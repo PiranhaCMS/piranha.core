@@ -93,7 +93,7 @@ namespace Piranha.Repositories
 				!String.IsNullOrEmpty(post.Type.Route) ? post.Type.Route : "/post";
 
 			// Map regions
-			foreach (var fieldType in post.Type.Fields) {
+			foreach (var fieldType in post.Type.Fields.Where(f => f.FieldType == FieldType.Region)) {
 				var field = post.Fields.SingleOrDefault(f => f.TypeId == fieldType.Id);
 
 				if (field != null) {

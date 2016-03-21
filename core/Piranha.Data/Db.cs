@@ -99,7 +99,7 @@ namespace Piranha
 		/// </summary>
 		/// <param name="optionsBuilder">The current configuration options</param>
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-			optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=piranha.dnx;Trusted_Connection=True;");
+			optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=piranha.core;Trusted_Connection=True;");
 		}
 
 		/// <summary>
@@ -154,7 +154,7 @@ namespace Piranha
 			mb.Entity<PageTypeField>().Property(p => p.Name).HasMaxLength(64).IsRequired();
 			mb.Entity<PageTypeField>().Property(p => p.InternalId).HasMaxLength(64).IsRequired();
 			mb.Entity<PageTypeField>().Property(p => p.CLRType).HasMaxLength(512).IsRequired();
-			mb.Entity<PageTypeField>().HasIndex(p => new { p.TypeId, p.InternalId }).IsUnique();
+			mb.Entity<PageTypeField>().HasIndex(p => new { p.TypeId, p.FieldType, p.InternalId }).IsUnique();
 
 			mb.Entity<Param>().ToTable("Piranha_Params");
 			mb.Entity<Param>().Property(p => p.Name).HasMaxLength(64).IsRequired();

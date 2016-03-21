@@ -177,6 +177,7 @@ namespace Piranha.Data.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CLRType = table.Column<string>(nullable: false),
+                    FieldType = table.Column<int>(nullable: false),
                     InternalId = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     SortOrder = table.Column<int>(nullable: false),
@@ -239,6 +240,7 @@ namespace Piranha.Data.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CLRType = table.Column<string>(nullable: false),
+                    FieldType = table.Column<int>(nullable: false),
                     InternalId = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     SortOrder = table.Column<int>(nullable: false),
@@ -325,9 +327,9 @@ namespace Piranha.Data.Migrations
                 column: "InternalId",
                 unique: true);
             migrationBuilder.CreateIndex(
-                name: "IX_PageTypeField_TypeId_InternalId",
+                name: "IX_PageTypeField_TypeId_FieldType_InternalId",
                 table: "Piranha_PageTypeFields",
-                columns: new[] { "TypeId", "InternalId" },
+                columns: new[] { "TypeId", "FieldType", "InternalId" },
                 unique: true);
             migrationBuilder.CreateIndex(
                 name: "IX_Param_InternalId",

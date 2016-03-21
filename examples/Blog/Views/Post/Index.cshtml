@@ -1,11 +1,8 @@
 ﻿@model Piranha.Models.PostModel
-<html>
-<head>
-    <title>@Model.Title</title>
-</head>
-<body>
-    <h1>@Model.Title</h1>
-    <p>@Model.Excerpt</p>
-    @Model.Regions.Body
-</body>
-</html>
+@{ 
+    ViewBag.Title = Model.Title;
+}
+
+<h1>@Model.Title</h1>
+<p>@Model.Excerpt</p>
+@Model.Regions.Body

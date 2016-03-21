@@ -16,7 +16,7 @@ namespace Piranha
 	/// The startup options for the Piranha middleware.
 	/// </summary>
 	[Flags]
-    public enum Startup
+    public enum Handle
     {
 		All = 1,
 		Archives = 2,

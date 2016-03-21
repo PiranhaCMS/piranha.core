@@ -231,6 +231,8 @@ namespace Piranha.Data.Migrations
                         .IsRequired()
                         .HasAnnotation("MaxLength", 512);
 
+                    b.Property<int>("FieldType");
+
                     b.Property<string>("InternalId")
                         .IsRequired()
                         .HasAnnotation("MaxLength", 64);
@@ -245,7 +247,7 @@ namespace Piranha.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TypeId", "InternalId")
+                    b.HasIndex("TypeId", "FieldType", "InternalId")
                         .IsUnique();
 
                     b.HasAnnotation("Relational:TableName", "Piranha_PageTypeFields");
@@ -372,6 +374,8 @@ namespace Piranha.Data.Migrations
                     b.Property<string>("CLRType")
                         .IsRequired()
                         .HasAnnotation("MaxLength", 512);
+
+                    b.Property<int>("FieldType");
 
                     b.Property<string>("InternalId")
                         .IsRequired()

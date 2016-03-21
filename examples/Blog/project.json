@@ -15,7 +15,7 @@
   },
 
   "commands": {
-    "web": "Microsoft.AspNet.Server.Kestrel --server.urls http://localhost:5050;http://piranha.blog:5050"
+    "web": "Microsoft.AspNet.Server.Kestrel"
   },
 
   "frameworks": {

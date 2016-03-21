@@ -8,6 +8,7 @@
  * 
  */
 
+using Piranha;
 using System;
 using System.Linq;
 using Microsoft.AspNet.Builder;
@@ -41,7 +42,7 @@ namespace Blog
 
 			app.UseIISPlatformHandler();
 			app.UseStaticFiles();
-			app.UsePiranha();
+			app.UsePiranha(Handle.Pages|Handle.Posts);
 
 			app.UseMvc(routes => {
 				routes.MapRoute(name: "areaRoute",
@@ -73,6 +74,7 @@ namespace Blog
 					type.Fields.Add(new Piranha.Data.PageTypeField() {
 						Id = Guid.NewGuid(),
 						TypeId = type.Id,
+						FieldType = Piranha.Data.FieldType.Region,
 						Name = "Main body",
 						InternalId = "Body",
 						SortOrder = 0,
@@ -87,7 +89,6 @@ namespace Blog
 						Id = Guid.NewGuid(),
 						TypeId = type.Id,
 						Title = "Start",
-						Slug = "start",
 						Published = DateTime.Now
 					};
 					page.Fields.Add(new Piranha.Data.PageField() {
@@ -122,6 +123,7 @@ namespace Blog
 					postType.Fields.Add(new Piranha.Data.PostTypeField() {
 						Id = Guid.NewGuid(),
 						TypeId = postType.Id,
+						FieldType = Piranha.Data.FieldType.Region,
 						Name = "Main body",
 						InternalId = "Body",
 						SortOrder = 0,
