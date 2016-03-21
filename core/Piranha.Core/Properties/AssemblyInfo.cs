@@ -6,10 +6,10 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Piranha.Core")]
-[assembly: AssemblyDescription("Core application library for Piranha.DNX")]
+[assembly: AssemblyDescription("Core application library for Piranha.Core")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Håkan Edling")]
-[assembly: AssemblyProduct("Piranha.DNX")]
+[assembly: AssemblyProduct("Piranha.Core")]
 [assembly: AssemblyCopyright("Copyright © Håkan Edling 2016")]
 [assembly: AssemblyTrademark("Piranha CMS")]
 [assembly: AssemblyCulture("")]
