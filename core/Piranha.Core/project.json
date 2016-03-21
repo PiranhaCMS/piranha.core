@@ -1,0 +1,31 @@
+{
+  "version": "4.0.0-*",
+  "description": "Core application library for Piranha.DNX",
+  "authors": [ "Håkan Edling" ],
+  "tags": [ "Piranha", "CMS", "DNX", "CoreCLR" ],
+  "projectUrl": "https://github.com/piranhacms/piranha.dnx",
+  "licenseUrl": "https://opensource.org/licenses/mit",
+
+  "dependencies": {
+    "AutoMapper": "4.2.1",
+    "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
+    "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final",
+    "Newtonsoft.Json": "8.0.2",
+    "Piranha.Data": "4.0.0-*"
+  },
+
+  "frameworks": {
+    "dnx451": { },
+    "dnxcore50": {
+      "dependencies": {
+        "Microsoft.CSharp": "4.0.1-beta-23516",
+        "System.Collections": "4.0.11-beta-23516",
+        "System.IO.FileSystem": "4.0.1-beta-23516",
+        "System.Linq": "4.0.1-beta-23516",
+        "System.Runtime": "4.0.21-beta-23516",
+        "System.Text.RegularExpressions": "4.0.11-beta-23516",
+        "System.Threading": "4.0.11-beta-23516"
+      }
+    }
+  }
+}
