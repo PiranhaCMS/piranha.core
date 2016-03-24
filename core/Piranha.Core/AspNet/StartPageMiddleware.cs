@@ -21,7 +21,7 @@ namespace Piranha.AspNet
 		/// Creates a new middleware instance.
 		/// </summary>
 		/// <param name="next">The next middleware in the pipeline</param>
-		public StartPageMiddleware(RequestDelegate next) : base(next) { }
+		public StartPageMiddleware(RequestDelegate next, Api api) : base(next, api) { }
 
 		/// <summary>
 		/// Invokes the middleware.
@@ -40,8 +40,8 @@ namespace Piranha.AspNet
 
 					// Set query
 					if (context.Request.QueryString.HasValue) {
-						context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&id=" + page.Id);
-					} else context.Request.QueryString = new QueryString("?id=" + page.Id);
+						context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&id=" + page.Id + "&startpage=true");
+					} else context.Request.QueryString = new QueryString("?id=" + page.Id + "&startpage=true");
 				}
 			}
 			await next.Invoke(context);

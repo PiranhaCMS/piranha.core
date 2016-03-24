@@ -1,0 +1,20 @@
+﻿@model Blog.Models.StartModel
+@{
+    ViewBag.Title = Model.Title;
+}
+
+<div class="jumbotron">
+    <h1>@Model.Title</h1>
+    @Model.Regions.Body
+</div>
+
+@foreach (var post in Model.Archive.Posts) {
+    <article>
+        <header>
+            <h2><a href="@post.Permalink">@post.Title</a></h2>
+        </header>
+        <p>
+            @post.Excerpt
+        </p>
+    </article>
+}

@@ -18,7 +18,7 @@ using Piranha.Models;
 namespace Piranha.Repositories
 {
 	/// <summary>
-	/// The page model repository.
+	/// The client page repository.
 	/// </summary>
     public class PageRepository
     {
@@ -42,12 +42,21 @@ namespace Piranha.Repositories
 		/// </summary>
 		/// <returns>The page model</returns>
 		public PageModel GetStartpage() {
+			return GetStartpage<PageModel>();
+		}
+
+		/// <summary>
+		/// Gets the site startpage.
+		/// </summary>
+		/// <typeparam name="T">The model type</typeparam>
+		/// <returns>The page model</returns>
+		public T GetStartpage<T>() where T : PageModel {
 			var page = FullQuery()
 				.Where(p => p.ParentId == null && p.SortOrder == 0 && p.Published <= DateTime.Now)
 				.SingleOrDefault();
 
 			if (page != null)
-				return FullTransform(page);
+				return FullTransform<T>(page);
 			return null;
 		}
 
@@ -57,12 +66,22 @@ namespace Piranha.Repositories
 		/// <param name="id">The unique id</param>
 		/// <returns>The page model</returns>
 		public PageModel GetById(Guid id) {
+			return GetById<PageModel>(id);
+		}
+
+		/// <summary>
+		/// Gets the page model with the specified id.
+		/// </summary>
+		/// <typeparam name="T">The model type</typeparam>
+		/// <param name="id">The unique id</param>
+		/// <returns>The page model</returns>
+		public T GetById<T>(Guid id) where T : PageModel {
 			var page = FullQuery()
 				.Where(p => p.Id == id && p.Published <= DateTime.Now)
 				.SingleOrDefault();
 
 			if (page != null)
-				return FullTransform(page);
+				return FullTransform<T>(page);
 			return null;
 		}
 
@@ -72,12 +91,22 @@ namespace Piranha.Repositories
 		/// <param name="slug">The unique slug</param>
 		/// <returns>The page model</returns>
 		public PageModel GetBySlug(string slug) {
+			return GetBySlug<PageModel>(slug);
+		}
+
+		/// <summary>
+		/// Gets the page model with the specified slug.
+		/// </summary>
+		/// <typeparam name="T">The model type</typeparam>
+		/// <param name="slug">The unique slug</param>
+		/// <returns>The page model</returns>
+		public T GetBySlug<T>(string slug) where T : PageModel {
 			var page = FullQuery()
 				.Where(p => p.Slug == slug && p.Published <= DateTime.Now)
 				.SingleOrDefault();
 
 			if (page != null)
-				return FullTransform(page);
+				return FullTransform<T>(page);
 			return null;
 		}
 
@@ -95,7 +124,7 @@ namespace Piranha.Repositories
 			var ret = new List<PageModel>();
 
 			foreach (var page in pages)
-				ret.Add(FullTransform(page));
+				ret.Add(FullTransform<PageModel>(page));
 			return ret;
 		}
 
@@ -117,11 +146,18 @@ namespace Piranha.Repositories
 		/// </summary>
 		/// <param name="page">The page</param>
 		/// <returns>The transformed model</returns>
-		private PageModel FullTransform(Page page) {
+		private T FullTransform<T>(Page page) where T : PageModel {
+			// Create the page model
+			var model = Activator.CreateInstance<T>();
+
 			// Map basic fields
-			var model = App.Mapper.Map<Page, PageModel>(page);
+			App.Mapper.Map<Page, PageModel>(page, model);
+
+			// Map additional fields
 			model.Route = !String.IsNullOrEmpty(page.Route) ? page.Route :
 				!String.IsNullOrEmpty(page.Type.Route) ? page.Type.Route : "/page";
+			model.Permalink = $"~/{page.Slug}";
+			model.IsStartPage = !page.ParentId.HasValue && page.SortOrder == 0;
 
 			// Map regions
 			foreach (var fieldType in page.Type.Fields.Where(f => f.FieldType == FieldType.Region)) {

@@ -8,15 +8,15 @@
  * 
  */
 
-using Microsoft.Data.Entity;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Piranha.Data;
-using Piranha.Models;
 
 namespace Piranha.Repositories
 {
+	/// <summary>
+	/// The client category repository.
+	/// </summary>
     public class CategoryRepository
     {
 		#region Members
@@ -34,11 +34,21 @@ namespace Piranha.Repositories
 			this.db = db;
 		}
 
+		/// <summary>
+		/// Gets the category identified by the given id.
+		/// </summary>
+		/// <param name="id">The unique id</param>
+		/// <returns>The category</returns>
 		public Category GetById(Guid id) {
 			return db.Categories
 				.SingleOrDefault(c => c.Id == id);
 		}
 
+		/// <summary>
+		/// Gets the category identified by the given slug.
+		/// </summary>
+		/// <param name="id">The unique slug</param>
+		/// <returns>The category</returns>
 		public Category GetBySlug(string slug) {
 			return db.Categories
 				.SingleOrDefault(c => c.Slug == slug);

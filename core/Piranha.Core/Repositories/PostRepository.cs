@@ -18,7 +18,7 @@ using Piranha.Models;
 namespace Piranha.Repositories
 {
 	/// <summary>
-	/// The post model repository.
+	/// The client post repository.
 	/// </summary>
     public class PostRepository
     {
@@ -89,8 +89,11 @@ namespace Piranha.Repositories
 		private PostModel FullTransform(Post post) {
 			// Map basic fields
 			var model = App.Mapper.Map<Post, PostModel>(post);
+
+			// Map additional fields
 			model.Route = !String.IsNullOrEmpty(post.Route) ? post.Route :
 				!String.IsNullOrEmpty(post.Type.Route) ? post.Type.Route : "/post";
+			model.Permalink = $"~/{post.Category.Slug}/{post.Slug}";
 
 			// Map regions
 			foreach (var fieldType in post.Type.Fields.Where(f => f.FieldType == FieldType.Region)) {

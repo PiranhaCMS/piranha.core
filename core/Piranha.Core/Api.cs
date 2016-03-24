@@ -27,6 +27,11 @@ namespace Piranha
 
 		#region Properties
 		/// <summary>
+		/// Gets the archive repository.
+		/// </summary>
+		public Repositories.ArchiveRepository Archives { get; private set; }
+
+		/// <summary>
 		/// Gets the category repository.
 		/// </summary>
 		public Repositories.CategoryRepository Categories { get; private set; }
@@ -45,9 +50,10 @@ namespace Piranha
 		/// <summary>
 		/// Default constructor.
 		/// </summary>
-		public Api() {
-			db = new Db();
+		public Api(Db db) {
+			this.db = db;
 
+			Archives = new Repositories.ArchiveRepository(db);
 			Categories = new Repositories.CategoryRepository(db);
 			Pages = new Repositories.PageRepository(db);
 			Posts = new Repositories.PostRepository(db);

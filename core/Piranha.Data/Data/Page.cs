@@ -8,7 +8,9 @@
  * 
  */
 
+using Microsoft.Data.Entity;
 using System;
+using System.Linq;
 
 namespace Piranha.Data
 {
@@ -53,6 +55,15 @@ namespace Piranha.Data
 		/// Gets/sets if the page should be hidden in the navigation.
 		/// </summary>
 		public bool IsHidden { get; set; }
+
+		/// <summary>
+		/// Gets if this is the site startpage.
+		/// </summary>
+		public bool IsStartPage {
+			get {
+				return !ParentId.HasValue && SortOrder == 0;
+			}
+		}
 		#endregion
 
 		#region Notifications

@@ -14,6 +14,7 @@ using Piranha.Data;
 using System;
 using System.Threading.Tasks;
 using System.Threading;
+using Microsoft.Data.Entity.Infrastructure;
 
 namespace Piranha
 {
@@ -95,11 +96,33 @@ namespace Piranha
 		#endregion
 
 		/// <summary>
+		/// Default constructor. Only uses this for testing purposes
+		/// or for creating migrations.
+		/// </summary>
+		public Db() : base() {
+			// Ensure that the database is created & in sync
+			Database.EnsureCreated();
+		}
+
+		/// <summary>
+		/// Default constructor.
+		/// </summary>
+		/// <param name="options">The db options</param>
+		public Db(DbContextOptions options) : base(options) {
+			/// Ensure that the database is created & in sync
+			Database.EnsureCreated();
+		}
+
+		/// <summary>
 		/// Configurs the db context.
 		/// </summary>
-		/// <param name="optionsBuilder">The current configuration options</param>
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-			optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=piranha.core;Trusted_Connection=True;");
+		/// <param name="builder">The current configuration options</param>
+		protected override void OnConfiguring(DbContextOptionsBuilder builder) {
+			if (!builder.IsConfigured) {
+				// Make sure we don't overwrite existing configuration with
+				// the local test config.
+				builder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=piranha.core;Trusted_Connection=True;");
+			}
 		}
 
 		/// <summary>
@@ -139,6 +162,7 @@ namespace Piranha
 			mb.Entity<Page>().HasOne(p => p.Author).WithMany().OnDelete(DeleteBehavior.SetNull);
 			mb.Entity<Page>().HasOne(p => p.Type).WithMany().OnDelete(DeleteBehavior.Restrict);
 			mb.Entity<Page>().HasIndex(p => p.Slug).IsUnique();
+			mb.Entity<Page>().Ignore(p => p.IsStartPage);
 
 			mb.Entity<PageField>().ToTable("Piranha_PageFields");
 			mb.Entity<PageField>().HasIndex(p => new { p.ParentId, p.TypeId }).IsUnique();
