@@ -97,6 +97,10 @@ namespace Piranha
 								.ForMember(m => m.Permalink, o => o.Ignore())
 								.ForMember(m => m.IsStartPage, o => o.Ignore())
 								.ForMember(m => m.Regions, o => o.Ignore());
+							cfg.CreateMap<Data.Page, Models.SiteMapModel>()
+								.ForMember(m => m.Permalink, o => o.Ignore())
+								.ForMember(m => m.Level, o => o.Ignore())
+								.ForMember(m => m.Children, o => o.Ignore());
 							cfg.CreateMap<Data.Post, Models.PostListModel>()
 								.ForMember(m => m.Permalink, o => o.Ignore());
 							cfg.CreateMap<Data.Post, Models.PostModel>()

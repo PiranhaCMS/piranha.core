@@ -45,6 +45,11 @@ namespace Piranha
 		/// Gets the post repository.
 		/// </summary>
 		public Repositories.PostRepository Posts { get; private set; }
+
+		/// <summary>
+		/// Gets the site map repository.
+		/// </summary>
+		public Repositories.SiteMapRepository SiteMap { get; private set; }
 		#endregion
 
 		/// <summary>
@@ -57,6 +62,7 @@ namespace Piranha
 			Categories = new Repositories.CategoryRepository(db);
 			Pages = new Repositories.PageRepository(db);
 			Posts = new Repositories.PostRepository(db);
+			SiteMap = new Repositories.SiteMapRepository(db);
 		}
 
 		/// <summary>
