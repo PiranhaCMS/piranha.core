@@ -29,32 +29,34 @@ namespace Piranha.AspNet
 		/// <param name="context">The current http context</param>
 		/// <returns>An async task</returns>
 		public override async Task Invoke(HttpContext context) {
-			var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
+			if (!IsHandled(context)) {
+				var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
 
-			if (!String.IsNullOrWhiteSpace(url) && url.Length > 1) {
-				var segments = url.Substring(1).Split(new char[] { '/' });
+				if (!String.IsNullOrWhiteSpace(url) && url.Length > 1) {
+					var segments = url.Substring(1).Split(new char[] { '/' });
 
-				var include = segments.Length;
+					var include = segments.Length;
 
-				// Scan for the most unique slug
-				for (var n = include; n > 0; n--) {
-					var slug = segments.Subset(0, n).Implode("/");
-					var page = api.Pages.GetBySlug(slug);
+					// Scan for the most unique slug
+					for (var n = include; n > 0; n--) {
+						var slug = segments.Subset(0, n).Implode("/");
+						var page = api.Pages.GetBySlug(slug);
 
-					if (page != null) {
-						var route = page.Route;
+						if (page != null) {
+							var route = page.Route;
 
-						if (n < include) {
-							route += "/" + segments.Subset(n).Implode("/");
+							if (n < include) {
+								route += "/" + segments.Subset(n).Implode("/");
+							}
+
+							// Set path
+							context.Request.Path = new PathString(route);
+
+							// Set query
+							if (context.Request.QueryString.HasValue) {
+								context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&id=" + page.Id + "&startpage=" + page.IsStartPage + "&piranha_handled=true");
+							} else context.Request.QueryString = new QueryString("?id=" + page.Id + "&startpage=" + page.IsStartPage + "&piranha_handled=true");
 						}
-
-						// Set path
-						context.Request.Path = new PathString(route);
-
-						// Set query
-						if (context.Request.QueryString.HasValue) {
-							context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&id=" + page.Id + "&startpage=" + page.IsStartPage);
-						} else context.Request.QueryString = new QueryString("?id=" + page.Id + "&startpage=" + page.IsStartPage);
 					}
 				}
 			}

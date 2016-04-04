@@ -29,19 +29,21 @@ namespace Piranha.AspNet
 		/// <param name="context">The current http context</param>
 		/// <returns>An async task</returns>
 		public override async Task Invoke(HttpContext context) {
-			var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
+			if (!IsHandled(context)) {
+				var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
 
-			if (String.IsNullOrWhiteSpace(url) || url == "/") {
-				var page = api.Pages.GetStartpage();
+				if (String.IsNullOrWhiteSpace(url) || url == "/") {
+					var page = api.Pages.GetStartpage();
 
-				if (page != null) {
-					// Set path
-					context.Request.Path = new PathString(page.Route);
+					if (page != null) {
+						// Set path
+						context.Request.Path = new PathString(page.Route);
 
-					// Set query
-					if (context.Request.QueryString.HasValue) {
-						context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&id=" + page.Id + "&startpage=true");
-					} else context.Request.QueryString = new QueryString("?id=" + page.Id + "&startpage=true");
+						// Set query
+						if (context.Request.QueryString.HasValue) {
+							context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&id=" + page.Id + "&startpage=true&piranha_handled=true");
+						} else context.Request.QueryString = new QueryString("?id=" + page.Id + "&startpage=true&piranha_handled = true");
+					}
 				}
 			}
 			await next.Invoke(context);

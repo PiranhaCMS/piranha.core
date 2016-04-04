@@ -29,29 +29,31 @@ namespace Piranha.AspNet
 		/// <param name="context">The current http context</param>
 		/// <returns>An async task</returns>
 		public override async Task Invoke(HttpContext context) {
-			var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
+			if (!IsHandled(context)) {
+				var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
 
-			if (!String.IsNullOrWhiteSpace(url) && url.Length > 2) {
-				var segments = url.Substring(1).Split(new char[] { '/' });
+				if (!String.IsNullOrWhiteSpace(url) && url.Length > 2) {
+					var segments = url.Substring(1).Split(new char[] { '/' });
 
-				var category = api.Categories.GetBySlug(segments[0]);
+					var category = api.Categories.GetBySlug(segments[0]);
 
-				if (category != null) {
-					var post = api.Posts.GetBySlug(category.Id, segments[1]);
+					if (category != null) {
+						var post = api.Posts.GetBySlug(category.Id, segments[1]);
 
-					if (post != null) {
-						// Get the route
-						var route = post.Route;
-						if (segments.Length > 2)
-							route += "/" + segments.Subset(2).Implode("/");
+						if (post != null) {
+							// Get the route
+							var route = post.Route;
+							if (segments.Length > 2)
+								route += "/" + segments.Subset(2).Implode("/");
 
-						// Set path
-						context.Request.Path = new PathString(route);
+							// Set path
+							context.Request.Path = new PathString(route);
 
-						// Set query
-						if (context.Request.QueryString.HasValue) {
-							context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&id=" + post.Id);
-						} else context.Request.QueryString = new QueryString("?id=" + post.Id);
+							// Set query
+							if (context.Request.QueryString.HasValue) {
+								context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&id=" + post.Id + "&piranha_handled=true");
+							} else context.Request.QueryString = new QueryString("?id=" + post.Id + "&piranha_handled=true");
+						}
 					}
 				}
 			}
