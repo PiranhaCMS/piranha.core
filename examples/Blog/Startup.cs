@@ -54,7 +54,7 @@ namespace Blog
 				.AddSqlServer()
 				.AddDbContext<Db>(options => 
 					options.UseSqlServer(Configuration["Data:Piranha:ConnectionString"]));
-			services.AddScoped<Api>();
+			services.AddScoped<IApi, Api>();
 		}
 
 		/// <summary>

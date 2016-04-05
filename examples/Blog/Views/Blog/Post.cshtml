@@ -3,6 +3,18 @@
     ViewBag.Title = Model.Title;
 }
 
-<h1>@Model.Title</h1>
-<p>@Model.Excerpt</p>
-@Model.Regions.Body
+<div class="container">
+    <article>
+        <header>
+            <h1>@Model.Title</h1>
+            <p class="meta">
+                <span class="glyphicon glyphicon-time"></span>
+                @Model.Published.ToLongDateString()
+                <span class="glyphicon glyphicon-tag"></span>
+                @Model.Category.Title
+            </p>
+        </header>
+        <p class="excerpt">@Model.Excerpt</p>
+        @Model.Regions.Body
+    </article>
+</div>

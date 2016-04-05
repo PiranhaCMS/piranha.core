@@ -23,14 +23,14 @@ namespace Blog.Controllers
 		/// <summary>
 		/// The private api.
 		/// </summary>
-		private readonly Api api;
+		private readonly IApi api;
 		#endregion
 
 		/// <summary>
 		/// Default construtor.
 		/// </summary>
 		/// <param name="api">The current api</param>
-		public BlogController(Api api) {
+		public BlogController(IApi api) {
 			this.api = api;
 		}
 

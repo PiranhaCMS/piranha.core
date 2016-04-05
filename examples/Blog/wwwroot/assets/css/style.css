@@ -6764,7 +6764,91 @@ button.close {
     display: none !important;
   }
 }
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('/assets/fonts/glyphicons-halflings-regular.eot');
+  src: url('/assets/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('/assets/fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('/assets/fonts/glyphicons-halflings-regular.woff') format('woff'), url('/assets/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('/assets/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
+body {
+  color: #343436;
+  font-family: "Open Sans", sans-serif;
+  font-size: 17px;
+  padding-bottom: 20px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #000;
+  text-rendering: optimizelegibility;
+}
+h1 {
+  font-size: 48px;
+  font-weight: 300;
+  margin-bottom: 20px;
+}
+.navbar {
+  background: #222 -moz-linear-gradient(center bottom, #131313 18%, #3a3a3a 80%) repeat scroll 0 0;
+  border-bottom: 1px solid #111;
+}
+.navbar .container .navbar-brand {
+  padding: 0 15px 0 0;
+  margin: 0;
+}
+.navbar .container ul {
+  float: right;
+}
+.navbar .container ul li a {
+  font-size: 15px;
+  padding: 24px 0 24px 24px;
+}
+.navbar .container ul li a img {
+  width: 20px;
+}
+.navbar .container ul li.active a {
+  background: none;
+}
 .container {
-  max-width: 720px;
-  padding: 20px 0;
+  max-width: 750px;
+}
+.container .jumbotron {
+  border-radius: 0;
+  text-align: center;
+}
+header[role="banner"] {
+  background: #1b6d8d;
+  background-image: -moz-linear-gradient(center bottom, #1b6d8d 18%, #1c7196 80%);
+  border-bottom: 1px solid #057;
+  box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.3) inset;
+  color: #fff;
+  text-align: center;
+  margin-top: -20px;
+}
+header[role="banner"] .container {
+  padding: 40px 0 0;
+}
+header[role="banner"] .container img {
+  margin-bottom: -20px;
+}
+p.meta {
+  color: #666;
+  font-size: 16px;
+  font-weight: 300;
+  margin: 15px 0;
+}
+p.meta .glyphicon {
+  color: #1f7da4;
+  font-size: 12px;
+  margin: 0 5px;
+  opacity: 0.8;
+}
+p.meta .glyphicon:first-child {
+  margin-left: 0;
+}
+p.excerpt {
+  font-size: 22px;
+  font-weight: 300;
+  margin: 20px 0;
 }
