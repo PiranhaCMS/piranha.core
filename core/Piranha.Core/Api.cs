@@ -16,7 +16,7 @@ namespace Piranha
 	/// <summary>
 	/// The main application api.
 	/// </summary>
-    public sealed class Api : IDisposable
+    public sealed class Api : IApi
     {
 		#region Members
 		/// <summary>
@@ -29,27 +29,27 @@ namespace Piranha
 		/// <summary>
 		/// Gets the archive repository.
 		/// </summary>
-		public Repositories.ArchiveRepository Archives { get; private set; }
+		public Repositories.IArchiveRepository Archives { get; private set; }
 
 		/// <summary>
 		/// Gets the category repository.
 		/// </summary>
-		public Repositories.CategoryRepository Categories { get; private set; }
+		public Repositories.ICategoryRepository Categories { get; private set; }
 
 		/// <summary>
 		/// Gets the page repository.
 		/// </summary>
-		public Repositories.PageRepository Pages { get; private set; }
+		public Repositories.IPageRepository Pages { get; private set; }
 
 		/// <summary>
 		/// Gets the post repository.
 		/// </summary>
-		public Repositories.PostRepository Posts { get; private set; }
+		public Repositories.IPostRepository Posts { get; private set; }
 
 		/// <summary>
 		/// Gets the site map repository.
 		/// </summary>
-		public Repositories.SiteMapRepository SiteMap { get; private set; }
+		public Repositories.ISiteMapRepository SiteMap { get; private set; }
 		#endregion
 
 		/// <summary>

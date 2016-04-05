@@ -18,7 +18,7 @@ namespace Piranha.Repositories
 	/// <summary>
 	/// The client site map repository.
 	/// </summary>
-	public class SiteMapRepository
+	public class SiteMapRepository : ISiteMapRepository
 	{
 		#region Members
 		/// <summary>
@@ -49,7 +49,7 @@ namespace Piranha.Repositories
 			return Sort(pages);
 		}
 
-
+		#region Private methods
 		/// <summary>
 		/// Sorts the page structure recursive.
 		/// </summary>
@@ -71,5 +71,6 @@ namespace Piranha.Repositories
 			}
 			return ret;
 		}
+		#endregion
 	}
 }

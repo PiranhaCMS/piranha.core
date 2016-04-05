@@ -93,6 +93,7 @@ namespace Piranha
 
 						// Setup auto mapper
 						mapper = new MapperConfiguration(cfg => {
+							cfg.CreateMap<Data.Category, Models.CategoryModel>();
 							cfg.CreateMap<Data.Page, Models.PageModel>()
 								.ForMember(m => m.Permalink, o => o.Ignore())
 								.ForMember(m => m.IsStartPage, o => o.Ignore())

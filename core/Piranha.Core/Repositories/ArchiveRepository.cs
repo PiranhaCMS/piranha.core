@@ -18,7 +18,7 @@ namespace Piranha.Repositories
 	/// <summary>
 	/// The client archive repository.
 	/// </summary>
-    public class ArchiveRepository
+    public class ArchiveRepository : IArchiveRepository
     {
 		#region Members
 		/// <summary>

@@ -20,7 +20,7 @@ namespace Piranha.Repositories
 	/// <summary>
 	/// The client page repository.
 	/// </summary>
-    public class PageRepository
+    public class PageRepository : IPageRepository
     {
 		#region Members
 		/// <summary>

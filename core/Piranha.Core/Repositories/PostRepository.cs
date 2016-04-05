@@ -20,7 +20,7 @@ namespace Piranha.Repositories
 	/// <summary>
 	/// The client post repository.
 	/// </summary>
-    public class PostRepository
+    public class PostRepository : IPostRepository
     {
 		#region Members
 		/// <summary>
@@ -43,12 +43,21 @@ namespace Piranha.Repositories
 		/// <param name="id">The unique id</param>
 		/// <returns>The post model</returns>
 		public PostModel GetById(Guid id) {
+			return GetById<PostModel>(id);
+		}
+
+		/// <summary>
+		/// Gets the post model with the specified id.
+		/// </summary>
+		/// <param name="id">The unique id</param>
+		/// <returns>The post model</returns>
+		public T GetById<T>(Guid id) where T : PostModel {
 			var post = FullQuery()
 				.Where(p => p.Id == id && p.Published <= DateTime.Now)
 				.SingleOrDefault();
 
 			if (post != null)
-				return FullTransform(post);
+				return FullTransform<T>(post);
 			return null;
 		}
 
@@ -59,12 +68,47 @@ namespace Piranha.Repositories
 		/// <param name="slug">The unique slug</param>
 		/// <returns>The post model</returns>
 		public PostModel GetBySlug(Guid categoryId, string slug) {
+			return GetBySlug<PostModel>(categoryId, slug);
+		}
+
+		/// <summary>
+		/// Gets the post model with the specified slug.
+		/// </summary
+		/// <param name="categoryId">The category id</param>
+		/// <param name="slug">The unique slug</param>
+		/// <returns>The post model</returns>
+		public T GetBySlug<T>(Guid categoryId, string slug) where T : PostModel {
 			var post = FullQuery()
 				.Where(p => p.CategoryId == categoryId && p.Slug == slug && p.Published <= DateTime.Now)
 				.SingleOrDefault();
 
 			if (post != null)
-				return FullTransform(post);
+				return FullTransform<T>(post);
+			return null;
+		}
+
+		/// <summary>
+		/// Gets the latest post from the specified category.
+		/// </summary>
+		/// <param name="categoryId">The category id</param>
+		/// <returns>The latest post</returns>
+		public PostModel GetLatest(Guid categoryId) {
+			return GetLatest<PostModel>(categoryId);
+		}
+
+		/// <summary>
+		/// Gets the latest post from the specified category.
+		/// </summary>
+		/// <param name="categoryId">The category id</param>
+		/// <returns>The latest post</returns>
+		public T GetLatest<T>(Guid categoryId) where T : PostModel {
+			var post = FullQuery()
+				.Where(p => p.CategoryId == categoryId && p.Published <= DateTime.Now)
+				.OrderByDescending(p => p.Published)
+				.FirstOrDefault();
+
+			if (post != null)
+				return FullTransform<T>(post);
 			return null;
 		}
 
@@ -86,9 +130,12 @@ namespace Piranha.Repositories
 		/// </summary>
 		/// <param name="post">The post</param>
 		/// <returns>The transformed model</returns>
-		private PostModel FullTransform(Post post) {
+		private T FullTransform<T>(Post post) where T : PostModel {
+			// Create the post model
+			var model = Activator.CreateInstance<T>();
+
 			// Map basic fields
-			var model = App.Mapper.Map<Post, PostModel>(post);
+			App.Mapper.Map<Post, PostModel>(post, model);
 
 			// Map additional fields
 			model.Route = !String.IsNullOrEmpty(post.Route) ? post.Route :
