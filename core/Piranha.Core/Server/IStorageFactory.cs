@@ -8,16 +8,17 @@
  * 
  */
 
-namespace Piranha
+namespace Piranha.Server
 {
 	/// <summary>
-	/// The app config used at initialization.
+	/// Interface for creating storage sessions.
 	/// </summary>
-    public sealed class AppConfig
-    {
+	public interface IStorageFactory
+	{
 		/// <summary>
-		/// The configured storage factory.
+		/// Opens a new storage session.
 		/// </summary>
-		public Server.IStorageFactory Storage;
-    }
+		/// <returns>An open storage session</returns>
+		IStorage Open();
+	}
 }

@@ -11,15 +11,14 @@
 using AutoMapper;
 using Piranha.Extend;
 using System;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace Piranha
 {
 	/// <summary>
 	/// The main Piranha application object.
 	/// </summary>
-	public sealed class App {
+	public sealed class App
+	{
 		#region Members
 		/// <summary>
 		/// The private singleton instance.
@@ -37,9 +36,14 @@ namespace Piranha
 		private object mutex = new object();
 
 		/// <summary>
-		/// The private extension manager
+		/// The private extension manager.
 		/// </summary>
-		private Extend.ExtensionManager extensionManager;
+		private ExtensionManager extensionManager;
+
+		/// <summary>
+		/// The private storage factory.
+		/// </summary>
+		private Server.IStorageFactory storageFactory;
 
 		/// <summary>
 		/// The private auto mapper configuration.
@@ -53,6 +57,13 @@ namespace Piranha
 		/// </summary>
 		public static ExtensionManager ExtensionManager {
 			get { return instance.extensionManager; }
+		}
+
+		/// <summary>
+		/// Gets the current storage factory.
+		/// </summary>
+		public static Server.IStorageFactory Storage {
+			get { return instance.storageFactory;  }
 		}
 
 		/// <summary>
@@ -88,6 +99,10 @@ namespace Piranha
 			if (!isInitialized) {
 				lock (mutex) {
 					if (!isInitialized) {
+						// Configure the app object
+						if (config.Storage != null)
+							storageFactory = config.Storage;
+
 						// Create & compose the extension manager
 						extensionManager = new ExtensionManager().Compose();
 
