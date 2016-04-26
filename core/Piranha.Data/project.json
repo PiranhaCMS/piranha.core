@@ -3,7 +3,7 @@
   "description": "Core data management library for Piranha.DNX",
   "authors": [ "Håkan Edling" ],
   "tags": [ "Piranha", "CMS", "DNX", "CoreCLR" ],
-  "projectUrl": "https://github.com/piranhacms/piranha.dnx",
+  "projectUrl": "https://github.com/piranhacms/piranha.core",
   "licenseUrl": "https://opensource.org/licenses/mit",
 
   "dependencies": {

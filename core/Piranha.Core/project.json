@@ -3,7 +3,7 @@
   "description": "Core application library for Piranha.Core",
   "authors": [ "Håkan Edling" ],
   "tags": [ "Piranha", "CMS", "CoreCLR" ],
-  "projectUrl": "https://github.com/piranhacms/piranha.dnx",
+  "projectUrl": "https://github.com/piranhacms/piranha.core",
   "licenseUrl": "https://opensource.org/licenses/mit",
 
   "dependencies": {
