@@ -100,8 +100,8 @@ namespace Piranha
 		/// or for creating migrations.
 		/// </summary>
 		public Db() : base() {
-			// Ensure that the database is created & in sync
-			Database.EnsureCreated();
+			/// Ensure that the database is created & in sync
+			Database.Migrate();
 		}
 
 		/// <summary>
@@ -110,7 +110,7 @@ namespace Piranha
 		/// <param name="options">The db options</param>
 		public Db(DbContextOptions options) : base(options) {
 			/// Ensure that the database is created & in sync
-			Database.EnsureCreated();
+			Database.Migrate();
 		}
 
 		/// <summary>
@@ -201,6 +201,13 @@ namespace Piranha
 			mb.Entity<PostField>().ToTable("Piranha_PostFields");
 			mb.Entity<PostField>().HasIndex(p => new { p.ParentId, p.TypeId }).IsUnique();
 
+			mb.Entity<PostType>().ToTable("Piranha_PostTypes");
+			mb.Entity<PostType>().Property(p => p.Name).HasMaxLength(64).IsRequired();
+			mb.Entity<PostType>().Property(p => p.InternalId).HasMaxLength(64).IsRequired();
+			mb.Entity<PostType>().Property(p => p.Description).HasMaxLength(256);
+			mb.Entity<PostType>().Property(p => p.Route).HasMaxLength(128);
+			mb.Entity<PostType>().HasIndex(p => p.InternalId).IsUnique();
+
 			mb.Entity<PostTypeField>().ToTable("Piranha_PostTypeFields");
 			mb.Entity<PostTypeField>().Property(p => p.Name).HasMaxLength(64).IsRequired();
 			mb.Entity<PostTypeField>().Property(p => p.InternalId).HasMaxLength(64).IsRequired();
@@ -259,6 +266,12 @@ namespace Piranha
 			foreach (var entry in ChangeTracker.Entries()) {
 				var now = DateTime.Now;
 
+				if (entry.State != EntityState.Deleted) {
+					// Shoud we set modified date
+					if (entry.Entity is IModified)
+						((IModified)entry.Entity).LastModified = now;
+				}
+
 				if (entry.State == EntityState.Added) {
 					// Should we auto generate a unique id
 					if (entry.Entity is Data.IModel && ((Data.IModel)entry.Entity).Id == Guid.Empty) 
@@ -276,10 +289,6 @@ namespace Piranha
 					if (entry.Entity is INotify)
 						((INotify)entry.Entity).OnSave(this);
 				} else if (entry.State == EntityState.Modified) {
-					// Shoud we set modified date
-					if (entry.Entity is IModified)
-						((IModified)entry.Entity).LastModified = now;
-
 					// Should we notify changes
 					if (entry.Entity is INotify)
 						((INotify)entry.Entity).OnSave(this);

@@ -8,7 +8,7 @@ using Piranha;
 namespace Piranha.Data.Migrations
 {
     [DbContext(typeof(Db))]
-    [Migration("20160321143845_InitialCreate")]
+    [Migration("20160510073345_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -354,17 +354,28 @@ namespace Piranha.Data.Migrations
 
                     b.Property<DateTime>("Created");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasAnnotation("MaxLength", 256);
 
-                    b.Property<string>("InternalId");
+                    b.Property<string>("InternalId")
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 64);
 
                     b.Property<DateTime>("LastModified");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 64);
 
-                    b.Property<string>("Route");
+                    b.Property<string>("Route")
+                        .HasAnnotation("MaxLength", 128);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("InternalId")
+                        .IsUnique();
+
+                    b.HasAnnotation("Relational:TableName", "Piranha_PostTypes");
                 });
 
             modelBuilder.Entity("Piranha.Data.PostTypeField", b =>
