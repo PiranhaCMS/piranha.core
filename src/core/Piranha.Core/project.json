@@ -1,0 +1,15 @@
+﻿{
+  "version": "4.0.0-*",
+
+  "dependencies": {
+    "Microsoft.Extensions.Configuration": "1.0.0",
+    "NETStandard.Library": "1.6.0",
+    "System.Dynamic.Runtime": "4.0.11"
+  },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  }
+}
