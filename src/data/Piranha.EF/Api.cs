@@ -47,6 +47,7 @@ namespace Piranha.EF
 		public Api(Db db) {
 			this.db = db;
 
+			Archives = new Repositories.ArchiveRepository(db);
 			Categories = new Repositories.CategoryRepository(db);
 			Posts = new Repositories.PostRepository(db);
 		}

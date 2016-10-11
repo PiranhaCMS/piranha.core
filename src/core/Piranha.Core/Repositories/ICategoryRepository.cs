@@ -46,7 +46,16 @@ namespace Piranha.Repositories
 		/// <returns>The category</returns>
 		CategoryModel GetModelBySlug(string slug);
 
+		/// <summary>
+		/// Saves the category.
+		/// </summary>
+		/// <param name="model">The category</param>
 		void Save(Category category);
+
+		/// <summary>
+		/// Saves the full category model.
+		/// </summary>
+		/// <param name="model">The full model</param>
 		void Save(CategoryModel category);
 	}
 }

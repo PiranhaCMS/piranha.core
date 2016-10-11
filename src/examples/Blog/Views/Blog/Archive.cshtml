@@ -1,0 +1,23 @@
+﻿@model Piranha.Models.ArchiveModel
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>@Model.Title</title>
+    </head>
+    <body>
+        <h1>@Model.Title</h1>
+
+        @foreach (var post in Model.Posts) {
+            <article>
+                <header>
+                    <h2><a href="~/@post.Permalink">@post.Title</a></h2>
+                </header>
+                <small>@post.Published in @post.Category.Title</small>
+                <p>
+                    @post.Excerpt
+                </p>
+                <hr />
+            </article>
+        }
+    </body>
+</html>

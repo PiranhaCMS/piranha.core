@@ -61,6 +61,10 @@ namespace Piranha.EF.Repositories
 			return null;
 		}
 
+		/// <summary>
+		/// Saves the category.
+		/// </summary>
+		/// <param name="model">The category</param>
 		public void Save(Models.Category model) {
 			var category = db.Categories.SingleOrDefault(c => c.Id == model.Id);
 			if (category == null) {
@@ -75,6 +79,10 @@ namespace Piranha.EF.Repositories
 			db.SaveChanges();
 		}
 
+		/// <summary>
+		/// Saves the full category model.
+		/// </summary>
+		/// <param name="model">The full model</param>
 		public void Save(Models.CategoryModel model) {
 			var category = db.Categories.SingleOrDefault(c => c.Id == model.Id);
 			if (category == null) {

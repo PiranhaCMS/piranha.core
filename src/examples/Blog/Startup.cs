@@ -54,6 +54,7 @@ namespace Blog
 			// Register middleware
 			app.UseStaticFiles();
 			app.UsePiranhaPosts();
+			app.UsePiranhaArchives();
 
 			app.UseMvc(routes => {
 				routes.MapRoute(name: "areaRoute",

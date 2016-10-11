@@ -62,9 +62,21 @@ namespace Piranha.Models
 		public int TotalPages { get; set; }
 
 		/// <summary>
+		/// Gets/sets the archive route.
+		/// </summary>
+		public string Route { get; set; }
+
+		/// <summary>
 		/// Gets/sets the available posts.
 		/// </summary>
 		public IList<PostModel> Posts { get; set; }
 		#endregion
+
+		/// <summary>
+		/// Default constructor.
+		/// </summary>
+		public ArchiveModel() {
+			Posts = new List<PostModel>();
+		}
 	}
 }

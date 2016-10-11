@@ -16,6 +16,11 @@ namespace Piranha.Models
     {
 		#region Properties
 		/// <summary>
+		/// Gets/sets the full permalink for the post.
+		/// </summary>
+		public string Permalink { get; set; }
+
+		/// <summary>
 		/// Gets/sets the post category.
 		/// </summary>
 		public Category Category { get; set; }

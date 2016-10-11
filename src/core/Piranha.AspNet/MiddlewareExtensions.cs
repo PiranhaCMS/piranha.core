@@ -21,7 +21,18 @@ public static class MiddlewareExtensions
 		return builder
 			.UseMiddleware<Piranha.AspNet.PageMiddleware>()
 			.UseMiddleware<Piranha.AspNet.PostMiddleware>()
+			.UseMiddleware<Piranha.AspNet.ArchiveMiddleware>()
 			.UseMiddleware<Piranha.AspNet.StartPageMiddleware>();
+	}
+
+	/// <summary>
+	/// Uses the piranha archive middleware.
+	/// </summary>
+	/// <param name="builder">The current application builder</param>
+	/// <returns>The builder</returns>
+	public static IApplicationBuilder UsePiranhaArchives(this IApplicationBuilder builder) {
+		return builder
+			.UseMiddleware<Piranha.AspNet.ArchiveMiddleware>();
 	}
 
 	/// <summary>

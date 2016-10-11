@@ -32,6 +32,18 @@ namespace Blog.Controllers
 		}
 
 		/// <summary>
+		/// Gets the archive for the category with the specified id.
+		/// </summary>
+		/// <param name="id">The category id</param>
+		/// <param name="year">The optional year</param>
+		/// <param name="month">The optional month</param>
+		/// <param name="page">The optional page</param>
+		[Route("archive")]
+		public IActionResult Archive(Guid id, int? year = null, int? month = null, int? page = null) {
+			return View(api.Archives.GetById(id, page, year, month));
+		}
+
+		/// <summary>
 		/// Gets the page with the specified id.
 		/// </summary>
 		/// <param name="id">The unique id</param>

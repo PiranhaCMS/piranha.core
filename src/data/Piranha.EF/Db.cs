@@ -12,6 +12,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Piranha.EF.Data;
 
 namespace Piranha.EF
 {
@@ -21,22 +22,22 @@ namespace Piranha.EF
 		/// <summary>
 		/// Gets/sets the category set.
 		/// </summary>
-		public DbSet<Data.Category> Categories { get; set; }
+		public DbSet<Category> Categories { get; set; }
 
 		/// <summary>
 		/// Gets/sets the page set.
 		/// </summary>
-		public DbSet<Data.Page> Pages { get; set; }
+		public DbSet<Page> Pages { get; set; }
 
 		/// <summary>
 		/// Gets/sets the post set.
 		/// </summary>
-		public DbSet<Data.Post> Posts { get; set; }
+		public DbSet<Post> Posts { get; set; }
 
 		/// <summary>
 		/// Gets/sets the tag set.
 		/// </summary>
-		public DbSet<Data.Tag> Tags { get; set; }
+		public DbSet<Tag> Tags { get; set; }
 		#endregion
 
 		/// <summary>
@@ -89,34 +90,34 @@ namespace Piranha.EF
 		/// </summary>
 		/// <param name="mb">The current model builder</param>
 		protected override void OnModelCreating(ModelBuilder mb) {
-			mb.Entity<Data.Category>().ToTable("Piranha_Categories");
-			mb.Entity<Data.Category>().Property(c => c.Title).IsRequired().HasMaxLength(64);
-			mb.Entity<Data.Category>().Property(c => c.Slug).IsRequired().HasMaxLength(64);
-			mb.Entity<Data.Category>().Property(c => c.Description).HasMaxLength(512);
-			mb.Entity<Data.Category>().HasIndex(c => c.Slug).IsUnique();
+			mb.Entity<Category>().ToTable("Piranha_Categories");
+			mb.Entity<Category>().Property(c => c.Title).IsRequired().HasMaxLength(64);
+			mb.Entity<Category>().Property(c => c.Slug).IsRequired().HasMaxLength(64);
+			mb.Entity<Category>().Property(c => c.Description).HasMaxLength(512);
+			mb.Entity<Category>().HasIndex(c => c.Slug).IsUnique();
 
-			mb.Entity<Data.Page>().ToTable("Piranha_Pages");
-			mb.Entity<Data.Page>().Property(p => p.Title).IsRequired().HasMaxLength(128);
-			mb.Entity<Data.Page>().Property(p => p.Slug).IsRequired().HasMaxLength(128);
-			mb.Entity<Data.Page>().Property(p => p.NavigationTitle).HasMaxLength(128);
-			mb.Entity<Data.Page>().Property(p => p.MetaKeywords).HasMaxLength(128);
-			mb.Entity<Data.Page>().Property(p => p.MetaDescription).HasMaxLength(255);
-			mb.Entity<Data.Page>().Property(p => p.Route).HasMaxLength(255);
-			mb.Entity<Data.Page>().HasIndex(p => p.Slug).IsUnique();
+			mb.Entity<Page>().ToTable("Piranha_Pages");
+			mb.Entity<Page>().Property(p => p.Title).IsRequired().HasMaxLength(128);
+			mb.Entity<Page>().Property(p => p.Slug).IsRequired().HasMaxLength(128);
+			mb.Entity<Page>().Property(p => p.NavigationTitle).HasMaxLength(128);
+			mb.Entity<Page>().Property(p => p.MetaKeywords).HasMaxLength(128);
+			mb.Entity<Page>().Property(p => p.MetaDescription).HasMaxLength(255);
+			mb.Entity<Page>().Property(p => p.Route).HasMaxLength(255);
+			mb.Entity<Page>().HasIndex(p => p.Slug).IsUnique();
 
-			mb.Entity<Data.Post>().ToTable("Piranha_Posts");
-			mb.Entity<Data.Post>().Property(p => p.Title).IsRequired().HasMaxLength(128);
-			mb.Entity<Data.Post>().Property(p => p.Slug).IsRequired().HasMaxLength(128);
-			mb.Entity<Data.Post>().Property(p => p.MetaKeywords).HasMaxLength(128);
-			mb.Entity<Data.Post>().Property(p => p.MetaDescription).HasMaxLength(255);
-			mb.Entity<Data.Post>().Property(p => p.Excerpt).HasMaxLength(512);
-			mb.Entity<Data.Post>().Property(p => p.Route).HasMaxLength(255);
-			mb.Entity<Data.Post>().HasIndex(p => new { p.CategoryId, p.Slug }).IsUnique();
+			mb.Entity<Post>().ToTable("Piranha_Posts");
+			mb.Entity<Post>().Property(p => p.Title).IsRequired().HasMaxLength(128);
+			mb.Entity<Post>().Property(p => p.Slug).IsRequired().HasMaxLength(128);
+			mb.Entity<Post>().Property(p => p.MetaKeywords).HasMaxLength(128);
+			mb.Entity<Post>().Property(p => p.MetaDescription).HasMaxLength(255);
+			mb.Entity<Post>().Property(p => p.Excerpt).HasMaxLength(512);
+			mb.Entity<Post>().Property(p => p.Route).HasMaxLength(255);
+			mb.Entity<Post>().HasIndex(p => new { p.CategoryId, p.Slug }).IsUnique();
 
-			mb.Entity<Data.Tag>().ToTable("Piranha_Tags");
-			mb.Entity<Data.Tag>().Property(t => t.Title).IsRequired().HasMaxLength(64);
-			mb.Entity<Data.Tag>().Property(t => t.Slug).IsRequired().HasMaxLength(64);
-			mb.Entity<Data.Tag>().HasIndex(t => t.Slug).IsUnique();
+			mb.Entity<Tag>().ToTable("Piranha_Tags");
+			mb.Entity<Tag>().Property(t => t.Title).IsRequired().HasMaxLength(64);
+			mb.Entity<Tag>().Property(t => t.Slug).IsRequired().HasMaxLength(64);
+			mb.Entity<Tag>().HasIndex(t => t.Slug).IsUnique();
 
 			base.OnModelCreating(mb);
 		}
@@ -131,22 +132,34 @@ namespace Piranha.EF
 
 				if (entry.State != EntityState.Deleted) {
 					// Shoud we set modified date
-					if (entry.Entity is Data.IModified)
-						((Data.IModified)entry.Entity).LastModified = now;
+					if (entry.Entity is IModified)
+						((IModified)entry.Entity).LastModified = now;
 				}
 
 				if (entry.State == EntityState.Added) {
 					// Should we auto generate a unique id
-					if (entry.Entity is Data.IModel && ((Data.IModel)entry.Entity).Id == Guid.Empty)
-						((Data.IModel)entry.Entity).Id = Guid.NewGuid();
+					if (entry.Entity is IModel && ((IModel)entry.Entity).Id == Guid.Empty)
+						((IModel)entry.Entity).Id = Guid.NewGuid();
 
 					// Should we set created date
-					if (entry.Entity is Data.ICreated)
-						((Data.ICreated)entry.Entity).Created = now;
+					if (entry.Entity is ICreated)
+						((ICreated)entry.Entity).Created = now;
 
 					// Should we auto generate slug
-					if (entry.Entity is Data.ISlug && String.IsNullOrWhiteSpace(((Data.ISlug)entry.Entity).Slug))
-						((Data.ISlug)entry.Entity).Slug = Utils.GenerateSlug(((Data.ISlug)entry.Entity).Title);
+					if (entry.Entity is ISlug && String.IsNullOrWhiteSpace(((ISlug)entry.Entity).Slug))
+						((ISlug)entry.Entity).Slug = Utils.GenerateSlug(((ISlug)entry.Entity).Title);
+
+					// Should we notify changes
+					if (entry.Entity is INotify)
+						((INotify)entry.Entity).OnSave(this);
+				} else if (entry.State == EntityState.Modified) {
+					// Should we notify changes
+					if (entry.Entity is INotify)
+						((INotify)entry.Entity).OnSave(this);
+				} else if (entry.State == EntityState.Deleted) {
+					// Should we notify changes
+					if (entry.Entity is INotify)
+						((INotify)entry.Entity).OnDelete(this);
 				}
 			}
 		}
