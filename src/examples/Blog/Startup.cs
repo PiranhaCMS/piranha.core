@@ -76,7 +76,8 @@ namespace Blog
 			if (db.Categories.Count() == 0) {
 				var category = new Piranha.EF.Data.Category() {
 					Id = Guid.NewGuid(),
-					Title = "Blog"
+					Title = "Blog",
+					ArchiveTitle = "Blog Archive"
 				};
 				db.Categories.Add(category);
 
