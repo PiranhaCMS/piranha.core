@@ -8,7 +8,9 @@
  * 
  */
 
+using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Piranha
 {
@@ -21,15 +23,28 @@ namespace Piranha
 		private static readonly App instance = new App();
 		private readonly object mutex = new object();
 		private bool isInitialized = false;
+		private AppConfig config;
+		private readonly Extend.FieldInfoList fields;
 		private readonly IList<Extend.IModule> modules;
 		#endregion
 
 		#region Properties
 		/// <summary>
+		/// Gets the currently registered field types.
+		/// </summary>
+		public static Extend.FieldInfoList Fields {
+			get { return instance.fields; }
+		}
+
+		/// <summary>
 		/// Gets the currently registred modules.
 		/// </summary>
 		public static IList<Extend.IModule> Modules {
 			get { return instance.modules; }
+		}
+
+		public static IList<Models.PageType> PageTypes {
+			get { return instance.config.PageTypes; }
 		}
 		#endregion
 
@@ -37,6 +52,7 @@ namespace Piranha
 		/// Default private constructor.
 		/// </summary>
 		private App() {
+			fields = new Extend.FieldInfoList();
 			modules = new List<Extend.IModule>();
 		}
 
@@ -56,6 +72,20 @@ namespace Piranha
 			if (!isInitialized) {
 				lock (mutex) {
 					if (!isInitialized) {
+						// Compose field types
+						fields.Register<Extend.Fields.HtmlField>();
+						fields.Register<Extend.Fields.StringField>();
+						fields.Register<Extend.Fields.TextField>();
+
+						// Compose app config
+						using (var file = File.OpenRead("piranha.json")) {
+							using (var reader = new StreamReader(file)) {
+								config = JsonConvert.DeserializeObject<AppConfig>(reader.ReadToEnd());
+							}
+						}
+						if (config != null)
+							config.Ensure();
+
 						// Compose & initialize modules
 						foreach (var module in modules) {
 							module.Init();

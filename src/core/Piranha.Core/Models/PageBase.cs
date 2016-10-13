@@ -26,6 +26,11 @@ namespace Piranha.Models
 		public Guid? ParentId { get; set; }
 
 		/// <summary>
+		/// Gets/sets the id of the page type.
+		/// </summary>
+		public string PageTypeId { get; set; }
+
+		/// <summary>
 		/// Gets/sets the sort order of the page in its hierarchical position.
 		/// </summary>
 		public int SortOrder { get; set; }

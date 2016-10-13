@@ -8,9 +8,31 @@
  * 
  */
 
+using System.Collections.Generic;
+
 namespace Piranha.EF.Data
 {
     public sealed class Page : Models.PageBase, IModel, ISlug, ICreated, IModified
     {
+		#region Properties
+		/// <summary>
+		/// Gets/sets the available fields.
+		/// </summary>
+		public IList<PageField> Fields { get; set; }
+		#endregion
+
+		#region Navigation properties
+		/// <summary>
+		/// Gets/sets the page type.
+		/// </summary>
+		public PageType PageType { get; set; }
+		#endregion
+
+		/// <summary>
+		/// Default constructor.
+		/// </summary>
+		public Page() {
+			Fields = new List<PageField>();
+		}
     }
 }

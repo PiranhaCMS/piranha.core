@@ -30,6 +30,16 @@ namespace Piranha.EF
 		public DbSet<Page> Pages { get; set; }
 
 		/// <summary>
+		/// Gets/sets the page field set.
+		/// </summary>
+		public DbSet<PageField> PageFields { get; set; }
+
+		/// <summary>
+		/// Gets/sets the page type set.
+		/// </summary>
+		public DbSet<PageType> PageTypes { get; set; }
+
+		/// <summary>
 		/// Gets/sets the post set.
 		/// </summary>
 		public DbSet<Post> Posts { get; set; }
@@ -97,6 +107,7 @@ namespace Piranha.EF
 			mb.Entity<Category>().HasIndex(c => c.Slug).IsUnique();
 
 			mb.Entity<Page>().ToTable("Piranha_Pages");
+			mb.Entity<Page>().Property(p => p.PageTypeId).IsRequired().HasMaxLength(32);
 			mb.Entity<Page>().Property(p => p.Title).IsRequired().HasMaxLength(128);
 			mb.Entity<Page>().Property(p => p.Slug).IsRequired().HasMaxLength(128);
 			mb.Entity<Page>().Property(p => p.NavigationTitle).HasMaxLength(128);
@@ -104,6 +115,15 @@ namespace Piranha.EF
 			mb.Entity<Page>().Property(p => p.MetaDescription).HasMaxLength(255);
 			mb.Entity<Page>().Property(p => p.Route).HasMaxLength(255);
 			mb.Entity<Page>().HasIndex(p => p.Slug).IsUnique();
+
+			mb.Entity<PageField>().ToTable("Piranha_PageFields");
+			mb.Entity<PageField>().Property(f => f.RegionId).IsRequired().HasMaxLength(32);
+			mb.Entity<PageField>().Property(f => f.FieldId).IsRequired().HasMaxLength(32);
+			mb.Entity<PageField>().Property(f => f.CLRType).IsRequired().HasMaxLength(255);
+			mb.Entity<PageField>().HasIndex(f => new { f.PageId, f.RegionId, f.FieldId, f.SortOrder }).IsUnique();
+
+			mb.Entity<PageType>().ToTable("Piranha_PageTypes");
+			mb.Entity<PageType>().Property(t => t.Id).IsRequired().HasMaxLength(32);
 
 			mb.Entity<Post>().ToTable("Piranha_Posts");
 			mb.Entity<Post>().Property(p => p.Title).IsRequired().HasMaxLength(128);
