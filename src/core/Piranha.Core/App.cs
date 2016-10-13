@@ -23,9 +23,9 @@ namespace Piranha
 		private static readonly App instance = new App();
 		private readonly object mutex = new object();
 		private bool isInitialized = false;
-		private AppConfig config;
-		private readonly Extend.FieldInfoList fields;
-		private readonly IList<Extend.IModule> modules;
+		private Extend.FieldInfoList fields;
+		private List<Extend.IModule> modules;
+		private IList<Models.PageType> pageTypes;
 		#endregion
 
 		#region Properties
@@ -44,7 +44,7 @@ namespace Piranha
 		}
 
 		public static IList<Models.PageType> PageTypes {
-			get { return instance.config.PageTypes; }
+			get { return instance.pageTypes; }
 		}
 		#endregion
 
@@ -60,15 +60,15 @@ namespace Piranha
 		/// Initializes the application object.
 		/// </summary>
 		/// <param name="modules">The modules to use</param>
-		public static void Init(params Extend.IModule[] modules) {
-			instance.Initialize(modules);
+		public static void Init(IApi api, params Extend.IModule[] modules) {
+			instance.Initialize(api, modules);
 		}
 
 		/// <summary>
 		/// Initializes the application object.
 		/// </summary>
 		/// <param name="modules">The modules to use</param>
-		private void Initialize(Extend.IModule[] modules = null) {
+		private void Initialize(IApi api, Extend.IModule[] modules = null) {
 			if (!isInitialized) {
 				lock (mutex) {
 					if (!isInitialized) {
@@ -78,13 +78,21 @@ namespace Piranha
 						fields.Register<Extend.Fields.TextField>();
 
 						// Compose app config
-						using (var file = File.OpenRead("piranha.json")) {
-							using (var reader = new StreamReader(file)) {
-								config = JsonConvert.DeserializeObject<AppConfig>(reader.ReadToEnd());
+						if (File.Exists("piranha.json")) {
+							using (var file = File.OpenRead("piranha.json")) {
+								using (var reader = new StreamReader(file)) {
+									var config = JsonConvert.DeserializeObject<AppConfig>(reader.ReadToEnd());
+									config.Ensure();
+
+									// Update page types
+									foreach (var type in config.PageTypes)
+										api.PageTypes.Save(type);
+								}
 							}
 						}
-						if (config != null)
-							config.Ensure();
+
+						// Get page types
+						pageTypes = api.PageTypes.Get();
 
 						// Compose & initialize modules
 						foreach (var module in modules) {

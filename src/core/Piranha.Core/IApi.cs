@@ -34,6 +34,11 @@ namespace Piranha
 		IPageRepository Pages { get; }
 
 		/// <summary>
+		/// Gets the page type repository.
+		/// </summary>
+		IPageTypeRepository PageTypes { get; }
+
+		/// <summary>
 		/// Gets the post repository.
 		/// </summary>
 		IPostRepository Posts { get; }

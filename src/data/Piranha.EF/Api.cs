@@ -39,6 +39,11 @@ namespace Piranha.EF
 		public IPageRepository Pages { get; private set; }
 
 		/// <summary>
+		/// Gets the page type repository.
+		/// </summary>
+		public IPageTypeRepository PageTypes { get; private set; }
+
+		/// <summary>
 		/// Gets the post repository.
 		/// </summary>
 		public IPostRepository Posts { get; private set; }
@@ -49,6 +54,7 @@ namespace Piranha.EF
 
 			Archives = new Repositories.ArchiveRepository(db);
 			Categories = new Repositories.CategoryRepository(db);
+			PageTypes = new Repositories.PageTypeRepository(db);
 			Posts = new Repositories.PostRepository(db);
 		}
 

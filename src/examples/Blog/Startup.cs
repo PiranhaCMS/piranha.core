@@ -39,7 +39,7 @@ namespace Blog
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, Piranha.EF.Db db)
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApi api, Piranha.EF.Db db)
         {
             loggerFactory.AddConsole();
 
@@ -48,7 +48,7 @@ namespace Blog
             }
 
 			// Initialize the piranha application
-			App.Init(new Piranha.EF.Module());
+			App.Init(api, new Piranha.EF.Module());
 
 			// Register middleware
 			app.UseStaticFiles();
