@@ -10,27 +10,27 @@
 
 namespace Piranha.Extend
 {
-	/// <summary>
-	/// Interface for fields.
-	/// </summary>
+    /// <summary>
+    /// Interface for fields.
+    /// </summary>
     public interface IField
     {
-		/// <summary>
-		/// Initializes the field for client use.
-		/// </summary>
-		void Init();
+        /// <summary>
+        /// Initializes the field for client use.
+        /// </summary>
+        void Init();
 
-		/// <summary>
-		/// Initializes the field for manager use. This
-		/// method can be used for loading additional meta
-		/// data needed.
-		/// </summary>
-		void InitManager();
+        /// <summary>
+        /// Initializes the field for manager use. This
+        /// method can be used for loading additional meta
+        /// data needed.
+        /// </summary>
+        void InitManager();
 
-		/// <summary>
-		/// Gets the client value.
-		/// </summary>
-		/// <returns></returns>
-		object GetValue();
+        /// <summary>
+        /// Gets the client value.
+        /// </summary>
+        /// <returns></returns>
+        object GetValue();
     }
 }

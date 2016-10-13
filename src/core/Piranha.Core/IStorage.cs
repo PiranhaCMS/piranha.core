@@ -12,15 +12,15 @@ using System.Threading.Tasks;
 
 namespace Piranha
 {
-	/// <summary>
-	/// Interface for the main storage manager.
-	/// </summary>
+    /// <summary>
+    /// Interface for the main storage manager.
+    /// </summary>
     public interface IStorage
     {
-		/// <summary>
-		/// Opens a new storage session.
-		/// </summary>
-		/// <returns>A new open session</returns>
-		Task<IStorageSession> OpenAsync();
+        /// <summary>
+        /// Opens a new storage session.
+        /// </summary>
+        /// <returns>A new open session</returns>
+        Task<IStorageSession> OpenAsync();
     }
 }

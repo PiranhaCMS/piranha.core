@@ -12,14 +12,14 @@ using System;
 
 namespace Piranha.EF.Data
 {
-	/// <summary>
-	/// Interface for data models tracking last modification date.
-	/// </summary>
+    /// <summary>
+    /// Interface for data models tracking last modification date.
+    /// </summary>
     public interface IModified
     {
-		/// <summary>
-		/// Gets/sets the last modification date.
-		/// </summary>
-		DateTime LastModified { get; set; }
+        /// <summary>
+        /// Gets/sets the last modification date.
+        /// </summary>
+        DateTime LastModified { get; set; }
     }
 }

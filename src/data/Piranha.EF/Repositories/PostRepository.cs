@@ -19,120 +19,120 @@ namespace Piranha.EF.Repositories
 {
     public class PostRepository : RepositoryBase<Data.Post, Models.PostModel>, IPostRepository
     {
-		/// <summary>
-		/// Default constructor.
-		/// </summary>
-		/// <param name="db">The current db context</param>
-		internal PostRepository(Db db) : base(db) { }
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        /// <param name="db">The current db context</param>
+        internal PostRepository(Db db) : base(db) { }
 
-		/// <summary>
-		/// Gets the post model with the specified id.
-		/// </summary>
-		/// <typeparam name="T">The model type</typeparam>
-		/// <param name="id">The unique id</param>
-		/// <returns>The post model</returns>
-		public T GetById<T>(Guid id) where T : Models.PostModel {
-			var result = Query().SingleOrDefault(p => p.Id == id);
+        /// <summary>
+        /// Gets the post model with the specified id.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="id">The unique id</param>
+        /// <returns>The post model</returns>
+        public T GetById<T>(Guid id) where T : Models.PostModel {
+            var result = Query().SingleOrDefault(p => p.Id == id);
 
-			if (result != null)
-				return Map<T>(result);
-			return null;
-		}
+            if (result != null)
+                return Map<T>(result);
+            return null;
+        }
 
-		/// <summary>
-		/// Gets the post models that matches the given
-		/// id array.
-		/// </summary>
-		/// <param name="id">The id array</param>
-		/// <returns>The post models</returns>
-		public IList<Models.PostModel> GetById(Guid[] id) {
-			var models = new List<Models.PostModel>();
-			var result = Query().Where(p => id.Contains(p.Id)).ToList();
+        /// <summary>
+        /// Gets the post models that matches the given
+        /// id array.
+        /// </summary>
+        /// <param name="id">The id array</param>
+        /// <returns>The post models</returns>
+        public IList<Models.PostModel> GetById(Guid[] id) {
+            var models = new List<Models.PostModel>();
+            var result = Query().Where(p => id.Contains(p.Id)).ToList();
 
-			foreach (var post in result)
-				models.Add(Map(post));
-			return models;
-		}
+            foreach (var post in result)
+                models.Add(Map(post));
+            return models;
+        }
 
-		/// <summary>
-		/// Gets the post models that matches the given
-		/// id array.
-		/// </summary>
-		/// <typeparam name="T">The model type</typeparam>
-		/// <param name="id">The id array</param>
-		/// <returns>The post models</returns>
-		public IList<T> GetById<T>(Guid[] id) where T : Models.PostModel {
-			var models = new List<T>();
-			var result = Query().Where(p => id.Contains(p.Id)).ToList();
+        /// <summary>
+        /// Gets the post models that matches the given
+        /// id array.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="id">The id array</param>
+        /// <returns>The post models</returns>
+        public IList<T> GetById<T>(Guid[] id) where T : Models.PostModel {
+            var models = new List<T>();
+            var result = Query().Where(p => id.Contains(p.Id)).ToList();
 
-			foreach (var post in result)
-				models.Add(Map<T>(post));
-			return models;
-		}
+            foreach (var post in result)
+                models.Add(Map<T>(post));
+            return models;
+        }
 
-		/// <summary>
-		/// Gets the post model with the specified slug.
-		/// </summary>
-		/// <param name="category">The unique category slug</param>
-		/// <param name="slug">The unique slug</param>
-		/// <returns>The post model</returns>
-		public Models.PostModel GetBySlug(string category, string slug) {
-			var result = Query().SingleOrDefault(p => p.Category.Slug == category && p.Slug == slug);
+        /// <summary>
+        /// Gets the post model with the specified slug.
+        /// </summary>
+        /// <param name="category">The unique category slug</param>
+        /// <param name="slug">The unique slug</param>
+        /// <returns>The post model</returns>
+        public Models.PostModel GetBySlug(string category, string slug) {
+            var result = Query().SingleOrDefault(p => p.Category.Slug == category && p.Slug == slug);
 
-			if (result != null)
-				return Map(result);
-			return null;
-		}
+            if (result != null)
+                return Map(result);
+            return null;
+        }
 
-		/// <summary>
-		/// Gets the post model with the specified slug.
-		/// </summary>
-		/// <typeparam name="T">The model type</typeparam>
-		/// <param name="category">The unique category slug</param>
-		/// <param name="slug">The unique slug</param>
-		/// <returns>The post model</returns>
-		public T GetBySlug<T>(string category, string slug) where T : Models.PostModel {
-			var result = Query().SingleOrDefault(p => p.Category.Slug == category && p.Slug == slug);
+        /// <summary>
+        /// Gets the post model with the specified slug.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="category">The unique category slug</param>
+        /// <param name="slug">The unique slug</param>
+        /// <returns>The post model</returns>
+        public T GetBySlug<T>(string category, string slug) where T : Models.PostModel {
+            var result = Query().SingleOrDefault(p => p.Category.Slug == category && p.Slug == slug);
 
-			if (result != null)
-				return Map<T>(result);
-			return null;
-		}
+            if (result != null)
+                return Map<T>(result);
+            return null;
+        }
 
-		/// <summary>
-		/// Gets the base query for the repository.
-		/// </summary>
-		/// <returns>The query</returns>
-		protected override IQueryable<Post> Query() {
-			return db.Posts
-				.Include(p => p.Category);
-		}
+        /// <summary>
+        /// Gets the base query for the repository.
+        /// </summary>
+        /// <returns>The query</returns>
+        protected override IQueryable<Post> Query() {
+            return db.Posts
+                .Include(p => p.Category);
+        }
 
-		/// <summary>
-		/// Maps the given result to the full post model.
-		/// </summary>
-		/// <param name="result">The result</param>
-		/// <returns>The model</returns>
-		protected override Models.PostModel Map(Data.Post result) {
-			return Map<Models.PostModel>(result);
-		}
+        /// <summary>
+        /// Maps the given result to the full post model.
+        /// </summary>
+        /// <param name="result">The result</param>
+        /// <returns>The model</returns>
+        protected override Models.PostModel Map(Data.Post result) {
+            return Map<Models.PostModel>(result);
+        }
 
-		/// <summary>
-		/// Maps the given result to the full post model.
-		/// </summary>
-		/// <typeparam name="T">The model type</typeparam>
-		/// <param name="result">The result</param>
-		/// <returns>The model</returns>
-		private T Map<T>(Data.Post post) where T : Models.PostModel {
-			var model = (T)Activator.CreateInstance<T>();
+        /// <summary>
+        /// Maps the given result to the full post model.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="result">The result</param>
+        /// <returns>The model</returns>
+        private T Map<T>(Data.Post post) where T : Models.PostModel {
+            var model = (T)Activator.CreateInstance<T>();
 
-			// Map basic fields
-			Module.Mapper.Map<Data.Post, Models.PostModel>(post, model);
+            // Map basic fields
+            Module.Mapper.Map<Data.Post, Models.PostModel>(post, model);
 
-			// Map category
-			model.Category = Module.Mapper.Map<Data.Category, Models.Category>(post.Category);
+            // Map category
+            model.Category = Module.Mapper.Map<Data.Category, Models.Category>(post.Category);
 
-			return model;
-		}
-	}
+            return model;
+        }
+    }
 }

@@ -14,31 +14,31 @@ using Microsoft.WindowsAzure.Storage;
 
 namespace Piranha.Azure
 {
-	/// <summary>
-	/// Azure blob storage manager.
-	/// </summary>
+    /// <summary>
+    /// Azure blob storage manager.
+    /// </summary>
     public class BlobStorage : IStorage
     {
-		#region Members
-		private readonly CloudStorageAccount account;
-		private readonly IConfigurationRoot configuration;
-		#endregion
+        #region Members
+        private readonly CloudStorageAccount account;
+        private readonly IConfigurationRoot configuration;
+        #endregion
 
-		/// <summary>
-		/// Default constructor.
-		/// </summary>
-		/// <param name="config">The curren configuraiton manager</param>
-		public BlobStorage(IConfigurationRoot config) {
-			account = CloudStorageAccount.Parse(config["Piranha:AzureStorage"]);
-			configuration = config;
-		}
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        /// <param name="config">The curren configuraiton manager</param>
+        public BlobStorage(IConfigurationRoot config) {
+            account = CloudStorageAccount.Parse(config["Piranha:AzureStorage"]);
+            configuration = config;
+        }
 
-		/// <summary>
-		/// Opens a new storage session.
-		/// </summary>
-		/// <returns>A new open session</returns>
-		public async Task<IStorageSession> OpenAsync() {
-			return await BlobStorageSession.Open(account, configuration);
-		}
+        /// <summary>
+        /// Opens a new storage session.
+        /// </summary>
+        /// <returns>A new open session</returns>
+        public async Task<IStorageSession> OpenAsync() {
+            return await BlobStorageSession.Open(account, configuration);
+        }
     }
 }

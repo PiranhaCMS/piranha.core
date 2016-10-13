@@ -12,14 +12,14 @@ using System;
 
 namespace Piranha.EF.Data
 {
-	/// <summary>
-	/// Interface for data models with a unique Guid id.
-	/// </summary>
+    /// <summary>
+    /// Interface for data models with a unique Guid id.
+    /// </summary>
     public interface IModel
     {
-		/// <summary>
-		/// Gets/sets the unique id.
-		/// </summary>
-		Guid Id { get; set; }
+        /// <summary>
+        /// Gets/sets the unique id.
+        /// </summary>
+        Guid Id { get; set; }
     }
 }

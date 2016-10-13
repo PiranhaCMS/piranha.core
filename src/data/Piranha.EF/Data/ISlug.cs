@@ -12,14 +12,14 @@ namespace Piranha.EF.Data
 {
     public interface ISlug
     {
-		/// <summary>
-		/// Gets/sets the display title.
-		/// </summary>
-		string Title { get; set; }
+        /// <summary>
+        /// Gets/sets the display title.
+        /// </summary>
+        string Title { get; set; }
 
-		/// <summary>
-		/// Gets/sets the unique slug.
-		/// </summary>
-		string Slug { get; set; }
+        /// <summary>
+        /// Gets/sets the unique slug.
+        /// </summary>
+        string Slug { get; set; }
     }
 }

@@ -14,28 +14,28 @@ namespace Piranha.Models
 {
     public class PostModel : PostBase
     {
-		#region Properties
-		/// <summary>
-		/// Gets/sets the full permalink for the post.
-		/// </summary>
-		public string Permalink { get; set; }
+        #region Properties
+        /// <summary>
+        /// Gets/sets the full permalink for the post.
+        /// </summary>
+        public string Permalink { get; set; }
 
-		/// <summary>
-		/// Gets/sets the post category.
-		/// </summary>
-		public Category Category { get; set; }
+        /// <summary>
+        /// Gets/sets the post category.
+        /// </summary>
+        public Category Category { get; set; }
 
-		/// <summary>
-		/// Gets/sets the available tags.
-		/// </summary>
-		public IList<Tag> Tags { get; set; }
-		#endregion
+        /// <summary>
+        /// Gets/sets the available tags.
+        /// </summary>
+        public IList<Tag> Tags { get; set; }
+        #endregion
 
-		/// <summary>
-		/// Default constructor.
-		/// </summary>
-		public PostModel() {
-			Tags = new List<Tag>();
-		}
-	}
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public PostModel() {
+            Tags = new List<Tag>();
+        }
+    }
 }

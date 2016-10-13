@@ -12,9 +12,9 @@ using System;
 
 namespace Piranha
 {
-	/// <summary>
-	/// Interface for a storage session.
-	/// </summary>
+    /// <summary>
+    /// Interface for a storage session.
+    /// </summary>
     public interface IStorageSession : IDisposable
     {
     }
