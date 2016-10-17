@@ -30,6 +30,19 @@
           ]
         },
         {
+          "Id": "Intro",
+          "Fields": [
+            {
+              "Id": "Title",
+              "Type": "String"
+            },
+            {
+              "Id": "Body",
+              "Type": "Text"
+            }
+          ]
+        },
+        {
           "Id": "Slider",
           "Title": "Slider",
           "Collection": true,

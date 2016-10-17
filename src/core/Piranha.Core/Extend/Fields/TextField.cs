@@ -10,7 +10,7 @@
 
 namespace Piranha.Extend.Fields
 {
-    [Field(Name = "Field", Shorthand = "Field")]
+    [Field(Name = "Field", Shorthand = "Text")]
     public class TextField : SimpleField<string>
     {
     }

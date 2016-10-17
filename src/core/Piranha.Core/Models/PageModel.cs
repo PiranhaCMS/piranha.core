@@ -13,17 +13,28 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Reflection;
 
 namespace Piranha.Models
 {
-    public class PageModel : PageBase
+    public class PageModel : PageModel<PageModel>
     {
         #region Properties
         /// <summary>
         /// Gets/sets the regions.
         /// </summary>
         public dynamic Regions { get; set; }
+        #endregion
 
+        public PageModel() : base() {
+            Regions = new ExpandoObject();
+        }
+    }
+
+
+    public class PageModel<T> : PageBase where T : PageModel<T>
+    {
+        #region Properties
         /// <summary>
         /// Gets if this is the startpage of the site.
         /// </summary>
@@ -36,7 +47,6 @@ namespace Piranha.Models
         /// Default constructor.
         /// </summary>
         public PageModel() {
-            Regions = new ExpandoObject();
         }
 
         /// <summary>
@@ -44,31 +54,55 @@ namespace Piranha.Models
         /// </summary>
         /// <param name="typeId">The unique page type id</param>
         /// <returns>The new model</returns>
-        public static PageModel Create(string typeId) {
+        public static T Create(string typeId) {
             var pageType = App.PageTypes
                 .SingleOrDefault(t => t.Id == typeId);
 
             if (pageType != null) {
-                var model = new PageModel() {
-                    PageTypeId = typeId
-                };
+                var model = (T)Activator.CreateInstance<T>();
+                model.PageTypeId = typeId;
 
-                foreach (var region in pageType.Regions) {
-                    object value = null;
+                if (model is PageModel) {
+                    var dynModel = (PageModel)(object)model;
 
-                    if (region.Collection) {
-                        var reg = CreateRegion(region);
+                    foreach (var region in pageType.Regions) {
+                        object value = null;
 
-                        if (reg != null) {
-                            value = Activator.CreateInstance(typeof(List<>).MakeGenericType(reg.GetType()));
-                            ((IList)value).Add(reg);
+                        if (region.Collection) {
+                            var reg = CreateRegion(region);
+
+                            if (reg != null) {
+                                value = Activator.CreateInstance(typeof(List<>).MakeGenericType(reg.GetType()));
+                                ((IList)value).Add(reg);
+                            }
+                        } else {
+                            value = CreateRegion(region);
                         }
-                    } else {
-                        value = CreateRegion(region);
-                    }
 
-                    if (value != null)
-                        ((IDictionary<string, object>)model.Regions).Add(region.Id, value);
+                        if (value != null)
+                            ((IDictionary<string, object>)dynModel.Regions).Add(region.Id, value);
+                    }
+                } else {
+                    var typeInfo = model.GetType().GetTypeInfo();
+
+                    foreach (var region in pageType.Regions) {
+                        if (region.Collection) {
+                            var prop = typeInfo.GetProperty(region.Id, App.PropertyBindings);
+                            if (prop != null && prop.PropertyType.GetTypeInfo().IsGenericType) {
+                                var val = CreateRegion(prop.PropertyType.GenericTypeArguments[0], region);
+                                if (val != null) {
+                                    var list = prop.GetValue(model);
+                                    list.GetType().GetTypeInfo().GetMethod("Add").Invoke(list, new[] { val });
+                                }
+                            }
+
+                        } else {
+                            var prop = typeInfo.GetProperty(region.Id, App.PropertyBindings);
+                            if (prop != null) {
+                                prop.SetValue(model, CreateRegion(prop.PropertyType, region));
+                            }
+                        }
+                    }
                 }
                 return model;
             }
@@ -94,13 +128,26 @@ namespace Piranha.Models
             return null;
         }
 
+        public static TValue CreateRegion<TValue>(string typeId, string regionId) {
+            var pageType = App.PageTypes
+                .SingleOrDefault(t => t.Id == typeId);
+
+            if (pageType != null) {
+                var region = pageType.Regions.SingleOrDefault(r => r.Id == regionId);
+
+                if (region != null)
+                    return (TValue)CreateRegion(typeof(TValue), region);
+            }
+            return default(TValue);
+        }
+
         #region Private methods
         /// <summary>
         /// Creates a region value from the specified json structure.
         /// </summary>
         /// <param name="region">The region type</param>
         /// <returns>The created value</returns>
-        private static object CreateRegion(Models.PageTypeRegion region) {
+        private static object CreateRegion(PageTypeRegion region) {
             if (region.Fields.Count == 1) {
                 var type = App.Fields.GetByShorthand(region.Fields[0].Type);
                 if (type == null)
@@ -122,6 +169,36 @@ namespace Piranha.Models
                 return reg;
             }
             return null;
+        }
+
+        public static object CreateRegion(Type regionType, PageTypeRegion region) {
+            if (region.Fields.Count == 1) {
+                var type = App.Fields.GetByShorthand(region.Fields[0].Type);
+                if (type == null)
+                    type = App.Fields.GetByType(region.Fields[0].Type);
+
+                if (type != null && type.Type == regionType)
+                    return Activator.CreateInstance(type.Type);
+                return null;
+            } else {
+                var reg = Activator.CreateInstance(regionType);
+                var typeInfo = reg.GetType().GetTypeInfo();
+
+                foreach (var field in region.Fields) {
+                    var type = App.Fields.GetByShorthand(field.Type);
+                    if (type == null)
+                        type = App.Fields.GetByType(field.Type);
+
+                    if (type != null) {
+                        var prop = typeInfo.GetProperty(field.Id, App.PropertyBindings);
+
+                        if (prop != null && type.Type == prop.PropertyType) {
+                            prop.SetValue(reg, Activator.CreateInstance(type.Type));
+                        }
+                    }
+                }
+                return reg;
+            }
         }
         #endregion
     }

@@ -54,6 +54,24 @@ namespace Blog
             app.UsePiranhaPosts();
             app.UsePiranhaArchives();
 
+            var dynModel = Piranha.Models.PageModel.Create("Start");
+            dynModel.SortOrder = 1;
+            dynModel.Title = "My second page";
+            dynModel.Regions.Content.Value = "<p>Lorem ipsum</p>";
+            dynModel.Regions.Intro.Title.Value = "Say hi to the new version of Piranha CMS!";
+            dynModel.Regions.Intro.Body.Value = "We hope you like it :)";
+            dynModel.Published = DateTime.Now;
+            api.Pages.Save(dynModel);
+
+            var clrModel = Models.StartPageModel.Create("Start");
+            clrModel.SortOrder = 2;
+            clrModel.Title = "My third page";
+            clrModel.Content.Value = "<p>Lorem ipsum</p>";
+            clrModel.Intro.Title.Value = "Say hi to the new version of Piranha CMS!";
+            clrModel.Intro.Body.Value = "We hope you like it :)";
+            clrModel.Published = DateTime.Now;
+            api.Pages.Save(clrModel);
+
             app.UseMvc(routes => {
                 routes.MapRoute(name: "areaRoute",
                     template: "{area:exists}/{controller}/{action}/{id?}",

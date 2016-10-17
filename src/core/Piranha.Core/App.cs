@@ -11,6 +11,7 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 
 namespace Piranha
 {
@@ -43,8 +44,19 @@ namespace Piranha
             get { return instance.modules; }
         }
 
+        /// <summary>
+        /// Gets the currently registered page types.
+        /// </summary>
         public static IList<Models.PageType> PageTypes {
             get { return instance.pageTypes; }
+        }
+
+        /// <summary>
+        /// Gets the binding flags for retrieving a region from a
+        /// strongly typed model.
+        /// </summary>
+        public static BindingFlags PropertyBindings {
+            get { return BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance; }
         }
         #endregion
 

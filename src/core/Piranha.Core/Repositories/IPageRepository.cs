@@ -30,7 +30,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
         /// <returns>The page model</returns>
-        T GetStartpage<T>() where T : PageModel;
+        T GetStartpage<T>() where T : PageModel<T>;
 
         /// <summary>
         /// Gets the page model with the specified id.
@@ -45,7 +45,7 @@ namespace Piranha.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
         /// <returns>The page model</returns>
-        T GetById<T>(Guid id) where T : PageModel;
+        T GetById<T>(Guid id) where T : PageModel<T>;
 
         /// <summary>
         /// Gets the page model with the specified slug.
@@ -60,7 +60,7 @@ namespace Piranha.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="slug">The unique slug</param>
         /// <returns>The page model</returns>
-        T GetBySlug<T>(string slug) where T : PageModel;
+        T GetBySlug<T>(string slug) where T : PageModel<T>;
 
         /// <summary>
         /// Gets all page models with the specified parent id.
@@ -68,5 +68,11 @@ namespace Piranha.Repositories
         /// <param name="parentId">The parent id</param>
         /// <returns>The page models</returns>
         IList<PageModel> GetByParentId(Guid? parentId);
+
+        /// <summary>
+        /// Saves the given page model
+        /// </summary>
+        /// <param name="model">The page model</param>
+        void Save<TModelType>(PageModel<TModelType> model) where TModelType : PageModel<TModelType>;
     }
 }
