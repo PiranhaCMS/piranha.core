@@ -1,9 +1,56 @@
 ﻿@import "../../../bower_components/bootstrap/less/bootstrap.less";
+@import "mixins.less";
 
 body {
     padding: 20px 0;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .container {
     max-width: 730px;
+}
+
+//
+// Header & Navigation
+//
+.header {
+    background: #222;
+    height: 76px;
+
+    img {
+        margin: 2px 0 -6px;
+    }
+
+    nav {
+        ul {
+            margin-top: 18px;
+
+            li {
+                a {
+                    color: #eee;
+                    text-transform: uppercase;
+                    position: relative;
+
+                    &:hover {
+                        color: #fff;
+                        background: inherit;
+                    }
+                }
+
+                &.active {
+                    a {
+                        color: #fff;
+                        background: inherit;
+
+                        &:before {
+                            .arrow(#fff, 10px, 28px)
+                        }
+                        &:hover {
+                            background: inherit;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

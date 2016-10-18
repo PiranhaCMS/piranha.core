@@ -1,0 +1,12 @@
+﻿.arrow(@color, @size, @margin-top) {
+	content: "";
+	display: block;
+	width: 0;
+	height: 0;
+	border: solid @size transparent;
+	border-bottom-color: @color;
+	position: absolute;
+	margin-top: @margin-top;
+	margin-left: -@size;
+	left: 50%;
+}

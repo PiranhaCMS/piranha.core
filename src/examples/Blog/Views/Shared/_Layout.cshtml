@@ -6,11 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     @*<meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">*@
+        <meta name="author" content="">
+        <link rel="icon" href="../../favicon.ico">*@
 
     <title>@ViewBag.Title</title>
 
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
     <link href="~/assets/css/style.min.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -21,25 +22,28 @@
 </head>
 
 <body>
-
-    <div class="container">
-        <div class="header clearfix">
+    <div class="header clearfix">
+        <div class="container">
             <nav>
                 <ul class="nav nav-pills pull-right">
                     <li role="presentation" class="active"><a href="~/">Home</a></li>
                     <li role="presentation"><a href="~/blog">Blog</a></li>
                 </ul>
             </nav>
-            <h3 class="text-muted">Piranha CMS</h3>
+            <a href="~/"><img src="~/assets/img/logo-simple.png" alt="Piranha CMS" /></a>
         </div>
+    </div>
 
+    <div class="container">
         @RenderBody()
+    </div>
 
-        <footer class="footer">
+    <footer class="footer">
+        <div class="container">
             <p>&copy; 2016 Håkan Edling | <a target="_blank" href="http://twitter.com/tidyui">@@tidyui</a>.</p>
-        </footer>
+        </div>
+    </footer>
 
-    </div> <!-- /container -->
     <script src="~/assets/js/script.min.js"></script>
 </body>
 </html>

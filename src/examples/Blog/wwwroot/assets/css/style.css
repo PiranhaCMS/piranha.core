@@ -6726,7 +6726,46 @@ button.close {
 }
 body {
   padding: 20px 0;
+  font-family: 'Open Sans', sans-serif;
 }
 .container {
   max-width: 730px;
+}
+.header {
+  background: #222;
+  height: 76px;
+}
+.header img {
+  margin: 2px 0 -6px;
+}
+.header nav ul {
+  margin-top: 18px;
+}
+.header nav ul li a {
+  color: #eee;
+  text-transform: uppercase;
+  position: relative;
+}
+.header nav ul li a:hover {
+  color: #fff;
+  background: inherit;
+}
+.header nav ul li.active a {
+  color: #fff;
+  background: inherit;
+}
+.header nav ul li.active a:before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  border: solid 10px transparent;
+  border-bottom-color: #fff;
+  position: absolute;
+  margin-top: 28px;
+  margin-left: -10px;
+  left: 50%;
+}
+.header nav ul li.active a:hover {
+  background: inherit;
 }
