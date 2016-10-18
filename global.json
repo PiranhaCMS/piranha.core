@@ -1,6 +1,6 @@
 {
-  "projects": [ "core" ],
+  "projects": [ "src", "src/core", "src/data", "src/env", "src/examples" ],
   "sdk": {
-    "version": "1.0.0-rc1-update2"
+    "version": "1.0.0-preview2-003131"
   }
 }

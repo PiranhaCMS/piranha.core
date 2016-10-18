@@ -1,0 +1,16 @@
+﻿@model Piranha.Models.PostModel
+@{
+    ViewBag.Title = Model.Title;
+}
+
+<h1>@Model.Title</h1>
+<p>
+    <small>
+        Published @Model.Published in @Model.Category.Title
+    </small>
+</p>
+<p>
+    @Model.Excerpt
+</p>
+<hr />
+@Html.Raw(Model.Body)
