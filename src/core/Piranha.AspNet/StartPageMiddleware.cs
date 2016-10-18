@@ -36,7 +36,7 @@ namespace Piranha.AspNet
 
                     if (page != null) {
                         // Set path
-                        context.Request.Path = new PathString(page.Route);
+                        context.Request.Path = new PathString(page.Route ?? "/page");
 
                         // Set query
                         if (context.Request.QueryString.HasValue) {

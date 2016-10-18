@@ -9,7 +9,6 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -17,6 +16,9 @@ using System.Reflection;
 
 namespace Piranha.Models
 {
+    /// <summary>
+    /// Dynamic page model.
+    /// </summary>
     public class PageModel : PageModel<PageModel>
     {
         #region Properties
@@ -26,12 +28,18 @@ namespace Piranha.Models
         public dynamic Regions { get; set; }
         #endregion
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public PageModel() : base() {
             Regions = new ExpandoObject();
         }
     }
 
-
+    /// <summary>
+    /// Generic page model.
+    /// </summary>
+    /// <typeparam name="T">The model type</typeparam>
     public class PageModel<T> : PageBase where T : PageModel<T>
     {
         #region Properties
@@ -42,12 +50,6 @@ namespace Piranha.Models
             get { return !ParentId.HasValue && SortOrder == 0; }
         }
         #endregion
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public PageModel() {
-        }
 
         /// <summary>
         /// Creates a new page model using the given page type id.
@@ -72,8 +74,9 @@ namespace Piranha.Models
                             var reg = CreateRegion(region);
 
                             if (reg != null) {
-                                value = Activator.CreateInstance(typeof(List<>).MakeGenericType(reg.GetType()));
-                                ((IList)value).Add(reg);
+                                value = Activator.CreateInstance(typeof(PageRegionList<>).MakeGenericType(reg.GetType()));
+                                ((IPageRegionList)value).TypeId = typeId;
+                                ((IPageRegionList)value).RegionId = region.Id;
                             }
                         } else {
                             value = CreateRegion(region);
@@ -86,17 +89,7 @@ namespace Piranha.Models
                     var typeInfo = model.GetType().GetTypeInfo();
 
                     foreach (var region in pageType.Regions) {
-                        if (region.Collection) {
-                            var prop = typeInfo.GetProperty(region.Id, App.PropertyBindings);
-                            if (prop != null && prop.PropertyType.GetTypeInfo().IsGenericType) {
-                                var val = CreateRegion(prop.PropertyType.GenericTypeArguments[0], region);
-                                if (val != null) {
-                                    var list = prop.GetValue(model);
-                                    list.GetType().GetTypeInfo().GetMethod("Add").Invoke(list, new[] { val });
-                                }
-                            }
-
-                        } else {
+                        if (!region.Collection) {
                             var prop = typeInfo.GetProperty(region.Id, App.PropertyBindings);
                             if (prop != null) {
                                 prop.SetValue(model, CreateRegion(prop.PropertyType, region));
@@ -128,6 +121,13 @@ namespace Piranha.Models
             return null;
         }
 
+        /// <summary>
+        /// Creates a dynamic region.
+        /// </summary>
+        /// <typeparam name="TValue">The value type</typeparam>
+        /// <param name="typeId">The page type id</param>
+        /// <param name="regionId">The region id</param>
+        /// <returns>The region value</returns>
         public static TValue CreateRegion<TValue>(string typeId, string regionId) {
             var pageType = App.PageTypes
                 .SingleOrDefault(t => t.Id == typeId);
@@ -143,7 +143,7 @@ namespace Piranha.Models
 
         #region Private methods
         /// <summary>
-        /// Creates a region value from the specified json structure.
+        /// Creates a region value.
         /// </summary>
         /// <param name="region">The region type</param>
         /// <returns>The created value</returns>
@@ -171,7 +171,13 @@ namespace Piranha.Models
             return null;
         }
 
-        public static object CreateRegion(Type regionType, PageTypeRegion region) {
+        /// <summary>
+        /// Creates a region value.
+        /// </summary>
+        /// <param name="regionType">The regio ntype</param>
+        /// <param name="region">The region</param>
+        /// <returns>The created value</returns>
+        private static object CreateRegion(Type regionType, PageTypeRegion region) {
             if (region.Fields.Count == 1) {
                 var type = App.Fields.GetByShorthand(region.Fields[0].Type);
                 if (type == null)

@@ -73,6 +73,6 @@ namespace Piranha.Repositories
         /// Saves the given page model
         /// </summary>
         /// <param name="model">The page model</param>
-        void Save<TModelType>(PageModel<TModelType> model) where TModelType : PageModel<TModelType>;
+        void Save<TModelType>(TModelType model) where TModelType : PageModel<TModelType>;
     }
 }

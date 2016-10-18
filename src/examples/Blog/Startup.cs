@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Piranha;
+using Piranha.Extend.Fields;
 
 namespace Blog
 {
@@ -53,24 +54,7 @@ namespace Blog
             app.UseStaticFiles();
             app.UsePiranhaPosts();
             app.UsePiranhaArchives();
-
-            var dynModel = Piranha.Models.PageModel.Create("Start");
-            dynModel.SortOrder = 1;
-            dynModel.Title = "My second page";
-            dynModel.Regions.Content.Value = "<p>Lorem ipsum</p>";
-            dynModel.Regions.Intro.Title.Value = "Say hi to the new version of Piranha CMS!";
-            dynModel.Regions.Intro.Body.Value = "We hope you like it :)";
-            dynModel.Published = DateTime.Now;
-            api.Pages.Save(dynModel);
-
-            var clrModel = Models.StartPageModel.Create("Start");
-            clrModel.SortOrder = 2;
-            clrModel.Title = "My third page";
-            clrModel.Content.Value = "<p>Lorem ipsum</p>";
-            clrModel.Intro.Title.Value = "Say hi to the new version of Piranha CMS!";
-            clrModel.Intro.Body.Value = "We hope you like it :)";
-            clrModel.Published = DateTime.Now;
-            api.Pages.Save(clrModel);
+            app.UsePiranhaStartPage();
 
             app.UseMvc(routes => {
                 routes.MapRoute(name: "areaRoute",
@@ -81,15 +65,18 @@ namespace Blog
                     name: "default",
                     template: "{controller=home}/{action=index}/{id?}");
             });
-            Seed(db);
+            Seed(api, db);
         }
+
+
 
         /// <summary>
         /// Seeds some test data.
         /// </summary>
         /// <param name="db"></param>
-        private void Seed(Piranha.EF.Db db) {
+        private void Seed(IApi api, Piranha.EF.Db db) {
             if (db.Categories.Count() == 0) {
+                // Add the blog category
                 var category = new Piranha.EF.Data.Category() {
                     Id = Guid.NewGuid(),
                     Title = "Blog",
@@ -97,6 +84,7 @@ namespace Blog
                 };
                 db.Categories.Add(category);
 
+                // Add a post
                 var post = new Piranha.EF.Data.Post() {
                     CategoryId = category.Id,
                     Title = "My first post",
@@ -105,6 +93,24 @@ namespace Blog
                     Published = DateTime.Now
                 };
                 db.Posts.Add(post);
+
+                // Add the startpage
+                var startPage = Models.StartPageModel.Create("Start");
+                startPage.Title = "Welcome to Piranha CMS";
+                startPage.Slug = "start";
+                startPage.Content = "<p>Lorem ipsum</p>";
+                startPage.Intro.Title = "Say hi to the new version of Piranha CMS!";
+                startPage.Intro.Body = "We hope you like it :)";
+                startPage.Slider.Add(new Models.SliderItem() {
+                    Title = "Slide 1",
+                    Body = "<p>Lorem</p>"
+                });
+                startPage.Slider.Add(new Models.SliderItem() {
+                    Title = "Slide 2",
+                    Body = "<p>Ipsum</p>"
+                });
+                startPage.Published = DateTime.Now;
+                api.Pages.Save(startPage);
 
                 db.SaveChanges();
             }

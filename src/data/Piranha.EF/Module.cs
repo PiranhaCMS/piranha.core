@@ -43,6 +43,14 @@ namespace Piranha.EF
                     .ForMember(m => m.Created, o => o.Ignore())
                     .ForMember(m => m.LastModified, o => o.Ignore());
 
+                cfg.CreateMap<Data.Page, Models.PageBase>();
+                cfg.CreateMap<Models.PageBase, Data.Page>()
+                    .ForMember(m => m.Id, o => o.Ignore())
+                    .ForMember(m => m.Created, o => o.Ignore())
+                    .ForMember(m => m.LastModified, o => o.Ignore())
+                    .ForMember(m => m.PageType, o => o.Ignore())
+                    .ForMember(m => m.Fields, o => o.Ignore());
+
                 cfg.CreateMap<Data.Post, Models.PostModel>()
                     .ForMember(m => m.Permalink, o => o.MapFrom(p => p.Category.Slug + "/" + p.Slug))
                     .ForMember(m => m.Category, o => o.Ignore())

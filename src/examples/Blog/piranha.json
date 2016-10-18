@@ -15,10 +15,10 @@
         }
       ]
     },
+
     {
       "Id": "Start",
       "Title": "Start page",
-      "Route": "/start",
       "Regions": [
         {
           "Id": "Content",
