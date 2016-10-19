@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace Piranha.EF.Data
 {
-    public sealed class Page : IModel, ISlug, ICreated, IModified
+    public sealed class Block : IModel, ICreated, IModified
     {
         #region Properties
         /// <summary>
@@ -22,19 +22,9 @@ namespace Piranha.EF.Data
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets/sets the page type id.
+        /// Gets/sets the block type id.
         /// </summary>
         public string TypeId { get; set; }
-
-        /// <summary>
-        /// Gets/sets the optional parent id.
-        /// </summary>
-        public Guid? ParentId { get; set; }
-
-        /// <summary>
-        /// Gets/sets the sort order of the page in its hierarchical position.
-        /// </summary>
-        public int SortOrder { get; set; }
 
         /// <summary>
         /// Gets/sets the main title.
@@ -42,29 +32,10 @@ namespace Piranha.EF.Data
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets/sets the navigation title.
+        /// Gets/sets the optional view that should be used
+        /// to render this block.
         /// </summary>
-        public string NavigationTitle { get; set; }
-
-        /// <summary>
-        /// Gets/sets the unique slug.
-        /// </summary>
-        public string Slug { get; set; }
-
-        /// <summary>
-        /// Gets/sets the optional meta keywords.
-        /// </summary>
-        public string MetaKeywords { get; set; }
-
-        /// <summary>
-        /// Gets/sets the optional meta description.
-        /// </summary>
-        public string MetaDescription { get; set; }
-
-        /// <summary>
-        /// Gets/sets the internal route used by the middleware.
-        /// </summary>
-        public string Route { get; set; }
+        public string View { get; set; }
 
         /// <summary>
         /// Gets/sets the optional published date.
@@ -84,21 +55,21 @@ namespace Piranha.EF.Data
 
         #region Navigation properties
         /// <summary>
-        /// Gets/sets the page type.
+        /// Gets/sets the block type.
         /// </summary>
-        public PageType Type { get; set; }
+        public BlockType Type { get; set; }
 
         /// <summary>
         /// Gets/sets the available fields.
         /// </summary>
-        public IList<PageField> Fields { get; set; }
+        public IList<BlockField> Fields { get; set; }
         #endregion
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public Page() {
-            Fields = new List<PageField>();
+        public Block() {
+            Fields = new List<BlockField>();
         }
     }
 }

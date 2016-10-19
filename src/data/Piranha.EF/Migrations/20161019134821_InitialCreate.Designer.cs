@@ -8,91 +8,14 @@ using Piranha.EF;
 namespace Piranha.EF.Migrations
 {
     [DbContext(typeof(Db))]
-    partial class DbModelSnapshot : ModelSnapshot
+    [Migration("20161019134821_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("Piranha.EF.Data.Block", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("Created");
-
-                    b.Property<DateTime>("LastModified");
-
-                    b.Property<DateTime?>("Published");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 128);
-
-                    b.Property<string>("TypeId")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 32);
-
-                    b.Property<string>("View")
-                        .HasAnnotation("MaxLength", 255);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TypeId");
-
-                    b.ToTable("Piranha_Blocks");
-                });
-
-            modelBuilder.Entity("Piranha.EF.Data.BlockField", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("BlockId");
-
-                    b.Property<string>("CLRType")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 255);
-
-                    b.Property<string>("FieldId")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 32);
-
-                    b.Property<string>("RegionId")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 32);
-
-                    b.Property<int>("SortOrder");
-
-                    b.Property<string>("Value");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BlockId");
-
-                    b.HasIndex("BlockId", "RegionId", "FieldId", "SortOrder")
-                        .IsUnique();
-
-                    b.ToTable("Piranha_BlockFields");
-                });
-
-            modelBuilder.Entity("Piranha.EF.Data.BlockType", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasAnnotation("MaxLength", 32);
-
-                    b.Property<string>("Body");
-
-                    b.Property<DateTime>("Created");
-
-                    b.Property<DateTime>("LastModified");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Piranha_BlockTypes");
-                });
 
             modelBuilder.Entity("Piranha.EF.Data.Category", b =>
                 {
@@ -296,22 +219,6 @@ namespace Piranha.EF.Migrations
                         .IsUnique();
 
                     b.ToTable("Piranha_Tags");
-                });
-
-            modelBuilder.Entity("Piranha.EF.Data.Block", b =>
-                {
-                    b.HasOne("Piranha.EF.Data.BlockType", "Type")
-                        .WithMany("Blocks")
-                        .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Piranha.EF.Data.BlockField", b =>
-                {
-                    b.HasOne("Piranha.EF.Data.Block", "Block")
-                        .WithMany("Fields")
-                        .HasForeignKey("BlockId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Piranha.EF.Data.Page", b =>

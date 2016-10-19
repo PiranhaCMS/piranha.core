@@ -8,11 +8,9 @@
  * 
  */
 
-using System.Collections.Generic;
-
-namespace Piranha.Models
+namespace Piranha.Extend
 {
-    public sealed class PageTypeRegion
+    public sealed class FieldType
     {
         #region Properties
         /// <summary>
@@ -26,21 +24,14 @@ namespace Piranha.Models
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets/sets if this region has a collection of values.
+        /// Gets/sets the value type.
         /// </summary>
-        public bool Collection { get; set; }
-
-        /// <summary>
-        /// Gets/sets the available fields.
-        /// </summary>
-        public IList<PageTypeField> Fields { get; set; }
+        public string Type { get; set; }
         #endregion
 
         /// <summary>
         /// Default internal constructor.
         /// </summary>
-        internal PageTypeRegion() {
-            Fields = new List<PageTypeField>();
-        }
+        internal FieldType() { }
     }
 }

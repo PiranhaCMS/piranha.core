@@ -26,7 +26,8 @@ namespace Piranha
         private bool isInitialized = false;
         private Extend.FieldInfoList fields;
         private List<Extend.IModule> modules;
-        private IList<Models.PageType> pageTypes;
+        private IList<Extend.BlockType> blockTypes;
+        private IList<Extend.PageType> pageTypes;
         #endregion
 
         #region Properties
@@ -45,9 +46,16 @@ namespace Piranha
         }
 
         /// <summary>
+        /// Gets the currently registered block types.
+        /// </summary>
+        public static IList<Extend.BlockType> BlockTypes {
+            get { return instance.blockTypes; }
+        }
+
+        /// <summary>
         /// Gets the currently registered page types.
         /// </summary>
-        public static IList<Models.PageType> PageTypes {
+        public static IList<Extend.PageType> PageTypes {
             get { return instance.pageTypes; }
         }
 
@@ -66,6 +74,8 @@ namespace Piranha
         private App() {
             fields = new Extend.FieldInfoList();
             modules = new List<Extend.IModule>();
+            blockTypes = new List<Extend.BlockType>();
+            pageTypes = new List<Extend.PageType>();
         }
 
         /// <summary>
@@ -88,20 +98,6 @@ namespace Piranha
                         fields.Register<Extend.Fields.HtmlField>();
                         fields.Register<Extend.Fields.StringField>();
                         fields.Register<Extend.Fields.TextField>();
-
-                        // Compose app config
-                        if (File.Exists("piranha.json")) {
-                            using (var file = File.OpenRead("piranha.json")) {
-                                using (var reader = new StreamReader(file)) {
-                                    var config = JsonConvert.DeserializeObject<AppConfig>(reader.ReadToEnd());
-                                    config.Ensure();
-
-                                    // Update page types
-                                    foreach (var type in config.PageTypes)
-                                        api.PageTypes.Save(type);
-                                }
-                            }
-                        }
 
                         // Get page types
                         pageTypes = api.PageTypes.Get();

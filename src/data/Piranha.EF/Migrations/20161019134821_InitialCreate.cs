@@ -1,9 +1,19 @@
-﻿using System;
+﻿/*
+ * Copyright (c) 2016 Håkan Edling
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ * 
+ * https://github.com/piranhacms/piranha.core
+ * 
+ */
+
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Piranha.EF.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder) {
             migrationBuilder.CreateTable(
@@ -84,19 +94,19 @@ namespace Piranha.EF.Migrations
                     MetaDescription = table.Column<string>(maxLength: 255, nullable: true),
                     MetaKeywords = table.Column<string>(maxLength: 128, nullable: true),
                     NavigationTitle = table.Column<string>(maxLength: 128, nullable: true),
-                    PageTypeId = table.Column<string>(maxLength: 32, nullable: false),
                     ParentId = table.Column<Guid>(nullable: true),
                     Published = table.Column<DateTime>(nullable: true),
                     Route = table.Column<string>(maxLength: 255, nullable: true),
                     Slug = table.Column<string>(maxLength: 128, nullable: false),
                     SortOrder = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(maxLength: 128, nullable: false)
+                    Title = table.Column<string>(maxLength: 128, nullable: false),
+                    TypeId = table.Column<string>(maxLength: 32, nullable: false)
                 },
                 constraints: table => {
                     table.PrimaryKey("PK_Piranha_Pages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Piranha_Pages_Piranha_PageTypes_PageTypeId",
-                        column: x => x.PageTypeId,
+                        name: "FK_Piranha_Pages_Piranha_PageTypes_TypeId",
+                        column: x => x.TypeId,
                         principalTable: "Piranha_PageTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -130,15 +140,15 @@ namespace Piranha.EF.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Piranha_Pages_PageTypeId",
-                table: "Piranha_Pages",
-                column: "PageTypeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Piranha_Pages_Slug",
                 table: "Piranha_Pages",
                 column: "Slug",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Piranha_Pages_TypeId",
+                table: "Piranha_Pages",
+                column: "TypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Piranha_PageFields_PageId",

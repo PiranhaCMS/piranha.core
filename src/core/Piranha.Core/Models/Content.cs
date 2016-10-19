@@ -12,7 +12,10 @@ using System;
 
 namespace Piranha.Models
 {
-    public abstract class MediaBase
+    /// <summary>
+    /// Abstract base class for templated content.
+    /// </summary>
+    public abstract class Content
     {
         #region Properties
         /// <summary>
@@ -21,24 +24,19 @@ namespace Piranha.Models
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets/sets the filename.
+        /// Gets/sets the content type id.
         /// </summary>
-        public string FileName { get; set; }
+        public string TypeId { get; set; }
 
         /// <summary>
-        /// Gets/sets the filesize.
+        /// Gets/sets the title.
         /// </summary>
-        public long FileSize { get; set; }
+        public string Title { get; set; }
 
         /// <summary>
-        /// Gets/sets the content type.
+        /// Gets/sets the published date.
         /// </summary>
-        public string ContentType { get; set; }
-
-        /// <summary>
-        /// Gets/sets the public url for retreiving the file.
-        /// </summary>
-        public string PublicUrl { get; set; }
+        public DateTime? Published { get; set; }
 
         /// <summary>
         /// Gets/sets the created date.

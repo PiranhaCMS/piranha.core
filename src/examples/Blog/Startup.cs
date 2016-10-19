@@ -47,6 +47,11 @@ namespace Blog
                 app.UseDeveloperExceptionPage();
             }
 
+            // Build page types
+            var pageTypeBuilder = new Piranha.Builder.Json.PageTypeBuilder(api)
+                .AddJsonFile("piranha.json");
+            pageTypeBuilder.Build();
+
             // Initialize the piranha application
             App.Init(api, new Piranha.EF.Module());
 

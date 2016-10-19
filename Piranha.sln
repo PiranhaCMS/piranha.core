@@ -28,6 +28,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{75
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Blog", "src\examples\Blog\Blog.xproj", "{01FBB170-EA99-46FC-93AC-D0BA0B18C289}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Piranha.Builder.Json", "src\core\Piranha.Builder.Json\Piranha.Builder.Json.xproj", "{E0FFB476-6BA7-4EC2-AD7B-976CB5F7596D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +56,10 @@ Global
 		{01FBB170-EA99-46FC-93AC-D0BA0B18C289}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01FBB170-EA99-46FC-93AC-D0BA0B18C289}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01FBB170-EA99-46FC-93AC-D0BA0B18C289}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0FFB476-6BA7-4EC2-AD7B-976CB5F7596D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0FFB476-6BA7-4EC2-AD7B-976CB5F7596D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0FFB476-6BA7-4EC2-AD7B-976CB5F7596D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0FFB476-6BA7-4EC2-AD7B-976CB5F7596D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,5 +74,6 @@ Global
 		{55FCB9F6-69D2-405D-B498-DDAFB00B7C7B} = {0A074A6C-6F0D-4D5D-9DB4-F5C972975C47}
 		{7541308A-E3C2-41A6-9D3C-49523A4212BE} = {AFB9C732-D409-4431-A6E0-C07669B32FDB}
 		{01FBB170-EA99-46FC-93AC-D0BA0B18C289} = {7541308A-E3C2-41A6-9D3C-49523A4212BE}
+		{E0FFB476-6BA7-4EC2-AD7B-976CB5F7596D} = {21F191FF-B150-4249-8357-7EC8BC9D779A}
 	EndGlobalSection
 EndGlobal

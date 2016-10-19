@@ -14,37 +14,37 @@ using Piranha.Extend;
 namespace Piranha.Repositories
 {
     /// <summary>
-    /// The client page type repository.
+    /// The block type repository.
     /// </summary>
-    public interface IPageTypeRepository
+    public interface IBlockTypeRepository
     {
         /// <summary>
-        /// Gets the page type with the specified id.
+        /// Gets the block type with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        /// <returns>The page type</returns>
-        PageType GetById(string id);
+        /// <returns>The block type</returns>
+        BlockType GetById(string id);
 
         /// <summary>
-        /// Gets all available page types.
+        /// Gets all available block types.
         /// </summary>
-        /// <returns>The page types</returns>
-        IList<PageType> Get();
+        /// <returns>The block types</returns>
+        IList<BlockType> Get();
 
         /// <summary>
-        /// Saves the given page type.
+        /// Saves the given block type.
         /// </summary>
-        /// <param name="pageType">The page type</param>
-        void Save(PageType pageType);
+        /// <param name="blockType">The block type</param>
+        void Save(BlockType blockType);
 
         /// <summary>
-        /// Deletes the given page type.
+        /// Deletes the given block type.
         /// </summary>
-        /// <param name="pageType">The page type</param>
-        void Delete(PageType pageType);
+        /// <param name="blockType">The block type</param>
+        void Delete(BlockType blockType);
 
         /// <summary>
-        /// Deletes the page type with the specified id.
+        /// Deletes the block type with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
         void Delete(string id);

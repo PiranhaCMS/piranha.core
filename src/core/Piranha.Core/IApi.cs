@@ -24,6 +24,11 @@ namespace Piranha
         IArchiveRepository Archives { get; }
 
         /// <summary>
+        /// Gets the block type repository.
+        /// </summary>
+        IBlockTypeRepository BlockTypes { get; }
+
+        /// <summary>
         /// Gets the category repository.
         /// </summary>
         ICategoryRepository Categories { get; }

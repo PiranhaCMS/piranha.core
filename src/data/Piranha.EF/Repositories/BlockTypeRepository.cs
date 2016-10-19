@@ -16,9 +16,9 @@ using Piranha.Repositories;
 namespace Piranha.EF.Repositories
 {
     /// <summary>
-    /// Page type repository.
+    /// Block type repository.
     /// </summary>
-    public class PageTypeRepository : IPageTypeRepository
+    public class BlockTypeRepository : IBlockTypeRepository
     {
         #region Members
         private readonly Db db;
@@ -28,75 +28,75 @@ namespace Piranha.EF.Repositories
         /// Default internal constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
-        internal PageTypeRepository(Db db) {
+        internal BlockTypeRepository(Db db) {
             this.db = db;
         }
 
         /// <summary>
-        /// Gets the page type with the specified id.
+        /// Gets the block type with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        /// <returns>The page type</returns>
-        public Extend.PageType GetById(string id) {
-            var type = db.PageTypes
+        /// <returns>The block type</returns>
+        public Extend.BlockType GetById(string id) {
+            var type = db.BlockTypes
                 .SingleOrDefault(t => t.Id == id);
 
             if (type != null)
-                return JsonConvert.DeserializeObject<Extend.PageType>(type.Body);
+                return JsonConvert.DeserializeObject<Extend.BlockType>(type.Body);
             return null;
         }
 
         /// <summary>
-        /// Gets all available page types.
+        /// Gets all available block types.
         /// </summary>
-        /// <returns>The page types</returns>
-        public IList<Extend.PageType> Get() {
-            var result = new List<Extend.PageType>();
+        /// <returns>The block types</returns>
+        public IList<Extend.BlockType> Get() {
+            var result = new List<Extend.BlockType>();
 
-            var types = db.PageTypes.ToList();
+            var types = db.BlockTypes.ToList();
             foreach (var type in types)
-                result.Add(JsonConvert.DeserializeObject<Extend.PageType>(type.Body));
+                result.Add(JsonConvert.DeserializeObject<Extend.BlockType>(type.Body));
 
             return result.OrderBy(t => t.Title).ToList();
         }
 
         /// <summary>
-        /// Saves the given page type.
+        /// Saves the given block type.
         /// </summary>
-        /// <param name="pageType">The page type</param>
-        public void Save(Extend.PageType pageType) {
-            var type = db.PageTypes
-                .SingleOrDefault(t => t.Id == pageType.Id);
+        /// <param name="blockType">The block type</param>
+        public void Save(Extend.BlockType blockType) {
+            var type = db.BlockTypes
+                .SingleOrDefault(t => t.Id == blockType.Id);
 
             if (type == null) {
-                type = new Data.PageType() {
-                    Id = pageType.Id
+                type = new Data.BlockType() {
+                    Id = blockType.Id
                 };
-                db.PageTypes.Add(type);
+                db.BlockTypes.Add(type);
             }
-            type.Body = JsonConvert.SerializeObject(pageType);
+            type.Body = JsonConvert.SerializeObject(blockType);
 
             db.SaveChanges();
         }
 
         /// <summary>
-        /// Deletes the given page type.
+        /// Deletes the given block type.
         /// </summary>
-        /// <param name="pageType">The page type</param>
-        public void Delete(Extend.PageType pageType) {
-            Delete(pageType.Id);
+        /// <param name="blockType">The block type</param>
+        public void Delete(Extend.BlockType blockType) {
+            Delete(blockType.Id);
         }
 
         /// <summary>
-        /// Deletes the page type with the specified id.
+        /// Deletes the block type with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
         public void Delete(string id) {
-            var type = db.PageTypes
+            var type = db.BlockTypes
                 .SingleOrDefault(t => t.Id == id);
 
             if (type != null) {
-                db.PageTypes.Remove(type);
+                db.BlockTypes.Remove(type);
                 db.SaveChanges();
             }
         }
