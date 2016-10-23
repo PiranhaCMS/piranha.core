@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Piranha;
-using Piranha.Extend.Fields;
 
 namespace Blog
 {
@@ -51,6 +50,9 @@ namespace Blog
             var pageTypeBuilder = new Piranha.Builder.Json.PageTypeBuilder(api)
                 .AddJsonFile("piranha.json");
             pageTypeBuilder.Build();
+            var blockTypeBuilder = new Piranha.Builder.Json.BlockTypeBuilder(api)
+                .AddJsonFile("piranha.json");
+            blockTypeBuilder.Build();
 
             // Initialize the piranha application
             App.Init(api, new Piranha.EF.Module());

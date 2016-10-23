@@ -1,0 +1,104 @@
+﻿//
+// Copyright (c) 2014-2015 Håkan Edling
+//
+// This software may be modified and distributed under the terms
+// of the MIT license.  See the LICENSE file for details.
+// 
+// http://github.com/piranhacms/piranha.vnext
+// 
+
+@import "mixins.less";
+@import "colors.less";
+
+//
+// Main navigation
+.navmenu-inverse {
+	width: 220px;
+
+	.navmenu-brand {
+		text-align: center;
+		border-bottom: 1px solid #444;
+		margin: 0;
+	}
+
+	.navmenu-nav {
+		>li {
+			font-size: 15px;
+			border-bottom: 1px solid #444;
+
+			span {
+				color: @highlight-color;
+				padding-right: 8px;
+				width: 28px;
+			}
+
+			a {
+				color: #ddd;
+				font-family: "Open Sans";
+				font-weight: 300;
+				font-size: 16px;
+
+				&:hover {
+					background: #2a2a2a;
+				}
+			}
+
+			ul {
+				padding: 0;
+
+				li {
+					font-size: 13px;
+					list-style-type: none;
+
+					a {
+						color: @link-color;
+						display: block;
+						padding: 8px 0 8px 44px;
+						font: normal 15px Arial;
+
+						&:hover {
+							text-decoration: none;
+						}
+					}
+
+					&:first-child a {
+						padding-top: 10px;
+					}
+					&:last-child a {
+						padding-bottom: 14px;
+					}
+					&.active a {
+						background: #2a2a2a;
+						color: #ccc;
+					}
+				}
+			}
+
+			&.active {
+				a {
+					border-bottom: 1px solid #000;
+				}
+			}
+		}
+	}
+}
+
+//
+// Navigation pills
+.nav-pills {
+	>li {
+		 >a {
+			 .border-radius(0);
+
+			 &:hover, &:focus {
+				 background: @border-color;
+			 }
+		 }
+
+		 &.active {
+			 a {
+				 background: @link-color;
+			 }
+		 }
+	} 
+}

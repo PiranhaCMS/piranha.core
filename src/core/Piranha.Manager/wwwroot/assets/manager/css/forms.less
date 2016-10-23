@@ -1,0 +1,246 @@
+﻿//
+// Copyright (c) 2014-2015 Håkan Edling
+//
+// This software may be modified and distributed under the terms
+// of the MIT license.  See the LICENSE file for details.
+// 
+// http://github.com/piranhacms/piranha.vnext
+// 
+
+@import "colors.less";
+@import "mixins.less";
+
+.panel {
+	.table {
+		margin-bottom: 0;
+
+		thead {
+			tr {
+				th {
+					background: transparent;
+					border-bottom: solid 4px @form-color;
+				}
+			}
+		}
+	}
+}
+
+.table-striped {
+	>tbody {
+		>tr:nth-child(2n+1) {
+			>td {
+				background-color: #fff;
+			}
+
+			&.active {
+				>td {
+					background-color: @list-color-active;
+				}
+			}
+		}
+		>tr:nth-child(2n) {
+			>td {
+				background-color: #fff;
+			}
+
+			&.active {
+				>td {
+					background-color: @list-color-active;
+				}
+			}
+		}
+	}
+}
+
+.form {
+	label.label-small {
+		font-size: 12px;
+	}
+
+	.form-group {
+		background: #fff;
+		border: 1px solid @border-color;
+		margin-bottom: 20px;
+		position: relative;
+		.border-radius(3px);
+
+		&.has-error {
+			border-color: #e88;
+		}
+
+		// Form controls
+		.form-control {
+			height: auto;
+			border: 0 none;
+			font-size: 18px;
+			box-shadow: none;
+
+			&.input-validation-error {
+				border: 1px solid #e88;
+				padding: 5px 12px;
+			}
+
+			&.title {
+				font-size: 26px;
+				color: #222;
+			}
+
+			&.meta {
+				font-size: 14px;
+			}
+
+			&.count-me + p {
+				color: #999;
+				font-size: 12px;
+				padding: 4px 12px;
+				margin: 0;
+				text-align: right;
+				text-transform: uppercase;
+			}
+		}
+
+		textarea {
+			resize: none;
+		}
+
+		// Validation messages
+		.field-validation-error {
+			display: block;
+			background: #333;
+			color: #fff;
+			padding: 4px 10px;
+			font-size: 13px;
+			position: absolute;
+			top: -12px;
+			right: -8px;
+			opacity: 0.9;
+			.border-radius(3px);
+		}
+		
+		.form-control-feedback {
+			top: 0;
+		}
+
+		// Select2 box
+		.select2-container {
+			width: 100%;
+			padding: 1px 2px;
+
+			&.select2-container-multi {
+				.select2-choices {
+					background-image: none;
+					border: 0 none;
+					padding: 2px 5px 0;
+
+					.select2-search-choice {
+						color: #fff;
+						background: #444;
+						border-color: #444;
+						box-shadow: none;
+						margin: 4px 2px 0 12px;
+						font-size: 10px;
+						text-transform: uppercase;
+
+						.select2-search-choice-close {
+							top: 2px;
+						}
+
+						&:before {
+							content: "";
+							position: absolute;
+							top: 0;
+							left: -20px;
+							width: 0;
+							height: 0;
+							border: 10px solid transparent;
+							border-right-color: #444;
+						}
+					}
+				}
+			}
+		}
+
+		// TinyMCE editor
+		.mce-tinymce {
+			border: 0 none !important;
+
+			.mce-panel {
+				background: #fff;
+				background-image: none;
+				padding: 1px 2px;
+
+				.mce-btn {
+					background: transparent;
+					background-image: none;
+					border: 0 none;
+					box-shadow: none;
+
+					.mce-ico {
+						font-size: 14px;
+					}
+				}
+			}
+
+			.mce-edit-area {
+				border-top: 0 none;
+			}
+		}
+	}
+
+	.panel-white, .table {
+		.form-group {
+			border: 0;
+
+			input, select {
+				background: #eee;
+				border-bottom: 1px solid @border-color;
+
+				&::-webkit-input-placeholder,
+				&:-moz-placeholder,
+				&::-moz-placeholder,
+				&:-ms-input-placeholder {  
+					color: #ccc;
+				}
+			}
+		}
+	}
+
+	.table {
+		.form-group {
+			margin-bottom: 0;
+
+			input, select, textarea {
+				font-size: 14px;
+			}
+		}
+	}
+}
+
+.btn {
+	.border-radius(0);
+
+	&.btn-primary {
+		background: @link-color;
+		border-color: @link-color;
+		color: #fff;
+	}
+
+	&.btn-success {
+		background: @success-color;
+		border-color: @success-color;
+		color: #fff;
+	}
+}
+
+.btn-label {
+	.border-radius(0);
+}
+
+.col-sm-12.buttons {
+	text-align: right;
+	margin-top: -50px;
+
+	.dropdown-menu {
+		text-align: left;
+	}
+}

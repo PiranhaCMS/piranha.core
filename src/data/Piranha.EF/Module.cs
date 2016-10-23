@@ -23,6 +23,11 @@ namespace Piranha.EF
         public static IMapper Mapper { get; private set; }
 
         /// <summary>
+        /// Gets the registered serializers.
+        /// </summary>
+        public static Serializers.SerializerManager Serializer { get; private set; }
+
+        /// <summary>
         /// Initializes the module.
         /// </summary>
         public void Init() {
@@ -59,6 +64,12 @@ namespace Piranha.EF
 
             config.AssertConfigurationIsValid();
             Mapper = config.CreateMapper();
+
+            Serializer = new Serializers.SerializerManager();
+            Serializer.Register<Extend.Fields.HtmlField>(new Serializers.StringSerializer<Extend.Fields.HtmlField>());
+            Serializer.Register<Extend.Fields.StringField>(new Serializers.StringSerializer<Extend.Fields.StringField>());
+            Serializer.Register<Extend.Fields.TextField>(new Serializers.StringSerializer<Extend.Fields.TextField>());
+
         }
     }
 }

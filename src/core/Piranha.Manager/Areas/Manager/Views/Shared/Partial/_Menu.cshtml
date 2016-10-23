@@ -1,0 +1,25 @@
+﻿@using Piranha.Manager
+@{
+    var controller = "keff";
+}
+<ul class="nav navmenu-nav">
+    <li>
+        <a href="#"><span class="glyphicon glyphicon-dashboard"></span>Dashboard</a>
+    </li>
+    @foreach (var group in Piranha.Manager.Menu.Items) {
+        if (group.Items.Count > 0) {
+            <li>
+                <a href="#"><span class="@group.Css"></span>@group.Name</a>
+                <ul>
+                    @foreach (var item in group.Items) {
+                        <li @(item.Controller.ToLower() == controller ? "class=active" : "")>
+                            <a href="@Url.Action(item.Action, item.Controller)">@item.Name</a>
+                        </li>
+                    }
+                </ul>
+            </li> }
+    }
+    <li>
+        <a href="@Url.Action("Logout", "Account")"><span class="glyphicon glyphicon-off"></span>Logout</a>
+    </li>
+</ul>

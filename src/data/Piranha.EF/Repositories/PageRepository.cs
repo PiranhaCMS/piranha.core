@@ -305,10 +305,10 @@ namespace Piranha.EF.Repositories
             if (type != null) {
                 if (model is Models.PageModel) {
                     ((IDictionary<string, object>)((Models.PageModel)(object)model).Regions)[regionId] =
-                        JsonConvert.DeserializeObject(field.Value, type.Type);
+                        Module.Serializer.Deserialize(type.Type, field.Value);
                 } else {
                     model.GetType().GetProperty(regionId, App.PropertyBindings).SetValue(model,
-                        JsonConvert.DeserializeObject(field.Value, type.Type));
+                        Module.Serializer.Deserialize(type.Type, field.Value));
                 }
             }
         }
@@ -327,12 +327,12 @@ namespace Piranha.EF.Repositories
             if (type != null) {
                 if (model is Models.PageModel) {
                     ((IDictionary<string, object>)((IDictionary<string, object>)((Models.PageModel)(object)model).Regions)[regionId])[fieldId] =
-                        JsonConvert.DeserializeObject(field.Value, type.Type);
+                        Module.Serializer.Deserialize(type.Type, field.Value);
                 } else {
                     var obj = model.GetType().GetProperty(regionId, App.PropertyBindings).GetValue(model);
                     if (obj != null)
                         obj.GetType().GetProperty(fieldId, App.PropertyBindings).SetValue(obj,
-                            JsonConvert.DeserializeObject(field.Value, type.Type));
+                            Module.Serializer.Deserialize(type.Type, field.Value));
                 }
             }
         }
@@ -350,10 +350,10 @@ namespace Piranha.EF.Repositories
             if (type != null) {
                 if (model is Models.PageModel) {
                     ((IList)((IDictionary<string, object>)((Models.PageModel)(object)model).Regions)[regionId]).Add(
-                        JsonConvert.DeserializeObject(field.Value, type.Type));
+                        Module.Serializer.Deserialize(type.Type, field.Value));
                 } else {
                     ((IList)model.GetType().GetProperty(regionId, App.PropertyBindings).GetValue(model)).Add(
-                        JsonConvert.DeserializeObject(field.Value, type.Type));
+                        Module.Serializer.Deserialize(type.Type, field.Value));
                 }
             }
         }
@@ -375,7 +375,7 @@ namespace Piranha.EF.Repositories
                     if (type != null) {
                         if (((IDictionary<string, object>)obj).ContainsKey(field.FieldId)) {
                             ((IDictionary<string, object>)obj)[field.FieldId] =
-                                JsonConvert.DeserializeObject(field.Value, type.Type);
+                                Module.Serializer.Deserialize(type.Type, field.Value);
                         }
                     }
                 }
@@ -388,7 +388,7 @@ namespace Piranha.EF.Repositories
                 foreach (var field in fields) {
                     var prop = obj.GetType().GetProperty(field.FieldId, App.PropertyBindings);
                     if (prop != null) {
-                        prop.SetValue(obj, JsonConvert.DeserializeObject(field.Value, prop.PropertyType));
+                        prop.SetValue(obj, Module.Serializer.Deserialize(prop.PropertyType, field.Value));
                     }
                 }
                 list.Add(obj);
@@ -446,7 +446,7 @@ namespace Piranha.EF.Repositories
                     // Update field info & value
                     field.CLRType = fieldType.CLRType;
                     field.SortOrder = sortOrder;
-                    field.Value = JsonConvert.SerializeObject(fieldValue);
+                    field.Value = Module.Serializer.Serialize(fieldValue);
                 }
             }
         }

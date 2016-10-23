@@ -1,0 +1,150 @@
+﻿//
+// Copyright (c) 2014-2015 Håkan Edling
+//
+// This software may be modified and distributed under the terms
+// of the MIT license.  See the LICENSE file for details.
+// 
+// http://github.com/piranhacms/piranha.vnext
+// 
+
+@import "colors.less";
+@import "mixins.less";
+
+.table {
+	thead {
+		tr {
+			th {
+				background: @list-color-head;
+				padding: 12px 20px;
+				font-family: "Open Sans", Arial;
+				text-transform: uppercase;
+
+				&.actions {
+					&.one {
+						width: 32px;
+					}
+					&.two {
+						width: 64px;
+					}
+					&.three {
+						width: 96px;
+					}
+				}
+
+				.sort {
+					cursor: pointer;
+
+					&::after {
+						display: inline-block;
+						padding-left: 4px;
+						font-family: "Glyphicons Halflings";
+						font-style: normal;
+						font-weight: 400;
+						font-size: 12px;
+						line-height: 1;
+						position: relative;
+						top: 1px;
+						-moz-osx-font-smoothing: grayscale;
+					}
+
+					&.asc::after {
+						content: "";
+					}
+					&.desc::after {
+						content: "";
+					}
+				}
+			}
+		}
+	}
+	>tbody {
+		>tr {
+			>td {
+				padding: 10px 20px;
+				border-top: 4px solid @bg-color;
+
+				&.actions {
+					a {
+						display: inline-block;
+						width: 16px;
+						height: 16px;
+
+						&.delete {
+							background: url('../img/ico-delete-16.png') 0 0 no-repeat;
+						}
+						&.down {
+							background: url('../img/ico-arrow-down-16.png') 0 0 no-repeat;
+						}
+						&.up {
+							background: url('../img/ico-arrow-up-16.png') 0 0 no-repeat;
+						}
+					}
+				}
+
+				p.meta {
+					color: @text-color-light;
+					margin: 4px 0 0;
+				}
+			}
+
+			&.detail {
+				display: none;
+
+				>td {
+					border: 0;
+				}
+			}
+
+			&.unpublished {
+				.meta {
+					color: #f0ad4e;
+				}
+			}
+
+			&.saved {
+				>td {
+					background: @saved-color !important;
+					.transition(background, 0.2s);
+				}
+			}
+			&.post-saved {
+				>td {
+					background: #fff;
+					.transition(background, 0.4s);
+				}
+			}
+		}
+	}
+	.date {
+		width: 114px;
+	}
+	.well {
+		margin-top: 10px;
+		margin-bottom: 0;
+	}
+
+	&.table-main {
+		tr {
+			td {
+				vertical-align: middle;
+			} 
+
+			&:hover {
+				td {
+					background: #fafafa;
+				}
+			}
+		}
+
+		a {
+			font-family: "Open Sans", Arial;
+			font-size: 16px;
+		}
+	}
+
+	.gravatar {
+		width: 40px;
+		margin-right: 10px;
+		.border-radius(20px);
+	}
+}
