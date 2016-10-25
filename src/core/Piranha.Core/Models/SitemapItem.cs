@@ -9,31 +9,32 @@
  */
 
 using System;
+using System.Collections.Generic;
 
-namespace Piranha.EF.Data
+namespace Piranha.Models
 {
-    public sealed class Category : Models.Category, IModel, ISlug, ICreated, IModified
+    public class SitemapItem
     {
         #region Properties
         /// <summary>
-        /// Gets/sets the archive title.
+        /// Gets/sets the unique id.
         /// </summary>
-        public string ArchiveTitle { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets/sets the archive meta keywords.
+        /// Gets/sets the main title.
         /// </summary>
-        public string ArchiveKeywords { get; set; }
+        public string Title { get; set; }
 
         /// <summary>
-        /// Gets/sets the archive meta description.
+        /// Gets/sets the optional navigation title.
         /// </summary>
-        public string ArchiveDescription { get; set; }
+        public string NavigationTitle { get; set; }
 
         /// <summary>
-        /// Gets/sets the archive route.
+        /// Gets/sets the unique permalink.
         /// </summary>
-        public string ArchiveRoute { get; set; }
+        public string Permalink { get; set; }
 
         /// <summary>
         /// Gets/sets the created date.
@@ -44,6 +45,18 @@ namespace Piranha.EF.Data
         /// Gets/sets the last modification date.
         /// </summary>
         public DateTime LastModified { get; set; }
+
+        /// <summary>
+        /// Gets/sets the available child items.
+        /// </summary>
+        public IList<SitemapItem> Items { get; set; }
         #endregion
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public SitemapItem() {
+            Items = new List<SitemapItem>();
+        }
     }
 }

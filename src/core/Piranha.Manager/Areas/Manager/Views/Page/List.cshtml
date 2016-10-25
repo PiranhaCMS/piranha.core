@@ -1,4 +1,17 @@
-﻿@{
+﻿@model Piranha.Areas.Manager.Models.PageListModel
+@{
     ViewBag.Title = "Pages";
 }
 
+<table class="table table-striped table-main">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th class="date">Modified</th>
+            <th class="date">Created</th>
+        </tr>
+    </thead>
+    <tbody>
+        @Html.DisplayFor(m => m.Sitemap)
+    </tbody>
+</table>

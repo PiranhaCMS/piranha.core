@@ -13,7 +13,7 @@ using Piranha.Repositories;
 
 namespace Piranha.EF
 {
-    public class Api : IApi
+    public sealed class Api : IApi
     {
         #region Members
         /// <summary>
@@ -52,6 +52,11 @@ namespace Piranha.EF
         /// Gets the post repository.
         /// </summary>
         public IPostRepository Posts { get; private set; }
+
+        /// <summary>
+        /// Gets the sitemap repository.
+        /// </summary>
+        public ISitemapRepository Sitemap { get; private set; }
         #endregion
 
         public Api(Db db) {
@@ -63,6 +68,7 @@ namespace Piranha.EF
             Pages = new Repositories.PageRepository(this, db);
             PageTypes = new Repositories.PageTypeRepository(db);
             Posts = new Repositories.PostRepository(db);
+            Sitemap = new Repositories.SitemapRepository(db);
         }
 
         /// <summary>

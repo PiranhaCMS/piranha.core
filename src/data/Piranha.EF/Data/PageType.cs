@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace Piranha.EF.Data
 {
-    public class PageType : ICreated, IModified
+    public sealed class PageType : ICreated, IModified
     {
         #region Properties
         /// <summary>

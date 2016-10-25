@@ -1,0 +1,16 @@
+﻿@model Piranha.Areas.Manager.Models.PageEditModel
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label>Route</label>
+            @Html.TextBoxFor(m => m.Route, new { @class = "form-control small", placeholder = "Optional route" })
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label>View</label>
+            <input type="text" class="form-control small" placeholder="Optional view" />
+        </div>
+    </div>
+</div>

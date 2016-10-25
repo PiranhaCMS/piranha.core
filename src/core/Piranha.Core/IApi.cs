@@ -47,5 +47,10 @@ namespace Piranha
         /// Gets the post repository.
         /// </summary>
         IPostRepository Posts { get; }
+
+        /// <summary>
+        /// Gets the sitemap repository.
+        /// </summary>
+        ISitemapRepository Sitemap { get; }
     }
 }

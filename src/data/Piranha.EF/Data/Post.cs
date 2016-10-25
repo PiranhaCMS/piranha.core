@@ -12,7 +12,7 @@ using System;
 
 namespace Piranha.EF.Data
 {
-    public class Post : IModel, ISlug, ICreated, IModified
+    public sealed class Post : IModel, ISlug, ICreated, IModified
     {
         #region Properties
         /// <summary>

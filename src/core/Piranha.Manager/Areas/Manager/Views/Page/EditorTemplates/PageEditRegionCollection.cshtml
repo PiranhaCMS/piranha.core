@@ -1,0 +1,27 @@
+﻿@model Piranha.Areas.Manager.Models.PageEditRegionCollection
+
+<div class="well well-sm">
+    Insert toolbar here for adding items
+</div>
+
+<div class="region-list">
+    @for (var i = 0; i < Model.FieldSets.Count; i++) {
+        <div class="region-list-item">
+            <div class="row">
+                <div class="col-sm-10">
+                    @for (var n = 0; n < Model.FieldSets[i].Count; n++) {
+                        <div class="form-group">
+                            @Html.HiddenFor(m => m.FieldSets[i][n].Id)
+                            @Html.HiddenFor(m => m.FieldSets[i][n].CLRType)
+                            @if (Model.FieldSets[i].Count > 1) {
+                                <label>@Model.FieldSets[i][n].Title</label>
+                            }
+                            @Html.EditorFor(m => m.FieldSets[i][n].Value, Model.FieldSets[i][n].Value.GetType().Name)
+                        </div>
+                    }
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+        </div>
+    }
+</div>

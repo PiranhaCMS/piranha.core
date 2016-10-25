@@ -58,21 +58,12 @@
 	}
 
 	.form-group {
-		background: #fff;
-		border: 1px solid @border-color;
-		margin-bottom: 20px;
-		position: relative;
-		.border-radius(3px);
-
-		&.has-error {
-			border-color: #e88;
-		}
-
 		// Form controls
 		.form-control {
 			height: auto;
-			border: 0 none;
 			font-size: 18px;
+            border-color: @border-color;
+            border-radius: 0;
 			box-shadow: none;
 
 			&.input-validation-error {
@@ -85,9 +76,13 @@
 				color: #222;
 			}
 
-			&.meta {
+			&.small {
 				font-size: 14px;
 			}
+
+            &.count-me {
+                border-bottom: 0 none;
+            }
 
 			&.count-me + p {
 				color: #999;
@@ -96,6 +91,8 @@
 				margin: 0;
 				text-align: right;
 				text-transform: uppercase;
+                border: solid 1px @border-color;
+                border-top: 0 none;
 			}
 		}
 
@@ -243,4 +240,17 @@
 	.dropdown-menu {
 		text-align: left;
 	}
+}
+
+.region-list {
+    margin: 0 -15px;
+
+    .region-list-item {
+        border-top: solid 1px @border-color;
+        padding: 15px;
+
+        &:last-child {
+            padding-bottom: 0;
+        }
+    }
 }

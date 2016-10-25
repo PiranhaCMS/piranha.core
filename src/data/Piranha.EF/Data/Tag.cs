@@ -12,7 +12,7 @@ using System;
 
 namespace Piranha.EF.Data
 {
-    public class Tag : IModel, ISlug, ICreated, IModified
+    public sealed class Tag : IModel, ISlug, ICreated, IModified
     {
         #region Properties
         public Guid Id { get; set; }

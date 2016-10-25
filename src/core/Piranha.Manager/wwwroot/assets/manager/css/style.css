@@ -7475,6 +7475,7 @@ body {
   font-family: Arial;
   margin-left: 220px;
   min-width: 768px;
+  max-width: 1200px;
 }
 h1 {
   text-transform: uppercase;
@@ -7699,23 +7700,11 @@ a {
 .form label.label-small {
   font-size: 12px;
 }
-.form .form-group {
-  background: #fff;
-  border: 1px solid #ddd;
-  margin-bottom: 20px;
-  position: relative;
-  border-radius: 3px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  -o-border-radius: 3px;
-}
-.form .form-group.has-error {
-  border-color: #e88;
-}
 .form .form-group .form-control {
   height: auto;
-  border: 0 none;
   font-size: 18px;
+  border-color: #ddd;
+  border-radius: 0;
   box-shadow: none;
 }
 .form .form-group .form-control.input-validation-error {
@@ -7726,8 +7715,11 @@ a {
   font-size: 26px;
   color: #222;
 }
-.form .form-group .form-control.meta {
+.form .form-group .form-control.small {
   font-size: 14px;
+}
+.form .form-group .form-control.count-me {
+  border-bottom: 0 none;
 }
 .form .form-group .form-control.count-me + p {
   color: #999;
@@ -7736,6 +7728,8 @@ a {
   margin: 0;
   text-align: right;
   text-transform: uppercase;
+  border: solid 1px #ddd;
+  border-top: 0 none;
 }
 .form .form-group textarea {
   resize: none;
@@ -7874,6 +7868,16 @@ a {
 }
 .col-sm-12.buttons .dropdown-menu {
   text-align: left;
+}
+.region-list {
+  margin: 0 -15px;
+}
+.region-list .region-list-item {
+  border-top: solid 1px #ddd;
+  padding: 15px;
+}
+.region-list .region-list-item:last-child {
+  padding-bottom: 0;
 }
 .panel {
   border: 1px solid #ddd;
