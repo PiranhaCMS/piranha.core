@@ -24,5 +24,16 @@ namespace Piranha.Models
         /// Gets/sets the region id.
         /// </summary>
         string RegionId { get; set; }
+
+        /// <summary>
+        /// Clears the list
+        /// </summary>
+        void Clear();
+
+        /// <summary>
+        /// Adds a new item to the region list
+        /// </summary>
+        /// <param name="item">The item</param>
+        void Add(object item);
     }
 }

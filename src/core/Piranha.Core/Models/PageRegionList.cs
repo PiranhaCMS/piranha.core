@@ -8,6 +8,7 @@
  * 
  */
 
+using System;
 using System.Collections.Generic;
 
 namespace Piranha.Models
@@ -46,6 +47,16 @@ namespace Piranha.Models
             Add(item);
 
             return item;
+        }
+
+        /// <summary>
+        /// Adds a new item to the region list
+        /// </summary>
+        /// <param name="item">The item</param>
+        public void Add(object item) {
+            if (item.GetType() == typeof(T))
+                base.Add((T)item);
+            else throw new ArgumentException();
         }
     }
 }

@@ -50,6 +50,7 @@ namespace Piranha.Areas.Manager.Models
 
             if (page != null) {
                 Module.Mapper.Map<PageEditModel, Piranha.Models.PageModelBase>(this, page);
+                SaveRegions(this, page);
                 api.Pages.Save(page);
 
                 return true;
@@ -68,14 +69,14 @@ namespace Piranha.Areas.Manager.Models
             if (page != null) {
                 var model = Module.Mapper.Map<Piranha.Models.PageModelBase, PageEditModel>(page);
                 model.PageType = App.PageTypes.SingleOrDefault(t => t.Id == model.TypeId);
-                MapRegions(page, model);
+                LoadRegions(page, model);
 
                 return model;
             }
             throw new KeyNotFoundException($"No page found with the id '{id}'");
         }
 
-        private static void MapRegions(Piranha.Models.PageModel src, PageEditModel dest) {
+        private static void LoadRegions(Piranha.Models.PageModel src, PageEditModel dest) {
             if (dest.PageType != null) {
                 foreach (var region in dest.PageType.Regions) {
                     var regions = (IDictionary<string, object>)src.Regions;
@@ -124,6 +125,50 @@ namespace Piranha.Areas.Manager.Models
                                 editRegion.Add(fieldSet);
                             }
                             dest.Regions.Add(editRegion);
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void SaveRegions(PageEditModel src, Piranha.Models.PageModel dest) {
+            var modelRegions = (IDictionary<string, object>)dest.Regions;
+            foreach (var region in src.Regions) {
+                if (region is PageEditRegion) {
+                    if (!modelRegions.ContainsKey(region.Id))
+                        modelRegions[region.Id] = Piranha.Models.PageModel.CreateRegion(dest.TypeId, region.Id);
+
+                    var reg = (PageEditRegion)region;
+
+                    if (reg.FieldSet.Count == 1) {
+                        modelRegions[region.Id] = reg.FieldSet[0].Value;
+                    } else {
+                        var modelFields = (IDictionary<string, object>)modelRegions[region.Id];
+
+                        foreach (var field in reg.FieldSet) {
+                            modelFields[field.Id] = field.Value;
+                        }
+                    }
+                } else {
+                    if (modelRegions.ContainsKey(region.Id)) {
+                        var list = (Piranha.Models.IRegionList)modelRegions[region.Id];
+                        var reg = (PageEditRegionCollection)region;
+
+                        // At this point we clear the values and rebuild them
+                        list.Clear();
+
+                        foreach (var set in reg.FieldSets) {
+                            if (set.Count == 1) {
+                                list.Add(set[0].Value);
+                            } else {
+                                var modelFields = (IDictionary<string, object>)Piranha.Models.PageModel.CreateRegion(dest.TypeId, region.Id);
+
+                                foreach (var field in set) {
+                                    modelFields[field.Id] = field.Value;
+                                }
+                                list.Add(modelFields);
+                            }
+
                         }
                     }
                 }
