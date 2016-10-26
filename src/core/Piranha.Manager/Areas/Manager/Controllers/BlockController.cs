@@ -10,10 +10,12 @@
 
 using Microsoft.AspNetCore.Mvc;
 
+// For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+
 namespace Piranha.Areas.Manager.Controllers
 {
     [Area("Manager")]
-    public class PostController : Controller
+    public class BlockController : Controller
     {
         #region Members
         /// <summary>
@@ -26,14 +28,14 @@ namespace Piranha.Areas.Manager.Controllers
         /// Default constroller.
         /// </summary>
         /// <param name="api">The current api</param>
-        public PostController(IApi api) {
+        public BlockController(IApi api) {
             this.api = api;
         }
 
         /// <summary>
-        /// Gets the list view for the posts.
+        /// Gets the list view for the blocks.
         /// </summary>
-        [Route("manager/posts")]
+        [Route("manager/blocks")]
         public IActionResult List() {
             return View();
         }
