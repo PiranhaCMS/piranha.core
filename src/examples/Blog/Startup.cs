@@ -34,8 +34,7 @@ namespace Blog
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services) {
             services.AddMvc();
-            services.AddDbContext<Piranha.EF.Db>(options => options.UseSqlServer(Configuration.GetConnectionString("Piranha")));
-            services.AddScoped<IApi, Piranha.EF.Api>();
+            services.AddPiranhaEF(options => options.UseSqlServer(Configuration.GetConnectionString("Piranha")));
             services.AddPiranhaManager();
         }
 
@@ -56,9 +55,7 @@ namespace Blog
             blockTypeBuilder.Build();
 
             // Initialize the piranha application
-            App.Init(api, 
-                new Piranha.EF.Module(),
-                new Piranha.Manager.Module());
+            App.Init(api);
 
             // Register middleware
             app.UseStaticFiles();

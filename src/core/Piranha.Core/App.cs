@@ -102,10 +102,14 @@ namespace Piranha
                         // Get page types
                         pageTypes = api.PageTypes.Get();
 
-                        // Compose & initialize modules
+                        // Add ad-hoc modules
                         foreach (var module in modules) {
-                            module.Init();
                             this.modules.Add(module);
+                        }
+
+                        // Initialize all modules
+                        foreach (var module in this.modules) {
+                            module.Init();
                         }
 
                         isInitialized = true;
