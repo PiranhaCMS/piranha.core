@@ -1,6 +1,10 @@
 ﻿[
   {
-    "outputFile": "wwwroot/assets/manager/css/style.css",
-    "inputFile": "wwwroot/assets/manager/css/style.less"
+    "outputFile": "assets/css/style.css",
+    "inputFile": "assets/css/style.less"
+  },
+  {
+    "outputFile": "assets/css/editor.css",
+    "inputFile": "assets/css/editor.less"
   }
 ]

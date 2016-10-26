@@ -12177,6 +12177,9 @@ if (typeof jQuery === 'undefined') {
 
 }(jQuery);
 
+//
+// Panel toggle buttons
+//
 $(document).on('click', '.panel-heading .btn-toggle', function () {
     var target = $(this).attr('data-target');
 

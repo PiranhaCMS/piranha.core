@@ -159,7 +159,8 @@
 
 		// TinyMCE editor
 		.mce-tinymce {
-			border: 0 none !important;
+            border-color: @border-color;
+			_border: 0 none !important;
 
 			.mce-panel {
 				background: #fff;
@@ -251,6 +252,16 @@
 
         &:last-child {
             padding-bottom: 0;
+        }
+    }
+}
+
+.single-region {
+    .region-editor {
+        margin: -15px -15px -30px;
+
+        .mce-tinymce {
+			border: 0 none !important;
         }
     }
 }

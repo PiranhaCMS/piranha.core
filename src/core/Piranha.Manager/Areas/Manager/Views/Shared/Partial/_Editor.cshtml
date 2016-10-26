@@ -1,0 +1,16 @@
+﻿<script type="text/javascript">
+    tinymce.init({
+        selector: 'textarea.editor',
+        menubar: false,
+        convert_urls: false,
+        plugins: [
+            "autoresize autolink code hr paste link image"
+        ],
+        width: "100%",
+        height: "340",
+        autoresize_min_height: 340,
+        content_css: "@Url.Content("~/assets/manager/css/editor.css")",
+        toolbar: "bold italic underline | bullist numlist hr | formatselect removeformat | link image",
+        block_formats: 'Paragraph=p;Header 1=h1;Header 2=h2;Header 3=h3;Header 4=h4'
+    });
+</script>

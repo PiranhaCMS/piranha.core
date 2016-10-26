@@ -1,4 +1,7 @@
-﻿$(document).on('click', '.panel-heading .btn-toggle', function () {
+﻿//
+// Panel toggle buttons
+//
+$(document).on('click', '.panel-heading .btn-toggle', function () {
     var target = $(this).attr('data-target');
 
     // Remove selecte state

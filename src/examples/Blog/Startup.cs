@@ -36,6 +36,7 @@ namespace Blog
             services.AddMvc();
             services.AddDbContext<Piranha.EF.Db>(options => options.UseSqlServer(Configuration.GetConnectionString("Piranha")));
             services.AddScoped<IApi, Piranha.EF.Api>();
+            services.AddPiranhaManager();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,7 +56,9 @@ namespace Blog
             blockTypeBuilder.Build();
 
             // Initialize the piranha application
-            App.Init(api, new Piranha.EF.Module());
+            App.Init(api, 
+                new Piranha.EF.Module(),
+                new Piranha.Manager.Module());
 
             // Register middleware
             app.UseStaticFiles();

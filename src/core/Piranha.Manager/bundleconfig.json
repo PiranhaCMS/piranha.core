@@ -1,10 +1,10 @@
 [
   {
-    "outputFileName": "wwwroot/assets/manager/js/script.js",
+    "outputFileName": "assets/js/script.js",
     "inputFiles": [
-      "wwwroot/assets/manager/vendor/jquery.js",
-      "wwwroot/assets/manager/vendor/bootstrap/js/bootstrap.js",
-      "wwwroot/assets/manager/js/ui.js"
+      "assets/vendor/jquery.js",
+      "assets/vendor/bootstrap/js/bootstrap.js",
+      "assets/js/ui.js"
     ]
   }
 ]

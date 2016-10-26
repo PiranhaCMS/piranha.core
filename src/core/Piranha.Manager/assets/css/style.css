@@ -7784,7 +7784,8 @@ a {
   border-right-color: #444;
 }
 .form .form-group .mce-tinymce {
-  border: 0 none !important;
+  border-color: #ddd;
+  _border: 0 none !important;
 }
 .form .form-group .mce-tinymce .mce-panel {
   background: #fff;
@@ -7878,6 +7879,12 @@ a {
 }
 .region-list .region-list-item:last-child {
   padding-bottom: 0;
+}
+.single-region .region-editor {
+  margin: -15px -15px -30px;
+}
+.single-region .region-editor .mce-tinymce {
+  border: 0 none !important;
 }
 .panel {
   border: 1px solid #ddd;
