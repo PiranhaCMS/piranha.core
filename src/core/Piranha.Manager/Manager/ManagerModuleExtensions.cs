@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Builder;
 
 public static class ManagerModuleExtensions
 {
@@ -34,5 +35,15 @@ public static class ManagerModuleExtensions
 
         // Return the service collection
         return services;
+    }
+
+    /// <summary>
+    /// Uses the piranha middleware.
+    /// </summary>
+    /// <param name="builder">The current application builder</param>
+    /// <returns>The builder</returns>
+    public static IApplicationBuilder UsePiranhaManager(this IApplicationBuilder builder) {
+        return builder
+            .UseMiddleware<Piranha.Manager.ResourceMiddleware>();
     }
 }

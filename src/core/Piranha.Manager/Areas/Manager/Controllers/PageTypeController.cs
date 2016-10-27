@@ -37,5 +37,14 @@ namespace Piranha.Areas.Manager.Controllers
         public IActionResult List() {
             return View(App.PageTypes);
         }
+
+        /// <summary>
+        /// Disposes the controller and its resources.
+        /// </summary>
+        protected override void Dispose(bool disposing) {
+            api.Dispose();
+
+            base.Dispose(disposing);
+        }
     }
 }

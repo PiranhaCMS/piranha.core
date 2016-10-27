@@ -33,7 +33,9 @@ namespace Blog
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services) {
-            services.AddMvc();
+            services.AddMvc(config => {
+                config.ModelBinderProviders.Insert(0, new Piranha.Areas.Manager.Binders.AbstractModelBinderProvider());
+            });
             services.AddPiranhaEF(options => options.UseSqlServer(Configuration.GetConnectionString("Piranha")));
             services.AddPiranhaManager();
         }
@@ -62,6 +64,7 @@ namespace Blog
             app.UsePiranhaPosts();
             app.UsePiranhaArchives();
             app.UsePiranhaStartPage();
+            app.UsePiranhaManager();
 
             app.UseMvc(routes => {
                 routes.MapRoute(name: "areaRoute",

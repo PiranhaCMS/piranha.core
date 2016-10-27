@@ -34,8 +34,8 @@ namespace Piranha.Manager
             services.AddMvc(config => {
                 config.ModelBinderProviders.Insert(0, new Areas.Manager.Binders.AbstractModelBinderProvider());
             });
-            services.AddDbContext<EF.Db>(options => options.UseSqlServer(Configuration.GetConnectionString("Piranha")));
-            services.AddScoped<IApi, EF.Api>();
+            services.AddPiranhaEF(options => options.UseSqlServer(Configuration.GetConnectionString("Piranha")));
+            services.AddPiranhaManager();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,12 +47,11 @@ namespace Piranha.Manager
             }
 
             // Initialize the piranha application
-            App.Init(api, 
-                new EF.Module(), 
-                new Manager.Module());
+            App.Init(api);
 
             // Register middleware
             app.UseStaticFiles();
+            app.UsePiranhaManager();
 
             app.UseMvc(routes => {
                 routes.MapRoute(name: "areaRoute",
