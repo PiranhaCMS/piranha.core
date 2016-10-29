@@ -22,7 +22,7 @@ public static class EFModuleExtensions
     public static IServiceCollection AddPiranhaEF(this IServiceCollection services, Action<DbContextOptionsBuilder> options) {
         // Add the db options
         services.AddDbContext<Piranha.EF.Db>(options);
-        services.AddScoped<Piranha.IApi, Piranha.EF.Api>();
+        services.AddTransient<Piranha.IApi, Piranha.EF.Api>();
 
         // Add the EF module
         Piranha.App.Modules.Add(new Piranha.EF.Module());
