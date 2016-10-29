@@ -36,7 +36,8 @@ namespace Blog
             services.AddMvc(config => {
                 config.ModelBinderProviders.Insert(0, new Piranha.Areas.Manager.Binders.AbstractModelBinderProvider());
             });
-            services.AddPiranhaEF(options => options.UseSqlServer(Configuration.GetConnectionString("Piranha")));
+            services.AddMvc();
+            services.AddPiranhaEF(options => options.UseSqlite("Filename=./blog.db"));
             services.AddPiranhaManager();
         }
 

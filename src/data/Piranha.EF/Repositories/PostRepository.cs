@@ -32,7 +32,7 @@ namespace Piranha.EF.Repositories
         /// <param name="id">The unique id</param>
         /// <returns>The post model</returns>
         public T GetById<T>(Guid id) where T : Models.PostModel {
-            var result = Query().SingleOrDefault(p => p.Id == id);
+            var result = Query().FirstOrDefault(p => p.Id == id);
 
             if (result != null)
                 return Map<T>(result);
@@ -77,7 +77,7 @@ namespace Piranha.EF.Repositories
         /// <param name="slug">The unique slug</param>
         /// <returns>The post model</returns>
         public Models.PostModel GetBySlug(string category, string slug) {
-            var result = Query().SingleOrDefault(p => p.Category.Slug == category && p.Slug == slug);
+            var result = Query().FirstOrDefault(p => p.Category.Slug == category && p.Slug == slug);
 
             if (result != null)
                 return Map(result);
@@ -92,7 +92,7 @@ namespace Piranha.EF.Repositories
         /// <param name="slug">The unique slug</param>
         /// <returns>The post model</returns>
         public T GetBySlug<T>(string category, string slug) where T : Models.PostModel {
-            var result = Query().SingleOrDefault(p => p.Category.Slug == category && p.Slug == slug);
+            var result = Query().FirstOrDefault(p => p.Category.Slug == category && p.Slug == slug);
 
             if (result != null)
                 return Map<T>(result);

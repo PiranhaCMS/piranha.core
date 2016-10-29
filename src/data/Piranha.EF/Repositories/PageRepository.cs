@@ -50,7 +50,7 @@ namespace Piranha.EF.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <returns>The page model</returns>
         public T GetStartpage<T>() where T : Models.PageModel<T> {
-            var page = Query().SingleOrDefault(p => !p.ParentId.HasValue && p.SortOrder == 0);
+            var page = Query().FirstOrDefault(p => !p.ParentId.HasValue && p.SortOrder == 0);
 
             if (page != null)
                 return Load<T>(page);
@@ -73,7 +73,7 @@ namespace Piranha.EF.Repositories
         /// <param name="id">The unique id</param>
         /// <returns>The page model</returns>
         public T GetById<T>(Guid id) where T : Models.PageModel<T> {
-            var page = Query().SingleOrDefault(p => p.Id == id);
+            var page = Query().FirstOrDefault(p => p.Id == id);
 
             if (page != null)
                 return Load<T>(page);
@@ -96,7 +96,7 @@ namespace Piranha.EF.Repositories
         /// <param name="slug">The unique slug</param>
         /// <returns>The page model</returns>
         public T GetBySlug<T>(string slug) where T : Models.PageModel<T> {
-            var page = Query().SingleOrDefault(p => p.Slug == slug);
+            var page = Query().FirstOrDefault(p => p.Slug == slug);
 
             if (page != null)
                 return Load<T>(page);
@@ -123,7 +123,7 @@ namespace Piranha.EF.Repositories
         /// </summary>
         /// <param name="model">The page model</param>
         public void Save<T>(T model) where T : Models.PageModel<T> {
-            var type = api.PageTypes.GetById(model.TypeId);
+            var type = App.PageTypes.FirstOrDefault(t => t.Id == model.TypeId);
 
             if (type != null) {
                 var currentRegions = type.Regions.Select(r => r.Id).ToArray();
@@ -131,7 +131,7 @@ namespace Piranha.EF.Repositories
                 // Check if we have the page in the database already
                 var page = db.Pages
                     .Include(p => p.Fields)
-                    .SingleOrDefault(p => p.Id == model.Id);
+                    .FirstOrDefault(p => p.Id == model.Id);
 
                 // If not, create a new page
                 if (page == null) {
@@ -189,7 +189,7 @@ namespace Piranha.EF.Repositories
         /// <param name="page">The data entity</param>
         /// <returns>The page model</returns>
         private T Load<T>(Data.Page page) where T : Models.PageModel<T> {
-            var type = api.PageTypes.GetById(page.TypeId);
+            var type = App.PageTypes.FirstOrDefault(t => t.Id == page.TypeId);
 
             if (type != null) {
                 // Create an initialized model

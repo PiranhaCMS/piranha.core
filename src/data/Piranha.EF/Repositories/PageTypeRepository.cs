@@ -39,7 +39,7 @@ namespace Piranha.EF.Repositories
         /// <returns>The page type</returns>
         public Extend.PageType GetById(string id) {
             var type = db.PageTypes
-                .SingleOrDefault(t => t.Id == id);
+                .FirstOrDefault(t => t.Id == id);
 
             if (type != null)
                 return JsonConvert.DeserializeObject<Extend.PageType>(type.Body);
@@ -66,7 +66,7 @@ namespace Piranha.EF.Repositories
         /// <param name="pageType">The page type</param>
         public void Save(Extend.PageType pageType) {
             var type = db.PageTypes
-                .SingleOrDefault(t => t.Id == pageType.Id);
+                .FirstOrDefault(t => t.Id == pageType.Id);
 
             if (type == null) {
                 type = new Data.PageType() {
@@ -93,7 +93,7 @@ namespace Piranha.EF.Repositories
         /// <param name="id">The unique id</param>
         public void Delete(string id) {
             var type = db.PageTypes
-                .SingleOrDefault(t => t.Id == id);
+                .FirstOrDefault(t => t.Id == id);
 
             if (type != null) {
                 db.PageTypes.Remove(type);
