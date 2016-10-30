@@ -28,7 +28,7 @@ namespace Piranha.AspNet
         /// <param name="context">The current http context</param>
         /// <returns>An async task</returns>
         public override async Task Invoke(HttpContext context) {
-            if (!IsHandled(context)) {
+            if (!IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/")) {
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
 
                 if (!String.IsNullOrWhiteSpace(url) && url.Length > 1) {
