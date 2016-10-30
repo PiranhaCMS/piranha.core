@@ -8,6 +8,7 @@
  * 
  */
 
+using Microsoft.EntityFrameworkCore;
 using System;
 using Piranha.Repositories;
 
@@ -59,8 +60,13 @@ namespace Piranha.EF
         public ISitemapRepository Sitemap { get; private set; }
         #endregion
 
-        public Api(Db db) {
-            this.db = db;
+        /// <summary>
+        /// Default constructor. Creates a new Entity Framework Api object.
+        /// </summary>
+        public Api() {
+            var builder = new DbContextOptionsBuilder<Db>();
+            Module.DbConfig(builder);
+            this.db = new Db(builder.Options);
 
             Archives = new Repositories.ArchiveRepository(db);
             BlockTypes = new Repositories.BlockTypeRepository(db);

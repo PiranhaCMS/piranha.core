@@ -60,14 +60,5 @@ namespace Piranha.Areas.Manager.Controllers
                 return RedirectToAction("List");
             return View(model);
         }
-
-        /// <summary>
-        /// Disposes the controller and its resources.
-        /// </summary>
-        protected override void Dispose(bool disposing) {
-            api.Dispose();
-
-            base.Dispose(disposing);
-        }
     }
 }
