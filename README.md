@@ -2,7 +2,7 @@
 
 This is a **complete rewrite** of Piranha CMS for the `DotNetCore` & `Entity Framework Core`. The goal is to create a platform independent version with minimal depenencies, but still provide tight integration with the services available in **Windows Azure** such as `Blob Storage` & `Media Services`.
 
-Piranha.Core is currently built for `1.0.0-preview2-003131` and uses the following packages:
+Piranha.Core is currently built for `1.1.0-preview1-001100-00` and uses the following packages:
 
 * AutoMapper `5.1.1`
 * Microsoft.EntityFrameworkCore.SqlServer `1.0.1`
