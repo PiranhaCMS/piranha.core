@@ -73,5 +73,18 @@ namespace Piranha.Areas.Manager.Controllers
                 return RedirectToAction("List");
             return View(model);
         }
+
+        /// <summary>
+        /// Saves and publishes the given page model.
+        /// </summary>
+        /// <param name="model">The page model</param>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("manager/page/publish")]
+        public IActionResult Publish(Models.PageEditModel model) {
+            if (model.Save(api, true))
+                return RedirectToAction("List");
+            return View(model);
+        }
     }
 }

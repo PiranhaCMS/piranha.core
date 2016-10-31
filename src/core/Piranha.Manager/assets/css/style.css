@@ -7630,6 +7630,10 @@ a {
   color: #999;
   margin: 4px 0 0;
 }
+.table > tbody > tr > td span.move {
+  color: #999;
+  cursor: pointer;
+}
 .table > tbody > tr.detail {
   display: none;
 }
@@ -7652,6 +7656,21 @@ a {
   -moz-transition: background ease-in-out 0.4s;
   -webkit-transition: background ease-in-out 0.4s;
   -o-transition: background ease-in-out 0.4s;
+}
+.table > tbody > tr.level-1 td:first-child {
+  padding-left: 35px;
+}
+.table > tbody > tr.level-2 td:first-child {
+  padding-left: 50px;
+}
+.table > tbody > tr.level-3 td:first-child {
+  padding-left: 65px;
+}
+.table > tbody > tr.level-4 td:first-child {
+  padding-left: 80px;
+}
+.table > tbody > tr.level-5 td:first-child {
+  padding-left: 95px;
 }
 .table .date {
   width: 114px;

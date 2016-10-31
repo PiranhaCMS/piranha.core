@@ -62,9 +62,7 @@ namespace Blog
 
             // Register middleware
             app.UseStaticFiles();
-            app.UsePiranhaPosts();
-            app.UsePiranhaArchives();
-            app.UsePiranhaStartPage();
+            app.UsePiranha();
             app.UsePiranhaManager();
 
             app.UseMvc(routes => {

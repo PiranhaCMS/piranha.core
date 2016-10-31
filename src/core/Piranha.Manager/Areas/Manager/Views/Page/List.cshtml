@@ -3,6 +3,16 @@
     ViewBag.Title = "Pages";
 }
 
+@section script {
+    <script type="text/javascript">
+        $(function () {
+            $('.table-sortable tbody').sortable({
+                handle: 'span.move'
+            });
+        });
+    </script>
+}
+
 <div class="row">
     <div class="col-sm-12 buttons">
         <div class="btn-group pull-right">
@@ -24,12 +34,13 @@
     </div>
 </div>
 
-<table class="table table-striped table-main">
+<table class="table table-striped table-main table-sortable">
     <thead>
         <tr>
             <th>Title</th>
             <th class="date">Modified</th>
             <th class="date">Created</th>
+            <th class="actions one"></th>
         </tr>
     </thead>
     <tbody>

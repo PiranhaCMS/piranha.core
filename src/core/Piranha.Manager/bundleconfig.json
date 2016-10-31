@@ -4,6 +4,7 @@
     "inputFiles": [
       "assets/vendor/jquery.js",
       "assets/vendor/bootstrap/js/bootstrap.js",
+      "assets/vendor/jquery-sortable.js",
       "assets/js/ui.js"
     ]
   }

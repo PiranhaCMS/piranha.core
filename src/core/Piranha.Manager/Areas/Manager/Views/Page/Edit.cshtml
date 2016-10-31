@@ -4,6 +4,14 @@
     ViewBag.Title = "Edit page";
 }
 
+@section script {
+    <script type="text/javascript">
+        $(document).on('click', '#submit-publish', function () {
+            $('form').attr('action', '@Url.Action("Publish")').submit();
+        });
+    </script>
+}
+
 @using (var form = Html.BeginForm("Save", "Page", FormMethod.Post, new { @class = "form", @role = "form" })) {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.Id)
