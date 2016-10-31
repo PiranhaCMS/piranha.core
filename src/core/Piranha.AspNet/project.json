@@ -2,9 +2,9 @@
   "version": "4.0.0-*",
 
   "dependencies": {
-    "NETStandard.Library": "1.6.0",
-    "Microsoft.AspNetCore.Http": "1.0.0",
-    "Microsoft.AspNetCore.Html.Abstractions": "1.0.0",
+    "NETStandard.Library": "1.6.1-preview1-24530-04",
+    "Microsoft.AspNetCore.Http": "1.1.0-preview1-final",
+    "Microsoft.AspNetCore.Html.Abstractions": "1.1.0-preview1-final",
     "Piranha.Core": "4.0.0-*"
   },
 
