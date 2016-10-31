@@ -3,6 +3,27 @@
     ViewBag.Title = "Pages";
 }
 
+<div class="row">
+    <div class="col-sm-12 buttons">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-labeled btn-primary" data-toggle="dropdown">
+                <span class="btn-label">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </span>Add
+            </button>
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                @foreach (var type in Model.PageTypes) {
+                    <li><a href="@Url.Action("Add", new { type = type.Id })">@type.Title</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
 <table class="table table-striped table-main">
     <thead>
         <tr>

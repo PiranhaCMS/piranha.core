@@ -49,6 +49,19 @@ namespace Piranha.Areas.Manager.Controllers
         }
 
         /// <summary>
+        /// Adds a new page of the given type.
+        /// </summary>
+        /// <param name="type">The page type id</param>
+        [Route("manager/page/add/{type}")]
+        public IActionResult Add(string type) {
+            var sitemap = api.Sitemap.Get(false);
+            var model = Models.PageEditModel.Create(type);
+            model.SortOrder = sitemap.Count;
+
+            return View("Edit", model);
+        }
+
+        /// <summary>
         /// Saves the given page model
         /// </summary>
         /// <param name="model">The page model</param>

@@ -1,6 +1,6 @@
 ﻿@model Piranha.Models.SitemapItem
 
-<tr>
+<tr @(Model.Level > 0 ? "class=level-" + Model.Level : "")>
     <td><a href="@Url.Action("Edit", "Page", new { id = Model.Id })">@(Model.NavigationTitle != null ? Model.NavigationTitle : Model.Title)</a></td>
     <td>@Model.LastModified.ToString("yyyy-MM-dd")</td>
     <td>@Model.Created.ToString("yyyy-MM-dd")</td>

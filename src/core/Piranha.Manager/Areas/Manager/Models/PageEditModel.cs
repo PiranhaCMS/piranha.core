@@ -48,14 +48,14 @@ namespace Piranha.Areas.Manager.Models
         public bool Save(IApi api) {
             var page = api.Pages.GetById(Id);
 
-            if (page != null) {
-                Module.Mapper.Map<PageEditModel, Piranha.Models.PageModelBase>(this, page);
-                SaveRegions(this, page);
-                api.Pages.Save(page);
+            if (page == null)
+                page = Piranha.Models.PageModel.Create(this.TypeId);
 
-                return true;
-            }
-            return false;
+            Module.Mapper.Map<PageEditModel, Piranha.Models.PageModelBase>(this, page);
+            SaveRegions(this, page);
+            api.Pages.Save(page);
+
+            return true;
         }
 
         /// <summary>
@@ -76,6 +76,31 @@ namespace Piranha.Areas.Manager.Models
             throw new KeyNotFoundException($"No page found with the id '{id}'");
         }
 
+        /// <summary>
+        /// Creates a new edit model with the given page typeparamref.
+        /// </summary>
+        /// <param name="pageTypeId">The page type id</param>
+        /// <returns>The page model</returns>        
+        public static PageEditModel Create(string pageTypeId) {
+            var type = App.PageTypes.SingleOrDefault(t => t.Id == pageTypeId);
+
+            if (type != null) {
+                var page = Piranha.Models.PageModel.Create(pageTypeId);
+                var model = Module.Mapper.Map<Piranha.Models.PageModelBase, PageEditModel>(page);
+                model.PageType = type;
+                LoadRegions(page, model);
+
+                return model;
+            }
+            throw new KeyNotFoundException($"No page type found with the id '{pageTypeId}'");
+        }
+
+        #region Private methods
+        /// <summary>
+        /// Loads all of the regions from the source model into the destination.
+        /// </summary>
+        /// <param name="src">The source</param>
+        /// <param name="dest">The destination</param>
         private static void LoadRegions(Piranha.Models.PageModel src, PageEditModel dest) {
             if (dest.PageType != null) {
                 foreach (var region in dest.PageType.Regions) {
@@ -131,6 +156,11 @@ namespace Piranha.Areas.Manager.Models
             }
         }
 
+        /// <summary>
+        /// Saves all of the regions from the source model into the destination.
+        /// </summary>
+        /// <param name="src">The source</param>
+        /// <param name="dest">The destination</param>
         private static void SaveRegions(PageEditModel src, Piranha.Models.PageModel dest) {
             var modelRegions = (IDictionary<string, object>)dest.Regions;
             foreach (var region in src.Regions) {
@@ -174,6 +204,7 @@ namespace Piranha.Areas.Manager.Models
                 }
             }
         }
+        #endregion
     }
 
     #region Helper classes
