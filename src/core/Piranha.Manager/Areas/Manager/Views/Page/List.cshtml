@@ -6,8 +6,12 @@
 @section script {
     <script type="text/javascript">
         $(function () {
-            $('.table-sortable tbody').sortable({
-                handle: 'span.move'
+            //$('.table-sortable tbody').sortable({
+            //    handle: 'span.move'
+            //});
+
+            $('.dd').nestable({
+                group: 1
             });
         });
     </script>
@@ -34,7 +38,18 @@
     </div>
 </div>
 
-<table class="table table-striped table-main table-sortable">
+<div class="dd">
+    <ol class="sitemap header">
+        <div class="date pull-right">Created</div>
+        <div class="date pull-right">Modified</div>
+        <div>Title</div>
+    </ol>
+    <ol class="sitemap dd-list">
+        @Html.DisplayFor(m => m.Sitemap)
+    </ol>
+</div>
+
+@*<table class="table table-striped table-main table-sortable">
     <thead>
         <tr>
             <th>Title</th>
@@ -46,4 +61,4 @@
     <tbody>
         @Html.DisplayFor(m => m.Sitemap)
     </tbody>
-</table>
+</table>*@

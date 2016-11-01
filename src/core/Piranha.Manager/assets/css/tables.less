@@ -178,3 +178,57 @@
 		.border-radius(20px);
 	}
 }
+
+ol.sitemap {
+    padding-left: 0;
+
+    &.header {
+        background: @list-color-head;
+        font-family: "Open Sans", Arial;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin: 0;
+
+        div {
+            padding: 12px 20px;
+        }
+    }
+
+    li {
+        list-style-type: none;
+
+		a {
+            background: #fff;
+            display: block;
+			font-family: "Open Sans", Arial;
+			font-size: 16px;
+            padding: 10px 20px;
+            margin-top: 4px;
+		}
+
+        ol {
+            padding-left: 0;
+        }
+
+        li {
+            a { padding-left: 35px; }
+            li {
+                a { padding-left: 50px; }
+                li {
+                    a { padding-left: 65px; }
+                    li {
+                        a { padding-left: 80px; }
+                        li {
+                            a { padding-left: 95px; }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .date {
+        width: 120px;
+        padding: 12px 20px;
+    }
+}

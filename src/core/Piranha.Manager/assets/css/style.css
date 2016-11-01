@@ -7470,6 +7470,112 @@ button.close {
  * https://github.com/piranhacms/piranha.core
  * 
  */
+.dd {
+  position: relative;
+  display: block;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.dd-list {
+  display: block;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.dd-list .dd-list {
+  padding-left: 30px;
+}
+.dd-collapsed .dd-list {
+  display: none;
+}
+.dd-item,
+.dd-empty,
+.dd-placeholder {
+  display: block;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  min-height: 43px;
+}
+.dd-handle {
+  display: block;
+  float: left;
+  color: #999;
+  width: 33px;
+  height: 43px;
+  padding: 10px;
+  border-right: solid 1px #f2f2f2;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.dd-handle span {
+  padding: 4px 0;
+}
+.dd-content {
+  background: #fff;
+  height: 43px;
+  padding: 10px 20px 10px 43px;
+  margin: 4px 0;
+  box-sizing: border-box;
+}
+.dd-content a {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.dd-item > button {
+  _display: block;
+  display: none;
+  position: relative;
+  cursor: pointer;
+  float: left;
+  width: 25px;
+  height: 20px;
+  margin: 4px 0;
+  padding: 0;
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  border: 0;
+  background: transparent;
+  text-align: center;
+  font-weight: bold;
+}
+.dd-item > button:before {
+  content: '+';
+  display: block;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  text-indent: 0;
+}
+.dd-item > button[data-action="collapse"]:before {
+  content: '-';
+}
+.dd-placeholder,
+.dd-empty {
+  margin: 4px 0;
+  padding: 0;
+  min-height: 43px;
+  background: #f2fbff;
+  border: 1px dashed #b6bcbf;
+  box-sizing: border-box;
+}
+.dd-empty {
+  border: 1px dashed #bbb;
+  min-height: 100px;
+  background-color: #e5e5e5;
+}
+.dd-dragel {
+  position: absolute;
+  pointer-events: none;
+  z-index: 9999;
+}
+.dd-dragel > .dd-item .dd-handle {
+  margin-top: 0;
+}
 body {
   background-color: #f2f2f2;
   font-family: Arial;
@@ -7696,6 +7802,52 @@ a {
   -moz-border-radius: 20px;
   -webkit-border-radius: 20px;
   -o-border-radius: 20px;
+}
+ol.sitemap {
+  padding-left: 0;
+}
+ol.sitemap.header {
+  background: #e2e2e2;
+  font-family: "Open Sans", Arial;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin: 0;
+}
+ol.sitemap.header div {
+  padding: 12px 20px;
+}
+ol.sitemap li {
+  list-style-type: none;
+}
+ol.sitemap li a {
+  background: #fff;
+  display: block;
+  font-family: "Open Sans", Arial;
+  font-size: 16px;
+  padding: 10px 20px;
+  margin-top: 4px;
+}
+ol.sitemap li ol {
+  padding-left: 0;
+}
+ol.sitemap li li a {
+  padding-left: 35px;
+}
+ol.sitemap li li li a {
+  padding-left: 50px;
+}
+ol.sitemap li li li li a {
+  padding-left: 65px;
+}
+ol.sitemap li li li li li a {
+  padding-left: 80px;
+}
+ol.sitemap li li li li li li a {
+  padding-left: 95px;
+}
+ol.sitemap .date {
+  width: 120px;
+  padding: 12px 20px;
 }
 .panel .table {
   margin-bottom: 0;

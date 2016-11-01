@@ -1,9 +1,29 @@
 ﻿@model Piranha.Models.SitemapItem
 
-<tr @(Model.Level > 0 ? "class=level-" + Model.Level : "")>
-    <td><a href="@Url.Action("Edit", "Page", new { id = Model.Id })">@(Model.NavigationTitle != null ? Model.NavigationTitle : Model.Title)</a></td>
-    <td>@Model.LastModified.ToString("yyyy-MM-dd")</td>
-    <td>@Model.Created.ToString("yyyy-MM-dd")</td>
-    <td><span class="move glyphicon glyphicon-move"></span></td>
-</tr>
-@Html.DisplayFor(m => m.Items)
+<li class="dd-item" data-id="@Model.Id">
+    <div class="dd-handle">
+        <span class="glyphicon glyphicon-option-vertical"></span>
+    </div>
+    <div class="date pull-right">
+        @Model.Created.ToString("yyyy-MM-dd")
+    </div>
+    <div class="date pull-right">
+        @Model.LastModified.ToString("yyyy-MM-dd")
+    </div>
+    <div class="dd-content">
+        <a href="@Url.Action("Edit", "Page", new { id = Model.Id })">@(Model.NavigationTitle != null ? Model.NavigationTitle : Model.Title)</a>
+    </div>
+    @if (Model.Items.Count > 0) {
+        <ol class="dd-list">
+            @Html.DisplayFor(m => m.Items)
+        </ol>
+    }
+</li>
+
+@*<tr @(Model.Level > 0 ? "class=level-" + Model.Level : "")>
+        <td><a href="@Url.Action("Edit", "Page", new { id = Model.Id })">@(Model.NavigationTitle != null ? Model.NavigationTitle : Model.Title)</a></td>
+        <td>@Model.LastModified.ToString("yyyy-MM-dd")</td>
+        <td>@Model.Created.ToString("yyyy-MM-dd")</td>
+        <td><span class="move glyphicon glyphicon-move"></span></td>
+    </tr>
+    @Html.DisplayFor(m => m.Items)*@
