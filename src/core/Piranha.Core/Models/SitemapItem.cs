@@ -42,6 +42,11 @@ namespace Piranha.Models
         public int Level { get; set; }
 
         /// <summary>
+        /// Gets/sets the published date.
+        /// </summary>        
+        public DateTime? Published { get; set; }
+
+        /// <summary>
         /// Gets/sets the created date.
         /// </summary>
         public DateTime Created { get; set; }
