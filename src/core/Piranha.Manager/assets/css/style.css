@@ -7500,6 +7500,7 @@ button.close {
   min-height: 43px;
 }
 .dd-handle {
+  background: #fff;
   display: block;
   float: left;
   color: #999;
@@ -7512,18 +7513,6 @@ button.close {
 }
 .dd-handle span {
   padding: 4px 0;
-}
-.dd-content {
-  background: #fff;
-  height: 43px;
-  padding: 10px 20px 10px 43px;
-  margin: 4px 0;
-  box-sizing: border-box;
-}
-.dd-content a {
-  background: transparent !important;
-  padding: 0 !important;
-  margin: 0 !important;
 }
 .dd-item > button {
   _display: block;
@@ -7609,6 +7598,12 @@ a {
 }
 .subtitle strong {
   color: #000;
+}
+.label {
+  border-radius: 0;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  -o-border-radius: 0;
 }
 .navmenu-inverse {
   width: 220px;
@@ -7803,6 +7798,18 @@ a {
   -webkit-border-radius: 20px;
   -o-border-radius: 20px;
 }
+.content {
+  background: #fff;
+  height: 43px;
+  padding: 10px 20px 10px 10px;
+  margin: 4px 0 0 34px;
+  box-sizing: border-box;
+}
+.content a {
+  font-family: "Open Sans", Arial;
+  font-size: 16px;
+  padding: 0 !important;
+}
 ol.sitemap {
   padding-left: 0;
 }
@@ -7818,36 +7825,57 @@ ol.sitemap.header div {
 }
 ol.sitemap li {
   list-style-type: none;
+  /*
+		a {
+            background: #fff;
+			font-family: "Open Sans", Arial;
+			font-size: 16px;
+            padding: 10px 20px;
+            margin-top: 4px;
+		}
+        */
 }
 ol.sitemap li a {
-  background: #fff;
-  display: block;
-  font-family: "Open Sans", Arial;
-  font-size: 16px;
   padding: 10px 20px;
-  margin-top: 4px;
+}
+ol.sitemap li .label {
+  margin-left: 10px;
 }
 ol.sitemap li ol {
   padding-left: 0;
 }
-ol.sitemap li li a {
+ol.sitemap li li .content a {
   padding-left: 35px;
 }
-ol.sitemap li li li a {
+ol.sitemap li li li .content a {
   padding-left: 50px;
 }
-ol.sitemap li li li li a {
+ol.sitemap li li li li .content a {
   padding-left: 65px;
 }
-ol.sitemap li li li li li a {
+ol.sitemap li li li li li .content a {
   padding-left: 80px;
 }
-ol.sitemap li li li li li li a {
+ol.sitemap li li li li li li .content a {
   padding-left: 95px;
+}
+ol.sitemap li.unpublished > .content a {
+  opacity: 0.6;
+}
+ol.sitemap li.unpublished .date {
+  opacity: 0.6;
 }
 ol.sitemap .date {
   width: 120px;
   padding: 12px 20px;
+}
+ol.sitemap .actions a {
+  display: inline-block;
+  font-size: 14px;
+  margin-top: 2px;
+}
+ol.sitemap .actions .one {
+  width: 60px;
 }
 .panel .table {
   margin-bottom: 0;

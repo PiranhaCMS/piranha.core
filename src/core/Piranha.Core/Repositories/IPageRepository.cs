@@ -73,6 +73,19 @@ namespace Piranha.Repositories
         /// Saves the given page model
         /// </summary>
         /// <param name="model">The page model</param>
-        void Save<TModelType>(TModelType model) where TModelType : PageModel<TModelType>;
+        void Save<T>(T model) where T : PageModel<T>;
+
+        /// <summary>
+        /// Deletes the given page.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="model">The page to delete</param>
+        void Delete<T>(T model) where T : PageModel<T>;
+
+        /// <summary>
+        /// Delets the page with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        void Delete(Guid id);
     }
 }

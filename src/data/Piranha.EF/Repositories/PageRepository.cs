@@ -173,6 +173,27 @@ namespace Piranha.EF.Repositories
         }
 
         /// <summary>
+        /// Deletes the given page.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="model">The page to delete</param>
+        public void Delete<T>(T model) where T : Models.PageModel<T> {
+            Delete(model.Id);
+        }
+
+        /// <summary>
+        /// Delets the page with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        public void Delete(Guid id) {
+            var page = db.Pages.FirstOrDefault(p => p.Id == id);
+            if (page != null) {
+                db.Pages.Remove(page);
+                db.SaveChanges();
+            }
+        }
+
+        /// <summary>
         /// Gets the base entity query.
         /// </summary>
         /// <returns>The query</returns>

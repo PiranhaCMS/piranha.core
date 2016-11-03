@@ -86,5 +86,15 @@ namespace Piranha.Areas.Manager.Controllers
                 return RedirectToAction("List");
             return View(model);
         }
+
+        /// <summary>
+        /// Deletes the page with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        [Route("manager/page/delete/{id:Guid}")]
+        public IActionResult Delete(Guid id) {
+            api.Pages.Delete(id);
+            return RedirectToAction("List");
+        }
     }
 }

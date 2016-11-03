@@ -8,6 +8,7 @@
 // 
 
 @import "colors.less";
+@import "mixins.less";
 
 body {
 	background-color: @bg-color;
@@ -48,4 +49,8 @@ a {
 	strong {
 		color: #000;
 	}
+}
+
+.label {
+    .border-radius(0);
 }

@@ -1,8 +1,11 @@
 ﻿@model Piranha.Models.SitemapItem
 
-<li class="dd-item" data-id="@Model.Id">
+<li class="dd-item @(!Model.Published.HasValue ? "unpublished" : "")" data-id="@Model.Id">
     <div class="dd-handle">
         <span class="glyphicon glyphicon-option-vertical"></span>
+    </div>
+    <div class="actions one pull-right">
+        <a class="remove" href="@Url.Action("Delete", new { id = Model.Id })"><span class="glyphicon glyphicon-remove"></span></a>
     </div>
     <div class="date pull-right">
         @Model.Created.ToString("yyyy-MM-dd")
@@ -10,8 +13,11 @@
     <div class="date pull-right">
         @Model.LastModified.ToString("yyyy-MM-dd")
     </div>
-    <div class="dd-content @(!Model.Published.HasValue ? "unpublished" : "")">
+    <div class="content">
         <a href="@Url.Action("Edit", "Page", new { id = Model.Id })">@(Model.NavigationTitle != null ? Model.NavigationTitle : Model.Title)</a>
+        @if (!Model.Published.HasValue) {
+            <span class="label label-info">Unpublished</span>
+        }
     </div>
     @if (Model.Items.Count > 0) {
         <ol class="dd-list">
