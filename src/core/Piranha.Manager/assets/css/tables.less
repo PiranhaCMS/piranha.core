@@ -179,24 +179,14 @@
 	}
 }
 
-.content {
-    background: #fff;
-    height: 43px;
-    padding: 10px 20px 10px 10px;
-    margin: 4px 0 0 34px; 
-    box-sizing: border-box;
-
-    a {
-    	font-family: "Open Sans", Arial;
-    	font-size: 16px;
-        padding: 0 !important;
-    }
-}
-
 ol.sitemap {
     padding-left: 0;
 
     &.header {
+		li {
+			list-style-type: none;
+		}
+
         background: @list-color-head;
         font-family: "Open Sans", Arial;
         font-weight: bold;
@@ -206,60 +196,76 @@ ol.sitemap {
         div {
             padding: 12px 20px;
         }
+
+		.date {
+			width: 120px;
+			padding: 12px 20px;			
+		}
+
+		.actions {
+			&.one {
+	            width: 60px;
+			}
+		}
     }
 
-    li {
-        list-style-type: none;
+}
 
-        a {
-            padding: 10px 20px;
-        }
+li.sitemap-item {
+	list-style-type: none;
 
-         /*
+	a {
+		padding: 10px 20px;
+	}
+
+	.label {
+		margin-left: 10px;
+	}
+
+	ol {
+		padding-left: 0;
+	}
+
+	.content {
+		background: #fff;
+		height: 43px;
+		padding: 10px 20px 10px 10px;
+		margin: 4px 0 0 34px; 
+		box-sizing: border-box;
+
 		a {
-            background: #fff;
 			font-family: "Open Sans", Arial;
 			font-size: 16px;
-            padding: 10px 20px;
-            margin-top: 4px;
+			padding: 0 !important;
 		}
-        */
+	}
 
-        .label {
-            margin-left: 10px;
-        }
+	li {
+		.content a { padding-left: 35px; }
+		li {
+			.content a { padding-left: 50px; }
+			li {
+				.content a { padding-left: 65px; }
+				li {
+					.content a { padding-left: 80px; }
+					li {
+						.content a { padding-left: 95px; }
+					}
+				}
+			}
+		}
+	}
 
-        ol {
-            padding-left: 0;
-        }
-
-        li {
-            .content a { padding-left: 35px; }
-            li {
-                .content a { padding-left: 50px; }
-                li {
-                    .content a { padding-left: 65px; }
-                    li {
-                        .content a { padding-left: 80px; }
-                        li {
-                            .content a { padding-left: 95px; }
-                        }
-                    }
-                }
-            }
-        }
-
-        &.unpublished {
-            >.content {
-                a {
-                    opacity: 0.6;
-                }
-            }
-            .date {
-                opacity: 0.6;
-            }
-        }
-    }
+	&.unpublished {
+		>.content {
+			a {
+				opacity: 0.6;
+			}
+		}
+		.date {
+			opacity: 0.6;
+		}
+	}
 
     .date {
         width: 120px;
@@ -273,9 +279,8 @@ ol.sitemap {
             margin-top: 2px;
         }
 
-        .one {
+        &.one {
             width: 60px;
         }
-
-    }
+    }	
 }

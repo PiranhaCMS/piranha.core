@@ -261,8 +261,8 @@ th {
 }
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url('../fonts/glyphicons-halflings-regular.eot');
-  src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+  src: url('../vendor/bootstrap/fonts/glyphicons-halflings-regular.eot');
+  src: url('../vendor/bootstrap/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../vendor/bootstrap/fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('../vendor/bootstrap/fonts/glyphicons-halflings-regular.woff') format('woff'), url('../vendor/bootstrap/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../vendor/bootstrap/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
 .glyphicon {
   position: relative;
@@ -7798,18 +7798,6 @@ a {
   -webkit-border-radius: 20px;
   -o-border-radius: 20px;
 }
-.content {
-  background: #fff;
-  height: 43px;
-  padding: 10px 20px 10px 10px;
-  margin: 4px 0 0 34px;
-  box-sizing: border-box;
-}
-.content a {
-  font-family: "Open Sans", Arial;
-  font-size: 16px;
-  padding: 0 !important;
-}
 ol.sitemap {
   padding-left: 0;
 }
@@ -7820,61 +7808,74 @@ ol.sitemap.header {
   text-transform: uppercase;
   margin: 0;
 }
+ol.sitemap.header li {
+  list-style-type: none;
+}
 ol.sitemap.header div {
   padding: 12px 20px;
 }
-ol.sitemap li {
-  list-style-type: none;
-  /*
-		a {
-            background: #fff;
-			font-family: "Open Sans", Arial;
-			font-size: 16px;
-            padding: 10px 20px;
-            margin-top: 4px;
-		}
-        */
-}
-ol.sitemap li a {
-  padding: 10px 20px;
-}
-ol.sitemap li .label {
-  margin-left: 10px;
-}
-ol.sitemap li ol {
-  padding-left: 0;
-}
-ol.sitemap li li .content a {
-  padding-left: 35px;
-}
-ol.sitemap li li li .content a {
-  padding-left: 50px;
-}
-ol.sitemap li li li li .content a {
-  padding-left: 65px;
-}
-ol.sitemap li li li li li .content a {
-  padding-left: 80px;
-}
-ol.sitemap li li li li li li .content a {
-  padding-left: 95px;
-}
-ol.sitemap li.unpublished > .content a {
-  opacity: 0.6;
-}
-ol.sitemap li.unpublished .date {
-  opacity: 0.6;
-}
-ol.sitemap .date {
+ol.sitemap.header .date {
   width: 120px;
   padding: 12px 20px;
 }
-ol.sitemap .actions a {
+ol.sitemap.header .actions.one {
+  width: 60px;
+}
+li.sitemap-item {
+  list-style-type: none;
+}
+li.sitemap-item a {
+  padding: 10px 20px;
+}
+li.sitemap-item .label {
+  margin-left: 10px;
+}
+li.sitemap-item ol {
+  padding-left: 0;
+}
+li.sitemap-item .content {
+  background: #fff;
+  height: 43px;
+  padding: 10px 20px 10px 10px;
+  margin: 4px 0 0 34px;
+  box-sizing: border-box;
+}
+li.sitemap-item .content a {
+  font-family: "Open Sans", Arial;
+  font-size: 16px;
+  padding: 0 !important;
+}
+li.sitemap-item li .content a {
+  padding-left: 35px;
+}
+li.sitemap-item li li .content a {
+  padding-left: 50px;
+}
+li.sitemap-item li li li .content a {
+  padding-left: 65px;
+}
+li.sitemap-item li li li li .content a {
+  padding-left: 80px;
+}
+li.sitemap-item li li li li li .content a {
+  padding-left: 95px;
+}
+li.sitemap-item.unpublished > .content a {
+  opacity: 0.6;
+}
+li.sitemap-item.unpublished .date {
+  opacity: 0.6;
+}
+li.sitemap-item .date {
+  width: 120px;
+  padding: 12px 20px;
+}
+li.sitemap-item .actions a {
   display: inline-block;
   font-size: 14px;
   margin-top: 2px;
 }
-ol.sitemap .actions .one {
+li.sitemap-item .actions.one {
   width: 60px;
 }
 .panel .table {

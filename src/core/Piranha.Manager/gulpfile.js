@@ -37,7 +37,9 @@ var paths = {
 //
 gulp.task("min:css", function () {
   return gulp.src(paths.less)
-    .pipe(less())
+    .pipe(less({
+        relativeUrls: true
+    }))
     .pipe(gulp.dest(paths.cssDest))
     .pipe(cssmin())
     .pipe(rename({
