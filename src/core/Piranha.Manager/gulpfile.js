@@ -1,3 +1,4 @@
+/// <binding BeforeBuild='default' />
 /*
  * Copyright (c) 2016 Håkan Edling
  *
