@@ -88,6 +88,19 @@ namespace Piranha.Areas.Manager.Controllers
         }
 
         /// <summary>
+        /// Saves and unpublishes the given page model.
+        /// </summary>
+        /// <param name="model">The page model</param>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("manager/page/unpublish")]
+        public IActionResult UnPublish(Models.PageEditModel model) {
+            if (model.Save(api, false))
+                return RedirectToAction("List");
+            return View(model);
+        }
+
+        /// <summary>
         /// Deletes the page with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>

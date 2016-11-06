@@ -46,7 +46,7 @@ namespace Piranha.Areas.Manager.Models
         /// <param name="api">The current api</param>
         /// <param name="publish">If the page should be published</param>
         /// <returns>If the page was successfully saved</returns>
-        public bool Save(IApi api, bool publish = false) {
+        public bool Save(IApi api, bool? publish = null) {
             var page = api.Pages.GetById(Id);
 
             if (page == null)
@@ -55,8 +55,12 @@ namespace Piranha.Areas.Manager.Models
             Module.Mapper.Map<PageEditModel, Piranha.Models.PageModelBase>(this, page);
             SaveRegions(this, page);
 
-            if (publish && !page.Published.HasValue)
-                page.Published = DateTime.Now;
+            if (publish.HasValue) {
+                if (publish.Value && !page.Published.HasValue)
+                    page.Published = DateTime.Now;
+                else if (!publish.Value)
+                    page.Published = null;
+            }
             api.Pages.Save(page);
 
             return true;

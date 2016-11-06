@@ -9,6 +9,9 @@
         $(document).on('click', '#submit-publish', function () {
             $('form').attr('action', '@Url.Action("Publish")').submit();
         });
+        $(document).on('click', '#submit-unpublish', function () {
+            $('form').attr('action', '@Url.Action("UnPublish")').submit();
+        });
     </script>
 }
 
