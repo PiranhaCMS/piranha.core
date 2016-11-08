@@ -190,6 +190,8 @@ namespace Piranha.EF.Repositories
             if (page != null) {
                 db.Pages.Remove(page);
                 db.SaveChanges();
+                
+                MovePages(page.Id, page.ParentId, page.SortOrder + 1, false);
             }
         }
 
@@ -480,6 +482,21 @@ namespace Piranha.EF.Repositories
                 }
             }
         }
+        
+        /// <summary>
+        /// Moves the pages around. This is done when a page is deleted or moved in the structure.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <param name="parentId">The parent id</param>
+        /// <param name="sortOrder">The sort order</param>
+        /// <param name="increase">If sort order should be increase or decreased</param>
+		private void MovePages(Guid id, Guid? parentId, int sortOrder, bool increase) {
+			if (parentId.HasValue)
+                db.Database.ExecuteSqlCommand("UPDATE Piranha_Pages SET SortOrder = SortOrder " + (increase ? "+ 1" : "- 1") +
+					" WHERE ParentId = @p0 AND SortOrder >= @p1", parentId.Value, sortOrder);
+			else db.Database.ExecuteSqlCommand("UPDATE Piranha_Pages SET SortOrder = SortOrder " + (increase ? "+ 1" : "- 1") +
+				" WHERE ParentId IS NULL AND SortOrder >= @p0", sortOrder);
+        }        
         #endregion
     }
 }

@@ -66,7 +66,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         /// <param name="model">The page model</param>
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken] Seems buggy ATM
         [Route("manager/page/save")]
         public IActionResult Save(Models.PageEditModel model) {
             if (model.Save(api))
@@ -79,7 +79,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         /// <param name="model">The page model</param>
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken] Seems buggy ATM
         [Route("manager/page/publish")]
         public IActionResult Publish(Models.PageEditModel model) {
             if (model.Save(api, true))
@@ -92,7 +92,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         /// <param name="model">The page model</param>
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken] Seems buggy ATM
         [Route("manager/page/unpublish")]
         public IActionResult UnPublish(Models.PageEditModel model) {
             if (model.Save(api, false))
