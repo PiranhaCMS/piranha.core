@@ -14,7 +14,7 @@ using System.Linq;
 namespace Piranha.Areas.Manager.Controllers
 {
     [Area("Manager")]
-    public class PageTypeController : Controller
+    public class BlockTypeController : Controller
     {
         #region Members
         /// <summary>
@@ -27,24 +27,25 @@ namespace Piranha.Areas.Manager.Controllers
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public PageTypeController(IApi api) {
+        public BlockTypeController(IApi api) {
             this.api = api;
         }
 
         /// <summary>
-        /// Gets the list view for the page types.
+        /// Gets the list view for the block types.
         /// </summary>
-        [Route("manager/pagetypes")]
+        [Route("manager/blocktypes")]
         public IActionResult List() {
-            return View(App.PageTypes);
+            return View(App.BlockTypes);
         }
 
+
         /// <summary>
-        /// Gets the edit view for the specified page type.
+        /// Gets the edit view for the specified block type.
         /// </summary>
-        [Route("manager/pagetype/{id}")]
+        [Route("manager/blocktype/{id}")]
         public IActionResult Edit(string id) {
-            return View(App.PageTypes.SingleOrDefault(t => t.Id.ToLower() == id.ToLower()));
+            return View(App.BlockTypes.SingleOrDefault(t => t.Id.ToLower() == id.ToLower()));
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿@model IList<Piranha.Extend.PageType>
+﻿@model IList<Piranha.Extend.BlockType>
 @{
-    ViewBag.Title = "Page types";
+    ViewBag.Title = "Block types";
 }
 
 <table class="table table-striped">
@@ -13,7 +13,7 @@
     <tbody>
         @foreach (var item in Model) {
             <tr>
-                <td>@item.Id</td>
+                <td><a href="@Url.Action("Edit", new { id = item.Id.ToLower() })">@item.Id</a></td>
                 <td>@item.Title</td>
             </tr>
         }

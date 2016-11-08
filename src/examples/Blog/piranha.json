@@ -64,5 +64,23 @@
         }
       ]
     }
+  ],
+
+  "BlockTypes": [
+    {
+      "Id": "Html",
+      "Title": "Html block",
+      "Regions": [
+        {
+          "Id": "Content",
+          "Title": "Main Content",
+          "Fields": [
+            {
+              "Type": "Html"
+            }
+          ]
+        }
+      ]
+    }
   ]
 }

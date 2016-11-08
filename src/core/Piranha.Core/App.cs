@@ -99,8 +99,9 @@ namespace Piranha
                         fields.Register<Extend.Fields.StringField>();
                         fields.Register<Extend.Fields.TextField>();
 
-                        // Get page types
+                        // Get types
                         pageTypes = api.PageTypes.Get();
+                        blockTypes = api.BlockTypes.Get();
 
                         // Add ad-hoc modules
                         foreach (var module in modules) {

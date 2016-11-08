@@ -87,6 +87,9 @@ namespace Piranha.Manager
             new MenuItem() {
                 InternalId = "Settings", Name = "Settings", Css = "glyphicon glyphicon-wrench", Items = new List<MenuItem>() {
                     new MenuItem() {
+                        InternalId = "BlockTypes", Name = "Block types", Controller = "BlockType", Action = "List"
+                    },
+                    new MenuItem() {
                         InternalId = "PageTypes", Name = "Page types", Controller = "PageType", Action = "List"
                     }
                 }
