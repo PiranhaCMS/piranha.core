@@ -26,11 +26,11 @@ public static class EFModuleExtensions
         // Add the db options
         services.AddDbContext<Piranha.EF.Db>(options, lifetime);
         if (lifetime == ServiceLifetime.Scoped)
-            services.AddScoped<Piranha.IApi, Piranha.EF.Api>();
+            services.AddScoped<Piranha.IDataService, Piranha.EF.DataService>();
         else if (lifetime == ServiceLifetime.Singleton)
-            services.AddSingleton<Piranha.IApi, Piranha.EF.Api>();
+            services.AddSingleton<Piranha.IDataService, Piranha.EF.DataService>();
         else if (lifetime == ServiceLifetime.Transient)
-            services.AddTransient<Piranha.IApi, Piranha.EF.Api>();
+            services.AddTransient<Piranha.IDataService, Piranha.EF.DataService>();
 
         // Add the EF module
         Piranha.App.Modules.Add(new Piranha.EF.Module());

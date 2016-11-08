@@ -39,6 +39,7 @@ namespace Blog
             services.AddMvc();
             services.AddPiranhaEF(options => options.UseSqlite("Filename=./blog.db"));
             services.AddPiranhaManager();
+            services.AddScoped<IApi, Api>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

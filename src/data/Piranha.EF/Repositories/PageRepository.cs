@@ -25,15 +25,15 @@ namespace Piranha.EF.Repositories
         /// <summary>
         /// The current Api.
         /// </summary>
-        private readonly Api api;
+        private readonly DataService service;
         #endregion
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
-        internal PageRepository(Api api, Db db) : base(db) {
-            this.api = api;
+        internal PageRepository(DataService service, Db db) : base(db) {
+            this.service = service;
         }
 
         /// <summary>

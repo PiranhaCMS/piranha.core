@@ -14,7 +14,7 @@ using Piranha.Repositories;
 
 namespace Piranha.EF
 {
-    public sealed class Api : IApi
+    public sealed class DataService : IDataService
     {
         #region Members
         /// <summary>
@@ -63,7 +63,7 @@ namespace Piranha.EF
         /// <summary>
         /// Default constructor. Creates a new Entity Framework Api object.
         /// </summary>
-        public Api() {
+        public DataService() {
             var builder = new DbContextOptionsBuilder<Db>();
             Module.DbConfig(builder);
             this.db = new Db(builder.Options);
