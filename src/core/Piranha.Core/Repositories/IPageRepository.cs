@@ -83,6 +83,15 @@ namespace Piranha.Repositories
         void Delete<T>(T model) where T : PageModel<T>;
 
         /// <summary>
+        /// Moves the current page in the structure.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="model">The page to move</param>
+        /// <param name="parentId">The new parent id</param>
+        /// <param name="sortOrder">The new sort order</param>
+        void Move<T>(T model, Guid? parentId, int sortOrder) where T : PageModel<T>;
+
+        /// <summary>
         /// Delets the page with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>

@@ -31,6 +31,7 @@ namespace Piranha.Manager
         private readonly Dictionary<string, string> contentTypes = new Dictionary<string, string>() {
             { ".ico", "image/x-icon" },
             { ".png", "image/png" },
+            { ".gif", "image/gif" },
             { ".css", "text/css" },
             { ".js", "text/javascript" }
         };

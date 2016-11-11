@@ -8,8 +8,8 @@
  * 
  */
 
-using System;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace Piranha.Areas.Manager.Controllers
 {
@@ -101,6 +101,21 @@ namespace Piranha.Areas.Manager.Controllers
         }
 
         /// <summary>
+        /// Moves a page to match the given structure.
+        /// </summary>
+        /// <param name="structure">The page structure</param>
+        [HttpPost]
+        [Route("manager/pages/move")]
+        public IActionResult Move([FromBody]Models.PageStructureModel structure) {
+            for (var n = 0; n < structure.Items.Count; n++) {
+                var moved = MovePage(structure.Items[n], n);
+                if (moved)
+                    break;
+            }
+            return View("Partial/_Sitemap", api.Sitemap.Get(false));
+        }
+
+        /// <summary>
         /// Deletes the page with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
@@ -108,6 +123,30 @@ namespace Piranha.Areas.Manager.Controllers
         public IActionResult Delete(Guid id) {
             api.Pages.Delete(id);
             return RedirectToAction("List");
+        }        
+
+        #region Private methods
+        private bool MovePage(Models.PageStructureModel.PageStructureItem page, int sortOrder = 1, Guid? parentId = null) {
+            var model = api.Pages.GetById(page.Id);
+
+            if (model != null) {
+                if (model.ParentId != parentId || model.SortOrder != sortOrder) {
+                    // Move the page in the structure.
+                    api.Pages.Move(model, parentId, sortOrder);
+
+                    // We only move one page at a time so we're done
+                    return true;
+                }
+
+                for (var n = 0; n < page.Children.Count; n++) {
+                    var moved = MovePage(page.Children[n], n, page.Id);
+
+                    if (moved)
+                        return true;
+                }
+            }
+            return false;
         }
+        #endregion
     }
 }

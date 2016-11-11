@@ -7605,6 +7605,15 @@ a {
   -webkit-border-radius: 0;
   -o-border-radius: 0;
 }
+.spinner {
+  background: #fff url('../img/ajax-loader.gif') no-repeat 50% 50%;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0.5;
+}
 .navmenu-inverse {
   width: 220px;
 }
@@ -7877,6 +7886,32 @@ li.sitemap-item .actions a {
 }
 li.sitemap-item .actions.one {
   width: 60px;
+}
+li.sitemap-item .toolbar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+}
+li.sitemap-item .toolbar a {
+  display: block;
+  float: left;
+  height: 43px;
+  line-height: 43px;
+  color: #fff;
+  font-size: 12px;
+}
+li.sitemap-item .toolbar a span.glyphicon {
+  padding: 0 20px;
+  border-right: solid 1px rgba(255, 255, 255, 0.2);
+  margin-right: 15px;
+  font-size: 14px;
+}
+li.sitemap-item .toolbar a.sitemap-publish {
+  background: #439700;
+}
+li.sitemap-item .toolbar a.sitemap-delete {
+  background: red;
 }
 .panel .table {
   margin-bottom: 0;
