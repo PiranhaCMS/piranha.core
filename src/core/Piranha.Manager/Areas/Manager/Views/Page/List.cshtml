@@ -6,12 +6,29 @@
 @section script {
     <script type="text/javascript">
         $(function () {
-            //$('.table-sortable tbody').sortable({
-            //    handle: 'span.move'
-            //});
-
             $('.dd').nestable({
                 group: 1
+            });
+
+            $('.dd').on('change', function() {
+                // TODO: Show spinner & block sitemap while saving
+                $('#sitemap-spinner').show();
+
+                $.ajax({
+                    url: '/manager/pages/move',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        Items: $('.dd').nestable('serialize') 
+                    }),
+                    success: function (data) {
+                        // TODO: Hide spinner
+                        $('#sitemap-spinner').hide();
+
+                        // Update the sitemap
+                        //$('.dd .sitemap').html(data);
+                    }
+                });
             });
         });
     </script>
@@ -48,20 +65,7 @@
 </ol>
 <div class="dd">
     <ol class="sitemap dd-list">
-        @Html.DisplayFor(m => m.Sitemap)
+        @Html.Partial("Partial/_Sitemap", Model.Sitemap)
     </ol>
+    <div id="sitemap-spinner" class="spinner" style="display:none"></div>
 </div>
-
-@*<table class="table table-striped table-main table-sortable">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th class="date">Modified</th>
-            <th class="date">Created</th>
-            <th class="actions one"></th>
-        </tr>
-    </thead>
-    <tbody>
-        @Html.DisplayFor(m => m.Sitemap)
-    </tbody>
-</table>*@

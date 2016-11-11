@@ -45,6 +45,7 @@
     "embed": [
       "Areas/Manager/Views/**/*.cshtml",
       "assets/css/*.min.css",
+      "assets/img/*.gif",
       "assets/img/*.ico",
       "assets/img/*.png",
       "assets/js/*.min.js",
