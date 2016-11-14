@@ -221,6 +221,8 @@ namespace Piranha.EF.Repositories
             // Update the position of the current page
             db.Database.ExecuteSqlCommand("UPDATE Piranha_Pages SET ParentId=@p0, SortOrder=@p1 WHERE Id=@p2",
                 parentId, sortOrder, model.Id);
+            // Sync the db context
+            db.SaveChanges();
         }
 
         /// <summary>
