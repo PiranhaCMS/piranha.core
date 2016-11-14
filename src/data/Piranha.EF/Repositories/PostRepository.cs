@@ -17,7 +17,7 @@ using Piranha.Repositories;
 
 namespace Piranha.EF.Repositories
 {
-    public class PostRepository : RepositoryBase<Data.Post, Models.PostModel>, IPostRepository
+    public class PostRepository : RepositoryBase<Data.Post, Models.Post>, IPostRepository
     {
         /// <summary>
         /// Default constructor.
@@ -31,7 +31,7 @@ namespace Piranha.EF.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
         /// <returns>The post model</returns>
-        public T GetById<T>(Guid id) where T : Models.PostModel {
+        public T GetById<T>(Guid id) where T : Models.Post {
             var result = Query().FirstOrDefault(p => p.Id == id);
 
             if (result != null)
@@ -45,8 +45,8 @@ namespace Piranha.EF.Repositories
         /// </summary>
         /// <param name="id">The id array</param>
         /// <returns>The post models</returns>
-        public IList<Models.PostModel> GetById(Guid[] id) {
-            var models = new List<Models.PostModel>();
+        public IList<Models.Post> GetById(Guid[] id) {
+            var models = new List<Models.Post>();
             var result = Query().Where(p => id.Contains(p.Id)).ToList();
 
             foreach (var post in result)
@@ -61,7 +61,7 @@ namespace Piranha.EF.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The id array</param>
         /// <returns>The post models</returns>
-        public IList<T> GetById<T>(Guid[] id) where T : Models.PostModel {
+        public IList<T> GetById<T>(Guid[] id) where T : Models.Post {
             var models = new List<T>();
             var result = Query().Where(p => id.Contains(p.Id)).ToList();
 
@@ -76,7 +76,7 @@ namespace Piranha.EF.Repositories
         /// <param name="category">The unique category slug</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The post model</returns>
-        public Models.PostModel GetBySlug(string category, string slug) {
+        public Models.Post GetBySlug(string category, string slug) {
             var result = Query().FirstOrDefault(p => p.Category.Slug == category && p.Slug == slug);
 
             if (result != null)
@@ -91,7 +91,7 @@ namespace Piranha.EF.Repositories
         /// <param name="category">The unique category slug</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The post model</returns>
-        public T GetBySlug<T>(string category, string slug) where T : Models.PostModel {
+        public T GetBySlug<T>(string category, string slug) where T : Models.Post {
             var result = Query().FirstOrDefault(p => p.Category.Slug == category && p.Slug == slug);
 
             if (result != null)
@@ -113,8 +113,8 @@ namespace Piranha.EF.Repositories
         /// </summary>
         /// <param name="result">The result</param>
         /// <returns>The model</returns>
-        protected override Models.PostModel Map(Data.Post result) {
-            return Map<Models.PostModel>(result);
+        protected override Models.Post Map(Data.Post result) {
+            return Map<Models.Post>(result);
         }
 
         /// <summary>
@@ -123,11 +123,11 @@ namespace Piranha.EF.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="result">The result</param>
         /// <returns>The model</returns>
-        private T Map<T>(Data.Post post) where T : Models.PostModel {
+        private T Map<T>(Data.Post post) where T : Models.Post {
             var model = (T)Activator.CreateInstance<T>();
 
             // Map basic fields
-            Module.Mapper.Map<Data.Post, Models.PostModel>(post, model);
+            Module.Mapper.Map<Data.Post, Models.Post>(post, model);
 
             // Map category
             model.Category = Module.Mapper.Map<Data.Category, Models.Category>(post.Category);
