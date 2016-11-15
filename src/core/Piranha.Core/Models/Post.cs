@@ -79,7 +79,7 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the post category.
         /// </summary>
-        public Category Category { get; set; }
+        public CategoryItem Category { get; set; }
 
         /// <summary>
         /// Gets/sets the available tags.

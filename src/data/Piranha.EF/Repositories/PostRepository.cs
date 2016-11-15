@@ -130,7 +130,7 @@ namespace Piranha.EF.Repositories
             Module.Mapper.Map<Data.Post, Models.Post>(post, model);
 
             // Map category
-            model.Category = Module.Mapper.Map<Data.Category, Models.Category>(post.Category);
+            model.Category = Module.Mapper.Map<Data.Category, Models.CategoryItem>(post.Category);
 
             return model;
         }

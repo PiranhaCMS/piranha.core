@@ -113,7 +113,7 @@ namespace Piranha.EF.Repositories
                 foreach (var post in posts) {
                     // Map fields
                     var postModel = mapper.Map<Post, Models.Post>(post);
-                    postModel.Category = mapper.Map<Category, Models.Category>(post.Category);
+                    postModel.Category = mapper.Map<Category, Models.CategoryItem>(post.Category);
                     //post.Permalink = $"~/{category.Slug}/{post.Slug}";
 
                     // Add to model

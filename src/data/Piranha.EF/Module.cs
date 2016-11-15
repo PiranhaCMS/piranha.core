@@ -39,10 +39,10 @@ namespace Piranha.EF
         /// </summary>
         public void Init() {
             var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<Data.Category, Models.CategoryItem>();
                 cfg.CreateMap<Data.Category, Models.Category>();
-                cfg.CreateMap<Data.Category, Models.CategoryModel>();
 
-                cfg.CreateMap<Models.Category, Data.Category>()
+                cfg.CreateMap<Models.CategoryItem, Data.Category>()
                     .ForMember(m => m.Id, o => o.Ignore())
                     .ForMember(m => m.ArchiveTitle, o => o.Ignore())
                     .ForMember(m => m.ArchiveKeywords, o => o.Ignore())
@@ -50,7 +50,7 @@ namespace Piranha.EF
                     .ForMember(m => m.ArchiveRoute, o => o.Ignore())
                     .ForMember(m => m.Created, o => o.Ignore())
                     .ForMember(m => m.LastModified, o => o.Ignore());
-                cfg.CreateMap<Models.CategoryModel, Data.Category>()
+                cfg.CreateMap<Models.Category, Data.Category>()
                     .ForMember(m => m.Id, o => o.Ignore())
                     .ForMember(m => m.Created, o => o.Ignore())
                     .ForMember(m => m.LastModified, o => o.Ignore());
