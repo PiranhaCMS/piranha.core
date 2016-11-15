@@ -16,7 +16,7 @@ namespace Blog.Models
         public TextField Body { get; set; }
     }
 
-    public class StartPageModel : PageModel<StartPageModel>
+    public class StartPageModel : Page<StartPageModel>
     {
         public HtmlField Content { get; set; }
         public IntroBlock Intro { get; set; }

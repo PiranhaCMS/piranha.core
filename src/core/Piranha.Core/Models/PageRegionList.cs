@@ -34,7 +34,7 @@ namespace Piranha.Models
         /// </summary>
         /// <returns>The new item</returns>
         public T Create() {
-            return (T)PageModel.CreateRegion(TypeId, RegionId);
+            return (T)DynamicPage.CreateRegion(TypeId, RegionId);
         }
 
         /// <summary>

@@ -55,8 +55,8 @@ namespace Piranha.EF
                     .ForMember(m => m.Created, o => o.Ignore())
                     .ForMember(m => m.LastModified, o => o.Ignore());
 
-                cfg.CreateMap<Data.Page, Models.PageModelBase>();
-                cfg.CreateMap<Models.PageModelBase, Data.Page>()
+                cfg.CreateMap<Data.Page, Models.PageBase>();
+                cfg.CreateMap<Models.PageBase, Data.Page>()
                     .ForMember(m => m.Id, o => o.Ignore())
                     .ForMember(m => m.Created, o => o.Ignore())
                     .ForMember(m => m.LastModified, o => o.Ignore())
