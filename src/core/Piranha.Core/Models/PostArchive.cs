@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace Piranha.Models
 {
-    public class ArchiveModel
+    public class PostArchive
     {
         #region Properties
         /// <summary>
@@ -69,14 +69,14 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the available posts.
         /// </summary>
-        public IList<PostModel> Posts { get; set; }
+        public IList<Post> Posts { get; set; }
         #endregion
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public ArchiveModel() {
-            Posts = new List<PostModel>();
+        public PostArchive() {
+            Posts = new List<Post>();
         }
     }
 }

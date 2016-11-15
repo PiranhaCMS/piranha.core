@@ -50,8 +50,8 @@ namespace Piranha.Models
                 var model = (T)Activator.CreateInstance<T>();
                 model.TypeId = typeId;
 
-                if (model is PageModel) {
-                    var dynModel = (PageModel)(object)model;
+                if (model is DynamicPage) {
+                    var dynModel = (DynamicPage)(object)model;
 
                     foreach (var region in contentType.Regions) {
                         object value = null;

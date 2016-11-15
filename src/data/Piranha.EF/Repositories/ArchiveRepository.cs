@@ -46,8 +46,8 @@ namespace Piranha.EF.Repositories
         /// <param name="year">The optional year</param>
         /// <param name="month">The optional month</param>
         /// <returns>The archive model</returns>
-        public Models.ArchiveModel GetById(Guid id, int? page = 1, int? year = null, int? month = null) {
-            return GetById<Models.ArchiveModel>(id, page, year, month);
+        public Models.PostArchive GetById(Guid id, int? page = 1, int? year = null, int? month = null) {
+            return GetById<Models.PostArchive>(id, page, year, month);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Piranha.EF.Repositories
         /// <param name="year">The optional year</param>
         /// <param name="month">The optional month</param>
         /// <returns>The archive model</returns>
-        public T GetById<T>(Guid id, int? page = 1, int? year = null, int? month = null) where T : Models.ArchiveModel {
+        public T GetById<T>(Guid id, int? page = 1, int? year = null, int? month = null) where T : Models.PostArchive {
             // Get the requested category
             var category = db.Categories
                 .FirstOrDefault(c => c.Id == id);
@@ -112,8 +112,8 @@ namespace Piranha.EF.Repositories
                 var mapper = Module.Mapper;
                 foreach (var post in posts) {
                     // Map fields
-                    var postModel = mapper.Map<Post, Models.PostModel>(post);
-                    postModel.Category = mapper.Map<Category, Models.Category>(post.Category);
+                    var postModel = mapper.Map<Post, Models.Post>(post);
+                    postModel.Category = mapper.Map<Category, Models.CategoryItem>(post.Category);
                     //post.Permalink = $"~/{category.Slug}/{post.Slug}";
 
                     // Add to model
@@ -132,12 +132,12 @@ namespace Piranha.EF.Repositories
         /// <param name="year">The optional year</param>
         /// <param name="month">The optional month</param>
         /// <returns>The archive model</returns>
-        public Models.ArchiveModel GetBySlug(string slug, int? page = 1, int? year = null, int? month = null) {
+        public Models.PostArchive GetBySlug(string slug, int? page = 1, int? year = null, int? month = null) {
             var category = db.Categories
                 .FirstOrDefault(c => c.Slug == slug);
 
             if (category != null) {
-                return GetById<Models.ArchiveModel>(category.Id, page, year, month);
+                return GetById<Models.PostArchive>(category.Id, page, year, month);
             }
             return null;
         }
@@ -150,7 +150,7 @@ namespace Piranha.EF.Repositories
         /// <param name="year">The optional year</param>
         /// <param name="month">The optional month</param>
         /// <returns>The archive model</returns>
-        public T GetBySlug<T>(string slug, int? page = 1, int? year = null, int? month = null) where T : Models.ArchiveModel {
+        public T GetBySlug<T>(string slug, int? page = 1, int? year = null, int? month = null) where T : Models.PostArchive {
             var category = db.Categories
                 .FirstOrDefault(c => c.Slug == slug);
 

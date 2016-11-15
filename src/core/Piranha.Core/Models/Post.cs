@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace Piranha.Models
 {
-    public class PostModel
+    public class Post
     {
         #region Properties
         /// <summary>
@@ -79,7 +79,7 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the post category.
         /// </summary>
-        public Category Category { get; set; }
+        public CategoryItem Category { get; set; }
 
         /// <summary>
         /// Gets/sets the available tags.
@@ -90,7 +90,7 @@ namespace Piranha.Models
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public PostModel() {
+        public Post() {
             Tags = new List<Tag>();
         }
     }

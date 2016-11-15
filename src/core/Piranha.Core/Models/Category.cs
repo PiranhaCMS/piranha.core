@@ -8,32 +8,30 @@
  * 
  */
 
-using System;
-
 namespace Piranha.Models
 {
-    public class Category
+    public class Category : CategoryItem
     {
         #region Properties
         /// <summary>
-        /// Gets/sets the unique id.
+        /// Gets/sets the archive title.
         /// </summary>
-        public Guid Id { get; set; }
+        public string ArchiveTitle { get; set; }
 
         /// <summary>
-        /// Gets/sets the title.
+        /// Gets/sets the archive meta keywords.
         /// </summary>
-        public string Title { get; set; }
+        public string ArchiveKeywords { get; set; }
 
         /// <summary>
-        /// Gets/sets the slug.
+        /// Gets/sets the archive meta description.
         /// </summary>
-        public string Slug { get; set; }
+        public string ArchiveDescription { get; set; }
 
         /// <summary>
-        /// Gets/sets the optional description.
+        /// Gets/sets the archive route.
         /// </summary>
-        public string Description { get; set; }
+        public string ArchiveRoute { get; set; }
         #endregion
     }
 }

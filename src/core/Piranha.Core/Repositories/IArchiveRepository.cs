@@ -23,7 +23,7 @@ namespace Piranha.Repositories
         /// <param name="year">The optional year</param>
         /// <param name="month">The optional month</param>
         /// <returns>The archive model</returns>
-        ArchiveModel GetById(Guid id, int? page = 1, int? year = null, int? month = null);
+        PostArchive GetById(Guid id, int? page = 1, int? year = null, int? month = null);
 
         /// <summary>
         /// Gets the post archive for the category with the given id.
@@ -33,7 +33,7 @@ namespace Piranha.Repositories
         /// <param name="year">The optional year</param>
         /// <param name="month">The optional month</param>
         /// <returns>The archive model</returns>
-        T GetById<T>(Guid id, int? page = 1, int? year = null, int? month = null) where T : ArchiveModel;
+        T GetById<T>(Guid id, int? page = 1, int? year = null, int? month = null) where T : PostArchive;
 
         /// <summary>
         /// Gets the post archive for the category with the given slug.
@@ -43,7 +43,7 @@ namespace Piranha.Repositories
         /// <param name="year">The optional year</param>
         /// <param name="month">The optional month</param>
         /// <returns>The archive model</returns>
-        ArchiveModel GetBySlug(string slug, int? page = 1, int? year = null, int? month = null);
+        PostArchive GetBySlug(string slug, int? page = 1, int? year = null, int? month = null);
 
         /// <summary>
         /// Gets the post archive for the category with the given slug.
@@ -53,6 +53,6 @@ namespace Piranha.Repositories
         /// <param name="year">The optional year</param>
         /// <param name="month">The optional month</param>
         /// <returns>The archive model</returns>
-        T GetBySlug<T>(string slug, int? page = 1, int? year = null, int? month = null) where T : ArchiveModel;
+        T GetBySlug<T>(string slug, int? page = 1, int? year = null, int? month = null) where T : PostArchive;
     }
 }

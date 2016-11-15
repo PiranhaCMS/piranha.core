@@ -19,7 +19,7 @@ namespace Piranha.Areas.Manager.Models
     /// <summary>
     /// The page edit view model.
     /// </summary>
-    public class PageEditModel : Piranha.Models.PageModelBase
+    public class PageEditModel : Piranha.Models.PageBase
     {
         #region Properties
         /// <summary>
@@ -50,9 +50,9 @@ namespace Piranha.Areas.Manager.Models
             var page = api.Pages.GetById(Id);
 
             if (page == null)
-                page = Piranha.Models.PageModel.Create(this.TypeId);
+                page = Piranha.Models.DynamicPage.Create(this.TypeId);
 
-            Module.Mapper.Map<PageEditModel, Piranha.Models.PageModelBase>(this, page);
+            Module.Mapper.Map<PageEditModel, Piranha.Models.PageBase>(this, page);
             SaveRegions(this, page);
 
             if (publish.HasValue) {
@@ -75,7 +75,7 @@ namespace Piranha.Areas.Manager.Models
         public static PageEditModel GetById(IApi api, Guid id) {
             var page = api.Pages.GetById(id);
             if (page != null) {
-                var model = Module.Mapper.Map<Piranha.Models.PageModelBase, PageEditModel>(page);
+                var model = Module.Mapper.Map<Piranha.Models.PageBase, PageEditModel>(page);
                 model.PageType = App.PageTypes.SingleOrDefault(t => t.Id == model.TypeId);
                 LoadRegions(page, model);
 
@@ -93,8 +93,8 @@ namespace Piranha.Areas.Manager.Models
             var type = App.PageTypes.SingleOrDefault(t => t.Id == pageTypeId);
 
             if (type != null) {
-                var page = Piranha.Models.PageModel.Create(pageTypeId);
-                var model = Module.Mapper.Map<Piranha.Models.PageModelBase, PageEditModel>(page);
+                var page = Piranha.Models.DynamicPage.Create(pageTypeId);
+                var model = Module.Mapper.Map<Piranha.Models.PageBase, PageEditModel>(page);
                 model.PageType = type;
                 LoadRegions(page, model);
 
@@ -109,7 +109,7 @@ namespace Piranha.Areas.Manager.Models
         /// </summary>
         /// <param name="src">The source</param>
         /// <param name="dest">The destination</param>
-        private static void LoadRegions(Piranha.Models.PageModel src, PageEditModel dest) {
+        private static void LoadRegions(Piranha.Models.DynamicPage src, PageEditModel dest) {
             if (dest.PageType != null) {
                 foreach (var region in dest.PageType.Regions) {
                     var regions = (IDictionary<string, object>)src.Regions;
@@ -169,12 +169,12 @@ namespace Piranha.Areas.Manager.Models
         /// </summary>
         /// <param name="src">The source</param>
         /// <param name="dest">The destination</param>
-        private static void SaveRegions(PageEditModel src, Piranha.Models.PageModel dest) {
+        private static void SaveRegions(PageEditModel src, Piranha.Models.DynamicPage dest) {
             var modelRegions = (IDictionary<string, object>)dest.Regions;
             foreach (var region in src.Regions) {
                 if (region is PageEditRegion) {
                     if (!modelRegions.ContainsKey(region.Id))
-                        modelRegions[region.Id] = Piranha.Models.PageModel.CreateRegion(dest.TypeId, region.Id);
+                        modelRegions[region.Id] = Piranha.Models.DynamicPage.CreateRegion(dest.TypeId, region.Id);
 
                     var reg = (PageEditRegion)region;
 
@@ -199,7 +199,7 @@ namespace Piranha.Areas.Manager.Models
                             if (set.Count == 1) {
                                 list.Add(set[0].Value);
                             } else {
-                                var modelFields = (IDictionary<string, object>)Piranha.Models.PageModel.CreateRegion(dest.TypeId, region.Id);
+                                var modelFields = (IDictionary<string, object>)Piranha.Models.DynamicPage.CreateRegion(dest.TypeId, region.Id);
 
                                 foreach (var field in set) {
                                     modelFields[field.Id] = field.Value;

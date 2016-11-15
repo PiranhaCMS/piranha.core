@@ -9,35 +9,14 @@
  */
 
 using System;
-using System.Dynamic;
 
 namespace Piranha.Models
 {
     /// <summary>
-    /// Dynamic page model.
-    /// </summary>
-    public class PageModel : PageModel<PageModel>
-    {
-        #region Properties
-        /// <summary>
-        /// Gets/sets the regions.
-        /// </summary>
-        public dynamic Regions { get; set; }
-        #endregion
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public PageModel() : base() {
-            Regions = new ExpandoObject();
-        }
-    }
-
-    /// <summary>
     /// Generic page model.
     /// </summary>
     /// <typeparam name="T">The model type</typeparam>
-    public class PageModel<T> : PageModelBase where T : PageModel<T>
+    public class Page<T> : PageBase where T : Page<T>
     {
         #region Properties
         /// <summary>
@@ -75,7 +54,7 @@ namespace Piranha.Models
     /// <summary>
     /// Base class for page models.
     /// </summary>
-    public abstract class PageModelBase : Content
+    public abstract class PageBase : Content
     {
         #region Properties
         /// <summary>
