@@ -15,7 +15,7 @@ namespace Piranha.Models
     /// <summary>
     /// Dynamic block model.
     /// </summary>
-    public class BlockModel : BlockModel<BlockModel>
+    public class DynamicBlock : Block<DynamicBlock>
     {
         #region Properties
         /// <summary>
@@ -27,7 +27,7 @@ namespace Piranha.Models
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public BlockModel() : base() {
+        public DynamicBlock() : base() {
             Regions = new ExpandoObject();
         }
     }
@@ -36,7 +36,7 @@ namespace Piranha.Models
     /// Generic block model.
     /// </summary>
     /// <typeparam name="T">The model type</typeparam>
-    public class BlockModel<T> : BlockModelBase where T : BlockModel<T>
+    public class Block<T> : BlockBase where T : Block<T>
     {
         /// <summary>
         /// Creates a new block model using the given block type id.
@@ -65,7 +65,7 @@ namespace Piranha.Models
     /// <summary>
     /// Base class for block models.
     /// </summary>
-    public abstract class BlockModelBase : Content
+    public abstract class BlockBase : Content
     {
         #region Properties
         /// <summary>
