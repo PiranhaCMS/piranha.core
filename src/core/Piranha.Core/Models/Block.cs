@@ -8,30 +8,8 @@
  * 
  */
 
-using System.Dynamic;
-
 namespace Piranha.Models
 {
-    /// <summary>
-    /// Dynamic block model.
-    /// </summary>
-    public class DynamicBlock : Block<DynamicBlock>
-    {
-        #region Properties
-        /// <summary>
-        /// Gets/sets the regions.
-        /// </summary>
-        public dynamic Regions { get; set; }
-        #endregion
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public DynamicBlock() : base() {
-            Regions = new ExpandoObject();
-        }
-    }
-
     /// <summary>
     /// Generic block model.
     /// </summary>
