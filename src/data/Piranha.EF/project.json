@@ -3,12 +3,12 @@
 
   "dependencies": {
     "AutoMapper": "5.1.1",
-    "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0-preview1-final",
+    "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0",
     "Microsoft.EntityFrameworkCore.Tools": {
       "version": "1.0.0-preview3-final",
       "type": "build"
     },
-    "NETStandard.Library": "1.6.1-preview1-24530-04",
+    "NETStandard.Library": "1.6.1",
     "Piranha.Core": "4.0.0-*"
   },
 
