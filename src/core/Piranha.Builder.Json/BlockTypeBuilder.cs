@@ -8,6 +8,7 @@
  * 
  */
 
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
@@ -19,14 +20,17 @@ namespace Piranha.Builder.Json
         #region Members
         private readonly List<ConfigFile> files = new List<ConfigFile>();
         private readonly IApi api;
+        private readonly ILogger logger;
         #endregion
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public BlockTypeBuilder(IApi api) {
+        /// <param name="logFactory">The optional log factory</param>
+        public BlockTypeBuilder(IApi api, ILoggerFactory logFactory = null) {
             this.api = api;
+            this.logger = logFactory?.CreateLogger("Piranha.Builder.Json.BlockTypeBuilder");
         }
 
         /// <summary>
@@ -56,11 +60,14 @@ namespace Piranha.Builder.Json
                             import.AssertConfigIsValid();
 
                             // Update page types
-                            foreach (var type in import.BlockTypes)
+                            foreach (var type in import.BlockTypes) {
+                                logger?.LogInformation($"Importing BlockType '{type.Id}'.");
                                 api.BlockTypes.Save(type);
+                            }
                         }
                     }
                 } else if (!file.Optional) {
+                    logger?.LogError($"Specified file '{file.Filename}' not found'.");
                     throw new FileNotFoundException($"Specified file {file.Filename} not found!");
                 }
             }

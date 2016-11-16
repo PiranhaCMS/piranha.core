@@ -30,8 +30,8 @@ namespace Piranha.Extend
         #endregion
 
         /// <summary>
-        /// Default internal constructor.
+        /// Default constructor.
         /// </summary>
-        internal FieldType() { }
+        public FieldType() { }
     }
 }

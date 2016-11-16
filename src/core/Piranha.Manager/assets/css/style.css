@@ -7887,32 +7887,6 @@ li.sitemap-item .actions a {
 li.sitemap-item .actions.one {
   width: 60px;
 }
-li.sitemap-item .toolbar {
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 100%;
-}
-li.sitemap-item .toolbar a {
-  display: block;
-  float: left;
-  height: 43px;
-  line-height: 43px;
-  color: #fff;
-  font-size: 12px;
-}
-li.sitemap-item .toolbar a span.glyphicon {
-  padding: 0 20px;
-  border-right: solid 1px rgba(255, 255, 255, 0.2);
-  margin-right: 15px;
-  font-size: 14px;
-}
-li.sitemap-item .toolbar a.sitemap-publish {
-  background: #439700;
-}
-li.sitemap-item .toolbar a.sitemap-delete {
-  background: red;
-}
 .panel .table {
   margin-bottom: 0;
 }
@@ -8106,14 +8080,30 @@ li.sitemap-item .toolbar a.sitemap-delete {
   text-align: left;
 }
 .region-list {
-  margin: 0 -15px;
+  margin: -15px -15px 15px;
 }
-.region-list .region-list-item {
-  border-top: solid 1px #ddd;
-  padding: 15px;
+.region-list .region-list-item .region-list-heading {
+  border-bottom: solid 1px #ddd;
 }
-.region-list .region-list-item:last-child {
-  padding-bottom: 0;
+.region-list .region-list-item .region-list-heading .handle {
+  height: 43px;
+  padding: 10px;
+  float: left;
+  border-right: solid 1px #f2f2f2;
+  cursor: pointer;
+}
+.region-list .region-list-item .region-list-heading a {
+  display: block;
+  height: 43px;
+  padding: 10px;
+  text-indent: 15px;
+}
+.region-list .region-list-item .region-list-body {
+  padding: 15px 15px 0;
+  border-bottom: solid 1px #ddd;
+}
+.region-list-toolbar {
+  margin-bottom: 0;
 }
 .single-region .region-editor {
   margin: -15px -15px -30px;

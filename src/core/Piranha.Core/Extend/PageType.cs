@@ -23,9 +23,9 @@ namespace Piranha.Extend
         #endregion
 
         /// <summary>
-        /// Default internal constructor.
+        /// Default constructor.
         /// </summary>
-        internal PageType() : base() {  }
+        public PageType() : base() {  }
 
         /// <summary>
         /// Validates that the page type is correctly defined.

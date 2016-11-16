@@ -9,4 +9,10 @@
     @Model.Intro.Body.Value
 </p>
 <hr />
+<ul>
+    @foreach (var field in Piranha.App.Fields) {
+        <li>@field.Name, @field.Shorthand, @field.CLRType, @field.Type.FullName</li>
+    }
+</ul>
+
 @Model.Content.Html()

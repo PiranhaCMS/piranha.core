@@ -47,9 +47,9 @@ namespace Piranha.Extend
         #endregion
 
         /// <summary>
-        /// Default internal constructor.
+        /// Default constructor.
         /// </summary>
-        internal RegionType() {
+        public RegionType() {
             Fields = new List<FieldType>();
         }
     }

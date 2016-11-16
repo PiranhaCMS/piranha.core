@@ -50,16 +50,19 @@ namespace Blog
                 app.UseDeveloperExceptionPage();
             }
 
-            // Build page types
+            // Initialize Piranha
+            App.Init(api);
+
+            // Build types
             var pageTypeBuilder = new Piranha.Builder.Json.PageTypeBuilder(api)
                 .AddJsonFile("piranha.json");
             pageTypeBuilder.Build();
             var blockTypeBuilder = new Piranha.Builder.Json.BlockTypeBuilder(api)
                 .AddJsonFile("piranha.json");
             blockTypeBuilder.Build();
-
-            // Initialize the piranha application
-            App.Init(api);
+            var attrTypeBuilder = new Piranha.Builder.Attribute.PageTypeBuilder(api, loggerFactory)
+                .AddType(typeof(Models.TestPageModel));
+            attrTypeBuilder.Build();
 
             // Register middleware
             app.UseStaticFiles();

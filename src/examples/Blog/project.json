@@ -17,6 +17,7 @@
     "Piranha.AspNet": "4.0.0-*",
     "Piranha.Core": "4.0.0-*",
     "Piranha.EF": "4.0.0-*",
+    "Piranha.Builder.Attribute": "4.0.0-*",
     "Piranha.Builder.Json": "4.0.0-*",
     "Piranha.Manager": "4.0.0-*"
   },
