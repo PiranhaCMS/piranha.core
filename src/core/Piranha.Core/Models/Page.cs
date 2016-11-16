@@ -88,9 +88,14 @@ namespace Piranha.Models
         public string MetaDescription { get; set; }
 
         /// <summary>
-        /// Gets/sets the internal route used by the middleware.
+        /// Gets/sets the optional route used by the middleware.
         /// </summary>
         public string Route { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional view.
+        /// </summary>
+        public string View { get; set; }
         #endregion
     }
 }

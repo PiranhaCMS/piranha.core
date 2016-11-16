@@ -143,6 +143,7 @@ namespace Piranha.EF
             mb.Entity<Page>().Property(p => p.MetaKeywords).HasMaxLength(128);
             mb.Entity<Page>().Property(p => p.MetaDescription).HasMaxLength(255);
             mb.Entity<Page>().Property(p => p.Route).HasMaxLength(255);
+            mb.Entity<Page>().Property(p => p.View).HasMaxLength(255);            
             mb.Entity<Page>().HasIndex(p => p.Slug).IsUnique();
 
             mb.Entity<PageField>().ToTable("Piranha_PageFields");
