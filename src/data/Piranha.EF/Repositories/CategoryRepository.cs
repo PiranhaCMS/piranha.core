@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Piranha.Repositories;
 
@@ -59,6 +60,23 @@ namespace Piranha.EF.Repositories
             if (result != null)
                 return MapModel(result);
             return null;
+        }
+
+        /// <summary>
+        /// Gets the available categories.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The category</returns>
+        public IList<Models.CategoryItem> Get(Guid id) {
+            var result = new List<Models.CategoryItem>();
+            var models = Query().OrderBy(c => c.Title).ToList();
+
+            foreach (var category in models) {
+                var model = Map(category);
+                if (model != null)
+                    result.Add(model);
+            }
+            return result;
         }
 
         /// <summary>
