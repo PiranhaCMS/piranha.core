@@ -1,0 +1,27 @@
+﻿@model Piranha.Areas.Manager.Models.CategoryListModel
+@{
+    ViewBag.Title = "Categories";
+}
+
+<table class="table table-striped table-main">
+    <thead>
+        <tr>
+            <th>Title</td>
+            <th>Slug</th>
+            <th class="actions one"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Categories) {
+            <tr>
+                <td><a href="@Url.Action("Edit", new { id = item.Id })">@item.Title</a></td>
+                <td>@item.Slug</td>
+                <td>
+                    <a class="remove" href="@Url.Action("Delete", new { id = item.Id })">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a> 
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

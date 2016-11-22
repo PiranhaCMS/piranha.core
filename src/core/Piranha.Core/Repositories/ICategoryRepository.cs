@@ -62,13 +62,31 @@ namespace Piranha.Repositories
         /// <summary>
         /// Saves the category.
         /// </summary>
-        /// <param name="model">The category</param>
+        /// <param name="category">The category</param>
         void Save(CategoryItem category);
 
         /// <summary>
         /// Saves the full category model.
         /// </summary>
-        /// <param name="model">The full model</param>
+        /// <param name="category">The full model</param>
         void Save(Category category);
+
+        /// <summary>
+        /// Deletes the given category.
+        /// </summary>
+        /// <param name="category">The category</param>
+        void Delete(CategoryItem category);
+        
+        /// <summary>
+        /// Deletes the given category.
+        /// </summary>
+        /// <param name="category">The category model</param>
+        void Delete(Category category);
+        
+        /// <summary>
+        /// Deletes the category with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        void Delete(Guid id);        
     }
 }
