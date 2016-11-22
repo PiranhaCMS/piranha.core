@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -66,7 +67,6 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             AssertBlockTypeListsMatches(Model);
             #endregion
         }
-
         private void AssertBlockTypeListsMatches(IList<BlockType> result) {
             Assert.NotNull(result);
             Assert.Equal(blockTypes.Count, result.Count);
@@ -80,19 +80,34 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             Assert.Equal(expected.Title, result.Title);
         }
 
-        [Fact]
-        public void EditResultWithEmptyApiProduces() {
+        [Theory]
+        [InlineData("bad-id")]
+        [InlineData("1")]
+        [InlineData("2")]
+        [InlineData("3")]
+        [InlineData("4")]
+        [InlineData("5")]
+        [InlineData("6")]
+        public void EditResultProvidesProperObject(string blockTypeId) {
             #region Arrange
+            BlockType expectedBlockType = blockTypes.FirstOrDefault(b => b.Id == blockTypeId);
             #endregion
 
             #region Act
-            ViewResult result = controller.Edit("no-id");
+            ViewResult result = controller.Edit(blockTypeId);
             #endregion
 
             #region Assert
             Assert.NotNull(result);
             BlockType Model = result.Model as BlockType;
-            Assert.Null(Model);
+            if (expectedBlockType == null)
+            {
+                Assert.Null(Model);
+            }
+            else
+            {
+                AssertBlockTypesMatch(expectedBlockType, Model);
+            }
             #endregion
         }
     }
