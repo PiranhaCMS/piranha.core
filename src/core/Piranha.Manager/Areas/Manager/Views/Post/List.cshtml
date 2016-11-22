@@ -1,4 +1,25 @@
-﻿@{
+﻿@model Piranha.Areas.Manager.Models.PostListModel
+@{
     ViewBag.Title = "Posts";
 }
 
+<table class="table table-striped table-main">
+    <thead>
+        <tr>
+            <th>Title</td>
+            <th>Category</th>
+            <th class="date">Published</th>
+            <th class="date">Created</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var post in Model.Posts) {
+            <tr>
+                <td><a href="@Url.Action("Edit", new { id = post.Id })">@post.Title</a></td>
+                <td>@post.Category.Title</td>
+                <td>@(post.Published.HasValue ? post.Published.Value.ToString("yyyy-MM-dd") : "")</td>
+                <td>@post.Created.ToString("yyyy-MM-dd")</td>
+            </tr>
+        }
+    </tbody>
+</table>

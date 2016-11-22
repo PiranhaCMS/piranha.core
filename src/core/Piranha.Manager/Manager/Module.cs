@@ -41,6 +41,8 @@ namespace Piranha.Manager
         /// </summary>
         public void Init() {
             var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<Models.Category, Areas.Manager.Models.CategoryEditModel>();
+                cfg.CreateMap<Areas.Manager.Models.CategoryEditModel, Models.Category>();
                 cfg.CreateMap<Models.PageBase, Areas.Manager.Models.PageEditModel>()
                     .ForMember(m => m.PageType, o => o.Ignore())
                     .ForMember(m => m.Regions, o => o.Ignore());

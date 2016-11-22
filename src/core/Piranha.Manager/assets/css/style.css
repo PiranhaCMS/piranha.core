@@ -7605,6 +7605,9 @@ a {
   -webkit-border-radius: 0;
   -o-border-radius: 0;
 }
+.img-thumbnail {
+  border-radius: 0 none;
+}
 .spinner {
   background: #fff url('../img/ajax-loader.gif') no-repeat 50% 50%;
   position: absolute;
@@ -7806,6 +7809,13 @@ a {
   -moz-border-radius: 20px;
   -webkit-border-radius: 20px;
   -o-border-radius: 20px;
+}
+.panel .table > tbody > tr > td {
+  padding: 10px;
+  border-top: 1px solid #f2f2f2;
+}
+.panel .table > tbody > tr:nth-child(2n+1) > td {
+  background-color: #f2f2f2;
 }
 ol.sitemap {
   padding-left: 0;
@@ -8129,6 +8139,19 @@ li.sitemap-item .actions.one {
 }
 .panel > .panel-heading .btn {
   margin: -2px 0 0 4px;
+}
+.panel .panel-body h3 {
+  font-family: "Open Sans", serif;
+  font-size: 18px;
+  font-weight: normal;
+  margin: 0 0 15px;
+  text-transform: uppercase;
+}
+.panel .panel-body.media-images {
+  padding-bottom: 0;
+}
+.panel .panel-body.media-images img {
+  margin-bottom: 30px;
 }
 .panel .panel-footer {
   background: #f8f8f8;

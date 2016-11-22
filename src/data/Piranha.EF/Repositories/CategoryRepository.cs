@@ -131,6 +131,35 @@ namespace Piranha.EF.Repositories
         }
 
         /// <summary>
+        /// Deletes the given category.
+        /// </summary>
+        /// <param name="category">The category</param>
+        public void Delete(Models.CategoryItem category) {
+            Delete(category.Id);
+        }
+        
+        /// <summary>
+        /// Deletes the given category.
+        /// </summary>
+        /// <param name="category">The category model</param>
+        public void Delete(Models.Category category) {
+            Delete(category.Id);
+        }
+        
+        /// <summary>
+        /// Deletes the category with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        public void Delete(Guid id) {
+            var category = db.Categories.FirstOrDefault(c => c.Id == id);
+
+            if (category != null) {
+                db.Categories.Remove(category);
+                db.SaveChanges();
+            }
+        }        
+
+        /// <summary>
         /// Maps the given result to the full category model.
         /// </summary>
         /// <param name="result">The result</param>
