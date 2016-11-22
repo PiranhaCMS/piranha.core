@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Piranha.Areas.Manager.Controllers
 {
-    [Area("manager")]
+    [Area("Manager")]
     public class BlockController : ManagerAreaControllerBase
     {
         /// <summary>
