@@ -13,6 +13,7 @@ using System.Linq;
 
 namespace Piranha.Areas.Manager.Controllers
 {
+    [Area("Manager")]
     public class BlockTypeController : ManagerAreaControllerBase
     {
         /// <summary>

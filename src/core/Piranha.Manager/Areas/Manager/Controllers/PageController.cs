@@ -13,6 +13,7 @@ using System;
 
 namespace Piranha.Areas.Manager.Controllers
 {
+    [Area("Manager")]
     public class PageController : ManagerAreaControllerBase
     {
         /// <summary>

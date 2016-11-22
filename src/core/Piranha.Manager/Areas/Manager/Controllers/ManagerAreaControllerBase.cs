@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Piranha.Areas.Manager.Controllers
 {
-    [Area("manager")]
     public abstract class ManagerAreaControllerBase : Controller
     {
         #region Properties

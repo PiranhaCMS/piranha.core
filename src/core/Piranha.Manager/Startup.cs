@@ -34,7 +34,7 @@ namespace Piranha.Manager
             services.AddMvc(config => {
                 config.ModelBinderProviders.Insert(0, new Manager.Binders.AbstractModelBinderProvider());
             });
-            services.AddPiranhaEF(options => options.UseSqlServer(Configuration.GetConnectionString("Piranha")));
+            services.AddPiranhaEF(options => options.UseSqlite("Filename=./piranha.db"));
             services.AddPiranhaManager();
         }
 
