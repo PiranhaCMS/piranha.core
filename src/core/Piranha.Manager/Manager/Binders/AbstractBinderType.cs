@@ -11,7 +11,7 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 
-namespace Piranha.Areas.Manager.Binders
+namespace Piranha.Manager.Binders
 {
     /// <summary>
     /// A type used when trying to bind an abstract type
