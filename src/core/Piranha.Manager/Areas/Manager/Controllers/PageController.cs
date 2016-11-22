@@ -27,7 +27,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// Gets the list view for the pages.
         /// </summary>
         [Route("manager/pages")]
-        public IActionResult List()
+        public ViewResult List()
         {
             return View(Models.PageListModel.Get(_api));
         }

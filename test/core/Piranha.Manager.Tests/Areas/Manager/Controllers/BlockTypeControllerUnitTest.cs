@@ -21,7 +21,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             #endregion
 
             #region Act
-            ViewResult result = _controller.List() as ViewResult;
+            ViewResult result = _controller.List();
             #endregion
 
             #region Assert
@@ -38,7 +38,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             #endregion
 
             #region Act
-            ViewResult result = _controller.Edit("no-id") as ViewResult;
+            ViewResult result = _controller.Edit("no-id");
             #endregion
 
             #region Assert

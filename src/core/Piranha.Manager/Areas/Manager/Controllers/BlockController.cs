@@ -28,7 +28,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// Gets the list view for the blocks.
         /// </summary>
         [Route("manager/blocks")]
-        public IActionResult List()
+        public ViewResult List()
         {
             return View();
         }
