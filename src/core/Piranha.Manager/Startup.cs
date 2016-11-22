@@ -32,7 +32,7 @@ namespace Piranha.Manager
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services) {
             services.AddMvc(config => {
-                config.ModelBinderProviders.Insert(0, new Areas.Manager.Binders.AbstractModelBinderProvider());
+                config.ModelBinderProviders.Insert(0, new Manager.Binders.AbstractModelBinderProvider());
             });
             services.AddPiranhaEF(options => options.UseSqlServer(Configuration.GetConnectionString("Piranha")));
             services.AddPiranhaManager();
