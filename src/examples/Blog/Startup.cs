@@ -34,7 +34,7 @@ namespace Blog
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services) {
             services.AddMvc(config => {
-                config.ModelBinderProviders.Insert(0, new Piranha.Areas.Manager.Binders.AbstractModelBinderProvider());
+                config.ModelBinderProviders.Insert(0, new Piranha.Manager.Binders.AbstractModelBinderProvider());
             });
             services.AddMvc();
             services.AddPiranhaEF(options => options.UseSqlite("Filename=./blog.db"));

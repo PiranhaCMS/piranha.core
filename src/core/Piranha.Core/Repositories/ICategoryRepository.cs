@@ -50,9 +50,14 @@ namespace Piranha.Repositories
         /// <summary>
         /// Gets the available categories.
         /// </summary>
-        /// <param name="id">The unique id</param>
-        /// <returns>The category</returns>
-        IList<CategoryItem> Get(Guid id);
+        /// <returns>The categories</returns>
+        IList<CategoryItem> Get();
+
+        /// <summary>
+        /// Gets the available categories.
+        /// </summary>
+        /// <returns>The categories</returns>
+        IList<Category> GetModels();
 
         /// <summary>
         /// Saves the category.

@@ -19,17 +19,15 @@ namespace Piranha.Areas.Manager.Controllers
         /// Default constroller.
         /// </summary>
         /// <param name="api">The current api</param>
-        public PostController(IApi api) : base(api)
-        {
-        }
+        public PostController(IApi api) : base(api) { }
 
         /// <summary>
         /// Gets the list view for the posts.
         /// </summary>
-        [Route("manager/posts")]
-        public IActionResult List()
-        {
-            return View();
+        /// <param name="category">The optional category slug</param>
+        [Route("manager/posts/{category?}")]
+        public IActionResult List(string category = null) {
+            return View(Models.PostListModel.Get(api, category));
         }
     }
 }

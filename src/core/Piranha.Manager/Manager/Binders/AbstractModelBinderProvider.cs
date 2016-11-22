@@ -11,8 +11,9 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
+using Piranha.Areas.Manager.Models;
 
-namespace Piranha.Areas.Manager.Binders
+namespace Piranha.Manager.Binders
 {
     /// <summary>
     /// Binder provider for handling abstract types.
@@ -27,18 +28,18 @@ namespace Piranha.Areas.Manager.Binders
         public IModelBinder GetBinder(ModelBinderProviderContext context) {
             if (context != null) {
                 // We only care about regions & fields
-                if (context.Metadata.ModelType == typeof(Models.PageEditRegionBase) || context.Metadata.ModelType == typeof(Extend.IField)) {
+                if (context.Metadata.ModelType == typeof(PageEditRegionBase) || context.Metadata.ModelType == typeof(Extend.IField)) {
                     var binders = new Dictionary<string, AbstractBinderType>();
 
-                    var metadata = context.MetadataProvider.GetMetadataForType(typeof(Models.PageEditRegion));
-                    binders.Add(typeof(Models.PageEditRegion).FullName, new AbstractBinderType() {
-                        Type = typeof(Models.PageEditRegion),
+                    var metadata = context.MetadataProvider.GetMetadataForType(typeof(PageEditRegion));
+                    binders.Add(typeof(PageEditRegion).FullName, new AbstractBinderType() {
+                        Type = typeof(PageEditRegion),
                         Binder = context.CreateBinder(metadata)
                     });
 
-                    metadata = context.MetadataProvider.GetMetadataForType(typeof(Models.PageEditRegionCollection));
-                    binders.Add(typeof(Models.PageEditRegionCollection).FullName, new AbstractBinderType() {
-                        Type = typeof(Models.PageEditRegionCollection),
+                    metadata = context.MetadataProvider.GetMetadataForType(typeof(PageEditRegionCollection));
+                    binders.Add(typeof(PageEditRegionCollection).FullName, new AbstractBinderType() {
+                        Type = typeof(PageEditRegionCollection),
                         Binder = context.CreateBinder(metadata)
                     });
 
