@@ -7,8 +7,10 @@
             "request": "launch",
             "preLaunchTask": "build",
             "program": "${workspaceRoot}/src/core/Piranha.Manager/bin/Debug/netcoreapp1.1/Piranha.Manager.dll",
+            // "program": "${workspaceRoot}/src/examples/Blog/bin/Debug/netcoreapp1.1/Blog.dll",
             "args": [],
-            "cwd": "${workspaceRoot}",
+            "cwd": "${workspaceRoot}/src/core/Piranha.Manager",
+            // "cwd": "${workspaceRoot}/src/examples/Blog",
             "stopAtEntry": false,
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {
