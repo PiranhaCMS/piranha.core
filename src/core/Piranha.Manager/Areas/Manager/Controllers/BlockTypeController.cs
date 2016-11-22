@@ -19,9 +19,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public BlockTypeController(IApi api) : base(api)
-        {
-        }
+        public BlockTypeController(IApi api) : base(api) { }
 
         /// <summary>
         /// Gets the list view for the block types.
