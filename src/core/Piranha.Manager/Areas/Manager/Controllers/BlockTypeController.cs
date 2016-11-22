@@ -13,22 +13,14 @@ using System.Linq;
 
 namespace Piranha.Areas.Manager.Controllers
 {
-    [Area("Manager")]
-    public class BlockTypeController : Controller
+    public class BlockTypeController : ManagerAreaControllerBase
     {
-        #region Members
-        /// <summary>
-        /// The current api.
-        /// </summary>
-        private IApi api;
-        #endregion
-
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public BlockTypeController(IApi api) {
-            this.api = api;
+        public BlockTypeController(IApi api) : base(api)
+        {
         }
 
         /// <summary>

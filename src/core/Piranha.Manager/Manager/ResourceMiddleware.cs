@@ -87,7 +87,7 @@ namespace Piranha.Manager
         /// <returns>The content type</returns>
         private string GetContentType(string path) {
             try {
-                return contentTypes[path.Substring(path.LastIndexOf("."))];
+                return contentTypes[Path.GetExtension(path)];
             } catch { }
             return "text/plain";
         }
