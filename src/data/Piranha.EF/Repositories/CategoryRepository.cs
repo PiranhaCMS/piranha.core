@@ -65,14 +65,29 @@ namespace Piranha.EF.Repositories
         /// <summary>
         /// Gets the available categories.
         /// </summary>
-        /// <param name="id">The unique id</param>
-        /// <returns>The category</returns>
-        public IList<Models.CategoryItem> Get(Guid id) {
+        /// <returns>The categories</returns>
+        public IList<Models.CategoryItem> Get() {
             var result = new List<Models.CategoryItem>();
             var models = Query().OrderBy(c => c.Title).ToList();
 
             foreach (var category in models) {
                 var model = Map(category);
+                if (model != null)
+                    result.Add(model);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the available categories.
+        /// </summary>
+        /// <returns>The categories</returns>
+        public IList<Models.Category> GetModels() {
+            var result = new List<Models.Category>();
+            var models = Query().OrderBy(c => c.Title).ToList();
+
+            foreach (var category in models) {
+                var model = MapModel(category);
                 if (model != null)
                     result.Add(model);
             }

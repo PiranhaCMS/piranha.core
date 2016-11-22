@@ -67,6 +67,10 @@ namespace Piranha.EF
                     .ForMember(m => m.Permalink, o => o.MapFrom(p => p.Category.Slug + "/" + p.Slug))
                     .ForMember(m => m.Category, o => o.Ignore())
                     .ForMember(m => m.Tags, o => o.Ignore());
+                cfg.CreateMap<Data.Post, Models.PostItem>()
+                    .ForMember(m => m.Permalink, o => o.MapFrom(p => p.Category.Slug + "/" + p.Slug))
+                    .ForMember(m => m.Category, o => o.Ignore())
+                    .ForMember(m => m.Tags, o => o.Ignore());
             });
 
             config.AssertConfigurationIsValid();

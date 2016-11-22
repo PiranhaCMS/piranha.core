@@ -100,6 +100,59 @@ namespace Piranha.EF.Repositories
         }
 
         /// <summary>
+        /// Gets the available post items.
+        /// </summary>
+        /// <returns>The posts</returns>
+        public IList<Models.PostItem> Get() {
+            var result = new List<Models.PostItem>();
+            var posts = Query()
+                .OrderBy(p => p.Published)
+                .ThenBy(p => p.Created).ToList();
+
+            foreach (var post in posts) {
+                result.Add(MapItem<Models.PostItem>(post));
+            }
+            return result;            
+        }
+
+        /// <summary>
+        /// Gets the available post items for the given category id.
+        /// </summary>
+        /// <param name="id">The unique category id</param>
+        /// <returns>The posts</returns>
+        public IList<Models.PostItem> GetByCategoryId(Guid id) {
+            var result = new List<Models.PostItem>();
+            var posts = Query()
+                .Where(p => p.CategoryId == id)
+                .OrderBy(p => p.Published)
+                .ThenBy(p => p.Created).ToList();
+
+            foreach (var post in posts) {
+                result.Add(MapItem<Models.PostItem>(post));
+            }
+            return result;            
+        }
+
+        /// <summary>
+        /// Gets the available post items for the given category slug.
+        /// </summary>
+        /// <param name="slug">The unique category slug</param>
+        /// <returns>The posts</returns>
+        public IList<Models.PostItem> GetByCategorySlug(string slug) {
+            var result = new List<Models.PostItem>();
+            var posts = Query()
+                .Where(p => p.Category.Slug == slug)
+                .OrderBy(p => p.Published)
+                .ThenBy(p => p.Created).ToList();
+
+            foreach (var post in posts) {
+                result.Add(MapItem<Models.PostItem>(post));
+            }
+            return result;                        
+        }
+        
+
+        /// <summary>
         /// Gets the base query for the repository.
         /// </summary>
         /// <returns>The query</returns>
@@ -128,6 +181,24 @@ namespace Piranha.EF.Repositories
 
             // Map basic fields
             Module.Mapper.Map<Data.Post, Models.Post>(post, model);
+
+            // Map category
+            model.Category = Module.Mapper.Map<Data.Category, Models.CategoryItem>(post.Category);
+
+            return model;
+        }
+
+        /// <summary>
+        /// Maps the given result to the full post model.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="result">The result</param>
+        /// <returns>The model</returns>
+        private T MapItem<T>(Data.Post post) where T : Models.PostItem {
+            var model = (T)Activator.CreateInstance<T>();
+
+            // Map basic fields
+            Module.Mapper.Map<Data.Post, Models.PostItem>(post, model);
 
             // Map category
             model.Category = Module.Mapper.Map<Data.Category, Models.CategoryItem>(post.Category);

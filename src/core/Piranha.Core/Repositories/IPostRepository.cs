@@ -66,5 +66,25 @@ namespace Piranha.Repositories
         /// <param name="slug">The unique slug</param>
         /// <returns>The post model</returns>
         T GetBySlug<T>(string category, string slug) where T : Post;
+
+        /// <summary>
+        /// Gets the available post items.
+        /// </summary>
+        /// <returns>The posts</returns>
+        IList<PostItem> Get();
+
+        /// <summary>
+        /// Gets the available post items for the given category id.
+        /// </summary>
+        /// <param name="id">The unique category id</param>
+        /// <returns>The posts</returns>
+        IList<PostItem> GetByCategoryId(Guid id);
+
+        /// <summary>
+        /// Gets the available post items for the given category slug.
+        /// </summary>
+        /// <param name="slug">The unique category slug</param>
+        /// <returns>The posts</returns>
+        IList<PostItem> GetByCategorySlug(string slug);
     }
 }
