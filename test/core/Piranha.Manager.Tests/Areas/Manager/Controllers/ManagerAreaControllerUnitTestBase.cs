@@ -26,10 +26,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             return new Mock<IApi>();
         }
 
-        protected virtual TController SetupController()
-        {
-            return new ManagerAreaControllerBase(_api.Object) as TController;
-        }
+        protected abstract TController SetupController();
         #endregion
     }
 }

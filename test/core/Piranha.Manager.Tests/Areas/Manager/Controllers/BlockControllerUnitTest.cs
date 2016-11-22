@@ -7,6 +7,11 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
 {
     public class BlockControllerUnitTest : ManagerAreaControllerUnitTestBase<BlockController>
     {
+        protected override BlockController SetupController()
+        {
+            return new BlockController(_api.Object);
+        }
+
         [Fact]
         public void ListViewResultIsNotNull()
         {
@@ -20,11 +25,6 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             #region Assert
             Assert.NotNull(result);
             #endregion
-        }
-
-        protected override BlockController SetupController()
-        {
-            return new BlockController(_api.Object);
         }
     }
 }
