@@ -104,18 +104,27 @@ namespace Piranha
                         blockTypes = api.BlockTypes.Get();
 
                         // Add ad-hoc modules
-                        foreach (var module in modules) {
-                            this.modules.Add(module);
-                        }
-
-                        // Initialize all modules
-                        foreach (var module in this.modules) {
-                            module.Init();
-                        }
+                        InitializeModules(modules);
 
                         isInitialized = true;
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Appends 
+        private void InitializeModules(Extend.IModule[] modules) {
+            // Add modules if present
+            if (modules != null) {
+                foreach (var module in modules) {
+                    this.modules.Add(module);
+                }
+            }
+
+            // Initialize all modules
+            foreach (var module in this.modules) {
+                module.Init();
             }
         }
     }

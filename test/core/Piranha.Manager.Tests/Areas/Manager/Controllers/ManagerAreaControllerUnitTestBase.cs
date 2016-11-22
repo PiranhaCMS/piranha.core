@@ -1,5 +1,7 @@
 using Piranha.Areas.Manager.Controllers;
 using Moq;
+using Piranha.Extend;
+using System.Collections.Generic;
 
 namespace Piranha.Manager.Tests.Areas.Manager.Controllers
 {
@@ -8,22 +10,34 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
     {
         #region Properties
         #region Protected Properties
-        protected readonly TController _controller;
+        /// <summary>
+        /// The controller being tested
+        /// </summary>
+        protected readonly TController controller;
 
-        protected readonly Mock<IApi> _api;
+        /// <summary>
+        /// The mocked Piranha api
+        /// </summary>
+        protected readonly Mock<IApi> mockApi;
         #endregion
         #endregion
 
         #region Test initialize
-        public ManagerAreaControllerUnitTestBase()
-        {
-            _api = SetupApi();
-            _controller = SetupController();
+        public ManagerAreaControllerUnitTestBase() {
+            mockApi = SetupApi();
+            controller = SetupController();
+            App.Init(mockApi.Object, IncludedModules());
         }
 
-        protected virtual Mock<IApi> SetupApi()
-        {
-            return new Mock<IApi>();
+        protected virtual Mock<IApi> SetupApi() {
+            var api = new Mock<IApi>();
+            api.Setup(a => a.PageTypes.Get()).Returns(new List<PageType>());
+            api.Setup(a => a.BlockTypes.Get()).Returns(new List<BlockType>());
+            return api;
+        }
+
+        protected virtual IModule[] IncludedModules() {
+            return null;
         }
 
         protected abstract TController SetupController();

@@ -12,20 +12,18 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
 {
     public class PageControllerUnitTest : ManagerAreaControllerUnitTestBase<PageController>
     {
-        protected override PageController SetupController()
-        {
-            return new PageController(_api.Object);
+        protected override PageController SetupController() {
+            return new PageController(mockApi.Object);
         }
 
         [Fact]
-        public void ListResultIsNotNull()
-        {
+        public void ListResultIsNotNull() {
             #region Arrange
-            _api.Setup(a => a.Sitemap.Get(false)).Returns(new List<SitemapItem>());
+            mockApi.Setup(a => a.Sitemap.Get(false)).Returns(new List<SitemapItem>());
             #endregion
 
             #region Act
-            ViewResult result = _controller.List();
+            ViewResult result = controller.List();
             #endregion
 
             #region Assert

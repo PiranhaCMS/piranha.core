@@ -7,19 +7,17 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
 {
     public class BlockControllerUnitTest : ManagerAreaControllerUnitTestBase<BlockController>
     {
-        protected override BlockController SetupController()
-        {
-            return new BlockController(_api.Object);
+        protected override BlockController SetupController() {
+            return new BlockController(mockApi.Object);
         }
 
         [Fact]
-        public void ListViewResultIsNotNull()
-        {
+        public void ListViewResultIsNotNull() {
             #region Arrange
             #endregion
 
             #region Act
-            ViewResult result = _controller.List() as ViewResult;
+            ViewResult result = controller.List() as ViewResult;
             #endregion
 
             #region Assert

@@ -9,19 +9,17 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
 {
     public class BlockTypeControllerUnitTest : ManagerAreaControllerUnitTestBase<BlockTypeController>
     {
-        protected override BlockTypeController SetupController()
-        {
-            return new BlockTypeController(_api.Object);
+        protected override BlockTypeController SetupController() {
+            return new BlockTypeController(mockApi.Object);
         }
 
         [Fact]
-        public void ListResultIsNotNull()
-        {
+        public void ListResultIsNotNull() {
             #region Arrange
             #endregion
 
             #region Act
-            ViewResult result = _controller.List();
+            ViewResult result = controller.List();
             #endregion
 
             #region Assert
@@ -32,13 +30,12 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         }
 
         [Fact]
-        public void EditResultWithEmptyApiProduces()
-        {
+        public void EditResultWithEmptyApiProduces() {
             #region Arrange
             #endregion
 
             #region Act
-            ViewResult result = _controller.Edit("no-id");
+            ViewResult result = controller.Edit("no-id");
             #endregion
 
             #region Assert

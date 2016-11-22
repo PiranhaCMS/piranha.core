@@ -8,9 +8,8 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
 {
     public class PostControllerUnitTest : ManagerAreaControllerUnitTestBase<PostController>
     {
-        protected override PostController SetupController()
-        {
-            return new PostController(_api.Object);
+        protected override PostController SetupController() {
+            return new PostController(mockApi.Object);
         }
     }
 }
