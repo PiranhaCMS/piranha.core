@@ -4,7 +4,9 @@
     "dependencies": {
         "dotnet-test-xunit": "2.2.0-preview2-build1029",
         "xunit": "2.2.0-beta2-build3300",
-        "Moq": "4.6.38-alpha"
+        "Moq": "4.6.38-alpha",
+        "Piranha.EF": "4.0.0-*",
+        "Microsoft.DotNet.InternalAbstractions": "1.0.0"
     },
     "frameworks": {
         "netcoreapp1.1": {
