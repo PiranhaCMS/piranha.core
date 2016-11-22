@@ -22,7 +22,8 @@
     "Microsoft.Extensions.Logging.Console": "1.1.0",
     "Piranha.AspNet": "4.0.0-*",
     "Piranha.Core": "4.0.0-*",
-    "Piranha.EF": "4.0.0-*"
+    "Piranha.EF": "4.0.0-*",
+    "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0"
   },
 
   "tools": {

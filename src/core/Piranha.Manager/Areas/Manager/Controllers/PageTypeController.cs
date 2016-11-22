@@ -14,28 +14,22 @@ using System.Linq;
 namespace Piranha.Areas.Manager.Controllers
 {
     [Area("Manager")]
-    public class PageTypeController : Controller
+    public class PageTypeController : ManagerAreaControllerBase
     {
-        #region Members
-        /// <summary>
-        /// The current api.
-        /// </summary>
-        private IApi api;
-        #endregion
-
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public PageTypeController(IApi api) {
-            this.api = api;
+        public PageTypeController(IApi api) : base(api)
+        {
         }
 
         /// <summary>
         /// Gets the list view for the page types.
         /// </summary>
         [Route("manager/pagetypes")]
-        public IActionResult List() {
+        public IActionResult List()
+        {
             return View(App.PageTypes);
         }
 
@@ -43,7 +37,8 @@ namespace Piranha.Areas.Manager.Controllers
         /// Gets the edit view for the specified page type.
         /// </summary>
         [Route("manager/pagetype/{id}")]
-        public IActionResult Edit(string id) {
+        public IActionResult Edit(string id)
+        {
             return View(App.PageTypes.SingleOrDefault(t => t.Id.ToLower() == id.ToLower()));
         }
     }

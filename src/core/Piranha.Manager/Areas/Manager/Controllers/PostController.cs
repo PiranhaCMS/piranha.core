@@ -13,28 +13,22 @@ using Microsoft.AspNetCore.Mvc;
 namespace Piranha.Areas.Manager.Controllers
 {
     [Area("Manager")]
-    public class PostController : Controller
+    public class PostController : ManagerAreaControllerBase
     {
-        #region Members
-        /// <summary>
-        /// The current api.
-        /// </summary>
-        private IApi api;
-        #endregion
-
         /// <summary>
         /// Default constroller.
         /// </summary>
         /// <param name="api">The current api</param>
-        public PostController(IApi api) {
-            this.api = api;
+        public PostController(IApi api) : base(api)
+        {
         }
 
         /// <summary>
         /// Gets the list view for the posts.
         /// </summary>
         [Route("manager/posts")]
-        public IActionResult List() {
+        public IActionResult List()
+        {
             return View();
         }
     }
