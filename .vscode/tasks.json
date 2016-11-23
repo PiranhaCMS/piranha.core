@@ -11,6 +11,52 @@
             ],
             "isBuildCommand": true,
             "problemMatcher": "$msCompile"
-        }
+        },
+        {
+            "taskName": "Piranha.AspNet.Tests",
+            "args": [
+                "test",
+                "${workspaceRoot}/test/core/Piranha.AspNet.Tests"
+            ],
+            "problemMatcher": "$msCompile",
+            "suppressTaskName": true
+        },
+        {
+            "taskName": "Piranha.Builder.Attribute.Tests",
+            "args": [
+                "test",
+                "${workspaceRoot}/test/core/Piranha.Builder.Attribute.Tests"
+            ],
+            "problemMatcher": "$msCompile",
+            "suppressTaskName": true
+        },
+        {
+            "taskName": "Piranha.Builder.Json.Tests",
+            "args": [
+                "test",
+                "${workspaceRoot}/test/core/Piranha.Builder.Json.Tests"
+            ],
+            "problemMatcher": "$msCompile",
+            "suppressTaskName": true
+        },
+        {
+            "taskName": "Piranha.Core.Tests",
+            "args": [
+                "test",
+                "${workspaceRoot}/test/core/Piranha.Core.Tests"
+            ],
+            "problemMatcher": "$msCompile",
+            "suppressTaskName": true
+        },
+        {
+            "taskName": "Piranha.Manager.Tests",
+            "args": [
+                "test",
+                "${workspaceRoot}/test/core/Piranha.Manager.Tests"
+            ],
+            "problemMatcher": "$msCompile",
+            "suppressTaskName": true
+        },
+        
     ]
 }

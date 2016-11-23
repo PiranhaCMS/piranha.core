@@ -23,8 +23,15 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
     {
         #region Properties
         #region Private Properties
+        /// <summary>
+        /// The number of sample page types to insert
+        /// to <see href="blockTypes" />
+        /// </summary>
         private const int NUM_BLOCK_TYPES = 5;
 
+        /// <summary>
+        /// The mock block type data
+        /// </summary>
         private List<BlockType> blockTypes;
         #endregion
         #endregion
@@ -41,8 +48,8 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             blockTypes = new List<BlockType>();
             for (int i = 1; i <= NUM_BLOCK_TYPES; i++) {
                 blockTypes.Add(new BlockType {
-                    Id = i.ToString(),
-                    Title = "Block type " + i,
+                    Id = $"{i}",
+                    Title = $"Block type {i}",
                 });
             }
         }
@@ -53,7 +60,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         #endregion
 
         [Fact]
-        public void ListResultIsNotNull() {
+        public void ListResultIsNotNullAndCorrectNumberBlockTypes() {
             #region Arrange
             #endregion
 
@@ -88,7 +95,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         [InlineData("4")]
         [InlineData("5")]
         [InlineData("6")]
-        public void EditResultProvidesProperObject(string blockTypeId) {
+        public void EditResultProvidesProperBlockTypeObject(string blockTypeId) {
             #region Arrange
             BlockType expectedBlockType = blockTypes.FirstOrDefault(b => b.Id == blockTypeId);
             #endregion
