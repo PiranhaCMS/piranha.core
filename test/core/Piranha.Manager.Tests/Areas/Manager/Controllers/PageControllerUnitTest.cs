@@ -38,6 +38,14 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         /// </summary>
         private const int NUM_PAGES = 5;
 
+        protected override IModule[] Modules {
+            get {
+                return new IModule[] {
+                    new Piranha.Manager.Module()
+                };
+            }
+        }
+
         /// <summary>
         /// The mock page type data
         /// </summary>
@@ -75,12 +83,6 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             byte[] valueAsBytes = new byte[16];
             BitConverter.GetBytes(value).CopyTo(valueAsBytes, 0);
             return new Guid(valueAsBytes);
-        }
-
-        protected override IModule[] IncludedModules() {
-            return new IModule[] {
-                new Piranha.Manager.Module()
-            };
         }
 
         protected override PageController SetupController() {
@@ -207,6 +209,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         public void AddResultWithNoPageTypesThrowsException() {
             #region Arrange
             pageTypes.Clear();
+            // TODO: Check if App.PageTypes.Clear() needs removing after api caching done
             App.PageTypes.Clear();
             #endregion
 

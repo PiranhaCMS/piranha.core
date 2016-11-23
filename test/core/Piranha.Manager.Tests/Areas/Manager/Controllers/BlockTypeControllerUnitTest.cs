@@ -24,7 +24,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         #region Private Properties
         /// <summary>
         /// The number of sample block types to insert
-        /// to <see href="blockTypes" />
+        /// to <see cref="blockTypes" />
         /// </summary>
         private const int NUM_BLOCK_TYPES = 5;
 
@@ -43,6 +43,9 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             api.Setup(a => a.PageTypes.Get()).Returns(new List<PageType>());
             return api;
         }
+        /// <summary>
+        /// Generates a list of block types to store in <see cref="blockTypes" />
+        /// </summary>
         private void GenerateBlockTypes() {
             blockTypes = new List<BlockType>();
             for (int i = 1; i <= NUM_BLOCK_TYPES; i++) {
@@ -58,8 +61,12 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         }
         #endregion
 
+        /// <summary>
+        /// Tests that <see cref="BlockTypeController.List" /> result model
+        /// matches <see cref="blockTypes" />
+        /// </summary>
         [Fact]
-        public void ListResultIsNotNullAndCorrectNumberBlockTypes() {
+        public void ListResultGivesCorrectNumberBlockTypes() {
             #region Arrange
             #endregion
 
@@ -73,6 +80,10 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             AssertBlockTypeListsMatches(Model);
             #endregion
         }
+        /// <summary>
+        /// Verifies that the list of block types matches <see cref="blockTypes" />
+        /// </summary>
+        /// <param name="result">The list of block types to verify</param>
         private void AssertBlockTypeListsMatches(IList<BlockType> result) {
             Assert.NotNull(result);
             Assert.Equal(blockTypes.Count, result.Count);
@@ -80,14 +91,51 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
                 AssertBlockTypesMatch(blockTypes[i], result[i]);
             }
         }
-        private void AssertBlockTypesMatch(BlockType expected, BlockType result)
-        {
+        /// <summary>
+        /// Verifies that the <see cref="BlockType.Id" /> and <see cref="BlockType.Title" />
+        /// of the given block types match
+        /// </summary>
+        private void AssertBlockTypesMatch(BlockType expected, BlockType result) {
             Assert.Equal(expected.Id, result.Id);
             Assert.Equal(expected.Title, result.Title);
         }
 
+        /// <summary>
+        /// Tests that <see cref="BlockTypeController.Edit" /> with an invalid block
+        /// type Id returns a result with a null model
+        /// </summary>
+        /// <remarks>
+        /// <see cref="InlineDataAttribute" /> values should not be in the range 
+        /// [1, <see cref="NUM_BLOCK_TYPES" />]
+        /// </remarks>
         [Theory]
-        [InlineData("bad-id")]
+        [InlineData("Bad-id")]
+        [InlineData("7")]
+        public void EditResultWithInvalidIdGivesNullModel(string blockTypeId) {
+            #region Arrange
+            #endregion
+
+            #region Act
+            ViewResult result = controller.Edit(blockTypeId);
+            #endregion
+
+            #region Assert
+            Assert.NotNull(result);
+            BlockType Model = result.Model as BlockType;
+            Assert.Null(Model);
+            #endregion
+        }
+
+        /// <summary>
+        /// Tests that <see cref="BlockTypeController.Edit" /> with a valid block
+        /// type Id returns a result with a block type model matching the one
+        /// in <see cref="blockTypes" />
+        /// </summary>
+        /// <remarks>
+        /// <see cref="InlineDataAttribute" /> values should be in the range 
+        /// [1, <see cref="NUM_BLOCK_TYPES" />]
+        /// </remarks>
+        [Theory]
         [InlineData("1")]
         [InlineData("2")]
         [InlineData("3")]
