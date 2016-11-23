@@ -8,7 +8,6 @@
  * 
  */
 
-using System;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +23,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         #region Properties
         #region Private Properties
         /// <summary>
-        /// The number of sample page types to insert
+        /// The number of sample block types to insert
         /// to <see href="blockTypes" />
         /// </summary>
         private const int NUM_BLOCK_TYPES = 5;

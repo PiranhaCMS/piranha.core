@@ -37,6 +37,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             mockApi = SetupApi();
             controller = SetupController();
             App.Init(mockApi.Object, IncludedModules());
+            AdditionalSetupAfterAppInit();
         }
 
         protected virtual Mock<IApi> SetupApi() {
@@ -51,6 +52,10 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         }
 
         protected abstract TController SetupController();
+
+        protected virtual void AdditionalSetupAfterAppInit() {
+            
+        }
         #endregion
     }
 }

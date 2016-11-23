@@ -56,6 +56,33 @@
             ],
             "problemMatcher": "$msCompile",
             "suppressTaskName": true
+        },
+        {
+            "taskName": "Piranha.EF.Tests",
+            "args": [
+                "test",
+                "${workspaceRoot}/test/data/Piranha.EF.Tests"
+            ],
+            "problemMatcher": "$msCompile",
+            "suppressTaskName": true
+        },
+        {
+            "taskName": "Piranha.Azure.Tests",
+            "args": [
+                "test",
+                "${workspaceRoot}/test/env/Piranha.Azure.Tests"
+            ],
+            "problemMatcher": "$msCompile",
+            "suppressTaskName": true
+        },
+        {
+            "taskName": "Blog.Tests",
+            "args": [
+                "test",
+                "${workspaceRoot}/test/examples/Blog.Tests"
+            ],
+            "problemMatcher": "$msCompile",
+            "suppressTaskName": true
         }
     ]
 }
