@@ -89,6 +89,9 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
 
         protected override void AdditionalSetupAfterAppInit() {
             SetupPageRepositoryMethods();
+            mockApi.Setup(a => a.Sitemap.Get(It.IsAny<bool>())).Returns(
+                (Func<bool, IList<SitemapItem>>)GetSitemapItems
+            );
         }
         private void SetupPageRepositoryMethods() {
             GeneratePages();
@@ -108,11 +111,30 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
                 pageToAdd.SortOrder = i - 1;
                 pageToAdd.Title = $"Page {i}";
                 pageToAdd.ParentId = null;
+                pageToAdd.Published = DateTime.Now.AddHours(-(NUM_PAGES - i));
                 pages.Add(pageToAdd);
             }
         }
+        private IList<SitemapItem> GetSitemapItems(bool onlyPublished)
+        {
+            List<SitemapItem> items = new List<SitemapItem>();
+            foreach (DynamicPage page in pages)
+            {
+                if (!onlyPublished || page.Published != null)
+                {
+                    SitemapItem itemToAdd = new SitemapItem
+                    {
+                        Id = page.Id,
+                        Title = page.Title,
+                        Published = page.Published,
+                    };
+                }
+            }
+            return items;
+        }
         #endregion
 
+        #region Unit tests
         [Fact]
         public void ListResultIsNotNullAndHasCorrectNumberPageTypes() {
             #region Arrange
@@ -131,12 +153,13 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             #endregion
         }
 
+        #region PageController.Edit
         [Theory]
         [InlineData(0)]
         [InlineData(NUM_PAGES + 1)]
-        public void EditResultWithInvalidIdsGivesNullModel(int idAsInt) {
+        public void EditResultWithInvalidPageIdGivesThrowsException(int pageIdAsInt) {
             #region Arrange
-            Guid invalidPageId = ConvertIntToGuid(idAsInt);
+            Guid invalidPageId = ConvertIntToGuid(pageIdAsInt);
             bool exceptionCaught = false;
             #endregion
         
@@ -161,9 +184,9 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         [InlineData(3)]
         [InlineData(4)]
         [InlineData(5)]
-        public void EditResultWithValidIdGivesCorrectPageEditModel(int idAsInt) {
+        public void EditResultWithValidPageIdGivesCorrectPageEditModel(int pageIdAsInt) {
             #region Arrange
-            Guid pageId = ConvertIntToGuid(idAsInt);
+            Guid pageId = ConvertIntToGuid(pageIdAsInt);
             DynamicPage page = pages.FirstOrDefault(p => p.Id == pageId);
             #endregion
         
@@ -177,7 +200,74 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             AssertPageEditModelMatchesPage(page, Model);
             #endregion
         }
+        #endregion
 
+        #region PageController.Add
+        [Fact]
+        public void AddResultWithNoPageTypesThrowsException() {
+            #region Arrange
+            pageTypes.Clear();
+            App.PageTypes.Clear();
+            #endregion
+
+            #region Act
+            AddResultWithInvalidPageTypeIdThrowsException(1);
+            #endregion
+
+            #region Assert
+            #endregion
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(NUM_PAGE_TYPES + 1)]
+        public void AddResultWithInvalidPageTypeIdThrowsException(int pageTypeIdAsInt) {
+            #region Arrange
+            string pageTypeId = ConvertIntToGuid(pageTypeIdAsInt).ToString();
+            bool exceptionCaught = false;
+            #endregion
+        
+            #region Act
+            try {
+                ViewResult result = controller.Add(pageTypeId) as ViewResult;
+            }
+            catch (KeyNotFoundException e) {
+                exceptionCaught = true;
+                Assert.Equal($"No page type found with the id '{pageTypeId}'", e.Message);
+            }
+            #endregion
+        
+            #region Assert
+            Assert.True(exceptionCaught);
+            #endregion
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        public void AddResultWithValidPageTypeIdGivesCorrectPageEditModel(int pageTypeIdAsInt) {
+            #region Arrange
+            string pageTypeId = ConvertIntToGuid(pageTypeIdAsInt).ToString();
+            PageType expectedPageType = pageTypes.FirstOrDefault(t => t.Id == pageTypeId);
+            #endregion
+        
+            #region Act
+            ViewResult result = controller.Add(pageTypeId) as ViewResult;
+            #endregion
+        
+            #region Assert
+            Assert.NotNull(result);
+            PageEditModel Model = result.Model as PageEditModel;
+            Assert.NotNull(Model);
+            Assert.Equal(expectedPageType.Id, Model.PageType.Id);
+            Assert.Equal(expectedPageType.Title, Model.PageType.Title);
+            Assert.Equal(GetSitemapItems(false).Count, Model.SortOrder);
+            #endregion
+        }
+        #endregion
+        #endregion
+
+        #region Helper methods
         private void AssertPageEditModelMatchesPage(DynamicPage page, PageEditModel Model) {
             Assert.NotNull(Model);
             Assert.Equal(page.Id, Model.Id);
@@ -186,5 +276,6 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             Assert.Equal(page.SortOrder, Model.SortOrder);
             Assert.Equal(((ExpandoObject)page.Regions).Count(), Model.Regions.Count);
         }
+        #endregion
     }
 }
