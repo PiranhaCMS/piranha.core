@@ -113,7 +113,8 @@ namespace Piranha
         }
 
         /// <summary>
-        /// Appends 
+        /// Appends the array of modules to the instance and initializes them
+        /// </summary>
         private void InitializeModules(Extend.IModule[] modules) {
             // Add modules if present
             if (modules != null) {
