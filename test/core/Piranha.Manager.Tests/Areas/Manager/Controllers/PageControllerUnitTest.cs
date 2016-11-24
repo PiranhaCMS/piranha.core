@@ -23,9 +23,22 @@ using Xunit;
 
 namespace Piranha.Manager.Tests.Areas.Manager.Controllers
 {
+    /// <summary>
+    /// Unit tests for <see cref="PageController" />
+    /// </summary>
     public class PageControllerUnitTest : ManagerAreaControllerUnitTestBase<PageController>
     {
         #region Properties
+        #region Protected Properties
+        protected override IModule[] Modules {
+            get {
+                return new IModule[] {
+                    new Piranha.Manager.Module()
+                };
+            }
+        }
+        #endregion
+
         #region Private Properties
         /// <summary>
         /// The number of sample page types to insert
@@ -37,14 +50,6 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         /// to <see href="pages" />
         /// </summary>
         private const int NUM_PAGES = 5;
-
-        protected override IModule[] Modules {
-            get {
-                return new IModule[] {
-                    new Piranha.Manager.Module()
-                };
-            }
-        }
 
         /// <summary>
         /// The mock page type data
@@ -66,11 +71,19 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
 
             return api;
         }
+        /// <summary>
+        /// Initializes <see cref="pageTypes" /> and sets <see cref="IApi.PageTypes.Get" />
+        /// return value
+        /// </summary>
         private void SetupPageTypeReporitoryMethods(Mock<IApi> api) {
-            GeneratePageTypes();
+            InitializePageTypes();
             api.Setup(a => a.PageTypes.Get()).Returns(pageTypes);
         }
-        private void GeneratePageTypes() {
+        /// <summary>
+        /// Initializes <see cref="pageTypes" /> with <see cref="NUM_PAGE_TYPES" />
+        /// page type objects
+        /// </summary>
+        private void InitializePageTypes() {
             pageTypes = new List<Extend.PageType>();
             for (int i = 1; i <= NUM_PAGE_TYPES; i++) {
                 pageTypes.Add(new Extend.PageType {
@@ -79,6 +92,9 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
                 });
             }
         }
+        /// <summary>
+        /// Converts an integer value to a <see cref="Guid" />
+        /// </summary>
         private Guid ConvertIntToGuid(int value) {
             byte[] valueAsBytes = new byte[16];
             BitConverter.GetBytes(value).CopyTo(valueAsBytes, 0);
@@ -95,14 +111,22 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
                 (Func<bool, IList<SitemapItem>>)GetSitemapItems
             );
         }
+        /// <summary>
+        /// Initializes <see cref="pages" /> and sets the <see cref="mockApi.Pages.GetById" /> and
+        /// <see cref="mockApi.Pages.GetStartpage" /> retun values
+        /// </summary>
         private void SetupPageRepositoryMethods() {
-            GeneratePages();
+            InitializePages();
             mockApi.Setup(a => a.Pages.GetById(It.IsAny<Guid>())).Returns(
                 (Func<Guid, DynamicPage>)((id) => pages.FirstOrDefault(p => p.Id == id))
             );
             mockApi.Setup(a => a.Pages.GetStartpage()).Returns(pages.FirstOrDefault(p => p.IsStartPage));
         }
-        private void GeneratePages() {
+        /// <summary>
+        /// Initializes <see cref="pages" /> with <see cref="NUM_PAGES" />
+        /// page objects
+        /// </summary>
+        private void InitializePages() {
             pages = new List<DynamicPage>();
             for (int i = 1; i <= NUM_PAGES; i++) {
                 int pageTypeId = (i % NUM_PAGE_TYPES) + 1;
@@ -117,30 +141,53 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
                 pages.Add(pageToAdd);
             }
         }
+        /// <summary>
+        /// Builds a list of sitemap items from <see cref="pages" />
+        /// </summary>
+        /// <param name="onlyPublished">Only get pages that are published</param>
         private IList<SitemapItem> GetSitemapItems(bool onlyPublished)
         {
             List<SitemapItem> items = new List<SitemapItem>();
-            foreach (DynamicPage page in pages)
+            foreach (DynamicPage page in pages.Where(p => p.ParentId == null))
             {
                 if (!onlyPublished || page.Published != null)
                 {
-                    SitemapItem itemToAdd = new SitemapItem
-                    {
-                        Id = page.Id,
-                        Title = page.Title,
-                        Published = page.Published,
-                    };
+                    items.Add(ConvertDynamicPageToSitemapItem(page));
                 }
             }
             return items;
         }
+        /// <summary>
+        /// Builds a sitemap item from a given page
+        /// </summary>
+        /// <param name="currentPage">The page to convert</param>
+        private SitemapItem ConvertDynamicPageToSitemapItem(DynamicPage currentPage)
+        {
+            SitemapItem sitemapItem = new SitemapItem
+            {
+                Id = currentPage.Id,
+                Title = currentPage.Title,
+                Published = currentPage.Published,
+                NavigationTitle = currentPage.NavigationTitle,
+                Created = currentPage.Created,
+                LastModified = currentPage.LastModified,
+            };
+            foreach (DynamicPage page in pages.Where(p => p.ParentId == currentPage.Id))
+            {
+                sitemapItem.Items.Add(ConvertDynamicPageToSitemapItem(page));
+            }
+            return sitemapItem;
+        }
         #endregion
 
         #region Unit tests
+        /// <summary>
+        /// Tests that <see cref="PageController.List" /> returns a result with
+        /// a model containing the same number of page types as <see cref="pageTypes" />
+        /// </summary>
         [Fact]
         public void ListResultIsNotNullAndHasCorrectNumberPageTypes() {
             #region Arrange
-            mockApi.Setup(a => a.Sitemap.Get(false)).Returns(new List<SitemapItem>());
             #endregion
 
             #region Act
@@ -152,10 +199,22 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             PageListModel Model = result.Model as PageListModel;
             Assert.NotNull(Model);
             Assert.Equal(pageTypes.Count, Model.PageTypes.Count);
+            Assert.Equal(pages.Count, Model.Sitemap.Count + Model.Sitemap.Select(i => i.Items.Count).Sum());
             #endregion
         }
 
         #region PageController.Edit
+        /// <summary>
+        /// Tests that <see cref="PageController.Edit" /> with an invalid page Id
+        /// throws a <see cref="KeyNotFoundException" />
+        /// </summary>
+        /// <param name="pageIdAsInt">
+        /// The integer Id of the page to convert to a <see cref="Guid" />
+        /// </param>
+        /// <remarks>
+        /// <see cref="InlineDataAttribute" /> values should NOT be in the range
+        /// [1, <see cref="NUM_PAGES" />]
+        /// </remarks>
         [Theory]
         [InlineData(0)]
         [InlineData(NUM_PAGES + 1)]
@@ -180,6 +239,17 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             #endregion
         }
 
+        /// <summary>
+        /// Tests that <see cref="PageController.Edit" /> with a valid page Id returns
+        /// a result with a <see cref="PageEditModel" /> for the given page Id
+        /// </summary>
+        /// <param name="pageIdAsInt">
+        /// The integer Id of the page to convert to a <see cref="Guid" />
+        /// </param>
+        /// <remarks>
+        /// <see cref="InlineDataAttribute" /> values should be in the range
+        /// [1, <see cref="NUM_PAGES" />]
+        /// </remarks>
         [Theory]
         [InlineData(1)]
         [InlineData(2)]
@@ -205,6 +275,10 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         #endregion
 
         #region PageController.Add
+        /// <summary>
+        /// Tests that <see cref="PageController.Add" /> throws a <see cref="KeyNotFoundException" />
+        /// when called while <see cref="App.PageTypes" /> is empty
+        /// </summary>
         [Fact]
         public void AddResultWithNoPageTypesThrowsException() {
             #region Arrange
@@ -221,6 +295,17 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             #endregion
         }
 
+        /// <summary>
+        /// Tests that <see cref="PageController.Add" /> with an invalid page type Id
+        /// throws a <see cref="KeyNotFoundException" />
+        /// </summary>
+        /// <param name="pageTypeIdAsInt">
+        /// The integer Id of the page type to convert to a <see cref="Guid" />
+        /// </param>
+        /// <remarks>
+        /// <see cref="InlineDataAttribute" /> values should NOT be in the range
+        /// [1, <see cref="NUM_PAGE_TYPES" />]
+        /// </remarks>
         [Theory]
         [InlineData(0)]
         [InlineData(NUM_PAGE_TYPES + 1)]
@@ -245,6 +330,17 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             #endregion
         }
 
+        /// <summary>
+        /// Tests that <see cref="PageController.Add" /> with a valid page type Id
+        /// returns a result with a new <see cref="PageEditModel" />
+        /// </summary>
+        /// <param name="pageTypeIdAsInt">
+        /// The integer Id of the page type to convert to a <see cref="Guid" />
+        /// </param>
+        /// <remarks>
+        /// <see cref="InlineDataAttribute" /> values should be in the range
+        /// [1, <see cref="NUM_PAGE_TYPES" />]
+        /// </remarks>
         [Theory]
         [InlineData(1)]
         [InlineData(2)]
@@ -271,6 +367,12 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         #endregion
 
         #region Helper methods
+        /// <summary>
+        /// Verifies that the provided <see cref="PageEditModel" /> is a reference to
+        /// the given <see cref="DynamicPage" />
+        /// </summary>
+        /// <param name="page">The expected page</param>
+        /// <param name="Model">The model to verify</param>
         private void AssertPageEditModelMatchesPage(DynamicPage page, PageEditModel Model) {
             Assert.NotNull(Model);
             Assert.Equal(page.Id, Model.Id);

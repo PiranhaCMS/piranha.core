@@ -18,10 +18,12 @@ using Xunit;
 
 namespace Piranha.Manager.Tests.Areas.Manager.Controllers
 {
+    /// <summary>
+    /// Unit tests for <see cref="BlockTypeController" />
+    /// </summary>
     public class BlockTypeControllerUnitTest : ManagerAreaControllerUnitTestBase<BlockTypeController>
     {
         #region Properties
-        #region Private Properties
         /// <summary>
         /// The number of sample block types to insert
         /// to <see cref="blockTypes" />
@@ -33,12 +35,11 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         /// </summary>
         private List<BlockType> blockTypes;
         #endregion
-        #endregion
 
         #region Test setup
         protected override Mock<IApi> SetupApi() {
             var api = new Mock<IApi>();
-            GenerateBlockTypes();
+            InitializeBlockTypes();
             api.Setup(a => a.BlockTypes.Get()).Returns(blockTypes);
             api.Setup(a => a.PageTypes.Get()).Returns(new List<PageType>());
             return api;
@@ -46,7 +47,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         /// <summary>
         /// Generates a list of block types to store in <see cref="blockTypes" />
         /// </summary>
-        private void GenerateBlockTypes() {
+        private void InitializeBlockTypes() {
             blockTypes = new List<BlockType>();
             for (int i = 1; i <= NUM_BLOCK_TYPES; i++) {
                 blockTypes.Add(new BlockType {
@@ -105,7 +106,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         /// type Id returns a result with a null model
         /// </summary>
         /// <remarks>
-        /// <see cref="InlineDataAttribute" /> values should not be in the range 
+        /// <see cref="InlineDataAttribute" /> values should NOT be in the range 
         /// [1, <see cref="NUM_BLOCK_TYPES" />]
         /// </remarks>
         [Theory]
@@ -128,8 +129,8 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
 
         /// <summary>
         /// Tests that <see cref="BlockTypeController.Edit" /> with a valid block
-        /// type Id returns a result with a block type model matching the one
-        /// in <see cref="blockTypes" />
+        /// type Id returns a result with a <see cref="BlockType" /> model matching 
+        /// the one in <see cref="blockTypes" />
         /// </summary>
         /// <remarks>
         /// <see cref="InlineDataAttribute" /> values should be in the range 
@@ -154,14 +155,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             #region Assert
             Assert.NotNull(result);
             BlockType Model = result.Model as BlockType;
-            if (expectedBlockType == null)
-            {
-                Assert.Null(Model);
-            }
-            else
-            {
-                AssertBlockTypesMatch(expectedBlockType, Model);
-            }
+            AssertBlockTypesMatch(expectedBlockType, Model);
             #endregion
         }
     }
