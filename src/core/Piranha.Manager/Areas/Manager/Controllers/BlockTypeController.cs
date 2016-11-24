@@ -27,7 +27,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         [Route("manager/blocktypes")]
         public ViewResult List() {
-            return View(App.BlockTypes);
+            return View(api.BlockTypes.Get());
         }
 
 
@@ -36,7 +36,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         [Route("manager/blocktype/{id}")]
         public ViewResult Edit(string id) {
-            return View(App.BlockTypes.SingleOrDefault(t => t.Id.ToLower() == id.ToLower()));
+            return View(api.BlockTypes.GetById(id));
         }
     }
 }
