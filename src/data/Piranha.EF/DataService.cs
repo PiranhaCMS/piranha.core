@@ -71,7 +71,7 @@ namespace Piranha.EF
             Archives = new Repositories.ArchiveRepository(db);
             BlockTypes = new Repositories.BlockTypeRepository(db);
             Categories = new Repositories.CategoryRepository(db);
-            Pages = new Repositories.PageRepository(this, db);
+            Pages = new Repositories.PageRepository(db);
             PageTypes = new Repositories.PageTypeRepository(db);
             Posts = new Repositories.PostRepository(db);
             Sitemap = new Repositories.SitemapRepository(db);

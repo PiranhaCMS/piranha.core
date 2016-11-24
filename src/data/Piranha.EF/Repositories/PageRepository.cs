@@ -21,20 +21,11 @@ namespace Piranha.EF.Repositories
 {
     public class PageRepository : RepositoryBase<Data.Page, Models.DynamicPage>, IPageRepository
     {
-        #region Members
-        /// <summary>
-        /// The current Api.
-        /// </summary>
-        private readonly DataService service;
-        #endregion
-
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
-        internal PageRepository(DataService service, IDb db) : base(db) {
-            this.service = service;
-        }
+        internal PageRepository(IDb db) : base(db) { }
 
         /// <summary>
         /// Gets the site startpage.
