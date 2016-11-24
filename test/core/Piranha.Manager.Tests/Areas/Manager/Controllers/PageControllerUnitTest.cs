@@ -439,11 +439,13 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             #region Arrange
             Guid pageId = ConvertIntToGuid(pageIdAsInt);
             string pageTitleUpdate = $"Updated title {pageIdAsInt}";
-            DynamicPage expectedPage = pages.FirstOrDefault(p => p.Id == pageId);
+            DynamicPage page = pages.FirstOrDefault(p => p.Id == pageId);
             
-            PageEditModel pageToSave = PageEditModelForPageType(new Guid(expectedPage.TypeId));
+            PageEditModel pageToSave = PageEditModelForPageType(new Guid(page.TypeId));
+            DateTime? expectedPublishTime = pageToSave.Published;
             pageToSave.Id = pageId;
             pageToSave.Title = pageTitleUpdate;
+            pageToSave.Published = expectedPublishTime;
             #endregion
         
             #region Act
@@ -453,7 +455,8 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             #region Assert
             Assert.NotNull(result);
             Assert.Equal("List", result.ActionName);
-            Assert.Equal(pageTitleUpdate, expectedPage.Title);
+            Assert.Equal(pageTitleUpdate, page.Title);
+            Assert.Equal(expectedPublishTime, page.Published);
             mockApi.Verify(a => a.Pages.Save(It.Is<DynamicPage>(p => p.Id == pageId)), Times.Once);
             #endregion
         }
@@ -477,6 +480,131 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             #region Assert
             Assert.NotNull(result);
             Assert.Equal(pageToSave, result.Model);
+            #endregion
+        }
+        #endregion
+
+        #region PageController.Publish
+        /// <summary>
+        /// Tests that <see cref="PageController.Publish" /> with an invalid page type Id
+        /// on a new page throws a <see cref="KeyNotFoundException" />
+        /// </summary>
+        /// <param name="pageTypeIdAsInt">
+        /// The integer Id of the page type to conver to a <see cref="Guid" />
+        /// </param>
+        /// <remarks>
+        /// <see cref="InlineDataAttribute" /> values should NOT be in the range
+        /// [1, <see cref="NUM_PAGE_TYPES" />]
+        /// </remarks>
+        [Theory]
+        [InlineData(0)]
+        [InlineData(NUM_PAGE_TYPES + 1)]
+        public void PublishNewPageWithInvalidPageTypeIdThrowsException(int pageTypeIdAsInt) {
+            #region Arrange
+            Guid pageTypeId = ConvertIntToGuid(pageTypeIdAsInt);
+            PageEditModel pageToPublish = PageEditModelForPageType(pageTypeId);
+            bool exceptionCaught = false;
+            #endregion
+        
+            #region Act
+            try {
+                IActionResult result = controller.Publish(pageToPublish);
+            } catch (KeyNotFoundException e) {
+                exceptionCaught = true;
+                Assert.Equal($"No page type found with id '{pageTypeId}'", e.Message);
+            }
+            #endregion
+        
+            #region Assert
+            Assert.True(exceptionCaught);
+            #endregion
+        }
+
+        /// <summary>
+        /// Tests that <see cref="PageController.Publish" /> with a new <see cref="PageEditModel" />
+        /// returns a <see cref="RedirectToActionResult" /> to the <see cref="PageController.List" /> method
+        /// </summary>
+        [Fact]
+        public void PublishNewPageIsSuccessfulAndRedirectsToList() {
+            #region Arrange
+            int pageTypeIdAsInt = 1;
+            PageEditModel pageToPublish = PageEditModelForPageType(ConvertIntToGuid(pageTypeIdAsInt));
+            #endregion
+        
+            #region Act
+            RedirectToActionResult result = controller.Publish(pageToPublish) as RedirectToActionResult;
+            #endregion
+        
+            #region Assert
+            Assert.NotNull(result);
+            Assert.Equal("List", result.ActionName);
+            mockApi.Verify(a => a.Pages.Save(
+                    It.Is<DynamicPage>(p => p.Id == pageToPublish.Id)
+                ), Times.Once
+            );
+            #endregion
+        }
+
+        /// <summary>
+        /// Tests that <see cref="PageController.Publish" /> updates the existing
+        /// page in <see cref="pages" /> and returns a <see cref="RedirectToActionResult" />
+        /// </summary>
+        /// <param name="pageIdAsInt">
+        /// The integer Id of the page to convert to a <see cref="Guid" />
+        /// </param>
+        /// <remarks>
+        /// <see cref="InlineDataAttribute" /> values should be in the range
+        /// [1, <see cref="NUM_PAGES" />]
+        /// </remarks>
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public void PublishWithExistingPageUpdatesAndRedirects(int pageIdAsInt) {
+            #region Arrange
+            Guid pageId = ConvertIntToGuid(pageIdAsInt);
+            string pageTitleUpdate = $"Updated title {pageIdAsInt}";
+            DynamicPage page = pages.FirstOrDefault(p => p.Id == pageId);
+            
+            PageEditModel pageToPublish = PageEditModelForPageType(new Guid(page.TypeId));
+            DateTime? originalPublishTime = pageToPublish.Published;
+            pageToPublish.Id = pageId;
+            pageToPublish.Title = pageTitleUpdate;
+            pageToPublish.Published = originalPublishTime;
+            #endregion
+        
+            #region Act
+            RedirectToActionResult result = controller.Publish(pageToPublish) as RedirectToActionResult;
+            #endregion
+        
+            #region Assert
+            Assert.NotNull(result);
+            Assert.Equal("List", result.ActionName);
+            Assert.Equal(pageTitleUpdate, page.Title);
+            Assert.NotEqual(originalPublishTime, page.Published);
+            mockApi.Verify(a => a.Pages.Save(It.Is<DynamicPage>(p => p.Id == pageId)), Times.Once);
+            #endregion
+        }
+
+        /// <summary>
+        /// Tests that <see cref="PageController.Publish" /> returns the standard View method
+        /// when <see cref="IApi.Pages.Publish" /> throws some an exception
+        /// </summary>
+        [Fact]
+        public void PublishNewPageWithFailedPublishReturnsView() {
+            #region Arrange
+            int pageTypeIdAsInt = 1;
+            PageEditModel pageToPublish = PageEditModelForPageType(ConvertIntToGuid(pageTypeIdAsInt));
+            mockApi.Setup(a => a.Pages.Save(It.Is<DynamicPage>(p => p.Id == pageToPublish.Id))).Throws(new Exception("DbUpdateConcurrencyException"));
+            #endregion
+        
+            #region Act
+            ViewResult result = controller.Publish(pageToPublish) as ViewResult;
+            #endregion
+        
+            #region Assert
+            Assert.NotNull(result);
+            Assert.Equal(pageToPublish, result.Model);
             #endregion
         }
         #endregion
