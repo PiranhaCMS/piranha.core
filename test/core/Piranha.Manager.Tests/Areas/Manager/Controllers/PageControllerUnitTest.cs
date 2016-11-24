@@ -360,6 +360,17 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         #endregion
 
         #region PageController.Save
+        /// <summary>
+        /// Tests that <see cref="PageController.Save" /> with an invalid page type Id
+        /// on a new page throws a <see cref="KeyNotFoundException" />
+        /// </summary>
+        /// <param name="pageTypeIdAsInt">
+        /// The integer Id of the page type to conver to a <see cref="Guid" />
+        /// </param>
+        /// <remarks>
+        /// <see cref="InlineDataAttribute" /> values should NOT be in the range
+        /// [1, <see cref="NUM_PAGE_TYPES" />]
+        /// </remarks>
         [Theory]
         [InlineData(0)]
         [InlineData(NUM_PAGE_TYPES + 1)]
@@ -384,6 +395,10 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             #endregion
         }
 
+        /// <summary>
+        /// Tests that <see cref="PageController.Save" /> with a new <see cref="PageEditModel" />
+        /// returns a <see cref="RedirectToActionResult" /> to the <see cref="PageController.List" /> method
+        /// </summary>
         [Fact]
         public void SaveNewPageIsSuccessfulAndRedirectsToList() {
             #region Arrange
@@ -405,17 +420,30 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             #endregion
         }
 
-        [Fact]
-        public void SaveNewPageWithExistingPageUpdatesAndRedirects() {
+        /// <summary>
+        /// Tests that <see cref="PageController.Save" /> updates the existing
+        /// page in <see cref="pages" /> and returns a <see cref="RedirectToActionResult" />
+        /// </summary>
+        /// <param name="pageIdAsInt">
+        /// The integer Id of the page to convert to a <see cref="Guid" />
+        /// </param>
+        /// <remarks>
+        /// <see cref="InlineDataAttribute" /> values should be in the range
+        /// [1, <see cref="NUM_PAGES" />]
+        /// </remarks>
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public void SaveWithExistingPageUpdatesAndRedirects(int pageIdAsInt) {
             #region Arrange
-            int pageTypeIdAsInt = 1;
-            int pageIdAsInt = 2;
             Guid pageId = ConvertIntToGuid(pageIdAsInt);
-            string pageTitleUpdate = "Updated title";
-            PageEditModel pageToSave = PageEditModelForPageType(ConvertIntToGuid(pageTypeIdAsInt));
+            string pageTitleUpdate = $"Updated title {pageIdAsInt}";
+            DynamicPage expectedPage = pages.FirstOrDefault(p => p.Id == pageId);
+            
+            PageEditModel pageToSave = PageEditModelForPageType(new Guid(expectedPage.TypeId));
             pageToSave.Id = pageId;
             pageToSave.Title = pageTitleUpdate;
-            DynamicPage expectedPage = pages.FirstOrDefault(p => p.Id == pageId);
             #endregion
         
             #region Act
@@ -430,6 +458,10 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             #endregion
         }
 
+        /// <summary>
+        /// Tests that <see cref="PageController.Save" /> returns the standard View method
+        /// when <see cref="IApi.Pages.Save" /> throws some an exception
+        /// </summary>
         [Fact]
         public void SaveNewPageWithFailedSaveReturnsView() {
             #region Arrange
@@ -466,6 +498,13 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             Assert.Equal(((ExpandoObject)page.Regions).Count(), Model.Regions.Count);
         }
 
+        /// <summary>
+        /// Create a new <see cref="PageEditModel" /> for a given page type Id
+        /// </summary>
+        /// <param name="pageTypeId">The Id of the page type to base the model on</param>
+        /// <returns>
+        /// The new page model
+        /// </returns>
         private PageEditModel PageEditModelForPageType(Guid pageTypeId) {
             return new PageEditModel {
                 Id = ConvertIntToGuid(NUM_PAGES + 1),

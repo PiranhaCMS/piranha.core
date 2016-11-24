@@ -58,6 +58,9 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         /// <summary>
         /// Creates the mocked API which is assigned to <see cref="mockApi" />
         /// </summary>
+        /// <returns>
+        /// The mocked API
+        /// </returns>
         protected virtual Mock<IApi> SetupApi() {
             var api = new Mock<IApi>();
             api.Setup(a => a.PageTypes.Get()).Returns(new List<PageType>());
@@ -68,6 +71,9 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         /// <summary>
         /// Creates the controller which is assigned to <see cref="controller" />
         /// </summary>
+        /// <returns>
+        /// The controller instance
+        /// </returns>
         protected abstract TController SetupController();
 
         /// <summary>
