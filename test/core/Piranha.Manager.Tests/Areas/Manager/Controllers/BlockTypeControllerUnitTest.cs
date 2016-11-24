@@ -15,6 +15,7 @@ using Moq;
 using Piranha.Areas.Manager.Controllers;
 using Piranha.Extend;
 using Xunit;
+using System;
 
 namespace Piranha.Manager.Tests.Areas.Manager.Controllers
 {
@@ -41,6 +42,9 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             var api = new Mock<IApi>();
             InitializeBlockTypes();
             api.Setup(a => a.BlockTypes.Get()).Returns(blockTypes);
+            api.Setup(a => a.BlockTypes.GetById(It.IsAny<string>())).Returns(
+                (Func<string, BlockType>)GetBlockTypeById
+            );
             api.Setup(a => a.PageTypes.Get()).Returns(new List<PageType>());
             return api;
         }
@@ -56,12 +60,16 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
                 });
             }
         }
+        private BlockType GetBlockTypeById(string blockTypeId) {
+            return blockTypes.FirstOrDefault(b => b.Id == blockTypeId);
+        }
 
         protected override BlockTypeController SetupController() {
             return new BlockTypeController(mockApi.Object);
         }
         #endregion
 
+        #region Unit tests
         /// <summary>
         /// Tests that <see cref="BlockTypeController.List" /> result model
         /// matches <see cref="blockTypes" />
@@ -81,24 +89,23 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             AssertBlockTypeListsMatches(Model);
             #endregion
         }
-        /// <summary>
-        /// Verifies that the list of block types matches <see cref="blockTypes" />
-        /// </summary>
-        /// <param name="result">The list of block types to verify</param>
-        private void AssertBlockTypeListsMatches(IList<BlockType> result) {
+        
+        #region BlockTypeController.Edit
+        [Fact]
+        public void EditWithEmptyBlockTypesGivesNullModel() {
+            #region Arrange
+            blockTypes.Clear();
+            string blockTypeId = "1";
+            #endregion
+        
+            #region Act
+            ViewResult result = controller.Edit(blockTypeId);
+            #endregion
+        
+            #region Assert
             Assert.NotNull(result);
-            Assert.Equal(blockTypes.Count, result.Count);
-            for (int i = 0; i < blockTypes.Count; i++) {
-                AssertBlockTypesMatch(blockTypes[i], result[i]);
-            }
-        }
-        /// <summary>
-        /// Verifies that the <see cref="BlockType.Id" /> and <see cref="BlockType.Title" />
-        /// of the given block types match
-        /// </summary>
-        private void AssertBlockTypesMatch(BlockType expected, BlockType result) {
-            Assert.Equal(expected.Id, result.Id);
-            Assert.Equal(expected.Title, result.Title);
+            Assert.Null(result.Model);
+            #endregion
         }
 
         /// <summary>
@@ -142,7 +149,6 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         [InlineData("3")]
         [InlineData("4")]
         [InlineData("5")]
-        [InlineData("6")]
         public void EditResultProvidesProperBlockTypeObject(string blockTypeId) {
             #region Arrange
             BlockType expectedBlockType = blockTypes.FirstOrDefault(b => b.Id == blockTypeId);
@@ -158,5 +164,29 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             AssertBlockTypesMatch(expectedBlockType, Model);
             #endregion
         }
+        #endregion
+        #endregion
+
+        #region Helper methods
+        /// <summary>
+        /// Verifies that the list of block types matches <see cref="blockTypes" />
+        /// </summary>
+        /// <param name="result">The list of block types to verify</param>
+        private void AssertBlockTypeListsMatches(IList<BlockType> result) {
+            Assert.NotNull(result);
+            Assert.Equal(blockTypes.Count, result.Count);
+            for (int i = 0; i < blockTypes.Count; i++) {
+                AssertBlockTypesMatch(blockTypes[i], result[i]);
+            }
+        }
+        /// <summary>
+        /// Verifies that the <see cref="BlockType.Id" /> and <see cref="BlockType.Title" />
+        /// of the given block types match
+        /// </summary>
+        private void AssertBlockTypesMatch(BlockType expected, BlockType result) {
+            Assert.Equal(expected.Id, result.Id);
+            Assert.Equal(expected.Title, result.Title);
+        }
+        #endregion
     }
 }

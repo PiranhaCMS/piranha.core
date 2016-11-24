@@ -278,8 +278,6 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         public void AddResultWithNoPageTypesThrowsException() {
             #region Arrange
             pageTypes.Clear();
-            // TODO: Check if App.PageTypes.Clear() needs removing after api caching done
-            App.PageTypes.Clear();
             #endregion
 
             #region Act
