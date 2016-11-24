@@ -17,3 +17,4 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("1b1a63fc-0de0-4fa5-b63d-163888a7a965")]
+[assembly: InternalsVisibleTo("Piranha.EF.Tests")]
