@@ -27,7 +27,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         [Route("manager/pagetypes")]
         public IActionResult List() {
-            return View(App.PageTypes);
+            return View(api.PageTypes.Get());
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         [Route("manager/pagetype/{id}")]
         public IActionResult Edit(string id) {
-            return View(App.PageTypes.SingleOrDefault(t => t.Id.ToLower() == id.ToLower()));
+            return View(api.PageTypes.GetById(id));
         }
     }
 }
