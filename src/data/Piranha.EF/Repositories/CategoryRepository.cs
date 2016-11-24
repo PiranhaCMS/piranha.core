@@ -21,7 +21,7 @@ namespace Piranha.EF.Repositories
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
-        internal CategoryRepository(Db db) : base(db) { }
+        internal CategoryRepository(IDb db) : base(db) { }
 
         /// <summary>
         /// Gets the category with the specified slug.

@@ -32,7 +32,7 @@ namespace Piranha.EF.Repositories
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
-        internal PageRepository(DataService service, Db db) : base(db) {
+        internal PageRepository(DataService service, IDb db) : base(db) {
             this.service = service;
         }
 

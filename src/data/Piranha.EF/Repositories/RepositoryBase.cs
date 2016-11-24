@@ -23,13 +23,13 @@ namespace Piranha.EF.Repositories
         /// <summary>
         /// The current db context.
         /// </summary>
-        protected Db db;
+        protected IDb db;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
-        protected RepositoryBase(Db db) {
+        protected RepositoryBase(IDb db) {
             this.db = db;
         }
 

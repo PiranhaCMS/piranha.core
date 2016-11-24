@@ -16,7 +16,7 @@ using Piranha.EF.Data;
 
 namespace Piranha.EF
 {
-    public sealed class Db : DbContext
+    public sealed class Db : DbContext, IDb
     {
         #region Properties
         /// <summary>

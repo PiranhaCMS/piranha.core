@@ -21,14 +21,14 @@ namespace Piranha.EF.Repositories
     public class BlockTypeRepository : IBlockTypeRepository
     {
         #region Members
-        private readonly Db db;
+        private readonly IDb db;
         #endregion
 
         /// <summary>
         /// Default internal constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
-        internal BlockTypeRepository(Db db) {
+        internal BlockTypeRepository(IDb db) {
             this.db = db;
         }
 
