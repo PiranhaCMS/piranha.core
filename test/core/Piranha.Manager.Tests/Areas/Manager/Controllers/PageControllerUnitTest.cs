@@ -733,6 +733,33 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             #endregion
         }
         #endregion
+
+        /// <summary>
+        /// Tests that <see cref="PageController.Delete" /> always results
+        /// in a redirect to <see cref="PageController.List" />
+        /// </summary>
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        [InlineData(6)]
+        public void DeletePageAlwaysRedirectsToList(int pageIdAsInt) {
+            #region Arrange
+            Guid pageId = ConvertIntToGuid(pageIdAsInt);
+            #endregion
+        
+            #region Act
+            RedirectToActionResult result = controller.Delete(pageId) as RedirectToActionResult; 
+            #endregion
+        
+            #region Assert
+            Assert.NotNull(result);
+            Assert.Equal("List", result.ActionName);
+            #endregion
+        }
         #endregion
 
         #region Helper methods
