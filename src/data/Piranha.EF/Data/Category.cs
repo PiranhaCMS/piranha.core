@@ -16,6 +16,12 @@ namespace Piranha.EF.Data
     {
         #region Properties
         /// <summary>
+        /// Gets/sets if an archive should be enabled
+        /// for the category.
+        /// </summary>
+        public bool EnableArchive { get; set; }
+
+        /// <summary>
         /// Gets/sets the archive title.
         /// </summary>
         public string ArchiveTitle { get; set; }

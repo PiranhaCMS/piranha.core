@@ -14,6 +14,12 @@ namespace Piranha.Models
     {
         #region Properties
         /// <summary>
+        /// Gets/sets if an archive should be enabled
+        /// for the category.
+        /// </summary>
+        public bool EnableArchive { get; set; }
+
+        /// <summary>
         /// Gets/sets the archive title.
         /// </summary>
         public string ArchiveTitle { get; set; }
@@ -33,5 +39,12 @@ namespace Piranha.Models
         /// </summary>
         public string ArchiveRoute { get; set; }
         #endregion
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public Category() {
+            EnableArchive = true;
+        }
     }
 }

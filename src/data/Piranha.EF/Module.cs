@@ -44,6 +44,7 @@ namespace Piranha.EF
 
                 cfg.CreateMap<Models.CategoryItem, Data.Category>()
                     .ForMember(m => m.Id, o => o.Ignore())
+                    .ForMember(m => m.EnableArchive, o => o.Ignore())
                     .ForMember(m => m.ArchiveTitle, o => o.Ignore())
                     .ForMember(m => m.ArchiveKeywords, o => o.Ignore())
                     .ForMember(m => m.ArchiveDescription, o => o.Ignore())
