@@ -4,22 +4,27 @@
 }
 <ul class="nav navmenu-nav">
     <li>
-        <a href="#"><span class="glyphicon glyphicon-dashboard"></span>Dashboard</a>
+        <a href="#"><span class="glyphicon glyphicon-dashboard"></span><span class="title">Dashboard</span></a>
     </li>
     @foreach (var group in Piranha.Manager.Menu.Items) {
         if (group.Items.Count > 0) {
             <li>
-                <a href="#"><span class="@group.Css"></span>@group.Name</a>
+                <a href="#"><span class="@group.Css"></span><span class="title">@group.Name</span></a>
                 <ul>
                     @foreach (var item in group.Items) {
                         <li @(item.Controller.ToLower() == controller ? "class=active" : "")>
-                            <a href="@Url.Action(item.Action, item.Controller)">@item.Name</a>
+                            <a href="@Url.Action(item.Action, item.Controller)">
+                                @if (!string.IsNullOrEmpty(item.Css)) {
+                                    <span class="@item.Css"></span>
+                                }
+                                <span class="title">@item.Name</span>
+                            </a>
                         </li>
                     }
                 </ul>
             </li> }
     }
     <li>
-        <a href="@Url.Action("Logout", "Account")"><span class="glyphicon glyphicon-off"></span>Logout</a>
+        <a href="@Url.Action("Logout", "Account")"><span class="glyphicon glyphicon-off"></span><span class="title">Logout</span></a>
     </li>
 </ul>

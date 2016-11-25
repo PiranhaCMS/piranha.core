@@ -1,10 +1,10 @@
 ﻿//
-// Copyright (c) 2014-2015 Håkan Edling
+// Copyright (c) 2016 Håkan Edling
 //
 // This software may be modified and distributed under the terms
 // of the MIT license.  See the LICENSE file for details.
 // 
-// http://github.com/piranhacms/piranha.vnext
+// http://github.com/piranhacms/piranha.core
 // 
 
 @import "mixins.less";
@@ -12,6 +12,27 @@
 
 //
 // Main navigation
+body.collapsed {
+	.navmenu-inverse {
+		width: 50px;
+
+		.navmenu-brand {
+			padding: 10px 0;
+
+			.logo-small {
+				display: inline;
+			}
+			.logo-main {
+				display: none;
+			}
+		}
+
+		span.title {
+			display: none;
+		}
+	}
+}
+
 .navmenu-inverse {
 	width: 220px;
 
@@ -19,6 +40,11 @@
 		text-align: center;
 		border-bottom: 1px solid #444;
 		margin: 0;
+		outline: none;
+
+		.logo-small {
+			display: none;
+		}
 	}
 
 	.navmenu-nav {
@@ -26,7 +52,7 @@
 			font-size: 15px;
 			border-bottom: 1px solid #444;
 
-			span {
+			span.glyphicon {
 				color: @highlight-color;
 				padding-right: 8px;
 				width: 28px;
@@ -53,11 +79,16 @@
 					a {
 						color: @link-color;
 						display: block;
-						padding: 8px 0 8px 44px;
+						padding: 8px 0 8px 15px;
 						font: normal 15px Arial;
 
 						&:hover {
 							text-decoration: none;
+						}
+
+						span.glyphicon {
+							color: @icon-color;
+							font-size: 16px;
 						}
 					}
 

@@ -7572,6 +7572,11 @@ body {
   min-width: 768px;
   max-width: 1200px;
 }
+body.collapsed {
+  margin-left: 50px;
+  min-width: 718px;
+  max-width: 1370px;
+}
 h1 {
   text-transform: uppercase;
   font-family: "Open Sans", Arial;
@@ -7617,6 +7622,21 @@ a {
   left: 0;
   opacity: 0.5;
 }
+body.collapsed .navmenu-inverse {
+  width: 50px;
+}
+body.collapsed .navmenu-inverse .navmenu-brand {
+  padding: 10px 0;
+}
+body.collapsed .navmenu-inverse .navmenu-brand .logo-small {
+  display: inline;
+}
+body.collapsed .navmenu-inverse .navmenu-brand .logo-main {
+  display: none;
+}
+body.collapsed .navmenu-inverse span.title {
+  display: none;
+}
 .navmenu-inverse {
   width: 220px;
 }
@@ -7624,12 +7644,16 @@ a {
   text-align: center;
   border-bottom: 1px solid #444;
   margin: 0;
+  outline: none;
+}
+.navmenu-inverse .navmenu-brand .logo-small {
+  display: none;
 }
 .navmenu-inverse .navmenu-nav > li {
   font-size: 15px;
   border-bottom: 1px solid #444;
 }
-.navmenu-inverse .navmenu-nav > li span {
+.navmenu-inverse .navmenu-nav > li span.glyphicon {
   color: #f0ad4e;
   padding-right: 8px;
   width: 28px;
@@ -7653,11 +7677,15 @@ a {
 .navmenu-inverse .navmenu-nav > li ul li a {
   color: #2a8ac2;
   display: block;
-  padding: 8px 0 8px 44px;
+  padding: 8px 0 8px 15px;
   font: normal 15px Arial;
 }
 .navmenu-inverse .navmenu-nav > li ul li a:hover {
   text-decoration: none;
+}
+.navmenu-inverse .navmenu-nav > li ul li a span.glyphicon {
+  color: #999;
+  font-size: 16px;
 }
 .navmenu-inverse .navmenu-nav > li ul li:first-child a {
   padding-top: 10px;
@@ -8332,6 +8360,16 @@ li.sitemap-item .actions.one {
 .modal-content .modal-footer {
   margin-top: 0;
   border-top: 1px solid #444;
+}
+.overlay {
+  position: absolute;
+  width: 75%;
+  height: 100%;
+  top: 0;
+  right: 0;
+}
+.overlay .overlay-body {
+  padding: 20px;
 }
 #login {
   margin: 0;
