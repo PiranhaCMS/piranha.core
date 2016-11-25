@@ -9,6 +9,8 @@
  */
 
 using System;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 
 namespace Piranha.EF.Tests.Repositories
@@ -56,6 +58,13 @@ namespace Piranha.EF.Tests.Repositories
             byte[] valueAsBytes = new byte[16];
             BitConverter.GetBytes(value).CopyTo(valueAsBytes, 0);
             return new Guid(valueAsBytes);
+        }
+        protected void SetupMockDbSet<T>(Mock<DbSet<T>> mockDbSet, IQueryable<T> source)
+            where T : class {
+            mockDbSet.As<IQueryable<T>>().Setup(s => s.Provider).Returns(source.Provider);
+            mockDbSet.As<IQueryable<T>>().Setup(s => s.Expression).Returns(source.Expression);
+            mockDbSet.As<IQueryable<T>>().Setup(s => s.ElementType).Returns(source.ElementType);
+            mockDbSet.As<IQueryable<T>>().Setup(s => s.GetEnumerator()).Returns(source.GetEnumerator());
         }
     }
  }

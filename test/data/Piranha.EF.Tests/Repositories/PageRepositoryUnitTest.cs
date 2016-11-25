@@ -14,6 +14,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Piranha.EF.Repositories;
+using Xunit;
 
 namespace Piranha.EF.Tests.Repositories
 {
@@ -23,37 +24,70 @@ namespace Piranha.EF.Tests.Repositories
         private const int NUM_PAGE_TYPES = 3;
         private const int NUM_PAGES = 7;
 
-        private IQueryable<Data.PageType> pageTypes;
-        private IQueryable<Data.Page> pages;
+        private IQueryable<Data.PageType> PageTypes {
+            get {
+                return pageTypesList.AsQueryable();
+            }
+        }
+        private IQueryable<Data.Page> Pages {
+            get {
+                return pagesList.AsQueryable();
+            }
+        }
+
+        private List<Data.PageType> pageTypesList = new List<Data.PageType>();
+        private List<Data.Page> pagesList = new List<Data.Page>();
         private readonly Mock<DbSet<Data.PageType>> mockPageTypeSet = new Mock<DbSet<Data.PageType>>();
-        private readonly Mock<DbSet<Data.Page>> mockPagesSet = new Mock<DbSet<Data.Page>>();
+        private readonly Mock<DbSet<Data.Page>> mockPageSet = new Mock<DbSet<Data.Page>>();
         
         private readonly Mock<IDataService> mockDataService = new Mock<IDataService>();
         #endregion
 
         protected override void SetupMockDbData() {
+            InitializeMockPageTypes();
+            InitializeMockPages();
+            mockDb.Setup(db => db.PageTypes).Returns(mockPageTypeSet.Object);
+            mockDataService.Setup(db => db.PageTypes).Returns(new PageTypeRepository(mockDb.Object));
+            mockDb.Setup(db => db.Pages).Returns(mockPageSet.Object);
+        }
+        private void InitializeMockPageTypes() {
             CreateMockPageTypes();
-            CreateMockPages();
-            mockDb.Setup(db => db.Pages).Returns(mockPagesSet.Object);
+            SetupMockDbSet(mockPageTypeSet, PageTypes);
         }
         private void CreateMockPageTypes() {
-            List<Data.PageType> listOfPageTypes = new List<Data.PageType>();
             for (int i = 0; i < NUM_PAGE_TYPES; i++) {
-                listOfPageTypes.Add(new Data.PageType {
-
+                pageTypesList.Add(new Data.PageType {
+                    Id = ConvertIntToGuid(i + 1).ToString(),
+                    Body = "{\"View\":null,\"Id\":\"Html\",\"Title\":\"Html block\",\"Regions\":[{\"Id\":\"Content\",\"Title\":\"Main Content\",\"Collection\":false,\"Max\":0,\"Min\":0,\"Fields\":[{\"Id\":\"Default\",\"Title\":\"Default\",\"Type\":\"Html\"}]}]}",
+                    Created = DateTime.Now.AddDays(-(i + 1)),
+                    LastModified = DateTime.Now.AddDays(-(i + 1)),
+                    Pages = new List<Data.Page>(),
                 });
             }
-            pageTypes = listOfPageTypes.AsQueryable();
+        }
+        private void InitializeMockPages() {
+            CreateMockPages();
+            SetupMockDbSet(mockPageSet, Pages);
         }
         private void CreateMockPages() {
-            List<Data.Page> listOfPages = new List<Data.Page>();
             for (int i = 0; i < NUM_PAGES; i++) {
-                listOfPages.Add(new Data.Page {
+                Data.PageType typeForNewPage = pageTypesList[i % NUM_PAGE_TYPES];
+                Data.Page newPage = new Data.Page {
                     Id = ConvertIntToGuid(i + 1),
-
-                });
+                    TypeId = typeForNewPage.Id,
+                    ParentId = null,
+                    SortOrder = i,
+                    Title = $"Page Title {i}",
+                    NavigationTitle = $"Nav title {i}",
+                    Slug = $"page-title-{i}",
+                    Published = DateTime.Now.AddDays(-(NUM_PAGES - i)),
+                    LastModified = DateTime.Now.AddDays(-(NUM_PAGES - i)),
+                    Type =  typeForNewPage,
+                    Fields = new List<Data.PageField>(),
+                };
+                typeForNewPage.Pages.Add(newPage);
+                pagesList.Add(newPage);
             }
-            pages = listOfPages.AsQueryable();
         }
 
         protected override PageRepository SetupRepository() {
