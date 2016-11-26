@@ -8,6 +8,8 @@
  * 
  */
 
+using HeyRed.MarkdownSharp;
+
 namespace Piranha.Extend.Fields
 {
     [Field(Name = "Markdown", Shorthand = "Markdown")]
@@ -16,5 +18,10 @@ namespace Piranha.Extend.Fields
         public static implicit operator MarkdownField(string str) {
             return new MarkdownField() { Value = str };
         } 
+
+        public string ToHtml() {
+            var converter = new Markdown();
+            return converter.Transform(Value);
+        }
     }
 }

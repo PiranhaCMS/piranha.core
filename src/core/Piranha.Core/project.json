@@ -2,6 +2,7 @@
   "version": "4.0.0-*",
 
   "dependencies": {
+    "Markdown": "2.2.0",
     "Microsoft.Extensions.Configuration": "1.1.0",
     "Microsoft.Extensions.DependencyInjection": "1.1.0",
     "NETStandard.Library": "1.6.1",
