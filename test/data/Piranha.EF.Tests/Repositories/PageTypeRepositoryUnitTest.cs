@@ -231,6 +231,74 @@ namespace Piranha.EF.Tests.Repositories
             #endregion
         }
         #endregion
+
+        #region PageTypeRepository.Delete
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        public void DeleteWithValidObjectRemovesItem(int pageTypeIdAsInt) {
+            #region Arrange
+            string pageTypeId = $"PageType{pageTypeIdAsInt}";
+            Data.PageType dataPageType = pageTypesList.FirstOrDefault(t => t.Id == pageTypeId);
+            Extend.PageType extendPageType = JsonConvert.DeserializeObject<Extend.PageType>(dataPageType.Body);
+            #endregion
+        
+            #region Act
+            repository.Delete(extendPageType);
+            #endregion
+        
+            #region Assert
+            mockPageTypeSet.Verify(db => db.Remove(It.Is<Data.PageType>(
+                t => t.Id == pageTypeId
+            )), Times.Once());
+            mockDb.Verify(db => db.SaveChanges(),Times.Once);
+            #endregion
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(NUM_PAGE_TYPES + 1)]
+        public void DeleteByIdWithInvalidIdDoesntCallRemove(int pageTypeIdAsInt) {
+            #region Arrange
+            string pageTypeId = $"PageType{pageTypeIdAsInt}";
+            #endregion
+        
+            #region Act
+            repository.Delete(pageTypeId);
+            #endregion
+        
+            #region Assert
+            mockPageTypeSet.Verify(db => db.Remove(It.IsAny<Data.PageType>()), Times.Never());
+            mockDb.Verify(db => db.SaveChanges(), Times.Never());
+            #endregion
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        public void DeleteByIdWithValidIdCallsRemove(int pageTypeIdAsInt) {
+            #region Arrange
+            string pageTypeId = $"PageType{pageTypeIdAsInt}";
+            #endregion
+        
+            #region Act
+            repository.Delete(pageTypeId);
+            #endregion
+        
+            #region Assert
+            mockPageTypeSet.Verify(db => db.Remove(It.Is<Data.PageType>(
+                t => t.Id == pageTypeId
+            )), Times.Once());
+            mockDb.Verify(db => db.SaveChanges(), Times.Once());
+            #endregion
+        }
+        #endregion
         #endregion
 
         #region Helpers
