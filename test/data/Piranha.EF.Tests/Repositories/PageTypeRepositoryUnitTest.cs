@@ -58,7 +58,7 @@ namespace Piranha.EF.Tests.Repositories
         /// </summary>
         private void CreateMockPageTypes() {
             for (int i = 0; i < NUM_PAGE_TYPES; i++) {
-                string pageTypeId = $"PageType{i}";
+                string pageTypeId = $"PageType{i+1}";
                 pageTypesList.Add(new Data.PageType {
                     Id = pageTypeId,
                     Body = $"{{\"View\":null,\"Id\":\"{pageTypeId}\",\"Title\":\"Html block\",\"Regions\":[{{\"Id\":\"Content\",\"Title\":\"Main Content\",\"Collection\":false,\"Max\":0,\"Min\":0,\"Fields\":[{{\"Id\":\"Default\",\"Title\":\"Default\",\"Type\":\"Html\"}}]}}]}}",
@@ -169,7 +169,7 @@ namespace Piranha.EF.Tests.Repositories
         [InlineData(5)]
         public void GetByIdWithValidIdGivesProperPageType(int pageTypeIdAsInt) {
             #region Arrange
-            string pageTypeId = ConvertIntToGuid(pageTypeIdAsInt).ToString();
+            string pageTypeId = $"PageType{pageTypeIdAsInt}";
             Data.PageType pageType = pageTypesList.FirstOrDefault(t => t.Id == pageTypeId);
             Extend.PageType expectedPageType = JsonConvert.DeserializeObject<Extend.PageType>(pageType.Body);
             #endregion
@@ -179,16 +179,72 @@ namespace Piranha.EF.Tests.Repositories
             #endregion
         
             #region Assert
-            Assert.NotNull(result);
-            Assert.Equal(expectedPageType.Id, result.Id);
-            Assert.Equal(expectedPageType.Route, result.Route);
-            Assert.Equal(expectedPageType.Title, result.Title);
+            AssertPageTypesMatch(expectedPageType, result);
+            #endregion
+        }
+        #endregion
+
+        #region PageTypeRepository.Get
+        /// <summary>
+        /// Tests that <see cref="PageTypeRepository.Get" /> returns an empty list when
+        /// the <see cref="IDb.PageTyps" /> is empty
+        /// </summary>
+        [Fact]
+        public void GetWithEmptySourceGivesEmptyList() {
+            #region Arrange
+            pageTypesList.Clear();
+            SetupMockDbSet(mockPageTypeSet, PageTypes);
+            #endregion
+        
+            #region Act
+            IList<Extend.PageType> result = repository.Get();
+            #endregion
+        
+            #region Assert
+            Assert.Empty(result);
+            #endregion
+        }
+
+        /// <summary>
+        /// Tests that <see cref="PageTypeRepository.Get" /> returns the page types
+        /// in title sorted order
+        /// </summary>
+        [Fact]
+        public void GetGivesCorrectList() {
+            #region Arrange
+            List<Extend.PageType> pageTypes = new List<Extend.PageType>();
+            foreach (Data.PageType pageType in pageTypesList) {
+                pageTypes.Add(JsonConvert.DeserializeObject<Extend.PageType>(pageType.Body));
+            }
+            pageTypes = pageTypes.OrderBy(t => t.Title).ToList();
+            #endregion
+        
+            #region Act
+            IList<Extend.PageType> result = repository.Get();
+            #endregion
+        
+            #region Assert
+            Assert.Equal(pageTypes.Count, result.Count);
+            for (int i = 0; i < pageTypes.Count; i++) {
+                AssertPageTypesMatch(pageTypes[i], result[i]);
+            }
             #endregion
         }
         #endregion
         #endregion
 
         #region Helpers
+        /// <summary>
+        /// Asserts that the given page types are the same
+        /// </summary>
+        /// <param name="expected">The expected page type</param>
+        /// <param name="actual">The actual page type</param>
+        private void AssertPageTypesMatch(Extend.PageType expected, Extend.PageType actual) {
+            Assert.NotNull(actual);
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.Route, actual.Route);
+            Assert.Equal(expected.Title, actual.Title);
+        }
         #endregion
     }
 }
