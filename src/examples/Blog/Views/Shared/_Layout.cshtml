@@ -11,7 +11,8 @@
 
     <title>@ViewBag.Title</title>
 
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Gentium+Book+Basic:700" rel="stylesheet"> 
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
     <link href="~/assets/css/style.min.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -26,7 +27,7 @@
         <div class="container">
             <nav>
                 <ul class="nav nav-pills pull-right">
-                    <li role="presentation" class="active"><a href="~/">Home</a></li>
+                    <li role="presentation"><a href="~/">Home</a></li>
                     <li role="presentation"><a href="~/blog">Blog</a></li>
                 </ul>
             </nav>
@@ -34,9 +35,7 @@
         </div>
     </div>
 
-    <div class="container">
-        @RenderBody()
-    </div>
+    @RenderBody()
 
     <footer class="footer">
         <div class="container">

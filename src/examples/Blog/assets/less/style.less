@@ -1,9 +1,17 @@
 ﻿@import "../../bower_components/bootstrap/less/bootstrap.less";
-@import "mixins.less";
 
-body {
-    font-family: 'Open Sans', sans-serif;
-}
+/*!
+ * Copyright (c) 2016 Håkan Edling
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ * 
+ * https://github.com/piranhacms/piranha.core
+ * 
+ */
+
+@import "mixins.less";
+@import "typography.less";
 
 .container {
     max-width: 730px;
@@ -14,7 +22,9 @@ body {
 //
 .header {
     background: #222;
+    position: relative;
     height: 76px;
+    z-index: 1000;
 
     img {
         margin: 2px 0 -6px;
@@ -27,6 +37,7 @@ body {
             li {
                 a {
                     color: #eee;
+                    font-size: 15px;
                     text-transform: uppercase;
                     position: relative;
 

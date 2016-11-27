@@ -4,17 +4,19 @@
 
 }
 
-<h1>@Model.Title</h1>
+<div class="container">
+    <h1>@Model.Title</h1>
 
-@foreach (var post in Model.Posts) {
-    <article>
-        <header>
-            <h2><a href="~/@post.Permalink">@post.Title</a></h2>
-        </header>
-        <small>@post.Published in @post.Category.Title</small>
-        <p>
-            @post.Excerpt
-        </p>
-        <hr />
-    </article>
-}
+    @foreach (var post in Model.Posts) {
+        <article>
+            <header>
+                <h2><a href="~/@post.Permalink">@post.Title</a></h2>
+            </header>
+            <small>@post.Published in @post.Category.Title</small>
+            <p>
+                @post.Excerpt
+            </p>
+            <hr />
+        </article>
+    }
+</div>
