@@ -58,9 +58,10 @@ namespace Piranha.EF.Tests.Repositories
         /// </summary>
         private void CreateMockPageTypes() {
             for (int i = 0; i < NUM_PAGE_TYPES; i++) {
+                string pageTypeId = $"PageType{i}";
                 pageTypesList.Add(new Data.PageType {
-                    Id = ConvertIntToGuid(i + 1).ToString(),
-                    Body = "{\"View\":null,\"Id\":\"Html\",\"Title\":\"Html block\",\"Regions\":[{\"Id\":\"Content\",\"Title\":\"Main Content\",\"Collection\":false,\"Max\":0,\"Min\":0,\"Fields\":[{\"Id\":\"Default\",\"Title\":\"Default\",\"Type\":\"Html\"}]}]}",
+                    Id = pageTypeId,
+                    Body = $"{{\"View\":null,\"Id\":\"{pageTypeId}\",\"Title\":\"Html block\",\"Regions\":[{{\"Id\":\"Content\",\"Title\":\"Main Content\",\"Collection\":false,\"Max\":0,\"Min\":0,\"Fields\":[{{\"Id\":\"Default\",\"Title\":\"Default\",\"Type\":\"Html\"}}]}}]}}",
                     Created = DateTime.Now.AddDays(-(i + 1)),
                     LastModified = DateTime.Now.AddDays(-(i + 1)),
                     Pages = new List<Data.Page>(),
@@ -80,7 +81,7 @@ namespace Piranha.EF.Tests.Repositories
         /// Tests that <see cref="PageTypeRepository.GetById" /> returns null when its
         /// data source is empty
         /// </summary>
-        /// <param name="pageTypeIdAsInt">The integer Id value to convert to a <see cref="Guid" /></param>
+        /// <param name="pageTypeIdAsInt">The integer Id value to use as part of the page type Id</param>
         [Theory]
         [InlineData(0)]
         [InlineData(1)]
@@ -92,7 +93,7 @@ namespace Piranha.EF.Tests.Repositories
         public void GetByIdWithEmptySetGivesNull(int pageTypeIdAsInt) {
             #region Arrange
             pageTypesList.Clear();
-            string pageTypeId = ConvertIntToGuid(pageTypeIdAsInt).ToString();
+            string pageTypeId = $"PageType{pageTypeIdAsInt}";
             #endregion
         
             #region Act
@@ -108,7 +109,7 @@ namespace Piranha.EF.Tests.Repositories
         /// Tests that <see cref="PageTypeRepository.GetById" /> with an invalid Id 
         /// returns null
         /// </summary>
-        /// <param name="pageTypeIdAsInt">The integer Id value to convert to a <see cref="Guid" /></param>
+        /// <param name="pageTypeIdAsInt">The integer Id value to use as part of the page type Id</param>
         /// <remarks>
         /// <see cref="InlineDataAttribute" /> values should NOT be in the range
         /// [1, <see cref="NUM_PAGE_TYPES" />]
@@ -118,7 +119,7 @@ namespace Piranha.EF.Tests.Repositories
         [InlineData(NUM_PAGE_TYPES + 1)]
         public void GetByIdWithInvalidIdGivesNull(int pageTypeIdAsInt) {
             #region Arrange
-            string pageTypeId = ConvertIntToGuid(pageTypeIdAsInt).ToString();
+            string pageTypeId = $"PageType{pageTypeIdAsInt}";
             #endregion
         
             #region Act
@@ -155,7 +156,7 @@ namespace Piranha.EF.Tests.Repositories
         /// Tests that <see cref="PageTypeRepository.GetById" /> with an valid Id 
         /// returns the proper page type
         /// </summary>
-        /// <param name="pageTypeIdAsInt">The integer Id value to convert to a <see cref="Guid" /></param>
+        /// <param name="pageTypeIdAsInt">The integer Id value to use as part of the page type Id</param>
         /// <remarks>
         /// <see cref="InlineDataAttribute" /> values should be in the range
         /// [1, <see cref="NUM_PAGE_TYPES" />]
