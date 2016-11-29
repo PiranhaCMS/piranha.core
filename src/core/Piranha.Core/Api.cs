@@ -48,6 +48,13 @@ namespace Piranha
         }
 
         /// <summary>
+        /// Gets the media repository.
+        /// </summary>
+        public IMediaRepository Media { 
+            get { return service.Media; }
+        }
+
+        /// <summary>
         /// Gets the page repository.
         /// </summary>
         public IPageRepository Pages { 

@@ -40,6 +40,11 @@ namespace Piranha.EF
         public ICategoryRepository Categories { get; private set; }
 
         /// <summary>
+        /// Gets the media repository.
+        /// </summary>
+        public IMediaRepository Media { get { throw new NotImplementedException(); } }
+
+        /// <summary>
         /// Gets the page repository.
         /// </summary>
         public IPageRepository Pages { get; private set; }

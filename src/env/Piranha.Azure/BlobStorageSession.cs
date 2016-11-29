@@ -9,8 +9,6 @@
  */
 
 using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
@@ -41,23 +39,6 @@ namespace Piranha.Azure
         private BlobStorageSession(CloudStorageAccount account, string containerName) {
             client = account.CreateCloudBlobClient();
             container = client.GetContainerReference(containerName);
-        }
-
-        /// <summary>
-        /// Opens a new blob storage session.
-        /// </summary>
-        /// <param name="account">The current account</param>
-        /// <param name="config">The config</param>
-        /// <returns>A new open session</returns>
-        public static async Task<BlobStorageSession> Open(CloudStorageAccount account, IConfigurationRoot config) {
-            var session = new BlobStorageSession(account, config["Piranha:AzureStorageContainer"]);
-
-            if (!(await session.container.ExistsAsync())) {
-                await session.container.SetPermissionsAsync(new BlobContainerPermissions() {
-                    PublicAccess = BlobContainerPublicAccessType.Blob
-                });
-            }
-            return session;
         }
 
         /// <summary>
