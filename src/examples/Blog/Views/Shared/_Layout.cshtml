@@ -23,6 +23,12 @@
 </head>
 
 <body>
+    <div class="banner @(ViewBag.IsStart != null && ViewBag.IsStart == true ? "startpage" : "")" role="banner">
+        <img src="~/assets/img/banner.jpg">
+        @if (ViewBag.IsStart != null && ViewBag.IsStart == true) {
+            <h1>@ViewBag.Title</h1>
+        }
+    </div>
     <div class="header clearfix">
         <div class="container">
             <nav>
@@ -31,7 +37,7 @@
                     <li role="presentation"><a href="~/blog">Blog</a></li>
                 </ul>
             </nav>
-            <a href="~/"><img src="~/assets/img/logo-simple.png" alt="Piranha CMS" /></a>
+            <a href="~/"><img src="~/assets/img/logo.png" alt="Piranha CMS" /></a>
         </div>
     </div>
 

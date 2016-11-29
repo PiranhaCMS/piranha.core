@@ -17,17 +17,52 @@
     max-width: 730px;
 }
 
+.banner {
+    position: relative;
+    height: 30vh;
+    max-height: 900px;
+    min-height: 240px;
+    overflow: hidden;
+
+    &.startpage {
+        height: 60vh;
+    }
+
+    img {
+        position: absolute;
+        min-width: 100%;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+    }
+
+    h1 {
+        color: #fff;
+        position: absolute;
+        width: 100%;
+        top: 50%;
+        text-align: center;
+        font-size: 50px;
+        text-shadow: 0 0 10px rgba(0,0,0,0.25);
+    }
+}
+
 //
 // Header & Navigation
 //
 .header {
-    background: #222;
-    position: relative;
+    position: absolute;
     height: 76px;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background: #222;
+    background: rgba(0,0,0,0.7);
     z-index: 1000;
 
     img {
-        margin: 2px 0 -6px;
+        margin: 10px 0 0;
     }
 
     nav {
