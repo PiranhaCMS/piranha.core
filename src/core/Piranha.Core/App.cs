@@ -28,6 +28,7 @@ namespace Piranha
         private List<Extend.IModule> modules;
         private IList<Extend.BlockType> blockTypes;
         private IList<Extend.PageType> pageTypes;
+        private Extend.IMarkdown markdown;
         #endregion
 
         #region Properties
@@ -66,6 +67,13 @@ namespace Piranha
         public static BindingFlags PropertyBindings {
             get { return BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance; }
         }
+
+        /// <summary>
+        /// Gets the currently registered markdown converter.
+        /// </summary>
+        public static Extend.IMarkdown Markdown {
+            get { return instance.markdown; }
+        }
         #endregion
 
         /// <summary>
@@ -94,6 +102,9 @@ namespace Piranha
             if (!isInitialized) {
                 lock (mutex) {
                     if (!isInitialized) {
+                        // Register default markdown converter
+                        markdown = new Extend.MarkdownSharp();
+
                         // Compose field types
                         fields.Register<Extend.Fields.HtmlField>();
                         fields.Register<Extend.Fields.MarkdownField>();
