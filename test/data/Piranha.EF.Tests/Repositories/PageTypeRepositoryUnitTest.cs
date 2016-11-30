@@ -299,6 +299,36 @@ namespace Piranha.EF.Tests.Repositories
             #endregion
         }
         #endregion
+
+        #region PageTypeRepository.Save
+        [Fact]
+        public void SaveWithNonExistentTypeCreatesNewPageType()
+        {
+            #region Arrange
+            #endregion
+
+            #region Act
+            #endregion
+
+            #region Assert
+            throw new NotImplementedException();
+            #endregion
+        }
+
+        [Fact]
+        public void SaveWithExistingTypeUpdatesPageType()
+        {
+            #region Arrange
+            #endregion
+
+            #region Act
+            #endregion
+
+            #region Assert
+            throw new NotImplementedException();
+            #endregion
+        }
+        #endregion
         #endregion
 
         #region Helpers
