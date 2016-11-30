@@ -110,6 +110,8 @@ namespace Piranha.EF.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(512);
 
+                    b.Property<bool>("EnableArchive");
+
                     b.Property<DateTime>("LastModified");
 
                     b.Property<string>("Slug")

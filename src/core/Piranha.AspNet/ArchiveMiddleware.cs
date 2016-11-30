@@ -37,7 +37,7 @@ namespace Piranha.AspNet
                     if (segments.Length >= 1) {
                         var category = api.Categories.GetModelBySlug(segments[0]);
 
-                        if (category != null) {
+                        if (category != null && category.EnableArchive) {
                             var route = category.ArchiveRoute ?? "/archive";
 
                             int? page = null;

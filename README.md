@@ -5,6 +5,7 @@ This is a **complete rewrite** of Piranha CMS for the `DotNetCore` & `Entity Fra
 Piranha.Core is currently built for dotnet core `1.1.0` and uses the following packages:
 
 * AutoMapper `5.1.1`
+* Markdown `2.2.0`
 * Microsoft.EntityFrameworkCore `1.1.0`
 * Microsoft.AspNetCore `1.1.0`
 * Newtonsoft.Json `9.0.1`

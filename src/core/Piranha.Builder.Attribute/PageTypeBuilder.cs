@@ -75,7 +75,8 @@ namespace Piranha.Builder.Attribute
                     var pageType = new PageType() {
                         Id = attr.Id,
                         Title = attr.Title,
-                        Route = attr.Route
+                        Route = attr.Route,
+                        View = attr.View
                     };
 
                     foreach (var prop in type.GetTypeInfo().GetProperties(App.PropertyBindings)) {

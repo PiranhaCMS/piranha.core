@@ -71,33 +71,36 @@ namespace Piranha.Manager
             new MenuItem() {
                 InternalId = "Content", Name = "Content", Css = "glyphicon glyphicon-pencil", Items = new List<MenuItem>() {
                     new MenuItem() {
-                        InternalId = "Blocks", Name = "Blocks", Controller = "Block", Action = "List"
+                        InternalId = "Pages", Name = "Pages", Controller = "Page", Action = "List", Css = "glyphicon glyphicon-duplicate"
                     },
                     new MenuItem() {
-                        InternalId = "Categories", Name = "Categories", Controller = "Category", Action = "List"
+                        InternalId = "Posts", Name = "Posts", Controller = "Post", Action = "List", Css = "glyphicon glyphicon-pushpin"
                     },
                     new MenuItem() {
-                        InternalId = "Pages", Name = "Pages", Controller = "Page", Action = "List"
+                        InternalId = "Blocks", Name = "Blocks", Controller = "Block", Action = "List", Css = "glyphicon glyphicon-font"
                     },
                     new MenuItem() {
-                        InternalId = "Posts", Name = "Posts", Controller = "Post", Action = "List"
+                        InternalId = "Media", Name = "Media", Controller = "Media", Action = "List", Css = "glyphicon glyphicon-picture"
+                    },
+                    new MenuItem() {
+                        InternalId = "Categories", Name = "Categories", Controller = "Category", Action = "List", Css = "glyphicon glyphicon-tags"
                     }
                 }
             },
             new MenuItem() {
-                InternalId = "Settings", Name = "Settings", Css = "glyphicon glyphicon-wrench", Items = new List<MenuItem>() {
+                InternalId = "Settings", Name = "Settings", Css = "glyphicon glyphicon-wrench", Items = new List<MenuItem>() /* {
                     new MenuItem() {
                         InternalId = "BlockTypes", Name = "Block types", Controller = "BlockType", Action = "List"
                     },
                     new MenuItem() {
                         InternalId = "PageTypes", Name = "Page types", Controller = "PageType", Action = "List"
                     }
-                }
+                }*/
             },
             new MenuItem() {
                 InternalId = "System", Name = "System", Css = "glyphicon glyphicon-cog", Items = new List<MenuItem>() {
                     new MenuItem() {
-                        InternalId = "Config", Name = "Config", Controller = "ConfigMgr", Action = "List"
+                        InternalId = "Config", Name = "Config", Controller = "ConfigMgr", Action = "List", Css = "glyphicon glyphicon-wrench"
                     }
                 }
             }

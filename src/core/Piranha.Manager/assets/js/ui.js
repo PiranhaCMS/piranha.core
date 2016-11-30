@@ -12,3 +12,11 @@ $(document).on('click', '.panel-heading .btn-toggle', function () {
 
     return false;
 });
+
+//
+// Toggle menu style
+//
+$(document).on('click', '.navmenu-brand', function () {
+    $('body').toggleClass('collapsed');
+    return false;
+});

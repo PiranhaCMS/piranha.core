@@ -8,8 +8,6 @@
  * 
  */
 
-using System.Threading.Tasks;
-
 namespace Piranha
 {
     /// <summary>
@@ -21,6 +19,6 @@ namespace Piranha
         /// Opens a new storage session.
         /// </summary>
         /// <returns>A new open session</returns>
-        Task<IStorageSession> OpenAsync();
+        IStorageSession Open();
     }
 }

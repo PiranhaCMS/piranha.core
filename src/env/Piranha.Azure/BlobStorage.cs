@@ -8,7 +8,8 @@
  * 
  */
 
-using System.Threading.Tasks;
+using System;
+using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 
@@ -37,8 +38,59 @@ namespace Piranha.Azure
         /// Opens a new storage session.
         /// </summary>
         /// <returns>A new open session</returns>
-        public async Task<IStorageSession> OpenAsync() {
-            return await BlobStorageSession.Open(account, configuration);
+        public IStorageSession Open() {
+            throw new NotImplementedException();
         }
+
+		/// <summary>
+		/// Writes the content for the specified media content to the given stream.
+		/// </summary>
+		/// <param name="id">The unique id</param>
+		/// <param name="stream">The output stream</param>
+		/// <returns>If the media was found</returns>
+		public bool Get(string id, ref Stream stream) {
+            throw new NotImplementedException();
+        }
+
+		/// <summary>
+		/// Writes the data for the specified media content to the given byte array.
+		/// </summary>
+		/// <param name="id">The unique id</param>
+		/// <param name="byte">The byte array</param>
+		/// <returns>If the asset was found</returns>
+		public bool Get(string id, ref byte[] bytes) {
+            throw new NotImplementedException();
+        }
+
+		/// <summary>
+		/// Stores the given media content.
+		/// </summary>
+		/// <param name="id">The unique id</param>
+		/// <param name="contentType">The content type</param>
+		/// <param name="stream">The input stream</param>
+		/// <returns>The public URL</returns>
+		public string Put(string id, string contentType, ref Stream stream) {
+            throw new NotImplementedException();
+        }
+
+		/// <summary>
+		/// Stores the given media content.
+		/// </summary>
+		/// <param name="id">The unique id</param>
+		/// <param name="contentType">The content type</param>
+		/// <param name="bytes">The binary data</param>
+		/// <returns>The public URL</returns>
+		public string Put(string id, string contentType, byte[] bytes) {
+            throw new NotImplementedException();
+        }
+
+		/// <summary>
+		/// Deletes the content for the specified media.
+		/// </summary>
+		/// <param name="id">The unique id/param>
+		public bool Delete(string id) {
+            throw new NotImplementedException();
+        }
+        
     }
 }

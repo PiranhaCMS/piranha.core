@@ -1,12 +1,15 @@
 ﻿@model Blog.Models.StartPageModel
 @{
     ViewBag.Title = Model.Title;
+    ViewBag.IsStart = true;
 }
 
-<h1>@Model.Title</h1>
-<p class="lead">@Model.Intro.Title.Value</p>
-<p>
-    @Model.Intro.Body.Value
-</p>
-<hr />
-@Model.Content.Html()
+<div class="container">
+    <h1>@Model.Title</h1>
+    <p class="lead">@Model.Intro.Title.Value</p>
+    <p>
+        @Model.Intro.Body.Value
+    </p>
+    <hr />
+    @Model.Content.Html()
+</div>

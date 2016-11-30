@@ -47,10 +47,10 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label>Enable archive</label>
+                        @Html.LabelFor(m => m.EnableArchive, "Enable archive")
                         <div class="checkbox">  
                             <label>
-                                <input type="checkbox" checked disabled> If an archive page should be generated for this category
+                                @Html.CheckBoxFor(m => m.EnableArchive) If an archive page should be generated for this category
                             </label>
                         </div>
                     </div>

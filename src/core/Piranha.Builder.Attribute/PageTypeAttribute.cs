@@ -32,5 +32,10 @@ namespace Piranha.Builder.Attribute
         /// Gets/sets the optional route.
         /// </summary>
         public string Route { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional view.
+        /// </summary>
+        public string View { get; set; }
     }
 }
