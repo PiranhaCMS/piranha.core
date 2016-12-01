@@ -14,9 +14,33 @@ $(document).on('click', '.panel-heading .btn-toggle', function () {
 });
 
 //
+// Auto grow textareas
+//
+$('.single-region textarea.raw-text').css({'overflow': 'hidden'}).autogrow({
+    vertical: true, 
+    horizontal: false
+});
+
+//
 // Toggle menu style
 //
 $(document).on('click', '.navmenu-brand', function () {
     $('body').toggleClass('collapsed');
     return false;
 });
+
+var manager = {
+    tools: {
+        markdown: function (str) {
+            $.ajax({
+                url: '/manager/markdown',
+                method: 'POST',
+                contentType: 'text/plain',
+                data: str,
+                success: function (res) {
+                    alert(res.Body);
+                }
+            });
+        }
+    }
+};

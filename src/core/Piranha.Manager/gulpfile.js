@@ -24,6 +24,7 @@ var paths = {
         "assets/vendor/bootstrap/js/bootstrap.js",
         "assets/vendor/jquery-sortable.js",
         "assets/vendor/jquery-nestable.js",
+        "assets/vendor/jquery-ns-autogrow.js",
         "assets/js/ui.js"
     ],
     jsDest: "assets/js/script.js",

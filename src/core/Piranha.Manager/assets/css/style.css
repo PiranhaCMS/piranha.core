@@ -7981,6 +7981,10 @@ li.sitemap-item .actions.one {
 .form .form-group textarea {
   resize: none;
 }
+.form .form-group textarea.raw-text {
+  font-family: Consolas,Courier,monospace;
+  font-size: 15px;
+}
 .form .form-group .field-validation-error {
   display: block;
   background: #333;
@@ -8143,11 +8147,59 @@ li.sitemap-item .actions.one {
 .region-list-toolbar {
   margin-bottom: 0;
 }
+.markdown .nav-tabs {
+  margin-bottom: 15px;
+}
 .single-region .region-editor {
   margin: -15px -15px -30px;
 }
 .single-region .region-editor .mce-tinymce {
   border: 0 none !important;
+}
+.single-region textarea.raw-text {
+  border-width: 0;
+}
+.single-region .content-preview {
+  font-family: "Open Sans", Arial;
+  font-size: 15px;
+}
+.single-region .content-preview h1,
+.single-region .content-preview h2,
+.single-region .content-preview h3,
+.single-region .content-preview h4,
+.single-region .content-preview h5,
+.single-region .content-preview h6 {
+  font-family: 'Gentium Book Basic', serif;
+  margin: 5px 0 10px;
+}
+.single-region .content-preview p,
+.single-region .content-preview ul,
+.single-region .content-preview ol {
+  margin: 0 0 20px;
+}
+.single-region .markdown .nav-tabs {
+  display: none;
+}
+@media (min-width: 990px) {
+  .single-region textarea.raw-text {
+    display: inline-block !important;
+    width: 50%;
+    border-width: 0 1px 0 0;
+  }
+  .content-preview {
+    display: inline-block !important;
+    float: right;
+    width: 49%;
+    padding-left: 15px;
+  }
+}
+@media (max-width: 989px) {
+  .single-region .markdown .nav-tabs {
+    display: block;
+  }
+  .single-region .content-preview {
+    display: none;
+  }
 }
 .panel {
   border: 1px solid #ddd;

@@ -98,6 +98,11 @@
 
 		textarea {
 			resize: none;
+
+			&.raw-text {
+				font-family: Consolas,Courier,monospace;
+				font-size: 15px;
+			}
 		}
 
 		// Validation messages
@@ -278,6 +283,13 @@
 	margin-bottom: 0;
 }
 
+.markdown {
+	.nav-tabs {
+		margin-bottom: 15px;
+	}
+}
+
+
 .single-region {
     .region-editor {
         margin: -15px -15px -30px;
@@ -286,4 +298,62 @@
 			border: 0 none !important;
         }
     }
+
+	textarea {
+		&.raw-text {
+			border-width: 0;			
+		}
+	}
+	
+	.content-preview {
+		font-family: "Open Sans", Arial;
+		font-size: 15px;
+
+		h1, h2, h3, h4, h5, h6 {
+			font-family: 'Gentium Book Basic', serif;
+			margin: 5px 0 10px;
+		}
+
+		p, ul, ol {
+			margin: 0 0 20px;
+		}
+	}
+
+	.markdown {
+		.nav-tabs {
+			display: none;
+		}
+	}
+}
+
+
+@media (min-width: 990px) {
+	.single-region {
+		textarea.raw-text {
+			display: inline-block !important;
+			width: 50%;
+			border-width: 0 1px 0 0;			
+		}
+	}
+
+	.content-preview {
+		display: inline-block !important;
+		float: right;
+		width: 49%;
+		padding-left: 15px;
+		
+	}
+}
+@media (max-width: 989px) {
+	.single-region {
+		.markdown {
+			.nav-tabs {
+				display: block;
+			}
+		}
+
+		.content-preview {
+			display: none;
+		}
+	}
 }
