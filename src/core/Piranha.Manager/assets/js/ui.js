@@ -22,6 +22,25 @@ $('.single-region textarea.raw-text').css({'overflow': 'hidden'}).autogrow({
 });
 
 //
+// Refresh markdown content
+//
+$(document).on('keyup', '.single-region textarea.raw-text', function() {
+    var md = $(this);
+
+    $.ajax({
+        url: '/manager/markdown',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify($(this).val()),
+        dataType: 'json',
+        success: function(data) {
+            md.next().html(data.body);
+        }
+    });
+});
+
+
+//
 // Toggle menu style
 //
 $(document).on('click', '.navmenu-brand', function () {
