@@ -22,7 +22,7 @@ namespace Piranha.EF.Repositories
         /// <summary>
         /// The current db context.
         /// </summary>
-        private readonly Db db;
+        private readonly IDb db;
 
         /// <summary>
         /// TODO: This should be configurable.
@@ -34,7 +34,7 @@ namespace Piranha.EF.Repositories
         /// Default internal constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
-        internal ArchiveRepository(Db db) {
+        internal ArchiveRepository(IDb db) {
             this.db = db;
         }
 

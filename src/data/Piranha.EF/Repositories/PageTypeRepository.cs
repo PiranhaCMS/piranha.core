@@ -21,14 +21,14 @@ namespace Piranha.EF.Repositories
     public class PageTypeRepository : IPageTypeRepository
     {
         #region Members
-        private readonly Db db;
+        private readonly IDb db;
         #endregion
 
         /// <summary>
         /// Default internal constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
-        internal PageTypeRepository(Db db) {
+        internal PageTypeRepository(IDb db) {
             this.db = db;
         }
 

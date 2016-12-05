@@ -21,14 +21,14 @@ namespace Piranha.EF.Repositories
         /// <summary>
         /// The current db context.
         /// </summary>
-        private readonly Db db;
+        private readonly IDb db;
         #endregion
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
-        internal SitemapRepository(Db db) {
+        internal SitemapRepository(IDb db) {
             this.db = db;
         }
         /// <summary>
