@@ -51,7 +51,10 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         public ManagerAreaControllerUnitTestBase() {
             mockApi = SetupApi();
             controller = SetupController();
-            App.Init(mockApi.Object, Modules);
+            //
+            // TODO: We need the app config, maybe mock it
+            //
+            App.Init(mockApi.Object, null, Modules);
             AdditionalSetupAfterAppInit();
         }
 
