@@ -107,6 +107,7 @@ namespace Piranha
 
                         // Compose field types
                         fields.Register<Extend.Fields.HtmlField>();
+                        fields.Register<Extend.Fields.ImageField>();
                         fields.Register<Extend.Fields.MarkdownField>();
                         fields.Register<Extend.Fields.StringField>();
                         fields.Register<Extend.Fields.TextField>();
