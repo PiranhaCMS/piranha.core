@@ -25,7 +25,7 @@ namespace Piranha.EF.Repositories
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
-        internal MediaRepository(Db db, IStorage storage) : base(db) { 
+        internal MediaRepository(IDb db, IStorage storage) : base(db) { 
             this.storage = storage;
         }
 
@@ -35,7 +35,7 @@ namespace Piranha.EF.Repositories
         /// <param name="id">The unique id</param>
         /// <returns>The media model</returns>
         public Models.Media GetModelById(Guid id) {
-            var media = db.Media.FirstOrDefault(m => m.Id == id);
+            var media = Query().FirstOrDefault(m => m.Id == id);
 
             if (media != null)
                 return Module.Mapper.Map<Data.Media, Models.Media>(media);
@@ -48,7 +48,7 @@ namespace Piranha.EF.Repositories
         /// <param name="folderId">The optional folder id</param>
         /// <returns>The media items</returns>
         public IList<Models.MediaItem> Get(Guid? folderId = null) {
-            var items = db.Media.Where(m => m.FolderId == folderId).ToList();
+            var items = Query().Where(m => m.FolderId == folderId).ToList();
             var result = new List<Models.MediaItem>();
 
             foreach (var item in items)
@@ -61,7 +61,7 @@ namespace Piranha.EF.Repositories
         /// </summary>
         /// <param name="content">The media content</param>
         public void Save(Models.MediaContent content) {
-            var media = db.Media.FirstOrDefault(m => m.Id == content.Id);
+            var media = Query().FirstOrDefault(m => m.Id == content.Id);
 
             if (media == null) {
                 media = new Data.Media() {
@@ -103,7 +103,7 @@ namespace Piranha.EF.Repositories
         /// <param name="id">The unique id</param>
         /// <param name="folderId">The folder id</param>
         public void Move(Guid id, Guid? folderId) {
-            var media = db.Media.FirstOrDefault(m => m.Id == id);
+            var media = Query().FirstOrDefault(m => m.Id == id);
 
             if (media != null) {
                 media.FolderId = folderId;
@@ -132,7 +132,7 @@ namespace Piranha.EF.Repositories
         /// </summary>
         /// <param name="id">The unique id</param>
         public void Delete(Guid id) {
-            var media = db.Media.FirstOrDefault(m => m.Id == id);
+            var media = Query().FirstOrDefault(m => m.Id == id);
 
             if (media != null) {
                 // Delete from storage
