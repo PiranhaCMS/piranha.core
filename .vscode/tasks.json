@@ -11,6 +11,78 @@
             ],
             "isBuildCommand": true,
             "problemMatcher": "$msCompile"
+        },
+        {
+            "taskName": "Piranha.AspNet.Tests",
+            "args": [
+                "test",
+                "${workspaceRoot}/test/core/Piranha.AspNet.Tests"
+            ],
+            "problemMatcher": "$msCompile",
+            "suppressTaskName": true
+        },
+        {
+            "taskName": "Piranha.Builder.Attribute.Tests",
+            "args": [
+                "test",
+                "${workspaceRoot}/test/core/Piranha.Builder.Attribute.Tests"
+            ],
+            "problemMatcher": "$msCompile",
+            "suppressTaskName": true
+        },
+        {
+            "taskName": "Piranha.Builder.Json.Tests",
+            "args": [
+                "test",
+                "${workspaceRoot}/test/core/Piranha.Builder.Json.Tests"
+            ],
+            "problemMatcher": "$msCompile",
+            "suppressTaskName": true
+        },
+        {
+            "taskName": "Piranha.Core.Tests",
+            "args": [
+                "test",
+                "${workspaceRoot}/test/core/Piranha.Core.Tests"
+            ],
+            "problemMatcher": "$msCompile",
+            "suppressTaskName": true
+        },
+        {
+            "taskName": "Piranha.Manager.Tests",
+            "args": [
+                "test",
+                "${workspaceRoot}/test/core/Piranha.Manager.Tests"
+            ],
+            "problemMatcher": "$msCompile",
+            "suppressTaskName": true
+        },
+        {
+            "taskName": "Piranha.EF.Tests",
+            "args": [
+                "test",
+                "${workspaceRoot}/test/data/Piranha.EF.Tests"
+            ],
+            "problemMatcher": "$msCompile",
+            "suppressTaskName": true
+        },
+        {
+            "taskName": "Piranha.Azure.Tests",
+            "args": [
+                "test",
+                "${workspaceRoot}/test/env/Piranha.Azure.Tests"
+            ],
+            "problemMatcher": "$msCompile",
+            "suppressTaskName": true
+        },
+        {
+            "taskName": "Blog.Tests",
+            "args": [
+                "test",
+                "${workspaceRoot}/test/examples/Blog.Tests"
+            ],
+            "problemMatcher": "$msCompile",
+            "suppressTaskName": true
         }
     ]
 }

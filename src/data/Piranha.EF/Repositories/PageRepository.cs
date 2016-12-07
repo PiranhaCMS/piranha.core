@@ -21,20 +21,15 @@ namespace Piranha.EF.Repositories
 {
     public class PageRepository : RepositoryBase<Data.Page, Models.DynamicPage>, IPageRepository
     {
-        #region Members
-        /// <summary>
-        /// The current Api.
-        /// </summary>
-        private readonly DataService service;
-        #endregion
+        private readonly IDataService dataService;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
-        internal PageRepository(DataService service, Db db) : base(db) {
-            this.service = service;
-        }
+        internal PageRepository(IDataService dataService, IDb db) : base(db) {
+            this.dataService = dataService;
+         }
 
         /// <summary>
         /// Gets the site startpage.
@@ -123,7 +118,7 @@ namespace Piranha.EF.Repositories
         /// </summary>
         /// <param name="model">The page model</param>
         public void Save<T>(T model) where T : Models.Page<T> {
-            var type = App.PageTypes.FirstOrDefault(t => t.Id == model.TypeId);
+            var type = dataService.PageTypes.GetById(model.TypeId);
 
             if (type != null) {
                 var currentRegions = type.Regions.Select(r => r.Id).ToArray();
@@ -242,7 +237,7 @@ namespace Piranha.EF.Repositories
         /// <param name="page">The data entity</param>
         /// <returns>The page model</returns>
         private T Load<T>(Data.Page page) where T : Models.Page<T> {
-            var type = App.PageTypes.FirstOrDefault(t => t.Id == page.TypeId);
+            var type = dataService.PageTypes.GetById(page.TypeId);
 
             if (type != null) {
                 // Create an initialized model

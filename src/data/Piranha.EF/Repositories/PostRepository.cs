@@ -23,7 +23,7 @@ namespace Piranha.EF.Repositories
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
-        internal PostRepository(Db db) : base(db) { }
+        internal PostRepository(IDb db) : base(db) { }
 
         /// <summary>
         /// Gets the post model with the specified id.
