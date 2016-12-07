@@ -1,15 +1,10 @@
-﻿@model Blog.Models.StartPageModel
+﻿@model Blog.Models.ContentPageModel
 @{
     ViewBag.Title = Model.Title;
+    ViewBag.Ingress = Model.Settings.Ingress.Value;
     ViewBag.IsStart = true;
 }
 
 <div class="container">
-    <h1>@Model.Title</h1>
-    <p class="lead">@Model.Intro.Title.Value</p>
-    <p>
-        @Model.Intro.Body.Value
-    </p>
-    <hr />
-    @Model.Content.Html()
+    @Html.Raw(Model.Body.ToHtml())
 </div>

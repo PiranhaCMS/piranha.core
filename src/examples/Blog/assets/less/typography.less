@@ -4,13 +4,15 @@
 // Copyright (c) 2016 Håkan Edling
 //
 
+@import "variables.less";
+
 body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: @fontBody;
     font-size: 16px;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Gentium Book Basic', serif;
+    font-family: @fontHeader;
     font-weight: bold;
     margin-bottom: 20px;
 }
@@ -19,7 +21,7 @@ h1, .h1 {
 }
 h2, .h2 {
     font-size: 34px;
-    border-bottom: solid 1px #eee;
+    border-bottom: solid 1px @colorBorder;
     margin-bottom: 10px;
     padding-bottom: 10px;
 }
