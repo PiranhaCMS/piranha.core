@@ -53,7 +53,7 @@ namespace Blog
             }
 
             // Initialize Piranha
-            App.Init(api);
+            App.Init(api, Configuration);
 
             // Build types
             var pageTypeBuilder = new Piranha.Builder.Json.PageTypeBuilder(api)
@@ -90,9 +90,6 @@ namespace Blog
         /// </summary>
         /// <param name="db"></param>
         private void Seed(IApi api, Piranha.EF.Db db) {
-            if (api.Media.Get().Count == 0) {
-            }
-
             if (api.Categories.Get().Count == 0) {
                 // Add the main image
                 var content = new Piranha.Models.StreamMediaContent() {
