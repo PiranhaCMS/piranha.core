@@ -47,8 +47,7 @@ namespace Piranha.EF.Tests.Repositories
         #endregion
 
         #region Test initialization
-        protected override void SetupMockDbData()
-        {
+        protected override void SetupMockDbData() {
             CreateMockPageTypes();
             SetupMockDbSet(mockPageTypeSet, PageTypes);
             mockDb.Setup(db => db.PageTypes).Returns(mockPageTypeSet.Object);
@@ -303,26 +302,50 @@ namespace Piranha.EF.Tests.Repositories
         [Fact]
         public void Save_NonExistentTypeCreatesNewPageType() {
             #region Arrange
+            Extend.PageType newPageType = new Extend.PageType {
+                View = null,
+                Id = "NewPageType",
+                Title = "New Page Type",
+                Regions = new List<Extend.RegionType> {
+                    new Extend.RegionType {
+                        Id = "Content",
+                        Title = "Main Content",
+                        Fields = new List<Extend.FieldType> {
+                            new Extend.FieldType {
+                                Type = "Html",
+                            }
+                        }
+                    }
+                },
+            };
             #endregion
 
             #region Act
+            repository.Save(newPageType);
             #endregion
 
             #region Assert
-            throw new NotImplementedException();
+            mockPageTypeSet.Verify(db => db.Add(
+                It.Is<Data.PageType>(t => t.Id == newPageType.Id)
+            ), Times.Once());
+            mockDb.Verify(db => db.SaveChanges(), Times.Once());
             #endregion
         }
 
         [Fact]
         public void Save_ExistingTypeUpdatesPageType() {
             #region Arrange
+            Data.PageType pageTypeData = pageTypesList[0];
+            Extend.PageType existingPageType = JsonConvert.DeserializeObject<Extend.PageType>(pageTypeData.Body);
             #endregion
 
             #region Act
+            repository.Save(existingPageType);
             #endregion
 
             #region Assert
-            throw new NotImplementedException();
+            mockPageTypeSet.Verify(db => db.Add(It.IsAny<Data.PageType>()), Times.Never());
+            mockDb.Verify(db => db.SaveChanges(), Times.Once());
             #endregion
         }
         #endregion
