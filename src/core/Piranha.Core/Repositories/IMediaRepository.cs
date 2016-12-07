@@ -44,6 +44,14 @@ namespace Piranha.Repositories
         void Save(MediaContent content);
 
         /// <summary>
+        /// Moves the media with the given id to the 
+        /// specified folder.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <param name="folderId">The folder id</param>
+        void Move(Guid id, Guid? folderId);
+
+        /// <summary>
         /// Deletes the given media item.
         /// </summary>
         /// <param name="media">The media item</param>

@@ -56,6 +56,9 @@ namespace Piranha.EF
                     .ForMember(m => m.Created, o => o.Ignore())
                     .ForMember(m => m.LastModified, o => o.Ignore());
 
+                cfg.CreateMap<Data.Media, Models.MediaItem>();
+                cfg.CreateMap<Data.Media, Models.Media>();
+
                 cfg.CreateMap<Data.Page, Models.PageBase>();
                 cfg.CreateMap<Models.PageBase, Data.Page>()
                     .ForMember(m => m.Id, o => o.Ignore())
