@@ -39,11 +39,11 @@ namespace Piranha.EF.Tests.Repositories
         /// <summary>
         /// Mock page type data
         /// </summary>
-        private List<Data.PageType> pageTypesList = new List<Data.PageType>();
+        private readonly List<Data.PageType> pageTypesList = new List<Data.PageType>();
         /// <summary>
-        /// Mock <see cref="DbSet" /> behind <see cref="repository.PageTypes" />
+        /// Mock <see cref="DbSet" /> for <see cref="repository" />
         /// </summary>
-        private Mock<DbSet<Data.PageType>> mockPageTypeSet = new Mock<DbSet<Data.PageType>>();
+        private readonly Mock<DbSet<Data.PageType>> mockPageTypeSet = new Mock<DbSet<Data.PageType>>();
         #endregion
 
         #region Test initialization
@@ -191,6 +191,7 @@ namespace Piranha.EF.Tests.Repositories
         public void Get_EmptySourceGivesEmptyList() {
             #region Arrange
             pageTypesList.Clear();
+            // Collection behind DbSet altered, need to update
             SetupMockDbSet(mockPageTypeSet, PageTypes);
             #endregion
         
