@@ -10,7 +10,7 @@
 
 using System.IO;
 
-namespace Piranha.Local.Storage
+namespace Piranha.Storage.Local
 {
     public class FileStorage : IStorage
     {

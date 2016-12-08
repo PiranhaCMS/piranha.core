@@ -40,7 +40,7 @@ namespace Blog
             services.AddMvc();
             services.AddPiranhaEF(options => options.UseSqlite("Filename=./blog.db"));
             services.AddPiranhaManager();
-            services.AddSingleton<IStorage, Piranha.Local.Storage.FileStorage>();
+            services.AddSingleton<IStorage, Piranha.Storage.Local.FileStorage>();
             services.AddScoped<IApi, Api>();
         }
 

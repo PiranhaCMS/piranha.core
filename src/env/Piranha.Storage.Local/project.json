@@ -13,6 +13,6 @@
   },
 
   "tooling": {
-    "defaultNamespace": "Piranha.Local.Storage"
+    "defaultNamespace": "Piranha.Storage.Local"
   }
 }

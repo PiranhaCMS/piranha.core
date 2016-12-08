@@ -11,7 +11,7 @@
 using System;
 using System.IO;
 
-namespace Piranha.Local.Storage
+namespace Piranha.Storage.Local
 {
     public class FileStorageSession : IStorageSession
     {
