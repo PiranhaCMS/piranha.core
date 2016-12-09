@@ -50,6 +50,11 @@ namespace Piranha.EF
         public IMediaRepository Media { get; private set; }
 
         /// <summary>
+        /// Gets the media folder repository.
+        /// </summary>
+        public IMediaFolderRepository MediaFolders { get; private set; }
+
+        /// <summary>
         /// Gets the page repository.
         /// </summary>
         public IPageRepository Pages { get; private set; }
@@ -84,6 +89,7 @@ namespace Piranha.EF
             BlockTypes = new Repositories.BlockTypeRepository(db);
             Categories = new Repositories.CategoryRepository(db);
             Media = new Repositories.MediaRepository(db, storage);
+            MediaFolders = new Repositories.MediaFolderRepository(db);
             Pages = new Repositories.PageRepository(this, db);
             PageTypes = new Repositories.PageTypeRepository(db);
             Posts = new Repositories.PostRepository(db);
