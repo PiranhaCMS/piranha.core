@@ -16,9 +16,16 @@
 
 .container {
     max-width: 730px;
+
+    &.arrow {
+        &::before {
+            .arrow(#fff, 40px, -100px);
+        }
+    }
 }
 
 .banner {
+    background: url('../img/seigaiha-blue.jpg');
     position: relative;
     height: 30vh;
     max-height: 900px;
@@ -47,7 +54,6 @@
         margin-top: -15px;
         text-align: center;
         font-size: 50px;
-        text-shadow: 0 0 10px rgba(0,0,0,0.25);
 
         small {
             color: #fff;

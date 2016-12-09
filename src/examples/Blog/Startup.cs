@@ -91,24 +91,12 @@ namespace Blog
         /// <param name="db"></param>
         private void Seed(IApi api, Piranha.EF.Db db) {
             if (api.Categories.Get().Count == 0) {
-                // Add the main image
-                var content = new Piranha.Models.StreamMediaContent() {
-                    Id = Guid.NewGuid(),
-                    Filename = "banner.jpg",
-                    ContentType = "image/jpg"
-                };
-                using (var stream = File.OpenRead("assets/seed/banner.jpg")) {
-                    content.Data = stream;
-                    api.Media.Save(content);
-                }
-
                 // Add the startpage
                 using (var stream = File.OpenRead("assets/seed/startpage.md")) {
                     using (var reader = new StreamReader(stream)) {
                         var startPage = Models.ContentPageModel.Create("Content");
                         startPage.Title = "Welcome to Piranha CMS";
                         startPage.Settings.Ingress = "The CMS framework with an extra bite";
-                        startPage.Settings.PrimaryImage = content.Id;
                         startPage.Body = reader.ReadToEnd();
                         startPage.Published = DateTime.Now;
                         api.Pages.Save(startPage);

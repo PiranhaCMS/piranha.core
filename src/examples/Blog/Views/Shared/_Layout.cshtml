@@ -24,7 +24,6 @@
 
 <body>
     <div class="banner @(ViewBag.IsStart != null && ViewBag.IsStart == true ? "startpage" : "")" role="banner">
-        <img src="~/assets/img/banner.jpg">
         @if (ViewBag.IsStart != null && ViewBag.IsStart == true) {
             <h1>
                 @ViewBag.Title
