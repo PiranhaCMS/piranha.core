@@ -71,6 +71,8 @@ namespace Piranha.Builder.Json
                     throw new FileNotFoundException($"Specified file {file.Filename} not found!");
                 }
             }
+            // Tell the app to reload the block types
+            App.ReloadBlockTypes(api);            
         }
     }
 }

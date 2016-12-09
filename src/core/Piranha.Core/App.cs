@@ -104,6 +104,22 @@ namespace Piranha
         }
 
         /// <summary>
+        /// Reloads the application block types.
+        /// </summary>
+        /// <param name="api">The current api</param>
+        public static void ReloadBlockTypes(IApi api) {
+            instance.blockTypes = api.BlockTypes.Get();
+        }
+
+        /// <summary>
+        /// Reloads the application page types.
+        /// </summary>
+        /// <param name="api">The current api</param>
+        public static void ReloadPageTypes(IApi api) {
+            instance.pageTypes = api.PageTypes.Get();            
+        }
+
+        /// <summary>
         /// Initializes the application object.
         /// </summary>
         /// <param name="api">The current api</param>
