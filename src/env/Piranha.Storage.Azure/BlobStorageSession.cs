@@ -13,7 +13,7 @@ using System.IO;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
-namespace Piranha.Azure
+namespace Piranha.Storage.Azure
 {
     /// <summary>
     /// Azure blob storage session.
