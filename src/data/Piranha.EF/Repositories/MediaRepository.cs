@@ -70,6 +70,7 @@ namespace Piranha.EF.Repositories
                 db.Media.Add(media);
             }
 
+            media.Type = content.Type;
             media.FileName = content.Filename;
             media.FolderId = content.FolderId;
             media.ContentType = content.ContentType;

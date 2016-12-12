@@ -31,6 +31,11 @@ namespace Piranha.Models
         public Guid? FolderId { get; set; }
 
         /// <summary>
+        /// Gets/sets the media type.
+        /// </summary>
+        public MediaType Type { get; set; }
+
+        /// <summary>
         /// Gets/sets the filename.
         /// </summary>
         public string Filename { get; set; }
