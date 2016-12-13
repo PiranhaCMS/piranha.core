@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -39,6 +40,7 @@ namespace Blog
             services.AddMvc();
             services.AddPiranhaEF(options => options.UseSqlite("Filename=./blog.db"));
             services.AddPiranhaManager();
+            services.AddSingleton<IStorage, Piranha.Storage.Local.FileStorage>();
             services.AddScoped<IApi, Api>();
         }
 
@@ -51,7 +53,7 @@ namespace Blog
             }
 
             // Initialize Piranha
-            App.Init(api);
+            App.Init(api, Configuration);
 
             // Build types
             var pageTypeBuilder = new Piranha.Builder.Json.PageTypeBuilder(api)
@@ -61,7 +63,7 @@ namespace Blog
                 .AddJsonFile("piranha.json");
             blockTypeBuilder.Build();
             var attrTypeBuilder = new Piranha.Builder.Attribute.PageTypeBuilder(api, loggerFactory)
-                .AddType(typeof(Models.TestPageModel));
+                .AddType(typeof(Models.ContentPageModel));
             attrTypeBuilder.Build();
 
             // Register middleware
@@ -90,22 +92,16 @@ namespace Blog
         private void Seed(IApi api, Piranha.EF.Db db) {
             if (api.Categories.Get().Count == 0) {
                 // Add the startpage
-                var startPage = Models.StartPageModel.Create("Start");
-                startPage.Title = "Welcome to Piranha CMS";
-                startPage.Slug = "start";
-                startPage.Content = "<p>Lorem ipsum</p>";
-                startPage.Intro.Title = "Say hi to the new version of Piranha CMS!";
-                startPage.Intro.Body = "We hope you like it :)";
-                startPage.Slider.Add(new Models.SliderItem() {
-                    Title = "Slide 1",
-                    Body = "<p>Lorem</p>"
-                });
-                startPage.Slider.Add(new Models.SliderItem() {
-                    Title = "Slide 2",
-                    Body = "<p>Ipsum</p>"
-                });
-                startPage.Published = DateTime.Now;
-                api.Pages.Save(startPage);
+                using (var stream = File.OpenRead("assets/seed/startpage.md")) {
+                    using (var reader = new StreamReader(stream)) {
+                        var startPage = Models.ContentPageModel.Create("Content");
+                        startPage.Title = "Welcome to Piranha CMS";
+                        startPage.Settings.Ingress = "The CMS framework with an extra bite";
+                        startPage.Body = reader.ReadToEnd();
+                        startPage.Published = DateTime.Now;
+                        api.Pages.Save(startPage);
+                    }
+                }
 
                 // Add the blog category
                 var category = new Piranha.Models.Category() {

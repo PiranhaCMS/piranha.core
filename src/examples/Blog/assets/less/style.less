@@ -12,17 +12,26 @@
 
 @import "mixins.less";
 @import "typography.less";
+@import "variables.less";
 
 .container {
     max-width: 730px;
+
+    &.arrow {
+        &::before {
+            .arrow(#fff, 40px, -100px);
+        }
+    }
 }
 
 .banner {
+    background: url('../img/seigaiha-blue.jpg');
     position: relative;
     height: 30vh;
     max-height: 900px;
     min-height: 240px;
     overflow: hidden;
+    margin-bottom: 10px;
 
     &.startpage {
         height: 60vh;
@@ -42,9 +51,18 @@
         position: absolute;
         width: 100%;
         top: 50%;
+        margin-top: -15px;
         text-align: center;
         font-size: 50px;
-        text-shadow: 0 0 10px rgba(0,0,0,0.25);
+
+        small {
+            color: #fff;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 300;
+            font-size: 50%;
+            display: block;
+            margin-top: 10px;
+        }
     }
 }
 
@@ -95,6 +113,38 @@
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+//
+// Footer
+//
+footer {
+    .container {
+        color: #999;
+        padding: 30px 0 10px;
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 767px) {
+    .banner {
+        h1 {
+            font-size: 44px;
+        }
+    }
+}
+@media (max-width: 420px) {
+    .banner {
+        h1 {
+            font-size: 34px;
+
+            small {
+                display: none;
             }
         }
     }

@@ -24,9 +24,14 @@
 
 <body>
     <div class="banner @(ViewBag.IsStart != null && ViewBag.IsStart == true ? "startpage" : "")" role="banner">
-        <img src="~/assets/img/banner.jpg">
         @if (ViewBag.IsStart != null && ViewBag.IsStart == true) {
-            <h1>@ViewBag.Title</h1>
+            <h1>
+                @ViewBag.Title
+                @if (ViewBag.Ingress != null) {
+                    <small>@ViewBag.Ingress
+                    </small>
+                }
+            </h1>
         }
     </div>
     <div class="header clearfix">

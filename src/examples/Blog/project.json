@@ -19,7 +19,8 @@
     "Piranha.EF": "4.0.0-*",
     "Piranha.Builder.Attribute": "4.0.0-*",
     "Piranha.Builder.Json": "4.0.0-*",
-    "Piranha.Manager": "4.0.0-*"
+    "Piranha.Manager": "4.0.0-*",
+    "Piranha.Storage.Local": "4.0.0-*"
   },
 
   "tools": {

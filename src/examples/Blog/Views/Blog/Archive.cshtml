@@ -1,10 +1,11 @@
 ﻿@model Piranha.Models.PostArchive
 @{
     ViewBag.Title = Model.Title;
+    ViewBag.IsStart = true;
 
 }
 
-<div class="container">
+<div class="container arrow">
     <h1>@Model.Title</h1>
 
     @foreach (var post in Model.Posts) {

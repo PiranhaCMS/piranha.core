@@ -50,9 +50,12 @@ namespace Blog.Controllers
         /// <param name="startpage">If this is the site startpage</param>
         [Route("page")]
         public IActionResult Page(Guid id, bool startpage) {
+            var model = api.Pages.GetById<Models.ContentPageModel>(id);
+            model.Settings.PrimaryImage.Init(api);
+
             if (startpage)
-                return View("Start", api.Pages.GetById<Models.StartPageModel>(id));
-            return View(api.Pages.GetById(id));
+                return View("Start", model);
+            return View(model);
         }
 
         /// <summary>

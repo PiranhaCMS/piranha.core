@@ -57,6 +57,8 @@ namespace Piranha.Builder.Attribute
                 if (pageType != null)
                     api.PageTypes.Save(pageType);
             }
+            // Tell the app to reload the page types
+            App.ReloadPageTypes(api);
         }
 
         #region Private methods

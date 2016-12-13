@@ -40,6 +40,16 @@ namespace Piranha.EF
         public DbSet<Category> Categories { get; set; }
 
         /// <summary>
+        /// Gets/sets the media set.
+        /// </summary>
+        public DbSet<Media> Media { get; set; }
+
+        /// <summary>
+        /// Gets/sets the media folder set.
+        /// </summary>
+        public DbSet<MediaFolder> MediaFolders { get; set; }
+
+        /// <summary>
         /// Gets/sets the page set.
         /// </summary>
         public DbSet<Page> Pages { get; set; }
@@ -134,6 +144,14 @@ namespace Piranha.EF
             mb.Entity<Category>().Property(c => c.Slug).IsRequired().HasMaxLength(64);
             mb.Entity<Category>().Property(c => c.Description).HasMaxLength(512);
             mb.Entity<Category>().HasIndex(c => c.Slug).IsUnique();
+
+            mb.Entity<Media>().ToTable("Piranha_Media");
+            mb.Entity<Media>().Property(m => m.FileName).HasMaxLength(128);
+            mb.Entity<Media>().Property(m => m.PublicUrl).IsRequired().HasMaxLength(255);
+            mb.Entity<Media>().Property(m => m.ContentType).HasMaxLength(255);
+
+            mb.Entity<MediaFolder>().ToTable("Piranha_MediaFolders");
+            mb.Entity<MediaFolder>().Property(m => m.Title).IsRequired().HasMaxLength(128);
 
             mb.Entity<Page>().ToTable("Piranha_Pages");
             mb.Entity<Page>().Property(p => p.TypeId).IsRequired().HasMaxLength(32);

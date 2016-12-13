@@ -39,6 +39,11 @@ namespace Piranha
         IMediaRepository Media { get; }
 
         /// <summary>
+        /// Gets the media folder repository.
+        /// </summary>
+        IMediaFolderRepository MediaFolders { get; }
+
+        /// <summary>
         /// Gets the page repository.
         /// </summary>
         IPageRepository Pages { get; }

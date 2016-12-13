@@ -50,8 +50,13 @@ namespace Piranha
         /// <summary>
         /// Gets the media repository.
         /// </summary>
-        public IMediaRepository Media { 
-            get { return service.Media; }
+        public IMediaRepository Media { get ; private set; }
+
+        /// <summary>
+        /// Gets the media folder repository.
+        /// </summary>
+        public IMediaFolderRepository MediaFolders { 
+            get { return service.MediaFolders; }
         }
 
         /// <summary>
@@ -89,6 +94,8 @@ namespace Piranha
         /// <param name="service">The data service</param>
         public Api(IDataService service) {
             this.service = service;
+
+            Media = new Repositories.MediaRepository(service);
         }
 
         /// <summary>

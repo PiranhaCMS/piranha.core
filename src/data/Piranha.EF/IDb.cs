@@ -48,6 +48,16 @@ namespace Piranha.EF
         DbSet<Category> Categories { get; set; }
 
         /// <summary>
+        /// Gets/sets the media set.
+        /// </summary>
+        DbSet<Media> Media { get; set; }
+
+        /// <summary>
+        /// Gets/sets the media folder set.
+        /// </summary>
+        DbSet<MediaFolder> MediaFolders { get; set; }        
+
+        /// <summary>
         /// Gets/sets the page set.
         /// </summary>
         DbSet<Page> Pages { get; set; }

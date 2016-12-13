@@ -21,6 +21,11 @@ namespace Piranha.EF
         /// The private db context.
         /// </summary>
         private readonly Db db;
+
+        /// <summary>
+        /// The private storage manager.
+        /// </summary>
+        private readonly IStorage storage;
         #endregion
 
         #region Properties
@@ -42,7 +47,12 @@ namespace Piranha.EF
         /// <summary>
         /// Gets the media repository.
         /// </summary>
-        public IMediaRepository Media { get { throw new NotImplementedException(); } }
+        public IMediaRepository Media { get; private set; }
+
+        /// <summary>
+        /// Gets the media folder repository.
+        /// </summary>
+        public IMediaFolderRepository MediaFolders { get; private set; }
 
         /// <summary>
         /// Gets the page repository.
@@ -68,14 +78,18 @@ namespace Piranha.EF
         /// <summary>
         /// Default constructor. Creates a new Entity Framework Api object.
         /// </summary>
-        public DataService() {
+        /// <param name="storage">The currently registered storage manager</param>
+        public DataService(IStorage storage) {
             var builder = new DbContextOptionsBuilder<Db>();
             Module.DbConfig(builder);
             this.db = new Db(builder.Options);
+            this.storage = storage;
 
             Archives = new Repositories.ArchiveRepository(db);
             BlockTypes = new Repositories.BlockTypeRepository(db);
             Categories = new Repositories.CategoryRepository(db);
+            Media = new Repositories.MediaRepository(db, storage);
+            MediaFolders = new Repositories.MediaFolderRepository(db);
             Pages = new Repositories.PageRepository(this, db);
             PageTypes = new Repositories.PageTypeRepository(db);
             Posts = new Repositories.PostRepository(db);

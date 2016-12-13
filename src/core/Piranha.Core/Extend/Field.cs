@@ -15,14 +15,16 @@ namespace Piranha.Extend
         /// <summary>
         /// Initializes the field for client use.
         /// </summary>
-        public virtual void Init() { }
+        /// <param name="api">The current api</param>
+        public virtual void Init(IApi api) { }
 
         /// <summary>
         /// Initializes the field for manager use. This
         /// method can be used for loading additional meta
         /// data needed.
         /// </summary>
-        public virtual void InitManager() { }
+        /// <param name="api">The current api</param>
+        public virtual void InitManager(IApi api) { }
 
         /// <summary>
         /// Gets the client value.

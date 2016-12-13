@@ -47,7 +47,7 @@ namespace Piranha.Manager
             }
 
             // Initialize the piranha application
-            App.Init(api);
+            App.Init(api, Configuration);
 
             // Register middleware
             app.UseStaticFiles();

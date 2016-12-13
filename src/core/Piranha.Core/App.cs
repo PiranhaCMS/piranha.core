@@ -8,9 +8,9 @@
  * 
  */
 
-using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace Piranha
@@ -29,6 +29,7 @@ namespace Piranha
         private IList<Extend.BlockType> blockTypes;
         private IList<Extend.PageType> pageTypes;
         private Extend.IMarkdown markdown;
+        private MediaTypes mediaTypes;
         #endregion
 
         #region Properties
@@ -74,6 +75,13 @@ namespace Piranha
         public static Extend.IMarkdown Markdown {
             get { return instance.markdown; }
         }
+
+        /// <summary>
+        /// Gets the currently supported media types.
+        /// </summary>
+        public static MediaTypes MediaTypes {
+            get { return instance.mediaTypes; }
+        }
         #endregion
 
         /// <summary>
@@ -89,24 +97,50 @@ namespace Piranha
         /// <summary>
         /// Initializes the application object.
         /// </summary>
+        /// <param name="api">The current api</param>
         /// <param name="modules">The modules to use</param>
-        public static void Init(IApi api, params Extend.IModule[] modules) {
-            instance.Initialize(api, modules);
+        public static void Init(IApi api, IConfigurationRoot config, params Extend.IModule[] modules) {
+            instance.Initialize(api, config, modules);
+        }
+
+        /// <summary>
+        /// Reloads the application block types.
+        /// </summary>
+        /// <param name="api">The current api</param>
+        public static void ReloadBlockTypes(IApi api) {
+            instance.blockTypes = api.BlockTypes.Get();
+        }
+
+        /// <summary>
+        /// Reloads the application page types.
+        /// </summary>
+        /// <param name="api">The current api</param>
+        public static void ReloadPageTypes(IApi api) {
+            instance.pageTypes = api.PageTypes.Get();            
         }
 
         /// <summary>
         /// Initializes the application object.
         /// </summary>
+        /// <param name="api">The current api</param>
         /// <param name="modules">The modules to use</param>
-        private void Initialize(IApi api, Extend.IModule[] modules = null) {
+        private void Initialize(IApi api, IConfigurationRoot config, Extend.IModule[] modules = null) {
             if (!isInitialized) {
                 lock (mutex) {
                     if (!isInitialized) {
+                        // Setup media types
+                        instance.mediaTypes = new MediaTypes() {
+                            Documents = config.GetSection("Piranha:MediaTypes:Documents").GetChildren().Select(c => c.Value).ToList(),
+                            Images = config.GetSection("Piranha:MediaTypes:Images").GetChildren().Select(c => c.Value).ToList(),
+                            Videos = config.GetSection("Piranha:MediaTypes:Videos").GetChildren().Select(c => c.Value).ToList(),
+                        };
+
                         // Register default markdown converter
                         markdown = new Extend.MarkdownSharp();
 
                         // Compose field types
                         fields.Register<Extend.Fields.HtmlField>();
+                        fields.Register<Extend.Fields.ImageField>();
                         fields.Register<Extend.Fields.MarkdownField>();
                         fields.Register<Extend.Fields.StringField>();
                         fields.Register<Extend.Fields.TextField>();

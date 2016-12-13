@@ -14,55 +14,6 @@
           ]
         }
       ]
-    },
-
-    {
-      "Id": "Start",
-      "Title": "Start page",
-      "Regions": [
-        {
-          "Id": "Content",
-          "Title": "Main Content",
-          "Fields": [
-            {
-              "Type": "Html"
-            }
-          ]
-        },
-        {
-          "Id": "Intro",
-          "Fields": [
-            {
-              "Id": "Title",
-              "Type": "String"
-            },
-            {
-              "Id": "Body",
-              "Type": "Text"
-            }
-          ]
-        },
-        {
-          "Id": "Slider",
-          "Title": "Slider",
-          "Collection": true,
-          "Fields": [
-            {
-              "Id": "Title",
-              "Type": "String"
-            },
-            {
-              "Id": "Image",
-              "Title": "Primary Image",
-              "Type": "Image"
-            },
-            {
-              "Id": "Body",
-              "Type": "Html"
-            }
-          ]
-        }
-      ]
     }
   ],
 
