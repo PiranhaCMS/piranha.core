@@ -68,7 +68,3 @@ if ($failedProjectCount -ne 0)
 {
     exit 1
 }
-else
-{
-    exit 0
-}
