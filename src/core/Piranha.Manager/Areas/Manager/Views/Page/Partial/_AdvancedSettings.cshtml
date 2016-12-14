@@ -10,7 +10,19 @@
     <div class="col-sm-6">
         <div class="form-group">
             <label>View</label>
-            <input type="text" class="form-control small" placeholder="Optional view" />
+            @Html.TextBoxFor(m => m.View, new { @class = "form-control small", placeholder = "Optional view" })
         </div>
     </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <label>Hidden</label>
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(m => m.IsHidden, new { @class = "checkbox" })
+                If the page should be hidden in menus.
+            </label>
+        </div>
+    </div>
+    <div class="col-sm-6"></div>
 </div>
