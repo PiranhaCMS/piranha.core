@@ -1,4 +1,4 @@
-$global:failedProjectCount = 0
+$failedProjectCount = 0
 
 echo "`n`n"
 echo "build: Running test/core tests"
@@ -10,7 +10,7 @@ foreach ($test in ls core/*.Tests) {
     dotnet restore
     & dotnet test
     if ($LASTEXITCODE -ne 0) {
-        $global:failedProjectCount += 1
+        $failedProjectCount += 1
     }
 
     Pop-Location
@@ -26,7 +26,7 @@ foreach ($test in ls data/*.Tests) {
     dotnet restore
     & dotnet test
     if ($LASTEXITCODE -ne 0) {
-        $global:failedProjectCount += 1
+        $failedProjectCount += 1
     }
 
     Pop-Location
@@ -42,7 +42,7 @@ foreach ($test in ls env/*.Tests) {
     dotnet restore
     & dotnet test
     if ($LASTEXITCODE -ne 0) {
-        $global:failedProjectCount += 1
+        $failedProjectCount += 1
     }
 
     Pop-Location
@@ -58,13 +58,13 @@ foreach ($test in ls examples/*.Tests) {
     dotnet restore
     & dotnet test
     if ($LASTEXITCODE -ne 0) {
-        $global:failedProjectCount += 1
+        $failedProjectCount += 1
     }
 
     Pop-Location
 }
 
-if ($global:failedProjectCount -ne 0)
+if ($failedProjectCount -ne 0)
 {
     exit 1
 }
