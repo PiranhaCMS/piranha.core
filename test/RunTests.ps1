@@ -1,14 +1,16 @@
 $failedProjectCount = 0
+$unitTestScript = "RunTests.ps1"
 
-echo "`n`n"
+echo "`n"
 echo "build: Running test/core tests"
 foreach ($test in ls core/*.Tests) {
     Push-Location $test
 
-    echo "Testing project in $test"
+    echo "build: Running '$unitTestScript' in $test"
 
     dotnet restore
-    & dotnet test
+    dotnet build
+	& powershell -ExecutionPolicy ByPass -File "$unitTestScript"
     if ($LASTEXITCODE -ne 0) {
         $failedProjectCount += 1
     }
@@ -21,10 +23,11 @@ echo "build: Running test/data tests"
 foreach ($test in ls data/*.Tests) {
     Push-Location $test
 
-    echo "Testing project in $test"
+    echo "build: Running 'RunTests.ps1' in $test"
 
     dotnet restore
-    & dotnet test
+    dotnet build
+	& powershell -ExecutionPolicy ByPass -File "$unitTestScript"
     if ($LASTEXITCODE -ne 0) {
         $failedProjectCount += 1
     }
@@ -37,10 +40,11 @@ echo "build: Running test/env tests"
 foreach ($test in ls env/*.Tests) {
     Push-Location $test
 
-    echo "Testing project in $test"
+    echo "build: Running 'RunTests.ps1' in $test"
 
     dotnet restore
-    & dotnet test
+    dotnet build
+	& powershell -ExecutionPolicy ByPass -File "$unitTestScript"
     if ($LASTEXITCODE -ne 0) {
         $failedProjectCount += 1
     }
@@ -53,10 +57,11 @@ echo "build: Running test/examples tests"
 foreach ($test in ls examples/*.Tests) {
     Push-Location $test
 
-    echo "Testing project in $test"
+    echo "build: Running 'RunTests.ps1' in $test"
 
     dotnet restore
-    & dotnet test
+    dotnet build
+	& powershell -ExecutionPolicy ByPass -File "$unitTestScript"
     if ($LASTEXITCODE -ne 0) {
         $failedProjectCount += 1
     }
@@ -64,7 +69,6 @@ foreach ($test in ls examples/*.Tests) {
     Pop-Location
 }
 
-if ($failedProjectCount -ne 0)
-{
+if ($failedProjectCount -ne 0) {
     exit 1
 }
