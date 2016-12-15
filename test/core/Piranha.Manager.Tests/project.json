@@ -21,7 +21,8 @@
     "buildOptions": {
         "copyToOutput": {
             "include": [ "xunit.runner.json" ]
-        }
+        },
+        "debugType": "portable"
     },
     "tooling": {
         "defaultNamespace": "Piranha.Manager.Tests"

@@ -278,6 +278,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         public void Add_ResultWithNoPageTypesThrowsException() {
             #region Arrange
             pageTypes.Clear();
+            App.ReloadPageTypes(mockApi.Object);
             #endregion
 
             #region Act
