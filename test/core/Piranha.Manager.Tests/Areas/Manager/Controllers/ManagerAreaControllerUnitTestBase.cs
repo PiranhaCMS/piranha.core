@@ -58,10 +58,10 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             mockApi = SetupApi();
             mockConfig = SetupConfig();
             controller = SetupController();
-            //
-            // TODO: We need the app config, maybe mock it
-            //
+            
             App.Init(mockApi.Object, mockConfig.Object, Modules);
+            App.ReloadBlockTypes(mockApi.Object);
+            App.ReloadPageTypes(mockApi.Object);
             AdditionalSetupAfterAppInit();
         }
 
