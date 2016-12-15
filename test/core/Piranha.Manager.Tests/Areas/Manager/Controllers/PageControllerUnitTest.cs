@@ -282,7 +282,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             #endregion
 
             #region Act
-            AddWithInvalidPageTypeIdThrowsException(1);
+            Add_WithInvalidPageTypeIdThrowsException(1);
             #endregion
 
             #region Assert
