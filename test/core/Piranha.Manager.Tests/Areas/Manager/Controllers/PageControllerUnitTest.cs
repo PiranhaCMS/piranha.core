@@ -214,7 +214,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         [Theory]
         [InlineData(0)]
         [InlineData(NUM_PAGES + 1)]
-        public void Edit_WithInvalidPageIdGivesThrowsException(int pageIdAsInt) {
+        public void Edit_WithInvalidPageIdGivesThrowsKeyNotFoundException(int pageIdAsInt) {
             #region Arrange
             Guid invalidPageId = ConvertIntToGuid(pageIdAsInt);
             bool exceptionCaught = false;
@@ -275,14 +275,14 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         /// when called while <see cref="App.PageTypes" /> is empty
         /// </summary>
         [Fact]
-        public void Add_ResultWithNoPageTypesThrowsException() {
+        public void Add_ResultWithNoPageTypesThrowsKeyNotFoundException() {
             #region Arrange
             pageTypes.Clear();
             App.ReloadPageTypes(mockApi.Object);
             #endregion
 
             #region Act
-            Add_WithInvalidPageTypeIdThrowsException(1);
+            Add_WithInvalidPageTypeIdThrowsKeyNotFoundException(1);
             #endregion
 
             #region Assert
@@ -303,7 +303,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         [Theory]
         [InlineData(0)]
         [InlineData(NUM_PAGE_TYPES + 1)]
-        public void Add_WithInvalidPageTypeIdThrowsException(int pageTypeIdAsInt) {
+        public void Add_WithInvalidPageTypeIdThrowsKeyNotFoundException(int pageTypeIdAsInt) {
             #region Arrange
             string pageTypeId = ConvertIntToGuid(pageTypeIdAsInt).ToString();
             bool exceptionCaught = false;
@@ -373,7 +373,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         [Theory]
         [InlineData(0)]
         [InlineData(NUM_PAGE_TYPES + 1)]
-        public void Save_NewPageWithInvalidPageTypeIdThrowsException(int pageTypeIdAsInt) {
+        public void Save_NewPageWithInvalidPageTypeIdThrowsKeyNotFoundException(int pageTypeIdAsInt) {
             #region Arrange
             Guid pageTypeId = ConvertIntToGuid(pageTypeIdAsInt);
             PageEditModel pageToSave = PageEditModelForPageType(pageTypeId);
