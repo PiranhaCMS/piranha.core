@@ -201,10 +201,18 @@ namespace Piranha.EF.Tests.Repositories {
         #endregion
 
         #region CategoryRepository.Get
-        [Fact]
-        public void Get_ReturnsCorrectListOrderedByTitle() {
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        public void Get_ReturnsCorrectListOrderedByTitle(int numItemsToRemove) {
             #region Arrange
             Shuffle(categoriesList);
+            categoriesList.RemoveRange(0, numItemsToRemove);
+
             List<Models.CategoryItem> expectedList = new List<Models.CategoryItem>();
             foreach (var category in categoriesList.OrderBy(c => c.Title)) {
                 expectedList.Add(new Models.Category {
@@ -225,6 +233,40 @@ namespace Piranha.EF.Tests.Repositories {
             for (int i = 0; i < expectedList.Count; i++) {
                 Assert_CategoryItemsMatch(expectedList[i], result[i]);
             }
+            #endregion
+        }
+        #endregion
+
+        #region CategoryRepository.GetModels
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        public void GetModels_ReturnsCorrectListOrderedByTitle(int numItemsToRemove) {
+            #region Arrange
+            Shuffle(categoriesList);
+            categoriesList.RemoveRange(0, numItemsToRemove);
+
+            List<Models.Category> expectedList = new List<Models.Category>();
+            foreach (var category in categoriesList.OrderBy(c => c.Title)) {
+                expectedList.Add(new Models.Category {
+                    Id = category.Id,
+                    Title = category.Title,
+                    Slug = category.Slug,
+                    Description = category.Description
+                });
+            }
+            #endregion
+
+            #region Act
+            IList<Models.Category> result = repository.GetModels();
+            #endregion
+
+            #region Assert
+            Assert.Equal(expectedList.Count, result.Count);
             #endregion
         }
         #endregion
