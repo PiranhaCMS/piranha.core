@@ -37,7 +37,7 @@ namespace Piranha.Storage.Azure
         /// </summary>
         /// <param name="account">The current account</param>
         /// <param name="containerName">The container name</param>
-        internal BlobStorageSession(CloudStorageAccount account, string containerName) {
+        public BlobStorageSession(CloudStorageAccount account, string containerName) {
             client = account.CreateCloudBlobClient();
             container = client.GetContainerReference(containerName);
         }
