@@ -17,10 +17,8 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 
-namespace Piranha.EF.Tests.Repositories
-{
-    public class CategoryRepositoryUnitTest : RepositoryUnitTestBase<CategoryRepository>
-    {
+namespace Piranha.EF.Tests.Repositories {
+    public class CategoryRepositoryUnitTest : RepositoryUnitTestBase<CategoryRepository> {
         #region Properties
         /// <summary>
         /// Numver of categories to create for testing
@@ -61,7 +59,7 @@ namespace Piranha.EF.Tests.Repositories
                 };
                 categoriesList.Add(newCategory);
             }
-           
+
         }
 
         protected override CategoryRepository SetupRepository() {
@@ -82,11 +80,11 @@ namespace Piranha.EF.Tests.Repositories
             string slug = $"Slug{slugNumber}";
             Models.CategoryItem expectedCategory = categoriesList.FirstOrDefault(c => c.Slug == slug);
             #endregion
-        
+
             #region Act
             Models.CategoryItem result = repository.GetBySlug(slug);
             #endregion
-        
+
             #region Assert
             Assert_CategoryItemsMatch(expectedCategory, result);
             #endregion
@@ -99,11 +97,11 @@ namespace Piranha.EF.Tests.Repositories
             #region Arrange
             string slug = $"Slug{slugNumber}";
             #endregion
-        
+
             #region Act
             Models.CategoryItem result = repository.GetBySlug(slug);
             #endregion
-        
+
             #region Assert
             Assert_CategoryItemsMatch(null, result);
             #endregion
@@ -121,21 +119,20 @@ namespace Piranha.EF.Tests.Repositories
             #region Arrange
             Guid categoryId = ConvertIntToGuid(idAsInt);
             Data.Category expectedCategory = categoriesList.FirstOrDefault(c => c.Id == categoryId);
-            Models.Category expectedModelCategory = new Models.Category
-            {
+            Models.Category expectedModelCategory = new Models.Category {
                 Id = expectedCategory.Id,
                 Title = expectedCategory.Title,
                 Description = expectedCategory.Description,
                 Slug = expectedCategory.Slug
             };
             #endregion
-        
+
             #region Act
             Models.Category result = repository.GetModelById(categoryId);
             #endregion
-        
+
             #region Assert
-            Assert_CategoryMatches(expectedModelCategory, result);
+            Assert_CategoriesMatch(expectedModelCategory, result);
             #endregion
         }
 
@@ -146,13 +143,13 @@ namespace Piranha.EF.Tests.Repositories
             #region Arrange
             Guid categoryId = ConvertIntToGuid(idAsInt);
             #endregion
-        
+
             #region Act
             Models.Category result = repository.GetModelById(categoryId);
             #endregion
-        
+
             #region Assert
-            Assert_CategoryMatches(null, result);
+            Assert_CategoriesMatch(null, result);
             #endregion
         }
         #endregion
@@ -168,8 +165,7 @@ namespace Piranha.EF.Tests.Repositories
             #region Arrange
             string slug = $"Slug{slugNumber}";
             Data.Category expectedCategory = categoriesList.FirstOrDefault(c => c.Slug == slug);
-            Models.Category expectedModelCategory = new Models.Category
-            {
+            Models.Category expectedModelCategory = new Models.Category {
                 Id = expectedCategory.Id,
                 Title = expectedCategory.Title,
                 Slug = expectedCategory.Slug,
@@ -182,15 +178,14 @@ namespace Piranha.EF.Tests.Repositories
             #endregion
 
             #region Assert
-            Assert_CategoryMatches(expectedModelCategory, result);
+            Assert_CategoriesMatch(expectedModelCategory, result);
             #endregion
         }
 
         [Theory]
         [InlineData(0)]
         [InlineData(NUM_CATEGORIES + 1)]
-        public void GetModelBySlug_InvalidSlugReturnsNull(int slugNumber)
-        {
+        public void GetModelBySlug_InvalidSlugReturnsNull(int slugNumber) {
             #region Arrange
             string slug = $"Slug{slugNumber}";
             #endregion
@@ -200,7 +195,36 @@ namespace Piranha.EF.Tests.Repositories
             #endregion
 
             #region Assert
-            Assert_CategoryMatches(null, result);
+            Assert_CategoriesMatch(null, result);
+            #endregion
+        }
+        #endregion
+
+        #region CategoryRepository.Get
+        [Fact]
+        public void Get_ReturnsCorrectListOrderedByTitle() {
+            #region Arrange
+            Shuffle(categoriesList);
+            List<Models.CategoryItem> expectedList = new List<Models.CategoryItem>();
+            foreach (var category in categoriesList.OrderBy(c => c.Title)) {
+                expectedList.Add(new Models.Category {
+                    Id = category.Id,
+                    Title = category.Title,
+                    Slug = category.Slug,
+                    Description = category.Description
+                });
+            }
+            #endregion
+
+            #region Act
+            IList<Models.CategoryItem> result = repository.Get();
+            #endregion
+
+            #region Assert
+            Assert.Equal(expectedList.Count, result.Count);
+            for (int i = 0; i < expectedList.Count; i++) {
+                Assert_CategoryItemsMatch(expectedList[i], result[i]);
+            }
             #endregion
         }
         #endregion
@@ -210,17 +234,19 @@ namespace Piranha.EF.Tests.Repositories
         private void Assert_CategoryItemsMatch(Models.CategoryItem expected, Models.CategoryItem actual) {
             if (expected == null) {
                 Assert.Null(actual);
-            } else {
+            }
+            else {
                 Assert.Equal(expected.Description, actual.Description);
                 Assert.Equal(expected.Slug, actual.Slug);
                 Assert.Equal(expected.Title, actual.Title);
                 Assert.Equal(expected.Id, actual.Id);
             }
         }
-        private void Assert_CategoryMatches(Models.Category expected, Models.Category actual) {
+        private void Assert_CategoriesMatch(Models.Category expected, Models.Category actual) {
             if (expected == null) {
                 Assert.Null(actual);
-            } else {
+            }
+            else {
                 Assert.Equal(expected.Id, actual.Id);
                 Assert.Equal(expected.Slug, actual.Slug);
                 Assert.Equal(expected.Description, actual.Description);
