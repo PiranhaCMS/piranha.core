@@ -108,6 +108,47 @@ namespace Piranha.EF.Tests.Repositories
             #endregion
         }
         #endregion
+
+        #region CategoryRepository.GetModelById
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        public void GetModelById_ValidIdReturnsCorrectCategory(int idAsInt) {
+            #region Arrange
+            Guid categoryId = ConvertIntToGuid(idAsInt);
+            Models.Category expectedCategory = null;
+            // TODO: Set expected category
+            #endregion
+        
+            #region Act
+            Models.Category result = repository.GetModelById(categoryId);
+            #endregion
+        
+            #region Assert
+            Assert_CategoryMatches(expectedCategory, result);
+            #endregion
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(NUM_CATEGORIES + 1)]
+        public void GetModelById_InvalidIdReturnsNull(int idAsInt) {
+            #region Arrange
+            Guid categoryId = ConvertIntToGuid(idAsInt);
+            #endregion
+        
+            #region Act
+            Models.Category result = repository.GetModelById(categoryId);
+            #endregion
+        
+            #region Assert
+            Assert_CategoryMatches(null, result);
+            #endregion
+        }
+        #endregion
         #endregion
 
         #region Private helper methods
@@ -119,6 +160,16 @@ namespace Piranha.EF.Tests.Repositories
                 Assert.Equal(expected.Slug, actual.Slug);
                 Assert.Equal(expected.Title, actual.Title);
                 Assert.Equal(expected.Id, actual.Id);
+            }
+        }
+        private void Assert_CategoryMatches(Models.Category expected, Models.Category actual) {
+            if (expected == null) {
+                Assert.Null(actual);
+            } else {
+                Assert.Equal(expected.Id, actual.Id);
+                Assert.Equal(expected.Slug, actual.Slug);
+                Assert.Equal(expected.Description, actual.Description);
+                Assert.Equal(expected.Title, actual.Title);
             }
         }
         #endregion
