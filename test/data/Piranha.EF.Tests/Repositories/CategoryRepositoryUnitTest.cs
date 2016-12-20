@@ -276,8 +276,7 @@ namespace Piranha.EF.Tests.Repositories {
         private void Assert_CategoryItemsMatch(Models.CategoryItem expected, Models.CategoryItem actual) {
             if (expected == null) {
                 Assert.Null(actual);
-            }
-            else {
+            } else {
                 Assert.Equal(expected.Description, actual.Description);
                 Assert.Equal(expected.Slug, actual.Slug);
                 Assert.Equal(expected.Title, actual.Title);
@@ -287,8 +286,7 @@ namespace Piranha.EF.Tests.Repositories {
         private void Assert_CategoriesMatch(Models.Category expected, Models.Category actual) {
             if (expected == null) {
                 Assert.Null(actual);
-            }
-            else {
+            } else {
                 Assert.Equal(expected.Id, actual.Id);
                 Assert.Equal(expected.Slug, actual.Slug);
                 Assert.Equal(expected.Description, actual.Description);
