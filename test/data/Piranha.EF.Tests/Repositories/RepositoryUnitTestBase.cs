@@ -12,6 +12,7 @@ using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Moq;
+using AutoMapper;
 
 namespace Piranha.EF.Tests.Repositories
  {
@@ -37,6 +38,8 @@ namespace Piranha.EF.Tests.Repositories
         public RepositoryUnitTestBase() {
             mockDb = new Mock<IDb>();
             repository = SetupRepository();
+            Module module = new Module();
+            module.Init();
             SetupMockDbData();
         }
 
