@@ -13,19 +13,18 @@ using System;
 namespace Piranha.Builder.Attribute
 {
     /// <summary>
-    /// Attribute for marking a class as a page type.
+    /// Abstract class for building content types.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class)]
-    public class PageTypeAttribute : ContentTypeAttribute
+    public abstract class ContentTypeAttribute : System.Attribute
     {
         /// <summary>
-        /// Gets/sets the optional route.
+        /// Gets/sets the unique id.
         /// </summary>
-        public string Route { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
-        /// Gets/sets the optional view.
+        /// Gets/sets the optional title. 
         /// </summary>
-        public string View { get; set; }
+        public string Title { get; set; }
     }
 }

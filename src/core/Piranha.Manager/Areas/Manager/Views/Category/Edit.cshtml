@@ -1,6 +1,7 @@
 ﻿@model Piranha.Areas.Manager.Models.CategoryEditModel
 @{
     ViewBag.Title = "Edit category";
+    ViewBag.Controller = "Category";
 }
 
 @using (var form = Html.BeginForm("Save", "Category", FormMethod.Post, new { @class = "form", @role = "form" })) {

@@ -13,16 +13,11 @@ using System;
 namespace Piranha.Builder.Attribute
 {
     /// <summary>
-    /// Attribute for marking a class as a page type.
+    /// Attribute for marking a class as a block type.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class PageTypeAttribute : ContentTypeAttribute
+    public class BlockTypeAttribute : ContentTypeAttribute
     {
-        /// <summary>
-        /// Gets/sets the optional route.
-        /// </summary>
-        public string Route { get; set; }
-
         /// <summary>
         /// Gets/sets the optional view.
         /// </summary>

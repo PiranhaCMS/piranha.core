@@ -8,6 +8,7 @@
  * 
  */
 
+using System;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Piranha.Areas.Manager.Controllers
@@ -28,6 +29,11 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/posts/{category?}")]
         public IActionResult List(string category = null) {
             return View(Models.PostListModel.Get(api, category));
+        }
+
+        [Route("manager/post/{id:Guid}")]
+        public IActionResult Edit(Guid id) {
+            return View(Models.PostEditModel.GetById(api, id));
         }
     }
 }
