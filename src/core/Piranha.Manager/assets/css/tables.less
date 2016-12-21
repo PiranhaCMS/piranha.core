@@ -11,6 +11,20 @@
 @import "mixins.less";
 
 .table {
+	td, th {
+		&.actions {
+			&.one {
+				width: 32px;
+			}
+			&.two {
+				width: 64px;
+			}
+			&.three {
+				width: 96px;
+			}
+		}
+	}
+
 	thead {
 		tr {
 			th {
@@ -18,18 +32,6 @@
 				padding: 12px 20px;
 				font-family: "Open Sans", Arial;
 				text-transform: uppercase;
-
-				&.actions {
-					&.one {
-						width: 32px;
-					}
-					&.two {
-						width: 64px;
-					}
-					&.three {
-						width: 96px;
-					}
-				}
 
 				.sort {
 					cursor: pointer;
