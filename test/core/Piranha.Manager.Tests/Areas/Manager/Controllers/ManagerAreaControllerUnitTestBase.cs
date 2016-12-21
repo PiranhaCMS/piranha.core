@@ -3,15 +3,16 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using Piranha.Areas.Manager.Controllers;
 using Moq;
 using Piranha.Extend;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace Piranha.Manager.Tests.Areas.Manager.Controllers
 {
@@ -41,6 +42,11 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         /// The mocked <see cref="IApi" />
         /// </summary>
         protected readonly Mock<IApi> mockApi;
+
+        /// <summary>
+        /// The mocked <see cref="IConfigurationRoot"/> passed to <see cref="App.Init(IApi, IConfigurationRoot, IModule[])"/>
+        /// </summary>
+        protected readonly Mock<IConfigurationRoot> mockConfig = new Mock<IConfigurationRoot>();
         #endregion
         #endregion
 
@@ -50,11 +56,12 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         /// </summary>
         public ManagerAreaControllerUnitTestBase() {
             mockApi = SetupApi();
+            mockConfig = SetupConfig();
             controller = SetupController();
-            //
-            // TODO: We need the app config, maybe mock it
-            //
-            App.Init(mockApi.Object, null, Modules);
+            
+            App.Init(mockApi.Object, mockConfig.Object, Modules);
+            App.ReloadBlockTypes(mockApi.Object);
+            App.ReloadPageTypes(mockApi.Object);
             AdditionalSetupAfterAppInit();
         }
 
@@ -69,6 +76,21 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             api.Setup(a => a.PageTypes.Get()).Returns(new List<PageType>());
             api.Setup(a => a.BlockTypes.Get()).Returns(new List<BlockType>());
             return api;
+        }
+
+        /// <summary>
+        /// Creates the mocked Config which is assigned to <see cref="mockConfig"/>
+        /// </summary>
+        /// <returns>
+        /// The mocked config
+        /// </returns>
+        protected virtual Mock<IConfigurationRoot> SetupConfig()
+        {
+            Mock<IConfigurationRoot> config = new Mock<IConfigurationRoot>();
+            Mock<IConfigurationSection> configSection = new Mock<IConfigurationSection>();
+            config.Setup(c => c.GetSection(It.IsAny<string>())).Returns(configSection.Object);
+            configSection.Setup(c => c.GetChildren()).Returns(new List<IConfigurationSection>());
+            return config;
         }
 
         /// <summary>

@@ -54,11 +54,24 @@ namespace Piranha.EF.Tests.Repositories
         protected abstract void SetupMockDbData();
         #endregion
 
+        /// <summary>
+        /// Converts an integer to a Guid
+        /// </summary>
+        /// <param name="value">The integer to convert</param>
+        /// <returns>
+        /// The Guid
+        /// </returns>
         protected Guid ConvertIntToGuid(int value) {
             byte[] valueAsBytes = new byte[16];
             BitConverter.GetBytes(value).CopyTo(valueAsBytes, 0);
             return new Guid(valueAsBytes);
         }
+
+        /// <summary>
+        /// Binds a queryable as the data behind the DbSet
+        /// </summary>
+        /// <param name="mockDbSet">The mocked DbSet</param>
+        /// <param name="source">The data behind</param>
         protected void SetupMockDbSet<T>(Mock<DbSet<T>> mockDbSet, IQueryable<T> source)
             where T : class {
             mockDbSet.As<IQueryable<T>>().Setup(s => s.Provider).Returns(source.Provider);

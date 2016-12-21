@@ -39,16 +39,15 @@ namespace Piranha.EF.Tests.Repositories
         /// <summary>
         /// Mock page type data
         /// </summary>
-        private List<Data.PageType> pageTypesList = new List<Data.PageType>();
+        private readonly List<Data.PageType> pageTypesList = new List<Data.PageType>();
         /// <summary>
-        /// Mock <see cref="DbSet" /> behind <see cref="repository.PageTypes" />
+        /// Mock <see cref="DbSet" /> for <see cref="repository" />
         /// </summary>
-        private Mock<DbSet<Data.PageType>> mockPageTypeSet = new Mock<DbSet<Data.PageType>>();
+        private readonly Mock<DbSet<Data.PageType>> mockPageTypeSet = new Mock<DbSet<Data.PageType>>();
         #endregion
 
         #region Test initialization
-        protected override void SetupMockDbData()
-        {
+        protected override void SetupMockDbData() {
             CreateMockPageTypes();
             SetupMockDbSet(mockPageTypeSet, PageTypes);
             mockDb.Setup(db => db.PageTypes).Returns(mockPageTypeSet.Object);
@@ -69,8 +68,7 @@ namespace Piranha.EF.Tests.Repositories
             }
         }
 
-        protected override PageTypeRepository SetupRepository()
-        {
+        protected override PageTypeRepository SetupRepository() {
             return new PageTypeRepository(mockDb.Object);
         }
         #endregion
@@ -90,7 +88,7 @@ namespace Piranha.EF.Tests.Repositories
         [InlineData(4)]
         [InlineData(5)]
         [InlineData(NUM_PAGE_TYPES + 1)]
-        public void GetByIdWithEmptySetGivesNull(int pageTypeIdAsInt) {
+        public void GetById_EmptySetGivesNull(int pageTypeIdAsInt) {
             #region Arrange
             pageTypesList.Clear();
             string pageTypeId = $"PageType{pageTypeIdAsInt}";
@@ -117,7 +115,7 @@ namespace Piranha.EF.Tests.Repositories
         [Theory]
         [InlineData(0)]
         [InlineData(NUM_PAGE_TYPES + 1)]
-        public void GetByIdWithInvalidIdGivesNull(int pageTypeIdAsInt) {
+        public void GetById_InvalidIdGivesNull(int pageTypeIdAsInt) {
             #region Arrange
             string pageTypeId = $"PageType{pageTypeIdAsInt}";
             #endregion
@@ -139,7 +137,7 @@ namespace Piranha.EF.Tests.Repositories
         [Theory]
         [InlineData("")]
         [InlineData(null)]
-        public void GetByIdWithEmptyIdGivesNull(string pageTypeId) {
+        public void GetById_EmptyIdGivesNull(string pageTypeId) {
             #region Arrange
             #endregion
         
@@ -167,7 +165,7 @@ namespace Piranha.EF.Tests.Repositories
         [InlineData(3)]
         [InlineData(4)]
         [InlineData(5)]
-        public void GetByIdWithValidIdGivesProperPageType(int pageTypeIdAsInt) {
+        public void GetById_ValidIdGivesProperPageType(int pageTypeIdAsInt) {
             #region Arrange
             string pageTypeId = $"PageType{pageTypeIdAsInt}";
             Data.PageType pageType = pageTypesList.FirstOrDefault(t => t.Id == pageTypeId);
@@ -190,9 +188,10 @@ namespace Piranha.EF.Tests.Repositories
         /// the <see cref="IDb.PageTyps" /> is empty
         /// </summary>
         [Fact]
-        public void GetWithEmptySourceGivesEmptyList() {
+        public void Get_EmptySourceGivesEmptyList() {
             #region Arrange
             pageTypesList.Clear();
+            // Collection behind DbSet altered, need to update
             SetupMockDbSet(mockPageTypeSet, PageTypes);
             #endregion
         
@@ -210,7 +209,7 @@ namespace Piranha.EF.Tests.Repositories
         /// in title sorted order
         /// </summary>
         [Fact]
-        public void GetGivesCorrectList() {
+        public void Get_GivesCorrectList() {
             #region Arrange
             List<Extend.PageType> pageTypes = new List<Extend.PageType>();
             foreach (Data.PageType pageType in pageTypesList) {
@@ -239,7 +238,7 @@ namespace Piranha.EF.Tests.Repositories
         [InlineData(3)]
         [InlineData(4)]
         [InlineData(5)]
-        public void DeleteWithValidObjectRemovesItem(int pageTypeIdAsInt) {
+        public void Delete_ValidObjectRemovesItem(int pageTypeIdAsInt) {
             #region Arrange
             string pageTypeId = $"PageType{pageTypeIdAsInt}";
             Data.PageType dataPageType = pageTypesList.FirstOrDefault(t => t.Id == pageTypeId);
@@ -261,7 +260,7 @@ namespace Piranha.EF.Tests.Repositories
         [Theory]
         [InlineData(0)]
         [InlineData(NUM_PAGE_TYPES + 1)]
-        public void DeleteByIdWithInvalidIdDoesntCallRemove(int pageTypeIdAsInt) {
+        public void Delete_ByIdWithInvalidIdDoesntCallRemove(int pageTypeIdAsInt) {
             #region Arrange
             string pageTypeId = $"PageType{pageTypeIdAsInt}";
             #endregion
@@ -282,7 +281,7 @@ namespace Piranha.EF.Tests.Repositories
         [InlineData(3)]
         [InlineData(4)]
         [InlineData(5)]
-        public void DeleteByIdWithValidIdCallsRemove(int pageTypeIdAsInt) {
+        public void Delete_ByIdWithValidIdCallsRemove(int pageTypeIdAsInt) {
             #region Arrange
             string pageTypeId = $"PageType{pageTypeIdAsInt}";
             #endregion
@@ -302,30 +301,52 @@ namespace Piranha.EF.Tests.Repositories
 
         #region PageTypeRepository.Save
         [Fact]
-        public void SaveWithNonExistentTypeCreatesNewPageType()
-        {
+        public void Save_NonExistentTypeCreatesNewPageType() {
             #region Arrange
+            Extend.PageType newPageType = new Extend.PageType {
+                View = null,
+                Id = "NewPageType",
+                Title = "New Page Type",
+                Regions = new List<Extend.RegionType> {
+                    new Extend.RegionType {
+                        Id = "Content",
+                        Title = "Main Content",
+                        Fields = new List<Extend.FieldType> {
+                            new Extend.FieldType {
+                                Type = "Html",
+                            }
+                        }
+                    }
+                },
+            };
             #endregion
 
             #region Act
+            repository.Save(newPageType);
             #endregion
 
             #region Assert
-            throw new NotImplementedException();
+            mockPageTypeSet.Verify(db => db.Add(
+                It.Is<Data.PageType>(t => t.Id == newPageType.Id)
+            ), Times.Once());
+            mockDb.Verify(db => db.SaveChanges(), Times.Once());
             #endregion
         }
 
         [Fact]
-        public void SaveWithExistingTypeUpdatesPageType()
-        {
+        public void Save_ExistingTypeUpdatesPageType() {
             #region Arrange
+            Data.PageType pageTypeData = pageTypesList[0];
+            Extend.PageType existingPageType = JsonConvert.DeserializeObject<Extend.PageType>(pageTypeData.Body);
             #endregion
 
             #region Act
+            repository.Save(existingPageType);
             #endregion
 
             #region Assert
-            throw new NotImplementedException();
+            mockPageTypeSet.Verify(db => db.Add(It.IsAny<Data.PageType>()), Times.Never());
+            mockDb.Verify(db => db.SaveChanges(), Times.Once());
             #endregion
         }
         #endregion
