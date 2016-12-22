@@ -29,16 +29,6 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
     public class PageControllerUnitTest : ManagerAreaControllerUnitTestBase<PageController>
     {
         #region Properties
-        #region Protected Properties
-        protected override IModule[] Modules {
-            get {
-                return new IModule[] {
-                    new Piranha.Manager.Module()
-                };
-            }
-        }
-        #endregion
-
         #region Private Properties
         /// <summary>
         /// The number of sample page types to insert
@@ -67,7 +57,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             var api = new Mock<IApi>();
 
             api.Setup(a => a.BlockTypes.Get()).Returns(new List<Extend.BlockType>());
-            SetupPageTypeReporitoryMethods(api);
+            SetupPageTypeRepository(api);
 
             return api;
         }
@@ -75,9 +65,12 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         /// Initializes <see cref="pageTypes" /> and sets <see cref="IApi.PageTypes.Get" />
         /// return value
         /// </summary>
-        private void SetupPageTypeReporitoryMethods(Mock<IApi> api) {
+        private void SetupPageTypeRepository(Mock<IApi> api) {
             InitializePageTypes();
             api.Setup(a => a.PageTypes.Get()).Returns(pageTypes);
+            api.Setup(a => a.PageTypes.GetById(It.IsAny<string>())).Returns(
+                (Func<string, PageType>)(pageTypeId => pageTypes.FirstOrDefault(t => t.Id == pageTypeId))
+            );
         }
         /// <summary>
         /// Initializes <see cref="pageTypes" /> with <see cref="NUM_PAGE_TYPES" />
