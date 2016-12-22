@@ -96,7 +96,7 @@ namespace Blog
                     using (var reader = new StreamReader(stream)) {
                         var startPage = Models.ContentPageModel.Create("Content");
                         startPage.Title = "Welcome to Piranha CMS";
-                        startPage.Settings.Ingress = "The CMS framework with an extra bite";
+                        startPage.Ingress = "The CMS framework with an extra bite";
                         startPage.Body = reader.ReadToEnd();
                         startPage.Published = DateTime.Now;
                         api.Pages.Save(startPage);

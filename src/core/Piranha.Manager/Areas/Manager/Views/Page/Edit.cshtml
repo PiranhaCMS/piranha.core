@@ -2,6 +2,7 @@
 @using Piranha.Areas.Manager.Models
 @{
     ViewBag.Title = "Edit page";
+    ViewBag.Controller = "Page";
 }
 
 @section script {
@@ -11,6 +12,10 @@
         });
         $(document).on('click', '#submit-unpublish', function () {
             $('form').attr('action', '@Url.Action("UnPublish")').submit();
+        });
+        $(document).on('click', '#btn-settings', function () {
+            $('#panel-settings').slideToggle('fast');
+            return false;
         });
     </script>
 }
@@ -25,6 +30,11 @@
 
     <div class="row">
         <div class="col-sm-12 buttons">
+            <!-- Settings -->
+            <button id="btn-settings" type="button" class="btn btn-primary">
+                <span class="glyphicon glyphicon-cog"></span>
+            </button>
+
             <!-- Actions -->
             <div class="btn-group">
                 <button type="submit" class="btn btn-labeled btn-success">
@@ -60,18 +70,22 @@
         @Html.ValidationMessageFor(m => m.Title)
     </div>
 
-    <div class="panel panel-default">
+    <div id="panel-settings" class="panel panel-default" style="display:none">
         <div class="panel-heading">
+            <!--
             <button class="btn btn-sm btn-secondary pull-right btn-toggle" data-target="#advanced-settings">Advanced settings</button>
             <button class="btn btn-sm btn-secondary btn-primary pull-right btn-toggle" data-target="#basic-settings">Basic settings</button>
+            -->
             <h3 class="panel-title">Settings</h3>
         </div>
         <div id="basic-settings" class="panel-body">
             @Html.Partial("Partial/_BasicSettings", Model)
         </div>
+        <!--
         <div id="advanced-settings" class="panel-body" style="display:none">
             @Html.Partial("Partial/_AdvancedSettings", Model)
         </div>
+        -->
     </div>
 
     <div class="panel panel-default">

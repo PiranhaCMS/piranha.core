@@ -21,6 +21,7 @@ body.collapsed {
 
 			.logo-small {
 				display: inline;
+				width: 60%;
 			}
 			.logo-main {
 				display: none;
@@ -35,6 +36,7 @@ body.collapsed {
 
 .navmenu-inverse {
 	width: 220px;
+	border: none 0px;
 
 	.navmenu-brand {
 		text-align: center;
@@ -98,9 +100,14 @@ body.collapsed {
 					&:last-child a {
 						padding-bottom: 14px;
 					}
-					&.active a {
-						background: #2a2a2a;
-						color: #ccc;
+					&.active {
+						a {
+							background: #2a2a2a;
+						}
+
+						&::after {
+							.arrow-left(@bg-color, 10px, -28px);
+						}
 					}
 				}
 			}

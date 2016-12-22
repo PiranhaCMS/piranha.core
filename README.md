@@ -1,5 +1,7 @@
 # Welcome to Piranha.Core
 
+[![Build status](https://ci.appveyor.com/api/projects/status/brw0cak0b5x4w17m?svg=true)](https://ci.appveyor.com/project/tidyui/piranha-core)
+
 This is a **complete rewrite** of Piranha CMS for the `DotNetCore` & `Entity Framework Core`. The goal is to create a platform independent version with minimal depenencies, but still provide tight integration with the services available in **Windows Azure** such as `Blob Storage` & `Media Services`.
 
 Piranha.Core is currently built for dotnet core `1.1.0` and uses the following packages:

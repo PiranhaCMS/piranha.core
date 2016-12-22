@@ -129,11 +129,13 @@ namespace Piranha
                 lock (mutex) {
                     if (!isInitialized) {
                         // Setup media types
-                        instance.mediaTypes = new MediaTypes() {
-                            Documents = config.GetSection("Piranha:MediaTypes:Documents").GetChildren().Select(c => c.Value).ToList(),
-                            Images = config.GetSection("Piranha:MediaTypes:Images").GetChildren().Select(c => c.Value).ToList(),
-                            Videos = config.GetSection("Piranha:MediaTypes:Videos").GetChildren().Select(c => c.Value).ToList(),
-                        };
+                        if (config != null && config.GetSection("Piranha:MediaTypes") != null) {
+                            instance.mediaTypes = new MediaTypes() {
+                                Documents = config.GetSection("Piranha:MediaTypes:Documents").GetChildren().Select(c => c.Value).ToList(),
+                                Images = config.GetSection("Piranha:MediaTypes:Images").GetChildren().Select(c => c.Value).ToList(),
+                                Videos = config.GetSection("Piranha:MediaTypes:Videos").GetChildren().Select(c => c.Value).ToList(),
+                            };
+                        }
 
                         // Register default markdown converter
                         markdown = new Extend.MarkdownSharp();

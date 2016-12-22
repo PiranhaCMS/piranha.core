@@ -51,7 +51,6 @@ namespace Blog.Controllers
         [Route("page")]
         public IActionResult Page(Guid id, bool startpage) {
             var model = api.Pages.GetById<Models.ContentPageModel>(id);
-            model.Settings.PrimaryImage.Init(api);
 
             if (startpage)
                 return View("Start", model);

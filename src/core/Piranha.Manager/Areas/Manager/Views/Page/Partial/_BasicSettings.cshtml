@@ -1,25 +1,51 @@
 ﻿@model Piranha.Areas.Manager.Models.PageEditModel
 
 <div class="row">
-    <div class="col-sm-8">
+    <div class="col-sm-6">
         <div class="form-group">
             <label>Navigation title</label>
             @Html.TextBoxFor(m => m.NavigationTitle, new { @class = "form-control", placeholder = "The optional navigation title" })
         </div>
+    </div>
+    <div class="col-sm-6">
         <div class="form-group">
             <label>Slug</label>
             @Html.TextBoxFor(m => m.Slug, new { @class = "form-control small", placeholder = "The unique slug" })
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label>Route</label>
+            @Html.TextBoxFor(m => m.Route, new { @class = "form-control small", placeholder = "Optional route" })
+        </div>
+        <div class="form-group">
+            <label>View</label>
+            @Html.TextBoxFor(m => m.View, new { @class = "form-control small", placeholder = "Optional view" })
         </div>
         <div class="form-group">
             <label>Meta Keywords</label>
             @Html.TextBoxFor(m => m.MetaKeywords, new { @class = "form-control small", placeholder = "Meta keywords" })
         </div>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-6">
         <div class="form-group">
             <label>Meta description</label>
-            @Html.TextAreaFor(m => m.MetaDescription, new { @class = "form-control small count-me", rows = 7, placeholder = "Meta description", style = "height:162px" })
+            @Html.TextAreaFor(m => m.MetaDescription, new { @class = "form-control small count-me", rows = 7, placeholder = "Meta description", style = "height:156px" })
             <p>0/255</p>
         </div>
     </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <label>Hidden</label>
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(m => m.IsHidden, new { @class = "checkbox" })
+                If the page should be hidden in the sitemap.
+            </label>
+        </div>
+    </div>
+    <div class="col-sm-6"></div>
 </div>

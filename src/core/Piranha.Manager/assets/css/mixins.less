@@ -28,3 +28,15 @@
 	-webkit-transition: @elm ease-in-out @time;
 	-o-transition: @elm ease-in-out @time;
 }
+
+.arrow-left(@color, @size, @margin-top) {
+	content: "";
+	display: block;
+	width: 0;
+	height: 0;
+	border: solid @size transparent;
+	border-right-color: @color;
+	position: absolute;
+	margin-top: @margin-top;
+	right: 0;
+}

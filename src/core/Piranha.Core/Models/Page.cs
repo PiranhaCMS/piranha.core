@@ -73,6 +73,11 @@ namespace Piranha.Models
         public string NavigationTitle { get; set; }
 
         /// <summary>
+        /// Gets/sets if the page is hidden in the navigation.
+        /// </summary>
+        public bool IsHidden { get; set; }
+
+        /// <summary>
         /// Gets/sets the unique slug.
         /// </summary>
         public string Slug { get; set; }
