@@ -124,6 +124,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             for (int i = 1; i <= NUM_PAGES; i++) {
                 int pageTypeId = (i % NUM_PAGE_TYPES) + 1;
                 DynamicPage pageToAdd = Models.Page<DynamicPage>.Create(
+                    mockApi.Object,
                     ConvertIntToGuid(pageTypeId).ToString()
                 );
                 pageToAdd.Id = ConvertIntToGuid(i);

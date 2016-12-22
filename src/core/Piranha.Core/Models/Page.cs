@@ -32,8 +32,8 @@ namespace Piranha.Models
         /// </summary>
         /// <param name="typeId">The unique page type id</param>
         /// <returns>The new model</returns>
-        public static T Create(string typeId) {
-            using (var factory = new ContentFactory(App.PageTypes)) {
+        public static T Create(IApi api, string typeId) {
+            using (var factory = new ContentFactory(api.PageTypes.Get())) {
                 return factory.Create<T>(typeId);
             }
         }

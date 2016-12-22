@@ -50,7 +50,7 @@ namespace Piranha.Areas.Manager.Models
             var page = api.Pages.GetById(Id);
 
             if (page == null)
-                page = Piranha.Models.DynamicPage.Create(this.TypeId);
+                page = Piranha.Models.DynamicPage.Create(api, this.TypeId);
 
             Module.Mapper.Map<PageEditModel, Piranha.Models.PageBase>(this, page);
             SaveRegions(this, page);
@@ -89,11 +89,11 @@ namespace Piranha.Areas.Manager.Models
         /// </summary>
         /// <param name="pageTypeId">The page type id</param>
         /// <returns>The page model</returns>        
-        public static PageEditModel Create(string pageTypeId) {
-            var type = App.PageTypes.SingleOrDefault(t => t.Id == pageTypeId);
+        public static PageEditModel Create(IApi api, string pageTypeId) {
+            var type = api.PageTypes.GetById(pageTypeId);
 
             if (type != null) {
-                var page = Piranha.Models.DynamicPage.Create(pageTypeId);
+                var page = Piranha.Models.DynamicPage.Create(api, pageTypeId);
                 var model = Module.Mapper.Map<Piranha.Models.PageBase, PageEditModel>(page);
                 model.PageType = type;
                 LoadRegions(page, model);

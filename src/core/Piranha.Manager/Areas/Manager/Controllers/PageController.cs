@@ -46,7 +46,7 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/page/add/{type}")]
         public IActionResult Add(string type) {
             var sitemap = api.Sitemap.Get(false);
-            var model = Models.PageEditModel.Create(type);
+            var model = Models.PageEditModel.Create(api, type);
             model.SortOrder = sitemap.Count;
 
             return View("Edit", model);
