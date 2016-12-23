@@ -12,6 +12,8 @@ using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Moq;
+using AutoMapper;
+using System.Collections.Generic;
 
 namespace Piranha.EF.Tests.Repositories
  {
@@ -37,6 +39,8 @@ namespace Piranha.EF.Tests.Repositories
         public RepositoryUnitTestBase() {
             mockDb = new Mock<IDb>();
             repository = SetupRepository();
+            Module module = new Module();
+            module.Init();
             SetupMockDbData();
         }
 
@@ -78,6 +82,27 @@ namespace Piranha.EF.Tests.Repositories
             mockDbSet.As<IQueryable<T>>().Setup(s => s.Expression).Returns(source.Expression);
             mockDbSet.As<IQueryable<T>>().Setup(s => s.ElementType).Returns(source.ElementType);
             mockDbSet.As<IQueryable<T>>().Setup(s => s.GetEnumerator()).Returns(source.GetEnumerator());
+        }
+
+        /// <summary>
+        /// Randomizes the ordering of the given list in place
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="listToShuffle">The list to shuffle</param>
+        /// <remarks>
+        /// Solution found StackOverflow http://stackoverflow.com/a/1262619/5884242
+        /// </remarks>
+        protected void Shuffle<T>(IList<T> listToShuffle) {
+            Random rng = new Random();
+            int n = listToShuffle.Count;
+
+            while (n > 1) {
+                n--;
+                int k = rng.Next(n + 1);
+                T value = listToShuffle[k];
+                listToShuffle[k] = listToShuffle[n];
+                listToShuffle[n] = value;
+            }
         }
     }
  }

@@ -85,7 +85,6 @@ namespace Piranha.EF
             Serializer.Register<Extend.Fields.MarkdownField>(new Serializers.StringSerializer<Extend.Fields.MarkdownField>());
             Serializer.Register<Extend.Fields.StringField>(new Serializers.StringSerializer<Extend.Fields.StringField>());
             Serializer.Register<Extend.Fields.TextField>(new Serializers.StringSerializer<Extend.Fields.TextField>());
-
         }
     }
 }

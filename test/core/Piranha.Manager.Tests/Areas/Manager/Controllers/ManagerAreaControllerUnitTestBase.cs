@@ -29,7 +29,10 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         /// </summary>
         protected virtual IModule[] Modules {
             get {
-                return null;
+                return new IModule[] {
+                    new Piranha.EF.Module(),
+                    new Piranha.Manager.Module()
+                };
             }
         }
 
