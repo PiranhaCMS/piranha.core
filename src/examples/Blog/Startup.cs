@@ -94,7 +94,7 @@ namespace Blog
                 // Add the startpage
                 using (var stream = File.OpenRead("assets/seed/startpage.md")) {
                     using (var reader = new StreamReader(stream)) {
-                        var startPage = Models.ContentPageModel.Create("Content");
+                        var startPage = Models.ContentPageModel.Create(api, "Content");
                         startPage.Title = "Welcome to Piranha CMS";
                         startPage.Ingress = "The CMS framework with an extra bite";
                         startPage.Body = reader.ReadToEnd();
