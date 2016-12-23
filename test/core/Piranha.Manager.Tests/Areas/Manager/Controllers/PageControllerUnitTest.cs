@@ -211,7 +211,8 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         public void Edit_WithInvalidPageIdGivesThrowsKeyNotFoundException(int pageIdAsInt) {
             #region Arrange
             Guid invalidPageId = ConvertIntToGuid(pageIdAsInt);
-            bool exceptionCaught = false;
+            bool expectedExceptionTypeCaught = false;
+            Type caughtExceptionType = null;
             #endregion
 
             #region Act
@@ -219,12 +220,15 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
                 ViewResult result = controller.Edit(invalidPageId) as ViewResult;
             } catch (KeyNotFoundException e) {
                 Assert.Equal($"No page found with the id '{invalidPageId}'", e.Message);
-                exceptionCaught = true;
+                expectedExceptionTypeCaught = true;
+            } catch (Exception e) {
+                expectedExceptionTypeCaught = false;
+                caughtExceptionType = e.GetType();
             }
             #endregion
 
             #region Assert
-            Assert.True(exceptionCaught);
+            Assert.True(expectedExceptionTypeCaught, string.Format("Incorrect exception type caught: {0}", caughtExceptionType));
             #endregion
         }
 
@@ -300,20 +304,24 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         public void Add_WithInvalidPageTypeIdThrowsKeyNotFoundException(int pageTypeIdAsInt) {
             #region Arrange
             string pageTypeId = ConvertIntToGuid(pageTypeIdAsInt).ToString();
-            bool exceptionCaught = false;
+            bool expectedExceptionTypeCaught = false;
+            Type caughtExceptionType = null;
             #endregion
 
             #region Act
             try {
                 ViewResult result = controller.Add(pageTypeId) as ViewResult;
             } catch (KeyNotFoundException e) {
-                exceptionCaught = true;
+                expectedExceptionTypeCaught = true;
                 Assert.Equal($"No page type found with the id '{pageTypeId}'", e.Message);
+            } catch (Exception e) {
+                expectedExceptionTypeCaught = false;
+                caughtExceptionType = e.GetType();
             }
             #endregion
 
             #region Assert
-            Assert.True(exceptionCaught);
+            Assert.True(expectedExceptionTypeCaught, string.Format("Incorrect exception type caught: {0}", caughtExceptionType));
             #endregion
         }
 
@@ -370,21 +378,25 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         public void Save_NewPageWithInvalidPageTypeIdThrowsKeyNotFoundException(int pageTypeIdAsInt) {
             #region Arrange
             Guid pageTypeId = ConvertIntToGuid(pageTypeIdAsInt);
-            PageEditModel pageToSave = PageEditModelForPageType(pageTypeId);
-            bool exceptionCaught = false;
+            PageEditModel pageToSave = PageEditModelForPageType(NUM_PAGES + 1, pageTypeId);
+            bool expectedExceptionTypeCaught = false;
+            Type caughtExceptionType = null;
             #endregion
 
             #region Act
             try {
                 IActionResult result = controller.Save(pageToSave);
             } catch (KeyNotFoundException e) {
-                exceptionCaught = true;
-                Assert.Equal($"No page type found with id '{pageTypeId}'", e.Message);
+                expectedExceptionTypeCaught = true;
+                Assert.Equal($"No page found with id '{pageToSave.Id}', and no page type found found with id '{pageTypeId}'", e.Message);
+            } catch (Exception e) {
+                expectedExceptionTypeCaught = false;
+                caughtExceptionType = e.GetType();
             }
             #endregion
 
             #region Assert
-            Assert.True(exceptionCaught);
+            Assert.True(expectedExceptionTypeCaught, string.Format("Incorrect exception type caught: {0}", caughtExceptionType));
             #endregion
         }
 
@@ -396,7 +408,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         public void Save_NewPageIsSuccessfulAndRedirectsToList() {
             #region Arrange
             int pageTypeIdAsInt = 1;
-            PageEditModel pageToSave = PageEditModelForPageType(ConvertIntToGuid(pageTypeIdAsInt));
+            PageEditModel pageToSave = PageEditModelForPageType(NUM_PAGES + 1, ConvertIntToGuid(pageTypeIdAsInt));
             #endregion
 
             #region Act
@@ -434,9 +446,8 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             string pageTitleUpdate = $"Updated title {pageIdAsInt}";
             DynamicPage page = pages.FirstOrDefault(p => p.Id == pageId);
 
-            PageEditModel pageToSave = PageEditModelForPageType(new Guid(page.TypeId));
+            PageEditModel pageToSave = PageEditModelForPageType(pageIdAsInt, new Guid(page.TypeId));
             DateTime? expectedPublishTime = pageToSave.Published;
-            pageToSave.Id = pageId;
             pageToSave.Title = pageTitleUpdate;
             pageToSave.Published = expectedPublishTime;
             #endregion
@@ -462,7 +473,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         public void Save_NewPageWithFailedSaveReturnsView() {
             #region Arrange
             int pageTypeIdAsInt = 1;
-            PageEditModel pageToSave = PageEditModelForPageType(ConvertIntToGuid(pageTypeIdAsInt));
+            PageEditModel pageToSave = PageEditModelForPageType(NUM_PAGES + 1, ConvertIntToGuid(pageTypeIdAsInt));
             mockApi.Setup(a => a.Pages.Save(It.Is<DynamicPage>(p => p.Id == pageToSave.Id))).Throws(new Exception("DbUpdateConcurrencyException"));
             #endregion
 
@@ -495,21 +506,25 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         public void Publish_NewPageWithInvalidPageTypeIdThrowsKeyNotFoundException(int pageTypeIdAsInt) {
             #region Arrange
             Guid pageTypeId = ConvertIntToGuid(pageTypeIdAsInt);
-            PageEditModel pageToPublish = PageEditModelForPageType(pageTypeId);
-            bool exceptionCaught = false;
+            PageEditModel pageToPublish = PageEditModelForPageType(NUM_PAGES + 1, pageTypeId);
+            bool expectedExceptionTypeCaught = false;
+            Type caughtExceptionType = null;
             #endregion
 
             #region Act
             try {
                 IActionResult result = controller.Publish(pageToPublish);
             } catch (KeyNotFoundException e) {
-                exceptionCaught = true;
-                Assert.Equal($"No page type found with id '{pageTypeId}'", e.Message);
+                expectedExceptionTypeCaught = true;
+                Assert.Equal($"No page found with id '{pageToPublish.Id}', and no page type found found with id '{pageTypeId}'", e.Message);
+            } catch (Exception e) {
+                expectedExceptionTypeCaught = false;
+                caughtExceptionType = e.GetType();
             }
             #endregion
 
             #region Assert
-            Assert.True(exceptionCaught);
+            Assert.True(expectedExceptionTypeCaught, string.Format("Incorrect exception type caught: {0}", caughtExceptionType));
             #endregion
         }
 
@@ -521,7 +536,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         public void Publish_NewPageIsSuccessfulAndRedirectsToList() {
             #region Arrange
             int pageTypeIdAsInt = 1;
-            PageEditModel pageToPublish = PageEditModelForPageType(ConvertIntToGuid(pageTypeIdAsInt));
+            PageEditModel pageToPublish = PageEditModelForPageType(NUM_PAGES + 1, ConvertIntToGuid(pageTypeIdAsInt));
             #endregion
 
             #region Act
@@ -559,9 +574,8 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             string pageTitleUpdate = $"Updated title {pageIdAsInt}";
             DynamicPage page = pages.FirstOrDefault(p => p.Id == pageId);
 
-            PageEditModel pageToPublish = PageEditModelForPageType(new Guid(page.TypeId));
+            PageEditModel pageToPublish = PageEditModelForPageType(pageIdAsInt, new Guid(page.TypeId));
             DateTime? originalPublishTime = pageToPublish.Published;
-            pageToPublish.Id = pageId;
             pageToPublish.Title = pageTitleUpdate;
             pageToPublish.Published = originalPublishTime;
             #endregion
@@ -587,7 +601,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         public void Publish_NewPageWithFailedPublishReturnsView() {
             #region Arrange
             int pageTypeIdAsInt = 1;
-            PageEditModel pageToPublish = PageEditModelForPageType(ConvertIntToGuid(pageTypeIdAsInt));
+            PageEditModel pageToPublish = PageEditModelForPageType(NUM_PAGES + 1, ConvertIntToGuid(pageTypeIdAsInt));
             mockApi.Setup(a => a.Pages.Save(It.Is<DynamicPage>(p => p.Id == pageToPublish.Id))).Throws(new Exception("DbUpdateConcurrencyException"));
             #endregion
 
@@ -620,21 +634,25 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         public void UnPublish_NewPageWithInvalidPageTypeIdThrowsKeyNotFoundException(int pageTypeIdAsInt) {
             #region Arrange
             Guid pageTypeId = ConvertIntToGuid(pageTypeIdAsInt);
-            PageEditModel pageToPublish = PageEditModelForPageType(pageTypeId);
-            bool exceptionCaught = false;
+            PageEditModel pageToPublish = PageEditModelForPageType(NUM_PAGES + 1, pageTypeId);
+            bool expectedExceptionTypeCaught = false;
+            Type caughtExceptionType = null;
             #endregion
 
             #region Act
             try {
                 IActionResult result = controller.UnPublish(pageToPublish);
             } catch (KeyNotFoundException e) {
-                exceptionCaught = true;
-                Assert.Equal($"No page type found with id '{pageTypeId}'", e.Message);
+                expectedExceptionTypeCaught = true;
+                Assert.Equal($"No page found with id '{pageToPublish.Id}', and no page type found found with id '{pageTypeId}'", e.Message);
+            } catch (Exception e) {
+                expectedExceptionTypeCaught = false;
+                caughtExceptionType = e.GetType();
             }
             #endregion
 
             #region Assert
-            Assert.True(exceptionCaught);
+            Assert.True(expectedExceptionTypeCaught, string.Format("Incorrect exception type caught: {0}", caughtExceptionType));
             #endregion
         }
 
@@ -646,7 +664,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         public void UnPublish_NewPageIsSuccessfulAndRedirectsToList() {
             #region Arrange
             int pageTypeIdAsInt = 1;
-            PageEditModel pageToPublish = PageEditModelForPageType(ConvertIntToGuid(pageTypeIdAsInt));
+            PageEditModel pageToPublish = PageEditModelForPageType(NUM_PAGES + 1, ConvertIntToGuid(pageTypeIdAsInt));
             #endregion
 
             #region Act
@@ -684,9 +702,8 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
             string pageTitleUpdate = $"Updated title {pageIdAsInt}";
             DynamicPage page = pages.FirstOrDefault(p => p.Id == pageId);
 
-            PageEditModel pageToPublish = PageEditModelForPageType(new Guid(page.TypeId));
+            PageEditModel pageToPublish = PageEditModelForPageType(pageIdAsInt, new Guid(page.TypeId));
             DateTime? originalPublishTime = pageToPublish.Published;
-            pageToPublish.Id = pageId;
             pageToPublish.Title = pageTitleUpdate;
             pageToPublish.Published = originalPublishTime;
             #endregion
@@ -712,7 +729,7 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         public void UnPublish_NewPageWithFailedPublishReturnsView() {
             #region Arrange
             int pageTypeIdAsInt = 1;
-            PageEditModel pageToPublish = PageEditModelForPageType(ConvertIntToGuid(pageTypeIdAsInt));
+            PageEditModel pageToPublish = PageEditModelForPageType(NUM_PAGES + 1, ConvertIntToGuid(pageTypeIdAsInt));
             mockApi.Setup(a => a.Pages.Save(It.Is<DynamicPage>(p => p.Id == pageToPublish.Id))).Throws(new Exception("DbUpdateConcurrencyException"));
             #endregion
 
@@ -778,9 +795,9 @@ namespace Piranha.Manager.Tests.Areas.Manager.Controllers
         /// <returns>
         /// The new page model
         /// </returns>
-        private PageEditModel PageEditModelForPageType(Guid pageTypeId) {
+        private PageEditModel PageEditModelForPageType(int pageIdAsInt, Guid pageTypeId) {
             return new PageEditModel {
-                Id = ConvertIntToGuid(NUM_PAGES + 1),
+                Id = ConvertIntToGuid(pageIdAsInt),
                 TypeId = pageTypeId.ToString(),
                 PageType = pageTypes.FirstOrDefault(t => t.Id == pageTypeId.ToString())
             };
