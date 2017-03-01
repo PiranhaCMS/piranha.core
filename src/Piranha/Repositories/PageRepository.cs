@@ -28,7 +28,6 @@ namespace Piranha.Repositories
         private readonly IDbConnection db;
         private readonly ICache cache;
         private readonly string table = "Piranha_Pages";
-        private readonly string sort = "ParentId, SortOrder";
         #endregion
 
         /// <summary>
