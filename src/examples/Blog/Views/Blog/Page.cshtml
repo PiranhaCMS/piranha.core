@@ -1,9 +1,0 @@
-﻿@model Blog.Models.ContentPageModel
-@{
-    ViewBag.Title = Model.Title;
-}
-
-<div class="container">
-    <h1>@Model.Title</h1>
-    @Html.Raw(Model.Body.ToHtml())
-</div>

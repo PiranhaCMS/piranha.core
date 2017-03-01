@@ -1,0 +1,10 @@
+﻿@model AspNetCoreWeb.Models.MarkdownPage
+@{
+    ViewBag.Title = Model.Title;
+    ViewBag.Ingress = Model.Ingress.Value;
+    ViewBag.IsStart = true;
+}
+
+<div class="container arrow">
+    @Html.Raw(Model.Body.ToHtml())
+</div>

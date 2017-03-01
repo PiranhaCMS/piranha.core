@@ -1,20 +1,20 @@
 # Welcome to Piranha.Core
 
-[![Build status](https://ci.appveyor.com/api/projects/status/brw0cak0b5x4w17m?svg=true)](https://ci.appveyor.com/project/tidyui/piranha-core)
+This is a **complete rewrite** of Piranha CMS for `NetStandard` & `.NET 4.61`. The goal of this
+rewrite is to create a version capable of targeting multiple platforms & frameworks with minimal
+depenencies, but still provide a flexible & high performance CMS library.
 
-This is a **complete rewrite** of Piranha CMS for the `DotNetCore` & `Entity Framework Core`. The goal is to create a platform independent version with minimal depenencies, but still provide tight integration with the services available in **Windows Azure** such as `Blob Storage` & `Media Services`.
+At the moment Piranha is compiled for `NetStandard 1.6.1` & `.NET 4.6.1` and uses the following packages:
 
-Piranha.Core is currently built for dotnet core `1.1.0` and uses the following packages:
-
-* AutoMapper `5.1.1`
+* AutoMapper `5.2.0`
+* Dapper `1.50.2`
 * Markdown `2.2.0`
-* Microsoft.EntityFrameworkCore `1.1.0`
-* Microsoft.AspNetCore `1.1.0`
 * Newtonsoft.Json `9.0.1`
-* NETStandard.Library `1.6.1`
 
 ## Licensing
-Piranha.Core is released under the **MIT** license. It is a permissive free software license, meaning that it permits reuse within proprietary software provided all copies of the licensed software include a copy of the MIT License terms and the copyright notice.
+Piranha CMS is released under the **MIT** license. It is a permissive free software license,
+meaning that it permits reuse within proprietary software provided all copies of the licensed
+software include a copy of the MIT License terms and the copyright notice.
 
 ## Status
 This repository is under development and is **not** intended for production use.
