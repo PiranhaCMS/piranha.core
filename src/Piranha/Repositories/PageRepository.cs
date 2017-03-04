@@ -91,7 +91,6 @@ namespace Piranha.Repositories
         public T GetStartpage<T>(Guid? siteId = null, IDbTransaction transaction = null) where T : Models.Page<T> {
             if (!siteId.HasValue) {
                 var site = api.Sites.GetDefault(transaction: transaction);
-
                 if (site != null)
                     siteId = site.Id;
             }
@@ -149,10 +148,11 @@ namespace Piranha.Repositories
         /// Gets the page model with the specified slug.
         /// </summary>
         /// <param name="slug">The unique slug</param>
+        /// <param name="siteId">The optional site id</param>
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
-        public Models.DynamicPage GetBySlug(string slug, IDbTransaction transaction = null) {
-            return GetBySlug<Models.DynamicPage>(slug);
+        public Models.DynamicPage GetBySlug(string slug, Guid? siteId = null, IDbTransaction transaction = null) {
+            return GetBySlug<Models.DynamicPage>(slug, siteId, transaction);
         }
 
         /// <summary>
@@ -160,12 +160,19 @@ namespace Piranha.Repositories
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="slug">The unique slug</param>
+        /// <param name="siteId">The optional site id</param>
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
-        public T GetBySlug<T>(string slug, IDbTransaction transaction = null) where T : Models.Page<T> {
+        public T GetBySlug<T>(string slug, Guid? siteId = null, IDbTransaction transaction = null) where T : Models.Page<T> {
+            if (!siteId.HasValue) {
+                var site = api.Sites.GetDefault(transaction: transaction);
+                if (site != null)
+                    siteId = site.Id;
+            }
+
             var page = db.QueryFirstOrDefault<Page>(
-                $"SELECT * FROM [{table}] WHERE [Slug]=@Slug",
-                new { Slug = slug },
+                $"SELECT * FROM [{table}] WHERE [SiteId]=@SiteId AND [Slug]=@Slug",
+                new { SiteId = siteId, Slug = slug },
                 transaction: transaction);
 
             if (page != null) {

@@ -62,18 +62,20 @@ namespace Piranha.Repositories
         /// Gets the page model with the specified slug.
         /// </summary>
         /// <param name="slug">The unique slug</param>
+        /// <param name="siteId">The optional site id</param>
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
-        Models.DynamicPage GetBySlug(string slug, IDbTransaction transaction = null);
+        Models.DynamicPage GetBySlug(string slug, Guid? siteId = null, IDbTransaction transaction = null);
 
         /// <summary>
         /// Gets the page model with the specified slug.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="slug">The unique slug</param>
+        /// <param name="siteId">The optional site id</param>
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
-        T GetBySlug<T>(string slug, IDbTransaction transaction = null) where T : Models.Page<T>;
+        T GetBySlug<T>(string slug, Guid? siteId = null, IDbTransaction transaction = null) where T : Models.Page<T>;
 
         /// <summary>
         /// Saves the given page model
