@@ -45,14 +45,18 @@ namespace Piranha.Repositories
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The available models</returns>
         public IEnumerable<Models.PageType> GetAll(IDbTransaction transaction = null) {
-            var types = db.Query<Models.PageType>($"SELECT * FROM [{table}] ORDER BY [{sort}]", transaction: transaction);
+            var types = db.Query<PageType>($"SELECT * FROM [{table}] ORDER BY [{sort}]", transaction: transaction);
+            var models = new List<Models.PageType>();
 
-            if (cache != null) {
-                foreach (var type in types) {
-                    cache.Set(type.Id, type);
-                }
+            foreach (var type in types) {
+                var model = JsonConvert.DeserializeObject<Models.PageType>(type.Body);
+
+                if (cache != null && model != null)
+                    cache.Set(model.Id, model);
+
+                models.Add(model);
             }
-            return types;
+            return models;
         }
 
         /// <summary>

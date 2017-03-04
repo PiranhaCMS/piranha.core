@@ -79,4 +79,4 @@ CREATE TABLE [Piranha_PageFields] (
 	CONSTRAINT PK_PageField_Id PRIMARY KEY ([Id]),
 	CONSTRAINT FK_PageField_PageId FOREIGN KEY ([PageId]) REFERENCES [Piranha_Pages] ([Id]) ON DELETE CASCADE
 );
-CREATE UNIQUE INDEX IX_PageField_FieldId ON [Piranha_PageFields] ([PageId], [RegionId], [FieldId]);
+CREATE UNIQUE INDEX IX_PageField_FieldId ON [Piranha_PageFields] ([PageId], [RegionId], [FieldId], [SortOrder]);

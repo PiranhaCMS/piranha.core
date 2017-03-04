@@ -11,7 +11,7 @@
 using Piranha.AttributeBuilder;
 using Piranha.Extend.Fields;
 using System;
-using System.Data.SqlClient;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -36,12 +36,24 @@ namespace Piranha.Tests.Repositories
             public MarkdownField Body { get; set; }
         }
 
+        [PageType(Title = "My CollectionPage")]
+        public class MyCollectionPage : Models.Page<MyCollectionPage>
+        {
+            [Region]
+            public IList<TextField> Texts { get; set; }
+
+            public MyCollectionPage() {
+                Texts = new List<TextField>();
+            }
+        }
+
         protected override void Init() {
             using (var api = new Api(options)) {
                 Piranha.App.Init(api);
 
                 var builder = new PageTypeBuilder(api)
-                    .AddType(typeof(MyPage));
+                    .AddType(typeof(MyPage))
+                    .AddType(typeof(MyCollectionPage));
                 builder.Build();
 
                 var site = new Data.Site() {
@@ -75,6 +87,21 @@ namespace Piranha.Tests.Repositories
                 page3.Ingress = "My third ingress";
                 page3.Body = "My third body";
                 api.Pages.Save(page3);
+
+                var page4 = MyCollectionPage.Create(api);
+                page4.SiteId = SITE_ID;
+                page4.Title = "My collection page";
+                page4.SortOrder = 1;
+                page4.Texts.Add(new TextField() {
+                    Value = "First text"
+                });
+                page4.Texts.Add(new TextField() {
+                    Value = "Second text"
+                });
+                page4.Texts.Add(new TextField() {
+                    Value = "Third text"
+                });
+                api.Pages.Save(page4);
             }
         }
 
@@ -133,6 +160,7 @@ namespace Piranha.Tests.Repositories
 
                 Assert.NotNull(model);
                 Assert.Equal("my-first-page", model.Slug);
+                Assert.Equal("My first body", model.Body.Value);
             }
         }
 
@@ -143,6 +171,7 @@ namespace Piranha.Tests.Repositories
 
                 Assert.NotNull(model);
                 Assert.Equal("my-first-page", model.Slug);
+                Assert.Equal("My first body", model.Body.Value);
             }
         }
 
@@ -153,6 +182,7 @@ namespace Piranha.Tests.Repositories
 
                 Assert.NotNull(model);
                 Assert.Equal("my-first-page", model.Slug);
+                Assert.Equal("My first body", model.Regions.Body.Value);
             }
         }
 
@@ -163,6 +193,29 @@ namespace Piranha.Tests.Repositories
 
                 Assert.NotNull(model);
                 Assert.Equal("My first page", model.Title);
+                Assert.Equal("My first body", model.Regions.Body.Value);
+            }
+        }
+
+        [Fact]
+        public void GetCollectionPage() {
+            using (var api = new Api(options)) {
+                var page = api.Pages.GetBySlug<MyCollectionPage>("my-collection-page");
+
+                Assert.NotNull(page);
+                Assert.Equal(3, page.Texts.Count);
+                Assert.Equal("Second text", page.Texts[1].Value);
+            }
+        }
+
+        [Fact]
+        public void GetDynamicCollectionPage() {
+            using (var api = new Api(options)) {
+                var page = api.Pages.GetBySlug("my-collection-page");
+
+                Assert.NotNull(page);
+                Assert.Equal(3, page.Regions.Texts.Count);
+                Assert.Equal("Second text", page.Regions.Texts[1].Value);
             }
         }
 
@@ -177,7 +230,7 @@ namespace Piranha.Tests.Repositories
 
                 api.Pages.Save(page);
 
-                Assert.Equal(4, api.Pages.GetAll(SITE_ID).Count());
+                Assert.Equal(5, api.Pages.GetAll(SITE_ID).Count());
             }
         }
 
