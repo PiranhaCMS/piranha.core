@@ -129,7 +129,7 @@ namespace Piranha.Repositories
         /// <returns>The page model</returns>
         public T GetById<T>(Guid id, IDbTransaction transaction = null) where T : Models.Page<T> {
             var multiple = db.QueryMultiple(
-                $"SELECT * FROM [{table}] WHERE [Id]=@Id " +
+                $"SELECT * FROM [{table}] WHERE [Id]=@Id; " +
                 $"SELECT * FROM [Piranha_PageFields] WHERE [PageId]=@Id", 
                 new { Id = id },
                 transaction: transaction);
@@ -204,7 +204,7 @@ namespace Piranha.Repositories
 
                     // Check if we have the page in the database already
                     var multiple = db.QueryMultiple(
-                        $"SELECT * FROM [{table}] WHERE [Id]=@Id " +
+                        $"SELECT * FROM [{table}] WHERE [Id]=@Id; " +
                         $"SELECT * FROM [Piranha_PageFields] WHERE [PageId]=@Id",
                         new { Id = model.Id },
                         transaction: tx);
