@@ -89,7 +89,7 @@ namespace Piranha.Repositories
         /// <param name="model">The model</param>
         /// <param name="transaction">The optional transaction</param>
         public void Save(Models.PageType model, IDbTransaction transaction = null) {
-            if ((int)db.ExecuteScalar($"SELECT COUNT([Id]) FROM [{table}] WHERE [Id]=@Id", model, transaction: transaction) == 0)
+            if (db.ExecuteScalar<int>($"SELECT COUNT([Id]) FROM [{table}] WHERE [Id]=@Id", model, transaction: transaction) == 0)
                 Add(model, transaction);
             else Update(model, transaction);
 
