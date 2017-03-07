@@ -8,14 +8,14 @@
 -- 
 
 CREATE TABLE [Piranha_Migrations] (
-	[Id] UNIQUEIDENTIFIER NOT NULL,
+	[Id] NVARCHAR(36) NOT NULL,
 	[Name] NVARCHAR(64) NOT NULL,
 	[Created] DATETIME NOT NULL,
 	CONSTRAINT PK_Migration_Id PRIMARY KEY ([Id])
 );
 
 CREATE TABLE [Piranha_Params] (
-	[Id] UNIQUEIDENTIFIER NOT NULL,
+	[Id] NVARCHAR(36) NOT NULL,
 	[Key] NVARCHAR(64) NOT NULL,
 	[Value] NTEXT NULL,
 	[Description] NVARCHAR(256) NULL,
@@ -26,7 +26,7 @@ CREATE TABLE [Piranha_Params] (
 CREATE UNIQUE INDEX IX_Param_Key ON [Piranha_Params] ([Key]);
 
 CREATE TABLE [Piranha_Sites] (
-	[Id] UNIQUEIDENTIFIER NOT NULL,
+	[Id] NVARCHAR(36) NOT NULL,
 	[InternalId] NVARCHAR(64) NOT NULL,
 	[Title] NVARCHAR(128) NOT NULL,
 	[Description] NVARCHAR(256) NULL,
@@ -39,7 +39,7 @@ CREATE TABLE [Piranha_Sites] (
 CREATE UNIQUE INDEX IX_Site_InternalId ON [Piranha_Sites] ([InternalId]);
 
 CREATE TABLE [Piranha_PageTypes] (
-    [Id] NVARCHAR(64) NOT NULL,
+	[Id] NVARCHAR(64) NOT NULL,
     [Body] NTEXT NOT NULL,
     [Created] DATETIME NOT NULL,
     [LastModified] DATETIME NOT NULL,
@@ -47,10 +47,10 @@ CREATE TABLE [Piranha_PageTypes] (
 );
 
 CREATE TABLE [Piranha_Pages] (
-	[Id] UNIQUEIDENTIFIER NOT NULL,
+	[Id] NVARCHAR(36) NOT NULL,
 	[PageTypeId] NVARCHAR(64) NOT NULL,
-	[SiteId] UNIQUEIDENTIFIER NOT NULL,
-	[ParentId] UNIQUEIDENTIFIER NULL,
+	[SiteId] NVARCHAR(36) NOT NULL,
+	[ParentId] NVARCHAR(36) NULL,
 	[SortOrder] INT NOT NULL DEFAULT(0),
 	[Title] NVARCHAR(128) NOT NULL,
 	[NavigationTitle] NVARCHAR(128) NULL,
@@ -69,8 +69,8 @@ CREATE TABLE [Piranha_Pages] (
 CREATE UNIQUE INDEX IX_Page_Slug ON [Piranha_Pages] ([Slug]);
 
 CREATE TABLE [Piranha_PageFields] (
-    [Id] UNIQUEIDENTIFIER NOT NULL,
-    [PageId] UNIQUEIDENTIFIER NOT NULL,
+	[Id] NVARCHAR(36) NOT NULL,
+    [PageId] NVARCHAR(36) NOT NULL,
     [RegionId] NVARCHAR(64) NOT NULL,
     [FieldId] NVARCHAR(64) NOT NULL,
     [SortOrder] INT NOT NULL DEFAULT(0),

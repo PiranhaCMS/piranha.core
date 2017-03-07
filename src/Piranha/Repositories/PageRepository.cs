@@ -47,15 +47,15 @@ namespace Piranha.Repositories
         /// <param name="siteId">The optional site id</param>
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The pages</returns>
-        public IEnumerable<Models.DynamicPage> GetAll(Guid? siteId = null, IDbTransaction transaction = null) {
-            if (!siteId.HasValue) {
+        public IEnumerable<Models.DynamicPage> GetAll(string siteId = null, IDbTransaction transaction = null) {
+            if (!string.IsNullOrEmpty(siteId)) {
                 var site = api.Sites.GetDefault(transaction: transaction);
 
                 if (site != null)
                     siteId = site.Id;
             }
 
-            var pages = db.Query<Guid>(
+            var pages = db.Query<string>(
                 $"SELECT [Id] FROM [{table}] WHERE [SiteId]=@SiteId ORDER BY [ParentId], [SortOrder]", 
                 new { SiteId = siteId },
                 transaction: transaction).ToArray();
@@ -77,7 +77,7 @@ namespace Piranha.Repositories
         /// <param name="siteId">The optional site id</param>
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
-        public Models.DynamicPage GetStartpage(Guid? siteId = null, IDbTransaction transaction = null) {
+        public Models.DynamicPage GetStartpage(string siteId = null, IDbTransaction transaction = null) {
             return GetStartpage<Models.DynamicPage>(siteId, transaction);
         }
 
@@ -88,8 +88,8 @@ namespace Piranha.Repositories
         /// <param param name="siteId">The optional site id</param>
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
-        public T GetStartpage<T>(Guid? siteId = null, IDbTransaction transaction = null) where T : Models.Page<T> {
-            if (!siteId.HasValue) {
+        public T GetStartpage<T>(string siteId = null, IDbTransaction transaction = null) where T : Models.Page<T> {
+            if (string.IsNullOrEmpty(siteId)) {
                 var site = api.Sites.GetDefault(transaction: transaction);
                 if (site != null)
                     siteId = site.Id;
@@ -116,7 +116,7 @@ namespace Piranha.Repositories
         /// <param name="id">The unique id</param>
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
-        public Models.DynamicPage GetById(Guid id, IDbTransaction transaction = null) {
+        public Models.DynamicPage GetById(string id, IDbTransaction transaction = null) {
             return GetById<Models.DynamicPage>(id);
         }
 
@@ -127,7 +127,7 @@ namespace Piranha.Repositories
         /// <param name="id">The unique id</param>
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
-        public T GetById<T>(Guid id, IDbTransaction transaction = null) where T : Models.Page<T> {
+        public T GetById<T>(string id, IDbTransaction transaction = null) where T : Models.Page<T> {
             var multiple = db.QueryMultiple(
                 $"SELECT * FROM [{table}] WHERE [Id]=@Id; " +
                 $"SELECT * FROM [Piranha_PageFields] WHERE [PageId]=@Id", 
@@ -151,7 +151,7 @@ namespace Piranha.Repositories
         /// <param name="siteId">The optional site id</param>
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
-        public Models.DynamicPage GetBySlug(string slug, Guid? siteId = null, IDbTransaction transaction = null) {
+        public Models.DynamicPage GetBySlug(string slug, string siteId = null, IDbTransaction transaction = null) {
             return GetBySlug<Models.DynamicPage>(slug, siteId, transaction);
         }
 
@@ -163,8 +163,8 @@ namespace Piranha.Repositories
         /// <param name="siteId">The optional site id</param>
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
-        public T GetBySlug<T>(string slug, Guid? siteId = null, IDbTransaction transaction = null) where T : Models.Page<T> {
-            if (!siteId.HasValue) {
+        public T GetBySlug<T>(string slug, string siteId = null, IDbTransaction transaction = null) where T : Models.Page<T> {
+            if (string.IsNullOrEmpty(siteId)) {
                 var site = api.Sites.GetDefault(transaction: transaction);
                 if (site != null)
                     siteId = site.Id;
@@ -217,7 +217,7 @@ namespace Piranha.Repositories
                     // If not, create a new page
                     if (page == null) {
                         page = new Page() {
-                            Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
+                            Id = !string.IsNullOrEmpty(model.Id) ? model.Id : Guid.NewGuid().ToString(),
                             PageTypeId = model.TypeId,
                             Created = DateTime.Now,
                             LastModified = DateTime.Now
@@ -292,7 +292,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <param name="transaction">The optional transaction</param>
-        public virtual void Delete(Guid id, IDbTransaction transaction = null) {
+        public virtual void Delete(string id, IDbTransaction transaction = null) {
             db.Execute($"DELETE FROM [{table}] WHERE [Id]=@Id",
                 new { Id = id }, transaction: transaction);
 
@@ -580,7 +580,7 @@ namespace Piranha.Repositories
                     // If not, create a new field
                     if (field == null) {
                         field = new PageField() {
-                            Id = Guid.NewGuid(),
+                            Id = Guid.NewGuid().ToString(),
                             PageId = page.Id,
                             RegionId = regionId,
                             FieldId = fieldDef.Id
@@ -615,11 +615,11 @@ namespace Piranha.Repositories
         /// <param name="sortOrder">The sort order</param>
         /// <param name="increase">If sort order should be increase or decreased</param>
         /// <param name="transaction">The current transaction</param>
-        private void MovePages(Guid? parentId, int sortOrder, bool increase, IDbTransaction transaction) {
-            if (parentId.HasValue)
+        private void MovePages(string parentId, int sortOrder, bool increase, IDbTransaction transaction) {
+            if (!string.IsNullOrEmpty(parentId))
                 db.Execute($"UPDATE [{table}] SET [SortOrder]=[SortOrder] " + (increase ? "+ 1" : "- 1") +
                     " WHERE [ParentId]=@ParentId AND [SortOrder]>=@SortOrder", 
-                    new { ParentId = parentId.Value, SortOrder = sortOrder },
+                    new { ParentId = parentId, SortOrder = sortOrder },
                     transaction: transaction);
             else db.Execute($"UPDATE [{table}] SET [SortOrder]=[SortOrder] " + (increase ? "+ 1" : "- 1") +
                 " WHERE [ParentId] IS NULL AND [SortOrder]>=@SortOrder", 

@@ -32,11 +32,11 @@ namespace Piranha.Repositories
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The model</returns>
         public Site GetByInternalId(string internalId, IDbTransaction transaction = null) {
-            Guid? id = cache != null ? cache.Get<Guid>($"SiteId_{internalId}") : (Guid?)null;
+            var id = cache != null ? cache.Get<string>($"SiteId_{internalId}") : null;
             Site model = null;
 
-            if (id.HasValue) {
-                model = GetById(id.Value, transaction);
+            if (!string.IsNullOrEmpty(id)) {
+                model = GetById(id, transaction);
             } else {
                 model = conn.QueryFirstOrDefault<Site>($"SELECT * FROM [{table}] WHERE [InternalId]=@InternalId",
                     new { InternalId = internalId }, transaction: transaction);

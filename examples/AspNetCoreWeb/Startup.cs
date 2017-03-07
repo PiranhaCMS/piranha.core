@@ -1,9 +1,20 @@
-﻿using System;
+﻿/*
+ * Copyright (c) 2017 Håkan Edling
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ * 
+ * https://github.com/piranhacms/piranha.core
+ * 
+ */
+
+using System;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -36,11 +47,15 @@ namespace AspNetCoreWeb
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services) {
             services.AddMvc();
-            services.AddPiranhaDb(options => {
-                options.Connection = new SqlConnection("data source=(localdb)\\MSSQLLocalDB;initial catalog=piranha.aspnetcore;integrated security=true");
-                options.Migrate = true;
-
+            services.AddPiranhaDb(o => {
+                o.Connection = new SqliteConnection("Filename=./piranha.db");
+                o.Migrate = true;
             });
+
+            //services.AddPiranhaDb(options => {
+            //    options.Connection = new SqlConnection("data source=(localdb)\\MSSQLLocalDB;initial catalog=piranha.aspnetcore;integrated security=true");
+            //    options.Migrate = true;
+            //});
             services.AddScoped<Api, Api>();
         }
 
@@ -83,7 +98,7 @@ namespace AspNetCoreWeb
         private void Seed(Api api) {
             if (api.Sites.GetAll().Count() == 0) {
                 // Add the main site
-                var siteId = Guid.NewGuid();
+                var siteId = Guid.NewGuid().ToString();
                 var site = new Site() {
                     Id = siteId,
                     Title = "Default site",

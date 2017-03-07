@@ -22,7 +22,7 @@ namespace Piranha.Repositories
         /// <param name="siteId">The optional site id</param>
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The pages</returns>
-        IEnumerable<Models.DynamicPage> GetAll(Guid? siteId = null, IDbTransaction transaction = null);
+        IEnumerable<Models.DynamicPage> GetAll(string siteId = null, IDbTransaction transaction = null);
 
         /// <summary>
         /// Gets the site startpage.
@@ -30,7 +30,7 @@ namespace Piranha.Repositories
         /// <param name="siteId">The optional site id</param>
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
-        Models.DynamicPage GetStartpage(Guid? siteId = null, IDbTransaction transaction = null);
+        Models.DynamicPage GetStartpage(string siteId = null, IDbTransaction transaction = null);
 
         /// <summary>
         /// Gets the site startpage.
@@ -39,7 +39,7 @@ namespace Piranha.Repositories
         /// <param name="siteId">The optional site id</param>
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
-        T GetStartpage<T>(Guid? siteId = null, IDbTransaction transaction = null) where T : Models.Page<T>;
+        T GetStartpage<T>(string siteId = null, IDbTransaction transaction = null) where T : Models.Page<T>;
 
         /// <summary>
         /// Gets the page model with the specified id.
@@ -47,7 +47,7 @@ namespace Piranha.Repositories
         /// <param name="id">The unique id</param>
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
-        Models.DynamicPage GetById(Guid id, IDbTransaction transaction = null);
+        Models.DynamicPage GetById(string id, IDbTransaction transaction = null);
 
         /// <summary>
         /// Gets the page model with the specified id.
@@ -56,7 +56,7 @@ namespace Piranha.Repositories
         /// <param name="id">The unique id</param>
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
-        T GetById<T>(Guid id, IDbTransaction transaction = null) where T : Models.Page<T>;
+        T GetById<T>(string id, IDbTransaction transaction = null) where T : Models.Page<T>;
 
         /// <summary>
         /// Gets the page model with the specified slug.
@@ -65,7 +65,7 @@ namespace Piranha.Repositories
         /// <param name="siteId">The optional site id</param>
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
-        Models.DynamicPage GetBySlug(string slug, Guid? siteId = null, IDbTransaction transaction = null);
+        Models.DynamicPage GetBySlug(string slug, string siteId = null, IDbTransaction transaction = null);
 
         /// <summary>
         /// Gets the page model with the specified slug.
@@ -75,7 +75,7 @@ namespace Piranha.Repositories
         /// <param name="siteId">The optional site id</param>
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
-        T GetBySlug<T>(string slug, Guid? siteId = null, IDbTransaction transaction = null) where T : Models.Page<T>;
+        T GetBySlug<T>(string slug, string siteId = null, IDbTransaction transaction = null) where T : Models.Page<T>;
 
         /// <summary>
         /// Saves the given page model
@@ -89,7 +89,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <param name="transaction">The optional transaction</param>
-        void Delete(Guid id, IDbTransaction transaction = null);
+        void Delete(string id, IDbTransaction transaction = null);
 
         /// <summary>
         /// Deletes the given model.

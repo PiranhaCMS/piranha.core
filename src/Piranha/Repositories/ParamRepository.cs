@@ -32,11 +32,11 @@ namespace Piranha.Repositories
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The model</returns>
         public Param GetByKey(string key, IDbTransaction transaction = null) {
-            Guid? id = cache != null ? cache.Get<Guid>($"ParamKey_{key}") : (Guid?)null;
+            var id = cache != null ? cache.Get<string>($"ParamKey_{key}") : null;
             Param model = null;
 
-            if (id.HasValue) {
-                model = GetById(id.Value, transaction);
+            if (!string.IsNullOrEmpty(id)) {
+                model = GetById(id, transaction);
             } else {
                 model = conn.QueryFirstOrDefault<Param>($"SELECT * FROM [{table}] WHERE [Key]=@Key",
                     new { Key = key }, transaction: transaction);

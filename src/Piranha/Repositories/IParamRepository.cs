@@ -30,7 +30,7 @@ namespace Piranha.Repositories
         /// <param name="id">The unique id</param>
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The model, or NULL if it doesn't exist</returns>
-        Param GetById(Guid id, IDbTransaction transaction = null);
+        Param GetById(string id, IDbTransaction transaction = null);
 
         /// <summary>
         /// Gets the model with the given internal id.
@@ -53,7 +53,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <param name="transaction">The optional transaction</param>
-        void Delete(Guid id, IDbTransaction transaction = null);
+        void Delete(string id, IDbTransaction transaction = null);
 
         /// <summary>
         /// Deletes the given model.

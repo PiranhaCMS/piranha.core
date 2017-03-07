@@ -61,7 +61,7 @@ namespace Piranha.Repositories
         /// <param name="id">The unique id</param>
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The model, or NULL if it doesn't exist</returns>
-        public virtual T GetById(Guid id, IDbTransaction transaction = null) {
+        public virtual T GetById(string id, IDbTransaction transaction = null) {
             T model = cache != null ? cache.Get<T>(id.ToString()) : null;
 
             if (model == null) {
@@ -94,7 +94,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <param name="transaction">The optional transaction</param>
-        public virtual void Delete(Guid id, IDbTransaction transaction = null) {
+        public virtual void Delete(string id, IDbTransaction transaction = null) {
             conn.Execute($"DELETE FROM [{table}] WHERE [Id]=@Id",
                 new { Id = id }, transaction: transaction);
 
@@ -133,7 +133,7 @@ namespace Piranha.Repositories
         /// <param name="transaction">The optional transaction</param>
         protected virtual void PrepareInsert(T model, IDbTransaction transaction) {
             // Prepare id
-            model.Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid();
+            model.Id = !string.IsNullOrEmpty(model.Id) ? model.Id : Guid.NewGuid().ToString();
 
             // Prepare created date
             if (isCreated)

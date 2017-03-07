@@ -26,7 +26,7 @@ namespace Piranha.Tests.Repositories
         private const string SITE_5 = "MyFifthSite";
         private const string SITE_1_HOSTS = "mysite.com";
 
-        private Guid SITE_1_ID = Guid.NewGuid();
+        private string SITE_1_ID = Guid.NewGuid().ToString();
         #endregion
 
         protected override void Init() {

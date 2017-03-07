@@ -37,7 +37,7 @@ namespace AspNetCoreWeb.Controllers
         /// <param name="id">The unique id</param>
         /// <param name="startpage">If this is the site startpage</param>
         [Route("page")]
-        public IActionResult Page(Guid id, bool startpage) {
+        public IActionResult Page(string id, bool startpage) {
             var model = api.Pages.GetById<Models.MarkdownPage>(id);
 
             if (startpage)

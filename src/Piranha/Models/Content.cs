@@ -21,7 +21,7 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the unique id.
         /// </summary>
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// Gets/sets the content type id.

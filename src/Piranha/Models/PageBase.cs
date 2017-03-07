@@ -21,12 +21,12 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the site id.
         /// </summary>
-        public Guid SiteId { get; set; }
+        public string SiteId { get; set; }
 
         /// <summary>
         /// Gets/sets the optional parent id.
         /// </summary>
-        public Guid? ParentId { get; set; }
+        public string ParentId { get; set; }
 
         /// <summary>
         /// Gets/sets the sort order of the page in its hierarchical position.

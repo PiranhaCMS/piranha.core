@@ -21,10 +21,10 @@ namespace Piranha.Tests.Repositories
     public class Pages : BaseTests
     {
         #region Members
-        public static readonly Guid SITE_ID = new Guid("8170A7B1-00C5-4014-90BD-6401710E93BD");
-        public static readonly Guid PAGE_1_ID = new Guid("C86E47BA-8D0A-4A54-8EB2-2EE2E05E79D5");
-        public static readonly Guid PAGE_2_ID = new Guid("BF61DBD2-BA79-4AF5-A4F5-66331AC3213E");
-        public static readonly Guid PAGE_3_ID = new Guid("AF62769D-019F-44BF-B44F-E3D61F421DD2");
+        public static readonly string SITE_ID = new Guid("8170A7B1-00C5-4014-90BD-6401710E93BD").ToString();
+        public static readonly string PAGE_1_ID = new Guid("C86E47BA-8D0A-4A54-8EB2-2EE2E05E79D5").ToString();
+        public static readonly string PAGE_2_ID = new Guid("BF61DBD2-BA79-4AF5-A4F5-66331AC3213E").ToString();
+        public static readonly string PAGE_3_ID = new Guid("AF62769D-019F-44BF-B44F-E3D61F421DD2").ToString();
         #endregion
 
         [PageType(Title = "My PageType")]
