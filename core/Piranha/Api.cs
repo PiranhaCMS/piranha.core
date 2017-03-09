@@ -83,14 +83,18 @@ namespace Piranha
                 dispose = true;
             }
 
+            Setup(modelCache);
+
             if (config.Migrate) {
                 lock (mutex) {
-                    if (!IsCompatible())
+                    if (!IsCompatible()) {
                         UpdateDatabase();
+
+                        if (config.Seed)
+                            Db.Seed(this);
+                    }
                 }
             }
-
-            Setup(modelCache);
         }
 
         /// <summary>

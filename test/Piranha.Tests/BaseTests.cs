@@ -24,6 +24,7 @@ namespace Piranha.Tests
         protected Action<DbBuilder> options = o => {
             o.Connection = new SqliteConnection("Filename=./piranha.tests.db");
             o.Migrate = true;
+            o.Seed = false;
         };
 
         /// <summary>

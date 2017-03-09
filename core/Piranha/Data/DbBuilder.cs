@@ -29,5 +29,19 @@ namespace Piranha
         /// to latest migration automatically.
         /// </summary>
         public bool Migrate { get; set; }
+
+        /// <summary>
+        /// Gets/sets if the database should be seeded 
+        /// with default data. This is only executed after
+        /// a migration is run.
+        /// </summary>
+        public bool Seed { get; set; }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public DbBuilder() {
+            Seed = true;
+        }
     }
 }

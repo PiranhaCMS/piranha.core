@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using Microsoft.Extensions.DependencyInjection;
@@ -16,8 +16,7 @@ namespace Piranha.Data
     /// <summary>
     /// Database extensions.
     /// </summary>
-    public static class Db
-    {
+    public static class Db {
         /// <summary>
         /// The currently available migrations.
         /// </summary>
@@ -27,6 +26,42 @@ namespace Piranha.Data
                 Script = "Piranha.Data.Migrations.1.sql"
             }
         };
+
+        /// <summary>
+        /// Seeds the database with default data.
+        /// </summary>
+        /// <param name="api">The current api</param>
+        public static void Seed(Api api) {
+            //
+            // Default site
+            //
+            var site = api.Sites.GetDefault();
+            if (site == null) {
+                site = new Site() {
+                    InternalId = "Default",
+                    Title = "Default Site",
+                    IsDefault = true
+                };
+                api.Sites.Save(site);
+            }
+
+            //
+            // Params
+            //
+            var param = api.Params.GetByKey("CacheExpiresMedia");
+            if (param == null)
+                api.Params.Save(new Param() {
+                    Key = "CacheExpiresMedia",
+                    Value = 0.ToString()
+                });
+
+            param = api.Params.GetByKey("CacheExpiresPages");
+            if (param == null)
+                api.Params.Save(new Param() {
+                    Key = "CacheExpiresPages",
+                    Value = 0.ToString()
+                });
+        }
 
         /// <summary>
         /// Registers the Piranha db initializer.
