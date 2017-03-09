@@ -4,7 +4,7 @@ This is a **complete rewrite** of Piranha CMS for `NetStandard` & `.NET 4.61`. T
 rewrite is to create a version capable of targeting multiple platforms & frameworks with minimal
 depenencies, but still provide a flexible & high performance CMS library.
 
-At the moment Piranha is compiled for `NetStandard 1.6.1` & `.NET 4.6.1` and uses the following packages:
+At the moment Piranha is compiled for `NetStandard 1.4` & `.NET 4.6.1` and uses the following packages:
 
 * AutoMapper `5.2.0`
 * Dapper `1.50.2`
