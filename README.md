@@ -8,7 +8,7 @@ At the moment Piranha is compiled for `NetStandard 1.6.1` & `.NET 4.6.1` and use
 
 * AutoMapper `5.2.0`
 * Dapper `1.50.2`
-* Markdown `2.2.0`
+* Markdown `2.2.1`
 * Newtonsoft.Json `9.0.1`
 
 ## Licensing

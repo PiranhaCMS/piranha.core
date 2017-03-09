@@ -72,7 +72,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void AddDuplicateKey() {
             using (var api = new Api(options)) {
-                Assert.Throws<SqlException>(() =>
+                Assert.ThrowsAny<Exception>(() =>
                     api.Params.Save(new Data.Param() {
                         Key = PARAM_1,
                         Value = "My duplicate value"

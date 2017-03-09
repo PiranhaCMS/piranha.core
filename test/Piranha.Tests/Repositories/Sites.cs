@@ -72,7 +72,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void AddDuplicateKey() {
             using (var api = new Api(options)) {
-                Assert.Throws<SqlException>(() =>
+                Assert.ThrowsAny<Exception>(() =>
                     api.Sites.Save(new Data.Site() {
                         InternalId = SITE_1,
                         Title = SITE_1
