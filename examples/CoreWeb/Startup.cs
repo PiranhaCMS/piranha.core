@@ -19,7 +19,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Piranha;
-using Piranha.Data;
+using Piranha.Cache;
 
 namespace CoreWeb
 {
@@ -51,6 +51,7 @@ namespace CoreWeb
                 o.Connection = new SqliteConnection("Filename=./piranha.db");
                 o.Migrate = true;
             });
+            services.AddSingleton<ICache, MemCache>();
             services.AddScoped<Api, Api>();
         }
 

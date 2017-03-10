@@ -56,7 +56,7 @@ namespace Piranha.Repositories
             }
 
             var pages = db.Query<string>(
-                $"SELECT [Id] FROM [{table}] WHERE [SiteId]=@SiteId ORDER BY [ParentId], [SortOrder]", 
+                $"SELECT [Id] FROM [{table}] WHERE [SiteId]=@SiteId ORDER BY [ParentId], [SortOrder]",
                 new { SiteId = siteId },
                 transaction: transaction).ToArray();
 
@@ -70,7 +70,7 @@ namespace Piranha.Repositories
             }
             return models;
         }
- 
+
         /// <summary>
         /// Gets the site startpage.
         /// </summary>
@@ -95,18 +95,25 @@ namespace Piranha.Repositories
                     siteId = site.Id;
             }
 
-            var page = db.QueryFirstOrDefault<Page>(
-                $"SELECT * FROM [{table}] WHERE [SiteId]=@SiteId AND [ParentId] IS NULL AND [SortOrder]=0", 
-                new { SiteId = siteId }, transaction: transaction);
+            var page = cache != null ? cache.Get<Page>($"Page_{siteId}") : null;
 
-            if (page != null) {
-                page.Fields = db.Query<PageField>(
-                    $"SELECT * FROM [Piranha_PageFields] WHERE [PageId]=@Id", 
-                    new { Id = page.Id }, 
-                    transaction: transaction).ToList();
+            if (page == null) {
+                page = db.QueryFirstOrDefault<Page>(
+                    $"SELECT * FROM [{table}] WHERE [SiteId]=@SiteId AND [ParentId] IS NULL AND [SortOrder]=0",
+                    new { SiteId = siteId }, transaction: transaction);
+                if (page != null) {
+                    page.Fields = db.Query<PageField>(
+                        $"SELECT * FROM [Piranha_PageFields] WHERE [PageId]=@Id",
+                        new { Id = page.Id },
+                        transaction: transaction).ToList();
 
-                return Load<T>(page);
+                    if (cache != null)
+                        AddToCache(page);
+                }
             }
+
+            if (page != null)
+                return Load<T>(page);
             return null;
         }
 
@@ -128,16 +135,24 @@ namespace Piranha.Repositories
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
         public T GetById<T>(string id, IDbTransaction transaction = null) where T : Models.Page<T> {
-            var multiple = db.QueryMultiple(
-                $"SELECT * FROM [{table}] WHERE [Id]=@Id; " +
-                $"SELECT * FROM [Piranha_PageFields] WHERE [PageId]=@Id", 
-                new { Id = id },
-                transaction: transaction);
+            var page = cache != null ? cache.Get<Page>(id) : null;
 
-            var page = multiple.Read<Page>().First();
-            if (page != null)
-                page.Fields = multiple.Read<PageField>().ToList();
-            multiple.Dispose();
+            if (page == null) {
+                var multiple = db.QueryMultiple(
+                    $"SELECT * FROM [{table}] WHERE [Id]=@Id; " +
+                    $"SELECT * FROM [Piranha_PageFields] WHERE [PageId]=@Id",
+                    new { Id = id },
+                    transaction: transaction);
+
+                page = multiple.Read<Page>().First();
+                if (page != null) {
+                    page.Fields = multiple.Read<PageField>().ToList();
+
+                    if (cache != null)
+                        AddToCache(page);
+                }
+                multiple.Dispose();
+            }
 
             if (page != null)
                 return Load<T>(page);
@@ -170,20 +185,29 @@ namespace Piranha.Repositories
                     siteId = site.Id;
             }
 
-            var page = db.QueryFirstOrDefault<Page>(
-                $"SELECT * FROM [{table}] WHERE [SiteId]=@SiteId AND [Slug]=@Slug",
-                new { SiteId = siteId, Slug = slug },
-                transaction: transaction);
+            // See if we can get the page id for the slug from cache.
+            string pageId = cache != null ? cache.Get<string>($"PageId_{siteId}_{slug}") : null;
 
-            if (page != null) {
-                page.Fields = db.Query<PageField>(
-                    $"SELECT * FROM [Piranha_PageFields] WHERE [PageId]=@Id",
-                    new { Id = page.Id },
-                    transaction: transaction).ToList();
+            if (!string.IsNullOrEmpty(pageId)) {
+                // Load the page by id instead
+                return GetById<T>(pageId, transaction);
+            } else {
+                // No cache found, load from database
+                var page = db.QueryFirstOrDefault<Page>(
+                    $"SELECT * FROM [{table}] WHERE [SiteId]=@SiteId AND [Slug]=@Slug",
+                    new { SiteId = siteId, Slug = slug },
+                    transaction: transaction);
 
-                return Load<T>(page);
+                if (page != null) {
+                    page.Fields = db.Query<PageField>(
+                        $"SELECT * FROM [Piranha_PageFields] WHERE [PageId]=@Id",
+                        new { Id = page.Id },
+                        transaction: transaction).ToList();
+
+                    return Load<T>(page);
+                }
+                return null;
             }
-            return null;
         }
 
         /// <summary>
@@ -193,7 +217,6 @@ namespace Piranha.Repositories
         /// <param name="transaction">The optional transaction</param>
         public void Save<T>(T model, IDbTransaction transaction = null) where T : Models.Page<T> {
             var tx = transaction != null ? transaction : api.BeginTransaction();
-            //var tx = transaction;
 
             try {
                 var type = api.PageTypes.GetById(model.TypeId, transaction: tx);
@@ -278,6 +301,9 @@ namespace Piranha.Repositories
                     if (tx != transaction) {
                         tx.Commit();
                     }
+
+                    if (cache != null && !isNew)
+                        RemoveFromCache(page);
                 }
             } catch {
                 if (tx != transaction) {
@@ -301,8 +327,12 @@ namespace Piranha.Repositories
             db.Execute($"DELETE FROM [{table}] WHERE [Id]=@Id",
                 new { Id = id }, transaction: transaction);
 
-            if (cache != null)
-                cache.Remove(id.ToString());
+            // Check if we have the page in cache, and if so remove it
+            if (cache != null) {
+                var page = cache.Get<Page>(id);
+                if (page != null)
+                    RemoveFromCache(page);
+            }
         }
 
         /// <summary>
@@ -390,7 +420,7 @@ namespace Piranha.Repositories
                     DeserializeValue(field));
             }
         }
-        
+
         /// <summary>
         /// Sets the value of a simple single field region.
         /// </summary>
@@ -441,7 +471,7 @@ namespace Piranha.Repositories
                 list.Add(obj);
             }
         }
-        
+
         /// <summary>
         /// Sets the value of a complex region.
         /// </summary>
@@ -469,7 +499,7 @@ namespace Piranha.Repositories
         /// <returns>The value</returns>
         private object DeserializeValue(PageField field) {
             var type = App.Fields.GetByType(field.CLRType);
-            
+
             if (type != null)
                 return JsonConvert.DeserializeObject(field.Value, type.Type);
             return null;
@@ -623,13 +653,37 @@ namespace Piranha.Repositories
         private void MovePages(string parentId, int sortOrder, bool increase, IDbTransaction transaction) {
             if (!string.IsNullOrEmpty(parentId))
                 db.Execute($"UPDATE [{table}] SET [SortOrder]=[SortOrder] " + (increase ? "+ 1" : "- 1") +
-                    " WHERE [ParentId]=@ParentId AND [SortOrder]>=@SortOrder", 
+                    " WHERE [ParentId]=@ParentId AND [SortOrder]>=@SortOrder",
                     new { ParentId = parentId, SortOrder = sortOrder },
                     transaction: transaction);
             else db.Execute($"UPDATE [{table}] SET [SortOrder]=[SortOrder] " + (increase ? "+ 1" : "- 1") +
-                " WHERE [ParentId] IS NULL AND [SortOrder]>=@SortOrder", 
-                new { SortOrder = sortOrder},
+                " WHERE [ParentId] IS NULL AND [SortOrder]>=@SortOrder",
+                new { SortOrder = sortOrder },
                 transaction: transaction);
+        }
+        #endregion
+
+        #region Private cache methods
+        /// <summary>
+        /// Adds the given model to cache.
+        /// </summary>
+        /// <param name="model">The model</param>
+        private void AddToCache(Page page) {
+            cache.Set(page.Id, page);
+            cache.Set($"PageId_{page.SiteId}_{page.Slug}", page.Id);
+            if (string.IsNullOrEmpty(page.ParentId) && page.SortOrder == 0)
+                cache.Set($"Page_{page.SiteId}", page);
+        }
+
+        /// <summary>
+        /// Removes the given model from cache.
+        /// </summary>
+        /// <param name="model">The model</param>
+        private void RemoveFromCache(Page page) {
+            cache.Remove(page.Id);
+            cache.Remove($"PageId_{page.SiteId}_{page.Slug}");
+            if (string.IsNullOrEmpty(page.ParentId) && page.SortOrder == 0)
+                cache.Remove($"Page_{page.SiteId}");
         }
         #endregion
     }

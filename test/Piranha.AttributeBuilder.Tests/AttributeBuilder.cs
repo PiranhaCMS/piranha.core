@@ -18,7 +18,7 @@ namespace Piranha.AttributeBuilder.Tests
     public class AttributeBuilder : IDisposable
     {
         #region Members
-        protected Action<DbBuilder> options = o => {
+        protected Action<Data.DbBuilder> options = o => {
             o.Connection = new SqliteConnection("Filename=./piranha.tests.db");
             o.Migrate = true;
         };

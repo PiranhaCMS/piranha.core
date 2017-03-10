@@ -10,7 +10,7 @@
 
 using System.Data;
 
-namespace Piranha
+namespace Piranha.Data
 {
     public sealed class DbBuilder
     {

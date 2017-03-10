@@ -8,9 +8,6 @@
  *
  */
 
-using Microsoft.Extensions.DependencyInjection;
-using System;
-
 namespace Piranha.Data
 {
     /// <summary>
@@ -61,15 +58,6 @@ namespace Piranha.Data
                     Key = Config.CACHE_EXPIRES_PAGES,
                     Value = 0.ToString()
                 });
-        }
-
-        /// <summary>
-        /// Registers the Piranha db initializer.
-        /// </summary>
-        /// <param name="services">The current service collection</param>
-        /// <param name="options">The connection builder</param>
-        public static void AddPiranhaDb(this IServiceCollection services, Action<DbBuilder> options) {
-            services.AddSingleton<Action<DbBuilder>>(options);
         }
     }
 }
