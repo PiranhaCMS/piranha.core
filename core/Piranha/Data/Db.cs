@@ -48,17 +48,17 @@ namespace Piranha.Data
             //
             // Params
             //
-            var param = api.Params.GetByKey("CacheExpiresMedia");
+            var param = api.Params.GetByKey(Config.CACHE_EXPIRES_MEDIA);
             if (param == null)
                 api.Params.Save(new Param() {
-                    Key = "CacheExpiresMedia",
+                    Key = Config.CACHE_EXPIRES_MEDIA,
                     Value = 0.ToString()
                 });
 
-            param = api.Params.GetByKey("CacheExpiresPages");
+            param = api.Params.GetByKey(Config.CACHE_EXPIRES_PAGES);
             if (param == null)
                 api.Params.Save(new Param() {
-                    Key = "CacheExpiresPages",
+                    Key = Config.CACHE_EXPIRES_PAGES,
                     Value = 0.ToString()
                 });
         }
