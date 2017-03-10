@@ -293,6 +293,11 @@ namespace Piranha.Repositories
         /// <param name="id">The unique id</param>
         /// <param name="transaction">The optional transaction</param>
         public virtual void Delete(string id, IDbTransaction transaction = null) {
+            // Delete explicitly for databases that doesn't support cascade
+            // delete on foreign keys (SQLite)
+            db.Execute($"DELETE FROM [Piranha_PageFields] WHERE [PageId]=@Id",
+                new { Id = id }, transaction: transaction);
+            // Delete the page
             db.Execute($"DELETE FROM [{table}] WHERE [Id]=@Id",
                 new { Id = id }, transaction: transaction);
 

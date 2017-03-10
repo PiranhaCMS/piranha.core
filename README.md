@@ -1,10 +1,10 @@
 # Welcome to Piranha.Core
 
-This is a **complete rewrite** of Piranha CMS for `NetStandard 1.4`. The goal of this rewrite 
+This is a **complete rewrite** of Piranha CMS for `NetStandard`. The goal of this rewrite 
 is to create a version capable of targeting multiple platforms & frameworks with minimal
 depenencies, but still provide a flexible & high performance CMS library.
 
-Piranha uses the following awesome packages:
+Piranha is currently built for `NetStandard 1.4` and uses the following awesome packages:
 
 * AutoMapper `5.2.0`
 * Dapper `1.50.2`

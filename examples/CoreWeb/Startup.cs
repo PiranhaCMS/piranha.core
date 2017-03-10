@@ -52,11 +52,6 @@ namespace CoreWeb
                 o.Migrate = true;
             });
             services.AddScoped<Api, Api>();
-
-            //services.AddPiranhaDb(options => {
-            //    options.Connection = new SqlConnection("data source=(localdb)\\MSSQLLocalDB;initial catalog=piranha.aspnetcore;integrated security=true");
-            //    options.Migrate = true;
-            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,6 +60,7 @@ namespace CoreWeb
 
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
             }
 
             // Initialize Piranha
@@ -96,22 +92,15 @@ namespace CoreWeb
         /// </summary>
         /// <param name="db"></param>
         private void Seed(Api api) {
-            if (api.Sites.GetAll().Count() == 0) {
-                // Add the main site
-                var siteId = Guid.NewGuid().ToString();
-                var site = new Site() {
-                    Id = siteId,
-                    Title = "Default site",
-                    InternalId = "DefaultSite",
-                    IsDefault = true
-                };
-                api.Sites.Save(site);
+            if (api.Pages.GetAll().Count() == 0) {
+                // Get the default site
+                var site = api.Sites.GetDefault();
 
                 // Add the startpage
                 using (var stream = File.OpenRead("assets/seed/startpage.md")) {
                     using (var reader = new StreamReader(stream)) {
                         var startPage = Models.MarkdownPage.Create(api);
-                        startPage.SiteId = siteId;
+                        startPage.SiteId = site.Id;
                         startPage.Title = "Welcome to Piranha CMS";
                         startPage.Ingress = "The CMS framework with an extra bite";
                         startPage.Body = reader.ReadToEnd();

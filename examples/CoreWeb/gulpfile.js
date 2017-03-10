@@ -16,12 +16,10 @@ var gulp = require("gulp"),
     rename = require("gulp-rename"),
     uglify = require("gulp-uglify");
 
-var project = require('./project.json');
-
 var paths = {
     js: [
-        "bower_components/jquery/dist/jquery.js",
-        "bower_components/bootstrap/dist/js/bootstrap.js"
+        "assets/lib/jquery/dist/jquery.js",
+        "assets/lib/bootstrap/dist/js/bootstrap.js"
     ],
     jsDest: "wwwroot/assets/js/script.min.js",
     less: "assets/less/style.less",
