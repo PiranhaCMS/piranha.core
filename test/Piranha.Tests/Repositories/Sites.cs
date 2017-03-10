@@ -26,7 +26,7 @@ namespace Piranha.Tests.Repositories
         private const string SITE_5 = "MyFifthSite";
         private const string SITE_1_HOSTS = "mysite.com";
 
-        private Guid SITE_1_ID = Guid.NewGuid();
+        private string SITE_1_ID = Guid.NewGuid().ToString();
         #endregion
 
         protected override void Init() {
@@ -72,7 +72,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void AddDuplicateKey() {
             using (var api = new Api(options)) {
-                Assert.Throws<SqlException>(() =>
+                Assert.ThrowsAny<Exception>(() =>
                     api.Sites.Save(new Data.Site() {
                         InternalId = SITE_1,
                         Title = SITE_1

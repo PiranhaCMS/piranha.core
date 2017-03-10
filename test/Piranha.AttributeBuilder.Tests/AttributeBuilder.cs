@@ -8,9 +8,9 @@
  * 
  */
 
+using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using Xunit;
 
 namespace Piranha.AttributeBuilder.Tests
@@ -19,7 +19,7 @@ namespace Piranha.AttributeBuilder.Tests
     {
         #region Members
         protected Action<DbBuilder> options = o => {
-            o.Connection = new SqlConnection("data source=(localdb)\\MSSQLLocalDB;initial catalog=piranha.dapper.tests;integrated security=true");
+            o.Connection = new SqliteConnection("Filename=./piranha.tests.db");
             o.Migrate = true;
         };
         #endregion
