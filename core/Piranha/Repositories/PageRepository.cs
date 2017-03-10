@@ -48,7 +48,7 @@ namespace Piranha.Repositories
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The pages</returns>
         public IEnumerable<Models.DynamicPage> GetAll(string siteId = null, IDbTransaction transaction = null) {
-            if (!string.IsNullOrEmpty(siteId)) {
+            if (string.IsNullOrEmpty(siteId)) {
                 var site = api.Sites.GetDefault(transaction: transaction);
 
                 if (site != null)
