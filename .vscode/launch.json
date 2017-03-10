@@ -6,11 +6,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            //"program": "${workspaceRoot}/src/core/Piranha.Manager/bin/Debug/netcoreapp1.1/Piranha.Manager.dll",
-            "program": "${workspaceRoot}/src/examples/Blog/bin/Debug/netcoreapp1.1/Blog.dll",
+            "program": "${workspaceRoot}/examples/CoreWeb/bin/Debug/netcoreapp1.1/CoreWeb.dll",
             "args": [],
-            //"cwd": "${workspaceRoot}/src/core/Piranha.Manager",
-            "cwd": "${workspaceRoot}/src/examples/Blog",
+            "cwd": "${workspaceRoot}",
             "stopAtEntry": false,
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {
