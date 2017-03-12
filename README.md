@@ -1,5 +1,7 @@
 # Welcome to Piranha.Core
 
+[![Build status](https://ci.appveyor.com/api/projects/status/brw0cak0b5x4w17m?svg=true)](https://ci.appveyor.com/project/tidyui/piranha-core)
+
 This is a **complete rewrite** of Piranha CMS for `NetStandard`. The goal of this rewrite 
 is to create a version capable of targeting multiple platforms & frameworks with minimal
 depenencies, but still provide a flexible & high performance CMS library.
