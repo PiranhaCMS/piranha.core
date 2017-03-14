@@ -13,6 +13,23 @@ Piranha is currently built for `NetStandard 1.4` and uses the following awesome 
 * Markdown `2.2.1`
 * Newtonsoft.Json `9.0.1`
 
+## Core Packages
+
+### Piranha
+**NetStandard 1.4** [`AutoMapper`, `Dapper`, `Markdown`, `Newtonsoft.Json`]
+
+The core library that contains all data management, repositories, client models and extensibility features. In a way, everything you need to integrate Piranha into your existing solution.
+
+### Piranha.AspNetCore
+**NetStandard 1.4** [`Microsoft.AspNetCore.Http`]
+
+Middleware components and other tools for building a .NET Core web application with Piranha.
+
+### Piranha.AttributeBuilder
+**NetStandard 1.4**
+
+Components for automatically build and import page types by adding simple attributes to your models.
+
 ## Licensing
 Piranha CMS is released under the **MIT** license. It is a permissive free software license,
 meaning that it permits reuse within proprietary software provided all copies of the licensed
