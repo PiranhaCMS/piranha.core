@@ -1,17 +1,5 @@
 {
-  "projects": [ 
-    "src",
-    "src/core",
-    "src/data",
-    "src/env",
-    "src/examples", 
-    "test",
-    "test/core",
-    "test/data",
-    "test/env",
-    "test/examples"
-  ],
   "sdk": {
-    "version": "1.0.0-preview2-1-003177"
+    "version": "1.0.0-rc4-004771"
   }
 }

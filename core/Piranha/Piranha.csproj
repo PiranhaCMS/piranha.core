@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+  <PropertyGroup>
+    <TargetFramework>netstandard1.4</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Version>4.0.0-alpha</Version>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Authors>Håkan Edling</Authors>
+    <Company>Piranha CMS</Company>
+    <AssemblyTitle>Piranha</AssemblyTitle>
+    <Description>
+    </Description>
+    <Copyright>Håkan Edling 2011-2017</Copyright>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="5.2.0" />
+    <PackageReference Include="Dapper" Version="1.50.2" />
+    <PackageReference Include="Markdown" Version="2.2.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Migrations\*.sql" />
+  </ItemGroup>
+</Project>

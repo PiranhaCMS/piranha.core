@@ -2,19 +2,38 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/brw0cak0b5x4w17m?svg=true)](https://ci.appveyor.com/project/tidyui/piranha-core)
 
-This is a **complete rewrite** of Piranha CMS for the `DotNetCore` & `Entity Framework Core`. The goal is to create a platform independent version with minimal depenencies, but still provide tight integration with the services available in **Windows Azure** such as `Blob Storage` & `Media Services`.
+This is a **complete rewrite** of Piranha CMS for `NetStandard`. The goal of this rewrite 
+is to create a version capable of targeting multiple platforms & frameworks with minimal
+depenencies, but still provide a flexible & high performance CMS library.
 
-Piranha.Core is currently built for dotnet core `1.1.0` and uses the following packages:
+Piranha is currently built for `NetStandard 1.4` and uses the following awesome packages:
 
-* AutoMapper `5.1.1`
-* Markdown `2.2.0`
-* Microsoft.EntityFrameworkCore `1.1.0`
-* Microsoft.AspNetCore `1.1.0`
+* AutoMapper `5.2.0`
+* Dapper `1.50.2`
+* Markdown `2.2.1`
 * Newtonsoft.Json `9.0.1`
-* NETStandard.Library `1.6.1`
+
+## Core Packages
+
+### Piranha
+**NetStandard 1.4** [`AutoMapper`, `Dapper`, `Markdown`, `Newtonsoft.Json`]
+
+The core library that contains all data management, repositories, client models and extensibility features. In a way, everything you need to integrate Piranha into your existing solution.
+
+### Piranha.AspNetCore
+**NetStandard 1.4** [`Microsoft.AspNetCore.Http`]
+
+Middleware components and other tools for building a .NET Core web application with Piranha.
+
+### Piranha.AttributeBuilder
+**NetStandard 1.4**
+
+Components for automatically build and import page types by adding simple attributes to your models.
 
 ## Licensing
-Piranha.Core is released under the **MIT** license. It is a permissive free software license, meaning that it permits reuse within proprietary software provided all copies of the licensed software include a copy of the MIT License terms and the copyright notice.
+Piranha CMS is released under the **MIT** license. It is a permissive free software license,
+meaning that it permits reuse within proprietary software provided all copies of the licensed
+software include a copy of the MIT License terms and the copyright notice.
 
 ## Status
 This repository is under development and is **not** intended for production use.
