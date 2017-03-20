@@ -33,7 +33,7 @@ Components for automatically build and import page types by adding simple attrib
 ### Piranha.Manager
 **CoreApp 1.1** [`Microsoft.AspNetCore.Mvc`, `Microsoft.AspNetCore.StaticFiles`, `Microsoft.Extensions.FileProviders.Embedded`]
 
-Manager interface for Piranha. As `Microsoft.AspNetCore.Mvc` currently references `NetStandard 1.4` this solution is not compatible with the .NET Framework. This will be updated when `NetStandard 2.0` is released.
+Manager interface for Piranha. As `Microsoft.AspNetCore.Mvc` currently references `NetStandard 1.6` this package is not compatible with the .NET Framework. This will hopefully be fixed when `NetStandard 2.0` is released.
 
 ## Licensing
 Piranha CMS is released under the **MIT** license. It is a permissive free software license,
