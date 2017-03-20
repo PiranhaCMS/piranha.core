@@ -78,6 +78,16 @@ namespace Piranha.Repositories
         T GetBySlug<T>(string slug, string siteId = null, IDbTransaction transaction = null) where T : Models.Page<T>;
 
         /// <summary>
+        /// Moves the current page in the structure.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="model">The page to move</param>
+        /// <param name="parentId">The new parent id</param>
+        /// <param name="sortOrder">The new sort order</param>
+        /// <param name="transaction">The optional transaction</param>
+        void Move<T>(T model, string parentId, int sortOrder, IDbTransaction transaction = null) where T : Models.Page<T>;
+
+        /// <summary>
         /// Saves the given page model
         /// </summary>
         /// <param name="model">The page model</param>

@@ -144,7 +144,10 @@ namespace Piranha.Repositories
                     new { Id = id },
                     transaction: transaction);
 
-                page = multiple.Read<Page>().First();
+                try {
+                    page = multiple.Read<Page>().First();
+                } catch { }
+
                 if (page != null) {
                     page.Fields = multiple.Read<PageField>().ToList();
 
@@ -208,6 +211,35 @@ namespace Piranha.Repositories
                 }
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Moves the current page in the structure.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="model">The page to move</param>
+        /// <param name="parentId">The new parent id</param>
+        /// <param name="sortOrder">The new sort order</param>
+        /// <param name="transaction">The optional transaction</param>
+        public void Move<T>(T model, string parentId, int sortOrder, IDbTransaction transaction = null) where T : Models.Page<T> {
+            var tx = transaction != null ? transaction : api.BeginTransaction();
+
+            // Remove the old position for the page
+            MovePages(model.ParentId, model.SortOrder + 1, false, transaction: tx);
+            // Add room for the new position of the page
+            MovePages(parentId, sortOrder, true, transaction: tx);
+            // Update the position of the current page
+            db.Execute($"UPDATE [{table}] SET [ParentId]=@ParentId, [SortOrder]=@SortOrder WHERE [Id]=@Id",
+                new {
+                    Id = model.Id,
+                    ParentId = parentId,
+                    SortOrder = sortOrder
+                }, transaction: tx);
+   
+            // Commit local transaction
+            if (tx != transaction)
+                tx.Commit();
+   
         }
 
         /// <summary>

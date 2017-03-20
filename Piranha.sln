@@ -28,6 +28,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".global", ".global", "{8805
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Manager", "core\Piranha.Manager\Piranha.Manager.csproj", "{444EF37E-1F2F-4C3F-88E7-DB291B01E261}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +60,10 @@ Global
 		{9C4D5E1B-58DD-47F2-B310-095B352C0D3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C4D5E1B-58DD-47F2-B310-095B352C0D3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C4D5E1B-58DD-47F2-B310-095B352C0D3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{444EF37E-1F2F-4C3F-88E7-DB291B01E261}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{444EF37E-1F2F-4C3F-88E7-DB291B01E261}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{444EF37E-1F2F-4C3F-88E7-DB291B01E261}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{444EF37E-1F2F-4C3F-88E7-DB291B01E261}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,5 +75,6 @@ Global
 		{C2FD396D-ED18-4D01-8437-4D8488A0AEA6} = {A82A5922-BF05-4DD7-A2C1-DD22F1AD6A57}
 		{9B19D8C3-E991-41BD-87C9-DE87C44A5BAC} = {DE1913AC-4AA3-4F66-83F1-615710D8367B}
 		{9C4D5E1B-58DD-47F2-B310-095B352C0D3D} = {DE1913AC-4AA3-4F66-83F1-615710D8367B}
+		{444EF37E-1F2F-4C3F-88E7-DB291B01E261} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 	EndGlobalSection
 EndGlobal

@@ -48,6 +48,15 @@ namespace Piranha.Repositories
         Site GetDefault(IDbTransaction transaction = null);
 
         /// <summary>
+        /// Gets the hierachical sitemap structure.
+        /// </summary>
+        /// <param name="id">The optional site id</param>
+        /// <param name="onlyPublished">If only published items should be included</param>
+        /// <param name="transaction">The optional transaction</param>
+        /// <returns>The sitemap</returns>
+        IList<Models.SitemapItem> GetSitemap(string id = null, bool onlyPublished = true, IDbTransaction transaction = null);
+
+        /// <summary>
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>

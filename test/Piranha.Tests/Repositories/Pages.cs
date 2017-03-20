@@ -122,6 +122,24 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void GetNoneById() {
+            using (var api = new Api(options)) {
+                var none = api.Pages.GetById(Guid.NewGuid().ToString());
+
+                Assert.Null(none);
+            }
+        }
+
+        [Fact]
+        public void GetNoneBySlug() {
+            using (var api = new Api(options)) {
+                var none = api.Pages.GetBySlug("none-existing-slug");
+
+                Assert.Null(none);
+            }
+        }
+
+        [Fact]
         public void GetStartpage() {
             using (var api = new Api(options)) {
                 var model = api.Pages.GetStartpage();
@@ -249,6 +267,24 @@ namespace Piranha.Tests.Repositories
 
                 Assert.NotNull(page);
                 Assert.Equal("Updated page", page.Title);
+            }
+        }
+
+        [Fact]
+        public void Move() {
+            using (var api = new Api(options)) {
+                var page = api.Pages.GetById(PAGE_1_ID);
+
+                Assert.NotNull(page);
+                Assert.True(page.SortOrder > 0);
+
+                page.SortOrder = 0;
+                api.Pages.Move(page, null, 0);
+
+                page = api.Pages.GetById(PAGE_1_ID);
+
+                Assert.NotNull(page);
+                Assert.Equal(0, page.SortOrder);
             }
         }
 

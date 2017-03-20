@@ -11,7 +11,9 @@
 using Dapper;
 using Piranha.Data;
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace Piranha.Repositories
 {
@@ -65,6 +67,32 @@ namespace Piranha.Repositories
             return model;
         }
 
+        /// <summary>
+        /// Gets the hierachical sitemap structure.
+        /// </summary>
+        /// <param name="id">The optional site id</param>
+        /// <param name="onlyPublished">If only published items should be included</param>
+        /// <param name="transaction">The optional transaction</param>
+        /// <returns>The sitemap</returns>
+        public IList<Models.SitemapItem> GetSitemap(string id = null, bool onlyPublished = true, IDbTransaction transaction = null) {
+            if (id == null) {
+                var site = GetDefault(transaction);
+
+                if (site != null)
+                    id = site.Id;
+            }
+
+            if (id != null) {
+                var pages = conn.Query<Page>("SELECT [Id], [ParentId], [SortOrder], [Title], [NavigationTitle], [Slug], [Published], [Created], [LastModified] FROM [Piranha_Pages] WHERE [SiteId]=@Id ORDER BY [ParentId], [SortOrder]",
+                    new { Id = id }, transaction: transaction);
+
+                if (onlyPublished)
+                    pages = pages.Where(p => p.Published.HasValue);
+                return Sort(pages);
+            }
+            return null;
+        }
+
         #region Protected methods
         /// <summary>
         /// Adds a new model to the database.
@@ -111,6 +139,35 @@ namespace Piranha.Repositories
                 cache.Remove($"Site_{Guid.Empty}");
 
             base.RemoveFromCache(model);
+        }
+        #endregion
+
+        #region Private methods
+        /// <summary>
+        /// Sorts the items.
+        /// </summary>
+        /// <param name="pages">The full page list</param>
+        /// <param name="parentId">The current parent id</param>
+        /// <returns>The sitemap</returns>
+        private IList<Models.SitemapItem> Sort(IEnumerable<Page> pages, string parentId = null, int level = 0) {
+            var result = new List<Models.SitemapItem>();
+
+            foreach (var page in pages.Where(p => p.ParentId == parentId).OrderBy(p => p.SortOrder)) {
+                var item = new Models.SitemapItem() {
+                    Id = page.Id,
+                    Title = page.Title,
+                    NavigationTitle = page.NavigationTitle,
+                    Permalink = page.Slug,
+                    Level = level,
+                    Published = page.Published,
+                    Created = page.Created,
+                    LastModified = page.LastModified
+                };
+                item.Items = Sort(pages, page.Id, level + 1);
+
+                result.Add(item);
+            }
+            return result;
         }
         #endregion
     }

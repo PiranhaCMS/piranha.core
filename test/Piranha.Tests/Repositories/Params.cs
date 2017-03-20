@@ -81,6 +81,25 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void GetNoneById() {
+            using (var api = new Api(options)) {
+                var none = api.Params.GetById(Guid.NewGuid().ToString());
+
+                Assert.Null(none);
+            }
+        }
+
+        [Fact]
+        public void GetNoneByKey() {
+            using (var api = new Api(options)) {
+                var none = api.Params.GetByKey("none-existing-key");
+
+                Assert.Null(none);
+            }
+        }
+
+
+        [Fact]
         public void GetAll() {
             using (var api = new Api(options)) {
                 var models = api.Params.GetAll();

@@ -1,0 +1,359 @@
+﻿//
+// Copyright (c) 2016 Håkan Edling
+//
+// This software may be modified and distributed under the terms
+// of the MIT license.  See the LICENSE file for details.
+// 
+// http://github.com/piranhacms/piranha.core
+// 
+
+@import "colors.less";
+@import "mixins.less";
+
+.panel {
+	.table {
+		margin-bottom: 0;
+
+		thead {
+			tr {
+				th {
+					background: transparent;
+					border-bottom: solid 4px @form-color;
+				}
+			}
+		}
+	}
+}
+
+.table-striped {
+	>tbody {
+		>tr:nth-child(2n+1) {
+			>td {
+				background-color: #fff;
+			}
+
+			&.active {
+				>td {
+					background-color: @list-color-active;
+				}
+			}
+		}
+		>tr:nth-child(2n) {
+			>td {
+				background-color: #fff;
+			}
+
+			&.active {
+				>td {
+					background-color: @list-color-active;
+				}
+			}
+		}
+	}
+}
+
+.form {
+	label.label-small {
+		font-size: 12px;
+	}
+
+	.form-group {
+		// Form controls
+		.form-control {
+			height: auto;
+			font-size: 18px;
+            border-color: @border-color;
+            border-radius: 0;
+			box-shadow: none;
+
+			&.input-validation-error {
+				border: 1px solid #e88;
+				padding: 5px 12px;
+			}
+
+			&.title {
+				font-size: 26px;
+				color: #222;
+			}
+
+			&.small {
+				font-size: 14px;
+			}
+
+            &.count-me {
+                border-bottom: 0 none;
+            }
+
+			&.count-me + p {
+				color: #999;
+				font-size: 12px;
+				padding: 4px 12px;
+				margin: 0;
+				text-align: right;
+				text-transform: uppercase;
+                border: solid 1px @border-color;
+                border-top: 0 none;
+			}
+		}
+
+		textarea {
+			resize: none;
+
+			&.raw-text {
+				font-family: Consolas,Courier,monospace;
+				font-size: 15px;
+			}
+		}
+
+		// Validation messages
+		.field-validation-error {
+			display: block;
+			background: #333;
+			color: #fff;
+			padding: 4px 10px;
+			font-size: 13px;
+			position: absolute;
+			top: -12px;
+			right: -8px;
+			opacity: 0.9;
+			.border-radius(3px);
+		}
+		
+		.form-control-feedback {
+			top: 0;
+		}
+
+		// Select2 box
+		.select2-container {
+			width: 100%;
+			padding: 1px 2px;
+
+			&.select2-container-multi {
+				.select2-choices {
+					background-image: none;
+					border: 0 none;
+					padding: 2px 5px 0;
+
+					.select2-search-choice {
+						color: #fff;
+						background: #444;
+						border-color: #444;
+						box-shadow: none;
+						margin: 4px 2px 0 12px;
+						font-size: 10px;
+						text-transform: uppercase;
+
+						.select2-search-choice-close {
+							top: 2px;
+						}
+
+						&:before {
+							content: "";
+							position: absolute;
+							top: 0;
+							left: -20px;
+							width: 0;
+							height: 0;
+							border: 10px solid transparent;
+							border-right-color: #444;
+						}
+					}
+				}
+			}
+		}
+
+		// TinyMCE editor
+		.mce-tinymce {
+            border-color: @border-color;
+			_border: 0 none !important;
+
+			.mce-panel {
+				background: #fff;
+				background-image: none;
+				padding: 1px 2px;
+
+				.mce-btn {
+					background: transparent;
+					background-image: none;
+					border: 0 none;
+					box-shadow: none;
+
+					.mce-ico {
+						font-size: 14px;
+					}
+				}
+			}
+
+			.mce-edit-area {
+				border-top: 0 none;
+			}
+		}
+	}
+
+	.panel-white, .table {
+		.form-group {
+			border: 0;
+
+			input, select {
+				background: #eee;
+				border-bottom: 1px solid @border-color;
+
+				&::-webkit-input-placeholder,
+				&:-moz-placeholder,
+				&::-moz-placeholder,
+				&:-ms-input-placeholder {  
+					color: #ccc;
+				}
+			}
+		}
+	}
+
+	.table {
+		.form-group {
+			margin-bottom: 0;
+
+			input, select, textarea {
+				font-size: 14px;
+			}
+		}
+	}
+}
+
+.btn {
+	.border-radius(0);
+
+	&.btn-primary {
+		background: @link-color;
+		border-color: @link-color;
+		color: #fff;
+	}
+
+	&.btn-success {
+		background: @success-color;
+		border-color: @success-color;
+		color: #fff;
+	}
+}
+
+.btn-label {
+	.border-radius(0);
+}
+
+.col-sm-12.buttons {
+	text-align: right;
+	margin-top: -50px;
+
+	.dropdown-menu {
+		text-align: left;
+	}
+}
+
+.region-list {
+    margin: -15px -15px 15px;
+
+    .region-list-item {
+		.region-list-heading {
+			border-bottom: solid 1px @border-color;
+
+			.handle {
+				height: 43px;
+				padding: 10px;
+				float: left;
+				border-right: solid 1px @bg-color;
+				cursor: pointer;
+			}	
+
+			a {
+				display: block;
+				height: 43px;
+				padding: 10px;
+				text-indent: 15px;
+			}
+		}
+
+		.region-list-body {
+			padding: 15px 15px 0;
+			border-bottom: solid 1px @border-color;
+		}
+    }
+
+}
+
+.region-list-toolbar {
+	margin-bottom: 0;
+}
+
+.markdown {
+	.nav-tabs {
+		margin-bottom: 15px;
+	}
+}
+
+
+.single-region {
+    .region-editor {
+        margin: -15px -15px -30px;
+
+        .mce-tinymce {
+			border: 0 none !important;
+        }
+    }
+
+	textarea {
+		&.raw-text {
+			border-width: 0;			
+		}
+	}
+	
+	.content-preview {
+		font-family: "Open Sans", Arial;
+		font-size: 15px;
+
+		h1, h2, h3, h4, h5, h6 {
+			font-family: 'Gentium Book Basic', serif;
+			margin: 5px 0 10px;
+		}
+
+		p, ul, ol {
+			margin: 0 0 20px;
+		}
+	}
+
+	.markdown {
+		.nav-tabs {
+			display: none;
+		}
+	}
+}
+
+
+@media (min-width: 990px) {
+	.single-region {
+		textarea.raw-text {
+			display: inline-block !important;
+			width: 50%;
+			border-width: 0 1px 0 0;			
+		}
+	}
+
+	.content-preview {
+		display: inline-block !important;
+		float: right;
+		width: 49%;
+		padding-left: 15px;
+		
+	}
+}
+@media (max-width: 989px) {
+	.single-region {
+		.markdown {
+			.nav-tabs {
+				display: block;
+			}
+		}
+
+		.content-preview {
+			display: none;
+		}
+	}
+}

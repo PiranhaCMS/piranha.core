@@ -1,0 +1,72 @@
+﻿@model Piranha.Areas.Manager.Models.PageListModel
+@{
+    ViewBag.Title = "Pages";
+    ViewBag.Controller = "Page";
+}
+
+@section script {
+    <script type="text/javascript">
+        $(function () {
+            $('.dd').nestable({
+                group: 1
+            });
+
+            $('.dd').on('change', function() {
+                // TODO: Show spinner & block sitemap while saving
+                $('#sitemap-spinner').show();
+
+                $.ajax({
+                    url: '/manager/pages/move',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        Items: $('.dd').nestable('serialize') 
+                    }),
+                    success: function (data) {
+                        // TODO: Hide spinner
+                        $('#sitemap-spinner').hide();
+
+                        // Update the sitemap
+                        //$('.dd .sitemap').html(data);
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+<div class="row">
+    <div class="col-sm-12 buttons">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-labeled btn-primary" data-toggle="dropdown">
+                <span class="btn-label">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </span>Add
+            </button>
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                @foreach (var type in Model.PageTypes) {
+                    <li><a href="@Url.Action("Add", new { type = type.Id })">@type.Title</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+<ol class="sitemap header">
+    <li>
+        <div class="actions one pull-right"></div>
+        <div class="date pull-right">Created</div>
+        <div class="date pull-right">Modified</div>
+        <div class="content">Title</div>
+    </li>
+</ol>
+<div class="dd">
+    <ol class="sitemap dd-list">
+        @Html.Partial("Partial/_Sitemap", Model.Sitemap)
+    </ol>
+    <div id="sitemap-spinner" class="spinner" style="display:none"></div>
+</div>
