@@ -128,6 +128,16 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void GetNoneById() {
+            using (var api = new Api(options)) {
+                var none = api.PageTypes.GetById("none-existing-type");
+
+                Assert.Null(none);
+            }
+        }
+
+
+        [Fact]
         public void GetById() {
             using (var api = new Api(options)) {
                 var model = api.PageTypes.GetById(pageTypes[0].Id);

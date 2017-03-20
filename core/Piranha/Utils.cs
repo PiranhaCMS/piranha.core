@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -74,6 +75,23 @@ namespace Piranha
             if (slug.StartsWith("-"))
                 slug = slug.Substring(Math.Min(slug.IndexOf("-") + 1, slug.Length));
             return slug;
+        }
+
+
+        /// <summary>
+        /// Generates a ETag from the given name and date.
+        /// </summary>
+        /// <param name="name">The resource name</param>
+        /// <param name="date">The modification date</param>
+        /// <returns>The etag</returns>
+        public static string GenerateETag(string name, DateTime date) {
+            var encoding = new UTF8Encoding();
+
+            using (var crypto = MD5.Create()) {
+                var str = name + date.ToString("yyyy-MM-dd HH:mm:ss");
+                var bytes = crypto.ComputeHash(encoding.GetBytes(str));
+                return Convert.ToBase64String(bytes);
+            }
         }
     }
 }

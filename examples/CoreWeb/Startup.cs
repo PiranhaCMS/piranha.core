@@ -46,13 +46,16 @@ namespace CoreWeb
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services) {
-            services.AddMvc();
+            services.AddMvc(config => {
+                config.ModelBinderProviders.Insert(0, new Piranha.Manager.Binders.AbstractModelBinderProvider());
+            });
             services.AddPiranhaDb(o => {
                 o.Connection = new SqliteConnection("Filename=./piranha.db");
                 o.Migrate = true;
             });
-            services.AddSingleton<ICache, MemCache>();
+            //services.AddSingleton<ICache, MemCache>();
             services.AddScoped<Api, Api>();
+            services.AddPiranhaManager();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,6 +78,7 @@ namespace CoreWeb
             // Register middleware
             app.UseStaticFiles();
             app.UsePiranha();
+            app.UsePiranhaManager();
 
             app.UseMvc(routes => {
                 routes.MapRoute(name: "areaRoute",

@@ -1,0 +1,19 @@
+﻿@model Piranha.Areas.Manager.Models.PageEditModel
+
+<div class="row">
+    <div class="col-sm-6">
+        <label>Hidden</label>
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(m => m.IsHidden, new { @class = "checkbox" })
+                If the page should be hidden in the sitemap.
+            </label>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label>Route</label>
+            @Html.TextBoxFor(m => m.Route, new { @class = "form-control small", placeholder = "Optional route" })
+        </div>
+    </div>
+</div>
