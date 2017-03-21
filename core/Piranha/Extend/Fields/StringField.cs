@@ -10,11 +10,11 @@
 
 namespace Piranha.Extend.Fields
 {
-    [Field(Name = "Text", Shorthand = "Text")]
-    public class TextField : SimpleField<string>
+    [Field(Name = "String", Shorthand = "String")]
+    public class StringField : SimpleField<string>
     {
-        public static implicit operator TextField(string str) {
-            return new TextField() { Value = str };
+        public static implicit operator StringField(string str) {
+            return new StringField() { Value = str };
         }
     }
 }
