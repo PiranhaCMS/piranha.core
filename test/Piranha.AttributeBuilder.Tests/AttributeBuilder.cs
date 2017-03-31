@@ -11,6 +11,7 @@
 using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Piranha.AttributeBuilder.Tests
@@ -94,6 +95,24 @@ namespace Piranha.AttributeBuilder.Tests
                 Assert.Equal("Main content", type.Regions[1].Title);
                 Assert.Equal(false, type.Regions[1].Collection);
                 Assert.Equal(2, type.Regions[1].Fields.Count);
+            }
+        }
+
+        [Fact]
+        public void DeleteOrphans() {
+            using (var api = new Api(options)) {
+                var builder = new PageTypeBuilder(api)
+                    .AddType(typeof(SimplePageType))
+                    .AddType(typeof(ComplexPageType));
+                builder.Build();
+
+                Assert.Equal(2, api.PageTypes.GetAll().Count());
+
+                builder = new PageTypeBuilder(api)
+                    .AddType(typeof(SimplePageType));
+                builder.DeleteOrphans();
+
+                Assert.Equal(1, api.PageTypes.GetAll().Count());
             }
         }
 

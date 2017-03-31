@@ -47,7 +47,7 @@ namespace Piranha.AttributeBuilder
         /// <summary>
         /// Builds the page types.
         /// </summary>
-        public abstract void Build();
+        public abstract T Build();
 
         #region Private methods
         /// <summary>
