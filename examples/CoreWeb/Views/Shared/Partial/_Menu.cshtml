@@ -1,0 +1,10 @@
+@inject Piranha.Api Api
+@{
+    var sitemap = Api.Sites.GetSitemap();
+}
+
+<ul class="nav nav-pills pull-right">
+    @foreach (var item in sitemap) {
+        <li role="presentation"><a href="@item.Permalink">@(!string.IsNullOrEmpty(item.NavigationTitle) ? item.NavigationTitle : item.Title)</a></li>
+    }
+</ul>
