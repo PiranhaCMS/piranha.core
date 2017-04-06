@@ -32,6 +32,18 @@ namespace Piranha.Models
         public string NavigationTitle { get; set; }
 
         /// <summary>
+        /// Gets the menu title for the item. The menu title returns
+        /// the navigation title if set, otherwise the main title.
+        /// </summary>
+        public string MenuTitle {
+            get {
+                if (!string.IsNullOrWhiteSpace(NavigationTitle))
+                    return NavigationTitle;
+                return Title;
+            }
+        }
+
+        /// <summary>
         /// Gets/sets the unique permalink.
         /// </summary>
         public string Permalink { get; set; }
@@ -66,7 +78,7 @@ namespace Piranha.Models
         /// Default constructor.
         /// </summary>
         public SitemapItem() {
-            Items = new List<SitemapItem>();
+            Items = new Sitemap();
         }
     }
 }

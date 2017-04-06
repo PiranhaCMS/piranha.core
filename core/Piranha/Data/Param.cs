@@ -27,6 +27,7 @@ namespace Piranha.Data
         /// Gets/sets the unique id.
         /// </summary>
         public string Id { get; set; }
+
         /// <summary>
         /// Gets/sets the unique key.
         /// </summary>

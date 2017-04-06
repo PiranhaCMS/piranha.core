@@ -54,7 +54,7 @@ namespace Piranha.Repositories
         /// <param name="onlyPublished">If only published items should be included</param>
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The sitemap</returns>
-        IList<Models.SitemapItem> GetSitemap(string id = null, bool onlyPublished = true, IDbTransaction transaction = null);
+        Models.Sitemap GetSitemap(string id = null, bool onlyPublished = true, IDbTransaction transaction = null);
 
         /// <summary>
         /// Adds or updates the given model in the database

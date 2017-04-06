@@ -5,6 +5,6 @@
 
 <ul class="nav nav-pills pull-right">
     @foreach (var item in sitemap) {
-        <li role="presentation"><a href="@item.Permalink">@(!string.IsNullOrEmpty(item.NavigationTitle) ? item.NavigationTitle : item.Title)</a></li>
+        <li role="presentation"><a href="@item.Permalink">@item.MenuTitle</a></li>
     }
 </ul>

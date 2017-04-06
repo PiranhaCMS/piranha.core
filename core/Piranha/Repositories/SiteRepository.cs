@@ -74,7 +74,7 @@ namespace Piranha.Repositories
         /// <param name="onlyPublished">If only published items should be included</param>
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The sitemap</returns>
-        public IList<Models.SitemapItem> GetSitemap(string id = null, bool onlyPublished = true, IDbTransaction transaction = null) {
+        public Models.Sitemap GetSitemap(string id = null, bool onlyPublished = true, IDbTransaction transaction = null) {
             if (id == null) {
                 var site = GetDefault(transaction);
 
@@ -149,8 +149,8 @@ namespace Piranha.Repositories
         /// <param name="pages">The full page list</param>
         /// <param name="parentId">The current parent id</param>
         /// <returns>The sitemap</returns>
-        private IList<Models.SitemapItem> Sort(IEnumerable<Page> pages, string parentId = null, int level = 0) {
-            var result = new List<Models.SitemapItem>();
+        private Models.Sitemap Sort(IEnumerable<Page> pages, string parentId = null, int level = 0) {
+            var result = new Models.Sitemap();
 
             foreach (var page in pages.Where(p => p.ParentId == parentId).OrderBy(p => p.SortOrder)) {
                 var item = new Models.SitemapItem() {
