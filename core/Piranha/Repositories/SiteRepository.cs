@@ -157,7 +157,7 @@ namespace Piranha.Repositories
                     Id = page.Id,
                     Title = page.Title,
                     NavigationTitle = page.NavigationTitle,
-                    Permalink = page.Slug,
+                    Permalink = string.IsNullOrEmpty(page.ParentId) && page.SortOrder == 0 ? "/" : page.Slug,
                     Level = level,
                     Published = page.Published,
                     Created = page.Created,
