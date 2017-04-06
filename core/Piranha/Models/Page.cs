@@ -21,7 +21,7 @@ namespace Piranha.Models
         /// Gets if this is the startpage of the site.
         /// </summary>
         public bool IsStartPage {
-            get { return !string.IsNullOrEmpty(ParentId) && SortOrder == 0; }
+            get { return string.IsNullOrEmpty(ParentId) && SortOrder == 0; }
         }
         #endregion
 
