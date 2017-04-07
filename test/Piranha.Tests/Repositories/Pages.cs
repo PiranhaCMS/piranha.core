@@ -261,12 +261,14 @@ namespace Piranha.Tests.Repositories
                 Assert.Equal("My first page", page.Title);
 
                 page.Title = "Updated page";
+                page.IsHidden = true;
                 api.Pages.Save(page);
 
                 page = api.Pages.GetById<MyPage>(PAGE_1_ID);
 
                 Assert.NotNull(page);
                 Assert.Equal("Updated page", page.Title);
+                Assert.Equal(true, page.IsHidden);
             }
         }
 

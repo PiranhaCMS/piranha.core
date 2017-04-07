@@ -83,7 +83,7 @@ namespace Piranha.Repositories
             }
 
             if (id != null) {
-                var pages = conn.Query<Page>("SELECT [Id], [ParentId], [SortOrder], [Title], [NavigationTitle], [Slug], [Published], [Created], [LastModified] FROM [Piranha_Pages] WHERE [SiteId]=@Id ORDER BY [ParentId], [SortOrder]",
+                var pages = conn.Query<Page>("SELECT [Id], [ParentId], [SortOrder], [Title], [NavigationTitle], [Slug], [IsHidden], [Published], [Created], [LastModified] FROM [Piranha_Pages] WHERE [SiteId]=@Id ORDER BY [ParentId], [SortOrder]",
                     new { Id = id }, transaction: transaction);
 
                 if (onlyPublished)
@@ -153,16 +153,9 @@ namespace Piranha.Repositories
             var result = new Models.Sitemap();
 
             foreach (var page in pages.Where(p => p.ParentId == parentId).OrderBy(p => p.SortOrder)) {
-                var item = new Models.SitemapItem() {
-                    Id = page.Id,
-                    Title = page.Title,
-                    NavigationTitle = page.NavigationTitle,
-                    Permalink = string.IsNullOrEmpty(page.ParentId) && page.SortOrder == 0 ? "/" : page.Slug,
-                    Level = level,
-                    Published = page.Published,
-                    Created = page.Created,
-                    LastModified = page.LastModified
-                };
+                var item = App.Mapper.Map<Page, Models.SitemapItem>(page);
+
+                item.Level = level;
                 item.Items = Sort(pages, page.Id, level + 1);
 
                 result.Add(item);

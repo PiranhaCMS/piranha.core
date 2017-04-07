@@ -54,6 +54,12 @@ namespace Piranha.Models
         public int Level { get; set; }
 
         /// <summary>
+        /// Gets/sets if the item is hidden.
+        /// </summary>
+        /// <returns></returns>
+        public bool IsHidden { get; set;}
+
+        /// <summary>
         /// Gets/sets the published date.
         /// </summary>        
         public DateTime? Published { get; set; }

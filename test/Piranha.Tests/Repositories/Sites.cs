@@ -66,6 +66,7 @@ namespace Piranha.Tests.Repositories
                 page1.SiteId = SITE_1_ID;
                 page1.Title = "Startpage";
                 page1.Text = "Welcome";
+                page1.IsHidden = true;
                 page1.Published = DateTime.Now;
                 api.Pages.Save(page1);
 
@@ -83,7 +84,6 @@ namespace Piranha.Tests.Repositories
                 page3.Text = "The subpage";
                 page3.Published = DateTime.Now;
                 api.Pages.Save(page3);
-
             }
         }
 
@@ -215,6 +215,15 @@ namespace Piranha.Tests.Repositories
                 Assert.Equal(1, sitemap[1].Items.Count);
                 Assert.Equal("Subpage", sitemap[1].Items[0].Title);
             }
+        }
+
+        [Fact]
+        public void CheckHiddenSitemapItems() {
+            using (var api = new Api(options)) {
+                var sitemap = api.Sites.GetSitemap();
+
+                Assert.Equal(1, sitemap.Count(s => s.IsHidden));
+            }            
         }
 
         [Fact]

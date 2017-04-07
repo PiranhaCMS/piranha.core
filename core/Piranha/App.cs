@@ -129,6 +129,11 @@ namespace Piranha
                                 .ForMember(p => p.Fields, o => o.Ignore())
                                 .ForMember(p => p.Created, o => o.Ignore())
                                 .ForMember(p => p.LastModified, o => o.Ignore());
+                            cfg.CreateMap<Data.Page, Models.SitemapItem>()
+                                .ForMember(p => p.MenuTitle, o => o.Ignore())
+                                .ForMember(p => p.Level, o => o.Ignore())
+                                .ForMember(p => p.Items, o => o.Ignore())
+                                .ForMember(p => p.Permalink, o => o.MapFrom(d => string.IsNullOrWhiteSpace(d.ParentId) && d.SortOrder == 0 ? "/" : d.Slug));
                         });
                         mapperConfig.AssertConfigurationIsValid();
                         mapper = mapperConfig.CreateMapper();
