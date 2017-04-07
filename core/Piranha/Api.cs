@@ -47,6 +47,12 @@ namespace Piranha
 
         #region Properties
         /// <summary>
+        /// Gets the media repository.
+        /// </summary>
+        /// <returns></returns>
+        public Repositories.IMediaRepository Media { get; private set; }
+
+        /// <summary>
         /// Gets the page repository.
         /// </summary>
         public Repositories.IPageRepository Pages { get; private set; }
