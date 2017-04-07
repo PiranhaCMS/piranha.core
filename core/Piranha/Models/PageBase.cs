@@ -62,6 +62,18 @@ namespace Piranha.Models
         /// Gets/sets the optional route used by the middleware.
         /// </summary>
         public string Route { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional redirect.
+        /// </summary>
+        /// <returns></returns>
+        public string RedirectUrl { get; set; }
+
+        /// <summary>
+        /// Gets/sets the redirect type.
+        /// </summary>
+        /// <returns></returns>
+        public Data.RedirectType RedirectType { get; set; }        
         #endregion
     }
 }

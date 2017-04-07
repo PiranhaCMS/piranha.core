@@ -305,11 +305,11 @@ namespace Piranha.Repositories
                     // Save the page
                     if (isNew) {
                         db.Execute(
-                            $"INSERT INTO [{table}] ([Id], [PageTypeId], [SiteId], [ParentId], [SortOrder], [Title], [NavigationTitle], [Slug], [IsHidden], [MetaKeywords], [MetaDescription], [Route], [Published], [Created], [LastModified]) VALUES(@Id, @PageTypeId, @SiteId, @ParentId, @SortOrder, @Title, @NavigationTitle, @Slug, @IsHidden, @MetaKeywords, @MetaDescription, @Route, @Published, @Created, @LastModified)",
+                            $"INSERT INTO [{table}] ([Id], [PageTypeId], [SiteId], [ParentId], [SortOrder], [Title], [NavigationTitle], [Slug], [IsHidden], [MetaKeywords], [MetaDescription], [Route], [RedirectUrl], [RedirectType], [Published], [Created], [LastModified]) VALUES(@Id, @PageTypeId, @SiteId, @ParentId, @SortOrder, @Title, @NavigationTitle, @Slug, @IsHidden, @MetaKeywords, @MetaDescription, @Route, @RedirectUrl, @RedirectType, @Published, @Created, @LastModified)",
                             page, transaction: tx);
                     } else {
                         db.Execute(
-                            $"UPDATE [{table}] Set [PageTypeId]=@PageTypeId, [SiteId]=@SiteId, [ParentId]=@ParentId, [SortOrder]=@SortOrder, [Title]=@Title, [NavigationTitle]=@NavigationTitle, [Slug]=@Slug, [IsHidden]=@IsHidden, [MetaKeywords]=@MetaKeywords, [MetaDescription]=@MetaDescription, [Route]=@Route, [Published]=@Published, [LastModified]=@LastModified WHERE [Id]=@Id",
+                            $"UPDATE [{table}] Set [PageTypeId]=@PageTypeId, [SiteId]=@SiteId, [ParentId]=@ParentId, [SortOrder]=@SortOrder, [Title]=@Title, [NavigationTitle]=@NavigationTitle, [Slug]=@Slug, [IsHidden]=@IsHidden, [MetaKeywords]=@MetaKeywords, [MetaDescription]=@MetaDescription, [Route]=@Route, [RedirectUrl]=@RedirectUrl, [RedirectType]=@RedirectType, [Published]=@Published, [LastModified]=@LastModified WHERE [Id]=@Id",
                             page, transaction: tx);
                     }
 

@@ -32,16 +32,23 @@ namespace Piranha.Web
                     var page = api.Pages.GetBySlug(slug);
 
                     if (page != null) {
-                        var route = page.Route ?? "/page";
+                        if (string.IsNullOrWhiteSpace(page.RedirectUrl)) {
+                            var route = page.Route ?? "/page";
 
-                        if (n < include) {
-                            route += "/" + string.Join("/", segments.Subset(n));
+                            if (n < include) {
+                                route += "/" + string.Join("/", segments.Subset(n));
+                            }
+
+                            return new RouteResponse() {
+                                Route = route,
+                                QueryString = $"id={page.Id}&startpage={page.IsStartPage}&piranha_handled=true"
+                            };
+                        } else {
+                            return new RouteResponse() {
+                                RedirectUrl = page.RedirectUrl,
+                                RedirectType = page.RedirectType
+                            };
                         }
-
-                        return new RouteResponse() {
-                            Route = route,
-                            QueryString = $"id={page.Id}&startpage={page.IsStartPage}&piranha_handled=true"
-                        };
                     }
                 }
             }

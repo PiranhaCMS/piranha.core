@@ -24,12 +24,23 @@
             <label>Route</label>
             @Html.TextBoxFor(m => m.Route, new { @class = "form-control small", placeholder = "Optional route" })
         </div>
+        <div class="form-group">
+            <label>Redirect</label>
+            @Html.TextBoxFor(m => m.RedirectUrl, new { @class = "form-control small", placeholder = "Optional redirect URL" })
+        </div>
     </div>
     <div class="col-sm-6">
         <div class="form-group">
             <label>Meta description</label>
             @Html.TextAreaFor(m => m.MetaDescription, new { @class = "form-control small count-me", rows = 5, placeholder = "Meta description", style = "height:82px" })
             <p>0/255</p>
+        </div>
+        <div class="form-group">
+            <label>Redirect type</label>
+            <select name="RedirectType" class="form-control small">
+                <option value="0" @(Model.RedirectType == Piranha.Data.RedirectType.Permanent ? "selected=selected" : "")>Permanent</option>
+                <option value="1" @(Model.RedirectType == Piranha.Data.RedirectType.Temporary ? "selected=selected" : "")>Temporary</option>
+            </select>
         </div>
     </div>
 </div>

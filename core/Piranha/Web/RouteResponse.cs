@@ -21,5 +21,15 @@ namespace Piranha.Web
         /// Gets/sets the optional query string.
         /// </summary>
         public string QueryString { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional redirect url.
+        /// </summary>
+        public string RedirectUrl { get; set;}
+
+        /// <summary>
+        /// Gets/sets the redirect type.
+        /// </summary>
+        public Data.RedirectType RedirectType { get; set; }
     }
 }

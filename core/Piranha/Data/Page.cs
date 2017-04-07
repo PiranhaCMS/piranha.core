@@ -84,6 +84,18 @@ namespace Piranha.Data
 	    public DateTime? Published { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional redirect.
+        /// </summary>
+        /// <returns></returns>
+        public string RedirectUrl { get; set; }
+
+        /// <summary>
+        /// Gets/sets the redirect type.
+        /// </summary>
+        /// <returns></returns>
+        public RedirectType RedirectType { get; set; }
+
+        /// <summary>
         /// Gets/sets the created date.
         /// </summary>
 	    public DateTime Created { get; set; }

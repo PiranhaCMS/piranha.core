@@ -34,11 +34,16 @@ namespace Piranha.AspNetCore
 
                 var response = PageRouter.Invoke(api, url);
                 if (response != null) {
-                    context.Request.Path = new PathString(response.Route);
+                    if (string.IsNullOrWhiteSpace(response.RedirectUrl)) {
+                        context.Request.Path = new PathString(response.Route);
 
-                    if (context.Request.QueryString.HasValue) {
-                        context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&" + response.QueryString);
-                    } else context.Request.QueryString = new QueryString("?" + response.QueryString);
+                        if (context.Request.QueryString.HasValue) {
+                            context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&" + response.QueryString);
+                        } else context.Request.QueryString = new QueryString("?" + response.QueryString);
+                    } else {
+                        context.Response.Redirect(response.RedirectUrl, response.RedirectType == Data.RedirectType.Permanent);
+                        return;
+                    }
                 }
             }
             await next.Invoke(context);
