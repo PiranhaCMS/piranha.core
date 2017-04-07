@@ -5,6 +5,7 @@
 
 <div class="container">
     <h1>@Model.Title</h1>
+    <p class="small">Published: @Model.Published.Value.ToString("yyyy-MM-dd") | Last Modified: @Model.LastModified.ToString("yyyy-MM-dd")</p>
 
     @if (!string.IsNullOrEmpty(Model.Ingress.Value)) {
         <p class="ingress">@Model.Ingress.Value</p>
