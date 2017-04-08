@@ -62,6 +62,7 @@ namespace Piranha.Areas.Manager.Models
                     page.Published = null;
             }
             api.Pages.Save(page);
+            Id = page.Id;
 
             return true;
         }

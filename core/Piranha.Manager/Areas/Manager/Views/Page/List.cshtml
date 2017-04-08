@@ -56,6 +56,16 @@
     </div>
 </div>
 
+@if (!string.IsNullOrWhiteSpace(ViewBag.Message)) {
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="@ViewBag.MessageCss">
+                @Html.Raw(ViewBag.Message)
+            </div>
+        </div>
+    </div>
+}
+
 <ol class="sitemap header">
     <li>
         <div class="actions one pull-right"></div>

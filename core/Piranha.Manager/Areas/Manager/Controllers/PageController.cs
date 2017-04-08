@@ -77,9 +77,13 @@ namespace Piranha.Areas.Manager.Controllers
         //[ValidateAntiForgeryToken] Seems buggy ATM
         [Route("manager/page/publish")]
         public IActionResult Publish(Models.PageEditModel model) {
-            if (model.Save(api, true))
-                return RedirectToAction("List");
-            return View(model);
+            if (model.Save(api, true)) {
+                SuccessMessage("The page has been published.");
+                return RedirectToAction("Edit", new { id = model.Id });
+            } else {
+                ErrorMessage("The page could not be published.", false);
+                return View(model);
+            }
         }
 
         /// <summary>
@@ -90,9 +94,13 @@ namespace Piranha.Areas.Manager.Controllers
         //[ValidateAntiForgeryToken] Seems buggy ATM
         [Route("manager/page/unpublish")]
         public IActionResult UnPublish(Models.PageEditModel model) {
-            if (model.Save(api, false))
-                return RedirectToAction("List");
-            return View(model);
+            if (model.Save(api, false)) {
+                SuccessMessage("The page has been unpublished.");
+                return RedirectToAction("Edit", new { id = model.Id });
+            } else {
+                ErrorMessage("The page could not be unpublished.", false);
+                return View(model);
+            }
         }
 
         /// <summary>
@@ -117,6 +125,7 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/page/delete/{id}")]
         public IActionResult Delete(string id) {
             api.Pages.Delete(id);
+            SuccessMessage("The page has been deleted");
             return RedirectToAction("List");
         }
 
