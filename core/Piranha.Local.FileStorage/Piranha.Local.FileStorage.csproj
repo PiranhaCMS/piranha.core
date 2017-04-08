@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+  <PropertyGroup>
+    <TargetFramework>netstandard1.4</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Version>4.0.0-alpha</Version>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Authors>Håkan Edling</Authors>
+    <Company>Piranha CMS</Company>
+    <AssemblyTitle>Piranha.Local.FileStorage</AssemblyTitle>
+    <Description>
+    </Description>
+    <Copyright>Håkan Edling 2011-2017</Copyright>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Piranha\Piranha.csproj" />
+  </ItemGroup>
+</Project>

@@ -57,7 +57,7 @@ namespace Piranha.Repositories
         /// <param name="model">The model</param>
         /// <param name="data">The binary data</param>
         /// <param name="transaction">The optional transaction</param>
-        void Save(Media model, Stream data = null, IDbTransaction transaction = null);
+        void Save(Models.MediaContent content, IDbTransaction transaction = null);
 
         /// <summary>
         /// Adds or updates the given model in the database
