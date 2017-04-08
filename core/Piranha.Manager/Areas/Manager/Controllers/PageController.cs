@@ -60,9 +60,13 @@ namespace Piranha.Areas.Manager.Controllers
         //[ValidateAntiForgeryToken] Seems buggy ATM
         [Route("manager/page/save")]
         public IActionResult Save(Models.PageEditModel model) {
-            if (model.Save(api))
-                return RedirectToAction("List");
-            return View(model);
+            if (model.Save(api)) {
+                SuccessMessage("The page has been saved.");
+                return RedirectToAction("Edit", new { id = model.Id });
+            } else {
+                ErrorMessage("The page could not be saved.", false);
+                return View("Edit", model);
+            }
         }
 
         /// <summary>

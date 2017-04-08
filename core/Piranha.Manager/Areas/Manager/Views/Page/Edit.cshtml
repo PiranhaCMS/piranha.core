@@ -66,6 +66,16 @@
         </div>
     </div>
 
+    @if (!string.IsNullOrWhiteSpace(ViewBag.Message)) {
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="@ViewBag.MessageCss">
+                    @Html.Raw(ViewBag.Message)
+                </div>
+            </div>
+        </div>
+    }
+
     <div class="form-group">
         @Html.TextBoxFor(m => m.Title, new { @class = "form-control title", @placeholder = "Your page title" })
         @Html.ValidationMessageFor(m => m.Title)
