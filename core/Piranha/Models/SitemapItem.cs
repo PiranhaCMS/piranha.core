@@ -86,5 +86,19 @@ namespace Piranha.Models
         public SitemapItem() {
             Items = new Sitemap();
         }
+
+        /// <summary>
+        /// Checks if the current sitemap item has a
+        /// child item with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>If the child was found</returns>
+        public bool HasChild(string id) {
+            foreach (var item in Items) {
+                if (item.Id == id || item.HasChild(id))
+                    return true;
+            }
+            return false;
+        }
     }
 }

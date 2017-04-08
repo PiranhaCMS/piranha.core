@@ -39,6 +39,7 @@ namespace CoreWeb.Controllers
         [Route("page")]
         public IActionResult Page(string id, bool startpage) {
             var model = api.Pages.GetById<Models.MarkdownPage>(id);
+            ViewBag.CurrentPage = model.Id;
 
             if (startpage)
                 return View("Start", model);

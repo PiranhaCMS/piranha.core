@@ -1,12 +1,24 @@
 @inject Piranha.Api Api
 @{
+    var currentPage = ViewBag.CurrentPage;
+    
+    Func<Piranha.Models.SitemapItem, string> Css = (item) => {
+        if (item.Id == currentPage) {
+            return "class=active";
+        } else if (item.HasChild(currentPage)) {
+            return "class=active-child";
+        }
+        return "";
+    };
+}
+@{
     var sitemap = Api.Sites.GetSitemap();
 }
 
 <ul class="nav nav-pills pull-right">
     @foreach (var item in sitemap) {
         if (!item.IsHidden) {
-            <li role="presentation"><a href="@item.Permalink">@item.MenuTitle</a></li>
+            <li role="presentation" @Css(item)><a href="@item.Permalink">@item.MenuTitle</a></li>
         }
     }
 </ul>
