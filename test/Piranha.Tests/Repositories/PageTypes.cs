@@ -94,7 +94,7 @@ namespace Piranha.Tests.Repositories
         #endregion
 
         protected override void Init() {
-            using (var api = new Api(options)) {
+            using (var api = new Api(options, storage)) {
                 api.PageTypes.Save(pageTypes[0]);
                 api.PageTypes.Save(pageTypes[3]);
                 api.PageTypes.Save(pageTypes[4]);
@@ -102,7 +102,7 @@ namespace Piranha.Tests.Repositories
         }
 
         protected override void Cleanup() {
-            using (var api = new Api(options)) {
+            using (var api = new Api(options, storage)) {
                 var pageTypes = api.PageTypes.GetAll();
 
                 foreach (var p in pageTypes)
@@ -112,14 +112,14 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Add() {
-            using (var api = new Api(options)) {
+            using (var api = new Api(options, storage)) {
                 api.PageTypes.Save(pageTypes[1]);
             }
         }
 
         [Fact]
         public void GetAll() {
-            using (var api = new Api(options)) {
+            using (var api = new Api(options, storage)) {
                 var models = api.PageTypes.GetAll();
 
                 Assert.NotNull(models);
@@ -129,7 +129,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetNoneById() {
-            using (var api = new Api(options)) {
+            using (var api = new Api(options, storage)) {
                 var none = api.PageTypes.GetById("none-existing-type");
 
                 Assert.Null(none);
@@ -139,7 +139,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetById() {
-            using (var api = new Api(options)) {
+            using (var api = new Api(options, storage)) {
                 var model = api.PageTypes.GetById(pageTypes[0].Id);
 
                 Assert.NotNull(model);
@@ -149,7 +149,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Update() {
-            using (var api = new Api(options)) {
+            using (var api = new Api(options, storage)) {
                 var model = api.PageTypes.GetById(pageTypes[0].Id);
 
                 Assert.Null(model.Title);
@@ -162,7 +162,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Delete() {
-            using (var api = new Api(options)) {
+            using (var api = new Api(options, storage)) {
                 var model = api.PageTypes.GetById(pageTypes[3].Id);
 
                 Assert.NotNull(model);
@@ -173,7 +173,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void DeleteById() {
-            using (var api = new Api(options)) {
+            using (var api = new Api(options, storage)) {
                 var model = api.PageTypes.GetById(pageTypes[4].Id);
 
                 Assert.NotNull(model);

@@ -8,15 +8,29 @@
  * 
  */
 
+using System;
 using System.IO;
 
-namespace Piranha.Storage.Local
+namespace Piranha.Local
 {
     public class FileStorage : IStorage
     {
-        public FileStorage() {
-            if (!Directory.Exists("wwwroot/uploads"))
-                Directory.CreateDirectory("wwwroot/uploads");
+        private readonly string basePath = "wwwroot/uploads/";
+        private readonly string baseUrl = "~/uploads/";
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        /// <param name="basePath">The optional base path</param>
+        /// <param name="basePath">The optional base url</param>
+        public FileStorage(string basePath = null, string baseUrl = null) {
+            if (!string.IsNullOrEmpty(basePath)) {
+                this.basePath = basePath;
+                this.baseUrl = baseUrl;
+            }
+
+            if (!Directory.Exists(this.basePath))
+                Directory.CreateDirectory(this.basePath);
         }
 
         /// <summary>
@@ -24,7 +38,7 @@ namespace Piranha.Storage.Local
         /// </summary>
         /// <returns>A new open session</returns>
         public IStorageSession Open() {
-            return new FileStorageSession();
+            return new FileStorageSession(basePath, baseUrl);
         }
     }
 }

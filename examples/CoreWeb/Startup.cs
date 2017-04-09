@@ -9,7 +9,6 @@
  */
 
 using System;
-using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
@@ -20,6 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Piranha;
 using Piranha.Cache;
+using Piranha.Local;
 
 namespace CoreWeb
 {
@@ -54,6 +54,7 @@ namespace CoreWeb
                 o.Migrate = true;
             });
             //services.AddSingleton<ICache, MemCache>();
+            services.AddSingleton<IStorage, FileStorage>();
             services.AddScoped<Api, Api>();
             services.AddPiranhaManager();
         }

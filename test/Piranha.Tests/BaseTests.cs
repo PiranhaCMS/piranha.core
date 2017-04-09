@@ -26,6 +26,7 @@ namespace Piranha.Tests
             o.Migrate = true;
             o.Seed = false;
         };
+        protected IStorage storage = new Local.FileStorage("uploads/", "~uploads/");
 
         /// <summary>
         /// Default constructor.

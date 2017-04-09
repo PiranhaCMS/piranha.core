@@ -20,7 +20,7 @@ namespace Piranha.Tests
         /// Sets up & initializes the tests.
         /// </summary>
         protected override void Init() {
-            using (var api = new Api(options)) {
+            using (var api = new Api(options, storage)) {
                 Piranha.App.Init(api);
             }
         }
@@ -33,7 +33,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void AppInit() {
-            using (var api = new Api(options)) {
+            using (var api = new Api(options, storage)) {
                 Piranha.App.Init(api);
             }
         }

@@ -30,6 +30,11 @@ namespace Piranha
         private readonly IDbConnection conn;
 
         /// <summary>
+        /// The private storage provider.
+        /// </summary>
+        private readonly IStorage storage;
+
+        /// <summary>
         /// If the api should dispose the connection.
         /// </summary>
         private readonly bool dispose;
@@ -77,8 +82,9 @@ namespace Piranha
         /// Default constructor.
         /// </summary>
         /// <param name="options">The database builder</param>
+        /// <param name="storage">The current storage</param>
         /// <param name="modelCache">The optional model cache</param>
-        public Api(Action<DbBuilder> options, ICache modelCache = null) {
+        public Api(Action<DbBuilder> options, IStorage storage, ICache modelCache = null) {
             var config = new DbBuilder();
             options?.Invoke(config);
 
@@ -88,6 +94,8 @@ namespace Piranha
                 conn = new SqlConnection(config.ConnectionString);
                 dispose = true;
             }
+
+            this.storage = storage;
 
             Setup(modelCache);
 
@@ -164,6 +172,7 @@ namespace Piranha
         private void Setup(ICache modelCache = null) {
             cache = modelCache;
 
+            Media = new Repositories.MediaRepository(conn, storage);
             Pages = new Repositories.PageRepository(this, conn, cache);
             PageTypes = new Repositories.PageTypeRepository(conn, cache);
             Params = new Repositories.ParamRepository(conn, cache);

@@ -1,5 +1,6 @@
 @inject Piranha.Api Api
 @{
+    var sitemap = Api.Sites.GetSitemap();
     var currentPage = ViewBag.CurrentPage;
     
     Func<Piranha.Models.SitemapItem, string> Css = (item) => {
@@ -10,9 +11,6 @@
         }
         return "";
     };
-}
-@{
-    var sitemap = Api.Sites.GetSitemap();
 }
 
 <ul class="nav nav-pills pull-right">
