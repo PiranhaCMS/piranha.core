@@ -53,14 +53,14 @@ namespace Piranha.AttributeBuilder.Tests
         #endregion
 
         public AttributeBuilder() {
-            using (var api = new Api(options)) {
+            using (var api = new Api(options, null)) {
                 App.Init(api);
             }
         }
 
         [Fact]
         public void AddSimple() {
-            using (var api = new Api(options)) {
+            using (var api = new Api(options, null)) {
                 var builder = new PageTypeBuilder(api)
                     .AddType(typeof(SimplePageType));
                 builder.Build();
@@ -76,7 +76,7 @@ namespace Piranha.AttributeBuilder.Tests
 
         [Fact]
         public void AddComplex() {
-            using (var api = new Api(options)) {
+            using (var api = new Api(options, null)) {
                 var builder = new PageTypeBuilder(api)
                     .AddType(typeof(ComplexPageType));
                 builder.Build();
@@ -100,7 +100,7 @@ namespace Piranha.AttributeBuilder.Tests
 
         [Fact]
         public void DeleteOrphans() {
-            using (var api = new Api(options)) {
+            using (var api = new Api(options, null)) {
                 var builder = new PageTypeBuilder(api)
                     .AddType(typeof(SimplePageType))
                     .AddType(typeof(ComplexPageType));
@@ -117,7 +117,7 @@ namespace Piranha.AttributeBuilder.Tests
         }
 
         public void Dispose() {
-            using (var api = new Api(options)) {
+            using (var api = new Api(options, null)) {
                 var types = api.PageTypes.GetAll();
 
                 foreach (var t in types)
