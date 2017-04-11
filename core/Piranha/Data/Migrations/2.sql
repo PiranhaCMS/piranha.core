@@ -21,7 +21,6 @@ CREATE TABLE [Piranha_Media] (
 	[Filename] NVARCHAR(128) NOT NULL,
 	[ContentType] NVARCHAR(255) NOT NULL,
 	[Size] BIGINT NOT NULL,
-	[PublicUrl] NVARCHAR(255) NOT NULL,
 	[Created] DATETIME NOT NULL,
     [LastModified] DATETIME NOT NULL,
 	CONSTRAINT PK_Media_Id PRIMARY KEY ([Id]),

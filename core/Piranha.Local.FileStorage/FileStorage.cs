@@ -40,5 +40,16 @@ namespace Piranha.Local
         public IStorageSession Open() {
             return new FileStorageSession(basePath, baseUrl);
         }
+
+        /// <summary>
+        /// Gets the public URL for the given media object.
+        /// </summary>
+        /// <param name="media">The media</param>
+        /// <returns>The public url</returns>
+        public string GetPublicUrl(Data.Media media) {
+            if (!string.IsNullOrWhiteSpace(media.Id))
+                return baseUrl + media.Id + "-" + media.Filename;
+            return null;
+        }
     }
 }

@@ -20,5 +20,12 @@ namespace Piranha
         /// </summary>
         /// <returns>A new open session</returns>
         IStorageSession Open();
+
+        /// <summary>
+        /// Gets the public URL for the given media object.
+        /// </summary>
+        /// <param name="media">The media</param>
+        /// <returns>The public url</returns>
+        string GetPublicUrl(Data.Media media);
     }
 }

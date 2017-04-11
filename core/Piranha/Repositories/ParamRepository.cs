@@ -10,7 +10,6 @@
 
 using Dapper;
 using Piranha.Data;
-using System;
 using System.Data;
 
 namespace Piranha.Repositories
