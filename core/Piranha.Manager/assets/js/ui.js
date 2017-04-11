@@ -1,4 +1,13 @@
 ﻿//
+// Startup
+//
+$(document).ready(function () {
+    $('.datepicker').datetimepicker({
+        format: "YYYY-MM-DD"
+    });
+});
+
+//
 // Panel toggle buttons
 //
 $(document).on('click', '.panel-heading .btn-toggle', function () {

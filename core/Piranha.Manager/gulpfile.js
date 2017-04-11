@@ -21,6 +21,8 @@ var paths = {
         "assets/lib/jquery/dist/jquery.js",
         "assets/lib/bootstrap/dist/js/bootstrap.js",
         "assets/lib/jasny-bootstrap/dist/js/jasny-bootstrap.js",
+        "assets/lib/moment/min/moment.min.js",
+        "assets/lib/bootstrap-datetimepicker-3/build/js/bootstrap-datetimepicker.min.js",
         "assets/lib/jquery-nestable/jquery.nestable.js",
         "assets/lib/jquery.ns-autogrow/dist/jquery.ns-autogrow.js",
         "assets/js/ui.js"

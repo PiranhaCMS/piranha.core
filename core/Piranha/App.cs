@@ -139,6 +139,7 @@ namespace Piranha
                         mapper = mapperConfig.CreateMapper();
 
                         // Compose field types
+                        fields.Register<Extend.Fields.DateField>();
                         fields.Register<Extend.Fields.HtmlField>();
                         fields.Register<Extend.Fields.MarkdownField>();
                         fields.Register<Extend.Fields.StringField>();
