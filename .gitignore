@@ -12,6 +12,7 @@
 
 # Bower components
 core/Piranha.Manager/assets/lib/
+examples/CoreWeb/assets/lib
 
 # Build results
 [Dd]ebug/
