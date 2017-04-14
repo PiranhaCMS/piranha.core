@@ -9,18 +9,12 @@
  */
 
 using System;
-using System.Collections.Generic;
 
 namespace Piranha.Models
 {
-    public class SitemapItem
+    public class SitemapItem : StructureItem<SitemapItem>
     {
         #region Properties
-        /// <summary>
-        /// Gets/sets the unique id.
-        /// </summary>
-        public string Id { get; set; }
-
         /// <summary>
         /// Gets/sets the main title.
         /// </summary>
@@ -49,11 +43,6 @@ namespace Piranha.Models
         public string Permalink { get; set; }
 
         /// <summary>
-        /// Gets/sets the level in the hierarchy.
-        /// </summary>
-        public int Level { get; set; }
-
-        /// <summary>
         /// Gets/sets if the item is hidden.
         /// </summary>
         /// <returns></returns>
@@ -73,11 +62,6 @@ namespace Piranha.Models
         /// Gets/sets the last modification date.
         /// </summary>
         public DateTime LastModified { get; set; }
-
-        /// <summary>
-        /// Gets/sets the available child items.
-        /// </summary>
-        public IList<SitemapItem> Items { get; set; }
         #endregion
 
         /// <summary>

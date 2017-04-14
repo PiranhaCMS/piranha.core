@@ -122,6 +122,9 @@ namespace Piranha
                     if (!isInitialized) {
                         // Configure object mapper
                         var mapperConfig = new MapperConfiguration(cfg => {
+                            cfg.CreateMap<Data.MediaFolder, Models.MediaStructureItem>()
+                                .ForMember(f => f.Level, o => o.Ignore())
+                                .ForMember(f => f.Items, o => o.Ignore());                            
                             cfg.CreateMap<Data.Page, Models.PageBase>()
                                 .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PageTypeId));
                             cfg.CreateMap<Models.PageBase, Data.Page>()

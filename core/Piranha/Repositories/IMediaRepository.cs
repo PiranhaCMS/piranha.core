@@ -50,6 +50,13 @@ namespace Piranha.Repositories
         MediaFolder GetFolderById(string id, IDbTransaction transaction = null);
 
         /// <summary>
+        /// Gets the hierachical media structure.
+        /// </summary>
+        /// <param name="transaction">The optional transaction</param>
+        /// <returns>The media structure</returns>
+        Models.MediaStructure GetStructure(IDbTransaction transaction = null);
+
+        /// <summary>
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>

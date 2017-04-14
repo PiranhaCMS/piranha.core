@@ -13,6 +13,7 @@ using Piranha.Data;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace Piranha.Repositories
 {
@@ -102,6 +103,18 @@ namespace Piranha.Repositories
             return db.QuerySingleOrDefault<MediaFolder>($"SELECT * FROM [{FOLDERTABLE}] WHERE [Id]=@Id", new { 
                 Id = id 
             }, transaction: transaction);
+        }
+
+        /// <summary>
+        /// Gets the hierachical media structure.
+        /// </summary>
+        /// <param name="transaction">The optional transaction</param>
+        /// <returns>The media structure</returns>
+        public Models.MediaStructure GetStructure(IDbTransaction transaction = null) {
+            var folders = db.Query<MediaFolder>("SELECT [Id], [ParentId], [Name] FROM [Piranha_MediaFolders] ORDER BY [ParentId], [Name]",
+                transaction: transaction);
+
+            return Sort(folders);
         }
 
         /// <summary>
@@ -224,6 +237,26 @@ namespace Piranha.Repositories
         /// <param name="transaction">The optional transaction</param>
         public void DeleteFolder(Data.MediaFolder model, IDbTransaction transaction = null) {
             DeleteFolder(model.Id, transaction);
+        }
+
+        /// <summary>
+        /// Sorts the items.
+        /// </summary>
+        /// <param name="folders">The full folder list</param>
+        /// <param name="parentId">The current parent id</param>
+        /// <returns>The structure</returns>
+        private Models.MediaStructure Sort(IEnumerable<MediaFolder> folders, string parentId = null, int level = 0) {
+            var result = new Models.MediaStructure();
+
+            foreach (var folder in folders.Where(f => f.ParentId == parentId).OrderBy(f => f.Name)) {
+                var item = App.Mapper.Map<MediaFolder, Models.MediaStructureItem>(folder);
+
+                item.Level = level;
+                item.Items = Sort(folders, folder.Id, level + 1);
+
+                result.Add(item);
+            }
+            return result;
         }
     }
 }
