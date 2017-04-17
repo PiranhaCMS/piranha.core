@@ -8,20 +8,21 @@
  * 
  */
 
-using System;
-
-namespace Piranha.Models
+namespace Piranha.Areas.Manager.Models
 {
-    public class MediaStructureItem : StructureItem<MediaStructureItem>
+    /// <summary>
+    /// Model for creating a new media folder.
+    /// </summary>
+    public class MediaFolderModel
     {
+        /// <summary>
+        /// Gets/sets the parent id.
+        /// </summary>
+        public string ParentId { get; set; }
+
         /// <summary>
         /// Gets/sets the folder name.
         /// </summary>
         public string Name { get; set; }
-
-        /// <summary>
-        /// Gets/sets the created date.
-        /// </summary>
-        public DateTime Created { get; set; }
     }
 }

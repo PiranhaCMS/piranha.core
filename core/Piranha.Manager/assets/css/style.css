@@ -7850,6 +7850,10 @@ a {
 .img-thumbnail {
   border-radius: 0 none;
 }
+.img-preview {
+  width: 100%;
+  max-width: 100%;
+}
 .spinner {
   background: #fff url('../img/ajax-loader.gif') no-repeat 50% 50%;
   position: absolute;
@@ -7858,6 +7862,9 @@ a {
   top: 0;
   left: 0;
   opacity: 0.5;
+}
+.breadcrumb {
+  padding: 0 15px;
 }
 body.collapsed .navmenu-inverse {
   width: 50px;
@@ -8082,6 +8089,10 @@ body.collapsed .navmenu-inverse span.title {
   font-family: "Open Sans", Arial;
   font-size: 16px;
 }
+.table.table-main span.media-icon {
+  padding-right: 10px;
+  color: #999;
+}
 .table .gravatar {
   width: 40px;
   margin-right: 10px;
@@ -8118,13 +8129,27 @@ ol.sitemap.header .date {
   padding: 12px 20px;
 }
 ol.sitemap.header .actions.one {
-  width: 60px;
+  width: 54px;
+}
+ol.sitemap.header .actions.two {
+  width: 88px;
+}
+ol.sitemap.header .actions.three {
+  width: 122px;
 }
 li.sitemap-item {
   list-style-type: none;
 }
 li.sitemap-item a {
-  padding: 10px 20px;
+  padding: 10px 8px;
+}
+li.sitemap-item a:last-child,
+li.sitemap-item a.last {
+  padding-right: 20px;
+}
+li.sitemap-item a:first-child,
+li.sitemap-item a.first {
+  padding-left: 20px;
 }
 li.sitemap-item .label {
   margin-left: 10px;
@@ -8631,43 +8656,59 @@ li.sitemap-item .actions.one {
   -webkit-transition: all ease-in-out 0.4s;
   -o-transition: all ease-in-out 0.4s;
 }
+/*
 .modal-content {
-  color: #fff;
-  background: #333;
-  border-color: #333;
+	color: #fff;
+	background: #333;
+	border-color: #333;
+
+	.modal-header {
+		border-bottom: 1px solid #222;
+	}
+
+	.modal-body {
+		border-top: 1px solid #444;
+		border-bottom: 1px solid #222;
+
+		label {
+			color: #ddd;
+			font-size: 12px;
+			font-weight: bold;
+			text-transform: uppercase;
+		}
+	}
+
+	.table {
+		margin-bottom: 0;
+
+		thead {
+			color: #ddd;
+
+			>tr {
+				>th {
+					background: #222;
+					font-size: 12px;
+					text-transform: uppercase;
+					border-bottom: 2px solid #444;
+				}
+			}
+		}
+
+		tbody {
+			>tr {
+				>td {
+					border-top: 0 none;
+				}
+			}
+		}
+	}
+
+	.modal-footer {
+		margin-top: 0;
+		border-top: 1px solid #444;
+	}
 }
-.modal-content .modal-header {
-  border-bottom: 1px solid #222;
-}
-.modal-content .modal-body {
-  border-top: 1px solid #444;
-  border-bottom: 1px solid #222;
-}
-.modal-content .modal-body label {
-  color: #ddd;
-  font-size: 12px;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-.modal-content .table {
-  margin-bottom: 0;
-}
-.modal-content .table thead {
-  color: #ddd;
-}
-.modal-content .table thead > tr > th {
-  background: #222;
-  font-size: 12px;
-  text-transform: uppercase;
-  border-bottom: 2px solid #444;
-}
-.modal-content .table tbody > tr > td {
-  border-top: 0 none;
-}
-.modal-content .modal-footer {
-  margin-top: 0;
-  border-top: 1px solid #444;
-}
+*/
 .overlay {
   position: absolute;
   width: 75%;

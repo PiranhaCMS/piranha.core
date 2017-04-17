@@ -111,7 +111,7 @@ namespace Piranha.Repositories
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The media structure</returns>
         public Models.MediaStructure GetStructure(IDbTransaction transaction = null) {
-            var folders = db.Query<MediaFolder>("SELECT [Id], [ParentId], [Name] FROM [Piranha_MediaFolders] ORDER BY [ParentId], [Name]",
+            var folders = db.Query<MediaFolder>("SELECT [Id],[ParentId],[Name],[Created] FROM [Piranha_MediaFolders] ORDER BY [ParentId], [Name]",
                 transaction: transaction);
 
             return Sort(folders);

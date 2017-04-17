@@ -172,6 +172,11 @@
 			font-family: "Open Sans", Arial;
 			font-size: 16px;
 		}
+
+		span.media-icon {
+			padding-right: 10px;
+			color: @icon-color;
+		}
 	}
 
 	.gravatar {
@@ -223,7 +228,15 @@ ol.sitemap {
 
 		.actions {
 			&.one {
-	            width: 60px;
+	            width: 54px;
+			}
+
+			&.two {
+				width: 88px;
+			}
+
+			&.three {
+				width: 122px;
 			}
 		}
     }
@@ -234,7 +247,14 @@ li.sitemap-item {
 	list-style-type: none;
 
 	a {
-		padding: 10px 20px;
+		padding: 10px 8px;
+
+		&:last-child, &.last {
+			padding-right: 20px;
+		}
+		&:first-child, &.first {
+			padding-left: 20px;
+		}
 	}
 
 	.label {
