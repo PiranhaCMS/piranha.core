@@ -14,12 +14,19 @@ namespace Piranha.Extend.Fields
     public class MarkdownField : SimpleField<string>
     {
         /// <summary>
-        /// Implicit operator for converting a string to 
-        /// markdown field.
+        /// Implicit operator for converting a string to a field.
         /// </summary>
-        /// <param name="str">The markdown string value</param>
+        /// <param name="str">The string value</param>
         public static implicit operator MarkdownField(string str) {
             return new MarkdownField() { Value = str };
+        }
+
+        /// <summary>
+        /// Implicitly converts the markdown field to a HTML string.
+        /// </summary>
+        /// <param name="field">The field</param>
+        public static implicit operator string(MarkdownField field) {
+            return field.ToHtml();
         }
 
         /// <summary>
