@@ -40,5 +40,24 @@ Piranha CMS is released under the **MIT** license. It is a permissive free softw
 meaning that it permits reuse within proprietary software provided all copies of the licensed
 software include a copy of the MIT License terms and the copyright notice.
 
+## Getting started
+Get the latest source code and get going:
+
+    > git clone https://github.com/PiranhaCMS/piranha.core.git
+    > cd piranha.core
+    > dotnet restore
+    > dotnet build
+    > cd examples/CoreWeb
+    > dotnet run
+    
+To build and update the javascript/css in the **manager** and **example project**:
+
+    > cd piranha.core/core/Piranha.Manager
+    > npm install
+    > bower install
+    > cd ../../examples/CoreWeb
+    > npm install
+    > bower install
+    
 ## Status
 This repository is under development and is **not** intended for production use.
