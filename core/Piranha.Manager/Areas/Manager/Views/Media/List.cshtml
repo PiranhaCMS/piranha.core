@@ -72,6 +72,18 @@
                 </tr>
             </thead>
             <tbody>
+                @if (!string.IsNullOrWhiteSpace(Model.CurrentFolderId)) {
+                    <tr>
+                        <td>
+                            <span class="glyphicon glyphicon-folder-open media-icon"></span>
+                            <a href="@Url.Action("List", new { folderId = Model.ParentFolderId })">...</a>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="actions one"></td>                        
+                    </tr>
+                }
                 @foreach (var folder in Model.Folders) {
                     <tr>
                         <td>

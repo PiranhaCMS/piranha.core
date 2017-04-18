@@ -1,0 +1,14 @@
+﻿@model Piranha.Extend.Fields.ImageField
+@{
+    var prefix = Html.ViewData.TemplateInfo.HtmlFieldPrefix;
+}
+
+<div class="row">
+    <div class="col-sm-10">
+        @Html.HiddenFor(m => m.Value)
+        @Html.TextBoxFor(m => m.Filename, new { @class = "form-control small"})
+    </div>
+    <div class="col-sm-2">
+        <button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#modalMedia" data-filter="image" data-mediaid="@(prefix).Value" data-medianame="@(prefix).Filename">Select</button>
+    </div>
+</div>

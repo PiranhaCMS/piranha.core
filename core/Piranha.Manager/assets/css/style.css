@@ -7864,6 +7864,7 @@ a {
   opacity: 0.5;
 }
 .breadcrumb {
+  background: transparent;
   padding: 0 15px;
 }
 body.collapsed .navmenu-inverse {
@@ -8484,7 +8485,7 @@ li.sitemap-item .actions.one {
 .panel {
   border: 1px solid #ddd;
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden; why did I add this? */
   border-radius: 0;
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
@@ -8655,6 +8656,12 @@ li.sitemap-item .actions.one {
   -moz-transition: all ease-in-out 0.4s;
   -webkit-transition: all ease-in-out 0.4s;
   -o-transition: all ease-in-out 0.4s;
+}
+.modal .modal-body {
+  background: #f2f2f2;
+}
+.modal .modal-body .table {
+  margin-bottom: 0;
 }
 /*
 .modal-content {

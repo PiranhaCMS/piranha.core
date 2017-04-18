@@ -26,11 +26,16 @@ namespace Piranha.Areas.Manager.Controllers
         /// <summary>
         /// Gets the list view for the media.
         /// </summary>
+        /// <param name="folderId">The optional folder id</param>
         [Route("manager/media/{folderId?}")]
         public IActionResult List(string folderId = null) {
             return View("List", Models.MediaListModel.Get(api, folderId));
         }
 
+        /// <summary>
+        /// Adds a new media upload.
+        /// </summary>
+        /// <param name="model">The upload model</param>
         [HttpPost]
         [Route("manager/media/add")]
         public IActionResult Add(Models.MediaUploadModel model) {
@@ -77,6 +82,10 @@ namespace Piranha.Areas.Manager.Controllers
             return RedirectToAction("List", new { folderId = model.ParentId });
         }
 
+        /// <summary>
+        /// Deletes the media upload with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
         [Route("/manager/media/delete/{id}")]
         public IActionResult Delete(string id) {
             var media = api.Media.GetById(id);
@@ -91,18 +100,34 @@ namespace Piranha.Areas.Manager.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes the folder with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
         [Route("/manager/media/delete/folder/{id}")]
         public IActionResult DeleteFolder(string id) {
             var folder = api.Media.GetFolderById(id);
 
             if (folder != null) {
-                api.Media.DeleteFolder(folder);
-                SuccessMessage($"Deleted folder \"{folder.Name}\".");
-                return RedirectToAction("List", new { folderId = folder.ParentId });
+                var media = api.Media.GetAll(folder.Id);
+
+                if (media.Count() == 0) {
+                    api.Media.DeleteFolder(folder);
+                    SuccessMessage($"Deleted folder \"{folder.Name}\".");
+                    return RedirectToAction("List", new { folderId = folder.ParentId });
+                } else {
+                    ErrorMessage($"The folder \"{folder.Name}\" is not empty.");
+                    return RedirectToAction("List", new { folderId = folder.ParentId });
+                }
             } else {
                 ErrorMessage("Could not delete the folder.");
                 return RedirectToAction("List", new { folderId = "" });
             }
+        }
+
+        [Route("/manager/media/modal/{folderId?}")]
+        public IActionResult Modal(string folderId = null) {
+            return View(Models.MediaListModel.Get(api, folderId));            
         }
     }
 }

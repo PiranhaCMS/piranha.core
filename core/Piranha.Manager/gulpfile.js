@@ -25,6 +25,7 @@ var paths = {
         "assets/lib/bootstrap-datetimepicker-3/build/js/bootstrap-datetimepicker.min.js",
         "assets/lib/jquery-nestable/jquery.nestable.js",
         "assets/lib/jquery.ns-autogrow/dist/jquery.ns-autogrow.js",
+        "assets/js/piranha.media.js",
         "assets/js/ui.js"
     ],
     jsDest: "assets/js/script.js",

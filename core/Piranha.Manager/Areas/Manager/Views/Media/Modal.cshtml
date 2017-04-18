@@ -1,0 +1,54 @@
+@model Piranha.Areas.Manager.Models.MediaListModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-striped table-main">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th class="date">Size</th>
+                    <th class="date">Modified</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!string.IsNullOrWhiteSpace(Model.CurrentFolderId)) {
+                    <tr>
+                        <td>
+                            <span class="glyphicon glyphicon-folder-open media-icon"></span>
+                            <a href="#" data-type="folder" data-folderid="@Model.ParentFolderId">...</a>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                }
+                @foreach (var folder in Model.Folders) {
+                    <tr>
+                        <td>
+                            <span class="glyphicon glyphicon-folder-open media-icon"></span>
+                            <a href="#" data-type="folder" data-folderid="@folder.Id">@folder.Name</a>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td>@folder.Created.ToString("yyyy-MM-dd")</td>
+                    </tr>
+                }
+                @foreach (var item in Model.Media) {
+                    <tr>
+                        <td>
+                            <span class="glyphicon glyphicon-picture media-icon"></span>
+                            <a href="#" data-type="item" data-id="@item.Id" data-name="@item.Filename">@item.Filename</a>
+                        </td>
+                        <td>@item.ContentType</td>
+                        <td>@Math.Round(item.Size / (double)1024) kB</td>
+                        <td>@item.LastModified.ToString("yyyy-MM-dd")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -20,6 +20,7 @@ namespace Piranha.Areas.Manager.Models
         public MediaStructure Folders { get; set; }
         public IList<MediaStructureItem> Breadcrumb { get; set; }
         public string CurrentFolderId { get; set; }
+        public string ParentFolderId { get; set; }
 
         /// <summary>
         /// Default constructor.
@@ -37,9 +38,14 @@ namespace Piranha.Areas.Manager.Models
         /// <returns>The model</returns>
         public static MediaListModel Get(Api api, string folderId = null) {
             var model = new MediaListModel() {
-                CurrentFolderId = folderId
+                CurrentFolderId = folderId,
+                ParentFolderId = null
             };
 
+            var folder = api.Media.GetFolderById(folderId);
+            if (folder != null)
+                model.ParentFolderId = folder.ParentId;
+                
             model.Media = api.Media.GetAll(folderId).ToList();
 
             var structure = api.Media.GetStructure();
