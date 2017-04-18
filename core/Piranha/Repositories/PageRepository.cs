@@ -532,8 +532,12 @@ namespace Piranha.Repositories
         private object DeserializeValue(PageField field) {
             var type = App.Fields.GetByType(field.CLRType);
 
-            if (type != null)
-                return JsonConvert.DeserializeObject(field.Value, type.Type);
+            if (type != null) {
+                var val = (Extend.IField)JsonConvert.DeserializeObject(field.Value, type.Type);
+                if (val != null)
+                    val.Init(api);
+                return val;
+            } 
             return null;
         }
         #endregion
