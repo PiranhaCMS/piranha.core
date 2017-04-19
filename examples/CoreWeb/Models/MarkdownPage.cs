@@ -17,9 +17,19 @@ namespace CoreWeb.Models
     [PageType(Title = "Markdown page")]
     public class MarkdownPage : Page<MarkdownPage>
     {
+        public class PageHeading 
+        {
+            [Field(Title = "Primary image")]
+            public ImageField PrimaryImage { get; set; }
+
+            [Field]
+            public TextField Ingress { get; set; }
+        }
+
         [Region]
         public MarkdownField Body { get; set; }
+
         [Region]
-        public TextField Ingress { get; set; }
+        public PageHeading Heading { get; set; }
     }
 }

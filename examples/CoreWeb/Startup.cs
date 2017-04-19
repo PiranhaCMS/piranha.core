@@ -109,7 +109,8 @@ namespace CoreWeb
                         var startPage = Models.MarkdownPage.Create(api);
                         startPage.SiteId = site.Id;
                         startPage.Title = "Welcome to Piranha CMS";
-                        startPage.Ingress = "The CMS framework with an extra bite";
+                        startPage.NavigationTitle = "Home";
+                        startPage.Heading.Ingress = "The CMS framework with an extra bite";
                         startPage.Body = reader.ReadToEnd();
                         startPage.Published = DateTime.Now;
 

@@ -1,10 +1,10 @@
 ﻿@model CoreWeb.Models.MarkdownPage
 @{
     ViewBag.Title = Model.Title;
-    ViewBag.Ingress = Model.Ingress.Value;
+    ViewBag.Ingress = Model.Heading.Ingress.Value;
     ViewBag.IsStart = true;
 }
 
 <div class="container arrow">
-    @Html.Raw(Model.Body.ToHtml())
+    @Html.Raw(Model.Body)
 </div>

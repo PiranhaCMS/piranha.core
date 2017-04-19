@@ -5,11 +5,16 @@
 
 <div class="container">
     <h1>@Model.Title</h1>
+
     <p class="small">Published: @Model.Published.Value.ToString("yyyy-MM-dd") | Last Modified: @Model.LastModified.ToString("yyyy-MM-dd")</p>
 
-    @if (!string.IsNullOrEmpty(Model.Ingress.Value)) {
-        <p class="ingress">@Model.Ingress.Value</p>
+    @if (Model.Heading.PrimaryImage.HasValue) {
+        <img src="@Url.Content(Model.Heading.PrimaryImage)">
+    }
+    
+    @if (!string.IsNullOrEmpty(Model.Heading.Ingress.Value)) {
+        <p class="ingress">@Model.Heading.Ingress.Value</p>
     }
 
-    @Html.Raw(Model.Body.ToHtml())
+    @Html.Raw(Model.Body)
 </div>
