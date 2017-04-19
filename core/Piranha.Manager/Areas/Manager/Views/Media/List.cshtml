@@ -4,22 +4,6 @@
     ViewBag.Controller = "Media";
 }
 
-@section script {
-    <script type="text/javascript">
-        $('#modalImgPreview').on('show.bs.modal', function (event) {
-            var link = $(event.relatedTarget);
-            var filename = link.data('filename');
-            var url = link.data('url');
-
-            var modal = $(this);
-            modal.find('.modal-title').text(filename)
-            modal.find('#imgPreview').attr('alt', filename);
-            modal.find('#imgPreview').attr('src', url);
-            modal.find('#btnDownload').attr('href', url);
-        });
-    </script>
-}
-
 <div class="row">
     <div class="col-sm-12 buttons">
         <div class="btn-group pull-right">
@@ -123,4 +107,3 @@
 
 @Html.Partial("Partial/_MediaModal.cshtml", Model)
 @Html.Partial("Partial/_FolderModal.cshtml", Model)
-@Html.Partial("Partial/_PreviewModal.cshtml", Model)

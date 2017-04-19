@@ -7867,6 +7867,17 @@ a {
   background: transparent;
   padding: 0 15px;
 }
+.well {
+  border: 0 none;
+  box-shadow: none;
+}
+.well.well-sm {
+  padding: 7px 9px 8px;
+}
+.form-group .well {
+  margin-bottom: 0;
+  min-height: 35px;
+}
 body.collapsed .navmenu-inverse {
   width: 50px;
 }
@@ -8398,6 +8409,15 @@ li.sitemap-item .actions.one {
 }
 .col-sm-12.buttons .dropdown-menu {
   text-align: left;
+}
+.btn-labeled.btn-block {
+  text-indent: -12px;
+  line-height: 32px;
+}
+.btn-labeled.btn-block .btn-label {
+  float: left;
+  line-height: 20px;
+  text-indent: 0;
 }
 .region-list {
   margin: -15px -15px 15px;

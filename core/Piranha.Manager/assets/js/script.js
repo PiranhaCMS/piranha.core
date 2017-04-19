@@ -14291,8 +14291,17 @@ piranha.media = new function() {
     };
 
     self.set = function (e) {
-        $('input[name="' + self.mediaId + '"]').val(e.data('id'));
-        $('input[name="' + self.mediaName + '"]').val(e.data('name'));
+        $('#' + self.mediaId).val(e.data('id'));
+        $('#' + self.mediaName).text(e.data('name'));
+        $('#' + self.mediaName).data('filename', e.data('name'));
+        $('#' + self.mediaName).data('url', e.data('url'));
+    };
+
+    self.remove = function (e) {
+        $('#' + self.mediaId).val('');
+        $('#' + self.mediaName).text('');
+        $('#' + self.mediaName).data('filename', '');
+        $('#' + self.mediaName).data('url', '');
     };
 };
 
@@ -14308,10 +14317,28 @@ $(document).on('click', '#modalMedia .modal-body a', function () {
     return false;
 });
 
+$(document).on('click', '.btn-media-clear', function () {
+    piranha.media.init($(this));
+    piranha.media.remove($(this));
+});
+
 $('#modalMedia').on('show.bs.modal', function (event) {
     piranha.media.init($(event.relatedTarget));
     piranha.media.load($(event.relatedTarget), '');
 });
+
+$('#modalImgPreview').on('show.bs.modal', function (event) {
+    var link = $(event.relatedTarget);
+    var filename = link.data('filename');
+    var url = link.data('url');
+
+    var modal = $(this);
+    modal.find('.modal-title').text(filename)
+    modal.find('#imgPreview').attr('alt', filename);
+    modal.find('#imgPreview').attr('src', url);
+    modal.find('#btnDownload').attr('href', url);
+});
+
 
 //
 // Startup

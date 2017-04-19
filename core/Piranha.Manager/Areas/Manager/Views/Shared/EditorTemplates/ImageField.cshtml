@@ -1,14 +1,28 @@
 ﻿@model Piranha.Extend.Fields.ImageField
 @{
-    var prefix = Html.ViewData.TemplateInfo.HtmlFieldPrefix;
+    var prefix = Html.ViewData.TemplateInfo.HtmlFieldPrefix
+        .Replace("[", "_").Replace("]", "_").Replace(".", "_");
 }
 
 <div class="row">
-    <div class="col-sm-10">
-        @Html.HiddenFor(m => m.Value)
-        @Html.TextBoxFor(m => m.Filename, new { @class = "form-control small"})
+    <div class="col-xs-8">
+        @Html.HiddenFor(m => m.Id)
+        <div class="well well-sm">
+            <a id="@(prefix)_Filename" href="#" data-toggle="modal" data-target="#modalImgPreview" data-filename="@(Model.Media != null ? Model.Media.Filename : "")" data-url="@Url.Content(Model.Media != null ? Model.Media.PublicUrl : "")">@(Model.Media != null ? Model.Media.Filename : "")</a>
+        </div>
     </div>
-    <div class="col-sm-2">
-        <button class="btn btn-primary btn-block" type="button" data-toggle="modal" data-target="#modalMedia" data-filter="image" data-mediaid="@(prefix).Value" data-medianame="@(prefix).Filename">Select</button>
+    <div class="col-xs-2">
+        <button class="btn btn-primary btn-labeled btn-block" type="button" data-toggle="modal" data-target="#modalMedia" data-filter="image" data-mediaid="@(prefix)_Id" data-medianame="@(prefix)_Filename">
+            <span class="btn-label">
+                <i class="glyphicon glyphicon-plus"></i>
+            </span>Add
+        </button>
+    </div>
+    <div class="col-xs-2">
+        <button class="btn btn-danger btn-labeled btn-block btn-media-clear" type="button" data-mediaid="@(prefix)_Id" data-medianame="@(prefix)_Filename">
+            <span class="btn-label">
+                <i class="glyphicon glyphicon-remove"></i>
+            </span>Remove
+        </button>
     </div>
 </div>

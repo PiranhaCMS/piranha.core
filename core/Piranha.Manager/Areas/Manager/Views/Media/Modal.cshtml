@@ -41,7 +41,7 @@
                     <tr>
                         <td>
                             <span class="glyphicon glyphicon-picture media-icon"></span>
-                            <a href="#" data-type="item" data-id="@item.Id" data-name="@item.Filename">@item.Filename</a>
+                            <a href="#" data-type="item" data-id="@item.Id" data-name="@item.Filename" data-url="@Url.Content(item.PublicUrl)">@item.Filename</a>
                         </td>
                         <td>@item.ContentType</td>
                         <td>@Math.Round(item.Size / (double)1024) kB</td>
