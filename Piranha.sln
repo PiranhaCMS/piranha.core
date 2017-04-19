@@ -32,6 +32,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Manager", "core\Pir
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Local.FileStorage", "core\Piranha.Local.FileStorage\Piranha.Local.FileStorage.csproj", "{4587BC7F-94D4-4DF5-B46E-4CC0E462FF03}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuspec", ".nuspec", "{A1B6ED88-8C91-45B0-9585-036E8A1C4A3C}"
+	ProjectSection(SolutionItems) = preProject
+		nuspec\Piranha.AspNetCore.nuspec = nuspec\Piranha.AspNetCore.nuspec
+		nuspec\Piranha.AttributeBuilder.nuspec = nuspec\Piranha.AttributeBuilder.nuspec
+		nuspec\Piranha.Local.FileStorage.nuspec = nuspec\Piranha.Local.FileStorage.nuspec
+		nuspec\Piranha.Manager.nuspec = nuspec\Piranha.Manager.nuspec
+		nuspec\Piranha.nuspec = nuspec\Piranha.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
