@@ -1,16 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
-  </PropertyGroup>
-  <PropertyGroup>
     <Version>4.0.0-alpha</Version>
-  </PropertyGroup>
-  <PropertyGroup>
-    <Authors>Håkan Edling</Authors>
     <Company>Piranha CMS</Company>
     <AssemblyTitle>Piranha.AttributeBuilder</AssemblyTitle>
-    <Description></Description>
-    <Copyright>Håkan Edling 2017</Copyright>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PackageId>Piranha.AttributeBuilder</PackageId>
+    <PackageVersion>4.0.0-alpha1</PackageVersion>
+    <Authors>Håkan Edling</Authors>
+    <Description>Library for defining page types by Attributes.</Description>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageTags>cms mvc aspnetcore netstandard</PackageTags>
+    <Copyright>Copyright 2017 (c) Håkan Edling</Copyright>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Piranha\Piranha.csproj" />

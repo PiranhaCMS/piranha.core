@@ -5,6 +5,16 @@
     <RootNamespace>Piranha</RootNamespace>
     <OutputType>Library</OutputType>
   </PropertyGroup>
+  <PropertyGroup>
+    <PackageId>Piranha.Manager</PackageId>
+    <PackageVersion>4.0.0-alpha1</PackageVersion>
+    <Authors>Håkan Edling</Authors>
+    <Description>Manager panel for Piranha CMS for AspNetCore.</Description>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageTags>cms mvc aspnetcore netstandard</PackageTags>
+    <Copyright>Copyright 2017 (c) Håkan Edling</Copyright>
+  </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="assets\css\" />
