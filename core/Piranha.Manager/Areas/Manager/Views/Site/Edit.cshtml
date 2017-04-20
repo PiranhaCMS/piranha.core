@@ -1,0 +1,78 @@
+@model Piranha.Areas.Manager.Models.SiteEditModel
+@{
+    ViewBag.Title = "Edit site";
+    ViewBag.Controller = "Site";
+}
+
+@using (var form = Html.BeginForm("Save", "Site", FormMethod.Post, new { @class = "form", @role = "form" })) {
+    @Html.HiddenFor(m => m.Site.Id)
+
+    <div class="row">
+        <div class="col-sm-12 buttons">
+            <!-- Actions -->
+            <button type="submit" class="btn btn-labeled btn-success pull-right">
+                <span class="btn-label">
+                    <i class="glyphicon glyphicon-ok"></i>
+                </span>
+                @if (!string.IsNullOrWhiteSpace(Model.Site.Id)) {
+                    <text>Update</text>
+                } else {
+                    <text>Save</text>
+                }
+            </button>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(ViewBag.Message)) {
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="@ViewBag.MessageCss">
+                    @Html.Raw(ViewBag.Message)
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">General information</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Title</label>
+                        @Html.TextBoxFor(m => m.Site.Title, new { @class = "form-control "})
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Internal Id</label>
+                        @Html.TextBoxFor(m => m.Site.InternalId, new { @class = "form-control "})
+                    </div>                
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group">
+                    <label>Description</label>
+                    @Html.TextAreaFor(m => m.Site.Description, new { @class = "form-control small" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group">
+                    <label>Hostnames</label>
+                    @Html.TextBoxFor(m => m.Site.Hostnames, new { @class = "form-control small" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label>IsDefault</label>
+                <div class="checkbox">
+                    <label>
+                        @Html.CheckBoxFor(m => m.Site.IsDefault, new { @class = "checkbox" })
+                        If this should be the default site of the installation.
+                    </label>
+                </div>            
+            </div>
+        </div>
+    </div>
+}

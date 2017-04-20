@@ -88,7 +88,12 @@ namespace Piranha.Manager
                 }
             },
             new MenuItem() {
-                InternalId = "Settings", Name = "Settings", Css = "glyphicon glyphicon-wrench", Items = new List<MenuItem>() /* {
+                InternalId = "Settings", Name = "Settings", Css = "glyphicon glyphicon-wrench", Items = new List<MenuItem>() {
+                    new MenuItem() {
+                        InternalId = "Sites", Name = "Sites", Controller = "Site", Action = "List", Css = "glyphicon glyphicon-globe"
+                    }
+                }
+                /* {
                     new MenuItem() {
                         InternalId = "BlockTypes", Name = "Block types", Controller = "BlockType", Action = "List"
                     },
