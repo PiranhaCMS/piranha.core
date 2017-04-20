@@ -10,6 +10,9 @@
     <description>Library for storing media assets on disc.</description>
     <copyright>Copyright 2017 (c) Håkan Edling</copyright>
     <tags>cms mvc aspnetcore netstandard</tags>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
+    <iconUrl>http://piranhacms.org/content/img/nuget.png</iconUrl>
     <dependencies>
       <group targetFramework=".NETStandard1.4">
         <dependency id="Piranha" version="4.0.0-alpha1" />
