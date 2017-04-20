@@ -25,6 +25,7 @@ namespace Piranha.Tests.Repositories
         private const string SITE_3 = "MyThirdSite";
         private const string SITE_4 = "MyFourthSite";
         private const string SITE_5 = "MyFifthSite";
+        private const string SITE_6 = "MySixthSite";
         private const string SITE_1_HOSTS = "mysite.com";
 
         private string SITE_1_ID = Guid.NewGuid().ToString();
@@ -60,6 +61,10 @@ namespace Piranha.Tests.Repositories
                 api.Sites.Save(new Data.Site() {
                     InternalId = SITE_5,
                     Title = SITE_5
+                });
+                api.Sites.Save(new Data.Site() {
+                    InternalId = SITE_6,
+                    Title = SITE_6
                 });
 
                 var page1 = MyPage.Create(api);
@@ -223,6 +228,37 @@ namespace Piranha.Tests.Repositories
                 var sitemap = api.Sites.GetSitemap();
 
                 Assert.Equal(1, sitemap.Count(s => s.IsHidden));
+            }            
+        }
+
+        [Fact]
+        public void ChangeDefaultSite() {
+            using (var api = new Api(options, storage)) {
+                var site6 = api.Sites.GetByInternalId(SITE_6);
+
+                Assert.False(site6.IsDefault);
+                site6.IsDefault = true;
+                api.Sites.Save(site6);
+
+                var site1 = api.Sites.GetById(SITE_1_ID);
+
+                Assert.False(site1.IsDefault);
+                site1.IsDefault = true;
+                api.Sites.Save(site1);
+            }            
+        }
+
+        public void CantRemoveDefault() {
+            using (var api = new Api(options, storage)) {
+                var site1 = api.Sites.GetById(SITE_1_ID);
+
+                Assert.True(site1.IsDefault);
+                site1.IsDefault = false;
+                api.Sites.Save(site1);
+
+                site1 = api.Sites.GetById(SITE_1_ID);
+
+                Assert.True(site1.IsDefault);
             }            
         }
 

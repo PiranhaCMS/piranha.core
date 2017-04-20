@@ -102,6 +102,20 @@ namespace Piranha.Repositories
         protected override void Add(Site model, IDbTransaction transaction = null) {
             PrepareInsert(model, transaction);
 
+            if (model.IsDefault) {
+                // Make sure no other site is default first
+                var def = GetDefault(transaction);
+
+                if (def != null && def.Id != model.Id) {
+                    def.IsDefault = false;
+                    Save(def, transaction);
+                }
+            } else {
+                // Make sure we have a default site
+                var count = conn.ExecuteScalar<int>($"SELECT COUNT(*) FROM [{table}] WHERE [IsDefault]=1");
+                if (count == 0)
+                    model.IsDefault = true;                
+            }
             conn.Execute($"INSERT INTO [{table}] ([Id], [InternalId], [Title], [Description], [Hostnames], [IsDefault], [Created], [LastModified]) VALUES (@Id, @InternalId, @Title, @Description, @Hostnames, @IsDefault, @Created, @LastModified)", 
                 model, transaction: transaction);
         }
@@ -114,6 +128,20 @@ namespace Piranha.Repositories
         protected override void Update(Site model, IDbTransaction transaction = null) {
             PrepareUpdate(model, transaction);
 
+            if (model.IsDefault) {
+                // Make sure no other site is default first
+                var def = GetDefault(transaction);
+
+                if (def != null && def.Id != model.Id) {
+                    def.IsDefault = false;
+                    Save(def, transaction);
+                }
+            } else {
+                // Make sure we have a default site
+                var count = conn.ExecuteScalar<int>($"SELECT COUNT(*) FROM [{table}] WHERE [IsDefault]=1");
+                if (count == 0)
+                    model.IsDefault = true;
+            }
             conn.Execute($"UPDATE [{table}] SET [InternalId]=@InternalId, [Title]=@Title, [Description]=@Description, [Hostnames]=@Hostnames, [IsDefault]=@IsDefault, [LastModified]=@LastModified WHERE [Id]=@Id", 
                 model, transaction: transaction);
         }
