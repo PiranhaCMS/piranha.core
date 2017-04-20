@@ -248,6 +248,7 @@ namespace Piranha.Tests.Repositories
             }            
         }
 
+        [Fact]
         public void CantRemoveDefault() {
             using (var api = new Api(options, storage)) {
                 var site1 = api.Sites.GetById(SITE_1_ID);

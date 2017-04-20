@@ -108,7 +108,7 @@ namespace Piranha.Repositories
 
                 if (def != null && def.Id != model.Id) {
                     def.IsDefault = false;
-                    Save(def, transaction);
+                    Update(def, transaction, false);
                 }
             } else {
                 // Make sure we have a default site
@@ -126,21 +126,35 @@ namespace Piranha.Repositories
         /// <param name="model">The model</param>
         /// <param name="transaction">The optional transaction</param>
         protected override void Update(Site model, IDbTransaction transaction = null) {
+            Update(model, transaction, true);
+        }        
+
+        /// <summary>
+        /// Updates the given model in the database.
+        /// </summary>
+        /// <param name="model">The model</param>
+        /// <param name="transaction">The optional transaction</param>
+        /// <param name="checkDefault">If default site integrity should be validated</param>
+        protected void Update(Site model, IDbTransaction transaction = null, bool checkDefault = true) {
             PrepareUpdate(model, transaction);
 
-            if (model.IsDefault) {
-                // Make sure no other site is default first
-                var def = GetDefault(transaction);
+            if (checkDefault) {
+                if (model.IsDefault) {
+                    // Make sure no other site is default first
+                    var def = GetDefault(transaction);
 
-                if (def != null && def.Id != model.Id) {
-                    def.IsDefault = false;
-                    Save(def, transaction);
+                    if (def != null && def.Id != model.Id) {
+                        def.IsDefault = false;
+                        Update(def, transaction, false);
+                    }
+                } else {
+                    // Make sure we have a default site
+                    var count = conn.ExecuteScalar<int>($"SELECT COUNT(*) FROM [{table}] WHERE [IsDefault]=1 AND [Id]!=@Id", new {
+                        Id = model.Id
+                    });
+                    if (count == 0)
+                        model.IsDefault = true;
                 }
-            } else {
-                // Make sure we have a default site
-                var count = conn.ExecuteScalar<int>($"SELECT COUNT(*) FROM [{table}] WHERE [IsDefault]=1");
-                if (count == 0)
-                    model.IsDefault = true;
             }
             conn.Execute($"UPDATE [{table}] SET [InternalId]=@InternalId, [Title]=@Title, [Description]=@Description, [Hostnames]=@Hostnames, [IsDefault]=@IsDefault, [LastModified]=@LastModified WHERE [Id]=@Id", 
                 model, transaction: transaction);
