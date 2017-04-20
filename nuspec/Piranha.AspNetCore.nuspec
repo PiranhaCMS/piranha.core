@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.AspNetCore</id>
     <title>Piranha AspNetCore</title>
-    <version>4.0.0-alpha1</version>
+    <version>4.0.0-alpha3</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,10 +12,10 @@
     <tags>cms mvc aspnetcore netstandard</tags>
     <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
     <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
-    <iconUrl>http://piranhacms.org/content/img/nuget.png</iconUrl>
+    <iconUrl>http://piranhacms.org/assets/twitter-shield.png</iconUrl>
     <dependencies>
       <group targetFramework=".NETStandard1.4">
-        <dependency id="Piranha" version="4.0.0-alpha1" />
+        <dependency id="Piranha" version="4.0.0-alpha3" />
         <dependency id="NETStandard.Library" version="1.6.1" />
         <dependency id="Microsoft.AspNetCore.Http" version="1.1.1" />
       </group>
