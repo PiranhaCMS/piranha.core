@@ -12,16 +12,20 @@
                 </a>                    
             </div>
             <div class="region-list-body collapse" role="tabpanel" id="region-@(Model.Id)-@(i + 1)">
-                @for (var n = 0; n < Model.FieldSets[i].Count; n++) {
-                    <div class="form-group">
-                        @Html.HiddenFor(m => m.FieldSets[i][n].Id)
-                        @Html.HiddenFor(m => m.FieldSets[i][n].CLRType)
-                        @if (Model.FieldSets[i].Count > 1) {
-                            <label>@Model.FieldSets[i][n].Title</label>
-                        }
-                        @Html.EditorFor(m => m.FieldSets[i][n].Value, Model.FieldSets[i][n].Value.GetType().Name)
-                    </div>
-                }
+                <div class="row">
+                    @for (var n = 0; n < Model.FieldSets[i].Count; n++) {
+                        <div class="col-sm-@(Model.FieldSet[i][n].Options.HasFlag(FieldOption.HalfWidth) ? "6" : "12")">
+                            <div class="form-group">
+                                @Html.HiddenFor(m => m.FieldSets[i][n].Id)
+                                @Html.HiddenFor(m => m.FieldSets[i][n].CLRType)
+                                @if (Model.FieldSets[i].Count > 1) {
+                                    <label>@Model.FieldSets[i][n].Title</label>
+                                }
+                                @Html.EditorFor(m => m.FieldSets[i][n].Value, Model.FieldSets[i][n].Value.GetType().Name)
+                            </div>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     }

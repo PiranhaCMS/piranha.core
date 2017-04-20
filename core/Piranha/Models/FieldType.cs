@@ -26,5 +26,10 @@ namespace Piranha.Models
         /// Gets/sets the value type.
         /// </summary>
         public string Type { get; set; }
+
+        /// <summary>
+        /// Gets/sets the options.
+        /// </summary>
+        public FieldOption Options { get; set; }
     }
 }

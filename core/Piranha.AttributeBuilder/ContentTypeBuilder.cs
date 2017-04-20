@@ -128,7 +128,8 @@ namespace Piranha.AttributeBuilder
                     return new FieldType() {
                         Id = prop.Name,
                         Title = attr.Title,
-                        Type = appFieldType.TypeName
+                        Type = appFieldType.TypeName,
+                        Options = attr.Options
                     };
                 }
             }

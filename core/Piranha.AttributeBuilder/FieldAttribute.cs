@@ -8,6 +8,7 @@
  * 
  */
 
+using Piranha.Models;
 using System;
 
 namespace Piranha.AttributeBuilder
@@ -22,5 +23,10 @@ namespace Piranha.AttributeBuilder
         /// Gets/sets the optional title.
         /// </summary>
         public string Title { get; set; }
+
+        /// <summary>
+        /// Gets/sets the field options.
+        /// </summary>
+        public FieldOption Options { get; set; }
     }
 }

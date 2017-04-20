@@ -149,6 +149,7 @@ namespace Piranha.Areas.Manager.Models
                                         Id = region.Fields[0].Id,
                                         Title = region.Fields[0].Title ?? region.Fields[0].Id,
                                         CLRType = item.GetType().FullName,
+                                        Options = region.Fields[0].Options,
                                         Value = (Extend.IField)item
                                     }
                                 });
@@ -162,6 +163,7 @@ namespace Piranha.Areas.Manager.Models
                                             Id = field.Id,
                                             Title = field.Title ?? field.Id,
                                             CLRType = fieldData[field.Id].GetType().FullName,
+                                            Options = field.Options,
                                             Value = (Extend.IField)fieldData[field.Id]
                                         });
                                 }
@@ -266,6 +268,7 @@ namespace Piranha.Areas.Manager.Models
         public string Title { get; set; }
         public string CLRType { get; set; }
         public Extend.IField Value { get; set; }
+        public Piranha.Models.FieldOption Options { get; set; }
     }
     #endregion
 }
