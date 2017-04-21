@@ -14295,6 +14295,9 @@ piranha.media = new function() {
         $('#' + self.mediaName).text(e.data('name'));
         $('#' + self.mediaName).data('filename', e.data('name'));
         $('#' + self.mediaName).data('url', e.data('url'));
+        $('#' + self.mediaName).data('contenttype', e.data('contenttype'));
+        $('#' + self.mediaName).data('filesize', e.data('filesize'));
+        $('#' + self.mediaName).data('modified', e.data('modified'));
     };
 
     self.remove = function (e) {
@@ -14302,6 +14305,9 @@ piranha.media = new function() {
         $('#' + self.mediaName).text('');
         $('#' + self.mediaName).data('filename', '');
         $('#' + self.mediaName).data('url', '');
+        $('#' + self.mediaName).data('contenttype', '');
+        $('#' + self.mediaName).data('filesize', '');
+        $('#' + self.mediaName).data('modified', '');
     };
 };
 
@@ -14337,12 +14343,24 @@ $('#modalImgPreview').on('show.bs.modal', function (event) {
 
     var modal = $(this);
     modal.find('.modal-title').text(filename)
-    modal.find('#imgPreview').attr('alt', filename);
-    modal.find('#imgPreview').attr('src', url);
     modal.find('#btnDownload').attr('href', url);
     modal.find('#previewContentType').text(contenttype);
     modal.find('#previewFilesize').text(filesize);
     modal.find('#previewModified').text(modified);
+
+    if (contenttype.startsWith("image")) {
+        modal.find('#previewImage').show();
+        modal.find('#previewVideo').hide();
+
+        modal.find('#imgPreview').attr('alt', filename);
+        modal.find('#imgPreview').attr('src', url);
+    } else if (contenttype.startsWith("video")) {
+        modal.find('#previewImage').hide();
+        modal.find('#previewVideo').show();
+
+        modal.find('video').attr('src', url);
+        modal.find('video').attr('type', contenttype);
+    }
 });
 
 

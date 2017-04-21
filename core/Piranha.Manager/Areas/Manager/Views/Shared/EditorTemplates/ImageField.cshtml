@@ -8,7 +8,7 @@
     <div class="col-xs-8">
         @Html.HiddenFor(m => m.Id)
         <div class="well well-sm">
-            <a id="@(prefix)_Filename" href="#" data-toggle="modal" data-target="#modalImgPreview" data-filename="@(Model.Media != null ? Model.Media.Filename : "")" data-url="@Url.Content(Model.Media != null ? Model.Media.PublicUrl : "")">@(Model.Media != null ? Model.Media.Filename : "")</a>
+            <a id="@(prefix)_Filename" href="#" data-toggle="modal" data-target="#modalImgPreview" data-filename="@(Model.Media != null ? Model.Media.Filename : "")" data-url="@Url.Content(Model.Media != null ? Model.Media.PublicUrl : "")" data-contenttype="@Model.Media?.ContentType" data-filesize="@(Math.Round(Model.Media != null ? Model.Media.Size : 0 / (double)1024, 1))kB" data-modified="@Model.Media?.LastModified.ToString("yyyy-MM-dd")">@(Model.Media != null ? Model.Media.Filename : "")</a>
         </div>
     </div>
     <div class="col-xs-2">

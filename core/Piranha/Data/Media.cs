@@ -22,7 +22,7 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the optional folder id.
         /// </summary>
-        public string FolderId { get; set;}
+        public string FolderId { get; set; }
 
         /// <summary>
         /// Gets/sets the filename.
@@ -44,6 +44,20 @@ namespace Piranha.Data
         /// Gets/sets the public url.
         /// </summary>
         public string PublicUrl { get; set; }
+
+        /// <summary>
+        /// Gets if this is an image.
+        /// </summary>
+        public bool IsImage {
+            get { return ContentType.ToLower().StartsWith("image"); }
+        }
+
+        /// <summary>
+        /// Gets if this is a video.
+        /// </summary>
+        public bool IsVideo {
+            get { return ContentType.ToLower().StartsWith("video"); }
+        }
 
         /// <summary>
         /// Gets/sets the created date.
