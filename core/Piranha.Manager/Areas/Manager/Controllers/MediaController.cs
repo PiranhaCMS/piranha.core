@@ -10,6 +10,7 @@
 
 using Piranha.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
 using System.Linq;
 
 namespace Piranha.Areas.Manager.Controllers
@@ -46,7 +47,7 @@ namespace Piranha.Areas.Manager.Controllers
                     using (var stream = upload.OpenReadStream()) {
                         api.Media.Save(new StreamMediaContent() {
                             FolderId = model.ParentId,
-                            Filename = upload.FileName,
+                            Filename = Path.GetFileName(upload.FileName),
                             ContentType = upload.ContentType,
                             Data = stream
                         });
