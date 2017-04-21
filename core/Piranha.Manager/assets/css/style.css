@@ -8683,6 +8683,9 @@ li.sitemap-item .actions.one {
 .modal .modal-body .table {
   margin-bottom: 0;
 }
+.modal .modal-body .media-info {
+  margin: 10px 0 0;
+}
 /*
 .modal-content {
 	color: #fff;

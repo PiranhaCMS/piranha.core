@@ -14331,12 +14331,18 @@ $('#modalImgPreview').on('show.bs.modal', function (event) {
     var link = $(event.relatedTarget);
     var filename = link.data('filename');
     var url = link.data('url');
+    var contenttype = link.data('contenttype');
+    var filesize = link.data('filesize');
+    var modified = link.data('modified');
 
     var modal = $(this);
     modal.find('.modal-title').text(filename)
     modal.find('#imgPreview').attr('alt', filename);
     modal.find('#imgPreview').attr('src', url);
     modal.find('#btnDownload').attr('href', url);
+    modal.find('#previewContentType').text(contenttype);
+    modal.find('#previewFilesize').text(filesize);
+    modal.find('#previewModified').text(modified);
 });
 
 
