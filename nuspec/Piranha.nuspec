@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha</id>
 		<title>Piranha</title>
-    <version>4.0.0-alpha3</version>
+    <version>4.0.0-alpha4</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -13,6 +13,9 @@
     <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
     <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
     <iconUrl>http://piranhacms.org/assets/twitter-shield.png</iconUrl>
+		<releaseNotes>See the changelog available at:
+https://github.com/piranhacms/piranha.core/wiki/alpha-changelog
+    </releaseNotes
     <dependencies>
       <group targetFramework=".NETStandard1.4">
         <dependency id="NETStandard.Library" version="1.6.1" />
