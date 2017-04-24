@@ -16,6 +16,12 @@ namespace Piranha.Extend
     public interface IField
     {
         /// <summary>
+        /// Gets the list item title if this field is used in
+        /// a collection regions.
+        /// </summary>
+        string GetTitle();
+
+        /// <summary>
         /// Initializes the field for client use.
         /// </summary>
         /// <param name="api">The current api</param>

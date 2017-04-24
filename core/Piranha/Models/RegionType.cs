@@ -40,6 +40,16 @@ namespace Piranha.Models
         public int Min { get; set; }
 
         /// <summary>
+        /// Gets/sets the field that should be used to render list item title.
+        /// </summary>
+        public string ListTitleField { get; set; }
+
+        /// <summary>
+        /// Gets/sets the placeholder title that should be used for new items.
+        /// </summary>
+        public string ListTitlePlaceholder { get; set; }
+
+        /// <summary>
         /// Gets/sets the available fields.
         /// </summary>
         public IList<FieldType> Fields { get; set; }

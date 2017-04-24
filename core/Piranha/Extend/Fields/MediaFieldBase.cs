@@ -15,6 +15,16 @@ namespace Piranha.Extend.Fields
     public class MediaFieldBase : IField
     {
         /// <summary>
+        /// Gets the list item title if this field is used in
+        /// a collection regions.
+        /// </summary>
+        public virtual string GetTitle() {
+            if (Media != null)
+                return Media.Filename;
+            return null;
+        }
+
+        /// <summary>
         /// Gets/sets the media id.
         /// </summary>
         /// <returns></returns>

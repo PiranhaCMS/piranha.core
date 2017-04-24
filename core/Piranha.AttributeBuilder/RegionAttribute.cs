@@ -24,6 +24,18 @@ namespace Piranha.AttributeBuilder
         public string Title { get; set; }
 
         /// <summary>
+        /// Gets/sets the field that will be used to generate the list 
+        /// item title if the region is used in a collection.
+        /// </summary>
+        public string ListTitle { get; set; }
+
+        /// <summary>
+        /// Gets/sets the placeholder title that will be used for new
+        /// list items if the region is used in a collection.
+        /// </summary>
+        public string ListPlaceholder { get; set;}
+
+        /// <summary>
         /// Gets/sets the maximum number of items if this is a collection.
         /// </summary>
         public int Max { get; set; }

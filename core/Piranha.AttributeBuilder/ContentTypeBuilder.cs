@@ -72,6 +72,8 @@ namespace Piranha.AttributeBuilder
                     Id = prop.Name,
                     Title = attr.Title,
                     Collection = isCollection,
+                    ListTitleField = attr.ListTitle,
+                    ListTitlePlaceholder = attr.ListPlaceholder,
                     Max = attr.Max,
                     Min = attr.Min
                 };
