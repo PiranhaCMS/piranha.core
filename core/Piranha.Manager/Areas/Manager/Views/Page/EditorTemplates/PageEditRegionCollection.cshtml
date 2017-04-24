@@ -7,6 +7,11 @@
     }
 </div>
 
-<div class="well well-sm region-list-toolbar">
-    <button type="button" class="btn btn-primary addRegionItem" data-pagetypeid="@ViewData["pageTypeId"]" data-regiontypeid="@ViewData["regionTypeId"]" data-regionindex="@ViewData["regionIndex"]" data-itemindex="@Model.FieldSets.Count" data-targetid="#@Model.Id">Add item</button>
+<div class="region-list-toolbar">
+    <button type="button" class="btn btn-labeled btn-primary pull-right addRegionItem" data-pagetypeid="@ViewData["pageTypeId"]" data-regiontypeid="@ViewData["regionTypeId"]" data-regionindex="@ViewData["regionIndex"]" data-itemindex="@Model.FieldSets.Count" data-targetid="#@Model.Id">
+        <span class="btn-label">
+            <i class="glyphicon glyphicon-plus"></i>
+        </span>
+        Add item
+    </button>
 </div>
