@@ -25,6 +25,23 @@ $(document).on('click', '.panel-heading .btn-toggle', function () {
 });
 
 //
+// Add new region items
+//
+$(document).on('click', '.addRegionItem', function () {
+    var btn = $(this);
+
+    manager.tools.addregion(
+        btn.data('targetid'), 
+        btn.data('pagetypeid'),
+        btn.data('regiontypeid'),
+        btn.data('regionindex'),
+        btn.data('itemindex'),
+        function () {
+            btn.data('itemindex', btn.data('itemindex') + 1);
+        });
+});
+
+//
 // Auto grow textareas
 //
 $('.single-region textarea.raw-text').css({'overflow': 'hidden'}).autogrow({
@@ -73,7 +90,7 @@ var manager = {
             });
         },
 
-        addregion: function (targetId, pageTypeId, regionTypeId, regionIndex, itemIndex) {
+        addregion: function (targetId, pageTypeId, regionTypeId, regionIndex, itemIndex, cb) {
             $.ajax({
                 url: '/manager/page/region',
                 method: 'POST',
@@ -86,7 +103,10 @@ var manager = {
                     ItemIndex: itemIndex
                 }),
                 success: function (res) {
-                    $(targetId).html(res);
+                    $(targetId).append(res);
+
+                    if (cb)
+                        cb();
                 }
             });
         }

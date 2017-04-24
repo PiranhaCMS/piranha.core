@@ -1,6 +1,7 @@
 ﻿@model Piranha.Areas.Manager.Models.PageEditFieldSet
 @using Piranha.Models
 @{
+    Layout = null;
     var unique = Guid.NewGuid().ToString();
 }
 
@@ -9,9 +10,12 @@
         <div class="handle">
             <span class="glyphicon glyphicon-option-vertical"></span>
         </div>                    
-        <a role="button" data-toggle="collapse" href="#region-@unique" aria-expanded="false" aria-controls="region-@unique">
-            Collapsible Group Item
-        </a>                    
+        <div class="region-actions">
+            <button type="button" class="delete" data-toggle="tooltip" data-original-title="Delete" data-placement="top"><span class="glyphicon glyphicon-remove text-danger"></span></button>
+        </div>
+        <a class="region-title" role="button" data-toggle="collapse" href="#region-@unique" aria-expanded="false" aria-controls="region-@unique">
+            @Model.ListTitle
+        </a>
     </div>
     <div class="region-list-body collapse" role="tabpanel" id="region-@unique">
         <div class="row">

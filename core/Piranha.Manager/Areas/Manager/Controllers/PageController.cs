@@ -9,6 +9,7 @@
  */
 
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Piranha.Areas.Manager.Controllers
@@ -145,11 +146,11 @@ namespace Piranha.Areas.Manager.Controllers
                     var region = Piranha.Models.DynamicPage.CreateRegion(api,
                         model.PageTypeId, model.RegionTypeId);
 
-                    var editModel = Models.PageEditModel.CreateRegion(regionType, region);
+                    var editModel = (Models.PageEditRegionCollection)Models.PageEditModel.CreateRegion(regionType, 
+                        new List<object>() { region});
 
                     ViewData.TemplateInfo.HtmlFieldPrefix = $"Regions[{model.RegionIndex}].FieldSets[{model.ItemIndex}]";
-                    return View("EditorTemplates/PageEditRegionItem", 
-                        Models.PageEditModel.CreateRegion(regionType, editModel));
+                    return View("EditorTemplates/PageEditRegionItem", editModel.FieldSets[0]);
                 }
             }
             return new NotFoundResult();

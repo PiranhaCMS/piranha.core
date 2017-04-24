@@ -11,6 +11,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Piranha.Manager;
 
 namespace Piranha.Areas.Manager.Models
@@ -139,7 +140,18 @@ namespace Piranha.Areas.Manager.Models
 
             foreach (var item in items) {
                 if (region.Fields.Count == 1) {
-                    editRegion.Add(new PageEditFieldSet() {
+                    var itemTitle = "";
+
+                    // Get the item title if this is a collection region.
+                    if (region.Collection) {
+                        if (item != null)
+                            itemTitle = ((Extend.IField)item).GetTitle();
+                        if (string.IsNullOrWhiteSpace(itemTitle) && !string.IsNullOrWhiteSpace(region.ListTitlePlaceholder))
+                            itemTitle = region.ListTitlePlaceholder;
+                        else itemTitle = "Item";
+                    }
+
+                    var set = new PageEditFieldSet() {
                         new PageEditField() {
                             Id = region.Fields[0].Id,
                             Title = region.Fields[0].Title ?? region.Fields[0].Id,
@@ -147,13 +159,32 @@ namespace Piranha.Areas.Manager.Models
                             Options = region.Fields[0].Options,
                             Value = (Extend.IField)item
                         }
-                    });
+                    };
+                    set.ListTitle = itemTitle;
+
+                    editRegion.Add(set);
                 } else {
                     var fieldData = (IDictionary<string, object>)item;
                     var fieldSet = new PageEditFieldSet();
 
                     foreach (var field in region.Fields) {
-                        if (fieldData.ContainsKey(field.Id))
+                        if (fieldData.ContainsKey(field.Id)) {
+                            // Get the item title if this is a collection region.
+                            if (region.Collection) {
+                                if (!string.IsNullOrWhiteSpace(region.ListTitleField) && field.Id == region.ListTitleField) {
+                                    var itemTitle = "";
+
+                                    if (fieldData[field.Id] != null)
+                                        itemTitle = ((Extend.IField)fieldData[field.Id]).GetTitle();
+                                    if (string.IsNullOrWhiteSpace(itemTitle) && !string.IsNullOrWhiteSpace(region.ListTitlePlaceholder))
+                                        itemTitle = region.ListTitlePlaceholder;
+                                    else if (string.IsNullOrWhiteSpace(itemTitle)) 
+                                        itemTitle = "Item";
+
+                                    fieldSet.ListTitle = itemTitle;
+                                }
+                            }
+
                             fieldSet.Add(new PageEditField() {
                                 Id = field.Id,
                                 Title = field.Title ?? field.Id,
@@ -161,6 +192,7 @@ namespace Piranha.Areas.Manager.Models
                                 Options = field.Options,
                                 Value = (Extend.IField)fieldData[field.Id]
                             });
+                        }
                     }
                     editRegion.Add(fieldSet);
                 }
@@ -238,48 +270,4 @@ namespace Piranha.Areas.Manager.Models
         }
         #endregion
     }
-
-    #region Helper classes
-    public abstract class PageEditRegionBase
-    {
-        public string Id { get; set; }
-        public string Title { get; set; }
-        public string CLRType { get; set; }
-
-        public abstract void Add(PageEditFieldSet fieldSet);
-    }
-
-    public class PageEditRegion : PageEditRegionBase
-    {
-        public PageEditFieldSet FieldSet { get; set; }
-
-        public override void Add(PageEditFieldSet fieldSet) {
-            FieldSet = fieldSet;
-        }
-    }
-
-    public class PageEditRegionCollection : PageEditRegionBase
-    {
-        public IList<PageEditFieldSet> FieldSets { get; set; }
-
-        public PageEditRegionCollection() {
-            FieldSets = new List<PageEditFieldSet>();
-        }
-
-        public override void Add(PageEditFieldSet fieldSet) {
-            FieldSets.Add(fieldSet);
-        }
-    }
-
-    public class PageEditFieldSet : List<PageEditField> { }
-
-    public class PageEditField
-    {
-        public string Id { get; set; }
-        public string Title { get; set; }
-        public string CLRType { get; set; }
-        public Extend.IField Value { get; set; }
-        public Piranha.Models.FieldOption Options { get; set; }
-    }
-    #endregion
 }
