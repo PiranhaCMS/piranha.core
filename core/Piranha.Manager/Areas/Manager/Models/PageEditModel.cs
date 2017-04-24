@@ -113,6 +113,61 @@ namespace Piranha.Areas.Manager.Models
             throw new KeyNotFoundException($"No page type found with the id '{pageTypeId}'");
         }
 
+        /// <summary>
+        /// Creates a new edit region model for the given region type and value.
+        /// </summary>
+        /// <param name="region">The region type</param>
+        /// <param name="value">The region value</param>
+        /// <returns>The edit model</returns>
+        public static PageEditRegionBase CreateRegion(Piranha.Models.RegionType region, object value) {
+            PageEditRegionBase editRegion;
+
+            if (region.Collection) {
+                editRegion = new PageEditRegionCollection();
+            } else {
+                editRegion = new PageEditRegion();
+            }
+            editRegion.Id = region.Id;
+            editRegion.Title = region.Title ?? region.Id;
+            editRegion.CLRType = editRegion.GetType().FullName;
+
+            IList items = new List<object>();
+
+            if (region.Collection)
+                items = (IList)value;
+            else items.Add(value);
+
+            foreach (var item in items) {
+                if (region.Fields.Count == 1) {
+                    editRegion.Add(new PageEditFieldSet() {
+                        new PageEditField() {
+                            Id = region.Fields[0].Id,
+                            Title = region.Fields[0].Title ?? region.Fields[0].Id,
+                            CLRType = item.GetType().FullName,
+                            Options = region.Fields[0].Options,
+                            Value = (Extend.IField)item
+                        }
+                    });
+                } else {
+                    var fieldData = (IDictionary<string, object>)item;
+                    var fieldSet = new PageEditFieldSet();
+
+                    foreach (var field in region.Fields) {
+                        if (fieldData.ContainsKey(field.Id))
+                            fieldSet.Add(new PageEditField() {
+                                Id = field.Id,
+                                Title = field.Title ?? field.Id,
+                                CLRType = fieldData[field.Id].GetType().FullName,
+                                Options = field.Options,
+                                Value = (Extend.IField)fieldData[field.Id]
+                            });
+                    }
+                    editRegion.Add(fieldSet);
+                }
+            }
+            return editRegion;
+        }
+
         #region Private methods
         /// <summary>
         /// Loads all of the regions from the source model into the destination.
@@ -125,51 +180,7 @@ namespace Piranha.Areas.Manager.Models
                     var regions = (IDictionary<string, object>)src.Regions;
 
                     if (regions.ContainsKey(region.Id)) {
-                        PageEditRegionBase editRegion;
-
-                        if (region.Collection) {
-                            editRegion = new PageEditRegionCollection();
-                        } else {
-                            editRegion = new PageEditRegion();
-                        }
-                        editRegion.Id = region.Id;
-                        editRegion.Title = region.Title ?? region.Id;
-                        editRegion.CLRType = editRegion.GetType().FullName;
-
-                        IList items = new List<object>();
-
-                        if (region.Collection)
-                            items = (IList)regions[region.Id];
-                        else items.Add(regions[region.Id]);
-
-                        foreach (var item in items) {
-                            if (region.Fields.Count == 1) {
-                                editRegion.Add(new PageEditFieldSet() {
-                                    new PageEditField() {
-                                        Id = region.Fields[0].Id,
-                                        Title = region.Fields[0].Title ?? region.Fields[0].Id,
-                                        CLRType = item.GetType().FullName,
-                                        Options = region.Fields[0].Options,
-                                        Value = (Extend.IField)item
-                                    }
-                                });
-                            } else {
-                                var fieldData = (IDictionary<string, object>)item;
-                                var fieldSet = new PageEditFieldSet();
-
-                                foreach (var field in region.Fields) {
-                                    if (fieldData.ContainsKey(field.Id))
-                                        fieldSet.Add(new PageEditField() {
-                                            Id = field.Id,
-                                            Title = field.Title ?? field.Id,
-                                            CLRType = fieldData[field.Id].GetType().FullName,
-                                            Options = field.Options,
-                                            Value = (Extend.IField)fieldData[field.Id]
-                                        });
-                                }
-                                editRegion.Add(fieldSet);
-                            }
-                        }
+                        var editRegion = CreateRegion(region, regions[region.Id]);
                         dest.Regions.Add(editRegion);
                     }
                 }

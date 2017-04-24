@@ -9,6 +9,7 @@
  */
 
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace Piranha.Areas.Manager.Controllers
 {
@@ -126,6 +127,29 @@ namespace Piranha.Areas.Manager.Controllers
             api.Pages.Delete(id);
             SuccessMessage("The page has been deleted");
             return RedirectToAction("List");
+        }
+
+        [HttpPost]
+        [Route("manager/page/region")]
+        public IActionResult AddRegion([FromBody]Models.PageRegionModel model) {
+            var pageType = api.PageTypes.GetById(model.PageTypeId);
+
+            if (pageType != null) {
+                var regionType = pageType.Regions.SingleOrDefault(r => r.Id == model.RegionTypeId);
+
+                if (regionType != null) {
+                    var region = Piranha.Models.DynamicPage.CreateRegion(api,
+                        model.PageTypeId, model.RegionTypeId);
+
+                    var editModel = Models.PageEditModel.CreateRegion(regionType, region);
+                    
+                }
+            }
+
+
+            //return View("EditorTemplates/PageEditRegionItem", Models.PageEditModel.CreateRegion())
+
+            return null;
         }
 
         #region Private methods
