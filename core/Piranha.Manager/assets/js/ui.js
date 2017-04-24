@@ -71,6 +71,24 @@ var manager = {
                     alert(res.Body);
                 }
             });
+        },
+
+        addregion: function (targetId, pageTypeId, regionTypeId, regionIndex, itemIndex) {
+            $.ajax({
+                url: '/manager/page/region',
+                method: 'POST',
+                contentType: 'application/json',
+                dataType: 'html',
+                data: JSON.stringify({
+                    PageTypeId: pageTypeId,
+                    RegionTypeId: regionTypeId,
+                    RegionIndex: regionIndex,
+                    ItemIndex: itemIndex
+                }),
+                success: function (res) {
+                    $(targetId).html(res);
+                }
+            });
         }
     }
 };

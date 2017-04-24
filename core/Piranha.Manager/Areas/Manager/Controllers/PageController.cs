@@ -129,6 +129,10 @@ namespace Piranha.Areas.Manager.Controllers
             return RedirectToAction("List");
         }
 
+        /// <summary>
+        /// Adds a new region to a page.
+        /// </summary>
+        /// <param name="model">The model</param>
         [HttpPost]
         [Route("manager/page/region")]
         public IActionResult AddRegion([FromBody]Models.PageRegionModel model) {
@@ -142,14 +146,13 @@ namespace Piranha.Areas.Manager.Controllers
                         model.PageTypeId, model.RegionTypeId);
 
                     var editModel = Models.PageEditModel.CreateRegion(regionType, region);
-                    
+
+                    ViewData.TemplateInfo.HtmlFieldPrefix = $"Regions[{model.RegionIndex}].FieldSets[{model.ItemIndex}]";
+                    return View("EditorTemplates/PageEditRegionItem", 
+                        Models.PageEditModel.CreateRegion(regionType, editModel));
                 }
             }
-
-
-            //return View("EditorTemplates/PageEditRegionItem", Models.PageEditModel.CreateRegion())
-
-            return null;
+            return new NotFoundResult();
         }
 
         #region Private methods

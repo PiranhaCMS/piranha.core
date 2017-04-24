@@ -102,7 +102,7 @@
                 @Html.HiddenFor(m => m.Regions[n].Id)
                 @Html.HiddenFor(m => m.Regions[n].Title)
                 @Html.HiddenFor(m => m.Regions[n].CLRType)
-                @Html.EditorFor(m => m.Regions[n], Model.Regions[n].GetType().Name)
+                @Html.EditorFor(m => m.Regions[n], Model.Regions[n].GetType().Name, new { regionIndex = n })
             </div>
         }
     </div>
