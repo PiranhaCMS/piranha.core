@@ -9,6 +9,8 @@
  */
 
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Piranha.Areas.Manager.Controllers
 {
@@ -126,6 +128,32 @@ namespace Piranha.Areas.Manager.Controllers
             api.Pages.Delete(id);
             SuccessMessage("The page has been deleted");
             return RedirectToAction("List");
+        }
+
+        /// <summary>
+        /// Adds a new region to a page.
+        /// </summary>
+        /// <param name="model">The model</param>
+        [HttpPost]
+        [Route("manager/page/region")]
+        public IActionResult AddRegion([FromBody]Models.PageRegionModel model) {
+            var pageType = api.PageTypes.GetById(model.PageTypeId);
+
+            if (pageType != null) {
+                var regionType = pageType.Regions.SingleOrDefault(r => r.Id == model.RegionTypeId);
+
+                if (regionType != null) {
+                    var region = Piranha.Models.DynamicPage.CreateRegion(api,
+                        model.PageTypeId, model.RegionTypeId);
+
+                    var editModel = (Models.PageEditRegionCollection)Models.PageEditModel.CreateRegion(regionType, 
+                        new List<object>() { region});
+
+                    ViewData.TemplateInfo.HtmlFieldPrefix = $"Regions[{model.RegionIndex}].FieldSets[{model.ItemIndex}]";
+                    return View("EditorTemplates/PageEditRegionItem", editModel.FieldSets[0]);
+                }
+            }
+            return new NotFoundResult();
         }
 
         #region Private methods

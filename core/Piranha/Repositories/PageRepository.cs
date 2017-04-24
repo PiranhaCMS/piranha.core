@@ -326,6 +326,15 @@ namespace Piranha.Repositories
                                 foreach (var region in GetEnumerable(model, regionKey)) {
                                     MapRegion(model, page, region, regionType, regionKey, sortOrder++, transaction: tx);
                                 }
+                                // Now delete removed collection items
+                                db.Execute(
+                                    $"DELETE FROM [Piranha_PageFields] WHERE [PageId]=@PageId AND [RegionId]=@RegionId AND [SortOrder]>=@SortOrder",
+                                    new {
+                                        PageId = model.Id,
+                                        RegionId = regionKey,
+                                        SortOrder = sortOrder
+                                    }, transaction: tx
+                                );
                             }
                         }
                     }
