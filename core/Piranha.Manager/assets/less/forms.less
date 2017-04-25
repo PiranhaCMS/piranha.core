@@ -262,6 +262,14 @@
 .region-list {
     margin: -15px -15px 15px;
 
+	.sortable-placeholder {
+		padding: 0; 
+		min-height: 43px; 
+		background: #f2fbff; 
+		border: 1px dashed #b6bcbf; 
+		box-sizing: border-box; 		
+	}
+
     .region-list-item {
 		.region-list-heading {
 			border-bottom: solid 1px @border-color;
@@ -283,7 +291,7 @@
 
 			.region-actions {
 				float: right;
-
+				
 				button {
 					height: 43px;
 					padding: 10px;
@@ -295,6 +303,7 @@
 		}
 
 		.region-list-body {
+			background: @item-color;
 			padding: 0 15px 0;
 			border-bottom: solid 1px @border-color;
 

@@ -4,8 +4,16 @@
     <div class="dd-handle">
         <span class="glyphicon glyphicon-option-vertical"></span>
     </div>
-    <div class="actions one pull-right">
-        <a class="remove" href="@Url.Action("Delete", new { id = Model.Id })"><span class="glyphicon glyphicon-remove"></span></a>
+    <div class="actions three pull-right">
+        <a class="add-after first" href="#" data-toggle="tooltip" data-original-title="Add after" data-placement="top">
+            <span class="glyphicon glyphicon-chevron-down"></span>
+        </a>
+        <a class="add-below" href="#" data-toggle="tooltip" data-original-title="Add below" data-placement="top">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+        <a class="remove last" href="@Url.Action("Delete", new { id = Model.Id })" data-toggle="tooltip" data-original-title="Delete" data-placement="top">
+            <span class="glyphicon glyphicon-trash text-danger"></span>
+        </a>
     </div>
     <div class="date pull-right">
         @Model.Created.ToString("yyyy-MM-dd")

@@ -8028,6 +8028,7 @@ body.collapsed .navmenu-inverse span.title {
   display: inline-block;
   width: 16px;
   height: 16px;
+  font-size: 14px;
 }
 .table > tbody > tr > td.actions a.delete {
   background: url('../img/ico-delete-16.png') 0 0 no-repeat;
@@ -8422,6 +8423,13 @@ li.sitemap-item .actions.one {
 .region-list {
   margin: -15px -15px 15px;
 }
+.region-list .sortable-placeholder {
+  padding: 0;
+  min-height: 43px;
+  background: #f2fbff;
+  border: 1px dashed #b6bcbf;
+  box-sizing: border-box;
+}
 .region-list .region-list-item .region-list-heading {
   border-bottom: solid 1px #ddd;
 }
@@ -8449,6 +8457,7 @@ li.sitemap-item .actions.one {
   border-left: solid 1px #f2f2f2;
 }
 .region-list .region-list-item .region-list-body {
+  background: #eee;
   padding: 0 15px 0;
   border-bottom: solid 1px #ddd;
 }

@@ -1,7 +1,7 @@
 ﻿@model Piranha.Areas.Manager.Models.PageEditRegionCollection
 @using Piranha.Models
 
-<div id="@Model.Id" class="region-list" role="tablist">
+<div id="@Model.Id" class="region-list sortable" role="tablist">
     @for (var i = 0; i < Model.FieldSets.Count; i++) {
         @Html.EditorFor(m => m.FieldSets[i], "PageEditRegionItem.cshtml")
     }

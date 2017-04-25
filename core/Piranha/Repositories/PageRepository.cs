@@ -647,40 +647,42 @@ namespace Piranha.Repositories
                         fieldValue = GetComplexValue(region, fieldDef.Id);
                     }
 
-                    // Check that the returned value matches the type specified
-                    // for the page type, otherwise deserialization won't work
-                    // when the model is retrieved from the database.
-                    if (fieldValue.GetType() != fieldType.Type)
-                        throw new ArgumentException("Given page field value does not match the configured page type");
+                    if (fieldValue != null) {
+                        // Check that the returned value matches the type specified
+                        // for the page type, otherwise deserialization won't work
+                        // when the model is retrieved from the database.
+                        if (fieldValue.GetType() != fieldType.Type)
+                            throw new ArgumentException("Given page field value does not match the configured page type");
 
-                    // Check if we have the current field in the database already
-                    var field = page.Fields
-                        .SingleOrDefault(f => f.RegionId == regionId && f.FieldId == fieldDef.Id && f.SortOrder == sortOrder);
+                        // Check if we have the current field in the database already
+                        var field = page.Fields
+                            .SingleOrDefault(f => f.RegionId == regionId && f.FieldId == fieldDef.Id && f.SortOrder == sortOrder);
 
-                    // If not, create a new field
-                    if (field == null) {
-                        field = new PageField() {
-                            Id = Guid.NewGuid().ToString(),
-                            PageId = page.Id,
-                            RegionId = regionId,
-                            FieldId = fieldDef.Id
-                        };
-                        page.Fields.Add(field);
-                        isNew = true;
-                    }
+                        // If not, create a new field
+                        if (field == null) {
+                            field = new PageField() {
+                                Id = Guid.NewGuid().ToString(),
+                                PageId = page.Id,
+                                RegionId = regionId,
+                                FieldId = fieldDef.Id
+                            };
+                            page.Fields.Add(field);
+                            isNew = true;
+                        }
 
-                    // Update field info & value
-                    field.CLRType = fieldType.TypeName;
-                    field.SortOrder = sortOrder;
-                    field.Value = JsonConvert.SerializeObject(fieldValue);
+                        // Update field info & value
+                        field.CLRType = fieldType.TypeName;
+                        field.SortOrder = sortOrder;
+                        field.Value = JsonConvert.SerializeObject(fieldValue);
 
-                    // Save the field
-                    if (isNew) {
-                        db.Execute("INSERT INTO [Piranha_PageFields] ([Id], [PageId], [RegionId], [FieldId], [CLRType], [SortOrder], [Value]) VALUES(@Id, @PageId, @RegionId, @FieldId, @CLRType, @SortOrder, @Value)",
-                            field, transaction: transaction);
-                    } else {
-                        db.Execute("UPDATE [Piranha_PageFields] Set [PageId]=@PageId, [RegionId]=@RegionId, [FieldId]=@FieldId, [CLRType]=@CLRType, [SortOrder]=@SortOrder, [Value]=@Value WHERE [Id]=@Id",
-                            field, transaction: transaction);
+                        // Save the field
+                        if (isNew) {
+                            db.Execute("INSERT INTO [Piranha_PageFields] ([Id], [PageId], [RegionId], [FieldId], [CLRType], [SortOrder], [Value]) VALUES(@Id, @PageId, @RegionId, @FieldId, @CLRType, @SortOrder, @Value)",
+                                field, transaction: transaction);
+                        } else {
+                            db.Execute("UPDATE [Piranha_PageFields] Set [PageId]=@PageId, [RegionId]=@RegionId, [FieldId]=@FieldId, [CLRType]=@CLRType, [SortOrder]=@SortOrder, [Value]=@Value WHERE [Id]=@Id",
+                                field, transaction: transaction);
+                        }
                     }
                 }
             }
