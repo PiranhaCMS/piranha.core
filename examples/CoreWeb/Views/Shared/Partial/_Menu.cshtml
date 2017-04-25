@@ -1,8 +1,11 @@
-@inject Piranha.Api Api
+﻿@inject Piranha.Api Api
 @{
     var sitemap = Api.Sites.GetSitemap();
     var currentPage = ViewBag.CurrentPage;
-    
+
+    //
+    // Simple helper function for styling menu items
+    //
     Func<Piranha.Models.SitemapItem, string> Css = (item) => {
         if (item.Id == currentPage) {
             return "class=active";

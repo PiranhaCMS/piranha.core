@@ -1,10 +1,12 @@
-﻿@model CoreWeb.Models.MarkdownPage
+﻿@model CoreWeb.Models.TeaserPage
 @{
     ViewBag.Title = Model.Title;
     ViewBag.Ingress = Model.Heading.Ingress.Value;
     ViewBag.IsStart = true;
 }
 
-<div class="container arrow">
+@Html.Partial("Partial/Teasers", Model.Teasers)
+
+<div class="container body @(Model.Teasers.Count == 0 ? "arrow" : "")">
     @Html.Raw(Model.Body)
 </div>

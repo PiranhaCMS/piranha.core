@@ -4,24 +4,24 @@
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
  * 
- * https://github.com/piranhacms/piranha.core
+ * http://github.com/tidyui/coreweb
  * 
  */
 
 using Microsoft.AspNetCore.Mvc;
-using System;
 using Piranha;
 
 namespace CoreWeb.Controllers
 {
+    /// <summary>
+    /// Simple controller for handling the CMS content from Piranha.
+    /// </summary>
     public class CmsController : Controller
     {
-        #region Members
         /// <summary>
         /// The private api.
         /// </summary>
         private readonly Api api;
-        #endregion
 
         /// <summary>
         /// Default construtor.
@@ -35,10 +35,22 @@ namespace CoreWeb.Controllers
         /// Gets the page with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        /// <param name="startpage">If this is the site startpage</param>
         [Route("page")]
-        public IActionResult Page(string id, bool startpage) {
-            var model = api.Pages.GetById<Models.MarkdownPage>(id);
+        public IActionResult Page(string id) {
+            var model = api.Pages.GetById<Models.StandardPage>(id);
+            ViewBag.CurrentPage = model.Id;
+
+            return View(model);
+        }
+
+        /// <summary>
+        /// Gets the page with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <param name="startpage">If this is the site startpage</param>
+        [Route("teaserpage")]
+        public IActionResult TeaserPage(string id, bool startpage) {
+            var model = api.Pages.GetById<Models.TeaserPage>(id);
             ViewBag.CurrentPage = model.Id;
 
             if (startpage)

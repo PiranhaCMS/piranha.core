@@ -1,0 +1,20 @@
+﻿@model IList<CoreWeb.Models.Regions.Teaser>
+@{
+    var teasers = Model.Count;
+    var teaserWidth = 12 / teasers;
+}
+
+@if (teasers > 0) {
+    <div class="teasers">
+        <div class="container">
+            <div class="row">
+                @foreach (var teaser in Model) {
+                    <div class="col-sm-@teaserWidth">
+                        <h3>@teaser.Title.Value</h3>
+                        @Html.Raw(teaser.Body)
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

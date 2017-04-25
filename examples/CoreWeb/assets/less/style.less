@@ -1,12 +1,12 @@
 ﻿@import "../lib/bootstrap/less/bootstrap.less";
 
 /*!
- * Copyright (c) 2016 Håkan Edling
+ * Copyright (c) 2017 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
  * 
- * https://github.com/piranhacms/piranha.core
+ * https://github.com/tidyui/coreweb
  * 
  */
 
@@ -27,14 +27,14 @@
 .banner {
     background: url('../img/seigaiha-blue.jpg');
     position: relative;
-    height: 30vh;
-    max-height: 900px;
-    min-height: 240px;
+    height: 90px;
     overflow: hidden;
     margin-bottom: 25px;
 
     &.startpage {
         height: 60vh;
+        max-height: 900px;
+        min-height: 240px;
     }
 
     img {
@@ -85,8 +85,11 @@
     }
 }
 
-img {
-    max-width: 100%;
+.body {
+    img {
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
 }
 
 //
@@ -131,6 +134,7 @@ img {
                         &:before {
                             .arrow(#2987ad, 10px, 28px)
                         }
+
                         &:hover {
                             background: inherit;
                         }
@@ -138,6 +142,21 @@ img {
                 }
             }
         }
+    }
+}
+
+//
+// Teasers
+//
+.teasers {
+    background: #f2f2f2;
+    border-bottom: 1px solid #ddd;
+    margin: -25px 0 15px;
+    padding: 30px 0;
+
+    .container {
+        max-width: 960px;
+        text-align: center;
     }
 }
 
@@ -161,6 +180,7 @@ footer {
         }
     }
 }
+
 @media (max-width: 420px) {
     .banner {
         h1 {

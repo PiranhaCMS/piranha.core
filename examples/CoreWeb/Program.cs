@@ -4,7 +4,7 @@
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
  * 
- * https://github.com/piranhacms/piranha.core
+ * http://github.com/tidyui/coreweb
  * 
  */
 
@@ -15,6 +15,10 @@ namespace CoreWeb
 {
     public class Program
     {
+        /// <summary>
+        /// Starts the web application.
+        /// </summary>
+        /// <param name="args">Optional command arguments</param>
         public static void Main(string[] args)
         {
             var host = new WebHostBuilder()
@@ -22,8 +26,8 @@ namespace CoreWeb
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
+                .UseApplicationInsights()
                 .Build();
-
             host.Run();
         }
     }

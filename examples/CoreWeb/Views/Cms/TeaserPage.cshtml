@@ -1,7 +1,9 @@
-﻿@model CoreWeb.Models.StandardPage
+﻿@model CoreWeb.Models.TeaserPage
 @{
     ViewBag.Title = Model.Title;
 }
+
+@Html.Partial("Partial/Teasers", Model.Teasers)
 
 <div class="container body">
     <h1>@Model.Title</h1>
