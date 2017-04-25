@@ -8470,6 +8470,10 @@ li.sitemap-item .actions.one {
 .markdown .nav-tabs {
   margin-bottom: 15px;
 }
+.region-list .markdown .nav-tabs,
+.region-list .markdown .content-preview {
+  display: none !important;
+}
 .single-region .region-editor {
   margin: -15px -15px -30px;
 }
