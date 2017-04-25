@@ -7,6 +7,7 @@
     "jquery.ns-autogrow": "1.1.6",
     "bootstrap": "3.3.7",
     "bootstrap-datetimepicker-3": "latest",
+    "bootstrap-html5sortable": "latest",
     "jasny-bootstrap": "3.1.3"
   },
   "resolutions": {

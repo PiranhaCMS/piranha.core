@@ -5,8 +5,6 @@ $(document).ready(function () {
     $('.datepicker').datetimepicker({
         format: "YYYY-MM-DD"
     });
-
-    //$('[data-toggle="tooltip"]').tooltip()
 });
 
 //
@@ -14,6 +12,15 @@ $(document).ready(function () {
 //
 $('body').tooltip({
     selector: '[data-toggle="tooltip"]'
+});
+
+//
+// Sortable
+//
+$('.sortable').sortable({
+    handle: '.sortable-handle'
+}).bind('sortupdate', function(e, ui) {
+    manager.tools.recalcregion($(ui.item).parent());
 });
 
 //
@@ -117,6 +124,13 @@ var manager = {
 
                     if (cb)
                         cb();
+
+                    $('.sortable').sortable('destroy');
+                    $('.sortable').sortable({
+                        handle: '.sortable-handle'
+                    }).bind('sortupdate', function(e, ui) {
+                        manager.tools.recalcregion($(ui.item).parent());
+                    });
                 }
             });
         },
@@ -138,10 +152,10 @@ var manager = {
             for (var n = 0; n < items.length; n++) {
                 var inputs = $(items.get(n)).find('input, textarea');
 
-                $(items.get(n)).find('input').attr('id', function (i, val) {
+                inputs.attr('id', function (i, val) {
                     return val.replace(/FieldSets_\d+__/, 'FieldSets_' + n + '__');
                 });
-                $(items.get(n)).find('input').attr('name', function (i, val) {
+                inputs.attr('name', function (i, val) {
                     return val.replace(/FieldSets\[\d+\]/, 'FieldSets[' + n + ']');
                 });
             }
