@@ -33,7 +33,12 @@ namespace Piranha.AttributeBuilder
         /// Gets/sets the placeholder title that will be used for new
         /// list items if the region is used in a collection.
         /// </summary>
-        public string ListPlaceholder { get; set;}
+        public string ListPlaceholder { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional sort order.
+        /// </summary>
+        public int SortOrder { get; set; }
 
         /// <summary>
         /// Gets/sets the maximum number of items if this is a collection.
@@ -44,5 +49,12 @@ namespace Piranha.AttributeBuilder
         /// Gets/sets the minimum number of items if this is a collection.
         /// </summary>
         public int Min { get; set; }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public RegionAttribute() {
+            SortOrder = Int32.MaxValue;
+        }
     }
 }

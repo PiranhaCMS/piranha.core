@@ -90,8 +90,12 @@ namespace Piranha.AttributeBuilder
                     foreach (var prop in type.GetProperties(App.PropertyBindings)) {
                         var regionType = GetRegionType(prop);
 
-                        if (regionType != null)
-                            pageType.Regions.Add(regionType);
+                        if (regionType != null) {
+                            var regAttr = prop.GetCustomAttribute<RegionAttribute>();
+                            if (regAttr.SortOrder != Int32.MaxValue && pageType.Regions.Count > 0)
+                                pageType.Regions.Insert(Math.Min(regAttr.SortOrder, pageType.Regions.Count - 1), regionType);
+                            else pageType.Regions.Add(regionType);
+                        }
                     }
                     return pageType;
                 }
