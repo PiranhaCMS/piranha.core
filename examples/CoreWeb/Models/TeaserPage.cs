@@ -19,22 +19,8 @@ namespace CoreWeb.Models
     /// Basic page with main content in markdown.
     /// </summary>
     [PageType(Title = "Teaser Page", Route = "/teaserpage")]
-    public class TeaserPage : BasePage<TeaserPage> // Page<StandardPage>
+    public class TeaserPage : BasePage<TeaserPage>
     {
-        /*
-        /// <summary>
-        /// Gets/sets the main content.
-        /// </summary>
-        [Region(Title = "Main content")]
-        public MarkdownField Body { get; set; }
-
-        /// <summary>
-        /// Gets/sets the page heading.
-        /// </summary>
-        [Region]
-        public Regions.PageHeading Heading { get; set; }
-        */
-
         /// <summary>
         /// Gets/sets the available teasers.
         /// </summary>

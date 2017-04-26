@@ -36,5 +36,14 @@ namespace CoreWeb.Models.Regions
         /// </summary>
         [Field]
         public MarkdownField Body { get; set; }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public Teaser() {
+            Title = new StringField();
+            SubTitle = new StringField();
+            Body = new MarkdownField();
+        }
     }
 }
