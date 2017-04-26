@@ -628,10 +628,9 @@ namespace Piranha.Repositories
         /// <param name="sortOrder">The optional sort order</param>
         /// <param name="transaction">The optional transaction</param>
         private void MapRegion<T>(T model, Page page, object region, Models.RegionType regionType, string regionId, int sortOrder = 0, IDbTransaction transaction = null) where T : Models.Page<T> {
-            var isNew = false;
-
             // Now map all of the fields
             for (var n = 0; n < regionType.Fields.Count; n++) {
+                var isNew = false;
                 var fieldDef = regionType.Fields[n];
                 var fieldType = App.Fields.GetByShorthand(fieldDef.Type);
                 if (fieldType == null)
