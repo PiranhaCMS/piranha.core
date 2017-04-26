@@ -41,6 +41,11 @@ namespace CoreWeb.Models.Regions
         /// Default constructor.
         /// </summary>
         public Teaser() {
+            //
+            // Note that fields in a region used as a collection item needs
+            // to be initialized if they are to be seeded through code due to
+            // a bug in the page repository.
+            //
             Title = new StringField();
             SubTitle = new StringField();
             Body = new MarkdownField();
