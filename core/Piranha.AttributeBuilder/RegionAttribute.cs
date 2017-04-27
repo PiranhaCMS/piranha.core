@@ -36,6 +36,12 @@ namespace Piranha.AttributeBuilder
         public string ListPlaceholder { get; set; }
 
         /// <summary>
+        /// Gets/sets if list items should be expandable. If not, the 
+        /// content is placed directly in the title.
+        /// </summary>
+        public bool ListExpand { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional sort order.
         /// </summary>
         public int SortOrder { get; set; }
@@ -55,6 +61,7 @@ namespace Piranha.AttributeBuilder
         /// </summary>
         public RegionAttribute() {
             SortOrder = Int32.MaxValue;
+            ListExpand = true;
         }
     }
 }

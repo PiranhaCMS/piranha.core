@@ -74,6 +74,7 @@ namespace Piranha.AttributeBuilder
                     Collection = isCollection,
                     ListTitleField = attr.ListTitle,
                     ListTitlePlaceholder = attr.ListPlaceholder,
+                    ListExpand = attr.ListExpand,
                     Max = attr.Max,
                     Min = attr.Min
                 };

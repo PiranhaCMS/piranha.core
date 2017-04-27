@@ -50,6 +50,12 @@ namespace Piranha.Models
         public string ListTitlePlaceholder { get; set; }
 
         /// <summary>
+        /// Gets/sets if list items should be expandable. If not, the
+        /// content is placed directly in the title.
+        /// </summary>
+        public bool ListExpand { get; set; }
+
+        /// <summary>
         /// Gets/sets the available fields.
         /// </summary>
         public IList<FieldType> Fields { get; set; }
@@ -59,6 +65,7 @@ namespace Piranha.Models
         /// </summary>
         public RegionType() {
             Fields = new List<FieldType>();
+            ListExpand = true;
         }
     }
 }
