@@ -1,0 +1,17 @@
+@model Piranha.Areas.Manager.Models.PageEditFieldSet
+@using Piranha.Models
+
+<div class="row">
+    @for (var n = 0; n < Model.Count; n++) {
+        <div class="col-sm-@(Model[n].Options.HasFlag(FieldOption.HalfWidth) ? "6" : "12")">
+            <div class="form-group">
+                @Html.HiddenFor(m => m[n].Id)
+                @Html.HiddenFor(m => m[n].CLRType)
+                @if (Model.Count > 1) {
+                    <label>@Model[n].Title</label>
+                }
+                @Html.EditorFor(m => m[n].Value, Model[n].Value.GetType().Name)
+            </div>
+        </div>
+    }
+</div>

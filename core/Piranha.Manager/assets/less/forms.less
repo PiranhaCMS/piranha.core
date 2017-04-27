@@ -273,32 +273,59 @@
     .region-list-item {
 		.region-list-heading {
 			border-bottom: solid 1px @border-color;
+			position: relative;
 
-			.handle {
-				height: 43px;
-				padding: 10px;
-				float: left;
-				border-right: solid 1px @bg-color;
-				cursor: pointer;
-			}	
+			.region-tool {
+				position: absolute;
+				width: 43px;
+				min-height: 43px;
+				height: 100%;
+				text-align: center;
+		
 
-			a {
-				display: block;
-				height: 43px;
-				padding: 10px;
-				text-indent: 15px;
+				&.handle {
+					left: 0;
+					border-right: solid 1px @border-color;
+					padding: 10px;
+					cursor: pointer;
+
+					&.no-expand {
+						padding: 20px 10px;
+					}
+				}	
+
+				&.region-actions {
+					right: 0;
+					padding: 0;
+					border-left: solid 1px @border-color;
+
+					&.no-expand {
+						padding: 10px 0;
+					}
+					
+					button {
+						height: 43px;
+						padding: 10px;
+						background: transparent;
+						border: 0 none;
+					}
+				}
 			}
 
-			.region-actions {
-				float: right;
-				
-				button {
-					height: 43px;
-					padding: 10px;
-					background: transparent;
-					border: 0 none;
-					border-left: solid 1px @bg-color;
+			.region-content {
+				min-height: 43px;
+				margin: 0 43px;
+				padding: 4px 15px 0;
+
+				.row:first-child {
+					margin-top: 11px;
 				}
+			}
+
+			a.region-title {
+				display: block;
+				height: 39px;
+				padding: 8px 10px;
 			}
 		}
 

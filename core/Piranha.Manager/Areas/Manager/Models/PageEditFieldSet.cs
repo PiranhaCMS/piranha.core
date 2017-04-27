@@ -21,5 +21,11 @@ namespace Piranha.Areas.Manager.Models
         /// Gets/sets the possible list title.
         /// </summary>
         public string ListTitle { get; set; }
+
+        /// <summary>
+        /// Gets/sets if the field set shouldn't be
+        /// expandable in lists.
+        /// </summary>
+        public bool NoExpand { get; set; }
     }    
 }

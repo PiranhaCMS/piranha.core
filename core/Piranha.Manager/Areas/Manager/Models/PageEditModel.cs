@@ -161,6 +161,7 @@ namespace Piranha.Areas.Manager.Models
                         }
                     };
                     set.ListTitle = itemTitle;
+                    set.NoExpand = !region.ListExpand;
 
                     editRegion.Add(set);
                 } else {
@@ -182,6 +183,7 @@ namespace Piranha.Areas.Manager.Models
                                         itemTitle = "Item";
 
                                     fieldSet.ListTitle = itemTitle;
+                                    fieldSet.NoExpand = !region.ListExpand;
                                 }
                             }
 

@@ -8432,29 +8432,50 @@ li.sitemap-item .actions.one {
 }
 .region-list .region-list-item .region-list-heading {
   border-bottom: solid 1px #ddd;
+  position: relative;
 }
-.region-list .region-list-item .region-list-heading .handle {
-  height: 43px;
+.region-list .region-list-item .region-list-heading .region-tool {
+  position: absolute;
+  width: 43px;
+  min-height: 43px;
+  height: 100%;
+  text-align: center;
+}
+.region-list .region-list-item .region-list-heading .region-tool.handle {
+  left: 0;
+  border-right: solid 1px #ddd;
   padding: 10px;
-  float: left;
-  border-right: solid 1px #f2f2f2;
   cursor: pointer;
 }
-.region-list .region-list-item .region-list-heading a {
-  display: block;
-  height: 43px;
-  padding: 10px;
-  text-indent: 15px;
+.region-list .region-list-item .region-list-heading .region-tool.handle.no-expand {
+  padding: 20px 10px;
 }
-.region-list .region-list-item .region-list-heading .region-actions {
-  float: right;
+.region-list .region-list-item .region-list-heading .region-tool.region-actions {
+  right: 0;
+  padding: 0;
+  border-left: solid 1px #ddd;
 }
-.region-list .region-list-item .region-list-heading .region-actions button {
+.region-list .region-list-item .region-list-heading .region-tool.region-actions.no-expand {
+  padding: 10px 0;
+}
+.region-list .region-list-item .region-list-heading .region-tool.region-actions button {
   height: 43px;
   padding: 10px;
   background: transparent;
   border: 0 none;
-  border-left: solid 1px #f2f2f2;
+}
+.region-list .region-list-item .region-list-heading .region-content {
+  min-height: 43px;
+  margin: 0 43px;
+  padding: 4px 15px 0;
+}
+.region-list .region-list-item .region-list-heading .region-content .row:first-child {
+  margin-top: 11px;
+}
+.region-list .region-list-item .region-list-heading a.region-title {
+  display: block;
+  height: 39px;
+  padding: 8px 10px;
 }
 .region-list .region-list-item .region-list-body {
   background: #eee;

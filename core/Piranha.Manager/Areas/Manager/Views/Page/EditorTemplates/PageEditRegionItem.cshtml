@@ -7,30 +7,25 @@
 
 <div class="region-list-item">
     <div class="region-list-heading" role="tab" id="heading-@unique">
-        <div class="handle sortable-handle">
+        <div class="region-tool handle sortable-handle @(Model.NoExpand ? "no-expand" : "")">
             <span class="glyphicon glyphicon-option-vertical"></span>
         </div>                    
-        <div class="region-actions">
+        <div class="region-tool region-actions @(Model.NoExpand ? "no-expand" : "")">
             <button type="button" class="delete" data-toggle="tooltip" data-original-title="Delete" data-placement="top"><span class="glyphicon glyphicon-trash text-danger"></span></button>
         </div>
-        <a class="region-title" role="button" data-toggle="collapse" href="#region-@unique" aria-expanded="false" aria-controls="region-@unique">
-            @Model.ListTitle
-        </a>
-    </div>
-    <div class="region-list-body collapse" role="tabpanel" id="region-@unique">
-        <div class="row">
-            @for (var n = 0; n < Model.Count; n++) {
-                <div class="col-sm-@(Model[n].Options.HasFlag(FieldOption.HalfWidth) ? "6" : "12")">
-                    <div class="form-group">
-                        @Html.HiddenFor(m => m[n].Id)
-                        @Html.HiddenFor(m => m[n].CLRType)
-                        @if (Model.Count > 1) {
-                            <label>@Model[n].Title</label>
-                        }
-                        @Html.EditorFor(m => m[n].Value, Model[n].Value.GetType().Name)
-                    </div>
-                </div>
+        <div class="region-content">
+            @if (Model.NoExpand) {
+                @Html.Partial("Partial/_PageEditRegionContent", Model)
+            } else {
+                <a class="region-title" role="button" data-toggle="collapse" href="#region-@unique" aria-expanded="false" aria-controls="region-@unique">
+                    @Model.ListTitle
+                </a>
             }
         </div>
     </div>
+    @if (!Model.NoExpand) {
+        <div class="region-list-body collapse" role="tabpanel" id="region-@unique">
+            @Html.Partial("Partial/_PageEditRegionContent", Model)
+        </div>
+    }
 </div>
