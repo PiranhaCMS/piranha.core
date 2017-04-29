@@ -48,7 +48,6 @@ namespace Piranha.Areas.Manager.Controllers
                         api.Media.Save(new StreamMediaContent() {
                             FolderId = model.ParentId,
                             Filename = Path.GetFileName(upload.FileName),
-                            ContentType = upload.ContentType,
                             Data = stream
                         });
                         uploaded++;

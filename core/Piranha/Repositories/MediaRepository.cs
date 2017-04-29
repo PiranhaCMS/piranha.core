@@ -125,6 +125,9 @@ namespace Piranha.Repositories
         /// <param name="data">The binary data</param>
         /// <param name="transaction">The optional transaction</param>
         public void Save(Models.MediaContent content, IDbTransaction transaction = null) {
+            if (!App.MediaTypes.IsSupported(content.Filename))
+                throw new NotSupportedException("Filetype not supported.");
+
             var model = GetById(content.Id, transaction);
             var insert = false;
 
@@ -138,7 +141,8 @@ namespace Piranha.Repositories
 
             model.Filename = content.Filename;
             model.FolderId = content.FolderId;
-            model.ContentType = content.ContentType;
+            model.Type = App.MediaTypes.GetMediaType(content.Filename);
+            model.ContentType = App.MediaTypes.GetContentType(content.Filename);
 
             // Upload to storage
             using (var session = storage.Open()) {
@@ -163,12 +167,12 @@ namespace Piranha.Repositories
                 model.Created = DateTime.Now;
                 model.LastModified = DateTime.Now;
 
-                db.Execute($"INSERT INTO [{TABLE}] ([Id],[FolderId],[Filename],[ContentType],[Size],[Created],[LastModified]) VALUES(@Id,@FolderId,@Filename,@ContentType,@Size,@Created,@LastModified)",
+                db.Execute($"INSERT INTO [{TABLE}] ([Id],[FolderId],[Type],[Filename],[ContentType],[Size],[Created],[LastModified]) VALUES(@Id,@FolderId,@Type,@Filename,@ContentType,@Size,@Created,@LastModified)",
                     model, transaction: transaction);
             } else {
                 model.LastModified = DateTime.Now;
 
-                db.Execute($"UPDATE [{TABLE}] SET [Id]=@Id,[FolderId]=@FolderId,[Filename]=@Filename,[ContentType]=@ContentType,[Size]=@Size,[LastModified]=@LastModified WHERE [Id]=@Id",
+                db.Execute($"UPDATE [{TABLE}] SET [Id]=@Id,[FolderId]=@FolderId,[Type]=@Type,[Filename]=@Filename,[ContentType]=@ContentType,[Size]=@Size,[LastModified]=@LastModified WHERE [Id]=@Id",
                     model, transaction: transaction);
             }
         }

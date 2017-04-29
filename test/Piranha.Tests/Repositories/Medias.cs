@@ -38,7 +38,6 @@ namespace Piranha.Tests.Repositories
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png")) {
                     var image1 = new Models.StreamMediaContent() {
                         Filename = "HLD_Screenshot_01_mech_1080.png",
-                        ContentType = "image/png",
                         Data = stream
                     };
                     api.Media.Save(image1);
@@ -50,7 +49,6 @@ namespace Piranha.Tests.Repositories
                     var image2 = new Models.StreamMediaContent() {
                         FolderId = folder1Id,
                         Filename = "HLD_Screenshot_01_rise_1080.png",
-                        ContentType = "image/png",
                         Data = stream
                     };
                     api.Media.Save(image2);
@@ -61,7 +59,6 @@ namespace Piranha.Tests.Repositories
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_robot_1080.png")) {
                     var image3 = new Models.StreamMediaContent() {
                         Filename = "HLD_Screenshot_01_robot_1080.png",
-                        ContentType = "image/png",
                         Data = stream
                     };
                     api.Media.Save(image3);
@@ -103,6 +100,7 @@ namespace Piranha.Tests.Repositories
                 Assert.NotNull(media);
                 Assert.Equal("HLD_Screenshot_01_mech_1080.png", media.Filename);
                 Assert.Equal("image/png", media.ContentType);
+                Assert.Equal(Data.MediaType.Image, media.Type);
             }
         }
 
@@ -122,7 +120,6 @@ namespace Piranha.Tests.Repositories
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_BETA_entrance.png")) {
                     var image = new Models.StreamMediaContent() {
                         Filename = "HLD_Screenshot_BETA_entrance.png",
-                        ContentType = "image/png",
                         Data = stream
                     };
                     api.Media.Save(image);

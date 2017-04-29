@@ -34,12 +34,6 @@ namespace Piranha.Models
         /// Gets/sets the filename.
         /// </summary>
         public string Filename { get; set; }
-
-        /// <summary>
-        /// Gets/sets the optional content type. If this is empty
-        /// the content type is determined from the filename.
-        /// </summary>
-        public string ContentType { get; set; }
     }
 
     /// <summary>
