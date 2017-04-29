@@ -29,6 +29,10 @@ namespace Piranha.Data
             new DbMigration() {
                 Name = "AddPageRedirects",
                 Script = "Piranha.Data.Migrations.3.sql"
+            },
+            new DbMigration() {
+                Name = "AddMediaType",
+                Script = "Piranha.Data.Migrations.4.sql"
             }
         };
 

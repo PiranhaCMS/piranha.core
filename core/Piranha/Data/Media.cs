@@ -25,6 +25,11 @@ namespace Piranha.Data
         public string FolderId { get; set; }
 
         /// <summary>
+        /// Gets/sets the media type.
+        /// </summary>
+        public MediaType Type { get; set; }
+
+        /// <summary>
         /// Gets/sets the filename.
         /// </summary>
         public string Filename { get; set; }
@@ -44,20 +49,6 @@ namespace Piranha.Data
         /// Gets/sets the public url.
         /// </summary>
         public string PublicUrl { get; set; }
-
-        /// <summary>
-        /// Gets if this is an image.
-        /// </summary>
-        public bool IsImage {
-            get { return ContentType.ToLower().StartsWith("image"); }
-        }
-
-        /// <summary>
-        /// Gets if this is a video.
-        /// </summary>
-        public bool IsVideo {
-            get { return ContentType.ToLower().StartsWith("video"); }
-        }
 
         /// <summary>
         /// Gets/sets the created date.

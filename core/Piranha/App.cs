@@ -47,6 +47,11 @@ namespace Piranha
         private AppModuleList modules;
 
         /// <summary>
+        /// The currently registered media types.
+        /// </summary>
+        private MediaManager mediaTypes;
+
+        /// <summary>
         /// The application object mapper.
         /// </summary>
         private IMapper mapper;
@@ -70,6 +75,13 @@ namespace Piranha
         /// </summary>
         public static AppModuleList Modules {
             get { return instance.modules; }
+        }
+
+        /// <summary>
+        /// Gets the currently registered media types.
+        /// </summary>
+        public static MediaManager MediaTypes {
+            get { return instance.mediaTypes; }
         }
 
         /// <summary>
@@ -101,6 +113,7 @@ namespace Piranha
         private App() {
             fields = new AppFieldList();
             modules = new AppModuleList();
+            mediaTypes = new MediaManager();
         }
 
         /// <summary>
@@ -140,6 +153,13 @@ namespace Piranha
                         });
                         mapperConfig.AssertConfigurationIsValid();
                         mapper = mapperConfig.CreateMapper();
+
+                        // Setup media types
+                        mediaTypes.Documents.Add(".pdf", "application/pdf");
+                        mediaTypes.Images.Add(".jpg", "image/jpeg");
+                        mediaTypes.Images.Add(".jpeg", "image/jpeg");
+                        mediaTypes.Images.Add(".png", "image/png");
+                        mediaTypes.Videos.Add(".mp4", "video/mp4");
 
                         // Compose field types
                         fields.Register<Extend.Fields.DateField>();
