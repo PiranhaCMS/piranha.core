@@ -9,7 +9,9 @@
  */
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.Net.Http.Headers;
 using Piranha.Web;
+using System;
 using System.Threading.Tasks;
 
 namespace Piranha.AspNetCore
@@ -34,11 +36,32 @@ namespace Piranha.AspNetCore
 
                 var response = StartPageRouter.Invoke(api, url);
                 if (response != null) {
-                    context.Request.Path = new PathString(response.Route);
+                    using (var config = new Config(api)) {
+                        var headers = context.Response.GetTypedHeaders();
 
-                    if (context.Request.QueryString.HasValue) {
-                        context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&" + response.QueryString);
-                    } else context.Request.QueryString = new QueryString("?" + response.QueryString);
+                        if (config.CacheExpiresPages > 0) {
+                            headers.CacheControl = new CacheControlHeaderValue() {
+                                Public = true,
+                                MaxAge = TimeSpan.FromMinutes(config.CacheExpiresPages),
+                            };
+
+                            headers.Headers["ETag"] = response.CacheInfo.EntityTag;
+                            headers.LastModified = response.CacheInfo.LastModified;
+                        } else {
+                            headers.CacheControl.NoCache = true;
+                        }
+                    }
+
+                    if (HttpCaching.IsCached(context, response.CacheInfo)) {
+                        context.Response.StatusCode = 304;
+                        return;
+                    } else {
+                        context.Request.Path = new PathString(response.Route);
+
+                        if (context.Request.QueryString.HasValue) {
+                            context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&" + response.QueryString);
+                        } else context.Request.QueryString = new QueryString("?" + response.QueryString);
+                    }
                 }
             }
             await next.Invoke(context);

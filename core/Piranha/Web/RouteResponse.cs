@@ -31,5 +31,10 @@ namespace Piranha.Web
         /// Gets/sets the redirect type.
         /// </summary>
         public Data.RedirectType RedirectType { get; set; }
+
+        /// <summary>
+        /// Gets/sets the cache info.
+        /// </summary>
+        public HttpCacheInfo CacheInfo { get; set; }
     }
 }

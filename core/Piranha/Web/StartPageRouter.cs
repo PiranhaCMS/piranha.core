@@ -25,7 +25,11 @@ namespace Piranha.Web
                 if (page != null) {
                     return new RouteResponse() {
                         Route = page.Route ?? "/page",
-                        QueryString = "id=" + page.Id + "&startpage=true&piranha_handled=true"
+                        QueryString = "id=" + page.Id + "&startpage=true&piranha_handled=true",
+                        CacheInfo = new HttpCacheInfo() {
+                            EntityTag = Utils.GenerateETag(page.Id, page.LastModified),
+                            LastModified = page.LastModified
+                        }
                     };
                 }
             }
