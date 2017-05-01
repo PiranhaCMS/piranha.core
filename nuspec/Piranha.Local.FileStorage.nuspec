@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.Local.FileStorage</id>
     <title>Piranha Local FileStorage</title>
-    <version>4.0.0-alpha5</version>
+    <version>4.0.0-alpha6</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -18,7 +18,7 @@ https://github.com/piranhacms/piranha.core/wiki/alpha-changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework=".NETStandard1.4">
-        <dependency id="Piranha" version="4.0.0-alpha5" />
+        <dependency id="Piranha" version="4.0.0-alpha6" />
         <dependency id="NETStandard.Library" version="1.6.1" />
       </group>
     </dependencies>
