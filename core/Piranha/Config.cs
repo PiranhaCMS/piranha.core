@@ -35,7 +35,7 @@ namespace Piranha
         /// Gets the currently configured cache expiration
         /// in minutes for media.
         /// </summary>
-        public int CacheExpiresMeia {
+        public int CacheExpiresMedia {
             get {
                 var param = api.Params.GetByKey(CACHE_EXPIRES_MEDIA);
                 if (param != null)

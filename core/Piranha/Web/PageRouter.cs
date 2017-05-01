@@ -41,7 +41,11 @@ namespace Piranha.Web
 
                             return new RouteResponse() {
                                 Route = route,
-                                QueryString = $"id={page.Id}&startpage={page.IsStartPage}&piranha_handled=true"
+                                QueryString = $"id={page.Id}&startpage={page.IsStartPage}&piranha_handled=true",
+                                CacheInfo = new HttpCacheInfo() {
+                                    EntityTag = Utils.GenerateETag(page.Id, page.LastModified),
+                                    LastModified = page.LastModified
+                                }
                             };
                         } else {
                             return new RouteResponse() {
