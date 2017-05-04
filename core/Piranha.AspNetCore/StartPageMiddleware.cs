@@ -48,7 +48,9 @@ namespace Piranha.AspNetCore
                             headers.Headers["ETag"] = response.CacheInfo.EntityTag;
                             headers.LastModified = response.CacheInfo.LastModified;
                         } else {
-                            headers.CacheControl.NoCache = true;
+                            headers.CacheControl = new CacheControlHeaderValue() {
+                                NoCache = true
+                            };
                         }
                     }
 
