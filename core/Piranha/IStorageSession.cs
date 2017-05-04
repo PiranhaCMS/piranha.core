@@ -30,7 +30,7 @@ namespace Piranha
 		/// Writes the data for the specified media content to the given byte array.
 		/// </summary>
 		/// <param name="id">The unique id</param>
-		/// <param name="byte">The byte array</param>
+		/// <param name="bytes">The byte array</param>
 		/// <returns>If the asset was found</returns>
 		bool Get(string id, ref byte[] bytes);
 

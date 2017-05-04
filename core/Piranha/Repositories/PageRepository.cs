@@ -33,7 +33,8 @@ namespace Piranha.Repositories
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="connection">The current db connection</param>
+        /// <param name="api">The current api</param>
+        /// <param name="db">The current db connection</param>
         /// <param name="modelCache">The optional model cache</param>
         public PageRepository(Api api, IDbConnection db, ICache modelCache = null) {
             this.api = api;
@@ -570,7 +571,7 @@ namespace Piranha.Repositories
         /// <summary>
         /// Gets the region with the given key.
         /// </summary>
-        /// <typeparam name="TModelType">The model type</typeparam>
+        /// <typeparam name="T">The model type</typeparam>
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <returns>The region</returns>
@@ -713,7 +714,7 @@ namespace Piranha.Repositories
         /// <summary>
         /// Adds the given model to cache.
         /// </summary>
-        /// <param name="model">The model</param>
+        /// <param name="page">The page</param>
         private void AddToCache(Page page) {
             cache.Set(page.Id, page);
             cache.Set($"PageId_{page.SiteId}_{page.Slug}", page.Id);
@@ -724,7 +725,7 @@ namespace Piranha.Repositories
         /// <summary>
         /// Removes the given model from cache.
         /// </summary>
-        /// <param name="model">The model</param>
+        /// <param name="page">The page</param>
         private void RemoveFromCache(Page page) {
             cache.Remove(page.Id);
             cache.Remove($"PageId_{page.SiteId}_{page.Slug}");

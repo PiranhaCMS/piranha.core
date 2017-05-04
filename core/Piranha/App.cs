@@ -173,7 +173,7 @@ namespace Piranha
                         markdown = new Markdown();
 
                         // Initialize all modules
-                        foreach (var module in this.modules) {
+                        foreach (var module in modules) {
                             module.Instance.Init();
                         }
 
