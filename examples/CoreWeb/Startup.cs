@@ -48,7 +48,7 @@ namespace CoreWeb
                 config.ModelBinderProviders.Insert(0, new Piranha.Manager.Binders.AbstractModelBinderProvider());
             });
             services.AddPiranhaDb(o => {
-                o.Connection = new SqliteConnection("Filename=./coreweb.db");
+                o.Connection = new SqliteConnection("Filename=./piranha.coreweb.db");
                 o.Migrate = true;
             });
             services.AddSingleton<IStorage, FileStorage>();
@@ -67,6 +67,11 @@ namespace CoreWeb
 
             // Initialize Piranha
             App.Init(api);
+
+            // Config
+            using (var config = new Config(api)) {
+                config.CacheExpiresPages = 0;
+            }
 
             // Build types
             var pageTypeBuilder = new Piranha.AttributeBuilder.PageTypeBuilder(api)
@@ -102,10 +107,38 @@ namespace CoreWeb
                 // Get the default site
                 var site = api.Sites.GetDefault();
 
+                // Add media assets
+                var githubId = Guid.NewGuid().ToString();
+                var platformId = Guid.NewGuid().ToString();
+                var stopwatchId = Guid.NewGuid().ToString();
+
+                using (var stream = File.OpenRead("assets/seed/github.png")) {
+                    api.Media.Save(new Piranha.Models.StreamMediaContent() {
+                        Id = githubId,
+                        Filename = "github.png",
+                        Data = stream
+                    });
+                }
+                using (var stream = File.OpenRead("assets/seed/platform.png")) {
+                    api.Media.Save(new Piranha.Models.StreamMediaContent() {
+                        Id = platformId,
+                        Filename = "platform.png",
+                        Data = stream
+                    });
+                }
+                using (var stream = File.OpenRead("assets/seed/stopwatch.png")) {
+                    api.Media.Save(new Piranha.Models.StreamMediaContent() {
+                        Id = stopwatchId,
+                        Filename = "stopwatch.png",
+                        Data = stream
+                    });
+                }
+                
+
                 // Add the startpage
                 using (var stream = File.OpenRead("assets/seed/startpage.md")) {
                     using (var reader = new StreamReader(stream)) {
-                        var startPage = Models.TeaserPage.Create(api);
+                        var startPage = Models.TeaserPage.Create(api);                        
 
                         // Add main content
                         startPage.SiteId = site.Id;
@@ -118,14 +151,17 @@ namespace CoreWeb
                         // Add teasers
                         startPage.Teasers.Add(new Models.Regions.Teaser() {
                             Title = "Cross Platform",
+                            Image = platformId,
                             Body = "Built for `NetStandard` and `AspNet Core`, Piranha CMS can be run on Windows, Linux and Mac OS X."
                         });
                         startPage.Teasers.Add(new Models.Regions.Teaser() {
                             Title = "Super Fast",
+                            Image = stopwatchId,
                             Body = "Designed from the ground up for super-fast performance using `Dapper` and optional Caching."
                         });
                         startPage.Teasers.Add(new Models.Regions.Teaser() {
                             Title = "Open Source",
+                            Image = githubId,
                             Body = "Everything is Open Source and released under the `MIT` license for maximum flexibility."
                         });
 

@@ -1,6 +1,45 @@
 ﻿@model CoreWeb.Models.StandardPage
+@inject Piranha.Api Api
 @{
     ViewBag.Title = Model.Title;
+
+    Piranha.Models.Sitemap sitemap = Api.Sites.GetSitemap();
+    Piranha.Models.Sitemap partial = null;
+
+    if (!string.IsNullOrEmpty(Model.ParentId)) {
+        foreach (var item in sitemap) {
+            if (item.HasChild(Model.Id)) {
+                partial = sitemap.GetPartial(item.Id);
+            }
+        }
+    }
+
+    Func<Piranha.Models.SitemapItem, string> Css = (item) => {
+        if (item.Id == Model.Id) {
+            return "class=active";
+        } else if (item.HasChild(Model.Id)) {
+            return "class=active-child";
+        }
+        return "";
+    };    
+}
+
+@section submenu {
+    @if (partial != null) {
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 submenu">
+                    <ul class="nav nav-pills pull-right">
+                        @foreach (var item in partial) {
+                            if (!item.IsHidden) {
+                                <li role="presentation" @Css(item)><a href="@item.Permalink">@item.MenuTitle</a></li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
 }
 
 <div class="container body">

@@ -20,6 +20,7 @@
 
 <body>
     <div class="banner @(ViewBag.IsStart != null && ViewBag.IsStart == true ? "startpage" : "")" role="banner">
+        <div class="bg"></div>
         @if (ViewBag.IsStart != null && ViewBag.IsStart == true) {
             <h1>
                 @ViewBag.Title
@@ -30,6 +31,7 @@
                 }
             </h1>
         }
+        @RenderSection("submenu", required: false)
     </div>
     <div class="header clearfix">
         <div class="container">

@@ -11,6 +11,9 @@
                 @foreach (var teaser in Model) {
                     <div class="col-sm-@teaserWidth">
                         <h3>@teaser.Title.Value</h3>
+                        @if (teaser.Image.HasValue) {
+                            <img src="@Url.Content(teaser.Image)">
+                        }
                         @Html.Raw(teaser.Body)
                     </div>
                 }

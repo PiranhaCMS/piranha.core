@@ -32,6 +32,12 @@ namespace CoreWeb.Models.Regions
         public StringField SubTitle { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional teaser image.
+        /// </summary>
+        [Field]
+        public ImageField Image { get; set; }
+
+        /// <summary>
         /// Gets/sets the body.
         /// </summary>
         [Field]
