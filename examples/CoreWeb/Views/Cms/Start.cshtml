@@ -4,6 +4,9 @@
     ViewBag.Ingress = Model.Heading.Ingress.Value;
     ViewBag.IsStart = true;
 }
+@section meta {
+    @Html.Partial("Partial/_PageMeta", Model)
+}
 
 @Html.Partial("Partial/Teasers", Model.Teasers)
 

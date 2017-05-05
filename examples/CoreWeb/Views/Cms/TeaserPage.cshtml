@@ -2,7 +2,9 @@
 @{
     ViewBag.Title = Model.Title;
 }
-
+@section meta {
+    @Html.Partial("Partial/_PageMeta", Model)
+}
 @Html.Partial("Partial/Teasers", Model.Teasers)
 
 <div class="container body">

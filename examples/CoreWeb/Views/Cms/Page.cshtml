@@ -23,6 +23,9 @@
         return "";
     };    
 }
+@section meta {
+    @Html.Partial("Partial/_PageMeta", Model)
+}
 
 @section submenu {
     @if (partial != null) {

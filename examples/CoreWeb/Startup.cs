@@ -143,6 +143,8 @@ namespace CoreWeb
                         // Add main content
                         startPage.SiteId = site.Id;
                         startPage.Title = "Welcome to Piranha CMS";
+                        startPage.MetaKeywords = "Piranha, Piranha CMS, CMS, AspNetCore, DotNetCore, MVC";
+                        startPage.MetaDescription = "Piranha is the fun, fast and lightweight framework for developing cms-based web applications with AspNetCore.";
                         startPage.NavigationTitle = "Home";
                         startPage.Heading.Ingress = "The CMS framework with an extra bite";
                         startPage.Body = reader.ReadToEnd();
