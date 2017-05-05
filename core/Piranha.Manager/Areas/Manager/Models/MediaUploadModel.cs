@@ -19,6 +19,11 @@ namespace Piranha.Areas.Manager.Models
     public class MediaUploadModel
     {
         /// <summary>
+        /// Gets/sets the optional id.
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
         /// Gets/sets the parent id.
         /// </summary>
         public string ParentId { get; set; }

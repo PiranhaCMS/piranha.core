@@ -46,6 +46,7 @@ namespace Piranha.Areas.Manager.Controllers
                 if (upload.Length > 0 && !string.IsNullOrWhiteSpace(upload.ContentType)) {
                     using (var stream = upload.OpenReadStream()) {
                         api.Media.Save(new StreamMediaContent() {
+                            Id = model.Uploads.Count() == 1 ? model.Id : null,
                             FolderId = model.ParentId,
                             Filename = Path.GetFileName(upload.FileName),
                             Data = stream

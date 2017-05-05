@@ -82,6 +82,8 @@ $('#modalImgPreview').on('show.bs.modal', function (event) {
     var contenttype = link.data('contenttype');
     var filesize = link.data('filesize');
     var modified = link.data('modified');
+    var id = link.data('id');
+    var parentid = link.data('parentid');
 
     var modal = $(this);
     modal.find('.modal-title').text(filename)
@@ -89,6 +91,12 @@ $('#modalImgPreview').on('show.bs.modal', function (event) {
     modal.find('#previewContentType').text(contenttype);
     modal.find('#previewFilesize').text(filesize);
     modal.find('#previewModified').text(modified);
+    modal.find('#previewId').val(id);
+    modal.find('#previewParentId').val(parentid);
+
+    if (!id || id == '')
+        modal.find('.fileinput').hide();
+    else modal.find('.fileinput').show(); 
 
     if (contenttype.startsWith("image")) {
         modal.find('#previewImage').show();

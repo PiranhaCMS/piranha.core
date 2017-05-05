@@ -7851,8 +7851,8 @@ a {
   border-radius: 0 none;
 }
 .img-preview {
-  width: 100%;
   max-width: 100%;
+  max-height: 600px;
 }
 .spinner {
   background: #fff url('../img/ajax-loader.gif') no-repeat 50% 50%;
@@ -8729,6 +8729,12 @@ li.sitemap-item .actions.one {
 }
 .modal .modal-body .media-info {
   margin: 10px 0 0;
+}
+.modal .modal-footer .fileinput {
+  text-align: left;
+}
+.modal.media-preview {
+  text-align: center;
 }
 /*
 .modal-content {

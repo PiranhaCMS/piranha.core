@@ -1,4 +1,4 @@
-<div id="modalImgPreview" class="modal fade" tabindex="-1" role="dialog">
+<div id="modalImgPreview" class="modal fade media-preview" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -30,8 +30,23 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a id="btnDownload" href="" class="btn btn-default" download>Download</a>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <div class="row">
+                    <div class="col-md-9 col-xs-8">
+                        <form action="@Url.Action("Add", "Media")" method="post" enctype="multipart/form-data">
+                            <input type="hidden" id="previewId" name="Id" value="">
+                            <input type="hidden" id="previewParentId" name="ParentId" value="">
+                            <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+                                <span class="input-group-addon btn btn-default btn-file"><span class="fileinput-new">Update file</span><span class="fileinput-exists">Change</span><input type="file" name="Uploads" multiple></span>
+                                <button type="submit" class="btn btn-default pull-left fileinput-exists">Upload</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-3 col-xs-4">
+                        <a id="btnDownload" href="" class="btn btn-default" download>Download</a>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
