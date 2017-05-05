@@ -62,7 +62,7 @@ namespace Piranha.AttributeBuilder
         /// </summary>
         /// <param name="prop">The property info</param>
         /// <returns>The region type</returns>
-        protected RegionType GetRegionType(PropertyInfo prop) {
+        protected Tuple<int?, RegionType> GetRegionType(PropertyInfo prop) {
             var attr = prop.GetCustomAttribute<RegionAttribute>();
 
             if (attr != null) {
@@ -78,6 +78,7 @@ namespace Piranha.AttributeBuilder
                     Max = attr.Max,
                     Min = attr.Min
                 };
+                int? sortOrder = attr.SortOrder != Int32.MaxValue ? attr.SortOrder : (int?)null;
 
                 Type type = null;
 
@@ -111,7 +112,7 @@ namespace Piranha.AttributeBuilder
                     if (regionType.Fields.Count == 0)
                         return null;
                 }
-                return regionType;
+                return new Tuple<int?, RegionType>(sortOrder, regionType);
             }
             return null;
         }

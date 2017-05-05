@@ -87,16 +87,24 @@ namespace Piranha.AttributeBuilder
                         Route = attr.Route
                     };
 
+                    var regionTypes = new List<Tuple<int?,RegionType>>();
+
                     foreach (var prop in type.GetProperties(App.PropertyBindings)) {
                         var regionType = GetRegionType(prop);
 
                         if (regionType != null) {
-                            var regAttr = prop.GetCustomAttribute<RegionAttribute>();
-                            if (regAttr.SortOrder != Int32.MaxValue && pageType.Regions.Count > 0)
-                                pageType.Regions.Insert(Math.Min(regAttr.SortOrder, pageType.Regions.Count - 1), regionType);
-                            else pageType.Regions.Add(regionType);
+                            regionTypes.Add(regionType);
                         }
                     }
+                    regionTypes = regionTypes.OrderBy(t => t.Item1).ToList();
+
+                    // First add sorted regions
+                    foreach (var regionType in regionTypes.Where(t => t.Item1.HasValue))
+                        pageType.Regions.Add(regionType.Item2);
+                    // Then add the unsorted regions
+                    foreach (var regionType in regionTypes.Where(t => !t.Item1.HasValue))
+                        pageType.Regions.Add(regionType.Item2);
+
                     return pageType;
                 }
             } else {
