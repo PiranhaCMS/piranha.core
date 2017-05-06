@@ -22,4 +22,11 @@ mono: none
 dotnet: 1.0.1
 
 script:
-  - ./build.sh --quiet verify
+  - ./build.sh --verbosity diagnostic
+
+cache:
+    directories:
+    - ".packages"
+    - "tools/Addins"
+    - "tools/gitreleasemanager"
+    - "tools/GitVersion.CommandLine"
