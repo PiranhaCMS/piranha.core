@@ -8,8 +8,6 @@ SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 TOOLS_DIR=$SCRIPT_DIR/tools
 NUGET_EXE=$TOOLS_DIR/nuget.exe
 NUGET_URL=https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
-OPENCOVER=$SCRIPT_DIR/packages/OpenCover.4.6.519/tools/OpenCover.Console.exe
-REPORTGENERATOR=$SCRIPT_DIR/packages/ReportGenerator.2.4.5.0/tools/ReportGenerator.exe
 
 # Make sure the tools folder exist.
 if [ ! -d "$TOOLS_DIR" ]; then
@@ -38,28 +36,3 @@ dotnet build
 echo "Starting tests..."
 dotnet test ./test/Piranha.Tests/Piranha.Tests.csproj
 dotnet test ./test/Piranha.AttributeBuilder.Tests/Piranha.AttributeBuilder.Tests.csproj
-
-# Create report folers
-echo "Creating coverage folders..."
-coverage=./coverage
-rm -rf $coverage
-mkdir $coverage
-
-# Generate test reports
-echo "Calculating coverage..."
-$OPENCOVER \
-  -target:"dotnet" \
-  -targetargs:"test -f netcoreapp1.1 test/Piranha.Tests test/Piranha.AttributeBuilder.Tests" \
-  -mergeoutput \
-  -hideskipped:File \
-  -output:$coverage/coverage.xml \
-  -oldStyle \
-  -filter:"+[Piranha*]* -[Piranha.*Tests*]*" \
-  -searchdirs:$testdir/bin/Release/netcoreapp1.1 \
-  -register:user
-
-echo "Generating HTML report..."
-$REPORTGENERATOR \
-  -reports:$coverage/coverage.xml \
-  -targetdir:$coverage \
-  -verbosity:Error
