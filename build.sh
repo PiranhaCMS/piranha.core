@@ -26,6 +26,7 @@ fi
 
 # Restore packages
 echo "Restoring NuGet packages..."
+ulimit -n 2048
 dotnet restore
 
 # Build solution
