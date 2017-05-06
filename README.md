@@ -1,10 +1,11 @@
 # Welcome to Piranha.Core
 
-## Continuous integration
 | Build server | Platform     | Build status |
 |--------------|--------------|--------------|
 | AppVeyor     | Windows      | [![Build status](https://ci.appveyor.com/api/projects/status/brw0cak0b5x4w17m?svg=true)](https://ci.appveyor.com/project/tidyui/piranha-core) |
 | Travis       | Linux / OS X | [![Build status](https://travis-ci.org/PiranhaCMS/piranha.core.svg?branch=master)](https://travis-ci.org/PiranhaCMS/piranha.core) |
+
+## About
 
 This is a **complete rewrite** of Piranha CMS for `NetStandard`. The goal of this rewrite 
 is to create a version capable of targeting multiple platforms & frameworks with minimal
