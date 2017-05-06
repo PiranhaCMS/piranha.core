@@ -30,10 +30,6 @@ fi
 echo "Restoring NuGet packages..."
 dotnet restore
 
-# Install code coverage tools
-nuget install -Verbosity quiet -OutputDirectory packages -Version 4.6.519 OpenCover
-nuget install -Verbosity quiet -OutputDirectory packages -Version 2.4.5.0 ReportGenerator
-
 # Build solution
 echo "Building solution..."
 dotnet build
