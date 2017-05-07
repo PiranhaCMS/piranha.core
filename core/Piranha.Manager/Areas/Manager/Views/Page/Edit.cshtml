@@ -8,10 +8,10 @@
 @section script {
     <script type="text/javascript">
         $(document).on('click', '#submit-publish', function () {
-            $('form').attr('action', '@Url.Action("Publish")').submit();
+            $('form#main-form').attr('action', '@Url.Action("Publish")').submit();
         });
         $(document).on('click', '#submit-unpublish', function () {
-            $('form').attr('action', '@Url.Action("UnPublish")').submit();
+            $('form#main-form').attr('action', '@Url.Action("UnPublish")').submit();
         });
         $(document).on('click', '#btn-settings', function () {
             $('#panel-settings').slideToggle('fast');
@@ -20,7 +20,7 @@
     </script>
 }
 
-@using (var form = Html.BeginForm("Save", "Page", FormMethod.Post, new { @class = "form", @role = "form" })) {
+@using (var form = Html.BeginForm("Save", "Page", FormMethod.Post, new { @id = "main-form", @class = "form", @role = "form" })) {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.Id)
     @Html.HiddenFor(m => m.SiteId)
