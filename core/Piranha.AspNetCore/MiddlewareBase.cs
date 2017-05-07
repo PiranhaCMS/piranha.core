@@ -9,6 +9,7 @@
  */
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace Piranha.AspNetCore
@@ -28,15 +29,32 @@ namespace Piranha.AspNetCore
         /// The current api.
         /// </summary>
         protected readonly Api api;
+
+        /// <summary>
+        /// The optional logger.
+        /// </summary>
+        protected ILogger logger;
         #endregion
 
         /// <summary>
         /// Creates a new middleware instance.
         /// </summary>
         /// <param name="next">The next middleware in the pipeline</param>
+        /// <param name="api">The current api</param>
         public MiddlewareBase(RequestDelegate next, Api api) {
             this.next = next;
             this.api = api;
+        }
+
+        /// <summary>
+        /// Creates a new middleware instance.
+        /// </summary>
+        /// <param name="next">The next middleware in the pipeline</param>
+        /// <param name="api">The current api</param>
+        /// <param name="factory">The logger factory</param>
+        public MiddlewareBase(RequestDelegate next, Api api, ILoggerFactory factory) : this(next, api) {
+            if (factory != null)
+                logger = factory.CreateLogger(this.GetType().FullName);
         }
 
         /// <summary>

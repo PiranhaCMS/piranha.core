@@ -9,6 +9,7 @@
  */
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using Piranha.Web;
 using System;
@@ -23,7 +24,8 @@ namespace Piranha.AspNetCore
         /// </summary>
         /// <param name="next">The next middleware in the pipeline</param>
         /// <param name="api">The current api</param>
-        public PageMiddleware(RequestDelegate next, Api api) : base(next, api) { }
+        /// <param name="factory">The logger factory</param>
+        public PageMiddleware(RequestDelegate next, Api api, ILoggerFactory factory = null) : base(next, api, factory) { }
 
         /// <summary>
         /// Invokes the middleware.
@@ -36,11 +38,17 @@ namespace Piranha.AspNetCore
 
                 var response = PageRouter.Invoke(api, url);
                 if (response != null) {
+                    if (logger != null)
+                        logger.LogInformation($"Found page\n  Route: {response.Route}\n  Params: {response.QueryString}");
+
                     if (string.IsNullOrWhiteSpace(response.RedirectUrl)) {
                         using (var config = new Config(api)) {
                             var headers = context.Response.GetTypedHeaders();
 
                             if (config.CacheExpiresPages > 0) {
+                                if (logger != null)
+                                    logger.LogInformation("Caching enabled. Setting MaxAge, LastModified & ETag");
+
                                 headers.CacheControl = new CacheControlHeaderValue() {
                                     Public = true,
                                     MaxAge = TimeSpan.FromMinutes(config.CacheExpiresPages),
@@ -56,6 +64,9 @@ namespace Piranha.AspNetCore
                         }
 
                         if (HttpCaching.IsCached(context, response.CacheInfo)) {
+                            if (logger != null)
+                                logger.LogInformation("Client has current version. Returning NotModified");
+
                             context.Response.StatusCode = 304;
                             return;
                         } else {
@@ -66,6 +77,9 @@ namespace Piranha.AspNetCore
                             } else context.Request.QueryString = new QueryString("?" + response.QueryString);
                         }
                     } else {
+                        if (logger != null)
+                            logger.LogInformation($"Redirecting to url: {response.RedirectUrl}");
+
                         context.Response.Redirect(response.RedirectUrl, response.RedirectType == Data.RedirectType.Permanent);
                         return;
                     }
