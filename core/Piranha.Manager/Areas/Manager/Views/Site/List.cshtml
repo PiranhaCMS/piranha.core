@@ -45,7 +45,13 @@
                 </td>
                 <td>@site.LastModified.ToString("yyyy-MM-dd")</td>
                 <td>@site.Created.ToString("yyyy-MM-dd")</td>
-                <td class="actions one"></td>
+                <td class="actions one">
+                    @if (!site.IsDefault) {
+                        <a class="remove" href="@Url.Action("Delete", new { id = site.Id })">
+                            <span class="glyphicon glyphicon-trash text-danger"></span>
+                        </a>
+                    }
+                </td>
             </tr>
         }
     </tbody>

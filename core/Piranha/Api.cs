@@ -176,7 +176,7 @@ namespace Piranha
             Pages = new Repositories.PageRepository(this, conn, cache);
             PageTypes = new Repositories.PageTypeRepository(conn, cache);
             Params = new Repositories.ParamRepository(conn, cache);
-            Sites = new Repositories.SiteRepository(conn, cache);
+            Sites = new Repositories.SiteRepository(this, conn, cache);
         }
 
         /// <summary>

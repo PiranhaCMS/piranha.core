@@ -19,13 +19,19 @@ namespace Piranha.Repositories
 {
     public class SiteRepository : BaseRepository<Site>, ISiteRepository
     {
+        private readonly Api api;
+
         /// <summary>
         /// Default constructor.
         /// </summary>
+        /// <param name="api">The current api</param>
         /// <param name="connection">The current db connection</param>
         /// <param name="cache">The optional model cache</param>
-        public SiteRepository(IDbConnection connection, ICache cache = null)
-            : base(connection, "Piranha_Sites", "Title", modelCache: cache) { }
+        public SiteRepository(Api api, IDbConnection connection, ICache cache = null)
+            : base(connection, "Piranha_Sites", "Title", modelCache: cache) 
+        { 
+            this.api = api;
+        }
 
         /// <summary>
         /// Gets the model with the given internal id.
@@ -92,6 +98,23 @@ namespace Piranha.Repositories
             }
             return null;
         }
+
+        /// <summary>
+        /// Deletes the model with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <param name="transaction">The optional transaction</param>
+        public override void Delete(string id, IDbTransaction transaction = null) {
+            // Delete all pages within the site
+            var pages = conn.Query<string>($"SELECT [Id] FROM [Piranha_Pages] WHERE [SiteId]=@Id", 
+                new { Id = id }, transaction: transaction);
+
+            foreach (var pageId in pages) {
+                api.Pages.Delete(pageId, transaction);
+            }
+
+            base.Delete(id, transaction);
+        }        
 
         #region Protected methods
         /// <summary>

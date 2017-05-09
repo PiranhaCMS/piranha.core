@@ -50,5 +50,22 @@ namespace Piranha.Areas.Manager.Controllers
                 return View("Edit", model);
             }
         }
+
+        [Route("manager/site/delete/{id}")]
+        public IActionResult Delete(string id) {
+            var site = api.Sites.GetById(id);
+
+            if (site != null) {
+                if (!site.IsDefault) {
+                    api.Sites.Delete(id);
+                    SuccessMessage("The site has been deleted.");
+                } else {
+                    ErrorMessage("Can't delete the default site.");
+                }
+            } else {
+                ErrorMessage("This site could not be found.");
+            }
+            return RedirectToAction("List");
+        }
     }
 }
