@@ -49,10 +49,29 @@
             </button>
             <ul class="dropdown-menu dropdown-menu-right" role="menu">
                 @foreach (var type in Model.PageTypes) {
-                    <li><a href="@Url.Action("Add", new { type = type.Id })">@type.Title</a></li>
+                    <li><a href="@Url.Action("Add", new { type = type.Id, siteId = Model.SiteId })">@type.Title</a></li>
                 }
             </ul>
         </div>
+        
+        @if (Model.Sites.Count > 1) {
+            <div id="btn-sitepicker" class="btn-group pull-right" style="margin-right: 15px">
+                <button type="button" class="btn btn-labeled btn-default" data-toggle="dropdown">
+                    <span class="btn-label">
+                        <i class="glyphicon glyphicon-globe"></i>
+                    </span>@Model.SiteTitle
+                </button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                    @foreach (var site in Model.Sites) {
+                        <li><a href="@Url.Action("List", new { siteId = site.Id })">@site.Title</a></li>
+                    }
+                </ul>
+            </div>
+        }
     </div>
 </div>
 

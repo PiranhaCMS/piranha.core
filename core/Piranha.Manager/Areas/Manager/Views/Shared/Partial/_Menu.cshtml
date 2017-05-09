@@ -13,7 +13,7 @@
                 <ul>
                     @foreach (var item in group.Items) {
                         <li @(item.Controller.ToLower() == controller ? "class=active" : "")>
-                            <a href="@Url.Action(item.Action, item.Controller)">
+                            <a href="@Url.Action(item.Action, item.Controller, item.Params)">
                                 @if (!string.IsNullOrEmpty(item.Css)) {
                                     <span class="@item.Css"></span>
                                 }

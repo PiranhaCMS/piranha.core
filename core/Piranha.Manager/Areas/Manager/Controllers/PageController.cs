@@ -26,9 +26,18 @@ namespace Piranha.Areas.Manager.Controllers
         /// <summary>
         /// Gets the list view for the pages.
         /// </summary>
-        [Route("manager/pages")]
-        public ViewResult List() {
-            return View(Models.PageListModel.Get(api));
+        [Route("manager/pages/{siteId?}")]
+        public ViewResult List(string siteId = null) {
+            var model = Models.PageListModel.Get(api, siteId);
+            var defaultSite = api.Sites.GetDefault();
+
+            Piranha.Manager.Menu
+                .Items["Content"]
+                .Items["Pages"]
+                .Params = new {
+                    siteId = model.SiteId != defaultSite.Id ? model.SiteId : ""
+                };
+            return View(Models.PageListModel.Get(api, siteId));
         }
 
         /// <summary>
@@ -44,10 +53,11 @@ namespace Piranha.Areas.Manager.Controllers
         /// Adds a new page of the given type.
         /// </summary>
         /// <param name="type">The page type id</param>
-        [Route("manager/page/add/{type}")]
-        public IActionResult Add(string type) {
+        /// <param name="siteId">The optional site id</param>
+        [Route("manager/page/add/{type}/{siteId?}")]
+        public IActionResult Add(string type, string siteId = null) {
             var sitemap = api.Sites.GetSitemap(onlyPublished: false);
-            var model = Models.PageEditModel.Create(api, type);
+            var model = Models.PageEditModel.Create(api, type, siteId);
             model.SortOrder = sitemap.Count;
 
             return View("Edit", model);

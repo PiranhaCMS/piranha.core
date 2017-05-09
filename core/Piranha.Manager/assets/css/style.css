@@ -8398,6 +8398,12 @@ li.sitemap-item .actions.one {
   border-color: #439700;
   color: #fff;
 }
+#btn-sitepicker .btn-default {
+  border-color: #fff;
+}
+#btn-sitepicker .btn-default .btn-label {
+  background: transparent;
+}
 .btn-label {
   border-radius: 0;
   -moz-border-radius: 0;

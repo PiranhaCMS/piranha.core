@@ -9,6 +9,7 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Piranha.Manager
 {
@@ -50,16 +51,33 @@ namespace Piranha.Manager
             public string Action { get; set; }
 
             /// <summary>
+            /// Gets/sets the optional menu item params.
+            /// </summary>
+            public object Params { get; set; }
+
+            /// <summary>
             /// Gets/sets the available items.
             /// </summary>
-            public IList<MenuItem> Items { get; set; }
+            public MenuItemList Items { get; set; }
             #endregion
 
             /// <summary>
             /// Default constructor.
             /// </summary>
             public MenuItem() {
-                Items = new List<MenuItem>();
+                Items = new MenuItemList();
+            }
+        }
+
+        public class MenuItemList : List<MenuItem>
+        {
+            /// <summary>
+            /// Gets the menu item with the given internal id.
+            /// </summary>
+            public MenuItem this[string internalId] {
+                get {
+                    return this.FirstOrDefault(i => i.InternalId == internalId);
+                }
             }
         }
         #endregion
@@ -67,9 +85,9 @@ namespace Piranha.Manager
         /// <summary>
         /// The basic manager menu.
         /// </summary>
-        public static IList<MenuItem> Items = new List<MenuItem>() {
+        public static MenuItemList Items = new MenuItemList() {
             new MenuItem() {
-                InternalId = "Content", Name = "Content", Css = "glyphicon glyphicon-pencil", Items = new List<MenuItem>() {
+                InternalId = "Content", Name = "Content", Css = "glyphicon glyphicon-pencil", Items = new MenuItemList() {
                     new MenuItem() {
                         InternalId = "Pages", Name = "Pages", Controller = "Page", Action = "List", Css = "glyphicon glyphicon-duplicate"
                     },/*/
@@ -88,7 +106,7 @@ namespace Piranha.Manager
                 }
             },
             new MenuItem() {
-                InternalId = "Settings", Name = "Settings", Css = "glyphicon glyphicon-wrench", Items = new List<MenuItem>() {
+                InternalId = "Settings", Name = "Settings", Css = "glyphicon glyphicon-wrench", Items = new MenuItemList {
                     new MenuItem() {
                         InternalId = "Sites", Name = "Sites", Controller = "Site", Action = "List", Css = "glyphicon glyphicon-globe"
                     }
@@ -103,7 +121,7 @@ namespace Piranha.Manager
                 }*/
             },
             new MenuItem() {
-                InternalId = "System", Name = "System", Css = "glyphicon glyphicon-cog", Items = new List<MenuItem>() /* {
+                InternalId = "System", Name = "System", Css = "glyphicon glyphicon-cog", Items = new MenuItemList() /* {
                     new MenuItem() {
                         InternalId = "Config", Name = "Config", Controller = "ConfigMgr", Action = "List", Css = "glyphicon glyphicon-wrench"
                     }
