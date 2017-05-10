@@ -23,15 +23,18 @@ namespace Piranha.Repositories
         private readonly IStorage storage;
         private const string TABLE = "Piranha_Media";
         private const string FOLDERTABLE = "Piranha_MediaFolders";
+        private readonly ICache cache;        
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="connection">The current connection</param>
         /// <param name="storage">The current storage manager</param>
-        public MediaRepository(IDbConnection connection, IStorage storage) {
+        /// <param name="cache">The optional model cache</param>
+        public MediaRepository(IDbConnection connection, IStorage storage, ICache cache = null) {
             this.db = connection;
             this.storage = storage;
+            this.cache = cache;
         }
 
         /// <summary>
@@ -83,12 +86,18 @@ namespace Piranha.Repositories
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The media</returns>
         public Media GetById(string id, IDbTransaction transaction = null) {
-            var model = db.QuerySingleOrDefault<Media>($"SELECT * FROM [{TABLE}] WHERE [Id]=@Id", new { 
-                Id = id 
-            }, transaction: transaction);
+            Media model = cache != null ? cache.Get<Media>(id) : null;
 
-            if (model != null) {
-                model.PublicUrl = storage.GetPublicUrl(model);
+            if (model == null) {
+                model = db.QuerySingleOrDefault<Media>($"SELECT * FROM [{TABLE}] WHERE [Id]=@Id", new { 
+                    Id = id 
+                }, transaction: transaction);
+
+                if (model != null)
+                    model.PublicUrl = storage.GetPublicUrl(model);
+
+                if (cache != null && model != null)
+                    cache.Set(model.Id, model);                
             }
             return model;
         }
@@ -100,9 +109,17 @@ namespace Piranha.Repositories
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The media folder</returns>
         public MediaFolder GetFolderById(string id, IDbTransaction transaction = null) {
-            return db.QuerySingleOrDefault<MediaFolder>($"SELECT * FROM [{FOLDERTABLE}] WHERE [Id]=@Id", new { 
-                Id = id 
-            }, transaction: transaction);
+            MediaFolder model = cache != null ? cache.Get<MediaFolder>(id) : null;
+
+            if (model == null) {
+                model = db.QuerySingleOrDefault<MediaFolder>($"SELECT * FROM [{FOLDERTABLE}] WHERE [Id]=@Id", new { 
+                    Id = id 
+                }, transaction: transaction);
+
+                if (cache != null && model != null)
+                    cache.Set(model.Id, model);                                
+            }
+            return model;
         }
 
         /// <summary>
@@ -111,10 +128,18 @@ namespace Piranha.Repositories
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The media structure</returns>
         public Models.MediaStructure GetStructure(IDbTransaction transaction = null) {
-            var folders = db.Query<MediaFolder>("SELECT [Id],[ParentId],[Name],[Created] FROM [Piranha_MediaFolders] ORDER BY [ParentId], [Name]",
-                transaction: transaction);
+            Models.MediaStructure model = cache != null ? cache.Get<Models.MediaStructure>("MediaStructure") : null;
 
-            return Sort(folders);
+            if (model == null) {
+                var folders = db.Query<MediaFolder>("SELECT [Id],[ParentId],[Name],[Created] FROM [Piranha_MediaFolders] ORDER BY [ParentId], [Name]",
+                    transaction: transaction);
+
+                model = Sort(folders);
+
+                if (cache != null && model != null)
+                    cache.Set("MediaStructure", model);  
+            }
+            return model;
         }
 
         /// <summary>
@@ -174,6 +199,8 @@ namespace Piranha.Repositories
 
                 db.Execute($"UPDATE [{TABLE}] SET [Id]=@Id,[FolderId]=@FolderId,[Type]=@Type,[Filename]=@Filename,[ContentType]=@ContentType,[Size]=@Size,[LastModified]=@LastModified WHERE [Id]=@Id",
                     model, transaction: transaction);
+
+                RemoveFromCache(model);
             }
         }
 
@@ -196,7 +223,8 @@ namespace Piranha.Repositories
             } else {
                 db.Execute($"UPDATE [{FOLDERTABLE}] SET [Id]=@Id,[ParentId]=@ParentId,[Name]=@Name WHERE [Id]=@Id",
                     model, transaction: transaction);
-            }        
+            }
+            RemoveStructureFromCache();
         }
 
         /// <summary>
@@ -223,6 +251,7 @@ namespace Piranha.Repositories
             using (var session = storage.Open()) {
                 session.Delete(model.Id + "-" + model.Filename);
             }
+            RemoveFromCache(model);
         }
 
         /// <summary>
@@ -231,7 +260,10 @@ namespace Piranha.Repositories
         /// <param name="id">The unique id</param>
         /// <param name="transaction">The optional transaction</param>
         public void DeleteFolder(string id, IDbTransaction transaction = null) {
-            db.Execute($"DELETE FROM [{FOLDERTABLE}] WHERE [Id]=@Id", new { Id = id }, transaction: transaction);
+            var model = GetFolderById(id, transaction);
+
+            if (model != null)
+                DeleteFolder(model, transaction);
         }
 
         /// <summary>
@@ -240,7 +272,8 @@ namespace Piranha.Repositories
         /// <param name="model">The media</param>
         /// <param name="transaction">The optional transaction</param>
         public void DeleteFolder(Data.MediaFolder model, IDbTransaction transaction = null) {
-            DeleteFolder(model.Id, transaction);
+            db.Execute($"DELETE FROM [{FOLDERTABLE}] WHERE [Id]=@Id", model, transaction: transaction);
+            RemoveFromCache(model);
         }
 
         /// <summary>
@@ -261,6 +294,35 @@ namespace Piranha.Repositories
                 result.Add(item);
             }
             return result;
+        }
+
+        /// <summary>
+        /// Removes the given model from cache.
+        /// </summary>
+        /// <param name="model">The model</param>
+        private void RemoveFromCache(Data.Media model) {
+            if (cache != null)
+                cache.Remove(model.Id.ToString());
+        }
+
+        /// <summary>
+        /// Removes the given model from cache.
+        /// </summary>
+        /// <param name="model">The model</param>
+        private void RemoveFromCache(MediaFolder model) {
+            if (cache != null) {
+                cache.Remove(model.Id.ToString());
+                RemoveStructureFromCache();
+            }
+        }
+
+        /// <summary>
+        /// Removes the given model from cache.
+        /// </summary>
+        /// <param name="model">The model</param>
+        private void RemoveStructureFromCache() {
+            if (cache != null)
+                cache.Remove("MediaStructure");
         }
     }
 }
