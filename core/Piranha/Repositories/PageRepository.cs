@@ -225,6 +225,28 @@ namespace Piranha.Repositories
         public void Move<T>(T model, string parentId, int sortOrder, IDbTransaction transaction = null) where T : Models.Page<T> {
             var tx = transaction != null ? transaction : api.BeginTransaction();
 
+            IEnumerable<Page> oldSiblings = null;
+            IEnumerable<Page> newSiblings = null;
+
+            // Only get siblings if we need to invalidate from cache
+            if (cache != null) {
+                if (!string.IsNullOrWhiteSpace(model.ParentId)) {
+                    oldSiblings = db.Query<Page>($"SELECT * FROM [{table}] WHERE [ParentId]=@ParentId", 
+                        new { ParentId = model.ParentId }, transaction: transaction);
+                } else {
+                    oldSiblings = db.Query<Page>($"SELECT * FROM [{table}] WHERE [ParentId] IS NULL", 
+                        transaction: transaction);                
+                }
+
+                if (!string.IsNullOrWhiteSpace(parentId)) {
+                    newSiblings = db.Query<Page>($"SELECT * FROM [{table}] WHERE [ParentId]=@ParentId", 
+                        new { ParentId = parentId }, transaction: transaction);
+                } else {
+                    newSiblings = db.Query<Page>($"SELECT * FROM [{table}] WHERE [ParentId] IS NULL", 
+                        transaction: transaction);                
+                }
+            }
+
             // Remove the old position for the page
             MovePages(model.ParentId, model.SortOrder + 1, false, transaction: tx);
             // Add room for the new position of the page
@@ -240,7 +262,14 @@ namespace Piranha.Repositories
             // Commit local transaction
             if (tx != transaction)
                 tx.Commit();
-   
+
+            // Remove all siblings from cache
+            if (cache != null) {
+                foreach (var page in oldSiblings)
+                    RemoveFromCache(page);
+                foreach (var page in newSiblings)
+                    RemoveFromCache(page);
+            }
         }
 
         /// <summary>

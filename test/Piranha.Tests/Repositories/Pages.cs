@@ -18,6 +18,16 @@ using Xunit;
 namespace Piranha.Tests.Repositories
 {
     [Collection("Integration tests")]
+    public class PagesCached : Pages
+    {
+        protected override void Init() {
+            cache = new Cache.MemCache();
+
+            base.Init();
+        }
+    }
+
+    [Collection("Integration tests")]
     public class Pages : BaseTests
     {
         #region Members
@@ -25,6 +35,7 @@ namespace Piranha.Tests.Repositories
         public static readonly string PAGE_1_ID = new Guid("C86E47BA-8D0A-4A54-8EB2-2EE2E05E79D5").ToString();
         public static readonly string PAGE_2_ID = new Guid("BF61DBD2-BA79-4AF5-A4F5-66331AC3213E").ToString();
         public static readonly string PAGE_3_ID = new Guid("AF62769D-019F-44BF-B44F-E3D61F421DD2").ToString();
+        protected ICache cache;
         #endregion
 
         [PageType(Title = "My PageType")]
@@ -48,7 +59,7 @@ namespace Piranha.Tests.Repositories
         }
 
         protected override void Init() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 Piranha.App.Init(api);
 
                 var builder = new PageTypeBuilder(api)
@@ -106,7 +117,7 @@ namespace Piranha.Tests.Repositories
         }
 
         protected override void Cleanup() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var pages = api.Pages.GetAll(SITE_ID);
                 foreach (var page in pages)
                     api.Pages.Delete(page);
@@ -123,7 +134,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetNoneById() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var none = api.Pages.GetById(Guid.NewGuid().ToString());
 
                 Assert.Null(none);
@@ -132,7 +143,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetNoneBySlug() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var none = api.Pages.GetBySlug("none-existing-slug");
 
                 Assert.Null(none);
@@ -141,7 +152,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetStartpage() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var model = api.Pages.GetStartpage();
 
                 Assert.NotNull(model);
@@ -152,7 +163,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetStartpageBySite() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var model = api.Pages.GetStartpage(SITE_ID);
 
                 Assert.NotNull(model);
@@ -163,7 +174,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetAll() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var pages = api.Pages.GetAll(SITE_ID);
 
                 Assert.NotNull(pages);
@@ -173,7 +184,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetGenericById() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var model = api.Pages.GetById<MyPage>(PAGE_1_ID);
 
                 Assert.NotNull(model);
@@ -184,7 +195,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetGenericBySlug() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var model = api.Pages.GetBySlug<MyPage>("my-first-page");
 
                 Assert.NotNull(model);
@@ -195,7 +206,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetDynamicById() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var model = api.Pages.GetById(PAGE_1_ID);
 
                 Assert.NotNull(model);
@@ -206,7 +217,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetDynamicBySlug() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var model = api.Pages.GetBySlug("my-first-page");
 
                 Assert.NotNull(model);
@@ -217,7 +228,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetCollectionPage() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var page = api.Pages.GetBySlug<MyCollectionPage>("my-collection-page");
 
                 Assert.NotNull(page);
@@ -228,7 +239,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetDynamicCollectionPage() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var page = api.Pages.GetBySlug("my-collection-page");
 
                 Assert.NotNull(page);
@@ -239,7 +250,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Add() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var page = MyPage.Create(api, "MyPage");
                 page.SiteId = SITE_ID;
                 page.Title = "My fourth page";
@@ -254,7 +265,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Update() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var page = api.Pages.GetById<MyPage>(PAGE_1_ID);
 
                 Assert.NotNull(page);
@@ -274,7 +285,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Move() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var page = api.Pages.GetById(PAGE_1_ID);
 
                 Assert.NotNull(page);
@@ -292,7 +303,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Delete() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var page = api.Pages.GetById<MyPage>(PAGE_3_ID);
                 var count = api.Pages.GetAll(SITE_ID).Count();
 
@@ -306,7 +317,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void DeleteById() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var count = api.Pages.GetAll(SITE_ID).Count();
 
                 api.Pages.Delete(PAGE_2_ID);

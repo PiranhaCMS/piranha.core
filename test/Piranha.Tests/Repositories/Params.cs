@@ -15,6 +15,15 @@ using Xunit;
 
 namespace Piranha.Tests.Repositories
 {
+    public class ParamsCached : Params
+    {
+        protected override void Init() {
+            cache = new Cache.MemCache();
+
+            base.Init();
+        }
+    }
+
     [Collection("Integration tests")]
     public class Params : BaseTests
     {
@@ -31,10 +40,11 @@ namespace Piranha.Tests.Repositories
         private const string CUSTOM_STRING_PARAM = "CustomStringParam";
         private const string CUSTOM_BOOL_PARAM = "CustomBoolParam";
         private const string CUSTOM_OBJECT_PARAM = "CustomObjectParam";
+        protected ICache cache;
         #endregion
 
         protected override void Init() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 api.Params.Save(new Data.Param() {
                     Id = PARAM_1_ID,
                     Key = PARAM_1,
@@ -51,7 +61,7 @@ namespace Piranha.Tests.Repositories
         }
 
         protected override void Cleanup() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var param = api.Params.GetAll();
 
                 foreach (var p in param)
@@ -61,7 +71,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Add() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 api.Params.Save(new Data.Param() {
                     Key = PARAM_2,
                     Value = "My second value"
@@ -71,7 +81,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void AddDuplicateKey() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 Assert.ThrowsAny<Exception>(() =>
                     api.Params.Save(new Data.Param() {
                         Key = PARAM_1,
@@ -82,7 +92,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetNoneById() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var none = api.Params.GetById(Guid.NewGuid().ToString());
 
                 Assert.Null(none);
@@ -91,7 +101,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetNoneByKey() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var none = api.Params.GetByKey("none-existing-key");
 
                 Assert.Null(none);
@@ -101,7 +111,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetAll() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var models = api.Params.GetAll();
 
                 Assert.NotNull(models);
@@ -111,7 +121,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetById() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var model = api.Params.GetById(PARAM_1_ID);
 
                 Assert.NotNull(model);
@@ -121,7 +131,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetByKey() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var model = api.Params.GetByKey(PARAM_1);
 
                 Assert.NotNull(model);
@@ -131,7 +141,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Update() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var model = api.Params.GetById(PARAM_1_ID);
 
                 Assert.Equal(PARAM_1_VALUE, model.Value);
@@ -144,7 +154,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Delete() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var model = api.Params.GetByKey(PARAM_4);
 
                 Assert.NotNull(model);
@@ -155,7 +165,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void DeleteById() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(options, storage, cache)) {
                 var model = api.Params.GetByKey(PARAM_4);
 
                 Assert.NotNull(model);
