@@ -1,8 +1,8 @@
 version: 1.0.{build}
 skip_tags: true
-#branches:
-#  only:
-#    - master
+branches:
+  only:
+    - master
 configuration: Debug
 environment:
   COVERALLS_REPO_TOKEN:

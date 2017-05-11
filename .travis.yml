@@ -21,6 +21,10 @@ mono: none
 
 dotnet: 1.0.1
 
+branches:
+  only:
+  - master
+
 script:
   - ./build.sh --verbosity diagnostic
 
