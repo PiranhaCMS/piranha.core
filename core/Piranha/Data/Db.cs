@@ -70,6 +70,13 @@ namespace Piranha.Data
                     Key = Config.CACHE_EXPIRES_PAGES,
                     Value = 0.ToString()
                 });
+
+            param = api.Params.GetByKey(Config.PAGES_HIERARCHICAL_SLUGS);
+            if (param == null)
+                api.Params.Save(new Param() {
+                    Key = Config.PAGES_HIERARCHICAL_SLUGS,
+                    Value = true.ToString()
+                });
         }
     }
 }

@@ -28,6 +28,7 @@ namespace Piranha
         /// </summary>
         public static readonly string CACHE_EXPIRES_MEDIA = "CacheExpiresMedia";
         public static readonly string CACHE_EXPIRES_PAGES = "CacheExpiresPages";
+        public static readonly string PAGES_HIERARCHICAL_SLUGS = "HierarchicalPageSlugs";
         #endregion
 
         #region Properties
@@ -76,6 +77,29 @@ namespace Piranha
                 api.Params.Save(param);
             }
         }
+
+        /// <summary>
+        /// Gets if hierarchical slugs should be generated when
+        /// creating new pages.
+        /// </summary>
+        public bool HierarchicalPageSlugs {
+            get {
+                var param = api.Params.GetByKey(PAGES_HIERARCHICAL_SLUGS);
+                if (param != null)
+                    return Convert.ToBoolean(param.Value);
+                return false;
+            }
+            set {
+                var param = api.Params.GetByKey(PAGES_HIERARCHICAL_SLUGS);
+                if (param == null) {
+                    param = new Data.Param() {
+                        Key = PAGES_HIERARCHICAL_SLUGS
+                    };
+                }
+                param.Value = value.ToString();
+                api.Params.Save(param);
+            }
+        }        
         #endregion
 
         /// <summary>

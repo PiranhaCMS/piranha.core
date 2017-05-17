@@ -264,6 +264,60 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void AddHierarchical() {
+            using (var api = new Api(options, storage, cache)) {
+                using (var config = new Piranha.Config(api)) {
+                    config.HierarchicalPageSlugs = true;
+                }
+
+                var page = MyPage.Create(api, "MyPage");
+                page.Id = Guid.NewGuid().ToString();
+                page.ParentId = PAGE_1_ID;
+                page.SiteId = SITE_ID;
+                page.Title = "My subpage";
+                page.Ingress = "My subpage ingress";
+                page.Body = "My subpage body";
+
+                api.Pages.Save(page);
+                
+                page = api.Pages.GetById<MyPage>(page.Id);
+
+                Assert.NotNull(page);
+                Assert.Equal("my-first-page/my-subpage", page.Slug);
+
+                var param = api.Params.GetByKey(Piranha.Config.PAGES_HIERARCHICAL_SLUGS);
+                api.Params.Delete(param);
+            }            
+        }
+
+        [Fact]
+        public void AddNonHierarchical() {
+            using (var api = new Api(options, storage, cache)) {
+                using (var config = new Piranha.Config(api)) {
+                    config.HierarchicalPageSlugs = false;
+                }
+
+                var page = MyPage.Create(api, "MyPage");
+                page.Id = Guid.NewGuid().ToString();
+                page.ParentId = PAGE_1_ID;
+                page.SiteId = SITE_ID;
+                page.Title = "My second subpage";
+                page.Ingress = "My subpage ingress";
+                page.Body = "My subpage body";
+
+                api.Pages.Save(page);
+                
+                page = api.Pages.GetById<MyPage>(page.Id);
+
+                Assert.NotNull(page);
+                Assert.Equal("my-second-subpage", page.Slug);
+
+                var param = api.Params.GetByKey(Piranha.Config.PAGES_HIERARCHICAL_SLUGS);
+                api.Params.Delete(param);
+            }            
+        }
+
+        [Fact]
         public void Update() {
             using (var api = new Api(options, storage, cache)) {
                 var page = api.Pages.GetById<MyPage>(PAGE_1_ID);

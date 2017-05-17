@@ -302,6 +302,7 @@ namespace Piranha.Repositories
                     if (page == null) {
                         page = new Page() {
                             Id = !string.IsNullOrEmpty(model.Id) ? model.Id : Guid.NewGuid().ToString(),
+                            ParentId = model.ParentId,
                             PageTypeId = model.TypeId,
                             Created = DateTime.Now,
                             LastModified = DateTime.Now
@@ -324,9 +325,22 @@ namespace Piranha.Repositories
                     }
 
                     // Ensure that we have a slug
-                    if (string.IsNullOrWhiteSpace(model.Slug))
-                        model.Slug = Utils.GenerateSlug(model.NavigationTitle != null ? model.NavigationTitle : model.Title);
-                    else model.Slug = Utils.GenerateSlug(model.Slug);
+                    if (string.IsNullOrWhiteSpace(model.Slug)) {
+                        var prefix = "";
+
+                        // Check if we should generate hierarchical slugs
+                        using (var config = new Config(api)) {
+                            if (config.HierarchicalPageSlugs && !string.IsNullOrWhiteSpace(page.ParentId)) {
+                                var parentSlug = db.QueryFirstOrDefault<string>($"SELECT [Slug] FROM [{table}] WHERE [Id]=@ParentId",
+                                    page, transaction: transaction);
+
+                                if (!string.IsNullOrWhiteSpace(parentSlug)) {
+                                    prefix = parentSlug + "/";
+                                }
+                            }
+                        }
+                        model.Slug = prefix + Utils.GenerateSlug(model.NavigationTitle != null ? model.NavigationTitle : model.Title);
+                    } else model.Slug = Utils.GenerateSlug(model.Slug);
 
                     // Map basic fields
                     App.Mapper.Map<Models.PageBase, Page>(model, page);

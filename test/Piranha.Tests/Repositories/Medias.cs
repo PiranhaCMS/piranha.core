@@ -88,8 +88,14 @@ namespace Piranha.Tests.Repositories
                 }
 
                 var folders = api.Media.GetAllFolders();
+
                 foreach (var folder in folders) {
-                    api.Media.DeleteFolder(folder);
+                    media = api.Media.GetAll(folder.Id);
+
+                    foreach (var item in media) {
+                        api.Media.Delete(item);
+                    }
+                    api.Media.DeleteFolder(folder);                    
                 }
             }
         }
