@@ -16,13 +16,13 @@ Piranha is currently built for `NetStandard 1.4` and uses the following awesome 
 
 * AutoMapper `5.2.0`
 * Dapper `1.50.2`
-* Markdown `2.2.1`
+* Markdig `0.11.0`
 * Newtonsoft.Json `9.0.1`
 
 ## Core Packages
 
 ### Piranha
-**NetStandard 1.4** [`AutoMapper`, `Dapper`, `Markdown`, `Newtonsoft.Json`]
+**NetStandard 1.4** [`AutoMapper`, `Dapper`, `Markdig`, `Newtonsoft.Json`]
 
 The core library that contains all data management, repositories, client models and extensibility features. In a way, everything you need to integrate Piranha into your existing solution.
 
