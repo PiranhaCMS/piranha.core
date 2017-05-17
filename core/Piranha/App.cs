@@ -8,9 +8,11 @@
  * 
  */
 
-using HeyRed.MarkdownSharp;
 using AutoMapper;
+using Newtonsoft.Json;
 using Piranha.Extend;
+using Piranha.Extend.Serializers;
+using System;
 using System.Reflection;
 
 namespace Piranha
@@ -59,7 +61,12 @@ namespace Piranha
         /// <summary>
         /// The application markdown converter.
         /// </summary>
-        private Markdown markdown;
+        private IMarkdown markdown;
+
+        /// <summary>
+        /// The currently registered serializers.
+        /// </summary>
+        private SerializerManager serializers;
         #endregion
 
         #region Properties
@@ -94,7 +101,7 @@ namespace Piranha
         /// <summary>
         /// Gets the markdown converter.
         /// </summary>
-        public static Markdown Markdown {
+        public static IMarkdown Markdown {
             get { return instance.markdown; }
         }
 
@@ -105,6 +112,13 @@ namespace Piranha
         public static BindingFlags PropertyBindings {
             get { return BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance; }
         }
+
+        /// <summary>
+        /// Gets the currently registered serializers.
+        /// </summary>
+        public static SerializerManager Serializers {
+            get { return instance.serializers; }
+        }
         #endregion
 
         /// <summary>
@@ -114,6 +128,7 @@ namespace Piranha
             fields = new AppFieldList();
             modules = new AppModuleList();
             mediaTypes = new MediaManager();
+            serializers = new SerializerManager();
         }
 
         /// <summary>
@@ -122,6 +137,22 @@ namespace Piranha
         /// <param name="api">The current api</param>
         public static void Init(Api api) {
             instance.Initialize(api);
+        }
+
+        public static string SerializeObject(object obj, Type type) {
+            var serializer = instance.serializers[type];
+
+            if (serializer != null)
+                return serializer.Serialize(obj);
+            return JsonConvert.SerializeObject(obj);
+        }
+
+        public static object DeserializeObject(string value, Type type) {
+            var serializer = instance.serializers[type];
+            
+            if (serializer != null)
+                return serializer.Deserialize(value);
+            return JsonConvert.DeserializeObject(value, type);
         }
 
         #region Private methods
@@ -169,8 +200,16 @@ namespace Piranha
                         fields.Register<Extend.Fields.StringField>();
                         fields.Register<Extend.Fields.TextField>();
 
+                        // Compose serializers
+                        serializers.Register<Extend.Fields.DateField>(new DateFieldSerializer());
+                        serializers.Register<Extend.Fields.HtmlField>(new StringFieldSerializer<Extend.Fields.HtmlField>());
+                        serializers.Register<Extend.Fields.MarkdownField>(new StringFieldSerializer<Extend.Fields.MarkdownField>());
+                        serializers.Register<Extend.Fields.StringField>(new StringFieldSerializer<Extend.Fields.StringField>());
+                        serializers.Register<Extend.Fields.TextField>(new StringFieldSerializer<Extend.Fields.TextField>());
+                        serializers.Register<Extend.Fields.ImageField>(new ImageFieldSerializer());
+
                         // Create markdown converter
-                        markdown = new Markdown();
+                        markdown = new DefaultMarkdown();
 
                         // Initialize all modules
                         foreach (var module in modules) {

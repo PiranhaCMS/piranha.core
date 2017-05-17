@@ -8,7 +8,7 @@ Piranha is currently built for `NetStandard 1.4` and uses the following awesome 
 
 * AutoMapper `5.2.0`
 * Dapper `1.50.2`
-* Markdown `2.2.1`
+* Markdig `0.11.0`
 * Newtonsoft.Json `9.0.1`
 
 ## Licensing

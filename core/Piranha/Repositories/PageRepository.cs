@@ -9,7 +9,6 @@
  */
 
 using Dapper;
-using Newtonsoft.Json;
 using Piranha.Data;
 using System;
 using System.Collections;
@@ -572,7 +571,7 @@ namespace Piranha.Repositories
             var type = App.Fields.GetByType(field.CLRType);
 
             if (type != null) {
-                var val = (Extend.IField)JsonConvert.DeserializeObject(field.Value, type.Type);
+                var val = (Extend.IField)App.DeserializeObject(field.Value, type.Type);
                 if (val != null)
                     val.Init(api);
                 return val;
@@ -702,7 +701,7 @@ namespace Piranha.Repositories
                         // Update field info & value
                         field.CLRType = fieldType.TypeName;
                         field.SortOrder = sortOrder;
-                        field.Value = JsonConvert.SerializeObject(fieldValue);
+                        field.Value = App.SerializeObject(fieldValue, fieldType.Type);
 
                         // Save the field
                         if (isNew) {
