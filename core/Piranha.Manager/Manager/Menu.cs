@@ -111,21 +111,13 @@ namespace Piranha.Manager
                         InternalId = "Sites", Name = "Sites", Controller = "Site", Action = "List", Css = "glyphicon glyphicon-globe"
                     }
                 }
-                /* {
-                    new MenuItem() {
-                        InternalId = "BlockTypes", Name = "Block types", Controller = "BlockType", Action = "List"
-                    },
-                    new MenuItem() {
-                        InternalId = "PageTypes", Name = "Page types", Controller = "PageType", Action = "List"
-                    }
-                }*/
             },
             new MenuItem() {
-                InternalId = "System", Name = "System", Css = "glyphicon glyphicon-cog", Items = new MenuItemList() /* {
+                InternalId = "System", Name = "System", Css = "glyphicon glyphicon-cog", Items = new MenuItemList()  {
                     new MenuItem() {
-                        InternalId = "Config", Name = "Config", Controller = "ConfigMgr", Action = "List", Css = "glyphicon glyphicon-wrench"
+                        InternalId = "Config", Name = "Config", Controller = "Config", Action = "Edit", Css = "glyphicon glyphicon-tasks"
                     }
-                }*/
+                }
             }
         };
     }

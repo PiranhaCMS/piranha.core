@@ -1,0 +1,74 @@
+@model Piranha.Areas.Manager.Models.ConfigEditModel
+@{
+    ViewBag.Title = "Config";
+    ViewBag.Controller = "Config";
+}
+
+@using (var form = Html.BeginForm("Save", "Config", FormMethod.Post, new { @id = "main-form", @class = "form", @role = "form" })) {
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-sm-12 buttons">
+            <button type="submit" class="btn btn-labeled btn-success">
+                <span class="btn-label">
+                    <i class="glyphicon glyphicon-ok"></i>
+                </span>
+                Save
+            </button>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(ViewBag.Message)) {
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="@ViewBag.MessageCss">
+                    @Html.Raw(ViewBag.Message)
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">General</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.General.HierarchicalPageSlugs, "Hierarchical page slugs")
+                        <div class="checkbox">
+                            <label>
+                                @Html.CheckBoxFor(m => m.General.HierarchicalPageSlugs)
+                                If page slugs should include the parent slug.
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Caching</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Cache.MediaExpires, "Media cache expiration (minutes)")
+                        @Html.TextBoxFor(m => m.Cache.MediaExpires, new { @class = "form-control", type = "number" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Cache.PagesExpires, "Page cache expiration (minutes)")
+                        @Html.TextBoxFor(m => m.Cache.PagesExpires, new { @class = "form-control", type = "number" })
+                    </div>                
+                </div>
+            </div>        
+        </div>
+    </div>
+}
