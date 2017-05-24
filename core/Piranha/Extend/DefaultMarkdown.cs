@@ -25,7 +25,7 @@ namespace Piranha.Extend
         public string Transform(string md) {
             if (!string.IsNullOrEmpty(md))
                 return Markdown.ToHtml(md);
-            return null;
+            return md;
         }
     }
 }

@@ -51,6 +51,16 @@ namespace Piranha.Tests
         }
 
         [Fact]
+        public void MarkdownEmptyString() {
+            Assert.Equal("", Piranha.App.Markdown.Transform(""));
+        }
+
+        [Fact]
+        public void MarkdownNullString() {
+            Assert.Equal(null, Piranha.App.Markdown.Transform(null));
+        }
+
+        [Fact]
         public void Fields() {
             Assert.NotNull(Piranha.App.Fields);
             Assert.NotEqual(0, Piranha.App.Fields.Count());
