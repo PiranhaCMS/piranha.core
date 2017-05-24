@@ -23,7 +23,9 @@ namespace Piranha.Extend
         /// <param name="md">The markdown</param>
         /// <returns>The transformed html</returns>
         public string Transform(string md) {
-            return Markdown.ToHtml(md);
+            if (!string.IsNullOrEmpty(md))
+                return Markdown.ToHtml(md);
+            return null;
         }
     }
 }
