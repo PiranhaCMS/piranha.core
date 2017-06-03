@@ -26,18 +26,30 @@ namespace Piranha.Areas.Manager.Controllers
         /// <summary>
         /// Gets the list view for the pages.
         /// </summary>
-        [Route("manager/pages/{siteId?}")]
-        public ViewResult List(string siteId = null) {
-            var model = Models.PageListModel.Get(api, siteId);
+        [Route("manager/pages/{pageId?}")]
+        public ViewResult List(string pageId = null) {
+            return ListSite(null, pageId);
+        }
+
+        /// <summary>
+        /// Gets the list view for the pages of the specified site.
+        /// </summary>
+        [Route("manager/pages/site/{siteId}/{pageId?}")]
+        public ViewResult ListSite(string siteId, string pageId = null) {
+            var model = Models.PageListModel.Get(api, siteId, pageId);
             var defaultSite = api.Sites.GetDefault();
 
+            Piranha.Manager.Menu
+                .Items["Content"]
+                .Items["Pages"]
+                .Action = string.IsNullOrEmpty(siteId) ? "List" : "ListSite";
             Piranha.Manager.Menu
                 .Items["Content"]
                 .Items["Pages"]
                 .Params = new {
                     siteId = model.SiteId != defaultSite.Id ? model.SiteId : ""
                 };
-            return View(Models.PageListModel.Get(api, siteId));
+            return View("List", Models.PageListModel.Get(api, siteId));
         }
 
         /// <summary>

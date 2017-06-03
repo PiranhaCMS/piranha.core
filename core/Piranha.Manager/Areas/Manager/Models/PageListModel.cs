@@ -19,6 +19,7 @@ namespace Piranha.Areas.Manager.Models
         {
             public string Id { get; set; }
             public string Title { get; set; }
+            public bool IsDefault { get; set; }
         }
 
         #region Properties
@@ -47,6 +48,11 @@ namespace Piranha.Areas.Manager.Models
         /// Gets/sets the current site title.
         /// </summary>
         public string SiteTitle { get; set; }
+
+        /// <summary>
+        /// Gets/sets the current page id.
+        /// </summary>
+        public string PageId { get; set; }
         #endregion
 
         /// <summary>
@@ -63,8 +69,9 @@ namespace Piranha.Areas.Manager.Models
         /// </summary>
         /// <param name="api">The current api</param>
         /// <param name="siteId">The optional site id</param>
+        /// <param name="pageId">The optional page id</param>
         /// <returns>The model</returns>
-        public static PageListModel Get(Api api, string siteId) {
+        public static PageListModel Get(Api api, string siteId, string pageId = null) {
             var model = new PageListModel();
 
             var site = !string.IsNullOrEmpty(siteId) ?
@@ -76,11 +83,13 @@ namespace Piranha.Areas.Manager.Models
 
             model.SiteId = site.Id == defaultSite.Id ? "" : site.Id;
             model.SiteTitle = site.Title;
+            model.PageId = pageId;
             model.PageTypes = api.PageTypes.GetAll().ToList();
             model.Sitemap = api.Sites.GetSitemap(site.Id, onlyPublished: false);
             model.Sites = api.Sites.GetAll().Select(s => new SiteInfo() {
                 Id = s.Id == defaultSite.Id ? "" : s.Id,
-                Title = s.Title
+                Title = s.Title,
+                IsDefault = s.IsDefault
             }).ToList();
 
             return model;

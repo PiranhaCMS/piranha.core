@@ -7722,7 +7722,8 @@ button.close {
   list-style: none;
 }
 .dd-list .dd-list {
-  padding-left: 30px;
+  padding-left: 34px;
+  display: none;
 }
 .dd-collapsed .dd-list {
   display: none;
@@ -7741,10 +7742,10 @@ button.close {
   display: block;
   float: left;
   color: #999;
-  width: 33px;
+  width: 34px;
   height: 43px;
   padding: 10px;
-  border-right: solid 1px #f2f2f2;
+  border-right: solid 2px #f2f2f2;
   box-sizing: border-box;
   cursor: pointer;
 }
@@ -8170,11 +8171,35 @@ li.sitemap-item .label {
 li.sitemap-item ol {
   padding-left: 0;
 }
+li.sitemap-item .dd-toggle {
+  background: #fff;
+  color: #2a8ac2;
+  box-sizing: border-box;
+  float: left;
+  height: 43px;
+  width: 32px;
+  padding: 14px 10px;
+}
+li.sitemap-item .dd-toggle span {
+  cursor: pointer;
+}
+li.sitemap-item .dd-toggle .glyphicon-minus-sign {
+  display: none;
+}
+li.sitemap-item.expanded > .dd-toggle .glyphicon-plus-sign {
+  display: none;
+}
+li.sitemap-item.expanded > .dd-toggle .glyphicon-minus-sign {
+  display: inline;
+}
+li.sitemap-item.expanded > .dd-list {
+  display: block;
+}
 li.sitemap-item .content {
   background: #fff;
   height: 43px;
-  padding: 10px 20px 10px 10px;
-  margin: 4px 0 0 34px;
+  padding: 10px 20px 10px 0;
+  margin: 2px 0 0 66px;
   box-sizing: border-box;
 }
 li.sitemap-item .content a {

@@ -67,7 +67,11 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right" role="menu">
                     @foreach (var site in Model.Sites) {
-                        <li><a href="@Url.Action("List", new { siteId = site.Id })">@site.Title</a></li>
+                        if (site.IsDefault) {
+                            <li><a href="@Url.Action("List")">@site.Title</a></li>
+                        } else {
+                            <li><a href="@Url.Action("ListSite", new { siteId = site.Id })">@site.Title</a></li>
+                        }
                     }
                 </ul>
             </div>

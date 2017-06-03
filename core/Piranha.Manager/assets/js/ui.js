@@ -22,6 +22,9 @@ $('.sortable').sortable({
 }).bind('sortupdate', function(e, ui) {
     manager.tools.recalcregion($(ui.item).parent());
 });
+$(document).on('click', '.dd-toggle span', function() {
+    $(this).parent().parent().toggleClass('expanded');
+});
 
 //
 // Sortable fix for FF

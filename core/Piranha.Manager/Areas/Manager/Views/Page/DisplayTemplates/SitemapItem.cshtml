@@ -1,8 +1,17 @@
 ﻿@model Piranha.Models.SitemapItem
+@{
+    string pageId = (string)ViewData["pageId"];
+}
 
-<li class="sitemap-item dd-item @(!Model.Published.HasValue ? "unpublished" : "")" data-id="@Model.Id">
+<li class="sitemap-item dd-item @(!Model.Published.HasValue ? "unpublished" : "") @(!string.IsNullOrEmpty(pageId) && Model.HasChild(pageId) ? "expanded" : "")" data-id="@Model.Id">
     <div class="dd-handle">
         <span class="glyphicon glyphicon-option-vertical"></span>
+    </div>
+    <div class="dd-toggle @(Model.Items.Count == 0 ? "empty" : "")">
+        @if (Model.Items.Count > 0) {
+            <span class="glyphicon glyphicon-plus-sign"></span>
+            <span class="glyphicon glyphicon-minus-sign"></span>
+        }
     </div>
     <div class="actions three pull-right">
         <a class="add-after first" href="#" data-toggle="tooltip" data-original-title="Add after" data-placement="top">
@@ -22,14 +31,14 @@
         @Model.LastModified.ToString("yyyy-MM-dd")
     </div>
     <div class="content">
-        <a href="@Url.Action("Edit", "Page", new { id = Model.Id })">@(Model.NavigationTitle != null ? Model.NavigationTitle : Model.Title)</a>
+        <a href="@Url.Action("Edit", "Page", new { id = Model.Id })" data-id="@Model.Id">@(Model.NavigationTitle != null ? Model.NavigationTitle : Model.Title)</a>
         @if (!Model.Published.HasValue) {
             <span class="label label-info">Unpublished</span>
         }
     </div>
     @if (Model.Items.Count > 0) {
         <ol class="dd-list">
-            @Html.DisplayFor(m => m.Items)
+            @Html.DisplayFor(m => m.Items, ViewData)
         </ol>
     }
 </li>

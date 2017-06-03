@@ -267,11 +267,45 @@ li.sitemap-item {
 		padding-left: 0;
 	}
 
+	.dd-toggle {
+		background: #fff;
+		color: @link-color;
+		box-sizing: border-box;
+		float: left;
+		height: 43px;
+		width: 32px;
+		padding: 14px 10px;
+
+		span {
+			cursor: pointer;
+
+		}
+
+		.glyphicon-minus-sign {
+			display: none;
+		}			
+	}
+
+	&.expanded {
+		>.dd-toggle {
+			.glyphicon-plus-sign {
+				display: none;
+			}
+			.glyphicon-minus-sign {
+				display: inline;
+			}
+		}
+
+		>.dd-list {
+			display: block;
+		}
+	}
+
 	.content {
 		background: #fff;
 		height: 43px;
-		padding: 10px 20px 10px 10px;
-		margin: 4px 0 0 34px; 
+		padding: 10px 20px 10px 0;
+		margin: 2px 0 0 66px; 
 		box-sizing: border-box;
 
 		a {
