@@ -29,11 +29,12 @@ namespace Piranha
         public static readonly string CACHE_EXPIRES_MEDIA = "CacheExpiresMedia";
         public static readonly string CACHE_EXPIRES_PAGES = "CacheExpiresPages";
         public static readonly string PAGES_HIERARCHICAL_SLUGS = "HierarchicalPageSlugs";
+        public static readonly string MANAGER_EXPANDED_SITEMAP_LEVELS = "ManagerExpandedSitemapLevels";
         #endregion
 
         #region Properties
         /// <summary>
-        /// Gets the currently configured cache expiration
+        /// Gets/sets the currently configured cache expiration
         /// in minutes for media.
         /// </summary>
         public int CacheExpiresMedia {
@@ -56,7 +57,7 @@ namespace Piranha
         }
 
         /// <summary>
-        /// Gets the currently configured cache expiration
+        /// Gets/sets the currently configured cache expiration
         /// in minutes for pages.
         /// </summary>
         public int CacheExpiresPages {
@@ -79,7 +80,7 @@ namespace Piranha
         }
 
         /// <summary>
-        /// Gets if hierarchical slugs should be generated when
+        /// Gets/sets if hierarchical slugs should be generated when
         /// creating new pages.
         /// </summary>
         public bool HierarchicalPageSlugs {
@@ -87,7 +88,7 @@ namespace Piranha
                 var param = api.Params.GetByKey(PAGES_HIERARCHICAL_SLUGS);
                 if (param != null)
                     return Convert.ToBoolean(param.Value);
-                return false;
+                return true;
             }
             set {
                 var param = api.Params.GetByKey(PAGES_HIERARCHICAL_SLUGS);
@@ -99,7 +100,30 @@ namespace Piranha
                 param.Value = value.ToString();
                 api.Params.Save(param);
             }
-        }        
+        }
+
+        /// <summary>
+        /// Gets/sets the default number of expanded sitemap levels
+        /// in the manager interface.
+        /// </summary>
+        public int ManagerExpandedSitemapLevels {
+            get {
+                var param = api.Params.GetByKey(MANAGER_EXPANDED_SITEMAP_LEVELS);
+                if (param != null)
+                    return Convert.ToInt32(param.Value);
+                return 0;
+            }
+            set {
+                var param = api.Params.GetByKey(MANAGER_EXPANDED_SITEMAP_LEVELS);
+                if (param == null) {
+                    param = new Data.Param() {
+                        Key = MANAGER_EXPANDED_SITEMAP_LEVELS
+                    };
+                }
+                param.Value = value.ToString();
+                api.Params.Save(param);                
+            }
+        }
         #endregion
 
         /// <summary>

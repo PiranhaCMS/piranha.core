@@ -99,7 +99,11 @@
 </ol>
 <div class="dd">
     <ol class="sitemap dd-list">
-        @Html.Partial("Partial/_Sitemap", Model.Sitemap)
+        @Html.Partial("Partial/_Sitemap", new Piranha.Areas.Manager.Models.SitemapModel() { 
+            Sitemap = Model.Sitemap, 
+            PageId = Model.PageId, 
+            ExpandedLevels = Model.ExpandedLevels 
+        })
     </ol>
     <div id="sitemap-spinner" class="spinner" style="display:none"></div>
 </div>

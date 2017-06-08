@@ -1,14 +1,16 @@
-﻿@model Piranha.Models.SitemapItem
+﻿@model Piranha.Areas.Manager.Models.SiteItemModel
 @{
-    string pageId = (string)ViewData["pageId"];
+    Piranha.Models.SitemapItem item = Model.Item;
+    string pageId = Model.PageId;
+    int expanded = Model.ExpandedLevels;
 }
 
-<li class="sitemap-item dd-item @(!Model.Published.HasValue ? "unpublished" : "") @(!string.IsNullOrEmpty(pageId) && Model.HasChild(pageId) ? "expanded" : "")" data-id="@Model.Id">
+<li class="sitemap-item dd-item @(!item.Published.HasValue ? "unpublished" : "") @(Model.CurrentLevel < Model.ExpandedLevels || (!string.IsNullOrEmpty(pageId) && item.HasChild(pageId)) ? "expanded" : "")" data-id="@item.Id">
     <div class="dd-handle">
         <span class="glyphicon glyphicon-option-vertical"></span>
     </div>
-    <div class="dd-toggle @(Model.Items.Count == 0 ? "empty" : "")">
-        @if (Model.Items.Count > 0) {
+    <div class="dd-toggle @(item.Items.Count == 0 ? "empty" : "")">
+        @if (item.Items.Count > 0) {
             <span class="glyphicon glyphicon-plus-sign"></span>
             <span class="glyphicon glyphicon-minus-sign"></span>
         }
@@ -20,25 +22,32 @@
         <a class="add-below" href="#" data-toggle="tooltip" data-original-title="Add below" data-placement="top">
             <span class="glyphicon glyphicon-chevron-right"></span>
         </a>
-        <a class="remove last" href="@Url.Action("Delete", new { id = Model.Id })" data-toggle="tooltip" data-original-title="Delete" data-placement="top">
+        <a class="remove last" href="@Url.Action("Delete", new { id = item.Id })" data-toggle="tooltip" data-original-title="Delete" data-placement="top">
             <span class="glyphicon glyphicon-trash text-danger"></span>
         </a>
     </div>
     <div class="date pull-right">
-        @Model.Created.ToString("yyyy-MM-dd")
+        @item.Created.ToString("yyyy-MM-dd")
     </div>
     <div class="date pull-right">
-        @Model.LastModified.ToString("yyyy-MM-dd")
+        @item.LastModified.ToString("yyyy-MM-dd")
     </div>
     <div class="content">
-        <a href="@Url.Action("Edit", "Page", new { id = Model.Id })" data-id="@Model.Id">@(Model.NavigationTitle != null ? Model.NavigationTitle : Model.Title)</a>
-        @if (!Model.Published.HasValue) {
+        <a href="@Url.Action("Edit", "Page", new { id = item.Id })" data-id="@item.Id">@(item.NavigationTitle != null ? item.NavigationTitle : item.Title)</a>
+        @if (!item.Published.HasValue) {
             <span class="label label-info">Unpublished</span>
         }
     </div>
-    @if (Model.Items.Count > 0) {
+    @if (item.Items.Count > 0) {
         <ol class="dd-list">
-            @Html.DisplayFor(m => m.Items, ViewData)
+            @foreach (var child in item.Items) {
+                @Html.Partial("DisplayTemplates/SitemapItem", new Piranha.Areas.Manager.Models.SiteItemModel() {
+                    Item = child,
+                    PageId = Model.PageId,
+                    ExpandedLevels = Model.ExpandedLevels,
+                    CurrentLevel = Model.CurrentLevel + 1
+                })
+            }
         </ol>
     }
 </li>

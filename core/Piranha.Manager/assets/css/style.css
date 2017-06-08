@@ -8407,6 +8407,12 @@ li.sitemap-item .actions.one {
 .form .table .form-group textarea {
   font-size: 14px;
 }
+.form blockquote {
+  margin-top: 10px;
+  padding: 5px 0 5px 15px;
+  font-size: 14px;
+  color: #999;
+}
 .btn {
   border-radius: 0;
   -moz-border-radius: 0;

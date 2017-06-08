@@ -53,6 +53,11 @@ namespace Piranha.Areas.Manager.Models
         /// Gets/sets the current page id.
         /// </summary>
         public string PageId { get; set; }
+
+        /// <summary>
+        /// Gets/sets the expanded levels in the sitemap.
+        /// </summary>
+        public int ExpandedLevels { get; set; }
         #endregion
 
         /// <summary>
@@ -92,6 +97,9 @@ namespace Piranha.Areas.Manager.Models
                 IsDefault = s.IsDefault
             }).ToList();
 
+            using (var config = new Config(api)) {
+                model.ExpandedLevels = config.ManagerExpandedSitemapLevels;
+            }
             return model;
         }
     }

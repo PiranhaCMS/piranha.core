@@ -37,6 +37,11 @@ namespace Piranha.Areas.Manager.Models
             /// Gets/sets if hierarchical slugs should be used.
             /// </summary>
             public bool HierarchicalPageSlugs { get; set; }
+
+            /// <summary>
+            /// Gets/sets the default expanded levels in the manager sitemap.
+            /// </summary>
+            public int ExpandedSitemapLevels { get; set; }
         }
 
         /// <summary>
@@ -70,6 +75,7 @@ namespace Piranha.Areas.Manager.Models
                 model.Cache.PagesExpires = config.CacheExpiresPages;
 
                 model.General.HierarchicalPageSlugs = config.HierarchicalPageSlugs;
+                model.General.ExpandedSitemapLevels = config.ManagerExpandedSitemapLevels;
             }
             return model;
         }
@@ -83,6 +89,7 @@ namespace Piranha.Areas.Manager.Models
                 config.CacheExpiresMedia = Cache.MediaExpires;
                 config.CacheExpiresPages = Cache.PagesExpires;
                 config.HierarchicalPageSlugs = General.HierarchicalPageSlugs;
+                config.ManagerExpandedSitemapLevels = General.ExpandedSitemapLevels;
             }
         }
     }

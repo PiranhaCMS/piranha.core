@@ -47,9 +47,10 @@ namespace Piranha.Areas.Manager.Controllers
                 .Items["Content"]
                 .Items["Pages"]
                 .Params = new {
+                    pageId = "",
                     siteId = model.SiteId != defaultSite.Id ? model.SiteId : ""
                 };
-            return View("List", Models.PageListModel.Get(api, siteId));
+            return View("List", model);
         }
 
         /// <summary>

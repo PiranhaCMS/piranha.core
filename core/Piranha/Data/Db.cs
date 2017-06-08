@@ -77,6 +77,13 @@ namespace Piranha.Data
                     Key = Config.PAGES_HIERARCHICAL_SLUGS,
                     Value = true.ToString()
                 });
+
+            param = api.Params.GetByKey(Config.MANAGER_EXPANDED_SITEMAP_LEVELS);
+            if (param == null)
+                api.Params.Save(new Param() {
+                    Key = Config.MANAGER_EXPANDED_SITEMAP_LEVELS,
+                    Value = "0"
+                });            
         }
     }
 }

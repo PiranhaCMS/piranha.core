@@ -61,5 +61,31 @@ namespace Piranha.Tests
                 }
             }
         }
+
+        [Fact]
+        public void HierarchicalPageSlugs() {
+            using (var api = new Api(options, storage)) {
+                using (var config = new Piranha.Config(api)) {
+                    Assert.Equal(true, config.HierarchicalPageSlugs);
+
+                    config.HierarchicalPageSlugs = false;
+
+                    Assert.Equal(false, config.HierarchicalPageSlugs);
+                }
+            }
+        }
+
+        [Fact]
+        public void ManagerExpandedSitemapLevels() {
+            using (var api = new Api(options, storage)) {
+                using (var config = new Piranha.Config(api)) {
+                    Assert.Equal(0, config.ManagerExpandedSitemapLevels);
+
+                    config.ManagerExpandedSitemapLevels = 3;
+
+                    Assert.Equal(3, config.ManagerExpandedSitemapLevels);
+                }
+            }
+        }
     }
 }
