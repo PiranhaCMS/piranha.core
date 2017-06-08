@@ -101,6 +101,14 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void IsCached() {
+            using (var api = new Api(options, storage, cache)) {
+                Assert.Equal(this.GetType() == typeof(MediasCached), api.IsCached);
+            }
+        }
+        
+
+        [Fact]
         public void GetAll() {
             using (var api = new Api(options, storage, cache)) {
                 var media = api.Media.GetAll();

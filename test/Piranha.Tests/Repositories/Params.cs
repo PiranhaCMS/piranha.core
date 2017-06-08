@@ -70,6 +70,13 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void IsCached() {
+            using (var api = new Api(options, storage, cache)) {
+                Assert.Equal(this.GetType() == typeof(ParamsCached), api.IsCached);
+            }
+        }        
+
+        [Fact]
         public void Add() {
             using (var api = new Api(options, storage, cache)) {
                 api.Params.Save(new Data.Param() {

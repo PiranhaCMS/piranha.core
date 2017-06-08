@@ -86,20 +86,23 @@ namespace Piranha.Repositories
         /// <param name="transaction">The optional transaction</param>
         /// <returns>The media</returns>
         public Media GetById(string id, IDbTransaction transaction = null) {
-            Media model = cache != null ? cache.Get<Media>(id) : null;
+            if (!string.IsNullOrWhiteSpace(id)) {
+                Media model = cache != null ? cache.Get<Media>(id) : null;
 
-            if (model == null) {
-                model = db.QuerySingleOrDefault<Media>($"SELECT * FROM [{TABLE}] WHERE [Id]=@Id", new { 
-                    Id = id 
-                }, transaction: transaction);
+                if (model == null) {
+                    model = db.QuerySingleOrDefault<Media>($"SELECT * FROM [{TABLE}] WHERE [Id]=@Id", new { 
+                        Id = id 
+                    }, transaction: transaction);
 
-                if (model != null)
-                    model.PublicUrl = storage.GetPublicUrl(model);
+                    if (model != null)
+                        model.PublicUrl = storage.GetPublicUrl(model);
 
-                if (cache != null && model != null)
-                    cache.Set(model.Id, model);                
+                    if (cache != null && model != null)
+                        cache.Set(model.Id, model);                
+                }
+                return model;
             }
-            return model;
+            return null;
         }
 
         /// <summary>

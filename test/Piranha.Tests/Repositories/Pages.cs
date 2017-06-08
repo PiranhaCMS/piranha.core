@@ -133,6 +133,13 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void IsCached() {
+            using (var api = new Api(options, storage, cache)) {
+                Assert.Equal(this.GetType() == typeof(PagesCached), api.IsCached);
+            }
+        }
+
+        [Fact]
         public void GetNoneById() {
             using (var api = new Api(options, storage, cache)) {
                 var none = api.Pages.GetById(Guid.NewGuid().ToString());

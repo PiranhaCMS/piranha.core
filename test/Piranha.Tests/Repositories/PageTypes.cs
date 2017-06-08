@@ -122,6 +122,13 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void IsCached() {
+            using (var api = new Api(options, storage, cache)) {
+                Assert.Equal(this.GetType() == typeof(PageTypesCached), api.IsCached);
+            }
+        }        
+
+        [Fact]
         public void Add() {
             using (var api = new Api(options, storage, cache)) {
                 api.PageTypes.Save(pageTypes[1]);

@@ -76,6 +76,13 @@ namespace Piranha
         /// Gets the site repository.
         /// </summary>
         public Repositories.ISiteRepository Sites { get; private set; }
+
+        /// <summary>
+        /// Gets if the current repository has caching enabled or not.
+        /// </summary>
+        public bool IsCached {
+            get { return cache != null; }
+        }
         #endregion
 
         /// <summary>
@@ -172,7 +179,7 @@ namespace Piranha
         private void Setup(ICache modelCache = null) {
             cache = modelCache;
 
-            Media = new Repositories.MediaRepository(conn, storage);
+            Media = new Repositories.MediaRepository(conn, storage, cache);
             Pages = new Repositories.PageRepository(this, conn, cache);
             PageTypes = new Repositories.PageTypeRepository(conn, cache);
             Params = new Repositories.ParamRepository(conn, cache);
