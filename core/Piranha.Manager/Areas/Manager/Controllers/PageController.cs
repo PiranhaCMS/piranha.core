@@ -139,7 +139,12 @@ namespace Piranha.Areas.Manager.Controllers
                 if (moved)
                     break;
             }
-            return View("Partial/_Sitemap", api.Sites.GetSitemap(onlyPublished: false));
+            using (var config = new Config(api)) {
+                return View("Partial/_Sitemap", new Models.SitemapModel() {
+                    Sitemap = api.Sites.GetSitemap(onlyPublished: false),
+                    ExpandedLevels = config.ManagerExpandedSitemapLevels
+                });
+            }
         }
 
         /// <summary>
