@@ -14,6 +14,9 @@
 core/Piranha.Manager/assets/lib/
 examples/CoreWeb/assets/lib
 
+# NPM lock files
+*-lock.json
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
