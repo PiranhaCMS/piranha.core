@@ -53,6 +53,12 @@ namespace CoreWeb
             });
             services.AddSingleton<IStorage, FileStorage>();
             services.AddScoped<Api, Api>();
+            services.AddPiranhaSimpleSecurity(
+                new Piranha.AspNetCore.SimpleUser(Piranha.Manager.Permission.All()) {
+                    UserName = "admin",
+                    Password = "password"
+                }
+            );
             services.AddPiranhaManager();
         }
 
@@ -83,6 +89,7 @@ namespace CoreWeb
             // Register middleware
             app.UseStaticFiles();
             app.UsePiranha();
+            app.UsePiranhaSimpleSecurity();
             app.UsePiranhaManager();
 
             app.UseMvc(routes => {

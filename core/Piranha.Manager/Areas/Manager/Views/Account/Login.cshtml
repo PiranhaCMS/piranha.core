@@ -1,0 +1,47 @@
+@model string
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+	<title>Login</title>
+
+    <link href="//fonts.googleapis.com/css?family=Gentium+Book+Basic:700" rel="stylesheet"> 
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
+    <link href="~/manager/assets/css/style.min.css" rel="stylesheet" type="text/css" />
+    <link type="image/x-icon" rel="icon" href="~/manager/assets/img/icon.ico">
+    <link type="image/x-icon" rel="shortcut icon" href="~/manager/assets/img/icon.ico">
+</head>
+<body id="login">
+	<div class="container">
+        @using (var form = Html.BeginForm("Login", "Account", FormMethod.Post, new { @id = "main-form", @class = "form", @role = "form" })) {
+			<div class="panel panel-white">
+				@Html.AntiForgeryToken()
+				<div class="panel-body">
+					<div class="account-logo"></div>
+					<p class="account-banner">
+						Piranha CMS
+						<small>Version 4.0.0-alpha8</small>
+					</p>
+					<div class="form-group">
+						@Html.TextBox("UserName", "", new { @class = "form-control", @placeholder = "username" })
+					</div>
+					<div class="form-group">
+						@Html.Password("Password", "", new { @class = "form-control", @placeholder = "password" })
+					</div>
+					<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>
+				</div>
+			</div>
+		}
+	</div>
+	<script type="text/javascript">
+		// Set focus to the first input field
+		document.getElementById('UserName').focus();
+	</script>
+</body>
+</html>

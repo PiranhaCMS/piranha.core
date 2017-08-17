@@ -8,7 +8,9 @@
  * 
  */
 
+using Piranha.Manager;
 using Piranha.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Linq;
@@ -28,6 +30,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// Gets the config view.
         /// </summary>
         [Route("manager/config")]
+        [Authorize(Policy = Permission.Config)]
         public IActionResult Edit() {
             return View(Models.ConfigEditModel.Get(api));
         }
@@ -37,6 +40,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         [HttpPost]
         [Route("manager/config/save")]
+        [Authorize(Policy = Permission.ConfigEdit)]
         public IActionResult Save(Models.ConfigEditModel model) {
             model.Save(api);
 

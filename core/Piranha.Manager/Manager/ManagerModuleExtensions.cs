@@ -8,6 +8,7 @@
  * 
  */
 
+using Piranha.Manager;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Microsoft.Extensions.FileProviders;
@@ -36,6 +37,108 @@ public static class ManagerModuleExtensions
 
         // Add session support
         services.AddSession();
+
+        // Setup authorization policies
+        services.AddAuthorization(o => {
+            // Config policies
+            o.AddPolicy(Permission.Config, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Config, Permission.Config);
+            });
+            o.AddPolicy(Permission.ConfigEdit, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Config, Permission.Config);
+                policy.RequireClaim(Permission.ConfigEdit, Permission.ConfigEdit);
+            });
+
+            // Media policies
+            o.AddPolicy(Permission.Media, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Media, Permission.Media);
+            });
+            o.AddPolicy(Permission.MediaAdd, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Media, Permission.Media);
+                policy.RequireClaim(Permission.MediaAdd, Permission.MediaAdd);
+            });
+            o.AddPolicy(Permission.MediaDelete, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Media, Permission.Media);
+                policy.RequireClaim(Permission.MediaDelete, Permission.MediaDelete);
+            });
+            o.AddPolicy(Permission.MediaEdit, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Media, Permission.Media);
+                policy.RequireClaim(Permission.MediaEdit, Permission.MediaEdit);
+            });
+            o.AddPolicy(Permission.MediaAddFolder, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Media, Permission.Media);
+                policy.RequireClaim(Permission.MediaAddFolder, Permission.MediaAddFolder);
+            });
+            o.AddPolicy(Permission.MediaDeleteFolder, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Media, Permission.Media);
+                policy.RequireClaim(Permission.MediaDeleteFolder, Permission.MediaDeleteFolder);
+            });
+
+            // Page policies
+            o.AddPolicy(Permission.Pages, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Pages, Permission.Pages);
+            });
+            o.AddPolicy(Permission.PagesAdd, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Pages, Permission.Pages);
+                policy.RequireClaim(Permission.PagesAdd, Permission.PagesAdd);
+            });
+            o.AddPolicy(Permission.PagesDelete, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Pages, Permission.Pages);
+                policy.RequireClaim(Permission.PagesDelete, Permission.PagesDelete);
+            });
+            o.AddPolicy(Permission.PagesEdit, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Pages, Permission.Pages);
+                policy.RequireClaim(Permission.PagesEdit, Permission.PagesEdit);
+            });
+            o.AddPolicy(Permission.PagesPublish, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Pages, Permission.Pages);
+                policy.RequireClaim(Permission.PagesPublish, Permission.PagesPublish);
+            });
+            o.AddPolicy(Permission.PagesSave, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Pages, Permission.Pages);
+                policy.RequireClaim(Permission.PagesSave, Permission.PagesSave);
+            });
+
+            // Site policies
+            o.AddPolicy(Permission.Sites, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Sites, Permission.Sites);
+            });
+            o.AddPolicy(Permission.SitesAdd, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Sites, Permission.Sites);
+                policy.RequireClaim(Permission.SitesAdd, Permission.SitesAdd);
+            });
+            o.AddPolicy(Permission.SitesDelete, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Sites, Permission.Sites);
+                policy.RequireClaim(Permission.SitesDelete, Permission.SitesDelete);
+            });
+            o.AddPolicy(Permission.SitesEdit, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Sites, Permission.Sites);
+                policy.RequireClaim(Permission.SitesEdit, Permission.SitesEdit);
+            });
+            o.AddPolicy(Permission.SitesSave, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Sites, Permission.Sites);
+                policy.RequireClaim(Permission.SitesSave, Permission.SitesSave);
+            });
+        });
 
         // Return the service collection
         return services;

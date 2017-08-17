@@ -8,15 +8,12 @@
  * 
  */
 
+using System.Threading.Tasks;
+
 namespace Piranha
 {
     public interface ISecurity
     {
-        /// <summary>
-        /// Gets if the current user is authenticated.
-        /// </summary>
-        bool IsAuthenticated { get; }
-
         /// <summary>
         /// Authenticates the given credentials without
         /// signing in the user.
@@ -30,21 +27,16 @@ namespace Piranha
         /// Authenticates and signs in the user with the
         /// given credentials.
         /// </summary>
+        /// <param name="context">The current application context</param>
         /// <param name="username">The username</param>
         /// <param name="password">The password</param>
         /// <returns>If the user was signed in</returns>
-        bool SignIn(string username, string password);
+        Task<bool> SignIn(object context, string username, string password);
 
         /// <summary>
         /// Signs out the current user.
         /// </summary>
-        void SignOut();
-
-        /// <summary>
-        /// Checks if the current user has the given role.
-        /// </summary>
-        /// <param name="role">The role</param>
-        /// <returns>If the user has the role</returns>
-        bool IsInRole(string role);
+        /// <param name="context">The current application context</param>
+        Task SignOut(object context);
     }
 }

@@ -8,6 +8,8 @@
  * 
  */
 
+using Piranha.Manager;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +29,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// Gets the list view for the pages.
         /// </summary>
         [Route("manager/pages/{pageId?}")]
+        [Authorize(Policy = Permission.Pages)]
         public ViewResult List(string pageId = null) {
             return ListSite(null, pageId);
         }
@@ -35,10 +38,16 @@ namespace Piranha.Areas.Manager.Controllers
         /// Gets the list view for the pages of the specified site.
         /// </summary>
         [Route("manager/pages/site/{siteId}/{pageId?}")]
+        [Authorize(Policy = Permission.Pages)]
         public ViewResult ListSite(string siteId, string pageId = null) {
             var model = Models.PageListModel.Get(api, siteId, pageId);
             var defaultSite = api.Sites.GetDefault();
 
+            // TODO!
+            //
+            // This doesn't really work for multiple users but is
+            // rather a proof of context. Menus needs to be changed
+            // per user session rather than globally.
             Piranha.Manager.Menu
                 .Items["Content"]
                 .Items["Pages"]
@@ -58,6 +67,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         /// <param name="id">The page id</param>
         [Route("manager/page/{id}")]
+        [Authorize(Policy = Permission.PagesEdit)]
         public IActionResult Edit(string id) {
             return View(Models.PageEditModel.GetById(api, id));
         }
@@ -68,6 +78,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="type">The page type id</param>
         /// <param name="siteId">The optional site id</param>
         [Route("manager/page/add/{type}/{siteId?}")]
+        [Authorize(Policy = Permission.PagesAdd)]
         public IActionResult Add(string type, string siteId = null) {
             var sitemap = api.Sites.GetSitemap(onlyPublished: false);
             var model = Models.PageEditModel.Create(api, type, siteId);
@@ -81,8 +92,8 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         /// <param name="model">The page model</param>
         [HttpPost]
-        //[ValidateAntiForgeryToken] Seems buggy ATM
         [Route("manager/page/save")]
+        [Authorize(Policy = Permission.PagesSave)]
         public IActionResult Save(Models.PageEditModel model) {
             if (model.Save(api)) {
                 SuccessMessage("The page has been saved.");
@@ -98,8 +109,8 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         /// <param name="model">The page model</param>
         [HttpPost]
-        //[ValidateAntiForgeryToken] Seems buggy ATM
         [Route("manager/page/publish")]
+        [Authorize(Policy = Permission.PagesPublish)]
         public IActionResult Publish(Models.PageEditModel model) {
             if (model.Save(api, true)) {
                 SuccessMessage("The page has been published.");
@@ -115,8 +126,8 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         /// <param name="model">The page model</param>
         [HttpPost]
-        //[ValidateAntiForgeryToken] Seems buggy ATM
         [Route("manager/page/unpublish")]
+        [Authorize(Policy = Permission.PagesPublish)]
         public IActionResult UnPublish(Models.PageEditModel model) {
             if (model.Save(api, false)) {
                 SuccessMessage("The page has been unpublished.");
@@ -133,6 +144,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="structure">The page structure</param>
         [HttpPost]
         [Route("manager/pages/move")]
+        [Authorize(Policy = Permission.PagesEdit)]
         public IActionResult Move([FromBody]Models.PageStructureModel structure) {
             for (var n = 0; n < structure.Items.Count; n++) {
                 var moved = MovePage(structure.Items[n], n);
@@ -152,6 +164,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         /// <param name="id">The unique id</param>
         [Route("manager/page/delete/{id}")]
+        [Authorize(Policy = Permission.PagesDelete)]
         public IActionResult Delete(string id) {
             api.Pages.Delete(id);
             SuccessMessage("The page has been deleted");
@@ -164,6 +177,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="model">The model</param>
         [HttpPost]
         [Route("manager/page/region")]
+        [Authorize(Policy = Permission.Pages)]
         public IActionResult AddRegion([FromBody]Models.PageRegionModel model) {
             var pageType = api.PageTypes.GetById(model.PageTypeId);
 

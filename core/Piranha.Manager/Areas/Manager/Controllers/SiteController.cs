@@ -8,8 +8,10 @@
  * 
  */
 
-using Microsoft.AspNetCore.Mvc;
 using Piranha.Areas.Manager.Models;
+using Piranha.Manager;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Piranha.Areas.Manager.Controllers
 {
@@ -26,21 +28,25 @@ namespace Piranha.Areas.Manager.Controllers
         /// Gets the list view for the current sites.
         /// </summary>
         [Route("manager/sites")]
+        [Authorize(Policy = Permission.Sites)]
         public IActionResult List() {
             return View(SiteListModel.Get(api));
         }
 
         [Route("manager/site/add")]
+        [Authorize(Policy = Permission.SitesAdd)]
         public IActionResult Add() {
             return View("Edit", new SiteEditModel());
         }
 
         [Route("manager/site/{id}")]
+        [Authorize(Policy = Permission.SitesEdit)]
         public IActionResult Edit(string id) {
             return View(SiteEditModel.GetById(api, id));
         }
 
         [Route("manager/site/save")]
+        [Authorize(Policy = Permission.SitesSave)]
         public IActionResult Save(SiteEditModel model) {
             if (model.Save(api)) {
                 SuccessMessage("The site has been saved.");
@@ -52,6 +58,7 @@ namespace Piranha.Areas.Manager.Controllers
         }
 
         [Route("manager/site/delete/{id}")]
+        [Authorize(Policy = Permission.SitesDelete)]
         public IActionResult Delete(string id) {
             var site = api.Sites.GetById(id);
 

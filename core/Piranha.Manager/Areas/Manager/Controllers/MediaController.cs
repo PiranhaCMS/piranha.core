@@ -8,7 +8,9 @@
  * 
  */
 
+using Piranha.Manager;
 using Piranha.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Linq;
@@ -29,6 +31,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         /// <param name="folderId">The optional folder id</param>
         [Route("manager/media/{folderId?}")]
+        [Authorize(Policy = Permission.Media)]
         public IActionResult List(string folderId = null) {
             return View("List", Models.MediaListModel.Get(api, folderId));
         }
@@ -39,6 +42,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="model">The upload model</param>
         [HttpPost]
         [Route("manager/media/add")]
+        [Authorize(Policy = Permission.MediaAdd)]
         public IActionResult Add(Models.MediaUploadModel model) {
             var uploaded = 0;
 
@@ -70,6 +74,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="model">The model</param>
         [HttpPost]
         [Route("manager/media/addfolder")]
+        [Authorize(Policy = Permission.MediaAddFolder)]
         public IActionResult AddFolder(Models.MediaFolderModel model) {
             if (!string.IsNullOrWhiteSpace(model.Name)) {
                 api.Media.SaveFolder(new Piranha.Data.MediaFolder() {
@@ -88,6 +93,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         /// <param name="id">The unique id</param>
         [Route("/manager/media/delete/{id}")]
+        [Authorize(Policy = Permission.MediaDelete)]
         public IActionResult Delete(string id) {
             var media = api.Media.GetById(id);
 
@@ -106,6 +112,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         /// <param name="id">The unique id</param>
         [Route("/manager/media/delete/folder/{id}")]
+        [Authorize(Policy = Permission.MediaDeleteFolder)]
         public IActionResult DeleteFolder(string id) {
             var folder = api.Media.GetFolderById(id);
 
