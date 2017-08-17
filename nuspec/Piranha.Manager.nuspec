@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.Manager</id>
     <title>Piranha Manager</title>
-    <version>4.0.0-alpha7</version>
+    <version>4.0.0-alpha8</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -18,8 +18,8 @@ https://github.com/piranhacms/piranha.core/wiki/alpha-changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework=".NETCoreApp1.1">
-        <dependency id="Piranha.AspNetCore" version="4.0.0-alpha7" />
-        <dependency id="Piranha" version="4.0.0-alpha7" />
+        <dependency id="Piranha.AspNetCore" version="4.0.0-alpha8" />
+        <dependency id="Piranha" version="4.0.0-alpha8" />
         <dependency id="Microsoft.NETCore.App" version="1.1.1" />
         <dependency id="Microsoft.AspNetCore" version="1.1.1" />
         <dependency id="Microsoft.AspNetCore.Mvc" version="1.1.2" />
