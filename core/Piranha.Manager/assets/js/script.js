@@ -14410,6 +14410,30 @@ $(document).on('click', '#modalMedia .modal-body a', function () {
     return false;
 });
 
+$(document).on('submit', '#modalMedia form', function (e) {
+    e.preventDefault();
+
+    var form = $('#modalMedia form');
+    var formData = new FormData(form.get(0));
+
+    $.ajax({
+        url: $(this).attr('action'),
+        type: 'POST',
+        data: formData,
+        contentType: false,       
+        cache: false,             
+        processData: false,                                  
+        success: function (data) {
+            $('#modalMedia .modal-body').html(data);
+        },
+        error: function (a, b, c) {
+            console.log(a)
+            console.log(b)
+            console.log(c)
+        }
+    }); 
+});
+
 $(document).on('click', '.btn-media-clear', function () {
     piranha.media.init($(this));
     piranha.media.remove($(this));

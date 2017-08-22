@@ -8773,6 +8773,14 @@ li.sitemap-item .actions.one {
 .modal.media-preview {
   text-align: center;
 }
+.modal .well.well-upload {
+  background: #fff;
+  color: #999;
+  border: dashed 1px #ddd;
+}
+.modal .well.well-upload .fileinput {
+  margin-bottom: 0;
+}
 /*
 .modal-content {
 	color: #fff;

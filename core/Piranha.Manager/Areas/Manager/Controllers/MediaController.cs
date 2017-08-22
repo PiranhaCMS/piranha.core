@@ -69,6 +69,32 @@ namespace Piranha.Areas.Manager.Controllers
         }
 
         /// <summary>
+        /// Adds a new media upload.
+        /// </summary>
+        /// <param name="model">The upload model</param>
+        [HttpPost]
+        [Route("manager/media/modal/add")]
+        [Authorize(Policy = Permission.MediaAdd)]
+        public IActionResult ModalAdd(Models.MediaUploadModel model) {
+            var uploaded = 0;
+
+            foreach (var upload in model.Uploads) {
+                if (upload.Length > 0 && !string.IsNullOrWhiteSpace(upload.ContentType)) {
+                    using (var stream = upload.OpenReadStream()) {
+                        api.Media.Save(new StreamMediaContent() {
+                            Id = model.Uploads.Count() == 1 ? model.Id : null,
+                            FolderId = model.ParentId,
+                            Filename = Path.GetFileName(upload.FileName),
+                            Data = stream
+                        });
+                        uploaded++;
+                    }
+                }
+            }
+            return Modal(model.ParentId);
+        }
+
+        /// <summary>
         /// Adds a new media folder
         /// </summary>
         /// <param name="model">The model</param>
@@ -135,7 +161,7 @@ namespace Piranha.Areas.Manager.Controllers
 
         [Route("/manager/media/modal/{folderId?}")]
         public IActionResult Modal(string folderId = null) {
-            return View(Models.MediaListModel.Get(api, folderId));            
+            return View("Modal", Models.MediaListModel.Get(api, folderId));            
         }
     }
 }
