@@ -92,6 +92,10 @@
                 color: #fff;
                 font-size: 14px;
                 text-transform: uppercase;
+
+                &:hover {
+                    background: transparent;
+                }
             }
 
             &.active, &.active-child {
@@ -108,6 +112,21 @@
                     }
                 }
             }
+        }
+    }
+}
+
+.pagemenu {
+    span {
+        padding: 0 10px;
+        border-left: solid 1px @colorBorder;
+
+        &:first-child {
+            padding-left: 0;
+            border-left: none 0;
+        }
+        &.active a {
+            color: #444;
         }
     }
 }

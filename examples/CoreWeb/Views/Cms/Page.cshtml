@@ -5,11 +5,20 @@
 
     Piranha.Models.Sitemap sitemap = Api.Sites.GetSitemap();
     Piranha.Models.Sitemap partial = null;
+    Piranha.Models.Sitemap third = null;
 
     if (!string.IsNullOrEmpty(Model.ParentId)) {
         foreach (var item in sitemap) {
             if (item.HasChild(Model.Id)) {
                 partial = sitemap.GetPartial(item.Id);
+            }
+        }
+    }
+
+    if (partial != null) {
+        foreach (var item in partial) {
+            if (item.HasChild(Model.Id)) {
+                third = sitemap.GetPartial(item.Id);
             }
         }
     }
@@ -46,6 +55,18 @@
 }
 
 <div class="container body">
+    @if (third != null) {
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="pagemenu">
+                    @foreach (var item in third) {
+                        <span @(item.Id == Model.Id ? "class=active" : "")><a href="@item.Permalink">@item.MenuTitle</a></span>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
     <h1>@Model.Title</h1>
 
     <p class="small">Published: @Model.Published.Value.ToString("yyyy-MM-dd") | Last Modified: @Model.LastModified.ToString("yyyy-MM-dd")</p>
