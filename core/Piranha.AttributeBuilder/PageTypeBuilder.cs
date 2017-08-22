@@ -22,7 +22,7 @@ namespace Piranha.AttributeBuilder
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>        
-        public PageTypeBuilder(Api api) : base(api) { }
+        public PageTypeBuilder(IApi api) : base(api) { }
 
         /// <summary>
         /// Builds the page types.

@@ -52,7 +52,7 @@ namespace CoreWeb
                 o.Migrate = true;
             });
             services.AddSingleton<IStorage, FileStorage>();
-            services.AddScoped<Api, Api>();
+            services.AddScoped<IApi, Api>();
             services.AddPiranhaSimpleSecurity(
                 new Piranha.AspNetCore.SimpleUser(Piranha.Manager.Permission.All()) {
                     UserName = "admin",
@@ -63,7 +63,7 @@ namespace CoreWeb
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, Api api) {
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApi api) {
             loggerFactory.AddConsole();
 
             if (env.IsDevelopment()) {
@@ -109,7 +109,7 @@ namespace CoreWeb
         /// Seeds some test data.
         /// </summary>
         /// <param name="api">The current application api</param>
-        private void Seed(Api api) {
+        private void Seed(IApi api) {
             if (api.Pages.GetAll().Count() == 0) {
                 // Get the default site
                 var site = api.Sites.GetDefault();

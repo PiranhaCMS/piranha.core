@@ -40,7 +40,7 @@ namespace Piranha.Data
         /// Seeds the database with default data.
         /// </summary>
         /// <param name="api">The current api</param>
-        public static void Seed(Api api) {
+        public static void Seed(IApi api) {
             //
             // Default site
             //

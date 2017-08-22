@@ -25,7 +25,7 @@ namespace Piranha.AspNetCore
         /// <param name="next">The next middleware in the pipeline</param>
         /// <param name="api">The current api</param>
         /// <param name="factory">The logger factory</param>
-        public PageMiddleware(RequestDelegate next, Api api, ILoggerFactory factory = null) : base(next, api, factory) { }
+        public PageMiddleware(RequestDelegate next, IApi api, ILoggerFactory factory = null) : base(next, api, factory) { }
 
         /// <summary>
         /// Invokes the middleware.

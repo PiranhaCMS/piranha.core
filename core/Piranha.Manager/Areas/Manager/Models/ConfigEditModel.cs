@@ -67,7 +67,7 @@ namespace Piranha.Areas.Manager.Models
         /// </summary>
         /// <param name="api">The current api</param>
         /// <returns>The model</returns>
-        public static ConfigEditModel Get(Api api) {
+        public static ConfigEditModel Get(IApi api) {
             var model = new ConfigEditModel();
 
             using (var config = new Config(api)) {
@@ -84,7 +84,7 @@ namespace Piranha.Areas.Manager.Models
         /// Saves the current config model.
         /// </summary>
         /// <param name="api">The current api</param>
-        public void Save(Api api) {
+        public void Save(IApi api) {
             using (var config = new Config(api)) {
                 config.CacheExpiresMedia = Cache.MediaExpires;
                 config.CacheExpiresPages = Cache.PagesExpires;

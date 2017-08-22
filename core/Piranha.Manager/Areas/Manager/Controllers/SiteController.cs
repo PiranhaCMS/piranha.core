@@ -22,7 +22,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public SiteController(Api api) : base(api) { }
+        public SiteController(IApi api) : base(api) { }
         
         /// <summary>
         /// Gets the list view for the current sites.

@@ -76,7 +76,7 @@ namespace Piranha.Areas.Manager.Models
         /// <param name="siteId">The optional site id</param>
         /// <param name="pageId">The optional page id</param>
         /// <returns>The model</returns>
-        public static PageListModel Get(Api api, string siteId, string pageId = null) {
+        public static PageListModel Get(IApi api, string siteId, string pageId = null) {
             var model = new PageListModel();
 
             var site = !string.IsNullOrEmpty(siteId) ?

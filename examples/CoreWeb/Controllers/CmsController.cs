@@ -21,13 +21,13 @@ namespace CoreWeb.Controllers
         /// <summary>
         /// The private api.
         /// </summary>
-        private readonly Api api;
+        private readonly IApi api;
 
         /// <summary>
         /// Default construtor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public CmsController(Api api) {
+        public CmsController(IApi api) {
             this.api = api;
         }
 

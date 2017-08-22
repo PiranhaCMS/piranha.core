@@ -22,7 +22,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// <summary>
         /// The current Api.
         /// </summary>
-        private readonly Api api;
+        private readonly IApi api;
 
         /// <summary>
         /// The current security provider.
@@ -34,7 +34,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         /// <param name="api">The current Api</param>
         /// <param name="security">The current security provider</param>
-        public AccountController(Api api, ISecurity security) {
+        public AccountController(IApi api, ISecurity security) {
             this.api = api;
             this.security = security;
         }

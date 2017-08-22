@@ -25,7 +25,7 @@ namespace Piranha.Extend
         /// Initializes the field for client use.
         /// </summary>
         /// <param name="api">The current api</param>
-        void Init(Api api);
+        void Init(IApi api);
 
         /// <summary>
         /// Initializes the field for manager use. This
@@ -33,6 +33,6 @@ namespace Piranha.Extend
         /// data needed.
         /// </summary>
         /// <param name="api">The current api</param>
-        void InitManager(Api api);
+        void InitManager(IApi api);
     }
 }

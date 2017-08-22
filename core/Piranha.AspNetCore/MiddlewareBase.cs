@@ -28,7 +28,7 @@ namespace Piranha.AspNetCore
         /// <summary>
         /// The current api.
         /// </summary>
-        protected readonly Api api;
+        protected readonly IApi api;
 
         /// <summary>
         /// The optional logger.
@@ -41,7 +41,7 @@ namespace Piranha.AspNetCore
         /// </summary>
         /// <param name="next">The next middleware in the pipeline</param>
         /// <param name="api">The current api</param>
-        public MiddlewareBase(RequestDelegate next, Api api) {
+        public MiddlewareBase(RequestDelegate next, IApi api) {
             this.next = next;
             this.api = api;
         }
@@ -52,7 +52,7 @@ namespace Piranha.AspNetCore
         /// <param name="next">The next middleware in the pipeline</param>
         /// <param name="api">The current api</param>
         /// <param name="factory">The logger factory</param>
-        public MiddlewareBase(RequestDelegate next, Api api, ILoggerFactory factory) : this(next, api) {
+        public MiddlewareBase(RequestDelegate next, IApi api, ILoggerFactory factory) : this(next, api) {
             if (factory != null)
                 logger = factory.CreateLogger(this.GetType().FullName);
         }

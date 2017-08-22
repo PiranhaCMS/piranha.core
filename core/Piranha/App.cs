@@ -135,7 +135,7 @@ namespace Piranha
         /// Initializes the application object.
         /// </summary>
         /// <param name="api">The current api</param>
-        public static void Init(Api api) {
+        public static void Init(IApi api) {
             instance.Initialize(api);
         }
 
@@ -160,7 +160,7 @@ namespace Piranha
         /// Initializes the application object.
         /// </summary>
         /// <param name="api">The current api</param>
-        private void Initialize(Api api) {
+        private void Initialize(IApi api) {
             if (!isInitialized) {
                 lock (mutex) {
                     if (!isInitialized) {

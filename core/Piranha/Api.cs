@@ -21,7 +21,7 @@ namespace Piranha
     /// <summary>
     /// The main application api.
     /// </summary>
-    public sealed class Api : IDisposable
+    public sealed class Api : IApi, IDisposable
     {
         #region Members
         /// <summary>

@@ -34,7 +34,7 @@ namespace Piranha.Models
         /// </summary>
         /// <param name="api">The current api</param>
         /// <returns>The new item</returns>
-        public T Create(Api api) {
+        public T Create(IApi api) {
             return (T)DynamicPage.CreateRegion(api, TypeId, RegionId);
         }
 
@@ -43,7 +43,7 @@ namespace Piranha.Models
         /// </summary>
         /// <param name="api">The current api</param>
         /// <returns>The new item</returns>
-        public T CreateAndAdd(Api api) {
+        public T CreateAndAdd(IApi api) {
             var item = Create(api);
 
             Add(item);

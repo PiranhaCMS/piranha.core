@@ -47,7 +47,7 @@ namespace Piranha.Extend.Fields
         /// Initializes the field for client use.
         /// </summary>
         /// <param name="api">The current api</param>
-        public virtual void Init(Api api) { 
+        public virtual void Init(IApi api) { 
             if (!string.IsNullOrWhiteSpace(Id)) {
                 Media = api.Media.GetById(Id);
 
@@ -65,7 +65,7 @@ namespace Piranha.Extend.Fields
         /// data needed.
         /// </summary>
         /// <param name="api">The current api</param>
-        public virtual void InitManager(Api api) { 
+        public virtual void InitManager(IApi api) { 
             Init(api);
         }
     }
