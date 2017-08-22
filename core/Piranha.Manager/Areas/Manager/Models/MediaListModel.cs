@@ -36,7 +36,7 @@ namespace Piranha.Areas.Manager.Models
         /// <param name="api">The current api</param>
         /// <param name="folderId">The optional folder id</param>
         /// <returns>The model</returns>
-        public static MediaListModel Get(Api api, string folderId = null) {
+        public static MediaListModel Get(IApi api, string folderId = null) {
             var model = new MediaListModel() {
                 CurrentFolderId = folderId,
                 ParentFolderId = null

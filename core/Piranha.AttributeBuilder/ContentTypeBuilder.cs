@@ -22,14 +22,14 @@ namespace Piranha.AttributeBuilder
     {
         #region Members
         protected readonly List<Type> types = new List<Type>();
-        protected readonly Api api;
+        protected readonly IApi api;
         #endregion
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public ContentTypeBuilder(Api api) {
+        public ContentTypeBuilder(IApi api) {
             this.api = api;
         }
 

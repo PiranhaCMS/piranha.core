@@ -19,14 +19,14 @@ namespace Piranha.Areas.Manager.Controllers
         /// <summary>
         /// The current api
         /// </summary>
-        protected readonly Api api;
+        protected readonly IApi api;
         #endregion
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public ManagerAreaControllerBase(Api api) {
+        public ManagerAreaControllerBase(IApi api) {
             this.api = api;
         }
 

@@ -18,7 +18,7 @@ namespace Piranha.Web
         /// <param name="api">The current api</param>
         /// <param name="url">The requested url</param>
         /// <returns>The piranha response, null if no matching page was found</returns>
-        public static IRouteResponse Invoke(Api api, string url) {
+        public static IRouteResponse Invoke(IApi api, string url) {
             if (string.IsNullOrWhiteSpace(url) || url == "/") {
                 var page = api.Pages.GetStartpage();
 

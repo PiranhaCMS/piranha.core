@@ -46,7 +46,7 @@ namespace Piranha.Areas.Manager.Models
         /// <param name="api">The current api</param>
         /// <param name="publish">If the page should be published</param>
         /// <returns>If the page was successfully saved</returns>
-        public bool Save(Api api, bool? publish = null) {
+        public bool Save(IApi api, bool? publish = null) {
             var page = api.Pages.GetById(Id);
 
             if (page == null)
@@ -73,7 +73,7 @@ namespace Piranha.Areas.Manager.Models
         /// <param name="api">The current api</param>
         /// <param name="id">The page id</param>
         /// <returns>The page model</returns>
-        public static PageEditModel GetById(Api api, string id) {
+        public static PageEditModel GetById(IApi api, string id) {
             var page = api.Pages.GetById(id);
             if (page != null) {
                 var model = Module.Mapper.Map<Piranha.Models.PageBase, PageEditModel>(page);
@@ -92,7 +92,7 @@ namespace Piranha.Areas.Manager.Models
         /// <param name="pageTypeId">The page type id</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>        
-        public static PageEditModel Create(Api api, string pageTypeId, string siteId = null) {
+        public static PageEditModel Create(IApi api, string pageTypeId, string siteId = null) {
             var type = api.PageTypes.GetById(pageTypeId);
 
             if (string.IsNullOrEmpty(siteId)) {
@@ -227,7 +227,7 @@ namespace Piranha.Areas.Manager.Models
         /// <param name="api">The current api</param>
         /// <param name="src">The source</param>
         /// <param name="dest">The destination</param>
-        private static void SaveRegions(Api api, PageEditModel src, Piranha.Models.DynamicPage dest) {
+        private static void SaveRegions(IApi api, PageEditModel src, Piranha.Models.DynamicPage dest) {
             var modelRegions = (IDictionary<string, object>)dest.Regions;
             foreach (var region in src.Regions) {
                 if (region is PageEditRegion) {

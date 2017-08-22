@@ -21,7 +21,7 @@ namespace Piranha
         /// <summary>
         /// The private api.
         /// </summary>
-        private readonly Api api;
+        private readonly IApi api;
 
         /// <summary>
         /// The system config keys.
@@ -130,7 +130,7 @@ namespace Piranha
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public Config(Api api) {
+        public Config(IApi api) {
             this.api = api;
         }
 

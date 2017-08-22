@@ -24,7 +24,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public ConfigController(Api api) : base(api) { }
+        public ConfigController(IApi api) : base(api) { }
 
         /// <summary>
         /// Gets the config view.

@@ -21,7 +21,7 @@ namespace Piranha.Areas.Manager.Models
             Sites = new List<Data.Site>();
         }
 
-        public static SiteListModel Get(Api api) {
+        public static SiteListModel Get(IApi api) {
             var model = new SiteListModel() {
                 Sites = api.Sites.GetAll().ToList()
             };

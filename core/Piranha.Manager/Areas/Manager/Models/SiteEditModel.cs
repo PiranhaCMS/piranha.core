@@ -21,14 +21,14 @@ namespace Piranha.Areas.Manager.Models
             Site = new Data.Site();
         }
 
-        public static SiteEditModel GetById(Api api, string id) {
+        public static SiteEditModel GetById(IApi api, string id) {
             var model = new SiteEditModel() {
                 Site = api.Sites.GetById(id)
             };
             return model;
         }
 
-        public bool Save(Api api) {
+        public bool Save(IApi api) {
             api.Sites.Save(this.Site);
 
             return true;
