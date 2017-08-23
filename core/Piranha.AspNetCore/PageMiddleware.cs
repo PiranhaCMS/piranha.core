@@ -80,7 +80,7 @@ namespace Piranha.AspNetCore
                         if (logger != null)
                             logger.LogInformation($"Redirecting to url: {response.RedirectUrl}");
 
-                        context.Response.Redirect(response.RedirectUrl, response.RedirectType == Data.RedirectType.Permanent);
+                        context.Response.Redirect(response.RedirectUrl, response.RedirectType == Models.RedirectType.Permanent);
                         return;
                     }
                 }

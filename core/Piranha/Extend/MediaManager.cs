@@ -103,16 +103,16 @@ namespace Piranha.Extend
         /// </summary>
         /// <param name="filename">The path or filename</param>
         /// <returns>The media type</returns>
-        public Data.MediaType GetMediaType(string filename) {
+        public Models.MediaType GetMediaType(string filename) {
             var extension = Path.GetExtension(filename);
 
             if (Documents.ContainsExtension(extension))
-                return Data.MediaType.Document;
+                return Models.MediaType.Document;
             else if (Images.ContainsExtension(extension))
-                return Data.MediaType.Image;
+                return Models.MediaType.Image;
             else if (Videos.ContainsExtension(extension))
-                return Data.MediaType.Video;
-            return Data.MediaType.Unknown;
+                return Models.MediaType.Video;
+            return Models.MediaType.Unknown;
         }
 
         /// <summary>

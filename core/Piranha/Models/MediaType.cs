@@ -10,7 +10,7 @@
 
 using System;
 
-namespace Piranha.Data
+namespace Piranha.Models
 {
     public enum MediaType
     {

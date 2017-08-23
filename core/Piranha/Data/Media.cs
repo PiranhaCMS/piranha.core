@@ -27,7 +27,7 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the media type.
         /// </summary>
-        public MediaType Type { get; set; }
+        public Models.MediaType Type { get; set; }
 
         /// <summary>
         /// Gets/sets the filename.

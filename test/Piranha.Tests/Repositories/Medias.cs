@@ -125,7 +125,7 @@ namespace Piranha.Tests.Repositories
                 Assert.NotNull(media);
                 Assert.Equal("HLD_Screenshot_01_mech_1080.png", media.Filename);
                 Assert.Equal("image/png", media.ContentType);
-                Assert.Equal(Data.MediaType.Image, media.Type);
+                Assert.Equal(Models.MediaType.Image, media.Type);
             }
         }
 

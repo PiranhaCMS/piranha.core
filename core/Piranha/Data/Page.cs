@@ -93,7 +93,7 @@ namespace Piranha.Data
         /// Gets/sets the redirect type.
         /// </summary>
         /// <returns></returns>
-        public RedirectType RedirectType { get; set; }
+        public Models.RedirectType RedirectType { get; set; }
 
         /// <summary>
         /// Gets/sets the created date.

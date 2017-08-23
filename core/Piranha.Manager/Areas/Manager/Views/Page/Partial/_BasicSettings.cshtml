@@ -38,8 +38,8 @@
         <div class="form-group">
             <label>Redirect type</label>
             <select name="RedirectType" class="form-control small">
-                <option value="0" @(Model.RedirectType == Piranha.Data.RedirectType.Permanent ? "selected=selected" : "")>Permanent</option>
-                <option value="1" @(Model.RedirectType == Piranha.Data.RedirectType.Temporary ? "selected=selected" : "")>Temporary</option>
+                <option value="0" @(Model.RedirectType == Piranha.Models.RedirectType.Permanent ? "selected=selected" : "")>Permanent</option>
+                <option value="1" @(Model.RedirectType == Piranha.Models.RedirectType.Temporary ? "selected=selected" : "")>Temporary</option>
             </select>
         </div>
     </div>

@@ -8,7 +8,7 @@
  * 
  */
 
-namespace Piranha.Data
+namespace Piranha.Models
 {
     public enum RedirectType 
     {
