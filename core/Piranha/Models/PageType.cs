@@ -8,7 +8,9 @@
  * 
  */
 
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Piranha.Models
@@ -18,12 +20,36 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the optional route.
         /// </summary>
-        public string Route { get; set; }
+        /*
+        [JsonIgnore]
+        public string Route { 
+            get {
+                return Routes.FirstOrDefault(r => r.Title == "Default")?.Route;
+            }
+            set {
+                var route = Routes.FirstOrDefault(r => r.Title == "Default");
+
+                if (route != null)
+                    route.Route = value;
+                else Routes.Add(new PageTypeRoute() {
+                    Title = "Default",
+                    Route = value
+                });
+            }
+        }
+        */
+
+        /// <summary>
+        /// Gets/sets the optional routes.
+        /// </summary>
+        public IList<PageTypeRoute> Routes { get; set; }
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public PageType() : base() { }
+        public PageType() : base() { 
+            Routes = new List<PageTypeRoute>();
+        }
 
         /// <summary>
         /// Validates that the page type is correctly defined.

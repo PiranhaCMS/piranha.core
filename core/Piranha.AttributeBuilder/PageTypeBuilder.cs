@@ -83,9 +83,17 @@ namespace Piranha.AttributeBuilder
                 if (!string.IsNullOrEmpty(attr.Id) && !string.IsNullOrEmpty(attr.Title)) {
                     var pageType = new PageType() {
                         Id = attr.Id,
-                        Title = attr.Title,
-                        Route = attr.Route
+                        Title = attr.Title
                     };
+
+                    var routes = type.GetTypeInfo().GetCustomAttributes(typeof(PageTypeRouteAttribute));
+                    foreach (PageTypeRouteAttribute route in routes) {
+                        if (!string.IsNullOrWhiteSpace(route.Title) && !string.IsNullOrWhiteSpace(route.Route))
+                            pageType.Routes.Add(new PageTypeRoute() {
+                                Title = route.Title,
+                                Route = route.Route
+                            });
+                    }
 
                     var regionTypes = new List<Tuple<int?,RegionType>>();
 

@@ -18,7 +18,8 @@ namespace CoreWeb.Models
     /// <summary>
     /// Basic page with main content in markdown.
     /// </summary>
-    [PageType(Title = "Teaser Page", Route = "/teaserpage")]
+    [PageType(Title = "Teaser Page")]
+    [PageTypeRoute(Title = "Default", Route = "/teaserpage")]
     public class TeaserPage : BasePage<TeaserPage>
     {
         /// <summary>

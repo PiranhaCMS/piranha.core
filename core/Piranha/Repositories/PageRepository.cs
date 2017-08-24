@@ -447,8 +447,8 @@ namespace Piranha.Repositories
                 App.Mapper.Map<Page, Models.PageBase>(page, model);
 
                 // Map page type route (if available)
-                if (string.IsNullOrWhiteSpace(model.Route) && !string.IsNullOrEmpty(type.Route))
-                    model.Route = type.Route;
+                if (string.IsNullOrWhiteSpace(model.Route) && type.Routes.Count > 0)
+                    model.Route = type.Routes.First();
 
                 // Map regions
                 foreach (var regionKey in currentRegions) {
