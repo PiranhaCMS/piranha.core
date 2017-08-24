@@ -42,5 +42,6 @@
     <EmbeddedResource Include="assets\img\*.png" />
     <EmbeddedResource Include="assets\js\*.min.js" />
     <EmbeddedResource Include="assets\lib\bootstrap\fonts\*" />
+    <EmbeddedResource Include="assets\tinymce\**\*.*" />
   </ItemGroup>
 </Project>

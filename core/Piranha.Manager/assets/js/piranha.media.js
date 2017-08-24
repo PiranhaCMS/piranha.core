@@ -17,10 +17,12 @@ piranha.media = new function() {
 
     self.mediaId = '';
     self.mediaName = '';
+    self.mediaUrlId = '';
 
     self.init = function (e) {
         self.mediaId = e.data('mediaid');
         self.mediaName = e.data('medianame');
+        self.mediaUrlId = e.data('mediaurlid');
     };
 
     self.load = function (e, folderId) {
@@ -33,8 +35,11 @@ piranha.media = new function() {
     };
 
     self.set = function (e) {
-        $('#' + self.mediaId).val(e.data('id'));
+        if (self.mediaId)
+            $('#' + self.mediaId).val(e.data('id'));
         $('#' + self.mediaName).text(e.data('name'));
+        if (self.mediaUrlId)
+            $('#' + self.mediaUrlId).val(e.data('url'));
         $('#' + self.mediaName).data('filename', e.data('name'));
         $('#' + self.mediaName).data('url', e.data('url'));
         $('#' + self.mediaName).data('contenttype', e.data('contenttype'));
