@@ -33,7 +33,8 @@ namespace Piranha.AttributeBuilder.Tests
             public Extend.Fields.TextField Body { get; set; }
         }
 
-        [PageType(Id = "Complex", Title = "Complex Page Type", Route = "/complex")]
+        [PageType(Id = "Complex", Title = "Complex Page Type")]
+        [PageTypeRoute(Title = "Default", Route = "/complex")]
         public class ComplexPageType
         {
             public class BodyRegion
@@ -95,6 +96,9 @@ namespace Piranha.AttributeBuilder.Tests
                 Assert.Equal("Main content", type.Regions[1].Title);
                 Assert.Equal(false, type.Regions[1].Collection);
                 Assert.Equal(2, type.Regions[1].Fields.Count);
+
+                Assert.Equal(1, type.Routes.Count);
+                Assert.Equal("/complex", type.Routes[0]);
             }
         }
 
