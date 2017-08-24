@@ -42,6 +42,7 @@ namespace Piranha.Web
                             return new RouteResponse() {
                                 Route = route,
                                 QueryString = $"id={page.Id}&startpage={page.IsStartPage}&piranha_handled=true",
+                                IsPublished = page.Published.HasValue && page.Published.Value <= DateTime.Now,
                                 CacheInfo = new HttpCacheInfo() {
                                     EntityTag = Utils.GenerateETag(page.Id, page.LastModified),
                                     LastModified = page.LastModified
@@ -49,6 +50,7 @@ namespace Piranha.Web
                             };
                         } else {
                             return new RouteResponse() {
+                                IsPublished = page.Published.HasValue && page.Published.Value <= DateTime.Now,
                                 RedirectUrl = page.RedirectUrl,
                                 RedirectType = page.RedirectType
                             };

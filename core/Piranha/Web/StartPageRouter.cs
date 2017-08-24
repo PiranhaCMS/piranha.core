@@ -8,6 +8,8 @@
  * 
  */
 
+using System;
+
 namespace Piranha.Web
 {
     public class StartPageRouter
@@ -26,6 +28,7 @@ namespace Piranha.Web
                     return new RouteResponse() {
                         Route = page.Route ?? "/page",
                         QueryString = "id=" + page.Id + "&startpage=true&piranha_handled=true",
+                            IsPublished = page.Published.HasValue && page.Published.Value <= DateTime.Now,
                         CacheInfo = new HttpCacheInfo() {
                             EntityTag = Utils.GenerateETag(page.Id, page.LastModified),
                             LastModified = page.LastModified

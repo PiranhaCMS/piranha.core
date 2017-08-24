@@ -69,7 +69,13 @@
 
     <h1>@Model.Title</h1>
 
-    <p class="small">Published: @Model.Published.Value.ToString("yyyy-MM-dd") | Last Modified: @Model.LastModified.ToString("yyyy-MM-dd")</p>
+    <p class="small">Published:
+        @if (Model.Published.HasValue) {
+            <text>@Model.Published.Value.ToString("yyyy-MM-dd") | Last Modified: @Model.LastModified.ToString("yyyy-MM-dd")</text>
+        } else {
+            <span class="label label-info">Unpublished</span>
+        }
+    </p>
 
     @if (Model.Heading.PrimaryImage.HasValue) {
         <img src="@Url.Content(Model.Heading.PrimaryImage)">

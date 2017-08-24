@@ -25,7 +25,12 @@ namespace Piranha.Web
         /// <summary>
         /// Gets/sets the optional redirect url.
         /// </summary>
-        public string RedirectUrl { get; set;}
+        public string RedirectUrl { get; set; }
+
+        /// <summary>
+        /// Gets/sets if the route is published or not.
+        /// </summary>
+        public bool IsPublished { get; set; }
 
         /// <summary>
         /// Gets/sets the redirect type.

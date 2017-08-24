@@ -88,8 +88,8 @@ namespace CoreWeb
 
             // Register middleware
             app.UseStaticFiles();
-            app.UsePiranha();
             app.UsePiranhaSimpleSecurity();
+            app.UsePiranha();
             app.UsePiranhaManager();
 
             app.UseMvc(routes => {

@@ -35,45 +35,57 @@ namespace Piranha.AspNetCore
         public override async Task Invoke(HttpContext context) {
             if (!IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/")) {
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
+                var authorized = true;
 
                 var response = StartPageRouter.Invoke(api, url);
                 if (response != null) {
                     if (logger != null)
                         logger.LogInformation($"Found startpage\n  Route: {response.Route}\n  Params: {response.QueryString}");
 
-                    using (var config = new Config(api)) {
-                        var headers = context.Response.GetTypedHeaders();
-
-                        if (config.CacheExpiresPages > 0) {
-                            if (logger != null)
-                                logger.LogInformation("Caching enabled. Setting MaxAge, LastModified & ETag");
-
-                            headers.CacheControl = new CacheControlHeaderValue() {
-                                Public = true,
-                                MaxAge = TimeSpan.FromMinutes(config.CacheExpiresPages),
-                            };
-
-                            headers.Headers["ETag"] = response.CacheInfo.EntityTag;
-                            headers.LastModified = response.CacheInfo.LastModified;
-                        } else {
-                            headers.CacheControl = new CacheControlHeaderValue() {
-                                NoCache = true
-                            };
+                    if (!response.IsPublished) {
+                        if (!context.User.HasClaim(Security.Permission.PagePreview, Security.Permission.PagePreview)) {
+                            if (logger != null) {
+                                logger.LogInformation($"User not authorized to preview unpublished page");
+                            }
+                            authorized = false;
                         }
                     }
 
-                    if (HttpCaching.IsCached(context, response.CacheInfo)) {
-                        if (logger != null)
-                            logger.LogInformation("Client has current version. Returning NotModified");
+                    if (authorized) {
+                        using (var config = new Config(api)) {
+                            var headers = context.Response.GetTypedHeaders();
 
-                        context.Response.StatusCode = 304;
-                        return;
-                    } else {
-                        context.Request.Path = new PathString(response.Route);
+                            if (config.CacheExpiresPages > 0) {
+                                if (logger != null)
+                                    logger.LogInformation("Caching enabled. Setting MaxAge, LastModified & ETag");
 
-                        if (context.Request.QueryString.HasValue) {
-                            context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&" + response.QueryString);
-                        } else context.Request.QueryString = new QueryString("?" + response.QueryString);
+                                headers.CacheControl = new CacheControlHeaderValue() {
+                                    Public = true,
+                                    MaxAge = TimeSpan.FromMinutes(config.CacheExpiresPages),
+                                };
+
+                                headers.Headers["ETag"] = response.CacheInfo.EntityTag;
+                                headers.LastModified = response.CacheInfo.LastModified;
+                            } else {
+                                headers.CacheControl = new CacheControlHeaderValue() {
+                                    NoCache = true
+                                };
+                            }
+                        }
+
+                        if (HttpCaching.IsCached(context, response.CacheInfo)) {
+                            if (logger != null)
+                                logger.LogInformation("Client has current version. Returning NotModified");
+
+                            context.Response.StatusCode = 304;
+                            return;
+                        } else {
+                            context.Request.Path = new PathString(response.Route);
+
+                            if (context.Request.QueryString.HasValue) {
+                                context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&" + response.QueryString);
+                            } else context.Request.QueryString = new QueryString("?" + response.QueryString);
+                        }
                     }
                 }
             }
