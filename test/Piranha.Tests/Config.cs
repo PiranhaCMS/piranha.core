@@ -14,6 +14,7 @@ using Xunit;
 
 namespace Piranha.Tests
 {
+    [Collection("Integration tests")]
     public class Config : BaseTests
     {
         /// <summary>

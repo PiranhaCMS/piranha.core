@@ -15,6 +15,7 @@ using Xunit;
 
 namespace Piranha.Tests.Repositories
 {
+    [Collection("Integration tests")]
     public class ParamsCached : Params
     {
         protected override void Init() {
