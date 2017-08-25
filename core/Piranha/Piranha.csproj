@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFramework>netstandard1.4</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Version>4.0.0-alpha</Version>
     <Company>Piranha CMS</Company>
     <AssemblyTitle>Piranha</AssemblyTitle>
@@ -16,10 +16,10 @@
     <Copyright>Copyright 2011-2017 (c) Håkan Edling</Copyright>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="5.2.0" />
+    <PackageReference Include="AutoMapper" Version="6.1.1" />
     <PackageReference Include="Dapper" Version="1.50.2" />
-    <PackageReference Include="Markdig" Version="0.11.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="Markdig" Version="0.13.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\Migrations\*.sql" />

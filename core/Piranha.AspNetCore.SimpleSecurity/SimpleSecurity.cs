@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 
 namespace Piranha.AspNetCore
@@ -73,7 +74,7 @@ namespace Piranha.AspNetCore
                     var identity = new ClaimsIdentity(claims, user.Password);
                     var principle = new ClaimsPrincipal(identity);
 
-                    await ((HttpContext)context).Authentication.SignInAsync("Piranha.SimpleSecurity", principle);
+                    await ((HttpContext)context).SignInAsync("Piranha.SimpleSecurity", principle);
 
                     return true;                
                 }
@@ -88,7 +89,7 @@ namespace Piranha.AspNetCore
         /// <param name="context">The current application context</param>
         public Task SignOut(object context) {
             if (context is HttpContext) {
-                return ((HttpContext)context).Authentication.SignOutAsync("Piranha.SimpleSecurity");
+                return ((HttpContext)context).SignOutAsync("Piranha.SimpleSecurity");
             }
             throw new ArgumentException("SimpleSecurity only works with a HttpContext");
         }

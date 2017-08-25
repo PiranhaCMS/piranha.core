@@ -4,12 +4,12 @@ This is a **complete rewrite** of Piranha CMS for `NetStandard`. The goal of thi
 is to create a version capable of targeting multiple platforms & frameworks with minimal
 depenencies, but still provide a flexible & high performance CMS library.
 
-Piranha is currently built for `NetStandard 1.4` and uses the following awesome packages:
+Piranha is currently built for `NetStandard 2.0` and uses the following awesome packages:
 
-* AutoMapper `5.2.0`
+* AutoMapper `6.1.1`
 * Dapper `1.50.2`
-* Markdig `0.11.0`
-* Newtonsoft.Json `9.0.1`
+* Markdig `0.13.1`
+* Newtonsoft.Json `10.0.3`
 
 ## Licensing
 Piranha CMS is released under the **MIT** license. It is a permissive free software license,
