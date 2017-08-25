@@ -35,11 +35,6 @@ namespace Piranha
         private readonly IStorage storage;
 
         /// <summary>
-        /// If the api should dispose the connection.
-        /// </summary>
-        private readonly bool dispose;
-
-        /// <summary>
         /// The private model cache.
         /// </summary>
         private ICache cache;
@@ -99,7 +94,6 @@ namespace Piranha
                 conn = config.Connection;
             } else {
                 conn = new SqlConnection(config.ConnectionString);
-                dispose = true;
             }
 
             this.storage = storage;
@@ -165,10 +159,8 @@ namespace Piranha
         /// Disposes the current api.
         /// </summary>
         public void Dispose() {
-            if (dispose) {
-                conn.Close();
-                conn.Dispose();
-            }
+            conn.Close();
+            conn.Dispose();
         }
 
         #region Private methods
