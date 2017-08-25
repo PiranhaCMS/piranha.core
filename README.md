@@ -13,32 +13,35 @@ This is a **complete rewrite** of Piranha CMS for `NetStandard`. The goal of thi
 is to create a version capable of targeting multiple platforms & frameworks with minimal
 depenencies, but still provide a flexible & high performance CMS library.
 
-Piranha is currently built for `NetStandard 1.4` and uses the following awesome packages:
+Piranha is currently built for `NetStandard 2.0` and uses the following awesome packages:
 
-* AutoMapper `5.2.0`
+* AutoMapper `6.1.1`
 * Dapper `1.50.2`
-* Markdig `0.11.0`
-* Newtonsoft.Json `9.0.1`
+* Markdig `0.13.1`
+* Newtonsoft.Json `10.0.3`
 
 ## Core Packages
 
 ### Piranha
-**NetStandard 1.4** [`AutoMapper`, `Dapper`, `Markdig`, `Newtonsoft.Json`]
+[`AutoMapper`, `Dapper`, `Markdig`, `Newtonsoft.Json`]
 
 The core library that contains all data management, repositories, client models and extensibility features. In a way, everything you need to integrate Piranha into your existing solution.
 
 ### Piranha.AspNetCore
-**NetStandard 1.4** [`Microsoft.AspNetCore.Http`]
+[`Microsoft.AspNetCore.Http`]
 
 Middleware components and other tools for building a .NET Core web application with Piranha.
 
 ### Piranha.AttributeBuilder
-**NetStandard 1.4**
 
 Components for automatically build and import page types by adding simple attributes to your models.
 
+### Piranha.Local.FileStorage
+
+Provider for storing uploaded media files on the local filesystem.
+
 ### Piranha.Manager
-**CoreApp 1.1** [`Microsoft.AspNetCore.Mvc`, `Microsoft.AspNetCore.StaticFiles`, `Microsoft.Extensions.FileProviders.Embedded`]
+[`Microsoft.AspNetCore.Mvc`, `Microsoft.AspNetCore.Session`, `Microsoft.AspNetCore.StaticFiles`, `Microsoft.Extensions.FileProviders.Embedded`]
 
 Manager interface for Piranha. As `Microsoft.AspNetCore.Mvc` currently references `NetStandard 1.6` this package is not compatible with the .NET Framework. This will hopefully be fixed when `NetStandard 2.0` is released.
 
