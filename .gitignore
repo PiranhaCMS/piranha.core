@@ -17,6 +17,9 @@ examples/CoreWeb/assets/lib
 # NPM lock files
 *-lock.json
 
+# Sqlite database
+examples/CoreWeb/**/*.db
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
