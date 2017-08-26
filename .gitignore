@@ -248,3 +248,6 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+/examples/CoreWeb/wwwroot/uploads/0ed62253-d420-4121-8f8a-c9c58966c555-stopwatch.png
+/examples/CoreWeb/wwwroot/uploads/42be9216-67da-4ff6-a513-d77d2961e231-platform.png
+/examples/CoreWeb/wwwroot/uploads/d9d8a31b-2866-4344-b94c-20b7142f23b6-github.png
