@@ -60,7 +60,9 @@
             <div class="col-sm-12">
                 <div class="pagemenu">
                     @foreach (var item in third) {
-                        <span @(item.Id == Model.Id ? "class=active" : "")><a href="@item.Permalink">@item.MenuTitle</a></span>
+                        if (!item.IsHidden) {
+                            <span @(item.Id == Model.Id ? "class=active" : "")><a href="@item.Permalink">@item.MenuTitle</a></span>
+                        }
                     }
                 </div>
             </div>
