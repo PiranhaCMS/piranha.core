@@ -4,6 +4,12 @@
     ViewBag.Controller = "Site";
 }
 
+@section script {
+    <script>
+        document.getElementById('Site_Title').focus();
+    </script>
+}
+
 @using (var form = Html.BeginForm("Save", "Site", FormMethod.Post, new { @class = "form", @role = "form" })) {
     @Html.HiddenFor(m => m.Site.Id)
 
