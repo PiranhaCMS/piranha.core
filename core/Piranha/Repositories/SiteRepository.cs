@@ -89,12 +89,20 @@ namespace Piranha.Repositories
             }
 
             if (id != null) {
-                var pages = conn.Query<Page>("SELECT [Id], [ParentId], [SortOrder], [Title], [NavigationTitle], [Slug], [IsHidden], [Published], [Created], [LastModified] FROM [Piranha_Pages] WHERE [SiteId]=@Id ORDER BY [ParentId], [SortOrder]",
-                    new { Id = id }, transaction: transaction);
+                var sitemap = onlyPublished && cache != null ? cache.Get<Models.Sitemap>($"Sitemap_{id}") : null;
 
-                if (onlyPublished)
-                    pages = pages.Where(p => p.Published.HasValue);
-                return Sort(pages);
+                if (sitemap == null) {
+                    var pages = conn.Query<Page>("SELECT [Id], [ParentId], [SortOrder], [Title], [NavigationTitle], [Slug], [IsHidden], [Published], [Created], [LastModified] FROM [Piranha_Pages] WHERE [SiteId]=@Id ORDER BY [ParentId], [SortOrder]",
+                        new { Id = id }, transaction: transaction);
+
+                    if (onlyPublished)
+                        pages = pages.Where(p => p.Published.HasValue);
+                    sitemap = Sort(pages);
+
+                    if (onlyPublished && cache != null)
+                        cache.Set($"Sitemap_{id}", sitemap);
+                }
+                return sitemap;
             }
             return null;
         }
@@ -114,7 +122,17 @@ namespace Piranha.Repositories
             }
 
             base.Delete(id, transaction);
-        }        
+        }
+
+        /// <summary>
+        /// Removes the specified public sitemap from
+        /// the cache.
+        /// </summary>
+        /// <param name="id">The site id</param>
+        public void InvalidateSitemap(string id) {
+            if (cache != null)
+                cache.Remove($"Sitemap_{id}");
+        }
 
         #region Protected methods
         /// <summary>

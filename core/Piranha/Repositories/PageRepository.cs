@@ -247,9 +247,9 @@ namespace Piranha.Repositories
             }
 
             // Remove the old position for the page
-            MovePages(model.ParentId, model.SortOrder + 1, false, transaction: tx);
+            MovePages(model.SiteId, model.ParentId, model.SortOrder + 1, false, transaction: tx);
             // Add room for the new position of the page
-            MovePages(parentId, sortOrder, true, transaction: tx);
+            MovePages(model.SiteId, parentId, sortOrder, true, transaction: tx);
             // Update the position of the current page
             db.Execute($"UPDATE [{table}] SET [ParentId]=@ParentId, [SortOrder]=@SortOrder WHERE [Id]=@Id",
                 new {
@@ -268,6 +268,7 @@ namespace Piranha.Repositories
                     RemoveFromCache(page);
                 foreach (var page in newSiblings)
                     RemoveFromCache(page);
+                ((SiteRepository)api.Sites).InvalidateSitemap(model.SiteId);
             }
         }
 
@@ -311,16 +312,16 @@ namespace Piranha.Repositories
                         isNew = true;
 
                         // Make room for the new page
-                        MovePages(model.ParentId, model.SortOrder, true, tx);
+                        MovePages(model.SiteId, model.ParentId, model.SortOrder, true, tx);
                     } else {
                         page.LastModified = DateTime.Now;
 
                         // Check if the page has been moved
                         if (page.ParentId != model.ParentId || page.SortOrder != model.SortOrder) {
                             // Remove the old position for the page
-                            MovePages(page.ParentId, page.SortOrder + 1, false, tx);
+                            MovePages(model.SiteId, page.ParentId, page.SortOrder + 1, false, tx);
                             // Add room for the new position of the page
-                            MovePages(model.ParentId, model.SortOrder, true, tx);
+                            MovePages(model.SiteId, model.ParentId, model.SortOrder, true, tx);
                         }
                     }
 
@@ -388,6 +389,7 @@ namespace Piranha.Repositories
 
                     if (cache != null && !isNew)
                         RemoveFromCache(page);
+                    ((SiteRepository)api.Sites).InvalidateSitemap(model.SiteId);                        
                 }
             } catch {
                 if (tx != transaction) {
@@ -403,20 +405,10 @@ namespace Piranha.Repositories
         /// <param name="id">The unique id</param>
         /// <param name="transaction">The optional transaction</param>
         public virtual void Delete(string id, IDbTransaction transaction = null) {
-            // Delete explicitly for databases that doesn't support cascade
-            // delete on foreign keys (SQLite)
-            db.Execute($"DELETE FROM [Piranha_PageFields] WHERE [PageId]=@Id",
-                new { Id = id }, transaction: transaction);
-            // Delete the page
-            db.Execute($"DELETE FROM [{table}] WHERE [Id]=@Id",
-                new { Id = id }, transaction: transaction);
+            var page = GetById(id, transaction);
 
-            // Check if we have the page in cache, and if so remove it
-            if (cache != null) {
-                var page = cache.Get<Page>(id);
-                if (page != null)
-                    RemoveFromCache(page);
-            }
+            if (page != null)
+                Delete(page, transaction);
         }
 
         /// <summary>
@@ -425,7 +417,21 @@ namespace Piranha.Repositories
         /// <param name="model">The model</param>
         /// <param name="transaction">The optional transaction</param>
         public virtual void Delete<T>(T model, IDbTransaction transaction = null) where T : Models.Page<T> {
-            Delete(model.Id, null);
+            // Delete explicitly for databases that doesn't support cascade
+            // delete on foreign keys (SQLite)
+            db.Execute($"DELETE FROM [Piranha_PageFields] WHERE [PageId]=@Id",
+                model, transaction: transaction);
+            // Delete the page
+            db.Execute($"DELETE FROM [{table}] WHERE [Id]=@Id",
+                model, transaction: transaction);
+
+            // Check if we have the page in cache, and if so remove it
+            if (cache != null) {
+                var page = cache.Get<Page>(model.Id);
+                if (page != null)
+                    RemoveFromCache(page);
+                ((SiteRepository)api.Sites).InvalidateSitemap(model.SiteId);
+            }
         }
 
         #region Private get methods
@@ -735,19 +741,20 @@ namespace Piranha.Repositories
         /// <summary>
         /// Moves the pages around. This is done when a page is deleted or moved in the structure.
         /// </summary>
+        /// <param name="siteId">The site id</param>
         /// <param name="parentId">The parent id</param>
         /// <param name="sortOrder">The sort order</param>
         /// <param name="increase">If sort order should be increase or decreased</param>
         /// <param name="transaction">The current transaction</param>
-        private void MovePages(string parentId, int sortOrder, bool increase, IDbTransaction transaction) {
+        private void MovePages(string siteId, string parentId, int sortOrder, bool increase, IDbTransaction transaction) {
             if (!string.IsNullOrEmpty(parentId))
                 db.Execute($"UPDATE [{table}] SET [SortOrder]=[SortOrder] " + (increase ? "+ 1" : "- 1") +
-                    " WHERE [ParentId]=@ParentId AND [SortOrder]>=@SortOrder",
-                    new { ParentId = parentId, SortOrder = sortOrder },
+                    " WHERE [SiteId]=@SiteId AND [ParentId]=@ParentId AND [SortOrder]>=@SortOrder",
+                    new { SiteId = siteId, ParentId = parentId, SortOrder = sortOrder },
                     transaction: transaction);
             else db.Execute($"UPDATE [{table}] SET [SortOrder]=[SortOrder] " + (increase ? "+ 1" : "- 1") +
-                " WHERE [ParentId] IS NULL AND [SortOrder]>=@SortOrder",
-                new { SortOrder = sortOrder },
+                " WHERE [SiteId]=@SiteId AND [ParentId] IS NULL AND [SortOrder]>=@SortOrder",
+                new { SiteId = siteId, SortOrder = sortOrder },
                 transaction: transaction);
         }
         #endregion
