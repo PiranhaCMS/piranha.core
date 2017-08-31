@@ -7982,6 +7982,29 @@ body.collapsed .navmenu-inverse span.title {
 .nav-pills > li.active a {
   background: #2a8ac2;
 }
+@media only screen and (max-width: 992px) {
+  body {
+    margin-left: 50px;
+    min-width: 718px;
+    max-width: 1370px;
+  }
+  .navmenu-inverse {
+    width: 50px;
+  }
+  .navmenu-inverse .navmenu-brand {
+    padding: 10px 0;
+  }
+  .navmenu-inverse .navmenu-brand .logo-small {
+    display: inline;
+    width: 60%;
+  }
+  .navmenu-inverse .navmenu-brand .logo-main {
+    display: none;
+  }
+  .navmenu-inverse span.title {
+    display: none;
+  }
+}
 .table td.actions.one,
 .table th.actions.one {
   width: 32px;
