@@ -367,12 +367,39 @@
 	.nav-tabs {
 		margin-bottom: 15px;
 	}
+
+	.content-preview {
+		font-family: "Open Sans", Arial;
+		font-size: 15px;
+
+		h1, h2, h3, h4, h5, h6 {
+			font-family: 'Gentium Book Basic', serif;
+			margin: 5px 0 10px;
+		}
+
+		p, ul, ol {
+			margin: 0 0 20px;
+		}		
+	}
 }
 
 .region-list {
 	.markdown {
-		.nav-tabs, .content-preview {
-			display: none !important;
+		.nav-tabs {
+			margin-bottom: 0;
+			border: 0;
+		}
+
+		.raw-text {
+			height: 230px;
+		}
+
+		.content-preview {
+			background: #fff;
+			padding: 15px 15px 0;
+			border: solid 1px @border-color;;
+			height: 230px;
+			overflow-y: scroll;						
 		}
 	}
 }
@@ -392,20 +419,6 @@
 			border-width: 0;			
 		}
 	}
-	
-	.content-preview {
-		font-family: "Open Sans", Arial;
-		font-size: 15px;
-
-		h1, h2, h3, h4, h5, h6 {
-			font-family: 'Gentium Book Basic', serif;
-			margin: 5px 0 10px;
-		}
-
-		p, ul, ol {
-			margin: 0 0 20px;
-		}
-	}
 
 	.markdown {
 		.nav-tabs {
@@ -417,19 +430,21 @@
 
 @media (min-width: 990px) {
 	.single-region {
-		textarea.raw-text {
+		.tab-content > .tab-pane {
 			display: inline-block !important;
-			width: 50%;
-			border-width: 0 1px 0 0;			
+			
+			&.content-markdown {
+				width: 50%;
+				border-right: solid 1px @border-color;
+			}
+	
+			&.content-preview {
+				float: right;
+				width: 49%;
+				padding-left: 15px;
+				
+			}
 		}
-	}
-
-	.content-preview {
-		display: inline-block !important;
-		float: right;
-		width: 49%;
-		padding-left: 15px;
-		
 	}
 }
 @media (max-width: 989px) {
@@ -438,10 +453,6 @@
 			.nav-tabs {
 				display: block;
 			}
-		}
-
-		.content-preview {
-			display: none;
 		}
 	}
 }

@@ -14573,7 +14573,7 @@ $('.single-region textarea.raw-text').css({'overflow': 'hidden'}).autogrow({
 //
 // Refresh markdown content
 //
-$(document).on('keyup', '.single-region textarea.raw-text', function() {
+$(document).on('keyup', '.markdown textarea.raw-text', function() {
     var md = $(this);
 
     $.ajax({
@@ -14583,7 +14583,8 @@ $(document).on('keyup', '.single-region textarea.raw-text', function() {
         data: JSON.stringify($(this).val()),
         dataType: 'json',
         success: function(data) {
-            md.next().html(data.body);
+            md.parent().next().html(data.body);
+            //md.next().html(data.body);
         }
     });
 });

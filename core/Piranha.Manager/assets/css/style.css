@@ -8551,9 +8551,37 @@ li.sitemap-item .actions.one {
 .markdown .nav-tabs {
   margin-bottom: 15px;
 }
-.region-list .markdown .nav-tabs,
+.markdown .content-preview {
+  font-family: "Open Sans", Arial;
+  font-size: 15px;
+}
+.markdown .content-preview h1,
+.markdown .content-preview h2,
+.markdown .content-preview h3,
+.markdown .content-preview h4,
+.markdown .content-preview h5,
+.markdown .content-preview h6 {
+  font-family: 'Gentium Book Basic', serif;
+  margin: 5px 0 10px;
+}
+.markdown .content-preview p,
+.markdown .content-preview ul,
+.markdown .content-preview ol {
+  margin: 0 0 20px;
+}
+.region-list .markdown .nav-tabs {
+  margin-bottom: 0;
+  border: 0;
+}
+.region-list .markdown .raw-text {
+  height: 230px;
+}
 .region-list .markdown .content-preview {
-  display: none !important;
+  background: #fff;
+  padding: 15px 15px 0;
+  border: solid 1px #ddd;
+  height: 230px;
+  overflow-y: scroll;
 }
 .single-region .region-editor {
   margin: -15px -15px -30px;
@@ -8564,35 +8592,18 @@ li.sitemap-item .actions.one {
 .single-region textarea.raw-text {
   border-width: 0;
 }
-.single-region .content-preview {
-  font-family: "Open Sans", Arial;
-  font-size: 15px;
-}
-.single-region .content-preview h1,
-.single-region .content-preview h2,
-.single-region .content-preview h3,
-.single-region .content-preview h4,
-.single-region .content-preview h5,
-.single-region .content-preview h6 {
-  font-family: 'Gentium Book Basic', serif;
-  margin: 5px 0 10px;
-}
-.single-region .content-preview p,
-.single-region .content-preview ul,
-.single-region .content-preview ol {
-  margin: 0 0 20px;
-}
 .single-region .markdown .nav-tabs {
   display: none;
 }
 @media (min-width: 990px) {
-  .single-region textarea.raw-text {
+  .single-region .tab-content > .tab-pane {
     display: inline-block !important;
-    width: 50%;
-    border-width: 0 1px 0 0;
   }
-  .content-preview {
-    display: inline-block !important;
+  .single-region .tab-content > .tab-pane.content-markdown {
+    width: 50%;
+    border-right: solid 1px #ddd;
+  }
+  .single-region .tab-content > .tab-pane.content-preview {
     float: right;
     width: 49%;
     padding-left: 15px;
@@ -8601,9 +8612,6 @@ li.sitemap-item .actions.one {
 @media (max-width: 989px) {
   .single-region .markdown .nav-tabs {
     display: block;
-  }
-  .single-region .content-preview {
-    display: none;
   }
 }
 .panel {
