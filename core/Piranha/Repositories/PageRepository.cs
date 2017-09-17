@@ -475,6 +475,8 @@ namespace Piranha.Repositories
                             }
                         }
                     } else {
+                        
+                        var fieldCount = page.Fields.Count(f => f.RegionId == regionKey && f.FieldId == region.Fields[0].Id);
                         var sortOrder = 0;
 
                         do {
@@ -486,7 +488,7 @@ namespace Piranha.Repositories
                                 AddComplexValue(model, regionKey, fields.Where(f => f.SortOrder == sortOrder).ToList());
                             }
                             sortOrder++;
-                        } while (page.Fields.Count(f => f.SortOrder == sortOrder) > 0);
+                        } while (fieldCount > sortOrder);
                     }
                 }
                 return model;
