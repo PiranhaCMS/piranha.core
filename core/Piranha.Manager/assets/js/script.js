@@ -14598,6 +14598,23 @@ $(document).on('click', '.navmenu-brand', function () {
     return false;
 });
 
+
+//
+// Confirm Delete
+//
+$(document).on('click', 'a.confirm-delete, button.confirm-delete', function (e) {
+
+    e.preventDefault();
+    var data = $(this).data();
+    var title = data.title || 'Delete Confirmation';
+    var message = data.message || '<p>Are you sure to delete?</p>';
+    var url = data.posturl || $(this).attr('href');
+    var $modal = $('<div class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button><h4 class="modal-title">' + title + '</h4></div><div class="modal-body">' + message + '</div><div class="modal-footer"><form method="post" class="form-delete" style="display:inline;" action="' + url + '"><button class="btn btn-danger btn-labeled" type="submit"><span class="btn-label"><i class="glyphicon glyphicon-trash"></i></span>Delete</button></form> <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button></div></div></div></div>').appendTo('body');
+    $modal.modal('show');
+    $modal.on('hidden.bs.modal', function () { $modal.remove(); });
+    return false;
+});
+
 var manager = {
     tools: {
         markdown: function (str) {
