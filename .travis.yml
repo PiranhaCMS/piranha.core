@@ -4,6 +4,8 @@ os:
   - osx
   - linux
 
+osx_image: xcode9
+
 dist: trusty
 
 addons:
