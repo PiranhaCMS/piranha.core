@@ -108,6 +108,23 @@ $(document).on('click', '.navmenu-brand', function () {
     return false;
 });
 
+
+//
+// Confirm Delete
+//
+$(document).on('click', 'a.confirm-delete, button.confirm-delete', function (e) {
+
+    e.preventDefault();
+    var data = $(this).data();
+    var title = data.title || 'Delete Confirmation';
+    var message = data.message || '<p>Are you sure to delete?</p>';
+    var url = data.posturl || $(this).attr('href');
+    var $modal = $('<div class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times-circle"></i></button><h4 class="modal-title"><i class="fa fa-question-circle"></i> ' + title + '</h4></div><div class="modal-body">' + message + '</div><div class="modal-footer"><form method="post" class="pull-left form-delete" style="display:inline;" action="' + url + '"><button class="btn btn-danger" type="submit"><i class="fa fa-trash-o"></i> Delete</button> <span>Beware, this action can not be undone!</span></form> <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button></div></div></div></div>').appendTo('body');
+    $modal.modal('show');
+    $modal.on('hidden.bs.modal', function () { $modal.remove(); });
+    return false;
+});
+
 var manager = {
     tools: {
         markdown: function (str) {
