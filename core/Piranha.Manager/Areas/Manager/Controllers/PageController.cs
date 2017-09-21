@@ -80,9 +80,26 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/page/add/{type}/{siteId?}")]
         [Authorize(Policy = Permission.PagesAdd)]
         public IActionResult Add(string type, string siteId = null) {
-            var sitemap = api.Sites.GetSitemap(onlyPublished: false);
+            var sitemap = api.Sites.GetSitemap(siteId, onlyPublished: false);
             var model = Models.PageEditModel.Create(api, type, siteId);
             model.SortOrder = sitemap.Count;
+
+            return View("Edit", model);
+        }
+
+        /// <summary>
+        /// Adds a new page of the given type at the specified position.
+        /// </summary>
+        /// <param name="type">The page type id</param>
+        /// <param name="sortOrder">The sort order</param>
+        /// <param name="parentId">The parent id</param>
+        /// <param name="siteId">The optional site id</param>
+        [Route("manager/page/add/{type}/{sortOrder:int}/{parentId?}/{siteId?}")]
+        public IActionResult AddAt(string type, int sortOrder, string parentId = null, string siteId = null) {
+            var model = Models.PageEditModel.Create(api, type, siteId);
+
+            model.ParentId = parentId;
+            model.SortOrder = sortOrder;
 
             return View("Edit", model);
         }

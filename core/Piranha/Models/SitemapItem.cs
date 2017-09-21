@@ -16,6 +16,16 @@ namespace Piranha.Models
     {
         #region Properties
         /// <summary>
+        /// Gets/sets the optional parent id.
+        /// </summary>
+        public string ParentId { get; set; }
+
+        /// <summary>
+        /// Gets/sets the sort order.
+        /// </summary>
+        public int SortOrder { get; set; }
+
+        /// <summary>
         /// Gets/sets the main title.
         /// </summary>
         public string Title { get; set; }

@@ -7,6 +7,15 @@
 @section script {
     <script type="text/javascript">
         $(function () {
+            @for (var n = 0; n < Model.PageTypes.Count; n++) {
+                <text>
+                    manager.pageTypes[@n] = {
+                        id: '@Model.PageTypes[n].Id',
+                        title: '@Model.PageTypes[n].Title'
+                    };
+                </text>
+            }
+
             $('.dd').nestable({
                 group: 1
             });

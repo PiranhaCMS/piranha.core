@@ -16,10 +16,10 @@
         }
     </div>
     <div class="actions three pull-right">
-        <a class="add-after first" href="#" data-toggle="tooltip" data-original-title="Add after" data-placement="top">
+        <a class="add-after first" href="@Url.Action("AddAt", new { type = "pageType", parentId = item.ParentId, sortOrder = item.SortOrder + 1 })" data-toggle="tooltip" data-original-title="Add after" data-placement="top"">
             <span class="glyphicon glyphicon-chevron-down"></span>
         </a>
-        <a class="add-below" href="#" data-toggle="tooltip" data-original-title="Add below" data-placement="top">
+        <a class="add-below" href="@Url.Action("AddAt", new { type = "pageType", parentId = item.Id, sortOrder = 0 })" data-toggle="tooltip" data-original-title="Add below" data-placement="top" data-parentid="@item.Id" data-sortorder="0">
             <span class="glyphicon glyphicon-chevron-right"></span>
         </a>
         <a class="remove last confirm-delete" href="@Url.Action("Delete", new { id = item.Id })" data-toggle="tooltip" data-original-title="Delete" data-placement="top" data-message="Are you sure you want to delete the page?">
