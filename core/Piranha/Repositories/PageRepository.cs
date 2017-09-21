@@ -424,6 +424,8 @@ namespace Piranha.Repositories
             // Delete the page
             db.Execute($"DELETE FROM [{table}] WHERE [Id]=@Id",
                 model, transaction: transaction);
+            // Move all remaining pages after this page in the site structure.
+            MovePages(model.SiteId, model.ParentId, model.SortOrder + 1, false, transaction);
 
             // Check if we have the page in cache, and if so remove it
             if (cache != null) {

@@ -7790,6 +7790,15 @@ button.close {
   border: 1px dashed #b6bcbf;
   box-sizing: border-box;
 }
+.dd-placeholder span,
+.dd-empty span {
+  display: block;
+  font-family: "Open Sans", Arial;
+  font-size: 16px;
+  padding: 10px 20px 10px 0;
+  opacity: 0.2;
+  text-indent: 65px;
+}
 .dd-empty {
   border: 1px dashed #bbb;
   min-height: 100px;
@@ -8229,6 +8238,9 @@ li.sitemap-item .content a {
   font-family: "Open Sans", Arial;
   font-size: 16px;
   padding: 0 !important;
+}
+li.sitemap-item.hover-remove {
+  opacity: 0.8;
 }
 li.sitemap-item li .content a {
   padding-left: 35px;
