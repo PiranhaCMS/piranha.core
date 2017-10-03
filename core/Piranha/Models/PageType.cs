@@ -18,28 +18,6 @@ namespace Piranha.Models
     public sealed class PageType : ContentType
     {
         /// <summary>
-        /// Gets/sets the optional route.
-        /// </summary>
-        /*
-        [JsonIgnore]
-        public string Route { 
-            get {
-                return Routes.FirstOrDefault(r => r.Title == "Default")?.Route;
-            }
-            set {
-                var route = Routes.FirstOrDefault(r => r.Title == "Default");
-
-                if (route != null)
-                    route.Route = value;
-                else Routes.Add(new PageTypeRoute() {
-                    Title = "Default",
-                    Route = value
-                });
-            }
-        }
-        */
-
-        /// <summary>
         /// Gets/sets the optional routes.
         /// </summary>
         public IList<PageTypeRoute> Routes { get; set; }
