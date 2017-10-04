@@ -87,6 +87,15 @@ namespace Piranha.Tests
         }
 
         [Fact]
+        public void WrongInputToDateField() {
+            var serializer = new DateFieldSerializer();
+
+            Assert.Throws<ArgumentException>(() => serializer.Serialize(new StringField() {
+                Value = "Exception"
+            }));
+        }
+
+        [Fact]
         public void SerializeImageField() {
             var serializer = new ImageFieldSerializer();
             var id = Guid.NewGuid().ToString();
@@ -109,6 +118,16 @@ namespace Piranha.Tests
         }
 
         [Fact]
+        public void WrongInputToImageField() {
+            var serializer = new ImageFieldSerializer();
+
+            Assert.Throws<ArgumentException>(() => serializer.Serialize(new StringField() {
+                Value = "Exception"
+            }));
+        }
+        
+
+        [Fact]
         public void SerializeStringField() {
             var serializer = new StringFieldSerializer<StringField>();
             var ipsum = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet.";
@@ -129,5 +148,14 @@ namespace Piranha.Tests
 
             Assert.Equal(ipsum, field.Value);
         }
+
+        [Fact]
+        public void WrongInputStringField() {
+            var serializer = new StringFieldSerializer<StringField>();
+
+            Assert.Throws<ArgumentException>(() => serializer.Serialize(new DateField() {
+                Value = DateTime.Now
+            }));
+        }        
     }
 }
