@@ -55,13 +55,17 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right" role="menu">
                     <li><a href="~/@Model.Slug" target="_blank">Preview</a></li>
-                    @if (Model.Published.HasValue) {
-                        <li><a id="submit-unpublish" href="#">Unpublish</a></li>
-                    } else {
-                        <li><a id="submit-publish" href="#">Publish now</a></li>
+                    @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesPublish)).Succeeded) {
+                        if (Model.Published.HasValue) {
+                            <li><a id="submit-unpublish" href="#">Unpublish</a></li>
+                        } else {
+                            <li><a id="submit-publish" href="#">Publish now</a></li>
+                        }
                     }
-                    <li class="divider"></li>
-                    <li><a href="@Url.Action("Delete", new { @id = Model.Id })"><span class="text-danger">Delete page</span></a></li>
+                    @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesDelete)).Succeeded) {
+                        <li class="divider"></li>
+                        <li><a href="@Url.Action("Delete", new { @id = Model.Id })"><span class="text-danger">Delete page</span></a></li>
+                    }
                 </ul>
             </div>
         </div>

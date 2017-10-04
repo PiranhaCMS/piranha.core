@@ -46,22 +46,24 @@
 
 <div class="row">
     <div class="col-sm-12 buttons">
-        <div class="btn-group pull-right">
-            <button type="button" class="btn btn-labeled btn-primary" data-toggle="dropdown">
-                <span class="btn-label">
-                    <i class="glyphicon glyphicon-plus"></i>
-                </span>Add
-            </button>
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                <span class="caret"></span>
-                <span class="sr-only">Toggle Dropdown</span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                @foreach (var type in Model.PageTypes) {
-                    <li><a href="@Url.Action("Add", new { type = type.Id, siteId = Model.SiteId })">@type.Title</a></li>
-                }
-            </ul>
-        </div>
+        @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesAdd)).Succeeded) {
+            <div class="btn-group pull-right">
+                <button type="button" class="btn btn-labeled btn-primary" data-toggle="dropdown">
+                    <span class="btn-label">
+                        <i class="glyphicon glyphicon-plus"></i>
+                    </span>Add
+                </button>
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                    @foreach (var type in Model.PageTypes) {
+                        <li><a href="@Url.Action("Add", new { type = type.Id, siteId = Model.SiteId })">@type.Title</a></li>
+                    }
+                </ul>
+            </div>
+        }
         
         @if (Model.Sites.Count > 1) {
             <div id="btn-sitepicker" class="btn-group pull-right" style="margin-right: 15px">
