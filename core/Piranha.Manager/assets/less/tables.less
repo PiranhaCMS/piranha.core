@@ -208,6 +208,22 @@
 ol.sitemap {
     padding-left: 0;
 
+	.actions {
+		text-align: right;
+
+		&.one {
+			width: 54px;
+		}
+
+		&.two {
+			width: 88px;
+		}
+
+		&.three {
+			width: 122px;
+		}
+	}
+
     &.header {
 		li {
 			list-style-type: none;
@@ -227,22 +243,7 @@ ol.sitemap {
 			width: 120px;
 			padding: 12px 20px;			
 		}
-
-		.actions {
-			&.one {
-	            width: 54px;
-			}
-
-			&.two {
-				width: 88px;
-			}
-
-			&.three {
-				width: 122px;
-			}
-		}
     }
-
 }
 
 li.sitemap-item {
@@ -308,7 +309,7 @@ li.sitemap-item {
 		margin: 2px 0 0 66px; 
 		box-sizing: border-box;
 
-		a {
+		a, .title {
 			font-family: "Open Sans", Arial;
 			font-size: 16px;
 			padding: 0 !important;
