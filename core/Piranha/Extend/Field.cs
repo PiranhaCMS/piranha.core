@@ -26,13 +26,5 @@ namespace Piranha.Extend
         /// </summary>
         /// <param name="api">The current api</param>
         public virtual void Init(IApi api) { }
-
-        /// <summary>
-        /// Initializes the field for manager use. This
-        /// method can be used for loading additional meta
-        /// data needed.
-        /// </summary>
-        /// <param name="api">The current api</param>
-        public virtual void InitManager(IApi api) { }
     }
 }
