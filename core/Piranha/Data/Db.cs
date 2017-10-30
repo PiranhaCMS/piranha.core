@@ -33,6 +33,10 @@ namespace Piranha.Data
             new DbMigration() {
                 Name = "AddMediaType",
                 Script = "Piranha.Data.Migrations.4.sql"
+            },
+            new DbMigration() {
+                Name = "RemoveMediaCache",
+                Script = "Piranha.Data.Migrations.5.sql"
             }
         };
 
@@ -57,14 +61,7 @@ namespace Piranha.Data
             //
             // Params
             //
-            var param = api.Params.GetByKey(Config.CACHE_EXPIRES_MEDIA);
-            if (param == null)
-                api.Params.Save(new Param() {
-                    Key = Config.CACHE_EXPIRES_MEDIA,
-                    Value = 0.ToString()
-                });
-
-            param = api.Params.GetByKey(Config.CACHE_EXPIRES_PAGES);
+            var param = api.Params.GetByKey(Config.CACHE_EXPIRES_PAGES);
             if (param == null)
                 api.Params.Save(new Param() {
                     Key = Config.CACHE_EXPIRES_PAGES,

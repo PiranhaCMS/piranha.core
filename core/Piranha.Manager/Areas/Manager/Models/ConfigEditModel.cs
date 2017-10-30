@@ -18,11 +18,6 @@ namespace Piranha.Areas.Manager.Models
         public class CacheConfig
         {
             /// <summary>
-            /// Gets/sets the cache expiration for media.
-            /// </summary>
-            public int MediaExpires { get; set; }
-
-            /// <summary>
             /// Gets/sets the cache expiration for pages.
             /// </summary>
             public int PagesExpires { get; set; }
@@ -71,7 +66,6 @@ namespace Piranha.Areas.Manager.Models
             var model = new ConfigEditModel();
 
             using (var config = new Config(api)) {
-                model.Cache.MediaExpires = config.CacheExpiresMedia;
                 model.Cache.PagesExpires = config.CacheExpiresPages;
 
                 model.General.HierarchicalPageSlugs = config.HierarchicalPageSlugs;
@@ -86,7 +80,6 @@ namespace Piranha.Areas.Manager.Models
         /// <param name="api">The current api</param>
         public void Save(IApi api) {
             using (var config = new Config(api)) {
-                config.CacheExpiresMedia = Cache.MediaExpires;
                 config.CacheExpiresPages = Cache.PagesExpires;
                 config.HierarchicalPageSlugs = General.HierarchicalPageSlugs;
                 config.ManagerExpandedSitemapLevels = General.ExpandedSitemapLevels;

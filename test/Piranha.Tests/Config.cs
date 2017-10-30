@@ -25,8 +25,9 @@ namespace Piranha.Tests
                 Piranha.App.Init(api);
 
                 using (var config = new Piranha.Config(api)) {
-                    config.CacheExpiresMedia = 0;
                     config.CacheExpiresPages = 0;
+                    config.HierarchicalPageSlugs = true;
+                    config.ManagerExpandedSitemapLevels = 0;
                 }
             }
         }
@@ -36,19 +37,6 @@ namespace Piranha.Tests
         /// created by the test.
         /// </summary>
         protected override void Cleanup() { }
-
-        [Fact]
-        public void CacheExpiresMedia() {
-            using (var api = new Api(options, storage)) {
-                using (var config = new Piranha.Config(api)) {
-                    Assert.Equal(0, config.CacheExpiresMedia);
-
-                    config.CacheExpiresMedia = 30;
-
-                    Assert.Equal(30, config.CacheExpiresMedia);
-                }
-            }
-        }
 
         [Fact]
         public void CacheExpiresPages() {
