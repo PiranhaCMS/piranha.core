@@ -26,36 +26,12 @@ namespace Piranha
         /// <summary>
         /// The system config keys.
         /// </summary>
-        public static readonly string CACHE_EXPIRES_MEDIA = "CacheExpiresMedia";
         public static readonly string CACHE_EXPIRES_PAGES = "CacheExpiresPages";
         public static readonly string PAGES_HIERARCHICAL_SLUGS = "HierarchicalPageSlugs";
         public static readonly string MANAGER_EXPANDED_SITEMAP_LEVELS = "ManagerExpandedSitemapLevels";
         #endregion
 
         #region Properties
-        /// <summary>
-        /// Gets/sets the currently configured cache expiration
-        /// in minutes for media.
-        /// </summary>
-        public int CacheExpiresMedia {
-            get {
-                var param = api.Params.GetByKey(CACHE_EXPIRES_MEDIA);
-                if (param != null)
-                    return Convert.ToInt32(param.Value);
-                return 0;
-            }
-            set {
-                var param = api.Params.GetByKey(CACHE_EXPIRES_MEDIA);
-                if (param == null) {
-                    param = new Data.Param() {
-                        Key = CACHE_EXPIRES_MEDIA
-                    };
-                }
-                param.Value = value.ToString();
-                api.Params.Save(param);
-            }
-        }
-
         /// <summary>
         /// Gets/sets the currently configured cache expiration
         /// in minutes for pages.

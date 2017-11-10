@@ -8157,6 +8157,18 @@ body.collapsed .navmenu-inverse span.title {
 ol.sitemap {
   padding-left: 0;
 }
+ol.sitemap .actions {
+  text-align: right;
+}
+ol.sitemap .actions.one {
+  width: 54px;
+}
+ol.sitemap .actions.two {
+  width: 88px;
+}
+ol.sitemap .actions.three {
+  width: 122px;
+}
 ol.sitemap.header {
   background: #e2e2e2;
   font-family: "Open Sans", Arial;
@@ -8173,15 +8185,6 @@ ol.sitemap.header div {
 ol.sitemap.header .date {
   width: 120px;
   padding: 12px 20px;
-}
-ol.sitemap.header .actions.one {
-  width: 54px;
-}
-ol.sitemap.header .actions.two {
-  width: 88px;
-}
-ol.sitemap.header .actions.three {
-  width: 122px;
 }
 li.sitemap-item {
   list-style-type: none;
@@ -8234,7 +8237,8 @@ li.sitemap-item .content {
   margin: 2px 0 0 66px;
   box-sizing: border-box;
 }
-li.sitemap-item .content a {
+li.sitemap-item .content a,
+li.sitemap-item .content .title {
   font-family: "Open Sans", Arial;
   font-size: 16px;
   padding: 0 !important;

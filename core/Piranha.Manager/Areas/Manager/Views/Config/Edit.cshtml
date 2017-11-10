@@ -71,16 +71,6 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        @Html.LabelFor(m => m.Cache.MediaExpires, "Media cache expiration (minutes)")
-                        <blockquote>
-                            The time in minutes that web browsers can use media before
-                            asking the server for new updates.
-                        </blockquote>
-                        @Html.TextBoxFor(m => m.Cache.MediaExpires, new { @class = "form-control", type = "number" })
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
                         @Html.LabelFor(m => m.Cache.PagesExpires, "Page cache expiration (minutes)")
                         <blockquote>
                             The time in minutes that web browsers can use pages before
