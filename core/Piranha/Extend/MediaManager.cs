@@ -56,7 +56,7 @@ namespace Piranha.Extend
             /// <param name="extension">The file extension</param>
             /// <returns>If the extension exists</returns>
             public bool ContainsExtension(string extension) {
-                return this.Any(t => t.Extension == extension);
+                return this.Any(t => t.Extension.Equals(extension, System.StringComparison.OrdinalIgnoreCase));
             }
         }
 
