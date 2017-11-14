@@ -7,4 +7,6 @@
 -- http://github.com/piranhacms/piranha
 -- 
 
-DELETE FROM [Piranha_Params] WHERE [Key] = 'CacheExpiresMedia';
+UPDATE [Piranha_Media] SET [Type] = 1 WHERE [ContentType] LIKE 'document/%' OR [ContentType] LIKE 'application/%';
+UPDATE [Piranha_Media] SET [Type] = 2 WHERE [ContentType] LIKE 'image/%';
+UPDATE [Piranha_Media] SET [Type] = 3 WHERE [ContentType] LIKE 'video/%';

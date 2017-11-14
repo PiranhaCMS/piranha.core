@@ -35,8 +35,12 @@ namespace Piranha.Data
                 Script = "Piranha.Data.Migrations.4.sql"
             },
             new DbMigration() {
-                Name = "RemoveMediaCache",
+                Name = "UpdateMediaTypes",
                 Script = "Piranha.Data.Migrations.5.sql"
+            },
+            new DbMigration() {
+                Name = "RemoveMediaCache",
+                Script = "Piranha.Data.Migrations.6.sql"
             }
         };
 

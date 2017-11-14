@@ -7,5 +7,4 @@
 -- http://github.com/piranhacms/piranha
 -- 
 
-ALTER TABLE [Piranha_Media] ADD [Type] INT NOT NULL DEFAULT(0);
-
+DELETE FROM [Piranha_Params] WHERE [Key] = 'CacheExpiresMedia';
