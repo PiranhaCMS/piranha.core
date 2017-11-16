@@ -92,7 +92,7 @@ namespace Piranha.Areas.Manager.Models
             model.PageTypes = api.PageTypes.GetAll().ToList();
             model.Sitemap = api.Sites.GetSitemap(site.Id, onlyPublished: false);
             model.Sites = api.Sites.GetAll().Select(s => new SiteInfo() {
-                Id = s.Id == defaultSite.Id ? "" : s.Id,
+                Id = s.Id,
                 Title = s.Title,
                 IsDefault = s.IsDefault
             }).ToList();

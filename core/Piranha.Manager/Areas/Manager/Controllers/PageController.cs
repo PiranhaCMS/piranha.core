@@ -19,6 +19,8 @@ namespace Piranha.Areas.Manager.Controllers
     [Area("Manager")]
     public class PageController : ManagerAreaControllerBase
     {
+        private const string COOKIE_SELECTEDSITE = "PiranhaManager_SelectedSite";
+
         /// <summary>
         /// Default constructor.
         /// </summary>
@@ -31,7 +33,10 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/pages/{pageId?}")]
         [Authorize(Policy = Permission.Pages)]
         public ViewResult List(string pageId = null) {
-            return ListSite(null, pageId);
+            // Get the currently selected site from the request cookies
+            var siteId = Request.Cookies[COOKIE_SELECTEDSITE];
+
+            return ListSite(siteId, pageId);
         }
 
         /// <summary>
@@ -43,22 +48,11 @@ namespace Piranha.Areas.Manager.Controllers
             var model = Models.PageListModel.Get(api, siteId, pageId);
             var defaultSite = api.Sites.GetDefault();
 
-            // TODO!
-            //
-            // This doesn't really work for multiple users but is
-            // rather a proof of context. Menus needs to be changed
-            // per user session rather than globally.
-            Piranha.Manager.Menu
-                .Items["Content"]
-                .Items["Pages"]
-                .Action = string.IsNullOrEmpty(siteId) ? "List" : "ListSite";
-            Piranha.Manager.Menu
-                .Items["Content"]
-                .Items["Pages"]
-                .Params = new {
-                    pageId = "",
-                    siteId = model.SiteId != defaultSite.Id ? model.SiteId : ""
-                };
+            // Store a cookie on our currently selected site
+            if (!string.IsNullOrEmpty(siteId))
+                Response.Cookies.Append(COOKIE_SELECTEDSITE, siteId);
+            else Response.Cookies.Delete(COOKIE_SELECTEDSITE); 
+
             return View("List", model);
         }
 
