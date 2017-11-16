@@ -148,6 +148,31 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void AddEmptyFailure() {
+            using (var api = new Api(options, storage, cache)) {
+                Assert.ThrowsAny<ArgumentException>(() =>
+                    api.Sites.Save(new Data.Site()));
+            }            
+        }
+
+        [Fact]
+        public void AddAndGenerateInternalId() {
+            var id = Guid.NewGuid().ToString();
+
+            using (var api = new Api(options, storage, cache)) {
+                api.Sites.Save(new Data.Site() {
+                    Id = id,
+                    Title = "Generate internal id"
+                });
+
+                var site = api.Sites.GetById(id);
+
+                Assert.NotNull(site);
+                Assert.Equal("GenerateInternalId", site.InternalId);
+            }
+        }
+
+        [Fact]
         public void GetAll() {
             using (var api = new Api(options, storage, cache)) {
                 var models = api.Sites.GetAll();

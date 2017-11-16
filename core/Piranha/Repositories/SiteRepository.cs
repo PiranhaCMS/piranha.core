@@ -143,6 +143,14 @@ namespace Piranha.Repositories
         protected override void Add(Site model, IDbTransaction transaction = null) {
             PrepareInsert(model, transaction);
 
+            // Check for title
+            if (string.IsNullOrWhiteSpace(model.Title))
+                throw new ArgumentException("Title cannot be empty");
+
+            // Ensure InternalId
+            if (string.IsNullOrWhiteSpace(model.InternalId))
+                model.InternalId = Utils.GenerateInteralId(model.Title);
+
             if (model.IsDefault) {
                 // Make sure no other site is default first
                 var def = GetDefault(transaction);

@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -75,6 +76,16 @@ namespace Piranha
             if (slug.StartsWith("-"))
                 slug = slug.Substring(Math.Min(slug.IndexOf("-") + 1, slug.Length));
             return slug;
+        }
+
+        /// <summary>
+        /// Generates a camel cased internal id from the given string.
+        /// </summary>
+        /// <param name="str">The string</param>
+        /// <returns>The internal id</returns>
+        public static string GenerateInteralId(string str) {
+            var ti = new CultureInfo("en-US", false).TextInfo;
+            return ti.ToTitleCase(GenerateSlug(str).Replace('-', ' ')).Replace(" ", "");
         }
 
 
