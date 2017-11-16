@@ -330,10 +330,10 @@ namespace Piranha.Repositories
                         var prefix = "";
 
                         // Check if we should generate hierarchical slugs
-                        using (var config = new Config(api)) {
+                        using (var config = new Config(api, tx)) {
                             if (config.HierarchicalPageSlugs && !string.IsNullOrWhiteSpace(page.ParentId)) {
                                 var parentSlug = db.QueryFirstOrDefault<string>($"SELECT [Slug] FROM [{table}] WHERE [Id]=@ParentId",
-                                    page, transaction: transaction);
+                                    page, transaction: tx);
 
                                 if (!string.IsNullOrWhiteSpace(parentSlug)) {
                                     prefix = parentSlug + "/";
