@@ -37,7 +37,7 @@ namespace Piranha.AspNetCore
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
                 var authorized = true;
 
-                var response = StartPageRouter.Invoke(api, url);
+                var response = StartPageRouter.Invoke(api, url, context.Request.Host.Host);
                 if (response != null) {
                     if (logger != null)
                         logger.LogInformation($"Found startpage\n  Route: {response.Route}\n  Params: {response.QueryString}");

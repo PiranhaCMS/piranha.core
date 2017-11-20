@@ -41,6 +41,14 @@ namespace Piranha.Repositories
         Site GetByInternalId(string internalId, IDbTransaction transaction = null);
 
         /// <summary>
+        /// Gets the model with the given hostname.
+        /// </summary>
+        /// <param name="hostname">The hostname</param>
+        /// <param name="transaction">The optional transaction</param>
+        /// <returns>The model</returns>
+        Site GetByHostname(string hostname, IDbTransaction transaction = null);
+
+        /// <summary>
         /// Gets the default side.
         /// </summary>
         /// <param name="transaction">The optional transaction</param>
