@@ -4,13 +4,13 @@
     <div class="col-sm-6">
         <div class="form-group">
             <label>Navigation title</label>
-            @Html.TextBoxFor(m => m.NavigationTitle, new { @class = "form-control", placeholder = "The optional navigation title" })
+            @Html.TextBoxFor(m => m.NavigationTitle, new { @class = "form-control", maxlength = 128, placeholder = "The optional navigation title" })
         </div>
     </div>
     <div class="col-sm-6">
         <div class="form-group">
             <label>Slug</label>
-            @Html.TextBoxFor(m => m.Slug, new { @class = "form-control", placeholder = "The unique slug" })
+            @Html.TextBoxFor(m => m.Slug, new { @class = "form-control", maxlength = 128, placeholder = "The unique slug" })
         </div>
     </div>
 </div>
@@ -18,11 +18,11 @@
     <div class="col-sm-6">
         <div class="form-group">
             <label>Meta Keywords</label>
-            @Html.TextBoxFor(m => m.MetaKeywords, new { @class = "form-control small", placeholder = "Meta keywords" })
+            @Html.TextBoxFor(m => m.MetaKeywords, new { @class = "form-control small", maxlength = 128, placeholder = "Meta keywords" })
         </div>
         <div class="form-group">
             <label>Meta description</label>
-            @Html.TextAreaFor(m => m.MetaDescription, new { @class = "form-control small count-me", rows = 5, placeholder = "Meta description", style = "height:82px" })
+            @Html.TextAreaFor(m => m.MetaDescription, new { @class = "form-control small count-me", rows = 5, maxlength = 256, placeholder = "Meta description", style = "height:82px" })
             <p>0/255</p>
         </div>
     </div>

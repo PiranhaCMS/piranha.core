@@ -82,7 +82,7 @@
     }
 
     <div class="form-group">
-        @Html.TextBoxFor(m => m.Title, new { @class = "form-control title", @placeholder = "Your page title" })
+        @Html.TextBoxFor(m => m.Title, new { @class = "form-control title", maxlength = 128, placeholder = "Your page title" })
         @Html.ValidationMessageFor(m => m.Title)
     </div>
 

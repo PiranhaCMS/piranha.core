@@ -86,6 +86,15 @@ namespace Piranha.Areas.Manager.Models
         }
 
         /// <summary>
+        /// Refreshes the model after an unsuccessful save.
+        /// </summary>
+        public PageEditModel Refresh(IApi api) {
+            if (!string.IsNullOrWhiteSpace(TypeId))
+                PageType = api.PageTypes.GetById(TypeId);
+            return this;
+        }
+
+        /// <summary>
         /// Creates a new edit model with the given page typeparamref.
         /// </summary>
         /// <param name="api">The current api</param>

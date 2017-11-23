@@ -187,6 +187,14 @@ namespace Piranha.Repositories
         protected void Update(Site model, IDbTransaction transaction = null, bool checkDefault = true) {
             PrepareUpdate(model, transaction);
 
+            // Check for title
+            if (string.IsNullOrWhiteSpace(model.Title))
+                throw new ArgumentException("Title cannot be empty");
+
+            // Ensure InternalId
+            if (string.IsNullOrWhiteSpace(model.InternalId))
+                model.InternalId = Utils.GenerateInteralId(model.Title);
+
             if (checkDefault) {
                 if (model.IsDefault) {
                     // Make sure no other site is default first

@@ -106,12 +106,19 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/page/save")]
         [Authorize(Policy = Permission.PagesSave)]
         public IActionResult Save(Models.PageEditModel model) {
+            // Validate
+            if (string.IsNullOrWhiteSpace(model.Title)) {
+                ErrorMessage("The page could not be saved. Title is mandatory", false);
+                return View("Edit", model.Refresh(api));                
+            }
+
+            // Save
             if (model.Save(api)) {
                 SuccessMessage("The page has been saved.");
                 return RedirectToAction("Edit", new { id = model.Id });
             } else {
                 ErrorMessage("The page could not be saved.", false);
-                return View("Edit", model);
+                return View("Edit", model.Refresh(api));
             }
         }
 
