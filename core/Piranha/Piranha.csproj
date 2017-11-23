@@ -16,9 +16,9 @@
     <Copyright>Copyright 2011-2017 (c) Håkan Edling</Copyright>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="6.1.1" />
+    <PackageReference Include="AutoMapper" Version="6.2.1" />
     <PackageReference Include="Dapper" Version="1.50.2" />
-    <PackageReference Include="Markdig" Version="0.13.1" />
+    <PackageReference Include="Markdig" Version="0.14.6" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
   <ItemGroup>

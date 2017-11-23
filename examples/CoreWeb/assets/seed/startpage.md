@@ -6,9 +6,9 @@ depenencies, but still provide a flexible & high performance CMS library.
 
 Piranha is currently built for `NetStandard 2.0` and uses the following awesome packages:
 
-* AutoMapper `6.1.1`
+* AutoMapper `6.2.1`
 * Dapper `1.50.2`
-* Markdig `0.13.1`
+* Markdig `0.14.6`
 * Newtonsoft.Json `10.0.3`
 
 ## Licensing
