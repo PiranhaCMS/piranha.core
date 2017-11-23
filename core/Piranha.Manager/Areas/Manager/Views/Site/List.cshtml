@@ -37,7 +37,11 @@
     <tbody>
         @foreach (var site in Model.Sites) {
             <tr>
-                <td><a href="@Url.Action("Edit", new { id = site.Id})">@site.Title</a></td>
+                <td class="text-limit-cell">
+                    <span class="text-limit">
+                        <a href="@Url.Action("Edit", new { id = site.Id})">@site.Title</a>
+                    </span>
+                </td>
                 <td class="text-center">
                     @if (site.IsDefault) {
                         <span class="glyphicon glyphicon-ok"></span>

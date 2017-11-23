@@ -61,6 +61,16 @@
 	}
 	>tbody {
 		>tr {
+			background: #fff;
+
+			&:hover {
+				background: #fafafa;
+			}
+
+			&:nth-child(2n+1) {
+				background: #fff;				
+			}
+			
 			>td {
 				padding: 10px 20px;
 				border-top: 4px solid @bg-color;
@@ -151,6 +161,9 @@
   	}
 	.date {
 		width: 114px;
+	}
+	.medium {
+		width: 150px;
 	}
 	.well {
 		margin-top: 10px;

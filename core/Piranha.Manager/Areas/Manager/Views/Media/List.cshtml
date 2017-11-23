@@ -50,7 +50,7 @@
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Type</th>
+                    <th class="medium">Type</th>
                     <th class="date">Size</th>
                     <th class="date">Modified</th>
                     <th clsas="actions one"></th>
@@ -59,9 +59,11 @@
             <tbody>
                 @if (!string.IsNullOrWhiteSpace(Model.CurrentFolderId)) {
                     <tr>
-                        <td>
-                            <span class="glyphicon glyphicon-folder-open media-icon"></span>
-                            <a href="@Url.Action("List", new { folderId = Model.ParentFolderId })">...</a>
+                        <td class="text-limit-cell">
+                            <span class="text-limit">
+                                <span class="glyphicon glyphicon-folder-open media-icon"></span>
+                                <a href="@Url.Action("List", new { folderId = Model.ParentFolderId })">...</a>
+                            </span>
                         </td>
                         <td></td>
                         <td></td>
@@ -71,9 +73,11 @@
                 }
                 @foreach (var folder in Model.Folders) {
                     <tr>
-                        <td>
-                            <span class="glyphicon glyphicon-folder-open media-icon"></span>
-                            <a href="@Url.Action("List", new { folderId = folder.Id})">@folder.Name</a>
+                        <td class="text-limit-cell">
+                            <span class="text-limit">
+                                <span class="glyphicon glyphicon-folder-open media-icon"></span>
+                                <a href="@Url.Action("List", new { folderId = folder.Id})">@folder.Name</a>
+                            </span>
                         </td>
                         <td></td>
                         <td></td>
@@ -87,17 +91,19 @@
                 }
                 @foreach (var item in Model.Media) {
                     <tr>
-                        <td>
-                            @if (item.Type == MediaType.Image) {
-                                <span class="glyphicon glyphicon-picture media-icon"></span>
-                            } else if (item.Type == MediaType.Video) {
-                                <span class="glyphicon glyphicon-film media-icon"></span>
-                            } else if (item.Type == MediaType.Document) {
-                                <span class="glyphicon glyphicon-book media-icon"></span>
-                            } else {
-                                <span class="glyphicon glyphicon-exclamation-sign media-icon"></span>                                
-                            }
-                            <a href="#" target="_blank" data-toggle="modal" data-target="#modalImgPreview" data-filename="@item.Filename" data-url="@Url.Content(item.PublicUrl)" data-contenttype="@item.ContentType" data-filesize="@Piranha.Utils.FormatByteSize(item.Size)" data-modified="@item.LastModified.ToString("yyyy-MM-dd")" data-id="@item.Id" data-parentid="@item.FolderId">@item.Filename</a>
+                        <td class="text-limit-cell">
+                            <span class="text-limit">
+                                @if (item.Type == MediaType.Image) {
+                                    <span class="glyphicon glyphicon-picture media-icon"></span>
+                                } else if (item.Type == MediaType.Video) {
+                                    <span class="glyphicon glyphicon-film media-icon"></span>
+                                } else if (item.Type == MediaType.Document) {
+                                    <span class="glyphicon glyphicon-book media-icon"></span>
+                                } else {
+                                    <span class="glyphicon glyphicon-exclamation-sign media-icon"></span>                                
+                                }
+                                <a href="#" target="_blank" data-toggle="modal" data-target="#modalImgPreview" data-filename="@item.Filename" data-url="@Url.Content(item.PublicUrl)" data-contenttype="@item.ContentType" data-filesize="@Piranha.Utils.FormatByteSize(item.Size)" data-modified="@item.LastModified.ToString("yyyy-MM-dd")" data-id="@item.Id" data-parentid="@item.FolderId">@item.Filename</a>
+                            </span>
                         </td>
                         <td>@item.ContentType</td>
                         <td>@Piranha.Utils.FormatByteSize(item.Size)</td>

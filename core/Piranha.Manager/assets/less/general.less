@@ -105,3 +105,18 @@ a {
 	border-radius: 0;
 	border-width: 0;
 }
+
+.text-limit-cell {
+	position: relative;
+	background-color: transparent !important;
+
+	.text-limit {
+		display: inline-block;
+		position: absolute;
+		max-width: 90%;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		top: 8px;
+	}
+}

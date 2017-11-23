@@ -7892,6 +7892,19 @@ a {
   border-radius: 0;
   border-width: 0;
 }
+.text-limit-cell {
+  position: relative;
+  background-color: transparent !important;
+}
+.text-limit-cell .text-limit {
+  display: inline-block;
+  position: absolute;
+  max-width: 90%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  top: 8px;
+}
 body.collapsed .navmenu-inverse {
   width: 50px;
 }
@@ -8057,6 +8070,15 @@ body.collapsed .navmenu-inverse span.title {
 .table thead tr th .sort.desc::after {
   content: "";
 }
+.table > tbody > tr {
+  background: #fff;
+}
+.table > tbody > tr:hover {
+  background: #fafafa;
+}
+.table > tbody > tr:nth-child(2n+1) {
+  background: #fff;
+}
 .table > tbody > tr > td {
   padding: 10px 20px;
   border-top: 4px solid #f2f2f2;
@@ -8124,6 +8146,9 @@ body.collapsed .navmenu-inverse span.title {
 }
 .table .date {
   width: 114px;
+}
+.table .medium {
+  width: 150px;
 }
 .table .well {
   margin-top: 10px;
