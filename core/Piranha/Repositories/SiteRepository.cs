@@ -56,6 +56,17 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Gets the model with the given hostname.
+        /// </summary>
+        /// <param name="hostname">The hostname</param>
+        /// <param name="transaction">The optional transaction</param>
+        /// <returns>The model</returns>
+        public Site GetByHostname(string hostname, IDbTransaction transaction = null) {
+            return conn.QueryFirstOrDefault<Site>($"SELECT * FROM [{table}] WHERE [Hostnames] LIKE @Hostname",
+                new { Hostname = $"%{hostname}%"}, transaction: transaction);
+        }        
+
+        /// <summary>
         /// Gets the default side.
         /// </summary>
         /// <param name="transaction">The optional transaction</param>
