@@ -28,6 +28,11 @@
 						Piranha CMS
 						<small>Version 4.0.0-beta1</small>
 					</p>
+					@if (!string.IsNullOrWhiteSpace(ViewBag.Message)) {
+						<div class="alert alert-danger" role="alert">
+							@Html.Raw(ViewBag.Message)
+						</div>
+					}
 					<div class="form-group">
 						@Html.TextBox("UserName", "", new { @class = "form-control", @placeholder = "username" })
 					</div>

@@ -7888,6 +7888,10 @@ a {
   margin-bottom: 0;
   min-height: 35px;
 }
+.alert {
+  border-radius: 0;
+  border-width: 0;
+}
 body.collapsed .navmenu-inverse {
   width: 50px;
 }

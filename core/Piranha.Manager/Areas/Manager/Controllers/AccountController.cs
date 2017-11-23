@@ -73,6 +73,8 @@ namespace Piranha.Areas.Manager.Controllers
                     return Redirect(model.ReturnUrl);
                 else return RedirectToAction("List", "Page", new { pageId = "" });
             }
+
+            ViewBag.Message = "You have entered an invalid username or password ";
             return Login(model.ReturnUrl);
         }
     }
