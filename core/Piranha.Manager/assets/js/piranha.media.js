@@ -99,6 +99,10 @@ $(document).on('click', '.btn-media-clear', function () {
     piranha.media.remove($(this));
 });
 
+$('.modal').on('shown.bs.modal', function (event) {
+    $(this).find('input[autofocus]').focus();
+});
+
 $('#modalMedia').on('show.bs.modal', function (event) {
     piranha.media.init($(event.relatedTarget));
     piranha.media.load($(event.relatedTarget), '');
