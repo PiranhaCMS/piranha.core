@@ -14,7 +14,7 @@
     <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
     <iconUrl>http://piranhacms.org/assets/twitter-shield.png</iconUrl>
     <releaseNotes>See the changelog available at:
-https://github.com/piranhacms/piranha.core/wiki/alpha-changelog
+https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework=".NETStandard2.0">
