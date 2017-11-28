@@ -9,7 +9,6 @@
  */
 
 using System;
-using System.Data;
 
 namespace Piranha
 {
@@ -23,11 +22,6 @@ namespace Piranha
         /// The private api.
         /// </summary>
         private readonly IApi api;
-
-        /// <summary>
-        /// The private transaction.
-        /// </summary>
-        private readonly IDbTransaction transaction;
 
         /// <summary>
         /// The system config keys.
@@ -45,20 +39,20 @@ namespace Piranha
         public int CacheExpiresPages {
             get
             {
-                var param = api.Params.GetByKey(CACHE_EXPIRES_PAGES, transaction);
+                var param = api.Params.GetByKey(CACHE_EXPIRES_PAGES);
                 if (param != null)
                     return Convert.ToInt32(param.Value);
                 return 0;
             }
             set {
-                var param = api.Params.GetByKey(CACHE_EXPIRES_PAGES, transaction);
+                var param = api.Params.GetByKey(CACHE_EXPIRES_PAGES);
                 if (param == null) {
                     param = new Data.Param() {
                         Key = CACHE_EXPIRES_PAGES
                     };
                 }
                 param.Value = value.ToString();
-                api.Params.Save(param, transaction);
+                api.Params.Save(param);
             }
         }
 
@@ -68,20 +62,20 @@ namespace Piranha
         /// </summary>
         public bool HierarchicalPageSlugs {
             get {
-                var param = api.Params.GetByKey(PAGES_HIERARCHICAL_SLUGS, transaction);
+                var param = api.Params.GetByKey(PAGES_HIERARCHICAL_SLUGS);
                 if (param != null)
                     return Convert.ToBoolean(param.Value);
                 return true;
             }
             set {
-                var param = api.Params.GetByKey(PAGES_HIERARCHICAL_SLUGS, transaction);
+                var param = api.Params.GetByKey(PAGES_HIERARCHICAL_SLUGS);
                 if (param == null) {
                     param = new Data.Param() {
                         Key = PAGES_HIERARCHICAL_SLUGS
                     };
                 }
                 param.Value = value.ToString();
-                api.Params.Save(param, transaction);
+                api.Params.Save(param);
             }
         }
 
@@ -91,20 +85,20 @@ namespace Piranha
         /// </summary>
         public int ManagerExpandedSitemapLevels {
             get {
-                var param = api.Params.GetByKey(MANAGER_EXPANDED_SITEMAP_LEVELS, transaction);
+                var param = api.Params.GetByKey(MANAGER_EXPANDED_SITEMAP_LEVELS);
                 if (param != null)
                     return Convert.ToInt32(param.Value);
                 return 0;
             }
             set {
-                var param = api.Params.GetByKey(MANAGER_EXPANDED_SITEMAP_LEVELS, transaction);
+                var param = api.Params.GetByKey(MANAGER_EXPANDED_SITEMAP_LEVELS);
                 if (param == null) {
                     param = new Data.Param() {
                         Key = MANAGER_EXPANDED_SITEMAP_LEVELS
                     };
                 }
                 param.Value = value.ToString();
-                api.Params.Save(param, transaction);                
+                api.Params.Save(param);                
             }
         }
         #endregion
@@ -113,10 +107,8 @@ namespace Piranha
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        /// <param name="tx"></param>
-        public Config(IApi api, IDbTransaction tx = null) {
+        public Config(IApi api) {
             this.api = api;
-            this.transaction = tx;
         }
 
         /// <summary>

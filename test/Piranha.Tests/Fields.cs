@@ -32,7 +32,7 @@ namespace Piranha.Tests
         /// Sets up & initializes the tests.
         /// </summary>
         protected override void Init() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(GetDb(), storage)) {
                 Piranha.App.Init(api);
                 Piranha.App.Fields.Register<MyFirstField>();
 

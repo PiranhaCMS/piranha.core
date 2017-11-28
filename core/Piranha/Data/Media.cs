@@ -59,5 +59,10 @@ namespace Piranha.Data
         /// Gets/sets the last modification date.
         /// </summary>
         public DateTime LastModified { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional folder.
+        /// </summary>
+        public MediaFolder Folder { get; set; }
     }
 }

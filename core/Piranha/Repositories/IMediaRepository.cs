@@ -10,7 +10,6 @@
 
 using Piranha.Data;
 using System.Collections.Generic;
-using System.Data;
 
 namespace Piranha.Repositories
 {
@@ -20,41 +19,36 @@ namespace Piranha.Repositories
         /// Gets all media available in the specified folder.
         /// </summary>
         /// <param name="folderId">The optional folder id</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The available media</returns>
-        IEnumerable<Media> GetAll(string folderId = null, IDbTransaction transaction = null);
+        IEnumerable<Media> GetAll(string folderId = null);
 
         /// <summary>
         /// Gets all media folders available in the specified
         /// folder.
         /// </summary>
         /// <param name="folderId">The optional folder id</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The available media folders</returns>
-        IEnumerable<MediaFolder> GetAllFolders(string folderId = null, IDbTransaction transaction = null);
+        IEnumerable<MediaFolder> GetAllFolders(string folderId = null);
 
         /// <summary>
         /// Gets the media with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The media</returns>
-        Media GetById(string id, IDbTransaction transaction = null);
+        Media GetById(string id);
 
         /// <summary>
         /// Gets the media folder with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The media folder</returns>
-        MediaFolder GetFolderById(string id, IDbTransaction transaction = null);
+        MediaFolder GetFolderById(string id);
 
         /// <summary>
         /// Gets the hierachical media structure.
         /// </summary>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The media structure</returns>
-        Models.MediaStructure GetStructure(IDbTransaction transaction = null);
+        Models.MediaStructure GetStructure();
 
         /// <summary>
         /// Adds or updates the given model in the database
@@ -62,43 +56,37 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="model">The model</param>
         /// <param name="data">The binary data</param>
-        /// <param name="transaction">The optional transaction</param>
-        void Save(Models.MediaContent content, IDbTransaction transaction = null);
+        void Save(Models.MediaContent content);
 
         /// <summary>
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        void SaveFolder(MediaFolder model, IDbTransaction transaction = null);
+        void SaveFolder(MediaFolder model);
 
         /// <summary>
         /// Deletes the media with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        /// <param name="transaction">The optional transaction</param>
-        void Delete(string id, IDbTransaction transaction = null);
+        void Delete(string id);
 
         /// <summary>
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The media</param>
-        /// <param name="transaction">The optional transaction</param>
-        void Delete(Media model, IDbTransaction transaction = null);
+        void Delete(Media model);
 
         /// <summary>
         /// Deletes the media folder with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        /// <param name="transaction">The optional transaction</param>
-        void DeleteFolder(string id, IDbTransaction transaction = null);
+        void DeleteFolder(string id);
 
         /// <summary>
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The media</param>
-        /// <param name="transaction">The optional transaction</param>
-        void DeleteFolder(MediaFolder model, IDbTransaction transaction = null);
+        void DeleteFolder(MediaFolder model);
     }
 }

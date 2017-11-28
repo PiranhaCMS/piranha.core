@@ -8,31 +8,28 @@
  * 
  */
 
-using Dapper;
+using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 
 namespace Piranha.Repositories
 {
     public class MediaRepository : IMediaRepository
     {
-        private readonly IDbConnection db;
+        private readonly IDb db;
         private readonly IStorage storage;
-        private const string TABLE = "Piranha_Media";
-        private const string FOLDERTABLE = "Piranha_MediaFolders";
         private readonly ICache cache;        
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="connection">The current connection</param>
+        /// <param name="db">The current db context</param>
         /// <param name="storage">The current storage manager</param>
         /// <param name="cache">The optional model cache</param>
-        public MediaRepository(IDbConnection connection, IStorage storage, ICache cache = null) {
-            this.db = connection;
+        public MediaRepository(IDb db, IStorage storage, ICache cache = null) {
+            this.db = db;
             this.storage = storage;
             this.cache = cache;
         }
@@ -41,19 +38,15 @@ namespace Piranha.Repositories
         /// Gets all media available in the specified folder.
         /// </summary>
         /// <param name="folderId">The optional folder id</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The available media</returns>
-        public IEnumerable<Media> GetAll(string folderId = null, IDbTransaction transaction = null) {
+        public IEnumerable<Media> GetAll(string folderId = null) {
             IEnumerable<Media> models;
 
-            if (folderId == null) {
-                models = db.Query<Media>($"SELECT * FROM [{TABLE}] WHERE [FolderId] IS NULL ORDER BY [Filename]",
-                    transaction: transaction);
-            } else {
-                models = db.Query<Media>($"SELECT * FROM [{TABLE}] WHERE [FolderId]=@FolderId ORDER BY [Filename]", new {
-                    FolderId = folderId
-                }, transaction: transaction);
-            }
+            models = db.Media
+                .AsNoTracking()
+                .Where(m => m.FolderId == folderId)
+                .OrderBy(m => m.Filename)
+                .ToList();
 
             foreach (var model in models) {
                 model.PublicUrl = storage.GetPublicUrl(model);
@@ -66,33 +59,28 @@ namespace Piranha.Repositories
         /// folder.
         /// </summary>
         /// <param name="folderId">The optional folder id</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The available media folders</returns>
-        public IEnumerable<MediaFolder> GetAllFolders(string folderId = null, IDbTransaction transaction = null) {
-            if (folderId == null) {
-                return db.Query<MediaFolder>($"SELECT * FROM [{FOLDERTABLE}] WHERE [ParentId] IS NULL ORDER BY [Name]",
-                transaction: transaction);
-            } else {
-                return db.Query<MediaFolder>($"SELECT * FROM [{FOLDERTABLE}] WHERE [ParentId]=@FolderId ORDER BY [Name]", new {
-                    FolderId = folderId
-                }, transaction: transaction);
-            }
+        public IEnumerable<MediaFolder> GetAllFolders(string folderId = null) {
+            return db.MediaFolders
+                .AsNoTracking()
+                .Where(f => f.ParentId == folderId)
+                .OrderBy(f => f.Name)
+                .ToList();
         }
 
         /// <summary>
         /// Gets the media with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The media</returns>
-        public Media GetById(string id, IDbTransaction transaction = null) {
+        public Media GetById(string id) {
             if (!string.IsNullOrWhiteSpace(id)) {
                 Media model = cache != null ? cache.Get<Media>(id) : null;
 
                 if (model == null) {
-                    model = db.QuerySingleOrDefault<Media>($"SELECT * FROM [{TABLE}] WHERE [Id]=@Id", new { 
-                        Id = id 
-                    }, transaction: transaction);
+                    model = db.Media
+                        .AsNoTracking()
+                        .FirstOrDefault(m => m.Id == id);
 
                     if (model != null)
                         model.PublicUrl = storage.GetPublicUrl(model);
@@ -109,15 +97,14 @@ namespace Piranha.Repositories
         /// Gets the media folder with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The media folder</returns>
-        public MediaFolder GetFolderById(string id, IDbTransaction transaction = null) {
+        public MediaFolder GetFolderById(string id) {
             MediaFolder model = cache != null ? cache.Get<MediaFolder>(id) : null;
 
             if (model == null) {
-                model = db.QuerySingleOrDefault<MediaFolder>($"SELECT * FROM [{FOLDERTABLE}] WHERE [Id]=@Id", new { 
-                    Id = id 
-                }, transaction: transaction);
+                model = db.MediaFolders
+                    .AsNoTracking()
+                    .FirstOrDefault(f => f.Id == id);
 
                 if (cache != null && model != null)
                     cache.Set(model.Id, model);                                
@@ -128,14 +115,16 @@ namespace Piranha.Repositories
         /// <summary>
         /// Gets the hierachical media structure.
         /// </summary>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The media structure</returns>
-        public Models.MediaStructure GetStructure(IDbTransaction transaction = null) {
+        public Models.MediaStructure GetStructure() {
             Models.MediaStructure model = cache != null ? cache.Get<Models.MediaStructure>("MediaStructure") : null;
 
             if (model == null) {
-                var folders = db.Query<MediaFolder>("SELECT [Id],[ParentId],[Name],[Created] FROM [Piranha_MediaFolders] ORDER BY [ParentId], [Name]",
-                    transaction: transaction);
+                var folders = db.MediaFolders
+                    .AsNoTracking()
+                    .OrderBy(f => f.ParentId)
+                    .ThenBy(f => f.Name)
+                    .ToList();
 
                 model = Sort(folders);
 
@@ -151,26 +140,27 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="model">The model</param>
         /// <param name="data">The binary data</param>
-        /// <param name="transaction">The optional transaction</param>
-        public void Save(Models.MediaContent content, IDbTransaction transaction = null) {
+        public void Save(Models.MediaContent content) {
             if (!App.MediaTypes.IsSupported(content.Filename))
                 throw new NotSupportedException("Filetype not supported.");
 
-            var model = GetById(content.Id, transaction);
-            var insert = false;
+            var model = db.Media
+                .FirstOrDefault(m => m.Id == content.Id);
 
             if (model == null) {
                 model = new Media() {
-                    Id = model != null || !string.IsNullOrWhiteSpace(content.Id) ? content.Id : Guid.NewGuid().ToString()
+                    Id = model != null || !string.IsNullOrWhiteSpace(content.Id) ? content.Id : Guid.NewGuid().ToString(),
+                    Created = DateTime.Now
                 };
                 content.Id = model.Id;
-                insert = true;
+                db.Media.Add(model);
             }
 
             model.Filename = content.Filename;
             model.FolderId = content.FolderId;
             model.Type = App.MediaTypes.GetMediaType(content.Filename);
             model.ContentType = App.MediaTypes.GetContentType(content.Filename);
+            model.LastModified = DateTime.Now;
 
             // Upload to storage
             using (var session = storage.Open()) {
@@ -190,21 +180,8 @@ namespace Piranha.Repositories
                 }
             }
 
-            if (insert) {
-                // Prepare
-                model.Created = DateTime.Now;
-                model.LastModified = DateTime.Now;
-
-                db.Execute($"INSERT INTO [{TABLE}] ([Id],[FolderId],[Type],[Filename],[ContentType],[Size],[Created],[LastModified]) VALUES(@Id,@FolderId,@Type,@Filename,@ContentType,@Size,@Created,@LastModified)",
-                    model, transaction: transaction);
-            } else {
-                model.LastModified = DateTime.Now;
-
-                db.Execute($"UPDATE [{TABLE}] SET [Id]=@Id,[FolderId]=@FolderId,[Type]=@Type,[Filename]=@Filename,[ContentType]=@ContentType,[Size]=@Size,[LastModified]=@LastModified WHERE [Id]=@Id",
-                    model, transaction: transaction);
-
-                RemoveFromCache(model);
-            }
+            db.SaveChanges();
+            RemoveFromCache(model);
         }
 
         /// <summary>
@@ -212,21 +189,22 @@ namespace Piranha.Repositories
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        public void SaveFolder(Data.MediaFolder model, IDbTransaction transaction = null) {
-            var insert = db.ExecuteScalar<int>($"SELECT COUNT(*) FROM [{FOLDERTABLE}] where [Id]=@Id", model, transaction: transaction) == 0;
+        public void SaveFolder(Data.MediaFolder model) {
+            var folder = db.MediaFolders
+                .FirstOrDefault(f => f.Id == model.Id);
 
-            // Prepare
-            model.Id = !string.IsNullOrWhiteSpace(model.Id) ? model.Id : Guid.NewGuid().ToString();
-            model.Created = insert ? DateTime.Now : model.Created;
-
-            if (insert) {
-                db.Execute($"INSERT INTO [{FOLDERTABLE}] ([Id],[ParentId],[Name],[Created]) VALUES(@Id,@ParentId,@Name,@Created)",
-                    model, transaction: transaction);
-            } else {
-                db.Execute($"UPDATE [{FOLDERTABLE}] SET [Id]=@Id,[ParentId]=@ParentId,[Name]=@Name WHERE [Id]=@Id",
-                    model, transaction: transaction);
+            if (folder == null) {
+                folder = new Data.MediaFolder() {
+                    Id = !string.IsNullOrWhiteSpace(model.Id) ? model.Id : Guid.NewGuid().ToString(),
+                    Created = DateTime.Now
+                };
+                model.Id = folder.Id;
+                db.MediaFolders.Add(folder);
             }
+
+            App.Mapper.Map<Data.MediaFolder, Data.MediaFolder>(model, folder);
+
+            db.SaveChanges();
             RemoveStructureFromCache();
         }
 
@@ -234,49 +212,58 @@ namespace Piranha.Repositories
         /// Deletes the media with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        /// <param name="transaction">The optional transaction</param>
-        public void Delete(string id, IDbTransaction transaction = null) {
-            var media = GetById(id, transaction);
+        public void Delete(string id) {
+            var media = db.Media
+                .FirstOrDefault(m => m.Id == id);
 
-            if (media != null)
-                Delete(media);
+            if (media != null) {
+                db.Media.Remove(media);
+                db.SaveChanges();
+
+                // Delete from storage
+                using (var session = storage.Open()) {
+                    session.Delete(media.Id + "-" + media.Filename);
+                }
+
+                RemoveFromCache(media);
+            }
         }
 
         /// <summary>
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The media</param>
-        /// <param name="transaction">The optional transaction</param>
-        public void Delete(Media model, IDbTransaction transaction = null) {
-            db.Execute($"DELETE FROM [{TABLE}] WHERE [Id]=@Id", model, transaction: transaction);
-
-            // Delete from storage
-            using (var session = storage.Open()) {
-                session.Delete(model.Id + "-" + model.Filename);
-            }
-            RemoveFromCache(model);
+        public void Delete(Media model) {
+            Delete(model.Id);
         }
 
         /// <summary>
         /// Deletes the media folder with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        /// <param name="transaction">The optional transaction</param>
-        public void DeleteFolder(string id, IDbTransaction transaction = null) {
-            var model = GetFolderById(id, transaction);
+        public void DeleteFolder(string id) {
+            var folder = db.MediaFolders
+                .FirstOrDefault(f => f.Id == id);
 
-            if (model != null)
-                DeleteFolder(model, transaction);
+            if (folder != null) {
+                var folderCount = db.MediaFolders.Count(f => f.ParentId == id);
+                var mediaCount = db.Media.Count(m => m.FolderId == id);
+
+                if (folderCount == 0 && mediaCount == 0) {
+                    db.MediaFolders.Remove(folder);
+                    db.SaveChanges();
+
+                    RemoveFromCache(folder);
+                }
+            }
         }
 
         /// <summary>
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The media</param>
-        /// <param name="transaction">The optional transaction</param>
-        public void DeleteFolder(Data.MediaFolder model, IDbTransaction transaction = null) {
-            db.Execute($"DELETE FROM [{FOLDERTABLE}] WHERE [Id]=@Id", model, transaction: transaction);
-            RemoveFromCache(model);
+        public void DeleteFolder(Data.MediaFolder model) {
+            DeleteFolder(model.Id);
         }
 
         /// <summary>

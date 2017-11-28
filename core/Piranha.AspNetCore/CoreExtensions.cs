@@ -15,15 +15,6 @@ using System;
 public static class CoreExtensions
 {
     /// <summary>
-    /// Registers the Piranha db initializer.
-    /// </summary>
-    /// <param name="services">The current service collection</param>
-    /// <param name="options">The connection builder</param>
-    public static void AddPiranhaDb(this IServiceCollection services, Action<Piranha.Data.DbBuilder> options) {
-        services.AddSingleton<Action<Piranha.Data.DbBuilder>>(options);
-    }
-
-    /// <summary>
     /// Uses the piranha middleware.
     /// </summary>
     /// <param name="builder">The current application builder</param>

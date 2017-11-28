@@ -8,11 +8,10 @@
  * 
  */
 
-using Dapper;
+using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 
 namespace Piranha.Repositories
@@ -25,10 +24,10 @@ namespace Piranha.Repositories
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        /// <param name="connection">The current db connection</param>
+        /// <param name="db">The current db context</param>
         /// <param name="cache">The optional model cache</param>
-        public SiteRepository(Api api, IDbConnection connection, ICache cache = null)
-            : base(connection, "Piranha_Sites", "Title", modelCache: cache) 
+        public SiteRepository(Api api, IDb db, ICache cache = null)
+            : base(db, cache) 
         { 
             this.api = api;
         }
@@ -37,17 +36,17 @@ namespace Piranha.Repositories
         /// Gets the model with the given internal id.
         /// </summary>
         /// <param name="internalId">The unique internal i</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The model</returns>
-        public Site GetByInternalId(string internalId, IDbTransaction transaction = null) {
+        public Site GetByInternalId(string internalId) {
             var id = cache != null ? cache.Get<string>($"SiteId_{internalId}") : null;
             Site model = null;
 
             if (!string.IsNullOrEmpty(id)) {
-                model = GetById(id, transaction);
+                model = GetById(id);
             } else {
-                model = conn.QueryFirstOrDefault<Site>($"SELECT * FROM [{table}] WHERE [InternalId]=@InternalId",
-                    new { InternalId = internalId }, transaction: transaction);
+                model = db.Sites
+                    .AsNoTracking()
+                    .FirstOrDefault(s => s.InternalId == internalId);
 
                 if (cache != null && model != null)
                     AddToCache(model);
@@ -59,24 +58,24 @@ namespace Piranha.Repositories
         /// Gets the model with the given hostname.
         /// </summary>
         /// <param name="hostname">The hostname</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The model</returns>
-        public Site GetByHostname(string hostname, IDbTransaction transaction = null) {
-            return conn.QueryFirstOrDefault<Site>($"SELECT * FROM [{table}] WHERE [Hostnames] LIKE @Hostname",
-                new { Hostname = $"%{hostname}%"}, transaction: transaction);
+        public Site GetByHostname(string hostname) {
+            return db.Sites
+                .AsNoTracking()
+                .FirstOrDefault(s => s.Hostnames.Contains(hostname));
         }        
 
         /// <summary>
         /// Gets the default side.
         /// </summary>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The modell, or NULL if it doesnt exist</returns>
-        public Site GetDefault(IDbTransaction transaction = null) {
+        public Site GetDefault() {
             Site model = cache != null ? cache.Get<Site>($"Site_{Guid.Empty}") : null;
 
             if (model == null) {
-                model = conn.QueryFirstOrDefault<Site>($"SELECT * FROM [{table}] WHERE [IsDefault]=1",
-                    transaction: transaction);
+                model = db.Sites
+                    .AsNoTracking()
+                    .FirstOrDefault(s => s.IsDefault);
 
                 if (cache != null && model != null)
                     AddToCache(model);
@@ -89,11 +88,10 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The optional site id</param>
         /// <param name="onlyPublished">If only published items should be included</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The sitemap</returns>
-        public Models.Sitemap GetSitemap(string id = null, bool onlyPublished = true, IDbTransaction transaction = null) {
+        public Models.Sitemap GetSitemap(string id = null, bool onlyPublished = true) {
             if (id == null) {
-                var site = GetDefault(transaction);
+                var site = GetDefault();
 
                 if (site != null)
                     id = site.Id;
@@ -103,11 +101,15 @@ namespace Piranha.Repositories
                 var sitemap = onlyPublished && cache != null ? cache.Get<Models.Sitemap>($"Sitemap_{id}") : null;
 
                 if (sitemap == null) {
-                    var pages = conn.Query<Page>("SELECT [Id], [ParentId], [SortOrder], [Title], [NavigationTitle], [Slug], [IsHidden], [Published], [Created], [LastModified] FROM [Piranha_Pages] WHERE [SiteId]=@Id ORDER BY [ParentId], [SortOrder]",
-                        new { Id = id }, transaction: transaction);
+                    var pages = db.Pages
+                        .AsNoTracking()
+                        .Where(p => p.SiteId == id)
+                        .OrderBy(p => p.ParentId)
+                        .ThenBy(p => p.SortOrder)
+                        .ToList();
 
                     if (onlyPublished)
-                        pages = pages.Where(p => p.Published.HasValue);
+                        pages = pages.Where(p => p.Published.HasValue).ToList();
                     sitemap = Sort(pages);
 
                     if (onlyPublished && cache != null)
@@ -116,23 +118,6 @@ namespace Piranha.Repositories
                 return sitemap;
             }
             return null;
-        }
-
-        /// <summary>
-        /// Deletes the model with the specified id.
-        /// </summary>
-        /// <param name="id">The unique id</param>
-        /// <param name="transaction">The optional transaction</param>
-        public override void Delete(string id, IDbTransaction transaction = null) {
-            // Delete all pages within the site
-            var pages = conn.Query<string>($"SELECT [Id] FROM [Piranha_Pages] WHERE [SiteId]=@Id", 
-                new { Id = id }, transaction: transaction);
-
-            foreach (var pageId in pages) {
-                api.Pages.Delete(pageId, transaction);
-            }
-
-            base.Delete(id, transaction);
         }
 
         /// <summary>
@@ -150,9 +135,8 @@ namespace Piranha.Repositories
         /// Adds a new model to the database.
         /// </summary>
         /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        protected override void Add(Site model, IDbTransaction transaction = null) {
-            PrepareInsert(model, transaction);
+        protected override void Add(Site model) {
+            PrepareInsert(model);
 
             // Check for title
             if (string.IsNullOrWhiteSpace(model.Title))
@@ -164,39 +148,36 @@ namespace Piranha.Repositories
 
             if (model.IsDefault) {
                 // Make sure no other site is default first
-                var def = GetDefault(transaction);
+                var def = GetDefault();
 
                 if (def != null && def.Id != model.Id) {
                     def.IsDefault = false;
-                    Update(def, transaction, false);
+                    Update(def, false);
                 }
             } else {
                 // Make sure we have a default site
-                var count = conn.ExecuteScalar<int>($"SELECT COUNT(*) FROM [{table}] WHERE [IsDefault]=1");
+                var count = db.Sites.Count(s => s.IsDefault);
                 if (count == 0)
                     model.IsDefault = true;                
             }
-            conn.Execute($"INSERT INTO [{table}] ([Id], [InternalId], [Title], [Description], [Hostnames], [IsDefault], [Created], [LastModified]) VALUES (@Id, @InternalId, @Title, @Description, @Hostnames, @IsDefault, @Created, @LastModified)", 
-                model, transaction: transaction);
+            db.Sites.Add(model);
         }
 
         /// <summary>
         /// Updates the given model in the database.
         /// </summary>
         /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        protected override void Update(Site model, IDbTransaction transaction = null) {
-            Update(model, transaction, true);
+        protected override void Update(Site model) {
+            Update(model, true);
         }        
 
         /// <summary>
         /// Updates the given model in the database.
         /// </summary>
         /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <param name="checkDefault">If default site integrity should be validated</param>
-        protected void Update(Site model, IDbTransaction transaction = null, bool checkDefault = true) {
-            PrepareUpdate(model, transaction);
+        protected void Update(Site model, bool checkDefault = true) {
+            PrepareUpdate(model);
 
             // Check for title
             if (string.IsNullOrWhiteSpace(model.Title))
@@ -209,23 +190,23 @@ namespace Piranha.Repositories
             if (checkDefault) {
                 if (model.IsDefault) {
                     // Make sure no other site is default first
-                    var def = GetDefault(transaction);
+                    var def = GetDefault();
 
                     if (def != null && def.Id != model.Id) {
                         def.IsDefault = false;
-                        Update(def, transaction, false);
+                        Update(def, false);
                     }
                 } else {
                     // Make sure we have a default site
-                    var count = conn.ExecuteScalar<int>($"SELECT COUNT(*) FROM [{table}] WHERE [IsDefault]=1 AND [Id]!=@Id", new {
-                        Id = model.Id
-                    });
+                    var count = db.Sites.Count(s => s.IsDefault && s.Id != model.Id);
                     if (count == 0)
                         model.IsDefault = true;
                 }
             }
-            conn.Execute($"UPDATE [{table}] SET [InternalId]=@InternalId, [Title]=@Title, [Description]=@Description, [Hostnames]=@Hostnames, [IsDefault]=@IsDefault, [LastModified]=@LastModified WHERE [Id]=@Id", 
-                model, transaction: transaction);
+            var site = db.Sites.FirstOrDefault(s => s.Id == model.Id);
+            if (site != null) {
+                App.Mapper.Map<Site, Site>(model, site);
+            }
         }
 
         /// <summary>

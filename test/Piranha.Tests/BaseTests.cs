@@ -8,7 +8,7 @@
  * 
  */
 
-using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace Piranha.Tests
@@ -18,14 +18,6 @@ namespace Piranha.Tests
     /// </summary>
     public abstract class BaseTests : IDisposable
     {
-        /// <summary>
-        /// The default test db options.
-        /// </summary>
-        protected Action<Data.DbBuilder> options = o => {
-            o.Connection = new SqliteConnection("Filename=./piranha.tests.db");
-            o.Migrate = true;
-            o.Seed = false;
-        };
         protected IStorage storage = new Local.FileStorage("uploads/", "~/uploads/");
 
         /// <summary>
@@ -52,5 +44,16 @@ namespace Piranha.Tests
         /// created by the test.
         /// </summary>
         protected abstract void Cleanup();
+
+        /// <summary>
+        /// Gets the test context.
+        /// </summary>
+        protected IDb GetDb() {
+            var builder = new DbContextOptionsBuilder<Db>();
+
+            builder.UseSqlite("Filename=./piranha.tests.db");
+
+            return new Db(builder.Options);
+        }
     }
 }

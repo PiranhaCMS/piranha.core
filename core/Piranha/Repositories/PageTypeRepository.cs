@@ -8,12 +8,12 @@
  * 
  */
 
-using Dapper;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Piranha.Data;
 using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Linq;
 using System.Reflection;
 
 namespace Piranha.Repositories
@@ -21,12 +21,8 @@ namespace Piranha.Repositories
     public class PageTypeRepository : IPageTypeRepository
     {
         #region Members
-        private static readonly bool isCreated = typeof(ICreated).IsAssignableFrom(typeof(PageType));
-        private static readonly bool isModified = typeof(IModified).IsAssignableFrom(typeof(PageType));
-        private readonly IDbConnection db;
+        private readonly IDb db;
         private readonly ICache cache;
-        private const string table = "Piranha_PageTypes";
-        private const string sort = "Id";
         #endregion
 
         /// <summary>
@@ -34,7 +30,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="db">The current db connection</param>
         /// <param name="cache">The optional model cache</param>
-        public PageTypeRepository(IDbConnection db, ICache cache = null) {
+        public PageTypeRepository(IDb db, ICache cache = null) {
             this.db = db;
             this.cache = cache;
         }
@@ -42,10 +38,12 @@ namespace Piranha.Repositories
         /// <summary>
         /// Gets all available models.
         /// </summary>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The available models</returns>
-        public IEnumerable<Models.PageType> GetAll(IDbTransaction transaction = null) {
-            var types = db.Query<PageType>($"SELECT * FROM [{table}] ORDER BY [{sort}]", transaction: transaction);
+        public IEnumerable<Models.PageType> GetAll() {
+            var types = db.PageTypes
+                .AsNoTracking()
+                .OrderBy(t => t.Id)
+                .ToList();
             var models = new List<Models.PageType>();
 
             foreach (var type in types) {
@@ -63,15 +61,14 @@ namespace Piranha.Repositories
         /// Gets the model with the specified id.
         /// </summary>
         /// <param name="id">The unique i</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns></returns>
-        public Models.PageType GetById(string id, IDbTransaction transaction = null) {
+        public Models.PageType GetById(string id) {
             Models.PageType model = cache != null ? cache.Get<Models.PageType>(id) : null;
 
             if (model == null) {
-                var type = db.QueryFirstOrDefault<PageType>($"SELECT * FROM [{table}] WHERE [Id]=@Id", new {
-                    Id = id
-                }, transaction: transaction);
+                var type = db.PageTypes
+                    .AsNoTracking()
+                    .FirstOrDefault(t => t.Id == id);
 
                 if (type != null)
                     model = JsonConvert.DeserializeObject<Models.PageType>(type.Body);
@@ -87,12 +84,22 @@ namespace Piranha.Repositories
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        public void Save(Models.PageType model, IDbTransaction transaction = null) {
-            if (db.ExecuteScalar<int>($"SELECT COUNT([Id]) FROM [{table}] WHERE [Id]=@Id", model, transaction: transaction) == 0)
-                Add(model, transaction);
-            else Update(model, transaction);
+        public void Save(Models.PageType model) {
+            var type = db.PageTypes
+                .FirstOrDefault(t => t.Id == model.Id);
 
+            if (type == null) {
+                type = new Data.PageType() {
+                    Id = model.Id,
+                    Created = DateTime.Now
+                };
+                db.PageTypes.Add(type);
+            }
+            type.Body = JsonConvert.SerializeObject(model);
+            type.LastModified = DateTime.Now;
+
+            db.SaveChanges();
+            
             if (cache != null)
                 cache.Remove(model.Id.ToString());
         }
@@ -101,58 +108,25 @@ namespace Piranha.Repositories
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        /// <param name="transaction">The optional transaction</param>
-        public void Delete(string id, IDbTransaction transaction = null) {
-            db.Execute($"DELETE FROM [{table}] WHERE [Id]=@Id",
-                new { Id = id }, transaction: transaction);
+        public void Delete(string id) {
+            var type = db.PageTypes
+                .FirstOrDefault(t => t.Id == id);
 
-            if (cache != null)
-                cache.Remove(id.ToString());
+            if (type != null) {
+                db.PageTypes.Remove(type);
+                db.SaveChanges();
+
+                if (cache != null)
+                    cache.Remove(id.ToString());
+            }
         }
 
         /// <summary>
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        public void Delete(Models.PageType model, IDbTransaction transaction = null) {
-            Delete(model.Id, null);
+        public void Delete(Models.PageType model) {
+            Delete(model.Id);
         }
-
-        #region Private methods
-        /// <summary>
-        /// Adds a new model to the database.
-        /// </summary>
-        /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        private void Add(Models.PageType model, IDbTransaction transaction = null) {
-            var pageType = new PageType() {
-                Id = model.Id,
-                Body = JsonConvert.SerializeObject(model),
-                Created = DateTime.Now,
-                LastModified = DateTime.Now
-            };
-            
-            db.Execute($"INSERT INTO [{table}] ([Id], [Body], [Created], [LastModified]) VALUES (@Id, @Body, @Created, @LastModified)",
-                pageType, transaction: transaction);
-        }
-
-        /// <summary>
-        /// Updates the given model in the database.
-        /// </summary>
-        /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        private void Update(Models.PageType model, IDbTransaction transaction = null) {
-            var pageType = db.QueryFirst<PageType>($"SELECT * FROM [{table}] WHERE [Id]=@Id", new {
-                Id = model.Id
-            });
-
-            pageType.Body = JsonConvert.SerializeObject(model);
-            pageType.LastModified = DateTime.Now;
-
-            db.Execute($"UPDATE [{table}] SET [Body]=@Body, [LastModified]=@LastModified WHERE [Id]=@Id",
-                pageType, transaction: transaction);
-        }
-        #endregion
     }
 }

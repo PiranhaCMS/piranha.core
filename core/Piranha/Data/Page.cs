@@ -106,6 +106,21 @@ namespace Piranha.Data
 	    public DateTime LastModified { get; set; }
 
         /// <summary>
+        /// Gets/sets the site.
+        /// </summary>
+        public Site Site { get; set; }
+
+        /// <summary>
+        /// Gets/sets the associated page type.
+        /// </summary>
+        public PageType PageType { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional page.
+        /// </summary>
+        public Page Parent { get; set; }
+
+        /// <summary>
         /// Gets/sets the available fields.
         /// </summary>
         public IList<PageField> Fields { get; set; }

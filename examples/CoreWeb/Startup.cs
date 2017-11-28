@@ -10,7 +10,7 @@
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -44,11 +44,10 @@ namespace CoreWeb
             services.AddMvc(config => {
                 config.ModelBinderProviders.Insert(0, new Piranha.Manager.Binders.AbstractModelBinderProvider());
             });
-            services.AddPiranhaDb(o => {
-                o.Connection = new SqliteConnection("Filename=./piranha.coreweb.db");
-                o.Migrate = true;
-            });
+            services.AddDbContext<Db>(options =>
+                options.UseSqlite("Filename=./piranha.coreweb.db"));            
             services.AddSingleton<IStorage, FileStorage>();
+            services.AddScoped<IDb, Db>();
             services.AddScoped<IApi, Api>();
             services.AddPiranhaSimpleSecurity(
                 new Piranha.AspNetCore.SimpleUser(Piranha.Manager.Permission.All()) {
@@ -143,7 +142,7 @@ namespace CoreWeb
                 // Add the startpage
                 using (var stream = File.OpenRead("assets/seed/startpage.md")) {
                     using (var reader = new StreamReader(stream)) {
-                        var startPage = Models.TeaserPage.Create(api);                        
+                        var startPage = Models.TeaserPage.Create(api);
 
                         // Add main content
                         startPage.SiteId = site.Id;

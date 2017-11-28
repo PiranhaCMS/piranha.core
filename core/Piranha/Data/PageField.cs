@@ -48,5 +48,10 @@ namespace Piranha.Data
         /// Gets/sets the JSON serialized value.
         /// </summary>
         public string Value { get; set; }
+
+        /// <summary>
+        /// Gets/sets the page.
+        /// </summary>
+        public Page Page { get; set; }
     }
 }

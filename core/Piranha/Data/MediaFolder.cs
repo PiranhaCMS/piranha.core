@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace Piranha.Data
 {
@@ -33,5 +34,17 @@ namespace Piranha.Data
         /// Gets/sets the created date.
         /// </summary>
         public DateTime Created { get; set; }
+
+        /// <summary>
+        /// Gets/sets the available media.
+        /// </summary>
+        public IList<Media> Media { get; set; }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public MediaFolder() {
+            Media = new List<Media>();
+        }
     }
 }

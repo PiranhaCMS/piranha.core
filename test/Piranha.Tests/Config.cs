@@ -21,7 +21,7 @@ namespace Piranha.Tests
         /// Sets up & initializes the tests.
         /// </summary>
         protected override void Init() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(GetDb(), storage)) {
                 Piranha.App.Init(api);
 
                 using (var config = new Piranha.Config(api)) {
@@ -40,7 +40,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void CacheExpiresPages() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(GetDb(), storage)) {
                 using (var config = new Piranha.Config(api)) {
                     Assert.Equal(0, config.CacheExpiresPages);
 
@@ -53,7 +53,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void HierarchicalPageSlugs() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(GetDb(), storage)) {
                 using (var config = new Piranha.Config(api)) {
                     Assert.Equal(true, config.HierarchicalPageSlugs);
 
@@ -66,7 +66,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void ManagerExpandedSitemapLevels() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(GetDb(), storage)) {
                 using (var config = new Piranha.Config(api)) {
                     Assert.Equal(0, config.ManagerExpandedSitemapLevels);
 
