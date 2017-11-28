@@ -231,18 +231,18 @@ namespace Piranha.Repositories
             if (cache != null) {
                 if (!string.IsNullOrWhiteSpace(model.ParentId)) {
                     oldSiblings = db.Query<Page>($"SELECT * FROM [{table}] WHERE [ParentId]=@ParentId", 
-                        new { ParentId = model.ParentId }, transaction: transaction);
+                        new { ParentId = model.ParentId }, transaction: tx);
                 } else {
                     oldSiblings = db.Query<Page>($"SELECT * FROM [{table}] WHERE [ParentId] IS NULL", 
-                        transaction: transaction);                
+                        transaction: tx);                
                 }
 
                 if (!string.IsNullOrWhiteSpace(parentId)) {
                     newSiblings = db.Query<Page>($"SELECT * FROM [{table}] WHERE [ParentId]=@ParentId", 
-                        new { ParentId = parentId }, transaction: transaction);
+                        new { ParentId = parentId }, transaction: tx);
                 } else {
                     newSiblings = db.Query<Page>($"SELECT * FROM [{table}] WHERE [ParentId] IS NULL", 
-                        transaction: transaction);                
+                        transaction: tx);                
                 }
             }
 
