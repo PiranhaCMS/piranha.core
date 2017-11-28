@@ -16,14 +16,14 @@ depenencies, but still provide a flexible & high performance CMS library.
 Piranha is currently built for `NetStandard 2.0` and uses the following awesome packages:
 
 * AutoMapper `6.2.1`
-* Dapper `1.50.2`
 * Markdig `0.14.6`
+* Microsoft.Microsoft.EntityFrameworkCore `2.0.1`
 * Newtonsoft.Json `10.0.3`
 
 ## Core Packages
 
 ### Piranha
-[`AutoMapper`, `Dapper`, `Markdig`, `Newtonsoft.Json`]
+[`AutoMapper`, `Markdig`, `Microsoft.EntityFrameworkCore`, `Newtonsoft.Json`]
 
 The core library that contains all data management, repositories, client models and extensibility features. In a way, everything you need to integrate Piranha into your existing solution.
 
