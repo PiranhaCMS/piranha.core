@@ -163,7 +163,7 @@ namespace CoreWeb
                         startPage.Teasers.Add(new Models.Regions.Teaser() {
                             Title = "Super Fast",
                             Image = stopwatchId,
-                            Body = "Designed from the ground up for super-fast performance using `Dapper` and optional Caching."
+                            Body = "Designed from the ground up for super-fast performance using `EF Core` and optional Caching."
                         });
                         startPage.Teasers.Add(new Models.Regions.Teaser() {
                             Title = "Open Source",
@@ -172,6 +172,15 @@ namespace CoreWeb
                         });
 
                         api.Pages.Save(startPage);
+
+                        var docsPage = Models.StandardPage.Create(api);
+                        docsPage.SiteId = site.Id;
+                        docsPage.SortOrder = 1;
+                        docsPage.Title = "Docs";
+                        docsPage.RedirectUrl = "https://github.com/PiranhaCMS/piranha.core/wiki";
+                        docsPage.Published = DateTime.Now;
+
+                        api.Pages.Save(docsPage);
                     }
                 }
             }
