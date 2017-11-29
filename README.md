@@ -17,7 +17,7 @@ Piranha is currently built for `NetStandard 2.0` and uses the following awesome 
 
 * AutoMapper `6.2.1`
 * Markdig `0.14.6`
-* Microsoft.Microsoft.EntityFrameworkCore `2.0.1`
+* Microsoft.EntityFrameworkCore `2.0.1`
 * Newtonsoft.Json `10.0.3`
 
 ## Core Packages
