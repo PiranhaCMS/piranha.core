@@ -43,7 +43,7 @@ Provider for storing uploaded media files on the local filesystem.
 ### Piranha.Manager
 [`Microsoft.AspNetCore.Mvc`, `Microsoft.AspNetCore.Session`, `Microsoft.AspNetCore.StaticFiles`, `Microsoft.Extensions.FileProviders.Embedded`]
 
-Manager interface for Piranha. As `Microsoft.AspNetCore.Mvc` currently references `NetStandard 1.6` this package is not compatible with the .NET Framework. This will hopefully be fixed when `NetStandard 2.0` is released.
+Manager interface for Piranha.
 
 ## Licensing
 Piranha CMS is released under the **MIT** license. It is a permissive free software license,
