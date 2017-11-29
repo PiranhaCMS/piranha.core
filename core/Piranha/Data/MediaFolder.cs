@@ -18,12 +18,12 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the unique id.
         /// </summary>
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets/sets the optional parent id.
         /// </summary>
-        public string ParentId { get; set; }
+        public Guid? ParentId { get; set; }
 
         /// <summary>
         /// Gets/sets the folder name.

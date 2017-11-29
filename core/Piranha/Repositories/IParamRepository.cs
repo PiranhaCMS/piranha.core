@@ -27,7 +27,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The model, or NULL if it doesn't exist</returns>
-        Param GetById(string id);
+        Param GetById(Guid id);
 
         /// <summary>
         /// Gets the model with the given internal id.
@@ -47,7 +47,7 @@ namespace Piranha.Repositories
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        void Delete(string id);
+        void Delete(Guid id);
 
         /// <summary>
         /// Deletes the given model.

@@ -10,6 +10,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
+using System;
 using System.Data;
 using System.Linq;
 
@@ -31,11 +32,11 @@ namespace Piranha.Repositories
         /// <param name="key">The unique key</param>
         /// <returns>The model</returns>
         public Param GetByKey(string key) {
-            var id = cache != null ? cache.Get<string>($"ParamKey_{key}") : null;
+            var id = cache != null ? cache.Get<Guid?>($"ParamKey_{key}") : null;
             Param model = null;
 
-            if (!string.IsNullOrEmpty(id)) {
-                model = GetById(id);
+            if (id.HasValue) {
+                model = GetById(id.Value);
             } else {
                 model = db.Params
                     .AsNoTracking()
@@ -76,7 +77,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="model">The model</param>
         protected override void AddToCache(Param model) {
-            cache.Set(model.Id, model);
+            cache.Set(model.Id.ToString(), model);
             cache.Set($"ParamKey_{model.Key}", model.Id);
         }
         #endregion

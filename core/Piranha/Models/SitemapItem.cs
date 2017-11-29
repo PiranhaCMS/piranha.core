@@ -87,7 +87,7 @@ namespace Piranha.Models
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>If the child was found</returns>
-        public bool HasChild(string id) {
+        public bool HasChild(Guid id) {
             foreach (var item in Items) {
                 if (item.Id == id || item.HasChild(id))
                     return true;

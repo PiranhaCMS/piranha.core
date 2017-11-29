@@ -21,7 +21,7 @@ namespace Piranha.Extend.Serializers
         /// <returns>The serialized value</returns>
         public string Serialize(object obj) {
             if (obj is Fields.ImageField) {
-                return ((Fields.ImageField)obj).Id;
+                return ((Fields.ImageField)obj).Id.ToString();
             }
             throw new ArgumentException("The given object doesn't match the serialization type");
         }
@@ -33,7 +33,7 @@ namespace Piranha.Extend.Serializers
         /// <returns>The object</returns>
         public object Deserialize(string str) {
             return new Fields.ImageField() {
-                Id = str
+                Id = !string.IsNullOrEmpty(str) ? new Guid(str) : (Guid?)null
             };
         }
     }

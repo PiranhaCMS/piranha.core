@@ -18,7 +18,7 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the unique id.
         /// </summary>
-	    public string Id { get; set; }
+	    public Guid Id { get; set; }
 
         /// <summary>
         /// Gets/sets the page type id.
@@ -28,13 +28,13 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the site id.
         /// </summary>
-	    public string SiteId { get; set; }
+	    public Guid SiteId { get; set; }
 
         /// <summary>
         /// Gets/sets the optional parent id. Used to
         /// position the page in the sitemap.
         /// </summary>
-    	public string ParentId { get; set; }
+    	public Guid? ParentId { get; set; }
 
         /// <summary>
         /// Gets/sets the pages sort order in its

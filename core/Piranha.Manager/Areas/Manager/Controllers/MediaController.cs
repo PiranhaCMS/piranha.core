@@ -12,6 +12,7 @@ using Piranha.Manager;
 using Piranha.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.IO;
 using System.Linq;
 
@@ -30,9 +31,9 @@ namespace Piranha.Areas.Manager.Controllers
         /// Gets the list view for the media.
         /// </summary>
         /// <param name="folderId">The optional folder id</param>
-        [Route("manager/media/{folderId?}")]
+        [Route("manager/media/{folderId:Guid?}")]
         [Authorize(Policy = Permission.Media)]
-        public IActionResult List(string folderId = null) {
+        public IActionResult List(Guid? folderId = null) {
             return View("List", Models.MediaListModel.Get(api, folderId));
         }
 
@@ -118,9 +119,9 @@ namespace Piranha.Areas.Manager.Controllers
         /// Deletes the media upload with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        [Route("/manager/media/delete/{id}")]
+        [Route("/manager/media/delete/{id:Guid}")]
         [Authorize(Policy = Permission.MediaDelete)]
-        public IActionResult Delete(string id) {
+        public IActionResult Delete(Guid id) {
             var media = api.Media.GetById(id);
 
             if (media != null) {
@@ -137,9 +138,9 @@ namespace Piranha.Areas.Manager.Controllers
         /// Deletes the folder with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        [Route("/manager/media/delete/folder/{id}")]
+        [Route("/manager/media/delete/folder/{id:Guid}")]
         [Authorize(Policy = Permission.MediaDeleteFolder)]
-        public IActionResult DeleteFolder(string id) {
+        public IActionResult DeleteFolder(Guid id) {
             var folder = api.Media.GetFolderById(id);
 
             if (folder != null) {
@@ -160,7 +161,7 @@ namespace Piranha.Areas.Manager.Controllers
         }
 
         [Route("/manager/media/modal/{folderId?}")]
-        public IActionResult Modal(string folderId = null) {
+        public IActionResult Modal(Guid? folderId = null) {
             return View("Modal", Models.MediaListModel.Get(api, folderId));            
         }
     }

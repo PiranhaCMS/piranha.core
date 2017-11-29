@@ -112,9 +112,9 @@ namespace CoreWeb
                 var site = api.Sites.GetDefault();
 
                 // Add media assets
-                var githubId = Guid.NewGuid().ToString();
-                var platformId = Guid.NewGuid().ToString();
-                var stopwatchId = Guid.NewGuid().ToString();
+                var githubId = Guid.NewGuid();
+                var platformId = Guid.NewGuid();
+                var stopwatchId = Guid.NewGuid();
 
                 using (var stream = File.OpenRead("assets/seed/github.png")) {
                     api.Media.Save(new Piranha.Models.StreamMediaContent() {

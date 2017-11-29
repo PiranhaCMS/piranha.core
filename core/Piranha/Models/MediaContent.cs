@@ -23,12 +23,12 @@ namespace Piranha.Models
         /// entry is created, otherwise the specified media
         /// is updated.
         /// </summary>
-        public string Id { get; set; }
+        public Guid? Id { get; set; }
 
         /// <summary>
         /// Gets/sets the optional folder id this media should be placed in.
         /// </summary>
-        public string FolderId { get; set; }
+        public Guid? FolderId { get; set; }
 
         /// <summary>
         /// Gets/sets the filename.

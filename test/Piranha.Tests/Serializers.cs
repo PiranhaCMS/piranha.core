@@ -98,23 +98,23 @@ namespace Piranha.Tests
         [Fact]
         public void SerializeImageField() {
             var serializer = new ImageFieldSerializer();
-            var id = Guid.NewGuid().ToString();
+            var id = Guid.NewGuid();
 
             var str = serializer.Serialize(new ImageField() {
                 Id = id
             });
 
-            Assert.Equal(id, str);
+            Assert.Equal(id.ToString(), str);
         }
 
         [Fact]
         public void DeserializeImageField() {
             var serializer = new ImageFieldSerializer();
-            var id = Guid.NewGuid().ToString();
+            var id = Guid.NewGuid();
 
-            var field = (ImageField)serializer.Deserialize(id);
+            var field = (ImageField)serializer.Deserialize(id.ToString());
 
-            Assert.Equal(id, field.Id);
+            Assert.Equal(id, field.Id.Value);
         }
 
         [Fact]

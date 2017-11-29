@@ -27,7 +27,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The model, or NULL if it doesn't exist</returns>
-        Site GetById(string id);
+        Site GetById(Guid id);
 
         /// <summary>
         /// Gets the model with the given internal id.
@@ -55,7 +55,7 @@ namespace Piranha.Repositories
         /// <param name="id">The optional site id</param>
         /// <param name="onlyPublished">If only published items should be included</param>
         /// <returns>The sitemap</returns>
-        Models.Sitemap GetSitemap(string id = null, bool onlyPublished = true);
+        Models.Sitemap GetSitemap(Guid? id = null, bool onlyPublished = true);
 
         /// <summary>
         /// Adds or updates the given model in the database
@@ -68,7 +68,7 @@ namespace Piranha.Repositories
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        void Delete(string id);
+        void Delete(Guid id);
 
         /// <summary>
         /// Deletes the given model.

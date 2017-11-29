@@ -8,6 +8,8 @@
  * 
  */
 
+using System;
+
 namespace Piranha.Data
 {
     /// <summary>
@@ -18,6 +20,6 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the unique id.
         /// </summary>
-        string Id { get; set; }
+        Guid Id { get; set; }
     }
 }

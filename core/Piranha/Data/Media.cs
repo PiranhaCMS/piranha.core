@@ -17,12 +17,12 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the unique id.
         /// </summary>
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets/sets the optional folder id.
         /// </summary>
-        public string FolderId { get; set; }
+        public Guid? FolderId { get; set; }
 
         /// <summary>
         /// Gets/sets the media type.

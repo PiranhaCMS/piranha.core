@@ -31,10 +31,10 @@ namespace Piranha.Tests.Repositories
     public class Pages : BaseTests
     {
         #region Members
-        public static readonly string SITE_ID = new Guid("8170A7B1-00C5-4014-90BD-6401710E93BD").ToString();
-        public static readonly string PAGE_1_ID = new Guid("C86E47BA-8D0A-4A54-8EB2-2EE2E05E79D5").ToString();
-        public static readonly string PAGE_2_ID = new Guid("BF61DBD2-BA79-4AF5-A4F5-66331AC3213E").ToString();
-        public static readonly string PAGE_3_ID = new Guid("AF62769D-019F-44BF-B44F-E3D61F421DD2").ToString();
+        public static readonly Guid SITE_ID = new Guid("8170A7B1-00C5-4014-90BD-6401710E93BD");
+        public static readonly Guid PAGE_1_ID = new Guid("C86E47BA-8D0A-4A54-8EB2-2EE2E05E79D5");
+        public static readonly Guid PAGE_2_ID = new Guid("BF61DBD2-BA79-4AF5-A4F5-66331AC3213E");
+        public static readonly Guid PAGE_3_ID = new Guid("AF62769D-019F-44BF-B44F-E3D61F421DD2");
         protected ICache cache;
         #endregion
 
@@ -119,9 +119,9 @@ namespace Piranha.Tests.Repositories
         protected override void Cleanup() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 var pages = api.Pages.GetAll(SITE_ID);
-                foreach (var page in pages.Where(p => !string.IsNullOrEmpty(p.ParentId)))
+                foreach (var page in pages.Where(p => p.ParentId.HasValue))
                     api.Pages.Delete(page);
-                foreach (var page in pages.Where(p => string.IsNullOrEmpty(p.ParentId)))
+                foreach (var page in pages.Where(p => !p.ParentId.HasValue))
                     api.Pages.Delete(page);
 
                 var types = api.PageTypes.GetAll();
@@ -144,7 +144,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void GetNoneById() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var none = api.Pages.GetById(Guid.NewGuid().ToString());
+                var none = api.Pages.GetById(Guid.NewGuid());
 
                 Assert.Null(none);
             }
@@ -280,7 +280,7 @@ namespace Piranha.Tests.Repositories
                 }
 
                 var page = MyPage.Create(api, "MyPage");
-                page.Id = Guid.NewGuid().ToString();
+                page.Id = Guid.NewGuid();
                 page.ParentId = PAGE_1_ID;
                 page.SiteId = SITE_ID;
                 page.Title = "My subpage";
@@ -307,7 +307,7 @@ namespace Piranha.Tests.Repositories
                 }
 
                 var page = MyPage.Create(api, "MyPage");
-                page.Id = Guid.NewGuid().ToString();
+                page.Id = Guid.NewGuid();
                 page.ParentId = PAGE_1_ID;
                 page.SiteId = SITE_ID;
                 page.Title = "My second subpage";

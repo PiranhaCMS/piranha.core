@@ -18,8 +18,8 @@ namespace Piranha.Tests
     public class Sitemaps : BaseTests
     {
         private Sitemap sitemap;
-        private string id_1 = Guid.NewGuid().ToString();
-        private string id_2 = Guid.NewGuid().ToString();
+        private Guid id_1 = Guid.NewGuid();
+        private Guid id_2 = Guid.NewGuid();
 
         protected override void Init() {
             sitemap = new Sitemap();
@@ -34,7 +34,7 @@ namespace Piranha.Tests
                 NavigationTitle = "Navigation title"
             });
             sitemap[0].Items.Add(new SitemapItem() {
-                Id = Guid.NewGuid().ToString()
+                Id = Guid.NewGuid()
             });
         }
 
@@ -65,7 +65,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void GetPartialMissing() {
-            var partial = sitemap.GetPartial(Guid.NewGuid().ToString());
+            var partial = sitemap.GetPartial(Guid.NewGuid());
 
             Assert.Null(partial);
         }
@@ -77,7 +77,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void HasChildMissing() {
-            Assert.False(sitemap[0].HasChild(Guid.NewGuid().ToString()));
+            Assert.False(sitemap[0].HasChild(Guid.NewGuid()));
         }
 
         [Fact]
@@ -92,7 +92,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void GetBreadcrumbMissing() {
-            var crumb = sitemap.GetBreadcrumb(Guid.NewGuid().ToString());
+            var crumb = sitemap.GetBreadcrumb(Guid.NewGuid());
 
             Assert.Null(crumb);
         }

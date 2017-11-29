@@ -8,6 +8,8 @@
  * 
  */
 
+using System;
+
 namespace Piranha.Areas.Manager.Models
 {
     /// <summary>
@@ -18,7 +20,7 @@ namespace Piranha.Areas.Manager.Models
         /// <summary>
         /// Gets/sets the parent id.
         /// </summary>
-        public string ParentId { get; set; }
+        public Guid? ParentId { get; set; }
 
         /// <summary>
         /// Gets/sets the folder name.

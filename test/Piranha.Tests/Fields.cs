@@ -166,10 +166,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void ImageFieldConversionsNullImage() {
-            var id = Guid.NewGuid().ToString();
+            var id = Guid.NewGuid();
 
             Piranha.Extend.Fields.ImageField field = id;
-            Assert.Equal(id, field.Id);
+            Assert.Equal(id, field.Id.Value);
 
             string url = field;
             Assert.Equal("", url);

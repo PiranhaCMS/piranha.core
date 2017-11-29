@@ -8,17 +8,19 @@
  * 
  */
 
+using System;
+
 namespace Piranha.Extend.Fields
 {
     [Field(Name = "Image", Shorthand = "Image")]
     public class ImageField : MediaFieldBase
     {
         /// <summary>
-        /// Implicit operator for converting a string id to a field.
+        /// Implicit operator for converting a Guid id to a field.
         /// </summary>
         /// <param name="str">The string value</param>
-        public static implicit operator ImageField(string str) {
-            return new ImageField() { Id = str };
+        public static implicit operator ImageField(Guid guid) {
+            return new ImageField() { Id = guid };
         }
 
         /// <summary>

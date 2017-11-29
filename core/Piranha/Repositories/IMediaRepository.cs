@@ -9,6 +9,7 @@
  */
 
 using Piranha.Data;
+using System;
 using System.Collections.Generic;
 
 namespace Piranha.Repositories
@@ -20,7 +21,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="folderId">The optional folder id</param>
         /// <returns>The available media</returns>
-        IEnumerable<Media> GetAll(string folderId = null);
+        IEnumerable<Media> GetAll(Guid? folderId = null);
 
         /// <summary>
         /// Gets all media folders available in the specified
@@ -28,21 +29,21 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="folderId">The optional folder id</param>
         /// <returns>The available media folders</returns>
-        IEnumerable<MediaFolder> GetAllFolders(string folderId = null);
+        IEnumerable<MediaFolder> GetAllFolders(Guid? folderId = null);
 
         /// <summary>
         /// Gets the media with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The media</returns>
-        Media GetById(string id);
+        Media GetById(Guid id);
 
         /// <summary>
         /// Gets the media folder with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The media folder</returns>
-        MediaFolder GetFolderById(string id);
+        MediaFolder GetFolderById(Guid id);
 
         /// <summary>
         /// Gets the hierachical media structure.
@@ -69,7 +70,7 @@ namespace Piranha.Repositories
         /// Deletes the media with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        void Delete(string id);
+        void Delete(Guid id);
 
         /// <summary>
         /// Deletes the given model.
@@ -81,7 +82,7 @@ namespace Piranha.Repositories
         /// Deletes the media folder with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        void DeleteFolder(string id);
+        void DeleteFolder(Guid id);
 
         /// <summary>
         /// Deletes the given model.

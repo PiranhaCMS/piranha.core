@@ -57,7 +57,7 @@
                 </tr>
             </thead>
             <tbody>
-                @if (!string.IsNullOrWhiteSpace(Model.CurrentFolderId)) {
+                @if (Model.CurrentFolderId.HasValue) {
                     <tr>
                         <td class="text-limit-cell">
                             <span class="text-limit">

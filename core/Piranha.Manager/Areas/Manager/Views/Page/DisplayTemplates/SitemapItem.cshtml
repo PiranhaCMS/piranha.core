@@ -5,7 +5,7 @@
     int expanded = Model.ExpandedLevels;
 }
 
-<li class="sitemap-item dd-item @(!item.Published.HasValue ? "unpublished" : "") @(Model.CurrentLevel < Model.ExpandedLevels || (!string.IsNullOrEmpty(pageId) && item.HasChild(pageId)) ? "expanded" : "")" data-id="@item.Id">
+<li class="sitemap-item dd-item @(!item.Published.HasValue ? "unpublished" : "") @(Model.CurrentLevel < Model.ExpandedLevels || (!string.IsNullOrEmpty(pageId) && item.HasChild(new Guid(pageId))) ? "expanded" : "")" data-id="@item.Id">
     <div class="dd-handle">
         <span class="glyphicon glyphicon-option-vertical"></span>
     </div>

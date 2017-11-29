@@ -17,12 +17,12 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the page id.
         /// </summary>
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets/sets the page id.
         /// </summary>
-        public string PageId { get; set; }
+        public Guid PageId { get; set; }
 
         /// <summary>
         /// Gets/sets the region id.

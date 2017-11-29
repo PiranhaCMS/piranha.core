@@ -47,7 +47,7 @@ namespace Piranha.Local
         /// <param name="media">The media</param>
         /// <returns>The public url</returns>
         public string GetPublicUrl(Data.Media media) {
-            if (!string.IsNullOrWhiteSpace(media.Id))
+            if (media.Id != Guid.Empty)
                 return baseUrl + media.Id + "-" + media.Filename;
             return null;
         }

@@ -42,7 +42,7 @@ namespace Piranha.Repositories
             Site model = null;
 
             if (!string.IsNullOrEmpty(id)) {
-                model = GetById(id);
+                model = GetById(new Guid(id));
             } else {
                 model = db.Sites
                     .AsNoTracking()
@@ -89,8 +89,8 @@ namespace Piranha.Repositories
         /// <param name="id">The optional site id</param>
         /// <param name="onlyPublished">If only published items should be included</param>
         /// <returns>The sitemap</returns>
-        public Models.Sitemap GetSitemap(string id = null, bool onlyPublished = true) {
-            if (id == null) {
+        public Models.Sitemap GetSitemap(Guid? id = null, bool onlyPublished = true) {
+            if (!id.HasValue) {
                 var site = GetDefault();
 
                 if (site != null)
@@ -125,7 +125,7 @@ namespace Piranha.Repositories
         /// the cache.
         /// </summary>
         /// <param name="id">The site id</param>
-        public void InvalidateSitemap(string id) {
+        public void InvalidateSitemap(Guid id) {
             if (cache != null)
                 cache.Remove($"Sitemap_{id}");
         }
@@ -240,7 +240,7 @@ namespace Piranha.Repositories
         /// <param name="pages">The full page list</param>
         /// <param name="parentId">The current parent id</param>
         /// <returns>The sitemap</returns>
-        private Models.Sitemap Sort(IEnumerable<Page> pages, string parentId = null, int level = 0) {
+        private Models.Sitemap Sort(IEnumerable<Page> pages, Guid? parentId = null, int level = 0) {
             var result = new Models.Sitemap();
 
             foreach (var page in pages.Where(p => p.ParentId == parentId).OrderBy(p => p.SortOrder)) {
