@@ -11,6 +11,7 @@
 using Piranha.Extend;
 using System;
 using System.Linq;
+using System.Text;
 using Xunit;
 
 namespace Piranha.Tests
@@ -207,6 +208,32 @@ namespace Piranha.Tests
 
             string outStr = field;
             Assert.Equal(inStr, outStr); 
-        }        
+        }
+
+        [Fact]
+        public void GetFieldTitleNull() {
+            var field = new Piranha.Extend.Fields.TextField();
+
+            Assert.Null(field.GetTitle());
+        }
+
+        [Fact]
+        public void GetFieldTitle() {
+            Piranha.Extend.Fields.TextField field = "String value";
+
+            Assert.Equal("String value", field.GetTitle());
+        }
+
+        [Fact]
+        public void GetFieldTitleMaxLength() {
+            var sb = new StringBuilder();
+            for (var n = 0; n < 10; n++) {
+                sb.Append("NineChars");
+            }
+
+            Piranha.Extend.Fields.TextField field = sb.ToString();
+            
+            Assert.Equal(43, field.GetTitle().Length);
+        }
     }
 }
