@@ -7,7 +7,7 @@
     Piranha.Models.Sitemap partial = null;
     Piranha.Models.Sitemap third = null;
 
-    if (!string.IsNullOrEmpty(Model.ParentId)) {
+    if (Model.ParentId.HasValue) {
         foreach (var item in sitemap) {
             if (item.HasChild(Model.Id)) {
                 partial = sitemap.GetPartial(item.Id);
