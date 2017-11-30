@@ -35,11 +35,6 @@ namespace Piranha
         /// The private model cache.
         /// </summary>
         private ICache cache;
-
-        /// <summary>
-        /// Mutex for database initialization.
-        /// </summary>
-        private static readonly object mutex = new object();
         #endregion
 
         #region Properties
