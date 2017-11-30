@@ -40,9 +40,9 @@ namespace Piranha.Areas.Manager.Controllers
             return View("Edit", new SiteEditModel());
         }
 
-        [Route("manager/site/{id}")]
+        [Route("manager/site/{id:Guid}")]
         [Authorize(Policy = Permission.SitesEdit)]
-        public IActionResult Edit(string id) {
+        public IActionResult Edit(Guid id) {
             return View(SiteEditModel.GetById(api, id));
         }
 
@@ -63,9 +63,9 @@ namespace Piranha.Areas.Manager.Controllers
             }
         }
 
-        [Route("manager/site/delete/{id}")]
+        [Route("manager/site/delete/{id:Guid}")]
         [Authorize(Policy = Permission.SitesDelete)]
-        public IActionResult Delete(string id) {
+        public IActionResult Delete(Guid id) {
             var site = api.Sites.GetById(id);
 
             if (site != null) {

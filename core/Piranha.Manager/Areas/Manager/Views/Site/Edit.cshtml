@@ -20,7 +20,7 @@
                 <span class="btn-label">
                     <i class="glyphicon glyphicon-ok"></i>
                 </span>
-                @if (!string.IsNullOrWhiteSpace(Model.Site.Id)) {
+                @if (Model.Site.Id != Guid.Empty) {
                     <text>Update</text>
                 } else {
                     <text>Save</text>

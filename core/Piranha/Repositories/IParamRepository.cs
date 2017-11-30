@@ -11,7 +11,6 @@
 using Piranha.Data;
 using System;
 using System.Collections.Generic;
-using System.Data;
 
 namespace Piranha.Repositories
 {
@@ -20,46 +19,40 @@ namespace Piranha.Repositories
         /// <summary>
         /// Gets all available models.
         /// </summary>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The available models</returns>
-        IEnumerable<Param> GetAll(IDbTransaction transaction = null);
+        IEnumerable<Param> GetAll();
 
         /// <summary>
         /// Gets the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The model, or NULL if it doesn't exist</returns>
-        Param GetById(string id, IDbTransaction transaction = null);
+        Param GetById(Guid id);
 
         /// <summary>
         /// Gets the model with the given internal id.
         /// </summary>
         /// <param name="key">The unique key</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The model</returns>
-        Param GetByKey(string key, IDbTransaction transaction = null);
+        Param GetByKey(string key);
 
         /// <summary>
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        void Save(Param model, IDbTransaction transaction = null);
+        void Save(Param model);
 
         /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        /// <param name="transaction">The optional transaction</param>
-        void Delete(string id, IDbTransaction transaction = null);
+        void Delete(Guid id);
 
         /// <summary>
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        void Delete(Param model, IDbTransaction transaction = null);
+        void Delete(Param model);
     }
 }

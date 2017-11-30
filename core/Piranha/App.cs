@@ -166,6 +166,10 @@ namespace Piranha
                     if (!isInitialized) {
                         // Configure object mapper
                         var mapperConfig = new MapperConfiguration(cfg => {
+                            cfg.CreateMap<Data.MediaFolder, Data.MediaFolder>()
+                                .ForMember(f => f.Id, o => o.Ignore())
+                                .ForMember(f => f.Created, o => o.Ignore())
+                                .ForMember(f => f.Media, o => o.Ignore());
                             cfg.CreateMap<Data.MediaFolder, Models.MediaStructureItem>()
                                 .ForMember(f => f.Level, o => o.Ignore())
                                 .ForMember(f => f.Items, o => o.Ignore());                            
@@ -175,12 +179,21 @@ namespace Piranha
                                 .ForMember(p => p.PageTypeId, o => o.MapFrom(m => m.TypeId))
                                 .ForMember(p => p.Fields, o => o.Ignore())
                                 .ForMember(p => p.Created, o => o.Ignore())
-                                .ForMember(p => p.LastModified, o => o.Ignore());
+                                .ForMember(p => p.LastModified, o => o.Ignore())
+                                .ForMember(p => p.PageType, o => o.Ignore())
+                                .ForMember(p => p.Site, o => o.Ignore())
+                                .ForMember(p => p.Parent, o => o.Ignore());
                             cfg.CreateMap<Data.Page, Models.SitemapItem>()
                                 .ForMember(p => p.MenuTitle, o => o.Ignore())
                                 .ForMember(p => p.Level, o => o.Ignore())
                                 .ForMember(p => p.Items, o => o.Ignore())
-                                .ForMember(p => p.Permalink, o => o.MapFrom(d => string.IsNullOrWhiteSpace(d.ParentId) && d.SortOrder == 0 ? "/" : "/" + d.Slug));
+                                .ForMember(p => p.Permalink, o => o.MapFrom(d => !d.ParentId.HasValue && d.SortOrder == 0 ? "/" : "/" + d.Slug));
+                            cfg.CreateMap<Data.Param, Data.Param>()
+                                .ForMember(p => p.Id, o => o.Ignore())
+                                .ForMember(p => p.Created, o => o.Ignore());
+                            cfg.CreateMap<Data.Site, Data.Site>()
+                                .ForMember(s => s.Id, o => o.Ignore())
+                                .ForMember(s => s.Created, o => o.Ignore());
                         });
                         mapperConfig.AssertConfigurationIsValid();
                         mapper = mapperConfig.CreateMapper();

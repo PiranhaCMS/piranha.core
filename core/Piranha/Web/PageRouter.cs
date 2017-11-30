@@ -52,7 +52,7 @@ namespace Piranha.Web
                                 QueryString = $"id={page.Id}&startpage={page.IsStartPage}&piranha_handled=true",
                                 IsPublished = page.Published.HasValue && page.Published.Value <= DateTime.Now,
                                 CacheInfo = new HttpCacheInfo() {
-                                    EntityTag = Utils.GenerateETag(page.Id, page.LastModified),
+                                    EntityTag = Utils.GenerateETag(page.Id.ToString(), page.LastModified),
                                     LastModified = page.LastModified
                                 }
                             };

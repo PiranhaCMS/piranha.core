@@ -9,7 +9,6 @@
  */
 
 using System.Collections.Generic;
-using System.Data;
 
 namespace Piranha.Repositories
 {
@@ -18,38 +17,33 @@ namespace Piranha.Repositories
         /// <summary>
         /// Gets all available models.
         /// </summary>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The available models</returns>
-        IEnumerable<Models.PageType> GetAll(IDbTransaction transaction = null);
+        IEnumerable<Models.PageType> GetAll();
 
         /// <summary>
         /// Gets the model with the specified id.
         /// </summary>
         /// <param name="id">The unique i</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns></returns>
-        Models.PageType GetById(string id, IDbTransaction transaction = null);
+        Models.PageType GetById(string id);
 
         /// <summary>
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        void Save(Models.PageType model, IDbTransaction transaction = null);
+        void Save(Models.PageType model);
 
         /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        /// <param name="transaction">The optional transaction</param>
-        void Delete(string id, IDbTransaction transaction = null);
+        void Delete(string id);
 
         /// <summary>
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        void Delete(Models.PageType model, IDbTransaction transaction = null);
+        void Delete(Models.PageType model);
     }
 }

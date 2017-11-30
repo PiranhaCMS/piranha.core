@@ -8,6 +8,7 @@
  * 
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -76,23 +77,23 @@ namespace Piranha.Areas.Manager.Models
         /// <param name="siteId">The optional site id</param>
         /// <param name="pageId">The optional page id</param>
         /// <returns>The model</returns>
-        public static PageListModel Get(IApi api, string siteId, string pageId = null) {
+        public static PageListModel Get(IApi api, Guid? siteId, string pageId = null) {
             var model = new PageListModel();
 
-            var site = !string.IsNullOrEmpty(siteId) ?
-                api.Sites.GetById(siteId) : api.Sites.GetDefault();
+            var site = siteId.HasValue ?
+                api.Sites.GetById(siteId.Value) : api.Sites.GetDefault();
             var defaultSite = api.Sites.GetDefault();
 
             if (site == null)
                 site = defaultSite;
 
-            model.SiteId = site.Id == defaultSite.Id ? "" : site.Id;
+            model.SiteId = site.Id == defaultSite.Id ? "" : site.Id.ToString();
             model.SiteTitle = site.Title;
             model.PageId = pageId;
             model.PageTypes = api.PageTypes.GetAll().ToList();
             model.Sitemap = api.Sites.GetSitemap(site.Id, onlyPublished: false);
             model.Sites = api.Sites.GetAll().Select(s => new SiteInfo() {
-                Id = s.Id,
+                Id = s.Id.ToString(),
                 Title = s.Title,
                 IsDefault = s.IsDefault
             }).ToList();

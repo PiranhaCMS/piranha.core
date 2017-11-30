@@ -9,6 +9,7 @@
  */
 
 using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 
 namespace Piranha.Areas.Manager.Models
@@ -21,12 +22,12 @@ namespace Piranha.Areas.Manager.Models
         /// <summary>
         /// Gets/sets the optional id.
         /// </summary>
-        public string Id { get; set; }
+        public Guid? Id { get; set; }
 
         /// <summary>
         /// Gets/sets the parent id.
         /// </summary>
-        public string ParentId { get; set; }
+        public Guid? ParentId { get; set; }
 
         /// <summary>
         /// Gets/sets the uploaded file.

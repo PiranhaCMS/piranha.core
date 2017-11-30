@@ -16,14 +16,14 @@ depenencies, but still provide a flexible & high performance CMS library.
 Piranha is currently built for `NetStandard 2.0` and uses the following awesome packages:
 
 * AutoMapper `6.2.1`
-* Dapper `1.50.2`
 * Markdig `0.14.6`
+* Microsoft.EntityFrameworkCore `2.0.1`
 * Newtonsoft.Json `10.0.3`
 
 ## Core Packages
 
 ### Piranha
-[`AutoMapper`, `Dapper`, `Markdig`, `Newtonsoft.Json`]
+[`AutoMapper`, `Markdig`, `Microsoft.EntityFrameworkCore`, `Newtonsoft.Json`]
 
 The core library that contains all data management, repositories, client models and extensibility features. In a way, everything you need to integrate Piranha into your existing solution.
 
@@ -43,7 +43,7 @@ Provider for storing uploaded media files on the local filesystem.
 ### Piranha.Manager
 [`Microsoft.AspNetCore.Mvc`, `Microsoft.AspNetCore.Session`, `Microsoft.AspNetCore.StaticFiles`, `Microsoft.Extensions.FileProviders.Embedded`]
 
-Manager interface for Piranha. As `Microsoft.AspNetCore.Mvc` currently references `NetStandard 1.6` this package is not compatible with the .NET Framework. This will hopefully be fixed when `NetStandard 2.0` is released.
+Manager interface for Piranha.
 
 ## Licensing
 Piranha CMS is released under the **MIT** license. It is a permissive free software license,

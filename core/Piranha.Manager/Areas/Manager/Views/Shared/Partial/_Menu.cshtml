@@ -3,9 +3,9 @@
     var controller = ViewBag.Controller?.ToLower();
 }
 <ul class="nav navmenu-nav">
-    <li>
+    <!--<li>
         <a href="#"><span class="glyphicon glyphicon-dashboard"></span><span class="title">Dashboard</span></a>
-    </li>
+    </li>-->
     @foreach (var group in Piranha.Manager.Menu.Items) {
         if (group.Items.Count > 0) {
             <li>

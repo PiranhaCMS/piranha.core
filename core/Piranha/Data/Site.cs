@@ -17,7 +17,7 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the unique id.
         /// </summary>
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets/sets the internal textual id.

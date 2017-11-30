@@ -8,12 +8,11 @@
  * 
  */
 
-using Dapper;
+using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
@@ -24,9 +23,8 @@ namespace Piranha.Repositories
     {
         #region Members
         private readonly Api api;
-        private readonly IDbConnection db;
+        private readonly IDb db;
         private readonly ICache cache;
-        private readonly string table = "Piranha_Pages";
         #endregion
 
         /// <summary>
@@ -35,7 +33,7 @@ namespace Piranha.Repositories
         /// <param name="api">The current api</param>
         /// <param name="db">The current db connection</param>
         /// <param name="modelCache">The optional model cache</param>
-        public PageRepository(Api api, IDbConnection db, ICache modelCache = null) {
+        public PageRepository(Api api, IDb db, ICache modelCache = null) {
             this.api = api;
             this.db = db;
             this.cache = modelCache;
@@ -45,25 +43,26 @@ namespace Piranha.Repositories
         /// Gets all of the available pages for the current site.
         /// </summary>
         /// <param name="siteId">The optional site id</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The pages</returns>
-        public IEnumerable<Models.DynamicPage> GetAll(string siteId = null, IDbTransaction transaction = null) {
-            if (string.IsNullOrEmpty(siteId)) {
-                var site = api.Sites.GetDefault(transaction: transaction);
+        public IEnumerable<Models.DynamicPage> GetAll(Guid? siteId = null) {
+            if (!siteId.HasValue) {
+                var site = api.Sites.GetDefault();
 
                 if (site != null)
                     siteId = site.Id;
             }
 
-            var pages = db.Query<string>(
-                $"SELECT [Id] FROM [{table}] WHERE [SiteId]=@SiteId ORDER BY [ParentId], [SortOrder]",
-                new { SiteId = siteId },
-                transaction: transaction).ToArray();
+            var pages = db.Pages
+                .AsNoTracking()
+                .Where(p => p.SiteId == siteId)
+                .OrderBy(p => p.ParentId)
+                .ThenBy(p => p.SortOrder)
+                .Select(p => p.Id);
 
             var models = new List<Models.DynamicPage>();
 
             foreach (var page in pages) {
-                var model = GetById(page, transaction);
+                var model = GetById(page);
 
                 if (model != null)
                     models.Add(model);
@@ -75,10 +74,9 @@ namespace Piranha.Repositories
         /// Gets the site startpage.
         /// </summary>
         /// <param name="siteId">The optional site id</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
-        public Models.DynamicPage GetStartpage(string siteId = null, IDbTransaction transaction = null) {
-            return GetStartpage<Models.DynamicPage>(siteId, transaction);
+        public Models.DynamicPage GetStartpage(Guid? siteId = null) {
+            return GetStartpage<Models.DynamicPage>(siteId);
         }
 
         /// <summary>
@@ -86,11 +84,10 @@ namespace Piranha.Repositories
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
         /// <param param name="siteId">The optional site id</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
-        public T GetStartpage<T>(string siteId = null, IDbTransaction transaction = null) where T : Models.Page<T> {
-            if (string.IsNullOrEmpty(siteId)) {
-                var site = api.Sites.GetDefault(transaction: transaction);
+        public T GetStartpage<T>(Guid? siteId = null) where T : Models.Page<T> {
+            if (!siteId.HasValue) {
+                var site = api.Sites.GetDefault();
                 if (site != null)
                     siteId = site.Id;
             }
@@ -98,15 +95,11 @@ namespace Piranha.Repositories
             var page = cache != null ? cache.Get<Page>($"Page_{siteId}") : null;
 
             if (page == null) {
-                page = db.QueryFirstOrDefault<Page>(
-                    $"SELECT * FROM [{table}] WHERE [SiteId]=@SiteId AND [ParentId] IS NULL AND [SortOrder]=0",
-                    new { SiteId = siteId }, transaction: transaction);
+                page = db.Pages
+                    .AsNoTracking()
+                    .Include(p => p.Fields)
+                    .FirstOrDefault(p => p.SiteId == siteId && p.ParentId == null && p.SortOrder == 0);
                 if (page != null) {
-                    page.Fields = db.Query<PageField>(
-                        $"SELECT * FROM [Piranha_PageFields] WHERE [PageId]=@Id",
-                        new { Id = page.Id },
-                        transaction: transaction).ToList();
-
                     if (cache != null)
                         AddToCache(page);
                 }
@@ -121,9 +114,8 @@ namespace Piranha.Repositories
         /// Gets the page model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
-        public Models.DynamicPage GetById(string id, IDbTransaction transaction = null) {
+        public Models.DynamicPage GetById(Guid id) {
             return GetById<Models.DynamicPage>(id);
         }
 
@@ -132,29 +124,20 @@ namespace Piranha.Repositories
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
-        public T GetById<T>(string id, IDbTransaction transaction = null) where T : Models.Page<T> {
-            var page = cache != null ? cache.Get<Page>(id) : null;
+        public T GetById<T>(Guid id) where T : Models.Page<T> {
+            var page = cache != null ? cache.Get<Page>(id.ToString()) : null;
 
             if (page == null) {
-                var multiple = db.QueryMultiple(
-                    $"SELECT * FROM [{table}] WHERE [Id]=@Id; " +
-                    $"SELECT * FROM [Piranha_PageFields] WHERE [PageId]=@Id",
-                    new { Id = id },
-                    transaction: transaction);
-
-                try {
-                    page = multiple.Read<Page>().First();
-                } catch { }
+                page = db.Pages
+                    .AsNoTracking()
+                    .Include(p => p.Fields)
+                    .FirstOrDefault(p => p.Id == id);
 
                 if (page != null) {
-                    page.Fields = multiple.Read<PageField>().ToList();
-
                     if (cache != null)
                         AddToCache(page);
                 }
-                multiple.Dispose();
             }
 
             if (page != null)
@@ -167,10 +150,9 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The optional site id</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
-        public Models.DynamicPage GetBySlug(string slug, string siteId = null, IDbTransaction transaction = null) {
-            return GetBySlug<Models.DynamicPage>(slug, siteId, transaction);
+        public Models.DynamicPage GetBySlug(string slug, Guid? siteId = null) {
+            return GetBySlug<Models.DynamicPage>(slug, siteId);
         }
 
         /// <summary>
@@ -179,36 +161,32 @@ namespace Piranha.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The optional site id</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The page model</returns>
-        public T GetBySlug<T>(string slug, string siteId = null, IDbTransaction transaction = null) where T : Models.Page<T> {
-            if (string.IsNullOrEmpty(siteId)) {
-                var site = api.Sites.GetDefault(transaction: transaction);
+        public T GetBySlug<T>(string slug, Guid? siteId = null) where T : Models.Page<T> {
+            if (!siteId.HasValue) {
+                var site = api.Sites.GetDefault();
                 if (site != null)
                     siteId = site.Id;
             }
 
             // See if we can get the page id for the slug from cache.
-            string pageId = cache != null ? cache.Get<string>($"PageId_{siteId}_{slug}") : null;
+            var pageId = cache != null ? cache.Get<Guid?>($"PageId_{siteId}_{slug}") : (Guid?)null;
 
-            if (!string.IsNullOrEmpty(pageId)) {
+            if (pageId.HasValue) {
                 // Load the page by id instead
-                return GetById<T>(pageId, transaction);
+                return GetById<T>(pageId.Value);
             } else {
                 // No cache found, load from database
-                var page = db.QueryFirstOrDefault<Page>(
-                    $"SELECT * FROM [{table}] WHERE [SiteId]=@SiteId AND [Slug]=@Slug",
-                    new { SiteId = siteId, Slug = slug },
-                    transaction: transaction);
+                var page = db.Pages
+                    .AsNoTracking()
+                    .Include(p => p.Fields)
+                    .FirstOrDefault(p => p.SiteId == siteId && p.Slug == slug);
 
                 if (page != null) {
-                    page.Fields = db.Query<PageField>(
-                        $"SELECT * FROM [Piranha_PageFields] WHERE [PageId]=@Id",
-                        new { Id = page.Id },
-                        transaction: transaction).ToList();
-
+                    if (cache != null)
+                        AddToCache(page);
                     return Load<T>(page);
-                }
+                }                    
                 return null;
             }
         }
@@ -220,54 +198,39 @@ namespace Piranha.Repositories
         /// <param name="model">The page to move</param>
         /// <param name="parentId">The new parent id</param>
         /// <param name="sortOrder">The new sort order</param>
-        /// <param name="transaction">The optional transaction</param>
-        public void Move<T>(T model, string parentId, int sortOrder, IDbTransaction transaction = null) where T : Models.Page<T> {
-            var tx = transaction != null ? transaction : api.BeginTransaction();
-
+        public void Move<T>(T model, Guid? parentId, int sortOrder) where T : Models.Page<T> {
             IEnumerable<Page> oldSiblings = null;
             IEnumerable<Page> newSiblings = null;
 
             // Only get siblings if we need to invalidate from cache
             if (cache != null) {
-                if (!string.IsNullOrWhiteSpace(model.ParentId)) {
-                    oldSiblings = db.Query<Page>($"SELECT * FROM [{table}] WHERE [ParentId]=@ParentId", 
-                        new { ParentId = model.ParentId }, transaction: tx);
-                } else {
-                    oldSiblings = db.Query<Page>($"SELECT * FROM [{table}] WHERE [ParentId] IS NULL", 
-                        transaction: tx);                
-                }
-
-                if (!string.IsNullOrWhiteSpace(parentId)) {
-                    newSiblings = db.Query<Page>($"SELECT * FROM [{table}] WHERE [ParentId]=@ParentId", 
-                        new { ParentId = parentId }, transaction: tx);
-                } else {
-                    newSiblings = db.Query<Page>($"SELECT * FROM [{table}] WHERE [ParentId] IS NULL", 
-                        transaction: tx);                
-                }
+                oldSiblings = db.Pages
+                    .Where(p => p.ParentId == model.ParentId && p.Id != model.Id)
+                    .ToList();
+                newSiblings = db.Pages
+                    .Where(p => p.ParentId == parentId)
+                    .ToList();
             }
 
             // Remove the old position for the page
-            MovePages(model.SiteId, model.ParentId, model.SortOrder + 1, false, transaction: tx);
+            MovePages(model.Id, model.SiteId, model.ParentId, model.SortOrder + 1, false);
             // Add room for the new position of the page
-            MovePages(model.SiteId, parentId, sortOrder, true, transaction: tx);
+            MovePages(model.Id, model.SiteId, parentId, sortOrder, true);
+
             // Update the position of the current page
-            db.Execute($"UPDATE [{table}] SET [ParentId]=@ParentId, [SortOrder]=@SortOrder WHERE [Id]=@Id",
-                new {
-                    Id = model.Id,
-                    ParentId = parentId,
-                    SortOrder = sortOrder
-                }, transaction: tx);
-   
-            // Commit local transaction
-            if (tx != transaction)
-                tx.Commit();
+            var page = db.Pages
+                .FirstOrDefault(p => p.Id == model.Id);
+            page.ParentId = parentId;
+            page.SortOrder = sortOrder;
+
+            db.SaveChanges();
 
             // Remove all siblings from cache
             if (cache != null) {
-                foreach (var page in oldSiblings)
-                    RemoveFromCache(page);
-                foreach (var page in newSiblings)
-                    RemoveFromCache(page);
+                foreach (var sibling in oldSiblings)
+                    RemoveFromCache(sibling);
+                foreach (var sibling in newSiblings)
+                    RemoveFromCache(sibling);
                 ((SiteRepository)api.Sites).InvalidateSitemap(model.SiteId);
             }
         }
@@ -276,126 +239,97 @@ namespace Piranha.Repositories
         /// Saves the given page model
         /// </summary>
         /// <param name="model">The page model</param>
-        /// <param name="transaction">The optional transaction</param>
-        public void Save<T>(T model, IDbTransaction transaction = null) where T : Models.Page<T> {
-            var tx = transaction != null ? transaction : api.BeginTransaction();
+        public void Save<T>(T model) where T : Models.Page<T> {
+            var type = api.PageTypes.GetById(model.TypeId);
 
-            try {
-                var type = api.PageTypes.GetById(model.TypeId, transaction: tx);
-                var isNew = false;
+            if (type != null) {
+                var currentRegions = type.Regions.Select(r => r.Id).ToArray();
 
-                if (type != null) {
-                    var currentRegions = type.Regions.Select(r => r.Id).ToArray();
+                var page = db.Pages
+                    .Include(p => p.Fields)
+                    .FirstOrDefault(p => p.Id == model.Id);
 
-                    // Check if we have the page in the database already
-                    var multiple = db.QueryMultiple(
-                        $"SELECT * FROM [{table}] WHERE [Id]=@Id; " +
-                        $"SELECT * FROM [Piranha_PageFields] WHERE [PageId]=@Id",
-                        new { Id = model.Id },
-                        transaction: tx);
+                // If not, create a new page
+                if (page == null) {
+                    page = new Page() {
+                        Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
+                        ParentId = model.ParentId,
+                        PageTypeId = model.TypeId,
+                        Created = DateTime.Now,
+                        LastModified = DateTime.Now
+                    };
+                    db.Pages.Add(page);
+                    model.Id = page.Id;
 
-                    var page = multiple.Read<Page>().FirstOrDefault();
-                    if (page != null)
-                        page.Fields = multiple.Read<PageField>().ToList();
-                    multiple.Dispose();
+                    // Make room for the new page
+                    MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true);
+                } else {
+                    page.LastModified = DateTime.Now;
 
-                    // If not, create a new page
-                    if (page == null) {
-                        page = new Page() {
-                            Id = !string.IsNullOrEmpty(model.Id) ? model.Id : Guid.NewGuid().ToString(),
-                            ParentId = model.ParentId,
-                            PageTypeId = model.TypeId,
-                            Created = DateTime.Now,
-                            LastModified = DateTime.Now
-                        };
-                        model.Id = page.Id;
-                        isNew = true;
-
-                        // Make room for the new page
-                        MovePages(model.SiteId, model.ParentId, model.SortOrder, true, tx);
-                    } else {
-                        page.LastModified = DateTime.Now;
-
-                        // Check if the page has been moved
-                        if (page.ParentId != model.ParentId || page.SortOrder != model.SortOrder) {
-                            // Remove the old position for the page
-                            MovePages(model.SiteId, page.ParentId, page.SortOrder + 1, false, tx);
-                            // Add room for the new position of the page
-                            MovePages(model.SiteId, model.ParentId, model.SortOrder, true, tx);
-                        }
+                    // Check if the page has been moved
+                    if (page.ParentId != model.ParentId || page.SortOrder != model.SortOrder) {
+                        // Remove the old position for the page
+                        MovePages(page.Id, model.SiteId, page.ParentId, page.SortOrder + 1, false);
+                        // Add room for the new position of the page
+                        MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true);
                     }
+                }
 
-                    // Ensure that we have a slug
-                    if (string.IsNullOrWhiteSpace(model.Slug)) {
-                        var prefix = "";
+                // Ensure that we have a slug
+                if (string.IsNullOrWhiteSpace(model.Slug)) {
+                    var prefix = "";
 
-                        // Check if we should generate hierarchical slugs
-                        using (var config = new Config(api, tx)) {
-                            if (config.HierarchicalPageSlugs && !string.IsNullOrWhiteSpace(page.ParentId)) {
-                                var parentSlug = db.QueryFirstOrDefault<string>($"SELECT [Slug] FROM [{table}] WHERE [Id]=@ParentId",
-                                    page, transaction: tx);
+                    // Check if we should generate hierarchical slugs
+                    using (var config = new Config(api)) {
+                        if (config.HierarchicalPageSlugs && page.ParentId.HasValue) {
+                            var parentSlug = db.Pages
+                                .AsNoTracking()
+                                .FirstOrDefault(p => p.Id == page.ParentId)?.Slug;
 
-                                if (!string.IsNullOrWhiteSpace(parentSlug)) {
-                                    prefix = parentSlug + "/";
-                                }
-                            }
-                        }
-                        model.Slug = prefix + Utils.GenerateSlug(model.NavigationTitle != null ? model.NavigationTitle : model.Title);
-                    } else model.Slug = Utils.GenerateSlug(model.Slug);
-
-                    // Map basic fields
-                    App.Mapper.Map<Models.PageBase, Page>(model, page);
-
-                    // Save the page
-                    if (isNew) {
-                        db.Execute(
-                            $"INSERT INTO [{table}] ([Id], [PageTypeId], [SiteId], [ParentId], [SortOrder], [Title], [NavigationTitle], [Slug], [IsHidden], [MetaKeywords], [MetaDescription], [Route], [RedirectUrl], [RedirectType], [Published], [Created], [LastModified]) VALUES(@Id, @PageTypeId, @SiteId, @ParentId, @SortOrder, @Title, @NavigationTitle, @Slug, @IsHidden, @MetaKeywords, @MetaDescription, @Route, @RedirectUrl, @RedirectType, @Published, @Created, @LastModified)",
-                            page, transaction: tx);
-                    } else {
-                        db.Execute(
-                            $"UPDATE [{table}] Set [PageTypeId]=@PageTypeId, [SiteId]=@SiteId, [ParentId]=@ParentId, [SortOrder]=@SortOrder, [Title]=@Title, [NavigationTitle]=@NavigationTitle, [Slug]=@Slug, [IsHidden]=@IsHidden, [MetaKeywords]=@MetaKeywords, [MetaDescription]=@MetaDescription, [Route]=@Route, [RedirectUrl]=@RedirectUrl, [RedirectType]=@RedirectType, [Published]=@Published, [LastModified]=@LastModified WHERE [Id]=@Id",
-                            page, transaction: tx);
-                    }
-
-                    // Map regions
-                    foreach (var regionKey in currentRegions) {
-                        // Check that the region exists in the current model
-                        if (HasRegion(model, regionKey)) {
-                            var regionType = type.Regions.Single(r => r.Id == regionKey);
-
-                            if (!regionType.Collection) {
-                                MapRegion(model, page, GetRegion(model, regionKey), regionType, regionKey, transaction: tx);
-                            } else {
-                                var sortOrder = 0;
-                                foreach (var region in GetEnumerable(model, regionKey)) {
-                                    MapRegion(model, page, region, regionType, regionKey, sortOrder++, transaction: tx);
-                                }
-                                // Now delete removed collection items
-                                db.Execute(
-                                    $"DELETE FROM [Piranha_PageFields] WHERE [PageId]=@PageId AND [RegionId]=@RegionId AND [SortOrder]>=@SortOrder",
-                                    new {
-                                        PageId = model.Id,
-                                        RegionId = regionKey,
-                                        SortOrder = sortOrder
-                                    }, transaction: tx
-                                );
+                            if (!string.IsNullOrWhiteSpace(parentSlug)) {
+                                prefix = parentSlug + "/";
                             }
                         }
                     }
+                    model.Slug = prefix + Utils.GenerateSlug(model.NavigationTitle != null ? model.NavigationTitle : model.Title);
+                } else model.Slug = Utils.GenerateSlug(model.Slug);
 
-                    if (tx != transaction) {
-                        tx.Commit();
+                // Map basic fields
+                App.Mapper.Map<Models.PageBase, Page>(model, page);
+
+                // Map regions
+                foreach (var regionKey in currentRegions) {
+                    // Check that the region exists in the current model
+                    if (HasRegion(model, regionKey)) {
+                        var regionType = type.Regions.Single(r => r.Id == regionKey);
+
+                        if (!regionType.Collection) {
+                            MapRegion(model, page, GetRegion(model, regionKey), regionType, regionKey);
+                        } else {
+                            var items = new List<Guid>();
+                            var sortOrder = 0;
+                            foreach (var region in GetEnumerable(model, regionKey)) {
+                                var fields = MapRegion(model, page, region, regionType, regionKey, sortOrder++);
+
+                                if (fields.Count > 0)
+                                    items.AddRange(fields);
+                            }
+                            // Now delete removed collection items
+                            var removedFields = db.PageFields
+                                .Where(f => f.PageId == model.Id && f.RegionId == regionKey && !items.Contains(f.Id))
+                                .ToList();
+
+                            if (removedFields.Count > 0)
+                                db.PageFields.RemoveRange(removedFields);
+                        }
                     }
+                }
 
-                    if (cache != null && !isNew)
-                        RemoveFromCache(page);
-                    ((SiteRepository)api.Sites).InvalidateSitemap(model.SiteId);                        
-                }
-            } catch {
-                if (tx != transaction) {
-                    tx.Rollback();
-                }
-                throw;
+                db.SaveChanges();
+
+                if (cache != null)
+                    RemoveFromCache(page);
+                ((SiteRepository)api.Sites).InvalidateSitemap(model.SiteId);                        
             }
         }
 
@@ -403,37 +337,35 @@ namespace Piranha.Repositories
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        /// <param name="transaction">The optional transaction</param>
-        public virtual void Delete(string id, IDbTransaction transaction = null) {
-            var page = GetById(id, transaction);
+        public virtual void Delete(Guid id) {
+            var model = db.Pages
+                .Include(p => p.Fields)
+                .FirstOrDefault(p => p.Id == id);
 
-            if (page != null)
-                Delete(page, transaction);
+            if (model != null) {
+                db.Pages.Remove(model);
+
+                // Move all remaining pages after this page in the site structure.
+                MovePages(id, model.SiteId, model.ParentId, model.SortOrder + 1, false);
+
+                db.SaveChanges();
+
+                // Check if we have the page in cache, and if so remove it
+                if (cache != null) {
+                    var page = cache.Get<Page>(model.Id.ToString());
+                    if (page != null)
+                        RemoveFromCache(page);
+                    ((SiteRepository)api.Sites).InvalidateSitemap(model.SiteId);
+                }   
+            }
         }
 
         /// <summary>
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        public virtual void Delete<T>(T model, IDbTransaction transaction = null) where T : Models.Page<T> {
-            // Delete explicitly for databases that doesn't support cascade
-            // delete on foreign keys (SQLite)
-            db.Execute($"DELETE FROM [Piranha_PageFields] WHERE [PageId]=@Id",
-                model, transaction: transaction);
-            // Delete the page
-            db.Execute($"DELETE FROM [{table}] WHERE [Id]=@Id",
-                model, transaction: transaction);
-            // Move all remaining pages after this page in the site structure.
-            MovePages(model.SiteId, model.ParentId, model.SortOrder + 1, false, transaction);
-
-            // Check if we have the page in cache, and if so remove it
-            if (cache != null) {
-                var page = cache.Get<Page>(model.Id);
-                if (page != null)
-                    RemoveFromCache(page);
-                ((SiteRepository)api.Sites).InvalidateSitemap(model.SiteId);
-            }
+        public virtual void Delete<T>(T model) where T : Models.Page<T> {
+            Delete(model.Id);
         }
 
         #region Private get methods
@@ -679,11 +611,11 @@ namespace Piranha.Repositories
         /// <param name="regionType">The region type</param>
         /// <param name="regionId">The region id</param>
         /// <param name="sortOrder">The optional sort order</param>
-        /// <param name="transaction">The optional transaction</param>
-        private void MapRegion<T>(T model, Page page, object region, Models.RegionType regionType, string regionId, int sortOrder = 0, IDbTransaction transaction = null) where T : Models.Page<T> {
+        private IList<Guid> MapRegion<T>(T model, Page page, object region, Models.RegionType regionType, string regionId, int sortOrder = 0) where T : Models.Page<T> {
+            var items = new List<Guid>();
+
             // Now map all of the fields
             for (var n = 0; n < regionType.Fields.Count; n++) {
-                var isNew = false;
                 var fieldDef = regionType.Fields[n];
                 var fieldType = App.Fields.GetByShorthand(fieldDef.Type);
                 if (fieldType == null)
@@ -713,13 +645,12 @@ namespace Piranha.Repositories
                         // If not, create a new field
                         if (field == null) {
                             field = new PageField() {
-                                Id = Guid.NewGuid().ToString(),
+                                Id = Guid.NewGuid(),
                                 PageId = page.Id,
                                 RegionId = regionId,
                                 FieldId = fieldDef.Id
                             };
                             page.Fields.Add(field);
-                            isNew = true;
                         }
 
                         // Update field info & value
@@ -727,17 +658,11 @@ namespace Piranha.Repositories
                         field.SortOrder = sortOrder;
                         field.Value = App.SerializeObject(fieldValue, fieldType.Type);
 
-                        // Save the field
-                        if (isNew) {
-                            db.Execute("INSERT INTO [Piranha_PageFields] ([Id], [PageId], [RegionId], [FieldId], [CLRType], [SortOrder], [Value]) VALUES(@Id, @PageId, @RegionId, @FieldId, @CLRType, @SortOrder, @Value)",
-                                field, transaction: transaction);
-                        } else {
-                            db.Execute("UPDATE [Piranha_PageFields] Set [PageId]=@PageId, [RegionId]=@RegionId, [FieldId]=@FieldId, [CLRType]=@CLRType, [SortOrder]=@SortOrder, [Value]=@Value WHERE [Id]=@Id",
-                                field, transaction: transaction);
-                        }
+                        items.Add(field.Id);
                     }
                 }
             }
+            return items;
         }
         #endregion
 
@@ -745,21 +670,18 @@ namespace Piranha.Repositories
         /// <summary>
         /// Moves the pages around. This is done when a page is deleted or moved in the structure.
         /// </summary>
+        /// <param name="pageId">The id of the page that is moved</param>
         /// <param name="siteId">The site id</param>
         /// <param name="parentId">The parent id</param>
         /// <param name="sortOrder">The sort order</param>
         /// <param name="increase">If sort order should be increase or decreased</param>
-        /// <param name="transaction">The current transaction</param>
-        private void MovePages(string siteId, string parentId, int sortOrder, bool increase, IDbTransaction transaction) {
-            if (!string.IsNullOrEmpty(parentId))
-                db.Execute($"UPDATE [{table}] SET [SortOrder]=[SortOrder] " + (increase ? "+ 1" : "- 1") +
-                    " WHERE [SiteId]=@SiteId AND [ParentId]=@ParentId AND [SortOrder]>=@SortOrder",
-                    new { SiteId = siteId, ParentId = parentId, SortOrder = sortOrder },
-                    transaction: transaction);
-            else db.Execute($"UPDATE [{table}] SET [SortOrder]=[SortOrder] " + (increase ? "+ 1" : "- 1") +
-                " WHERE [SiteId]=@SiteId AND [ParentId] IS NULL AND [SortOrder]>=@SortOrder",
-                new { SiteId = siteId, SortOrder = sortOrder },
-                transaction: transaction);
+        private void MovePages(Guid pageId, Guid siteId, Guid? parentId, int sortOrder, bool increase) {
+            var pages = db.Pages
+                .Where(p => p.SiteId == siteId && p.ParentId == parentId && p.SortOrder >= sortOrder && p.Id != pageId)
+                .ToList();
+
+            foreach (var page in pages)
+                page.SortOrder = increase ? page.SortOrder + 1 : page.SortOrder - 1;
         }
         #endregion
 
@@ -769,9 +691,9 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="page">The page</param>
         private void AddToCache(Page page) {
-            cache.Set(page.Id, page);
+            cache.Set(page.Id.ToString(), page);
             cache.Set($"PageId_{page.SiteId}_{page.Slug}", page.Id);
-            if (string.IsNullOrEmpty(page.ParentId) && page.SortOrder == 0)
+            if (!page.ParentId.HasValue && page.SortOrder == 0)
                 cache.Set($"Page_{page.SiteId}", page);
         }
 
@@ -780,9 +702,9 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="page">The page</param>
         private void RemoveFromCache(Page page) {
-            cache.Remove(page.Id);
+            cache.Remove(page.Id.ToString());
             cache.Remove($"PageId_{page.SiteId}_{page.Slug}");
-            if (string.IsNullOrEmpty(page.ParentId) && page.SortOrder == 0)
+            if (!page.ParentId.HasValue && page.SortOrder == 0)
                 cache.Remove($"Page_{page.SiteId}");
         }
         #endregion

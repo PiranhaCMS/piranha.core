@@ -8,11 +8,8 @@
  * 
  */
 
-using Dapper;
 using Piranha.Data;
 using System;
-using System.Data;
-using System.Data.SqlClient;
 using System.IO;
 using System.Reflection;
 
@@ -25,9 +22,9 @@ namespace Piranha
     {
         #region Members
         /// <summary>
-        /// The private db connection.
+        /// The private db context.
         /// </summary>
-        private readonly IDbConnection conn;
+        private readonly IDb db;
 
         /// <summary>
         /// The private storage provider.
@@ -83,84 +80,21 @@ namespace Piranha
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="options">The database builder</param>
+        /// <param name="db">The current db context</param>
         /// <param name="storage">The current storage</param>
         /// <param name="modelCache">The optional model cache</param>
-        public Api(Action<DbBuilder> options, IStorage storage, ICache modelCache = null) {
-            var config = new DbBuilder();
-            options?.Invoke(config);
-
-            if (config.Connection != null) {
-                conn = config.Connection;
-            } else {
-                conn = new SqlConnection(config.ConnectionString);
-            }
-
+        public Api(IDb db, IStorage storage, ICache modelCache = null) {
+            this.db = db;
             this.storage = storage;
 
             Setup(modelCache);
-
-            if (config.Migrate) {
-                lock (mutex) {
-                    if (!IsCompatible()) {
-                        UpdateDatabase();
-
-                        if (config.Seed)
-                            Db.Seed(this);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Checks if the database is compatible with the current model.
-        /// </summary>
-        /// <returns>If the database is up to date</returns>
-        public bool IsCompatible() {
-            return GetMigrationCount() == Db.Migrations.Length;
-        }
-
-        /// <summary>
-        /// Updates the database to the latest migration.
-        /// </summary>
-        public void UpdateDatabase() {
-            var pos = GetMigrationCount();
-
-            if (pos < Db.Migrations.Length) {
-                conn.Open();
-
-                using (var tx = conn.BeginTransaction()) {
-                    for (var n = pos; n < Db.Migrations.Length; n++) {
-                        conn.Execute(GetMigration(n), transaction: tx);
-
-                        // Add into the migration history
-                        conn.Execute("INSERT INTO [Piranha_Migrations] ([Id], [Name], [Created]) VALUES(@Id, @Name, @Created)", new {
-                            Id = Guid.NewGuid(),
-                            Name = Db.Migrations[n].Name,
-                            Created = DateTime.Now
-                        }, transaction: tx);
-                    }
-                    tx.Commit();
-                }
-                conn.Close();
-            }
-        }
-
-        /// <summary>
-        /// Begins a new transaction.
-        /// </summary>
-        public IDbTransaction BeginTransaction() {
-            if (conn.State != ConnectionState.Open)
-                conn.Open();
-            return conn.BeginTransaction();
         }
 
         /// <summary>
         /// Disposes the current api.
         /// </summary>
         public void Dispose() {
-            conn.Close();
-            conn.Dispose();
+            db.Dispose();
         }
 
         #region Private methods
@@ -171,36 +105,11 @@ namespace Piranha
         private void Setup(ICache modelCache = null) {
             cache = modelCache;
 
-            Media = new Repositories.MediaRepository(conn, storage, cache);
-            Pages = new Repositories.PageRepository(this, conn, cache);
-            PageTypes = new Repositories.PageTypeRepository(conn, cache);
-            Params = new Repositories.ParamRepository(conn, cache);
-            Sites = new Repositories.SiteRepository(this, conn, cache);
-        }
-
-        /// <summary>
-        /// Gets the current migration count from the database.
-        /// </summary>
-        /// <returns>The migration count</returns>
-        private int GetMigrationCount() {
-            try {
-                return conn.ExecuteScalar<int>("SELECT COUNT(*) FROM Piranha_Migrations");
-            } catch { }
-
-            return 0;
-        }
-
-        /// <summary>
-        /// Gets the embedded migration at the specific position.
-        /// </summary>
-        /// <param name="index">The migration</param>
-        /// <returns>The migration script</returns>
-        private string GetMigration(int index) {
-            var assembly = typeof(Api).GetTypeInfo().Assembly;
-
-            using (var reader = new StreamReader(assembly.GetManifestResourceStream(Db.Migrations[index].Script))) {
-                return reader.ReadToEnd();
-            }
+            Media = new Repositories.MediaRepository(db, storage, cache);
+            Pages = new Repositories.PageRepository(this, db, cache);
+            PageTypes = new Repositories.PageTypeRepository(db, cache);
+            Params = new Repositories.ParamRepository(db, cache);
+            Sites = new Repositories.SiteRepository(this, db, cache);
         }
         #endregion
     }

@@ -10,6 +10,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Piranha;
+using System;
 
 namespace CoreWeb.Controllers
 {
@@ -36,7 +37,7 @@ namespace CoreWeb.Controllers
         /// </summary>
         /// <param name="id">The unique id</param>
         [Route("page")]
-        public IActionResult Page(string id) {
+        public IActionResult Page(Guid id) {
             var model = api.Pages.GetById<Models.StandardPage>(id);
             ViewBag.CurrentPage = model.Id;
 
@@ -49,7 +50,7 @@ namespace CoreWeb.Controllers
         /// <param name="id">The unique id</param>
         /// <param name="startpage">If this is the site startpage</param>
         [Route("teaserpage")]
-        public IActionResult TeaserPage(string id, bool startpage) {
+        public IActionResult TeaserPage(Guid id, bool startpage) {
             var model = api.Pages.GetById<Models.TeaserPage>(id);
             ViewBag.CurrentPage = model.Id;
 

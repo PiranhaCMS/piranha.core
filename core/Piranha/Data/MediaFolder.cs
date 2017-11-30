@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace Piranha.Data
 {
@@ -17,12 +18,12 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the unique id.
         /// </summary>
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets/sets the optional parent id.
         /// </summary>
-        public string ParentId { get; set; }
+        public Guid? ParentId { get; set; }
 
         /// <summary>
         /// Gets/sets the folder name.
@@ -33,5 +34,17 @@ namespace Piranha.Data
         /// Gets/sets the created date.
         /// </summary>
         public DateTime Created { get; set; }
+
+        /// <summary>
+        /// Gets/sets the available media.
+        /// </summary>
+        public IList<Media> Media { get; set; }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public MediaFolder() {
+            Media = new List<Media>();
+        }
     }
 }

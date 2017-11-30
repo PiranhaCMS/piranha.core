@@ -8,9 +8,11 @@
  * 
  */
 
-using Dapper;
+using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
+using System;
 using System.Data;
+using System.Linq;
 
 namespace Piranha.Repositories
 {
@@ -19,26 +21,26 @@ namespace Piranha.Repositories
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="connection">The current db connection</param>
+        /// <param name="db">The current db context</param>
         /// <param name="cache">The optional model cache</param>
-        public ParamRepository(IDbConnection connection, ICache cache = null) 
-            : base(connection, "Piranha_Params", "Key", modelCache: cache) { }
+        public ParamRepository(IDb db, ICache cache = null) 
+            : base(db, cache) { }
 
         /// <summary>
         /// Gets the model with the given key.
         /// </summary>
         /// <param name="key">The unique key</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The model</returns>
-        public Param GetByKey(string key, IDbTransaction transaction = null) {
-            var id = cache != null ? cache.Get<string>($"ParamKey_{key}") : null;
+        public Param GetByKey(string key) {
+            var id = cache != null ? cache.Get<Guid?>($"ParamKey_{key}") : null;
             Param model = null;
 
-            if (!string.IsNullOrEmpty(id)) {
-                model = GetById(id, transaction);
+            if (id.HasValue) {
+                model = GetById(id.Value);
             } else {
-                model = conn.QueryFirstOrDefault<Param>($"SELECT * FROM [{table}] WHERE [Key]=@Key",
-                    new { Key = key }, transaction: transaction);
+                model = db.Params
+                    .AsNoTracking()
+                    .FirstOrDefault(p => p.Key == key);
 
                 if (cache != null && model != null)
                     AddToCache(model);
@@ -51,24 +53,23 @@ namespace Piranha.Repositories
         /// Adds a new model to the database.
         /// </summary>
         /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        protected override void Add(Param model, IDbTransaction transaction = null) {
-            PrepareInsert(model, transaction);
+        protected override void Add(Param model) {
+            PrepareInsert(model);
 
-            conn.Execute($"INSERT INTO [{table}] ([Id], [Key], [Value], [Description], [Created], [LastModified]) VALUES (@Id, @Key, @Value, @Description, @Created, @LastModified)", 
-                model, transaction: transaction);
+            db.Params.Add(model);
         }
 
         /// <summary>
         /// Updates the given model in the database.
         /// </summary>
         /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        protected override void Update(Param model, IDbTransaction transaction = null) {
-            PrepareUpdate(model, transaction);
+        protected override void Update(Param model) {
+            PrepareUpdate(model);
 
-            conn.Execute($"UPDATE [{table}] SET [Key]=@Key, [Value]=@Value, [Description]=@Description, [LastModified]=@LastModified WHERE [Id]=@Id", 
-                model, transaction: transaction);
+            var param = db.Params.FirstOrDefault(p => p.Id == model.Id);
+            if (param != null) {
+                App.Mapper.Map<Param, Param>(model, param);
+            }
         }
 
         /// <summary>

@@ -11,7 +11,6 @@
 using Piranha.Data;
 using System;
 using System.Collections.Generic;
-using System.Data;
 
 namespace Piranha.Repositories
 {
@@ -20,70 +19,61 @@ namespace Piranha.Repositories
         /// <summary>
         /// Gets all available models.
         /// </summary>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The available models</returns>
-        IEnumerable<Site> GetAll(IDbTransaction transaction = null);
+        IEnumerable<Site> GetAll();
 
         /// <summary>
         /// Gets the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The model, or NULL if it doesn't exist</returns>
-        Site GetById(string id, IDbTransaction transaction = null);
+        Site GetById(Guid id);
 
         /// <summary>
         /// Gets the model with the given internal id.
         /// </summary>
         /// <param name="internalId">The unique internal i</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The model</returns>
-        Site GetByInternalId(string internalId, IDbTransaction transaction = null);
+        Site GetByInternalId(string internalId);
 
         /// <summary>
         /// Gets the model with the given hostname.
         /// </summary>
         /// <param name="hostname">The hostname</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The model</returns>
-        Site GetByHostname(string hostname, IDbTransaction transaction = null);
+        Site GetByHostname(string hostname);
 
         /// <summary>
         /// Gets the default side.
         /// </summary>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The modell, or NULL if it doesnt exist</returns>
-        Site GetDefault(IDbTransaction transaction = null);
+        Site GetDefault();
 
         /// <summary>
         /// Gets the hierachical sitemap structure.
         /// </summary>
         /// <param name="id">The optional site id</param>
         /// <param name="onlyPublished">If only published items should be included</param>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The sitemap</returns>
-        Models.Sitemap GetSitemap(string id = null, bool onlyPublished = true, IDbTransaction transaction = null);
+        Models.Sitemap GetSitemap(Guid? id = null, bool onlyPublished = true);
 
         /// <summary>
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        void Save(Site model, IDbTransaction transaction = null);
+        void Save(Site model);
 
         /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        /// <param name="transaction">The optional transaction</param>
-        void Delete(string id, IDbTransaction transaction = null);
+        void Delete(Guid id);
 
         /// <summary>
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        void Delete(Site model, IDbTransaction transaction = null);
+        void Delete(Site model);
     }
 }

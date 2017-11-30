@@ -9,6 +9,7 @@
  */
 
 using Newtonsoft.Json;
+using System;
 
 namespace Piranha.Extend.Fields
 {
@@ -28,7 +29,7 @@ namespace Piranha.Extend.Fields
         /// Gets/sets the media id.
         /// </summary>
         /// <returns></returns>
-        public string Id { get; set; }
+        public Guid? Id { get; set; }
 
         /// <summary>
         /// Gets/sets the related media object.
@@ -48,8 +49,8 @@ namespace Piranha.Extend.Fields
         /// </summary>
         /// <param name="api">The current api</param>
         public virtual void Init(IApi api) { 
-            if (!string.IsNullOrWhiteSpace(Id)) {
-                Media = api.Media.GetById(Id);
+            if (Id.HasValue) {
+                Media = api.Media.GetById(Id.Value);
 
                 if (Media == null) {
                     // The image has been removed, remove the

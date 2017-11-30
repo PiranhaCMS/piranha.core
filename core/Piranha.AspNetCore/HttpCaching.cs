@@ -30,7 +30,7 @@ namespace Piranha.AspNetCore
 
         public static HttpCacheInfo Get(Models.PageBase page) {
             return new HttpCacheInfo() {
-                EntityTag = Utils.GenerateETag(page.Id, page.LastModified),
+                EntityTag = Utils.GenerateETag(page.Id.ToString(), page.LastModified),
                 LastModified = page.LastModified
             };
         }

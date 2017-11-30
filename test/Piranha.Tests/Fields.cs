@@ -32,7 +32,7 @@ namespace Piranha.Tests
         /// Sets up & initializes the tests.
         /// </summary>
         protected override void Init() {
-            using (var api = new Api(options, storage)) {
+            using (var api = new Api(GetDb(), storage)) {
                 Piranha.App.Init(api);
                 Piranha.App.Fields.Register<MyFirstField>();
 
@@ -166,10 +166,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void ImageFieldConversionsNullImage() {
-            var id = Guid.NewGuid().ToString();
+            var id = Guid.NewGuid();
 
             Piranha.Extend.Fields.ImageField field = id;
-            Assert.Equal(id, field.Id);
+            Assert.Equal(id, field.Id.Value);
 
             string url = field;
             Assert.Equal("", url);

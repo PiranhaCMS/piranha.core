@@ -8,7 +8,7 @@
  * 
  */
 
-using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +18,6 @@ namespace Piranha.AttributeBuilder.Tests
 {
     public class AttributeBuilder : IDisposable
     {
-        #region Members
-        protected Action<Data.DbBuilder> options = o => {
-            o.Connection = new SqliteConnection("Filename=./piranha.tests.db");
-            o.Migrate = true;
-        };
-        #endregion
-
         #region Inner classes
         [PageType(Id = "Simple", Title = "Simple Page Type")]
         public class SimplePageType
@@ -54,14 +47,14 @@ namespace Piranha.AttributeBuilder.Tests
         #endregion
 
         public AttributeBuilder() {
-            using (var api = new Api(options, null)) {
+            using (var api = new Api(GetDb(), null)) {
                 App.Init(api);
             }
         }
 
         [Fact]
         public void AddSimple() {
-            using (var api = new Api(options, null)) {
+            using (var api = new Api(GetDb(), null)) {
                 var builder = new PageTypeBuilder(api)
                     .AddType(typeof(SimplePageType));
                 builder.Build();
@@ -77,7 +70,7 @@ namespace Piranha.AttributeBuilder.Tests
 
         [Fact]
         public void AddComplex() {
-            using (var api = new Api(options, null)) {
+            using (var api = new Api(GetDb(), null)) {
                 var builder = new PageTypeBuilder(api)
                     .AddType(typeof(ComplexPageType));
                 builder.Build();
@@ -104,7 +97,7 @@ namespace Piranha.AttributeBuilder.Tests
 
         [Fact]
         public void DeleteOrphans() {
-            using (var api = new Api(options, null)) {
+            using (var api = new Api(GetDb(), null)) {
                 var builder = new PageTypeBuilder(api)
                     .AddType(typeof(SimplePageType))
                     .AddType(typeof(ComplexPageType));
@@ -121,12 +114,23 @@ namespace Piranha.AttributeBuilder.Tests
         }
 
         public void Dispose() {
-            using (var api = new Api(options, null)) {
+            using (var api = new Api(GetDb(), null)) {
                 var types = api.PageTypes.GetAll();
 
                 foreach (var t in types)
                     api.PageTypes.Delete(t);
             }
+        }
+
+        /// <summary>
+        /// Gets the test context.
+        /// </summary>
+        private IDb GetDb() {
+            var builder = new DbContextOptionsBuilder<Db>();
+
+            builder.UseSqlite("Filename=./piranha.tests.db");
+
+            return new Db(builder.Options);
         }
     }
 }

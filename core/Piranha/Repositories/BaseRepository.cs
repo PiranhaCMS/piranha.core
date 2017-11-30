@@ -8,11 +8,11 @@
  * 
  */
 
-using Dapper;
 using Piranha.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Linq;
 using System.Reflection;
 
 namespace Piranha.Repositories
@@ -26,47 +26,42 @@ namespace Piranha.Repositories
         #region Members
         protected static readonly bool isCreated = typeof(ICreated).IsAssignableFrom(typeof(T));
         protected static readonly bool isModified = typeof(IModified).IsAssignableFrom(typeof(T));
-        protected readonly IDbConnection conn;
+        protected readonly IDb db;
         protected readonly ICache cache;
-        protected readonly string table;
-        protected readonly string sort;
         #endregion
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="connection">The current db connection</param>
-        /// <param name="tableName">The table name</param>
-        /// <param name="sortOrder">The default sort order</param>
-        /// <param name="modelCache">The optional model cache</param>
-        protected BaseRepository(IDbConnection connection, string tableName, string sortOrder, ICache modelCache = null) {
-            conn = connection;
-            table = tableName;
-            sort = sortOrder;
-            cache = modelCache;
+        /// <param name="db">The current db connection</param>
+        /// <param name="cache">The optional model cache</param>
+        protected BaseRepository(IDb db, ICache cache = null) {
+            this.db = db;
+            this.cache = cache;
         }
 
         /// <summary>
         /// Gets all available models.
         /// </summary>
-        /// <param name="transaction">The optional transaction</param>
         /// <returns>The available models</returns>
-        public virtual IEnumerable<T> GetAll(IDbTransaction transaction = null) {
-            return conn.Query<T>($"SELECT * FROM [{table}] ORDER BY [{sort}]", transaction: transaction);
+        public virtual IEnumerable<T> GetAll() {
+            return db.Set<T>()
+                .AsNoTracking()
+                .ToList();
         }
 
         /// <summary>
         /// Gets the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        /// <param name="transaction">The optional transaction</param>
-        /// <returns>The model, or NULL if it doesn't exist</returns>
-        public virtual T GetById(string id, IDbTransaction transaction = null) {
+        /// <returns>The model, or null if it doesn't exist</returns>
+        public virtual T GetById(Guid id) {
             T model = cache != null ? cache.Get<T>(id.ToString()) : null;
 
             if (model == null) {
-                model = conn.QueryFirstOrDefault<T>($"SELECT * FROM [{table}] WHERE [Id]=@Id",
-                    new { Id = id }, transaction: transaction);
+                model = db.Set<T>()
+                    .AsNoTracking()
+                    .FirstOrDefault(m => m.Id == id);
 
                 if (cache != null && model != null)
                     AddToCache(model);
@@ -79,11 +74,12 @@ namespace Piranha.Repositories
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        public virtual void Save(T model, IDbTransaction transaction = null) {
-            if (conn.ExecuteScalar<int>($"SELECT COUNT([Id]) FROM [{table}] WHERE [Id]=@Id", model, transaction: transaction) == 0)
-                Add(model, transaction);
-            else Update(model, transaction);
+        public virtual void Save(T model) {
+            if (db.Set<T>().Count(m => m.Id == model.Id) == 0)
+                Add(model);
+            else Update(model);
+
+            db.SaveChanges();
 
             if (cache != null)
                 cache.Remove(model.Id.ToString());
@@ -93,10 +89,12 @@ namespace Piranha.Repositories
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        /// <param name="transaction">The optional transaction</param>
-        public virtual void Delete(string id, IDbTransaction transaction = null) {
-            conn.Execute($"DELETE FROM [{table}] WHERE [Id]=@Id",
-                new { Id = id }, transaction: transaction);
+        public virtual void Delete(Guid id) {
+            var model = db.Set<T>().FirstOrDefault(m => m.Id == id);
+            if (model != null) {
+                db.Set<T>().Remove(model);
+                db.SaveChanges();
+            }
 
             if (cache != null)
                 cache.Remove(id.ToString());
@@ -106,9 +104,8 @@ namespace Piranha.Repositories
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        public virtual void Delete(T model, IDbTransaction transaction = null) {
-            Delete(model.Id, null);
+        public virtual void Delete(T model) {
+            Delete(model.Id);
         }
 
         #region Protected methods
@@ -116,24 +113,21 @@ namespace Piranha.Repositories
         /// Adds a new model to the database.
         /// </summary>
         /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        protected abstract void Add(T model, IDbTransaction transaction = null);
+        protected abstract void Add(T model);
 
         /// <summary>
         /// Updates the given model in the database.
         /// </summary>
         /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        protected abstract void Update(T model, IDbTransaction transaction = null);
+        protected abstract void Update(T model);
 
         /// <summary>
         /// Prepares the model for an insert.
         /// </summary>
         /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        protected virtual void PrepareInsert(T model, IDbTransaction transaction) {
+        protected virtual void PrepareInsert(T model) {
             // Prepare id
-            model.Id = !string.IsNullOrEmpty(model.Id) ? model.Id : Guid.NewGuid().ToString();
+            model.Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid();
 
             // Prepare created date
             if (isCreated)
@@ -148,8 +142,7 @@ namespace Piranha.Repositories
         /// Perpares the model for an update.
         /// </summary>
         /// <param name="model">The model</param>
-        /// <param name="transaction">The optional transaction</param>
-        protected virtual void PrepareUpdate(T model, IDbTransaction transaction) {
+        protected virtual void PrepareUpdate(T model) {
             // Prepare last modified date
             if (isModified)
                 ((IModified)model).LastModified = DateTime.Now;

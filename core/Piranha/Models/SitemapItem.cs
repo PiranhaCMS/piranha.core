@@ -18,7 +18,7 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the optional parent id.
         /// </summary>
-        public string ParentId { get; set; }
+        public Guid? ParentId { get; set; }
 
         /// <summary>
         /// Gets/sets the sort order.
@@ -87,7 +87,7 @@ namespace Piranha.Models
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>If the child was found</returns>
-        public bool HasChild(string id) {
+        public bool HasChild(Guid id) {
             foreach (var item in Items) {
                 if (item.Id == id || item.HasChild(id))
                     return true;

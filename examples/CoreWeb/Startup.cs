@@ -10,7 +10,7 @@
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -44,11 +44,10 @@ namespace CoreWeb
             services.AddMvc(config => {
                 config.ModelBinderProviders.Insert(0, new Piranha.Manager.Binders.AbstractModelBinderProvider());
             });
-            services.AddPiranhaDb(o => {
-                o.Connection = new SqliteConnection("Filename=./piranha.coreweb.db");
-                o.Migrate = true;
-            });
+            services.AddDbContext<Db>(options =>
+                options.UseSqlite("Filename=./piranha.coreweb.db"));            
             services.AddSingleton<IStorage, FileStorage>();
+            services.AddScoped<IDb, Db>();
             services.AddScoped<IApi, Api>();
             services.AddPiranhaSimpleSecurity(
                 new Piranha.AspNetCore.SimpleUser(Piranha.Manager.Permission.All()) {
@@ -113,9 +112,9 @@ namespace CoreWeb
                 var site = api.Sites.GetDefault();
 
                 // Add media assets
-                var githubId = Guid.NewGuid().ToString();
-                var platformId = Guid.NewGuid().ToString();
-                var stopwatchId = Guid.NewGuid().ToString();
+                var githubId = Guid.NewGuid();
+                var platformId = Guid.NewGuid();
+                var stopwatchId = Guid.NewGuid();
 
                 using (var stream = File.OpenRead("assets/seed/github.png")) {
                     api.Media.Save(new Piranha.Models.StreamMediaContent() {
@@ -143,7 +142,7 @@ namespace CoreWeb
                 // Add the startpage
                 using (var stream = File.OpenRead("assets/seed/startpage.md")) {
                     using (var reader = new StreamReader(stream)) {
-                        var startPage = Models.TeaserPage.Create(api);                        
+                        var startPage = Models.TeaserPage.Create(api);
 
                         // Add main content
                         startPage.SiteId = site.Id;
@@ -164,7 +163,7 @@ namespace CoreWeb
                         startPage.Teasers.Add(new Models.Regions.Teaser() {
                             Title = "Super Fast",
                             Image = stopwatchId,
-                            Body = "Designed from the ground up for super-fast performance using `Dapper` and optional Caching."
+                            Body = "Designed from the ground up for super-fast performance using `EF Core` and optional Caching."
                         });
                         startPage.Teasers.Add(new Models.Regions.Teaser() {
                             Title = "Open Source",
@@ -173,6 +172,15 @@ namespace CoreWeb
                         });
 
                         api.Pages.Save(startPage);
+
+                        var docsPage = Models.StandardPage.Create(api);
+                        docsPage.SiteId = site.Id;
+                        docsPage.SortOrder = 1;
+                        docsPage.Title = "Docs";
+                        docsPage.RedirectUrl = "https://github.com/PiranhaCMS/piranha.core/wiki";
+                        docsPage.Published = DateTime.Now;
+
+                        api.Pages.Save(docsPage);
                     }
                 }
             }
