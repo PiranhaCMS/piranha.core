@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace Piranha.Migrations
 {
+    [NoCoverage]
     public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

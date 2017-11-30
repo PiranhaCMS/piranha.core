@@ -12,6 +12,7 @@ using System;
 namespace Piranha.Migrations
 {
     [DbContext(typeof(Db))]
+    [NoCoverage]
     partial class DbModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
