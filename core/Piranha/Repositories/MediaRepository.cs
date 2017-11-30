@@ -202,6 +202,7 @@ namespace Piranha.Repositories
             App.Mapper.Map<Data.MediaFolder, Data.MediaFolder>(model, folder);
 
             db.SaveChanges();
+            RemoveFromCache(folder);
             RemoveStructureFromCache();
         }
 

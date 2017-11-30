@@ -18,7 +18,7 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the optional parent id.
         /// </summary>
-        public string ParentId { get; set; }
+        public Guid? ParentId { get; set; }
 
         /// <summary>
         /// Gets/sets the sort order.

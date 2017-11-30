@@ -170,11 +170,11 @@ namespace Piranha.Repositories
             }
 
             // See if we can get the page id for the slug from cache.
-            string pageId = cache != null ? cache.Get<string>($"PageId_{siteId}_{slug}") : null;
+            var pageId = cache != null ? cache.Get<Guid?>($"PageId_{siteId}_{slug}") : (Guid?)null;
 
-            if (!string.IsNullOrEmpty(pageId)) {
+            if (pageId.HasValue) {
                 // Load the page by id instead
-                return GetById<T>(new Guid(pageId));
+                return GetById<T>(pageId.Value);
             } else {
                 // No cache found, load from database
                 var page = db.Pages
@@ -183,8 +183,10 @@ namespace Piranha.Repositories
                     .FirstOrDefault(p => p.SiteId == siteId && p.Slug == slug);
 
                 if (page != null) {
+                    if (cache != null)
+                        AddToCache(page);
                     return Load<T>(page);
-                }
+                }                    
                 return null;
             }
         }
@@ -304,13 +306,17 @@ namespace Piranha.Repositories
                         if (!regionType.Collection) {
                             MapRegion(model, page, GetRegion(model, regionKey), regionType, regionKey);
                         } else {
+                            var items = new List<Guid>();
                             var sortOrder = 0;
                             foreach (var region in GetEnumerable(model, regionKey)) {
-                                MapRegion(model, page, region, regionType, regionKey, sortOrder++);
+                                var fields = MapRegion(model, page, region, regionType, regionKey, sortOrder++);
+
+                                if (fields.Count > 0)
+                                    items.AddRange(fields);
                             }
                             // Now delete removed collection items
                             var removedFields = db.PageFields
-                                .Where(f => f.PageId == model.Id && f.RegionId == regionKey && f.SortOrder == f.SortOrder)
+                                .Where(f => f.PageId == model.Id && f.RegionId == regionKey && !items.Contains(f.Id))
                                 .ToList();
 
                             if (removedFields.Count > 0)
@@ -350,8 +356,7 @@ namespace Piranha.Repositories
                     if (page != null)
                         RemoveFromCache(page);
                     ((SiteRepository)api.Sites).InvalidateSitemap(model.SiteId);
-                }
-                
+                }   
             }
         }
 
@@ -606,7 +611,9 @@ namespace Piranha.Repositories
         /// <param name="regionType">The region type</param>
         /// <param name="regionId">The region id</param>
         /// <param name="sortOrder">The optional sort order</param>
-        private void MapRegion<T>(T model, Page page, object region, Models.RegionType regionType, string regionId, int sortOrder = 0) where T : Models.Page<T> {
+        private IList<Guid> MapRegion<T>(T model, Page page, object region, Models.RegionType regionType, string regionId, int sortOrder = 0) where T : Models.Page<T> {
+            var items = new List<Guid>();
+
             // Now map all of the fields
             for (var n = 0; n < regionType.Fields.Count; n++) {
                 var fieldDef = regionType.Fields[n];
@@ -650,9 +657,12 @@ namespace Piranha.Repositories
                         field.CLRType = fieldType.TypeName;
                         field.SortOrder = sortOrder;
                         field.Value = App.SerializeObject(fieldValue, fieldType.Type);
+
+                        items.Add(field.Id);
                     }
                 }
             }
+            return items;
         }
         #endregion
 

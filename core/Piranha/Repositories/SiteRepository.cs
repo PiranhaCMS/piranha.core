@@ -38,11 +38,11 @@ namespace Piranha.Repositories
         /// <param name="internalId">The unique internal i</param>
         /// <returns>The model</returns>
         public Site GetByInternalId(string internalId) {
-            var id = cache != null ? cache.Get<string>($"SiteId_{internalId}") : null;
+            var id = cache != null ? cache.Get<Guid?>($"SiteId_{internalId}") : null;
             Site model = null;
 
-            if (!string.IsNullOrEmpty(id)) {
-                model = GetById(new Guid(id));
+            if (id.HasValue) {
+                model = GetById(id.Value);
             } else {
                 model = db.Sites
                     .AsNoTracking()
