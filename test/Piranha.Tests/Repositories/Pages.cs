@@ -153,7 +153,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void GetNoneBySlug() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var none = api.Pages.GetBySlug("none-existing-slug", SITE_ID);
+                var none = api.Pages.GetBySlug("none-existing-slug");
 
                 Assert.Null(none);
             }
@@ -205,7 +205,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void GetGenericBySlug() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var model = api.Pages.GetBySlug<MyPage>("my-first-page", SITE_ID);
+                var model = api.Pages.GetBySlug<MyPage>("my-first-page");
 
                 Assert.NotNull(model);
                 Assert.Equal("my-first-page", model.Slug);
@@ -227,7 +227,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void GetDynamicBySlug() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var model = api.Pages.GetBySlug("my-first-page", SITE_ID);
+                var model = api.Pages.GetBySlug("my-first-page");
 
                 Assert.NotNull(model);
                 Assert.Equal("My first page", model.Title);
@@ -238,7 +238,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void GetCollectionPage() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var page = api.Pages.GetBySlug<MyCollectionPage>("my-collection-page", SITE_ID);
+                var page = api.Pages.GetBySlug<MyCollectionPage>("my-collection-page");
 
                 Assert.NotNull(page);
                 Assert.Equal(3, page.Texts.Count);
@@ -249,7 +249,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void GetDynamicCollectionPage() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var page = api.Pages.GetBySlug("my-collection-page", SITE_ID);
+                var page = api.Pages.GetBySlug("my-collection-page");
 
                 Assert.NotNull(page);
                 Assert.Equal(3, page.Regions.Texts.Count);
