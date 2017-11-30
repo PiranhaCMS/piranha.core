@@ -13,6 +13,8 @@
                 partial = sitemap.GetPartial(item.Id);
             }
         }
+    } else {
+        partial = sitemap.GetPartial(Model.Id);
     }
 
     if (partial != null) {
