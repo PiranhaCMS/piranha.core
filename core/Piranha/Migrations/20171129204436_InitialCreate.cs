@@ -12,10 +12,10 @@ namespace Piranha.Migrations
                 name: "Piranha_MediaFolders",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 64, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     Created = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(maxLength: 128, nullable: false),
-                    ParentId = table.Column<string>(maxLength: 64, nullable: true)
+                    ParentId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -40,7 +40,7 @@ namespace Piranha.Migrations
                 name: "Piranha_Params",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 64, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     Created = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(maxLength: 256, nullable: true),
                     Key = table.Column<string>(maxLength: 64, nullable: false),
@@ -56,7 +56,7 @@ namespace Piranha.Migrations
                 name: "Piranha_Sites",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 64, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     Created = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(maxLength: 256, nullable: true),
                     Hostnames = table.Column<string>(maxLength: 256, nullable: true),
@@ -74,11 +74,11 @@ namespace Piranha.Migrations
                 name: "Piranha_Media",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 64, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     ContentType = table.Column<string>(maxLength: 256, nullable: false),
                     Created = table.Column<DateTime>(nullable: false),
                     Filename = table.Column<string>(maxLength: 128, nullable: false),
-                    FolderId = table.Column<string>(maxLength: 64, nullable: true),
+                    FolderId = table.Column<Guid>(nullable: true),
                     LastModified = table.Column<DateTime>(nullable: false),
                     PublicUrl = table.Column<string>(nullable: true),
                     Size = table.Column<long>(nullable: false),
@@ -99,7 +99,7 @@ namespace Piranha.Migrations
                 name: "Piranha_Pages",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 64, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     Created = table.Column<DateTime>(nullable: false),
                     IsHidden = table.Column<bool>(nullable: false),
                     LastModified = table.Column<DateTime>(nullable: false),
@@ -107,12 +107,12 @@ namespace Piranha.Migrations
                     MetaKeywords = table.Column<string>(maxLength: 128, nullable: true),
                     NavigationTitle = table.Column<string>(maxLength: 128, nullable: true),
                     PageTypeId = table.Column<string>(maxLength: 64, nullable: false),
-                    ParentId = table.Column<string>(maxLength: 64, nullable: true),
+                    ParentId = table.Column<Guid>(nullable: true),
                     Published = table.Column<DateTime>(nullable: true),
                     RedirectType = table.Column<int>(nullable: false),
                     RedirectUrl = table.Column<string>(maxLength: 256, nullable: true),
                     Route = table.Column<string>(maxLength: 256, nullable: true),
-                    SiteId = table.Column<string>(maxLength: 64, nullable: false),
+                    SiteId = table.Column<Guid>(nullable: false),
                     Slug = table.Column<string>(maxLength: 128, nullable: false),
                     SortOrder = table.Column<int>(nullable: false),
                     Title = table.Column<string>(maxLength: 128, nullable: false)
@@ -144,10 +144,10 @@ namespace Piranha.Migrations
                 name: "Piranha_PageFields",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 64, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CLRType = table.Column<string>(maxLength: 256, nullable: false),
                     FieldId = table.Column<string>(maxLength: 64, nullable: false),
-                    PageId = table.Column<string>(maxLength: 64, nullable: false),
+                    PageId = table.Column<Guid>(nullable: false),
                     RegionId = table.Column<string>(maxLength: 64, nullable: false),
                     SortOrder = table.Column<int>(nullable: false),
                     Value = table.Column<string>(nullable: true)

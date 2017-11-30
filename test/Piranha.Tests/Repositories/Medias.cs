@@ -8,6 +8,7 @@
  * 
  */
 
+using System;
 using System.IO;
 using System.Linq;
 using Xunit;
@@ -27,11 +28,11 @@ namespace Piranha.Tests.Repositories
     [Collection("Integration tests")]
     public class Medias : BaseTests
     {
-        private string image1Id;
-        private string image2Id;
-        private string image3Id;
-        private string image4Id;
-        private string folder1Id;
+        private Guid image1Id;
+        private Guid image2Id;
+        private Guid image3Id;
+        private Guid image4Id;
+        private Guid folder1Id;
         protected ICache cache;
 
         protected override void Init() {
@@ -53,7 +54,7 @@ namespace Piranha.Tests.Repositories
                     };
                     api.Media.Save(image1);
 
-                    image1Id = image1.Id;
+                    image1Id = image1.Id.Value;
                 }
 
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_rise_1080.png")) {
@@ -64,7 +65,7 @@ namespace Piranha.Tests.Repositories
                     };
                     api.Media.Save(image2);
 
-                    image2Id = image2.Id;
+                    image2Id = image2.Id.Value;
                 }                
 
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_robot_1080.png")) {
@@ -74,7 +75,7 @@ namespace Piranha.Tests.Repositories
                     };
                     api.Media.Save(image3);
 
-                    image3Id = image3.Id;
+                    image3Id = image3.Id.Value;
                 }                
             }
         }
@@ -151,7 +152,7 @@ namespace Piranha.Tests.Repositories
 
                     Assert.NotNull(image.Id);
 
-                    image4Id = image.Id;
+                    image4Id = image.Id.Value;
                 }
             }            
         }

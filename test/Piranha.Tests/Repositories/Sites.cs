@@ -39,7 +39,7 @@ namespace Piranha.Tests.Repositories
         private const string SITE_1_HOSTS = "mysite.com";
         protected ICache cache;
 
-        private string SITE_1_ID = Guid.NewGuid().ToString();
+        private Guid SITE_1_ID = Guid.NewGuid();
         #endregion
 
         [PageType(Title = "PageType")]
@@ -106,9 +106,9 @@ namespace Piranha.Tests.Repositories
         protected override void Cleanup() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 var pages = api.Pages.GetAll(SITE_1_ID);
-                foreach (var page in pages.Where(p => !string.IsNullOrEmpty(p.ParentId)))
+                foreach (var page in pages.Where(p => p.ParentId.HasValue))
                     api.Pages.Delete(page);
-                foreach (var page in pages.Where(p => string.IsNullOrEmpty(p.ParentId)))
+                foreach (var page in pages.Where(p => !p.ParentId.HasValue))
                     api.Pages.Delete(page);
 
                 var types = api.PageTypes.GetAll();
@@ -159,7 +159,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void AddAndGenerateInternalId() {
-            var id = Guid.NewGuid().ToString();
+            var id = Guid.NewGuid();
 
             using (var api = new Api(GetDb(), storage, cache)) {
                 api.Sites.Save(new Data.Site() {
@@ -187,7 +187,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void GetNoneById() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var none = api.Sites.GetById(Guid.NewGuid().ToString());
+                var none = api.Sites.GetById(Guid.NewGuid());
 
                 Assert.Null(none);
             }

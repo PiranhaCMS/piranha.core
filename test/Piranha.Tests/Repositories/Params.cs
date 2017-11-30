@@ -35,7 +35,7 @@ namespace Piranha.Tests.Repositories
         private const string PARAM_4 = "MyFourthParam";
         private const string PARAM_5 = "MyFifthParam";
 
-        private string PARAM_1_ID = Guid.NewGuid().ToString();
+        private Guid PARAM_1_ID = Guid.NewGuid();
         private string PARAM_1_VALUE = "My first value";
 
         private const string CUSTOM_STRING_PARAM = "CustomStringParam";
@@ -101,7 +101,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void GetNoneById() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var none = api.Params.GetById(Guid.NewGuid().ToString());
+                var none = api.Params.GetById(Guid.NewGuid());
 
                 Assert.Null(none);
             }

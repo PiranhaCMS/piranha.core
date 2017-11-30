@@ -22,9 +22,8 @@ namespace Piranha.Migrations
 
             modelBuilder.Entity("Piranha.Data.Media", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(64);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("ContentType")
                         .IsRequired()
@@ -36,8 +35,7 @@ namespace Piranha.Migrations
                         .IsRequired()
                         .HasMaxLength(128);
 
-                    b.Property<string>("FolderId")
-                        .HasMaxLength(64);
+                    b.Property<Guid?>("FolderId");
 
                     b.Property<DateTime>("LastModified");
 
@@ -56,9 +54,8 @@ namespace Piranha.Migrations
 
             modelBuilder.Entity("Piranha.Data.MediaFolder", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(64);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("Created");
 
@@ -66,8 +63,7 @@ namespace Piranha.Migrations
                         .IsRequired()
                         .HasMaxLength(128);
 
-                    b.Property<string>("ParentId")
-                        .HasMaxLength(64);
+                    b.Property<Guid?>("ParentId");
 
                     b.HasKey("Id");
 
@@ -76,9 +72,8 @@ namespace Piranha.Migrations
 
             modelBuilder.Entity("Piranha.Data.Page", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(64);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("Created");
 
@@ -99,8 +94,7 @@ namespace Piranha.Migrations
                         .IsRequired()
                         .HasMaxLength(64);
 
-                    b.Property<string>("ParentId")
-                        .HasMaxLength(64);
+                    b.Property<Guid?>("ParentId");
 
                     b.Property<DateTime?>("Published");
 
@@ -112,9 +106,7 @@ namespace Piranha.Migrations
                     b.Property<string>("Route")
                         .HasMaxLength(256);
 
-                    b.Property<string>("SiteId")
-                        .IsRequired()
-                        .HasMaxLength(64);
+                    b.Property<Guid>("SiteId");
 
                     b.Property<string>("Slug")
                         .IsRequired()
@@ -140,9 +132,8 @@ namespace Piranha.Migrations
 
             modelBuilder.Entity("Piranha.Data.PageField", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(64);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("CLRType")
                         .IsRequired()
@@ -152,9 +143,7 @@ namespace Piranha.Migrations
                         .IsRequired()
                         .HasMaxLength(64);
 
-                    b.Property<string>("PageId")
-                        .IsRequired()
-                        .HasMaxLength(64);
+                    b.Property<Guid>("PageId");
 
                     b.Property<string>("RegionId")
                         .IsRequired()
@@ -190,9 +179,8 @@ namespace Piranha.Migrations
 
             modelBuilder.Entity("Piranha.Data.Param", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(64);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("Created");
 
@@ -217,9 +205,8 @@ namespace Piranha.Migrations
 
             modelBuilder.Entity("Piranha.Data.Site", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(64);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("Created");
 

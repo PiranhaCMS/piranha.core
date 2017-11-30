@@ -44,8 +44,8 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The pages</returns>
-        public IEnumerable<Models.DynamicPage> GetAll(string siteId = null) {
-            if (string.IsNullOrEmpty(siteId)) {
+        public IEnumerable<Models.DynamicPage> GetAll(Guid? siteId = null) {
+            if (!siteId.HasValue) {
                 var site = api.Sites.GetDefault();
 
                 if (site != null)
@@ -75,7 +75,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>
-        public Models.DynamicPage GetStartpage(string siteId = null) {
+        public Models.DynamicPage GetStartpage(Guid? siteId = null) {
             return GetStartpage<Models.DynamicPage>(siteId);
         }
 
@@ -85,8 +85,8 @@ namespace Piranha.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>
-        public T GetStartpage<T>(string siteId = null) where T : Models.Page<T> {
-            if (string.IsNullOrEmpty(siteId)) {
+        public T GetStartpage<T>(Guid? siteId = null) where T : Models.Page<T> {
+            if (!siteId.HasValue) {
                 var site = api.Sites.GetDefault();
                 if (site != null)
                     siteId = site.Id;
@@ -115,7 +115,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The page model</returns>
-        public Models.DynamicPage GetById(string id) {
+        public Models.DynamicPage GetById(Guid id) {
             return GetById<Models.DynamicPage>(id);
         }
 
@@ -125,8 +125,8 @@ namespace Piranha.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
         /// <returns>The page model</returns>
-        public T GetById<T>(string id) where T : Models.Page<T> {
-            var page = cache != null ? cache.Get<Page>(id) : null;
+        public T GetById<T>(Guid id) where T : Models.Page<T> {
+            var page = cache != null ? cache.Get<Page>(id.ToString()) : null;
 
             if (page == null) {
                 page = db.Pages
@@ -151,7 +151,7 @@ namespace Piranha.Repositories
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>
-        public Models.DynamicPage GetBySlug(string slug, string siteId = null) {
+        public Models.DynamicPage GetBySlug(string slug, Guid? siteId = null) {
             return GetBySlug<Models.DynamicPage>(slug, siteId);
         }
 
@@ -162,19 +162,19 @@ namespace Piranha.Repositories
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>
-        public T GetBySlug<T>(string slug, string siteId = null) where T : Models.Page<T> {
-            if (string.IsNullOrEmpty(siteId)) {
+        public T GetBySlug<T>(string slug, Guid? siteId = null) where T : Models.Page<T> {
+            if (!siteId.HasValue) {
                 var site = api.Sites.GetDefault();
                 if (site != null)
                     siteId = site.Id;
             }
 
             // See if we can get the page id for the slug from cache.
-            string pageId = cache != null ? cache.Get<string>($"PageId_{siteId}_{slug}") : null;
+            var pageId = cache != null ? cache.Get<Guid?>($"PageId_{siteId}_{slug}") : (Guid?)null;
 
-            if (!string.IsNullOrEmpty(pageId)) {
+            if (pageId.HasValue) {
                 // Load the page by id instead
-                return GetById<T>(pageId);
+                return GetById<T>(pageId.Value);
             } else {
                 // No cache found, load from database
                 var page = db.Pages
@@ -183,8 +183,10 @@ namespace Piranha.Repositories
                     .FirstOrDefault(p => p.SiteId == siteId && p.Slug == slug);
 
                 if (page != null) {
+                    if (cache != null)
+                        AddToCache(page);
                     return Load<T>(page);
-                }
+                }                    
                 return null;
             }
         }
@@ -196,7 +198,7 @@ namespace Piranha.Repositories
         /// <param name="model">The page to move</param>
         /// <param name="parentId">The new parent id</param>
         /// <param name="sortOrder">The new sort order</param>
-        public void Move<T>(T model, string parentId, int sortOrder) where T : Models.Page<T> {
+        public void Move<T>(T model, Guid? parentId, int sortOrder) where T : Models.Page<T> {
             IEnumerable<Page> oldSiblings = null;
             IEnumerable<Page> newSiblings = null;
 
@@ -250,7 +252,7 @@ namespace Piranha.Repositories
                 // If not, create a new page
                 if (page == null) {
                     page = new Page() {
-                        Id = !string.IsNullOrEmpty(model.Id) ? model.Id : Guid.NewGuid().ToString(),
+                        Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
                         ParentId = model.ParentId,
                         PageTypeId = model.TypeId,
                         Created = DateTime.Now,
@@ -279,7 +281,7 @@ namespace Piranha.Repositories
 
                     // Check if we should generate hierarchical slugs
                     using (var config = new Config(api)) {
-                        if (config.HierarchicalPageSlugs && !string.IsNullOrWhiteSpace(page.ParentId)) {
+                        if (config.HierarchicalPageSlugs && page.ParentId.HasValue) {
                             var parentSlug = db.Pages
                                 .AsNoTracking()
                                 .FirstOrDefault(p => p.Id == page.ParentId)?.Slug;
@@ -304,13 +306,17 @@ namespace Piranha.Repositories
                         if (!regionType.Collection) {
                             MapRegion(model, page, GetRegion(model, regionKey), regionType, regionKey);
                         } else {
+                            var items = new List<Guid>();
                             var sortOrder = 0;
                             foreach (var region in GetEnumerable(model, regionKey)) {
-                                MapRegion(model, page, region, regionType, regionKey, sortOrder++);
+                                var fields = MapRegion(model, page, region, regionType, regionKey, sortOrder++);
+
+                                if (fields.Count > 0)
+                                    items.AddRange(fields);
                             }
                             // Now delete removed collection items
                             var removedFields = db.PageFields
-                                .Where(f => f.PageId == model.Id && f.RegionId == regionKey && f.SortOrder == f.SortOrder)
+                                .Where(f => f.PageId == model.Id && f.RegionId == regionKey && !items.Contains(f.Id))
                                 .ToList();
 
                             if (removedFields.Count > 0)
@@ -331,7 +337,7 @@ namespace Piranha.Repositories
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public virtual void Delete(string id) {
+        public virtual void Delete(Guid id) {
             var model = db.Pages
                 .Include(p => p.Fields)
                 .FirstOrDefault(p => p.Id == id);
@@ -346,12 +352,11 @@ namespace Piranha.Repositories
 
                 // Check if we have the page in cache, and if so remove it
                 if (cache != null) {
-                    var page = cache.Get<Page>(model.Id);
+                    var page = cache.Get<Page>(model.Id.ToString());
                     if (page != null)
                         RemoveFromCache(page);
                     ((SiteRepository)api.Sites).InvalidateSitemap(model.SiteId);
-                }
-                
+                }   
             }
         }
 
@@ -606,7 +611,9 @@ namespace Piranha.Repositories
         /// <param name="regionType">The region type</param>
         /// <param name="regionId">The region id</param>
         /// <param name="sortOrder">The optional sort order</param>
-        private void MapRegion<T>(T model, Page page, object region, Models.RegionType regionType, string regionId, int sortOrder = 0) where T : Models.Page<T> {
+        private IList<Guid> MapRegion<T>(T model, Page page, object region, Models.RegionType regionType, string regionId, int sortOrder = 0) where T : Models.Page<T> {
+            var items = new List<Guid>();
+
             // Now map all of the fields
             for (var n = 0; n < regionType.Fields.Count; n++) {
                 var fieldDef = regionType.Fields[n];
@@ -638,7 +645,7 @@ namespace Piranha.Repositories
                         // If not, create a new field
                         if (field == null) {
                             field = new PageField() {
-                                Id = Guid.NewGuid().ToString(),
+                                Id = Guid.NewGuid(),
                                 PageId = page.Id,
                                 RegionId = regionId,
                                 FieldId = fieldDef.Id
@@ -650,9 +657,12 @@ namespace Piranha.Repositories
                         field.CLRType = fieldType.TypeName;
                         field.SortOrder = sortOrder;
                         field.Value = App.SerializeObject(fieldValue, fieldType.Type);
+
+                        items.Add(field.Id);
                     }
                 }
             }
+            return items;
         }
         #endregion
 
@@ -665,7 +675,7 @@ namespace Piranha.Repositories
         /// <param name="parentId">The parent id</param>
         /// <param name="sortOrder">The sort order</param>
         /// <param name="increase">If sort order should be increase or decreased</param>
-        private void MovePages(string pageId, string siteId, string parentId, int sortOrder, bool increase) {
+        private void MovePages(Guid pageId, Guid siteId, Guid? parentId, int sortOrder, bool increase) {
             var pages = db.Pages
                 .Where(p => p.SiteId == siteId && p.ParentId == parentId && p.SortOrder >= sortOrder && p.Id != pageId)
                 .ToList();
@@ -681,9 +691,9 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="page">The page</param>
         private void AddToCache(Page page) {
-            cache.Set(page.Id, page);
+            cache.Set(page.Id.ToString(), page);
             cache.Set($"PageId_{page.SiteId}_{page.Slug}", page.Id);
-            if (string.IsNullOrEmpty(page.ParentId) && page.SortOrder == 0)
+            if (!page.ParentId.HasValue && page.SortOrder == 0)
                 cache.Set($"Page_{page.SiteId}", page);
         }
 
@@ -692,9 +702,9 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="page">The page</param>
         private void RemoveFromCache(Page page) {
-            cache.Remove(page.Id);
+            cache.Remove(page.Id.ToString());
             cache.Remove($"PageId_{page.SiteId}_{page.Slug}");
-            if (string.IsNullOrEmpty(page.ParentId) && page.SortOrder == 0)
+            if (!page.ParentId.HasValue && page.SortOrder == 0)
                 cache.Remove($"Page_{page.SiteId}");
         }
         #endregion

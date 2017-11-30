@@ -8,6 +8,7 @@
  * 
  */
 
+using System;
 using System.Collections.Generic;
 
 namespace Piranha.Models
@@ -28,9 +29,9 @@ namespace Piranha.Models
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The partial structure</returns>
-        public TThis GetPartial(string id) {
-            if (!string.IsNullOrWhiteSpace(id))
-                return GetPartialRecursive(this, id);
+        public TThis GetPartial(Guid? id) {
+            if (id.HasValue)
+                return GetPartialRecursive(this, id.Value);
             return (TThis)this;
         }
 
@@ -39,9 +40,9 @@ namespace Piranha.Models
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The breadcrumb</returns>
-        public IList<T> GetBreadcrumb(string id) {
-            if (!string.IsNullOrWhiteSpace(id))
-                return GetBreadcrumbRecursive(this, id);
+        public IList<T> GetBreadcrumb(Guid? id) {
+            if (id.HasValue)
+                return GetBreadcrumbRecursive(this, id.Value);
             return new List<T>();
         }        
 
@@ -52,7 +53,7 @@ namespace Piranha.Models
         /// <param name="items">The items</param>
         /// <param name="pageId">The unique id</param>
         /// <returns>The partial structure if found</returns>
-        private TThis GetPartialRecursive(IList<T> items, string id) {
+        private TThis GetPartialRecursive(IList<T> items, Guid id) {
             foreach (var item in items) {
                 if (item.Id == id) {
                     return (TThis)item.Items;
@@ -73,7 +74,7 @@ namespace Piranha.Models
         /// <param name="items">The items</param>
         /// <param name="pageId">The unique id</param>
         /// <returns>The breadcrumb items</returns>
-        private IList<T> GetBreadcrumbRecursive(IList<T> items, string id) {
+        private IList<T> GetBreadcrumbRecursive(IList<T> items, Guid id) {
             foreach (var item in items) {
                 if (item.Id == id) {
                     return new List<T>() {

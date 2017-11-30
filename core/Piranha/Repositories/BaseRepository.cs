@@ -55,8 +55,8 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The model, or null if it doesn't exist</returns>
-        public virtual T GetById(string id) {
-            T model = cache != null ? cache.Get<T>(id) : null;
+        public virtual T GetById(Guid id) {
+            T model = cache != null ? cache.Get<T>(id.ToString()) : null;
 
             if (model == null) {
                 model = db.Set<T>()
@@ -82,14 +82,14 @@ namespace Piranha.Repositories
             db.SaveChanges();
 
             if (cache != null)
-                cache.Remove(model.Id);
+                cache.Remove(model.Id.ToString());
         }
 
         /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public virtual void Delete(string id) {
+        public virtual void Delete(Guid id) {
             var model = db.Set<T>().FirstOrDefault(m => m.Id == id);
             if (model != null) {
                 db.Set<T>().Remove(model);
@@ -97,7 +97,7 @@ namespace Piranha.Repositories
             }
 
             if (cache != null)
-                cache.Remove(id);
+                cache.Remove(id.ToString());
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace Piranha.Repositories
         /// <param name="model">The model</param>
         protected virtual void PrepareInsert(T model) {
             // Prepare id
-            model.Id = !string.IsNullOrWhiteSpace(model.Id) ? model.Id : Guid.NewGuid().ToString();
+            model.Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid();
 
             // Prepare created date
             if (isCreated)
@@ -153,7 +153,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="model">The model</param>
         protected virtual void AddToCache(T model) {
-            cache.Set(model.Id, model);
+            cache.Set(model.Id.ToString(), model);
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="model">The model</param>
         protected virtual void RemoveFromCache(T model) {
-            cache.Remove(model.Id);
+            cache.Remove(model.Id.ToString());
         }
         #endregion
     }

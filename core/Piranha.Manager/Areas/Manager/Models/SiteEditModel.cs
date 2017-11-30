@@ -8,6 +8,8 @@
  * 
  */
 
+using System;
+
 namespace Piranha.Areas.Manager.Models
 {
     public class SiteEditModel
@@ -21,7 +23,7 @@ namespace Piranha.Areas.Manager.Models
             Site = new Data.Site();
         }
 
-        public static SiteEditModel GetById(IApi api, string id) {
+        public static SiteEditModel GetById(IApi api, Guid id) {
             var model = new SiteEditModel() {
                 Site = api.Sites.GetById(id)
             };
