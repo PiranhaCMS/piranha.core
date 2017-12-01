@@ -68,6 +68,3 @@ To build and update the javascript/css in the **manager** and **example project*
     > cd ../../examples/CoreWeb
     > npm install
     > bower install
-    
-## Status
-This repository is under development and is **not** intended for production use.
