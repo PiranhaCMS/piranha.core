@@ -43,7 +43,7 @@
                 </tr>
             </thead>
             <tbody>
-                @if (!string.IsNullOrWhiteSpace(Model.CurrentFolderId)) {
+                @if (Model.CurrentFolderId.HasValue) {
                     <tr>
                         <td>
                             <span class="glyphicon glyphicon-folder-open media-icon"></span>
