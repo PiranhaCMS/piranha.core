@@ -19,9 +19,13 @@ namespace Piranha
     public interface IApi : IDisposable
     {
         /// <summary>
+        /// Gets the category repository.
+        /// </summary>
+        Repositories.ICategoryRepository Categories { get; }
+
+        /// <summary>
         /// Gets the media repository.
         /// </summary>
-        /// <returns></returns>
         Repositories.IMediaRepository Media { get; }
 
         /// <summary>
@@ -38,6 +42,16 @@ namespace Piranha
         /// Gets the param repository.
         /// </summary>
         Repositories.IParamRepository Params { get; }
+
+        /// <summary>
+        /// Gets the post repository.
+        /// </summary>
+        Repositories.IPostRepository Posts { get; }
+
+        /// <summary>
+        /// Gets the post type repository.
+        /// </summary>
+        Repositories.IPostTypeRepository PostTypes { get; }
 
         /// <summary>
         /// Gets the site repository.

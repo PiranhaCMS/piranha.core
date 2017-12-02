@@ -29,6 +29,11 @@ namespace Piranha
         static object mutex = new object();
 
         /// <summary>
+        /// Gets/sets the category set.
+        /// </summary>
+        public DbSet<Data.Category> Categories { get; set; }
+
+        /// <summary>
         /// Gets/sets the media set.
         /// </summary>
         public DbSet<Data.Media> Media { get; set; }
@@ -41,13 +46,11 @@ namespace Piranha
         /// <summary>
         /// Gets/sets the page set.
         /// </summary>
-        /// <returns></returns>
         public DbSet<Data.Page> Pages { get; set; }
 
         /// <summary>
         /// Gets/sets the page field set.
         /// </summary>
-        /// <returns></returns>
         public DbSet<Data.PageField> PageFields { get; set; }
 
         /// <summary>
@@ -61,9 +64,34 @@ namespace Piranha
         public DbSet<Data.Param> Params { get; set; }
 
         /// <summary>
+        /// Gets/sets the post set.
+        /// </summary>
+        public DbSet<Data.Post> Posts { get; set; }
+
+        /// <summary>
+        /// Gets/sets the post field set.
+        /// </summary>        
+        public DbSet<Data.PostField> PostFields { get; set; }
+
+        /// <summary>
+        /// Gets/sets the post tag set.
+        /// </summary>
+        public DbSet<Data.PostTag> PostTags { get; set; }
+
+        /// <summary>
+        /// Gets/sets the post type set.
+        /// </summary>
+        public DbSet<Data.PostType> PostTypes { get; set; }
+
+        /// <summary>
         /// Gets/sets the site set.
         /// </summary>
         public DbSet<Data.Site> Sites { get; set; }
+
+        /// <summary>
+        /// Gets/sets the tag set.
+        /// </summary>
+        public DbSet<Data.Tag> Tags { get; set; }
 
         /// <summary>
         /// Default constructor.
@@ -89,22 +117,25 @@ namespace Piranha
         /// </summary>
         /// <param name="mb">The current model builder</param>
         protected override void OnModelCreating(ModelBuilder mb) {
+            mb.Entity<Data.Category>().ToTable("Piranha_Categories");
+            mb.Entity<Data.Category>().Property(c => c.Title).IsRequired().HasMaxLength(64);
+            mb.Entity<Data.Category>().Property(c => c.Slug).IsRequired().HasMaxLength(64);
+            mb.Entity<Data.Category>().Property(c => c.Description).HasMaxLength(512);
+            mb.Entity<Data.Category>().Property(c => c.ArchiveTitle).HasMaxLength(128).IsRequired();
+            mb.Entity<Data.Category>().Property(c => c.ArchiveKeywords).HasMaxLength(128);
+            mb.Entity<Data.Category>().Property(c => c.ArchiveTitle).HasMaxLength(256);
+            mb.Entity<Data.Category>().Property(c => c.ArchiveRoute).HasMaxLength(256);
+            mb.Entity<Data.Category>().HasIndex(c => c.Slug).IsUnique();
+
             mb.Entity<Data.Media>().ToTable("Piranha_Media");
-            //mb.Entity<Data.Media>().Property(m => m.Id).HasMaxLength(64).IsRequired();
-            //mb.Entity<Data.Media>().Property(m => m.FolderId).HasMaxLength(64);
             mb.Entity<Data.Media>().Property(m => m.Filename).HasMaxLength(128).IsRequired();
             mb.Entity<Data.Media>().Property(m => m.ContentType).HasMaxLength(256).IsRequired();
 
             mb.Entity<Data.MediaFolder>().ToTable("Piranha_MediaFolders");
-            //mb.Entity<Data.MediaFolder>().Property(m => m.Id).HasMaxLength(64).IsRequired();
-            //mb.Entity<Data.MediaFolder>().Property(m => m.ParentId).HasMaxLength(64);
             mb.Entity<Data.MediaFolder>().Property(f => f.Name).HasMaxLength(128).IsRequired();
 
             mb.Entity<Data.Page>().ToTable("Piranha_Pages");
-            //mb.Entity<Data.Page>().Property(m => m.Id).HasMaxLength(64).IsRequired();
             mb.Entity<Data.Page>().Property(p => p.PageTypeId).HasMaxLength(64).IsRequired();
-            //mb.Entity<Data.Page>().Property(p => p.SiteId).HasMaxLength(64).IsRequired();
-            //mb.Entity<Data.Page>().Property(p => p.ParentId).HasMaxLength(64);
             mb.Entity<Data.Page>().Property(p => p.Title).HasMaxLength(128).IsRequired();
             mb.Entity<Data.Page>().Property(p => p.NavigationTitle).HasMaxLength(128);
             mb.Entity<Data.Page>().Property(p => p.Slug).HasMaxLength(128).IsRequired();
@@ -115,8 +146,6 @@ namespace Piranha
             mb.Entity<Data.Page>().HasIndex(p => new { p.SiteId, p.Slug }).IsUnique();
 
             mb.Entity<Data.PageField>().ToTable("Piranha_PageFields");
-            //mb.Entity<Data.PageField>().Property(m => m.Id).HasMaxLength(64).IsRequired();
-            //mb.Entity<Data.PageField>().Property(m => m.PageId).HasMaxLength(64).IsRequired();
             mb.Entity<Data.PageField>().Property(f => f.RegionId).HasMaxLength(64).IsRequired();
             mb.Entity<Data.PageField>().Property(f => f.FieldId).HasMaxLength(64).IsRequired();
             mb.Entity<Data.PageField>().Property(f => f.CLRType).HasMaxLength(256).IsRequired();
@@ -126,18 +155,43 @@ namespace Piranha
             mb.Entity<Data.PageType>().Property(p => p.Id).HasMaxLength(64).IsRequired();
 
             mb.Entity<Data.Param>().ToTable("Piranha_Params");
-            //mb.Entity<Data.Param>().Property(m => m.Id).HasMaxLength(64).IsRequired();
             mb.Entity<Data.Param>().Property(p => p.Key).HasMaxLength(64).IsRequired();
             mb.Entity<Data.Param>().Property(p => p.Description).HasMaxLength(256);
             mb.Entity<Data.Param>().HasIndex(p => p.Key).IsUnique();
 
+            mb.Entity<Data.Post>().ToTable("Piranha_Posts");
+            mb.Entity<Data.Post>().Property(p => p.PostTypeId).HasMaxLength(64).IsRequired();
+            mb.Entity<Data.Post>().Property(p => p.Title).HasMaxLength(128).IsRequired();
+            mb.Entity<Data.Post>().Property(p => p.Slug).HasMaxLength(128).IsRequired();
+            mb.Entity<Data.Post>().Property(p => p.MetaKeywords).HasMaxLength(128);
+            mb.Entity<Data.Post>().Property(p => p.MetaDescription).HasMaxLength(256);
+            mb.Entity<Data.Post>().Property(p => p.Route).HasMaxLength(256);
+            mb.Entity<Data.Post>().Property(p => p.RedirectUrl).HasMaxLength(256);
+            mb.Entity<Data.Post>().HasIndex(p => new { p.CategoryId, p.Slug }).IsUnique();
+
+            mb.Entity<Data.PostField>().ToTable("Piranha_PostFields");
+            mb.Entity<Data.PostField>().Property(f => f.RegionId).HasMaxLength(64).IsRequired();
+            mb.Entity<Data.PostField>().Property(f => f.FieldId).HasMaxLength(64).IsRequired();
+            mb.Entity<Data.PostField>().Property(f => f.CLRType).HasMaxLength(256).IsRequired();
+            mb.Entity<Data.PostField>().HasIndex(f => new { f.PostId, f.RegionId, f.FieldId, f.SortOrder });
+
+            mb.Entity<Data.PostTag>().ToTable("Piranha_PostTags");
+            mb.Entity<Data.PostTag>().HasKey(t => new { t.PostId, t.TagId });
+
+            mb.Entity<Data.PostType>().ToTable("Piranha_PostTypes");
+            mb.Entity<Data.PostType>().Property(p => p.Id).HasMaxLength(64).IsRequired();
+
             mb.Entity<Data.Site>().ToTable("Piranha_Sites");
-            //mb.Entity<Data.Site>().Property(m => m.Id).HasMaxLength(64).IsRequired();
             mb.Entity<Data.Site>().Property(s => s.InternalId).HasMaxLength(64).IsRequired();
             mb.Entity<Data.Site>().Property(s => s.Title).HasMaxLength(128);
             mb.Entity<Data.Site>().Property(s => s.Description).HasMaxLength(256);
             mb.Entity<Data.Site>().Property(s => s.Hostnames).HasMaxLength(256);
             mb.Entity<Data.Site>().HasIndex(s => s.InternalId).IsUnique();
+
+            mb.Entity<Data.Tag>().ToTable("Piranha_Tags");
+            mb.Entity<Data.Tag>().Property(t => t.Title).IsRequired().HasMaxLength(64);
+            mb.Entity<Data.Tag>().Property(t => t.Slug).IsRequired().HasMaxLength(64);
+            mb.Entity<Data.Tag>().HasIndex(t => t.Slug).IsUnique();
         }
 
         /// <summary>

@@ -80,6 +80,15 @@ namespace Piranha.Repositories
             cache.Set(model.Id.ToString(), model);
             cache.Set($"ParamKey_{model.Key}", model.Id);
         }
+
+        /// <summary>
+        /// Removes the given model from cache.
+        /// </summary>
+        /// <param name="model">The model</param>
+        protected override void RemoveFromCache(Param model) {
+            cache.Remove(model.Id.ToString());
+            cache.Remove($"ParamKey_{model.Key}");
+        }        
         #endregion
     }
 }

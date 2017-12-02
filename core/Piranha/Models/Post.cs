@@ -11,31 +11,22 @@
 namespace Piranha.Models
 {
     /// <summary>
-    /// Generic page model.
+    /// Generic post model.
     /// </summary>
     /// <typeparam name="T">The model type</typeparam>
-    public class Page<T> : PageBase where T : Page<T>
+    public class Post<T> : PostBase where T : Post<T>
     {
-        #region Properties
         /// <summary>
-        /// Gets if this is the startpage of the site.
-        /// </summary>
-        public bool IsStartPage {
-            get { return !ParentId.HasValue && SortOrder == 0; }
-        }
-        #endregion
-
-        /// <summary>
-        /// Creates a new page model using the given page type id.
+        /// Creates a new post model using the given post type id.
         /// </summary>
         /// <param name="api">The current api</param>
-        /// <param name="typeId">The unique page type id</param>
+        /// <param name="typeId">The unique post type id</param>
         /// <returns>The new model</returns>
         public static T Create(IApi api, string typeId = null) {
             if (string.IsNullOrWhiteSpace(typeId))
                 typeId = typeof(T).Name;
 
-            using (var factory = new ContentFactory(api.PageTypes.GetAll())) {
+            using (var factory = new ContentFactory(api.PostTypes.GetAll())) {
                 return factory.Create<T>(typeId);
             }
         }
@@ -48,7 +39,7 @@ namespace Piranha.Models
         /// <param name="regionId">The region id</param>
         /// <returns>The new region value</returns>
         public static object CreateRegion(IApi api, string typeId, string regionId) {
-            using (var factory = new ContentFactory(api.PageTypes.GetAll())) {
+            using (var factory = new ContentFactory(api.PostTypes.GetAll())) {
                 return factory.CreateDynamicRegion(typeId, regionId);
             }
         }

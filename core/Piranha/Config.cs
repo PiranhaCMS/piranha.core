@@ -27,6 +27,7 @@ namespace Piranha
         /// The system config keys.
         /// </summary>
         public static readonly string CACHE_EXPIRES_PAGES = "CacheExpiresPages";
+        public static readonly string CACHE_EXPIRES_POSTS = "CacheExpiresPosts";
         public static readonly string PAGES_HIERARCHICAL_SLUGS = "HierarchicalPageSlugs";
         public static readonly string MANAGER_EXPANDED_SITEMAP_LEVELS = "ManagerExpandedSitemapLevels";
         #endregion
@@ -49,6 +50,30 @@ namespace Piranha
                 if (param == null) {
                     param = new Data.Param() {
                         Key = CACHE_EXPIRES_PAGES
+                    };
+                }
+                param.Value = value.ToString();
+                api.Params.Save(param);
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the currently configured cache expiration
+        /// in minutes for posts.
+        /// </summary>
+        public int CacheExpiresPosts {
+            get
+            {
+                var param = api.Params.GetByKey(CACHE_EXPIRES_POSTS);
+                if (param != null)
+                    return Convert.ToInt32(param.Value);
+                return 0;
+            }
+            set {
+                var param = api.Params.GetByKey(CACHE_EXPIRES_POSTS);
+                if (param == null) {
+                    param = new Data.Param() {
+                        Key = CACHE_EXPIRES_POSTS
                     };
                 }
                 param.Value = value.ToString();

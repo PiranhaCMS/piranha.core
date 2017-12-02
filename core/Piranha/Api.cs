@@ -39,6 +39,11 @@ namespace Piranha
 
         #region Properties
         /// <summary>
+        /// Gets the category repository.
+        /// </summary>
+        public Repositories.ICategoryRepository Categories { get; private set; }
+
+        /// <summary>
         /// Gets the media repository.
         /// </summary>
         /// <returns></returns>
@@ -58,6 +63,16 @@ namespace Piranha
         /// Gets the param repository.
         /// </summary>
         public Repositories.IParamRepository Params { get; private set; }
+
+        /// <summary>
+        /// Gets the post repository.
+        /// </summary>
+        public Repositories.IPostRepository Posts { get; private set; }
+
+        /// <summary>
+        /// Gets the post type repository.
+        /// </summary>
+        public Repositories.IPostTypeRepository PostTypes { get; private set; }
 
         /// <summary>
         /// Gets the site repository.
@@ -100,10 +115,13 @@ namespace Piranha
         private void Setup(ICache modelCache = null) {
             cache = modelCache;
 
+            Categories = new Repositories.CategoryRepository(db, cache);
             Media = new Repositories.MediaRepository(db, storage, cache);
             Pages = new Repositories.PageRepository(this, db, cache);
             PageTypes = new Repositories.PageTypeRepository(db, cache);
             Params = new Repositories.ParamRepository(db, cache);
+            Posts = new Repositories.PostRepository(this, db, cache);
+            PostTypes = new Repositories.PostTypeRepository(db, cache);
             Sites = new Repositories.SiteRepository(this, db, cache);
         }
         #endregion

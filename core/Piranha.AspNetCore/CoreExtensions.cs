@@ -36,6 +36,16 @@ public static class CoreExtensions
     }
 
     /// <summary>
+    /// Uses the piranha post middleware.
+    /// </summary>
+    /// <param name="builder">The current application builder</param>
+    /// <returns>The builder</returns>
+    public static IApplicationBuilder UsePiranhaPosts(this IApplicationBuilder builder) {
+        return builder
+            .UseMiddleware<Piranha.AspNetCore.PostMiddleware>();
+    }
+
+    /// <summary>
     /// Uses the piranha startpage middleware.
     /// </summary>
     /// <param name="builder">The current application builder</param>

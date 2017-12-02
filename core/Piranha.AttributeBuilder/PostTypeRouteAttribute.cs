@@ -13,8 +13,8 @@ using System;
 namespace Piranha.AttributeBuilder
 {
     /// <summary>
-    /// Attribute for adding a route to a page type.
+    /// Attribute for adding a route to a post type.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public class PageTypeRouteAttribute : ContentTypeRouteAttribute { }
+    public class PostTypeRouteAttribute : ContentTypeRouteAttribute { }
 }

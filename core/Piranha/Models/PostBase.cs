@@ -13,35 +13,15 @@ using System;
 namespace Piranha.Models
 {
     /// <summary>
-    /// Base class for page models.
+    /// Base class for post models.
     /// </summary>
-    public abstract class PageBase : RoutedContent
+    public abstract class PostBase : RoutedContent
     {
         #region Properties
         /// <summary>
-        /// Gets/sets the site id.
+        /// Gets/sets the category id.
         /// </summary>
-        public Guid SiteId { get; set; }
-
-        /// <summary>
-        /// Gets/sets the optional parent id.
-        /// </summary>
-        public Guid? ParentId { get; set; }
-
-        /// <summary>
-        /// Gets/sets the sort order of the page in its hierarchical position.
-        /// </summary>
-        public int SortOrder { get; set; }
-
-        /// <summary>
-        /// Gets/sets the navigation title.
-        /// </summary>
-        public string NavigationTitle { get; set; }
-
-        /// <summary>
-        /// Gets/sets if the page is hidden in the navigation.
-        /// </summary>
-        public bool IsHidden { get; set; }
+        public Guid CategoryId { get; set; }
 
         /// <summary>
         /// Gets/sets the unique slug.
@@ -68,7 +48,7 @@ namespace Piranha.Models
         /// Gets/sets the redirect type.
         /// </summary>
         /// <returns></returns>
-        public RedirectType RedirectType { get; set; }        
+        public RedirectType RedirectType { get; set; }
         #endregion
     }
 }

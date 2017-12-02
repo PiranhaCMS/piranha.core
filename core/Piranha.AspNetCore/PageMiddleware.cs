@@ -56,7 +56,8 @@ namespace Piranha.AspNetCore
                             using (var config = new Config(api)) {
                                 var headers = context.Response.GetTypedHeaders();
 
-                                if (config.CacheExpiresPages > 0) {
+                                // Only use caching for published pages
+                                if (response.IsPublished && config.CacheExpiresPages > 0) {
                                     if (logger != null)
                                         logger.LogInformation("Caching enabled. Setting MaxAge, LastModified & ETag");
 

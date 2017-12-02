@@ -166,13 +166,16 @@ namespace Piranha
                     if (!isInitialized) {
                         // Configure object mapper
                         var mapperConfig = new MapperConfiguration(cfg => {
+                            cfg.CreateMap<Data.Category, Data.Category>()
+                                .ForMember(c => c.Id, o => o.Ignore())
+                                .ForMember(c => c.Created, o => o.Ignore());
                             cfg.CreateMap<Data.MediaFolder, Data.MediaFolder>()
                                 .ForMember(f => f.Id, o => o.Ignore())
                                 .ForMember(f => f.Created, o => o.Ignore())
                                 .ForMember(f => f.Media, o => o.Ignore());
                             cfg.CreateMap<Data.MediaFolder, Models.MediaStructureItem>()
                                 .ForMember(f => f.Level, o => o.Ignore())
-                                .ForMember(f => f.Items, o => o.Ignore());                            
+                                .ForMember(f => f.Items, o => o.Ignore());
                             cfg.CreateMap<Data.Page, Models.PageBase>()
                                 .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PageTypeId));
                             cfg.CreateMap<Models.PageBase, Data.Page>()
@@ -191,6 +194,16 @@ namespace Piranha
                             cfg.CreateMap<Data.Param, Data.Param>()
                                 .ForMember(p => p.Id, o => o.Ignore())
                                 .ForMember(p => p.Created, o => o.Ignore());
+                            cfg.CreateMap<Data.Post, Models.PostBase>()
+                                .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PostTypeId));
+                            cfg.CreateMap<Models.PostBase, Data.Post>()
+                                .ForMember(p => p.PostTypeId, o => o.MapFrom(m => m.TypeId))
+                                .ForMember(p => p.Fields, o => o.Ignore())
+                                .ForMember(p => p.Created, o => o.Ignore())
+                                .ForMember(p => p.LastModified, o => o.Ignore())
+                                .ForMember(p => p.PostType, o => o.Ignore())
+                                .ForMember(p => p.Category, o => o.Ignore())
+                                .ForMember(p => p.Tags, o => o.Ignore());
                             cfg.CreateMap<Data.Site, Data.Site>()
                                 .ForMember(s => s.Id, o => o.Ignore())
                                 .ForMember(s => s.Created, o => o.Ignore());

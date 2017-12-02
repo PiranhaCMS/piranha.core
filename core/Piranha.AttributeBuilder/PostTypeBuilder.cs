@@ -16,23 +16,23 @@ using Piranha.Models;
 
 namespace Piranha.AttributeBuilder
 {
-    public class PageTypeBuilder : ContentTypeBuilder<PageTypeBuilder, PageType>
+    public class PostTypeBuilder : ContentTypeBuilder<PostTypeBuilder, PostType>
     {
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>        
-        public PageTypeBuilder(IApi api) : base(api) { }
+        public PostTypeBuilder(IApi api) : base(api) { }
 
         /// <summary>
         /// Builds the page types.
         /// </summary>
-        public override PageTypeBuilder Build() {
+        public override PostTypeBuilder Build() {
             foreach (var type in types) {
-                var pageType = GetContentType(type);
+                var postType = GetContentType(type);
 
-                if (pageType != null)
-                    api.PageTypes.Save(pageType);
+                if (postType != null)
+                    api.PostTypes.Save(postType);
             }
             return this;
         }
@@ -42,9 +42,9 @@ namespace Piranha.AttributeBuilder
         ///  exist in the database,
         /// </summary>
         /// <returns>The builder</returns>
-        public PageTypeBuilder DeleteOrphans() {
-            var orphans = new List<PageType>();
-            var importTypes = new List<PageType>();
+        public PostTypeBuilder DeleteOrphans() {
+            var orphans = new List<PostType>();
+            var importTypes = new List<PostType>();
 
             // Get all page types added for import.
             foreach (var type in types) {
@@ -55,41 +55,41 @@ namespace Piranha.AttributeBuilder
             }
 
             // Get all previously imported page types.
-            foreach (var pageType in api.PageTypes.GetAll()) {
-                if (!importTypes.Any(t => t.Id == pageType.Id))
-                    orphans.Add(pageType);
+            foreach (var postType in api.PostTypes.GetAll()) {
+                if (!importTypes.Any(t => t.Id == postType.Id))
+                    orphans.Add(postType);
             }
 
             // Delete all orphans.
-            foreach (var pageType in orphans) {
-                api.PageTypes.Delete(pageType);
+            foreach (var postType in orphans) {
+                api.PostTypes.Delete(postType);
             }
             return this;
         }
 
         #region Private methods
         /// <summary>
-        /// Gets the possible page type for the given type.
+        /// Gets the possible post type for the given type.
         /// </summary>
         /// <param name="type">The type</param>
         /// <returns>The page type</returns>
-        protected override PageType GetContentType(Type type) {
-            var attr = type.GetTypeInfo().GetCustomAttribute<PageTypeAttribute>();
+        protected override PostType GetContentType(Type type) {
+            var attr = type.GetTypeInfo().GetCustomAttribute<PostTypeAttribute>();
 
             if (attr != null) {
                 if (string.IsNullOrWhiteSpace(attr.Id))
                     attr.Id = type.Name;
 
                 if (!string.IsNullOrEmpty(attr.Id) && !string.IsNullOrEmpty(attr.Title)) {
-                    var pageType = new PageType() {
+                    var postType = new PostType() {
                         Id = attr.Id,
                         Title = attr.Title
                     };
 
-                    var routes = type.GetTypeInfo().GetCustomAttributes(typeof(PageTypeRouteAttribute));
-                    foreach (PageTypeRouteAttribute route in routes) {
+                    var routes = type.GetTypeInfo().GetCustomAttributes(typeof(PostTypeRouteAttribute));
+                    foreach (PostTypeRouteAttribute route in routes) {
                         if (!string.IsNullOrWhiteSpace(route.Title) && !string.IsNullOrWhiteSpace(route.Route))
-                            pageType.Routes.Add(new ContentTypeRoute() {
+                            postType.Routes.Add(new ContentTypeRoute() {
                                 Title = route.Title,
                                 Route = route.Route
                             });
@@ -108,15 +108,15 @@ namespace Piranha.AttributeBuilder
 
                     // First add sorted regions
                     foreach (var regionType in regionTypes.Where(t => t.Item1.HasValue))
-                        pageType.Regions.Add(regionType.Item2);
+                        postType.Regions.Add(regionType.Item2);
                     // Then add the unsorted regions
                     foreach (var regionType in regionTypes.Where(t => !t.Item1.HasValue))
-                        pageType.Regions.Add(regionType.Item2);
+                        postType.Regions.Add(regionType.Item2);
 
-                    return pageType;
+                    return postType;
                 }
             } else {
-                throw new ArgumentException($"Title is mandatory in PageTypeAttribute. No title provided for {type.Name}");
+                throw new ArgumentException($"Title is mandatory in PostTypeAttribute. No title provided for {type.Name}");
             }
             return null;
         }

@@ -26,6 +26,11 @@ namespace Piranha.Models
         string RegionId { get; set; }
 
         /// <summary>
+        /// Gets/sets the parent model.
+        /// </summary>
+        IDynamicModel Model { get; set; }
+
+        /// <summary>
         /// Clears the list
         /// </summary>
         void Clear();

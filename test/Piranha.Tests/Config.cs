@@ -26,6 +26,7 @@ namespace Piranha.Tests
 
                 using (var config = new Piranha.Config(api)) {
                     config.CacheExpiresPages = 0;
+                    config.CacheExpiresPosts = 0;
                     config.HierarchicalPageSlugs = true;
                     config.ManagerExpandedSitemapLevels = 0;
                 }
@@ -47,6 +48,19 @@ namespace Piranha.Tests
                     config.CacheExpiresPages = 30;
 
                     Assert.Equal(30, config.CacheExpiresPages);
+                }
+            }
+        }
+
+        [Fact]
+        public void CacheExpiresPosts() {
+            using (var api = new Api(GetDb(), storage)) {
+                using (var config = new Piranha.Config(api)) {
+                    Assert.Equal(0, config.CacheExpiresPosts);
+
+                    config.CacheExpiresPosts = 30;
+
+                    Assert.Equal(30, config.CacheExpiresPosts);
                 }
             }
         }

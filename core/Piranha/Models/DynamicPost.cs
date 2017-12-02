@@ -15,7 +15,7 @@ namespace Piranha.Models
     /// <summary>
     /// Dynamic page model.
     /// </summary>
-    public class DynamicPage : Page<DynamicPage>, IDynamicModel
+    public class DynamicPost : Post<DynamicPost>, IDynamicModel
     {
         #region Properties
         /// <summary>
@@ -27,7 +27,7 @@ namespace Piranha.Models
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public DynamicPage() : base() {
+        public DynamicPost() : base() {
             Regions = new ExpandoObject();
         }
     }

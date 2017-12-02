@@ -14,10 +14,10 @@ using System.Collections.Generic;
 namespace Piranha.Models
 {
     /// <summary>
-    /// Region list for dynamic page models.
+    /// Region list for dynamic models.
     /// </summary>
     /// <typeparam name="T">The item type</typeparam>
-    public class PageRegionList<T> : List<T>, IRegionList
+    public class RegionList<T> : List<T>, IRegionList
     {
         /// <summary>
         /// Gets/sets the page type id.
@@ -30,12 +30,17 @@ namespace Piranha.Models
         public string RegionId { get; set; }
 
         /// <summary>
+        /// Gets/sets the parent model.
+        /// </summary>
+        public IDynamicModel Model { get; set; }
+
+        /// <summary>
         /// Creates a new item instance
         /// </summary>
         /// <param name="api">The current api</param>
         /// <returns>The new item</returns>
         public T Create(IApi api) {
-            return (T)DynamicPage.CreateRegion(api, TypeId, RegionId);
+            return (T)Model.CreateRegion(api, RegionId);
         }
 
         /// <summary>

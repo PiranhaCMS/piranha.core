@@ -50,8 +50,8 @@ namespace Piranha.Models
                 var model = (T)Activator.CreateInstance<T>();
                 model.TypeId = typeId;
 
-                if (model is DynamicPage) {
-                    var dynModel = (DynamicPage)(object)model;
+                if (model is IDynamicModel) {
+                    var dynModel = (IDynamicModel)(object)model;
 
                     foreach (var region in contentType.Regions) {
                         object value = null;
@@ -60,7 +60,8 @@ namespace Piranha.Models
                             var reg = CreateDynamicRegion(region);
 
                             if (reg != null) {
-                                value = Activator.CreateInstance(typeof(PageRegionList<>).MakeGenericType(reg.GetType()));
+                                value = Activator.CreateInstance(typeof(RegionList<>).MakeGenericType(reg.GetType()));
+                                ((IRegionList)value).Model = (IDynamicModel)model;
                                 ((IRegionList)value).TypeId = typeId;
                                 ((IRegionList)value).RegionId = region.Id;
                             }

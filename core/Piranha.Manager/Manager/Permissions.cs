@@ -34,7 +34,6 @@ namespace Piranha.Manager
         public const string SitesAdd = "PiranhaSitesAdd";
         public const string SitesDelete = "PiranhaSitesDelete";
         public const string SitesEdit = "PiranhaSitesEdit";
-
         public const string SitesSave = "PiranhaSitesSave";
 
         public static string[] All() {

@@ -15,12 +15,12 @@ using System.Linq;
 
 namespace Piranha.Models
 {
-    public sealed class PageType : ContentType
+    public sealed class PostType : ContentType
     {
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public PageType() : base() {  }
+        public PostType() : base() {  }
 
         /// <summary>
         /// Validates that the page type is correctly defined.

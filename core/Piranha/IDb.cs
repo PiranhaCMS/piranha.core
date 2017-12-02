@@ -19,6 +19,11 @@ namespace Piranha
     public interface IDb : IDisposable
     {
         /// <summary>
+        /// Gets/sets the category set.
+        /// </summary>
+        DbSet<Data.Category> Categories { get; set; }
+
+        /// <summary>
         /// Gets/sets the media set.
         /// </summary>
         DbSet<Data.Media> Media { get; set; }
@@ -51,9 +56,34 @@ namespace Piranha
         DbSet<Data.Param> Params { get; set; }
 
         /// <summary>
+        /// Gets/sets the post set.
+        /// </summary>
+        DbSet<Data.Post> Posts { get; set; }
+
+        /// <summary>
+        /// Gets/sets the post field set.
+        /// </summary>        
+        DbSet<Data.PostField> PostFields { get; set; }
+
+        /// <summary>
+        /// Gets/sets the post tag set.
+        /// </summary>
+        DbSet<Data.PostTag> PostTags { get; set; }
+
+        /// <summary>
+        /// Gets/sets the post type set.
+        /// </summary>
+        DbSet<Data.PostType> PostTypes { get; set; }
+
+        /// <summary>
         /// Gets/sets the site set.
         /// </summary>
         DbSet<Data.Site> Sites { get; set; }
+
+        /// <summary>
+        /// Gets/sets the tag set.
+        /// </summary>
+        DbSet<Data.Tag> Tags { get; set; }
 
         /// <summary>
         /// Gets the entity set for the specified type.
