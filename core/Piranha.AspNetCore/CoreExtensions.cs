@@ -22,6 +22,7 @@ public static class CoreExtensions
     public static IApplicationBuilder UsePiranha(this IApplicationBuilder builder) {
         return builder
             .UseMiddleware<Piranha.AspNetCore.PageMiddleware>()
+            .UseMiddleware<Piranha.AspNetCore.PostMiddleware>()
             .UseMiddleware<Piranha.AspNetCore.StartPageMiddleware>();
     }
 
