@@ -11,6 +11,7 @@ using System;
 
 namespace Piranha.Migrations
 {
+    [NoCoverage]
     [DbContext(typeof(Db))]
     partial class DbModelSnapshot : ModelSnapshot
     {

@@ -45,6 +45,18 @@ namespace CoreWeb.Controllers
         }
 
         /// <summary>
+        /// Gets the post with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        [Route("post")]
+        public IActionResult Post(Guid id) {
+            var model = api.Posts.GetById<Models.ArticlePost>(id);
+            ViewBag.CurrentPage = model.Id;
+
+            return View(model);
+        }
+
+        /// <summary>
         /// Gets the page with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>

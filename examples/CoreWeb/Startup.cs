@@ -83,6 +83,10 @@ namespace CoreWeb
                 .AddType(typeof(Models.TeaserPage));
             pageTypeBuilder.Build()
                 .DeleteOrphans();
+            var postTypeBuilder = new Piranha.AttributeBuilder.PostTypeBuilder(api)
+                .AddType(typeof(Models.ArticlePost));
+            postTypeBuilder.Build()
+                .DeleteOrphans();
 
             // Register middleware
             app.UseStaticFiles();
@@ -107,6 +111,33 @@ namespace CoreWeb
         /// </summary>
         /// <param name="api">The current application api</param>
         private void Seed(IApi api) {
+
+            if (api.Categories.GetAll().Count() == 0) {
+                var blogId = Guid.NewGuid();
+
+                api.Categories.Save(new Piranha.Data.Category() {
+                    Id = blogId,
+                    Title = "Blog",
+                    ArchiveTitle = "Blog Archive"
+                });
+
+                using (var stream = File.OpenRead("assets/seed/blogpost.md")) {
+                    using (var reader = new StreamReader(stream)) {
+                        var post = Models.ArticlePost.Create(api);
+
+                        // Add main content
+                        post.CategoryId = blogId;
+                        post.Title = "Welcome to the Blog";
+                        post.MetaKeywords = "Piranha, Piranha CMS, CMS, AspNetCore, DotNetCore, MVC";
+                        post.MetaDescription = "Piranha is the fun, fast and lightweight framework for developing cms-based web applications with AspNetCore.";
+                        post.Body = reader.ReadToEnd();
+                        post.Published = DateTime.Now;      
+
+                        api.Posts.Save(post);                  
+                    }
+                }
+            }
+
             if (api.Pages.GetAll().Count() == 0) {
                 // Get the default site
                 var site = api.Sites.GetDefault();

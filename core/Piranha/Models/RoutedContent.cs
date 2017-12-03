@@ -18,6 +18,21 @@ namespace Piranha.Models
     public abstract class RoutedContent : Content
     {
         /// <summary>
+        /// Gets/sets the unique slug.
+        /// </summary>
+        public string Slug { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional meta keywords.
+        /// </summary>
+        public string MetaKeywords { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional meta description.
+        /// </summary>
+        public string MetaDescription { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional route used by the middleware.
         /// </summary>
         public string Route { get; set; }
