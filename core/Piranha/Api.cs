@@ -39,6 +39,11 @@ namespace Piranha
 
         #region Properties
         /// <summary>
+        /// Gets/sets the archive repository.
+        /// </summary>
+        public Repositories.IArchiveRepository Archives { get; private set; }
+
+        /// <summary>
         /// Gets the category repository.
         /// </summary>
         public Repositories.ICategoryRepository Categories { get; private set; }
@@ -80,6 +85,11 @@ namespace Piranha
         public Repositories.ISiteRepository Sites { get; private set; }
 
         /// <summary>
+        /// Gets the tag repository.
+        /// </summary>
+        public Repositories.ITagRepository Tags { get; private set; }
+
+        /// <summary>
         /// Gets if the current repository has caching enabled or not.
         /// </summary>
         public bool IsCached {
@@ -115,6 +125,7 @@ namespace Piranha
         private void Setup(ICache modelCache = null) {
             cache = modelCache;
 
+            Archives = new Repositories.ArchiveRepository(this, db);
             Categories = new Repositories.CategoryRepository(db, cache);
             Media = new Repositories.MediaRepository(db, storage, cache);
             Pages = new Repositories.PageRepository(this, db, cache);
@@ -123,6 +134,7 @@ namespace Piranha
             Posts = new Repositories.PostRepository(this, db, cache);
             PostTypes = new Repositories.PostTypeRepository(db, cache);
             Sites = new Repositories.SiteRepository(this, db, cache);
+            Tags = new Repositories.TagRepository(db, cache);
         }
         #endregion
     }

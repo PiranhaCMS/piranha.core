@@ -1,0 +1,26 @@
+@model Piranha.Models.PostArchive
+@{
+    ViewBag.Title = Model.Title;
+    ViewBag.CurrentPage = Model.CategoryId;
+}
+
+@section meta {
+    @Html.Partial("Partial/_Meta", Model)
+}
+
+<div class="container body">
+    <h1>@Model.Title</h1>
+
+    @foreach (var post in Model.Posts) {
+        <article>
+            <header>
+                <h2><a href="~/@Model.Slug/@post.Slug">@post.Title</a></h2>
+            </header>
+            <p class="small">Published: @post.Published in @post.CategoryName</p>
+            <p>
+                @Html.Raw((((Piranha.Models.DynamicPost)post).Regions.Body.ToHtml()))
+            </p>
+            <hr />
+        </article>
+    }
+</div>

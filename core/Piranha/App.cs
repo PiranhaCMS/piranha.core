@@ -195,7 +195,8 @@ namespace Piranha
                                 .ForMember(p => p.Id, o => o.Ignore())
                                 .ForMember(p => p.Created, o => o.Ignore());
                             cfg.CreateMap<Data.Post, Models.PostBase>()
-                                .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PostTypeId));
+                                .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PostTypeId))
+                                .ForMember(p => p.CategoryName, o => o.MapFrom(m => m.Category.Title));
                             cfg.CreateMap<Models.PostBase, Data.Post>()
                                 .ForMember(p => p.PostTypeId, o => o.MapFrom(m => m.TypeId))
                                 .ForMember(p => p.Fields, o => o.Ignore())
@@ -207,6 +208,9 @@ namespace Piranha
                             cfg.CreateMap<Data.Site, Data.Site>()
                                 .ForMember(s => s.Id, o => o.Ignore())
                                 .ForMember(s => s.Created, o => o.Ignore());
+                            cfg.CreateMap<Data.Tag, Data.Tag>()
+                                .ForMember(t => t.Id, o => o.Ignore())
+                                .ForMember(t => t.Created, o => o.Ignore());
                         });
                         mapperConfig.AssertConfigurationIsValid();
                         mapper = mapperConfig.CreateMapper();

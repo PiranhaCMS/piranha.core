@@ -118,7 +118,8 @@ namespace CoreWeb
                 api.Categories.Save(new Piranha.Data.Category() {
                     Id = blogId,
                     Title = "Blog",
-                    ArchiveTitle = "Blog Archive"
+                    ArchiveTitle = "Blog Archive",
+                    EnableArchive = true
                 });
 
                 using (var stream = File.OpenRead("assets/seed/blogpost.md")) {

@@ -23,7 +23,18 @@ public static class CoreExtensions
         return builder
             .UseMiddleware<Piranha.AspNetCore.PageMiddleware>()
             .UseMiddleware<Piranha.AspNetCore.PostMiddleware>()
+            .UseMiddleware<Piranha.AspNetCore.ArchiveMiddleware>()
             .UseMiddleware<Piranha.AspNetCore.StartPageMiddleware>();
+    }
+
+    /// <summary>
+    /// Uses the piranha archive middleware.
+    /// </summary>
+    /// <param name="builder">The current application builder</param>
+    /// <returns>The builder</returns>
+    public static IApplicationBuilder UsePiranhaArchives(this IApplicationBuilder builder) {
+        return builder
+            .UseMiddleware<Piranha.AspNetCore.ArchiveMiddleware>();
     }
 
     /// <summary>

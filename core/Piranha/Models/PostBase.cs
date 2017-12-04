@@ -15,13 +15,18 @@ namespace Piranha.Models
     /// <summary>
     /// Base class for post models.
     /// </summary>
-    public abstract class PostBase : RoutedContent
+    public abstract class PostBase : RoutedContent, IMeta
     {
         #region Properties
         /// <summary>
         /// Gets/sets the category id.
         /// </summary>
         public Guid CategoryId { get; set; }
+
+        /// <summary>
+        /// Gets/sets the category name.
+        /// </summary>
+        public string CategoryName { get; set; }
 
         /// <summary>
         /// Gets/sets the optional redirect.

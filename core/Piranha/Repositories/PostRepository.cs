@@ -75,6 +75,7 @@ namespace Piranha.Repositories
                 if (post != null) {
                     if (cache != null)
                         AddToCache(post);
+                    post.Category = api.Categories.GetById(post.CategoryId);
                 }
             }
 
@@ -119,6 +120,8 @@ namespace Piranha.Repositories
                     if (post != null) {
                         if (cache != null)
                             AddToCache(post);
+                        post.Category = category;
+                
                         return Load<T, Models.PostBase>(post, api.PostTypes.GetById(post.PostTypeId));
                     }                    
                     return null;

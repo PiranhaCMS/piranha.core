@@ -15,7 +15,7 @@ namespace Piranha.Models
     /// <summary>
     /// Base class for page models.
     /// </summary>
-    public abstract class PageBase : RoutedContent
+    public abstract class PageBase : RoutedContent, IMeta
     {
         #region Properties
         /// <summary>
