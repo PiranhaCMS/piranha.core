@@ -1,4 +1,5 @@
 @model Piranha.Models.PostArchive
+@using Piranha
 @{
     ViewBag.Title = Model.Title;
     ViewBag.CurrentPage = Model.CategoryId;
@@ -14,13 +15,12 @@
     @foreach (var post in Model.Posts) {
         <article>
             <header>
-                <h2><a href="~/@Model.Slug/@post.Slug">@post.Title</a></h2>
+                <h2><a href="~/@post.Permalink">@post.Title</a></h2>
             </header>
             <p class="small">Published: @post.Published in @post.CategoryName</p>
             <p>
-                @Html.Raw((((Piranha.Models.DynamicPost)post).Regions.Body.ToHtml()))
+                @Html.Raw(Utils.FirstParagraph(post.Regions.Body))
             </p>
-            <hr />
         </article>
     }
 </div>

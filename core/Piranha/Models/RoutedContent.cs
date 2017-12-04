@@ -23,6 +23,11 @@ namespace Piranha.Models
         public string Slug { get; set; }
 
         /// <summary>
+        /// Gets/sets the public permalink.
+        /// </summary>
+        public string Permalink { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional meta keywords.
         /// </summary>
         public string MetaKeywords { get; set; }

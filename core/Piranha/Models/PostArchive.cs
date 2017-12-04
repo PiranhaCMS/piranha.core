@@ -69,14 +69,14 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the available posts.
         /// </summary>
-        public IList<PostBase> Posts { get; set; }
+        public IList<DynamicPost> Posts { get; set; }
         #endregion
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         public PostArchive() {
-            Posts = new List<PostBase>();
+            Posts = new List<DynamicPost>();
         }
     }
 }

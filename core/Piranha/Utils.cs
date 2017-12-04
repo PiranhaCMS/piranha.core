@@ -122,7 +122,42 @@ namespace Piranha
             } while (bytes >= 1024);
 
             return $"{bytes:0.00} {SizeSuffixes[index]}";
-
         }
+
+        /// <summary>
+        /// Gets the first paragraph from the given html string.
+        /// </summary>
+        /// <param name="str">The string</param>
+        /// <returns>The first paragraph</returns>
+        public static string FirstParagraph(string str) {
+            Regex reg = new Regex("<p[^>]*>.*?</p>") ;
+            var matches = reg.Matches(str) ;
+
+            return matches.Count > 0 ? matches[0].Value : "" ;
+        }
+
+        /// <summary>
+        /// Gets the first paragraph from the given markdown field.
+        /// </summary>
+        /// <param name="md">The field</param>
+        /// <returns>The first paragraph</returns>
+        public static string FirstParagraph(Extend.Fields.MarkdownField md) {
+            Regex reg = new Regex("<p[^>]*>.*?</p>") ;
+            var matches = reg.Matches(md.ToHtml()) ;
+
+            return matches.Count > 0 ? matches[0].Value : "" ;
+        }        
+
+        /// <summary>
+        /// Gets the first paragraph from the given html field.
+        /// </summary>
+        /// <param name="html">The field</param>
+        /// <returns>The first paragraph</returns>
+        public static string FirstParagraph(Extend.Fields.HtmlField html) {
+            Regex reg = new Regex("<p[^>]*>.*?</p>") ;
+            var matches = reg.Matches(html.Value) ;
+
+            return matches.Count > 0 ? matches[0].Value : "" ;
+        }        
     }
 }
