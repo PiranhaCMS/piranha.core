@@ -8,10 +8,11 @@
  * 
  */
 
-namespace Piranha.Models
+namespace Piranha.Data
 {
-    /// <summary>
-    /// Base class for basic content pages.
-    /// </summary>
-    public class Page<T> : GenericPage<T>, IPage where T : Page<T> {}
+    public enum PageContentType
+    {
+        Page,
+        Blog
+    }
 }

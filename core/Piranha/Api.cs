@@ -126,7 +126,7 @@ namespace Piranha
             cache = modelCache;
 
             Archives = new Repositories.ArchiveRepository(this, db);
-            Categories = new Repositories.CategoryRepository(db, cache);
+            Categories = new Repositories.CategoryRepository(this, db, cache);
             Media = new Repositories.MediaRepository(db, storage, cache);
             Pages = new Repositories.PageRepository(this, db, cache);
             PageTypes = new Repositories.PageTypeRepository(db, cache);

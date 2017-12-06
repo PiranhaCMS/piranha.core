@@ -8,6 +8,7 @@
  * 
  */
 
+using Piranha.AttributeBuilder;
 using System;
 using System.Data.SqlClient;
 using System.Linq;
@@ -35,24 +36,54 @@ namespace Piranha.Tests.Repositories
         private const string TAG_4 = "My Fourth Tag";
         private const string TAG_5 = "My Fifth Tag";
 
+        private Guid SITE_ID = Guid.NewGuid();
+        private Guid BLOG_ID = Guid.NewGuid();
         private Guid TAG_1_ID = Guid.NewGuid();
         private Guid TAG_5_ID = Guid.NewGuid();
 
         protected ICache cache;
         #endregion
 
+        [PageType(Title = "Blog page")]
+        public class BlogPage : Models.Page<BlogPage> { }        
+
         protected override void Init() {
             using (var api = new Api(GetDb(), storage, cache)) {
+                Piranha.App.Init(api);
+
+                var pageTypeBuilder = new PageTypeBuilder(api)
+                    .AddType(typeof(BlogPage));
+                pageTypeBuilder.Build();
+
+                // Add site
+                var site = new Data.Site() {
+                    Id = SITE_ID,
+                    Title = "Category Site",
+                    InternalId = "CategorySite",
+                    IsDefault = true
+                };
+                api.Sites.Save(site);
+
+                // Add blog page
+                var page = BlogPage.Create(api);
+                page.Id = BLOG_ID;
+                page.SiteId = SITE_ID;
+                page.Title = "Blog";
+                api.Pages.Save(page);
+
+                // Add tags
                 api.Tags.Save(new Data.Tag() {
                     Id = TAG_1_ID,
+                    BlogId = BLOG_ID,
                     Title = TAG_1
                 });
-
                 api.Tags.Save(new Data.Tag() {
+                    BlogId = BLOG_ID,
                     Title = TAG_4
                 });
                 api.Tags.Save(new Data.Tag() {
                     Id = TAG_5_ID,
+                    BlogId = BLOG_ID,
                     Title = TAG_5
                 });
             }
@@ -60,10 +91,18 @@ namespace Piranha.Tests.Repositories
 
         protected override void Cleanup() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var tags = api.Tags.GetAll();
+                var tags = api.Tags.GetAll(BLOG_ID);
 
                 foreach (var t in tags)
                     api.Tags.Delete(t);
+
+                api.Pages.Delete(BLOG_ID);
+
+                var types = api.PageTypes.GetAll();
+                foreach (var t in types)
+                    api.PageTypes.Delete(t);
+
+                api.Sites.Delete(SITE_ID);                    
             }
         }
 
@@ -78,6 +117,7 @@ namespace Piranha.Tests.Repositories
         public void Add() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 api.Tags.Save(new Data.Tag() {
+                    BlogId = BLOG_ID,
                     Title = TAG_2
                 });
             }
@@ -88,6 +128,7 @@ namespace Piranha.Tests.Repositories
             using (var api = new Api(GetDb(), storage, cache)) {
                 Assert.ThrowsAny<Exception>(() =>
                     api.Tags.Save(new Data.Tag() {
+                        BlogId = BLOG_ID,
                         Title = TAG_1
                     }));
             }
@@ -97,7 +138,9 @@ namespace Piranha.Tests.Repositories
         public void AddNoTitle() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 Assert.ThrowsAny<ArgumentException>(() =>
-                    api.Tags.Save(new Data.Tag()));
+                    api.Tags.Save(new Data.Tag() {
+                        BlogId = BLOG_ID
+                    }));
             }
         }
 
@@ -113,17 +156,25 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void GetNoneBySlug() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var none = api.Tags.GetBySlug("none-existing-slug");
+                var none = api.Tags.GetBySlug(BLOG_ID, "none-existing-slug");
 
                 Assert.Null(none);
             }
         }
 
+        [Fact]
+        public void GetNoneBySlugBlog() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var none = api.Tags.GetBySlug(Guid.NewGuid(), "none-existing-slug");
+
+                Assert.Null(none);
+            }
+        }
 
         [Fact]
         public void GetAll() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var models = api.Tags.GetAll();
+                var models = api.Tags.GetAll(BLOG_ID);
 
                 Assert.NotNull(models);
                 Assert.NotEqual(0, models.Count());
@@ -143,7 +194,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void GetBySlug() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var model = api.Tags.GetBySlug(Piranha.Utils.GenerateSlug(TAG_1));
+                var model = api.Tags.GetBySlug(BLOG_ID, Piranha.Utils.GenerateSlug(TAG_1));
 
                 Assert.NotNull(model);
                 Assert.Equal(TAG_1, model.Title);
@@ -166,7 +217,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void Delete() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var model = api.Tags.GetBySlug(Piranha.Utils.GenerateSlug(TAG_4));
+                var model = api.Tags.GetBySlug(BLOG_ID, Piranha.Utils.GenerateSlug(TAG_4));
 
                 Assert.NotNull(model);
 

@@ -28,6 +28,26 @@ namespace Piranha.Repositories
             : base(db, cache) { }
 
         /// <summary>
+        /// Gets all available models for the specified blog.
+        /// </summary>
+        /// <param name="id">The blog id</param>
+        /// <returns>The available models</returns>
+        public IEnumerable<Tag> GetAll(Guid blogId) {
+            var models = new List<Tag>();
+            var tags = db.Tags
+                .AsNoTracking()
+                .Where(t => t.BlogId == blogId)
+                .Select(t => t.Id);
+
+            foreach (var t in tags) {
+                var model = GetById(t);
+                if (model != null)
+                    models.Add(model);
+            }
+            return models;
+        }
+
+        /// <summary>
         /// Gets the models for the post with the given id.
         /// </summary>
         /// <param name="postId">The post id</param>
@@ -52,10 +72,11 @@ namespace Piranha.Repositories
         /// <summary>
         /// Gets the model with the given slug.
         /// </summary>
+        /// <param name="blogId">The blog id</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The model</returns>
-        public Tag GetBySlug(string slug) {
-            var id = cache != null ? cache.Get<Guid?>($"Tag_{slug}") : null;
+        public Tag GetBySlug(Guid blogId, string slug) {
+            var id = cache != null ? cache.Get<Guid?>($"Tag_{blogId}_{slug}") : null;
             Tag model = null;
 
             if (id.HasValue) {
@@ -63,7 +84,7 @@ namespace Piranha.Repositories
             } else {
                 model = db.Tags
                     .AsNoTracking()
-                    .FirstOrDefault(t => t.Slug == slug);
+                    .FirstOrDefault(t => t.BlogId == blogId && t.Slug == slug);
 
                 if (cache != null && model != null)
                     AddToCache(model);
@@ -119,7 +140,7 @@ namespace Piranha.Repositories
         /// <param name="model">The model</param>
         protected override void AddToCache(Tag model) {
             cache.Set(model.Id.ToString(), model);
-            cache.Set($"Tag_{model.Slug}", model.Id);
+            cache.Set($"Tag_{model.BlogId}_{model.Slug}", model.Id);
         }
 
         /// <summary>
@@ -128,7 +149,7 @@ namespace Piranha.Repositories
         /// <param name="model">The model</param>
         protected override void RemoveFromCache(Tag model) {
             cache.Remove(model.Id.ToString());
-            cache.Remove($"Tag_{model.Slug}");
+            cache.Remove($"Tag_{model.BlogId}_{model.Slug}");
         }        
         #endregion
     }

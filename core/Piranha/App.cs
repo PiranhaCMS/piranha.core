@@ -67,6 +67,11 @@ namespace Piranha
         /// The currently registered serializers.
         /// </summary>
         private SerializerManager serializers;
+
+        /// <summary>
+        /// The currently registered content types.
+        /// </summary>
+        private ContentTypeManager contentTypes;
         #endregion
 
         #region Properties
@@ -119,6 +124,13 @@ namespace Piranha
         public static SerializerManager Serializers {
             get { return instance.serializers; }
         }
+
+        /// <summary>
+        /// Gets the currently registered content types.
+        /// </summary>
+        public static ContentTypeManager ContentTypes {
+            get { return instance.contentTypes; }
+        }
         #endregion
 
         /// <summary>
@@ -129,6 +141,7 @@ namespace Piranha
             modules = new AppModuleList();
             mediaTypes = new MediaManager();
             serializers = new SerializerManager();
+            contentTypes = new ContentTypeManager();
         }
 
         /// <summary>
@@ -198,13 +211,14 @@ namespace Piranha
                             cfg.CreateMap<Data.Post, Models.PostBase>()
                                 .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PostTypeId))
                                 .ForMember(p => p.CategoryName, o => o.MapFrom(m => m.Category.Title))
-                                .ForMember(p => p.Permalink, o => o.MapFrom(m => m.Category.Slug + "/" + m.Slug));
+                                .ForMember(p => p.Permalink, o => o.MapFrom(m => m.Blog.Slug + "/" + m.Slug));
                             cfg.CreateMap<Models.PostBase, Data.Post>()
                                 .ForMember(p => p.PostTypeId, o => o.MapFrom(m => m.TypeId))
                                 .ForMember(p => p.Fields, o => o.Ignore())
                                 .ForMember(p => p.Created, o => o.Ignore())
                                 .ForMember(p => p.LastModified, o => o.Ignore())
                                 .ForMember(p => p.PostType, o => o.Ignore())
+                                .ForMember(p => p.Blog, o => o.Ignore())
                                 .ForMember(p => p.Category, o => o.Ignore())
                                 .ForMember(p => p.Tags, o => o.Ignore());
                             cfg.CreateMap<Data.Site, Data.Site>()
@@ -223,6 +237,10 @@ namespace Piranha
                         mediaTypes.Images.Add(".jpeg", "image/jpeg");
                         mediaTypes.Images.Add(".png", "image/png");
                         mediaTypes.Videos.Add(".mp4", "video/mp4");
+
+                        // Compose content types
+                        contentTypes.Register<Models.IPage>("Page", "Page");
+                        contentTypes.Register<Models.IBlogPage>("Blog", "Blog");
 
                         // Compose field types
                         fields.Register<Extend.Fields.DateField>();

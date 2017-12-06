@@ -8,6 +8,8 @@
  * 
  */
 
+using Piranha.AttributeBuilder;
+using Piranha.Extend.Fields;
 using System;
 using System.Data.SqlClient;
 using System.Linq;
@@ -35,38 +37,74 @@ namespace Piranha.Tests.Repositories
         private const string CAT_4 = "My Fourth Category";
         private const string CAT_5 = "My Fifth Category";
 
+        private Guid SITE_ID = Guid.NewGuid();
+        private Guid BLOG_ID = Guid.NewGuid();
         private Guid CAT_1_ID = Guid.NewGuid();
         private Guid CAT_5_ID = Guid.NewGuid();
 
         protected ICache cache;
         #endregion
 
+        [PageType(Title = "Blog page")]
+        public class BlogPage : Models.Page<BlogPage> { }        
+
         protected override void Init() {
             using (var api = new Api(GetDb(), storage, cache)) {
+                Piranha.App.Init(api);
+
+                var pageTypeBuilder = new PageTypeBuilder(api)
+                    .AddType(typeof(BlogPage));
+                pageTypeBuilder.Build();
+
+                // Add site
+                var site = new Data.Site() {
+                    Id = SITE_ID,
+                    Title = "Category Site",
+                    InternalId = "CategorySite",
+                    IsDefault = true
+                };
+                api.Sites.Save(site);
+
+                // Add blog page
+                var page = BlogPage.Create(api);
+                page.Id = BLOG_ID;
+                page.SiteId = SITE_ID;
+                page.Title = "Blog";
+                api.Pages.Save(page);
+
+                // Add categories
                 api.Categories.Save(new Data.Category() {
                     Id = CAT_1_ID,
-                    Title = CAT_1,
-                    ArchiveTitle = "Archive"
+                    BlogId = BLOG_ID,
+                    Title = CAT_1
                 });
 
                 api.Categories.Save(new Data.Category() {
-                    Title = CAT_4,
-                    ArchiveTitle = "Archive"
+                    BlogId = BLOG_ID,
+                    Title = CAT_4
                 });
                 api.Categories.Save(new Data.Category() {
                     Id = CAT_5_ID,
-                    Title = CAT_5,
-                    ArchiveTitle = "Archive"
+                    BlogId = BLOG_ID,
+                    Title = CAT_5
                 });
             }
         }
 
         protected override void Cleanup() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var categories = api.Categories.GetAll();
+                var categories = api.Categories.GetAll(BLOG_ID);
 
                 foreach (var c in categories)
                     api.Categories.Delete(c);
+
+                api.Pages.Delete(BLOG_ID);
+
+                var types = api.PageTypes.GetAll();
+                foreach (var t in types)
+                    api.PageTypes.Delete(t);
+
+                api.Sites.Delete(SITE_ID);
             }
         }
 
@@ -81,8 +119,8 @@ namespace Piranha.Tests.Repositories
         public void Add() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 api.Categories.Save(new Data.Category() {
-                    Title = CAT_2,
-                    ArchiveTitle = "Archive"
+                    BlogId = BLOG_ID,
+                    Title = CAT_2
                 });
             }
         }
@@ -92,8 +130,8 @@ namespace Piranha.Tests.Repositories
             using (var api = new Api(GetDb(), storage, cache)) {
                 Assert.ThrowsAny<Exception>(() =>
                     api.Categories.Save(new Data.Category() {
-                        Title = CAT_1,
-                        ArchiveTitle = "Archive"
+                        BlogId = BLOG_ID,
+                        Title = CAT_1
                     }));
             }
         }
@@ -103,17 +141,7 @@ namespace Piranha.Tests.Repositories
             using (var api = new Api(GetDb(), storage, cache)) {
                 Assert.ThrowsAny<ArgumentException>(() =>
                     api.Categories.Save(new Data.Category() {
-                        ArchiveTitle = "No title"
-                    }));
-            }
-        }
-
-        [Fact]
-        public void AddNoArchiveTitle() {
-            using (var api = new Api(GetDb(), storage, cache)) {
-                Assert.ThrowsAny<ArgumentException>(() =>
-                    api.Categories.Save(new Data.Category() {
-                        Title = "No archive title"
+                        BlogId = BLOG_ID
                     }));
             }
         }
@@ -130,20 +158,29 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void GetNoneBySlug() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var none = api.Categories.GetBySlug("none-existing-slug");
+                var none = api.Categories.GetBySlug(BLOG_ID, "none-existing-slug");
 
                 Assert.Null(none);
             }
         }
 
-
         [Fact]
         public void GetAll() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var models = api.Categories.GetAll();
+                var models = api.Categories.GetAll(BLOG_ID);
 
                 Assert.NotNull(models);
                 Assert.NotEqual(0, models.Count());
+            }
+        }
+
+        [Fact]
+        public void GetNone() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var models = api.Categories.GetAll(Guid.NewGuid());
+
+                Assert.NotNull(models);
+                Assert.Equal(0, models.Count());
             }
         }
 
@@ -160,7 +197,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void GetBySlug() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var model = api.Categories.GetBySlug(Piranha.Utils.GenerateSlug(CAT_1));
+                var model = api.Categories.GetBySlug(BLOG_ID, Piranha.Utils.GenerateSlug(CAT_1));
 
                 Assert.NotNull(model);
                 Assert.Equal(CAT_1, model.Title);
@@ -183,7 +220,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void Delete() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var model = api.Categories.GetBySlug(Piranha.Utils.GenerateSlug(CAT_4));
+                var model = api.Categories.GetBySlug(BLOG_ID, Piranha.Utils.GenerateSlug(CAT_4));
 
                 Assert.NotNull(model);
 

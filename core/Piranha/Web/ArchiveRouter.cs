@@ -21,15 +21,22 @@ namespace Piranha.Web
         /// <param name="url">The requested url</param>
         /// <param name="hostname">The optional hostname</param>
         /// <returns>The piranha response, null if no matching page was found</returns>
-        public static IRouteResponse Invoke(IApi api, string url) {
+        public static IRouteResponse Invoke(IApi api, string url, string hostname) {
             if (!String.IsNullOrWhiteSpace(url) && url.Length > 1) {
                 var segments = url.Substring(1).Split(new char[] { '/' });
 
                 if (segments.Length >= 1) {
-                    var category = api.Categories.GetBySlug(segments[0]);
+                    Data.Site site = null;
+                    
+                    if (!string.IsNullOrWhiteSpace(hostname))
+                        site = api.Sites.GetByHostname(hostname);
+                    if (site == null)
+                        site = api.Sites.GetDefault();
 
-                    if (category != null && category.EnableArchive) {
-                        var route = category.ArchiveRoute ?? "/archive";
+                    var blog = api.Pages.GetBySlug(segments[0], site.Id);
+
+                    if (blog != null && blog.ContentType == "Blog") {
+                        var route = blog.Route ?? "/archive";
 
                         int? page = null;
                         int? year = null;
@@ -65,7 +72,7 @@ namespace Piranha.Web
 
                         return new RouteResponse() {
                             Route = route,
-                            QueryString = $"id={category.Id}&year={year}&month={month}&page={page}&piranha_handled=true",
+                            QueryString = $"id={blog.Id}&year={year}&month={month}&page={page}&piranha_handled=true",
                             IsPublished = true
                         };                            
                     }

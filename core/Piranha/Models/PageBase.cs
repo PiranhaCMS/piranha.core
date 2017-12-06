@@ -24,6 +24,11 @@ namespace Piranha.Models
         public Guid SiteId { get; set; }
 
         /// <summary>
+        /// Gets/sets the page content type.
+        /// </summary>
+        public string ContentType { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional parent id.
         /// </summary>
         public Guid? ParentId { get; set; }

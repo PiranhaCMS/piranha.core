@@ -19,6 +19,11 @@ namespace Piranha.Models
     {
         #region Properties
         /// <summary>
+        /// Gets/sets the blog page id.
+        /// </summary>
+        public Guid BlogId { get; set; }
+
+        /// <summary>
         /// Gets/sets the category id.
         /// </summary>
         public Guid CategoryId { get; set; }

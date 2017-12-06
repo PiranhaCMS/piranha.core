@@ -16,7 +16,7 @@ using System.Linq;
 
 namespace Piranha.Repositories
 {
-    public class ParamRepository : BaseRepository<Param>, IParamRepository
+    public class ParamRepository : BaseRepositoryWithAll<Param>, IParamRepository
     {
         /// <summary>
         /// Default constructor.

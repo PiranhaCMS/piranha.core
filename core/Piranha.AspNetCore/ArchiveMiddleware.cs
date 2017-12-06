@@ -33,7 +33,7 @@ namespace Piranha.AspNetCore
             if (!IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/")) {
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
 
-                var response = ArchiveRouter.Invoke(api, url);
+                var response = ArchiveRouter.Invoke(api, url, context.Request.Host.Host);
                 if (response != null) {
                     if (logger != null)
                         logger.LogInformation($"Found archive\n  Route: {response.Route}\n  Params: {response.QueryString}");

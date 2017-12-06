@@ -7933,7 +7933,8 @@ body.collapsed .navmenu-inverse span.title {
   outline: none;
 }
 .navmenu-inverse .navmenu-brand .logo-main {
-  height: 55px;
+  width: 100%;
+  padding: 9px 0;
 }
 .navmenu-inverse .navmenu-brand .logo-small {
   display: none;

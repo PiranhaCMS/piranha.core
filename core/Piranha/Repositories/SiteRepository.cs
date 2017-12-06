@@ -16,7 +16,7 @@ using System.Linq;
 
 namespace Piranha.Repositories
 {
-    public class SiteRepository : BaseRepository<Site>, ISiteRepository
+    public class SiteRepository : BaseRepositoryWithAll<Site>, ISiteRepository
     {
         private readonly Api api;
 

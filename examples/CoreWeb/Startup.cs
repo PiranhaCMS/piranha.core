@@ -79,6 +79,7 @@ namespace CoreWeb
 
             // Build types
             var pageTypeBuilder = new Piranha.AttributeBuilder.PageTypeBuilder(api)
+                .AddType(typeof(Models.StandardBlog))
                 .AddType(typeof(Models.StandardPage))
                 .AddType(typeof(Models.TeaserPage));
             pageTypeBuilder.Build()
@@ -111,34 +112,6 @@ namespace CoreWeb
         /// </summary>
         /// <param name="api">The current application api</param>
         private void Seed(IApi api) {
-
-            if (api.Categories.GetAll().Count() == 0) {
-                var blogId = Guid.NewGuid();
-
-                api.Categories.Save(new Piranha.Data.Category() {
-                    Id = blogId,
-                    Title = "Blog",
-                    ArchiveTitle = "Blog Archive",
-                    EnableArchive = true
-                });
-
-                using (var stream = File.OpenRead("assets/seed/blogpost.md")) {
-                    using (var reader = new StreamReader(stream)) {
-                        var post = Models.ArticlePost.Create(api);
-
-                        // Add main content
-                        post.CategoryId = blogId;
-                        post.Title = "Welcome to the Blog";
-                        post.MetaKeywords = "Piranha, Piranha CMS, CMS, AspNetCore, DotNetCore, MVC";
-                        post.MetaDescription = "Piranha is the fun, fast and lightweight framework for developing cms-based web applications with AspNetCore.";
-                        post.Body = reader.ReadToEnd();
-                        post.Published = DateTime.Now;      
-
-                        api.Posts.Save(post);                  
-                    }
-                }
-            }
-
             if (api.Pages.GetAll().Count() == 0) {
                 // Get the default site
                 var site = api.Sites.GetDefault();
@@ -207,12 +180,52 @@ namespace CoreWeb
 
                         var docsPage = Models.StandardPage.Create(api);
                         docsPage.SiteId = site.Id;
-                        docsPage.SortOrder = 1;
+                        docsPage.SortOrder = 2;
                         docsPage.Title = "Docs";
                         docsPage.RedirectUrl = "https://github.com/PiranhaCMS/piranha.core/wiki";
                         docsPage.Published = DateTime.Now;
 
                         api.Pages.Save(docsPage);
+                    }
+                }
+
+                // Add the blog page
+                var blogPage = Models.StandardBlog.Create(api);
+
+                blogPage.SiteId = site.Id;
+                blogPage.Title = "Blog Archive";
+                blogPage.SortOrder = 1;
+                blogPage.MetaKeywords = "Piranha, Piranha CMS, CMS, AspNetCore, DotNetCore, MVC, Blog";
+                blogPage.MetaDescription = "Read the latest blog posts about Piranha, fast and lightweight framework for developing cms-based web applications with AspNetCore.";
+                blogPage.NavigationTitle = "Blog";
+                blogPage.Body = "Welcome to the blog, the best place to stay up to date with what's happening in the Piranha infested waters.";
+                blogPage.Published = DateTime.Now;
+
+                api.Pages.Save(blogPage);
+
+                // Add a blog category
+                var categoryId = Guid.NewGuid();
+                api.Categories.Save(new Piranha.Data.Category() {
+                    Id = categoryId,
+                    BlogId = blogPage.Id,
+                    Title = "Uncategorized"
+                });
+
+                // Add a blog post
+                using (var stream = File.OpenRead("assets/seed/blogpost.md")) {
+                    using (var reader = new StreamReader(stream)) {
+                        var post = Models.ArticlePost.Create(api);
+
+                        // Add main content
+                        post.BlogId = blogPage.Id;
+                        post.CategoryId = categoryId;
+                        post.Title = "My first post";
+                        post.MetaKeywords = "First, Blog, AspNetCore, DotNetCore";
+                        post.MetaDescription = "The first post ever written by a Piranha";
+                        post.Body = reader.ReadToEnd();
+                        post.Published = DateTime.Now;      
+
+                        api.Posts.Save(post);                  
                     }
                 }
             }

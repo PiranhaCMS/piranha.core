@@ -18,8 +18,17 @@ namespace Piranha.Repositories
         /// <summary>
         /// Gets the available post items.
         /// </summary>
+        /// <param name="blogId">The unique id</param>
         /// <returns>The posts</returns>
-        IEnumerable<Models.DynamicPost> GetAll();
+        IEnumerable<Models.DynamicPost> GetAll(Guid blogId);
+
+        /// <summary>
+        /// Gets the available posts for the specified blog.
+        /// </summary>
+        /// <param name="slug">The blog slug</param>
+        /// <param name="siteId">The optional site id</param>
+        /// <returns>The posts</returns>
+        IEnumerable<Models.DynamicPost> GetAll(string slug, Guid? siteId = null);
 
         /// <summary>
         /// Gets the post model with the specified id.
@@ -39,33 +48,38 @@ namespace Piranha.Repositories
         /// <summary>
         /// Gets the post model with the specified slug.
         /// </summary>
-        /// <param name="category">The unique category slug</param>
+        /// <param name="blog">The unique blog slug</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The post model</returns>
-        Models.DynamicPost GetBySlug(string category, string slug);
+        Models.DynamicPost GetBySlug(Guid blogId, string slug);
 
         /// <summary>
         /// Gets the post model with the specified slug.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
-        /// <param name="categorySlug">The unique category slug</param>
+        /// <param name="blog">The unique blog slug</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The post model</returns>
-        T GetBySlug<T>(string categorySlug, string slug) where T : Models.Post<T>;
+        T GetBySlug<T>(Guid blogId, string slug) where T : Models.Post<T>;
 
         /// <summary>
-        /// Gets the available post items for the given category id.
+        /// Gets the post model with the specified slug.
         /// </summary>
-        /// <param name="id">The unique category id</param>
-        /// <returns>The posts</returns>
-        IList<Models.DynamicPost> GetByCategoryId(Guid id);
+        /// <param name="blog">The unique blog slug</param>
+        /// <param name="slug">The unique slug</param>
+        /// <param name="siteId">The optional site id</param>
+        /// <returns>The post model</returns>
+        Models.DynamicPost GetBySlug(string blog, string slug, Guid? siteId = null);
 
         /// <summary>
-        /// Gets the available post items for the given category slug.
+        /// Gets the post model with the specified slug.
         /// </summary>
-        /// <param name="slug">The unique category slug</param>
-        /// <returns>The posts</returns>
-        IList<Models.DynamicPost> GetByCategorySlug(string slug);
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="blog">The unique blog slug</param>
+        /// <param name="slug">The unique slug</param>
+        /// <param name="siteId">The optional site id</param>
+        /// <returns>The post model</returns>
+        T GetBySlug<T>(string blog, string slug, Guid? siteId = null) where T : Models.Post<T>;
 
         /// <summary>
         /// Saves the given post model

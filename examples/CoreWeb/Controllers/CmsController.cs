@@ -41,7 +41,10 @@ namespace CoreWeb.Controllers
         /// <param name="page">The optional page</param>
         [Route("archive")]
         public IActionResult Archive(Guid id, int? year = null, int? month = null, int? page = null) {
-            return View(api.Archives.GetById(id, page, year, month));
+            var model = api.Archives.GetById<Models.StandardBlog>(id, page, year, month);
+            ViewBag.CurrentPage = model.Id;
+
+            return View(model);
         }
 
         /// <summary>
@@ -63,7 +66,7 @@ namespace CoreWeb.Controllers
         [Route("post")]
         public IActionResult Post(Guid id) {
             var model = api.Posts.GetById<Models.ArticlePost>(id);
-            ViewBag.CurrentPage = model.Id;
+            ViewBag.CurrentPage = model.BlogId;
 
             return View(model);
         }

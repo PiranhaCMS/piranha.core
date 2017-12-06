@@ -39,7 +39,7 @@ namespace Piranha.Web
                     var slug = string.Join("/", segments.Subset(0, n));
                     var page = api.Pages.GetBySlug(slug, site.Id);
 
-                    if (page != null) {
+                    if (page != null && page.ContentType == "Page") {
                         if (string.IsNullOrWhiteSpace(page.RedirectUrl)) {
                             var route = page.Route ?? "/page";
 

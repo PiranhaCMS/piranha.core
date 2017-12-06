@@ -9,18 +9,20 @@ namespace Piranha.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<string>(
+                name: "ContentType",
+                table: "Piranha_Pages",
+                maxLength: 255,
+                nullable: false,
+                defaultValue: "Page");
+
             migrationBuilder.CreateTable(
                 name: "Piranha_Categories",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    ArchiveDescription = table.Column<string>(nullable: true),
-                    ArchiveKeywords = table.Column<string>(maxLength: 128, nullable: true),
-                    ArchiveRoute = table.Column<string>(maxLength: 256, nullable: true),
-                    ArchiveTitle = table.Column<string>(maxLength: 256, nullable: false),
+                    BlogId = table.Column<Guid>(nullable: false),
                     Created = table.Column<DateTime>(nullable: false),
-                    Description = table.Column<string>(maxLength: 512, nullable: true),
-                    EnableArchive = table.Column<bool>(nullable: false),
                     LastModified = table.Column<DateTime>(nullable: false),
                     Slug = table.Column<string>(maxLength: 64, nullable: false),
                     Title = table.Column<string>(maxLength: 64, nullable: false)
@@ -28,6 +30,12 @@ namespace Piranha.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Piranha_Categories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Piranha_Categories_Piranha_Pages_BlogId",
+                        column: x => x.BlogId,
+                        principalTable: "Piranha_Pages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -49,6 +57,7 @@ namespace Piranha.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    BlogId = table.Column<Guid>(nullable: false),
                     Created = table.Column<DateTime>(nullable: false),
                     LastModified = table.Column<DateTime>(nullable: false),
                     Slug = table.Column<string>(maxLength: 64, nullable: false),
@@ -57,6 +66,12 @@ namespace Piranha.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Piranha_Tags", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Piranha_Tags_Piranha_Pages_BlogId",
+                        column: x => x.BlogId,
+                        principalTable: "Piranha_Pages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -64,6 +79,7 @@ namespace Piranha.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    BlogId = table.Column<Guid>(nullable: false),
                     CategoryId = table.Column<Guid>(nullable: false),
                     Created = table.Column<DateTime>(nullable: false),
                     LastModified = table.Column<DateTime>(nullable: false),
@@ -80,6 +96,12 @@ namespace Piranha.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Piranha_Posts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Piranha_Posts_Piranha_Pages_BlogId",
+                        column: x => x.BlogId,
+                        principalTable: "Piranha_Pages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Piranha_Posts_Piranha_Categories_CategoryId",
                         column: x => x.CategoryId,
@@ -142,9 +164,9 @@ namespace Piranha.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Piranha_Categories_Slug",
+                name: "IX_Piranha_Categories_BlogId_Slug",
                 table: "Piranha_Categories",
-                column: "Slug",
+                columns: new[] { "BlogId", "Slug" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -153,14 +175,19 @@ namespace Piranha.Migrations
                 columns: new[] { "PostId", "RegionId", "FieldId", "SortOrder" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Piranha_Posts_CategoryId",
+                table: "Piranha_Posts",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Piranha_Posts_PostTypeId",
                 table: "Piranha_Posts",
                 column: "PostTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Piranha_Posts_CategoryId_Slug",
+                name: "IX_Piranha_Posts_BlogId_Slug",
                 table: "Piranha_Posts",
-                columns: new[] { "CategoryId", "Slug" },
+                columns: new[] { "BlogId", "Slug" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -169,9 +196,9 @@ namespace Piranha.Migrations
                 column: "TagId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Piranha_Tags_Slug",
+                name: "IX_Piranha_Tags_BlogId_Slug",
                 table: "Piranha_Tags",
-                column: "Slug",
+                columns: new[] { "BlogId", "Slug" },
                 unique: true);
         }
 
@@ -194,6 +221,10 @@ namespace Piranha.Migrations
 
             migrationBuilder.DropTable(
                 name: "Piranha_PostTypes");
+
+            migrationBuilder.DropColumn(
+                name: "ContentType",
+                table: "Piranha_Pages");
         }
     }
 }

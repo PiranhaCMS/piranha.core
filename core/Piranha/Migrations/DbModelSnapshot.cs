@@ -26,24 +26,9 @@ namespace Piranha.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ArchiveDescription");
-
-                    b.Property<string>("ArchiveKeywords")
-                        .HasMaxLength(128);
-
-                    b.Property<string>("ArchiveRoute")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("ArchiveTitle")
-                        .IsRequired()
-                        .HasMaxLength(256);
+                    b.Property<Guid>("BlogId");
 
                     b.Property<DateTime>("Created");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(512);
-
-                    b.Property<bool>("EnableArchive");
 
                     b.Property<DateTime>("LastModified");
 
@@ -57,7 +42,7 @@ namespace Piranha.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Slug")
+                    b.HasIndex("BlogId", "Slug")
                         .IsUnique();
 
                     b.ToTable("Piranha_Categories");
@@ -117,6 +102,12 @@ namespace Piranha.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue("Page")
+                        .HasMaxLength(255);
 
                     b.Property<DateTime>("Created");
 
@@ -251,6 +242,8 @@ namespace Piranha.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<Guid>("BlogId");
+
                     b.Property<Guid>("CategoryId");
 
                     b.Property<DateTime>("Created");
@@ -287,9 +280,11 @@ namespace Piranha.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.HasIndex("PostTypeId");
 
-                    b.HasIndex("CategoryId", "Slug")
+                    b.HasIndex("BlogId", "Slug")
                         .IsUnique();
 
                     b.ToTable("Piranha_Posts");
@@ -392,6 +387,8 @@ namespace Piranha.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<Guid>("BlogId");
+
                     b.Property<DateTime>("Created");
 
                     b.Property<DateTime>("LastModified");
@@ -406,10 +403,18 @@ namespace Piranha.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Slug")
+                    b.HasIndex("BlogId", "Slug")
                         .IsUnique();
 
                     b.ToTable("Piranha_Tags");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Category", b =>
+                {
+                    b.HasOne("Piranha.Data.Page", "Blog")
+                        .WithMany()
+                        .HasForeignKey("BlogId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Piranha.Data.Media", b =>
@@ -446,6 +451,11 @@ namespace Piranha.Migrations
 
             modelBuilder.Entity("Piranha.Data.Post", b =>
                 {
+                    b.HasOne("Piranha.Data.Page", "Blog")
+                        .WithMany()
+                        .HasForeignKey("BlogId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("Piranha.Data.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
@@ -475,6 +485,14 @@ namespace Piranha.Migrations
                     b.HasOne("Piranha.Data.Tag", "Tag")
                         .WithMany()
                         .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Piranha.Data.Tag", b =>
+                {
+                    b.HasOne("Piranha.Data.Page", "Blog")
+                        .WithMany()
+                        .HasForeignKey("BlogId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

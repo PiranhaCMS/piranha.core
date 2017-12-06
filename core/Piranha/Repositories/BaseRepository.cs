@@ -44,11 +44,13 @@ namespace Piranha.Repositories
         /// Gets all available models.
         /// </summary>
         /// <returns>The available models</returns>
+        /*
         public virtual IEnumerable<T> GetAll() {
             return db.Set<T>()
                 .AsNoTracking()
                 .ToList();
         }
+        */
 
         /// <summary>
         /// Gets the model with the specified id.

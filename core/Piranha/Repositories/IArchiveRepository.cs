@@ -16,43 +16,24 @@ namespace Piranha.Repositories
     public interface IArchiveRepository
     {
         /// <summary>
-        /// Gets the post archive for the category with the given id.
+        /// Gets the post archive for the blog with the given id.
         /// </summary>
-        /// <param name="id">The unique category id</param>
+        /// <param name="id">The unique blog id</param>
         /// <param name="page">The optional page</param>
         /// <param name="year">The optional year</param>
         /// <param name="month">The optional month</param>
         /// <returns>The archive model</returns>
-        PostArchive GetById(Guid id, int? page = 1, int? year = null, int? month = null);
+        T GetById<T>(Guid id, int? page = 1, int? year = null, int? month = null) where T : BlogPage<T>;
 
         /// <summary>
-        /// Gets the post archive for the category with the given id.
+        /// Gets the post archive for the blog with the given slug.
         /// </summary>
-        /// <param name="id">The unique category id</param>
+        /// <param name="slug">The unique blog slug</param>
         /// <param name="page">The optional page</param>
         /// <param name="year">The optional year</param>
         /// <param name="month">The optional month</param>
+        /// <param name="siteId">The optional site id</param>
         /// <returns>The archive model</returns>
-        T GetById<T>(Guid id, int? page = 1, int? year = null, int? month = null) where T : PostArchive;
-
-        /// <summary>
-        /// Gets the post archive for the category with the given slug.
-        /// </summary>
-        /// <param name="slug">The unique category slug</param>
-        /// <param name="page">The optional page</param>
-        /// <param name="year">The optional year</param>
-        /// <param name="month">The optional month</param>
-        /// <returns>The archive model</returns>
-        PostArchive GetBySlug(string slug, int? page = 1, int? year = null, int? month = null);
-
-        /// <summary>
-        /// Gets the post archive for the category with the given slug.
-        /// </summary>
-        /// <param name="slug">The unique category slug</param>
-        /// <param name="page">The optional page</param>
-        /// <param name="year">The optional year</param>
-        /// <param name="month">The optional month</param>
-        /// <returns>The archive model</returns>
-        T GetBySlug<T>(string slug, int? page = 1, int? year = null, int? month = null) where T : PostArchive;
+        T GetBySlug<T>(string slug, int? page = 1, int? year = null, int? month = null, Guid? siteId = null) where T : BlogPage<T>;
     }
 }

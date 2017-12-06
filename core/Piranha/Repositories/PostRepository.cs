@@ -27,12 +27,14 @@ namespace Piranha.Repositories
         public PostRepository(Api api, IDb db, ICache modelCache = null) : base(api, db, modelCache) { }
 
         /// <summary>
-        /// Gets the available posts.
+        /// Gets the available posts for the specified blog.
         /// </summary>
+        /// <param name="blogId">The unique blog id</param>
         /// <returns>The posts</returns>
-        public IEnumerable<Models.DynamicPost> GetAll() {
+        public IEnumerable<Models.DynamicPost> GetAll(Guid blogId) {
             var posts = db.Posts
                 .AsNoTracking()
+                .Where(p => p.BlogId == blogId)
                 .OrderBy(p => p.Published)
                 .ThenBy(p => p.Title)
                 .Select(p => p.Id);
@@ -46,6 +48,26 @@ namespace Piranha.Repositories
                     models.Add(model);
             }
             return models;
+        }
+
+        /// <summary>
+        /// Gets the available posts for the specified blog.
+        /// </summary>
+        /// <param name="slug">The blog slug</param>
+        /// <param name="siteId">The optional site id</param>
+        /// <returns>The posts</returns>
+        public IEnumerable<Models.DynamicPost> GetAll(string slug, Guid? siteId = null) {
+            if (!siteId.HasValue) {
+                var site = api.Sites.GetDefault();
+                if (site != null)
+                    siteId = site.Id;
+            }
+
+            var blogId = api.Pages.GetIdBySlug(slug, siteId);
+
+            if (blogId.HasValue)
+                return GetAll(blogId.Value);
+            return new List<Models.DynamicPost>();
         }
 
         /// <summary>
@@ -76,6 +98,7 @@ namespace Piranha.Repositories
                     if (cache != null)
                         AddToCache(post);
                     post.Category = api.Categories.GetById(post.CategoryId);
+                    post.Blog = ((Repositories.PageRepository)api.Pages).GetPageById(post.BlogId);
                 }
             }
 
@@ -87,99 +110,76 @@ namespace Piranha.Repositories
         /// <summary>
         /// Gets the post model with the specified slug.
         /// </summary>
-        /// <param name="category">The unique category slug</param>
+        /// <param name="blog">The unique blog slug</param>
         /// <param name="slug">The unique slug</param>
+        /// <param name="siteId">The optional site id</param>
         /// <returns>The post model</returns>
-        public Models.DynamicPost GetBySlug(string category, string slug) {
-            return GetBySlug<Models.DynamicPost>(category, slug);
+        public Models.DynamicPost GetBySlug(string blog, string slug, Guid? siteId = null) {
+            return GetBySlug<Models.DynamicPost>(blog, slug, siteId);
         }
 
         /// <summary>
         /// Gets the post model with the specified slug.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
-        /// <param name="categorySlug">The unique category slug</param>
+        /// <param name="blog">The unique blog slug</param>
         /// <param name="slug">The unique slug</param>
+        /// <param name="siteId">The optional site id</param>
         /// <returns>The post model</returns>
-        public T GetBySlug<T>(string categorySlug, string slug) where T : Models.Post<T> {
-            var category = api.Categories.GetBySlug(categorySlug);
-
-            if (category != null) {
-                var postId = cache != null ? cache.Get<Guid?>($"PostId_{category.Id}_{slug}") : (Guid?)null;
-
-                if (postId.HasValue) {
-                    // Load the post by id instead
-                    return GetById<T>(postId.Value);
-                } else {
-                    // No cache found, load from database
-                    var post = db.Posts
-                        .AsNoTracking()
-                        .Include(p => p.Fields)
-                        .FirstOrDefault(p => p.CategoryId == category.Id && p.Slug == slug);
-
-                    if (post != null) {
-                        if (cache != null)
-                            AddToCache(post);
-                        post.Category = category;
-                
-                        return Load<T, Models.PostBase>(post, api.PostTypes.GetById(post.PostTypeId));
-                    }                    
-                    return null;
-                }
+        public T GetBySlug<T>(string blog, string slug, Guid? siteId = null) where T : Models.Post<T> {
+            if (!siteId.HasValue) {
+                var site = api.Sites.GetDefault();
+                if (site != null)
+                    siteId = site.Id;
             }
+
+            var blogId = api.Pages.GetIdBySlug(blog, siteId);
+
+            if (blogId.HasValue)
+                return GetBySlug<T>(blogId.Value, slug);
             return null;
         }
 
         /// <summary>
-        /// Gets the available post items for the given category id.
+        /// Gets the post model with the specified slug.
         /// </summary>
-        /// <param name="id">The unique category id</param>
-        /// <returns>The posts</returns>
-        public IList<Models.DynamicPost> GetByCategoryId(Guid id) {
-            var posts = db.Posts
-                .AsNoTracking()
-                .Where(p => p.CategoryId == id)
-                .OrderBy(p => p.Published)
-                .ThenBy(p => p.Title)
-                .Select(p => p.Id);
-
-            var models = new List<Models.DynamicPost>();
-
-            foreach (var post in posts) {
-                var model = GetById(post);
-
-                if (model != null)
-                    models.Add(model);
-            }
-            return models;
+        /// <param name="blog">The unique blog slug</param>
+        /// <param name="slug">The unique slug</param>
+        /// <returns>The post model</returns>
+        public Models.DynamicPost GetBySlug(Guid blogId, string slug) {
+            return GetBySlug<Models.DynamicPost>(blogId, slug);
         }
 
         /// <summary>
-        /// Gets the available post items for the given category slug.
+        /// Gets the post model with the specified slug.
         /// </summary>
-        /// <param name="slug">The unique category slug</param>
-        /// <returns>The posts</returns>
-        public IList<Models.DynamicPost> GetByCategorySlug(string slug) {
-            var models = new List<Models.DynamicPost>();
-            var category = api.Categories.GetBySlug(slug);
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="blog">The unique blog slug</param>
+        /// <param name="slug">The unique slug</param>
+        /// <returns>The post model</returns>
+        public T GetBySlug<T>(Guid blogId, string slug) where T : Models.Post<T> {
+            var postId = cache != null ? cache.Get<Guid?>($"PostId_{blogId}_{slug}") : (Guid?)null;
 
-            if (category != null) {
-                var posts = db.Posts
+            if (postId.HasValue) {
+                // Load the post by id instead
+                return GetById<T>(postId.Value);
+            } else {
+                // No cache found, load from database
+                var post = db.Posts
                     .AsNoTracking()
-                    .Where(p => p.CategoryId == category.Id)
-                    .OrderBy(p => p.Published)
-                    .ThenBy(p => p.Title)
-                    .Select(p => p.Id);
+                    .Include(p => p.Fields)
+                    .FirstOrDefault(p => p.BlogId == blogId && p.Slug == slug);
 
-
-                foreach (var post in posts) {
-                    var model = GetById(post);
-
-                    if (model != null)
-                        models.Add(model);
-                }
+                if (post != null) {
+                    if (cache != null)
+                        AddToCache(post);
+                    post.Category = api.Categories.GetById(post.CategoryId);
+                    post.Blog = ((Repositories.PageRepository)api.Pages).GetPageById(post.BlogId);
+            
+                    return Load<T, Models.PostBase>(post, api.PostTypes.GetById(post.PostTypeId));
+                }                    
+                return null;
             }
-            return models;
         }
 
         /// <summary>

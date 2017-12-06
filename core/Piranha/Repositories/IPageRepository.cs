@@ -35,7 +35,7 @@ namespace Piranha.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>
-        T GetStartpage<T>(Guid? siteId = null) where T : Models.Page<T>;
+        T GetStartpage<T>(Guid? siteId = null) where T : Models.GenericPage<T>;
 
         /// <summary>
         /// Gets the page model with the specified id.
@@ -50,7 +50,7 @@ namespace Piranha.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
         /// <returns>The page model</returns>
-        T GetById<T>(Guid id) where T : Models.Page<T>;
+        T GetById<T>(Guid id) where T : Models.GenericPage<T>;
 
         /// <summary>
         /// Gets the page model with the specified slug.
@@ -67,7 +67,15 @@ namespace Piranha.Repositories
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>
-        T GetBySlug<T>(string slug, Guid? siteId = null) where T : Models.Page<T>;
+        T GetBySlug<T>(string slug, Guid? siteId = null) where T : Models.GenericPage<T>;
+
+        /// <summary>
+        /// Gets the id for the page with the given slug.
+        /// </summary>
+        /// <param name="slug">The unique slug</param>
+        /// <param name="siteId">The optional page id</param>
+        /// <returns>The id</returns>
+        Guid? GetIdBySlug(string slug, Guid? siteId = null);
 
         /// <summary>
         /// Moves the current page in the structure.
@@ -76,13 +84,13 @@ namespace Piranha.Repositories
         /// <param name="model">The page to move</param>
         /// <param name="parentId">The new parent id</param>
         /// <param name="sortOrder">The new sort order</param>
-        void Move<T>(T model, Guid? parentId, int sortOrder) where T : Models.Page<T>;
+        void Move<T>(T model, Guid? parentId, int sortOrder) where T : Models.GenericPage<T>;
 
         /// <summary>
         /// Saves the given page model
         /// </summary>
         /// <param name="model">The page model</param>
-        void Save<T>(T model) where T : Models.Page<T>;
+        void Save<T>(T model) where T : Models.GenericPage<T>;
 
         /// <summary>
         /// Deletes the model with the specified id.
@@ -94,6 +102,6 @@ namespace Piranha.Repositories
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        void Delete<T>(T model) where T : Models.Page<T>;
+        void Delete<T>(T model) where T : Models.GenericPage<T>;
     }
 }

@@ -12,31 +12,17 @@ using System;
 
 namespace Piranha.Data
 {
-    public sealed class Tag : IModel, ICreated, IModified
-    {
+    public sealed class Tag : Taxonomy, IModel, ICreated, IModified 
+    { 
         /// <summary>
-        /// Gets/sets the unique id.
+        /// Gets/sets the id of the blog page this
+        /// category belongs to.
         /// </summary>
-        public Guid Id { get; set; }
+        public Guid BlogId { get; set; }
 
         /// <summary>
-        /// Gets/sets the title.
+        /// Gets/sets the blog page this category belongs to.
         /// </summary>
-        public string Title { get; set; }
-
-        /// <summary>
-        /// Gets/sets the slug.
-        /// </summary>
-        public string Slug { get; set; }
-
-        /// <summary>
-        /// Gets/sets the created date.
-        /// </summary>
-        public DateTime Created { get; set; }
-
-        /// <summary>
-        /// Gets/sets the last modification date.
-        /// </summary>
-        public DateTime LastModified { get; set; }
+        public Page Blog { get; set; }        
     }
 }

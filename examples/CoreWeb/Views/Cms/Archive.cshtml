@@ -1,8 +1,7 @@
-@model Piranha.Models.PostArchive
+@model CoreWeb.Models.StandardBlog
 @using Piranha
 @{
     ViewBag.Title = Model.Title;
-    ViewBag.CurrentPage = Model.CategoryId;
 }
 
 @section meta {
@@ -12,7 +11,11 @@
 <div class="container body">
     <h1>@Model.Title</h1>
 
-    @foreach (var post in Model.Posts) {
+    <div class="lead">
+        @Html.Raw(Model.Body)
+    </div>
+
+    @foreach (var post in Model.Archive.Posts) {
         <article>
             <header>
                 <h2><a href="~/@post.Permalink">@post.Title</a></h2>

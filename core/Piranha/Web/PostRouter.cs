@@ -19,8 +19,9 @@ namespace Piranha.Web
         /// </summary>
         /// <param name="api">The current api</param>
         /// <param name="url">The requested url</param>
+        /// <param name="hostname">The optional hostname</param>
         /// <returns>The piranha response, null if no matching post was found</returns>
-        public static IRouteResponse Invoke(IApi api, string url) {
+        public static IRouteResponse Invoke(IApi api, string url, string hostname) {
             if (!String.IsNullOrWhiteSpace(url) && url.Length > 1) {
                 var segments = url.Substring(1).Split(new char[] { '/' });
 

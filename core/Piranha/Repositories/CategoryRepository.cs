@@ -11,6 +11,7 @@
 using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
@@ -18,21 +19,48 @@ namespace Piranha.Repositories
 {
     public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
     {
+        private readonly Api api;
+
         /// <summary>
         /// Default constructor.
         /// </summary>
+        /// <param name="api">The current api</param>
         /// <param name="db">The current db context</param>
         /// <param name="cache">The optional model cache</param>
-        public CategoryRepository(IDb db, ICache cache = null) 
-            : base(db, cache) { }
+        public CategoryRepository(Api api, IDb db, ICache cache = null) 
+            : base(db, cache) 
+        { 
+            this.api = api;
+        }
+
+        /// <summary>
+        /// Gets all available models for the specified blog.
+        /// </summary>
+        /// <param name="id">The blog id</param>
+        /// <returns>The available models</returns>
+        public IEnumerable<Category> GetAll(Guid blogId) {
+            var models = new List<Category>();
+            var categories = db.Categories
+                .AsNoTracking()
+                .Where(c => c.BlogId == blogId)
+                .Select(c => c.Id);
+
+            foreach (var c in categories) {
+                var model = GetById(c);
+                if (model != null)
+                    models.Add(model);
+            }
+            return models;
+        }
 
         /// <summary>
         /// Gets the model with the given slug.
         /// </summary>
+        /// <param name="blogId">The blog id</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The model</returns>
-        public Category GetBySlug(string slug) {
-            var id = cache != null ? cache.Get<Guid?>($"Category_{slug}") : null;
+        public Category GetBySlug(Guid blogId, string slug) {
+            var id = cache != null ? cache.Get<Guid?>($"Category_{blogId}_{slug}") : null;
             Category model = null;
 
             if (id.HasValue) {
@@ -40,7 +68,7 @@ namespace Piranha.Repositories
             } else {
                 model = db.Categories
                     .AsNoTracking()
-                    .FirstOrDefault(c => c.Slug == slug);
+                    .FirstOrDefault(c => c.BlogId == blogId && c.Slug == slug);
 
                 if (cache != null && model != null)
                     AddToCache(model);
@@ -59,8 +87,6 @@ namespace Piranha.Repositories
             // Check required
             if (string.IsNullOrWhiteSpace(model.Title))
                 throw new ArgumentException("Title is required for Category");
-            if (string.IsNullOrWhiteSpace(model.ArchiveTitle))
-                throw new ArgumentException("Archive title is required for Category");
 
             // Ensure slug
             if (string.IsNullOrWhiteSpace(model.Slug))
@@ -80,8 +106,6 @@ namespace Piranha.Repositories
             // Check required
             if (string.IsNullOrWhiteSpace(model.Title))
                 throw new ArgumentException("Title is required for Category");
-            if (string.IsNullOrWhiteSpace(model.ArchiveTitle))
-                throw new ArgumentException("Archive title is required for Category");
 
             // Ensure slug
             if (string.IsNullOrWhiteSpace(model.Slug))
@@ -100,7 +124,7 @@ namespace Piranha.Repositories
         /// <param name="model">The model</param>
         protected override void AddToCache(Category model) {
             cache.Set(model.Id.ToString(), model);
-            cache.Set($"Category_{model.Slug}", model.Id);
+            cache.Set($"Category_{model.BlogId}_{model.Slug}", model.Id);
         }
 
         /// <summary>
@@ -109,7 +133,7 @@ namespace Piranha.Repositories
         /// <param name="model">The model</param>
         protected override void RemoveFromCache(Category model) {
             cache.Remove(model.Id.ToString());
-            cache.Remove($"Category_{model.Slug}");
+            cache.Remove($"Category_{model.BlogId}_{model.Slug}");
         }        
         #endregion
     }

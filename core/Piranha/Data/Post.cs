@@ -21,6 +21,12 @@ namespace Piranha.Data
         public string PostTypeId { get; set; }
 
         /// <summary>
+        /// Gets/sets the id of the blog page this
+        /// post belongs to.
+        /// </summary>
+        public Guid BlogId { get; set; }
+
+        /// <summary>
         /// Gets/sets the category id.
         /// </summary>
         public Guid CategoryId { get; set; }
@@ -41,6 +47,11 @@ namespace Piranha.Data
         /// Gets/sets the associated post type.
         /// </summary>
         public PostType PostType { get; set; }
+
+        /// <summary>
+        /// Gets/sets the blog page this category belongs to.
+        /// </summary>
+        public Page Blog { get; set; }        
 
         /// <summary>
         /// Gets/sets the post category.

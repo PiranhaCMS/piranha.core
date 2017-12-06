@@ -75,7 +75,7 @@ namespace Piranha.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>
-        public T GetStartpage<T>(Guid? siteId = null) where T : Models.Page<T> {
+        public T GetStartpage<T>(Guid? siteId = null) where T : Models.GenericPage<T> {
             if (!siteId.HasValue) {
                 var site = api.Sites.GetDefault();
                 if (site != null)
@@ -116,7 +116,7 @@ namespace Piranha.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
         /// <returns>The page model</returns>
-        public T GetById<T>(Guid id) where T : Models.Page<T> {
+        public T GetById<T>(Guid id) where T : Models.GenericPage<T> {
             var page = cache != null ? cache.Get<Page>(id.ToString()) : null;
 
             if (page == null) {
@@ -153,7 +153,7 @@ namespace Piranha.Repositories
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>
-        public T GetBySlug<T>(string slug, Guid? siteId = null) where T : Models.Page<T> {
+        public T GetBySlug<T>(string slug, Guid? siteId = null) where T : Models.GenericPage<T> {
             if (!siteId.HasValue) {
                 var site = api.Sites.GetDefault();
                 if (site != null)
@@ -183,13 +183,47 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Gets the id for the page with the given slug.
+        /// </summary>
+        /// <param name="slug">The unique slug</param>
+        /// <param name="siteId">The optional page id</param>
+        /// <returns>The id</returns>
+        public Guid? GetIdBySlug(string slug, Guid? siteId = null) {
+            if (!siteId.HasValue) {
+                var site = api.Sites.GetDefault();
+                if (site != null)
+                    siteId = site.Id;
+            }
+
+            // See if we can get the page id for the slug from cache.
+            var pageId = cache != null ? cache.Get<Guid?>($"PageId_{siteId}_{slug}") : (Guid?)null;
+
+            if (pageId.HasValue) {
+                return pageId;
+            } else {
+                // No cache found, load from database
+                var page = db.Pages
+                    .AsNoTracking()
+                    .Include(p => p.Fields)
+                    .FirstOrDefault(p => p.SiteId == siteId && p.Slug == slug);
+
+                if (page != null) {
+                    if (cache != null)
+                        AddToCache(page);
+                    return page.Id;
+                }                    
+                return null;                
+            }
+        }
+
+        /// <summary>
         /// Moves the current page in the structure.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="model">The page to move</param>
         /// <param name="parentId">The new parent id</param>
         /// <param name="sortOrder">The new sort order</param>
-        public void Move<T>(T model, Guid? parentId, int sortOrder) where T : Models.Page<T> {
+        public void Move<T>(T model, Guid? parentId, int sortOrder) where T : Models.GenericPage<T> {
             IEnumerable<Page> oldSiblings = null;
             IEnumerable<Page> newSiblings = null;
 
@@ -230,7 +264,7 @@ namespace Piranha.Repositories
         /// Saves the given page model
         /// </summary>
         /// <param name="model">The page model</param>
-        public void Save<T>(T model) where T : Models.Page<T> {
+        public void Save<T>(T model) where T : Models.GenericPage<T> {
             var type = api.PageTypes.GetById(model.TypeId);
 
             if (type != null) {
@@ -284,6 +318,8 @@ namespace Piranha.Repositories
                     }
                     model.Slug = prefix + Utils.GenerateSlug(model.NavigationTitle != null ? model.NavigationTitle : model.Title);
                 } else model.Slug = Utils.GenerateSlug(model.Slug);
+
+                model.ContentType = App.ContentTypes.GetId(typeof(T));
 
                 // Map basic fields
                 App.Mapper.Map<Models.PageBase, Page>(model, page);
@@ -355,7 +391,7 @@ namespace Piranha.Repositories
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        public virtual void Delete<T>(T model) where T : Models.Page<T> {
+        public virtual void Delete<T>(T model) where T : Models.GenericPage<T> {
             Delete(model.Id);
         }
 
@@ -377,6 +413,28 @@ namespace Piranha.Repositories
                 page.SortOrder = increase ? page.SortOrder + 1 : page.SortOrder - 1;
         }
         #endregion
+
+        /// <summary>
+        /// Internal method for getting the data page by id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The page</returns>
+        internal Page GetPageById(Guid id) {
+            var page = cache != null ? cache.Get<Page>(id.ToString()) : null;
+
+            if (page == null) {
+                page = db.Pages
+                    .AsNoTracking()
+                    .Include(p => p.Fields)
+                    .FirstOrDefault(p => p.Id == id);
+
+                if (page != null) {
+                    if (cache != null)
+                        AddToCache(page);
+                }
+            }
+            return page;
+        }
 
         #region Private cache methods
         /// <summary>

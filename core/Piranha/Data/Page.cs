@@ -32,6 +32,12 @@ namespace Piranha.Data
     	public Guid? ParentId { get; set; }
 
         /// <summary>
+        /// Gets/sets the type of content this page
+        /// contains.
+        /// </summary>
+        public string ContentType { get; set; }
+
+        /// <summary>
         /// Gets/sets the pages sort order in its
         /// hierarchical position.
         /// </summary>

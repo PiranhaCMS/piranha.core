@@ -120,12 +120,7 @@ namespace Piranha
             mb.Entity<Data.Category>().ToTable("Piranha_Categories");
             mb.Entity<Data.Category>().Property(c => c.Title).IsRequired().HasMaxLength(64);
             mb.Entity<Data.Category>().Property(c => c.Slug).IsRequired().HasMaxLength(64);
-            mb.Entity<Data.Category>().Property(c => c.Description).HasMaxLength(512);
-            mb.Entity<Data.Category>().Property(c => c.ArchiveTitle).HasMaxLength(128).IsRequired();
-            mb.Entity<Data.Category>().Property(c => c.ArchiveKeywords).HasMaxLength(128);
-            mb.Entity<Data.Category>().Property(c => c.ArchiveTitle).HasMaxLength(256);
-            mb.Entity<Data.Category>().Property(c => c.ArchiveRoute).HasMaxLength(256);
-            mb.Entity<Data.Category>().HasIndex(c => c.Slug).IsUnique();
+            mb.Entity<Data.Category>().HasIndex(c => new { c.BlogId, c.Slug }).IsUnique();
 
             mb.Entity<Data.Media>().ToTable("Piranha_Media");
             mb.Entity<Data.Media>().Property(m => m.Filename).HasMaxLength(128).IsRequired();
@@ -136,6 +131,7 @@ namespace Piranha
 
             mb.Entity<Data.Page>().ToTable("Piranha_Pages");
             mb.Entity<Data.Page>().Property(p => p.PageTypeId).HasMaxLength(64).IsRequired();
+            mb.Entity<Data.Page>().Property(p => p.ContentType).HasMaxLength(255).IsRequired().HasDefaultValue("Page");
             mb.Entity<Data.Page>().Property(p => p.Title).HasMaxLength(128).IsRequired();
             mb.Entity<Data.Page>().Property(p => p.NavigationTitle).HasMaxLength(128);
             mb.Entity<Data.Page>().Property(p => p.Slug).HasMaxLength(128).IsRequired();
@@ -167,7 +163,7 @@ namespace Piranha
             mb.Entity<Data.Post>().Property(p => p.MetaDescription).HasMaxLength(256);
             mb.Entity<Data.Post>().Property(p => p.Route).HasMaxLength(256);
             mb.Entity<Data.Post>().Property(p => p.RedirectUrl).HasMaxLength(256);
-            mb.Entity<Data.Post>().HasIndex(p => new { p.CategoryId, p.Slug }).IsUnique();
+            mb.Entity<Data.Post>().HasIndex(p => new { p.BlogId, p.Slug }).IsUnique();
 
             mb.Entity<Data.PostField>().ToTable("Piranha_PostFields");
             mb.Entity<Data.PostField>().Property(f => f.RegionId).HasMaxLength(64).IsRequired();
@@ -191,7 +187,7 @@ namespace Piranha
             mb.Entity<Data.Tag>().ToTable("Piranha_Tags");
             mb.Entity<Data.Tag>().Property(t => t.Title).IsRequired().HasMaxLength(64);
             mb.Entity<Data.Tag>().Property(t => t.Slug).IsRequired().HasMaxLength(64);
-            mb.Entity<Data.Tag>().HasIndex(t => t.Slug).IsUnique();
+            mb.Entity<Data.Tag>().HasIndex(t => new { t.BlogId, t.Slug }).IsUnique();
         }
 
         /// <summary>
@@ -213,6 +209,16 @@ namespace Piranha
                     LastModified = DateTime.Now
                 });
 
+            param = Params.FirstOrDefault(p => p.Key == Config.CACHE_EXPIRES_POSTS);
+            if (param == null)
+                Params.Add(new Data.Param() {
+                    Id = Guid.NewGuid(),
+                    Key = Config.CACHE_EXPIRES_POSTS,
+                    Value = 0.ToString(),
+                    Created = DateTime.Now,
+                    LastModified = DateTime.Now
+                });
+
             param = Params.FirstOrDefault(p => p.Key == Config.PAGES_HIERARCHICAL_SLUGS);
             if (param == null)
                 Params.Add(new Data.Param() {
@@ -228,7 +234,7 @@ namespace Piranha
                 Params.Add(new Data.Param() {
                     Id = Guid.NewGuid(),
                     Key = Config.MANAGER_EXPANDED_SITEMAP_LEVELS,
-                    Value = "0",
+                    Value = 1.ToString(),
                     Created = DateTime.Now,
                     LastModified = DateTime.Now
                 });

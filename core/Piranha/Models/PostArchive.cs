@@ -13,34 +13,9 @@ using System.Collections.Generic;
 
 namespace Piranha.Models
 {
-    public class PostArchive : IMeta
+    public class PostArchive
     {
         #region Properties
-        /// <summary>
-        /// Gets/sets the unique category id.
-        /// </summary>
-        public Guid CategoryId { get; set; }
-
-        /// <summary>
-        /// Gets/sets the title.
-        /// </summary>
-        public string Title { get; set; }
-
-        /// <summary>
-        /// Gets/sets the unique slug.
-        /// </summary>
-        public string Slug { get; set; }
-
-        /// <summary>
-        /// Gets/sets the meta keywords.
-        /// </summary>
-        public string MetaKeywords { get; set; }
-
-        /// <summary>
-        /// Gets/sets the meta description.
-        /// </summary>
-        public string MetaDescription { get; set; }
-
         /// <summary>
         /// Gets/sets the optionally requested year.
         /// </summary>
@@ -54,17 +29,12 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the current page.
         /// </summary>
-        public int Page { get; set; }
+        public int CurrentPage { get; set; }
 
         /// <summary>
         /// Gets/sets the total number of pages available.
         /// </summary>
         public int TotalPages { get; set; }
-
-        /// <summary>
-        /// Gets/sets the archive route.
-        /// </summary>
-        public string Route { get; set; }
 
         /// <summary>
         /// Gets/sets the available posts.

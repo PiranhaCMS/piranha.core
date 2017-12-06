@@ -19,8 +19,9 @@ namespace Piranha.Repositories
         /// <summary>
         /// Gets all available models.
         /// </summary>
+        /// <param name="blogId">The blog id</param>
         /// <returns>The available models</returns>
-        IEnumerable<Category> GetAll();
+        IEnumerable<Category> GetAll(Guid blogId);
 
         /// <summary>
         /// Gets the model with the specified id.
@@ -32,9 +33,10 @@ namespace Piranha.Repositories
         /// <summary>
         /// Gets the model with the given slug
         /// </summary>
+        /// <param name="blogId">The blog id</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The model</returns>
-        Category GetBySlug(string slug);
+        Category GetBySlug(Guid blogId, string slug);
 
         /// <summary>
         /// Adds or updates the given model in the database

@@ -44,47 +44,30 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
-        /// Gets the post archive for the category with the given id.
+        /// Gets the post archive for the blog with the given id.
         /// </summary>
-        /// <param name="id">The unique category id</param>
+        /// <param name="id">The unique blog id</param>
         /// <param name="page">The optional page</param>
         /// <param name="year">The optional year</param>
         /// <param name="month">The optional month</param>
         /// <returns>The archive model</returns>
-        public Models.PostArchive GetById(Guid id, int? page = 1, int? year = null, int? month = null) {
-            return GetById<Models.PostArchive>(id, page, year, month);
-        }
+        public T GetById<T>(Guid id, int? page = 1, int? year = null, int? month = null) where T : Models.BlogPage<T> {
+            // Get the requested blog page
+            var model = api.Pages.GetById<T>(id);
 
-        /// <summary>
-        /// Gets the post archive for the category with the given id.
-        /// </summary>
-        /// <param name="id">The unique category id</param>
-        /// <param name="page">The optional page</param>
-        /// <param name="year">The optional year</param>
-        /// <param name="month">The optional month</param>
-        /// <returns>The archive model</returns>
-        public T GetById<T>(Guid id, int? page = 1, int? year = null, int? month = null) where T : Models.PostArchive {
-            // Get the requested category
-            var category = db.Categories
-                .FirstOrDefault(c => c.Id == id);
-
-            if (category != null) {
+            if (model != null) {
                 // Set basic fields
-                var model = Activator.CreateInstance<T>();
+                model.Archive = new Models.PostArchive();
 
-                model.CategoryId = id;
-                model.Title = category.ArchiveTitle ?? category.Title;
-                model.Slug = category.Slug;
-                model.MetaDescription = category.ArchiveDescription ?? category.Description;
-                model.Route = !String.IsNullOrEmpty(category.ArchiveRoute) ? category.ArchiveRoute : "/archive";
-                model.Year = year;
-                model.Month = month;
-                model.Page = Math.Max(1, page.HasValue ? page.Value : 1);
+                model.Route = model.Route ?? "/archive";
+                model.Archive.Year = year;
+                model.Archive.Month = month;
+                model.Archive.CurrentPage = Math.Max(1, page.HasValue ? page.Value : 1);
 
                 // Build the query.
                 var now = DateTime.Now;
                 var query = db.Posts
-                    .Where(p => p.CategoryId == id && p.Published <= now);
+                    .Where(p => p.BlogId == id && p.Published <= now);
 
                 if (year.HasValue) {
                     DateTime from;
@@ -101,19 +84,19 @@ namespace Piranha.Repositories
                 }
 
                 // Get the total page count for the archive
-                model.TotalPages = Math.Max(Convert.ToInt32(Math.Ceiling((double)query.Count() / ArchivePageSize)), 1);
-                model.Page = Math.Min(model.Page, model.TotalPages);
+                model.Archive.TotalPages = Math.Max(Convert.ToInt32(Math.Ceiling((double)query.Count() / ArchivePageSize)), 1);
+                model.Archive.CurrentPage = Math.Min(model.Archive.CurrentPage, model.Archive.TotalPages);
 
                 // Get the posts
                 var posts = query
                     .OrderBy(p => p.Published)
-                    .Skip((model.Page - 1) * ArchivePageSize)
+                    .Skip((model.Archive.CurrentPage - 1) * ArchivePageSize)
                     .Take(ArchivePageSize)
                     .Select(p => p.Id);
 
                 // Map & add the posts within the requested page
                 foreach (var post in posts) {
-                    model.Posts.Add(api.Posts.GetById(post));
+                    model.Archive.Posts.Add(api.Posts.GetById(post));
                 }
                 return model;
             }
@@ -127,32 +110,14 @@ namespace Piranha.Repositories
         /// <param name="page">The optional page</param>
         /// <param name="year">The optional year</param>
         /// <param name="month">The optional month</param>
+        /// <param name="siteId">The optional site id</param>
         /// <returns>The archive model</returns>
-        public Models.PostArchive GetBySlug(string slug, int? page = 1, int? year = null, int? month = null) {
-            var category = db.Categories
-                .FirstOrDefault(c => c.Slug == slug);
+        public T GetBySlug<T>(string slug, int? page = 1, int? year = null, int? month = null, Guid? siteId = null) where T : Models.BlogPage<T> {
+            // Get the id of the blog page with the given type
+            var blogId = api.Pages.GetIdBySlug(slug, siteId);
 
-            if (category != null) {
-                return GetById<Models.PostArchive>(category.Id, page, year, month);
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Gets the post archive for the category with the given slug.
-        /// </summary>
-        /// <param name="slug">The unique category slug</param>
-        /// <param name="page">The optional page</param>
-        /// <param name="year">The optional year</param>
-        /// <param name="month">The optional month</param>
-        /// <returns>The archive model</returns>
-        public T GetBySlug<T>(string slug, int? page = 1, int? year = null, int? month = null) where T : Models.PostArchive {
-            var category = db.Categories
-                .FirstOrDefault(c => c.Slug == slug);
-
-            if (category != null) {
-                return GetById<T>(category.Id, page, year, month);
-            }
+            if (blogId.HasValue)
+                return GetById<T>(blogId.Value, page, year, month);
             return null;
         }
     }
