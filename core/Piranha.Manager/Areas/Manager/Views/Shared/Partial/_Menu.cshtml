@@ -1,4 +1,6 @@
 ﻿@using Piranha.Manager
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 @{
     var controller = ViewBag.Controller?.ToLower();
 }
@@ -12,14 +14,16 @@
                 <a href="#"><span class="@group.Css"></span><span class="title">@group.Name</span></a>
                 <ul>
                     @foreach (var item in group.Items) {
-                        <li @(item.Controller.ToLower() == controller ? "class=active" : "")>
-                            <a href="@Url.Action(item.Action, item.Controller, item.Params)">
-                                @if (!string.IsNullOrEmpty(item.Css)) {
-                                    <span class="@item.Css"></span>
-                                }
-                                <span class="title">@item.Name</span>
-                            </a>
-                        </li>
+                        if (string.IsNullOrWhiteSpace(item.Policy) || (await AuthorizationService.AuthorizeAsync(User, item.Policy)).Succeeded) {
+                            <li @(item.Controller.ToLower() == controller ? "class=active" : "")>
+                                <a href="@Url.Action(item.Action, item.Controller, item.Params)">
+                                    @if (!string.IsNullOrEmpty(item.Css)) {
+                                        <span class="@item.Css"></span>
+                                    }
+                                    <span class="title">@item.Name</span>
+                                </a>
+                            </li>
+                        }
                     }
                 </ul>
             </li> }
