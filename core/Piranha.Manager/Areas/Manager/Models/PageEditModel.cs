@@ -31,6 +31,11 @@ namespace Piranha.Areas.Manager.Models
         /// Gets/sets the available regions.
         /// </summary>
         public IList<PageEditRegionBase> Regions { get; set; }
+
+        /// <summary>
+        /// Gets/sets the page content type.
+        /// </summary>
+        public Extend.AppContentType PageContentType { get; set; }
         #endregion
 
         /// <summary>
@@ -78,6 +83,7 @@ namespace Piranha.Areas.Manager.Models
             if (page != null) {
                 var model = Module.Mapper.Map<Piranha.Models.PageBase, PageEditModel>(page);
                 model.PageType = api.PageTypes.GetById(model.TypeId);
+                model.PageContentType = App.ContentTypes.GetById(model.PageType.ContentTypeId);
                 LoadRegions(page, model);
 
                 return model;
@@ -89,8 +95,10 @@ namespace Piranha.Areas.Manager.Models
         /// Refreshes the model after an unsuccessful save.
         /// </summary>
         public PageEditModel Refresh(IApi api) {
-            if (!string.IsNullOrWhiteSpace(TypeId))
+            if (!string.IsNullOrWhiteSpace(TypeId)) {
                 PageType = api.PageTypes.GetById(TypeId);
+                PageContentType = App.ContentTypes.GetById(PageType.ContentTypeId);
+            }
             return this;
         }
 
@@ -116,6 +124,9 @@ namespace Piranha.Areas.Manager.Models
                 var model = Module.Mapper.Map<Piranha.Models.PageBase, PageEditModel>(page);
                 model.SiteId = siteId.Value;
                 model.PageType = type;
+                model.PageContentType = App.ContentTypes.GetById(type.ContentTypeId);
+                model.ContentType = model.PageContentType != null ? model.PageContentType.Id : null;
+
                 LoadRegions(page, model);
 
                 return model;

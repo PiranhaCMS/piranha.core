@@ -83,7 +83,8 @@ namespace Piranha.AttributeBuilder
                 if (!string.IsNullOrEmpty(attr.Id) && !string.IsNullOrEmpty(attr.Title)) {
                     var pageType = new PageType() {
                         Id = attr.Id,
-                        Title = attr.Title
+                        Title = attr.Title,
+                        ContentTypeId = App.ContentTypes.GetId(type)
                     };
 
                     var routes = type.GetTypeInfo().GetCustomAttributes(typeof(PageTypeRouteAttribute));

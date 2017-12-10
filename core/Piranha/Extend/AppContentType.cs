@@ -31,5 +31,10 @@ namespace Piranha.Extend
         /// Gets/sets the display title.
         /// </summary>
         public string Title { get; set; }
+
+        /// <summary>
+        /// Gets/sets if a custom editor should be inserted.
+        /// </summary>
+        public bool CustomEditor { get; set; }
     }
 }

@@ -142,7 +142,6 @@ namespace CoreWeb
                         Data = stream
                     });
                 }
-                
 
                 // Add the startpage
                 using (var stream = File.OpenRead("assets/seed/startpage.md")) {

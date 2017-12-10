@@ -29,14 +29,16 @@ namespace Piranha.Extend
         /// </summary>
         /// <param name="id">The id that will be stored in the database</param>
         /// <param name="title">The display title of the content type</param>
-        internal void Register<T>(string id, string title) {
+        /// <param name="customEditor">If a custom editor should be added</param>
+        internal void Register<T>(string id, string title, bool customEditor = false) {
             if (contentTypes.Exists(t => t.Type == typeof(T)))
                 throw new ArgumentException($"Given type {typeof(T).FullName} is already registered as a content type.");
             
             contentTypes.Add(new AppContentType() {
                 Id = id,
                 Type = typeof(T),
-                Title = title
+                Title = title,
+                CustomEditor = customEditor
             });
         }
 
@@ -50,6 +52,14 @@ namespace Piranha.Extend
 
         public string GetId<T>() {
             return GetId(typeof(T));
+        }
+
+        public AppContentType GetById(string id) {
+            foreach (var type in contentTypes) {
+                if (type.Id == id)
+                    return type;
+            }
+            return null;            
         }
     }
 }

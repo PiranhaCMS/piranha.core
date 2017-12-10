@@ -240,7 +240,7 @@ namespace Piranha
 
                         // Compose content types
                         contentTypes.Register<Models.IPage>("Page", "Page");
-                        contentTypes.Register<Models.IBlogPage>("Blog", "Blog");
+                        contentTypes.Register<Models.IBlogPage>("Blog", "Blog", true);
 
                         // Compose field types
                         fields.Register<Extend.Fields.DateField>();
