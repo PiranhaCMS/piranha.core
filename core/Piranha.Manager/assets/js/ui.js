@@ -212,6 +212,12 @@ var manager = {
                 success: function (res) {
                     $(targetId).append(res);
 
+                    // If the new region contains a html editor, make sure
+                    // we initialize it.
+                    var editors = $(res).find('.editor').each(function () {
+                        tinyMCE.execCommand('mceAddEditor', false, this.id);
+                    });
+
                     if (cb)
                         cb();
 
