@@ -15,7 +15,7 @@ namespace Piranha.Models
     /// <summary>
     /// Dynamic page model.
     /// </summary>
-    public class DynamicPage : Page<DynamicPage>, IDynamicModel
+    public class DynamicPage : GenericPage<DynamicPage>, IDynamicModel
     {
         #region Properties
         /// <summary>

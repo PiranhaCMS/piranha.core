@@ -13,7 +13,7 @@ namespace Piranha.Models
     /// <summary>
     /// Base class for blog pages.
     /// </summary>
-    public class BlogPage<T> : GenericPage<T>, IPage where T : BlogPage<T> 
+    public class BlogPage<T> : GenericPage<T>, IBlogPage where T : BlogPage<T> 
     {
         /// <summary>
         /// Gets/sets the post archive.
