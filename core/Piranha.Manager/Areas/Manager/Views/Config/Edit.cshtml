@@ -79,6 +79,16 @@
                         @Html.TextBoxFor(m => m.Cache.PagesExpires, new { @class = "form-control", type = "number" })
                     </div>                
                 </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Cache.PostsExpires, "Post cache expiration (minutes)")
+                        <blockquote>
+                            The time in minutes that web browsers can use posts before
+                            asking the server for new updates.
+                        </blockquote>
+                        @Html.TextBoxFor(m => m.Cache.PostsExpires, new { @class = "form-control", type = "number" })
+                    </div>                
+                </div>
             </div>        
         </div>
     </div>

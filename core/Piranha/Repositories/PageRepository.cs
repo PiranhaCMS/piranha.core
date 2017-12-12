@@ -319,8 +319,8 @@ namespace Piranha.Repositories
                     model.Slug = prefix + Utils.GenerateSlug(model.NavigationTitle != null ? model.NavigationTitle : model.Title);
                 } else model.Slug = Utils.GenerateSlug(model.Slug);
 
-                if (string.IsNullOrWhiteSpace(model.ContentType))
-                    model.ContentType = App.ContentTypes.GetId(typeof(T));
+                // Set content type
+                model.ContentType = type.ContentTypeId;
 
                 // Map basic fields
                 App.Mapper.Map<Models.PageBase, Page>(model, page);
