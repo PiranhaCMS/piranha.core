@@ -459,7 +459,7 @@ namespace Piranha.Migrations
                     b.HasOne("Piranha.Data.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Piranha.Data.PostType", "PostType")
                         .WithMany()

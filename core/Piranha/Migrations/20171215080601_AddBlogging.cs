@@ -107,7 +107,7 @@ namespace Piranha.Migrations
                         column: x => x.CategoryId,
                         principalTable: "Piranha_Categories",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Piranha_Posts_Piranha_PostTypes_PostTypeId",
                         column: x => x.PostTypeId,
