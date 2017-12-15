@@ -12,7 +12,7 @@ using System;
 namespace Piranha.Migrations
 {
     [DbContext(typeof(Db))]
-    [Migration("20171215080601_AddBlogging")]
+    [Migration("20171215130248_AddBlogging")]
     partial class AddBlogging
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -485,7 +485,7 @@ namespace Piranha.Migrations
                     b.HasOne("Piranha.Data.Tag", "Tag")
                         .WithMany()
                         .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Piranha.Data.Tag", b =>

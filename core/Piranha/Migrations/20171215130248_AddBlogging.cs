@@ -160,7 +160,7 @@ namespace Piranha.Migrations
                         column: x => x.TagId,
                         principalTable: "Piranha_Tags",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

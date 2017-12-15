@@ -485,7 +485,7 @@ namespace Piranha.Migrations
                     b.HasOne("Piranha.Data.Tag", "Tag")
                         .WithMany()
                         .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Piranha.Data.Tag", b =>
