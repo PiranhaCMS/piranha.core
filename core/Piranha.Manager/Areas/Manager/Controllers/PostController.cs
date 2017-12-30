@@ -62,7 +62,11 @@ namespace Piranha.Areas.Manager.Controllers
             // Validate
             if (string.IsNullOrWhiteSpace(model.Title)) {
                 ErrorMessage("The post could not be saved. Title is mandatory", false);
-                return View("Edit", model.Refresh(api));                
+                return View("Edit", model.Refresh(api));
+            }
+            if (string.IsNullOrWhiteSpace(model.SelectedCategory)) {
+                ErrorMessage("The post could not be saved. Category is mandatory", false);
+                return View("Edit", model.Refresh(api));
             }
 
             // Save

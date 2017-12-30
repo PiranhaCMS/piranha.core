@@ -55,7 +55,8 @@ namespace Piranha.Manager
                     .ForMember(m => m.AllCategories, o => o.Ignore())
                     .ForMember(m => m.AllTags, o => o.Ignore())
                     .ForMember(m => m.SelectedCategory, o => o.Ignore())
-                    .ForMember(m => m.SelectedTags, o => o.Ignore());
+                    .ForMember(m => m.SelectedTags, o => o.Ignore())
+                    .ForMember(m => m.BlogSlug, o => o.Ignore());
                 cfg.CreateMap<Areas.Manager.Models.PostEditModel, Models.PostBase>()
                     .ForMember(m => m.TypeId, o => o.Ignore())
                     .ForMember(m => m.Created, o => o.Ignore())

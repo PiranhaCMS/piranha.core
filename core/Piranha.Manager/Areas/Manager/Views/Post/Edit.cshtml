@@ -25,6 +25,7 @@
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.Id)
     @Html.HiddenFor(m => m.BlogId)
+    @Html.HiddenFor(m => m.BlogSlug)
     @Html.HiddenFor(m => m.TypeId)
     @Html.HiddenFor(m => m.Published)
 
@@ -52,17 +53,17 @@
                     <span class="sr-only">Toggle Dropdown</span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                    <li><a href="~/@Model.Slug" target="_blank">Preview</a></li>
-                    @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesPublish)).Succeeded) {
+                    <li><a href="~/@Model.BlogSlug/@Model.Slug" target="_blank">Preview</a></li>
+                    @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PostsPublish)).Succeeded) {
                         if (Model.Published.HasValue) {
                             <li><a id="submit-unpublish" href="#">Unpublish</a></li>
                         } else {
                             <li><a id="submit-publish" href="#">Publish now</a></li>
                         }
                     }
-                    @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesDelete)).Succeeded) {
+                    @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PostsDelete)).Succeeded) {
                         <li class="divider"></li>
-                        <li><a href="@Url.Action("Delete", new { @id = Model.Id })"><span class="text-danger">Delete page</span></a></li>
+                        <li><a href="@Url.Action("Delete", new { @id = Model.Id })"><span class="text-danger">Delete post</span></a></li>
                     }
                 </ul>
             </div>

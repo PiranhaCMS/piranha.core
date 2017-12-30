@@ -21,7 +21,6 @@ namespace Piranha.Areas.Manager.Models
     /// </summary>
     public class PostEditModel : Piranha.Models.PostBase
     {
-        #region Properties
         /// <summary>
         /// Gets/sets the post type.
         /// </summary>
@@ -51,7 +50,11 @@ namespace Piranha.Areas.Manager.Models
         /// Gets/sets the currently selected tags.
         /// </summary>
         public IList<string> SelectedTags { get; set; }
-        #endregion
+
+        /// <summary>
+        /// Gets/sets the base slug of the blog.
+        /// </summary>
+        public string BlogSlug { get; set; }
 
          /// <summary>
         /// Default constructor.
@@ -72,12 +75,14 @@ namespace Piranha.Areas.Manager.Models
         public static PostEditModel GetById(IApi api, Guid id) {
             var post = api.Posts.GetById(id);
             if (post != null) {
+                var page = api.Pages.GetById(post.BlogId);
                 var model = Module.Mapper.Map<Piranha.Models.PostBase, PostEditModel>(post);
                 model.PostType = api.PostTypes.GetById(model.TypeId);
                 model.AllCategories = api.Categories.GetAll(post.BlogId);
                 model.AllTags = api.Tags.GetAll(post.BlogId);
                 model.SelectedCategory = post.Category.Slug;
                 model.SelectedTags = post.Tags.Select(t => t.Slug).ToList();
+                model.BlogSlug = page.Slug;
 
                 LoadRegions(post, model);
 
@@ -163,14 +168,16 @@ namespace Piranha.Areas.Manager.Models
         /// <returns>The post edit model</returns>        
         public static PostEditModel Create(IApi api, string postTypeId, Guid blogId) {
             var type = api.PostTypes.GetById(postTypeId);
+            var page = api.Pages.GetById(blogId);
 
-            if (type != null) {
+            if (type != null && page != null) {
                 var post = Piranha.Models.DynamicPost.Create(api, postTypeId);
                 var model = Module.Mapper.Map<Piranha.Models.PostBase, PostEditModel>(post);
                 model.BlogId = blogId;
                 model.PostType = type;
                 model.AllCategories = api.Categories.GetAll(blogId);
                 model.AllTags = api.Tags.GetAll(blogId);
+                model.BlogSlug = page.Slug;
 
                 LoadRegions(post, model);
 
