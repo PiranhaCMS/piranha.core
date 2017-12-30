@@ -9,21 +9,9 @@
  */
 
 using System;
-using System.Collections.Generic;
 
 namespace Piranha.Models
 {
-    public class TaxonomyList : List<Taxonomy>
-    {
-        public void Add(params string[] titles) {
-            foreach (var title in titles) {
-                Add(new Taxonomy() {
-                    Title = title
-                });
-            }
-        }
-    }
-
     public class Taxonomy
     {
         /// <summary>
@@ -41,12 +29,20 @@ namespace Piranha.Models
         /// </summary>
         public string Slug { get; set; }
 
+        /// <summary>
+        /// Operator for type casting a string to a taxonomy.
+        /// </summary>
+        /// <param name="str">The string</param>
         public static implicit operator Taxonomy(string str) {
             return new Taxonomy() {
                 Title = str
             };
         }
 
+        /// <summary>
+        /// Operator for type casting a category to a taxonomy.
+        /// </summary>
+        /// <param name="category">The category</param>
         public static implicit operator Taxonomy(Data.Category category) {
             return new Taxonomy() {
                 Id = category.Id,
@@ -55,6 +51,10 @@ namespace Piranha.Models
             };
         }
 
+        /// <summary>
+        /// Operator for type casting a tag to a taxonomy.
+        /// </summary>
+        /// <param name="tag">The tag</param>
         public static implicit operator Taxonomy(Data.Tag tag) {
             return new Taxonomy() {
                 Id = tag.Id,
