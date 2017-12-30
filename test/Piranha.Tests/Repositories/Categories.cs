@@ -205,6 +205,25 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void GetByTitle() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var model = api.Categories.GetByTitle(BLOG_ID, CAT_1);
+
+                Assert.NotNull(model);
+                Assert.Equal(CAT_1, model.Title);
+            }
+        }
+
+        [Fact]
+        public void GetNoneByTitle() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var model = api.Categories.GetByTitle(BLOG_ID, "Missing Title");
+
+                Assert.Null(model);
+            }
+        }
+
+        [Fact]
         public void Update() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 var model = api.Categories.GetById(CAT_1_ID);
