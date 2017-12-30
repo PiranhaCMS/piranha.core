@@ -89,7 +89,7 @@ namespace Piranha.Repositories
 
                 // Get the posts
                 var posts = query
-                    .OrderBy(p => p.Published)
+                    .OrderByDescending(p => p.Published)
                     .Skip((model.Archive.CurrentPage - 1) * ArchivePageSize)
                     .Take(ArchivePageSize)
                     .Select(p => p.Id);
