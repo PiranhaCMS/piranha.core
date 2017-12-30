@@ -51,6 +51,10 @@ namespace Piranha.Areas.Manager.Models
                 }).ToList();
             model.PostTypes = api.PostTypes.GetAll();
 
+            // Sort so we show unpublished drafts first
+            model.Posts = model.Posts.Where(p => !p.Published.HasValue)
+                .Concat(model.Posts.Where(p => p.Published.HasValue));
+
             foreach (var post in model.Posts) {
                 var type = api.PostTypes.GetById(post.TypeId);
                 if (type != null)
