@@ -14,4 +14,10 @@ namespace Piranha.Models
     /// Base class for basic content pages.
     /// </summary>
     public class Page<T> : GenericPage<T>, IPage where T : Page<T> {}
+
+    /// <summary>
+    /// Interface for registering the basic page 
+    /// content type.
+    /// </summary>
+    public interface IPage {}    
 }
