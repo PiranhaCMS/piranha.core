@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace Piranha.Models
 {
@@ -17,33 +18,46 @@ namespace Piranha.Models
     /// </summary>
     public abstract class PostBase : RoutedContent, IMeta
     {
-        #region Properties
         /// <summary>
         /// Gets/sets the blog page id.
         /// </summary>
         public Guid BlogId { get; set; }
 
         /// <summary>
+        /// Gets/sets the category.
+        /// </summary>
+        public Taxonomy Category { get; set; }
+
+        /// <summary>
         /// Gets/sets the category id.
         /// </summary>
-        public Guid CategoryId { get; set; }
+        //public Guid CategoryId { get; set; }
 
         /// <summary>
         /// Gets/sets the category name.
         /// </summary>
-        public string CategoryName { get; set; }
+        //public string CategoryName { get; set; }
 
         /// <summary>
         /// Gets/sets the optional redirect.
         /// </summary>
-        /// <returns></returns>
         public string RedirectUrl { get; set; }
 
         /// <summary>
         /// Gets/sets the redirect type.
         /// </summary>
-        /// <returns></returns>
         public RedirectType RedirectType { get; set; }
-        #endregion
+
+        /// <summary>
+        /// Gets/sets the available tags.
+        /// </summary>
+        public TaxonomyList Tags { get; set; }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public PostBase() {
+            Tags = new TaxonomyList();
+        }
     }
 }

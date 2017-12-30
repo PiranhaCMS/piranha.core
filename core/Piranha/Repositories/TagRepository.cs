@@ -56,7 +56,7 @@ namespace Piranha.Repositories
             var tags = db.PostTags
                 .AsNoTracking()
                 .Where(t => t.PostId == postId)
-                .Select(t => t.PostId);
+                .Select(t => t.TagId);
 
             var models = new List<Tag>();
 
@@ -91,6 +91,23 @@ namespace Piranha.Repositories
             }
             return model;
         }
+
+        /// <summary>
+        /// Gets the model with the given title
+        /// </summary>
+        /// <param name="blogId">The blog id</param>
+        /// <param name="title">The unique title</param>
+        /// <returns>The model</returns>
+        public Tag GetByTitle(Guid blogId, string title) {
+            var model = db.Tags
+                .AsNoTracking()
+                .SingleOrDefault(t => t.BlogId == blogId && t.Title == title);
+
+            if (cache != null && model != null)
+                AddToCache(model);
+            return model;
+        }
+        
 
         #region Protected methods
         /// <summary>

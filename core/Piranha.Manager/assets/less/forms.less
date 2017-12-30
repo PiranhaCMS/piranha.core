@@ -367,20 +367,6 @@
 	.nav-tabs {
 		margin-bottom: 15px;
 	}
-
-	.content-preview {
-		font-family: "Open Sans", Arial;
-		font-size: 15px;
-
-		h1, h2, h3, h4, h5, h6 {
-			font-family: 'Gentium Book Basic', serif;
-			margin: 5px 0 10px;
-		}
-
-		p, ul, ol {
-			margin: 0 0 20px;
-		}		
-	}
 }
 
 .region-list {
@@ -424,6 +410,74 @@
 		.nav-tabs {
 			display: none;
 		}
+	}
+}
+
+.custom-editor {
+	padding: 0px 15px;
+
+	.custom-editor-list {
+		background: @list-color;
+		padding: 0;
+		border-right: solid 1px @border-color;
+
+		.nav-tabs {
+			font-size: 12px;
+			font-weight: bold;
+			text-transform: uppercase;
+			border-bottom: 0 none;
+
+			>li {
+				>a {
+					border: 0 none;
+					border-radius: 0;
+					padding: 15px;
+				}
+
+				&.active {
+					>a {
+						background: @border-color;
+						border: 0 none;
+					}
+				}
+			}
+		}
+
+		.list-group {
+			.list-group-item {
+				background: @list-color;
+			    font-family: "Open Sans",Arial;
+    			font-size: 16px;
+				border: 0 none;
+				border-bottom: solid 1px #fff;
+				margin-bottom: 0;
+
+				&.active {
+					color: #555;
+					background: @border-color;
+				}
+
+				&:first-child {
+					border-radius: 0;
+				}
+				&:last-child {
+					border-radius: 0;
+					border-bottom: 0 none;
+				}
+
+				small {
+					color: @text-color-light;
+					font-family: Arial;
+					font-size: 12px;
+					display: block;
+					padding: 5px 0;
+				}
+			}
+		}
+	}
+
+	.custom-editor-body {
+		padding: 15px 25px;
 	}
 }
 

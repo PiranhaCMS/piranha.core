@@ -202,14 +202,6 @@ namespace CoreWeb
 
                 api.Pages.Save(blogPage);
 
-                // Add a blog category
-                var categoryId = Guid.NewGuid();
-                api.Categories.Save(new Piranha.Data.Category() {
-                    Id = categoryId,
-                    BlogId = blogPage.Id,
-                    Title = "Uncategorized"
-                });
-
                 // Add a blog post
                 using (var stream = File.OpenRead("assets/seed/blogpost.md")) {
                     using (var reader = new StreamReader(stream)) {
@@ -217,12 +209,13 @@ namespace CoreWeb
 
                         // Add main content
                         post.BlogId = blogPage.Id;
-                        post.CategoryId = categoryId;
+                        post.Category = "Uncategorized";
                         post.Title = "My first post";
                         post.MetaKeywords = "First, Blog, AspNetCore, DotNetCore";
                         post.MetaDescription = "The first post ever written by a Piranha";
                         post.Body = reader.ReadToEnd();
-                        post.Published = DateTime.Now;      
+                        post.Published = DateTime.Now;
+                        post.Tags.Add("Tech", "AspNetCore", "NetCore");  
 
                         api.Posts.Save(post);                  
                     }

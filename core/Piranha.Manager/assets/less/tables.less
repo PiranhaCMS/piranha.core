@@ -10,7 +10,7 @@
 @import "colors.less";
 @import "mixins.less";
 
-.table {
+.table, .panel .table {
 	td, th {
 		&.actions {
 			&.one {
@@ -188,6 +188,13 @@
 			font-size: 16px;
 		}
 
+		.dropdown-menu {
+			a {
+				font-family: Arial;
+				font-size: 14px;
+			}
+		}
+
 		span.media-icon {
 			padding-right: 10px;
 			color: @icon-color;
@@ -201,6 +208,7 @@
 	}
 }
 
+/*
 .panel .table {
 	>tbody {
 		>tr {
@@ -217,6 +225,7 @@
 		}
 	}
 }
+*/
 
 ol.sitemap {
     padding-left: 0;

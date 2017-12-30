@@ -103,7 +103,7 @@ namespace Piranha.Repositories
             }
 
             if (post != null)
-                return Load<T, Models.PostBase>(post, api.PostTypes.GetById(post.PostTypeId));
+                return Load<T, Models.PostBase>(post, api.PostTypes.GetById(post.PostTypeId), Process);
             return null;
         }
 
@@ -176,7 +176,7 @@ namespace Piranha.Repositories
                     post.Category = api.Categories.GetById(post.CategoryId);
                     post.Blog = ((Repositories.PageRepository)api.Pages).GetPageById(post.BlogId);
             
-                    return Load<T, Models.PostBase>(post, api.PostTypes.GetById(post.PostTypeId));
+                    return Load<T, Models.PostBase>(post, api.PostTypes.GetById(post.PostTypeId), Process);
                 }                    
                 return null;
             }
@@ -192,8 +192,52 @@ namespace Piranha.Repositories
             if (type != null) {
                 var currentRegions = type.Regions.Select(r => r.Id).ToArray();
 
+                // Ensure category
+                if (model.Category.Id == Guid.Empty) {
+                    Data.Category category = null;
+
+                    if (!string.IsNullOrWhiteSpace(model.Category.Slug))
+                        category = api.Categories.GetBySlug(model.BlogId, model.Category.Slug);
+                    if (category == null && !string.IsNullOrWhiteSpace(model.Category.Title))
+                        category = api.Categories.GetByTitle(model.BlogId, model.Category.Title);                        
+
+                    if (category == null) {
+                        category = new Data.Category() {
+                            Id = Guid.NewGuid(),
+                            BlogId = model.BlogId,
+                            Title = model.Category.Title
+                        };
+                        api.Categories.Save(category);
+                    }
+                    model.Category.Id = category.Id;
+                }
+
+                // Ensure tags
+                foreach (var t in model.Tags) {
+                    if (t.Id == Guid.Empty) {
+                        Data.Tag tag = null;
+
+                        if (!string.IsNullOrWhiteSpace(t.Slug))
+                            tag = api.Tags.GetBySlug(model.BlogId, t.Slug);
+
+                        if (tag == null && !string.IsNullOrWhiteSpace(t.Title))
+                            tag = api.Tags.GetByTitle(model.BlogId, t.Title);
+
+                        if (tag == null) {
+                            tag = new Data.Tag() {
+                                Id = Guid.NewGuid(),
+                                BlogId = model.BlogId,
+                                Title = t.Title
+                            };
+                            api.Tags.Save(tag);
+                        }
+                        t.Id = tag.Id;
+                    }
+                }
+
                 var post = db.Posts
                     .Include(p => p.Fields)
+                    .Include(p => p.Tags)
                     .FirstOrDefault(p => p.Id == model.Id);
 
                 // If not, create a new post
@@ -216,6 +260,24 @@ namespace Piranha.Repositories
 
                 // Map basic fields
                 App.Mapper.Map<Models.PostBase, Post>(model, post);
+
+                // Remove tags
+                var removedTags = new List<PostTag>();
+                foreach (var tag in post.Tags) {
+                    if (!model.Tags.Any(t => t.Id == tag.TagId))
+                        removedTags.Add(tag);
+                }
+                if (removedTags.Count > 0)
+                    db.PostTags.RemoveRange(removedTags);
+
+                // Add tags
+                foreach (var tag in model.Tags) {
+                    if (!post.Tags.Any(t => t.PostId == post.Id && t.TagId == tag.Id))
+                        post.Tags.Add(new PostTag() {
+                            PostId = post.Id,
+                            TagId = tag.Id
+                        });
+                }
 
                 // Map regions
                 foreach (var regionKey in currentRegions) {
@@ -243,7 +305,7 @@ namespace Piranha.Repositories
                                 db.PostFields.RemoveRange(removedFields);
                         }
                     }
-                }
+                }                
 
                 db.SaveChanges();
 
@@ -280,6 +342,19 @@ namespace Piranha.Repositories
         /// <param name="model">The model</param>
         public void Delete<T>(T model) where T : Models.Post<T> {
             Delete(model.Id);
+        }
+
+        /// <summary>
+        /// Performs additional processing and loads related models.
+        /// </summary>
+        /// <param name="post">The source post</param>
+        /// <param name="model">The targe model</param>
+        private void Process<T>(Data.Post post, T model) where T : Models.PostBase {
+            model.Category = api.Categories.GetById(post.CategoryId);
+
+            foreach (var tag in api.Tags.GetByPostId(post.Id).OrderBy(t => t.Title)) {
+                model.Tags.Add((Models.Taxonomy)tag);
+            }
         }
 
         /// <summary>

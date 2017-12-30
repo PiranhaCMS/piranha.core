@@ -5,6 +5,10 @@ $(document).ready(function () {
     $('.datepicker').datetimepicker({
         format: "YYYY-MM-DD"
     });
+
+    $('.select2').select2({
+        tags: true
+    });
 });
 
 //
