@@ -35,7 +35,8 @@ namespace Piranha.Repositories
             var posts = db.Posts
                 .AsNoTracking()
                 .Where(p => p.BlogId == blogId)
-                .OrderBy(p => p.Published)
+                .OrderByDescending(p => p.Published)
+                .ThenByDescending(p => p.LastModified)
                 .ThenBy(p => p.Title)
                 .Select(p => p.Id);
 

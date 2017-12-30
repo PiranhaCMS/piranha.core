@@ -113,6 +113,37 @@ public static class ManagerModuleExtensions
                 policy.RequireClaim(Permission.PagesSave, Permission.PagesSave);
             });
 
+            // Posts policies
+            o.AddPolicy(Permission.Posts, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Posts, Permission.Posts);
+            });
+            o.AddPolicy(Permission.PostsAdd, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Posts, Permission.Posts);
+                policy.RequireClaim(Permission.PostsAdd, Permission.PostsAdd);
+            });
+            o.AddPolicy(Permission.PostsDelete, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Posts, Permission.Posts);
+                policy.RequireClaim(Permission.PostsDelete, Permission.PostsDelete);
+            });
+            o.AddPolicy(Permission.PostsEdit, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Posts, Permission.Posts);
+                policy.RequireClaim(Permission.PostsEdit, Permission.PostsEdit);
+            });
+            o.AddPolicy(Permission.PostsPublish, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Posts, Permission.Posts);
+                policy.RequireClaim(Permission.PostsPublish, Permission.PostsPublish);
+            });
+            o.AddPolicy(Permission.PostsSave, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Posts, Permission.Posts);
+                policy.RequireClaim(Permission.PostsSave, Permission.PostsSave);
+            });
+
             // Site policies
             o.AddPolicy(Permission.Sites, policy => {
                 policy.RequireClaim(Permission.Admin, Permission.Admin);

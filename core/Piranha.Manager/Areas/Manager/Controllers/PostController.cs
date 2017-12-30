@@ -33,7 +33,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         /// <param name="id">The post id</param>
         [Route("manager/post/{id:Guid}")]
-        [Authorize(Policy = Permission.PagesEdit)]
+        [Authorize(Policy = Permission.PostsEdit)]
         public IActionResult Edit(Guid id) {
             return View(Models.PostEditModel.GetById(api, id));
         }
@@ -44,7 +44,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="type">The page type id</param>
         /// <param name="blogId">The blog id</param>
         [Route("manager/post/add/{type}/{blogId:Guid}")]
-        [Authorize(Policy = Permission.PagesAdd)]
+        [Authorize(Policy = Permission.PostsEdit)]
         public IActionResult Add(string type, Guid blogId) {
             var model = Models.PostEditModel.Create(api, type, blogId);
 
@@ -57,7 +57,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="model">The post model</param>
         [HttpPost]
         [Route("manager/post/save")]
-        [Authorize(Policy = Permission.PagesSave)]
+        [Authorize(Policy = Permission.PostsSave)]
         public IActionResult Save(Models.PostEditModel model) {
             // Validate
             if (string.IsNullOrWhiteSpace(model.Title)) {
@@ -81,11 +81,11 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="model">The post model</param>
         [HttpPost]
         [Route("manager/post/publish")]
-        [Authorize(Policy = Permission.PagesPublish)]
+        [Authorize(Policy = Permission.PostsPublish)]
         public IActionResult Publish(Models.PostEditModel model) {
             if (model.Save(api, true)) {
                 SuccessMessage("The post has been published.");
-                return RedirectToAction("Edit", new { id = model.Id });
+                return RedirectToAction("Edit", "Page", new { id = model.BlogId });
             } else {
                 ErrorMessage("The post could not be published.", false);
                 return View(model);
@@ -98,11 +98,11 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="model">The post model</param>
         [HttpPost]
         [Route("manager/post/unpublish")]
-        [Authorize(Policy = Permission.PagesPublish)]
+        [Authorize(Policy = Permission.PostsPublish)]
         public IActionResult UnPublish(Models.PostEditModel model) {
             if (model.Save(api, false)) {
                 SuccessMessage("The post has been unpublished.");
-                return RedirectToAction("Edit", new { id = model.Id });
+                return RedirectToAction("Edit", "Page", new { id = model.BlogId });
             } else {
                 ErrorMessage("The post could not be unpublished.", false);
                 return View(model);
@@ -114,7 +114,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         /// <param name="id">The unique id</param>
         [Route("manager/post/delete/{id:Guid}")]
-        [Authorize(Policy = Permission.PagesDelete)]
+        [Authorize(Policy = Permission.PostsDelete)]
         public IActionResult Delete(Guid id) {
             var post = api.Posts.GetById(id);
 

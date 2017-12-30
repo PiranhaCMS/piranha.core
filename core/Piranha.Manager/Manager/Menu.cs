@@ -95,19 +95,10 @@ namespace Piranha.Manager
                 InternalId = "Content", Name = "Content", Css = "glyphicon glyphicon-pencil", Items = new MenuItemList() {
                     new MenuItem() {
                         InternalId = "Pages", Name = "Pages", Controller = "Page", Action = "List", Policy = Permission.Pages, Css = "glyphicon glyphicon-duplicate"
-                    },/*/
-                    new MenuItem() {
-                        InternalId = "Posts", Name = "Posts", Controller = "Post", Action = "List", Css = "glyphicon glyphicon-pushpin"
                     },
                     new MenuItem() {
-                        InternalId = "Blocks", Name = "Blocks", Controller = "Block", Action = "List", Css = "glyphicon glyphicon-font"
-                    },*/
-                    new MenuItem() {
                         InternalId = "Media", Name = "Media", Controller = "Media", Action = "List", Policy = Permission.Media, Css = "glyphicon glyphicon-picture"
-                    }/*,
-                    new MenuItem() {
-                        InternalId = "Categories", Name = "Categories", Controller = "Category", Action = "List", Css = "glyphicon glyphicon-tags"
-                    }*/
+                    }
                 }
             },
             new MenuItem() {
