@@ -76,6 +76,22 @@ namespace Piranha.Repositories
             return model;
         }
 
+        /// <summary>
+        /// Gets the model with the given title
+        /// </summary>
+        /// <param name="blogId">The blog id</param>
+        /// <param name="title">The unique title</param>
+        /// <returns>The model</returns>
+        public Category GetByTitle(Guid blogId, string title) {
+            var model = db.Categories
+                .AsNoTracking()
+                .SingleOrDefault(c => c.BlogId == blogId && c.Title == title);
+
+            if (cache != null && model != null)
+                AddToCache(model);
+            return model;
+        }
+        
         #region Protected methods
         /// <summary>
         /// Adds a new model to the database.

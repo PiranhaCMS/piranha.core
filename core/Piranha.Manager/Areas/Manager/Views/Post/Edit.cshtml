@@ -1,0 +1,173 @@
+﻿@model Piranha.Areas.Manager.Models.PostEditModel
+@using Piranha.Areas.Manager.Models
+@{
+    ViewBag.Title = "Edit post";
+    ViewBag.Controller = "Page";
+}
+
+@section script {
+    <script type="text/javascript">
+        $(document).on('click', '#submit-publish', function () {
+            $('form#main-form').attr('action', '@Url.Action("Publish")').submit();
+        });
+        $(document).on('click', '#submit-unpublish', function () {
+            $('form#main-form').attr('action', '@Url.Action("UnPublish")').submit();
+        });
+        $(document).on('click', '#btn-settings', function () {
+            $('#panel-settings').slideToggle('fast');
+            return false;
+        });
+        document.getElementById('Title').focus();
+    </script>
+}
+
+@using (var form = Html.BeginForm("Save", "Post", FormMethod.Post, new { @id = "main-form", @class = "form", @role = "form" })) {
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.BlogId)
+    @Html.HiddenFor(m => m.BlogSlug)
+    @Html.HiddenFor(m => m.TypeId)
+    @Html.HiddenFor(m => m.Published)
+
+    <div class="row">
+        <div class="col-sm-12 buttons">
+            <!-- Settings -->
+            <button id="btn-settings" type="button" class="btn btn-primary">
+                <span class="glyphicon glyphicon-cog"></span>
+            </button>
+
+            <!-- Actions -->
+            <div class="btn-group">
+                <button type="submit" class="btn btn-labeled btn-success">
+                    <span class="btn-label">
+                        <i class="glyphicon glyphicon-ok"></i>
+                    </span>
+                    @if (Model.Published.HasValue) {
+                        <text>Update</text>
+                    } else {
+                        <text>Save draft</text>
+                    }
+                </button>
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                    <li><a href="~/@Model.BlogSlug/@Model.Slug" target="_blank">Preview</a></li>
+                    @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PostsPublish)).Succeeded) {
+                        if (Model.Published.HasValue) {
+                            <li><a id="submit-unpublish" href="#">Unpublish</a></li>
+                        } else {
+                            <li><a id="submit-publish" href="#">Publish now</a></li>
+                        }
+                    }
+                    @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PostsDelete)).Succeeded) {
+                        <li class="divider"></li>
+                        <li><a href="@Url.Action("Delete", new { @id = Model.Id })"><span class="text-danger">Delete post</span></a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(ViewBag.Message)) {
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="@ViewBag.MessageCss">
+                    @Html.Raw(ViewBag.Message)
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="form-group">
+        @Html.TextBoxFor(m => m.Title, new { @class = "form-control title", maxlength = 128, placeholder = "Your post title" })
+        @Html.ValidationMessageFor(m => m.Title)
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label>Category</label>
+                <select class="form-control select2" name="SelectedCategory">
+                    <option value=""></option>
+                    @foreach (var category in Model.AllCategories) {
+                        <option value="@category.Slug" @(Model.Category != null && category.Slug == Model.Category.Slug ? "selected=selected" : "")>@category.Title</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label>Tags</label>
+                <select class="form-control select2" multiple="multiple" name="SelectedTags[]">
+                    @foreach (var tag in Model.AllTags) {
+                        <option value="@tag.Slug" @(Model.SelectedTags.Contains(tag.Slug) ? "selected=selected" : "")>@tag.Title</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div id="panel-settings" class="panel panel-default" style="display:none">
+        <div class="panel-heading">
+            <h3 class="panel-title">Settings</h3>
+        </div>
+        <div id="basic-settings" class="panel-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Slug</label>
+                        @Html.TextBoxFor(m => m.Slug, new { @class = "form-control", maxlength = 128, placeholder = "The unique slug" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Meta Keywords</label>
+                        @Html.TextBoxFor(m => m.MetaKeywords, new { @class = "form-control small", maxlength = 128, placeholder = "Meta keywords" })
+                    </div>
+                    @if (Model.PostType.Routes.Count > 1) {
+                        <div class="form-group">
+                            <label>Route</label>
+                            <select name="Route" class="form-control small">
+                                @foreach (var item in Model.PostType.Routes) {
+                                    <option value="@item.Route" @(Model.Route == item.Route ? "selected=selected" : "")>@item.Title</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Meta description</label>
+                        @Html.TextAreaFor(m => m.MetaDescription, new { @class = "form-control small count-me", rows = 5, maxlength = 256, placeholder = "Meta description", style = "height:82px" })
+                        <p>0/255</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            @for (var n = Model.Regions.Count - 1; n >= 0; n--) {
+                <button class="btn btn-sm btn-secondary pull-right btn-toggle @(n == 0 ? "btn-primary" : "")" data-target="#region-@Model.Regions[n].Id">@Model.Regions[n].Title</button>
+            }
+            <h3 class="panel-title">Content</h3>
+        </div>
+        @for (var n = 0; n < Model.Regions.Count; n++) {
+            <div id="region-@Model.Regions[n].Id" class="panel-body" @(n > 0 ? "style=display:none" : "")>
+                @Html.HiddenFor(m => m.Regions[n].Id)
+                @Html.HiddenFor(m => m.Regions[n].Title)
+                @Html.HiddenFor(m => m.Regions[n].CLRType)
+                @Html.EditorFor(m => m.Regions[n], Model.Regions[n].GetType().Name, new { 
+                    pageTypeId = Model.PostType.Id,
+                    regionTypeId = Model.Regions[n].Id,
+                    regionIndex = n
+                })
+            </div>
+        }
+    </div>
+}

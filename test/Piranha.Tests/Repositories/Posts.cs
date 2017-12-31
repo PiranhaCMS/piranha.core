@@ -91,16 +91,17 @@ namespace Piranha.Tests.Repositories
                 page.Title = "Blog";
                 api.Pages.Save(page);
 
-                api.Categories.Save(new Data.Category() {
+                var category = new Data.Category() {
                     Id = CAT_1_ID,
                     BlogId = BLOG_ID,
                     Title = "My category"
-                });
+                };
+                api.Categories.Save(category);
 
                 var post1 = MyPost.Create(api);
                 post1.Id = POST_1_ID;
                 post1.BlogId = BLOG_ID;
-                post1.CategoryId = CAT_1_ID;
+                post1.Category = category;
                 post1.Title = "My first post";
                 post1.Ingress = "My first ingress";
                 post1.Body = "My first body";
@@ -109,7 +110,7 @@ namespace Piranha.Tests.Repositories
                 var post2 = MyPost.Create(api);
                 post2.Id = POST_2_ID;
                 post2.BlogId = BLOG_ID;
-                post2.CategoryId = CAT_1_ID;
+                post2.Category = category;
                 post2.Title = "My second post";
                 post2.Ingress = "My second ingress";
                 post2.Body = "My second body";
@@ -118,7 +119,7 @@ namespace Piranha.Tests.Repositories
                 var post3 = MyPost.Create(api);
                 post3.Id = POST_3_ID;
                 post3.BlogId = BLOG_ID;
-                post3.CategoryId = CAT_1_ID;
+                post3.Category = category;
                 post3.Title = "My third post";
                 post3.Ingress = "My third ingress";
                 post3.Body = "My third body";
@@ -126,7 +127,7 @@ namespace Piranha.Tests.Repositories
 
                 var post4 = MyCollectionPost.Create(api);
                 post4.BlogId = BLOG_ID;
-                post4.CategoryId = CAT_1_ID;
+                post4.Category = category;
                 post4.Title = "My collection post";
                 post4.Texts.Add(new TextField() {
                     Value = "First text"
@@ -154,6 +155,10 @@ namespace Piranha.Tests.Repositories
                 var category = api.Categories.GetById(CAT_1_ID);
                 if (category != null)
                     api.Categories.Delete(category);
+
+                var tags = api.Tags.GetAll(BLOG_ID);
+                foreach (var tag in tags)
+                    api.Tags.Delete(tag);
 
                 api.Pages.Delete(BLOG_ID);
 
@@ -350,9 +355,10 @@ namespace Piranha.Tests.Repositories
         public void Add() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 var count = api.Posts.GetAll(BLOG_ID).Count();
+                var catCount = api.Categories.GetAll(BLOG_ID).Count();
                 var post = MyPost.Create(api, "MyPost");
                 post.BlogId = BLOG_ID;
-                post.CategoryId = CAT_1_ID;
+                post.Category = "My category";
                 post.Title = "My fourth post";
                 post.Ingress = "My fourth ingress";
                 post.Body = "My fourth body";
@@ -360,6 +366,45 @@ namespace Piranha.Tests.Repositories
                 api.Posts.Save(post);
 
                 Assert.Equal(count + 1, api.Posts.GetAll(BLOG_ID).Count());
+                Assert.Equal(catCount, api.Categories.GetAll(BLOG_ID).Count());
+            }
+        }
+
+        [Fact]
+        public void AddWithTags() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var count = api.Posts.GetAll(BLOG_ID).Count();
+                var catCount = api.Categories.GetAll(BLOG_ID).Count();
+                var tagCount = api.Tags.GetAll(BLOG_ID).Count();
+
+                var post = MyPost.Create(api, "MyPost");
+                post.BlogId = BLOG_ID;
+                post.Category = "My category";
+                post.Tags.Add("Testing", "Trying", "Adding");
+                post.Title = "My fifth post";
+                post.Ingress = "My fifth ingress";
+                post.Body = "My fifth body";
+
+                api.Posts.Save(post);
+
+                Assert.Equal(count + 1, api.Posts.GetAll(BLOG_ID).Count());
+                Assert.Equal(catCount, api.Categories.GetAll(BLOG_ID).Count());
+                Assert.Equal(tagCount + 3, api.Tags.GetAll(BLOG_ID).Count());
+
+                post = api.Posts.GetBySlug<MyPost>(BLOG_ID, Piranha.Utils.GenerateSlug("My fifth post"));
+
+                Assert.NotNull(post);
+                Assert.Equal(3, post.Tags.Count);
+                post.Tags.Add("Another tag");
+
+                api.Posts.Save(post);
+
+                Assert.Equal(tagCount + 4, api.Tags.GetAll(BLOG_ID).Count());
+
+                post = api.Posts.GetBySlug<MyPost>(BLOG_ID, Piranha.Utils.GenerateSlug("My fifth post"));
+
+                Assert.NotNull(post);
+                Assert.Equal(4, post.Tags.Count);
             }
         }
 

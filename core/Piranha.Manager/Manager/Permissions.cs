@@ -30,6 +30,12 @@ namespace Piranha.Manager
         public const string PagesEdit = "PiranhaPagesEdit";
         public const string PagesPublish = "PiranhaPagesPublish";
         public const string PagesSave = "PiranhaPagesSave";
+        public const string Posts = "PiranhaPosts";
+        public const string PostsAdd = "PiranhaPostsAdd";
+        public const string PostsDelete = "PiranhaPostsDelete";
+        public const string PostsEdit = "PiranhaPostsEdit";
+        public const string PostsPublish = "PiranhaPostsPublish";
+        public const string PostsSave = "PiranhaPostsSave";
         public const string Sites = "PiranhaSites";
         public const string SitesAdd = "PiranhaSitesAdd";
         public const string SitesDelete = "PiranhaSitesDelete";
@@ -57,6 +63,12 @@ namespace Piranha.Manager
                 PagesEdit,
                 PagesPublish,
                 PagesSave,
+                Posts,
+                PostsAdd,
+                PostsDelete,
+                PostsEdit,
+                PostsPublish,
+                PostsSave,
                 Sites,
                 SitesAdd,
                 SitesDelete,

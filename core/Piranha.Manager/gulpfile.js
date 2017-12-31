@@ -25,6 +25,7 @@ var paths = {
         "assets/lib/bootstrap-html5sortable/jquery.sortable.js",
         "assets/lib/jquery-nestable/jquery.nestable.js",
         "assets/lib/jquery.ns-autogrow/dist/jquery.ns-autogrow.js",
+        "assets/lib/select2/dist/js/select2.js",
         "assets/js/piranha.media.js",
         "assets/js/ui.js"
     ],

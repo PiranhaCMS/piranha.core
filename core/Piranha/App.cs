@@ -210,10 +210,11 @@ namespace Piranha
                                 .ForMember(p => p.Created, o => o.Ignore());
                             cfg.CreateMap<Data.Post, Models.PostBase>()
                                 .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PostTypeId))
-                                .ForMember(p => p.CategoryName, o => o.MapFrom(m => m.Category.Title))
+                                //.ForMember(p => p.CategoryName, o => o.MapFrom(m => m.Category.Title))
                                 .ForMember(p => p.Permalink, o => o.MapFrom(m => m.Blog.Slug + "/" + m.Slug));
                             cfg.CreateMap<Models.PostBase, Data.Post>()
                                 .ForMember(p => p.PostTypeId, o => o.MapFrom(m => m.TypeId))
+                                .ForMember(p => p.CategoryId, o => o.MapFrom(m => m.Category.Id))
                                 .ForMember(p => p.Fields, o => o.Ignore())
                                 .ForMember(p => p.Created, o => o.Ignore())
                                 .ForMember(p => p.LastModified, o => o.Ignore())

@@ -20,7 +20,7 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
       <group targetFramework=".NETStandard2.0">
         <dependency id="AutoMapper" version="6.2.1" />
         <dependency id="Markdig" version="0.14.6" />
-        <dependency id="Microsoft.EntityFrameworkCore" version="2.0.1" />
+        <dependency id="Microsoft.EntityFrameworkCore.Relational" version="2.0.1" />
         <dependency id="Newtonsoft.Json" version="10.0.3" />
       </group>
     </dependencies>

@@ -47,7 +47,7 @@ namespace Piranha.Repositories
         /// <param name="content">The content entity</param>
         /// <param name="type">The content type</param>
         /// <returns>The page model</returns>
-        protected T Load<T, TModelBase>(TContent content, Models.ContentType type) 
+        protected T Load<T, TModelBase>(TContent content, Models.ContentType type, Action<TContent, T> process = null) 
             where T : Models.RoutedContent, TModelBase
             where TModelBase : Models.RoutedContent
         {
@@ -97,6 +97,8 @@ namespace Piranha.Repositories
                         } while (fieldCount > sortOrder);
                     }
                 }
+                process?.Invoke(content, model);
+
                 return model;
             }
             return null;

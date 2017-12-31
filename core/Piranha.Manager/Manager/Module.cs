@@ -49,6 +49,18 @@ namespace Piranha.Manager
                     .ForMember(m => m.TypeId, o => o.Ignore())
                     .ForMember(m => m.Created, o => o.Ignore())
                     .ForMember(m => m.LastModified, o => o.Ignore());
+                cfg.CreateMap<Models.PostBase, Areas.Manager.Models.PostEditModel>()
+                    .ForMember(m => m.PostType, o => o.Ignore())
+                    .ForMember(m => m.Regions, o => o.Ignore())
+                    .ForMember(m => m.AllCategories, o => o.Ignore())
+                    .ForMember(m => m.AllTags, o => o.Ignore())
+                    .ForMember(m => m.SelectedCategory, o => o.Ignore())
+                    .ForMember(m => m.SelectedTags, o => o.Ignore())
+                    .ForMember(m => m.BlogSlug, o => o.Ignore());
+                cfg.CreateMap<Areas.Manager.Models.PostEditModel, Models.PostBase>()
+                    .ForMember(m => m.TypeId, o => o.Ignore())
+                    .ForMember(m => m.Created, o => o.Ignore())
+                    .ForMember(m => m.LastModified, o => o.Ignore());
             });
 
             config.AssertConfigurationIsValid();

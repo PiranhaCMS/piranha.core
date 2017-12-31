@@ -27,4 +27,10 @@ namespace Piranha.Models
             Archive = new PostArchive();
         }        
     }
+
+    /// <summary>
+    /// Interface for registering the basic blog page 
+    /// content type.
+    /// </summary>
+    public interface IBlogPage {}    
 }

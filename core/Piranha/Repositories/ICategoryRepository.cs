@@ -39,6 +39,14 @@ namespace Piranha.Repositories
         Category GetBySlug(Guid blogId, string slug);
 
         /// <summary>
+        /// Gets the model with the given title
+        /// </summary>
+        /// <param name="blogId">The blog id</param>
+        /// <param name="title">The unique title</param>
+        /// <returns>The model</returns>
+        Category GetByTitle(Guid blogId, string title);
+
+        /// <summary>
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>

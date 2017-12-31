@@ -102,12 +102,12 @@
                 <button class="btn btn-sm btn-secondary pull-right btn-toggle @(n == 0 && !Model.PageContentType.CustomEditor ? "btn-primary" : "")" data-target="#region-@Model.Regions[n].Id">@Model.Regions[n].Title</button>
             }
             @if (Model.PageContentType.CustomEditor) {
-                <button class="btn btn-sm btn-secondary pull-right btn-toggle btn-primary" data-target="#customEditor">@Model.PageContentType.Title</button>
+                <button class="btn btn-sm btn-secondary pull-right btn-toggle btn-primary" data-target="#custom-editor">@Model.PageContentType.Title</button>
             }
             <h3 class="panel-title">Content</h3>
         </div>
         @if (Model.PageContentType.CustomEditor) {
-            <div id="customEditor" class="panel-body">
+            <div id="custom-editor" class="panel-body custom-editor">
                 @Html.EditorFor(m => m, Model.PageContentType.Id)
             </div>
         } 

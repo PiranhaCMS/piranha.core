@@ -174,6 +174,7 @@ namespace Piranha
 
             mb.Entity<Data.PostTag>().ToTable("Piranha_PostTags");
             mb.Entity<Data.PostTag>().HasKey(t => new { t.PostId, t.TagId });
+            mb.Entity<Data.PostTag>().HasOne(t => t.Tag).WithMany().IsRequired().OnDelete(DeleteBehavior.Restrict);
 
             mb.Entity<Data.PostType>().ToTable("Piranha_PostTypes");
             mb.Entity<Data.PostType>().Property(p => p.Id).HasMaxLength(64).IsRequired();
