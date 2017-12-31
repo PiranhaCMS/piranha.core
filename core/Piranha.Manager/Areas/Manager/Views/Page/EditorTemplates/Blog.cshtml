@@ -6,7 +6,7 @@
 }
 <div class="row">
     <div class="col-sm-12 custom-editor-list">
-        <table class="table table-striped table-main">
+        <table id="post-table" class="table table-striped table-main">
             <tbody>
                 @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PostsAdd)).Succeeded) {
                     <tr>
@@ -27,24 +27,34 @@
                                     }
                                 </ul>
                             </div>
+                            <div class="table-filter" data-table="#post-table">
+                                <button class="btn btn-sm btn-primary" data-filter="">All</button>
+                                <button class="btn btn-sm" data-filter="draft">Drafts</button>
+                                <button class="btn btn-sm" data-filter="scheduled">Scheduled</button>
+                            </div>
                         </td>
                     </tr>
                 }
                 @foreach (var post in blogModel.Posts) {
-                    <tr>
+                    var status = "";
+                    if (!post.Published.HasValue) {
+                        status = "draft";
+                    } else if (post.Published.Value > DateTime.Now) {
+                        status = "scheduled";
+                    }
+
+                    <tr class="@status">
                         <td>
                             @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PostsEdit)).Succeeded) {
                                 <a href="@Url.Action("Edit", "Post", new { id = post.Id })">@post.Title</a>
                             } else {
                                 <text>@post.Title</text>                                
                             }
-                            <small class="post-meta">
-                                @if (post.Published.HasValue) {
-                                    <text>Published: @post.Published.Value.ToString("yyyy-MM-dd")</text>
-                                } else {
-                                    <text>Unpublished</text>
-                                }
-                            </small>
+                            @if (post.Published.HasValue) {
+                                <small class="post-meta">
+                                        <text>Published: @post.Published.Value.ToString("yyyy-MM-dd")</text>
+                                </small>
+                            }
                         </td>
                         <td>@post.TypeName</td>
                         <td class="actions one">

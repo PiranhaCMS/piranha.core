@@ -20371,6 +20371,34 @@ $(document).on('click', 'a.confirm-delete, button.confirm-delete', function (e) 
 
 
 //
+// Table filters
+//
+$(document).on('click', '.table-filter button', function (e) {
+    e.preventDefault();
+
+    var data = $(this).data();
+    var table = $(this).parent().data().table;
+
+    $.each($(table).find('tr'), function (i, e) {
+        if (i > 0) {
+            var row = $(e);
+
+            if (data.filter == '') {
+                row.show();
+            } else if (row.hasClass(data.filter)) {
+                row.show();
+            } else {
+                row.hide();
+            }
+        }
+    });
+
+    $(this).parent().find('button').removeClass('btn-primary');
+    $(this).addClass('btn-primary');
+});
+
+
+//
 // Add page
 //
 $(document).on('click', 'a.add-after, a.add-below', function (e) {
