@@ -177,6 +177,39 @@ namespace Piranha.Tests
         }
 
         [Fact]
+        public void DocumentFieldConversionsNullDocument() {
+            var id = Guid.NewGuid();
+
+            Piranha.Extend.Fields.DocumentField field = id;
+            Assert.Equal(id, field.Id.Value);
+
+            string url = field;
+            Assert.Equal("", url);
+        }
+
+        [Fact]
+        public void VideoFieldConversionsNullVideo() {
+            var id = Guid.NewGuid();
+
+            Piranha.Extend.Fields.VideoField field = id;
+            Assert.Equal(id, field.Id.Value);
+
+            string url = field;
+            Assert.Equal("", url);
+        }
+
+        [Fact]
+        public void MediaFieldConversionsNullMedia() {
+            var id = Guid.NewGuid();
+
+            Piranha.Extend.Fields.MediaField field = id;
+            Assert.Equal(id, field.Id.Value);
+
+            string url = field;
+            Assert.Equal("", url);
+        }
+
+        [Fact]
         public void MarkdownFieldConversions() {
             var md = "This is a paragraph";
             var html = Piranha.App.Markdown.Transform(md);

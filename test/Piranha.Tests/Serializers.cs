@@ -118,6 +118,72 @@ namespace Piranha.Tests
         }
 
         [Fact]
+        public void SerializeDocumentField() {
+            var serializer = new DocumentFieldSerializer();
+            var id = Guid.NewGuid();
+
+            var str = serializer.Serialize(new DocumentField() {
+                Id = id
+            });
+
+            Assert.Equal(id.ToString(), str);
+        }
+
+        [Fact]
+        public void DeserializeDocumentField() {
+            var serializer = new DocumentFieldSerializer();
+            var id = Guid.NewGuid();
+
+            var field = (DocumentField)serializer.Deserialize(id.ToString());
+
+            Assert.Equal(id, field.Id.Value);
+        }
+
+        [Fact]
+        public void SerializeVideoField() {
+            var serializer = new VideoFieldSerializer();
+            var id = Guid.NewGuid();
+
+            var str = serializer.Serialize(new VideoField() {
+                Id = id
+            });
+
+            Assert.Equal(id.ToString(), str);
+        }
+
+        [Fact]
+        public void DeserializeVideoField() {
+            var serializer = new VideoFieldSerializer();
+            var id = Guid.NewGuid();
+
+            var field = (VideoField)serializer.Deserialize(id.ToString());
+
+            Assert.Equal(id, field.Id.Value);
+        }
+
+        [Fact]
+        public void SerializeMediaField() {
+            var serializer = new MediaFieldSerializer();
+            var id = Guid.NewGuid();
+
+            var str = serializer.Serialize(new MediaField() {
+                Id = id
+            });
+
+            Assert.Equal(id.ToString(), str);
+        }
+
+        [Fact]
+        public void DeserializeMediaField() {
+            var serializer = new MediaFieldSerializer();
+            var id = Guid.NewGuid();
+
+            var field = (MediaField)serializer.Deserialize(id.ToString());
+
+            Assert.Equal(id, field.Id.Value);
+        }
+
+        [Fact]
         public void WrongInputToImageField() {
             var serializer = new ImageFieldSerializer();
 
