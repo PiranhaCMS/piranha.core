@@ -245,19 +245,25 @@ namespace Piranha
 
                         // Compose field types
                         fields.Register<Extend.Fields.DateField>();
+                        fields.Register<Extend.Fields.DocumentField>();
                         fields.Register<Extend.Fields.HtmlField>();
                         fields.Register<Extend.Fields.ImageField>();
                         fields.Register<Extend.Fields.MarkdownField>();
+                        fields.Register<Extend.Fields.MediaField>();
                         fields.Register<Extend.Fields.StringField>();
                         fields.Register<Extend.Fields.TextField>();
+                        fields.Register<Extend.Fields.VideoField>();
 
                         // Compose serializers
                         serializers.Register<Extend.Fields.DateField>(new DateFieldSerializer());
+                        serializers.Register<Extend.Fields.DocumentField>(new DocumentFieldSerializer());
                         serializers.Register<Extend.Fields.HtmlField>(new StringFieldSerializer<Extend.Fields.HtmlField>());
                         serializers.Register<Extend.Fields.MarkdownField>(new StringFieldSerializer<Extend.Fields.MarkdownField>());
+                        serializers.Register<Extend.Fields.MediaField>(new MediaFieldSerializer());
                         serializers.Register<Extend.Fields.StringField>(new StringFieldSerializer<Extend.Fields.StringField>());
                         serializers.Register<Extend.Fields.TextField>(new StringFieldSerializer<Extend.Fields.TextField>());
                         serializers.Register<Extend.Fields.ImageField>(new ImageFieldSerializer());
+                        serializers.Register<Extend.Fields.VideoField>(new VideoFieldSerializer());
 
                         // Create markdown converter
                         markdown = new DefaultMarkdown();

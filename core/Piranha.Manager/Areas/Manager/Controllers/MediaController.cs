@@ -161,8 +161,17 @@ namespace Piranha.Areas.Manager.Controllers
         }
 
         [Route("/manager/media/modal/{folderId?}")]
-        public IActionResult Modal(Guid? folderId = null) {
-            return View("Modal", Models.MediaListModel.Get(api, folderId));            
+        public IActionResult Modal(Guid? folderId = null, string filter = null) {
+            MediaType? type = null;
+
+            if (filter == "image")
+                type = MediaType.Image;
+            else if (filter == "document")
+                type = MediaType.Document;
+            else if (filter == "video")
+                type = MediaType.Video;
+
+            return View("Modal", Models.MediaListModel.Get(api, folderId, type));            
         }
     }
 }

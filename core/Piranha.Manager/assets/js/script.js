@@ -20110,16 +20110,18 @@ piranha.media = new function() {
     self.mediaId = '';
     self.mediaName = '';
     self.mediaUrlId = '';
+    self.mediaFilter = '';
 
     self.init = function (e) {
         self.mediaId = e.data('mediaid');
         self.mediaName = e.data('medianame');
         self.mediaUrlId = e.data('mediaurlid');
+        self.mediaFilter = e.data('filter');
     };
 
     self.load = function (e, folderId) {
         $.ajax({
-            url: baseUrl + 'manager/media/modal/' + folderId,
+            url: baseUrl + 'manager/media/modal/' + folderId + '?filter=' + self.mediaFilter,
             success: function (data) {
                 $('#modalMedia .modal-body').html(data);
             }
@@ -20154,7 +20156,7 @@ $(document).on('click', '#modalMedia .modal-body a', function () {
     var button = $(this);
 
     if (button.data('type') == 'folder') {
-        piranha.media.load(button, button.data('folderid'));
+        piranha.media.load(button, button.data('folderid'), button.data('filter'));
     } else {
         piranha.media.set(button);
         $('#modalMedia').modal('hide');

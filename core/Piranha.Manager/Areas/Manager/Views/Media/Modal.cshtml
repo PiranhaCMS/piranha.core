@@ -47,7 +47,7 @@
                     <tr>
                         <td>
                             <span class="glyphicon glyphicon-folder-open media-icon"></span>
-                            <a href="#" data-type="folder" data-folderid="@Model.ParentFolderId">...</a>
+                            <a href="#" data-type="folder" data-folderid="@Model.ParentFolderId" data-filter="@Model.Filter.ToString().ToLower()">...</a>
                         </td>
                         <td></td>
                         <td></td>
@@ -58,7 +58,7 @@
                     <tr>
                         <td>
                             <span class="glyphicon glyphicon-folder-open media-icon"></span>
-                            <a href="#" data-type="folder" data-folderid="@folder.Id">@folder.Name</a>
+                            <a href="#" data-type="folder" data-folderid="@folder.Id" data-filter="@Model.Filter.ToString().ToLower()">@folder.Name</a>
                         </td>
                         <td></td>
                         <td></td>
