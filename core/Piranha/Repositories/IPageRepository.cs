@@ -23,6 +23,13 @@ namespace Piranha.Repositories
         IEnumerable<Models.DynamicPage> GetAll(Guid? siteId = null);
 
         /// <summary>
+        /// Gets the available blog pages for the current site.
+        /// </summary>
+        /// <param name="siteId">The optional site id</param>
+        /// <returns>The pages</returns>
+        IEnumerable<Models.DynamicPage> GetAllBlogs(Guid? siteId = null);        
+
+        /// <summary>
         /// Gets the site startpage.
         /// </summary>
         /// <param name="siteId">The optional site id</param>

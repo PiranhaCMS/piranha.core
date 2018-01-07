@@ -132,6 +132,17 @@ namespace Piranha.Areas.Manager.Controllers
                 ErrorMessage("The post could not be deleted");
                 return RedirectToAction("List", "Page", new { id = "" });                
             }
-        }        
+        }
+
+        /// <summary>
+        /// Gets the post modal for the specified blog.
+        /// </summary>
+        /// <param name="siteId">The site id</param>
+        /// <param name="blogId">The blog id</param>
+        [Route("manager/post/modal/{siteId:Guid?}/{blogId:Guid?}")]
+        [Authorize(Policy = Permission.Posts)]
+        public IActionResult Modal(Guid? siteId = null, Guid? blogId = null) {
+            return View(Models.PostModalModel.GetByBlogId(api, siteId, blogId));
+        }  
     }
 }
