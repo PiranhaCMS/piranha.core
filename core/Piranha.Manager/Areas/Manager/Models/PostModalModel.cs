@@ -37,6 +37,9 @@ namespace Piranha.Areas.Manager.Models
 
         public IEnumerable<PostModalItem> Posts { get; set; }
         public IEnumerable<BlogItem> Blogs { get; set; }
+        public Guid SiteId { get; set; }
+        public Guid BlogId { get; set; }
+        public string BlogTitle { get; set; }
 
         public PostModalModel() {
             Posts = new List<PostModalItem>();
@@ -53,6 +56,7 @@ namespace Piranha.Areas.Manager.Models
                 if (site != null)
                     siteId = site.Id;
             }
+            model.SiteId = siteId.Value;
 
             // Get the blogs available
             model.Blogs = api.Pages.GetAllBlogs(siteId.Value)
@@ -64,6 +68,12 @@ namespace Piranha.Areas.Manager.Models
             if (!blogId.HasValue && model.Blogs.Count() > 0) {
                 // Select the first blog
                 blogId = model.Blogs.First().Id;
+            }
+
+            var blog = model.Blogs.FirstOrDefault(b => b.Id == blogId.Value);
+            if (blog != null) {
+                model.BlogId = blog.Id;
+                model.BlogTitle = blog.Title;
             }
 
             // Get the available posts

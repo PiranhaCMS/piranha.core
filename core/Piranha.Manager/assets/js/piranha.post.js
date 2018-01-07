@@ -18,6 +18,7 @@ piranha.post = new function() {
     self.postId = '';
     self.postTitle = '';
     self.siteId = '';
+    self.blogId;
 
     self.init = function (e) {
         self.postId = e.data('postid');
@@ -26,9 +27,14 @@ piranha.post = new function() {
         self.blogId = e.data('blogid');
     };
 
-    self.load = function (e, folderId) {
+    self.load = function (e, site, blog) {
+        if (!site)
+            site = self.siteId;
+        if (!blog)
+            blog = self.blogId;
+
         $.ajax({
-            url: baseUrl + 'manager/post/modal/' + (self.siteId ? '/' + self.siteId + (self.blogId ? '/' + self.blogId : '') : ''),
+            url: baseUrl + 'manager/post/modal' + (site ? '/' + site + (blog ? '/' + blog : '') : ''),
             success: function (data) {
                 $('#modalPost .modal-body').html(data);
             }
@@ -50,19 +56,19 @@ piranha.post = new function() {
 $(document).on('click', '#modalPost .modal-body a', function () {
     var button = $(this);
 
-    //if (button.data('type') == 'folder') {
-    //    piranha.media.load(button, button.data('folderid'), button.data('filter'));
-    //} else {
+    if (button.data('type') == 'reload') {
+        piranha.post.load(button, button.data('siteid'), button.data('blogid'));
+    } else {
         piranha.post.set(button);
-        $('#modalMedia').modal('hide');
-    //}
+        $('#modalPost').modal('hide');
+    }
     return false;
 });
 
 $(document).on('submit', '#modalPost form', function (e) {
     e.preventDefault();
 
-    var form = $('#modalMedia form');
+    var form = $('#modalPost form');
     var formData = new FormData(form.get(0));
 
     $.ajax({
@@ -90,5 +96,5 @@ $(document).on('click', '.btn-post-clear', function () {
 
 $('#modalPost').on('show.bs.modal', function (event) {
     piranha.post.init($(event.relatedTarget));
-    piranha.post.load($(event.relatedTarget), '');
+    piranha.post.load($(event.relatedTarget));
 });

@@ -6,11 +6,24 @@
 
 <div class="row">
     <div class="col-sm-12">
-        <select class="form-control">
-           @foreach (var blog in Model.Blogs) {
-               <option value="@blog.Id">@blog.Title</option>
-           } 
-        </select>
+        <div class="form-group">
+            <div id="btn-postmodal-blogpicker" class="btn-group pull-right">
+                <button type="button" class="btn btn-labeled btn-default" data-toggle="dropdown">
+                    <span class="btn-label">
+                        <i class="glyphicon glyphicon-font"></i>
+                    </span>@Model.BlogTitle
+                </button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                    @foreach (var blog in Model.Blogs) {
+                        <li><a data-type="reload" data-siteid="@Model.SiteId" data-blogid="@blog.Id" href="@Url.Action("Modal", new { siteId = Model.SiteId, blogId = blog.Id })">@blog.Title</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 <div class="row">
