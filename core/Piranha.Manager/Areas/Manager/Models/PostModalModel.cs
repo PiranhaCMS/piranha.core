@@ -65,29 +65,30 @@ namespace Piranha.Areas.Manager.Models
                     Title = p.Title
                 }).OrderBy(p => p.Title).ToList();
 
-            if (!blogId.HasValue && model.Blogs.Count() > 0) {
-                // Select the first blog
-                blogId = model.Blogs.First().Id;
+            if (model.Blogs.Count() > 0) {
+                if (!blogId.HasValue) {
+                    // Select the first blog
+                    blogId = model.Blogs.First().Id;
+                }
+
+                var blog = model.Blogs.FirstOrDefault(b => b.Id == blogId.Value);
+                if (blog != null) {
+                    model.BlogId = blog.Id;
+                    model.BlogTitle = blog.Title;
+                }
+
+                // Get the available posts
+                model.Posts = api.Posts.GetAll(blogId.Value)
+                    .Select(p => new PostModalItem() {
+                        Id = p.Id,
+                        Title = p.Title,
+                        Published = p.Published
+                    }).ToList();
+
+                // Sort so we show unpublished drafts first
+                model.Posts = model.Posts.Where(p => !p.Published.HasValue)
+                    .Concat(model.Posts.Where(p => p.Published.HasValue));
             }
-
-            var blog = model.Blogs.FirstOrDefault(b => b.Id == blogId.Value);
-            if (blog != null) {
-                model.BlogId = blog.Id;
-                model.BlogTitle = blog.Title;
-            }
-
-            // Get the available posts
-            model.Posts = api.Posts.GetAll(blogId.Value)
-                .Select(p => new PostModalItem() {
-                    Id = p.Id,
-                    Title = p.Title,
-                    Published = p.Published
-                }).ToList();
-
-            // Sort so we show unpublished drafts first
-            model.Posts = model.Posts.Where(p => !p.Published.HasValue)
-                .Concat(model.Posts.Where(p => p.Published.HasValue));
-
             return model;
         }
     }
