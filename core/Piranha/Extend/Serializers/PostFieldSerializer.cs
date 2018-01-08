@@ -12,7 +12,7 @@ using System;
 
 namespace Piranha.Extend.Serializers
 {
-    public class MediaFieldSerializer : ISerializer
+    public class PostFieldSerializer : ISerializer
     {        
         /// <summary>
         /// Serializes the given object.
@@ -20,8 +20,8 @@ namespace Piranha.Extend.Serializers
         /// <param name="obj">The object</param>
         /// <returns>The serialized value</returns>
         public string Serialize(object obj) {
-            if (obj is Fields.MediaField) {
-                return ((Fields.MediaField)obj).Id.ToString();
+            if (obj is Fields.PostField) {
+                return ((Fields.PostField)obj).Id.ToString();
             }
             throw new ArgumentException("The given object doesn't match the serialization type");
         }
@@ -32,7 +32,7 @@ namespace Piranha.Extend.Serializers
         /// <param name="str">The serialized value</param>
         /// <returns>The object</returns>
         public object Deserialize(string str) {
-            return new Fields.MediaField() {
+            return new Fields.PostField() {
                 Id = !string.IsNullOrEmpty(str) ? new Guid(str) : (Guid?)null
             };
         }

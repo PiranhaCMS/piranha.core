@@ -210,7 +210,6 @@ namespace Piranha
                                 .ForMember(p => p.Created, o => o.Ignore());
                             cfg.CreateMap<Data.Post, Models.PostBase>()
                                 .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PostTypeId))
-                                //.ForMember(p => p.CategoryName, o => o.MapFrom(m => m.Category.Title))
                                 .ForMember(p => p.Permalink, o => o.MapFrom(m => m.Blog.Slug + "/" + m.Slug));
                             cfg.CreateMap<Models.PostBase, Data.Post>()
                                 .ForMember(p => p.PostTypeId, o => o.MapFrom(m => m.TypeId))
@@ -250,6 +249,7 @@ namespace Piranha
                         fields.Register<Extend.Fields.ImageField>();
                         fields.Register<Extend.Fields.MarkdownField>();
                         fields.Register<Extend.Fields.MediaField>();
+                        fields.Register<Extend.Fields.PostField>();
                         fields.Register<Extend.Fields.StringField>();
                         fields.Register<Extend.Fields.TextField>();
                         fields.Register<Extend.Fields.VideoField>();
@@ -260,6 +260,7 @@ namespace Piranha
                         serializers.Register<Extend.Fields.HtmlField>(new StringFieldSerializer<Extend.Fields.HtmlField>());
                         serializers.Register<Extend.Fields.MarkdownField>(new StringFieldSerializer<Extend.Fields.MarkdownField>());
                         serializers.Register<Extend.Fields.MediaField>(new MediaFieldSerializer());
+                        serializers.Register<Extend.Fields.PostField>(new PostFieldSerializer());
                         serializers.Register<Extend.Fields.StringField>(new StringFieldSerializer<Extend.Fields.StringField>());
                         serializers.Register<Extend.Fields.TextField>(new StringFieldSerializer<Extend.Fields.TextField>());
                         serializers.Register<Extend.Fields.ImageField>(new ImageFieldSerializer());

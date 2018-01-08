@@ -61,6 +61,37 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Gets the available blog pages for the current site.
+        /// </summary>
+        /// <param name="siteId">The optional site id</param>
+        /// <returns>The pages</returns>
+        public IEnumerable<Models.DynamicPage> GetAllBlogs(Guid? siteId = null) {
+            if (!siteId.HasValue) {
+                var site = api.Sites.GetDefault();
+
+                if (site != null)
+                    siteId = site.Id;
+            }
+
+            var pages = db.Pages
+                .AsNoTracking()
+                .Where(p => p.SiteId == siteId && p.ContentType == "Blog")
+                .OrderBy(p => p.ParentId)
+                .ThenBy(p => p.SortOrder)
+                .Select(p => p.Id);
+
+            var models = new List<Models.DynamicPage>();
+
+            foreach (var page in pages) {
+                var model = GetById(page);
+
+                if (model != null)
+                    models.Add(model);
+            }
+            return models;            
+        }          
+
+        /// <summary>
         /// Gets the site startpage.
         /// </summary>
         /// <param name="siteId">The optional site id</param>

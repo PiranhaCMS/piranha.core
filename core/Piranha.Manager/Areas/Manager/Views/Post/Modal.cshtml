@@ -1,0 +1,53 @@
+@model Piranha.Areas.Manager.Models.PostModalModel
+@using Piranha.Models
+@using System.Linq
+@{
+    Layout = null;
+}
+
+@if (Model.Blogs.Count() > 1) {
+    <div class="row">
+        <div class="col-sm-12" style="margin-bottom:15px">
+            <div class="form-group">
+                <div id="btn-postmodal-blogpicker" class="btn-group pull-right">
+                    <button type="button" class="btn btn-labeled btn-default" data-toggle="dropdown">
+                        <span class="btn-label">
+                            <i class="glyphicon glyphicon-font"></i>
+                        </span>@Model.BlogTitle
+                    </button>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                        @foreach (var blog in Model.Blogs) {
+                            <li><a data-type="reload" data-siteid="@Model.SiteId" data-blogid="@blog.Id" href="@Url.Action("Modal", new { siteId = Model.SiteId, blogId = blog.Id })">@blog.Title</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-striped table-main">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th class="date">Published</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var post in Model.Posts) {
+                    <tr>
+                        <td>
+                            <a href="#" data-type="item" data-id="@post.Id" data-title="@post.Title">@post.Title</a>
+                        </td>
+                        <td>@post.Published?.ToString("yyyy-MM-dd")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

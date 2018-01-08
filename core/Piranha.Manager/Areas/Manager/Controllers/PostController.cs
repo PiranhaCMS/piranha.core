@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -20,8 +20,6 @@ namespace Piranha.Areas.Manager.Controllers
     [Area("Manager")]
     public class PostController : ManagerAreaControllerBase
     {
-        private const string COOKIE_SELECTEDSITE = "PiranhaManager_SelectedSite";
-
         /// <summary>
         /// Default constructor.
         /// </summary>
@@ -132,6 +130,17 @@ namespace Piranha.Areas.Manager.Controllers
                 ErrorMessage("The post could not be deleted");
                 return RedirectToAction("List", "Page", new { id = "" });                
             }
-        }        
+        }
+
+        /// <summary>
+        /// Gets the post modal for the specified blog.
+        /// </summary>
+        /// <param name="siteId">The site id</param>
+        /// <param name="blogId">The blog id</param>
+        [Route("manager/post/modal/{siteId:Guid?}/{blogId:Guid?}")]
+        [Authorize(Policy = Permission.Posts)]
+        public IActionResult Modal(Guid? siteId = null, Guid? blogId = null) {
+            return View(Models.PostModalModel.GetByBlogId(api, siteId, blogId));
+        }  
     }
 }
