@@ -3,12 +3,12 @@
   <metadata>
     <id>Piranha.AspNetCore</id>
     <title>Piranha AspNetCore</title>
-    <version>4.1.0-alpha1</version>
+    <version>4.1.0-beta1</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Piranha CMS middleware components for AspNetCore</description>
-    <copyright>Copyright 2017 (c) Håkan Edling</copyright>
+    <copyright>Copyright 2017-2018 (c) Håkan Edling</copyright>
     <tags>cms mvc aspnetcore netstandard</tags>
     <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
     <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
@@ -18,7 +18,7 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework=".NETStandard2.0">
-        <dependency id="Piranha" version="4.1.0-alpha1" />
+        <dependency id="Piranha" version="4.1.0-beta1" />
         <dependency id="Microsoft.AspNetCore.Http" version="2.0.1" />
         <dependency id="Microsoft.AspNetCore.Http.Extensions" version="2.0.1" />
         <dependency id="Microsoft.Extensions.Logging.Abstractions" version="2.0.0" />
