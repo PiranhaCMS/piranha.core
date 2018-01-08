@@ -166,30 +166,31 @@ namespace Piranha.Repositories
         /// <param name="regionId">The region id</param>
         /// <param name="fields">The field</param>
         private void AddComplexValue<T>(T model, string regionId, IList<TField> fields) where T : Models.RoutedContent {
-            if (model is Models.IDynamicModel) {
-                var list = (IList)((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId];
-                var obj = ((Models.IDynamicModel)model).CreateRegion(api, regionId); 
-                    //Models.DynamicPage.CreateRegion(api, model.TypeId, regionId);
+            if (fields.Count > 0) {
+                if (model is Models.IDynamicModel) {
+                    var list = (IList)((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId];
+                    var obj = ((Models.IDynamicModel)model).CreateRegion(api, regionId); 
 
-                foreach (var field in fields) {
-                    if (((IDictionary<string, object>)obj).ContainsKey(field.FieldId)) {
-                        ((IDictionary<string, object>)obj)[field.FieldId] =
-                            DeserializeValue(field);
+                    foreach (var field in fields) {
+                        if (((IDictionary<string, object>)obj).ContainsKey(field.FieldId)) {
+                            ((IDictionary<string, object>)obj)[field.FieldId] =
+                                DeserializeValue(field);
+                        }
                     }
-                }
-                list.Add(obj);
+                    list.Add(obj);
 
-            } else {
-                var list = (IList)model.GetType().GetProperty(regionId, App.PropertyBindings).GetValue(model);
-                var obj = Activator.CreateInstance(list.GetType().GenericTypeArguments.First());
+                } else {
+                    var list = (IList)model.GetType().GetProperty(regionId, App.PropertyBindings).GetValue(model);
+                    var obj = Activator.CreateInstance(list.GetType().GenericTypeArguments.First());
 
-                foreach (var field in fields) {
-                    var prop = obj.GetType().GetProperty(field.FieldId, App.PropertyBindings);
-                    if (prop != null) {
-                        prop.SetValue(obj, DeserializeValue(field));
+                    foreach (var field in fields) {
+                        var prop = obj.GetType().GetProperty(field.FieldId, App.PropertyBindings);
+                        if (prop != null) {
+                            prop.SetValue(obj, DeserializeValue(field));
+                        }
                     }
+                    list.Add(obj);
                 }
-                list.Add(obj);
             }
         }
 

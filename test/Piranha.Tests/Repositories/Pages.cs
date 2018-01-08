@@ -38,6 +38,14 @@ namespace Piranha.Tests.Repositories
         protected ICache cache;
         #endregion
 
+        public class ComplexRegion
+        {
+            [Field]
+            public StringField Title { get; set; }
+            [Field]
+            public TextField Body { get; set; }
+        }
+
         [PageType(Title = "My PageType")]
         public class MyPage : Models.Page<MyPage>
         {
@@ -52,9 +60,12 @@ namespace Piranha.Tests.Repositories
         {
             [Region]
             public IList<TextField> Texts { get; set; }
+            [Region]
+            public IList<ComplexRegion> Teasers { get; set; }
 
             public MyCollectionPage() {
                 Texts = new List<TextField>();
+                Teasers = new List<ComplexRegion>();
             }
         }
 
@@ -258,8 +269,81 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void EmptyCollectionPage() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var page = MyCollectionPage.Create(api);
+
+                Assert.Equal(0, page.Texts.Count);
+
+                page.SiteId = SITE_ID;
+                page.Title = "Another collection page";
+
+                api.Pages.Save(page);
+
+                page = api.Pages.GetBySlug<MyCollectionPage>(Piranha.Utils.GenerateSlug(page.Title), SITE_ID);
+
+                Assert.Equal(0, page.Texts.Count);
+            }
+        }
+
+        [Fact]
+        public void EmptyDynamicCollectionPage() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var page = Piranha.Models.DynamicPage.Create(api, "MyCollectionPage");
+
+                Assert.Equal(0, page.Regions.Texts.Count);
+
+                page.SiteId = SITE_ID;
+                page.Title = "Third collection page";
+
+                api.Pages.Save(page);
+
+                page = api.Pages.GetBySlug(Piranha.Utils.GenerateSlug(page.Title), SITE_ID);
+
+                Assert.Equal(0, page.Regions.Texts.Count);
+            }
+        }
+
+        [Fact]
+        public void EmptyCollectionPageComplex() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var page = MyCollectionPage.Create(api);
+
+                Assert.Equal(0, page.Teasers.Count);
+
+                page.SiteId = SITE_ID;
+                page.Title = "Fourth collection page";
+
+                api.Pages.Save(page);
+
+                page = api.Pages.GetBySlug<MyCollectionPage>(Piranha.Utils.GenerateSlug(page.Title), SITE_ID);
+
+                Assert.Equal(0, page.Teasers.Count);
+            }
+        }
+
+        [Fact]
+        public void EmptyDynamicCollectionPageComplex() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var page = Piranha.Models.DynamicPage.Create(api, "MyCollectionPage");
+
+                Assert.Equal(0, page.Regions.Teasers.Count);
+
+                page.SiteId = SITE_ID;
+                page.Title = "Fifth collection page";
+
+                api.Pages.Save(page);
+
+                page = api.Pages.GetBySlug(Piranha.Utils.GenerateSlug(page.Title), SITE_ID);
+
+                Assert.Equal(0, page.Regions.Teasers.Count);
+            }
+        }
+
+        [Fact]
         public void Add() {
             using (var api = new Api(GetDb(), storage, cache)) {
+                var count = api.Pages.GetAll(SITE_ID).Count();
                 var page = MyPage.Create(api, "MyPage");
                 page.SiteId = SITE_ID;
                 page.Title = "My fourth page";
@@ -268,7 +352,7 @@ namespace Piranha.Tests.Repositories
 
                 api.Pages.Save(page);
 
-                Assert.Equal(5, api.Pages.GetAll(SITE_ID).Count());
+                Assert.Equal(count + 1, api.Pages.GetAll(SITE_ID).Count());
             }
         }
 
