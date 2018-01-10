@@ -32,5 +32,10 @@ namespace Piranha.Areas.Manager.Models
         /// Gets/sets the default number of expanded levels.
         /// </summary>
         public int ExpandedLevels { get; set; }
+
+        /// <summary>
+        /// Gets/sets if the model is readonly for modals.
+        /// </summary>
+        public bool ReadOnly { get; set; }
     }
 }

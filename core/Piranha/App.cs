@@ -240,7 +240,7 @@ namespace Piranha
 
                         // Compose content types
                         contentTypes.Register<Models.IPage>("Page", "Page");
-                        contentTypes.Register<Models.IBlogPage>("Blog", "Blog", true);
+                        contentTypes.Register<Models.IBlogPage>("Blog", "Archive", true);
 
                         // Compose field types
                         fields.Register<Extend.Fields.DateField>();
@@ -249,6 +249,7 @@ namespace Piranha
                         fields.Register<Extend.Fields.ImageField>();
                         fields.Register<Extend.Fields.MarkdownField>();
                         fields.Register<Extend.Fields.MediaField>();
+                        fields.Register<Extend.Fields.PageField>();
                         fields.Register<Extend.Fields.PostField>();
                         fields.Register<Extend.Fields.StringField>();
                         fields.Register<Extend.Fields.TextField>();
@@ -260,6 +261,7 @@ namespace Piranha
                         serializers.Register<Extend.Fields.HtmlField>(new StringFieldSerializer<Extend.Fields.HtmlField>());
                         serializers.Register<Extend.Fields.MarkdownField>(new StringFieldSerializer<Extend.Fields.MarkdownField>());
                         serializers.Register<Extend.Fields.MediaField>(new MediaFieldSerializer());
+                        serializers.Register<Extend.Fields.PageField>(new PageFieldSerializer());                        
                         serializers.Register<Extend.Fields.PostField>(new PostFieldSerializer());
                         serializers.Register<Extend.Fields.StringField>(new StringFieldSerializer<Extend.Fields.StringField>());
                         serializers.Register<Extend.Fields.TextField>(new StringFieldSerializer<Extend.Fields.TextField>());

@@ -221,6 +221,17 @@ namespace Piranha.Areas.Manager.Controllers
             return new NotFoundResult();
         }
 
+        /// <summary>
+        /// Gets the page modal for the specified site.
+        /// </summary>
+        /// <param name="siteId">The site id</param>
+        [Route("manager/page/modal/{siteId:Guid?}")]
+        [Authorize(Policy = Permission.Pages)]
+        public IActionResult Modal(Guid? siteId = null) {
+            return View(Models.PageModalModel.GetBySiteId(api, siteId));
+        }  
+        
+
         #region Private methods
         private bool MovePage(Models.PageStructureModel.PageStructureItem page, int sortOrder = 1, Guid? parentId = null) {
             var model = api.Pages.GetById(new Guid(page.Id));

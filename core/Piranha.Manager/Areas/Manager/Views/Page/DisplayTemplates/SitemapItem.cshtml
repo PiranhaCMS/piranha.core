@@ -15,21 +15,23 @@
             <span class="glyphicon glyphicon-minus-sign"></span>
         }
     </div>
-    <div class="actions three pull-right">
-        @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesAdd)).Succeeded) {
-            <a class="add-after first" href="@Url.Action("AddAt", new { type = "pageType", parentId = item.ParentId, sortOrder = item.SortOrder + 1 })" data-toggle="tooltip" data-original-title="Add after" data-placement="top">
-                <span class="glyphicon glyphicon-chevron-down"></span>
-            </a>
-            <a class="add-below" href="@Url.Action("AddAt", new { type = "pageType", parentId = item.Id, sortOrder = 0 })" data-toggle="tooltip" data-original-title="Add below" data-placement="top" data-parentid="@item.Id" data-sortorder="0">
-                <span class="glyphicon glyphicon-chevron-right"></span>
-            </a>
-        }
-        @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesDelete)).Succeeded) {
-            <a class="remove last confirm-delete" href="@Url.Action("Delete", new { id = item.Id })" data-toggle="tooltip" data-original-title="Delete" data-placement="top" data-message="Are you sure you want to delete the page?">
-                <span class="glyphicon glyphicon-trash text-danger"></span>
-            </a>
-        }
-    </div>
+    @if (!Model.ReadOnly) {
+        <div class="actions three pull-right">
+            @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesAdd)).Succeeded) {
+                <a class="add-after first" href="@Url.Action("AddAt", new { type = "pageType", parentId = item.ParentId, sortOrder = item.SortOrder + 1 })" data-toggle="tooltip" data-original-title="Add after" data-placement="top">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </a>
+                <a class="add-below" href="@Url.Action("AddAt", new { type = "pageType", parentId = item.Id, sortOrder = 0 })" data-toggle="tooltip" data-original-title="Add below" data-placement="top" data-parentid="@item.Id" data-sortorder="0">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            }
+            @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesDelete)).Succeeded) {
+                <a class="remove last confirm-delete" href="@Url.Action("Delete", new { id = item.Id })" data-toggle="tooltip" data-original-title="Delete" data-placement="top" data-message="Are you sure you want to delete the page?">
+                    <span class="glyphicon glyphicon-trash text-danger"></span>
+                </a>
+            }
+        </div>
+    }
     <div class="date pull-right">
         @item.Created.ToString("yyyy-MM-dd")
     </div>
@@ -38,7 +40,7 @@
     </div>
     <div class="content">
         @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesEdit)).Succeeded) {
-            <a href="@Url.Action("Edit", "Page", new { id = item.Id })" data-id="@item.Id">@(item.NavigationTitle != null ? item.NavigationTitle : item.Title)</a>
+            <a href="@Url.Action("Edit", "Page", new { id = item.Id })" data-id="@item.Id" data-title="@(item.NavigationTitle != null ? item.NavigationTitle : item.Title)">@(item.NavigationTitle != null ? item.NavigationTitle : item.Title)</a>
         } else {
             <span class="title">@(item.NavigationTitle != null ? item.NavigationTitle : item.Title)</span>
         }

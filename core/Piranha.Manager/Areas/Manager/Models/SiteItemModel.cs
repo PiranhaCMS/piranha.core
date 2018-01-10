@@ -35,6 +35,11 @@ namespace Piranha.Areas.Manager.Models
         /// <summary>
         /// Gets/sets the current level
         /// </summary>
-        public int CurrentLevel { get; set; }  
+        public int CurrentLevel { get; set; }
+
+        /// <summary>
+        /// Gets/sets if the model is readonly for modals.
+        /// </summary>
+        public bool ReadOnly { get; set; }
     }    
 }

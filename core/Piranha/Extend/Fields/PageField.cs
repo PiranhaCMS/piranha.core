@@ -13,8 +13,8 @@ using System;
 
 namespace Piranha.Extend.Fields
 {
-    [Field(Name = "Post", Shorthand = "Post")]
-    public class PostField : IField
+    [Field(Name = "Page", Shorthand = "Page")]
+    public class PageField : IField
     {
         /// <summary>
         /// Gets/sets the media id.
@@ -23,16 +23,16 @@ namespace Piranha.Extend.Fields
         public Guid? Id { get; set; }
 
         /// <summary>
-        /// Gets/sets the related post object.
+        /// Gets/sets the related page object.
         /// </summary>
         [JsonIgnore]
-        public Models.DynamicPost Post { get; private set; }
+        public Models.DynamicPage Page { get; private set; }
 
         /// <summary>
-        /// Gets if the field has a post object available.
+        /// Gets if the field has a page object available.
         /// </summary>
         public bool HasValue {
-            get { return Post != null; }
+            get { return Page != null; }
         }
 
         /// <summary>
@@ -40,8 +40,8 @@ namespace Piranha.Extend.Fields
         /// a collection regions.
         /// </summary>
         public virtual string GetTitle() {
-            if (Post != null)
-                return Post.Title;
+            if (Page != null)
+                return Page.Title;
             return null;
         }
 
@@ -51,10 +51,10 @@ namespace Piranha.Extend.Fields
         /// <param name="api">The current api</param>
         public virtual void Init(IApi api) { 
             if (Id.HasValue) {
-                Post = api.Posts.GetById(Id.Value);
+                Page = api.Pages.GetById(Id.Value);
 
-                if (Post == null) {
-                    // The post has been removed, remove the
+                if (Page == null) {
+                    // The page has been removed, remove the
                     // missing id.
                     Id = null;
                 }
@@ -72,30 +72,30 @@ namespace Piranha.Extend.Fields
         }
 
         /// <summary>
-        /// Gets the referenced post.
+        /// Gets the referenced page.
         /// </summary>
         /// <param name="api">The current api</param>
-        /// <returns>The referenced post</returns>
-        public virtual T GetPost<T>(IApi api) where T : Models.Post<T> {
+        /// <returns>The referenced page</returns>
+        public virtual T GetPage<T>(IApi api) where T : Models.GenericPage<T> {
             if (Id.HasValue)
-                return api.Posts.GetById<T>(Id.Value);
+                return api.Pages.GetById<T>(Id.Value);
             return null;
-        }
+        }        
 
         /// <summary>
         /// Implicit operator for converting a Guid id to a field.
         /// </summary>
         /// <param name="str">The string value</param>
-        public static implicit operator PostField(Guid guid) {
-            return new PostField() { Id = guid };
+        public static implicit operator PageField(Guid guid) {
+            return new PageField() { Id = guid };
         }
 
         /// <summary>
-        /// Implicit operator for converting a post object to a field.
+        /// Implicit operator for converting a page object to a field.
         /// </summary>
-        /// <param name="post">The post object</param>
-        public static implicit operator PostField(Models.PostBase post) {
-            return new PostField() { Id = post.Id };
+        /// <param name="page">The page object</param>
+        public static implicit operator PageField(Models.PageBase page) {
+            return new PageField() { Id = page.Id };
         }
     }
 }
