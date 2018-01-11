@@ -26,7 +26,7 @@
                 </a>
             }
             @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesDelete)).Succeeded) {
-                <a class="remove last confirm-delete" href="@Url.Action("Delete", new { id = item.Id })" data-toggle="tooltip" data-original-title="Delete" data-placement="top" data-message="Are you sure you want to delete the page?">
+                <a class="remove last confirm-delete" href="@Url.Action("Delete", new { id = item.Id })" @(item.Items.Count > 0 ? "style=visibility:hidden" : "") data-toggle="tooltip" data-original-title="Delete" data-placement="top" data-message="Are you sure you want to delete the page?">
                     <span class="glyphicon glyphicon-trash text-danger"></span>
                 </a>
             }
