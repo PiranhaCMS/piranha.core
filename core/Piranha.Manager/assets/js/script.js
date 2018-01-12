@@ -20261,6 +20261,7 @@ piranha.page = new function() {
     self.pageId = '';
     self.pageTitle = '';
     self.siteId = '';
+    self.pageUrlId = '';
 
     self.init = function (e) {
         self.pageId = e.data('pageid');
@@ -20281,9 +20282,13 @@ piranha.page = new function() {
     };
 
     self.set = function (e) {
-        if (self.pageId)
-            $('#' + self.pageId).val(e.data('id'));
-        $('#' + self.pageTitle).text(e.data('title'));
+        if (self.pageUrlId) {
+            $('#' + self.pageUrlId).val(e.data('url'));
+        } else {
+            if (self.pageId)
+                $('#' + self.pageId).val(e.data('id'));
+            $('#' + self.pageTitle).text(e.data('title'));
+        }
     };
 
     self.remove = function (e) {
@@ -20359,6 +20364,7 @@ piranha.post = new function() {
     self.postTitle = '';
     self.siteId = '';
     self.blogId;
+    self.postUrlId = '';
 
     self.init = function (e) {
         self.postId = e.data('postid');
@@ -20382,9 +20388,13 @@ piranha.post = new function() {
     };
 
     self.set = function (e) {
-        if (self.postId)
-            $('#' + self.postId).val(e.data('id'));
-        $('#' + self.postTitle).text(e.data('title'));
+        if (self.postUrlId) {
+            $('#' + self.postUrlId).val(e.data('url'));
+        } else {
+            if (self.postId)
+                $('#' + self.postId).val(e.data('id'));
+            $('#' + self.postTitle).text(e.data('title'));
+        }
     };
 
     self.remove = function (e) {

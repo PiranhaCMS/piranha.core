@@ -26,6 +26,7 @@ namespace Piranha.Areas.Manager.Models
         {
             public Guid Id { get; set; }
             public string Title { get; set; }
+            public string Permalink { get; set; }
             public DateTime? Published { get; set; }
         }
 
@@ -33,6 +34,7 @@ namespace Piranha.Areas.Manager.Models
         {
             public Guid Id { get; set; }
             public string Title { get; set; }
+            public string Slug { get; set; }
         }
 
         public IEnumerable<PostModalItem> Posts { get; set; }
@@ -40,6 +42,7 @@ namespace Piranha.Areas.Manager.Models
         public Guid SiteId { get; set; }
         public Guid BlogId { get; set; }
         public string BlogTitle { get; set; }
+        public string BlogSlug { get; set; }
 
         public PostModalModel() {
             Posts = new List<PostModalItem>();
@@ -62,7 +65,8 @@ namespace Piranha.Areas.Manager.Models
             model.Blogs = api.Pages.GetAllBlogs(siteId.Value)
                 .Select(p => new BlogItem() {
                     Id = p.Id,
-                    Title = p.Title
+                    Title = p.Title,
+                    Slug = p.Slug
                 }).OrderBy(p => p.Title).ToList();
 
             if (model.Blogs.Count() > 0) {
@@ -75,6 +79,7 @@ namespace Piranha.Areas.Manager.Models
                 if (blog != null) {
                     model.BlogId = blog.Id;
                     model.BlogTitle = blog.Title;
+                    model.BlogSlug = blog.Slug;
                 }
 
                 // Get the available posts
@@ -82,6 +87,7 @@ namespace Piranha.Areas.Manager.Models
                     .Select(p => new PostModalItem() {
                         Id = p.Id,
                         Title = p.Title,
+                        Permalink = "/" + model.BlogSlug + "/" + p.Slug,
                         Published = p.Published
                     }).ToList();
 

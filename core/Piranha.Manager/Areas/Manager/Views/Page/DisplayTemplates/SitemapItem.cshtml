@@ -40,7 +40,7 @@
     </div>
     <div class="content">
         @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesEdit)).Succeeded) {
-            <a href="@Url.Action("Edit", "Page", new { id = item.Id })" data-id="@item.Id" data-title="@(item.NavigationTitle != null ? item.NavigationTitle : item.Title)">@(item.NavigationTitle != null ? item.NavigationTitle : item.Title)</a>
+            <a href="@Url.Action("Edit", "Page", new { id = item.Id })" data-id="@item.Id" data-title="@(item.NavigationTitle != null ? item.NavigationTitle : item.Title)" data-url="@item.Permalink">@(item.NavigationTitle != null ? item.NavigationTitle : item.Title)</a>
         } else {
             <span class="title">@(item.NavigationTitle != null ? item.NavigationTitle : item.Title)</span>
         }

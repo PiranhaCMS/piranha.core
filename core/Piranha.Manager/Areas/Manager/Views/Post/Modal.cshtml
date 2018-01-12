@@ -43,7 +43,7 @@
                     @foreach (var post in Model.Posts) {
                         <tr>
                             <td>
-                                <a href="#" data-type="item" data-id="@post.Id" data-title="@post.Title">@post.Title</a>
+                                <a href="#" data-type="item" data-id="@post.Id" data-title="@post.Title" data-url="@post.Permalink">@post.Title</a>
                             </td>
                             <td>@post.Published?.ToString("yyyy-MM-dd")</td>
                         </tr>

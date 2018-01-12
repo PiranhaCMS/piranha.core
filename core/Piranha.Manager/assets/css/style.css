@@ -9494,6 +9494,9 @@ li.sitemap-item .actions.one {
   -webkit-transition: all ease-in-out 0.4s;
   -o-transition: all ease-in-out 0.4s;
 }
+.modal {
+  z-index: 70000;
+}
 .modal .modal-body {
   background: #f2f2f2;
 }
