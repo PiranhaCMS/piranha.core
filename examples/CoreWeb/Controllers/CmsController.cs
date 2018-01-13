@@ -39,9 +39,10 @@ namespace CoreWeb.Controllers
         /// <param name="year">The optional year</param>
         /// <param name="month">The optional month</param>
         /// <param name="page">The optional page</param>
+        /// <param name="category">The optional category id</param>
         [Route("archive")]
-        public IActionResult Archive(Guid id, int? year = null, int? month = null, int? page = null) {
-            var model = api.Archives.GetById<Models.StandardBlog>(id, page, year, month);
+        public IActionResult Archive(Guid id, int? year = null, int? month = null, int? page = null, Guid? category = null) {
+            var model = api.Archives.GetById<Models.StandardBlog>(id, page, category, year, month);
             ViewBag.CurrentPage = model.Id;
 
             return View(model);
