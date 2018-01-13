@@ -9316,7 +9316,7 @@ li.sitemap-item .actions.one {
 .select2-container--default .select2-selection--multiple {
   border-radius: 0;
   border-color: #ddd;
-  height: 34px;
+  min-height: 34px;
 }
 .select2-container--default .select2-selection--single {
   padding: 2px 4px;
