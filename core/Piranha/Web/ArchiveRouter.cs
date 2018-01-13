@@ -41,12 +41,28 @@ namespace Piranha.Web
                         int? page = null;
                         int? year = null;
                         int? month = null;
+                        Guid? categoryId = null;
+                        bool foundCategory = false;
                         bool foundPage = false;
 
                         for (var n = 1; n < segments.Length; n++) {
+                            if (segments[n] == "category" && !foundPage) {
+                                foundCategory = true;
+                                continue;
+                            }
+
                             if (segments[n] == "page") {
                                 foundPage = true;
                                 continue;
+                            }
+
+                            if (foundCategory) {
+                                try {
+                                    categoryId = api.Categories.GetBySlug(blog.Id, segments[n])?.Id;
+                                } catch { 
+                                } finally {
+                                    foundCategory = false;
+                                }
                             }
 
                             if (foundPage) {
@@ -72,7 +88,7 @@ namespace Piranha.Web
 
                         return new RouteResponse() {
                             Route = route,
-                            QueryString = $"id={blog.Id}&year={year}&month={month}&page={page}&piranha_handled=true",
+                            QueryString = $"id={blog.Id}&year={year}&month={month}&page={page}&category={categoryId}&piranha_handled=true",
                             IsPublished = true
                         };                            
                     }

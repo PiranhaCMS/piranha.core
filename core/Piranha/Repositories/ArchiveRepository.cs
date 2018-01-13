@@ -48,10 +48,11 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique blog id</param>
         /// <param name="page">The optional page</param>
+        /// <param name="categoryId">The optional category id</param>
         /// <param name="year">The optional year</param>
         /// <param name="month">The optional month</param>
         /// <returns>The archive model</returns>
-        public T GetById<T>(Guid id, int? page = 1, int? year = null, int? month = null) where T : Models.BlogPage<T> {
+        public T GetById<T>(Guid id, int? page = 1, Guid? categoryId = null, int? year = null, int? month = null) where T : Models.BlogPage<T> {
             // Get the requested blog page
             var model = api.Pages.GetById<T>(id);
 
@@ -68,6 +69,10 @@ namespace Piranha.Repositories
                 var now = DateTime.Now;
                 var query = db.Posts
                     .Where(p => p.BlogId == id && p.Published <= now);
+
+                if (categoryId.HasValue) {
+                    query = query.Where(p => p.CategoryId == categoryId.Value);
+                }
 
                 if (year.HasValue) {
                     DateTime from;
@@ -108,16 +113,17 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="slug">The unique category slug</param>
         /// <param name="page">The optional page</param>
+        /// <param name="categoryId">The optional category id</param>
         /// <param name="year">The optional year</param>
         /// <param name="month">The optional month</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The archive model</returns>
-        public T GetBySlug<T>(string slug, int? page = 1, int? year = null, int? month = null, Guid? siteId = null) where T : Models.BlogPage<T> {
+        public T GetBySlug<T>(string slug, int? page = 1, Guid? categoryId = null, int? year = null, int? month = null, Guid? siteId = null) where T : Models.BlogPage<T> {
             // Get the id of the blog page with the given type
             var blogId = api.Pages.GetIdBySlug(slug, siteId);
 
             if (blogId.HasValue)
-                return GetById<T>(blogId.Value, page, year, month);
+                return GetById<T>(blogId.Value, page, categoryId, year, month);
             return null;
         }
     }
