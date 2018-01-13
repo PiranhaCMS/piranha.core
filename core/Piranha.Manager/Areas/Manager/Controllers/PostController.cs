@@ -85,6 +85,17 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/post/publish")]
         [Authorize(Policy = Permission.PostsPublish)]
         public IActionResult Publish(Models.PostEditModel model) {
+            // Validate
+            if (string.IsNullOrWhiteSpace(model.Title)) {
+                ErrorMessage("The post could not be saved. Title is mandatory", false);
+                return View("Edit", model.Refresh(api));
+            }
+            if (string.IsNullOrWhiteSpace(model.SelectedCategory)) {
+                ErrorMessage("The post could not be saved. Category is mandatory", false);
+                return View("Edit", model.Refresh(api));
+            }
+
+            // Save
             if (model.Save(api, true)) {
                 SuccessMessage("The post has been published.");
                 return RedirectToAction("Edit", "Page", new { id = model.BlogId });

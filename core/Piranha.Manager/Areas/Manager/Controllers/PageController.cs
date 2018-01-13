@@ -135,6 +135,13 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/page/publish")]
         [Authorize(Policy = Permission.PagesPublish)]
         public IActionResult Publish(Models.PageEditModel model) {
+            // Validate
+            if (string.IsNullOrWhiteSpace(model.Title)) {
+                ErrorMessage("The page could not be saved. Title is mandatory", false);
+                return View("Edit", model.Refresh(api));                
+            }
+
+            // Save
             if (model.Save(api, true)) {
                 SuccessMessage("The page has been published.");
                 return RedirectToAction("Edit", new { id = model.Id });
