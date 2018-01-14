@@ -60,6 +60,16 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    @Html.LabelFor(m => m.General.ArchivePageSize, "Archive page size")
+                    <blockquote>
+                        The default page size for Blog Page archive. Please note that this this
+                        can be overridden for specific archives.
+                    </blockquote>
+                    @Html.TextBoxFor(m => m.General.ArchivePageSize, new { @class = "form-control", type = "number" })
+                </div>
+            </div>
         </div>
     </div>
 

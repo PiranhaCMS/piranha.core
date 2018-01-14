@@ -201,7 +201,17 @@ namespace Piranha
             //
             // Params
             //
-            var param = Params.FirstOrDefault(p => p.Key == Config.CACHE_EXPIRES_PAGES);
+            var param = Params.FirstOrDefault(p => p.Key == Config.ARCHIVE_PAGE_SIZE);
+            if (param == null)
+                Params.Add(new Data.Param() {
+                    Id = Guid.NewGuid(),
+                    Key = Config.ARCHIVE_PAGE_SIZE,
+                    Value = 5.ToString(),
+                    Created = DateTime.Now,
+                    LastModified = DateTime.Now
+                });
+
+            param = Params.FirstOrDefault(p => p.Key == Config.CACHE_EXPIRES_PAGES);
             if (param == null)
                 Params.Add(new Data.Param() {
                     Id = Guid.NewGuid(),

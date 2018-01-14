@@ -23,8 +23,9 @@ namespace Piranha.Repositories
         /// <param name="categoryId">The optional category id</param>
         /// <param name="year">The optional year</param>
         /// <param name="month">The optional month</param>
+        /// <param name="pageSize">The optional page size</param>
         /// <returns>The archive model</returns>
-        T GetById<T>(Guid id, int? page = 1, Guid? categoryId = null, int? year = null, int? month = null) where T : BlogPage<T>;
+        T GetById<T>(Guid id, int? page = 1, Guid? categoryId = null, int? year = null, int? month = null, int? pageSize = null) where T : BlogPage<T>;
 
         /// <summary>
         /// Gets the post archive for the blog with the given slug.
@@ -35,7 +36,8 @@ namespace Piranha.Repositories
         /// <param name="year">The optional year</param>
         /// <param name="month">The optional month</param>
         /// <param name="siteId">The optional site id</param>
+        /// <param name="pageSize">The optional page size</param>
         /// <returns>The archive model</returns>
-        T GetBySlug<T>(string slug, int? page = 1, Guid? categoryId = null, int? year = null, int? month = null, Guid? siteId = null) where T : BlogPage<T>;
+        T GetBySlug<T>(string slug, int? page = 1, Guid? categoryId = null, int? year = null, int? month = null, Guid? siteId = null, int? pageSize = null) where T : BlogPage<T>;
     }
 }

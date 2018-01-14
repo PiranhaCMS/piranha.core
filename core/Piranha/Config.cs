@@ -26,6 +26,7 @@ namespace Piranha
         /// <summary>
         /// The system config keys.
         /// </summary>
+        public static readonly string ARCHIVE_PAGE_SIZE = "ArchivePageSize";
         public static readonly string CACHE_EXPIRES_PAGES = "CacheExpiresPages";
         public static readonly string CACHE_EXPIRES_POSTS = "CacheExpiresPosts";
         public static readonly string PAGES_HIERARCHICAL_SLUGS = "HierarchicalPageSlugs";
@@ -33,6 +34,29 @@ namespace Piranha
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets/sets the currently configured archive page size.
+        /// </summary>
+        public int ArchivePageSize {
+            get
+            {
+                var param = api.Params.GetByKey(ARCHIVE_PAGE_SIZE);
+                if (param != null)
+                    return Convert.ToInt32(param.Value);
+                return 0;
+            }
+            set {
+                var param = api.Params.GetByKey(ARCHIVE_PAGE_SIZE);
+                if (param == null) {
+                    param = new Data.Param() {
+                        Key = ARCHIVE_PAGE_SIZE
+                    };
+                }
+                param.Value = value.ToString();
+                api.Params.Save(param);
+            }
+        }
+
         /// <summary>
         /// Gets/sets the currently configured cache expiration
         /// in minutes for pages.

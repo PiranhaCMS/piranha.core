@@ -34,6 +34,11 @@ namespace Piranha.Areas.Manager.Models
         public class GeneralConfig
         {
             /// <summary>
+            /// Gets/sets the archive page size.
+            /// </summary>
+            public int ArchivePageSize { get; set; }
+
+            /// <summary>
             /// Gets/sets if hierarchical slugs should be used.
             /// </summary>
             public bool HierarchicalPageSlugs { get; set; }
@@ -74,6 +79,7 @@ namespace Piranha.Areas.Manager.Models
                 model.Cache.PagesExpires = config.CacheExpiresPages;
                 model.Cache.PostsExpires = config.CacheExpiresPosts;
 
+                model.General.ArchivePageSize = config.ArchivePageSize;
                 model.General.HierarchicalPageSlugs = config.HierarchicalPageSlugs;
                 model.General.ExpandedSitemapLevels = config.ManagerExpandedSitemapLevels;
             }
@@ -88,6 +94,7 @@ namespace Piranha.Areas.Manager.Models
             using (var config = new Config(api)) {
                 config.CacheExpiresPages = Cache.PagesExpires;
                 config.CacheExpiresPosts = Cache.PostsExpires;
+                config.ArchivePageSize = General.ArchivePageSize;
                 config.HierarchicalPageSlugs = General.HierarchicalPageSlugs;
                 config.ManagerExpandedSitemapLevels = General.ExpandedSitemapLevels;
             }
