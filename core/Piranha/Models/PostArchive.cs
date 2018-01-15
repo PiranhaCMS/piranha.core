@@ -37,6 +37,16 @@ namespace Piranha.Models
         public int TotalPages { get; set; }
 
         /// <summary>
+        /// Gets/sets the total number of posts available.
+        /// </summary>
+        public int TotalPosts { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optionally selected category.
+        /// </summary>
+        public Taxonomy Category { get; set; }
+
+        /// <summary>
         /// Gets/sets the available posts.
         /// </summary>
         public IList<DynamicPost> Posts { get; set; }
