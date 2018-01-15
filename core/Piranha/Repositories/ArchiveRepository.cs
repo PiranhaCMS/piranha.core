@@ -67,6 +67,8 @@ namespace Piranha.Repositories
                     .Where(p => p.BlogId == id && p.Published <= now);
 
                 if (categoryId.HasValue) {
+                    model.Archive.Category = api.Categories.GetById(categoryId.Value);
+                    
                     query = query.Where(p => p.CategoryId == categoryId.Value);
                 }
 
@@ -95,7 +97,8 @@ namespace Piranha.Repositories
                 }
 
                 // Get the total page count for the archive
-                model.Archive.TotalPages = Math.Max(Convert.ToInt32(Math.Ceiling((double)query.Count() / pageSize.Value)), 1);
+                model.Archive.TotalPosts = query.Count();
+                model.Archive.TotalPages = Math.Max(Convert.ToInt32(Math.Ceiling((double)model.Archive.TotalPosts / pageSize.Value)), 1);
                 model.Archive.CurrentPage = Math.Min(model.Archive.CurrentPage, model.Archive.TotalPages);
 
                 // Get the posts
