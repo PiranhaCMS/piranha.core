@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -44,12 +44,14 @@ namespace Piranha.Repositories
             if (id.HasValue) {
                 model = GetById(id.Value);
             } else {
-                model = db.Sites
+                id = db.Sites
                     .AsNoTracking()
-                    .FirstOrDefault(s => s.InternalId == internalId);
+                    .Where(s => s.InternalId == internalId)
+                    .Select(s => s.Id)
+                    .FirstOrDefault();
 
-                if (cache != null && model != null)
-                    AddToCache(model);
+                if (id != Guid.Empty)
+                    model = GetById(id.Value);
             }
             return model;
         }
@@ -60,9 +62,15 @@ namespace Piranha.Repositories
         /// <param name="hostname">The hostname</param>
         /// <returns>The model</returns>
         public Site GetByHostname(string hostname) {
-            return db.Sites
+            var id = db.Sites
                 .AsNoTracking()
-                .FirstOrDefault(s => s.Hostnames.Contains(hostname));
+                .Where(s => s.Hostnames.Contains(hostname))
+                .Select(s => s.Id)
+                .FirstOrDefault();
+
+            if (id != Guid.Empty)
+                return GetById(id);
+            return null;
         }        
 
         /// <summary>
@@ -73,12 +81,14 @@ namespace Piranha.Repositories
             Site model = cache != null ? cache.Get<Site>($"Site_{Guid.Empty}") : null;
 
             if (model == null) {
-                model = db.Sites
+                var id = db.Sites
                     .AsNoTracking()
-                    .FirstOrDefault(s => s.IsDefault);
+                    .Where(s => s.IsDefault)
+                    .Select(s => s.Id)
+                    .FirstOrDefault();
 
-                if (cache != null && model != null)
-                    AddToCache(model);
+                if (id != Guid.Empty)
+                    model = GetById(id);
             }
             return model;
         }

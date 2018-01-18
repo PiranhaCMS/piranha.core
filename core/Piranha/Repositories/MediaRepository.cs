@@ -20,7 +20,8 @@ namespace Piranha.Repositories
     {
         private readonly IDb db;
         private readonly IStorage storage;
-        private readonly ICache cache;        
+        private readonly ICache cache;
+        private const string MEDIA_STRUCTURE = "MediaStructure";
 
         /// <summary>
         /// Default constructor.
@@ -40,16 +41,18 @@ namespace Piranha.Repositories
         /// <param name="folderId">The optional folder id</param>
         /// <returns>The available media</returns>
         public IEnumerable<Media> GetAll(Guid? folderId = null) {
-            IEnumerable<Media> models;
+            List<Media> models = new List<Media>();
 
-            models = db.Media
+            var media = db.Media
                 .AsNoTracking()
                 .Where(m => m.FolderId == folderId)
                 .OrderBy(m => m.Filename)
-                .ToList();
+                .Select(m => m.Id);
 
-            foreach (var model in models) {
-                model.PublicUrl = storage.GetPublicUrl(model);
+            foreach (var id in media) {
+                var model = GetById(id);
+                if (model != null) 
+                    models.Add(model);
             }
             return models;
         }
@@ -61,11 +64,20 @@ namespace Piranha.Repositories
         /// <param name="folderId">The optional folder id</param>
         /// <returns>The available media folders</returns>
         public IEnumerable<MediaFolder> GetAllFolders(Guid? folderId = null) {
-            return db.MediaFolders
+            List<MediaFolder> models = new List<MediaFolder>();
+
+            var folders = db.MediaFolders
                 .AsNoTracking()
                 .Where(f => f.ParentId == folderId)
                 .OrderBy(f => f.Name)
-                .ToList();
+                .Select(f => f.Id);
+
+            foreach (var id in folders) {
+                var model = GetFolderById(id);
+                if (model != null) 
+                    models.Add(model);
+            }
+            return models;
         }
 
         /// <summary>
@@ -84,8 +96,10 @@ namespace Piranha.Repositories
                 if (model != null)
                     model.PublicUrl = storage.GetPublicUrl(model);
 
-                if (cache != null && model != null)
-                    cache.Set(model.Id.ToString(), model);                
+                if (cache != null && model != null) {
+                    App.Hooks.OnLoad<Media>(model);
+                    cache.Set(model.Id.ToString(), model);
+                }
             }
             return model;
         }
@@ -103,8 +117,10 @@ namespace Piranha.Repositories
                     .AsNoTracking()
                     .FirstOrDefault(f => f.Id == id);
 
-                if (cache != null && model != null)
-                    cache.Set(model.Id.ToString(), model);                                
+                if (cache != null && model != null) {
+                    App.Hooks.OnLoad<MediaFolder>(model);
+                    cache.Set(model.Id.ToString(), model);
+                }
             }
             return model;
         }
@@ -114,19 +130,27 @@ namespace Piranha.Repositories
         /// </summary>
         /// <returns>The media structure</returns>
         public Models.MediaStructure GetStructure() {
-            Models.MediaStructure model = cache != null ? cache.Get<Models.MediaStructure>("MediaStructure") : null;
+            Models.MediaStructure model = cache != null ? cache.Get<Models.MediaStructure>(MEDIA_STRUCTURE) : null;
 
             if (model == null) {
-                var folders = db.MediaFolders
+                var folders = new List<MediaFolder>();
+                var ids = db.MediaFolders
                     .AsNoTracking()
                     .OrderBy(f => f.ParentId)
                     .ThenBy(f => f.Name)
+                    .Select(f => f.Id)
                     .ToList();
+                
+                foreach (var id in ids) {
+                    var folder = GetFolderById(id);
+                    if (folder != null) 
+                        folders.Add(folder);
+                }
 
                 model = Sort(folders);
 
                 if (cache != null && model != null)
-                    cache.Set("MediaStructure", model);  
+                    cache.Set(MEDIA_STRUCTURE, model);  
             }
             return model;
         }
@@ -177,7 +201,10 @@ namespace Piranha.Repositories
                 }
             }
 
+            App.Hooks.OnBeforeSave<Media>(model);
             db.SaveChanges();
+            App.Hooks.OnAfterSave<Media>(model);
+
             RemoveFromCache(model);
         }
 
@@ -187,6 +214,8 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="model">The model</param>
         public void SaveFolder(Data.MediaFolder model) {
+            App.Hooks.OnBeforeSave<MediaFolder>(model);
+
             var folder = db.MediaFolders
                 .FirstOrDefault(f => f.Id == model.Id);
 
@@ -202,6 +231,9 @@ namespace Piranha.Repositories
             App.Mapper.Map<Data.MediaFolder, Data.MediaFolder>(model, folder);
 
             db.SaveChanges();
+
+            App.Hooks.OnAfterSave<MediaFolder>(model);
+
             RemoveFromCache(folder);
             RemoveStructureFromCache();
         }
@@ -215,6 +247,8 @@ namespace Piranha.Repositories
                 .FirstOrDefault(m => m.Id == id);
 
             if (media != null) {
+                App.Hooks.OnBeforeDelete<Media>(media);
+
                 db.Media.Remove(media);
                 db.SaveChanges();
 
@@ -222,6 +256,7 @@ namespace Piranha.Repositories
                 using (var session = storage.Open()) {
                     session.Delete(media.Id + "-" + media.Filename);
                 }
+                App.Hooks.OnAfterDelete<Media>(media);
 
                 RemoveFromCache(media);
             }
@@ -248,8 +283,12 @@ namespace Piranha.Repositories
                 var mediaCount = db.Media.Count(m => m.FolderId == id);
 
                 if (folderCount == 0 && mediaCount == 0) {
+                    App.Hooks.OnBeforeDelete<MediaFolder>(folder);
+
                     db.MediaFolders.Remove(folder);
                     db.SaveChanges();
+                    
+                    App.Hooks.OnAfterDelete<MediaFolder>(folder);
 
                     RemoveFromCache(folder);
                 }
@@ -310,7 +349,7 @@ namespace Piranha.Repositories
         /// <param name="model">The model</param>
         private void RemoveStructureFromCache() {
             if (cache != null)
-                cache.Remove("MediaStructure");
+                cache.Remove(MEDIA_STRUCTURE);
         }
     }
 }

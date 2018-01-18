@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2017 Håkan Edling
+ * Copyright (c) 2016-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -72,6 +72,11 @@ namespace Piranha
         /// The currently registered content types.
         /// </summary>
         private ContentTypeManager contentTypes;
+
+        /// <summary>
+        /// The currently registered hooks.
+        /// </summary>
+        private HookManager hooks;
         #endregion
 
         #region Properties
@@ -131,6 +136,13 @@ namespace Piranha
         public static ContentTypeManager ContentTypes {
             get { return instance.contentTypes; }
         }
+
+        /// <summary>
+        /// Gets the currently registered hooks.
+        /// </summary>
+        public static HookManager Hooks {
+            get { return instance.hooks; }
+        }
         #endregion
 
         /// <summary>
@@ -142,6 +154,7 @@ namespace Piranha
             mediaTypes = new MediaManager();
             serializers = new SerializerManager();
             contentTypes = new ContentTypeManager();
+            hooks = new HookManager();
         }
 
         /// <summary>
@@ -240,7 +253,7 @@ namespace Piranha
 
                         // Compose content types
                         contentTypes.Register<Models.IPage>("Page", "Page");
-                        contentTypes.Register<Models.IBlogPage>("Blog", "Archive", true);
+                        contentTypes.Register<Models.IBlogPage>("Blog", "Archive", true);                        
 
                         // Compose field types
                         fields.Register<Extend.Fields.DateField>();

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -41,18 +41,6 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
-        /// Gets all available models.
-        /// </summary>
-        /// <returns>The available models</returns>
-        /*
-        public virtual IEnumerable<T> GetAll() {
-            return db.Set<T>()
-                .AsNoTracking()
-                .ToList();
-        }
-        */
-
-        /// <summary>
         /// Gets the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
@@ -65,8 +53,10 @@ namespace Piranha.Repositories
                     .AsNoTracking()
                     .FirstOrDefault(m => m.Id == id);
 
-                if (cache != null && model != null)
+                if (cache != null && model != null) {
+                    App.Hooks.OnLoad<T>(model);
                     AddToCache(model);
+                }
             }
             return model;
         }
@@ -77,11 +67,15 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="model">The model</param>
         public virtual void Save(T model) {
+            App.Hooks.OnBeforeSave<T>(model);
+
             if (db.Set<T>().Count(m => m.Id == model.Id) == 0)
                 Add(model);
             else Update(model);
 
             db.SaveChanges();
+
+            App.Hooks.OnAfterSave<T>(model);
 
             if (cache != null)
                 cache.Remove(model.Id.ToString());
@@ -94,8 +88,12 @@ namespace Piranha.Repositories
         public virtual void Delete(Guid id) {
             var model = db.Set<T>().FirstOrDefault(m => m.Id == id);
             if (model != null) {
+                App.Hooks.OnBeforeDelete<T>(model);
+
                 db.Set<T>().Remove(model);
                 db.SaveChanges();
+
+                App.Hooks.OnAfterDelete<T>(model);
             }
 
             if (cache != null)

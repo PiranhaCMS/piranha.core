@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -35,9 +35,17 @@ namespace Piranha.Repositories
         /// </summary>
         /// <returns>The available models</returns>
         public virtual IEnumerable<T> GetAll() {
-            return db.Set<T>()
+            var models = new List<T>();
+            var ids = db.Set<T>()
                 .AsNoTracking()
-                .ToList();
+                .Select(m => m.Id);
+
+            foreach (var id in ids) {
+                var model = GetById(id);
+                if (model != null)
+                    models.Add(model);
+            }
+            return models;
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -66,12 +66,14 @@ namespace Piranha.Repositories
             if (id.HasValue) {
                 model = GetById(id.Value);
             } else {
-                model = db.Categories
+                id = db.Categories
                     .AsNoTracking()
-                    .FirstOrDefault(c => c.BlogId == blogId && c.Slug == slug);
+                    .Where(c => c.BlogId == blogId && c.Slug == slug)
+                    .Select(c => c.Id)
+                    .FirstOrDefault();
 
-                if (cache != null && model != null)
-                    AddToCache(model);
+                if (id.HasValue && id != Guid.Empty)
+                    model = GetById(id.Value);
             }
             return model;
         }
@@ -83,13 +85,15 @@ namespace Piranha.Repositories
         /// <param name="title">The unique title</param>
         /// <returns>The model</returns>
         public Category GetByTitle(Guid blogId, string title) {
-            var model = db.Categories
+            var id = db.Categories
                 .AsNoTracking()
-                .SingleOrDefault(c => c.BlogId == blogId && c.Title == title);
+                .Where(c => c.BlogId == blogId && c.Title == title)
+                .Select(c => c.Id)
+                .FirstOrDefault();
 
-            if (cache != null && model != null)
-                AddToCache(model);
-            return model;
+            if (id != Guid.Empty)
+                return GetById(id);
+            return null;
         }
         
         #region Protected methods

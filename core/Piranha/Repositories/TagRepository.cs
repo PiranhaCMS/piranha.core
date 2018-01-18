@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -82,12 +82,14 @@ namespace Piranha.Repositories
             if (id.HasValue) {
                 model = GetById(id.Value);
             } else {
-                model = db.Tags
+                id = db.Tags
                     .AsNoTracking()
-                    .FirstOrDefault(t => t.BlogId == blogId && t.Slug == slug);
+                    .Where(t => t.BlogId == blogId && t.Slug == slug)
+                    .Select(t => t.Id)
+                    .FirstOrDefault();
 
-                if (cache != null && model != null)
-                    AddToCache(model);
+                if (id != Guid.Empty)
+                    model = GetById(id.Value);
             }
             return model;
         }
@@ -99,13 +101,15 @@ namespace Piranha.Repositories
         /// <param name="title">The unique title</param>
         /// <returns>The model</returns>
         public Tag GetByTitle(Guid blogId, string title) {
-            var model = db.Tags
+            var id = db.Tags
                 .AsNoTracking()
-                .SingleOrDefault(t => t.BlogId == blogId && t.Title == title);
+                .Where(t => t.BlogId == blogId && t.Title == title)
+                .Select(t => t.Id)
+                .FirstOrDefault();
 
-            if (cache != null && model != null)
-                AddToCache(model);
-            return model;
+            if (id != Guid.Empty)
+                return GetById(id);
+            return null;
         }
         
 
