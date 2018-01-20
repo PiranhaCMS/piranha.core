@@ -64,5 +64,11 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="model">The model</param>
         void Delete(Category model);
+
+        /// <summary>
+        /// Deletes all unused categories for the specified blog.
+        /// </summary>
+        /// <param name="blogId">The blog id</param>
+        void DeleteUnused(Guid blogId);
     }
 }

@@ -71,5 +71,11 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="model">The model</param>
         void Delete(Tag model);
+
+        /// <summary>
+        /// Deletes all unused tags for the specified blog.
+        /// </summary>
+        /// <param name="blogId">The blog id</param>
+        void DeleteUnused(Guid blogId);
     }
 }

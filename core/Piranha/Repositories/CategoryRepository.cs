@@ -91,6 +91,27 @@ namespace Piranha.Repositories
                 AddToCache(model);
             return model;
         }
+
+        /// <summary>
+        /// Deletes all unused categories for the specified blog.
+        /// </summary>
+        /// <param name="blogId">The blog id</param>
+        public void DeleteUnused(Guid blogId) {
+            var used = db.Posts
+                .Where(p => p.BlogId == blogId)
+                .Select(p => p.CategoryId)
+                .Distinct()
+                .ToArray();
+
+            var unused = db.Categories
+                .Where(c => c.BlogId == blogId && !used.Contains(c.Id))
+                .ToList();
+
+            if (unused.Count > 0) {
+                db.Categories.RemoveRange(unused);
+                db.SaveChanges();
+            }
+        }
         
         #region Protected methods
         /// <summary>

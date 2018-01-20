@@ -107,7 +107,27 @@ namespace Piranha.Repositories
                 AddToCache(model);
             return model;
         }
-        
+
+        /// <summary>
+        /// Deletes all unused tags for the specified blog.
+        /// </summary>
+        /// <param name="blogId">The blog id</param>
+        public void DeleteUnused(Guid blogId) {
+            var used = db.PostTags
+                .Where(t => t.Post.BlogId == blogId)
+                .Select(t => t.TagId)
+                .Distinct()
+                .ToArray();
+
+            var unused = db.Tags
+                .Where(t => t.BlogId == blogId && !used.Contains(t.Id))
+                .ToList();
+
+            if (unused.Count > 0) {
+                db.Tags.RemoveRange(unused);
+                db.SaveChanges();
+            }
+        }        
 
         #region Protected methods
         /// <summary>

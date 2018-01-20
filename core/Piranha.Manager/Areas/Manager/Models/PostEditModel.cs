@@ -156,6 +156,10 @@ namespace Piranha.Areas.Manager.Models
             api.Posts.Save(post);
             Id = post.Id;
 
+            // Now tidy up the categories & tags for the blog
+            api.Categories.DeleteUnused(post.BlogId);
+            api.Tags.DeleteUnused(post.BlogId);
+
             return true;
         }
 
