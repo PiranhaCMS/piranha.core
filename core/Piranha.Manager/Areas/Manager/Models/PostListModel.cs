@@ -28,15 +28,21 @@ namespace Piranha.Areas.Manager.Models
             public string TypeId { get; set; }
             public string TypeName { get; set; }
             public string Title { get; set; }
+            public Guid CategoryId { get; set; }
+            public string Category { get; set; }
             public DateTime? Published { get; set; }
         }
 
         public IEnumerable<PostListItem> Posts { get; set; }
         public IEnumerable<PostType> PostTypes { get; set; }
+        public IEnumerable<PostType> CurrentPostTypes { get; set; }
+        public IEnumerable<Taxonomy> CurrentCategories { get; set; }
 
         public PostListModel() {
             Posts = new List<PostListItem>();
             PostTypes = new List<PostType>();
+            CurrentPostTypes = new List<PostType>();
+            CurrentCategories = new List<Taxonomy>();
         }
 
         public static PostListModel GetByBlogId(IApi api, Guid blogId) {
@@ -47,9 +53,24 @@ namespace Piranha.Areas.Manager.Models
                     Id = p.Id,
                     TypeId = p.TypeId,
                     Title = p.Title,
+                    CategoryId = p.Category.Id,
+                    Category = p.Category.Title,
                     Published = p.Published
                 }).ToList();
             model.PostTypes = api.PostTypes.GetAll();
+
+            // Filter out the currently used post types
+            var typesId = model.Posts.Select(p => p.TypeId).Distinct();
+            model.CurrentPostTypes = model.PostTypes.Where(t => typesId.Contains(t.Id));
+
+            // Get the currently used categories
+            var categoriesId = model.Posts.Select(p => p.CategoryId).Distinct();
+            model.CurrentCategories = api.Categories.GetAll(blogId)
+                .Where(c => categoriesId.Contains(c.Id))
+                .Select(c => new Taxonomy() {
+                    Id = c.Id,
+                    Title = c.Title
+                });
 
             // Sort so we show unpublished drafts first
             model.Posts = model.Posts.Where(p => !p.Published.HasValue)
