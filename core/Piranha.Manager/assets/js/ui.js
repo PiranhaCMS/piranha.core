@@ -6,6 +6,10 @@ $(document).ready(function () {
         format: "YYYY-MM-DD"
     });
 
+    $('.datetimepicker').datetimepicker({
+        format: "YYYY-MM-DD hh:mm"
+    });
+
     $('.select2').select2({
         tags: true
     });
