@@ -27,7 +27,6 @@
     @Html.HiddenFor(m => m.BlogId)
     @Html.HiddenFor(m => m.BlogSlug)
     @Html.HiddenFor(m => m.TypeId)
-    @Html.HiddenFor(m => m.Published)
 
     <div class="row">
         <div class="col-sm-12 buttons">
@@ -45,7 +44,7 @@
                     @if (Model.Published.HasValue) {
                         <text>Update</text>
                     } else {
-                        <text>Save draft</text>
+                        <text>Save</text>
                     }
                 </button>
                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
@@ -127,6 +126,15 @@
                     <div class="form-group">
                         <label>Meta Keywords</label>
                         @Html.TextBoxFor(m => m.MetaKeywords, new { @class = "form-control small", maxlength = 128, placeholder = "Meta keywords" })
+                    </div>
+                    <div class="form-group">
+                        <label>Publish date</label>
+                        <div class="input-group date datetimepicker">
+                            @Html.TextBoxFor(m => m.Published, new { @class = "form-control small" })
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
                     </div>
                     @if (Model.PostType.Routes.Count > 1) {
                         <div class="form-group">
