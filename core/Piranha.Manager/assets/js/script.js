@@ -20549,7 +20549,6 @@ $(document).on('keyup', '.markdown textarea.raw-text', function() {
         dataType: 'json',
         success: function(data) {
             md.parent().next().html(data.body);
-            //md.next().html(data.body);
         }
     });
 });
@@ -20589,24 +20588,20 @@ $(document).on('click', '.table-filter button', function (e) {
     var data = $(this).data();
     var table = $(this).parent().data().table;
 
-    $.each($(table).find('tr'), function (i, e) {
-        if (i > 0) {
-            var row = $(e);
-
-            if (data.filter == '') {
-                row.show();
-            } else if (row.hasClass(data.filter)) {
-                row.show();
-            } else {
-                row.hide();
-            }
-        }
-    });
+    manager.tools.tablesort(table, data.filter, $('#blog-type-filter').val(), $('#blog-category-filter').val());
 
     $(this).parent().find('button').removeClass('btn-primary');
     $(this).addClass('btn-primary');
 });
 
+$(document).on('change', '.table-filter select', function (e) {
+    e.preventDefault();
+
+    var data = $(this).parent().find('button.btn-primary').data();
+    var table = $(this).parent().data().table;
+    
+    manager.tools.tablesort(table, data.filter, $('#blog-type-filter').val(), $('#blog-category-filter').val());
+});
 
 //
 // Add page
@@ -20738,6 +20733,26 @@ var manager = {
                     return val.replace(/FieldSets\[\d+\]/, 'FieldSets[' + n + ']');
                 });
             }
+        },
+
+        tablesort: function(table, status, type, category) {
+            $.each($(table).find('tr'), function (i, e) {
+                if (i > 0) {
+                    var row = $(e);
+                    var show = true;
+                    
+                    if (status != '' && !row.hasClass(status))
+                        show = false;
+                    if (type != '' && type != row.data().posttype)
+                        show = false;
+                    if (category != '' && category != row.data().category)
+                        show = false;
+
+                    if (show)
+                        row.show();
+                    else row.hide();
+                }
+            });        
         }
     }
 };
