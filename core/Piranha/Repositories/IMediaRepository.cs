@@ -11,6 +11,7 @@
 using Piranha.Data;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Piranha.Repositories
 {
@@ -52,12 +53,19 @@ namespace Piranha.Repositories
         Models.MediaStructure GetStructure();
 
         /// <summary>
+        /// Adds or updates the given model in the database depending on its state.
+        /// Please note that this method is not really synchronous, it's just a 
+        /// wrapper for the async version.
+        /// </summary>
+        /// <param name="content">The content to save</param>
+        void Save(Models.MediaContent content);
+
+        /// <summary>
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>
-        /// <param name="model">The model</param>
-        /// <param name="data">The binary data</param>
-        void Save(Models.MediaContent content);
+        /// <param name="content">The content to save</param>
+        Task SaveAsync(Models.MediaContent content);
 
         /// <summary>
         /// Adds or updates the given model in the database
@@ -67,16 +75,30 @@ namespace Piranha.Repositories
         void SaveFolder(MediaFolder model);
 
         /// <summary>
-        /// Deletes the media with the given id.
+        /// Deletes the media with the given id. Please note that this method
+        /// is not really synchronous, it's just a wrapper for the async version.
         /// </summary>
         /// <param name="id">The unique id</param>
         void Delete(Guid id);
 
         /// <summary>
-        /// Deletes the given model.
+        /// Deletes the media with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        Task DeleteAsync(Guid id);
+
+        /// <summary>
+        /// Deletes the given model. Please note that this method
+        /// is not really synchronous, it's just a wrapper for the async version.
         /// </summary>
         /// <param name="model">The media</param>
         void Delete(Media model);
+
+        /// <summary>
+        /// Deletes the given model.
+        /// </summary>
+        /// <param name="model">The media</param>
+        Task DeleteAsync(Media model);
 
         /// <summary>
         /// Deletes the media folder with the given id.

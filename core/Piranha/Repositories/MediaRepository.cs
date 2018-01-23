@@ -13,6 +13,7 @@ using Piranha.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Piranha.Repositories
 {
@@ -132,12 +133,21 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Adds or updates the given model in the database depending on its state.
+        /// Please note that this method is not really synchronous, it's just a 
+        /// wrapper for the async version.
+        /// </summary>
+        /// <param name="content">The content to save</param>
+        public void Save(Models.MediaContent content) {
+            Task.Run(() => SaveAsync(content)).Wait();
+        }
+
+        /// <summary>
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>
-        /// <param name="model">The model</param>
-        /// <param name="data">The binary data</param>
-        public void Save(Models.MediaContent content) {
+        /// <param name="content">The content to save</param>
+        public async Task SaveAsync(Models.MediaContent content) {
             if (!App.MediaTypes.IsSupported(content.Filename))
                 throw new NotSupportedException("Filetype not supported.");
 
@@ -165,15 +175,15 @@ namespace Piranha.Repositories
                     var bc = (Models.BinaryMediaContent)content;
 
                     model.Size = bc.Data.Length;
-                    session.Put(model.Id + "-" + model.Filename, 
+                    await session.PutAsync(model.Id + "-" + model.Filename, 
                         model.ContentType, bc.Data);
                 } else if (content is Models.StreamMediaContent) {
                     var sc = (Models.StreamMediaContent)content;
                     var stream = sc.Data;
 
                     model.Size = sc.Data.Length;
-                    session.Put(model.Id + "-" + model.Filename, 
-                        model.ContentType, ref stream);
+                    await session.PutAsync(model.Id + "-" + model.Filename, 
+                        model.ContentType, stream);
                 }
             }
 
@@ -207,10 +217,19 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
-        /// Deletes the media with the given id.
+        /// Deletes the media with the given id. Please note that this method
+        /// is not really synchronous, it's just a wrapper for the async version.
         /// </summary>
         /// <param name="id">The unique id</param>
         public void Delete(Guid id) {
+            Task.Run(() => DeleteAsync(id)).Wait();
+        }
+
+        /// <summary>
+        /// Deletes the media with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        public async Task DeleteAsync(Guid id) {
             var media = db.Media
                 .FirstOrDefault(m => m.Id == id);
 
@@ -220,7 +239,7 @@ namespace Piranha.Repositories
 
                 // Delete from storage
                 using (var session = storage.Open()) {
-                    session.Delete(media.Id + "-" + media.Filename);
+                    await session.DeleteAsync(media.Id + "-" + media.Filename);
                 }
 
                 RemoveFromCache(media);
@@ -228,11 +247,20 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
-        /// Deletes the given model.
+        /// Deletes the given model. Please note that this method
+        /// is not really synchronous, it's just a wrapper for the async version.
         /// </summary>
         /// <param name="model">The media</param>
         public void Delete(Media model) {
             Delete(model.Id);
+        }
+
+        /// <summary>
+        /// Deletes the given model.
+        /// </summary>
+        /// <param name="model">The media</param>
+        public async Task DeleteAsync(Media model) {
+            await DeleteAsync(model.Id);
         }
 
         /// <summary>

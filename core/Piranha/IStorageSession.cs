@@ -10,6 +10,7 @@
 
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Piranha
 {
@@ -24,15 +25,7 @@ namespace Piranha
 		/// <param name="id">The unique id</param>
 		/// <param name="stream">The output stream</param>
 		/// <returns>If the media was found</returns>
-		bool Get(string id, ref Stream stream);
-
-		/// <summary>
-		/// Writes the data for the specified media content to the given byte array.
-		/// </summary>
-		/// <param name="id">The unique id</param>
-		/// <param name="bytes">The byte array</param>
-		/// <returns>If the asset was found</returns>
-		bool Get(string id, ref byte[] bytes);
+		Task<bool> GetAsync(string id, Stream stream);
 
 		/// <summary>
 		/// Stores the given media content.
@@ -41,7 +34,7 @@ namespace Piranha
 		/// <param name="contentType">The content type</param>
 		/// <param name="stream">The input stream</param>
 		/// <returns>The public URL</returns>
-		string Put(string id, string contentType, ref Stream stream);
+		Task<string> PutAsync(string id, string contentType, Stream stream);
 
 		/// <summary>
 		/// Stores the given media content.
@@ -50,12 +43,12 @@ namespace Piranha
 		/// <param name="contentType">The content type</param>
 		/// <param name="bytes">The binary data</param>
 		/// <returns>The public URL</returns>
-		string Put(string id, string contentType, byte[] bytes);
+		Task<string> PutAsync(string id, string contentType, byte[] bytes);
 
 		/// <summary>
 		/// Deletes the content for the specified media.
 		/// </summary>
 		/// <param name="id">The unique id/param>
-		bool Delete(string id);
+		Task<bool> DeleteAsync(string id);
     }
 }

@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Piranha.Areas.Manager.Controllers
 {
@@ -44,13 +45,13 @@ namespace Piranha.Areas.Manager.Controllers
         [HttpPost]
         [Route("manager/media/add")]
         [Authorize(Policy = Permission.MediaAdd)]
-        public IActionResult Add(Models.MediaUploadModel model) {
+        public async Task<IActionResult> Add(Models.MediaUploadModel model) {
             var uploaded = 0;
 
             foreach (var upload in model.Uploads) {
                 if (upload.Length > 0 && !string.IsNullOrWhiteSpace(upload.ContentType)) {
                     using (var stream = upload.OpenReadStream()) {
-                        api.Media.Save(new StreamMediaContent() {
+                        await api.Media.SaveAsync(new StreamMediaContent() {
                             Id = model.Uploads.Count() == 1 ? model.Id : null,
                             FolderId = model.ParentId,
                             Filename = Path.GetFileName(upload.FileName),
@@ -76,13 +77,13 @@ namespace Piranha.Areas.Manager.Controllers
         [HttpPost]
         [Route("manager/media/modal/add")]
         [Authorize(Policy = Permission.MediaAdd)]
-        public IActionResult ModalAdd(Models.MediaUploadModel model) {
+        public async Task<IActionResult> ModalAdd(Models.MediaUploadModel model) {
             var uploaded = 0;
 
             foreach (var upload in model.Uploads) {
                 if (upload.Length > 0 && !string.IsNullOrWhiteSpace(upload.ContentType)) {
                     using (var stream = upload.OpenReadStream()) {
-                        api.Media.Save(new StreamMediaContent() {
+                        await api.Media.SaveAsync(new StreamMediaContent() {
                             Id = model.Uploads.Count() == 1 ? model.Id : null,
                             FolderId = model.ParentId,
                             Filename = Path.GetFileName(upload.FileName),
@@ -121,11 +122,11 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="id">The unique id</param>
         [Route("/manager/media/delete/{id:Guid}")]
         [Authorize(Policy = Permission.MediaDelete)]
-        public IActionResult Delete(Guid id) {
+        public async Task<IActionResult> Delete(Guid id) {
             var media = api.Media.GetById(id);
 
             if (media != null) {
-                api.Media.Delete(media);
+                await api.Media.DeleteAsync(media);
                 SuccessMessage($"Deleted \"{media.Filename}\".");
                 return RedirectToAction("List", new { folderId = media.FolderId });
             } else {

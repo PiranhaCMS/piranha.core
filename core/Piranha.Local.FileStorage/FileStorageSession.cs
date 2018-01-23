@@ -10,6 +10,7 @@
 
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Piranha.Local
 {
@@ -36,27 +37,11 @@ namespace Piranha.Local
 		/// <param name="id">The unique id</param>
 		/// <param name="stream">The output stream</param>
 		/// <returns>If the media was found</returns>
-		public bool Get(string id, ref Stream stream) {
+		public async Task<bool> GetAsync(string id, Stream stream) {
 			if (File.Exists(basePath + id)) {
 				using (var file = File.OpenRead(basePath + id)) {
-					file.CopyTo(stream);
+					await file.CopyToAsync(stream);
 					return true;
-				}
-			}
-			return false;
-        }
-
-		/// <summary>
-		/// Writes the data for the specified media content to the given byte array.
-		/// </summary>
-		/// <param name="id">The unique id</param>
-		/// <param name="byte">The byte array</param>
-		/// <returns>If the asset was found</returns>
-		public bool Get(string id, ref byte[] bytes) {
-			if (File.Exists(basePath + id)) {
-				using (var file = File.OpenRead(basePath + id)) {
-					bytes = new byte[file.Length];
-					return file.Read(bytes, 0, (int)file.Length) > 0;
 				}
 			}
 			return false;
@@ -69,9 +54,9 @@ namespace Piranha.Local
 		/// <param name="contentType">The content type</param>
 		/// <param name="stream">The input stream</param>
 		/// <returns>The public URL</returns>
-		public string Put(string id, string contentType, ref Stream stream) {
+		public async Task<string> PutAsync(string id, string contentType, Stream stream) {
 			using (var file = File.OpenWrite(basePath + id)) {
-				stream.CopyTo(file);
+				await stream.CopyToAsync(file);
 			}
 			return baseUrl + id;
         }
@@ -83,9 +68,9 @@ namespace Piranha.Local
 		/// <param name="contentType">The content type</param>
 		/// <param name="bytes">The binary data</param>
 		/// <returns>The public URL</returns>
-		public string Put(string id, string contentType, byte[] bytes) {
+		public async Task<string> PutAsync(string id, string contentType, byte[] bytes) {
 			using (var file = File.OpenWrite(basePath + id)) {
-				file.Write(bytes, 0, bytes.Length);
+				await file.WriteAsync(bytes, 0, bytes.Length);
 			}
 			return baseUrl + id;
         }
@@ -94,12 +79,14 @@ namespace Piranha.Local
 		/// Deletes the content for the specified media.
 		/// </summary>
 		/// <param name="id">The unique id/param>
-		public bool Delete(string id) {
-			if (File.Exists(basePath + id)) {
-				File.Delete(basePath + id);
-				return true;
-			}
-			return false;
+		public Task<bool> DeleteAsync(string id) {
+			return Task.Run(() => {
+				if (File.Exists(basePath + id)) {
+					File.Delete(basePath + id);
+					return true;
+				}
+				return false;
+			});
         }
 
         /// <summary>
