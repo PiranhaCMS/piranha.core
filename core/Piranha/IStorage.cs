@@ -8,6 +8,8 @@
  * 
  */
 
+using System.Threading.Tasks;
+
 namespace Piranha
 {
     /// <summary>
@@ -19,7 +21,7 @@ namespace Piranha
         /// Opens a new storage session.
         /// </summary>
         /// <returns>A new open session</returns>
-        IStorageSession Open();
+        Task<IStorageSession> OpenAsync();
 
         /// <summary>
         /// Gets the public URL for the given media object.

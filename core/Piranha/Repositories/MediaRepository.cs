@@ -170,7 +170,7 @@ namespace Piranha.Repositories
             model.LastModified = DateTime.Now;
 
             // Upload to storage
-            using (var session = storage.Open()) {
+            using (var session = await storage.OpenAsync()) {
                 if (content is Models.BinaryMediaContent) {
                     var bc = (Models.BinaryMediaContent)content;
 
@@ -238,7 +238,7 @@ namespace Piranha.Repositories
                 db.SaveChanges();
 
                 // Delete from storage
-                using (var session = storage.Open()) {
+                using (var session = await storage.OpenAsync()) {
                     await session.DeleteAsync(media.Id + "-" + media.Filename);
                 }
 

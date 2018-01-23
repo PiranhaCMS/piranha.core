@@ -10,6 +10,7 @@
 
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Piranha.Local
 {
@@ -37,8 +38,10 @@ namespace Piranha.Local
         /// Opens a new storage session.
         /// </summary>
         /// <returns>A new open session</returns>
-        public IStorageSession Open() {
-            return new FileStorageSession(basePath, baseUrl);
+        public Task<IStorageSession> OpenAsync() {
+            return Task.Run(() => {
+                return (IStorageSession)new FileStorageSession(basePath, baseUrl);
+            });
         }
 
         /// <summary>
