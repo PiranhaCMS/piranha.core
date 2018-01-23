@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>4.2.0</Version>
+    <Company>Piranha CMS</Company>
+    <AssemblyTitle>Piranha.Azure.BlogStorage</AssemblyTitle>
+    <RootNamespace>Piranha.Azure</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PackageId>Piranha.Azure.BlobStorage</PackageId>
+    <PackageVersion>4.2.0</PackageVersion>
+    <Authors>Håkan Edling</Authors>
+    <Description>Library for storing media assets on disc.</Description>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageTags>cms mvc aspnetcore netstandard</PackageTags>
+    <Copyright>Copyright 2018 (c) Håkan Edling</Copyright>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Piranha\Piranha.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
+  </ItemGroup>
+</Project>
