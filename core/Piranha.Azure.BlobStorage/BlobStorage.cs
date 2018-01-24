@@ -63,17 +63,17 @@ namespace Piranha.Azure
         /// <summary>
         /// Gets the public URL for the given media object.
         /// </summary>
-        /// <param name="media">The media</param>
+        /// <param name="id">The media resource id</param>
         /// <returns>The public url</returns>
-        public string GetPublicUrl(Data.Media media) {
-            if (media.Id != Guid.Empty) {
+        public string GetPublicUrl(string id) {
+            if (!string.IsNullOrWhiteSpace(id)) {
                 if (string.IsNullOrEmpty(containerUrl)) {
                     var session = storage.CreateCloudBlobClient();
                     var container = session.GetContainerReference(containerName);
 
                     containerUrl = container.Uri.AbsoluteUri;                
                 }
-                return containerUrl + "/" + media.Id + "-" + media.Filename;
+                return containerUrl + "/" + id;
             }
             return null;
         }

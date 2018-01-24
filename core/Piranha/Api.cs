@@ -103,11 +103,12 @@ namespace Piranha
         /// <param name="db">The current db context</param>
         /// <param name="storage">The current storage</param>
         /// <param name="modelCache">The optional model cache</param>
-        public Api(IDb db, IStorage storage, ICache modelCache = null) {
+        /// <param name="imageProcessor">The optional image processor</param>
+        public Api(IDb db, IStorage storage, ICache modelCache = null, IImageProcessor imageProcessor = null) {
             this.db = db;
             this.storage = storage;
 
-            Setup(modelCache);
+            Setup(modelCache, imageProcessor);
         }
 
         /// <summary>
@@ -122,12 +123,13 @@ namespace Piranha
         /// Configures the api.
         /// </summary>
         /// <param name="modelCache">The optional model cache</param>
-        private void Setup(ICache modelCache = null) {
+        /// <param name="imageProcessor">The optional image processor</param>
+        private void Setup(ICache modelCache = null, IImageProcessor imageProcessor = null) {
             cache = modelCache;
 
             Archives = new Repositories.ArchiveRepository(this, db);
             Categories = new Repositories.CategoryRepository(this, db, cache);
-            Media = new Repositories.MediaRepository(db, storage, cache);
+            Media = new Repositories.MediaRepository(db, storage, cache, imageProcessor);
             Pages = new Repositories.PageRepository(this, db, cache);
             PageTypes = new Repositories.PageTypeRepository(db, cache);
             Params = new Repositories.ParamRepository(db, cache);

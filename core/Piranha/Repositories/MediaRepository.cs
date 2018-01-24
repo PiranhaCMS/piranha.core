@@ -12,7 +12,9 @@ using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Piranha.Repositories
@@ -21,7 +23,9 @@ namespace Piranha.Repositories
     {
         private readonly IDb db;
         private readonly IStorage storage;
-        private readonly ICache cache;        
+        private readonly ICache cache;   
+        private readonly IImageProcessor processor;
+        private static object scalemutex = new object();     
 
         /// <summary>
         /// Default constructor.
@@ -29,10 +33,11 @@ namespace Piranha.Repositories
         /// <param name="db">The current db context</param>
         /// <param name="storage">The current storage manager</param>
         /// <param name="cache">The optional model cache</param>
-        public MediaRepository(IDb db, IStorage storage, ICache cache = null) {
+        public MediaRepository(IDb db, IStorage storage, ICache cache = null, IImageProcessor processor = null) {
             this.db = db;
             this.storage = storage;
             this.cache = cache;
+            this.processor = processor;
         }
 
         /// <summary>
@@ -50,7 +55,7 @@ namespace Piranha.Repositories
                 .ToList();
 
             foreach (var model in models) {
-                model.PublicUrl = storage.GetPublicUrl(model);
+                model.PublicUrl = storage.GetPublicUrl(GetResourceName(model));
             }
             return models;
         }
@@ -83,7 +88,7 @@ namespace Piranha.Repositories
                     .FirstOrDefault(m => m.Id == id);
 
                 if (model != null)
-                    model.PublicUrl = storage.GetPublicUrl(model);
+                    model.PublicUrl = storage.GetPublicUrl(GetResourceName(model));
 
                 if (cache != null && model != null)
                     cache.Set(model.Id.ToString(), model);                
@@ -152,6 +157,7 @@ namespace Piranha.Repositories
                 throw new NotSupportedException("Filetype not supported.");
 
             var model = db.Media
+                .Include(m => m.Versions)
                 .FirstOrDefault(m => m.Id == content.Id);
 
             if (model == null) {
@@ -161,6 +167,17 @@ namespace Piranha.Repositories
                 };
                 content.Id = model.Id;
                 db.Media.Add(model);
+            } else {
+                using (var session = await storage.OpenAsync()) {
+                    // Delete all versions as we're updating the image
+                    if (model.Versions.Count > 0) {
+                        foreach (var version in model.Versions) {
+                            // Delete version from storage
+                            await session.DeleteAsync(GetResourceName(model, version.Width, version.Height, ".jpg"));
+                        }
+                        db.MediaVersions.RemoveRange(model.Versions);
+                    }
+                }
             }
 
             model.Filename = content.Filename;
@@ -168,6 +185,25 @@ namespace Piranha.Repositories
             model.Type = App.MediaTypes.GetMediaType(content.Filename);
             model.ContentType = App.MediaTypes.GetContentType(content.Filename);
             model.LastModified = DateTime.Now;
+
+            // Pre-process if this is an image
+            if (processor != null && model.Type == Models.MediaType.Image) {
+                byte[] bytes;
+
+                if (content is Models.BinaryMediaContent) {
+                    bytes = ((Models.BinaryMediaContent)content).Data;
+                } else {
+                    var reader = new BinaryReader(((Models.StreamMediaContent)content).Data);
+                    bytes = reader.ReadBytes((int)reader.BaseStream.Length);
+                    ((Models.StreamMediaContent)content).Data.Position = 0;
+                }
+
+                int width, height;
+                
+                processor.GetSize(bytes, out width, out height);
+                model.Width = width;
+                model.Height = height;
+            }
 
             // Upload to storage
             using (var session = await storage.OpenAsync()) {
@@ -217,6 +253,113 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Ensures that the image version with the given size exsists
+        /// and returns its public URL. Please note that this method is 
+        /// not really synchronous, it's just a wrapper for the async version.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <param name="width">The requested width</param>
+        /// <param name="height">The optionally requested height</param>
+        /// <returns>The public URL</returns>
+        public string EnsureVersion(Guid id, int width, int? height = null) {
+            var task = Task.Run(() => EnsureVersionAsync(id, width, height));
+            task.Wait();
+            return task.Result;
+        }
+
+        /// <summary>
+        /// Ensures that the image version with the given size exsists
+        /// and returns its public URL.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <param name="width">The requested width</param>
+        /// <param name="height">The optionally requested height</param>
+        /// <returns>The public URL</returns>
+        public async Task<string> EnsureVersionAsync(Guid id, int width, int? height = null) {
+            if (processor != null) {
+            var query = db.MediaVersions
+                .Where(v => v.MediaId == id && v.Width == width);
+
+            if (height.HasValue)
+                query = query.Where(v => v.Height == height);
+            else query = query.Where(v => !v.Height.HasValue);
+
+            var version = query.FirstOrDefault();
+
+            if (version == null) {
+                var media = db.Media
+                    .FirstOrDefault(m => m.Id == id);
+
+                // If the media is missing return false
+                if (media == null)
+                    return null;
+
+                // If the requested size is equal to the original size, return true
+                if (media.Width == width && (!height.HasValue || media.Height == height.Value))
+                    return GetResourceName(media);
+
+                // Get the image file
+                using (var stream = new MemoryStream()) {
+                    using (var session = await storage.OpenAsync()) {
+                        if (!await session.GetAsync(media.Id + "-" + media.Filename, stream))
+                            return null;
+
+                        // Reset strem position    
+                        stream.Position = 0;
+
+                        using (var output = new MemoryStream()) {
+                            if (height.HasValue) {
+                                processor.CropScale(stream, output, width, height.Value);
+                            } else {
+                                processor.Scale(stream, output, width);
+                            }
+                            output.Position = 0;
+                            bool upload = false;
+
+                            lock (scalemutex) {
+                                // We have to make sure we don't scale multiple files
+                                // at the same time as it can create index violations.
+                                version = query.FirstOrDefault();
+
+                                if (version == null) {
+                                    version = new MediaVersion() {
+                                        Id = Guid.NewGuid(),
+                                        MediaId = media.Id,
+                                        Size = output.Length,
+                                        Width = width,
+                                        Height = height
+                                    };
+                                    db.MediaVersions.Add(version);
+                                    db.SaveChanges();
+
+                                    upload = true;
+                                }
+                            }
+
+                            if (upload) {
+                                return await session.PutAsync(GetResourceName(media, width, height, ".jpg"), "image/jpeg", output);
+                            }
+                        }
+                    }
+                }
+            } else {
+                var media = db.Media
+                    .FirstOrDefault(m => m.Id == id);
+
+                // If the media is missing return false
+                if (media == null)
+                    return null;
+
+                // If the requested size is equal to the original size, return true
+                if (media.Width == width && (!height.HasValue || media.Height == height.Value))
+                    return storage.GetPublicUrl(GetResourceName(media));
+                return storage.GetPublicUrl(GetResourceName(media, width, height, ".jpg"));
+            }
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Deletes the media with the given id. Please note that this method
         /// is not really synchronous, it's just a wrapper for the async version.
         /// </summary>
@@ -231,17 +374,24 @@ namespace Piranha.Repositories
         /// <param name="id">The unique id</param>
         public async Task DeleteAsync(Guid id) {
             var media = db.Media
+                .Include(m => m.Versions)
                 .FirstOrDefault(m => m.Id == id);
 
             if (media != null) {
-                db.Media.Remove(media);
-                db.SaveChanges();
-
-                // Delete from storage
                 using (var session = await storage.OpenAsync()) {
+                    if (media.Versions.Count > 0) {
+                        foreach (var version in media.Versions) {
+                            // Delete version from storage
+                            await session.DeleteAsync(GetResourceName(media, version.Width, version.Height, ".jpg"));
+                        }
+                        db.MediaVersions.RemoveRange(media.Versions);
+                    }
+                    db.Media.Remove(media);
+                    db.SaveChanges();
+
+                    // Delete from storage
                     await session.DeleteAsync(media.Id + "-" + media.Filename);
                 }
-
                 RemoveFromCache(media);
             }
         }
@@ -339,6 +489,40 @@ namespace Piranha.Repositories
         private void RemoveStructureFromCache() {
             if (cache != null)
                 cache.Remove("MediaStructure");
+        }
+
+        /// <summary>
+        /// Gets the media resource name.
+        /// </summary>
+        /// <param name="media">The media object</param>
+        /// <param name="width">Optional requested width</param>
+        /// <param name="height">Optional requested height</param>
+        /// <param name="extension">Optional requested extension</param>
+        /// <returns>The name</returns>
+        private string GetResourceName(Media media, int? width = null, int? height = null, string extension = null) {
+            var filename = new FileInfo(media.Filename);
+            var sb = new StringBuilder();
+
+            sb.Append(media.Id);
+            sb.Append("-");
+
+            if (width.HasValue) {
+                sb.Append(filename.Name.Replace(filename.Extension, "_"));
+                sb.Append(width);
+
+                if (height.HasValue) {
+                    sb.Append("x");
+                    sb.Append(height.Value);
+                }
+            } else {
+                sb.Append(filename.Name.Replace(filename.Extension, ""));
+            }
+
+            if (string.IsNullOrEmpty(extension))
+                sb.Append(filename.Extension);
+            else sb.Append(extension);
+
+            return sb.ToString();
         }
     }
 }

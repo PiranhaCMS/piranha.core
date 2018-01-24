@@ -1,4 +1,5 @@
 ﻿@model CoreWeb.Models.ArticlePost
+@inject Piranha.IApi Api
 @{
     ViewBag.Title = Model.Title;
 }
@@ -19,7 +20,7 @@
     </p>
 
     @if (Model.Heading.PrimaryImage.HasValue) {
-        <img src="@Url.Content(Model.Heading.PrimaryImage)">
+        <img src="@Url.Content(Model.Heading.PrimaryImage.Resize(Api, 700, 250))">
     }
 
     @if (!string.IsNullOrEmpty(Model.Heading.Ingress.Value)) {

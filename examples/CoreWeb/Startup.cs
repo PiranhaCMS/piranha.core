@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Piranha;
+using Piranha.ImageSharp;
 using Piranha.Local;
 using System;
 using System.Collections.Generic;
@@ -47,6 +48,7 @@ namespace CoreWeb
             services.AddDbContext<Db>(options =>
                 options.UseSqlite("Filename=./piranha.coreweb.db"));            
             services.AddSingleton<IStorage, FileStorage>();
+            services.AddSingleton<IImageProcessor, ImageSharpProcessor>();
             services.AddScoped<IDb, Db>();
             services.AddScoped<IApi, Api>();
             services.AddPiranhaSimpleSecurity(
