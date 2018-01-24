@@ -44,6 +44,11 @@ namespace Piranha
         public DbSet<Data.MediaFolder> MediaFolders { get; set; }
 
         /// <summary>
+        /// Gets/sets the media version set.
+        /// </summary>
+        public DbSet<Data.MediaVersion> MediaVersions { get; set; }
+
+        /// <summary>
         /// Gets/sets the page set.
         /// </summary>
         public DbSet<Data.Page> Pages { get; set; }
@@ -128,6 +133,9 @@ namespace Piranha
 
             mb.Entity<Data.MediaFolder>().ToTable("Piranha_MediaFolders");
             mb.Entity<Data.MediaFolder>().Property(f => f.Name).HasMaxLength(128).IsRequired();
+
+            mb.Entity<Data.MediaVersion>().ToTable("Piranha_MediaVersions");
+            mb.Entity<Data.MediaVersion>().HasIndex(v => new { v.MediaId, v.Width, v.Height }).IsUnique();
 
             mb.Entity<Data.Page>().ToTable("Piranha_Pages");
             mb.Entity<Data.Page>().Property(p => p.PageTypeId).HasMaxLength(64).IsRequired();

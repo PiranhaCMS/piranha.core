@@ -34,6 +34,11 @@ namespace Piranha
         DbSet<Data.MediaFolder> MediaFolders { get; set; }
 
         /// <summary>
+        /// Gets/sets the media version set.
+        /// </summary>
+        DbSet<Data.MediaVersion> MediaVersions { get; set; }
+
+        /// <summary>
         /// Gets/sets the page set.
         /// </summary>
         /// <returns></returns>

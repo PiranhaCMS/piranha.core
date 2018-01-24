@@ -40,5 +40,18 @@ namespace Piranha.Extend.Fields
                 return image.Media.PublicUrl;
             return "";
         }
+
+        /// <summary>
+        /// Gets the url for a resized version of the image.
+        /// </summary>
+        /// <param name="api">The api</param>
+        /// <param name="width">The requested width</param>
+        /// <param name="height">The optional height</param>
+        /// <returns>The image url</returns>
+        public string Resize(IApi api, int width, int? height = null) {
+            if (Id.HasValue)
+                return api.Media.EnsureVersion(Id.Value, width, height);
+            return null;
+        }
     }
 }

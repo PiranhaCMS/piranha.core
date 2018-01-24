@@ -75,6 +75,27 @@ namespace Piranha.Repositories
         void SaveFolder(MediaFolder model);
 
         /// <summary>
+        /// Ensures that the image version with the given size exsists
+        /// and returns its public URL. Please note that this method is 
+        /// not really synchronous, it's just a wrapper for the async version.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <param name="width">The requested width</param>
+        /// <param name="height">The optionally requested height</param>
+        /// <returns>The public URL</returns>
+        string EnsureVersion(Guid id, int width, int? height = null);
+
+        /// <summary>
+        /// Ensures that the image version with the given size exsists
+        /// and returns its public URL.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <param name="width">The requested width</param>
+        /// <param name="height">The optionally requested height</param>
+        /// <returns>The public URL</returns>
+        Task<string> EnsureVersionAsync(Guid id, int width, int? height = null);
+
+        /// <summary>
         /// Deletes the media with the given id. Please note that this method
         /// is not really synchronous, it's just a wrapper for the async version.
         /// </summary>

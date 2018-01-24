@@ -1,21 +1,24 @@
-<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Version>4.2.0-alpha1</Version>
     <Company>Piranha CMS</Company>
-    <AssemblyTitle>Piranha.AttributeBuilder</AssemblyTitle>
+    <AssemblyTitle>Piranha.ImageSharp</AssemblyTitle>
   </PropertyGroup>
   <PropertyGroup>
-    <PackageId>Piranha.AttributeBuilder</PackageId>
+    <PackageId>Piranha.ImageSharp</PackageId>
     <PackageVersion>4.2.0-alpha1</PackageVersion>
     <Authors>Håkan Edling</Authors>
-    <Description>Library for defining page types by Attributes.</Description>
+    <Description>Piranha CMS image processor using ImageSharp</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes></PackageReleaseNotes>
     <PackageTags>cms mvc aspnetcore netstandard</PackageTags>
-    <Copyright>Copyright 2017-2018 (c) Håkan Edling</Copyright>
+    <Copyright>Copyright 2018 (c) Håkan Edling</Copyright>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0002" />
     <ProjectReference Include="..\Piranha\Piranha.csproj" />
   </ItemGroup>
+
 </Project>

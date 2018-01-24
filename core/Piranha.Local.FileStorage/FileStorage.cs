@@ -47,11 +47,11 @@ namespace Piranha.Local
         /// <summary>
         /// Gets the public URL for the given media object.
         /// </summary>
-        /// <param name="media">The media</param>
+        /// <param name="id">The media resource id</param>
         /// <returns>The public url</returns>
-        public string GetPublicUrl(Data.Media media) {
-            if (media.Id != Guid.Empty)
-                return baseUrl + media.Id + "-" + media.Filename;
+        public string GetPublicUrl(string id) {
+            if (!string.IsNullOrWhiteSpace(id))
+                return baseUrl + id;
             return null;
         }
     }

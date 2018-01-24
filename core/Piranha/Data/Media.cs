@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace Piranha.Data
 {
@@ -48,7 +49,19 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the public url.
         /// </summary>
-        public string PublicUrl { get; set; }
+        public string PublicUrl { get; set; }        
+
+        /// <summary>
+        /// Gets/sets the optional width. This only applies
+        /// if the media asset is an image.
+        /// </summary>
+        public int? Width { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional height. This only applies
+        /// if the media asset is an image.
+        /// </summary>
+        public int? Height { get; set; }
 
         /// <summary>
         /// Gets/sets the created date.
@@ -64,5 +77,17 @@ namespace Piranha.Data
         /// Gets/sets the optional folder.
         /// </summary>
         public MediaFolder Folder { get; set; }
+
+        /// <summary>
+        /// Gets/sets the available versions.
+        /// </summary>
+        public IList<MediaVersion> Versions { get; set; }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public Media() {
+            Versions = new List<MediaVersion>();
+        }
     }
 }
