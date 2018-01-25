@@ -19,7 +19,7 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     <dependencies>
       <group targetFramework=".NETStandard2.0">
         <dependency id="Piranha" version="4.2.0-alpha1" />
-        <dependency id="WindowsAzure.Storage" Version="8.7.0" />
+        <dependency id="WindowsAzure.Storage" version="8.7.0" />
       </group>
     </dependencies>
   </metadata>
