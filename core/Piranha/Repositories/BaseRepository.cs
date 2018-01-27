@@ -53,10 +53,11 @@ namespace Piranha.Repositories
                     .AsNoTracking()
                     .FirstOrDefault(m => m.Id == id);
 
-                if (cache != null && model != null) {
+                if (model != null)
                     App.Hooks.OnLoad<T>(model);
+
+                if (cache != null && model != null)
                     AddToCache(model);
-                }
             }
             return model;
         }

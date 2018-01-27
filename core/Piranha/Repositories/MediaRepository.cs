@@ -93,13 +93,13 @@ namespace Piranha.Repositories
                     .AsNoTracking()
                     .FirstOrDefault(m => m.Id == id);
 
-                if (model != null)
+                if (model != null) {
                     model.PublicUrl = storage.GetPublicUrl(model);
-
-                if (cache != null && model != null) {
                     App.Hooks.OnLoad<Media>(model);
-                    cache.Set(model.Id.ToString(), model);
                 }
+
+                if (cache != null && model != null)
+                    cache.Set(model.Id.ToString(), model);
             }
             return model;
         }
@@ -117,10 +117,11 @@ namespace Piranha.Repositories
                     .AsNoTracking()
                     .FirstOrDefault(f => f.Id == id);
 
-                if (cache != null && model != null) {
+                if (model != null)
                     App.Hooks.OnLoad<MediaFolder>(model);
+
+                if (cache != null && model != null)
                     cache.Set(model.Id.ToString(), model);
-                }
             }
             return model;
         }
