@@ -166,6 +166,46 @@ namespace Piranha.Tests
         }
 
         [Fact]
+        public void ImageFieldConversions() {
+            var media = new Data.Media() {
+                Id = Guid.NewGuid()
+            };
+
+            Piranha.Extend.Fields.ImageField field = media;
+            Assert.Equal(media.Id, field.Id.Value);
+        }
+
+        [Fact]
+        public void DocumentFieldConversions() {
+            var media = new Data.Media() {
+                Id = Guid.NewGuid()
+            };
+
+            Piranha.Extend.Fields.DocumentField field = media;
+            Assert.Equal(media.Id, field.Id.Value);
+        }
+
+        [Fact]
+        public void VideoFieldConversions() {
+            var media = new Data.Media() {
+                Id = Guid.NewGuid()
+            };
+
+            Piranha.Extend.Fields.VideoField field = media;
+            Assert.Equal(media.Id, field.Id.Value);
+        }
+
+        [Fact]
+        public void MediaFieldConversions() {
+            var media = new Data.Media() {
+                Id = Guid.NewGuid()
+            };
+
+            Piranha.Extend.Fields.MediaField field = media;
+            Assert.Equal(media.Id, field.Id.Value);
+        }
+
+        [Fact]
         public void ImageFieldConversionsNullImage() {
             var id = Guid.NewGuid();
 

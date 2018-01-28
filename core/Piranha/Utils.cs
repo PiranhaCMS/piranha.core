@@ -112,14 +112,16 @@ namespace Piranha
         /// <returns></returns>
         public static string FormatByteSize(double bytes)
         {
-            string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+            string[] SizeSuffixes = { "bytes", "KB", "MB", "GB" };
 
             int index = 0;
-            do
-            {
-                bytes /= 1024;
-                index++;
-            } while (bytes >= 1024);
+            if (bytes > 1023) {
+                do
+                {
+                    bytes /= 1024;
+                    index++;
+                } while (bytes >= 1024 && index < 3);
+            }
 
             return $"{bytes:0.00} {SizeSuffixes[index]}";
         }
