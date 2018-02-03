@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -16,6 +16,8 @@ namespace Piranha.Manager
     public static class Permission 
     {
         public const string Admin = "PiranhaAdmin";
+        public const string Aliases = "PiranhaAliases";
+        public const string AliasesEdit = "PiranhaAliasesEdit";
         public const string Config = "PiranhaConfig";
         public const string ConfigEdit = "PiranhaConfigEdit";
         public const string Media = "PiranhaMedia";
@@ -49,6 +51,8 @@ namespace Piranha.Manager
 
                 // Admin permissions
                 Admin,
+                Aliases,
+                AliasesEdit,
                 Config,
                 ConfigEdit,
                 Media,

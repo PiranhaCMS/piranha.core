@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016 Håkan Edling
+ * Copyright (c) 2016-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -40,6 +40,17 @@ public static class ManagerModuleExtensions
 
         // Setup authorization policies
         services.AddAuthorization(o => {
+            // Alias policies
+            o.AddPolicy(Permission.Aliases, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Aliases, Permission.Aliases);
+            });
+            o.AddPolicy(Permission.AliasesEdit, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Aliases, Permission.Aliases);
+                policy.RequireClaim(Permission.AliasesEdit, Permission.AliasesEdit);
+            });
+
             // Config policies
             o.AddPolicy(Permission.Config, policy => {
                 policy.RequireClaim(Permission.Admin, Permission.Admin);

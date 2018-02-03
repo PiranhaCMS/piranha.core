@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -27,6 +27,11 @@ namespace Piranha
         /// The object mutext used for initializing the context.
         /// </summary>
         static object mutex = new object();
+
+        /// <summary>
+        /// Gets/sets the alias set.
+        /// </summary>
+        public DbSet<Data.Alias> Aliases { get; set; }
 
         /// <summary>
         /// Gets/sets the category set.
@@ -122,6 +127,11 @@ namespace Piranha
         /// </summary>
         /// <param name="mb">The current model builder</param>
         protected override void OnModelCreating(ModelBuilder mb) {
+            mb.Entity<Data.Alias>().ToTable("Piranha_Aliases");
+            mb.Entity<Data.Alias>().Property(a => a.AliasUrl).IsRequired().HasMaxLength(256);
+            mb.Entity<Data.Alias>().Property(a => a.RedirectUrl).IsRequired().HasMaxLength(256);
+            mb.Entity<Data.Alias>().HasIndex(a => new { a.SiteId, a.AliasUrl }).IsUnique();
+
             mb.Entity<Data.Category>().ToTable("Piranha_Categories");
             mb.Entity<Data.Category>().Property(c => c.Title).IsRequired().HasMaxLength(64);
             mb.Entity<Data.Category>().Property(c => c.Slug).IsRequired().HasMaxLength(64);
