@@ -35,23 +35,37 @@ namespace Piranha.Tests.Repositories
         private const string ALIAS_4 = "/another-moved-page";
         private const string ALIAS_5 = "/the-last-moved-page";
 
+        private Guid SITE_ID = Guid.NewGuid();
         private Guid ALIAS_1_ID = Guid.NewGuid();
         protected ICache cache;
         #endregion
 
         protected override void Init() {
             using (var api = new Api(GetDb(), storage, cache)) {
+                // Add site
+                var site = new Data.Site() {
+                    Id = SITE_ID,
+                    Title = "Alias Site",
+                    InternalId = "AliasSite",
+                    IsDefault = true
+                };
+                api.Sites.Save(site);
+
+                // Add aliases
                 api.Aliases.Save(new Data.Alias() {
                     Id = ALIAS_1_ID,
+                    SiteId = SITE_ID,
                     AliasUrl = ALIAS_1,
                     RedirectUrl = "/redirect-1"
                 });
 
                 api.Aliases.Save(new Data.Alias() {
+                    SiteId = SITE_ID,
                     AliasUrl = ALIAS_4,
                     RedirectUrl = "/redirect-4"
                 });
                 api.Aliases.Save(new Data.Alias() {
+                    SiteId = SITE_ID,
                     AliasUrl = ALIAS_5,
                     RedirectUrl = "/redirect-5"
                 });
@@ -61,9 +75,12 @@ namespace Piranha.Tests.Repositories
         protected override void Cleanup() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 var aliases = api.Aliases.GetAll();
-
                 foreach (var a in aliases)
                     api.Aliases.Delete(a);
+
+                var sites = api.Sites.GetAll();
+                foreach (var s in sites)
+                    api.Sites.Delete(s);
             }
         }
 
@@ -78,6 +95,7 @@ namespace Piranha.Tests.Repositories
         public void Add() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 api.Aliases.Save(new Data.Alias() {
+                    SiteId = SITE_ID,
                     AliasUrl = ALIAS_2,
                     RedirectUrl = "/redirect-2"
                 });
@@ -89,6 +107,7 @@ namespace Piranha.Tests.Repositories
             using (var api = new Api(GetDb(), storage, cache)) {
                 Assert.ThrowsAny<Exception>(() =>
                     api.Aliases.Save(new Data.Alias() {
+                        SiteId = SITE_ID,
                         AliasUrl = ALIAS_1,
                         RedirectUrl = "/duplicate-alias"
                     }));
@@ -161,6 +180,7 @@ namespace Piranha.Tests.Repositories
         public void FixAliasUrl() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 var model = new Data.Alias() {
+                    SiteId = SITE_ID,
                     AliasUrl = "the-alias-url-1",
                     RedirectUrl = "/the-redirect-1"
                 };
@@ -175,6 +195,7 @@ namespace Piranha.Tests.Repositories
         public void FixRedirectUrl() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 var model = new Data.Alias() {
+                    SiteId = SITE_ID,
                     AliasUrl = "/the-alias-url-2",
                     RedirectUrl = "the-redirect-2"
                 };

@@ -38,11 +38,13 @@ namespace Piranha.Migrations
                         .IsRequired()
                         .HasMaxLength(256);
 
+                    b.Property<Guid>("SiteId");
+
                     b.Property<int>("Type");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AliasUrl")
+                    b.HasIndex("SiteId", "AliasUrl")
                         .IsUnique();
 
                     b.ToTable("Piranha_Aliases");
@@ -459,6 +461,14 @@ namespace Piranha.Migrations
                         .IsUnique();
 
                     b.ToTable("Piranha_Tags");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Alias", b =>
+                {
+                    b.HasOne("Piranha.Data.Site", "Site")
+                        .WithMany()
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Piranha.Data.Category", b =>

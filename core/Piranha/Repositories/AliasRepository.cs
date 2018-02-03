@@ -16,23 +16,62 @@ using System.Linq;
 
 namespace Piranha.Repositories
 {
-    public class AliasRepository : BaseRepositoryWithAll<Alias>, IAliasRepository
+    public class AliasRepository : BaseRepository<Alias>, IAliasRepository
     {
+        private readonly Api api;
+
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
         /// <param name="cache">The optional model cache</param>
-        public AliasRepository(IDb db, ICache cache = null)
-            : base(db, cache) { }
+        public AliasRepository(Api api, IDb db, ICache cache = null)
+            : base(db, cache) 
+            { 
+                this.api = api;
+            }
+
+        /// <summary>
+        /// Gets all available models for the specified site.
+        /// </summary>
+        /// <param name="siteId">The optional site id</param>
+        /// <returns>The available models</returns>
+        public IEnumerable<Alias> GetAll(Guid? siteId) {
+            var models = new List<Alias>();
+
+            if (!siteId.HasValue) {
+                var site = api.Sites.GetDefault();
+                if (site != null)
+                    siteId = site.Id;
+            }
+            
+            var aliases = db.Aliases
+                .AsNoTracking()
+                .Where(a => a.SiteId == siteId)
+                .Select(a => a.Id);
+
+            foreach (var a in aliases) {
+                var model = GetById(a);
+                if (model != null)
+                    models.Add(model);
+            }
+            return models;
+        }
 
         /// <summary>
         /// Gets the model with the given alias url.
         /// </summary>
         /// <param name="url">The unique url</param>
+        /// <param name="siteId">The optional site id</param>
         /// <returns>The model</returns>
-        public Alias GetByAliasUrl(string url) {
-            var id = cache != null ? cache.Get<Guid?>($"AliasId_{url}") : null;
+        public Alias GetByAliasUrl(string url, Guid? siteId = null) {
+            if (!siteId.HasValue) {
+                var site = api.Sites.GetDefault();
+                if (site != null)
+                    siteId = site.Id;
+            }
+
+            var id = cache != null ? cache.Get<Guid?>($"AliasId_{siteId}_{url}") : null;
             Alias model = null;
 
             if (id.HasValue) {
@@ -40,7 +79,7 @@ namespace Piranha.Repositories
             } else {
                 model = db.Aliases
                     .AsNoTracking()
-                    .FirstOrDefault(a => a.AliasUrl == url);
+                    .FirstOrDefault(a => a.SiteId == siteId && a.AliasUrl == url);
 
                 if (cache != null && model != null)
                     AddToCache(model);
@@ -105,7 +144,7 @@ namespace Piranha.Repositories
         /// <param name="model">The model</param>
         protected override void AddToCache(Alias model) {
             cache.Set(model.Id.ToString(), model);
-            cache.Set($"AliasId_{model.AliasUrl}", model.Id);
+            cache.Set($"AliasId_{model.SiteId}_{model.AliasUrl}", model.Id);
         }
 
         /// <summary>
@@ -113,7 +152,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="model">The model</param>
         protected override void RemoveFromCache(Alias model) {
-            cache.Remove($"AliasId_{model.AliasUrl}");
+            cache.Remove($"AliasId_{model.SiteId}_{model.AliasUrl}");
 
             base.RemoveFromCache(model);
         }

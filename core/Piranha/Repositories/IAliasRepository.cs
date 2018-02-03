@@ -19,8 +19,9 @@ namespace Piranha.Repositories
         /// <summary>
         /// Gets all available models.
         /// </summary>
+        /// <param name="siteId">The optional site id</param>
         /// <returns>The available models</returns>
-        IEnumerable<Alias> GetAll();
+        IEnumerable<Alias> GetAll(Guid? siteId = null);
 
         /// <summary>
         /// Gets the model with the specified id.
@@ -33,8 +34,9 @@ namespace Piranha.Repositories
         /// Gets the model with the given alias url.
         /// </summary>
         /// <param name="url">The unique url</param>
+        /// <param name="siteId">The optional site id</param>
         /// <returns>The model</returns>
-        Alias GetByAliasUrl(string url);
+        Alias GetByAliasUrl(string url, Guid? siteId = null);
 
         /// <summary>
         /// Adds or updates the given model in the database

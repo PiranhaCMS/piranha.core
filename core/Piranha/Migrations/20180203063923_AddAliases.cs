@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace Piranha.Migrations
 {
+    [NoCoverage]
     public partial class AddAliases : Migration
     {
-        [NoCoverage]
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -18,17 +18,24 @@ namespace Piranha.Migrations
                     Created = table.Column<DateTime>(nullable: false),
                     LastModified = table.Column<DateTime>(nullable: false),
                     RedirectUrl = table.Column<string>(maxLength: 256, nullable: false),
+                    SiteId = table.Column<Guid>(nullable: false),
                     Type = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Piranha_Aliases", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Piranha_Aliases_Piranha_Sites_SiteId",
+                        column: x => x.SiteId,
+                        principalTable: "Piranha_Sites",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Piranha_Aliases_AliasUrl",
+                name: "IX_Piranha_Aliases_SiteId_AliasUrl",
                 table: "Piranha_Aliases",
-                column: "AliasUrl",
+                columns: new[] { "SiteId", "AliasUrl" },
                 unique: true);
         }
 

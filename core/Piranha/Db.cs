@@ -130,7 +130,7 @@ namespace Piranha
             mb.Entity<Data.Alias>().ToTable("Piranha_Aliases");
             mb.Entity<Data.Alias>().Property(a => a.AliasUrl).IsRequired().HasMaxLength(256);
             mb.Entity<Data.Alias>().Property(a => a.RedirectUrl).IsRequired().HasMaxLength(256);
-            mb.Entity<Data.Alias>().HasIndex(a => a.AliasUrl).IsUnique();
+            mb.Entity<Data.Alias>().HasIndex(a => new { a.SiteId, a.AliasUrl }).IsUnique();
 
             mb.Entity<Data.Category>().ToTable("Piranha_Categories");
             mb.Entity<Data.Category>().Property(c => c.Title).IsRequired().HasMaxLength(64);

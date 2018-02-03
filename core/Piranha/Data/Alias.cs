@@ -20,6 +20,11 @@ namespace Piranha.Data
         public Guid Id { get; set; }
 
         /// <summary>
+        /// Gets/sets the id of the site this alias is for.
+        /// </summary>
+        public Guid SiteId { get; set; }
+
+        /// <summary>
         /// Gets/sets the alias url.
         /// </summary>
         public string AliasUrl { get; set; }
@@ -44,5 +49,11 @@ namespace Piranha.Data
         /// Gets/sets the last modification date.
         /// </summary>
         public DateTime LastModified { get; set; }
+
+        /// <summary>
+        /// Gets/sets the site this alias is for.
+        /// </summary>
+        /// <returns></returns>
+        public Site Site { get; set; }
     }
 }

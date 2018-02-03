@@ -132,7 +132,7 @@ namespace Piranha
         private void Setup(ICache modelCache = null, IImageProcessor imageProcessor = null) {
             cache = modelCache;
 
-            Aliases = new Repositories.AliasRepository(db, cache);
+            Aliases = new Repositories.AliasRepository(this, db, cache);
             Archives = new Repositories.ArchiveRepository(this, db);
             Categories = new Repositories.CategoryRepository(this, db, cache);
             Media = new Repositories.MediaRepository(db, storage, cache, imageProcessor);
