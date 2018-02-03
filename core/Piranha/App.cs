@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2017 Håkan Edling
+ * Copyright (c) 2016-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -179,6 +179,9 @@ namespace Piranha
                     if (!isInitialized) {
                         // Configure object mapper
                         var mapperConfig = new MapperConfiguration(cfg => {
+                            cfg.CreateMap<Data.Alias, Data.Alias>()
+                                .ForMember(a => a.Id, o => o.Ignore())
+                                .ForMember(a => a.Created, o => o.Ignore());
                             cfg.CreateMap<Data.Category, Data.Category>()
                                 .ForMember(c => c.Id, o => o.Ignore())
                                 .ForMember(c => c.Created, o => o.Ignore());

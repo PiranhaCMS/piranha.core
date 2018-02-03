@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -18,6 +18,11 @@ namespace Piranha
     /// </summary>
     public interface IDb : IDisposable
     {
+        /// <summary>
+        /// Gets/sets the alias set.
+        /// </summary>
+        DbSet<Data.Alias> Aliases { get; set; }
+
         /// <summary>
         /// Gets/sets the category set.
         /// </summary>
