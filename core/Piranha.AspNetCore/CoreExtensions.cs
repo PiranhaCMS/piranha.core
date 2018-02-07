@@ -21,10 +21,21 @@ public static class CoreExtensions
     /// <returns>The builder</returns>
     public static IApplicationBuilder UsePiranha(this IApplicationBuilder builder) {
         return builder
+            .UseMiddleware<Piranha.AspNetCore.AliasMiddleware>()
             .UseMiddleware<Piranha.AspNetCore.PageMiddleware>()
             .UseMiddleware<Piranha.AspNetCore.PostMiddleware>()
             .UseMiddleware<Piranha.AspNetCore.ArchiveMiddleware>()
             .UseMiddleware<Piranha.AspNetCore.StartPageMiddleware>();
+    }
+
+    /// <summary>
+    /// Uses the piranha alias middleware.
+    /// </summary>
+    /// <param name="builder">The current application builder</param>
+    /// <returns>The builder</returns>
+    public static IApplicationBuilder UsePiranhaAliases(this IApplicationBuilder builder) {
+        return builder
+            .UseMiddleware<Piranha.AspNetCore.AliasMiddleware>();
     }
 
     /// <summary>
