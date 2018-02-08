@@ -49,7 +49,7 @@ namespace Piranha.Web
 
                             return new RouteResponse() {
                                 Route = route,
-                                QueryString = $"id={page.Id}&startpage={page.IsStartPage}&piranha_handled=true",
+                                QueryString = $"id={page.Id}&startpage={page.IsStartPage.ToString().ToLower()}&piranha_handled=true",
                                 IsPublished = page.Published.HasValue && page.Published.Value <= DateTime.Now,
                                 CacheInfo = new HttpCacheInfo() {
                                     EntityTag = Utils.GenerateETag(page.Id.ToString(), page.LastModified),

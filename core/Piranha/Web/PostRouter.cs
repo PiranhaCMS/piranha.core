@@ -23,10 +23,17 @@ namespace Piranha.Web
         /// <returns>The piranha response, null if no matching post was found</returns>
         public static IRouteResponse Invoke(IApi api, string url, string hostname) {
             if (!String.IsNullOrWhiteSpace(url) && url.Length > 1) {
+                Data.Site site = null;
+                
+                if (!string.IsNullOrWhiteSpace(hostname))
+                    site = api.Sites.GetByHostname(hostname);
+                if (site == null)
+                    site = api.Sites.GetDefault();
+
                 var segments = url.Substring(1).Split(new char[] { '/' });
 
                 if (segments.Length >= 2) {
-                    var post = api.Posts.GetBySlug(segments[0], segments[1]);                    
+                    var post = api.Posts.GetBySlug(segments[0], segments[1], site.Id);                    
 
                     if (post != null) {
                         var route = post.Route ?? "/post";
