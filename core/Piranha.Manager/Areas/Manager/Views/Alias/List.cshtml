@@ -1,4 +1,4 @@
-@model Piranha.Areas.Manager.Models.AliasEditModel
+@model Piranha.Areas.Manager.Models.AliasListModel
 @{
     ViewBag.Title = "Aliases";
     ViewBag.Controller = "Alias";
@@ -6,11 +6,13 @@
 
 <div class="row">
     <div class="col-sm-12 buttons">
-        <a href="@Url.Action("Add")" class="btn btn-labeled btn-primary pull-right">
-            <span class="btn-label">
-                <i class="glyphicon glyphicon-plus"></i>
-            </span>Add alias
-        </a>
+        @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.AliasesEdit)).Succeeded) {        
+            <a href="#" class="btn btn-labeled btn-primary pull-right" data-toggle="modal" data-target="#modalAddAlias">
+                <span class="btn-label">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </span>Add alias
+            </a>
+        }
 
         @if (Model.Sites.Count() > 1) {
             <div id="btn-sitepicker" class="btn-group pull-right" style="margin-right: 15px">
@@ -56,17 +58,70 @@
         @foreach (var alias in Model.Items) {
             <tr>
                 <td class="text-limit-cell">
+                    <code>@alias.AliasUrl</code>
                 </td>
                 <td class="text-limit-cell">
+                    <code>@alias.RedirectUrl</code>
                 </td>
                 <td class="text-center">
+                    @if (alias.Type == Piranha.Models.RedirectType.Permanent) {
+                        <span class="glyphicon glyphicon-ok"></span>
+                    }
                 </td>
                 <td class="actions one">
-                    <a class="remove" href="@Url.Action("Delete", new { id = alias.Id })">
-                        <span class="glyphicon glyphicon-trash text-danger"></span>
-                    </a>
+                    @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.AliasesDelete)).Succeeded) {        
+                        <a class="remove" href="@Url.Action("Delete", new { id = alias.Id })">
+                            <span class="glyphicon glyphicon-trash text-danger"></span>
+                        </a>
+                    }
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<div id="modalAddAlias" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form action="@Url.Action("Add")" method="post">
+            <input type="hidden" name="SiteId" value="@Model.SiteId">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Add new alias</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Alias URL</label>
+                                <input type="text" class="form-control" name="AliasUrl" placeholder="Add a new Alias URL">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Redirect URL</label>
+                                <input type="text" class="form-control" name="RedirectUrl" placeholder="Add the URL to redirect to">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="IsPermanent" value="true">
+                                    If the redirect should be permanent.
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

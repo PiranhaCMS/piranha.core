@@ -75,6 +75,9 @@ namespace Piranha.Extend
             }
         }
 
+        //
+        // Private hook collections.
+        //
         private Dictionary<Type, object> onLoad;
         private Dictionary<Type, object> onBeforeSave;
         private Dictionary<Type, object> onAfterSave;

@@ -10,39 +10,30 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Piranha.Areas.Manager.Models
 {
     public class AliasEditModel
     {
-        public IEnumerable<Data.Alias> Items { get; set; }
-        public IEnumerable<Data.Site> Sites { get; set; }
-        public Guid? SiteId { get; set; }
-        public string SiteTitle { get; set; }
+        /// <summary>
+        /// Gets/sets the site id.
+        /// </summary>
+        public Guid SiteId { get; set; }
 
-        public AliasEditModel() {
-            Items = new List<Data.Alias>();
-            Sites = new List<Data.Site>();
-        }
+        /// <summary>
+        /// Gets/sets the alias url.
+        /// </summary>
+        public string AliasUrl { get; set; }
 
-        public static AliasEditModel Get(IApi api, Guid? siteId = null) {
-            Data.Site site;
+        /// <summary>
+        /// Gets/sets the redirect url.
+        /// </summary>
+        public string RedirectUrl { get; set; }
 
-            if (!siteId.HasValue) {
-                site = api.Sites.GetDefault();
-                if (site != null)
-                    siteId = site.Id;
-            } else {
-                site = api.Sites.GetById(siteId.Value);                
-            }
-
-            var model = new AliasEditModel() {
-                Items = api.Aliases.GetAll(siteId),
-                Sites = api.Sites.GetAll(),
-                SiteId = siteId,
-                SiteTitle = site.Title
-            };
-            return model;
-        }
+        /// <summary>
+        /// Gets/sets if the redirect is permanent.
+        /// </summary>
+        public bool IsPermanent { get; set; }
     }
 }

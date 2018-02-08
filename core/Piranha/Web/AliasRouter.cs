@@ -37,7 +37,7 @@ namespace Piranha.Web
                     return new RouteResponse() {
                         IsPublished = true,
                         RedirectUrl = alias.RedirectUrl,
-                        RedirectType = Models.RedirectType.Permanent
+                        RedirectType = alias.Type
                     };
                 }
             }

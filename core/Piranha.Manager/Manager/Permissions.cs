@@ -17,6 +17,7 @@ namespace Piranha.Manager
     {
         public const string Admin = "PiranhaAdmin";
         public const string Aliases = "PiranhaAliases";
+        public const string AliasesDelete = "PiranhaAliasesDelete";
         public const string AliasesEdit = "PiranhaAliasesEdit";
         public const string Config = "PiranhaConfig";
         public const string ConfigEdit = "PiranhaConfigEdit";
@@ -52,6 +53,7 @@ namespace Piranha.Manager
                 // Admin permissions
                 Admin,
                 Aliases,
+                AliasesDelete,
                 AliasesEdit,
                 Config,
                 ConfigEdit,

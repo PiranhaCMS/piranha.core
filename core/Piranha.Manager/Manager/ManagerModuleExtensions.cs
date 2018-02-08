@@ -45,6 +45,11 @@ public static class ManagerModuleExtensions
                 policy.RequireClaim(Permission.Admin, Permission.Admin);
                 policy.RequireClaim(Permission.Aliases, Permission.Aliases);
             });
+            o.AddPolicy(Permission.AliasesDelete, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Aliases, Permission.Aliases);
+                policy.RequireClaim(Permission.AliasesDelete, Permission.AliasesDelete);
+            });
             o.AddPolicy(Permission.AliasesEdit, policy => {
                 policy.RequireClaim(Permission.Admin, Permission.Admin);
                 policy.RequireClaim(Permission.Aliases, Permission.Aliases);

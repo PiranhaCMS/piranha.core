@@ -48,6 +48,8 @@ namespace Piranha.Repositories
             var aliases = db.Aliases
                 .AsNoTracking()
                 .Where(a => a.SiteId == siteId)
+                .OrderBy(a => a.AliasUrl)
+                .ThenBy(a => a.RedirectUrl)
                 .Select(a => a.Id);
 
             foreach (var a in aliases) {

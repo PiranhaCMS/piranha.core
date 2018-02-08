@@ -55,5 +55,12 @@ namespace Piranha.Data
         /// </summary>
         /// <returns></returns>
         public Site Site { get; set; }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public Alias() {
+            Type = Models.RedirectType.Temporary;
+        }
     }
 }
