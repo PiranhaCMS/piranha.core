@@ -156,6 +156,18 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
+        public void GetPostByUrlDefaultSiteWithAction() {
+            using (var api = new Api(GetDb(), storage)) {
+                var response = Piranha.Web.PostRouter.Invoke(api, "/blog/my-first-post/action", null);
+
+                Assert.NotNull(response);
+                Assert.Equal("/post/action", response.Route);
+                Assert.Equal(true, response.IsPublished);
+                Assert.Equal($"id={POST1_ID}&piranha_handled=true", response.QueryString);
+            }
+        }
+
+        [Fact]
         public void GetPostByUrlNoneDefaultSite() {
             using (var api = new Api(GetDb(), storage)) {
                 var response = Piranha.Web.PostRouter.Invoke(api, "/news/my-second-page", null);
@@ -257,6 +269,18 @@ namespace Piranha.Tests.Routers
 
                 Assert.NotNull(response);
                 Assert.Equal("/post", response.Route);
+                Assert.Equal(true, response.IsPublished);
+                Assert.Equal($"id={POST2_ID}&piranha_handled=true", response.QueryString);
+            }
+        }
+
+        [Fact]
+        public void GetPostByUrlOtherSiteAction() {
+            using (var api = new Api(GetDb(), storage)) {
+                var response = Piranha.Web.PostRouter.Invoke(api, "/news/my-second-post/action", "www.myothersite.com");
+
+                Assert.NotNull(response);
+                Assert.Equal("/post/action", response.Route);
                 Assert.Equal(true, response.IsPublished);
                 Assert.Equal($"id={POST2_ID}&piranha_handled=true", response.QueryString);
             }

@@ -107,7 +107,19 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public void GetStarpageDefaultSite() {
+        public void GetPageByUrlDefaultSiteWithAction() {
+            using (var api = new Api(GetDb(), storage)) {
+                var response = Piranha.Web.PageRouter.Invoke(api, "/my-first-page/action", null);
+
+                Assert.NotNull(response);
+                Assert.Equal("/page/action", response.Route);
+                Assert.Equal(true, response.IsPublished);
+                Assert.Equal($"id={PAGE1_ID}&startpage=true&piranha_handled=true", response.QueryString);
+            }
+        }
+
+        [Fact]
+        public void GetStartpageDefaultSite() {
             using (var api = new Api(GetDb(), storage)) {
                 var response = Piranha.Web.StartPageRouter.Invoke(api, "/", null);
 
@@ -128,12 +140,33 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
+        public void GetStartpageDefaultSiteNone() {
+            using (var api = new Api(GetDb(), storage)) {
+                var response = Piranha.Web.StartPageRouter.Invoke(api, "/slug", null);
+
+                Assert.Null(response);
+            }
+        }
+
+        [Fact]
         public void GetPageByUrlOtherSite() {
             using (var api = new Api(GetDb(), storage)) {
                 var response = Piranha.Web.PageRouter.Invoke(api, "/my-second-page", "www.myothersite.com");
 
                 Assert.NotNull(response);
                 Assert.Equal("/page", response.Route);
+                Assert.Equal(true, response.IsPublished);
+                Assert.Equal($"id={PAGE2_ID}&startpage=true&piranha_handled=true", response.QueryString);
+            }
+        }
+
+        [Fact]
+        public void GetPageByUrlOtherSiteWithAction() {
+            using (var api = new Api(GetDb(), storage)) {
+                var response = Piranha.Web.PageRouter.Invoke(api, "/my-second-page/action", "www.myothersite.com");
+
+                Assert.NotNull(response);
+                Assert.Equal("/page/action", response.Route);
                 Assert.Equal(true, response.IsPublished);
                 Assert.Equal($"id={PAGE2_ID}&startpage=true&piranha_handled=true", response.QueryString);
             }
@@ -155,6 +188,15 @@ namespace Piranha.Tests.Routers
         public void GetPageByUrlNoneOtherSite() {
             using (var api = new Api(GetDb(), storage)) {
                 var response = Piranha.Web.PageRouter.Invoke(api, "/my-first-page", "www.myothersite.com");
+
+                Assert.Null(response);
+            }
+        }
+
+        [Fact]
+        public void GetStartpageOtherSiteNone() {
+            using (var api = new Api(GetDb(), storage)) {
+                var response = Piranha.Web.StartPageRouter.Invoke(api, "/slug", "www.myothersite.com");
 
                 Assert.Null(response);
             }
