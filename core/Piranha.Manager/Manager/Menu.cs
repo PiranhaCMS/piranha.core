@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016 Håkan Edling
+ * Copyright (c) 2016-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -103,6 +103,9 @@ namespace Piranha.Manager
             },
             new MenuItem() {
                 InternalId = "Settings", Name = "Settings", Css = "glyphicon glyphicon-wrench", Items = new MenuItemList {
+                    new MenuItem() {
+                        InternalId = "Aliases", Name = "Aliases", Controller = "Alias", Action = "List", Policy = Permission.Aliases, Css = "glyphicon glyphicon-random"
+                    },
                     new MenuItem() {
                         InternalId = "Sites", Name = "Sites", Controller = "Site", Action = "List", Policy = Permission.Sites, Css = "glyphicon glyphicon-globe"
                     }
