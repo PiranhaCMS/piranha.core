@@ -77,12 +77,14 @@ namespace Piranha.Repositories
             if (id.HasValue) {
                 model = GetById(id.Value);
             } else {
-                model = db.Aliases
+                id = db.Aliases
                     .AsNoTracking()
-                    .FirstOrDefault(a => a.SiteId == siteId && a.AliasUrl == url);
+                    .Where(a => a.SiteId == siteId && a.AliasUrl == url)
+                    .Select(a => a.Id)
+                    .FirstOrDefault();
 
-                if (cache != null && model != null)
-                    AddToCache(model);
+                if (id != Guid.Empty)
+                    model = GetById(id.Value);
             }
             return model;
         }

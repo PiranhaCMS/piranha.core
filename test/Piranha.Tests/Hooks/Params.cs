@@ -50,6 +50,7 @@ namespace Piranha.Tests.Hooks
             }
         }
 
+        [Fact]
         public void OnLoad() {
             Piranha.App.Hooks.Param.RegisterOnLoad(m => throw new ParamOnLoadException());
 

@@ -81,6 +81,7 @@ namespace Piranha.Tests.Hooks
             }
         }
 
+        [Fact]
         public void OnLoad() {
             Piranha.App.Hooks.Category.RegisterOnLoad(m => throw new CategoryOnLoadException());
 

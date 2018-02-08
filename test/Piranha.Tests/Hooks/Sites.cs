@@ -50,6 +50,7 @@ namespace Piranha.Tests.Hooks
             }
         }
 
+        [Fact]
         public void OnLoad() {
             Piranha.App.Hooks.Site.RegisterOnLoad(m => throw new SiteOnLoadException());
 

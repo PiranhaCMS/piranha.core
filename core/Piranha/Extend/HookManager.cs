@@ -87,6 +87,11 @@ namespace Piranha.Extend
         public delegate void ModelDelegate<T>(T model);
 
         /// <summary>
+        /// Gets the hooks available for aliases.
+        /// </summary>
+        public RepositoryHooks<Data.Alias> Alias { get; private set; }
+
+        /// <summary>
         /// Gets the hooks available for categories.
         /// </summary>
         public RepositoryHooks<Data.Category> Category { get; private set; }
@@ -126,6 +131,7 @@ namespace Piranha.Extend
             onBeforeDelete = new Dictionary<Type, object>();
             onAfterDelete = new Dictionary<Type, object>();
 
+            Alias = new RepositoryHooks<Data.Alias>();
             Category = new RepositoryHooks<Data.Category>();
             Media = new RepositoryHooks<Data.Media>();
             MediaFolder = new RepositoryHooks<Data.MediaFolder>();

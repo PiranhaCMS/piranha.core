@@ -24,6 +24,7 @@ namespace Piranha.Tests.Routers
         private Guid SITE2_ID = Guid.NewGuid();
         private Guid PAGE1_ID = Guid.NewGuid();
         private Guid PAGE2_ID = Guid.NewGuid();
+        private Guid PAGE3_ID = Guid.NewGuid();
 
         [PageType(Title = "My PageType")]
         public class MyPage : Models.Page<MyPage>
@@ -75,6 +76,16 @@ namespace Piranha.Tests.Routers
                 page2.Body = "My second body";
                 page2.Published = DateTime.Now;
                 api.Pages.Save(page2);
+
+                var page3 = MyPage.Create(api);
+                page3.Id = PAGE3_ID;
+                page3.SiteId = SITE1_ID;
+                page3.SortOrder = 1;
+                page3.Title = "My third page";
+                page3.Published = DateTime.Now;
+                page3.RedirectUrl = "http://www.redirect.com";
+                page3.RedirectType = Models.RedirectType.Temporary;
+                api.Pages.Save(page3);
             }
         }
 
@@ -115,6 +126,17 @@ namespace Piranha.Tests.Routers
                 Assert.Equal("/page/action", response.Route);
                 Assert.Equal(true, response.IsPublished);
                 Assert.Equal($"id={PAGE1_ID}&startpage=true&piranha_handled=true", response.QueryString);
+            }
+        }
+
+        [Fact]
+        public void GetPageByUrlDefaultSiteWithRedirect() {
+            using (var api = new Api(GetDb(), storage)) {
+                var response = Piranha.Web.PageRouter.Invoke(api, "/my-third-page", null);
+
+                Assert.NotNull(response);
+                Assert.Equal("http://www.redirect.com", response.RedirectUrl);
+                Assert.Equal(Models.RedirectType.Temporary, response.RedirectType);
             }
         }
 
