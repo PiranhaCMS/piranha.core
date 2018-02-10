@@ -70,7 +70,7 @@ namespace Piranha.Areas.Manager.Controllers
             // Save
             if (model.Save(api)) {
                 SuccessMessage("The post has been saved.");
-                return RedirectToAction("Edit", "Page", new { id = model.BlogId });
+                return RedirectToAction("Edit", new { id = model.Id });
             } else {
                 ErrorMessage("The post could not be saved.", false);
                 return View("Edit", model.Refresh(api));
@@ -98,7 +98,7 @@ namespace Piranha.Areas.Manager.Controllers
             // Save
             if (model.Save(api, true)) {
                 SuccessMessage("The post has been published.");
-                return RedirectToAction("Edit", "Page", new { id = model.BlogId });
+                return RedirectToAction("Edit", new { id = model.Id });
             } else {
                 ErrorMessage("The post could not be published.", false);
                 return View(model);
@@ -115,7 +115,7 @@ namespace Piranha.Areas.Manager.Controllers
         public IActionResult UnPublish(Models.PostEditModel model) {
             if (model.Save(api, false)) {
                 SuccessMessage("The post has been unpublished.");
-                return RedirectToAction("Edit", "Page", new { id = model.BlogId });
+                return RedirectToAction("Edit", new { id = model.Id });
             } else {
                 ErrorMessage("The post could not be unpublished.", false);
                 return View(model);

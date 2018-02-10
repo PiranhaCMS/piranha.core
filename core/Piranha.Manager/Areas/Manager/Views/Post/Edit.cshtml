@@ -30,6 +30,11 @@
 
     <div class="row">
         <div class="col-sm-12 buttons">
+            <!-- Back -->
+            <a href="@Url.Action("Edit", "Page", new { id = Model.BlogId })" class="btn btn-info">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+
             <!-- Settings -->
             <button id="btn-settings" type="button" class="btn btn-primary">
                 <span class="glyphicon glyphicon-cog"></span>
@@ -130,7 +135,7 @@
                     <div class="form-group">
                         <label>Publish date</label>
                         <div class="input-group date datetimepicker">
-                            @Html.TextBoxFor(m => m.Published, new { @class = "form-control small" })
+                            @Html.TextBoxFor(m => m.Published, new { @class = "form-control small", value = Model.Published.HasValue ? Model.Published.Value.ToString("yyyy-MM-dd HH:mm") : "" })
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
