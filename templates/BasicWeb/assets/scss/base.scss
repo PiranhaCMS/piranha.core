@@ -1,0 +1,88 @@
+.header-bg {
+    background-size: cover;
+    background-position: 50% 50%;
+}
+
+header {
+    padding: 1rem 0;
+
+    h1+.lead {
+       margin: 2rem 0; 
+    }
+
+    &.site-header.site-header-dark {
+        position: initial;
+
+        .nav-site {
+            a {
+                color: #000;
+    
+                &:hover {
+                    color: #000;
+                }
+            }
+    
+            .active {
+                a {
+                    color: #000;
+                }
+            }    
+        }
+    }
+
+    &.page-header {
+        background-size: cover;
+        background-position: 50% 50%;            
+    }
+}
+
+.main {
+    margin: 3rem 0;
+
+    img {
+        max-width: 100%;
+    }
+}
+
+.teasers {
+    margin-bottom: 1rem;
+
+    .teaser {
+        margin-bottom: 2rem;
+    }
+}
+
+.archive-item {
+    padding-top: 3rem;
+
+    &:first-child {
+        padding-top: 0;
+    }
+
+    a {
+        font-weight: 500;
+    }
+}
+
+.tag {
+    white-space: nowrap;
+}
+
+.post-header {
+    img {
+        margin-top: 2rem;
+    }
+
+    .tag {
+        margin-right: 1rem;
+    }
+}
+
+.post-body {
+    margin-top: 3rem;
+}
+.page-body {
+    h1 {
+        margin-bottom: 3rem;
+    }
+}
