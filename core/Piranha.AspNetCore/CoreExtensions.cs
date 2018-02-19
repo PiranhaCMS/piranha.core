@@ -25,7 +25,8 @@ public static class CoreExtensions
             .UseMiddleware<Piranha.AspNetCore.PageMiddleware>()
             .UseMiddleware<Piranha.AspNetCore.PostMiddleware>()
             .UseMiddleware<Piranha.AspNetCore.ArchiveMiddleware>()
-            .UseMiddleware<Piranha.AspNetCore.StartPageMiddleware>();
+            .UseMiddleware<Piranha.AspNetCore.StartPageMiddleware>()
+            .UseMiddleware<Piranha.AspNetCore.SitemapMiddleware>();
     }
 
     /// <summary>
@@ -76,5 +77,15 @@ public static class CoreExtensions
     public static IApplicationBuilder UsePiranhaStartPage(this IApplicationBuilder builder) {
         return builder
             .UseMiddleware<Piranha.AspNetCore.StartPageMiddleware>();
+    }
+
+    /// <summary>
+    /// Uses the piranha sitemap generation middleware.
+    /// </summary>
+    /// <param name="builder">The current application builder</param>
+    /// <returns>The builder</returns>
+    public static IApplicationBuilder UsePiranhaSitemap(this IApplicationBuilder builder) {
+        return builder
+            .UseMiddleware<Piranha.AspNetCore.SitemapMiddleware>();        
     }
 }

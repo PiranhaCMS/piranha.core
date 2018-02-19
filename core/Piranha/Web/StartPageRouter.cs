@@ -30,7 +30,6 @@ namespace Piranha.Web
                 if (site == null)
                     site = api.Sites.GetDefault();
 
-
                 var page = api.Pages.GetStartpage(site.Id);
 
                 if (page != null) {
