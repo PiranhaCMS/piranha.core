@@ -25,6 +25,19 @@
             @Html.TextAreaFor(m => m.MetaDescription, new { @class = "form-control small count-me", rows = 5, maxlength = 256, placeholder = "Meta description", style = "height:82px" })
             <p>0/255</p>
         </div>
+        @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesPublish)).Succeeded) {
+            <div class="form-group">
+                <label>Publish date</label>
+                <div class="input-group date datetimepicker">
+                    @Html.TextBoxFor(m => m.Published, new { @class = "form-control small", value = Model.Published.HasValue ? Model.Published.Value.ToString("yyyy-MM-dd HH:mm") : "" })
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        } else {
+            @Html.HiddenFor(m => m.Published)
+        }
     </div>
     <div class="col-sm-6">
         <div class="row">

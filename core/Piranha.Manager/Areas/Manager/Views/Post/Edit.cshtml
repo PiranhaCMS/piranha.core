@@ -132,15 +132,19 @@
                         <label>Meta Keywords</label>
                         @Html.TextBoxFor(m => m.MetaKeywords, new { @class = "form-control small", maxlength = 128, placeholder = "Meta keywords" })
                     </div>
-                    <div class="form-group">
-                        <label>Publish date</label>
-                        <div class="input-group date datetimepicker">
-                            @Html.TextBoxFor(m => m.Published, new { @class = "form-control small", value = Model.Published.HasValue ? Model.Published.Value.ToString("yyyy-MM-dd HH:mm") : "" })
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
+                    @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PostsPublish)).Succeeded) {
+                        <div class="form-group">
+                            <label>Publish date</label>
+                            <div class="input-group date datetimepicker">
+                                @Html.TextBoxFor(m => m.Published, new { @class = "form-control small", value = Model.Published.HasValue ? Model.Published.Value.ToString("yyyy-MM-dd HH:mm") : "" })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
                         </div>
-                    </div>
+                    } else {
+                        @Html.HiddenFor(m => m.Published)
+                    }
                     @if (Model.PostType.Routes.Count > 1) {
                         <div class="form-group">
                             <label>Route</label>
