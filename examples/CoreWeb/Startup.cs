@@ -74,11 +74,6 @@ namespace CoreWeb
             var api = services.GetService<IApi>();
             App.Init(api);
 
-            // Config
-            using (var config = new Config(api)) {
-                config.CacheExpiresPages = 0; 
-            }
-
             // Build types
             var pageTypeBuilder = new Piranha.AttributeBuilder.PageTypeBuilder(api)
                 .AddType(typeof(Models.StandardBlog))

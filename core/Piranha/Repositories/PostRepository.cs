@@ -308,6 +308,14 @@ namespace Piranha.Repositories
                     }
                 }                
 
+                // If this is a published post, update last modified for the
+                // blog page for caching purposes.
+                if (post.Published.HasValue) {
+                    var page = db.Pages
+                        .FirstOrDefault(p => p.Id == post.BlogId);
+                    page.LastModified = DateTime.Now;
+                }
+
                 db.SaveChanges();
 
                 if (cache != null)
@@ -326,6 +334,15 @@ namespace Piranha.Repositories
 
             if (model != null) {
                 db.Posts.Remove(model);
+
+                // If this is a published post, update last modified for the
+                // blog page for caching purposes.
+                if (model.Published.HasValue) {
+                    var page = db.Pages
+                        .FirstOrDefault(p => p.Id == model.BlogId);
+                    page.LastModified = DateTime.Now;
+                }
+
                 db.SaveChanges();
 
                 // Check if we have the post in cache, and if so remove it

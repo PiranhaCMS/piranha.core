@@ -34,15 +34,19 @@ namespace Piranha.Web
                 var page = api.Pages.GetStartpage(site.Id);
 
                 if (page != null) {
-                    return new RouteResponse() {
-                        Route = page.Route ?? "/page",
-                        QueryString = "id=" + page.Id + "&startpage=true&piranha_handled=true",
-                            IsPublished = page.Published.HasValue && page.Published.Value <= DateTime.Now,
-                        CacheInfo = new HttpCacheInfo() {
-                            EntityTag = Utils.GenerateETag(page.Id.ToString(), page.LastModified),
-                            LastModified = page.LastModified
-                        }
-                    };
+                    if (page.ContentType == "Page") {
+                        return new RouteResponse() {
+                            Route = page.Route ?? "/page",
+                            QueryString = "id=" + page.Id + "&startpage=true&piranha_handled=true",
+                                IsPublished = page.Published.HasValue && page.Published.Value <= DateTime.Now,
+                            CacheInfo = new HttpCacheInfo() {
+                                EntityTag = Utils.GenerateETag(page.Id.ToString(), page.LastModified),
+                                LastModified = page.LastModified
+                            }
+                        };
+                    } else if (page.ContentType == "Blog") {
+                        return ArchiveRouter.Invoke(api, $"/{page.Slug}", hostname);
+                    }
                 }
             }
             return null;

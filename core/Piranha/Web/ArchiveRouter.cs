@@ -89,7 +89,11 @@ namespace Piranha.Web
                         return new RouteResponse() {
                             Route = route,
                             QueryString = $"id={blog.Id}&year={year}&month={month}&page={page}&category={categoryId}&piranha_handled=true",
-                            IsPublished = true
+                            IsPublished = blog.Published.HasValue && blog.Published.Value <= DateTime.Now,
+                            CacheInfo = new HttpCacheInfo() {
+                                EntityTag = Utils.GenerateETag(blog.Id.ToString(), blog.LastModified),
+                                LastModified = blog.LastModified
+                            }
                         };                            
                     }
                 }

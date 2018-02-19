@@ -29,16 +29,6 @@ namespace Piranha.Models
         public Taxonomy Category { get; set; }
 
         /// <summary>
-        /// Gets/sets the category id.
-        /// </summary>
-        //public Guid CategoryId { get; set; }
-
-        /// <summary>
-        /// Gets/sets the category name.
-        /// </summary>
-        //public string CategoryName { get; set; }
-
-        /// <summary>
         /// Gets/sets the optional redirect.
         /// </summary>
         public string RedirectUrl { get; set; }
