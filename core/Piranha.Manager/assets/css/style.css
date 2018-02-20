@@ -9245,6 +9245,13 @@ li.sitemap-item .actions.one {
 .single-region .markdown .nav-tabs {
   display: none;
 }
+.inline-search {
+  border: 0 none;
+  background: #f4f4f4;
+  margin-top: 10px;
+  border-radius: 0;
+  box-shadow: unset;
+}
 .custom-editor {
   padding: 0px 15px;
 }

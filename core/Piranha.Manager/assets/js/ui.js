@@ -141,7 +141,7 @@ $(document).on('click', '.table-filter button', function (e) {
     var data = $(this).data();
     var table = $(this).parent().data().table;
 
-    manager.tools.tablesort(table, data.filter, $('#blog-type-filter').val(), $('#blog-category-filter').val());
+    manager.tools.tablesort(table, data.filter, $('#blog-type-filter').val(), $('#blog-category-filter').val(), $('#blog-search').val());
 
     $(this).parent().find('button').removeClass('btn-primary');
     $(this).addClass('btn-primary');
@@ -153,7 +153,16 @@ $(document).on('change', '.table-filter select', function (e) {
     var data = $(this).parent().find('button.btn-primary').data();
     var table = $(this).parent().data().table;
     
-    manager.tools.tablesort(table, data.filter, $('#blog-type-filter').val(), $('#blog-category-filter').val());
+    manager.tools.tablesort(table, data.filter, $('#blog-type-filter').val(), $('#blog-category-filter').val(), $('#blog-search').val());
+});
+
+$(document).on('keyup', '.table-filter #blog-search', function (e) {
+    e.preventDefault();
+
+    var data = $(this).parent().find('button.btn-primary').data();
+    var table = $(this).parent().data().table;
+
+    manager.tools.tablesort(table, data.filter, $('#blog-type-filter').val(), $('#blog-category-filter').val(), $('#blog-search').val());
 });
 
 //
@@ -288,7 +297,7 @@ var manager = {
             }
         },
 
-        tablesort: function(table, status, type, category) {
+        tablesort: function(table, status, type, category, search) {
             $.each($(table).find('tr'), function (i, e) {
                 if (i > 0) {
                     var row = $(e);
@@ -300,6 +309,10 @@ var manager = {
                         show = false;
                     if (category != '' && category != row.data().category)
                         show = false;
+                    if (search != '') {
+                        if (!row.first('td').text().toLowerCase().includes(search))
+                            show = false;
+                    }
 
                     if (show)
                         row.show();

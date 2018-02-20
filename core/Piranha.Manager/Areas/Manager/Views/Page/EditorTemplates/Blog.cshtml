@@ -8,9 +8,9 @@
     <div class="col-sm-12 custom-editor-list">
         <table id="post-table" class="table table-striped table-main">
             <tbody>
-                @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PostsAdd)).Succeeded) {
-                    <tr>
-                        <td colspan="4" style="border-top:none">
+                <tr>
+                    <td colspan="4" style="border-top:none">
+                        @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PostsAdd)).Succeeded) {
                             <div class="btn-group pull-right">
                                 <button type="button" class="btn btn-labeled btn-primary btn-sm" data-toggle="dropdown">
                                     <span class="btn-label">
@@ -27,26 +27,27 @@
                                     }
                                 </ul>
                             </div>
-                            <div class="table-filter" data-table="#post-table">
-                                <button class="btn btn-sm btn-primary" data-filter="">All</button>
-                                <button class="btn btn-sm" data-filter="draft">Drafts</button>
-                                <button class="btn btn-sm" data-filter="scheduled">Scheduled</button>
-                                <select id="blog-type-filter" class="form-control input-sm" style="display:inline;width:auto">
-                                    <option value="">All post types</option>
-                                    @foreach (var type in blogModel.CurrentPostTypes) {
-                                        <option value="@type.Id">@type.Title</option>
-                                    }
-                                </select>
-                                <select id="blog-category-filter" class="form-control input-sm" style="display:inline;width:auto">
-                                    <option value="">All categories</option>
-                                    @foreach (var category in blogModel.CurrentCategories) {
-                                        <option value="@category.Id">@category.Title</option>
-                                    }
-                                </select>
-                            </div>
-                        </td>
-                    </tr>
-                }
+                        }
+                        <div class="table-filter" data-table="#post-table">
+                            <button class="btn btn-sm btn-primary" data-filter="">All</button>
+                            <button class="btn btn-sm" data-filter="draft">Drafts</button>
+                            <button class="btn btn-sm" data-filter="scheduled">Scheduled</button>
+                            <select id="blog-type-filter" class="form-control input-sm" style="display:inline;width:auto">
+                                <option value="">All post types</option>
+                                @foreach (var type in blogModel.CurrentPostTypes) {
+                                    <option value="@type.Id">@type.Title</option>
+                                }
+                            </select>
+                            <select id="blog-category-filter" class="form-control input-sm" style="display:inline;width:auto">
+                                <option value="">All categories</option>
+                                @foreach (var category in blogModel.CurrentCategories) {
+                                    <option value="@category.Id">@category.Title</option>
+                                }
+                            </select>
+                            <input id="blog-search" class="form-control input-block inline-search" placeholder="Search for a post in the archive">                        
+                        </div>
+                    </td>
+                </tr>
                 @foreach (var post in blogModel.Posts) {
                     var status = "";
                     if (!post.Published.HasValue) {
