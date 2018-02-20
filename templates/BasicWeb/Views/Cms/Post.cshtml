@@ -1,0 +1,32 @@
+@model BasicWeb.Models.BlogPost
+@inject Piranha.IApi Api
+@{
+    ViewBag.Title = Model.Title;
+}
+
+<div class="main">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-sm-8 post-header">
+                <h1>@Model.Title</h1>
+                @if (Model.Tags.Count > 0) {
+                    foreach (var tag in Model.Tags) {
+                        <text><span class="tag"># @tag.Title</span></text>
+                    }
+                }
+            </div>
+        </div>
+        @if (Model.Heading.PrimaryImage.HasValue) {
+            <div class="row">
+                <div class="col-sm post-header">
+                    <img class="img-fluid" src="@Url.Content(Model.Heading.PrimaryImage.Resize(Api, 1100, 400))">
+                </div>
+            </div>
+        }
+        <div class="row justify-content-center">
+            <div class="col-sm-8 post-body">
+                @Html.Raw(Model.Body)
+            </div>
+        </div>
+    </div>
+</div>

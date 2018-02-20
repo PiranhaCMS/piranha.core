@@ -1,0 +1,13 @@
+@model Piranha.Models.IMeta
+
+@if (!string.IsNullOrEmpty(Model.MetaKeywords)) {
+    <meta key="keywords" value="@Model.MetaKeywords">
+}
+@if (!string.IsNullOrEmpty(Model.MetaDescription)) {
+    <meta key="description" value="@Model.MetaDescription">
+}
+<meta key="og:title" value="@Model.Title">
+<meta key="og:type" value="article">
+@if (!string.IsNullOrEmpty(Model.MetaDescription)) {
+    <meta key="og:description" value="@Model.MetaDescription">
+}

@@ -1,0 +1,12 @@
+@inject Piranha.IApi Api
+@{
+    var sitemap = Api.Sites.GetSitemap();
+}
+
+<ul class="nav nav-site justify-content-center">
+    @foreach (var item in sitemap) {
+        <li class="nav-item @(item.Id == ViewBag.CurrentPage ? "active" : "")">
+            <a class="nav-link" href="@item.Permalink"><span>@item.MenuTitle</span></a>
+        </li>
+    }
+</ul>
