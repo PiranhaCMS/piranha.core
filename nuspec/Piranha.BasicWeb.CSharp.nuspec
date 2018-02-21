@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>Piranha.BasicWeb.CSharp</id>
+    <version>4.2.0-beta2</version>
+    <title>Piranha CMS Basic Web Template</title>
+    <authors>Håkan Edling</authors>
+    <owners>Håkan Edling</owners>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
+    <iconUrl>http://piranhacms.org/assets/twitter-shield.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Piranha CMS Basic Web Template</description>
+    <releaseNotes>
+      See the changelog available at:
+      https://github.com/piranhacms/piranha.core/wiki/changelog
+    </releaseNotes>
+    <copyright>Copyright 2018 (c) Håkan Edling</copyright>
+    <tags>cms mvc aspnetcore netstandard</tags>
+  </metadata>
+  <files>
+    <file src="content\wwwroot\_._" target="content\wwwroot\_._" />
+    <file src="..\templates\BasicWeb\.template.config\template.json" target="content\.template.config\template.json" />
+    <file src="..\templates\BasicWeb\assets\scss\base.scss" target="content\assets\scss\base.scss" />
+    <file src="..\templates\BasicWeb\assets\scss\colors.scss" target="content\assets\scss\colors.scss" />
+    <file src="..\templates\BasicWeb\assets\scss\style.scss" target="content\assets\scss\style.scss" />
+    <file src="..\templates\BasicWeb\assets\scss\theme.scss" target="content\assets\scss\theme.scss" />
+    <file src="..\templates\BasicWeb\Controllers\CmsController.cs" target="content\Controllers\CmsController.cs" />
+    <file src="..\templates\BasicWeb\Controllers\SetupController.cs" target="content\Controllers\SetupController.cs" />
+    <file src="..\templates\BasicWeb\Models\Regions\Heading.cs" target="content\Models\Regions\Heading.cs" />
+    <file src="..\templates\BasicWeb\Models\Regions\Teaser.cs" target="content\Models\Regions\Teaser.cs" />
+    <file src="..\templates\BasicWeb\Models\BlogArchive.cs" target="content\Models\BlogArchive.cs" />
+    <file src="..\templates\BasicWeb\Models\BlogPost.cs" target="content\Models\BlogPost.cs" />
+    <file src="..\templates\BasicWeb\Models\StandardPage.cs" target="content\Models\StandardPage.cs" />
+    <file src="..\templates\BasicWeb\Models\StartPage.cs" target="content\Models\StartPage.cs" />
+    <file src="..\templates\BasicWeb\Views\Cms\Archive.cshtml" target="content\Views\Cms\Archive.cshtml" />
+    <file src="..\templates\BasicWeb\Views\Cms\Page.cshtml" target="content\Views\Cms\Page.cshtml" />
+    <file src="..\templates\BasicWeb\Views\Cms\Post.cshtml" target="content\Views\Cms\Post.cshtml" />
+    <file src="..\templates\BasicWeb\Views\Cms\Start.cshtml" target="content\Views\Cms\Start.cshtml" />
+    <file src="..\templates\BasicWeb\Views\Shared\Partial\_Menu.cshtml" target="content\Views\Shared\Partial\_Menu.cshtml" />
+    <file src="..\templates\BasicWeb\Views\Shared\Partial\_Meta.cshtml" target="content\Views\Shared\Partial\_Meta.cshtml" />
+    <file src="..\templates\BasicWeb\Views\Shared\_Layout.cshtml" target="content\Views\Shared\_Layout.cshtml" />
+    <file src="..\templates\BasicWeb\Views\_ViewStart.cshtml" target="content\Views\_ViewStart.cshtml" />
+    <file src="..\templates\BasicWeb\wwwroot\css\style.css" target="content\wwwroot\css\style.css" />
+    <file src="..\templates\BasicWeb\wwwroot\css\style.min.css" target="content\wwwroot\css\style.min.css" />
+    <file src="..\templates\BasicWeb\BasicWeb.csproj" target="content\BasicWeb.csproj" />
+    <file src="..\templates\BasicWeb\compilerconfig.json" target="content\compilerconfig.json" />
+    <file src="..\templates\BasicWeb\compilerconfig.json.defaults" target="content\compilerconfig.json.defaults" />
+    <file src="..\templates\BasicWeb\gulpfile.js" target="content\gulpfile.js" />
+    <file src="..\templates\BasicWeb\package.json" target="content\package.json" />
+    <file src="..\templates\BasicWeb\Program.cs" target="content\Program.cs" />
+    <file src="..\templates\BasicWeb\Startup.cs" target="content\Startup.cs" />
+  </files>
+</package>

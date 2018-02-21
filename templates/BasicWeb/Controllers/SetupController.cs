@@ -11,7 +11,7 @@ namespace BasicWeb.Controllers
     {
         [Route("/")]
         public IActionResult Index() {
-            return RedirectToRoute("~/");
+            return Redirect("~/manager");
         }
     }
 }
