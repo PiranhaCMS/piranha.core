@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha</id>
 		<title>Piranha</title>
-    <version>4.2.0-beta1</version>
+    <version>4.2.0</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
