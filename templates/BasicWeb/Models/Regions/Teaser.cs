@@ -38,5 +38,10 @@ namespace BasicWeb.Models.Regions
         /// </summary>
         [Field]
         public HtmlField Body { get; set; }
+
+        public Teaser() {
+            PageLink = new PageField();
+            PostLink = new PostField();
+        }
     }
 }

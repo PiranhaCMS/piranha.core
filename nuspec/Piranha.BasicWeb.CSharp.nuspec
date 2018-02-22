@@ -33,10 +33,12 @@
     <file src="..\templates\BasicWeb\Models\BlogPost.cs" target="content\Models\BlogPost.cs" />
     <file src="..\templates\BasicWeb\Models\StandardPage.cs" target="content\Models\StandardPage.cs" />
     <file src="..\templates\BasicWeb\Models\StartPage.cs" target="content\Models\StartPage.cs" />
+    <file src="..\templates\BasicWeb\seed\pexels-photo-355423.jpeg" target="content\seed\pexels-photo-355423.jpeg" />
     <file src="..\templates\BasicWeb\Views\Cms\Archive.cshtml" target="content\Views\Cms\Archive.cshtml" />
     <file src="..\templates\BasicWeb\Views\Cms\Page.cshtml" target="content\Views\Cms\Page.cshtml" />
     <file src="..\templates\BasicWeb\Views\Cms\Post.cshtml" target="content\Views\Cms\Post.cshtml" />
     <file src="..\templates\BasicWeb\Views\Cms\Start.cshtml" target="content\Views\Cms\Start.cshtml" />
+    <file src="..\templates\BasicWeb\Views\Setup\Index.cshtml" target="content\Views\Setup\Index.cshtml" />
     <file src="..\templates\BasicWeb\Views\Shared\Partial\_Menu.cshtml" target="content\Views\Shared\Partial\_Menu.cshtml" />
     <file src="..\templates\BasicWeb\Views\Shared\Partial\_Meta.cshtml" target="content\Views\Shared\Partial\_Meta.cshtml" />
     <file src="..\templates\BasicWeb\Views\Shared\_Layout.cshtml" target="content\Views\Shared\_Layout.cshtml" />
