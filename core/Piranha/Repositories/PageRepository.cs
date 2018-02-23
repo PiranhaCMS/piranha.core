@@ -310,6 +310,7 @@ namespace Piranha.Repositories
                     page = new Page() {
                         Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
                         ParentId = model.ParentId,
+                        SortOrder = model.SortOrder,
                         PageTypeId = model.TypeId,
                         Created = DateTime.Now,
                         LastModified = DateTime.Now

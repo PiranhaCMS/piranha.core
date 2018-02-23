@@ -176,7 +176,7 @@ namespace CoreWeb
 
                         var docsPage = Models.StandardPage.Create(api);
                         docsPage.SiteId = site.Id;
-                        docsPage.SortOrder = 2;
+                        docsPage.SortOrder = 1;
                         docsPage.Title = "Docs";
                         docsPage.RedirectUrl = "https://github.com/PiranhaCMS/piranha.core/wiki";
                         docsPage.Published = DateTime.Now;

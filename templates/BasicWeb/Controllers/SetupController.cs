@@ -43,7 +43,6 @@ namespace BasicWeb.Controllers
             blogPage.Id = blogId;
             blogPage.SiteId = site.Id;
             blogPage.Title = "Blog Archive";
-            blogPage.SortOrder = 1;
             blogPage.MetaKeywords = "Inceptos, Tristique, Pellentesque, Lorem, Vestibulum";
             blogPage.MetaDescription = "Morbi leo risus, porta ac consectetur ac, vestibulum at eros.";
             blogPage.NavigationTitle = "Blog";
