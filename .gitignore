@@ -14,11 +14,12 @@
 core/Piranha.Manager/assets/lib/
 examples/CoreWeb/assets/lib
 
+# Runtime test files
+examples/CoreWeb/wwwroot/uploads
+examples/CoreWeb/**/*.db
+
 # NPM lock files
 *-lock.json
-
-# Sqlite database
-examples/CoreWeb/**/*.db
 
 # Build results
 [Dd]ebug/
