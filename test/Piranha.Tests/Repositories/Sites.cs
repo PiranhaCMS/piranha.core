@@ -255,6 +255,18 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void CheckPermlinkSyntax() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var sitemap = api.Sites.GetSitemap();
+
+                foreach (var item in sitemap) {
+                    Assert.NotNull(item.Permalink);
+                    Assert.StartsWith("/", item.Permalink);
+                }
+            }
+        }        
+
+        [Fact]
         public void GetUnpublishedSitemap() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 var sitemap = api.Sites.GetSitemap(onlyPublished: false);

@@ -289,7 +289,7 @@ namespace Piranha.Tests.Repositories
 
                 Assert.NotNull(model);
                 Assert.Equal("my-first-post", model.Slug);
-                Assert.Equal("blog/my-first-post", model.Permalink);
+                Assert.Equal("/blog/my-first-post", model.Permalink);
                 Assert.Equal("My first body", model.Body.Value);
             }
         }
@@ -301,7 +301,7 @@ namespace Piranha.Tests.Repositories
 
                 Assert.NotNull(model);
                 Assert.Equal("my-first-post", model.Slug);
-                Assert.Equal("blog/my-first-post", model.Permalink);
+                Assert.Equal("/blog/my-first-post", model.Permalink);
                 Assert.Equal("My first body", model.Body.Value);
             }
         }
@@ -313,7 +313,7 @@ namespace Piranha.Tests.Repositories
 
                 Assert.NotNull(model);
                 Assert.Equal("my-first-post", model.Slug);
-                Assert.Equal("blog/my-first-post", model.Permalink);
+                Assert.Equal("/blog/my-first-post", model.Permalink);
                 Assert.Equal("My first body", model.Regions.Body.Value);
             }
         }
@@ -326,6 +326,17 @@ namespace Piranha.Tests.Repositories
                 Assert.NotNull(model);
                 Assert.Equal("My first post", model.Title);
                 Assert.Equal("My first body", model.Regions.Body.Value);
+            }
+        }
+
+        [Fact]
+        public void CheckPermlinkSyntax() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var model = api.Posts.GetById(POST_1_ID);
+
+                Assert.NotNull(model);
+                Assert.NotNull(model.Permalink);
+                Assert.StartsWith("/", model.Permalink);
             }
         }
 

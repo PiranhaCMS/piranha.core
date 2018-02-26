@@ -247,6 +247,17 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void CheckPermlinkSyntax() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var model = api.Pages.GetById(PAGE_1_ID);
+
+                Assert.NotNull(model);
+                Assert.NotNull(model.Permalink);
+                Assert.StartsWith("/", model.Permalink);
+            }
+        }
+
+        [Fact]
         public void GetCollectionPage() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 var page = api.Pages.GetBySlug<MyCollectionPage>("my-collection-page");
