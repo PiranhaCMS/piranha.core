@@ -8417,6 +8417,9 @@ a {
 .content-preview ol {
   margin: 0 0 20px;
 }
+.content-preview img {
+  max-width: 100%;
+}
 .post-meta {
   color: #999;
   border-left: solid 1px #999;
