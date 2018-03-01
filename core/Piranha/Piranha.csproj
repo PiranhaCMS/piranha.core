@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>4.2.0</Version>
+    <Version>4.2.1</Version>
     <Company>Piranha CMS</Company>
     <AssemblyTitle>Piranha</AssemblyTitle>
   </PropertyGroup>
   <PropertyGroup>
     <PackageId>Piranha</PackageId>
-    <PackageVersion>4.2.0</PackageVersion>
+    <PackageVersion>4.2.1</PackageVersion>
     <Authors>Håkan Edling</Authors>
     <Description>Core package for Piranha CMS for NetStandard.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
