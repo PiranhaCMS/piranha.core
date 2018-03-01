@@ -32,17 +32,17 @@
         @foreach (var post in Model.Archive.Posts) {
             <div class="row archive-item">
                 <div class="col-sm-12">
-                    <h2><a href="@Url.Content($"~/{post.Permalink}")">@post.Title</a></h2>
+                    <h2><a href="@post.Permalink")">@post.Title</a></h2>
                     <p>
                         <strong>@post.Published.Value.ToString("yyyy-MM-dd")</strong> in 
-                        <a href="@Url.Content($"~/{Model.Permalink}/category/{post.Category.Slug}")">@post.Category.Title</a>
+                        <a href="@Model.Permalink/category/@post.Category.Slug")">@post.Category.Title</a>
                     </p>
                 </div>
                 <div class="col-sm-9">
                     <p>
                         @post.Regions.Heading.Ingress.Value 
                     </p>
-                    <p><a href="@Url.Content(post.Permalink)">Read more...</a></p>
+                    <p><a href="@post.Permalink">Read more...</a></p>
                 </div>
                 <div class="col-sm-3 d-xs-none d-md-block">
                     @foreach (var tag in post.Tags) {

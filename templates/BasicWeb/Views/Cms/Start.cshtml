@@ -55,9 +55,9 @@
                                 <h3>@teaser.Title</h3>
                                 @Html.Raw(teaser.Body)
                                 @if (teaser.PageLink.HasValue) {
-                                    <p><a href="~/@teaser.PageLink.Page.Permalink">Read more..</a></p>
+                                    <p><a href="@teaser.PageLink.Page.Permalink">Read more..</a></p>
                                 } else if (teaser.PostLink.HasValue) {
-                                    <p><a href="~/@teaser.PostLink.Post.Permalink">Read more..</a></p>                                
+                                    <p><a href="@teaser.PostLink.Post.Permalink">Read more..</a></p>                                
                                 }
                             </div>
                         </div>                        
