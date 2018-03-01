@@ -6,6 +6,9 @@
     <title>Piranha CMS Basic Web Template</title>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
+    <packageTypes>
+      <packageType name="Template" />
+    </packageTypes>    
     <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
     <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
     <iconUrl>http://piranhacms.org/assets/twitter-shield.png</iconUrl>
