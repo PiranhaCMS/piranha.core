@@ -109,7 +109,7 @@ namespace Piranha.Repositories
             // Fix urls
             if (!model.AliasUrl.StartsWith("/"))
                 model.AliasUrl = "/" + model.AliasUrl;
-            if (!model.RedirectUrl.StartsWith("/"))
+            if (!model.RedirectUrl.StartsWith("/") && !model.RedirectUrl.StartsWith("http://") && !model.RedirectUrl.StartsWith("https://"))
                 model.RedirectUrl = "/" + model.RedirectUrl;
 
             db.Aliases.Add(model);
@@ -133,7 +133,7 @@ namespace Piranha.Repositories
             // Fix urls
             if (!model.AliasUrl.StartsWith("/"))
                 model.AliasUrl = "/" + model.AliasUrl;
-            if (!model.RedirectUrl.StartsWith("/"))
+            if (!model.RedirectUrl.StartsWith("/") && !model.RedirectUrl.StartsWith("http://") && !model.RedirectUrl.StartsWith("https://"))
                 model.RedirectUrl = "/" + model.RedirectUrl;
 
             var alias = db.Aliases.FirstOrDefault(s => s.Id == model.Id);

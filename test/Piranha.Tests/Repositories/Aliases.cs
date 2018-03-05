@@ -207,6 +207,36 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void AllowHttpUrl() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var model = new Data.Alias() {
+                    SiteId = SITE_ID,
+                    AliasUrl = "/the-alias-url-3",
+                    RedirectUrl = "http://redirect.com"
+                };
+
+                api.Aliases.Save(model);
+
+                Assert.Equal("http://redirect.com", model.RedirectUrl);
+            }                        
+        }
+
+        [Fact]
+        public void AllowHttpsUrl() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var model = new Data.Alias() {
+                    SiteId = SITE_ID,
+                    AliasUrl = "/the-alias-url-4",
+                    RedirectUrl = "https://redirect.com"
+                };
+
+                api.Aliases.Save(model);
+
+                Assert.Equal("https://redirect.com", model.RedirectUrl);
+            }                        
+        }
+
+        [Fact]
         public void Delete() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 var model = api.Aliases.GetByAliasUrl(ALIAS_4);
