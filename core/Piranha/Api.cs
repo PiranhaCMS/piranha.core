@@ -135,7 +135,7 @@ namespace Piranha
             Aliases = new Repositories.AliasRepository(this, db, cache);
             Archives = new Repositories.ArchiveRepository(this, db);
             Categories = new Repositories.CategoryRepository(this, db, cache);
-            Media = new Repositories.MediaRepository(db, storage, cache, imageProcessor);
+            Media = new Repositories.MediaRepository(this, db, storage, cache, imageProcessor);
             Pages = new Repositories.PageRepository(this, db, cache);
             PageTypes = new Repositories.PageTypeRepository(db, cache);
             Params = new Repositories.ParamRepository(db, cache);

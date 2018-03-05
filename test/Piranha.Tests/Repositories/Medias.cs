@@ -158,6 +158,34 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void PublicUrl() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                using (var config = new Piranha.Config(api)) {
+                    config.MediaCDN = null;
+                }
+
+                var media = api.Media.GetById(image1Id);
+
+                Assert.NotNull(media);
+                Assert.Equal($"~/uploads/{image1Id}-HLD_Screenshot_01_mech_1080.png", media.PublicUrl);
+            }
+        }        
+
+        [Fact]
+        public void PublicUrlCDN() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                using (var config = new Piranha.Config(api)) {
+                    config.MediaCDN = "https://mycdn.org/uploads";
+                }
+
+                var media = api.Media.GetById(image1Id);
+
+                Assert.NotNull(media);
+                Assert.Equal($"https://mycdn.org/uploads/{image1Id}-HLD_Screenshot_01_mech_1080.png", media.PublicUrl);
+            }
+        }
+
+        [Fact]
         public void Delete() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 var media = api.Media.GetById(image3Id);

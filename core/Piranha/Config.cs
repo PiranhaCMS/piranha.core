@@ -17,7 +17,6 @@ namespace Piranha
     /// </summary>
     public sealed class Config : IDisposable
     {
-        #region Members
         /// <summary>
         /// The private api.
         /// </summary>
@@ -30,10 +29,9 @@ namespace Piranha
         public static readonly string CACHE_EXPIRES_PAGES = "CacheExpiresPages";
         public static readonly string CACHE_EXPIRES_POSTS = "CacheExpiresPosts";
         public static readonly string PAGES_HIERARCHICAL_SLUGS = "HierarchicalPageSlugs";
+        public static readonly string MEDIA_CDN_URL = "MediaCdnUrl";
         public static readonly string MANAGER_EXPANDED_SITEMAP_LEVELS = "ManagerExpandedSitemapLevels";
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets/sets the currently configured archive page size.
         /// </summary>
@@ -150,7 +148,34 @@ namespace Piranha
                 api.Params.Save(param);                
             }
         }
-        #endregion
+
+        /// <summary>
+        /// Gets/sets the optional URL for the CDN used. If this param isn't
+        /// null it will be used when generating the PublicUrl for media.
+        /// </summary>
+        public string MediaCDN {
+            get {
+                var param = api.Params.GetByKey(MEDIA_CDN_URL);
+                if (param != null)
+                    return param.Value;
+                return null;
+            }
+            set {
+                var param = api.Params.GetByKey(MEDIA_CDN_URL);
+                if (param == null) {
+                    param = new Data.Param() {
+                        Key = MEDIA_CDN_URL
+                    };
+                }
+
+                // Ensure trailing slash
+                if (!string.IsNullOrWhiteSpace(value) && !value.EndsWith("/"))
+                    value = value + "/";
+
+                param.Value = value;
+                api.Params.Save(param);                
+            }
+        }
 
         /// <summary>
         /// Default constructor.

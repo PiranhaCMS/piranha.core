@@ -26,6 +26,11 @@ namespace Piranha.Areas.Manager.Models
             /// Gets/sets the cache expiration for posts.
             /// </summary>
             public int PostsExpires { get; set; }
+
+            /// <summary>
+            /// Gets/sets the optional CDN for uploaded media.
+            /// </summary>
+            public string MediaCDN { get; set; }
         }
 
         /// <summary>
@@ -78,6 +83,7 @@ namespace Piranha.Areas.Manager.Models
             using (var config = new Config(api)) {
                 model.Cache.PagesExpires = config.CacheExpiresPages;
                 model.Cache.PostsExpires = config.CacheExpiresPosts;
+                model.Cache.MediaCDN = config.MediaCDN;
 
                 model.General.ArchivePageSize = config.ArchivePageSize;
                 model.General.HierarchicalPageSlugs = config.HierarchicalPageSlugs;
@@ -94,6 +100,7 @@ namespace Piranha.Areas.Manager.Models
             using (var config = new Config(api)) {
                 config.CacheExpiresPages = Cache.PagesExpires;
                 config.CacheExpiresPosts = Cache.PostsExpires;
+                config.MediaCDN = Cache.MediaCDN;
                 config.ArchivePageSize = General.ArchivePageSize;
                 config.HierarchicalPageSlugs = General.HierarchicalPageSlugs;
                 config.ManagerExpandedSitemapLevels = General.ExpandedSitemapLevels;

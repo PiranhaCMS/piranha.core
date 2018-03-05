@@ -90,5 +90,27 @@ namespace Piranha.Tests
                 }
             }
         }
+
+        [Fact]
+        public void MediaCDN() {
+            using (var api = new Api(GetDb(), storage)) {
+                using (var config = new Piranha.Config(api)) {
+                    config.MediaCDN = "https://mycdn.org/uploads/";
+
+                    Assert.Equal("https://mycdn.org/uploads/", config.MediaCDN);
+                }
+            }            
+        }
+
+        [Fact]
+        public void MediaCDNTrailingSlash() {
+            using (var api = new Api(GetDb(), storage)) {
+                using (var config = new Piranha.Config(api)) {
+                    config.MediaCDN = "https://mycdn.org/uploads";
+
+                    Assert.Equal("https://mycdn.org/uploads/", config.MediaCDN);
+                }
+            }            
+        }
     }
 }

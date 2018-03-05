@@ -56,18 +56,20 @@
                             The default number of levels that should be expanded in the page 
                             sitemap. This is useful for smaller sitemaps.
                         </blockquote>
-                        @Html.TextBoxFor(m => m.General.ExpandedSitemapLevels, new { @class = "form-control", type = "number" })
+                        @Html.TextBoxFor(m => m.General.ExpandedSitemapLevels, new { @class = "form-control small", type = "number" })
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-6">
-                    @Html.LabelFor(m => m.General.ArchivePageSize, "Archive page size")
-                    <blockquote>
-                        The default page size for Blog Page archive. Please note that this this
-                        can be overridden for specific archives.
-                    </blockquote>
-                    @Html.TextBoxFor(m => m.General.ArchivePageSize, new { @class = "form-control", type = "number" })
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.General.ArchivePageSize, "Archive page size")
+                        <blockquote>
+                            The default page size for Blog Page archive. Please note that this this
+                            can be overridden for specific archives.
+                        </blockquote>
+                        @Html.TextBoxFor(m => m.General.ArchivePageSize, new { @class = "form-control small", type = "number" })
+                    </div>
                 </div>
             </div>
         </div>
@@ -75,7 +77,7 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Browser Caching</h3>
+            <h3 class="panel-title">Caching</h3>
         </div>
         <div class="panel-body">
             <div class="row">
@@ -86,7 +88,7 @@
                             The time in minutes that web browsers can use pages before
                             asking the server for new updates.
                         </blockquote>
-                        @Html.TextBoxFor(m => m.Cache.PagesExpires, new { @class = "form-control", type = "number" })
+                        @Html.TextBoxFor(m => m.Cache.PagesExpires, new { @class = "form-control small", type = "number" })
                     </div>                
                 </div>
                 <div class="col-sm-6">
@@ -96,10 +98,22 @@
                             The time in minutes that web browsers can use posts before
                             asking the server for new updates.
                         </blockquote>
-                        @Html.TextBoxFor(m => m.Cache.PostsExpires, new { @class = "form-control", type = "number" })
+                        @Html.TextBoxFor(m => m.Cache.PostsExpires, new { @class = "form-control small", type = "number" })
                     </div>                
                 </div>
-            </div>        
+            </div> 
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Cache.MediaCDN, "Media CDN")
+                        <blockquote>
+                            The full URL (including any folder name) to the CDN used to serve 
+                            uploaded media. Leave bland to use default storage URL.
+                        </blockquote>
+                        @Html.TextBoxFor(m => m.Cache.MediaCDN, new { @class = "form-control small" })
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 }
