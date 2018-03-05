@@ -21,6 +21,7 @@ public static class CoreExtensions
     /// <returns>The builder</returns>
     public static IApplicationBuilder UsePiranha(this IApplicationBuilder builder) {
         return builder
+            .UseMiddleware<Piranha.AspNetCore.SiteMiddleware>()
             .UseMiddleware<Piranha.AspNetCore.AliasMiddleware>()
             .UseMiddleware<Piranha.AspNetCore.PageMiddleware>()
             .UseMiddleware<Piranha.AspNetCore.PostMiddleware>()
@@ -77,6 +78,16 @@ public static class CoreExtensions
     public static IApplicationBuilder UsePiranhaStartPage(this IApplicationBuilder builder) {
         return builder
             .UseMiddleware<Piranha.AspNetCore.StartPageMiddleware>();
+    }
+
+    /// <summary>
+    /// Uses the piranha site routing middleware.
+    /// </summary>
+    /// <param name="builder">The current application builder</param>
+    /// <returns>The builder</returns>
+    public static IApplicationBuilder UsePiranhaSites(this IApplicationBuilder builder) {
+        return builder
+            .UseMiddleware<Piranha.AspNetCore.SiteMiddleware>();        
     }
 
     /// <summary>

@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Piranha.AspNetCore
 {
-    public class AliasMiddleware : MiddlewareBase
+    public class SiteMiddleware : MiddlewareBase
     {
         /// <summary>
         /// Creates a new middleware instance.
@@ -25,7 +25,7 @@ namespace Piranha.AspNetCore
         /// <param name="next">The next middleware in the pipeline</param>
         /// <param name="api">The current api</param>
         /// <param name="factory">The logger factory</param>
-        public AliasMiddleware(RequestDelegate next, IApi api, ILoggerFactory factory = null) : base(next, api, factory) { }
+        public SiteMiddleware(RequestDelegate next, IApi api, ILoggerFactory factory = null) : base(next, api, factory) { }
 
         /// <summary>
         /// Invokes the middleware.
@@ -33,18 +33,18 @@ namespace Piranha.AspNetCore
         /// <param name="context">The current http context</param>
         /// <returns>An async task</returns>
         public override async Task Invoke(HttpContext context) {
-            if (!IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/")) {
-                var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
+            // Try to get the requested site by hostname
+            var site = api.Sites.GetByHostname(context.Request.Host.Host);
 
-                var response = AliasRouter.Invoke(api, url, GetSiteId(context));
-                if (response != null) {
-                    if (logger != null)
-                        logger.LogInformation($"Found alias\n  Alias: {url}\n  Redirect: {response.RedirectUrl}");
+            // If we didn't find the site, get the default site
+            if (site == null)
+                site = api.Sites.GetDefault();
 
-                    context.Response.Redirect(response.RedirectUrl, response.RedirectType == Models.RedirectType.Permanent);
-                    return;
-                }
-            }
+            // Store the current site id for the current request
+            if (site != null)
+                context.Items[SiteId] = site.Id;
+
+            // Nothing to see here, move along
             await next.Invoke(context);
         }
     }

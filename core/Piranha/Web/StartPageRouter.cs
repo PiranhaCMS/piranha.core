@@ -21,16 +21,9 @@ namespace Piranha.Web
         /// <param name="url">The requested url</param>
         /// <param name="hostname">The optional hostname</param>
         /// <returns>The piranha response, null if no matching page was found</returns>
-        public static IRouteResponse Invoke(IApi api, string url, string hostname) {
+        public static IRouteResponse Invoke(IApi api, string url, Guid siteId) {
             if (string.IsNullOrWhiteSpace(url) || url == "/") {
-                Data.Site site = null;
-                
-                if (!string.IsNullOrWhiteSpace(hostname))
-                    site = api.Sites.GetByHostname(hostname);
-                if (site == null)
-                    site = api.Sites.GetDefault();
-
-                var page = api.Pages.GetStartpage(site.Id);
+                var page = api.Pages.GetStartpage(siteId);
 
                 if (page != null) {
                     if (page.ContentType == "Page") {
@@ -44,7 +37,7 @@ namespace Piranha.Web
                             }
                         };
                     } else if (page.ContentType == "Blog") {
-                        return ArchiveRouter.Invoke(api, $"/{page.Slug}", hostname);
+                        return ArchiveRouter.Invoke(api, $"/{page.Slug}", siteId);
                     }
                 }
             }

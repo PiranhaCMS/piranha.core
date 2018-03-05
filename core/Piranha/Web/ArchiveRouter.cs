@@ -19,21 +19,14 @@ namespace Piranha.Web
         /// </summary>
         /// <param name="api">The current api</param>
         /// <param name="url">The requested url</param>
-        /// <param name="hostname">The optional hostname</param>
+        /// <param name="siteId">The requested site id</param>
         /// <returns>The piranha response, null if no matching page was found</returns>
-        public static IRouteResponse Invoke(IApi api, string url, string hostname) {
+        public static IRouteResponse Invoke(IApi api, string url, Guid siteId) {
             if (!String.IsNullOrWhiteSpace(url) && url.Length > 1) {
                 var segments = url.Substring(1).Split(new char[] { '/' });
 
                 if (segments.Length >= 1) {
-                    Data.Site site = null;
-                    
-                    if (!string.IsNullOrWhiteSpace(hostname))
-                        site = api.Sites.GetByHostname(hostname);
-                    if (site == null)
-                        site = api.Sites.GetDefault();
-
-                    var blog = api.Pages.GetBySlug(segments[0], site.Id);
+                    var blog = api.Pages.GetBySlug(segments[0], siteId);
 
                     if (blog != null && blog.ContentType == "Blog") {
                         var route = blog.Route ?? "/archive";

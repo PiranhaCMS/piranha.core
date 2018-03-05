@@ -35,9 +35,10 @@ namespace Piranha.AspNetCore
         public override async Task Invoke(HttpContext context) {
             if (!IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/")) {
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
+                var siteId = GetSiteId(context);
                 var authorized = true;
 
-                var response = PostRouter.Invoke(api, url, context.Request.Host.Host);
+                var response = PostRouter.Invoke(api, url, siteId);
                 if (response != null) {
                     if (logger != null)
                         logger.LogInformation($"Found post\n  Route: {response.Route}\n  Params: {response.QueryString}");

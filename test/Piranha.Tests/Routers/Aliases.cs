@@ -72,7 +72,7 @@ namespace Piranha.Tests.Routers
         [Fact]
         public void GetAliasByUrlDefaultSite() {
             using (var api = new Api(GetDb(), storage)) {
-                var response = Piranha.Web.AliasRouter.Invoke(api, "/old-url", null);
+                var response = Piranha.Web.AliasRouter.Invoke(api, "/old-url", SITE1_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/new-url", response.RedirectUrl);
@@ -82,7 +82,7 @@ namespace Piranha.Tests.Routers
         [Fact]
         public void GetAliasByUrlNoneDefaultSite() {
             using (var api = new Api(GetDb(), storage)) {
-                var response = Piranha.Web.AliasRouter.Invoke(api, "/missing-url", null);
+                var response = Piranha.Web.AliasRouter.Invoke(api, "/missing-url", SITE1_ID);
 
                 Assert.Null(response);
             }
@@ -91,7 +91,7 @@ namespace Piranha.Tests.Routers
         [Fact]
         public void GetAliasByUrlOtherSite() {
             using (var api = new Api(GetDb(), storage)) {
-                var response = Piranha.Web.AliasRouter.Invoke(api, "/old-url", "www.myothersite.com");
+                var response = Piranha.Web.AliasRouter.Invoke(api, "/old-url", SITE2_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/another-new-url", response.RedirectUrl);
@@ -101,7 +101,7 @@ namespace Piranha.Tests.Routers
         [Fact]
         public void GetAliasByUrlNoneOtherSite() {
             using (var api = new Api(GetDb(), storage)) {
-                var response = Piranha.Web.AliasRouter.Invoke(api, "/missing-url", "www.myothersite.com");
+                var response = Piranha.Web.AliasRouter.Invoke(api, "/missing-url", SITE2_ID);
 
                 Assert.Null(response);
             }
