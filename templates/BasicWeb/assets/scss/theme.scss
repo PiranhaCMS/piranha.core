@@ -124,3 +124,19 @@ header {
         box-shadow: 0 1rem 2rem rgba(0,0,0,0.15);
     }
 }
+
+#navbarNavAltMarkup {
+    background-color: rgba(62, 70, 123, 0.90);
+    z-index: 100;
+    padding: 10px;
+}
+
+.site-header-dark .menu {
+    background: rgba(62, 70, 123, 1);
+}
+
+@media (min-width: 768px) {
+    .site-header-dark .menu {
+        background: #fff
+    }
+}
