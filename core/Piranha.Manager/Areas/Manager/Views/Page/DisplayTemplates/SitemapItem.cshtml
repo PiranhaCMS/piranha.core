@@ -33,10 +33,10 @@
         </div>
     }
     <div class="date pull-right">
-        @item.Created.ToString("yyyy-MM-dd")
+        @(item.Published.HasValue ? item.Published.Value.ToString("yyyy-MM-dd") : "")
     </div>
-    <div class="date pull-right">
-        @item.LastModified.ToString("yyyy-MM-dd")
+    <div class="info pull-right">
+        @item.PageTypeName
     </div>
     <div class="content">
         @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesEdit)).Succeeded) {

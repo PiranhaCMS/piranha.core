@@ -220,6 +220,7 @@ namespace Piranha
                                 .ForMember(p => p.MenuTitle, o => o.Ignore())
                                 .ForMember(p => p.Level, o => o.Ignore())
                                 .ForMember(p => p.Items, o => o.Ignore())
+                                .ForMember(p => p.PageTypeName, o => o.Ignore())
                                 .ForMember(p => p.Permalink, o => o.MapFrom(d => !d.ParentId.HasValue && d.SortOrder == 0 ? "/" : "/" + d.Slug));
                             cfg.CreateMap<Data.Param, Data.Param>()
                                 .ForMember(p => p.Id, o => o.Ignore())

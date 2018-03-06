@@ -8837,6 +8837,10 @@ ol.sitemap.header .date {
   width: 120px;
   padding: 12px 20px;
 }
+ol.sitemap.header .info {
+  width: 140px;
+  padding: 12px 20px;
+}
 li.sitemap-item {
   list-style-type: none;
 }
@@ -8921,6 +8925,13 @@ li.sitemap-item.unpublished .date {
 li.sitemap-item .date {
   width: 120px;
   padding: 12px 20px;
+}
+li.sitemap-item .info {
+  width: 140px;
+  padding: 12px 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 li.sitemap-item .actions a {
   display: inline-block;

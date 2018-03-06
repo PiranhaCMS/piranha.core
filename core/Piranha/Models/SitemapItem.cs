@@ -48,6 +48,11 @@ namespace Piranha.Models
         }
 
         /// <summary>
+        /// Gets/sets the name of the page type.
+        /// </summary>
+        public string PageTypeName { get; set; }
+
+        /// <summary>
         /// Gets/sets the unique permalink.
         /// </summary>
         public string Permalink { get; set; }

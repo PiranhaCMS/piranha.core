@@ -118,9 +118,11 @@ namespace Piranha.Repositories
                         .ThenBy(p => p.SortOrder)
                         .ToList();
 
+                    var pageTypes = api.PageTypes.GetAll();
+
                     if (onlyPublished)
                         pages = pages.Where(p => p.Published.HasValue).ToList();
-                    sitemap = Sort(pages);
+                    sitemap = Sort(pages, pageTypes);
 
                     if (onlyPublished && cache != null)
                         cache.Set($"Sitemap_{id}", sitemap);
@@ -250,14 +252,15 @@ namespace Piranha.Repositories
         /// <param name="pages">The full page list</param>
         /// <param name="parentId">The current parent id</param>
         /// <returns>The sitemap</returns>
-        private Models.Sitemap Sort(IEnumerable<Page> pages, Guid? parentId = null, int level = 0) {
+        private Models.Sitemap Sort(IEnumerable<Page> pages, IEnumerable<Models.PageType> pageTypes, Guid? parentId = null, int level = 0) {
             var result = new Models.Sitemap();
 
             foreach (var page in pages.Where(p => p.ParentId == parentId).OrderBy(p => p.SortOrder)) {
                 var item = App.Mapper.Map<Page, Models.SitemapItem>(page);
 
                 item.Level = level;
-                item.Items = Sort(pages, page.Id, level + 1);
+                item.PageTypeName = pageTypes.First(t => t.Id == page.PageTypeId).Title;
+                item.Items = Sort(pages, pageTypes, page.Id, level + 1);
 
                 result.Add(item);
             }
