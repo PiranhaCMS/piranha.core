@@ -26,11 +26,6 @@ namespace Piranha.AspNetCore
         protected readonly RequestDelegate next;
 
         /// <summary>
-        /// The current api.
-        /// </summary>
-        protected readonly IApi api;
-
-        /// <summary>
         /// The optional logger.
         /// </summary>
         protected ILogger logger;
@@ -44,19 +39,16 @@ namespace Piranha.AspNetCore
         /// Creates a new middleware instance.
         /// </summary>
         /// <param name="next">The next middleware in the pipeline</param>
-        /// <param name="api">The current api</param>
-        public MiddlewareBase(RequestDelegate next, IApi api) {
+        public MiddlewareBase(RequestDelegate next) {
             this.next = next;
-            this.api = api;
         }
 
         /// <summary>
         /// Creates a new middleware instance.
         /// </summary>
         /// <param name="next">The next middleware in the pipeline</param>
-        /// <param name="api">The current api</param>
         /// <param name="factory">The logger factory</param>
-        public MiddlewareBase(RequestDelegate next, IApi api, ILoggerFactory factory) : this(next, api) {
+        public MiddlewareBase(RequestDelegate next, ILoggerFactory factory) : this(next) {
             if (factory != null)
                 logger = factory.CreateLogger(this.GetType().FullName);
         }
@@ -65,8 +57,9 @@ namespace Piranha.AspNetCore
         /// Invokes the middleware.
         /// </summary>
         /// <param name="context">The current http context</param>
+        /// <param name="api">The current api</param>
         /// <returns>An async task</returns>
-        public abstract Task Invoke(HttpContext context);
+        public abstract Task Invoke(HttpContext context, IApi api);
 
         /// <summary>
         /// Checks if the request has already been handled by another

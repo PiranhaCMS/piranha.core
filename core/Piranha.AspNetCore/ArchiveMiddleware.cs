@@ -22,14 +22,15 @@ namespace Piranha.AspNetCore
         /// Creates a new middleware instance.
         /// </summary>
         /// <param name="next">The next middleware in the pipeline</param>
-        public ArchiveMiddleware(RequestDelegate next, IApi api, ILoggerFactory factory = null) : base(next, api, factory) { }
+        public ArchiveMiddleware(RequestDelegate next, ILoggerFactory factory = null) : base(next, factory) { }
 
         /// <summary>
         /// Invokes the middleware.
         /// </summary>
         /// <param name="context">The current http context</param>
+        /// <param name="api">The current api</param>
         /// <returns>An async task</returns>
-        public override async Task Invoke(HttpContext context) {
+        public override async Task Invoke(HttpContext context, IApi api) {
             if (!IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/")) {
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
                 var siteId = GetSiteId(context);

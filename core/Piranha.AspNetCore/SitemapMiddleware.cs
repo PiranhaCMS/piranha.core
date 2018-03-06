@@ -25,16 +25,16 @@ namespace Piranha.AspNetCore
         /// Creates a new middleware instance.
         /// </summary>
         /// <param name="next">The next middleware in the pipeline</param>
-        /// <param name="api">The current api</param>
         /// <param name="factory">The logger factory</param>
-        public SitemapMiddleware(RequestDelegate next, IApi api, ILoggerFactory factory = null) : base(next, api, factory) { }
+        public SitemapMiddleware(RequestDelegate next, ILoggerFactory factory = null) : base(next, factory) { }
 
         /// <summary>
         /// Invokes the middleware.
         /// </summary>
         /// <param name="context">The current http context</param>
+        /// <param name="api">The current api</param>
         /// <returns>An async task</returns>
-        public override async Task Invoke(HttpContext context) {
+        public override async Task Invoke(HttpContext context, IApi api) {
             if (!IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/")) {
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
                 var host = context.Request.Host.Host;
@@ -56,7 +56,7 @@ namespace Piranha.AspNetCore
                     var sitemap = new Sitemap();
 
                     foreach (var page in pages) {
-                        var urls = GetPageUrls(page, baseUrl);
+                        var urls = GetPageUrls(api, page, baseUrl);
 
                         if (urls.Count > 0)
                             sitemap.AddRange(urls);
@@ -67,7 +67,7 @@ namespace Piranha.AspNetCore
             await next.Invoke(context);
         }
 
-        private List<Url> GetPageUrls(Models.SitemapItem item, string baseUrl) {
+        private List<Url> GetPageUrls(IApi api, Models.SitemapItem item, string baseUrl) {
             var urls = new List<Url>();
 
             if (item.Published.HasValue) {
@@ -94,7 +94,7 @@ namespace Piranha.AspNetCore
                 }
 
                 foreach (var child in item.Items) {
-                    var childUrls = GetPageUrls(child, baseUrl);
+                    var childUrls = GetPageUrls(api, child, baseUrl);
 
                     if (childUrls.Count > 0)
                         urls.AddRange(childUrls);
