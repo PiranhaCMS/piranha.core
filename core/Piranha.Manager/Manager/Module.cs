@@ -40,8 +40,10 @@ namespace Piranha.Manager
         /// <summary>
         /// Initializes the module.
         /// </summary>
-        public void Init() {
-            var config = new MapperConfiguration(cfg => {
+        public void Init()
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
                 cfg.CreateMap<PageBase, PageEditModel>()
                     .ForMember(m => m.PageType, o => o.Ignore())
                     .ForMember(m => m.Regions, o => o.Ignore())

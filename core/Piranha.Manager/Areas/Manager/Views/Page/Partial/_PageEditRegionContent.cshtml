@@ -6,7 +6,7 @@
         <div class="col-sm-@(Model[n].Options.HasFlag(FieldOption.HalfWidth) ? "6" : "12")">
             <div class="form-group">
                 @Html.HiddenFor(m => m[n].Id)
-                @Html.HiddenFor(m => m[n].CLRType)
+                @Html.HiddenFor(m => m[n].ClrType)
                 @if (Model.Count > 1) {
                     <label>@Model[n].Title</label>
                 }

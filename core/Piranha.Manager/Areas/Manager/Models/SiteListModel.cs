@@ -18,11 +18,13 @@ namespace Piranha.Areas.Manager.Models
     {
         public IList<Site> Sites { get; set; }
 
-        public SiteListModel() {
+        public SiteListModel()
+        {
             Sites = new List<Site>();
         }
 
-        public static SiteListModel Get(IApi api) {
+        public static SiteListModel Get(IApi api)
+        {
             var model = new SiteListModel
             {
                 Sites = api.Sites.GetAll().ToList()

@@ -25,8 +25,10 @@ namespace Piranha.ImageSharp
         /// <param name="stream">The image data stream</param>
         /// <param name="width">The returned width</param>
         /// <param name="height">The returned height</param>
-        public void GetSize(Stream stream, out int width, out int height) {
-            using (var image = Image.Load(stream)) {
+        public void GetSize(Stream stream, out int width, out int height)
+        {
+            using (var image = Image.Load(stream))
+            {
                 width = image.Width;
                 height = image.Height;
             }
@@ -38,8 +40,10 @@ namespace Piranha.ImageSharp
         /// <param name="bytes">The image data</param>
         /// <param name="width">The returned width</param>
         /// <param name="height">The returned height</param>
-        public void GetSize(byte[] bytes, out int width, out int height) {
-            using (var image = Image.Load(bytes)) {
+        public void GetSize(byte[] bytes, out int width, out int height)
+        {
+            using (var image = Image.Load(bytes))
+            {
                 width = image.Width;
                 height = image.Height;
             }
@@ -54,8 +58,10 @@ namespace Piranha.ImageSharp
         /// <param name="dest">The destination stream</param>
         /// <param name="width">The requested width</param>
         /// <param name="height">The requested height</param>
-        public void Crop(Stream source, Stream dest, int width, int height) {
-            using (var image = Image.Load(source)) {
+        public void Crop(Stream source, Stream dest, int width, int height)
+        {
+            using (var image = Image.Load(source))
+            {
                 image.Mutate(x => x.Crop(new Rectangle
                 {
                     Width = width,
@@ -80,9 +86,11 @@ namespace Piranha.ImageSharp
         /// <param name="source">The image data stream</param>
         /// <param name="dest">The destination stream</param>
         /// <param name="width">The requested width</param>
-        public void Scale(Stream source, Stream dest, int width) {
-            using (var image = Image.Load(source)) {
-                int height = (int)Math.Round(width * ((float)image.Height / image.Width));
+        public void Scale(Stream source, Stream dest, int width)
+        {
+            using (var image = Image.Load(source))
+            {
+                var height = (int)Math.Round(width * ((float)image.Height / image.Width));
 
                 image.Mutate(x => x.Resize(new ResizeOptions
                 {
@@ -94,10 +102,10 @@ namespace Piranha.ImageSharp
                 {
                     IgnoreMetadata = true,
                     Quality = 90
-                });                
+                });
             }
         }
-        
+
         /// <summary>
         /// Gets an image from the provided stream, crops and scales it 
         /// according to the given size and writes out a new jpeg image 
@@ -107,17 +115,22 @@ namespace Piranha.ImageSharp
         /// <param name="dest">The destination stream</param>
         /// <param name="width">The requested width</param>
         /// <param name="height">The requested height</param>
-        public void CropScale(Stream source, Stream dest, int width, int height) {
-            using (var image = Image.Load(source)) {
+        public void CropScale(Stream source, Stream dest, int width, int height)
+        {
+            using (var image = Image.Load(source))
+            {
                 var oldRatio = (float)image.Height / image.Width;
                 var newRatio = (float)height / width;
                 var cropWidth = image.Width;
                 var cropHeight = image.Height;
 
-                if (newRatio < oldRatio) {
+                if (newRatio < oldRatio)
+                {
                     // We making the image lower
                     cropHeight = (int)Math.Round(image.Width * newRatio);
-                } else {
+                }
+                else
+                {
                     // We're making the image thinner
                     cropWidth = (int)Math.Round(image.Height / newRatio);
                 }
@@ -139,8 +152,8 @@ namespace Piranha.ImageSharp
                 {
                     IgnoreMetadata = true,
                     Quality = 90
-                });                
-            }            
+                });
+            }
         }
     }
 }

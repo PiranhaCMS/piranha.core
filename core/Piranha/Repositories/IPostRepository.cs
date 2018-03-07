@@ -49,7 +49,7 @@ namespace Piranha.Repositories
         /// <summary>
         /// Gets the post model with the specified slug.
         /// </summary>
-        /// <param name="blog">The unique blog slug</param>
+        /// <param name="blogId">The unique blog id slug</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The post model</returns>
         DynamicPost GetBySlug(Guid blogId, string slug);
@@ -58,7 +58,7 @@ namespace Piranha.Repositories
         /// Gets the post model with the specified slug.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
-        /// <param name="blog">The unique blog slug</param>
+        /// <param name="blogId">The unique blog id slug</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The post model</returns>
         T GetBySlug<T>(Guid blogId, string slug) where T : Post<T>;

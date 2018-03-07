@@ -36,10 +36,9 @@ namespace Piranha.Extend.Fields
         /// Impicit operator for converting the field to an url string.
         /// </summary>
         /// <param name="image">The image field</param>
-        public static implicit operator string(ImageField image) {
-            if (image.Media != null)
-                return image.Media.PublicUrl;
-            return "";
+        public static implicit operator string(ImageField image)
+        {
+            return image.Media != null ? image.Media.PublicUrl : "";
         }
 
         /// <summary>
@@ -49,10 +48,9 @@ namespace Piranha.Extend.Fields
         /// <param name="width">The requested width</param>
         /// <param name="height">The optional height</param>
         /// <returns>The image url</returns>
-        public string Resize(IApi api, int width, int? height = null) {
-            if (Id.HasValue)
-                return api.Media.EnsureVersion(Id.Value, width, height);
-            return null;
+        public string Resize(IApi api, int width, int? height = null)
+        {
+            return Id.HasValue ? api.Media.EnsureVersion(Id.Value, width, height) : null;
         }
     }
 }

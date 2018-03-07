@@ -39,7 +39,8 @@ namespace Piranha.Models
         /// </summary>
         /// <param name="api">The current api</param>
         /// <returns>The new item</returns>
-        public T Create(IApi api) {
+        public T Create(IApi api)
+        {
             return (T)Model.CreateRegion(api, RegionId);
         }
 
@@ -48,7 +49,8 @@ namespace Piranha.Models
         /// </summary>
         /// <param name="api">The current api</param>
         /// <returns>The new item</returns>
-        public T CreateAndAdd(IApi api) {
+        public T CreateAndAdd(IApi api)
+        {
             var item = Create(api);
 
             Add(item);
@@ -60,7 +62,8 @@ namespace Piranha.Models
         /// Adds a new item to the region list
         /// </summary>
         /// <param name="item">The item</param>
-        public void Add(object item) {
+        public void Add(object item)
+        {
             if (item.GetType() == typeof(T))
                 base.Add((T)item);
             else throw new ArgumentException();

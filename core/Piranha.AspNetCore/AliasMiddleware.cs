@@ -31,20 +31,22 @@ namespace Piranha.AspNetCore
         /// <param name="context">The current http context</param>
         /// <param name="api">The current api</param>
         /// <returns>An async task</returns>
-        public override async Task Invoke(HttpContext context, IApi api) {
-            if (!IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/")) {
+        public override async Task Invoke(HttpContext context, IApi api)
+        {
+            if (!IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/"))
+            {
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
 
                 var response = AliasRouter.Invoke(api, url, GetSiteId(context));
-                if (response != null) {
-                    if (logger != null)
-                        logger.LogInformation($"Found alias\n  Alias: {url}\n  Redirect: {response.RedirectUrl}");
+                if (response != null)
+                {
+                    Logger?.LogInformation($"Found alias\n  Alias: {url}\n  Redirect: {response.RedirectUrl}");
 
                     context.Response.Redirect(response.RedirectUrl, response.RedirectType == RedirectType.Permanent);
                     return;
                 }
             }
-            await next.Invoke(context);
+            await Next.Invoke(context);
         }
     }
 }

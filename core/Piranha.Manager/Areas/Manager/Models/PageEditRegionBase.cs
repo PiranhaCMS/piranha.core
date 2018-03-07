@@ -28,7 +28,7 @@ namespace Piranha.Areas.Manager.Models
         /// <summary>
         /// Gets/sets the CLR type.
         /// </summary>
-        public string CLRType { get; set; }
+        public string ClrType { get; set; }
 
         /// <summary>
         /// Adds a field set to the region.

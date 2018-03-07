@@ -28,30 +28,37 @@ namespace Piranha
         /// Registers a new item.
         /// </summary>
         /// <typeparam name="TValue">The value type</typeparam>
-        public virtual void Register<TValue>() where TValue : T {
+        public virtual void Register<TValue>() where TValue : T
+        {
             var type = typeof(TValue);
 
             //
             // Make sure we don't register the same type multiple times.
             //
-            if (items.Where(i => i.Type == type).Count() == 0) {
-                var item = Activator.CreateInstance<TItem>();
-
-                item.Type = type;
-                item.TypeName = type.FullName;
-
-                items.Add(OnRegister<TValue>(item));
+            if (items.Any(i => i.Type == type))
+            {
+                return;
             }
+
+            var item = Activator.CreateInstance<TItem>();
+
+            item.Type = type;
+            item.TypeName = type.FullName;
+
+            items.Add(OnRegister<TValue>(item));
         }
 
         /// <summary>
         /// Unregisters a previously registered item.
         /// </summary>
         /// <typeparam name="TValue">The value type</typeparam>
-        public virtual void UnRegister<TValue>()  where TValue : T {
+        public virtual void UnRegister<TValue>() where TValue : T
+        {
             var item = items.SingleOrDefault(i => i.Type == typeof(TValue));
             if (item != null)
+            {
                 items.Remove(item);
+            }
         }
 
         /// <summary>
@@ -59,7 +66,8 @@ namespace Piranha
         /// </summary>
         /// <param name="type">The type</param>
         /// <returns>The item, null if not found</returns>
-        public virtual TItem GetByType(Type type) {
+        public virtual TItem GetByType(Type type)
+        {
             return items.SingleOrDefault(i => i.Type == type);
         }
 
@@ -68,7 +76,8 @@ namespace Piranha
         /// </summary>
         /// <param name="typeName">The type name</param>
         /// <returns>The item, null if not found</returns>
-        public virtual TItem GetByType(string typeName) {
+        public virtual TItem GetByType(string typeName)
+        {
             return items.SingleOrDefault(i => i.TypeName == typeName);
         }
 
@@ -76,7 +85,8 @@ namespace Piranha
         /// Gets the generic enumerator for the items.
         /// </summary>
         /// <returns>The enumerator</returns>
-        public IEnumerator<TItem> GetEnumerator() {
+        public IEnumerator<TItem> GetEnumerator()
+        {
             return items.GetEnumerator();
         }
 
@@ -84,7 +94,8 @@ namespace Piranha
         /// Gets the enumerator for the items.
         /// </summary>
         /// <returns>The enumerator</returns>
-        IEnumerator IEnumerable.GetEnumerator() {
+        IEnumerator IEnumerable.GetEnumerator()
+        {
             return items.GetEnumerator();
         }
 
@@ -95,7 +106,8 @@ namespace Piranha
         /// <typeparam name="TValue">The value type</typeparam>
         /// <param name="item">The item</param>
         /// <returns>The processed item</returns>
-        protected virtual TItem OnRegister<TValue>(TItem item) where TValue : T {
+        protected virtual TItem OnRegister<TValue>(TItem item) where TValue : T
+        {
             return item;
         }
     }

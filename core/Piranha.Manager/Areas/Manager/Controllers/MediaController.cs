@@ -36,8 +36,9 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="folderId">The optional folder id</param>
         [Route("manager/media/{folderId:Guid?}")]
         [Authorize(Policy = Permission.Media)]
-        public IActionResult List(Guid? folderId = null) {
-            return View("List", MediaListModel.Get(api, folderId));
+        public IActionResult List(Guid? folderId = null)
+        {
+            return View("List", MediaListModel.Get(Api, folderId));
         }
 
         /// <summary>
@@ -47,28 +48,41 @@ namespace Piranha.Areas.Manager.Controllers
         [HttpPost]
         [Route("manager/media/add")]
         [Authorize(Policy = Permission.MediaAdd)]
-        public async Task<IActionResult> Add(MediaUploadModel model) {
+        public async Task<IActionResult> Add(MediaUploadModel model)
+        {
             var uploaded = 0;
 
-            foreach (var upload in model.Uploads) {
-                if (upload.Length > 0 && !string.IsNullOrWhiteSpace(upload.ContentType)) {
-                    using (var stream = upload.OpenReadStream()) {
-                        await api.Media.SaveAsync(new StreamMediaContent
-                        {
-                            Id = model.Uploads.Count() == 1 ? model.Id : null,
-                            FolderId = model.ParentId,
-                            Filename = Path.GetFileName(upload.FileName),
-                            Data = stream
-                        });
-                        uploaded++;
-                    }
+            foreach (var upload in model.Uploads)
+            {
+                if (upload.Length <= 0 || string.IsNullOrWhiteSpace(upload.ContentType))
+                {
+                    continue;
+                }
+
+                using (var stream = upload.OpenReadStream())
+                {
+                    await Api.Media.SaveAsync(new StreamMediaContent
+                    {
+                        Id = model.Uploads.Count() == 1 ? model.Id : null,
+                        FolderId = model.ParentId,
+                        Filename = Path.GetFileName(upload.FileName),
+                        Data = stream
+                    });
+                    uploaded++;
                 }
             }
             if (uploaded == model.Uploads.Count())
+            {
                 SuccessMessage("Uploaded all media assets.");
+            }
             else if (uploaded == 0)
+            {
                 ErrorMessage("Could not upload the media assets.");
-            else InformationMessage($"Uploaded {uploaded} of {model.Uploads.Count()} media assets.");
+            }
+            else
+            {
+                InformationMessage($"Uploaded {uploaded} of {model.Uploads.Count()} media assets.");
+            }
 
             return RedirectToAction("List", new { folderId = model.ParentId });
         }
@@ -80,21 +94,27 @@ namespace Piranha.Areas.Manager.Controllers
         [HttpPost]
         [Route("manager/media/modal/add")]
         [Authorize(Policy = Permission.MediaAdd)]
-        public async Task<IActionResult> ModalAdd(MediaUploadModel model) {
+        public async Task<IActionResult> ModalAdd(MediaUploadModel model)
+        {
             var uploaded = 0;
 
-            foreach (var upload in model.Uploads) {
-                if (upload.Length > 0 && !string.IsNullOrWhiteSpace(upload.ContentType)) {
-                    using (var stream = upload.OpenReadStream()) {
-                        await api.Media.SaveAsync(new StreamMediaContent
-                        {
-                            Id = model.Uploads.Count() == 1 ? model.Id : null,
-                            FolderId = model.ParentId,
-                            Filename = Path.GetFileName(upload.FileName),
-                            Data = stream
-                        });
-                        uploaded++;
-                    }
+            foreach (var upload in model.Uploads)
+            {
+                if (upload.Length <= 0 || string.IsNullOrWhiteSpace(upload.ContentType))
+                {
+                    continue;
+                }
+
+                using (var stream = upload.OpenReadStream())
+                {
+                    await Api.Media.SaveAsync(new StreamMediaContent
+                    {
+                        Id = model.Uploads.Count() == 1 ? model.Id : null,
+                        FolderId = model.ParentId,
+                        Filename = Path.GetFileName(upload.FileName),
+                        Data = stream
+                    });
+                    uploaded++;
                 }
             }
             return Modal(model.ParentId);
@@ -107,15 +127,19 @@ namespace Piranha.Areas.Manager.Controllers
         [HttpPost]
         [Route("manager/media/addfolder")]
         [Authorize(Policy = Permission.MediaAddFolder)]
-        public IActionResult AddFolder(MediaFolderModel model) {
-            if (!string.IsNullOrWhiteSpace(model.Name)) {
-                api.Media.SaveFolder(new MediaFolder
+        public IActionResult AddFolder(MediaFolderModel model)
+        {
+            if (!string.IsNullOrWhiteSpace(model.Name))
+            {
+                Api.Media.SaveFolder(new MediaFolder
                 {
                     ParentId = model.ParentId,
                     Name = model.Name
                 });
                 SuccessMessage($"Added folder \"{model.Name}\".");
-            } else {
+            }
+            else
+            {
                 ErrorMessage("Name is mandatory when creating a new folder.");
             }
             return RedirectToAction("List", new { folderId = model.ParentId });
@@ -127,11 +151,13 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="id">The unique id</param>
         [Route("/manager/media/delete/{id:Guid}")]
         [Authorize(Policy = Permission.MediaDelete)]
-        public async Task<IActionResult> Delete(Guid id) {
-            var media = api.Media.GetById(id);
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var media = Api.Media.GetById(id);
 
-            if (media != null) {
-                await api.Media.DeleteAsync(media);
+            if (media != null)
+            {
+                await Api.Media.DeleteAsync(media);
                 SuccessMessage($"Deleted \"{media.Filename}\".");
                 return RedirectToAction("List", new { folderId = media.FolderId });
             }
@@ -145,14 +171,17 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="id">The unique id</param>
         [Route("/manager/media/delete/folder/{id:Guid}")]
         [Authorize(Policy = Permission.MediaDeleteFolder)]
-        public IActionResult DeleteFolder(Guid id) {
-            var folder = api.Media.GetFolderById(id);
+        public IActionResult DeleteFolder(Guid id)
+        {
+            var folder = Api.Media.GetFolderById(id);
 
-            if (folder != null) {
-                var media = api.Media.GetAll(folder.Id);
+            if (folder != null)
+            {
+                var media = Api.Media.GetAll(folder.Id);
 
-                if (media.Count() == 0) {
-                    api.Media.DeleteFolder(folder);
+                if (!media.Any())
+                {
+                    Api.Media.DeleteFolder(folder);
                     SuccessMessage($"Deleted folder \"{folder.Name}\".");
                     return RedirectToAction("List", new { folderId = folder.ParentId });
                 }
@@ -164,17 +193,24 @@ namespace Piranha.Areas.Manager.Controllers
         }
 
         [Route("/manager/media/modal/{folderId?}")]
-        public IActionResult Modal(Guid? folderId = null, string filter = null) {
+        public IActionResult Modal(Guid? folderId = null, string filter = null)
+        {
             MediaType? type = null;
 
-            if (filter == "image")
-                type = MediaType.Image;
-            else if (filter == "document")
-                type = MediaType.Document;
-            else if (filter == "video")
-                type = MediaType.Video;
+            switch (filter)
+            {
+                case "image":
+                    type = MediaType.Image;
+                    break;
+                case "document":
+                    type = MediaType.Document;
+                    break;
+                case "video":
+                    type = MediaType.Video;
+                    break;
+            }
 
-            return View("Modal", MediaListModel.Get(api, folderId, type));            
+            return View("Modal", MediaListModel.Get(Api, folderId, type));
         }
     }
 }

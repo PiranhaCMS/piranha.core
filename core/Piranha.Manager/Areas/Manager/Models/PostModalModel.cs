@@ -41,59 +41,72 @@ namespace Piranha.Areas.Manager.Models
         public string BlogTitle { get; set; }
         public string BlogSlug { get; set; }
 
-        public PostModalModel() {
+        public PostModalModel()
+        {
             Posts = new List<PostModalItem>();
             Blogs = new List<BlogItem>();
         }
 
-        public static PostModalModel GetByBlogId(IApi api, Guid? siteId = null, Guid? blogId = null) {
+        public static PostModalModel GetByBlogId(IApi api, Guid? siteId = null, Guid? blogId = null)
+        {
             var model = new PostModalModel();
 
             // Get default site if none is selected
-            if (!siteId.HasValue) {
+            if (!siteId.HasValue)
+            {
                 var site = api.Sites.GetDefault();
 
                 if (site != null)
                     siteId = site.Id;
             }
-            model.SiteId = siteId.Value;
+            if (siteId != null)
+            {
+                model.SiteId = siteId.Value;
 
-            // Get the blogs available
-            model.Blogs = api.Pages.GetAllBlogs(siteId.Value)
-                .Select(p => new BlogItem
-                {
-                    Id = p.Id,
-                    Title = p.Title,
-                    Slug = p.Slug
-                }).OrderBy(p => p.Title).ToList();
-
-            if (model.Blogs.Count() > 0) {
-                if (!blogId.HasValue) {
-                    // Select the first blog
-                    blogId = model.Blogs.First().Id;
-                }
-
-                var blog = model.Blogs.FirstOrDefault(b => b.Id == blogId.Value);
-                if (blog != null) {
-                    model.BlogId = blog.Id;
-                    model.BlogTitle = blog.Title;
-                    model.BlogSlug = blog.Slug;
-                }
-
-                // Get the available posts
-                model.Posts = api.Posts.GetAll(blogId.Value)
-                    .Select(p => new PostModalItem
+                // Get the blogs available
+                model.Blogs = api.Pages.GetAllBlogs(siteId.Value)
+                    .Select(p => new BlogItem
                     {
                         Id = p.Id,
                         Title = p.Title,
-                        Permalink = "/" + model.BlogSlug + "/" + p.Slug,
-                        Published = p.Published
-                    }).ToList();
-
-                // Sort so we show unpublished drafts first
-                model.Posts = model.Posts.Where(p => !p.Published.HasValue)
-                    .Concat(model.Posts.Where(p => p.Published.HasValue));
+                        Slug = p.Slug
+                    }).OrderBy(p => p.Title).ToList();
             }
+
+            if (!model.Blogs.Any())
+            {
+                return model;
+            }
+
+
+            if (!blogId.HasValue)
+            {
+                // Select the first blog
+                blogId = model.Blogs.First().Id;
+            }
+
+            var blog = model.Blogs.FirstOrDefault(b => b.Id == blogId.Value);
+            if (blog != null)
+            {
+                model.BlogId = blog.Id;
+                model.BlogTitle = blog.Title;
+                model.BlogSlug = blog.Slug;
+            }
+
+            // Get the available posts
+            model.Posts = api.Posts.GetAll(blogId.Value)
+                .Select(p => new PostModalItem
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    Permalink = "/" + model.BlogSlug + "/" + p.Slug,
+                    Published = p.Published
+                }).ToList();
+
+            // Sort so we show unpublished drafts first
+            model.Posts = model.Posts.Where(p => !p.Published.HasValue)
+                .Concat(model.Posts.Where(p => p.Published.HasValue));
+
             return model;
         }
     }

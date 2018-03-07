@@ -26,25 +26,27 @@ namespace Piranha.Repositories
         /// <param name="db">The current db context</param>
         /// <param name="cache">The optional model cache</param>
         public AliasRepository(Api api, IDb db, ICache cache = null)
-            : base(db, cache) 
-            { 
-                this.api = api;
-            }
+            : base(db, cache)
+        {
+            this.api = api;
+        }
 
         /// <summary>
         /// Gets all available models for the specified site.
         /// </summary>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The available models</returns>
-        public IEnumerable<Alias> GetAll(Guid? siteId) {
+        public IEnumerable<Alias> GetAll(Guid? siteId)
+        {
             var models = new List<Alias>();
 
-            if (!siteId.HasValue) {
+            if (!siteId.HasValue)
+            {
                 var site = api.Sites.GetDefault();
                 if (site != null)
                     siteId = site.Id;
             }
-            
+
             var aliases = db.Aliases
                 .AsNoTracking()
                 .Where(a => a.SiteId == siteId)
@@ -52,11 +54,13 @@ namespace Piranha.Repositories
                 .ThenBy(a => a.RedirectUrl)
                 .Select(a => a.Id);
 
-            foreach (var a in aliases) {
+            foreach (var a in aliases)
+            {
                 var model = GetById(a);
                 if (model != null)
                     models.Add(model);
             }
+
             return models;
         }
 
@@ -66,19 +70,24 @@ namespace Piranha.Repositories
         /// <param name="url">The unique url</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The model</returns>
-        public Alias GetByAliasUrl(string url, Guid? siteId = null) {
-            if (!siteId.HasValue) {
+        public Alias GetByAliasUrl(string url, Guid? siteId = null)
+        {
+            if (!siteId.HasValue)
+            {
                 var site = api.Sites.GetDefault();
                 if (site != null)
                     siteId = site.Id;
             }
 
-            var id = cache != null ? cache.Get<Guid?>($"AliasId_{siteId}_{url}") : null;
+            var id = cache?.Get<Guid?>($"AliasId_{siteId}_{url}");
             Alias model = null;
 
-            if (id.HasValue) {
+            if (id.HasValue)
+            {
                 model = GetById(id.Value);
-            } else {
+            }
+            else
+            {
                 id = db.Aliases
                     .AsNoTracking()
                     .Where(a => a.SiteId == siteId && a.AliasUrl == url)
@@ -86,8 +95,11 @@ namespace Piranha.Repositories
                     .FirstOrDefault();
 
                 if (id != Guid.Empty)
+                {
                     model = GetById(id.Value);
+                }
             }
+
             return model;
         }
 
@@ -95,22 +107,32 @@ namespace Piranha.Repositories
         /// Adds a new model to the database.
         /// </summary>
         /// <param name="model">The model</param>
-        protected override void Add(Alias model) {
+        protected override void Add(Alias model)
+        {
             PrepareInsert(model);
 
             // Check for alias url
             if (string.IsNullOrWhiteSpace(model.AliasUrl))
+            {
                 throw new ArgumentException("Alias Url cannot be empty");
+            }
 
             // Check for redirect url
             if (string.IsNullOrWhiteSpace(model.RedirectUrl))
+            {
                 throw new ArgumentException("Redirect Url cannot be empty");
+            }
 
             // Fix urls
             if (!model.AliasUrl.StartsWith("/"))
+            {
                 model.AliasUrl = "/" + model.AliasUrl;
-            if (!model.RedirectUrl.StartsWith("/") && !model.RedirectUrl.StartsWith("http://") && !model.RedirectUrl.StartsWith("https://"))
+            }
+            if (!model.RedirectUrl.StartsWith("/") && !model.RedirectUrl.StartsWith("http://") &&
+                !model.RedirectUrl.StartsWith("https://"))
+            {
                 model.RedirectUrl = "/" + model.RedirectUrl;
+            }
 
             db.Aliases.Add(model);
         }
@@ -119,34 +141,46 @@ namespace Piranha.Repositories
         /// Updates the given model in the database.
         /// </summary>
         /// <param name="model">The model</param>
-        protected override void Update(Alias model) {
+        protected override void Update(Alias model)
+        {
             PrepareUpdate(model);
 
             // Check for alias url
             if (string.IsNullOrWhiteSpace(model.AliasUrl))
+            {
                 throw new ArgumentException("Alias Url cannot be empty");
+            }
 
             // Check for redirect url
             if (string.IsNullOrWhiteSpace(model.RedirectUrl))
+            {
                 throw new ArgumentException("Redirect Url cannot be empty");
+            }
 
             // Fix urls
             if (!model.AliasUrl.StartsWith("/"))
+            {
                 model.AliasUrl = "/" + model.AliasUrl;
-            if (!model.RedirectUrl.StartsWith("/") && !model.RedirectUrl.StartsWith("http://") && !model.RedirectUrl.StartsWith("https://"))
+            }
+            if (!model.RedirectUrl.StartsWith("/") && !model.RedirectUrl.StartsWith("http://") &&
+                !model.RedirectUrl.StartsWith("https://"))
+            {
                 model.RedirectUrl = "/" + model.RedirectUrl;
+            }
 
             var alias = db.Aliases.FirstOrDefault(s => s.Id == model.Id);
-            if (alias != null) {
+            if (alias != null)
+            {
                 App.Mapper.Map(model, alias);
             }
-        }        
+        }
 
         /// <summary>
         /// Adds the given model to cache.
         /// </summary>
         /// <param name="model">The model</param>
-        protected override void AddToCache(Alias model) {
+        protected override void AddToCache(Alias model)
+        {
             cache.Set(model.Id.ToString(), model);
             cache.Set($"AliasId_{model.SiteId}_{model.AliasUrl}", model.Id);
         }
@@ -155,7 +189,8 @@ namespace Piranha.Repositories
         /// Removes the given model from cache.
         /// </summary>
         /// <param name="model">The model</param>
-        protected override void RemoveFromCache(Alias model) {
+        protected override void RemoveFromCache(Alias model)
+        {
             cache.Remove($"AliasId_{model.SiteId}_{model.AliasUrl}");
 
             base.RemoveFromCache(model);

@@ -59,8 +59,9 @@ namespace Piranha.AttributeBuilder
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public RegionAttribute() {
-            SortOrder = Int32.MaxValue;
+        public RegionAttribute()
+        {
+            SortOrder = int.MaxValue;
             ListExpand = true;
         }
     }

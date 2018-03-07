@@ -23,12 +23,12 @@ namespace Piranha.Manager.Binders
         /// <summary>
         /// The meta data provider from the current binding context.
         /// </summary>
-        private readonly IModelMetadataProvider provider;
+        private readonly IModelMetadataProvider _provider;
 
         /// <summary>
         /// The available binders.
         /// </summary>
-        private readonly Dictionary<string, AbstractBinderType> binders;
+        private readonly Dictionary<string, AbstractBinderType> _binders;
         #endregion
 
         /// <summary>
@@ -36,9 +36,10 @@ namespace Piranha.Manager.Binders
         /// </summary>
         /// <param name="provider">The current meta data provider</param>
         /// <param name="binders">The available binders</param>
-        public AbstractModelBinder(IModelMetadataProvider provider, Dictionary<string, AbstractBinderType> binders) {
-            this.provider = provider;
-            this.binders = binders;
+        public AbstractModelBinder(IModelMetadataProvider provider, Dictionary<string, AbstractBinderType> binders)
+        {
+            _provider = provider;
+            _binders = binders;
         }
 
         /// <summary>
@@ -46,22 +47,30 @@ namespace Piranha.Manager.Binders
         /// </summary>
         /// <param name="bc">The binding context</param>
         /// <returns>An asynchronous task</returns>
-        public async Task BindModelAsync(ModelBindingContext bc) {
+        public async Task BindModelAsync(ModelBindingContext bc)
+        {
             var result = ModelBindingResult.Failed();
             var typeName = "";
 
             // Get the requested abstract type
             if (bc.ModelType == typeof(PageEditRegionBase))
+            {
                 typeName = bc.ValueProvider.GetValue(bc.ModelName + ".CLRType").FirstValue;
+            }
             else if (bc.ModelType == typeof(IField))
+            {
                 typeName = bc.ValueProvider.GetValue(bc.ModelName.Replace(".Value", "") + ".CLRType").FirstValue;
+            }
 
-            if (!String.IsNullOrEmpty(typeName)) {
-                try {
-                    if (binders.ContainsKey(typeName)) {
+            if (!string.IsNullOrEmpty(typeName))
+            {
+                try
+                {
+                    if (_binders.ContainsKey(typeName))
+                    {
                         // Get the binder for the abstract type
-                        var item = binders[typeName];
-                        var metadata = provider.GetMetadataForType(item.Type);
+                        var item = _binders[typeName];
+                        var metadata = _provider.GetMetadataForType(item.Type);
 
                         // Let the default binders take care of it once
                         // that the real type has been discovered.
@@ -70,13 +79,18 @@ namespace Piranha.Manager.Binders
                             metadata,
                             bc.FieldName,
                             bc.ModelName,
-                            model: null)) {
+                            null))
+                        {
                             await item.Binder.BindModelAsync(bc);
                             scoped = bc.Result;
                         }
                         result = scoped;
-                    } 
-                } catch { }
+                    }
+                }
+                catch
+                {
+                    // ignored
+                }
             }
             bc.Result = result;
         }

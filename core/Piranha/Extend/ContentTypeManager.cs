@@ -20,7 +20,8 @@ namespace Piranha.Extend
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public ContentTypeManager() {
+        public ContentTypeManager()
+        {
             contentTypes = new List<AppContentType>();
         }
 
@@ -30,10 +31,13 @@ namespace Piranha.Extend
         /// <param name="id">The id that will be stored in the database</param>
         /// <param name="title">The display title of the content type</param>
         /// <param name="customEditor">If a custom editor should be added</param>
-        internal void Register<T>(string id, string title, bool customEditor = false) {
+        internal void Register<T>(string id, string title, bool customEditor = false)
+        {
             if (contentTypes.Exists(t => t.Type == typeof(T)))
+            {
                 throw new ArgumentException($"Given type {typeof(T).FullName} is already registered as a content type.");
-            
+            }
+
             contentTypes.Add(new AppContentType
             {
                 Id = id,
@@ -43,24 +47,31 @@ namespace Piranha.Extend
             });
         }
 
-        public string GetId(Type t) {
-            foreach (var type in contentTypes) {
+        public string GetId(Type t)
+        {
+            foreach (var type in contentTypes)
+            {
                 if (type.Type.IsAssignableFrom(t))
                     return type.Id;
             }
+
             return null;
         }
 
-        public string GetId<T>() {
+        public string GetId<T>()
+        {
             return GetId(typeof(T));
         }
 
-        public AppContentType GetById(string id) {
-            foreach (var type in contentTypes) {
+        public AppContentType GetById(string id)
+        {
+            foreach (var type in contentTypes)
+            {
                 if (type.Id == id)
                     return type;
             }
-            return null;            
+
+            return null;
         }
     }
 }

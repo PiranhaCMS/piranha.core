@@ -24,9 +24,13 @@ namespace Piranha.Models
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The partial structure</returns>
-        public TThis GetPartial(Guid? id) {
+        public TThis GetPartial(Guid? id)
+        {
             if (id.HasValue)
+            {
                 return GetPartialRecursive(this, id.Value);
+            }
+
             return (TThis)this;
         }
 
@@ -35,29 +39,34 @@ namespace Piranha.Models
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The breadcrumb</returns>
-        public IList<T> GetBreadcrumb(Guid? id) {
-            if (id.HasValue)
-                return GetBreadcrumbRecursive(this, id.Value);
-            return new List<T>();
-        }        
+        public IList<T> GetBreadcrumb(Guid? id)
+        {
+            return id.HasValue ? GetBreadcrumbRecursive(this, id.Value) : new List<T>();
+        }
 
         /// <summary>
         /// Gets the partial structure by going through the
         /// items recursively.
         /// </summary>
         /// <param name="items">The items</param>
-        /// <param name="pageId">The unique id</param>
+        /// <param name="pageId">The unique pageId</param>
         /// <returns>The partial structure if found</returns>
-        private TThis GetPartialRecursive(IList<T> items, Guid id) {
-            foreach (var item in items) {
-                if (item.Id == id) {
+        private static TThis GetPartialRecursive(IList<T> items, Guid pageId)
+        {
+            foreach (var item in items)
+            {
+                if (item.Id == pageId)
+                {
                     return (TThis)item.Items;
                 }
-                var partial = GetPartialRecursive(item.Items, id);
+                var partial = GetPartialRecursive(item.Items, pageId);
 
                 if (partial != null)
+                {
                     return partial;
+                }
             }
+
             return null;
         }
 
@@ -68,22 +77,27 @@ namespace Piranha.Models
         /// <param name="items">The items</param>
         /// <param name="pageId">The unique id</param>
         /// <returns>The breadcrumb items</returns>
-        private IList<T> GetBreadcrumbRecursive(IList<T> items, Guid id) {
-            foreach (var item in items) {
-                if (item.Id == id) {
+        private static IList<T> GetBreadcrumbRecursive(IList<T> items, Guid pageId)
+        {
+            foreach (var item in items)
+            {
+                if (item.Id == pageId)
+                {
                     return new List<T>
                     {
                         item
                     };
                 }
-                var crumb = GetBreadcrumbRecursive(item.Items, id);
+                var crumb = GetBreadcrumbRecursive(item.Items, pageId);
 
-                if (crumb != null) {
+                if (crumb != null)
+                {
                     crumb.Insert(0, item);
 
                     return crumb;
                 }
             }
+
             return null;
         }
     }

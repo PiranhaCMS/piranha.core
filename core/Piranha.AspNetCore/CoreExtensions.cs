@@ -18,7 +18,8 @@ public static class CoreExtensions
     /// </summary>
     /// <param name="builder">The current application builder</param>
     /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranha(this IApplicationBuilder builder) {
+    public static IApplicationBuilder UsePiranha(this IApplicationBuilder builder)
+    {
         return builder
             .UseMiddleware<SiteMiddleware>()
             .UseMiddleware<AliasMiddleware>()
@@ -34,7 +35,8 @@ public static class CoreExtensions
     /// </summary>
     /// <param name="builder">The current application builder</param>
     /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranhaAliases(this IApplicationBuilder builder) {
+    public static IApplicationBuilder UsePiranhaAliases(this IApplicationBuilder builder)
+    {
         return builder
             .UseMiddleware<AliasMiddleware>();
     }
@@ -44,7 +46,8 @@ public static class CoreExtensions
     /// </summary>
     /// <param name="builder">The current application builder</param>
     /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranhaArchives(this IApplicationBuilder builder) {
+    public static IApplicationBuilder UsePiranhaArchives(this IApplicationBuilder builder)
+    {
         return builder
             .UseMiddleware<ArchiveMiddleware>();
     }
@@ -54,7 +57,8 @@ public static class CoreExtensions
     /// </summary>
     /// <param name="builder">The current application builder</param>
     /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranhaPages(this IApplicationBuilder builder) {
+    public static IApplicationBuilder UsePiranhaPages(this IApplicationBuilder builder)
+    {
         return builder
             .UseMiddleware<PageMiddleware>();
     }
@@ -64,7 +68,8 @@ public static class CoreExtensions
     /// </summary>
     /// <param name="builder">The current application builder</param>
     /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranhaPosts(this IApplicationBuilder builder) {
+    public static IApplicationBuilder UsePiranhaPosts(this IApplicationBuilder builder)
+    {
         return builder
             .UseMiddleware<PostMiddleware>();
     }
@@ -74,7 +79,8 @@ public static class CoreExtensions
     /// </summary>
     /// <param name="builder">The current application builder</param>
     /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranhaStartPage(this IApplicationBuilder builder) {
+    public static IApplicationBuilder UsePiranhaStartPage(this IApplicationBuilder builder)
+    {
         return builder
             .UseMiddleware<StartPageMiddleware>();
     }
@@ -84,9 +90,10 @@ public static class CoreExtensions
     /// </summary>
     /// <param name="builder">The current application builder</param>
     /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranhaSites(this IApplicationBuilder builder) {
+    public static IApplicationBuilder UsePiranhaSites(this IApplicationBuilder builder)
+    {
         return builder
-            .UseMiddleware<SiteMiddleware>();        
+            .UseMiddleware<SiteMiddleware>();
     }
 
     /// <summary>
@@ -94,8 +101,9 @@ public static class CoreExtensions
     /// </summary>
     /// <param name="builder">The current application builder</param>
     /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranhaSitemap(this IApplicationBuilder builder) {
+    public static IApplicationBuilder UsePiranhaSitemap(this IApplicationBuilder builder)
+    {
         return builder
-            .UseMiddleware<SitemapMiddleware>();        
+            .UseMiddleware<SitemapMiddleware>();
     }
 }

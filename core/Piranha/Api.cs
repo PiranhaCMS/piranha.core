@@ -95,7 +95,8 @@ namespace Piranha
         /// <summary>
         /// Gets if the current repository has caching enabled or not.
         /// </summary>
-        public bool IsCached {
+        public bool IsCached
+        {
             get { return cache != null; }
         }
         #endregion
@@ -107,7 +108,8 @@ namespace Piranha
         /// <param name="storage">The current storage</param>
         /// <param name="modelCache">The optional model cache</param>
         /// <param name="imageProcessor">The optional image processor</param>
-        public Api(IDb db, IStorage storage, ICache modelCache = null, IImageProcessor imageProcessor = null) {
+        public Api(IDb db, IStorage storage, ICache modelCache = null, IImageProcessor imageProcessor = null)
+        {
             this.db = db;
             this.storage = storage;
 
@@ -117,7 +119,8 @@ namespace Piranha
         /// <summary>
         /// Disposes the current api.
         /// </summary>
-        public void Dispose() {
+        public void Dispose()
+        {
             db.Dispose();
         }
 
@@ -127,7 +130,8 @@ namespace Piranha
         /// </summary>
         /// <param name="modelCache">The optional model cache</param>
         /// <param name="imageProcessor">The optional image processor</param>
-        private void Setup(ICache modelCache = null, IImageProcessor imageProcessor = null) {
+        private void Setup(ICache modelCache = null, IImageProcessor imageProcessor = null)
+        {
             cache = modelCache;
 
             Aliases = new AliasRepository(this, db, cache);

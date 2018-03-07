@@ -20,11 +20,13 @@ namespace Piranha.Areas.Manager.Models
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public SiteEditModel() {
+        public SiteEditModel()
+        {
             Site = new Site();
         }
 
-        public static SiteEditModel GetById(IApi api, Guid id) {
+        public static SiteEditModel GetById(IApi api, Guid id)
+        {
             var model = new SiteEditModel
             {
                 Site = api.Sites.GetById(id)
@@ -32,7 +34,8 @@ namespace Piranha.Areas.Manager.Models
             return model;
         }
 
-        public bool Save(IApi api) {
+        public bool Save(IApi api)
+        {
             api.Sites.Save(Site);
 
             return true;

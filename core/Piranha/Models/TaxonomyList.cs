@@ -14,8 +14,10 @@ namespace Piranha.Models
 {
     public class TaxonomyList : List<Taxonomy>
     {
-        public void Add(params string[] titles) {
-            foreach (var title in titles) {
+        public void Add(params string[] titles)
+        {
+            foreach (var title in titles)
+            {
                 Add(new Taxonomy
                 {
                     Title = title

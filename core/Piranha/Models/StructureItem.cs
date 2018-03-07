@@ -36,7 +36,8 @@ namespace Piranha.Models
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public StructureItem() {
+        protected StructureItem()
+        {
             Items = new List<T>();
         }
     }

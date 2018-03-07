@@ -45,7 +45,7 @@ namespace Piranha.Models
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public PostBase() {
+        protected PostBase() {
             Tags = new TaxonomyList();
         }
     }

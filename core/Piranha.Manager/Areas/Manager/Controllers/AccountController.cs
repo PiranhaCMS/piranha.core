@@ -20,21 +20,22 @@ namespace Piranha.Areas.Manager.Controllers
         /// <summary>
         /// The current Api.
         /// </summary>
-        private readonly IApi api;
+        private readonly IApi _api;
 
         /// <summary>
         /// The current security provider.
         /// </summary>
-        private readonly ISecurity security;
+        private readonly ISecurity _security;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current Api</param>
         /// <param name="security">The current security provider</param>
-        public AccountController(IApi api, ISecurity security) {
-            this.api = api;
-            this.security = security;
+        public AccountController(IApi api, ISecurity security)
+        {
+            _api = api;
+            _security = security;
         }
 
         /// <summary>
@@ -42,7 +43,8 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         /// <param name="returnurl">The optional return url</param>
         [Route("manager/login/{returnurl?}")]
-        public IActionResult Login(string returnurl = null) {
+        public IActionResult Login(string returnurl = null)
+        {
             return View("Login", returnurl);
         }
 
@@ -51,8 +53,9 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         /// <param name="returnurl">The optional return url</param>
         [Route("manager/logout")]
-        public async Task<IActionResult> Logout(string returnurl = null) {
-            await security.SignOut(HttpContext);
+        public async Task<IActionResult> Logout(string returnurl = null)
+        {
+            await _security.SignOut(HttpContext);
 
             return RedirectToAction("Login", "Account");
         }
@@ -63,8 +66,9 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="model">The login model</param>
         [HttpPost]
         [Route("manager/login")]
-        public async Task<IActionResult> Login(LoginModel model) {
-            var result = await security.SignIn(HttpContext, model.UserName, model.Password);
+        public async Task<IActionResult> Login(LoginModel model)
+        {
+            var result = await _security.SignIn(HttpContext, model.UserName, model.Password);
 
             if (result)
             {

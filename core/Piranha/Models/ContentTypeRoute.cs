@@ -25,8 +25,9 @@ namespace Piranha.Models
         /// <summary>
         /// Implicit type conversion between a route and a string.
         /// </summary>
-        public static implicit operator string(ContentTypeRoute r) {
+        public static implicit operator string(ContentTypeRoute r)
+        {
             return r.Route;
-        } 
+        }
     }
 }

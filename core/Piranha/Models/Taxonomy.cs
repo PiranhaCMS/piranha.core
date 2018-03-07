@@ -34,7 +34,8 @@ namespace Piranha.Models
         /// Operator for type casting a string to a taxonomy.
         /// </summary>
         /// <param name="str">The string</param>
-        public static implicit operator Taxonomy(string str) {
+        public static implicit operator Taxonomy(string str)
+        {
             return new Taxonomy
             {
                 Title = str
@@ -45,7 +46,8 @@ namespace Piranha.Models
         /// Operator for type casting a category to a taxonomy.
         /// </summary>
         /// <param name="category">The category</param>
-        public static implicit operator Taxonomy(Category category) {
+        public static implicit operator Taxonomy(Category category)
+        {
             return new Taxonomy
             {
                 Id = category.Id,
@@ -58,13 +60,14 @@ namespace Piranha.Models
         /// Operator for type casting a tag to a taxonomy.
         /// </summary>
         /// <param name="tag">The tag</param>
-        public static implicit operator Taxonomy(Tag tag) {
+        public static implicit operator Taxonomy(Tag tag)
+        {
             return new Taxonomy
             {
                 Id = tag.Id,
                 Title = tag.Title,
                 Slug = tag.Slug
             };
-        }   
+        }
     }
 }

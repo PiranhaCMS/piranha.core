@@ -33,33 +33,37 @@ namespace Piranha.AspNetCore
         /// <param name="context">The current http context</param>
         /// <param name="api">The current api</param>
         /// <returns>An async task</returns>
-        public override async Task Invoke(HttpContext context, IApi api) {
-            if (!IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/")) {
+        public override async Task Invoke(HttpContext context, IApi api)
+        {
+            if (!IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/"))
+            {
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
                 var siteId = GetSiteId(context);
                 var authorized = true;
 
                 var response = StartPageRouter.Invoke(api, url, siteId);
-                if (response != null) {
-                    if (logger != null)
-                        logger.LogInformation($"Found startpage\n  Route: {response.Route}\n  Params: {response.QueryString}");
+                if (response != null)
+                {
+                    Logger?.LogInformation($"Found startpage\n  Route: {response.Route}\n  Params: {response.QueryString}");
 
-                    if (!response.IsPublished) {
-                        if (!context.User.HasClaim(Permission.PagePreview, Permission.PagePreview)) {
-                            if (logger != null) {
-                                logger.LogInformation($"User not authorized to preview unpublished page");
-                            }
+                    if (!response.IsPublished)
+                    {
+                        if (!context.User.HasClaim(Permission.PagePreview, Permission.PagePreview))
+                        {
+                            Logger?.LogInformation($"User not authorized to preview unpublished page");
                             authorized = false;
                         }
                     }
 
-                    if (authorized) {
-                        using (var config = new Config(api)) {
+                    if (authorized)
+                    {
+                        using (var config = new Config(api))
+                        {
                             var headers = context.Response.GetTypedHeaders();
 
-                            if (config.CacheExpiresPages > 0) {
-                                if (logger != null)
-                                    logger.LogInformation("Caching enabled. Setting MaxAge, LastModified & ETag");
+                            if (config.CacheExpiresPages > 0)
+                            {
+                                Logger?.LogInformation("Caching enabled. Setting MaxAge, LastModified & ETag");
 
                                 headers.CacheControl = new CacheControlHeaderValue
                                 {
@@ -69,7 +73,9 @@ namespace Piranha.AspNetCore
 
                                 headers.Headers["ETag"] = response.CacheInfo.EntityTag;
                                 headers.LastModified = response.CacheInfo.LastModified;
-                            } else {
+                            }
+                            else
+                            {
                                 headers.CacheControl = new CacheControlHeaderValue
                                 {
                                     NoCache = true
@@ -77,22 +83,22 @@ namespace Piranha.AspNetCore
                             }
                         }
 
-                        if (HttpCaching.IsCached(context, response.CacheInfo)) {
-                            if (logger != null)
-                                logger.LogInformation("Client has current version. Returning NotModified");
+                        if (HttpCaching.IsCached(context, response.CacheInfo))
+                        {
+                            Logger?.LogInformation("Client has current version. Returning NotModified");
 
                             context.Response.StatusCode = 304;
                             return;
                         }
                         context.Request.Path = new PathString(response.Route);
 
-                        if (context.Request.QueryString.HasValue) {
-                            context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&" + response.QueryString);
-                        } else context.Request.QueryString = new QueryString("?" + response.QueryString);
+                        context.Request.QueryString = context.Request.QueryString.HasValue ?
+                            new QueryString(context.Request.QueryString.Value + "&" + response.QueryString) :
+                            new QueryString("?" + response.QueryString);
                     }
                 }
             }
-            await next.Invoke(context);
+            await Next.Invoke(context);
         }
     }
 }

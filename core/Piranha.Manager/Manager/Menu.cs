@@ -69,7 +69,8 @@ namespace Piranha.Manager
             /// <summary>
             /// Default constructor.
             /// </summary>
-            public MenuItem() {
+            public MenuItem()
+            {
                 Items = new MenuItemList();
             }
         }
@@ -79,8 +80,10 @@ namespace Piranha.Manager
             /// <summary>
             /// Gets the menu item with the given internal id.
             /// </summary>
-            public MenuItem this[string internalId] {
-                get {
+            public MenuItem this[string internalId]
+            {
+                get
+                {
                     return this.FirstOrDefault(i => i.InternalId == internalId);
                 }
             }

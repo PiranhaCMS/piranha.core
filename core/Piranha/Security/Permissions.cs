@@ -13,12 +13,13 @@ namespace Piranha.Security
     /// <summary>
     /// The available core permissions.
     /// </summary>
-    public static class Permission 
+    public static class Permission
     {
         public const string PagePreview = "PiranhaPagePreview";
         public const string PostPreview = "PiranhaPostPreview";
 
-        public static string[] All() {
+        public static string[] All()
+        {
             return new[] {
                 PagePreview,
                 PostPreview

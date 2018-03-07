@@ -24,8 +24,9 @@ namespace Piranha.Areas.Manager.Models
         /// Adds a field set to the region.
         /// </summary>
         /// <param name="fieldSet">The field set</param>
-        public override void Add(PageEditFieldSet fieldSet) {
+        public override void Add(PageEditFieldSet fieldSet)
+        {
             FieldSet = fieldSet;
         }
-    }    
+    }
 }

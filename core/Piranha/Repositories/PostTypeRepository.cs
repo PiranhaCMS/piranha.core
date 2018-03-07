@@ -29,7 +29,8 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="db">The current db connection</param>
         /// <param name="cache">The optional model cache</param>
-        public PostTypeRepository(IDb db, ICache cache = null) {
+        public PostTypeRepository(IDb db, ICache cache = null)
+        {
             this.db = db;
             this.cache = cache;
         }
@@ -38,14 +39,16 @@ namespace Piranha.Repositories
         /// Gets all available models.
         /// </summary>
         /// <returns>The available models</returns>
-        public IEnumerable<PostType> GetAll() {
+        public IEnumerable<PostType> GetAll()
+        {
             var types = db.PostTypes
                 .AsNoTracking()
                 .OrderBy(t => t.Id)
                 .ToList();
             var models = new List<PostType>();
 
-            foreach (var type in types) {
+            foreach (var type in types)
+            {
                 var model = JsonConvert.DeserializeObject<PostType>(type.Body);
 
                 if (cache != null && model != null)
@@ -61,20 +64,28 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns></returns>
-        public PostType GetById(string id) {
-            PostType model = cache != null ? cache.Get<PostType>(id) : null;
+        public PostType GetById(string id)
+        {
+            var model = cache?.Get<PostType>(id);
 
-            if (model == null) {
-                var type = db.PostTypes
-                    .AsNoTracking()
-                    .FirstOrDefault(t => t.Id == id);
-
-                if (type != null)
-                    model = JsonConvert.DeserializeObject<PostType>(type.Body);
-
-                if (cache != null && model != null)
-                    cache.Set(model.Id, model);
+            if (model != null)
+            {
+                return model;
             }
+            var type = db.PostTypes
+                .AsNoTracking()
+                .FirstOrDefault(t => t.Id == id);
+
+            if (type != null)
+            {
+                model = JsonConvert.DeserializeObject<PostType>(type.Body);
+            }
+
+            if (cache != null && model != null)
+            {
+                cache.Set(model.Id, model);
+            }
+
             return model;
         }
 
@@ -83,11 +94,13 @@ namespace Piranha.Repositories
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        public void Save(PostType model) {
+        public void Save(PostType model)
+        {
             var type = db.PostTypes
                 .FirstOrDefault(t => t.Id == model.Id);
 
-            if (type == null) {
+            if (type == null)
+            {
                 type = new Data.PostType
                 {
                     Id = model.Id,
@@ -99,33 +112,36 @@ namespace Piranha.Repositories
             type.LastModified = DateTime.Now;
 
             db.SaveChanges();
-            
-            if (cache != null)
-                cache.Remove(model.Id);
+
+            cache?.Remove(model.Id);
         }
 
         /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public void Delete(string id) {
+        public void Delete(string id)
+        {
             var type = db.PostTypes
                 .FirstOrDefault(t => t.Id == id);
 
-            if (type != null) {
-                db.PostTypes.Remove(type);
-                db.SaveChanges();
-
-                if (cache != null)
-                    cache.Remove(id);
+            if (type == null)
+            {
+                return;
             }
+
+            db.PostTypes.Remove(type);
+            db.SaveChanges();
+
+            cache?.Remove(id);
         }
 
         /// <summary>
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        public void Delete(PostType model) {
+        public void Delete(PostType model)
+        {
             Delete(model.Id);
         }
     }

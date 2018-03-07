@@ -36,10 +36,9 @@ namespace Piranha.Extend.Fields
         /// Impicit operator for converting the field to an url string.
         /// </summary>
         /// <param name="image">The media field</param>
-        public static implicit operator string(MediaField image) {
-            if (image.Media != null)
-                return image.Media.PublicUrl;
-            return "";
+        public static implicit operator string(MediaField image)
+        {
+            return image.Media != null ? image.Media.PublicUrl : "";
         }
     }
 }

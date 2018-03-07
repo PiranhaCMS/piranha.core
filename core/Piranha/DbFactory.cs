@@ -26,7 +26,8 @@ namespace Piranha
         /// </summary>
         /// <param name="args">The arguments</param>
         /// <returns>The db context</returns>
-        public Db CreateDbContext(string[] args) {
+        public Db CreateDbContext(string[] args)
+        {
             var builder = new DbContextOptionsBuilder<Db>();
             builder.UseSqlite("Filename=./piranha.dev.db");
             return new Db(builder.Options);

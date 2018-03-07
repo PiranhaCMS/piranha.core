@@ -23,8 +23,10 @@ namespace Piranha.Local
         /// </summary>
         /// <param name="basePath">The optional base path</param>
         /// <param name="basePath">The optional base url</param>
-        public FileStorage(string basePath = null, string baseUrl = null) {
-            if (!string.IsNullOrEmpty(basePath)) {
+        public FileStorage(string basePath = null, string baseUrl = null)
+        {
+            if (!string.IsNullOrEmpty(basePath))
+            {
                 this.basePath = basePath;
                 this.baseUrl = baseUrl;
             }
@@ -37,10 +39,9 @@ namespace Piranha.Local
         /// Opens a new storage session.
         /// </summary>
         /// <returns>A new open session</returns>
-        public Task<IStorageSession> OpenAsync() {
-            return Task.Run(() => {
-                return (IStorageSession)new FileStorageSession(basePath, baseUrl);
-            });
+        public Task<IStorageSession> OpenAsync()
+        {
+            return Task.Run(() => (IStorageSession)new FileStorageSession(basePath, baseUrl));
         }
 
         /// <summary>
@@ -48,9 +49,13 @@ namespace Piranha.Local
         /// </summary>
         /// <param name="id">The media resource id</param>
         /// <returns>The public url</returns>
-        public string GetPublicUrl(string id) {
+        public string GetPublicUrl(string id)
+        {
             if (!string.IsNullOrWhiteSpace(id))
+            {
                 return baseUrl + id;
+            }
+
             return null;
         }
     }

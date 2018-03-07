@@ -118,7 +118,7 @@
             <div id="region-@Model.Regions[n].Id" class="panel-body" @(n > 0 || Model.PageContentType.CustomEditor ? "style=display:none" : "")>
                 @Html.HiddenFor(m => m.Regions[n].Id)
                 @Html.HiddenFor(m => m.Regions[n].Title)
-                @Html.HiddenFor(m => m.Regions[n].CLRType)
+                @Html.HiddenFor(m => m.Regions[n].ClrType)
                 @Html.EditorFor(m => m.Regions[n], Model.Regions[n].GetType().Name, new { 
                     pageTypeId = Model.PageType.Id,
                     regionTypeId = Model.Regions[n].Id,

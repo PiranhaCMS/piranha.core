@@ -13,26 +13,30 @@ namespace BasicWeb.Controllers
     /// </summary>
     public class SetupController : Controller
     {
-        private readonly IApi api; 
+        private readonly IApi api;
 
-        public SetupController(IApi api) {
+        public SetupController(IApi api)
+        {
             this.api = api;
         }
 
         [Route("/")]
-        public IActionResult Index() {
+        public IActionResult Index()
+        {
             return View();
         }
 
         [Route("/seed")]
-        public IActionResult Seed() {
+        public IActionResult Seed()
+        {
             // Get the default site
             var site = api.Sites.GetDefault();
 
             // Add media assets
             var bannerId = Guid.NewGuid();
 
-            using (var stream = System.IO.File.OpenRead("seed/pexels-photo-355423.jpeg")) {
+            using (var stream = System.IO.File.OpenRead("seed/pexels-photo-355423.jpeg"))
+            {
                 api.Media.Save(new StreamMediaContent
                 {
                     Id = bannerId,
@@ -42,38 +46,19 @@ namespace BasicWeb.Controllers
             }
 
             // Add the blog archived
-            var blogId = Guid.NewGuid();
-            var blogPage = BlogArchive.Create(api);
-            blogPage.Id = blogId;
-            blogPage.SiteId = site.Id;
-            blogPage.Title = "Blog Archive";
-            blogPage.MetaKeywords = "Inceptos, Tristique, Pellentesque, Lorem, Vestibulum";
-            blogPage.MetaDescription = "Morbi leo risus, porta ac consectetur ac, vestibulum at eros.";
-            blogPage.NavigationTitle = "Blog";
-            blogPage.Heading.PrimaryImage = bannerId;
-            blogPage.Heading.Ingress = "Curabitur blandit tempus porttitor. Maecenas sed diam eget risus varius blandit sit amet non magna.";
-            blogPage.Published = DateTime.Now;
-
-            api.Pages.Save(blogPage);
+            var blogPage = CreateBlogPage(site, bannerId);
 
             // Add a blog post
-            var postId = Guid.NewGuid();
-            var post = BlogPost.Create(api);
-            post.Id = postId;
-            post.BlogId = blogPage.Id;
-            post.Category = "Uncategorized";
-            post.Tags.Add("Ornare", "Pellentesque", "Fringilla Ridiculus");  
-            post.Title = "Dapibus Cursus Justo";
-            post.MetaKeywords = "Nullam, Mollis, Cras, Sem, Ipsum";
-            post.MetaDescription = "Aenean lacinia bibendum nulla sed consectetur.";
-            post.Body = "<p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas sed diam eget risus varius blandit sit amet non magna. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Curabitur blandit tempus porttitor. Maecenas faucibus mollis interdum.</p>";
-            post.Heading.PrimaryImage = bannerId;
-            post.Heading.Ingress = "Sed posuere consectetur est at lobortis. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.";
-            post.Published = DateTime.Now;
+            var post = CreatePost(bannerId, blogPage);
 
-            api.Posts.Save(post);                  
-            
             // Add the startpage
+            CreateStartPage(site, bannerId, blogPage, post);
+
+            return Redirect("~/");
+        }
+
+        private void CreateStartPage(Piranha.Data.Site site, Guid bannerId, BlogArchive blogPage, BlogPost post)
+        {
             var startPage = StartPage.Create(api);
             startPage.SiteId = site.Id;
             startPage.Title = "Porta Tortor Euismod";
@@ -101,8 +86,44 @@ namespace BasicWeb.Controllers
                 PostLink = post
             });
             api.Pages.Save(startPage);
+        }
 
-            return Redirect("~/");
+        private BlogPost CreatePost(Guid bannerId, BlogArchive blogPage)
+        {
+            var postId = Guid.NewGuid();
+            var post = BlogPost.Create(api);
+            post.Id = postId;
+            post.BlogId = blogPage.Id;
+            post.Category = "Uncategorized";
+            post.Tags.Add("Ornare", "Pellentesque", "Fringilla Ridiculus");
+            post.Title = "Dapibus Cursus Justo";
+            post.MetaKeywords = "Nullam, Mollis, Cras, Sem, Ipsum";
+            post.MetaDescription = "Aenean lacinia bibendum nulla sed consectetur.";
+            post.Body = "<p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas sed diam eget risus varius blandit sit amet non magna. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Curabitur blandit tempus porttitor. Maecenas faucibus mollis interdum.</p>";
+            post.Heading.PrimaryImage = bannerId;
+            post.Heading.Ingress = "Sed posuere consectetur est at lobortis. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.";
+            post.Published = DateTime.Now;
+
+            api.Posts.Save(post);
+            return post;
+        }
+
+        private BlogArchive CreateBlogPage(Piranha.Data.Site site, Guid bannerId)
+        {
+            var blogId = Guid.NewGuid();
+            var blogPage = BlogArchive.Create(api);
+            blogPage.Id = blogId;
+            blogPage.SiteId = site.Id;
+            blogPage.Title = "Blog Archive";
+            blogPage.MetaKeywords = "Inceptos, Tristique, Pellentesque, Lorem, Vestibulum";
+            blogPage.MetaDescription = "Morbi leo risus, porta ac consectetur ac, vestibulum at eros.";
+            blogPage.NavigationTitle = "Blog";
+            blogPage.Heading.PrimaryImage = bannerId;
+            blogPage.Heading.Ingress = "Curabitur blandit tempus porttitor. Maecenas sed diam eget risus varius blandit sit amet non magna.";
+            blogPage.Published = DateTime.Now;
+
+            api.Pages.Save(blogPage);
+            return blogPage;
         }
     }
 }

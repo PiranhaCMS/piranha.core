@@ -21,7 +21,7 @@ namespace Piranha
         /// <summary>
         /// The private api.
         /// </summary>
-        private readonly IApi api;
+        private readonly IApi _api;
 
         /// <summary>
         /// The system config keys.
@@ -36,24 +36,27 @@ namespace Piranha
         /// <summary>
         /// Gets/sets the currently configured archive page size.
         /// </summary>
-        public int ArchivePageSize {
+        public int ArchivePageSize
+        {
             get
             {
-                var param = api.Params.GetByKey(ARCHIVE_PAGE_SIZE);
+                var param = _api.Params.GetByKey(ARCHIVE_PAGE_SIZE);
                 if (param != null)
                     return Convert.ToInt32(param.Value);
                 return 0;
             }
-            set {
-                var param = api.Params.GetByKey(ARCHIVE_PAGE_SIZE);
-                if (param == null) {
+            set
+            {
+                var param = _api.Params.GetByKey(ARCHIVE_PAGE_SIZE);
+                if (param == null)
+                {
                     param = new Param
                     {
                         Key = ARCHIVE_PAGE_SIZE
                     };
                 }
                 param.Value = value.ToString();
-                api.Params.Save(param);
+                _api.Params.Save(param);
             }
         }
 
@@ -61,24 +64,27 @@ namespace Piranha
         /// Gets/sets the currently configured cache expiration
         /// in minutes for pages.
         /// </summary>
-        public int CacheExpiresPages {
+        public int CacheExpiresPages
+        {
             get
             {
-                var param = api.Params.GetByKey(CACHE_EXPIRES_PAGES);
+                var param = _api.Params.GetByKey(CACHE_EXPIRES_PAGES);
                 if (param != null)
                     return Convert.ToInt32(param.Value);
                 return 0;
             }
-            set {
-                var param = api.Params.GetByKey(CACHE_EXPIRES_PAGES);
-                if (param == null) {
+            set
+            {
+                var param = _api.Params.GetByKey(CACHE_EXPIRES_PAGES);
+                if (param == null)
+                {
                     param = new Param
                     {
                         Key = CACHE_EXPIRES_PAGES
                     };
                 }
                 param.Value = value.ToString();
-                api.Params.Save(param);
+                _api.Params.Save(param);
             }
         }
 
@@ -86,24 +92,23 @@ namespace Piranha
         /// Gets/sets the currently configured cache expiration
         /// in minutes for posts.
         /// </summary>
-        public int CacheExpiresPosts {
+        public int CacheExpiresPosts
+        {
             get
             {
-                var param = api.Params.GetByKey(CACHE_EXPIRES_POSTS);
+                var param = _api.Params.GetByKey(CACHE_EXPIRES_POSTS);
                 if (param != null)
                     return Convert.ToInt32(param.Value);
                 return 0;
             }
-            set {
-                var param = api.Params.GetByKey(CACHE_EXPIRES_POSTS);
-                if (param == null) {
-                    param = new Param
-                    {
-                        Key = CACHE_EXPIRES_POSTS
-                    };
-                }
+            set
+            {
+                var param = _api.Params.GetByKey(CACHE_EXPIRES_POSTS) ?? new Param
+                {
+                    Key = CACHE_EXPIRES_POSTS
+                };
                 param.Value = value.ToString();
-                api.Params.Save(param);
+                _api.Params.Save(param);
             }
         }
 
@@ -111,23 +116,21 @@ namespace Piranha
         /// Gets/sets if hierarchical slugs should be generated when
         /// creating new pages.
         /// </summary>
-        public bool HierarchicalPageSlugs {
-            get {
-                var param = api.Params.GetByKey(PAGES_HIERARCHICAL_SLUGS);
-                if (param != null)
-                    return Convert.ToBoolean(param.Value);
-                return true;
+        public bool HierarchicalPageSlugs
+        {
+            get
+            {
+                var param = _api.Params.GetByKey(PAGES_HIERARCHICAL_SLUGS);
+                return param == null || Convert.ToBoolean(param.Value);
             }
-            set {
-                var param = api.Params.GetByKey(PAGES_HIERARCHICAL_SLUGS);
-                if (param == null) {
-                    param = new Param
-                    {
-                        Key = PAGES_HIERARCHICAL_SLUGS
-                    };
-                }
+            set
+            {
+                var param = _api.Params.GetByKey(PAGES_HIERARCHICAL_SLUGS) ?? new Param
+                {
+                    Key = PAGES_HIERARCHICAL_SLUGS
+                };
                 param.Value = value.ToString();
-                api.Params.Save(param);
+                _api.Params.Save(param);
             }
         }
 
@@ -135,23 +138,21 @@ namespace Piranha
         /// Gets/sets the default number of expanded sitemap levels
         /// in the manager interface.
         /// </summary>
-        public int ManagerExpandedSitemapLevels {
-            get {
-                var param = api.Params.GetByKey(MANAGER_EXPANDED_SITEMAP_LEVELS);
-                if (param != null)
-                    return Convert.ToInt32(param.Value);
-                return 0;
+        public int ManagerExpandedSitemapLevels
+        {
+            get
+            {
+                var param = _api.Params.GetByKey(MANAGER_EXPANDED_SITEMAP_LEVELS);
+                return param != null ? Convert.ToInt32(param.Value) : 0;
             }
-            set {
-                var param = api.Params.GetByKey(MANAGER_EXPANDED_SITEMAP_LEVELS);
-                if (param == null) {
-                    param = new Param
-                    {
-                        Key = MANAGER_EXPANDED_SITEMAP_LEVELS
-                    };
-                }
+            set
+            {
+                var param = _api.Params.GetByKey(MANAGER_EXPANDED_SITEMAP_LEVELS) ?? new Param
+                {
+                    Key = MANAGER_EXPANDED_SITEMAP_LEVELS
+                };
                 param.Value = value.ToString();
-                api.Params.Save(param);                
+                _api.Params.Save(param);
             }
         }
 
@@ -159,28 +160,28 @@ namespace Piranha
         /// Gets/sets the optional URL for the CDN used. If this param isn't
         /// null it will be used when generating the PublicUrl for media.
         /// </summary>
-        public string MediaCDN {
-            get {
-                var param = api.Params.GetByKey(MEDIA_CDN_URL);
-                if (param != null)
-                    return param.Value;
-                return null;
+        public string MediaCDN
+        {
+            get
+            {
+                var param = _api.Params.GetByKey(MEDIA_CDN_URL);
+                return param?.Value;
             }
-            set {
-                var param = api.Params.GetByKey(MEDIA_CDN_URL);
-                if (param == null) {
-                    param = new Param
-                    {
-                        Key = MEDIA_CDN_URL
-                    };
-                }
+            set
+            {
+                var param = _api.Params.GetByKey(MEDIA_CDN_URL) ?? new Param
+                {
+                    Key = MEDIA_CDN_URL
+                };
 
                 // Ensure trailing slash
                 if (!string.IsNullOrWhiteSpace(value) && !value.EndsWith("/"))
+                {
                     value = value + "/";
+                }
 
                 param.Value = value;
-                api.Params.Save(param);                
+                _api.Params.Save(param);
             }
         }
 
@@ -188,14 +189,16 @@ namespace Piranha
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public Config(IApi api) {
-            this.api = api;
+        public Config(IApi api)
+        {
+            _api = api;
         }
 
         /// <summary>
         /// Disposes the config.
         /// </summary>
-        public void Dispose() {
+        public void Dispose()
+        {
             GC.SuppressFinalize(this);
         }
     }

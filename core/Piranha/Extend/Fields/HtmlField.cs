@@ -17,7 +17,8 @@ namespace Piranha.Extend.Fields
         /// Implicit operator for converting a string to a field.
         /// </summary>
         /// <param name="str">The string value</param>
-        public static implicit operator HtmlField(string str) {
+        public static implicit operator HtmlField(string str)
+        {
             return new HtmlField { Value = str };
         }
 
@@ -25,7 +26,8 @@ namespace Piranha.Extend.Fields
         /// Implicitly converts the Html field to a string.
         /// </summary>
         /// <param name="field">The field</param>
-        public static implicit operator string(HtmlField field) {
+        public static implicit operator string(HtmlField field)
+        {
             return field.Value;
         }
     }

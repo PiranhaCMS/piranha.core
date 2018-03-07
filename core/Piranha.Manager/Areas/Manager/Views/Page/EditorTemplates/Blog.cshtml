@@ -1,7 +1,7 @@
 @using Piranha
 @using Piranha.Areas.Manager.Models
 @using Piranha.Manager
-@model Piranha.Areas.Manager.Models.PageEditModel
+@model PageEditModel
 @inject IApi Api
 @{
     var blogModel = PostListModel.GetByBlogId(Api, Model.Id);

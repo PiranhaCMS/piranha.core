@@ -22,43 +22,52 @@ namespace Piranha.Extend
         /// <summary>
         /// The private collection.
         /// </summary>
-        private readonly List<FieldInfo> items = new List<FieldInfo>();
+        private readonly List<FieldInfo> _items = new List<FieldInfo>();
         #endregion
 
         /// <summary>
         /// Registers a new field.
         /// </summary>
         /// <typeparam name="T">The field type</typeparam>
-        public void Register<T>() where T : IField {
+        public void Register<T>() where T : IField
+        {
             var type = typeof(T);
 
             //
             // Make sure we don't register the same type multiple times.
             //
-            if (items.Where(i => i.Type == type).Count() == 0) {
-                var field = new FieldInfo
-                {
-                    CLRType = type.FullName,
-                    Type = type
-                };
-
-                var attr = type.GetTypeInfo().GetCustomAttribute<FieldAttribute>();
-                if (attr != null) {
-                    field.Name = attr.Name;
-                    field.Shorthand = attr.Shorthand;
-                }
-                items.Add(field);
+            if (_items.Count(i => i.Type == type) != 0)
+            {
+                return;
             }
+
+            var field = new FieldInfo
+            {
+                CLRType = type.FullName,
+                Type = type
+            };
+
+            var attr = type.GetTypeInfo().GetCustomAttribute<FieldAttribute>();
+            if (attr != null)
+            {
+                field.Name = attr.Name;
+                field.Shorthand = attr.Shorthand;
+            }
+
+            _items.Add(field);
         }
 
         /// <summary>
         /// Unregisters a previously registered field.
         /// </summary>
         /// <typeparam name="T">The field type</typeparam>
-        public void UnRegister<T>() where T : IField {
-            var item = items.SingleOrDefault(i => i.Type == typeof(T));
+        public void UnRegister<T>() where T : IField
+        {
+            var item = _items.SingleOrDefault(i => i.Type == typeof(T));
             if (item != null)
-                items.Remove(item);
+            {
+                _items.Remove(item);
+            }
         }
 
         /// <summary>
@@ -66,8 +75,9 @@ namespace Piranha.Extend
         /// </summary>
         /// <param name="type">The type</param>
         /// <returns>The field, null if not found</returns>
-        public FieldInfo GetByType(Type type) {
-            return items.SingleOrDefault(i => i.Type == type);
+        public FieldInfo GetByType(Type type)
+        {
+            return _items.SingleOrDefault(i => i.Type == type);
         }
 
         /// <summary>
@@ -75,8 +85,9 @@ namespace Piranha.Extend
         /// </summary>
         /// <param name="typeName">The type name</param>
         /// <returns>The field, null if not found</returns>
-        public FieldInfo GetByType(string typeName) {
-            return items.SingleOrDefault(i => i.CLRType == typeName);
+        public FieldInfo GetByType(string typeName)
+        {
+            return _items.SingleOrDefault(i => i.CLRType == typeName);
         }
 
         /// <summary>
@@ -84,24 +95,27 @@ namespace Piranha.Extend
         /// </summary>
         /// <param name="shorthand">The shorthand name</param>
         /// <returns>The field, null if not found</returns>
-        public FieldInfo GetByShorthand(string shorthand) {
-            return items.SingleOrDefault(i => i.Shorthand == shorthand);
+        public FieldInfo GetByShorthand(string shorthand)
+        {
+            return _items.SingleOrDefault(i => i.Shorthand == shorthand);
         }
 
         /// <summary>
         /// Gets the generic enumerator for the items.
         /// </summary>
         /// <returns>The enumerator</returns>
-        public IEnumerator<FieldInfo> GetEnumerator() {
-            return items.GetEnumerator();
+        public IEnumerator<FieldInfo> GetEnumerator()
+        {
+            return _items.GetEnumerator();
         }
 
         /// <summary>
         /// Gets the enumerator for the items.
         /// </summary>
         /// <returns>The enumerator</returns>
-        IEnumerator IEnumerable.GetEnumerator() {
-            return items.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _items.GetEnumerator();
         }
     }
 }

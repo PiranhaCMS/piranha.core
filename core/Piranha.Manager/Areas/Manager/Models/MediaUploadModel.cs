@@ -38,7 +38,8 @@ namespace Piranha.Areas.Manager.Models
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public MediaUploadModel() {
+        public MediaUploadModel()
+        {
             Uploads = new List<IFormFile>();
         }
     }

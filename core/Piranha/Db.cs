@@ -21,12 +21,12 @@ namespace Piranha
         /// Gets/sets whether the db context as been initialized. This
         /// is only performed once in the application lifecycle.
         /// </summary>
-        static bool isInitialized;
+        static bool _isInitialized;
 
         /// <summary>
         /// The object mutext used for initializing the context.
         /// </summary>
-        static object mutex = new object();
+        static readonly object Mutex = new object();
 
         /// <summary>
         /// Gets/sets the alias set.
@@ -107,26 +107,31 @@ namespace Piranha
         /// Default constructor.
         /// </summary>
         /// <param name="options">Configuration options</param>
-        public Db(DbContextOptions<Db> options) : base(options) {
-            if (!isInitialized) {
-                lock (mutex) {
-                    if (!isInitialized) {
+        public Db(DbContextOptions<Db> options) : base(options)
+        {
+            if (!_isInitialized)
+            {
+                lock (Mutex)
+                {
+                    if (!_isInitialized)
+                    {
                         // Migrate database
                         Database.Migrate();
                         // Seed
                         Seed();
 
-                        isInitialized = true;
+                        _isInitialized = true;
                     }
                 }
             }
-        }        
+        }
 
         /// <summary>
         /// Creates and configures the data model.
         /// </summary>
         /// <param name="mb">The current model builder</param>
-        protected override void OnModelCreating(ModelBuilder mb) {
+        protected override void OnModelCreating(ModelBuilder mb)
+        {
             mb.Entity<Alias>().ToTable("Piranha_Aliases");
             mb.Entity<Alias>().Property(a => a.AliasUrl).IsRequired().HasMaxLength(256);
             mb.Entity<Alias>().Property(a => a.RedirectUrl).IsRequired().HasMaxLength(256);
@@ -213,7 +218,8 @@ namespace Piranha
         /// <summary>
         /// Seeds the default data.
         /// </summary>
-        private void Seed() {
+        private void Seed()
+        {
             SaveChanges();
 
             //
@@ -221,6 +227,7 @@ namespace Piranha
             //
             var param = Params.FirstOrDefault(p => p.Key == Config.ARCHIVE_PAGE_SIZE);
             if (param == null)
+            {
                 Params.Add(new Param
                 {
                     Id = Guid.NewGuid(),
@@ -229,9 +236,11 @@ namespace Piranha
                     Created = DateTime.Now,
                     LastModified = DateTime.Now
                 });
+            }
 
             param = Params.FirstOrDefault(p => p.Key == Config.CACHE_EXPIRES_PAGES);
             if (param == null)
+            {
                 Params.Add(new Param
                 {
                     Id = Guid.NewGuid(),
@@ -240,9 +249,11 @@ namespace Piranha
                     Created = DateTime.Now,
                     LastModified = DateTime.Now
                 });
+            }
 
             param = Params.FirstOrDefault(p => p.Key == Config.CACHE_EXPIRES_POSTS);
             if (param == null)
+            {
                 Params.Add(new Param
                 {
                     Id = Guid.NewGuid(),
@@ -251,9 +262,11 @@ namespace Piranha
                     Created = DateTime.Now,
                     LastModified = DateTime.Now
                 });
+            }
 
             param = Params.FirstOrDefault(p => p.Key == Config.PAGES_HIERARCHICAL_SLUGS);
             if (param == null)
+            {
                 Params.Add(new Param
                 {
                     Id = Guid.NewGuid(),
@@ -262,9 +275,11 @@ namespace Piranha
                     Created = DateTime.Now,
                     LastModified = DateTime.Now
                 });
+            }
 
             param = Params.FirstOrDefault(p => p.Key == Config.MANAGER_EXPANDED_SITEMAP_LEVELS);
             if (param == null)
+            {
                 Params.Add(new Param
                 {
                     Id = Guid.NewGuid(),
@@ -273,11 +288,13 @@ namespace Piranha
                     Created = DateTime.Now,
                     LastModified = DateTime.Now
                 });
+            }
 
             //
             // Default site
             //
-            if (Sites.Count() == 0)
+            if (!Sites.Any())
+            {
                 Sites.Add(new Site
                 {
                     Id = Guid.NewGuid(),
@@ -287,6 +304,7 @@ namespace Piranha
                     Created = DateTime.Now,
                     LastModified = DateTime.Now
                 });
+            }
 
             SaveChanges();
         }

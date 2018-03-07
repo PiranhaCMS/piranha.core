@@ -32,7 +32,7 @@ namespace Piranha.Areas.Manager.Models
         /// <summary>
         /// Gets/sets the CLR type of the field value.
         /// </summary>
-        public string CLRType { get; set; }
+        public string ClrType { get; set; }
 
         /// <summary>
         /// Gets/sets the possible options.
