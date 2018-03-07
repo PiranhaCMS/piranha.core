@@ -56,15 +56,16 @@ namespace Piranha.AspNetCore
                         if (string.IsNullOrWhiteSpace(response.RedirectUrl)) {
                             using (var config = new Config(api)) {
                                 var headers = context.Response.GetTypedHeaders();
+                                var expires = config.CacheExpiresPages;
 
                                 // Only use caching for published pages
-                                if (response.IsPublished && config.CacheExpiresPages > 0) {
+                                if (response.IsPublished && expires > 0) {
                                     if (logger != null)
                                         logger.LogInformation("Caching enabled. Setting MaxAge, LastModified & ETag");
 
                                     headers.CacheControl = new CacheControlHeaderValue() {
                                         Public = true,
-                                        MaxAge = TimeSpan.FromMinutes(config.CacheExpiresPages),
+                                        MaxAge = TimeSpan.FromMinutes(expires),
                                     };
 
                                     headers.Headers["ETag"] = response.CacheInfo.EntityTag;

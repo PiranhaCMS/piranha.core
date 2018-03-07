@@ -55,15 +55,16 @@ namespace Piranha.AspNetCore
                     if (authorized) {
                         using (var config = new Config(api)) {
                             var headers = context.Response.GetTypedHeaders();
+                            var expires = config.CacheExpiresPosts;
 
                             // Only use caching for published posts
-                            if (response.IsPublished && config.CacheExpiresPosts > 0) {
+                            if (response.IsPublished && expires > 0) {
                                 if (logger != null)
                                     logger.LogInformation("Caching enabled. Setting MaxAge, LastModified & ETag");
 
                                 headers.CacheControl = new CacheControlHeaderValue() {
                                     Public = true,
-                                    MaxAge = TimeSpan.FromMinutes(config.CacheExpiresPosts),
+                                    MaxAge = TimeSpan.FromMinutes(expires),
                                 };
 
                                 headers.Headers["ETag"] = response.CacheInfo.EntityTag;
