@@ -9,8 +9,7 @@
  */
 
 using System;
-using System.Data.SqlClient;
-using System.Linq;
+using Piranha.Data;
 using Xunit;
 
 namespace Piranha.Tests.Hooks
@@ -34,13 +33,15 @@ namespace Piranha.Tests.Hooks
                 Piranha.App.Init(api);
 
                 // Create site
-                api.Sites.Save(new Data.Site() {
+                api.Sites.Save(new Site
+                {
                     Id = SITE_ID,
                     Title = "Alias Hook Site"
                 });
 
                 // Create test alias
-                api.Aliases.Save(new Data.Alias() {
+                api.Aliases.Save(new Alias
+                {
                     Id = ID,
                     SiteId = SITE_ID,
                     AliasUrl = ALIAS,
@@ -78,7 +79,8 @@ namespace Piranha.Tests.Hooks
             Piranha.App.Hooks.Alias.RegisterOnBeforeSave(m => throw new AliasOnBeforeSaveException());
             using (var api = new Api(GetDb(), storage)) {
                 Assert.Throws<AliasOnBeforeSaveException>(() => {
-                    api.Aliases.Save(new Data.Alias() {
+                    api.Aliases.Save(new Alias
+                    {
                         SiteId = SITE_ID,
                         AliasUrl = "/my-first-alias",
                         RedirectUrl = "/my-first-redirect"
@@ -93,7 +95,8 @@ namespace Piranha.Tests.Hooks
             Piranha.App.Hooks.Alias.RegisterOnAfterSave(m => throw new AliasOnAfterSaveException());
             using (var api = new Api(GetDb(), storage)) {
                 Assert.Throws<AliasOnAfterSaveException>(() => {
-                    api.Aliases.Save(new Data.Alias() {
+                    api.Aliases.Save(new Alias
+                    {
                         SiteId = SITE_ID,
                         AliasUrl = "/my-second-alias",
                         RedirectUrl = "/my-seconf-redirect"

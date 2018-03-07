@@ -8,10 +8,11 @@
  * 
  */
 
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Piranha.Extend.Fields;
 using Xunit;
 
 namespace Piranha.AttributeBuilder.Tests
@@ -23,7 +24,7 @@ namespace Piranha.AttributeBuilder.Tests
         public class SimplePageType
         {
             [Region]
-            public Extend.Fields.TextField Body { get; set; }
+            public TextField Body { get; set; }
         }
 
         [PageType(Id = "Complex", Title = "Complex Page Type")]
@@ -33,13 +34,13 @@ namespace Piranha.AttributeBuilder.Tests
             public class BodyRegion
             {
                 [Field]
-                public Extend.Fields.TextField Title { get; set; }
+                public TextField Title { get; set; }
                 [Field]
-                public Extend.Fields.TextField Body { get; set; }
+                public TextField Body { get; set; }
             }
 
             [Region(Title = "Intro", Min = 3, Max = 6)]
-            public IList<Extend.Fields.TextField> Slider { get; set; }
+            public IList<TextField> Slider { get; set; }
 
             [Region(Title = "Main content")]
             public BodyRegion Content { get; set; }

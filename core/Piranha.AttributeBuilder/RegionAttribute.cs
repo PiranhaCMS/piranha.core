@@ -16,7 +16,7 @@ namespace Piranha.AttributeBuilder
     /// Attribute for marking a property as a region.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    public class RegionAttribute : System.Attribute
+    public class RegionAttribute : Attribute
     {
         /// <summary>
         /// Gets/sets the optional title.
@@ -59,8 +59,9 @@ namespace Piranha.AttributeBuilder
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public RegionAttribute() {
-            SortOrder = Int32.MaxValue;
+        public RegionAttribute()
+        {
+            SortOrder = int.MaxValue;
             ListExpand = true;
         }
     }

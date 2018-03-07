@@ -39,8 +39,10 @@ namespace Piranha.Models
         /// Gets the menu title for the item. The menu title returns
         /// the navigation title if set, otherwise the main title.
         /// </summary>
-        public string MenuTitle {
-            get {
+        public string MenuTitle
+        {
+            get
+            {
                 if (!string.IsNullOrWhiteSpace(NavigationTitle))
                     return NavigationTitle;
                 return Title;
@@ -61,7 +63,7 @@ namespace Piranha.Models
         /// Gets/sets if the item is hidden.
         /// </summary>
         /// <returns></returns>
-        public bool IsHidden { get; set;}
+        public bool IsHidden { get; set; }
 
         /// <summary>
         /// Gets/sets the published date.
@@ -82,7 +84,8 @@ namespace Piranha.Models
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public SitemapItem() {
+        public SitemapItem()
+        {
             Items = new Sitemap();
         }
 
@@ -92,8 +95,10 @@ namespace Piranha.Models
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>If the child was found</returns>
-        public bool HasChild(Guid id) {
-            foreach (var item in Items) {
+        public bool HasChild(Guid id)
+        {
+            foreach (var item in Items)
+            {
                 if (item.Id == id || item.HasChild(id))
                     return true;
             }

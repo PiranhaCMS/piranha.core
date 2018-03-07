@@ -8,10 +8,10 @@
  * 
  */
 
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Piranha.AspNetCore
 {
@@ -23,12 +23,12 @@ namespace Piranha.AspNetCore
         /// <summary>
         /// The next middleware in the pipeline.
         /// </summary>
-        protected readonly RequestDelegate next;
+        protected readonly RequestDelegate Next;
 
         /// <summary>
         /// The optional logger.
         /// </summary>
-        protected ILogger logger;
+        protected ILogger Logger;
 
         /// <summary>
         /// The item key for accessing the stored site id.
@@ -39,8 +39,9 @@ namespace Piranha.AspNetCore
         /// Creates a new middleware instance.
         /// </summary>
         /// <param name="next">The next middleware in the pipeline</param>
-        public MiddlewareBase(RequestDelegate next) {
-            this.next = next;
+        protected MiddlewareBase(RequestDelegate next)
+        {
+            Next = next;
         }
 
         /// <summary>
@@ -48,9 +49,12 @@ namespace Piranha.AspNetCore
         /// </summary>
         /// <param name="next">The next middleware in the pipeline</param>
         /// <param name="factory">The logger factory</param>
-        public MiddlewareBase(RequestDelegate next, ILoggerFactory factory) : this(next) {
+        protected MiddlewareBase(RequestDelegate next, ILoggerFactory factory) : this(next)
+        {
             if (factory != null)
-                logger = factory.CreateLogger(this.GetType().FullName);
+            {
+                Logger = factory.CreateLogger(GetType().FullName);
+            }
         }
 
         /// <summary>
@@ -67,9 +71,11 @@ namespace Piranha.AspNetCore
         /// </summary>
         /// <param name="context">The current http context</param>
         /// <returns>If the request has already been handled</returns>
-        protected bool IsHandled(HttpContext context) {
+        protected bool IsHandled(HttpContext context)
+        {
             var values = context.Request.Query["piranha_handled"];
-            if (values.Count > 0) {
+            if (values.Count > 0)
+            {
                 return values[0] == "true";
             }
             return false;
@@ -80,11 +86,13 @@ namespace Piranha.AspNetCore
         /// </summary>
         /// <param name="context">The current HttpContext</param>
         /// <returns>The requested site id</returns>
-        protected Guid GetSiteId(HttpContext context) {
-            object id = null;
-
-            if (context.Items.TryGetValue(SiteId, out id))
+        protected Guid GetSiteId(HttpContext context)
+        {
+            if (context.Items.TryGetValue(SiteId, out var id))
+            {
                 return (Guid)id;
+            }
+
             return Guid.Empty;
         }
     }

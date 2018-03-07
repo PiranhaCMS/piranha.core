@@ -1,5 +1,5 @@
-﻿@model Piranha.Areas.Manager.Models.PostEditModel
-@using Piranha.Areas.Manager.Models
+﻿@using Piranha.Manager
+@model Piranha.Areas.Manager.Models.PostEditModel
 @{
     ViewBag.Title = "Edit post";
     ViewBag.Controller = "Page";
@@ -21,7 +21,7 @@
     </script>
 }
 
-@using (var form = Html.BeginForm("Save", "Post", FormMethod.Post, new { @id = "main-form", @class = "form", @role = "form" })) {
+@using (var form = Html.BeginForm("Save", "Post", FormMethod.Post, new { id = "main-form", @class = "form", role = "form" })) {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.Id)
     @Html.HiddenFor(m => m.BlogId)
@@ -58,16 +58,16 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right" role="menu">
                     <li><a href="~/@Model.BlogSlug/@Model.Slug" target="_blank">Preview</a></li>
-                    @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PostsPublish)).Succeeded) {
+                    @if ((await Authorization.AuthorizeAsync(User, Permission.PostsPublish)).Succeeded) {
                         if (Model.Published.HasValue) {
                             <li><a id="submit-unpublish" href="#">Unpublish</a></li>
                         } else {
                             <li><a id="submit-publish" href="#">Publish now</a></li>
                         }
                     }
-                    @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PostsDelete)).Succeeded) {
+                    @if ((await Authorization.AuthorizeAsync(User, Permission.PostsDelete)).Succeeded) {
                         <li class="divider"></li>
-                        <li><a href="@Url.Action("Delete", new { @id = Model.Id })"><span class="text-danger">Delete post</span></a></li>
+                        <li><a href="@Url.Action("Delete", new { id = Model.Id })"><span class="text-danger">Delete post</span></a></li>
                     }
                 </ul>
             </div>
@@ -132,7 +132,7 @@
                         <label>Meta Keywords</label>
                         @Html.TextBoxFor(m => m.MetaKeywords, new { @class = "form-control small", maxlength = 128, placeholder = "Meta keywords" })
                     </div>
-                    @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PostsPublish)).Succeeded) {
+                    @if ((await Authorization.AuthorizeAsync(User, Permission.PostsPublish)).Succeeded) {
                         <div class="form-group">
                             <label>Publish date</label>
                             <div class="input-group date datetimepicker">
@@ -178,7 +178,7 @@
             <div id="region-@Model.Regions[n].Id" class="panel-body" @(n > 0 ? "style=display:none" : "")>
                 @Html.HiddenFor(m => m.Regions[n].Id)
                 @Html.HiddenFor(m => m.Regions[n].Title)
-                @Html.HiddenFor(m => m.Regions[n].CLRType)
+                @Html.HiddenFor(m => m.Regions[n].ClrType)
                 @Html.EditorFor(m => m.Regions[n], Model.Regions[n].GetType().Name, new { 
                     pageTypeId = Model.PostType.Id,
                     regionTypeId = Model.Regions[n].Id,

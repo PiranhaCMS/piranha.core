@@ -8,8 +8,9 @@
  * 
  */
 
-using Newtonsoft.Json;
 using System;
+using Newtonsoft.Json;
+using Piranha.Models;
 
 namespace Piranha.Extend.Fields
 {
@@ -26,38 +27,37 @@ namespace Piranha.Extend.Fields
         /// Gets/sets the related post object.
         /// </summary>
         [JsonIgnore]
-        public Models.DynamicPost Post { get; private set; }
+        public DynamicPost Post { get; private set; }
 
         /// <summary>
         /// Gets if the field has a post object available.
         /// </summary>
-        public bool HasValue {
-            get { return Post != null; }
-        }
+        public bool HasValue => Post != null;
 
         /// <summary>
         /// Gets the list item title if this field is used in
         /// a collection regions.
         /// </summary>
         public virtual string GetTitle() {
-            if (Post != null)
-                return Post.Title;
-            return null;
+            return Post?.Title;
         }
 
         /// <summary>
         /// Initializes the field for client use.
         /// </summary>
         /// <param name="api">The current api</param>
-        public virtual void Init(IApi api) { 
-            if (Id.HasValue) {
-                Post = api.Posts.GetById(Id.Value);
+        public virtual void Init(IApi api) {
+            if (!Id.HasValue)
+            {
+                return;
+            }
 
-                if (Post == null) {
-                    // The post has been removed, remove the
-                    // missing id.
-                    Id = null;
-                }
+            Post = api.Posts.GetById(Id.Value);
+
+            if (Post == null) {
+                // The post has been removed, remove the
+                // missing id.
+                Id = null;
             }
         }
 
@@ -76,7 +76,7 @@ namespace Piranha.Extend.Fields
         /// </summary>
         /// <param name="api">The current api</param>
         /// <returns>The referenced post</returns>
-        public virtual T GetPost<T>(IApi api) where T : Models.Post<T> {
+        public virtual T GetPost<T>(IApi api) where T : Post<T> {
             if (Id.HasValue)
                 return api.Posts.GetById<T>(Id.Value);
             return null;
@@ -85,17 +85,17 @@ namespace Piranha.Extend.Fields
         /// <summary>
         /// Implicit operator for converting a Guid id to a field.
         /// </summary>
-        /// <param name="str">The string value</param>
+        /// <param name="guid">The guid value</param>
         public static implicit operator PostField(Guid guid) {
-            return new PostField() { Id = guid };
+            return new PostField { Id = guid };
         }
 
         /// <summary>
         /// Implicit operator for converting a post object to a field.
         /// </summary>
         /// <param name="post">The post object</param>
-        public static implicit operator PostField(Models.PostBase post) {
-            return new PostField() { Id = post.Id };
+        public static implicit operator PostField(PostBase post) {
+            return new PostField { Id = post.Id };
         }
     }
 }

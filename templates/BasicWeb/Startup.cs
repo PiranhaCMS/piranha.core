@@ -1,15 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using BasicWeb.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;
+using Piranha.AspNetCore;
+using Piranha.AttributeBuilder;
 using Piranha.ImageSharp;
 using Piranha.Local;
+using Piranha.Manager;
+using Piranha.Manager.Binders;
 
 namespace BasicWeb
 {
@@ -21,7 +22,7 @@ namespace BasicWeb
         {
             services.AddMvc(config => 
             {
-                config.ModelBinderProviders.Insert(0, new Piranha.Manager.Binders.AbstractModelBinderProvider());
+                config.ModelBinderProviders.Insert(0, new AbstractModelBinderProvider());
             });
             services.AddDbContext<Db>(options =>
                 options.UseSqlite("Filename=./piranha.db"));            
@@ -30,7 +31,7 @@ namespace BasicWeb
             services.AddScoped<IDb, Db>();
             services.AddScoped<IApi, Api>();
             services.AddPiranhaSimpleSecurity(
-                new Piranha.AspNetCore.SimpleUser(Piranha.Manager.Permission.All()) 
+                new SimpleUser(Permission.All()) 
                 {
                     UserName = "admin",
                     Password = "password"
@@ -54,14 +55,14 @@ namespace BasicWeb
             App.Init(api);
 
             // Build content types
-            var pageTypeBuilder = new Piranha.AttributeBuilder.PageTypeBuilder(api)
-                .AddType(typeof(Models.BlogArchive))
-                .AddType(typeof(Models.StandardPage))
-                .AddType(typeof(Models.StartPage));
+            var pageTypeBuilder = new PageTypeBuilder(api)
+                .AddType(typeof(BlogArchive))
+                .AddType(typeof(StandardPage))
+                .AddType(typeof(StartPage));
             pageTypeBuilder.Build()
                 .DeleteOrphans();
-            var postTypeBuilder = new Piranha.AttributeBuilder.PostTypeBuilder(api)
-                .AddType(typeof(Models.BlogPost));
+            var postTypeBuilder = new PostTypeBuilder(api)
+                .AddType(typeof(BlogPost));
             postTypeBuilder.Build()
                 .DeleteOrphans();
 

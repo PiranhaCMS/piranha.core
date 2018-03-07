@@ -8,10 +8,10 @@
  * 
  */
 
-using Piranha.AttributeBuilder;
 using System;
-using System.Data.SqlClient;
-using System.Linq;
+using Piranha.AttributeBuilder;
+using Piranha.Data;
+using Piranha.Models;
 using Xunit;
 
 namespace Piranha.Tests.Hooks
@@ -24,7 +24,7 @@ namespace Piranha.Tests.Hooks
         private Guid ID = Guid.NewGuid();
 
         [PageType(Title = "Blog page")]
-        public class BlogPage : Models.Page<BlogPage> { }        
+        public class BlogPage : Page<BlogPage> { }        
         class CategoryOnLoadException : Exception {}
         class CategoryOnBeforeSaveException : Exception {}
         class CategoryOnAfterSaveException : Exception {}
@@ -41,7 +41,8 @@ namespace Piranha.Tests.Hooks
                 pageTypeBuilder.Build();
 
                 // Add site
-                var site = new Data.Site() {
+                var site = new Site
+                {
                     Id = SITE_ID,
                     Title = "Hook Site",
                     IsDefault = true
@@ -56,7 +57,8 @@ namespace Piranha.Tests.Hooks
                 api.Pages.Save(page);
 
                 // Add category
-                api.Categories.Save(new Data.Category() {
+                api.Categories.Save(new Category
+                {
                     Id = ID,
                     BlogId = BLOG_ID,
                     Title = "Hook Category"
@@ -98,7 +100,8 @@ namespace Piranha.Tests.Hooks
             Piranha.App.Hooks.Category.RegisterOnBeforeSave(m => throw new CategoryOnBeforeSaveException());
             using (var api = new Api(GetDb(), storage)) {
                 Assert.Throws<CategoryOnBeforeSaveException>(() => {
-                    api.Categories.Save(new Data.Category() {
+                    api.Categories.Save(new Category
+                    {
                         BlogId = BLOG_ID,
                         Title = "My First Hook Category"
                     });
@@ -112,7 +115,8 @@ namespace Piranha.Tests.Hooks
             Piranha.App.Hooks.Category.RegisterOnAfterSave(m => throw new CategoryOnAfterSaveException());
             using (var api = new Api(GetDb(), storage)) {
                 Assert.Throws<CategoryOnAfterSaveException>(() => {
-                    api.Categories.Save(new Data.Category() {
+                    api.Categories.Save(new Category
+                    {
                         BlogId = BLOG_ID,
                         Title = "My Second Hook Category"
                     });

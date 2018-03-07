@@ -8,8 +8,6 @@
  * 
  */
 
-using System;
-
 namespace Piranha.Data
 {
     public sealed class PageType : ContentType, ICreated, IModified { }

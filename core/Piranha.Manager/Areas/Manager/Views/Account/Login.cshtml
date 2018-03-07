@@ -19,7 +19,7 @@
 </head>
 <body id="login">
 	<div class="container">
-        @using (var form = Html.BeginForm("Login", "Account", FormMethod.Post, new { @id = "main-form", @class = "form", @role = "form" })) {
+        @using (var form = Html.BeginForm("Login", "Account", FormMethod.Post, new { id = "main-form", @class = "form", role = "form" })) {
 			<div class="panel panel-white">
 				@Html.AntiForgeryToken()
 				<div class="panel-body">
@@ -36,10 +36,10 @@
 						</div>
 					}
 					<div class="form-group">
-						@Html.TextBox("UserName", "", new { @class = "form-control", @placeholder = "username" })
+						@Html.TextBox("UserName", "", new { @class = "form-control", placeholder = "username" })
 					</div>
 					<div class="form-group">
-						@Html.Password("Password", "", new { @class = "form-control", @placeholder = "password" })
+						@Html.Password("Password", "", new { @class = "form-control", placeholder = "password" })
 					</div>
 					<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>
 				</div>

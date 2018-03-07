@@ -9,6 +9,7 @@
  */
 
 using System;
+using Piranha.Data;
 
 namespace Piranha.Extend.Fields
 {
@@ -18,27 +19,26 @@ namespace Piranha.Extend.Fields
         /// <summary>
         /// Implicit operator for converting a Guid id to a field.
         /// </summary>
-        /// <param name="str">The string value</param>
+        /// <param name="guid">The guid value</param>
         public static implicit operator ImageField(Guid guid) {
-            return new ImageField() { Id = guid };
+            return new ImageField { Id = guid };
         }
 
         /// <summary>
         /// Implicit operator for converting a media object to a field.
         /// </summary>
         /// <param name="media">The media object</param>
-        public static implicit operator ImageField(Data.Media media) {
-            return new ImageField() { Id = media.Id };
+        public static implicit operator ImageField(Media media) {
+            return new ImageField { Id = media.Id };
         }
 
         /// <summary>
         /// Impicit operator for converting the field to an url string.
         /// </summary>
         /// <param name="image">The image field</param>
-        public static implicit operator string(ImageField image) {
-            if (image.Media != null)
-                return image.Media.PublicUrl;
-            return "";
+        public static implicit operator string(ImageField image)
+        {
+            return image.Media != null ? image.Media.PublicUrl : "";
         }
 
         /// <summary>
@@ -48,10 +48,9 @@ namespace Piranha.Extend.Fields
         /// <param name="width">The requested width</param>
         /// <param name="height">The optional height</param>
         /// <returns>The image url</returns>
-        public string Resize(IApi api, int width, int? height = null) {
-            if (Id.HasValue)
-                return api.Media.EnsureVersion(Id.Value, width, height);
-            return null;
+        public string Resize(IApi api, int width, int? height = null)
+        {
+            return Id.HasValue ? api.Media.EnsureVersion(Id.Value, width, height) : null;
         }
     }
 }

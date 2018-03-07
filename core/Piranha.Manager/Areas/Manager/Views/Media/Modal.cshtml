@@ -1,5 +1,6 @@
-@model Piranha.Areas.Manager.Models.MediaListModel
+@using Piranha
 @using Piranha.Models
+@model Piranha.Areas.Manager.Models.MediaListModel
 @{
     Layout = null;
 }
@@ -77,10 +78,10 @@
                             } else {
                                 <span class="glyphicon glyphicon-exclamation-sign media-icon"></span>                                
                             }
-                            <a href="#" data-type="item" data-id="@item.Id" data-name="@item.Filename" data-url="@Url.Content(item.PublicUrl)" data-contenttype="@item.ContentType" data-filesize="@Piranha.Utils.FormatByteSize(item.Size)" data-modified="@item.LastModified.ToString("yyyy-MM-dd")">@item.Filename</a>
+                            <a href="#" data-type="item" data-id="@item.Id" data-name="@item.Filename" data-url="@Url.Content(item.PublicUrl)" data-contenttype="@item.ContentType" data-filesize="@Utils.FormatByteSize(item.Size)" data-modified="@item.LastModified.ToString("yyyy-MM-dd")">@item.Filename</a>
                         </td>
                         <td>@item.ContentType</td>
-                        <td>@Piranha.Utils.FormatByteSize(item.Size)</td>
+                        <td>@Utils.FormatByteSize(item.Size)</td>
                         <td>@item.LastModified.ToString("yyyy-MM-dd")</td>
                     </tr>
                 }

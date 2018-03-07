@@ -25,16 +25,18 @@ namespace Piranha.Areas.Manager.Controllers
         /// Gets the list view for the page types.
         /// </summary>
         [Route("manager/pagetypes")]
-        public IActionResult List() {
-            return View(api.PageTypes.GetAll());
+        public IActionResult List()
+        {
+            return View(Api.PageTypes.GetAll());
         }
 
         /// <summary>
         /// Gets the edit view for the specified page type.
         /// </summary>
         [Route("manager/pagetype/{id}")]
-        public IActionResult Edit(string id) {
-            return View(api.PageTypes.GetById(id));
+        public IActionResult Edit(string id)
+        {
+            return View(Api.PageTypes.GetById(id));
         }
     }
 }

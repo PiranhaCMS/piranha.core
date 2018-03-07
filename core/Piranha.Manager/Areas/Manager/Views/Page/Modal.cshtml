@@ -1,6 +1,5 @@
-@model Piranha.Areas.Manager.Models.PageModalModel
-@using Piranha.Models
-@using System.Linq
+@using Piranha.Areas.Manager.Models
+@model PageModalModel
 @{
     Layout = null;
 }
@@ -40,7 +39,8 @@
         </ol>
         <div class="dd">
             <ol class="sitemap dd-list">
-                @Html.Partial("Partial/_Sitemap", new Piranha.Areas.Manager.Models.SitemapModel() { 
+                @Html.Partial("Partial/_Sitemap", new SitemapModel
+                { 
                     Sitemap = Model.Sitemap, 
                     ExpandedLevels = Model.ExpandedLevels,
                     ReadOnly = true

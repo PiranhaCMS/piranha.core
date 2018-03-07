@@ -8,11 +8,12 @@
  * 
  */
 
-using Piranha.AttributeBuilder;
-using Piranha.Extend.Fields;
 using System;
-using System.Data.SqlClient;
-using System.Linq;
+using Piranha.AttributeBuilder;
+using Piranha.Data;
+using Piranha.Extend.Fields;
+using Piranha.Models;
+using Piranha.Web;
 using Xunit;
 
 namespace Piranha.Tests.Routers
@@ -30,12 +31,12 @@ namespace Piranha.Tests.Routers
         private Guid POST2_ID = Guid.NewGuid();
 
         [PageType(Title = "My PageType")]
-        public class MyPage : Models.BlogPage<MyPage>
+        public class MyPage : BlogPage<MyPage>
         {
         }
 
         [PostType(Title = "My PostType")]
-        public class MyPost : Models.Post<MyPost>
+        public class MyPost : Post<MyPost>
         {
             [Region]
             public TextField Body { get; set; }
@@ -55,7 +56,8 @@ namespace Piranha.Tests.Routers
                 postBuilder.Build();
 
                 // Add site
-                var site1 = new Data.Site() {
+                var site1 = new Site
+                {
                     Id = SITE1_ID,
                     Title = "Page Site",
                     InternalId = "PostSite",
@@ -63,7 +65,8 @@ namespace Piranha.Tests.Routers
                 };
                 api.Sites.Save(site1);
 
-                var site2 = new Data.Site() {
+                var site2 = new Site
+                {
                     Id = SITE2_ID,
                     Title = "Page Site 2",
                     InternalId = "PostSite2",
@@ -88,14 +91,16 @@ namespace Piranha.Tests.Routers
                 api.Pages.Save(page2);
 
                 // Add categories
-                var category1 = new Data.Category() {
+                var category1 = new Category
+                {
                     Id = CATEGORY1_ID,
                     BlogId = PAGE1_ID,
                     Title = "Default category"
                 };
                 api.Categories.Save(category1);
                 
-                var category2 = new Data.Category() {
+                var category2 = new Category
+                {
                     Id = CATEGORY2_ID,
                     BlogId = PAGE2_ID,
                     Title = "Default category"
@@ -146,7 +151,7 @@ namespace Piranha.Tests.Routers
         [Fact]
         public void GetPostByUrlDefaultSite() {
             using (var api = new Api(GetDb(), storage)) {
-                var response = Piranha.Web.PostRouter.Invoke(api, "/blog/my-first-post", SITE1_ID);
+                var response = PostRouter.Invoke(api, "/blog/my-first-post", SITE1_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/post", response.Route);
@@ -158,7 +163,7 @@ namespace Piranha.Tests.Routers
         [Fact]
         public void GetPostByUrlDefaultSiteWithAction() {
             using (var api = new Api(GetDb(), storage)) {
-                var response = Piranha.Web.PostRouter.Invoke(api, "/blog/my-first-post/action", SITE1_ID);
+                var response = PostRouter.Invoke(api, "/blog/my-first-post/action", SITE1_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/post/action", response.Route);
@@ -170,7 +175,7 @@ namespace Piranha.Tests.Routers
         [Fact]
         public void GetPostByUrlNoneDefaultSite() {
             using (var api = new Api(GetDb(), storage)) {
-                var response = Piranha.Web.PostRouter.Invoke(api, "/news/my-second-page", SITE1_ID);
+                var response = PostRouter.Invoke(api, "/news/my-second-page", SITE1_ID);
 
                 Assert.Null(response);
             }
@@ -179,7 +184,7 @@ namespace Piranha.Tests.Routers
         [Fact]
         public void GetArchiveDefaultSite() {
             using (var api = new Api(GetDb(), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog", SITE1_ID);
+                var response = ArchiveRouter.Invoke(api, "/blog", SITE1_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
@@ -190,7 +195,7 @@ namespace Piranha.Tests.Routers
         [Fact]
         public void GetArchiveYearDefaultSite() {
             using (var api = new Api(GetDb(), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog/2018", SITE1_ID);
+                var response = ArchiveRouter.Invoke(api, "/blog/2018", SITE1_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
@@ -201,7 +206,7 @@ namespace Piranha.Tests.Routers
         [Fact]
         public void GetArchiveYearMonthDefaultSite() {
             using (var api = new Api(GetDb(), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog/2018/2", SITE1_ID);
+                var response = ArchiveRouter.Invoke(api, "/blog/2018/2", SITE1_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
@@ -212,7 +217,7 @@ namespace Piranha.Tests.Routers
         [Fact]
         public void GetArchiveYearMonthPageDefaultSite() {
             using (var api = new Api(GetDb(), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog/2018/2/page/1", SITE1_ID);
+                var response = ArchiveRouter.Invoke(api, "/blog/2018/2/page/1", SITE1_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
@@ -223,7 +228,7 @@ namespace Piranha.Tests.Routers
         [Fact]
         public void GetArchiveYearMonthPageCategoryDefaultSite() {
             using (var api = new Api(GetDb(), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog/category/default-category/2018/2/page/1", SITE1_ID);
+                var response = ArchiveRouter.Invoke(api, "/blog/category/default-category/2018/2/page/1", SITE1_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
@@ -234,7 +239,7 @@ namespace Piranha.Tests.Routers
         [Fact]
         public void GetArchiveCategoryDefaultSite() {
             using (var api = new Api(GetDb(), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog/category/default-category", SITE1_ID);
+                var response = ArchiveRouter.Invoke(api, "/blog/category/default-category", SITE1_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
@@ -245,7 +250,7 @@ namespace Piranha.Tests.Routers
         [Fact]
         public void GetArchivePageDefaultSite() {
             using (var api = new Api(GetDb(), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog/page/1", SITE1_ID);
+                var response = ArchiveRouter.Invoke(api, "/blog/page/1", SITE1_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
@@ -256,7 +261,7 @@ namespace Piranha.Tests.Routers
         [Fact]
         public void GetArchiveNoneDefaultSite() {
             using (var api = new Api(GetDb(), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/news", SITE1_ID);
+                var response = ArchiveRouter.Invoke(api, "/news", SITE1_ID);
 
                 Assert.Null(response);
             }            
@@ -265,7 +270,7 @@ namespace Piranha.Tests.Routers
         [Fact]
         public void GetPostByUrlOtherSite() {
             using (var api = new Api(GetDb(), storage)) {
-                var response = Piranha.Web.PostRouter.Invoke(api, "/news/my-second-post", SITE2_ID);
+                var response = PostRouter.Invoke(api, "/news/my-second-post", SITE2_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/post", response.Route);
@@ -277,7 +282,7 @@ namespace Piranha.Tests.Routers
         [Fact]
         public void GetPostByUrlOtherSiteAction() {
             using (var api = new Api(GetDb(), storage)) {
-                var response = Piranha.Web.PostRouter.Invoke(api, "/news/my-second-post/action", SITE2_ID);
+                var response = PostRouter.Invoke(api, "/news/my-second-post/action", SITE2_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/post/action", response.Route);
@@ -289,7 +294,7 @@ namespace Piranha.Tests.Routers
         [Fact]
         public void GetPostByUrlNoneOtherSite() {
             using (var api = new Api(GetDb(), storage)) {
-                var response = Piranha.Web.PostRouter.Invoke(api, "/blog/my-first-post", SITE2_ID);
+                var response = PostRouter.Invoke(api, "/blog/my-first-post", SITE2_ID);
 
                 Assert.Null(response);
             }
@@ -298,7 +303,7 @@ namespace Piranha.Tests.Routers
         [Fact]
         public void GetArchiveOtherSite() {
             using (var api = new Api(GetDb(), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/news", SITE2_ID);
+                var response = ArchiveRouter.Invoke(api, "/news", SITE2_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
@@ -309,7 +314,7 @@ namespace Piranha.Tests.Routers
         [Fact]
         public void GetArchiveNoneOtherSite() {
             using (var api = new Api(GetDb(), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog", SITE2_ID);
+                var response = ArchiveRouter.Invoke(api, "/blog", SITE2_ID);
 
                 Assert.Null(response);
             }            

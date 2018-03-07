@@ -8,8 +8,9 @@
  * 
  */
 
-using Microsoft.EntityFrameworkCore;
 using System;
+using Microsoft.EntityFrameworkCore;
+using Piranha.Local;
 
 namespace Piranha.Tests
 {
@@ -18,7 +19,7 @@ namespace Piranha.Tests
     /// </summary>
     public abstract class BaseTests : IDisposable
     {
-        protected IStorage storage = new Local.FileStorage("uploads/", "~/uploads/");
+        protected IStorage storage = new FileStorage("uploads/", "~/uploads/");
 
         /// <summary>
         /// Default constructor.

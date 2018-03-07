@@ -9,29 +9,34 @@
  */
 
 using System;
+using Piranha.Data;
 
 namespace Piranha.Areas.Manager.Models
 {
     public class SiteEditModel
     {
-        public Data.Site Site { get; set; }
+        public Site Site { get; set; }
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public SiteEditModel() {
-            Site = new Data.Site();
+        public SiteEditModel()
+        {
+            Site = new Site();
         }
 
-        public static SiteEditModel GetById(IApi api, Guid id) {
-            var model = new SiteEditModel() {
+        public static SiteEditModel GetById(IApi api, Guid id)
+        {
+            var model = new SiteEditModel
+            {
                 Site = api.Sites.GetById(id)
             };
             return model;
         }
 
-        public bool Save(IApi api) {
-            api.Sites.Save(this.Site);
+        public bool Save(IApi api)
+        {
+            api.Sites.Save(Site);
 
             return true;
         }

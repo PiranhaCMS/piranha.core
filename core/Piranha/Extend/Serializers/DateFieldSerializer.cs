@@ -9,25 +9,28 @@
  */
 
 using System;
+using Piranha.Extend.Fields;
 
 namespace Piranha.Extend.Serializers
 {
     public class DateFieldSerializer : ISerializer
-    {        
+    {
         /// <summary>
         /// Serializes the given object.
         /// </summary>
         /// <param name="obj">The object</param>
         /// <returns>The serialized value</returns>
-        public string Serialize(object obj) {
-            if (obj is Fields.DateField) {
-                var field = (Fields.DateField)obj;
+        public string Serialize(object obj)
+        {
+            if (!(obj is DateField))
+            {
+                throw new ArgumentException("The given object doesn't match the serialization type");
 
-                if (field.Value.HasValue)
-                    return ((Fields.DateField)obj).Value.Value.ToString("yyyy-MM-dd HH:mm:ss");
-                return null;
             }
-            throw new ArgumentException("The given object doesn't match the serialization type");
+
+            var field = (DateField)obj;
+
+            return field.Value.HasValue ? ((DateField)obj).Value?.ToString("yyyy-MM-dd HH:mm:ss") : null;
         }
 
         /// <summary>
@@ -35,14 +38,24 @@ namespace Piranha.Extend.Serializers
         /// </summary>
         /// <param name="str">The serialized value</param>
         /// <returns>The object</returns>
-        public object Deserialize(string str) {
-            var field = new Fields.DateField();
+        public object Deserialize(string str)
+        {
+            var field = new DateField();
 
-            if (!string.IsNullOrWhiteSpace(str)) {
-                try {
-                    field.Value = DateTime.Parse(str);
-                } catch { }
+            if (string.IsNullOrWhiteSpace(str))
+            {
+                return field;
             }
+
+            try
+            {
+                field.Value = DateTime.Parse(str);
+            }
+            catch
+            {
+                // ignored
+            }
+
             return field;
         }
     }

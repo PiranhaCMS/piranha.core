@@ -21,7 +21,7 @@ namespace Piranha.Cache
         /// <summary>
         /// The private cache collection.
         /// </summary>
-        private readonly IDictionary<string, object> cache = new Dictionary<string, object>();
+        private readonly IDictionary<string, object> _cache = new Dictionary<string, object>();
         #endregion
 
         /// <summary>
@@ -31,9 +31,7 @@ namespace Piranha.Cache
         /// <param name="key">The unique key</param>
         /// <returns>The cached model, null it wasn't found</returns>
         public T Get<T>(string key) {
-            object value;
-
-            if (cache.TryGetValue(key, out value))
+            if (_cache.TryGetValue(key, out var value))
                 return (T)value;
             return default(T);
         }
@@ -45,7 +43,7 @@ namespace Piranha.Cache
         /// <param name="key">The unique key</param>
         /// <param name="value">The model</param>
         public void Set<T>(string key, T value) {
-            cache[key] = value;
+            _cache[key] = value;
         }
 
         /// <summary>
@@ -53,7 +51,7 @@ namespace Piranha.Cache
         /// </summary>
         /// <param name="key">The unique key</param>
         public void Remove(string key) {
-            cache.Remove(key);
+            _cache.Remove(key);
         }
     }
 }

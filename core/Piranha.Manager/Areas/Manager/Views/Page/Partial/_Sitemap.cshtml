@@ -1,10 +1,12 @@
-@model Piranha.Areas.Manager.Models.SitemapModel
+@using Piranha.Areas.Manager.Models
+@model SitemapModel
 @{
     Layout = null;
 }
 
 @foreach (var item in Model.Sitemap) {
-    @Html.Partial("DisplayTemplates/SitemapItem", new Piranha.Areas.Manager.Models.SiteItemModel() {
+    @Html.Partial("DisplayTemplates/SitemapItem", new SiteItemModel
+    {
         Item = item,
         PageId = Model.PageId,
         ExpandedLevels = Model.ExpandedLevels,

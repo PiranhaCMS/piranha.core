@@ -8,19 +8,21 @@
  * 
  */
 
-using Piranha.Manager;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Piranha.Areas.Manager.Models;
+using Piranha.Manager;
+using Piranha.Models;
 
 namespace Piranha.Areas.Manager.Controllers
 {
     [Area("Manager")]
     public class PageController : ManagerAreaControllerBase
     {
-        private const string COOKIE_SELECTEDSITE = "PiranhaManager_SelectedSite";
+        private const string CookieSelectedsite = "PiranhaManager_SelectedSite";
 
         /// <summary>
         /// Default constructor.
@@ -33,13 +35,16 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         [Route("manager/pages/{pageId?}")]
         [Authorize(Policy = Permission.Pages)]
-        public ViewResult List(string pageId = null) {
+        public ViewResult List(string pageId = null)
+        {
             // Get the currently selected site from the request cookies
-            var siteId = Request.Cookies[COOKIE_SELECTEDSITE];
+            var siteId = Request.Cookies[CookieSelectedsite];
             Guid? site = null;
 
             if (!string.IsNullOrWhiteSpace(siteId))
+            {
                 site = new Guid(siteId);
+            }
 
             return ListSite(site, pageId);
         }
@@ -49,14 +54,19 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         [Route("manager/pages/site/{siteId:Guid?}/{pageId?}")]
         [Authorize(Policy = Permission.Pages)]
-        public ViewResult ListSite(Guid? siteId, string pageId = null) {
-            var model = Models.PageListModel.Get(api, siteId, pageId);
-            var defaultSite = api.Sites.GetDefault();
+        public ViewResult ListSite(Guid? siteId, string pageId = null)
+        {
+            var model = PageListModel.Get(Api, siteId, pageId);
 
             // Store a cookie on our currently selected site
             if (siteId.HasValue)
-                Response.Cookies.Append(COOKIE_SELECTEDSITE, siteId.ToString());
-            else Response.Cookies.Delete(COOKIE_SELECTEDSITE); 
+            {
+                Response.Cookies.Append(CookieSelectedsite, siteId.ToString());
+            }
+            else
+            {
+                Response.Cookies.Delete(CookieSelectedsite);
+            }
 
             return View("List", model);
         }
@@ -67,8 +77,9 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="id">The page id</param>
         [Route("manager/page/{id:Guid}")]
         [Authorize(Policy = Permission.PagesEdit)]
-        public IActionResult Edit(Guid id) {
-            return View(Models.PageEditModel.GetById(api, id));
+        public IActionResult Edit(Guid id)
+        {
+            return View(PageEditModel.GetById(Api, id));
         }
 
         /// <summary>
@@ -78,9 +89,10 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="siteId">The optional site id</param>
         [Route("manager/page/add/{type}/{siteId:Guid?}")]
         [Authorize(Policy = Permission.PagesAdd)]
-        public IActionResult Add(string type, Guid? siteId = null) {
-            var sitemap = api.Sites.GetSitemap(siteId, onlyPublished: false);
-            var model = Models.PageEditModel.Create(api, type, siteId);
+        public IActionResult Add(string type, Guid? siteId = null)
+        {
+            var sitemap = Api.Sites.GetSitemap(siteId, onlyPublished: false);
+            var model = PageEditModel.Create(Api, type, siteId);
             model.SortOrder = sitemap.Count;
 
             return View("Edit", model);
@@ -94,8 +106,9 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="parentId">The parent id</param>
         /// <param name="siteId">The optional site id</param>
         [Route("manager/page/add/{type}/{sortOrder:int}/{parentId:Guid?}/{siteId:Guid?}")]
-        public IActionResult AddAt(string type, int sortOrder, Guid? parentId = null, Guid? siteId = null) {
-            var model = Models.PageEditModel.Create(api, type, siteId);
+        public IActionResult AddAt(string type, int sortOrder, Guid? parentId = null, Guid? siteId = null)
+        {
+            var model = PageEditModel.Create(Api, type, siteId);
 
             model.ParentId = parentId;
             model.SortOrder = sortOrder;
@@ -110,21 +123,23 @@ namespace Piranha.Areas.Manager.Controllers
         [HttpPost]
         [Route("manager/page/save")]
         [Authorize(Policy = Permission.PagesSave)]
-        public IActionResult Save(Models.PageEditModel model) {
+        public IActionResult Save(PageEditModel model)
+        {
             // Validate
-            if (string.IsNullOrWhiteSpace(model.Title)) {
+            if (string.IsNullOrWhiteSpace(model.Title))
+            {
                 ErrorMessage("The page could not be saved. Title is mandatory", false);
-                return View("Edit", model.Refresh(api));                
+                return View("Edit", model.Refresh(Api));
             }
 
             // Save
-            if (model.Save(api)) {
+            if (model.Save(Api))
+            {
                 SuccessMessage("The page has been saved.");
                 return RedirectToAction("Edit", new { id = model.Id });
-            } else {
-                ErrorMessage("The page could not be saved.", false);
-                return View("Edit", model.Refresh(api));
             }
+            ErrorMessage("The page could not be saved.", false);
+            return View("Edit", model.Refresh(Api));
         }
 
         /// <summary>
@@ -134,21 +149,23 @@ namespace Piranha.Areas.Manager.Controllers
         [HttpPost]
         [Route("manager/page/publish")]
         [Authorize(Policy = Permission.PagesPublish)]
-        public IActionResult Publish(Models.PageEditModel model) {
+        public IActionResult Publish(PageEditModel model)
+        {
             // Validate
-            if (string.IsNullOrWhiteSpace(model.Title)) {
+            if (string.IsNullOrWhiteSpace(model.Title))
+            {
                 ErrorMessage("The page could not be saved. Title is mandatory", false);
-                return View("Edit", model.Refresh(api));                
+                return View("Edit", model.Refresh(Api));
             }
 
             // Save
-            if (model.Save(api, true)) {
+            if (model.Save(Api, true))
+            {
                 SuccessMessage("The page has been published.");
                 return RedirectToAction("Edit", new { id = model.Id });
-            } else {
-                ErrorMessage("The page could not be published.", false);
-                return View(model);
             }
+            ErrorMessage("The page could not be published.", false);
+            return View(model);
         }
 
         /// <summary>
@@ -158,14 +175,15 @@ namespace Piranha.Areas.Manager.Controllers
         [HttpPost]
         [Route("manager/page/unpublish")]
         [Authorize(Policy = Permission.PagesPublish)]
-        public IActionResult UnPublish(Models.PageEditModel model) {
-            if (model.Save(api, false)) {
+        public IActionResult UnPublish(PageEditModel model)
+        {
+            if (model.Save(Api, false))
+            {
                 SuccessMessage("The page has been unpublished.");
                 return RedirectToAction("Edit", new { id = model.Id });
-            } else {
-                ErrorMessage("The page could not be unpublished.", false);
-                return View(model);
             }
+            ErrorMessage("The page could not be unpublished.", false);
+            return View(model);
         }
 
         /// <summary>
@@ -175,15 +193,19 @@ namespace Piranha.Areas.Manager.Controllers
         [HttpPost]
         [Route("manager/pages/move")]
         [Authorize(Policy = Permission.PagesEdit)]
-        public IActionResult Move([FromBody]Models.PageStructureModel structure) {
-            for (var n = 0; n < structure.Items.Count; n++) {
+        public IActionResult Move([FromBody]PageStructureModel structure)
+        {
+            for (var n = 0; n < structure.Items.Count; n++)
+            {
                 var moved = MovePage(structure.Items[n], n);
                 if (moved)
                     break;
             }
-            using (var config = new Config(api)) {
-                return View("Partial/_Sitemap", new Models.SitemapModel() {
-                    Sitemap = api.Sites.GetSitemap(onlyPublished: false),
+            using (var config = new Config(Api))
+            {
+                return View("Partial/_Sitemap", new SitemapModel
+                {
+                    Sitemap = Api.Sites.GetSitemap(onlyPublished: false),
                     ExpandedLevels = config.ManagerExpandedSitemapLevels
                 });
             }
@@ -195,8 +217,9 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="id">The unique id</param>
         [Route("manager/page/delete/{id:Guid}")]
         [Authorize(Policy = Permission.PagesDelete)]
-        public IActionResult Delete(Guid id) {
-            api.Pages.Delete(id);
+        public IActionResult Delete(Guid id)
+        {
+            Api.Pages.Delete(id);
             SuccessMessage("The page has been deleted");
             return RedirectToAction("List");
         }
@@ -208,24 +231,30 @@ namespace Piranha.Areas.Manager.Controllers
         [HttpPost]
         [Route("manager/page/region")]
         [Authorize(Policy = Permission.Pages)]
-        public IActionResult AddRegion([FromBody]Models.PageRegionModel model) {
-            var pageType = api.PageTypes.GetById(model.PageTypeId);
+        public IActionResult AddRegion([FromBody]PageRegionModel model)
+        {
+            var pageType = Api.PageTypes.GetById(model.PageTypeId);
 
-            if (pageType != null) {
-                var regionType = pageType.Regions.SingleOrDefault(r => r.Id == model.RegionTypeId);
-
-                if (regionType != null) {
-                    var region = Piranha.Models.DynamicPage.CreateRegion(api,
-                        model.PageTypeId, model.RegionTypeId);
-
-                    var editModel = (Models.PageEditRegionCollection)Models.PageEditModel.CreateRegion(regionType, 
-                        new List<object>() { region});
-
-                    ViewData.TemplateInfo.HtmlFieldPrefix = $"Regions[{model.RegionIndex}].FieldSets[{model.ItemIndex}]";
-                    return View("EditorTemplates/PageEditRegionItem", editModel.FieldSets[0]);
-                }
+            if (pageType == null)
+            {
+                return new NotFoundResult();
             }
-            return new NotFoundResult();
+
+            var regionType = pageType.Regions.SingleOrDefault(r => r.Id == model.RegionTypeId);
+
+            if (regionType == null)
+            {
+                return new NotFoundResult();
+            }
+
+            var region = DynamicPage.CreateRegion(Api,
+                model.PageTypeId, model.RegionTypeId);
+
+            var editModel = (PageEditRegionCollection)PageEditModel.CreateRegion(regionType,
+                new List<object> { region });
+
+            ViewData.TemplateInfo.HtmlFieldPrefix = $"Regions[{model.RegionIndex}].FieldSets[{model.ItemIndex}]";
+            return View("EditorTemplates/PageEditRegionItem", editModel.FieldSets[0]);
         }
 
         /// <summary>
@@ -234,30 +263,37 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="siteId">The site id</param>
         [Route("manager/page/modal/{siteId:Guid?}")]
         [Authorize(Policy = Permission.Pages)]
-        public IActionResult Modal(Guid? siteId = null) {
-            return View(Models.PageModalModel.GetBySiteId(api, siteId));
-        }  
-        
+        public IActionResult Modal(Guid? siteId = null)
+        {
+            return View(PageModalModel.GetBySiteId(Api, siteId));
+        }
+
 
         #region Private methods
-        private bool MovePage(Models.PageStructureModel.PageStructureItem page, int sortOrder = 1, Guid? parentId = null) {
-            var model = api.Pages.GetById(new Guid(page.Id));
+        private bool MovePage(PageStructureModel.PageStructureItem page, int sortOrder = 1, Guid? parentId = null)
+        {
+            var model = Api.Pages.GetById(new Guid(page.Id));
 
-            if (model != null) {
-                if (model.ParentId != parentId || model.SortOrder != sortOrder) {
-                    // Move the page in the structure.
-                    api.Pages.Move(model, parentId, sortOrder);
+            if (model == null)
+            {
+                return false;
+            }
 
-                    // We only move one page at a time so we're done
+            if (model.ParentId != parentId || model.SortOrder != sortOrder)
+            {
+                // Move the page in the structure.
+                Api.Pages.Move(model, parentId, sortOrder);
+
+                // We only move one page at a time so we're done
+                return true;
+            }
+
+            for (var n = 0; n < page.Children.Count; n++)
+            {
+                var moved = MovePage(page.Children[n], n, new Guid(page.Id));
+
+                if (moved)
                     return true;
-                }
-
-                for (var n = 0; n < page.Children.Count; n++) {
-                    var moved = MovePage(page.Children[n], n, new Guid(page.Id));
-
-                    if (moved)
-                        return true;
-                }
             }
             return false;
         }

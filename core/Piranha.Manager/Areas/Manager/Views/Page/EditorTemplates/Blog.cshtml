@@ -1,6 +1,8 @@
-@model Piranha.Areas.Manager.Models.PageEditModel
+@using Piranha
 @using Piranha.Areas.Manager.Models
-@inject Piranha.IApi Api
+@using Piranha.Manager
+@model PageEditModel
+@inject IApi Api
 @{
     var blogModel = PostListModel.GetByBlogId(Api, Model.Id);
 }
@@ -10,7 +12,7 @@
             <tbody>
                 <tr>
                     <td colspan="4" style="border-top:none">
-                        @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PostsAdd)).Succeeded) {
+                        @if ((await Authorization.AuthorizeAsync(User, Permission.PostsAdd)).Succeeded) {
                             <div class="btn-group pull-right">
                                 <button type="button" class="btn btn-labeled btn-primary btn-sm" data-toggle="dropdown">
                                     <span class="btn-label">
@@ -58,7 +60,7 @@
 
                     <tr class="@status" data-category="@post.CategoryId" data-posttype="@post.TypeId">
                         <td>
-                            @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PostsEdit)).Succeeded) {
+                            @if ((await Authorization.AuthorizeAsync(User, Permission.PostsEdit)).Succeeded) {
                                 <a href="@Url.Action("Edit", "Post", new { id = post.Id })">@post.Title</a>
                             } else {
                                 <text>@post.Title</text>                                
@@ -72,7 +74,7 @@
                         <td>@post.TypeName</td>
                         <td>@post.Category</td>
                         <td class="actions one">
-                            @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PostsDelete)).Succeeded) {
+                            @if ((await Authorization.AuthorizeAsync(User, Permission.PostsDelete)).Succeeded) {
                                 <a class="remove" href="@Url.Action("Delete", "Post", new { id = post.Id })">
                                     <span class="glyphicon glyphicon-trash text-danger"></span>
                                 </a>

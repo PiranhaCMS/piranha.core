@@ -8,11 +8,13 @@
  * 
  */
 
-using Piranha.AttributeBuilder;
-using Piranha.Extend.Fields;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Piranha.AttributeBuilder;
+using Piranha.Data;
+using Piranha.Extend.Fields;
+using Piranha.Models;
 using Xunit;
 
 namespace Piranha.Tests.Repositories
@@ -47,7 +49,7 @@ namespace Piranha.Tests.Repositories
         }
 
         [PageType(Title = "My PageType")]
-        public class MyPage : Models.Page<MyPage>
+        public class MyPage : Page<MyPage>
         {
             [Region]
             public TextField Ingress { get; set; }
@@ -56,7 +58,7 @@ namespace Piranha.Tests.Repositories
         }
 
         [PageType(Title = "My CollectionPage")]
-        public class MyCollectionPage : Models.Page<MyCollectionPage>
+        public class MyCollectionPage : Page<MyCollectionPage>
         {
             [Region]
             public IList<TextField> Texts { get; set; }
@@ -78,7 +80,8 @@ namespace Piranha.Tests.Repositories
                     .AddType(typeof(MyCollectionPage));
                 builder.Build();
 
-                var site = new Data.Site() {
+                var site = new Site
+                {
                     Id = SITE_ID,
                     Title = "Default Site",
                     InternalId = "DefaultSite",
@@ -114,13 +117,16 @@ namespace Piranha.Tests.Repositories
                 page4.SiteId = SITE_ID;
                 page4.Title = "My collection page";
                 page4.SortOrder = 1;
-                page4.Texts.Add(new TextField() {
+                page4.Texts.Add(new TextField
+                {
                     Value = "First text"
                 });
-                page4.Texts.Add(new TextField() {
+                page4.Texts.Add(new TextField
+                {
                     Value = "Second text"
                 });
-                page4.Texts.Add(new TextField() {
+                page4.Texts.Add(new TextField
+                {
                     Value = "Third text"
                 });
                 api.Pages.Save(page4);
@@ -148,7 +154,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void IsCached() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                Assert.Equal(this.GetType() == typeof(PagesCached), api.IsCached);
+                Assert.Equal(GetType() == typeof(PagesCached), api.IsCached);
             }
         }
 
@@ -300,7 +306,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void EmptyDynamicCollectionPage() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var page = Piranha.Models.DynamicPage.Create(api, "MyCollectionPage");
+                var page = DynamicPage.Create(api, "MyCollectionPage");
 
                 Assert.Equal(0, page.Regions.Texts.Count);
 
@@ -336,7 +342,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void EmptyDynamicCollectionPageComplex() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var page = Piranha.Models.DynamicPage.Create(api, "MyCollectionPage");
+                var page = DynamicPage.Create(api, "MyCollectionPage");
 
                 Assert.Equal(0, page.Regions.Teasers.Count);
 

@@ -11,7 +11,6 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Piranha
 {
@@ -27,7 +26,8 @@ namespace Piranha
         /// </summary>
         /// <param name="args">The arguments</param>
         /// <returns>The db context</returns>
-        public Db CreateDbContext(string[] args) {
+        public Db CreateDbContext(string[] args)
+        {
             var builder = new DbContextOptionsBuilder<Db>();
             builder.UseSqlite("Filename=./piranha.dev.db");
             return new Db(builder.Options);

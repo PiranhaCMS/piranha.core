@@ -8,11 +8,11 @@
  * 
  */
 
-using Piranha.AttributeBuilder;
-using Piranha.Extend.Fields;
 using System;
-using System.Data.SqlClient;
 using System.Linq;
+using Piranha.AttributeBuilder;
+using Piranha.Data;
+using Piranha.Models;
 using Xunit;
 
 namespace Piranha.Tests.Repositories
@@ -46,7 +46,7 @@ namespace Piranha.Tests.Repositories
         #endregion
 
         [PageType(Title = "Blog page")]
-        public class BlogPage : Models.Page<BlogPage> { }        
+        public class BlogPage : Page<BlogPage> { }        
 
         protected override void Init() {
             using (var api = new Api(GetDb(), storage, cache)) {
@@ -57,7 +57,8 @@ namespace Piranha.Tests.Repositories
                 pageTypeBuilder.Build();
 
                 // Add site
-                var site = new Data.Site() {
+                var site = new Site
+                {
                     Id = SITE_ID,
                     Title = "Category Site",
                     InternalId = "CategorySite",
@@ -73,17 +74,20 @@ namespace Piranha.Tests.Repositories
                 api.Pages.Save(page);
 
                 // Add categories
-                api.Categories.Save(new Data.Category() {
+                api.Categories.Save(new Category
+                {
                     Id = CAT_1_ID,
                     BlogId = BLOG_ID,
                     Title = CAT_1
                 });
 
-                api.Categories.Save(new Data.Category() {
+                api.Categories.Save(new Category
+                {
                     BlogId = BLOG_ID,
                     Title = CAT_4
                 });
-                api.Categories.Save(new Data.Category() {
+                api.Categories.Save(new Category
+                {
                     Id = CAT_5_ID,
                     BlogId = BLOG_ID,
                     Title = CAT_5
@@ -111,14 +115,15 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void IsCached() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                Assert.Equal(this.GetType() == typeof(CategoriesCached), api.IsCached);
+                Assert.Equal(GetType() == typeof(CategoriesCached), api.IsCached);
             }
         }        
 
         [Fact]
         public void Add() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                api.Categories.Save(new Data.Category() {
+                api.Categories.Save(new Category
+                {
                     BlogId = BLOG_ID,
                     Title = CAT_2
                 });
@@ -129,7 +134,8 @@ namespace Piranha.Tests.Repositories
         public void AddDuplicateSlug() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 Assert.ThrowsAny<Exception>(() =>
-                    api.Categories.Save(new Data.Category() {
+                    api.Categories.Save(new Category
+                    {
                         BlogId = BLOG_ID,
                         Title = CAT_1
                     }));
@@ -140,7 +146,8 @@ namespace Piranha.Tests.Repositories
         public void AddNoTitle() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 Assert.ThrowsAny<ArgumentException>(() =>
-                    api.Categories.Save(new Data.Category() {
+                    api.Categories.Save(new Category
+                    {
                         BlogId = BLOG_ID
                     }));
             }

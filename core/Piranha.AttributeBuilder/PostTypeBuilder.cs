@@ -27,13 +27,18 @@ namespace Piranha.AttributeBuilder
         /// <summary>
         /// Builds the page types.
         /// </summary>
-        public override PostTypeBuilder Build() {
-            foreach (var type in types) {
+        public override PostTypeBuilder Build()
+        {
+            foreach (var type in types)
+            {
                 var postType = GetContentType(type);
 
                 if (postType != null)
+                {
                     api.PostTypes.Save(postType);
+                }
             }
+
             return this;
         }
 
@@ -42,12 +47,14 @@ namespace Piranha.AttributeBuilder
         ///  exist in the database,
         /// </summary>
         /// <returns>The builder</returns>
-        public PostTypeBuilder DeleteOrphans() {
+        public PostTypeBuilder DeleteOrphans()
+        {
             var orphans = new List<PostType>();
             var importTypes = new List<PostType>();
 
             // Get all page types added for import.
-            foreach (var type in types) {
+            foreach (var type in types)
+            {
                 var importType = GetContentType(type);
 
                 if (importType != null)
@@ -55,15 +62,20 @@ namespace Piranha.AttributeBuilder
             }
 
             // Get all previously imported page types.
-            foreach (var postType in api.PostTypes.GetAll()) {
-                if (!importTypes.Any(t => t.Id == postType.Id))
+            foreach (var postType in api.PostTypes.GetAll())
+            {
+                if (importTypes.All(t => t.Id != postType.Id))
+                {
                     orphans.Add(postType);
+                }
             }
 
             // Delete all orphans.
-            foreach (var postType in orphans) {
+            foreach (var postType in orphans)
+            {
                 api.PostTypes.Delete(postType);
             }
+
             return this;
         }
 
@@ -73,52 +85,67 @@ namespace Piranha.AttributeBuilder
         /// </summary>
         /// <param name="type">The type</param>
         /// <returns>The page type</returns>
-        protected override PostType GetContentType(Type type) {
+        protected override PostType GetContentType(Type type)
+        {
             var attr = type.GetTypeInfo().GetCustomAttribute<PostTypeAttribute>();
 
-            if (attr != null) {
+            if (attr != null)
+            {
                 if (string.IsNullOrWhiteSpace(attr.Id))
                     attr.Id = type.Name;
 
-                if (!string.IsNullOrEmpty(attr.Id) && !string.IsNullOrEmpty(attr.Title)) {
-                    var postType = new PostType() {
-                        Id = attr.Id,
-                        Title = attr.Title
-                    };
-
-                    var routes = type.GetTypeInfo().GetCustomAttributes(typeof(PostTypeRouteAttribute));
-                    foreach (PostTypeRouteAttribute route in routes) {
-                        if (!string.IsNullOrWhiteSpace(route.Title) && !string.IsNullOrWhiteSpace(route.Route))
-                            postType.Routes.Add(new ContentTypeRoute() {
-                                Title = route.Title,
-                                Route = route.Route
-                            });
-                    }
-
-                    var regionTypes = new List<Tuple<int?,RegionType>>();
-
-                    foreach (var prop in type.GetProperties(App.PropertyBindings)) {
-                        var regionType = GetRegionType(prop);
-
-                        if (regionType != null) {
-                            regionTypes.Add(regionType);
-                        }
-                    }
-                    regionTypes = regionTypes.OrderBy(t => t.Item1).ToList();
-
-                    // First add sorted regions
-                    foreach (var regionType in regionTypes.Where(t => t.Item1.HasValue))
-                        postType.Regions.Add(regionType.Item2);
-                    // Then add the unsorted regions
-                    foreach (var regionType in regionTypes.Where(t => !t.Item1.HasValue))
-                        postType.Regions.Add(regionType.Item2);
-
-                    return postType;
+                if (string.IsNullOrEmpty(attr.Id) || string.IsNullOrEmpty(attr.Title))
+                {
+                    return null;
                 }
-            } else {
-                throw new ArgumentException($"Title is mandatory in PostTypeAttribute. No title provided for {type.Name}");
+
+                var postType = new PostType
+                {
+                    Id = attr.Id,
+                    Title = attr.Title
+                };
+
+                var routes = type.GetTypeInfo().GetCustomAttributes(typeof(PostTypeRouteAttribute));
+                foreach (var attribute in routes)
+                {
+                    var route = (PostTypeRouteAttribute) attribute;
+                    if (!string.IsNullOrWhiteSpace(route.Title) && !string.IsNullOrWhiteSpace(route.Route))
+                        postType.Routes.Add(new ContentTypeRoute
+                        {
+                            Title = route.Title,
+                            Route = route.Route
+                        });
+                }
+
+                var regionTypes = new List<Tuple<int?, RegionType>>();
+
+                foreach (var prop in type.GetProperties(App.PropertyBindings))
+                {
+                    var regionType = GetRegionType(prop);
+
+                    if (regionType != null)
+                    {
+                        regionTypes.Add(regionType);
+                    }
+                }
+                regionTypes = regionTypes.OrderBy(t => t.Item1).ToList();
+
+                // First add sorted regions
+                foreach (var regionType in regionTypes.Where(t => t.Item1.HasValue))
+                {
+                    postType.Regions.Add(regionType.Item2);
+                }
+
+                // Then add the unsorted regions
+                foreach (var regionType in regionTypes.Where(t => !t.Item1.HasValue))
+                {
+                    postType.Regions.Add(regionType.Item2);
+                }
+
+                return postType;
             }
-            return null;
+
+            throw new ArgumentException($"Title is mandatory in PostTypeAttribute. No title provided for {type.Name}");
         }
         #endregion
     }

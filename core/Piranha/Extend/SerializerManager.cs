@@ -13,46 +13,41 @@ using System.Collections.Generic;
 
 namespace Piranha.Extend
 {
-    public sealed class SerializerManager 
+    public sealed class SerializerManager
     {
         /// <summary>
         /// The currently available serializers.
         /// </summary>
-        private readonly Dictionary<Type, ISerializer> serializers;
+        private readonly Dictionary<Type, ISerializer> _serializers;
 
         /// <summary>
         /// Gets the serializer for the specified type.
         /// </summary>
-        public ISerializer this[Type type] {
-            get { 
-                ISerializer serializer = null;
-
-                if (serializers.TryGetValue(type, out serializer))
-                    return serializer;
-                return null;
-            }
-        }
+        public ISerializer this[Type type] => _serializers.TryGetValue(type, out var serializer) ? serializer : null;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public SerializerManager() {
-            serializers = new Dictionary<Type, ISerializer>();
+        public SerializerManager()
+        {
+            _serializers = new Dictionary<Type, ISerializer>();
         }
 
         /// <summary>
         /// Registers the given serializer for the specified type
         /// </summary>
         /// <param name="serializer">The serializer</param>
-        public void Register<T>(ISerializer serializer) {
-            serializers[typeof(T)] = serializer;
+        public void Register<T>(ISerializer serializer)
+        {
+            _serializers[typeof(T)] = serializer;
         }
 
         /// <summary>
         /// Unregisters the current serializer for the specified type
         /// </summary>
-        public void UnRegister<T>() {
-            serializers.Remove(typeof(T));
+        public void UnRegister<T>()
+        {
+            _serializers.Remove(typeof(T));
         }
     }
 }

@@ -9,6 +9,7 @@
  */
 
 using System.Collections.Generic;
+using Piranha.Models;
 
 namespace Piranha.Repositories
 {
@@ -18,21 +19,21 @@ namespace Piranha.Repositories
         /// Gets all available models.
         /// </summary>
         /// <returns>The available models</returns>
-        IEnumerable<Models.PageType> GetAll();
+        IEnumerable<PageType> GetAll();
 
         /// <summary>
         /// Gets the model with the specified id.
         /// </summary>
         /// <param name="id">The unique i</param>
         /// <returns></returns>
-        Models.PageType GetById(string id);
+        PageType GetById(string id);
 
         /// <summary>
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        void Save(Models.PageType model);
+        void Save(PageType model);
 
         /// <summary>
         /// Deletes the model with the specified id.
@@ -44,6 +45,6 @@ namespace Piranha.Repositories
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        void Delete(Models.PageType model);
+        void Delete(PageType model);
     }
 }

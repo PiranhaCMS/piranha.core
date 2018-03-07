@@ -21,44 +21,57 @@ namespace Piranha.Web
         /// <param name="url">The requested url</param>
         /// <param name="siteId">The requested site id</param>
         /// <returns>The piranha response, null if no matching page was found</returns>
-        public static IRouteResponse Invoke(IApi api, string url, Guid siteId) {
-            if (!String.IsNullOrWhiteSpace(url) && url.Length > 1) {
-                var segments = url.Substring(1).Split(new char[] { '/' });
-
-                var include = segments.Length;
-
-                // Scan for the most unique slug
-                for (var n = include; n > 0; n--) {
-                    var slug = string.Join("/", segments.Subset(0, n));
-                    var page = api.Pages.GetBySlug(slug, siteId);
-
-                    if (page != null && page.ContentType == "Page") {
-                        if (string.IsNullOrWhiteSpace(page.RedirectUrl)) {
-                            var route = page.Route ?? "/page";
-
-                            if (n < include) {
-                                route += "/" + string.Join("/", segments.Subset(n));
-                            }
-
-                            return new RouteResponse() {
-                                Route = route,
-                                QueryString = $"id={page.Id}&startpage={page.IsStartPage.ToString().ToLower()}&piranha_handled=true",
-                                IsPublished = page.Published.HasValue && page.Published.Value <= DateTime.Now,
-                                CacheInfo = new HttpCacheInfo() {
-                                    EntityTag = Utils.GenerateETag(page.Id.ToString(), page.LastModified),
-                                    LastModified = page.LastModified
-                                }
-                            };
-                        } else {
-                            return new RouteResponse() {
-                                IsPublished = page.Published.HasValue && page.Published.Value <= DateTime.Now,
-                                RedirectUrl = page.RedirectUrl,
-                                RedirectType = page.RedirectType
-                            };
-                        }
-                    }
-                }
+        public static IRouteResponse Invoke(IApi api, string url, Guid siteId)
+        {
+            if (string.IsNullOrWhiteSpace(url) || url.Length <= 1)
+            {
+                return null;
             }
+
+            var segments = url.Substring(1).Split('/');
+
+            var include = segments.Length;
+
+            // Scan for the most unique slug
+            for (var n = include; n > 0; n--)
+            {
+                var slug = string.Join("/", segments.Subset(0, n));
+                var page = api.Pages.GetBySlug(slug, siteId);
+                if (page == null || page.ContentType != "Page")
+                {
+                    continue;
+                }
+
+                if (!string.IsNullOrWhiteSpace(page.RedirectUrl))
+                {
+                    return new RouteResponse
+                    {
+                        IsPublished = page.Published.HasValue && page.Published.Value <= DateTime.Now,
+                        RedirectUrl = page.RedirectUrl,
+                        RedirectType = page.RedirectType
+                    };
+                }
+
+                var route = page.Route ?? "/page";
+
+                if (n < include)
+                {
+                    route += "/" + string.Join("/", segments.Subset(n));
+                }
+
+                return new RouteResponse
+                {
+                    Route = route,
+                    QueryString = $"id={page.Id}&startpage={page.IsStartPage.ToString().ToLower()}&piranha_handled=true",
+                    IsPublished = page.Published.HasValue && page.Published.Value <= DateTime.Now,
+                    CacheInfo = new HttpCacheInfo
+                    {
+                        EntityTag = Utils.GenerateETag(page.Id.ToString(), page.LastModified),
+                        LastModified = page.LastModified
+                    }
+                };
+            }
+
             return null;
         }
     }

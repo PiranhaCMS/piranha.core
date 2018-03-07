@@ -9,8 +9,8 @@
  */
 
 using System;
-using System.Data.SqlClient;
 using System.Linq;
+using Piranha.Data;
 using Xunit;
 
 namespace Piranha.Tests.Repositories
@@ -43,7 +43,8 @@ namespace Piranha.Tests.Repositories
         protected override void Init() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 // Add site
-                var site = new Data.Site() {
+                var site = new Site
+                {
                     Id = SITE_ID,
                     Title = "Alias Site",
                     InternalId = "AliasSite",
@@ -52,19 +53,22 @@ namespace Piranha.Tests.Repositories
                 api.Sites.Save(site);
 
                 // Add aliases
-                api.Aliases.Save(new Data.Alias() {
+                api.Aliases.Save(new Alias
+                {
                     Id = ALIAS_1_ID,
                     SiteId = SITE_ID,
                     AliasUrl = ALIAS_1,
                     RedirectUrl = "/redirect-1"
                 });
 
-                api.Aliases.Save(new Data.Alias() {
+                api.Aliases.Save(new Alias
+                {
                     SiteId = SITE_ID,
                     AliasUrl = ALIAS_4,
                     RedirectUrl = "/redirect-4"
                 });
-                api.Aliases.Save(new Data.Alias() {
+                api.Aliases.Save(new Alias
+                {
                     SiteId = SITE_ID,
                     AliasUrl = ALIAS_5,
                     RedirectUrl = "/redirect-5"
@@ -87,14 +91,15 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void IsCached() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                Assert.Equal(this.GetType() == typeof(AliasesCached), api.IsCached);
+                Assert.Equal(GetType() == typeof(AliasesCached), api.IsCached);
             }
         }        
 
         [Fact]
         public void Add() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                api.Aliases.Save(new Data.Alias() {
+                api.Aliases.Save(new Alias
+                {
                     SiteId = SITE_ID,
                     AliasUrl = ALIAS_2,
                     RedirectUrl = "/redirect-2"
@@ -106,7 +111,8 @@ namespace Piranha.Tests.Repositories
         public void AddDuplicateKey() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 Assert.ThrowsAny<Exception>(() =>
-                    api.Aliases.Save(new Data.Alias() {
+                    api.Aliases.Save(new Alias
+                    {
                         SiteId = SITE_ID,
                         AliasUrl = ALIAS_1,
                         RedirectUrl = "/duplicate-alias"
@@ -179,7 +185,8 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void FixAliasUrl() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var model = new Data.Alias() {
+                var model = new Alias
+                {
                     SiteId = SITE_ID,
                     AliasUrl = "the-alias-url-1",
                     RedirectUrl = "/the-redirect-1"
@@ -194,7 +201,8 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void FixRedirectUrl() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var model = new Data.Alias() {
+                var model = new Alias
+                {
                     SiteId = SITE_ID,
                     AliasUrl = "/the-alias-url-2",
                     RedirectUrl = "the-redirect-2"
@@ -209,7 +217,8 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void AllowHttpUrl() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var model = new Data.Alias() {
+                var model = new Alias
+                {
                     SiteId = SITE_ID,
                     AliasUrl = "/the-alias-url-3",
                     RedirectUrl = "http://redirect.com"
@@ -224,7 +233,8 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void AllowHttpsUrl() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                var model = new Data.Alias() {
+                var model = new Alias
+                {
                     SiteId = SITE_ID,
                     AliasUrl = "/the-alias-url-4",
                     RedirectUrl = "https://redirect.com"

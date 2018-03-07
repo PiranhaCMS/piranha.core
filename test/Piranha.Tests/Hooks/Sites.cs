@@ -9,8 +9,7 @@
  */
 
 using System;
-using System.Data.SqlClient;
-using System.Linq;
+using Piranha.Data;
 using Xunit;
 
 namespace Piranha.Tests.Hooks
@@ -33,7 +32,8 @@ namespace Piranha.Tests.Hooks
                 Piranha.App.Init(api);
 
                 // Create test param
-                api.Sites.Save(new Data.Site() {
+                api.Sites.Save(new Site
+                {
                     Id = ID,
                     Title = TITLE
                 });
@@ -67,7 +67,8 @@ namespace Piranha.Tests.Hooks
             Piranha.App.Hooks.Site.RegisterOnBeforeSave(m => throw new SiteOnBeforeSaveException());
             using (var api = new Api(GetDb(), storage)) {
                 Assert.Throws<SiteOnBeforeSaveException>(() => {
-                    api.Sites.Save(new Data.Site() {
+                    api.Sites.Save(new Site
+                    {
                         Title = "My First Hook Site"
                     });
                 });
@@ -80,7 +81,8 @@ namespace Piranha.Tests.Hooks
             Piranha.App.Hooks.Site.RegisterOnAfterSave(m => throw new SiteOnAfterSaveException());
             using (var api = new Api(GetDb(), storage)) {
                 Assert.Throws<SiteOnAfterSaveException>(() => {
-                    api.Sites.Save(new Data.Site() {
+                    api.Sites.Save(new Site
+                    {
                         Title = "My Second Hook Site"
                     });
                 });

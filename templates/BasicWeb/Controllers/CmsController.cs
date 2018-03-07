@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using BasicWeb.Models;
+using Microsoft.AspNetCore.Mvc;
 using Piranha;
-using System;
 
 namespace BasicWeb.Controllers
 {
@@ -12,7 +13,8 @@ namespace BasicWeb.Controllers
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public CmsController(IApi api) {
+        public CmsController(IApi api)
+        {
             this.api = api;
         }
 
@@ -25,8 +27,9 @@ namespace BasicWeb.Controllers
         /// <param name="page">The optional page</param>
         /// <param name="category">The optional category</param>
         [Route("archive")]
-        public IActionResult Archive(Guid id, int? year = null, int? month = null, int? page = null, Guid? category = null) {
-            var model = api.Archives.GetById<Models.BlogArchive>(id, page, category, year, month);
+        public IActionResult Archive(Guid id, int? year = null, int? month = null, int? page = null, Guid? category = null)
+        {
+            var model = api.Archives.GetById<BlogArchive>(id, page, category, year, month);
             ViewBag.CurrentPage = model.Id;
 
             return View(model);
@@ -37,8 +40,9 @@ namespace BasicWeb.Controllers
         /// </summary>
         /// <param name="id">The unique page id</param>
         [Route("page")]
-        public IActionResult Page(Guid id) {
-            var model = api.Pages.GetById<Models.StandardPage>(id);
+        public IActionResult Page(Guid id)
+        {
+            var model = api.Pages.GetById<StandardPage>(id);
             ViewBag.CurrentPage = model.Id;
 
             return View(model);
@@ -49,8 +53,9 @@ namespace BasicWeb.Controllers
         /// </summary>
         /// <param name="id">The unique post id</param>
         [Route("post")]
-        public IActionResult Post(Guid id) {
-            var model = api.Posts.GetById<Models.BlogPost>(id);
+        public IActionResult Post(Guid id)
+        {
+            var model = api.Posts.GetById<BlogPost>(id);
             ViewBag.CurrentPage = model.BlogId;
 
             return View(model);
@@ -61,8 +66,9 @@ namespace BasicWeb.Controllers
         /// </summary>
         /// <param name="id">The unique page id</param>
         [Route("start")]
-        public IActionResult Start(Guid id) {
-            var model = api.Pages.GetById<Models.StartPage>(id);
+        public IActionResult Start(Guid id)
+        {
+            var model = api.Pages.GetById<StartPage>(id);
             ViewBag.CurrentPage = model.Id;
 
             return View(model);

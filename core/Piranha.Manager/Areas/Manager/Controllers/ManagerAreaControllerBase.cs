@@ -19,74 +19,84 @@ namespace Piranha.Areas.Manager.Controllers
         /// <summary>
         /// The current api
         /// </summary>
-        protected readonly IApi api;
+        protected readonly IApi Api;
         #endregion
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public ManagerAreaControllerBase(IApi api) {
-            this.api = api;
+        protected ManagerAreaControllerBase(IApi api)
+        {
+            Api = api;
         }
 
-		public override void OnActionExecuting(ActionExecutingContext context) {
-            if (TempData.ContainsKey("MessageCss")) {
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            if (TempData.ContainsKey("MessageCss"))
+            {
                 ViewBag.MessageCss = TempData["MessageCss"];
                 TempData.Remove("MessageCss");
             }
-            if (TempData.ContainsKey("Message")) {
+            if (TempData.ContainsKey("Message"))
+            {
                 ViewBag.Message = TempData["Message"];
                 TempData.Remove("Message");
             }
-		}
-
-		/// <summary>
-		/// Adds a success message to the current view.
-		/// </summary>
-		/// <param name="msg">The message</param>
-		/// <param name="persist">If the message should be persisted in TempData</param>
-		protected void SuccessMessage(string msg, bool persist = true) {
-			msg = "<b>Success:</b> " + msg;
-
-			ViewBag.MessageCss = "alert alert-success";
-			ViewBag.Message = msg;
-			if (persist) {
-				TempData["MessageCss"] = "alert alert-success";
-				TempData["Message"] = msg;
-			}
         }
 
-		/// <summary>
-		/// Adds an error message to the current view.
-		/// </summary>
-		/// <param name="msg"></param>
-		/// <param name="persist">If the message should be persisted in TempData</param>
-		protected void ErrorMessage(string msg, bool persist = true) {
-			msg = "<b>Error:</b> " + msg;
+        /// <summary>
+        /// Adds a success message to the current view.
+        /// </summary>
+        /// <param name="msg">The message</param>
+        /// <param name="persist">If the message should be persisted in TempData</param>
+        protected void SuccessMessage(string msg, bool persist = true)
+        {
+            msg = "<b>Success:</b> " + msg;
 
-			ViewBag.MessageCss = "alert alert-danger";
-			ViewBag.Message = msg;
-			if (persist) {
-				TempData["MessageCss"] = "alert alert-danger";
-				TempData["Message"] = msg;
-			}
+            ViewBag.MessageCss = "alert alert-success";
+            ViewBag.Message = msg;
+            if (persist)
+            {
+                TempData["MessageCss"] = "alert alert-success";
+                TempData["Message"] = msg;
+            }
         }
 
-		/// <summary>
-		/// Adds an information message to the current view.
-		/// </summary>
-		/// <param name="msg"></param>
-		/// <param name="persist">If the message should be persisted in TempData</param>
-		protected void InformationMessage(string msg, bool persist = true) {
-			msg = "<b>Information:</b> " + msg;
+        /// <summary>
+        /// Adds an error message to the current view.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="persist">If the message should be persisted in TempData</param>
+        protected void ErrorMessage(string msg, bool persist = true)
+        {
+            msg = "<b>Error:</b> " + msg;
 
-			ViewBag.MessageCss = "alert alert-info";
-			ViewBag.Message = msg;
-			if (persist) {
-				TempData["MessageCss"] = "alert alert-info";
-				TempData["Message"] = msg;
-			}
-        }    
+            ViewBag.MessageCss = "alert alert-danger";
+            ViewBag.Message = msg;
+            if (persist)
+            {
+                TempData["MessageCss"] = "alert alert-danger";
+                TempData["Message"] = msg;
+            }
+        }
+
+        /// <summary>
+        /// Adds an information message to the current view.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="persist">If the message should be persisted in TempData</param>
+        protected void InformationMessage(string msg, bool persist = true)
+        {
+            msg = "<b>Information:</b> " + msg;
+
+            ViewBag.MessageCss = "alert alert-info";
+            ViewBag.Message = msg;
+            if (persist)
+            {
+                TempData["MessageCss"] = "alert alert-info";
+                TempData["Message"] = msg;
+            }
+        }
     }
 }

@@ -8,7 +8,6 @@
  * 
  */
 
-using Piranha.Extend;
 using System.Linq;
 using Xunit;
 

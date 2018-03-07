@@ -27,8 +27,10 @@ namespace Piranha.AttributeBuilder
         /// <summary>
         /// Builds the page types.
         /// </summary>
-        public override PageTypeBuilder Build() {
-            foreach (var type in types) {
+        public override PageTypeBuilder Build()
+        {
+            foreach (var type in types)
+            {
                 var pageType = GetContentType(type);
 
                 if (pageType != null)
@@ -42,12 +44,14 @@ namespace Piranha.AttributeBuilder
         ///  exist in the database,
         /// </summary>
         /// <returns>The builder</returns>
-        public PageTypeBuilder DeleteOrphans() {
+        public PageTypeBuilder DeleteOrphans()
+        {
             var orphans = new List<PageType>();
             var importTypes = new List<PageType>();
 
             // Get all page types added for import.
-            foreach (var type in types) {
+            foreach (var type in types)
+            {
                 var importType = GetContentType(type);
 
                 if (importType != null)
@@ -55,13 +59,17 @@ namespace Piranha.AttributeBuilder
             }
 
             // Get all previously imported page types.
-            foreach (var pageType in api.PageTypes.GetAll()) {
-                if (!importTypes.Any(t => t.Id == pageType.Id))
+            foreach (var pageType in api.PageTypes.GetAll())
+            {
+                if (importTypes.All(t => t.Id != pageType.Id))
+                {
                     orphans.Add(pageType);
+                }
             }
 
             // Delete all orphans.
-            foreach (var pageType in orphans) {
+            foreach (var pageType in orphans)
+            {
                 api.PageTypes.Delete(pageType);
             }
             return this;
@@ -73,53 +81,63 @@ namespace Piranha.AttributeBuilder
         /// </summary>
         /// <param name="type">The type</param>
         /// <returns>The page type</returns>
-        protected override PageType GetContentType(Type type) {
+        protected override PageType GetContentType(Type type)
+        {
             var attr = type.GetTypeInfo().GetCustomAttribute<PageTypeAttribute>();
 
-            if (attr != null) {
+            if (attr != null)
+            {
                 if (string.IsNullOrWhiteSpace(attr.Id))
                     attr.Id = type.Name;
 
-                if (!string.IsNullOrEmpty(attr.Id) && !string.IsNullOrEmpty(attr.Title)) {
-                    var pageType = new PageType() {
-                        Id = attr.Id,
-                        Title = attr.Title,
-                        ContentTypeId = App.ContentTypes.GetId(type)
-                    };
-
-                    var routes = type.GetTypeInfo().GetCustomAttributes(typeof(PageTypeRouteAttribute));
-                    foreach (PageTypeRouteAttribute route in routes) {
-                        if (!string.IsNullOrWhiteSpace(route.Title) && !string.IsNullOrWhiteSpace(route.Route))
-                            pageType.Routes.Add(new ContentTypeRoute() {
-                                Title = route.Title,
-                                Route = route.Route
-                            });
-                    }
-
-                    var regionTypes = new List<Tuple<int?,RegionType>>();
-
-                    foreach (var prop in type.GetProperties(App.PropertyBindings)) {
-                        var regionType = GetRegionType(prop);
-
-                        if (regionType != null) {
-                            regionTypes.Add(regionType);
-                        }
-                    }
-                    regionTypes = regionTypes.OrderBy(t => t.Item1).ToList();
-
-                    // First add sorted regions
-                    foreach (var regionType in regionTypes.Where(t => t.Item1.HasValue))
-                        pageType.Regions.Add(regionType.Item2);
-                    // Then add the unsorted regions
-                    foreach (var regionType in regionTypes.Where(t => !t.Item1.HasValue))
-                        pageType.Regions.Add(regionType.Item2);
-
-                    return pageType;
+                if (string.IsNullOrEmpty(attr.Id) || string.IsNullOrEmpty(attr.Title))
+                {
+                    return null;
                 }
-            } else {
-                throw new ArgumentException($"Title is mandatory in PageTypeAttribute. No title provided for {type.Name}");
+
+                var pageType = new PageType
+                {
+                    Id = attr.Id,
+                    Title = attr.Title,
+                    ContentTypeId = App.ContentTypes.GetId(type)
+                };
+
+                var routes = type.GetTypeInfo().GetCustomAttributes(typeof(PageTypeRouteAttribute));
+                foreach (var attribute in routes)
+                {
+                    var route = (PageTypeRouteAttribute) attribute;
+                    if (!string.IsNullOrWhiteSpace(route.Title) && !string.IsNullOrWhiteSpace(route.Route))
+                        pageType.Routes.Add(new ContentTypeRoute
+                        {
+                            Title = route.Title,
+                            Route = route.Route
+                        });
+                }
+
+                var regionTypes = new List<Tuple<int?, RegionType>>();
+
+                foreach (var prop in type.GetProperties(App.PropertyBindings))
+                {
+                    var regionType = GetRegionType(prop);
+
+                    if (regionType != null)
+                    {
+                        regionTypes.Add(regionType);
+                    }
+                }
+                regionTypes = regionTypes.OrderBy(t => t.Item1).ToList();
+
+                // First add sorted regions
+                foreach (var regionType in regionTypes.Where(t => t.Item1.HasValue))
+                    pageType.Regions.Add(regionType.Item2);
+                // Then add the unsorted regions
+                foreach (var regionType in regionTypes.Where(t => !t.Item1.HasValue))
+                    pageType.Regions.Add(regionType.Item2);
+
+                return pageType;
             }
-            return null;
+
+            throw new ArgumentException($"Title is mandatory in PageTypeAttribute. No title provided for {type.Name}");
         }
         #endregion
     }

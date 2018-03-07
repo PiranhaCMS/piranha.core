@@ -8,12 +8,9 @@
  * 
  */
 
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.Net.Http.Headers;
-using Piranha.Web;
-using System;
-using System.Threading.Tasks;
 
 namespace Piranha.AspNetCore
 {
@@ -32,21 +29,22 @@ namespace Piranha.AspNetCore
         /// <param name="context">The current http context</param>
         /// <param name="api">The current api</param>
         /// <returns>An async task</returns>
-        public override async Task Invoke(HttpContext context, IApi api) {
-            if (!context.Request.Path.Value.StartsWith("/manager/")) {
+        public override async Task Invoke(HttpContext context, IApi api)
+        {
+            if (!context.Request.Path.Value.StartsWith("/manager/"))
+            {
                 // Try to get the requested site by hostname
-                var site = api.Sites.GetByHostname(context.Request.Host.Host);
-
                 // If we didn't find the site, get the default site
-                if (site == null)
-                    site = api.Sites.GetDefault();
+                var site = api.Sites.GetByHostname(context.Request.Host.Host) ?? api.Sites.GetDefault();
 
                 // Store the current site id for the current request
                 if (site != null)
+                {
                     context.Items[SiteId] = site.Id;
+                }
             }
             // Nothing to see here, move along
-            await next.Invoke(context);
+            await Next.Invoke(context);
         }
     }
 }

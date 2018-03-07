@@ -8,12 +8,10 @@
  * 
  */
 
-using Piranha.Data;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
+using Microsoft.EntityFrameworkCore;
+using Piranha.Data;
 
 namespace Piranha.Repositories
 {
@@ -35,7 +33,8 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="db">The current db connection</param>
         /// <param name="cache">The optional model cache</param>
-        protected BaseRepository(IDb db, ICache cache = null) {
+        protected BaseRepository(IDb db, ICache cache = null)
+        {
             this.db = db;
             this.cache = cache;
         }
@@ -45,20 +44,25 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The model, or null if it doesn't exist</returns>
-        public virtual T GetById(Guid id) {
-            T model = cache != null ? cache.Get<T>(id.ToString()) : null;
+        public virtual T GetById(Guid id)
+        {
+            T model = cache?.Get<T>(id.ToString());
 
-            if (model == null) {
-                model = db.Set<T>()
-                    .AsNoTracking()
-                    .FirstOrDefault(m => m.Id == id);
-
-                if (model != null)
-                    App.Hooks.OnLoad<T>(model);
-
-                if (cache != null && model != null)
-                    AddToCache(model);
+            if (model != null)
+            {
+                return model;
             }
+
+            model = db.Set<T>()
+                .AsNoTracking()
+                .FirstOrDefault(m => m.Id == id);
+
+            if (model != null)
+                App.Hooks.OnLoad(model);
+
+            if (cache != null && model != null)
+                AddToCache(model);
+
             return model;
         }
 
@@ -67,45 +71,52 @@ namespace Piranha.Repositories
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        public virtual void Save(T model) {
-            App.Hooks.OnBeforeSave<T>(model);
+        public virtual void Save(T model)
+        {
+            App.Hooks.OnBeforeSave(model);
 
             if (db.Set<T>().Count(m => m.Id == model.Id) == 0)
+            {
                 Add(model);
-            else Update(model);
+            }
+            else
+            {
+                Update(model);
+            }
 
             db.SaveChanges();
 
-            App.Hooks.OnAfterSave<T>(model);
+            App.Hooks.OnAfterSave(model);
 
-            if (cache != null)
-                cache.Remove(model.Id.ToString());
+            cache?.Remove(model.Id.ToString());
         }
 
         /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public virtual void Delete(Guid id) {
+        public virtual void Delete(Guid id)
+        {
             var model = db.Set<T>().FirstOrDefault(m => m.Id == id);
-            if (model != null) {
-                App.Hooks.OnBeforeDelete<T>(model);
+            if (model != null)
+            {
+                App.Hooks.OnBeforeDelete(model);
 
                 db.Set<T>().Remove(model);
                 db.SaveChanges();
 
-                App.Hooks.OnAfterDelete<T>(model);
+                App.Hooks.OnAfterDelete(model);
             }
 
-            if (cache != null)
-                cache.Remove(id.ToString());
+            cache?.Remove(id.ToString());
         }
 
         /// <summary>
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        public virtual void Delete(T model) {
+        public virtual void Delete(T model)
+        {
             Delete(model.Id);
         }
 
@@ -126,7 +137,8 @@ namespace Piranha.Repositories
         /// Prepares the model for an insert.
         /// </summary>
         /// <param name="model">The model</param>
-        protected virtual void PrepareInsert(T model) {
+        protected virtual void PrepareInsert(T model)
+        {
             // Prepare id
             model.Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid();
 
@@ -143,7 +155,8 @@ namespace Piranha.Repositories
         /// Perpares the model for an update.
         /// </summary>
         /// <param name="model">The model</param>
-        protected virtual void PrepareUpdate(T model) {
+        protected virtual void PrepareUpdate(T model)
+        {
             // Prepare last modified date
             if (isModified)
                 ((IModified)model).LastModified = DateTime.Now;
@@ -153,7 +166,8 @@ namespace Piranha.Repositories
         /// Adds the given model to cache.
         /// </summary>
         /// <param name="model">The model</param>
-        protected virtual void AddToCache(T model) {
+        protected virtual void AddToCache(T model)
+        {
             cache.Set(model.Id.ToString(), model);
         }
 
@@ -161,7 +175,8 @@ namespace Piranha.Repositories
         /// Removes the given model from cache.
         /// </summary>
         /// <param name="model">The model</param>
-        protected virtual void RemoveFromCache(T model) {
+        protected virtual void RemoveFromCache(T model)
+        {
             cache.Remove(model.Id.ToString());
         }
         #endregion

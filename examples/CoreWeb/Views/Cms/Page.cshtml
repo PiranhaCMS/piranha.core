@@ -1,11 +1,13 @@
-﻿@model CoreWeb.Models.StandardPage
-@inject Piranha.IApi Api
+﻿@using Piranha
+@using Piranha.Models
+@model CoreWeb.Models.StandardPage
+@inject IApi Api
 @{
     ViewBag.Title = Model.Title;
 
-    Piranha.Models.Sitemap sitemap = Api.Sites.GetSitemap();
-    Piranha.Models.Sitemap partial = null;
-    Piranha.Models.Sitemap third = null;
+    Sitemap sitemap = Api.Sites.GetSitemap();
+    Sitemap partial = null;
+    Sitemap third = null;
 
     if (Model.ParentId.HasValue) {
         foreach (var item in sitemap) {
@@ -25,13 +27,14 @@
         }
     }
 
-    Func<Piranha.Models.SitemapItem, string> Css = (item) => {
+    Func<SitemapItem, string> Css = item => {
         if (item.Id == Model.Id) {
             return "class=active";
-        } else if (item.HasChild(Model.Id)) {
-            return "class=active-child";
         }
-        return "";
+                                                               if (item.HasChild(Model.Id)) {
+                                                                   return "class=active-child";
+                                                               }
+                                                               return "";
     };    
 }
 @section meta {

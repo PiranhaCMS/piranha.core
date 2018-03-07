@@ -18,7 +18,7 @@ namespace Piranha.Extend.Fields
         /// </summary>
         /// <param name="str">The string value</param>
         public static implicit operator MarkdownField(string str) {
-            return new MarkdownField() { Value = str };
+            return new MarkdownField { Value = str };
         }
 
         /// <summary>

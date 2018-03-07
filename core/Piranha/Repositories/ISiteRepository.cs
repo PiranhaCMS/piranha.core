@@ -8,9 +8,10 @@
  * 
  */
 
-using Piranha.Data;
 using System;
 using System.Collections.Generic;
+using Piranha.Data;
+using Piranha.Models;
 
 namespace Piranha.Repositories
 {
@@ -55,7 +56,7 @@ namespace Piranha.Repositories
         /// <param name="id">The optional site id</param>
         /// <param name="onlyPublished">If only published items should be included</param>
         /// <returns>The sitemap</returns>
-        Models.Sitemap GetSitemap(Guid? id = null, bool onlyPublished = true);
+        Sitemap GetSitemap(Guid? id = null, bool onlyPublished = true);
 
         /// <summary>
         /// Adds or updates the given model in the database

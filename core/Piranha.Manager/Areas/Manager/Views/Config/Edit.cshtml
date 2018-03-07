@@ -4,7 +4,7 @@
     ViewBag.Controller = "Config";
 }
 
-@using (var form = Html.BeginForm("Save", "Config", FormMethod.Post, new { @id = "main-form", @class = "form", @role = "form" })) {
+@using (var form = Html.BeginForm("Save", "Config", FormMethod.Post, new { id = "main-form", @class = "form", role = "form" })) {
     @Html.AntiForgeryToken()
 
     <div class="row">

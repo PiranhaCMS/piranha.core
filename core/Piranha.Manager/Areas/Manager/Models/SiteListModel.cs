@@ -10,19 +10,23 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Piranha.Data;
 
 namespace Piranha.Areas.Manager.Models
 {
     public class SiteListModel
     {
-        public IList<Data.Site> Sites { get; set; }
+        public IList<Site> Sites { get; set; }
 
-        public SiteListModel() {
-            Sites = new List<Data.Site>();
+        public SiteListModel()
+        {
+            Sites = new List<Site>();
         }
 
-        public static SiteListModel Get(IApi api) {
-            var model = new SiteListModel() {
+        public static SiteListModel Get(IApi api)
+        {
+            var model = new SiteListModel
+            {
                 Sites = api.Sites.GetAll().ToList()
             };
             return model;

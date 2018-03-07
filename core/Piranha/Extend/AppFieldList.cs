@@ -20,7 +20,8 @@ namespace Piranha.Extend
         /// </summary>
         /// <param name="shorthand">The shorthand name</param>
         /// <returns>The item, null if not found</returns>
-        public AppField GetByShorthand(string shorthand) {
+        public AppField GetByShorthand(string shorthand)
+        {
             return items.FirstOrDefault(i => i.Shorthand == shorthand);
         }
 
@@ -31,12 +32,17 @@ namespace Piranha.Extend
         /// <typeparam name="TValue">The value type</typeparam>
         /// <param name="item">The item</param>
         /// <returns>The processed item</returns>
-        protected override AppField OnRegister<TValue>(AppField item) {
-            var attr = typeof(TValue).GetTypeInfo().GetCustomAttribute<Extend.FieldAttribute>();
-            if (attr != null) {
-                item.Name = attr.Name;
-                item.Shorthand = attr.Shorthand;
+        protected override AppField OnRegister<TValue>(AppField item)
+        {
+            var attr = typeof(TValue).GetTypeInfo().GetCustomAttribute<FieldAttribute>();
+            if (attr == null)
+            {
+                return item;
             }
+
+            item.Name = attr.Name;
+            item.Shorthand = attr.Shorthand;
+
             return item;
         }
     }

@@ -1,12 +1,12 @@
-﻿@model Piranha.Areas.Manager.Models.PageEditRegion
-@using Piranha.Models
+﻿@using Piranha.Models
+@model Piranha.Areas.Manager.Models.PageEditRegion
 
 <div class="row">
     @for (var n = 0; n < Model.FieldSet.Count; n++) {
         <div class="col-sm-@(Model.FieldSet[n].Options.HasFlag(FieldOption.HalfWidth) ? "6" : "12")">
             <div class="form-group @(Model.FieldSet.Count == 1 ? "single-region" : "")">
                 @Html.HiddenFor(m => m.FieldSet[n].Id)
-                @Html.HiddenFor(m => m.FieldSet[n].CLRType)
+                @Html.HiddenFor(m => m.FieldSet[n].ClrType)
                 @if (Model.FieldSet.Count > 1) {
                     <label>@Model.FieldSet[n].Title</label>
                 }

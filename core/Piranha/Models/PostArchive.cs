@@ -8,7 +8,6 @@
  * 
  */
 
-using System;
 using System.Collections.Generic;
 
 namespace Piranha.Models
@@ -55,7 +54,8 @@ namespace Piranha.Models
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public PostArchive() {
+        public PostArchive()
+        {
             Posts = new List<DynamicPost>();
         }
     }

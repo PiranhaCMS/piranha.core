@@ -9,6 +9,7 @@
  */
 
 using System;
+using Piranha.Models;
 
 namespace Piranha.Data
 {
@@ -38,7 +39,7 @@ namespace Piranha.Data
         /// Gets/sets if this is a permanent or temporary
         /// redirect.
         /// </summary>
-        public Models.RedirectType Type { get; set; }
+        public RedirectType Type { get; set; }
 
         /// <summary>
         /// Gets/sets the created date.
@@ -60,7 +61,7 @@ namespace Piranha.Data
         /// Default constructor.
         /// </summary>
         public Alias() {
-            Type = Models.RedirectType.Temporary;
+            Type = RedirectType.Temporary;
         }
     }
 }

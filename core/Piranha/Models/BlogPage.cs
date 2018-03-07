@@ -13,7 +13,7 @@ namespace Piranha.Models
     /// <summary>
     /// Base class for blog pages.
     /// </summary>
-    public class BlogPage<T> : GenericPage<T>, IBlogPage where T : BlogPage<T> 
+    public class BlogPage<T> : GenericPage<T>, IBlogPage where T : BlogPage<T>
     {
         /// <summary>
         /// Gets/sets the post archive.
@@ -23,14 +23,15 @@ namespace Piranha.Models
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public BlogPage() {
+        public BlogPage()
+        {
             Archive = new PostArchive();
-        }        
+        }
     }
 
     /// <summary>
     /// Interface for registering the basic blog page 
     /// content type.
     /// </summary>
-    public interface IBlogPage {}    
+    public interface IBlogPage { }
 }

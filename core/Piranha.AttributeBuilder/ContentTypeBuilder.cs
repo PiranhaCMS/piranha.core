@@ -8,13 +8,13 @@
  * 
  */
 
-using Piranha.Extend;
-using Piranha.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
+using Piranha.Extend;
+using Piranha.Models;
 
 namespace Piranha.AttributeBuilder
 {
@@ -29,7 +29,8 @@ namespace Piranha.AttributeBuilder
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public ContentTypeBuilder(IApi api) {
+        protected ContentTypeBuilder(IApi api)
+        {
             this.api = api;
         }
 
@@ -38,7 +39,8 @@ namespace Piranha.AttributeBuilder
         /// </summary>
         /// <param name="type">The type</param>
         /// <returns>The builder</returns>
-        public T AddType(Type type) {
+        public T AddType(Type type)
+        {
             types.Add(type);
 
             return (T)this;
@@ -62,59 +64,67 @@ namespace Piranha.AttributeBuilder
         /// </summary>
         /// <param name="prop">The property info</param>
         /// <returns>The region type</returns>
-        protected Tuple<int?, RegionType> GetRegionType(PropertyInfo prop) {
+        protected Tuple<int?, RegionType> GetRegionType(PropertyInfo prop)
+        {
             var attr = prop.GetCustomAttribute<RegionAttribute>();
 
-            if (attr != null) {
-                var isCollection = typeof(IEnumerable).IsAssignableFrom(prop.PropertyType);
-
-                var regionType = new RegionType() {
-                    Id = prop.Name,
-                    Title = attr.Title,
-                    Collection = isCollection,
-                    ListTitleField = attr.ListTitle,
-                    ListTitlePlaceholder = attr.ListPlaceholder,
-                    ListExpand = attr.ListExpand,
-                    Max = attr.Max,
-                    Min = attr.Min
-                };
-                int? sortOrder = attr.SortOrder != Int32.MaxValue ? attr.SortOrder : (int?)null;
-
-                Type type = null;
-
-                if (!isCollection) {
-                    type = prop.PropertyType;
-                } else {
-                    type = prop.PropertyType.GenericTypeArguments.First();
-                }
-
-                if (typeof(IField).IsAssignableFrom(type)) {
-                    var appFieldType = App.Fields.GetByType(type);
-
-                    if (appFieldType == null) {
-                        // This is a single field region, but the type is missing.
-                        // Discard the entire region
-                        return null;
-                    }
-
-                    regionType.Fields.Add(new FieldType() {
-                        Id = "Default",
-                        Type = appFieldType.TypeName
-                    });
-                } else {
-                    foreach (var fieldProp in type.GetProperties(App.PropertyBindings)) {
-                        var fieldType = GetFieldType(fieldProp);
-
-                        if (fieldType != null)
-                            regionType.Fields.Add(fieldType);
-                    }
-                    // Skip regions without fields.
-                    if (regionType.Fields.Count == 0)
-                        return null;
-                }
-                return new Tuple<int?, RegionType>(sortOrder, regionType);
+            if (attr == null)
+            {
+                return null;
             }
-            return null;
+
+            var isCollection = typeof(IEnumerable).IsAssignableFrom(prop.PropertyType);
+
+            var regionType = new RegionType
+            {
+                Id = prop.Name,
+                Title = attr.Title,
+                Collection = isCollection,
+                ListTitleField = attr.ListTitle,
+                ListTitlePlaceholder = attr.ListPlaceholder,
+                ListExpand = attr.ListExpand,
+                Max = attr.Max,
+                Min = attr.Min
+            };
+            var sortOrder = attr.SortOrder != int.MaxValue ? attr.SortOrder : (int?)null;
+
+            var type = !isCollection ? prop.PropertyType : prop.PropertyType.GenericTypeArguments.First();
+
+            if (typeof(IField).IsAssignableFrom(type))
+            {
+                var appFieldType = App.Fields.GetByType(type);
+
+                if (appFieldType == null)
+                {
+                    // This is a single field region, but the type is missing.
+                    // Discard the entire region
+                    return null;
+                }
+
+                regionType.Fields.Add(new FieldType
+                {
+                    Id = "Default",
+                    Type = appFieldType.TypeName
+                });
+            }
+            else
+            {
+                foreach (var fieldProp in type.GetProperties(App.PropertyBindings))
+                {
+                    var fieldType = GetFieldType(fieldProp);
+
+                    if (fieldType != null)
+                    {
+                        regionType.Fields.Add(fieldType);
+                    }
+                }
+                // Skip regions without fields.
+                if (regionType.Fields.Count == 0)
+                {
+                    return null;
+                }
+            }
+            return new Tuple<int?, RegionType>(sortOrder, regionType);
         }
 
         /// <summary>
@@ -122,20 +132,26 @@ namespace Piranha.AttributeBuilder
         /// </summary>
         /// <param name="prop">The property</param>
         /// <returns>The field type</returns>
-        protected FieldType GetFieldType(PropertyInfo prop) {
+        protected FieldType GetFieldType(PropertyInfo prop)
+        {
             var attr = prop.GetCustomAttribute<FieldAttribute>();
 
-            if (attr != null) {
-                var appFieldType = App.Fields.GetByType(prop.PropertyType);
+            if (attr == null)
+            {
+                return null;
+            }
 
-                if (appFieldType != null) {
-                    return new FieldType() {
-                        Id = prop.Name,
-                        Title = attr.Title,
-                        Type = appFieldType.TypeName,
-                        Options = attr.Options
-                    };
-                }
+            var appFieldType = App.Fields.GetByType(prop.PropertyType);
+
+            if (appFieldType != null)
+            {
+                return new FieldType
+                {
+                    Id = prop.Name,
+                    Title = attr.Title,
+                    Type = appFieldType.TypeName,
+                    Options = attr.Options
+                };
             }
             return null;
         }

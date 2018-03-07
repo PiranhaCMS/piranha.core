@@ -19,29 +19,37 @@ namespace Piranha.Web
         /// </summary>
         /// <param name="api">The current api</param>
         /// <param name="url">The requested url</param>
-        /// <param name="hostname">The optional hostname</param>
+        /// <param name="siteId">The optional site id</param>
         /// <returns>The piranha response, null if no matching page was found</returns>
-        public static IRouteResponse Invoke(IApi api, string url, Guid siteId) {
-            if (string.IsNullOrWhiteSpace(url) || url == "/") {
-                var page = api.Pages.GetStartpage(siteId);
-
-                if (page != null) {
-                    if (page.ContentType == "Page") {
-                        return new RouteResponse() {
-                            Route = page.Route ?? "/page",
-                            QueryString = "id=" + page.Id + "&startpage=true&piranha_handled=true",
-                                IsPublished = page.Published.HasValue && page.Published.Value <= DateTime.Now,
-                            CacheInfo = new HttpCacheInfo() {
-                                EntityTag = Utils.GenerateETag(page.Id.ToString(), page.LastModified),
-                                LastModified = page.LastModified
-                            }
-                        };
-                    } else if (page.ContentType == "Blog") {
-                        return ArchiveRouter.Invoke(api, $"/{page.Slug}", siteId);
-                    }
-                }
+        public static IRouteResponse Invoke(IApi api, string url, Guid siteId)
+        {
+            if (!string.IsNullOrWhiteSpace(url) && url != "/")
+            {
+                return null;
             }
-            return null;
+
+            var page = api.Pages.GetStartpage(siteId);
+            if (page == null)
+            {
+                return null;
+            }
+
+            if (page.ContentType == "Page")
+            {
+                return new RouteResponse
+                {
+                    Route = page.Route ?? "/page",
+                    QueryString = "id=" + page.Id + "&startpage=true&piranha_handled=true",
+                    IsPublished = page.Published.HasValue && page.Published.Value <= DateTime.Now,
+                    CacheInfo = new HttpCacheInfo
+                    {
+                        EntityTag = Utils.GenerateETag(page.Id.ToString(), page.LastModified),
+                        LastModified = page.LastModified
+                    }
+                };
+            }
+
+            return page.ContentType == "Blog" ? ArchiveRouter.Invoke(api, $"/{page.Slug}", siteId) : null;
         }
     }
 }

@@ -8,10 +8,12 @@
  * 
  */
 
-using Piranha.AttributeBuilder;
-using Piranha.Extend.Fields;
 using System;
 using System.Linq;
+using Piranha.AttributeBuilder;
+using Piranha.Data;
+using Piranha.Extend.Fields;
+using Piranha.Models;
 using Xunit;
 
 namespace Piranha.Tests.Repositories
@@ -43,7 +45,7 @@ namespace Piranha.Tests.Repositories
         #endregion
 
         [PageType(Title = "PageType")]
-        public class MyPage : Models.Page<MyPage>
+        public class MyPage : Page<MyPage>
         {
             [Region]
             public TextField Text { get; set; }
@@ -57,7 +59,8 @@ namespace Piranha.Tests.Repositories
                     .AddType(typeof(MyPage));
                 builder.Build();
 
-                api.Sites.Save(new Data.Site() {
+                api.Sites.Save(new Site
+                {
                     Id = SITE_1_ID,
                     InternalId = SITE_1,
                     Title = SITE_1,
@@ -65,15 +68,18 @@ namespace Piranha.Tests.Repositories
                     IsDefault = true
                 });
 
-                api.Sites.Save(new Data.Site() {
+                api.Sites.Save(new Site
+                {
                     InternalId = SITE_4,
                     Title = SITE_4
                 });
-                api.Sites.Save(new Data.Site() {
+                api.Sites.Save(new Site
+                {
                     InternalId = SITE_5,
                     Title = SITE_5
                 });
-                api.Sites.Save(new Data.Site() {
+                api.Sites.Save(new Site
+                {
                     InternalId = SITE_6,
                     Title = SITE_6
                 });
@@ -124,14 +130,15 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void IsCached() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                Assert.Equal(this.GetType() == typeof(SitesCached), api.IsCached);
+                Assert.Equal(GetType() == typeof(SitesCached), api.IsCached);
             }
         }        
 
         [Fact]
         public void Add() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                api.Sites.Save(new Data.Site() {
+                api.Sites.Save(new Site
+                {
                     InternalId = SITE_2,
                     Title = SITE_2
                 });
@@ -142,7 +149,8 @@ namespace Piranha.Tests.Repositories
         public void AddDuplicateKey() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 Assert.ThrowsAny<Exception>(() =>
-                    api.Sites.Save(new Data.Site() {
+                    api.Sites.Save(new Site
+                    {
                         InternalId = SITE_1,
                         Title = SITE_1
                     }));
@@ -153,7 +161,7 @@ namespace Piranha.Tests.Repositories
         public void AddEmptyFailure() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 Assert.ThrowsAny<ArgumentException>(() =>
-                    api.Sites.Save(new Data.Site()));
+                    api.Sites.Save(new Site()));
             }            
         }
 
@@ -162,7 +170,8 @@ namespace Piranha.Tests.Repositories
             var id = Guid.NewGuid();
 
             using (var api = new Api(GetDb(), storage, cache)) {
-                api.Sites.Save(new Data.Site() {
+                api.Sites.Save(new Site
+                {
                     Id = id,
                     Title = "Generate internal id"
                 });

@@ -46,9 +46,9 @@ namespace Piranha.Manager
         public const string SitesSave = "PiranhaSitesSave";
 
         public static string[] All() {
-            return new string[] {
+            return new[] {
                 // Core permissions
-                Piranha.Security.Permission.PagePreview,
+                Security.Permission.PagePreview,
 
                 // Admin permissions
                 Admin,

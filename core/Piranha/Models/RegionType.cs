@@ -63,7 +63,8 @@ namespace Piranha.Models
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public RegionType() {
+        public RegionType()
+        {
             Fields = new List<FieldType>();
             ListExpand = true;
         }

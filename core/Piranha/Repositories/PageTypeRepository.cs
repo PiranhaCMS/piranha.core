@@ -8,13 +8,12 @@
  * 
  */
 
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using Piranha.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Piranha.Models;
 
 namespace Piranha.Repositories
 {
@@ -30,7 +29,8 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="db">The current db connection</param>
         /// <param name="cache">The optional model cache</param>
-        public PageTypeRepository(IDb db, ICache cache = null) {
+        public PageTypeRepository(IDb db, ICache cache = null)
+        {
             this.db = db;
             this.cache = cache;
         }
@@ -39,21 +39,24 @@ namespace Piranha.Repositories
         /// Gets all available models.
         /// </summary>
         /// <returns>The available models</returns>
-        public IEnumerable<Models.PageType> GetAll() {
+        public IEnumerable<PageType> GetAll()
+        {
             var types = db.PageTypes
                 .AsNoTracking()
                 .OrderBy(t => t.Id)
                 .ToList();
-            var models = new List<Models.PageType>();
+            var models = new List<PageType>();
 
-            foreach (var type in types) {
-                var model = JsonConvert.DeserializeObject<Models.PageType>(type.Body);
+            foreach (var type in types)
+            {
+                var model = JsonConvert.DeserializeObject<PageType>(type.Body);
 
                 if (cache != null && model != null)
                     cache.Set(model.Id, model);
 
                 models.Add(model);
             }
+
             return models;
         }
 
@@ -62,20 +65,29 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique i</param>
         /// <returns></returns>
-        public Models.PageType GetById(string id) {
-            Models.PageType model = cache != null ? cache.Get<Models.PageType>(id) : null;
+        public PageType GetById(string id)
+        {
+            var model = cache?.Get<PageType>(id);
 
-            if (model == null) {
-                var type = db.PageTypes
-                    .AsNoTracking()
-                    .FirstOrDefault(t => t.Id == id);
-
-                if (type != null)
-                    model = JsonConvert.DeserializeObject<Models.PageType>(type.Body);
-
-                if (cache != null && model != null)
-                    cache.Set(model.Id, model);
+            if (model != null)
+            {
+                return model;
             }
+
+            var type = db.PageTypes
+                .AsNoTracking()
+                .FirstOrDefault(t => t.Id == id);
+
+            if (type != null)
+            {
+                model = JsonConvert.DeserializeObject<PageType>(type.Body);
+            }
+
+            if (cache != null && model != null)
+            {
+                cache.Set(model.Id, model);
+            }
+
             return model;
         }
 
@@ -84,12 +96,15 @@ namespace Piranha.Repositories
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        public void Save(Models.PageType model) {
+        public void Save(PageType model)
+        {
             var type = db.PageTypes
                 .FirstOrDefault(t => t.Id == model.Id);
 
-            if (type == null) {
-                type = new Data.PageType() {
+            if (type == null)
+            {
+                type = new Data.PageType
+                {
                     Id = model.Id,
                     Created = DateTime.Now
                 };
@@ -99,33 +114,36 @@ namespace Piranha.Repositories
             type.LastModified = DateTime.Now;
 
             db.SaveChanges();
-            
-            if (cache != null)
-                cache.Remove(model.Id.ToString());
+
+            cache?.Remove(model.Id);
         }
 
         /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public void Delete(string id) {
+        public void Delete(string id)
+        {
             var type = db.PageTypes
                 .FirstOrDefault(t => t.Id == id);
 
-            if (type != null) {
-                db.PageTypes.Remove(type);
-                db.SaveChanges();
-
-                if (cache != null)
-                    cache.Remove(id.ToString());
+            if (type == null)
+            {
+                return;
             }
+
+            db.PageTypes.Remove(type);
+            db.SaveChanges();
+
+            cache?.Remove(id);
         }
 
         /// <summary>
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        public void Delete(Models.PageType model) {
+        public void Delete(PageType model)
+        {
             Delete(model.Id);
         }
     }

@@ -69,7 +69,8 @@ namespace Piranha.Manager
             /// <summary>
             /// Default constructor.
             /// </summary>
-            public MenuItem() {
+            public MenuItem()
+            {
                 Items = new MenuItemList();
             }
         }
@@ -79,8 +80,10 @@ namespace Piranha.Manager
             /// <summary>
             /// Gets the menu item with the given internal id.
             /// </summary>
-            public MenuItem this[string internalId] {
-                get {
+            public MenuItem this[string internalId]
+            {
+                get
+                {
                     return this.FirstOrDefault(i => i.InternalId == internalId);
                 }
             }
@@ -90,30 +93,41 @@ namespace Piranha.Manager
         /// <summary>
         /// The basic manager menu.
         /// </summary>
-        public static MenuItemList Items = new MenuItemList() {
-            new MenuItem() {
-                InternalId = "Content", Name = "Content", Css = "glyphicon glyphicon-pencil", Items = new MenuItemList() {
-                    new MenuItem() {
+        public static MenuItemList Items = new MenuItemList
+        {
+            new MenuItem
+            {
+                InternalId = "Content", Name = "Content", Css = "glyphicon glyphicon-pencil", Items = new MenuItemList
+                {
+                    new MenuItem
+                    {
                         InternalId = "Pages", Name = "Pages", Controller = "Page", Action = "List", Policy = Permission.Pages, Css = "glyphicon glyphicon-duplicate"
                     },
-                    new MenuItem() {
+                    new MenuItem
+                    {
                         InternalId = "Media", Name = "Media", Controller = "Media", Action = "List", Policy = Permission.Media, Css = "glyphicon glyphicon-picture"
                     }
                 }
             },
-            new MenuItem() {
+            new MenuItem
+            {
                 InternalId = "Settings", Name = "Settings", Css = "glyphicon glyphicon-wrench", Items = new MenuItemList {
-                    new MenuItem() {
+                    new MenuItem
+                    {
                         InternalId = "Aliases", Name = "Aliases", Controller = "Alias", Action = "List", Policy = Permission.Aliases, Css = "glyphicon glyphicon-random"
                     },
-                    new MenuItem() {
+                    new MenuItem
+                    {
                         InternalId = "Sites", Name = "Sites", Controller = "Site", Action = "List", Policy = Permission.Sites, Css = "glyphicon glyphicon-globe"
                     }
                 }
             },
-            new MenuItem() {
-                InternalId = "System", Name = "System", Css = "glyphicon glyphicon-cog", Items = new MenuItemList()  {
-                    new MenuItem() {
+            new MenuItem
+            {
+                InternalId = "System", Name = "System", Css = "glyphicon glyphicon-cog", Items = new MenuItemList
+                {
+                    new MenuItem
+                    {
                         InternalId = "Config", Name = "Config", Controller = "Config", Action = "Edit", Policy = Permission.Config, Css = "glyphicon glyphicon-tasks"
                     }
                 }

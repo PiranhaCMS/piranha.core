@@ -8,9 +8,10 @@
  * 
  */
 
-using Microsoft.AspNetCore.Http;
-using Piranha.Web;
 using System;
+using Microsoft.AspNetCore.Http;
+using Piranha.Models;
+using Piranha.Web;
 
 namespace Piranha.AspNetCore
 {
@@ -20,32 +21,43 @@ namespace Piranha.AspNetCore
             var clientInfo = Get(context);
 
             if (clientInfo.EntityTag == serverInfo.EntityTag)
+            {
                 return true;
+            }
 
             if (clientInfo.LastModified.HasValue)
+            {
                 return clientInfo.LastModified.Value >= serverInfo.LastModified.Value;
+            }
             
             return false;
         }
 
-        public static HttpCacheInfo Get(Models.PageBase page) {
-            return new HttpCacheInfo() {
+        public static HttpCacheInfo Get(PageBase page) {
+            return new HttpCacheInfo
+            {
                 EntityTag = Utils.GenerateETag(page.Id.ToString(), page.LastModified),
                 LastModified = page.LastModified
             };
         }
 
         public static HttpCacheInfo Get(HttpContext context) {
-            var info = new HttpCacheInfo();
-
-            info.EntityTag = context.Request.Headers["If-None-Match"];
+            var info = new HttpCacheInfo {EntityTag = context.Request.Headers["If-None-Match"]};
 
             string lastMod = context.Request.Headers["If-Modified-Since"];
-            if (!string.IsNullOrWhiteSpace(lastMod)) {
-                try {
-                    info.LastModified = DateTime.Parse(lastMod);
-                } catch {}
+            if (string.IsNullOrWhiteSpace(lastMod))
+            {
+                return info;
             }
+
+            try {
+                info.LastModified = DateTime.Parse(lastMod);
+            }
+            catch
+            {
+                // ignored
+            }
+
             return info;
         }
     }

@@ -27,7 +27,8 @@ namespace Piranha.Models
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public DynamicPost() : base() {
+        public DynamicPost()
+        {
             Regions = new ExpandoObject();
         }
     }

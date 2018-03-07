@@ -8,11 +8,10 @@
  * 
  */
 
+using System;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
-using System;
-using System.Data;
-using System.Linq;
 
 namespace Piranha.Repositories
 {
@@ -23,7 +22,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="db">The current db context</param>
         /// <param name="cache">The optional model cache</param>
-        public ParamRepository(IDb db, ICache cache = null) 
+        public ParamRepository(IDb db, ICache cache = null)
             : base(db, cache) { }
 
         /// <summary>
@@ -31,13 +30,17 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="key">The unique key</param>
         /// <returns>The model</returns>
-        public Param GetByKey(string key) {
-            var id = cache != null ? cache.Get<Guid?>($"ParamKey_{key}") : null;
+        public Param GetByKey(string key)
+        {
+            var id = cache?.Get<Guid?>($"ParamKey_{key}");
             Param model = null;
 
-            if (id.HasValue) {
+            if (id.HasValue)
+            {
                 model = GetById(id.Value);
-            } else {
+            }
+            else
+            {
                 id = db.Params
                     .AsNoTracking()
                     .Where(p => p.Key == key)
@@ -45,8 +48,11 @@ namespace Piranha.Repositories
                     .FirstOrDefault();
 
                 if (id != Guid.Empty)
+                {
                     model = GetById(id.Value);
+                }
             }
+
             return model;
         }
 
@@ -55,7 +61,8 @@ namespace Piranha.Repositories
         /// Adds a new model to the database.
         /// </summary>
         /// <param name="model">The model</param>
-        protected override void Add(Param model) {
+        protected override void Add(Param model)
+        {
             PrepareInsert(model);
 
             db.Params.Add(model);
@@ -65,12 +72,14 @@ namespace Piranha.Repositories
         /// Updates the given model in the database.
         /// </summary>
         /// <param name="model">The model</param>
-        protected override void Update(Param model) {
+        protected override void Update(Param model)
+        {
             PrepareUpdate(model);
 
             var param = db.Params.FirstOrDefault(p => p.Id == model.Id);
-            if (param != null) {
-                App.Mapper.Map<Param, Param>(model, param);
+            if (param != null)
+            {
+                App.Mapper.Map(model, param);
             }
         }
 
@@ -78,7 +87,8 @@ namespace Piranha.Repositories
         /// Adds the given model to cache.
         /// </summary>
         /// <param name="model">The model</param>
-        protected override void AddToCache(Param model) {
+        protected override void AddToCache(Param model)
+        {
             cache.Set(model.Id.ToString(), model);
             cache.Set($"ParamKey_{model.Key}", model.Id);
         }
@@ -87,10 +97,11 @@ namespace Piranha.Repositories
         /// Removes the given model from cache.
         /// </summary>
         /// <param name="model">The model</param>
-        protected override void RemoveFromCache(Param model) {
+        protected override void RemoveFromCache(Param model)
+        {
             cache.Remove(model.Id.ToString());
             cache.Remove($"ParamKey_{model.Key}");
-        }        
+        }
         #endregion
     }
 }

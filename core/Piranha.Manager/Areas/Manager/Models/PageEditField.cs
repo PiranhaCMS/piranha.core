@@ -8,6 +8,9 @@
  * 
  */
 
+using Piranha.Extend;
+using Piranha.Models;
+
 namespace Piranha.Areas.Manager.Models
 {
     /// <summary>
@@ -29,16 +32,16 @@ namespace Piranha.Areas.Manager.Models
         /// <summary>
         /// Gets/sets the CLR type of the field value.
         /// </summary>
-        public string CLRType { get; set; }
+        public string ClrType { get; set; }
 
         /// <summary>
         /// Gets/sets the possible options.
         /// </summary>
-        public Piranha.Models.FieldOption Options { get; set; }
+        public FieldOption Options { get; set; }
 
         /// <summary>
         /// Gets/sets the field value.
         /// </summary>
-        public Extend.IField Value { get; set; }
+        public IField Value { get; set; }
     }
 }

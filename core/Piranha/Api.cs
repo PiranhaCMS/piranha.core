@@ -8,10 +8,8 @@
  * 
  */
 
-using Piranha.Data;
 using System;
-using System.IO;
-using System.Reflection;
+using Piranha.Repositories;
 
 namespace Piranha
 {
@@ -41,63 +39,64 @@ namespace Piranha
         /// <summary>
         /// Gets/sets the alias repository.
         /// </summary>
-        public Repositories.IAliasRepository Aliases { get; private set; }
+        public IAliasRepository Aliases { get; private set; }
 
         /// <summary>
         /// Gets/sets the archive repository.
         /// </summary>
-        public Repositories.IArchiveRepository Archives { get; private set; }
+        public IArchiveRepository Archives { get; private set; }
 
         /// <summary>
         /// Gets the category repository.
         /// </summary>
-        public Repositories.ICategoryRepository Categories { get; private set; }
+        public ICategoryRepository Categories { get; private set; }
 
         /// <summary>
         /// Gets the media repository.
         /// </summary>
         /// <returns></returns>
-        public Repositories.IMediaRepository Media { get; private set; }
+        public IMediaRepository Media { get; private set; }
 
         /// <summary>
         /// Gets the page repository.
         /// </summary>
-        public Repositories.IPageRepository Pages { get; private set; }
+        public IPageRepository Pages { get; private set; }
 
         /// <summary>
         /// Gets the page type repository.
         /// </summary>
-        public Repositories.IPageTypeRepository PageTypes { get; private set; }
+        public IPageTypeRepository PageTypes { get; private set; }
 
         /// <summary>
         /// Gets the param repository.
         /// </summary>
-        public Repositories.IParamRepository Params { get; private set; }
+        public IParamRepository Params { get; private set; }
 
         /// <summary>
         /// Gets the post repository.
         /// </summary>
-        public Repositories.IPostRepository Posts { get; private set; }
+        public IPostRepository Posts { get; private set; }
 
         /// <summary>
         /// Gets the post type repository.
         /// </summary>
-        public Repositories.IPostTypeRepository PostTypes { get; private set; }
+        public IPostTypeRepository PostTypes { get; private set; }
 
         /// <summary>
         /// Gets the site repository.
         /// </summary>
-        public Repositories.ISiteRepository Sites { get; private set; }
+        public ISiteRepository Sites { get; private set; }
 
         /// <summary>
         /// Gets the tag repository.
         /// </summary>
-        public Repositories.ITagRepository Tags { get; private set; }
+        public ITagRepository Tags { get; private set; }
 
         /// <summary>
         /// Gets if the current repository has caching enabled or not.
         /// </summary>
-        public bool IsCached {
+        public bool IsCached
+        {
             get { return cache != null; }
         }
         #endregion
@@ -109,7 +108,8 @@ namespace Piranha
         /// <param name="storage">The current storage</param>
         /// <param name="modelCache">The optional model cache</param>
         /// <param name="imageProcessor">The optional image processor</param>
-        public Api(IDb db, IStorage storage, ICache modelCache = null, IImageProcessor imageProcessor = null) {
+        public Api(IDb db, IStorage storage, ICache modelCache = null, IImageProcessor imageProcessor = null)
+        {
             this.db = db;
             this.storage = storage;
 
@@ -119,7 +119,8 @@ namespace Piranha
         /// <summary>
         /// Disposes the current api.
         /// </summary>
-        public void Dispose() {
+        public void Dispose()
+        {
             db.Dispose();
         }
 
@@ -129,20 +130,21 @@ namespace Piranha
         /// </summary>
         /// <param name="modelCache">The optional model cache</param>
         /// <param name="imageProcessor">The optional image processor</param>
-        private void Setup(ICache modelCache = null, IImageProcessor imageProcessor = null) {
+        private void Setup(ICache modelCache = null, IImageProcessor imageProcessor = null)
+        {
             cache = modelCache;
 
-            Aliases = new Repositories.AliasRepository(this, db, cache);
-            Archives = new Repositories.ArchiveRepository(this, db);
-            Categories = new Repositories.CategoryRepository(this, db, cache);
-            Media = new Repositories.MediaRepository(this, db, storage, cache, imageProcessor);
-            Pages = new Repositories.PageRepository(this, db, cache);
-            PageTypes = new Repositories.PageTypeRepository(db, cache);
-            Params = new Repositories.ParamRepository(db, cache);
-            Posts = new Repositories.PostRepository(this, db, cache);
-            PostTypes = new Repositories.PostTypeRepository(db, cache);
-            Sites = new Repositories.SiteRepository(this, db, cache);
-            Tags = new Repositories.TagRepository(db, cache);
+            Aliases = new AliasRepository(this, db, cache);
+            Archives = new ArchiveRepository(this, db);
+            Categories = new CategoryRepository(this, db, cache);
+            Media = new MediaRepository(this, db, storage, cache, imageProcessor);
+            Pages = new PageRepository(this, db, cache);
+            PageTypes = new PageTypeRepository(db, cache);
+            Params = new ParamRepository(db, cache);
+            Posts = new PostRepository(this, db, cache);
+            PostTypes = new PostTypeRepository(db, cache);
+            Sites = new SiteRepository(this, db, cache);
+            Tags = new TagRepository(db, cache);
         }
         #endregion
     }

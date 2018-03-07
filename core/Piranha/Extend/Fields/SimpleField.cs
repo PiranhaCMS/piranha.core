@@ -25,15 +25,20 @@ namespace Piranha.Extend.Fields
         /// Gets the list item title if this field is used in
         /// a collection regions.
         /// </summary>
-        public override string GetTitle() {
-            if (Value != null) {
-                var title = Value.ToString();
-
-                if (title.Length > 40)
-                    title = title.Substring(0, 40) + "...";
-                return title;
+        public override string GetTitle()
+        {
+            if (Value == null)
+            {
+                return null;
             }
-            return null;
+
+            var title = Value.ToString();
+
+            if (title.Length > 40)
+            {
+                title = title.Substring(0, 40) + "...";
+            }
+            return title;
         }
     }
 }

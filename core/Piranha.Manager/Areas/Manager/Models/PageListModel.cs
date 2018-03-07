@@ -11,12 +11,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Piranha.Models;
 
 namespace Piranha.Areas.Manager.Models
 {
     public class PageListModel
     {
-        public class SiteInfo 
+        public class SiteInfo
         {
             public string Id { get; set; }
             public string Title { get; set; }
@@ -27,12 +28,12 @@ namespace Piranha.Areas.Manager.Models
         /// <summary>
         /// Gets/sets the available page types.
         /// </summary>
-        public IList<Piranha.Models.PageType> PageTypes { get; set; }
+        public IList<PageType> PageTypes { get; set; }
 
         /// <summary>
         /// Gets/sets the current sitemap.
         /// </summary>
-        public IList<Piranha.Models.SitemapItem> Sitemap { get; set; }
+        public IList<SitemapItem> Sitemap { get; set; }
 
         /// <summary>
         /// Gets/sets the available sites.
@@ -64,9 +65,10 @@ namespace Piranha.Areas.Manager.Models
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public PageListModel() {
-            PageTypes = new List<Piranha.Models.PageType>();
-            Sitemap = new List<Piranha.Models.SitemapItem>();
+        public PageListModel()
+        {
+            PageTypes = new List<PageType>();
+            Sitemap = new List<SitemapItem>();
             Sites = new List<SiteInfo>();
         }
 
@@ -77,7 +79,8 @@ namespace Piranha.Areas.Manager.Models
         /// <param name="siteId">The optional site id</param>
         /// <param name="pageId">The optional page id</param>
         /// <returns>The model</returns>
-        public static PageListModel Get(IApi api, Guid? siteId, string pageId = null) {
+        public static PageListModel Get(IApi api, Guid? siteId, string pageId = null)
+        {
             var model = new PageListModel();
 
             var site = siteId.HasValue ?
@@ -85,20 +88,24 @@ namespace Piranha.Areas.Manager.Models
             var defaultSite = api.Sites.GetDefault();
 
             if (site == null)
+            {
                 site = defaultSite;
+            }
 
             model.SiteId = site.Id == defaultSite.Id ? "" : site.Id.ToString();
             model.SiteTitle = site.Title;
             model.PageId = pageId;
             model.PageTypes = api.PageTypes.GetAll().ToList();
             model.Sitemap = api.Sites.GetSitemap(site.Id, onlyPublished: false);
-            model.Sites = api.Sites.GetAll().Select(s => new SiteInfo() {
+            model.Sites = api.Sites.GetAll().Select(s => new SiteInfo
+            {
                 Id = s.Id.ToString(),
                 Title = s.Title,
                 IsDefault = s.IsDefault
             }).ToList();
 
-            using (var config = new Config(api)) {
+            using (var config = new Config(api))
+            {
                 model.ExpandedLevels = config.ManagerExpandedSitemapLevels;
             }
             return model;
