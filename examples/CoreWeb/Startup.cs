@@ -18,7 +18,6 @@ using Piranha;
 using Piranha.ImageSharp;
 using Piranha.Local;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 

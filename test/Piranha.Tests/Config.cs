@@ -8,8 +8,6 @@
  * 
  */
 
-using Piranha.Extend;
-using System.Linq;
 using Xunit;
 
 namespace Piranha.Tests

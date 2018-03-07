@@ -9,8 +9,6 @@
  */
 
 using Piranha.AttributeBuilder;
-using Piranha.Models;
-using Piranha.Extend.Fields;
 using System.Collections.Generic;
 
 namespace CoreWeb.Models

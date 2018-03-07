@@ -8,10 +8,7 @@
  * 
  */
 
-using Piranha.Manager;
-using Piranha.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace Piranha.Areas.Manager.Controllers

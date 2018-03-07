@@ -37,7 +37,7 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the sort order of the value.
         /// </summary>
-        public string CLRType { get; set; }
+        public string ClrType { get; set; }
 
         /// <summary>
         /// Gets/sets the JSON serialized value.

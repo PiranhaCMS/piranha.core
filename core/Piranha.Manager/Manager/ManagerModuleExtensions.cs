@@ -14,7 +14,6 @@ using System.Reflection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Session;
 
 public static class ManagerModuleExtensions
 {

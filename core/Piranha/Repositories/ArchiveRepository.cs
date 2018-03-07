@@ -8,8 +8,6 @@
  * 
  */
 
-using Microsoft.EntityFrameworkCore;
-using Piranha.Data;
 using System;
 using System.Linq;
 

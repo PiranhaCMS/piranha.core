@@ -11,7 +11,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Piranha.Web;
-using System;
 using System.Threading.Tasks;
 
 namespace Piranha.AspNetCore

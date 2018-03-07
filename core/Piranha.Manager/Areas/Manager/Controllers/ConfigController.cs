@@ -9,11 +9,8 @@
  */
 
 using Piranha.Manager;
-using Piranha.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.IO;
-using System.Linq;
 
 namespace Piranha.Areas.Manager.Controllers
 {

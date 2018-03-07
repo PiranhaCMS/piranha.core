@@ -9,11 +9,8 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Piranha.Manager;
-using Piranha.Models;
 
 namespace Piranha.Areas.Manager.Models
 {

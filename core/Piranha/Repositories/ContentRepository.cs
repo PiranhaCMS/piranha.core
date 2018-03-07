@@ -200,7 +200,7 @@ namespace Piranha.Repositories
         /// <param name="field">The page field</param>
         /// <returns>The value</returns>
         protected object DeserializeValue(TField field) {
-            var type = App.Fields.GetByType(field.CLRType);
+            var type = App.Fields.GetByType(field.ClrType);
 
             if (type != null) {
                 var val = (Extend.IField)App.DeserializeObject(field.Value, type.Type);
@@ -327,7 +327,7 @@ namespace Piranha.Repositories
                         }
 
                         // Update field info & value
-                        field.CLRType = fieldType.TypeName;
+                        field.ClrType = fieldType.TypeName;
                         field.SortOrder = sortOrder;
                         field.Value = App.SerializeObject(fieldValue, fieldType.Type);
 

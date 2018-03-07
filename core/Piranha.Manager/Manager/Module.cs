@@ -9,11 +9,9 @@
  */
 
 using AutoMapper;
-using System.Collections.Generic;
 using System;
 using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Piranha.Manager
 {

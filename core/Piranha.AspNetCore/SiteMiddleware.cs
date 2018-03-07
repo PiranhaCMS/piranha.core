@@ -10,9 +10,6 @@
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.Net.Http.Headers;
-using Piranha.Web;
-using System;
 using System.Threading.Tasks;
 
 namespace Piranha.AspNetCore

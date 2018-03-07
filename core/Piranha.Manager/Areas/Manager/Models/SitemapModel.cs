@@ -9,7 +9,6 @@
  */
 
 using System.Collections.Generic;
-using Piranha.Models;
 
 namespace Piranha.Areas.Manager.Models
 {

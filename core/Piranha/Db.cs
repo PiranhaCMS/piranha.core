@@ -9,7 +9,6 @@
  */
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 using System;
 using System.Linq;
 
@@ -162,7 +161,7 @@ namespace Piranha
             mb.Entity<Data.PageField>().ToTable("Piranha_PageFields");
             mb.Entity<Data.PageField>().Property(f => f.RegionId).HasMaxLength(64).IsRequired();
             mb.Entity<Data.PageField>().Property(f => f.FieldId).HasMaxLength(64).IsRequired();
-            mb.Entity<Data.PageField>().Property(f => f.CLRType).HasMaxLength(256).IsRequired();
+            mb.Entity<Data.PageField>().Property(f => f.ClrType).HasMaxLength(256).IsRequired();
             mb.Entity<Data.PageField>().HasIndex(f => new { f.PageId, f.RegionId, f.FieldId, f.SortOrder });
 
             mb.Entity<Data.PageType>().ToTable("Piranha_PageTypes");
@@ -187,7 +186,7 @@ namespace Piranha
             mb.Entity<Data.PostField>().ToTable("Piranha_PostFields");
             mb.Entity<Data.PostField>().Property(f => f.RegionId).HasMaxLength(64).IsRequired();
             mb.Entity<Data.PostField>().Property(f => f.FieldId).HasMaxLength(64).IsRequired();
-            mb.Entity<Data.PostField>().Property(f => f.CLRType).HasMaxLength(256).IsRequired();
+            mb.Entity<Data.PostField>().Property(f => f.ClrType).HasMaxLength(256).IsRequired();
             mb.Entity<Data.PostField>().HasIndex(f => new { f.PostId, f.RegionId, f.FieldId, f.SortOrder });
 
             mb.Entity<Data.PostTag>().ToTable("Piranha_PostTags");

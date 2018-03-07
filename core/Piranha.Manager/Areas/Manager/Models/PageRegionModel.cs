@@ -8,8 +8,6 @@
  * 
  */
 
-using System.Collections.Generic;
-
 namespace Piranha.Areas.Manager.Models
 {
     public class PageRegionModel

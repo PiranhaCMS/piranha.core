@@ -9,9 +9,7 @@
  */
 
 using Piranha.AttributeBuilder;
-using Piranha.Extend.Fields;
 using System;
-using System.Data.SqlClient;
 using System.Linq;
 using Xunit;
 

@@ -10,11 +10,9 @@
 
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Piranha.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace Piranha.Repositories
 {

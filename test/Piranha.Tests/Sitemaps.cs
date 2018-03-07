@@ -10,7 +10,6 @@
 
 using Piranha.Models;
 using System;
-using System.Linq;
 using Xunit;
 
 namespace Piranha.Tests

@@ -8,10 +8,7 @@
  * 
  */
 
-using Piranha.Data;
 using System;
-using System.IO;
-using System.Reflection;
 
 namespace Piranha
 {
