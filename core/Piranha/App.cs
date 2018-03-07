@@ -77,6 +77,11 @@ namespace Piranha
         /// The currently registered hooks.
         /// </summary>
         private HookManager hooks;
+
+        /// <summary>
+        /// The current cache level.
+        /// </summary>
+        private Cache.CacheLevel cacheLevel = Cache.CacheLevel.Full;
         #endregion
 
         #region Properties
@@ -142,6 +147,14 @@ namespace Piranha
         /// </summary>
         public static HookManager Hooks {
             get { return instance.hooks; }
+        }
+
+        /// <summary>
+        /// Gets/sets the current cache level.
+        /// </summary>
+        public static Cache.CacheLevel CacheLevel {
+            get { return instance.cacheLevel; }
+            set { instance.cacheLevel = value; }
         }
         #endregion
 

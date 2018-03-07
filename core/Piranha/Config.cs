@@ -36,8 +36,7 @@ namespace Piranha
         /// Gets/sets the currently configured archive page size.
         /// </summary>
         public int ArchivePageSize {
-            get
-            {
+            get {
                 var param = api.Params.GetByKey(ARCHIVE_PAGE_SIZE);
                 if (param != null)
                     return Convert.ToInt32(param.Value);
@@ -60,8 +59,7 @@ namespace Piranha
         /// in minutes for pages.
         /// </summary>
         public int CacheExpiresPages {
-            get
-            {
+            get {
                 var param = api.Params.GetByKey(CACHE_EXPIRES_PAGES);
                 if (param != null)
                     return Convert.ToInt32(param.Value);
@@ -84,8 +82,7 @@ namespace Piranha
         /// in minutes for posts.
         /// </summary>
         public int CacheExpiresPosts {
-            get
-            {
+            get {
                 var param = api.Params.GetByKey(CACHE_EXPIRES_POSTS);
                 if (param != null)
                     return Convert.ToInt32(param.Value);
