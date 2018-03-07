@@ -18,6 +18,9 @@ examples/CoreWeb/assets/lib
 examples/CoreWeb/wwwroot/uploads
 examples/CoreWeb/**/*.db
 
+templates/**/wwwroot/uploads
+templates/**/**/*.db
+
 # NPM lock files
 *-lock.json
 
