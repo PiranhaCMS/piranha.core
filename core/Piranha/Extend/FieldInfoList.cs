@@ -36,7 +36,8 @@ namespace Piranha.Extend
             // Make sure we don't register the same type multiple times.
             //
             if (items.Where(i => i.Type == type).Count() == 0) {
-                var field = new FieldInfo() {
+                var field = new FieldInfo
+                {
                     CLRType = type.FullName,
                     Type = type
                 };

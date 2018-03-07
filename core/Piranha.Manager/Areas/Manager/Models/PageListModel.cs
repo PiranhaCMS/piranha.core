@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Piranha.Models;
 
 namespace Piranha.Areas.Manager.Models
 {
@@ -27,12 +28,12 @@ namespace Piranha.Areas.Manager.Models
         /// <summary>
         /// Gets/sets the available page types.
         /// </summary>
-        public IList<Piranha.Models.PageType> PageTypes { get; set; }
+        public IList<PageType> PageTypes { get; set; }
 
         /// <summary>
         /// Gets/sets the current sitemap.
         /// </summary>
-        public IList<Piranha.Models.SitemapItem> Sitemap { get; set; }
+        public IList<SitemapItem> Sitemap { get; set; }
 
         /// <summary>
         /// Gets/sets the available sites.
@@ -65,8 +66,8 @@ namespace Piranha.Areas.Manager.Models
         /// Default constructor.
         /// </summary>
         public PageListModel() {
-            PageTypes = new List<Piranha.Models.PageType>();
-            Sitemap = new List<Piranha.Models.SitemapItem>();
+            PageTypes = new List<PageType>();
+            Sitemap = new List<SitemapItem>();
             Sites = new List<SiteInfo>();
         }
 
@@ -92,7 +93,8 @@ namespace Piranha.Areas.Manager.Models
             model.PageId = pageId;
             model.PageTypes = api.PageTypes.GetAll().ToList();
             model.Sitemap = api.Sites.GetSitemap(site.Id, onlyPublished: false);
-            model.Sites = api.Sites.GetAll().Select(s => new SiteInfo() {
+            model.Sites = api.Sites.GetAll().Select(s => new SiteInfo
+            {
                 Id = s.Id.ToString(),
                 Title = s.Title,
                 IsDefault = s.IsDefault

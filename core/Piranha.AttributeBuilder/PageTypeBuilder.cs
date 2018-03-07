@@ -81,7 +81,8 @@ namespace Piranha.AttributeBuilder
                     attr.Id = type.Name;
 
                 if (!string.IsNullOrEmpty(attr.Id) && !string.IsNullOrEmpty(attr.Title)) {
-                    var pageType = new PageType() {
+                    var pageType = new PageType
+                    {
                         Id = attr.Id,
                         Title = attr.Title,
                         ContentTypeId = App.ContentTypes.GetId(type)
@@ -90,7 +91,8 @@ namespace Piranha.AttributeBuilder
                     var routes = type.GetTypeInfo().GetCustomAttributes(typeof(PageTypeRouteAttribute));
                     foreach (PageTypeRouteAttribute route in routes) {
                         if (!string.IsNullOrWhiteSpace(route.Title) && !string.IsNullOrWhiteSpace(route.Route))
-                            pageType.Routes.Add(new ContentTypeRoute() {
+                            pageType.Routes.Add(new ContentTypeRoute
+                            {
                                 Title = route.Title,
                                 Route = route.Route
                             });

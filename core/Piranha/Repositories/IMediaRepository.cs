@@ -8,10 +8,11 @@
  * 
  */
 
-using Piranha.Data;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Piranha.Data;
+using Piranha.Models;
 
 namespace Piranha.Repositories
 {
@@ -50,7 +51,7 @@ namespace Piranha.Repositories
         /// Gets the hierachical media structure.
         /// </summary>
         /// <returns>The media structure</returns>
-        Models.MediaStructure GetStructure();
+        MediaStructure GetStructure();
 
         /// <summary>
         /// Adds or updates the given model in the database depending on its state.
@@ -58,14 +59,14 @@ namespace Piranha.Repositories
         /// wrapper for the async version.
         /// </summary>
         /// <param name="content">The content to save</param>
-        void Save(Models.MediaContent content);
+        void Save(MediaContent content);
 
         /// <summary>
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>
         /// <param name="content">The content to save</param>
-        Task SaveAsync(Models.MediaContent content);
+        Task SaveAsync(MediaContent content);
 
         /// <summary>
         /// Adds or updates the given model in the database

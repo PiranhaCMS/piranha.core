@@ -9,6 +9,7 @@
  */
 
 using System;
+using Piranha.Extend.Fields;
 
 namespace Piranha.Extend.Serializers
 {
@@ -20,11 +21,11 @@ namespace Piranha.Extend.Serializers
         /// <param name="obj">The object</param>
         /// <returns>The serialized value</returns>
         public string Serialize(object obj) {
-            if (obj is Fields.DateField) {
-                var field = (Fields.DateField)obj;
+            if (obj is DateField) {
+                var field = (DateField)obj;
 
                 if (field.Value.HasValue)
-                    return ((Fields.DateField)obj).Value.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                    return ((DateField)obj).Value.Value.ToString("yyyy-MM-dd HH:mm:ss");
                 return null;
             }
             throw new ArgumentException("The given object doesn't match the serialization type");
@@ -36,7 +37,7 @@ namespace Piranha.Extend.Serializers
         /// <param name="str">The serialized value</param>
         /// <returns>The object</returns>
         public object Deserialize(string str) {
-            var field = new Fields.DateField();
+            var field = new DateField();
 
             if (!string.IsNullOrWhiteSpace(str)) {
                 try {

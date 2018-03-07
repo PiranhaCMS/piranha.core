@@ -49,7 +49,8 @@ namespace Piranha.Tests
         public void SerializeDateField() {
             var serializer = new DateFieldSerializer();
 
-            var str = serializer.Serialize(new DateField() {
+            var str = serializer.Serialize(new DateField
+            {
                Value = new DateTime(2001, 1, 5, 16, 0, 0) 
             });
 
@@ -90,7 +91,8 @@ namespace Piranha.Tests
         public void WrongInputToDateField() {
             var serializer = new DateFieldSerializer();
 
-            Assert.Throws<ArgumentException>(() => serializer.Serialize(new StringField() {
+            Assert.Throws<ArgumentException>(() => serializer.Serialize(new StringField
+            {
                 Value = "Exception"
             }));
         }
@@ -100,7 +102,8 @@ namespace Piranha.Tests
             var serializer = new ImageFieldSerializer();
             var id = Guid.NewGuid();
 
-            var str = serializer.Serialize(new ImageField() {
+            var str = serializer.Serialize(new ImageField
+            {
                 Id = id
             });
 
@@ -122,7 +125,8 @@ namespace Piranha.Tests
             var serializer = new DocumentFieldSerializer();
             var id = Guid.NewGuid();
 
-            var str = serializer.Serialize(new DocumentField() {
+            var str = serializer.Serialize(new DocumentField
+            {
                 Id = id
             });
 
@@ -144,7 +148,8 @@ namespace Piranha.Tests
             var serializer = new VideoFieldSerializer();
             var id = Guid.NewGuid();
 
-            var str = serializer.Serialize(new VideoField() {
+            var str = serializer.Serialize(new VideoField
+            {
                 Id = id
             });
 
@@ -166,7 +171,8 @@ namespace Piranha.Tests
             var serializer = new MediaFieldSerializer();
             var id = Guid.NewGuid();
 
-            var str = serializer.Serialize(new MediaField() {
+            var str = serializer.Serialize(new MediaField
+            {
                 Id = id
             });
 
@@ -187,7 +193,8 @@ namespace Piranha.Tests
         public void WrongInputToImageField() {
             var serializer = new ImageFieldSerializer();
 
-            Assert.Throws<ArgumentException>(() => serializer.Serialize(new StringField() {
+            Assert.Throws<ArgumentException>(() => serializer.Serialize(new StringField
+            {
                 Value = "Exception"
             }));
         }
@@ -198,7 +205,8 @@ namespace Piranha.Tests
             var serializer = new StringFieldSerializer<StringField>();
             var ipsum = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet.";
 
-            var str = serializer.Serialize(new StringField() {
+            var str = serializer.Serialize(new StringField
+            {
                 Value = ipsum
             });
 
@@ -219,7 +227,8 @@ namespace Piranha.Tests
         public void WrongInputStringField() {
             var serializer = new StringFieldSerializer<StringField>();
 
-            Assert.Throws<ArgumentException>(() => serializer.Serialize(new DateField() {
+            Assert.Throws<ArgumentException>(() => serializer.Serialize(new DateField
+            {
                 Value = DateTime.Now
             }));
         }        

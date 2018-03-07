@@ -11,6 +11,8 @@
 using System;
 using System.IO;
 using System.Linq;
+using Piranha.Data;
+using Piranha.Models;
 using Xunit;
 
 namespace Piranha.Tests.Repositories
@@ -40,7 +42,8 @@ namespace Piranha.Tests.Repositories
                 Piranha.App.Init(api);
 
                 // Add media folders
-                var folder1 = new Data.MediaFolder() {
+                var folder1 = new MediaFolder
+                {
                     Name = "Images"
                 };
                 api.Media.SaveFolder(folder1);
@@ -48,7 +51,8 @@ namespace Piranha.Tests.Repositories
 
                 // Add media
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png")) {
-                    var image1 = new Models.StreamMediaContent() {
+                    var image1 = new StreamMediaContent
+                    {
                         Filename = "HLD_Screenshot_01_mech_1080.png",
                         Data = stream
                     };
@@ -58,7 +62,8 @@ namespace Piranha.Tests.Repositories
                 }
 
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_rise_1080.png")) {
-                    var image2 = new Models.StreamMediaContent() {
+                    var image2 = new StreamMediaContent
+                    {
                         FolderId = folder1Id,
                         Filename = "HLD_Screenshot_01_rise_1080.png",
                         Data = stream
@@ -69,7 +74,8 @@ namespace Piranha.Tests.Repositories
                 }                
 
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_robot_1080.png")) {
-                    var image3 = new Models.StreamMediaContent() {
+                    var image3 = new StreamMediaContent
+                    {
                         Filename = "HLD_Screenshot_01_robot_1080.png",
                         Data = stream
                     };
@@ -104,7 +110,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void IsCached() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                Assert.Equal(this.GetType() == typeof(MediasCached), api.IsCached);
+                Assert.Equal(GetType() == typeof(MediasCached), api.IsCached);
             }
         }
         
@@ -126,7 +132,7 @@ namespace Piranha.Tests.Repositories
                 Assert.NotNull(media);
                 Assert.Equal("HLD_Screenshot_01_mech_1080.png", media.Filename);
                 Assert.Equal("image/png", media.ContentType);
-                Assert.Equal(Models.MediaType.Image, media.Type);
+                Assert.Equal(MediaType.Image, media.Type);
             }
         }
 
@@ -144,7 +150,8 @@ namespace Piranha.Tests.Repositories
         public void Insert() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_BETA_entrance.png")) {
-                    var image = new Models.StreamMediaContent() {
+                    var image = new StreamMediaContent
+                    {
                         Filename = "HLD_Screenshot_BETA_entrance.png",
                         Data = stream
                     };

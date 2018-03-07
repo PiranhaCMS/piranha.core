@@ -8,8 +8,9 @@
  * 
  */
 
-using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Piranha.Areas.Manager.Models;
 
 namespace Piranha.Areas.Manager.Controllers
 {
@@ -62,13 +63,14 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="model">The login model</param>
         [HttpPost]
         [Route("manager/login")]
-        public async Task<IActionResult> Login(Models.LoginModel model) {
+        public async Task<IActionResult> Login(LoginModel model) {
             var result = await security.SignIn(HttpContext, model.UserName, model.Password);
 
-            if (result) {
+            if (result)
+            {
                 if (!string.IsNullOrWhiteSpace(model.ReturnUrl))
                     return Redirect(model.ReturnUrl);
-                else return RedirectToAction("List", "Page", new { pageId = "" });
+                return RedirectToAction("List", "Page", new { pageId = "" });
             }
 
             ViewBag.Message = "You have entered an invalid username or password ";

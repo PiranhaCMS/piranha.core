@@ -8,11 +8,11 @@
  * 
  */
 
-using Piranha.Areas.Manager.Models;
-using Piranha.Manager;
+using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using Piranha.Areas.Manager.Models;
+using Piranha.Manager;
 
 namespace Piranha.Areas.Manager.Controllers
 {
@@ -53,10 +53,9 @@ namespace Piranha.Areas.Manager.Controllers
                 if (model.Save(api)) {
                     SuccessMessage("The site has been saved.");
                     return RedirectToAction("Edit", new { id = model.Site.Id });
-                } else {
-                    ErrorMessage("The site could not be saved.", false);
-                    return View("Edit", model);
                 }
+                ErrorMessage("The site could not be saved.", false);
+                return View("Edit", model);
             } catch (ArgumentException) {
                 ErrorMessage("The site could not be saved. Title is mandatory", false);
                 return View("Edit", model);                

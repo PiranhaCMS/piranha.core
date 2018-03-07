@@ -9,6 +9,7 @@
  */
 
 using Microsoft.AspNetCore.Builder;
+using Piranha.AspNetCore;
 
 public static class CoreExtensions
 {
@@ -19,13 +20,13 @@ public static class CoreExtensions
     /// <returns>The builder</returns>
     public static IApplicationBuilder UsePiranha(this IApplicationBuilder builder) {
         return builder
-            .UseMiddleware<Piranha.AspNetCore.SiteMiddleware>()
-            .UseMiddleware<Piranha.AspNetCore.AliasMiddleware>()
-            .UseMiddleware<Piranha.AspNetCore.PageMiddleware>()
-            .UseMiddleware<Piranha.AspNetCore.PostMiddleware>()
-            .UseMiddleware<Piranha.AspNetCore.ArchiveMiddleware>()
-            .UseMiddleware<Piranha.AspNetCore.StartPageMiddleware>()
-            .UseMiddleware<Piranha.AspNetCore.SitemapMiddleware>();
+            .UseMiddleware<SiteMiddleware>()
+            .UseMiddleware<AliasMiddleware>()
+            .UseMiddleware<PageMiddleware>()
+            .UseMiddleware<PostMiddleware>()
+            .UseMiddleware<ArchiveMiddleware>()
+            .UseMiddleware<StartPageMiddleware>()
+            .UseMiddleware<SitemapMiddleware>();
     }
 
     /// <summary>
@@ -35,7 +36,7 @@ public static class CoreExtensions
     /// <returns>The builder</returns>
     public static IApplicationBuilder UsePiranhaAliases(this IApplicationBuilder builder) {
         return builder
-            .UseMiddleware<Piranha.AspNetCore.AliasMiddleware>();
+            .UseMiddleware<AliasMiddleware>();
     }
 
     /// <summary>
@@ -45,7 +46,7 @@ public static class CoreExtensions
     /// <returns>The builder</returns>
     public static IApplicationBuilder UsePiranhaArchives(this IApplicationBuilder builder) {
         return builder
-            .UseMiddleware<Piranha.AspNetCore.ArchiveMiddleware>();
+            .UseMiddleware<ArchiveMiddleware>();
     }
 
     /// <summary>
@@ -55,7 +56,7 @@ public static class CoreExtensions
     /// <returns>The builder</returns>
     public static IApplicationBuilder UsePiranhaPages(this IApplicationBuilder builder) {
         return builder
-            .UseMiddleware<Piranha.AspNetCore.PageMiddleware>();
+            .UseMiddleware<PageMiddleware>();
     }
 
     /// <summary>
@@ -65,7 +66,7 @@ public static class CoreExtensions
     /// <returns>The builder</returns>
     public static IApplicationBuilder UsePiranhaPosts(this IApplicationBuilder builder) {
         return builder
-            .UseMiddleware<Piranha.AspNetCore.PostMiddleware>();
+            .UseMiddleware<PostMiddleware>();
     }
 
     /// <summary>
@@ -75,7 +76,7 @@ public static class CoreExtensions
     /// <returns>The builder</returns>
     public static IApplicationBuilder UsePiranhaStartPage(this IApplicationBuilder builder) {
         return builder
-            .UseMiddleware<Piranha.AspNetCore.StartPageMiddleware>();
+            .UseMiddleware<StartPageMiddleware>();
     }
 
     /// <summary>
@@ -85,7 +86,7 @@ public static class CoreExtensions
     /// <returns>The builder</returns>
     public static IApplicationBuilder UsePiranhaSites(this IApplicationBuilder builder) {
         return builder
-            .UseMiddleware<Piranha.AspNetCore.SiteMiddleware>();        
+            .UseMiddleware<SiteMiddleware>();        
     }
 
     /// <summary>
@@ -95,6 +96,6 @@ public static class CoreExtensions
     /// <returns>The builder</returns>
     public static IApplicationBuilder UsePiranhaSitemap(this IApplicationBuilder builder) {
         return builder
-            .UseMiddleware<Piranha.AspNetCore.SitemapMiddleware>();        
+            .UseMiddleware<SitemapMiddleware>();        
     }
 }

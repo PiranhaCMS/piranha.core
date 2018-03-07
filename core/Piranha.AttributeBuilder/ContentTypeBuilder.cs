@@ -8,13 +8,13 @@
  * 
  */
 
-using Piranha.Extend;
-using Piranha.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
+using Piranha.Extend;
+using Piranha.Models;
 
 namespace Piranha.AttributeBuilder
 {
@@ -68,7 +68,8 @@ namespace Piranha.AttributeBuilder
             if (attr != null) {
                 var isCollection = typeof(IEnumerable).IsAssignableFrom(prop.PropertyType);
 
-                var regionType = new RegionType() {
+                var regionType = new RegionType
+                {
                     Id = prop.Name,
                     Title = attr.Title,
                     Collection = isCollection,
@@ -97,7 +98,8 @@ namespace Piranha.AttributeBuilder
                         return null;
                     }
 
-                    regionType.Fields.Add(new FieldType() {
+                    regionType.Fields.Add(new FieldType
+                    {
                         Id = "Default",
                         Type = appFieldType.TypeName
                     });
@@ -129,7 +131,8 @@ namespace Piranha.AttributeBuilder
                 var appFieldType = App.Fields.GetByType(prop.PropertyType);
 
                 if (appFieldType != null) {
-                    return new FieldType() {
+                    return new FieldType
+                    {
                         Id = prop.Name,
                         Title = attr.Title,
                         Type = appFieldType.TypeName,

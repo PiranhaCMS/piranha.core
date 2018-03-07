@@ -10,6 +10,7 @@
 
 using System;
 using System.Linq;
+using Piranha.Models;
 
 namespace Piranha.Repositories
 {
@@ -46,13 +47,13 @@ namespace Piranha.Repositories
         /// <param name="month">The optional month</param>
         /// <param name="pageSize">The optional page size</param>
         /// <returns>The archive model</returns>
-        public T GetById<T>(Guid id, int? page = 1, Guid? categoryId = null, int? year = null, int? month = null, int? pageSize = null) where T : Models.BlogPage<T> {
+        public T GetById<T>(Guid id, int? page = 1, Guid? categoryId = null, int? year = null, int? month = null, int? pageSize = null) where T : BlogPage<T> {
             // Get the requested blog page
             var model = api.Pages.GetById<T>(id);
 
             if (model != null) {
                 // Set basic fields
-                model.Archive = new Models.PostArchive();
+                model.Archive = new PostArchive();
 
                 model.Route = model.Route ?? "/archive";
                 model.Archive.Year = year;
@@ -126,7 +127,7 @@ namespace Piranha.Repositories
         /// <param name="siteId">The optional site id</param>
         /// <param name="pageSize">The optional page size</param>
         /// <returns>The archive model</returns>
-        public T GetBySlug<T>(string slug, int? page = 1, Guid? categoryId = null, int? year = null, int? month = null, Guid? siteId = null, int? pageSize = null) where T : Models.BlogPage<T> {
+        public T GetBySlug<T>(string slug, int? page = 1, Guid? categoryId = null, int? year = null, int? month = null, Guid? siteId = null, int? pageSize = null) where T : BlogPage<T> {
             // Get the id of the blog page with the given type
             var blogId = api.Pages.GetIdBySlug(slug, siteId);
 

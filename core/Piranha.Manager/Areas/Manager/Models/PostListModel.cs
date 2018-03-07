@@ -47,7 +47,8 @@ namespace Piranha.Areas.Manager.Models
             var model = new PostListModel();
 
             model.Posts = api.Posts.GetAll(blogId)
-                .Select(p => new PostListItem() {
+                .Select(p => new PostListItem
+                {
                     Id = p.Id,
                     TypeId = p.TypeId,
                     Title = p.Title,
@@ -65,7 +66,8 @@ namespace Piranha.Areas.Manager.Models
             var categoriesId = model.Posts.Select(p => p.CategoryId).Distinct();
             model.CurrentCategories = api.Categories.GetAll(blogId)
                 .Where(c => categoriesId.Contains(c.Id))
-                .Select(c => new Taxonomy() {
+                .Select(c => new Taxonomy
+                {
                     Id = c.Id,
                     Title = c.Title
                 });

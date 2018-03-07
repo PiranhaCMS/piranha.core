@@ -1,3 +1,4 @@
+using BasicWeb.Models.Regions;
 using Piranha.AttributeBuilder;
 using Piranha.Extend.Fields;
 using Piranha.Models;
@@ -17,6 +18,6 @@ namespace BasicWeb.Models
         /// Gets/sets the post heading.
         /// </summary>
         [Region]
-        public Regions.Heading Heading { get; set; }
+        public Heading Heading { get; set; }
     }
 }

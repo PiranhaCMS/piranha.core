@@ -1,3 +1,5 @@
+@using Piranha.Manager
+@using Piranha.Models
 @model Piranha.Areas.Manager.Models.AliasListModel
 @{
     ViewBag.Title = "Aliases";
@@ -6,7 +8,7 @@
 
 <div class="row">
     <div class="col-sm-12 buttons">
-        @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.AliasesEdit)).Succeeded) {        
+        @if ((await Authorization.AuthorizeAsync(User, Permission.AliasesEdit)).Succeeded) {        
             <a href="#" class="btn btn-labeled btn-primary pull-right" data-toggle="modal" data-target="#modalAddAlias">
                 <span class="btn-label">
                     <i class="glyphicon glyphicon-plus"></i>
@@ -64,12 +66,12 @@
                     <code>@alias.RedirectUrl</code>
                 </td>
                 <td class="text-center">
-                    @if (alias.Type == Piranha.Models.RedirectType.Permanent) {
+                    @if (alias.Type == RedirectType.Permanent) {
                         <span class="glyphicon glyphicon-ok"></span>
                     }
                 </td>
                 <td class="actions one">
-                    @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.AliasesDelete)).Succeeded) {        
+                    @if ((await Authorization.AuthorizeAsync(User, Permission.AliasesDelete)).Succeeded) {        
                         <a class="remove" href="@Url.Action("Delete", new { id = alias.Id })">
                             <span class="glyphicon glyphicon-trash text-danger"></span>
                         </a>

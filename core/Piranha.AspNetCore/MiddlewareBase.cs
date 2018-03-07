@@ -8,10 +8,10 @@
  * 
  */
 
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Piranha.AspNetCore
 {
@@ -50,7 +50,7 @@ namespace Piranha.AspNetCore
         /// <param name="factory">The logger factory</param>
         public MiddlewareBase(RequestDelegate next, ILoggerFactory factory) : this(next) {
             if (factory != null)
-                logger = factory.CreateLogger(this.GetType().FullName);
+                logger = factory.CreateLogger(GetType().FullName);
         }
 
         /// <summary>

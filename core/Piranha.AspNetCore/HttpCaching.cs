@@ -8,9 +8,10 @@
  * 
  */
 
-using Microsoft.AspNetCore.Http;
-using Piranha.Web;
 using System;
+using Microsoft.AspNetCore.Http;
+using Piranha.Models;
+using Piranha.Web;
 
 namespace Piranha.AspNetCore
 {
@@ -28,8 +29,9 @@ namespace Piranha.AspNetCore
             return false;
         }
 
-        public static HttpCacheInfo Get(Models.PageBase page) {
-            return new HttpCacheInfo() {
+        public static HttpCacheInfo Get(PageBase page) {
+            return new HttpCacheInfo
+            {
                 EntityTag = Utils.GenerateETag(page.Id.ToString(), page.LastModified),
                 LastModified = page.LastModified
             };

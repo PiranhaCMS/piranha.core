@@ -8,10 +8,10 @@
  * 
  */
 
-using Microsoft.EntityFrameworkCore;
-using Piranha.Data;
 using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Piranha.Data;
 
 namespace Piranha.Repositories
 {
@@ -69,7 +69,7 @@ namespace Piranha.Repositories
 
             var param = db.Params.FirstOrDefault(p => p.Id == model.Id);
             if (param != null) {
-                App.Mapper.Map<Param, Param>(model, param);
+                App.Mapper.Map(model, param);
             }
         }
 

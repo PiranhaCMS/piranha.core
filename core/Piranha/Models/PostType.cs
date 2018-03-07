@@ -16,11 +16,6 @@ namespace Piranha.Models
     public sealed class PostType : ContentType
     {
         /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public PostType() : base() {  }
-
-        /// <summary>
         /// Validates that the page type is correctly defined.
         /// </summary>
         public void Ensure() {

@@ -8,6 +8,7 @@
  * 
  */
 
+using Piranha.Extend.Fields;
 using Xunit;
 
 namespace Piranha.Tests.Utils
@@ -45,28 +46,28 @@ namespace Piranha.Tests.Utils
 
         [Fact]
         public void FirstParagraphMarkdown() {
-            Extend.Fields.MarkdownField field = "First\n\nSecond\n\nThird";
+            MarkdownField field = "First\n\nSecond\n\nThird";
 
             Assert.Equal("<p>First</p>", Piranha.Utils.FirstParagraph(field));
         }
 
         [Fact]
         public void NoFirstParagraphMarkdown() {
-            Extend.Fields.MarkdownField field = "";
+            MarkdownField field = "";
 
             Assert.Equal("", Piranha.Utils.FirstParagraph(field));
         }
 
         [Fact]
         public void FirstParagraphHtml() {
-            Extend.Fields.HtmlField field = "<p>First</p><p>Second</p><p>Third</p>";
+            HtmlField field = "<p>First</p><p>Second</p><p>Third</p>";
 
             Assert.Equal("<p>First</p>", Piranha.Utils.FirstParagraph(field));
         }
 
         [Fact]
         public void NoFirstParagraphHtml() {
-            Extend.Fields.HtmlField field = "First,Second,Third";
+            HtmlField field = "First,Second,Third";
 
             Assert.Equal("", Piranha.Utils.FirstParagraph(field));
         }

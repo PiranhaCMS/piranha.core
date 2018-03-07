@@ -8,10 +8,10 @@
  * 
  */
 
+using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Blob;
-using System.Threading.Tasks;
 
 namespace Piranha.Azure
 {
@@ -36,7 +36,7 @@ namespace Piranha.Azure
         /// Default constructor.
         /// </summary>
         public BlobStorage(StorageCredentials credentials, string containerName = "uploads") {
-            this.storage = new CloudStorageAccount(credentials, true);
+            storage = new CloudStorageAccount(credentials, true);
             this.containerName = containerName;
         }
 
@@ -50,7 +50,8 @@ namespace Piranha.Azure
 
             if (!await container.ExistsAsync()) {
                 await container.CreateAsync();
-                await container.SetPermissionsAsync(new BlobContainerPermissions() {
+                await container.SetPermissionsAsync(new BlobContainerPermissions
+                {
                     PublicAccess = BlobContainerPublicAccessType.Blob
                 });
             }

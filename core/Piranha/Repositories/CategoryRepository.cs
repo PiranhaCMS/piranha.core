@@ -8,11 +8,11 @@
  * 
  */
 
-using Microsoft.EntityFrameworkCore;
-using Piranha.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Piranha.Data;
 
 namespace Piranha.Repositories
 {
@@ -154,7 +154,7 @@ namespace Piranha.Repositories
 
             var category = db.Categories.FirstOrDefault(c => c.Id == model.Id);
             if (category != null) {
-                App.Mapper.Map<Category, Category>(model, category);
+                App.Mapper.Map(model, category);
             }
         }
 

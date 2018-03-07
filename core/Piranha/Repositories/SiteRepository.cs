@@ -8,11 +8,13 @@
  * 
  */
 
-using Microsoft.EntityFrameworkCore;
-using Piranha.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Piranha.Data;
+using Piranha.Models;
+using PageType = Piranha.Models.PageType;
 
 namespace Piranha.Repositories
 {
@@ -99,7 +101,7 @@ namespace Piranha.Repositories
         /// <param name="id">The optional site id</param>
         /// <param name="onlyPublished">If only published items should be included</param>
         /// <returns>The sitemap</returns>
-        public Models.Sitemap GetSitemap(Guid? id = null, bool onlyPublished = true) {
+        public Sitemap GetSitemap(Guid? id = null, bool onlyPublished = true) {
             if (!id.HasValue) {
                 var site = GetDefault();
 
@@ -108,7 +110,7 @@ namespace Piranha.Repositories
             }
 
             if (id != null) {
-                var sitemap = onlyPublished && cache != null ? cache.Get<Models.Sitemap>($"Sitemap_{id}") : null;
+                var sitemap = onlyPublished && cache != null ? cache.Get<Sitemap>($"Sitemap_{id}") : null;
 
                 if (sitemap == null) {
                     var pages = db.Pages
@@ -217,7 +219,7 @@ namespace Piranha.Repositories
             }
             var site = db.Sites.FirstOrDefault(s => s.Id == model.Id);
             if (site != null) {
-                App.Mapper.Map<Site, Site>(model, site);
+                App.Mapper.Map(model, site);
             }
         }
 
@@ -252,11 +254,11 @@ namespace Piranha.Repositories
         /// <param name="pages">The full page list</param>
         /// <param name="parentId">The current parent id</param>
         /// <returns>The sitemap</returns>
-        private Models.Sitemap Sort(IEnumerable<Page> pages, IEnumerable<Models.PageType> pageTypes, Guid? parentId = null, int level = 0) {
-            var result = new Models.Sitemap();
+        private Sitemap Sort(IEnumerable<Page> pages, IEnumerable<PageType> pageTypes, Guid? parentId = null, int level = 0) {
+            var result = new Sitemap();
 
             foreach (var page in pages.Where(p => p.ParentId == parentId).OrderBy(p => p.SortOrder)) {
-                var item = App.Mapper.Map<Page, Models.SitemapItem>(page);
+                var item = App.Mapper.Map<Page, SitemapItem>(page);
 
                 item.Level = level;
                 item.PageTypeName = pageTypes.First(t => t.Id == page.PageTypeId).Title;

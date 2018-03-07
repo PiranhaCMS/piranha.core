@@ -8,8 +8,9 @@
  * 
  */
 
-using Newtonsoft.Json;
 using System;
+using Newtonsoft.Json;
+using Piranha.Models;
 
 namespace Piranha.Extend.Fields
 {
@@ -26,38 +27,40 @@ namespace Piranha.Extend.Fields
         /// Gets/sets the related page object.
         /// </summary>
         [JsonIgnore]
-        public Models.DynamicPage Page { get; private set; }
+        public DynamicPage Page { get; private set; }
 
         /// <summary>
         /// Gets if the field has a page object available.
         /// </summary>
-        public bool HasValue {
-            get { return Page != null; }
-        }
+        public bool HasValue => Page != null;
 
         /// <summary>
         /// Gets the list item title if this field is used in
         /// a collection regions.
         /// </summary>
-        public virtual string GetTitle() {
-            if (Page != null)
-                return Page.Title;
-            return null;
+        public virtual string GetTitle()
+        {
+            return Page?.Title;
         }
 
         /// <summary>
         /// Initializes the field for client use.
         /// </summary>
         /// <param name="api">The current api</param>
-        public virtual void Init(IApi api) { 
-            if (Id.HasValue) {
-                Page = api.Pages.GetById(Id.Value);
+        public virtual void Init(IApi api)
+        {
+            if (!Id.HasValue)
+            {
+                return;
+            }
 
-                if (Page == null) {
-                    // The page has been removed, remove the
-                    // missing id.
-                    Id = null;
-                }
+            Page = api.Pages.GetById(Id.Value);
+
+            if (Page == null)
+            {
+                // The page has been removed, remove the
+                // missing id.
+                Id = null;
             }
         }
 
@@ -67,7 +70,8 @@ namespace Piranha.Extend.Fields
         /// data needed.
         /// </summary>
         /// <param name="api">The current api</param>
-        public virtual void InitManager(IApi api) { 
+        public virtual void InitManager(IApi api)
+        {
             Init(api);
         }
 
@@ -76,26 +80,27 @@ namespace Piranha.Extend.Fields
         /// </summary>
         /// <param name="api">The current api</param>
         /// <returns>The referenced page</returns>
-        public virtual T GetPage<T>(IApi api) where T : Models.GenericPage<T> {
-            if (Id.HasValue)
-                return api.Pages.GetById<T>(Id.Value);
-            return null;
-        }        
+        public virtual T GetPage<T>(IApi api) where T : GenericPage<T>
+        {
+            return Id.HasValue ? api.Pages.GetById<T>(Id.Value) : null;
+        }
 
         /// <summary>
         /// Implicit operator for converting a Guid id to a field.
         /// </summary>
-        /// <param name="str">The string value</param>
-        public static implicit operator PageField(Guid guid) {
-            return new PageField() { Id = guid };
+        /// <param name="guid">The string value</param>
+        public static implicit operator PageField(Guid guid)
+        {
+            return new PageField { Id = guid };
         }
 
         /// <summary>
         /// Implicit operator for converting a page object to a field.
         /// </summary>
         /// <param name="page">The page object</param>
-        public static implicit operator PageField(Models.PageBase page) {
-            return new PageField() { Id = page.Id };
+        public static implicit operator PageField(PageBase page)
+        {
+            return new PageField { Id = page.Id };
         }
     }
 }

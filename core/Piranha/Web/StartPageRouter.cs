@@ -25,18 +25,22 @@ namespace Piranha.Web
             if (string.IsNullOrWhiteSpace(url) || url == "/") {
                 var page = api.Pages.GetStartpage(siteId);
 
-                if (page != null) {
+                if (page != null)
+                {
                     if (page.ContentType == "Page") {
-                        return new RouteResponse() {
+                        return new RouteResponse
+                        {
                             Route = page.Route ?? "/page",
                             QueryString = "id=" + page.Id + "&startpage=true&piranha_handled=true",
                                 IsPublished = page.Published.HasValue && page.Published.Value <= DateTime.Now,
-                            CacheInfo = new HttpCacheInfo() {
+                            CacheInfo = new HttpCacheInfo
+                            {
                                 EntityTag = Utils.GenerateETag(page.Id.ToString(), page.LastModified),
                                 LastModified = page.LastModified
                             }
                         };
-                    } else if (page.ContentType == "Blog") {
+                    }
+                    if (page.ContentType == "Blog") {
                         return ArchiveRouter.Invoke(api, $"/{page.Slug}", siteId);
                     }
                 }

@@ -8,11 +8,12 @@
  * 
  */
 
-using Microsoft.EntityFrameworkCore;
-using Piranha.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Piranha.Data;
+using Piranha.Models;
 
 namespace Piranha.Repositories
 {
@@ -31,7 +32,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The pages</returns>
-        public IEnumerable<Models.DynamicPage> GetAll(Guid? siteId = null) {
+        public IEnumerable<DynamicPage> GetAll(Guid? siteId = null) {
             if (!siteId.HasValue) {
                 var site = api.Sites.GetDefault();
 
@@ -46,7 +47,7 @@ namespace Piranha.Repositories
                 .ThenBy(p => p.SortOrder)
                 .Select(p => p.Id);
 
-            var models = new List<Models.DynamicPage>();
+            var models = new List<DynamicPage>();
 
             foreach (var page in pages) {
                 var model = GetById(page);
@@ -62,7 +63,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The pages</returns>
-        public IEnumerable<Models.DynamicPage> GetAllBlogs(Guid? siteId = null) {
+        public IEnumerable<DynamicPage> GetAllBlogs(Guid? siteId = null) {
             if (!siteId.HasValue) {
                 var site = api.Sites.GetDefault();
 
@@ -77,7 +78,7 @@ namespace Piranha.Repositories
                 .ThenBy(p => p.SortOrder)
                 .Select(p => p.Id);
 
-            var models = new List<Models.DynamicPage>();
+            var models = new List<DynamicPage>();
 
             foreach (var page in pages) {
                 var model = GetById(page);
@@ -93,8 +94,8 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>
-        public Models.DynamicPage GetStartpage(Guid? siteId = null) {
-            return GetStartpage<Models.DynamicPage>(siteId);
+        public DynamicPage GetStartpage(Guid? siteId = null) {
+            return GetStartpage<DynamicPage>(siteId);
         }
 
         /// <summary>
@@ -103,7 +104,7 @@ namespace Piranha.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>
-        public T GetStartpage<T>(Guid? siteId = null) where T : Models.GenericPage<T> {
+        public T GetStartpage<T>(Guid? siteId = null) where T : GenericPage<T> {
             if (!siteId.HasValue) {
                 var site = api.Sites.GetDefault();
                 if (site != null)
@@ -124,7 +125,7 @@ namespace Piranha.Repositories
             }
 
             if (page != null) {
-                return Load<T, Models.PageBase>(page, api.PageTypes.GetById(page.PageTypeId));
+                return Load<T, PageBase>(page, api.PageTypes.GetById(page.PageTypeId));
             }
             return null;
         }
@@ -134,8 +135,8 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The page model</returns>
-        public Models.DynamicPage GetById(Guid id) {
-            return GetById<Models.DynamicPage>(id);
+        public DynamicPage GetById(Guid id) {
+            return GetById<DynamicPage>(id);
         }
 
         /// <summary>
@@ -144,7 +145,7 @@ namespace Piranha.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
         /// <returns>The page model</returns>
-        public T GetById<T>(Guid id) where T : Models.GenericPage<T> {
+        public T GetById<T>(Guid id) where T : GenericPage<T> {
             var page = cache != null ? cache.Get<Page>(id.ToString()) : null;
 
             if (page == null) {
@@ -160,7 +161,7 @@ namespace Piranha.Repositories
             }
 
             if (page != null)
-                return Load<T, Models.PageBase>(page, api.PageTypes.GetById(page.PageTypeId));
+                return Load<T, PageBase>(page, api.PageTypes.GetById(page.PageTypeId));
             return null;
         }
 
@@ -170,8 +171,8 @@ namespace Piranha.Repositories
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>
-        public Models.DynamicPage GetBySlug(string slug, Guid? siteId = null) {
-            return GetBySlug<Models.DynamicPage>(slug, siteId);
+        public DynamicPage GetBySlug(string slug, Guid? siteId = null) {
+            return GetBySlug<DynamicPage>(slug, siteId);
         }
 
         /// <summary>
@@ -181,7 +182,7 @@ namespace Piranha.Repositories
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>
-        public T GetBySlug<T>(string slug, Guid? siteId = null) where T : Models.GenericPage<T> {
+        public T GetBySlug<T>(string slug, Guid? siteId = null) where T : GenericPage<T> {
             if (!siteId.HasValue) {
                 var site = api.Sites.GetDefault();
                 if (site != null)
@@ -189,25 +190,24 @@ namespace Piranha.Repositories
             }
 
             // See if we can get the page id for the slug from cache.
-            var pageId = cache != null ? cache.Get<Guid?>($"PageId_{siteId}_{slug}") : (Guid?)null;
+            var pageId = cache != null ? cache.Get<Guid?>($"PageId_{siteId}_{slug}") : null;
 
             if (pageId.HasValue) {
                 // Load the page by id instead
                 return GetById<T>(pageId.Value);
-            } else {
-                // No cache found, load from database
-                var page = db.Pages
-                    .AsNoTracking()
-                    .Include(p => p.Fields)
-                    .FirstOrDefault(p => p.SiteId == siteId && p.Slug == slug);
-
-                if (page != null) {
-                    if (cache != null)
-                        AddToCache(page);
-                    return Load<T, Models.PageBase>(page, api.PageTypes.GetById(page.PageTypeId));
-                }                    
-                return null;
             }
+            // No cache found, load from database
+            var page = db.Pages
+                .AsNoTracking()
+                .Include(p => p.Fields)
+                .FirstOrDefault(p => p.SiteId == siteId && p.Slug == slug);
+
+            if (page != null) {
+                if (cache != null)
+                    AddToCache(page);
+                return Load<T, PageBase>(page, api.PageTypes.GetById(page.PageTypeId));
+            }                    
+            return null;
         }
 
         /// <summary>
@@ -224,24 +224,23 @@ namespace Piranha.Repositories
             }
 
             // See if we can get the page id for the slug from cache.
-            var pageId = cache != null ? cache.Get<Guid?>($"PageId_{siteId}_{slug}") : (Guid?)null;
+            var pageId = cache != null ? cache.Get<Guid?>($"PageId_{siteId}_{slug}") : null;
 
             if (pageId.HasValue) {
                 return pageId;
-            } else {
-                // No cache found, load from database
-                var page = db.Pages
-                    .AsNoTracking()
-                    .Include(p => p.Fields)
-                    .FirstOrDefault(p => p.SiteId == siteId && p.Slug == slug);
-
-                if (page != null) {
-                    if (cache != null)
-                        AddToCache(page);
-                    return page.Id;
-                }                    
-                return null;                
             }
+            // No cache found, load from database
+            var page = db.Pages
+                .AsNoTracking()
+                .Include(p => p.Fields)
+                .FirstOrDefault(p => p.SiteId == siteId && p.Slug == slug);
+
+            if (page != null) {
+                if (cache != null)
+                    AddToCache(page);
+                return page.Id;
+            }                    
+            return null;
         }
 
         /// <summary>
@@ -251,7 +250,7 @@ namespace Piranha.Repositories
         /// <param name="model">The page to move</param>
         /// <param name="parentId">The new parent id</param>
         /// <param name="sortOrder">The new sort order</param>
-        public void Move<T>(T model, Guid? parentId, int sortOrder) where T : Models.GenericPage<T> {
+        public void Move<T>(T model, Guid? parentId, int sortOrder) where T : GenericPage<T> {
             IEnumerable<Page> oldSiblings = null;
             IEnumerable<Page> newSiblings = null;
 
@@ -292,7 +291,7 @@ namespace Piranha.Repositories
         /// Saves the given page model
         /// </summary>
         /// <param name="model">The page model</param>
-        public void Save<T>(T model) where T : Models.GenericPage<T> {
+        public void Save<T>(T model) where T : GenericPage<T> {
             var type = api.PageTypes.GetById(model.TypeId);
 
             if (type != null) {
@@ -304,7 +303,8 @@ namespace Piranha.Repositories
 
                 // If not, create a new page
                 if (page == null) {
-                    page = new Page() {
+                    page = new Page
+                    {
                         Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
                         ParentId = model.ParentId,
                         SortOrder = model.SortOrder,
@@ -352,7 +352,7 @@ namespace Piranha.Repositories
                 model.ContentType = type.ContentTypeId;
 
                 // Map basic fields
-                App.Mapper.Map<Models.PageBase, Page>(model, page);
+                App.Mapper.Map<PageBase, Page>(model, page);
 
                 // Map regions
                 foreach (var regionKey in currentRegions) {
@@ -421,7 +421,7 @@ namespace Piranha.Repositories
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        public virtual void Delete<T>(T model) where T : Models.GenericPage<T> {
+        public virtual void Delete<T>(T model) where T : GenericPage<T> {
             Delete(model.Id);
         }
 

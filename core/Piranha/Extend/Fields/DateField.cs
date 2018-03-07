@@ -16,7 +16,7 @@ namespace Piranha.Extend.Fields
     public class DateField : SimpleField<DateTime?>
     {
         public static implicit operator DateField(DateTime date) {
-            return new DateField() { Value = date };
+            return new DateField { Value = date };
         }
     }
 }

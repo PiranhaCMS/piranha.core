@@ -8,9 +8,11 @@
  * 
  */
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Piranha.Models;
 
 namespace Piranha.Extend
 {
@@ -43,7 +45,8 @@ namespace Piranha.Extend
             /// <param name="extension">The file extension</param>
             /// <param name="contentType">The content type</param>
             public void Add(string extension, string contentType) {
-                Add(new MediaTypeItem() {
+                Add(new MediaTypeItem
+                {
                     Extension = extension,
                     ContentType = contentType
                 });
@@ -55,7 +58,7 @@ namespace Piranha.Extend
             /// <param name="extension">The file extension</param>
             /// <returns>If the extension exists</returns>
             public bool ContainsExtension(string extension) {
-                return this.Any(t => t.Extension.Equals(extension, System.StringComparison.OrdinalIgnoreCase));
+                return this.Any(t => t.Extension.Equals(extension, StringComparison.OrdinalIgnoreCase));
             }
         }
 
@@ -102,16 +105,16 @@ namespace Piranha.Extend
         /// </summary>
         /// <param name="filename">The path or filename</param>
         /// <returns>The media type</returns>
-        public Models.MediaType GetMediaType(string filename) {
+        public MediaType GetMediaType(string filename) {
             var extension = Path.GetExtension(filename);
 
             if (Documents.ContainsExtension(extension))
-                return Models.MediaType.Document;
-            else if (Images.ContainsExtension(extension))
-                return Models.MediaType.Image;
-            else if (Videos.ContainsExtension(extension))
-                return Models.MediaType.Video;
-            return Models.MediaType.Unknown;
+                return MediaType.Document;
+            if (Images.ContainsExtension(extension))
+                return MediaType.Image;
+            if (Videos.ContainsExtension(extension))
+                return MediaType.Video;
+            return MediaType.Unknown;
         }
 
         /// <summary>
@@ -126,9 +129,9 @@ namespace Piranha.Extend
 
             if ((item = Documents.SingleOrDefault(t => t.Extension == extension)) != null)
                 return item.ContentType;
-            else if ((item = Images.SingleOrDefault(t => t.Extension == extension)) != null)
+            if ((item = Images.SingleOrDefault(t => t.Extension == extension)) != null)
                 return item.ContentType;
-            else if ((item = Videos.SingleOrDefault(t => t.Extension == extension)) != null)
+            if ((item = Videos.SingleOrDefault(t => t.Extension == extension)) != null)
                 return item.ContentType;
             return "application/octet-stream";
         }

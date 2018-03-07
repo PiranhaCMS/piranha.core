@@ -8,12 +8,14 @@
  * 
  */
 
-using Piranha.Manager;
-using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
+using Piranha;
+using Piranha.Manager;
+using Module = Piranha.Manager.Module;
 
 public static class ManagerModuleExtensions
 {
@@ -32,7 +34,7 @@ public static class ManagerModuleExtensions
         });
 
         // Add the manager module
-        Piranha.App.Modules.Register<Piranha.Manager.Module>();
+        App.Modules.Register<Module>();
 
         // Add session support
         services.AddSession();
@@ -198,6 +200,6 @@ public static class ManagerModuleExtensions
     public static IApplicationBuilder UsePiranhaManager(this IApplicationBuilder builder) {
         return builder
             .UseSession()
-            .UseMiddleware<Piranha.Manager.ResourceMiddleware>();
+            .UseMiddleware<ResourceMiddleware>();
     }
 }

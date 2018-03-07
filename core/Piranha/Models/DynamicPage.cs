@@ -27,7 +27,8 @@ namespace Piranha.Models
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public DynamicPage() : base() {
+        public DynamicPage()
+        {
             Regions = new ExpandoObject();
         }
     }

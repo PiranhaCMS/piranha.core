@@ -9,6 +9,7 @@
  */
 
 using System;
+using Piranha.Data;
 
 namespace Piranha
 {
@@ -46,7 +47,8 @@ namespace Piranha
             set {
                 var param = api.Params.GetByKey(ARCHIVE_PAGE_SIZE);
                 if (param == null) {
-                    param = new Data.Param() {
+                    param = new Param
+                    {
                         Key = ARCHIVE_PAGE_SIZE
                     };
                 }
@@ -70,7 +72,8 @@ namespace Piranha
             set {
                 var param = api.Params.GetByKey(CACHE_EXPIRES_PAGES);
                 if (param == null) {
-                    param = new Data.Param() {
+                    param = new Param
+                    {
                         Key = CACHE_EXPIRES_PAGES
                     };
                 }
@@ -94,7 +97,8 @@ namespace Piranha
             set {
                 var param = api.Params.GetByKey(CACHE_EXPIRES_POSTS);
                 if (param == null) {
-                    param = new Data.Param() {
+                    param = new Param
+                    {
                         Key = CACHE_EXPIRES_POSTS
                     };
                 }
@@ -117,7 +121,8 @@ namespace Piranha
             set {
                 var param = api.Params.GetByKey(PAGES_HIERARCHICAL_SLUGS);
                 if (param == null) {
-                    param = new Data.Param() {
+                    param = new Param
+                    {
                         Key = PAGES_HIERARCHICAL_SLUGS
                     };
                 }
@@ -140,7 +145,8 @@ namespace Piranha
             set {
                 var param = api.Params.GetByKey(MANAGER_EXPANDED_SITEMAP_LEVELS);
                 if (param == null) {
-                    param = new Data.Param() {
+                    param = new Param
+                    {
                         Key = MANAGER_EXPANDED_SITEMAP_LEVELS
                     };
                 }
@@ -163,7 +169,8 @@ namespace Piranha
             set {
                 var param = api.Params.GetByKey(MEDIA_CDN_URL);
                 if (param == null) {
-                    param = new Data.Param() {
+                    param = new Param
+                    {
                         Key = MEDIA_CDN_URL
                     };
                 }

@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Authorization
+﻿@using Piranha.Manager
 @inject IAuthorizationService AuthorizationService
 @{
     var controller = ViewBag.Controller?.ToLower();
@@ -7,7 +7,7 @@
     <!--<li>
         <a href="#"><span class="glyphicon glyphicon-dashboard"></span><span class="title">Dashboard</span></a>
     </li>-->
-    @foreach (var group in Piranha.Manager.Menu.Items) {
+    @foreach (var group in Menu.Items) {
         if (group.Items.Count > 0) {
             <li>
                 <a href="#"><span class="@group.Css"></span><span class="title">@group.Name</span></a>

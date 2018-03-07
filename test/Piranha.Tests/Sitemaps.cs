@@ -8,8 +8,8 @@
  * 
  */
 
-using Piranha.Models;
 using System;
+using Piranha.Models;
 using Xunit;
 
 namespace Piranha.Tests
@@ -23,16 +23,19 @@ namespace Piranha.Tests
         protected override void Init() {
             sitemap = new Sitemap();
 
-            sitemap.Add(new SitemapItem() {
+            sitemap.Add(new SitemapItem
+            {
                 Id = id_1,
                 Title = "No navigation title"
             });
-            sitemap[0].Items.Add(new SitemapItem() {
+            sitemap[0].Items.Add(new SitemapItem
+            {
                 Id = id_2,
                 Title = "Has navigation title",
                 NavigationTitle = "Navigation title"
             });
-            sitemap[0].Items.Add(new SitemapItem() {
+            sitemap[0].Items.Add(new SitemapItem
+            {
                 Id = Guid.NewGuid()
             });
         }

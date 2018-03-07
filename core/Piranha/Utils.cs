@@ -14,6 +14,7 @@ using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using Piranha.Extend.Fields;
 
 namespace Piranha
 {
@@ -143,7 +144,7 @@ namespace Piranha
         /// </summary>
         /// <param name="md">The field</param>
         /// <returns>The first paragraph</returns>
-        public static string FirstParagraph(Extend.Fields.MarkdownField md) {
+        public static string FirstParagraph(MarkdownField md) {
             Regex reg = new Regex("<p[^>]*>.*?</p>") ;
             var matches = reg.Matches(md.ToHtml()) ;
 
@@ -155,7 +156,7 @@ namespace Piranha
         /// </summary>
         /// <param name="html">The field</param>
         /// <returns>The first paragraph</returns>
-        public static string FirstParagraph(Extend.Fields.HtmlField html) {
+        public static string FirstParagraph(HtmlField html) {
             Regex reg = new Regex("<p[^>]*>.*?</p>") ;
             var matches = reg.Matches(html.Value) ;
 

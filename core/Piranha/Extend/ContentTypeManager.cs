@@ -34,7 +34,8 @@ namespace Piranha.Extend
             if (contentTypes.Exists(t => t.Type == typeof(T)))
                 throw new ArgumentException($"Given type {typeof(T).FullName} is already registered as a content type.");
             
-            contentTypes.Add(new AppContentType() {
+            contentTypes.Add(new AppContentType
+            {
                 Id = id,
                 Type = typeof(T),
                 Title = title,

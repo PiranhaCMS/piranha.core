@@ -19,7 +19,7 @@ namespace Piranha.Security
         public const string PostPreview = "PiranhaPostPreview";
 
         public static string[] All() {
-            return new string[] {
+            return new[] {
                 PagePreview,
                 PostPreview
             };

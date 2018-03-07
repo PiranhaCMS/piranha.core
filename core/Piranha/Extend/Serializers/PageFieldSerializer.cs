@@ -9,6 +9,7 @@
  */
 
 using System;
+using Piranha.Extend.Fields;
 
 namespace Piranha.Extend.Serializers
 {
@@ -20,8 +21,8 @@ namespace Piranha.Extend.Serializers
         /// <param name="obj">The object</param>
         /// <returns>The serialized value</returns>
         public string Serialize(object obj) {
-            if (obj is Fields.PageField) {
-                return ((Fields.PageField)obj).Id.ToString();
+            if (obj is PageField) {
+                return ((PageField)obj).Id.ToString();
             }
             throw new ArgumentException("The given object doesn't match the serialization type");
         }
@@ -32,7 +33,8 @@ namespace Piranha.Extend.Serializers
         /// <param name="str">The serialized value</param>
         /// <returns>The object</returns>
         public object Deserialize(string str) {
-            return new Fields.PageField() {
+            return new PageField
+            {
                 Id = !string.IsNullOrEmpty(str) ? new Guid(str) : (Guid?)null
             };
         }

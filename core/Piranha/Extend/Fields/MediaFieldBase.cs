@@ -8,8 +8,9 @@
  * 
  */
 
-using Newtonsoft.Json;
 using System;
+using Newtonsoft.Json;
+using Piranha.Data;
 
 namespace Piranha.Extend.Fields
 {
@@ -19,10 +20,9 @@ namespace Piranha.Extend.Fields
         /// Gets the list item title if this field is used in
         /// a collection regions.
         /// </summary>
-        public virtual string GetTitle() {
-            if (Media != null)
-                return Media.Filename;
-            return null;
+        public virtual string GetTitle()
+        {
+            return Media?.Filename;
         }
 
         /// <summary>
@@ -35,28 +35,31 @@ namespace Piranha.Extend.Fields
         /// Gets/sets the related media object.
         /// </summary>
         [JsonIgnore]
-        public Data.Media Media { get; private set; }
+        public Media Media { get; private set; }
 
         /// <summary>
         /// Gets if the field has a media object available.
         /// </summary>
-        public bool HasValue {
-            get { return Media != null; }
-        }
+        public bool HasValue => Media != null;
 
         /// <summary>
         /// Initializes the field for client use.
         /// </summary>
         /// <param name="api">The current api</param>
-        public virtual void Init(IApi api) { 
-            if (Id.HasValue) {
-                Media = api.Media.GetById(Id.Value);
+        public virtual void Init(IApi api)
+        {
+            if (!Id.HasValue)
+            {
+                return;
+            }
 
-                if (Media == null) {
-                    // The image has been removed, remove the
-                    // missing id.
-                    Id = null;
-                }
+            Media = api.Media.GetById(Id.Value);
+
+            if (Media == null)
+            {
+                // The image has been removed, remove the
+                // missing id.
+                Id = null;
             }
         }
 
@@ -66,7 +69,8 @@ namespace Piranha.Extend.Fields
         /// data needed.
         /// </summary>
         /// <param name="api">The current api</param>
-        public virtual void InitManager(IApi api) { 
+        public virtual void InitManager(IApi api)
+        {
             Init(api);
         }
     }

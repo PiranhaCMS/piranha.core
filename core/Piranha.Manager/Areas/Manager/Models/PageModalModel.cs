@@ -50,7 +50,8 @@ namespace Piranha.Areas.Manager.Models
 
             // Get the sites available
             model.Sites = api.Sites.GetAll()
-                .Select(s => new SiteItem() {
+                .Select(s => new SiteItem
+                {
                     Id = s.Id,
                     Title = s.Title
                 }).OrderBy(s => s.Title).ToList();

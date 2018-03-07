@@ -27,7 +27,8 @@ namespace Piranha.Web
                 var alias = api.Aliases.GetByAliasUrl(url, siteId);
 
                 if (alias != null) {
-                    return new RouteResponse() {
+                    return new RouteResponse
+                    {
                         IsPublished = true,
                         RedirectUrl = alias.RedirectUrl,
                         RedirectType = alias.Type

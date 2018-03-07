@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using Piranha.Models;
 
 namespace Piranha.Data
 {
@@ -41,7 +42,7 @@ namespace Piranha.Data
         /// Gets/sets the redirect type.
         /// </summary>
         /// <returns></returns>
-        public Models.RedirectType RedirectType { get; set; }
+        public RedirectType RedirectType { get; set; }
 
         /// <summary>
         /// Gets/sets the associated post type.
@@ -66,7 +67,8 @@ namespace Piranha.Data
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public Post() : base() { 
+        public Post()
+        { 
             Tags = new List<PostTag>();
         }
     }

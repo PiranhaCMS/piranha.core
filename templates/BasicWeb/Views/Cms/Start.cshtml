@@ -1,5 +1,6 @@
+@using Piranha
 @model BasicWeb.Models.StartPage
-@inject Piranha.IApi Api
+@inject IApi Api
 @{
     ViewBag.Title = Model.Title;
     ViewBag.HasImage = Model.Heading.PrimaryImage.HasValue;

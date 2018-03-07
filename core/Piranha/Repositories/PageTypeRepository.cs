@@ -8,11 +8,12 @@
  * 
  */
 
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Piranha.Models;
 
 namespace Piranha.Repositories
 {
@@ -37,15 +38,15 @@ namespace Piranha.Repositories
         /// Gets all available models.
         /// </summary>
         /// <returns>The available models</returns>
-        public IEnumerable<Models.PageType> GetAll() {
+        public IEnumerable<PageType> GetAll() {
             var types = db.PageTypes
                 .AsNoTracking()
                 .OrderBy(t => t.Id)
                 .ToList();
-            var models = new List<Models.PageType>();
+            var models = new List<PageType>();
 
             foreach (var type in types) {
-                var model = JsonConvert.DeserializeObject<Models.PageType>(type.Body);
+                var model = JsonConvert.DeserializeObject<PageType>(type.Body);
 
                 if (cache != null && model != null)
                     cache.Set(model.Id, model);
@@ -60,8 +61,8 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique i</param>
         /// <returns></returns>
-        public Models.PageType GetById(string id) {
-            Models.PageType model = cache != null ? cache.Get<Models.PageType>(id) : null;
+        public PageType GetById(string id) {
+            PageType model = cache != null ? cache.Get<PageType>(id) : null;
 
             if (model == null) {
                 var type = db.PageTypes
@@ -69,7 +70,7 @@ namespace Piranha.Repositories
                     .FirstOrDefault(t => t.Id == id);
 
                 if (type != null)
-                    model = JsonConvert.DeserializeObject<Models.PageType>(type.Body);
+                    model = JsonConvert.DeserializeObject<PageType>(type.Body);
 
                 if (cache != null && model != null)
                     cache.Set(model.Id, model);
@@ -82,12 +83,13 @@ namespace Piranha.Repositories
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        public void Save(Models.PageType model) {
+        public void Save(PageType model) {
             var type = db.PageTypes
                 .FirstOrDefault(t => t.Id == model.Id);
 
             if (type == null) {
-                type = new Data.PageType() {
+                type = new Data.PageType
+                {
                     Id = model.Id,
                     Created = DateTime.Now
                 };
@@ -99,7 +101,7 @@ namespace Piranha.Repositories
             db.SaveChanges();
             
             if (cache != null)
-                cache.Remove(model.Id.ToString());
+                cache.Remove(model.Id);
         }
 
         /// <summary>
@@ -115,7 +117,7 @@ namespace Piranha.Repositories
                 db.SaveChanges();
 
                 if (cache != null)
-                    cache.Remove(id.ToString());
+                    cache.Remove(id);
             }
         }
 
@@ -123,7 +125,7 @@ namespace Piranha.Repositories
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        public void Delete(Models.PageType model) {
+        public void Delete(PageType model) {
             Delete(model.Id);
         }
     }

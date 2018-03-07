@@ -9,6 +9,7 @@
  */
 
 using System;
+using Piranha.Data;
 
 namespace Piranha.Extend.Fields
 {
@@ -20,15 +21,15 @@ namespace Piranha.Extend.Fields
         /// </summary>
         /// <param name="str">The string value</param>
         public static implicit operator VideoField(Guid guid) {
-            return new VideoField() { Id = guid };
+            return new VideoField { Id = guid };
         }
 
         /// <summary>
         /// Implicit operator for converting a media object to a field.
         /// </summary>
         /// <param name="media">The media object</param>
-        public static implicit operator VideoField(Data.Media media) {
-            return new VideoField() { Id = media.Id };
+        public static implicit operator VideoField(Media media) {
+            return new VideoField { Id = media.Id };
         }
 
         /// <summary>

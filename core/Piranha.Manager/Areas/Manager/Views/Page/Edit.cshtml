@@ -1,4 +1,5 @@
-﻿@model Piranha.Areas.Manager.Models.PageEditModel
+﻿@using Piranha.Manager
+@model Piranha.Areas.Manager.Models.PageEditModel
 @{
     ViewBag.Title = "Edit page";
     ViewBag.Controller = "Page";
@@ -20,7 +21,7 @@
     </script>
 }
 
-@using (var form = Html.BeginForm("Save", "Page", FormMethod.Post, new { @id = "main-form", @class = "form", @role = "form" })) {
+@using (var form = Html.BeginForm("Save", "Page", FormMethod.Post, new { id = "main-form", @class = "form", role = "form" })) {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.Id)
     @Html.HiddenFor(m => m.SiteId)
@@ -58,16 +59,16 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right" role="menu">
                     <li><a href="~/@Model.Slug" target="_blank">Preview</a></li>
-                    @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesPublish)).Succeeded) {
+                    @if ((await Authorization.AuthorizeAsync(User, Permission.PagesPublish)).Succeeded) {
                         if (Model.Published.HasValue) {
                             <li><a id="submit-unpublish" href="#">Unpublish</a></li>
                         } else {
                             <li><a id="submit-publish" href="#">Publish now</a></li>
                         }
                     }
-                    @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesDelete)).Succeeded) {
+                    @if ((await Authorization.AuthorizeAsync(User, Permission.PagesDelete)).Succeeded) {
                         <li class="divider"></li>
-                        <li><a href="@Url.Action("Delete", new { @id = Model.Id })"><span class="text-danger">Delete page</span></a></li>
+                        <li><a href="@Url.Action("Delete", new { id = Model.Id })"><span class="text-danger">Delete page</span></a></li>
                     }
                 </ul>
             </div>

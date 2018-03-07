@@ -8,11 +8,12 @@
  * 
  */
 
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Piranha.Areas.Manager.Models;
+using Piranha.Extend;
 
 namespace Piranha.Manager.Binders
 {
@@ -52,7 +53,7 @@ namespace Piranha.Manager.Binders
             // Get the requested abstract type
             if (bc.ModelType == typeof(PageEditRegionBase))
                 typeName = bc.ValueProvider.GetValue(bc.ModelName + ".CLRType").FirstValue;
-            else if (bc.ModelType == typeof(Extend.IField))
+            else if (bc.ModelType == typeof(IField))
                 typeName = bc.ValueProvider.GetValue(bc.ModelName.Replace(".Value", "") + ".CLRType").FirstValue;
 
             if (!String.IsNullOrEmpty(typeName)) {

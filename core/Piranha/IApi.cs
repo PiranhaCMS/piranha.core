@@ -9,6 +9,7 @@
  */
 
 using System;
+using Piranha.Repositories;
 
 namespace Piranha
 {
@@ -20,56 +21,56 @@ namespace Piranha
         /// <summary>
         /// Gets/sets the alias repository.
         /// </summary>
-        Repositories.IAliasRepository Aliases { get; }
+        IAliasRepository Aliases { get; }
 
         /// <summary>
         /// Gets/sets the archive repository.
         /// </summary>
-        Repositories.IArchiveRepository Archives { get; }
+        IArchiveRepository Archives { get; }
 
         /// <summary>
         /// Gets the category repository.
         /// </summary>
-        Repositories.ICategoryRepository Categories { get; }
+        ICategoryRepository Categories { get; }
 
         /// <summary>
         /// Gets the media repository.
         /// </summary>
-        Repositories.IMediaRepository Media { get; }
+        IMediaRepository Media { get; }
 
         /// <summary>
         /// Gets the page repository.
         /// </summary>
-        Repositories.IPageRepository Pages { get; }
+        IPageRepository Pages { get; }
 
         /// <summary>
         /// Gets the page type repository.
         /// </summary>
-        Repositories.IPageTypeRepository PageTypes { get; }
+        IPageTypeRepository PageTypes { get; }
 
         /// <summary>
         /// Gets the param repository.
         /// </summary>
-        Repositories.IParamRepository Params { get; }
+        IParamRepository Params { get; }
 
         /// <summary>
         /// Gets the post repository.
         /// </summary>
-        Repositories.IPostRepository Posts { get; }
+        IPostRepository Posts { get; }
 
         /// <summary>
         /// Gets the post type repository.
         /// </summary>
-        Repositories.IPostTypeRepository PostTypes { get; }
+        IPostTypeRepository PostTypes { get; }
 
         /// <summary>
         /// Gets the site repository.
         /// </summary>
-        Repositories.ISiteRepository Sites { get; }
+        ISiteRepository Sites { get; }
 
         /// <summary>
         /// Gets the tag repository.
         /// </summary>
-        Repositories.ITagRepository Tags { get; }
+        ITagRepository Tags { get; }
     }
 }

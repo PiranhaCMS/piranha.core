@@ -8,8 +8,8 @@
  * 
  */
 
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Piranha.Manager.Binders
 {

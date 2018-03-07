@@ -8,11 +8,13 @@
  * 
  */
 
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Piranha.Models;
 using X.Web.Sitemap;
+using Sitemap = X.Web.Sitemap.Sitemap;
 
 namespace Piranha.AspNetCore
 {
@@ -64,11 +66,12 @@ namespace Piranha.AspNetCore
             await next.Invoke(context);
         }
 
-        private List<Url> GetPageUrls(IApi api, Models.SitemapItem item, string baseUrl) {
+        private List<Url> GetPageUrls(IApi api, SitemapItem item, string baseUrl) {
             var urls = new List<Url>();
 
             if (item.Published.HasValue) {
-                urls.Add(new Url() {
+                urls.Add(new Url
+                {
                     ChangeFrequency = ChangeFrequency.Daily,
                     Location = baseUrl + item.Permalink,
                     Priority = 0.5,
@@ -81,7 +84,8 @@ namespace Piranha.AspNetCore
                     // Get all posts for the blog
                     var posts = api.Posts.GetAll(page.Id);
                     foreach (var post in posts) {
-                        urls.Add(new Url() {
+                        urls.Add(new Url
+                        {
                             ChangeFrequency = ChangeFrequency.Daily,
                             Location = baseUrl + post.Permalink,
                             Priority = 0.5,

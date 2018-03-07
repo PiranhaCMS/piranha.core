@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using Piranha.Models;
 
 namespace Piranha.Repositories
 {
@@ -20,7 +21,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="blogId">The unique id</param>
         /// <returns>The posts</returns>
-        IEnumerable<Models.DynamicPost> GetAll(Guid blogId);
+        IEnumerable<DynamicPost> GetAll(Guid blogId);
 
         /// <summary>
         /// Gets the available posts for the specified blog.
@@ -28,14 +29,14 @@ namespace Piranha.Repositories
         /// <param name="slug">The blog slug</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The posts</returns>
-        IEnumerable<Models.DynamicPost> GetAll(string slug, Guid? siteId = null);
+        IEnumerable<DynamicPost> GetAll(string slug, Guid? siteId = null);
 
         /// <summary>
         /// Gets the post model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The post model</returns>
-        Models.DynamicPost GetById(Guid id);
+        DynamicPost GetById(Guid id);
 
         /// <summary>
         /// Gets the post model with the specified id.
@@ -43,7 +44,7 @@ namespace Piranha.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
         /// <returns>The post model</returns>
-        T GetById<T>(Guid id) where T : Models.Post<T>;
+        T GetById<T>(Guid id) where T : Post<T>;
 
         /// <summary>
         /// Gets the post model with the specified slug.
@@ -51,7 +52,7 @@ namespace Piranha.Repositories
         /// <param name="blog">The unique blog slug</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The post model</returns>
-        Models.DynamicPost GetBySlug(Guid blogId, string slug);
+        DynamicPost GetBySlug(Guid blogId, string slug);
 
         /// <summary>
         /// Gets the post model with the specified slug.
@@ -60,7 +61,7 @@ namespace Piranha.Repositories
         /// <param name="blog">The unique blog slug</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The post model</returns>
-        T GetBySlug<T>(Guid blogId, string slug) where T : Models.Post<T>;
+        T GetBySlug<T>(Guid blogId, string slug) where T : Post<T>;
 
         /// <summary>
         /// Gets the post model with the specified slug.
@@ -69,7 +70,7 @@ namespace Piranha.Repositories
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The post model</returns>
-        Models.DynamicPost GetBySlug(string blog, string slug, Guid? siteId = null);
+        DynamicPost GetBySlug(string blog, string slug, Guid? siteId = null);
 
         /// <summary>
         /// Gets the post model with the specified slug.
@@ -79,13 +80,13 @@ namespace Piranha.Repositories
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The post model</returns>
-        T GetBySlug<T>(string blog, string slug, Guid? siteId = null) where T : Models.Post<T>;
+        T GetBySlug<T>(string blog, string slug, Guid? siteId = null) where T : Post<T>;
 
         /// <summary>
         /// Saves the given post model
         /// </summary>
         /// <param name="model">The post model</param>
-        void Save<T>(T model) where T : Models.Post<T>;
+        void Save<T>(T model) where T : Post<T>;
 
         /// <summary>
         /// Deletes the model with the specified id.
@@ -97,6 +98,6 @@ namespace Piranha.Repositories
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        void Delete<T>(T model) where T : Models.Post<T>;
+        void Delete<T>(T model) where T : Post<T>;
     }
 }

@@ -8,6 +8,11 @@
  * 
  */
 
+using System;
+using System.IO;
+using System.Linq;
+using CoreWeb.Models;
+using CoreWeb.Models.Regions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -15,11 +20,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Piranha;
+using Piranha.AspNetCore;
+using Piranha.AttributeBuilder;
 using Piranha.ImageSharp;
 using Piranha.Local;
-using System;
-using System.IO;
-using System.Linq;
+using Piranha.Manager;
+using Piranha.Manager.Binders;
+using Piranha.Models;
 
 namespace CoreWeb
 {
@@ -42,7 +49,7 @@ namespace CoreWeb
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public IServiceProvider ConfigureServices(IServiceCollection services) {
             services.AddMvc(config => {
-                config.ModelBinderProviders.Insert(0, new Piranha.Manager.Binders.AbstractModelBinderProvider());
+                config.ModelBinderProviders.Insert(0, new AbstractModelBinderProvider());
             });
             services.AddDbContext<Db>(options =>
                 options.UseSqlite("Filename=./piranha.coreweb.db"));            
@@ -51,7 +58,7 @@ namespace CoreWeb
             services.AddScoped<IDb, Db>();
             services.AddScoped<IApi, Api>();
             services.AddPiranhaSimpleSecurity(
-                new Piranha.AspNetCore.SimpleUser(Piranha.Manager.Permission.All()) {
+                new SimpleUser(Permission.All()) {
                     UserName = "admin",
                     Password = "password"
                 }
@@ -74,14 +81,14 @@ namespace CoreWeb
             App.Init(api);
 
             // Build types
-            var pageTypeBuilder = new Piranha.AttributeBuilder.PageTypeBuilder(api)
-                .AddType(typeof(Models.StandardBlog))
-                .AddType(typeof(Models.StandardPage))
-                .AddType(typeof(Models.TeaserPage));
+            var pageTypeBuilder = new PageTypeBuilder(api)
+                .AddType(typeof(StandardBlog))
+                .AddType(typeof(StandardPage))
+                .AddType(typeof(TeaserPage));
             pageTypeBuilder.Build()
                 .DeleteOrphans();
-            var postTypeBuilder = new Piranha.AttributeBuilder.PostTypeBuilder(api)
-                .AddType(typeof(Models.ArticlePost));
+            var postTypeBuilder = new PostTypeBuilder(api)
+                .AddType(typeof(ArticlePost));
             postTypeBuilder.Build()
                 .DeleteOrphans();
 
@@ -118,21 +125,24 @@ namespace CoreWeb
                 var stopwatchId = Guid.NewGuid();
 
                 using (var stream = File.OpenRead("assets/seed/github.png")) {
-                    api.Media.Save(new Piranha.Models.StreamMediaContent() {
+                    api.Media.Save(new StreamMediaContent
+                    {
                         Id = githubId,
                         Filename = "github.png",
                         Data = stream
                     });
                 }
                 using (var stream = File.OpenRead("assets/seed/platform.png")) {
-                    api.Media.Save(new Piranha.Models.StreamMediaContent() {
+                    api.Media.Save(new StreamMediaContent
+                    {
                         Id = platformId,
                         Filename = "platform.png",
                         Data = stream
                     });
                 }
                 using (var stream = File.OpenRead("assets/seed/stopwatch.png")) {
-                    api.Media.Save(new Piranha.Models.StreamMediaContent() {
+                    api.Media.Save(new StreamMediaContent
+                    {
                         Id = stopwatchId,
                         Filename = "stopwatch.png",
                         Data = stream
@@ -142,7 +152,7 @@ namespace CoreWeb
                 // Add the startpage
                 using (var stream = File.OpenRead("assets/seed/startpage.md")) {
                     using (var reader = new StreamReader(stream)) {
-                        var startPage = Models.TeaserPage.Create(api);
+                        var startPage = TeaserPage.Create(api);
 
                         // Add main content
                         startPage.SiteId = site.Id;
@@ -155,17 +165,20 @@ namespace CoreWeb
                         startPage.Published = DateTime.Now;
 
                         // Add teasers
-                        startPage.Teasers.Add(new Models.Regions.Teaser() {
+                        startPage.Teasers.Add(new Teaser
+                        {
                             Title = "Cross Platform",
                             Image = platformId,
                             Body = "Built for `NetStandard` and `AspNet Core`, Piranha CMS can be run on Windows, Linux and Mac OS X."
                         });
-                        startPage.Teasers.Add(new Models.Regions.Teaser() {
+                        startPage.Teasers.Add(new Teaser
+                        {
                             Title = "Super Fast",
                             Image = stopwatchId,
                             Body = "Designed from the ground up for super-fast performance using `EF Core` and optional Caching."
                         });
-                        startPage.Teasers.Add(new Models.Regions.Teaser() {
+                        startPage.Teasers.Add(new Teaser
+                        {
                             Title = "Open Source",
                             Image = githubId,
                             Body = "Everything is Open Source and released under the `MIT` license for maximum flexibility."
@@ -173,7 +186,7 @@ namespace CoreWeb
 
                         api.Pages.Save(startPage);
 
-                        var docsPage = Models.StandardPage.Create(api);
+                        var docsPage = StandardPage.Create(api);
                         docsPage.SiteId = site.Id;
                         docsPage.SortOrder = 1;
                         docsPage.Title = "Docs";
@@ -185,7 +198,7 @@ namespace CoreWeb
                 }
 
                 // Add the blog page
-                var blogPage = Models.StandardBlog.Create(api);
+                var blogPage = StandardBlog.Create(api);
 
                 blogPage.SiteId = site.Id;
                 blogPage.Title = "Blog Archive";
@@ -201,7 +214,7 @@ namespace CoreWeb
                 // Add a blog post
                 using (var stream = File.OpenRead("assets/seed/blogpost.md")) {
                     using (var reader = new StreamReader(stream)) {
-                        var post = Models.ArticlePost.Create(api);
+                        var post = ArticlePost.Create(api);
 
                         // Add main content
                         post.BlogId = blogPage.Id;

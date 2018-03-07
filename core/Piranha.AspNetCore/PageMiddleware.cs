@@ -8,12 +8,14 @@
  * 
  */
 
+using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
+using Piranha.Models;
+using Piranha.Security;
 using Piranha.Web;
-using System;
-using System.Threading.Tasks;
 
 namespace Piranha.AspNetCore
 {
@@ -44,7 +46,7 @@ namespace Piranha.AspNetCore
                         logger.LogInformation($"Found page\n  Route: {response.Route}\n  Params: {response.QueryString}");
 
                     if (!response.IsPublished) {
-                        if (!context.User.HasClaim(Security.Permission.PagePreview, Security.Permission.PagePreview)) {
+                        if (!context.User.HasClaim(Permission.PagePreview, Permission.PagePreview)) {
                             if (logger != null) {
                                 logger.LogInformation($"User not authorized to preview unpublished page");
                             }
@@ -62,15 +64,17 @@ namespace Piranha.AspNetCore
                                     if (logger != null)
                                         logger.LogInformation("Caching enabled. Setting MaxAge, LastModified & ETag");
 
-                                    headers.CacheControl = new CacheControlHeaderValue() {
+                                    headers.CacheControl = new CacheControlHeaderValue
+                                    {
                                         Public = true,
-                                        MaxAge = TimeSpan.FromMinutes(config.CacheExpiresPages),
+                                        MaxAge = TimeSpan.FromMinutes(config.CacheExpiresPages)
                                     };
 
                                     headers.Headers["ETag"] = response.CacheInfo.EntityTag;
                                     headers.LastModified = response.CacheInfo.LastModified;
                                 } else {
-                                    headers.CacheControl = new CacheControlHeaderValue() {
+                                    headers.CacheControl = new CacheControlHeaderValue
+                                    {
                                         NoCache = true
                                     };
                                 }
@@ -82,18 +86,17 @@ namespace Piranha.AspNetCore
 
                                 context.Response.StatusCode = 304;
                                 return;
-                            } else {
-                                context.Request.Path = new PathString(response.Route);
-
-                                if (context.Request.QueryString.HasValue) {
-                                    context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&" + response.QueryString);
-                                } else context.Request.QueryString = new QueryString("?" + response.QueryString);
                             }
+                            context.Request.Path = new PathString(response.Route);
+
+                            if (context.Request.QueryString.HasValue) {
+                                context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&" + response.QueryString);
+                            } else context.Request.QueryString = new QueryString("?" + response.QueryString);
                         } else {
                             if (logger != null)
                                 logger.LogInformation($"Redirecting to url: {response.RedirectUrl}");
 
-                            context.Response.Redirect(response.RedirectUrl, response.RedirectType == Models.RedirectType.Permanent);
+                            context.Response.Redirect(response.RedirectUrl, response.RedirectType == RedirectType.Permanent);
                             return;
                         }
                     }

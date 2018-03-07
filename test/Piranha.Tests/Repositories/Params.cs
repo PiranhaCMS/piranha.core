@@ -10,6 +10,7 @@
 
 using System;
 using System.Linq;
+using Piranha.Data;
 using Xunit;
 
 namespace Piranha.Tests.Repositories
@@ -45,17 +46,20 @@ namespace Piranha.Tests.Repositories
 
         protected override void Init() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                api.Params.Save(new Data.Param() {
+                api.Params.Save(new Param
+                {
                     Id = PARAM_1_ID,
                     Key = PARAM_1,
                     Value = PARAM_1_VALUE
                 });
 
-                api.Params.Save(new Data.Param() {
-                    Key = PARAM_4,
+                api.Params.Save(new Param
+                {
+                    Key = PARAM_4
                 });
-                api.Params.Save(new Data.Param() {
-                    Key = PARAM_5,
+                api.Params.Save(new Param
+                {
+                    Key = PARAM_5
                 });
             }
         }
@@ -72,14 +76,15 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void IsCached() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                Assert.Equal(this.GetType() == typeof(ParamsCached), api.IsCached);
+                Assert.Equal(GetType() == typeof(ParamsCached), api.IsCached);
             }
         }        
 
         [Fact]
         public void Add() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                api.Params.Save(new Data.Param() {
+                api.Params.Save(new Param
+                {
                     Key = PARAM_2,
                     Value = "My second value"
                 });
@@ -90,7 +95,8 @@ namespace Piranha.Tests.Repositories
         public void AddDuplicateKey() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 Assert.ThrowsAny<Exception>(() =>
-                    api.Params.Save(new Data.Param() {
+                    api.Params.Save(new Param
+                    {
                         Key = PARAM_1,
                         Value = "My duplicate value"
                     }));

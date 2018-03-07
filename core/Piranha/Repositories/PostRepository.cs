@@ -8,11 +8,12 @@
  * 
  */
 
-using Microsoft.EntityFrameworkCore;
-using Piranha.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Piranha.Data;
+using Piranha.Models;
 
 namespace Piranha.Repositories
 {
@@ -31,7 +32,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="blogId">The unique blog id</param>
         /// <returns>The posts</returns>
-        public IEnumerable<Models.DynamicPost> GetAll(Guid blogId) {
+        public IEnumerable<DynamicPost> GetAll(Guid blogId) {
             var posts = db.Posts
                 .AsNoTracking()
                 .Where(p => p.BlogId == blogId)
@@ -40,7 +41,7 @@ namespace Piranha.Repositories
                 .ThenBy(p => p.Title)
                 .Select(p => p.Id);
 
-            var models = new List<Models.DynamicPost>();
+            var models = new List<DynamicPost>();
 
             foreach (var post in posts) {
                 var model = GetById(post);
@@ -57,7 +58,7 @@ namespace Piranha.Repositories
         /// <param name="slug">The blog slug</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The posts</returns>
-        public IEnumerable<Models.DynamicPost> GetAll(string slug, Guid? siteId = null) {
+        public IEnumerable<DynamicPost> GetAll(string slug, Guid? siteId = null) {
             if (!siteId.HasValue) {
                 var site = api.Sites.GetDefault();
                 if (site != null)
@@ -68,7 +69,7 @@ namespace Piranha.Repositories
 
             if (blogId.HasValue)
                 return GetAll(blogId.Value);
-            return new List<Models.DynamicPost>();
+            return new List<DynamicPost>();
         }
 
         /// <summary>
@@ -76,8 +77,8 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The post model</returns>
-        public Models.DynamicPost GetById(Guid id) {
-            return GetById<Models.DynamicPost>(id);
+        public DynamicPost GetById(Guid id) {
+            return GetById<DynamicPost>(id);
         }
 
         /// <summary>
@@ -86,7 +87,7 @@ namespace Piranha.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
         /// <returns>The post model</returns>
-        public T GetById<T>(Guid id) where T : Models.Post<T> {
+        public T GetById<T>(Guid id) where T : Post<T> {
             var post = cache != null ? cache.Get<Post>(id.ToString()) : null;
 
             if (post == null) {
@@ -99,12 +100,12 @@ namespace Piranha.Repositories
                     if (cache != null)
                         AddToCache(post);
                     post.Category = api.Categories.GetById(post.CategoryId);
-                    post.Blog = ((Repositories.PageRepository)api.Pages).GetPageById(post.BlogId);
+                    post.Blog = ((PageRepository)api.Pages).GetPageById(post.BlogId);
                 }
             }
 
             if (post != null)
-                return Load<T, Models.PostBase>(post, api.PostTypes.GetById(post.PostTypeId), Process);
+                return Load<T, PostBase>(post, api.PostTypes.GetById(post.PostTypeId), Process);
             return null;
         }
 
@@ -115,8 +116,8 @@ namespace Piranha.Repositories
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The post model</returns>
-        public Models.DynamicPost GetBySlug(string blog, string slug, Guid? siteId = null) {
-            return GetBySlug<Models.DynamicPost>(blog, slug, siteId);
+        public DynamicPost GetBySlug(string blog, string slug, Guid? siteId = null) {
+            return GetBySlug<DynamicPost>(blog, slug, siteId);
         }
 
         /// <summary>
@@ -127,7 +128,7 @@ namespace Piranha.Repositories
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The post model</returns>
-        public T GetBySlug<T>(string blog, string slug, Guid? siteId = null) where T : Models.Post<T> {
+        public T GetBySlug<T>(string blog, string slug, Guid? siteId = null) where T : Post<T> {
             if (!siteId.HasValue) {
                 var site = api.Sites.GetDefault();
                 if (site != null)
@@ -147,8 +148,8 @@ namespace Piranha.Repositories
         /// <param name="blog">The unique blog slug</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The post model</returns>
-        public Models.DynamicPost GetBySlug(Guid blogId, string slug) {
-            return GetBySlug<Models.DynamicPost>(blogId, slug);
+        public DynamicPost GetBySlug(Guid blogId, string slug) {
+            return GetBySlug<DynamicPost>(blogId, slug);
         }
 
         /// <summary>
@@ -158,36 +159,35 @@ namespace Piranha.Repositories
         /// <param name="blog">The unique blog slug</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The post model</returns>
-        public T GetBySlug<T>(Guid blogId, string slug) where T : Models.Post<T> {
-            var postId = cache != null ? cache.Get<Guid?>($"PostId_{blogId}_{slug}") : (Guid?)null;
+        public T GetBySlug<T>(Guid blogId, string slug) where T : Post<T> {
+            var postId = cache != null ? cache.Get<Guid?>($"PostId_{blogId}_{slug}") : null;
 
             if (postId.HasValue) {
                 // Load the post by id instead
                 return GetById<T>(postId.Value);
-            } else {
-                // No cache found, load from database
-                var post = db.Posts
-                    .AsNoTracking()
-                    .Include(p => p.Fields)
-                    .FirstOrDefault(p => p.BlogId == blogId && p.Slug == slug);
-
-                if (post != null) {
-                    if (cache != null)
-                        AddToCache(post);
-                    post.Category = api.Categories.GetById(post.CategoryId);
-                    post.Blog = ((Repositories.PageRepository)api.Pages).GetPageById(post.BlogId);
-            
-                    return Load<T, Models.PostBase>(post, api.PostTypes.GetById(post.PostTypeId), Process);
-                }                    
-                return null;
             }
+            // No cache found, load from database
+            var post = db.Posts
+                .AsNoTracking()
+                .Include(p => p.Fields)
+                .FirstOrDefault(p => p.BlogId == blogId && p.Slug == slug);
+
+            if (post != null) {
+                if (cache != null)
+                    AddToCache(post);
+                post.Category = api.Categories.GetById(post.CategoryId);
+                post.Blog = ((PageRepository)api.Pages).GetPageById(post.BlogId);
+            
+                return Load<T, PostBase>(post, api.PostTypes.GetById(post.PostTypeId), Process);
+            }                    
+            return null;
         }
 
         /// <summary>
         /// Saves the given post model
         /// </summary>
         /// <param name="model">The post model</param>
-        public void Save<T>(T model) where T : Models.Post<T> {
+        public void Save<T>(T model) where T : Post<T> {
             var type = api.PostTypes.GetById(model.TypeId);
 
             if (type != null) {
@@ -195,7 +195,7 @@ namespace Piranha.Repositories
 
                 // Ensure category
                 if (model.Category.Id == Guid.Empty) {
-                    Data.Category category = null;
+                    Category category = null;
 
                     if (!string.IsNullOrWhiteSpace(model.Category.Slug))
                         category = api.Categories.GetBySlug(model.BlogId, model.Category.Slug);
@@ -203,7 +203,8 @@ namespace Piranha.Repositories
                         category = api.Categories.GetByTitle(model.BlogId, model.Category.Title);                        
 
                     if (category == null) {
-                        category = new Data.Category() {
+                        category = new Category
+                        {
                             Id = Guid.NewGuid(),
                             BlogId = model.BlogId,
                             Title = model.Category.Title
@@ -216,7 +217,7 @@ namespace Piranha.Repositories
                 // Ensure tags
                 foreach (var t in model.Tags) {
                     if (t.Id == Guid.Empty) {
-                        Data.Tag tag = null;
+                        Tag tag = null;
 
                         if (!string.IsNullOrWhiteSpace(t.Slug))
                             tag = api.Tags.GetBySlug(model.BlogId, t.Slug);
@@ -225,7 +226,8 @@ namespace Piranha.Repositories
                             tag = api.Tags.GetByTitle(model.BlogId, t.Title);
 
                         if (tag == null) {
-                            tag = new Data.Tag() {
+                            tag = new Tag
+                            {
                                 Id = Guid.NewGuid(),
                                 BlogId = model.BlogId,
                                 Title = t.Title
@@ -243,7 +245,8 @@ namespace Piranha.Repositories
 
                 // If not, create a new post
                 if (post == null) {
-                    post = new Post() {
+                    post = new Post
+                    {
                         Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
                         Created = DateTime.Now,
                         LastModified = DateTime.Now
@@ -260,7 +263,7 @@ namespace Piranha.Repositories
                 else model.Slug = Utils.GenerateSlug(model.Slug);
 
                 // Map basic fields
-                App.Mapper.Map<Models.PostBase, Post>(model, post);
+                App.Mapper.Map<PostBase, Post>(model, post);
 
                 // Remove tags
                 var removedTags = new List<PostTag>();
@@ -274,7 +277,8 @@ namespace Piranha.Repositories
                 // Add tags
                 foreach (var tag in model.Tags) {
                     if (!post.Tags.Any(t => t.PostId == post.Id && t.TagId == tag.Id))
-                        post.Tags.Add(new PostTag() {
+                        post.Tags.Add(new PostTag
+                        {
                             PostId = post.Id,
                             TagId = tag.Id
                         });
@@ -358,7 +362,7 @@ namespace Piranha.Repositories
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        public void Delete<T>(T model) where T : Models.Post<T> {
+        public void Delete<T>(T model) where T : Post<T> {
             Delete(model.Id);
         }
 
@@ -367,11 +371,11 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="post">The source post</param>
         /// <param name="model">The targe model</param>
-        private void Process<T>(Data.Post post, T model) where T : Models.PostBase {
+        private void Process<T>(Post post, T model) where T : PostBase {
             model.Category = api.Categories.GetById(post.CategoryId);
 
             foreach (var tag in api.Tags.GetByPostId(post.Id).OrderBy(t => t.Title)) {
-                model.Tags.Add((Models.Taxonomy)tag);
+                model.Tags.Add(tag);
             }
         }
 

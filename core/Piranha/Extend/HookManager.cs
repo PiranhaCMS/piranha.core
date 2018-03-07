@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using Piranha.Data;
 
 namespace Piranha.Extend
 {
@@ -27,7 +28,7 @@ namespace Piranha.Extend
             /// </summary>
             /// <param name="hook">The hook</param>
             public void RegisterOnLoad(ModelDelegate<T> hook) {
-                App.Hooks.RegisterOnLoad<T>(hook);
+                App.Hooks.RegisterOnLoad(hook);
             }
 
             /// <summary>
@@ -36,7 +37,7 @@ namespace Piranha.Extend
             /// </summary>
             /// <param name="hook">The hook</param>
             public void RegisterOnBeforeSave(ModelDelegate<T> hook) { 
-                App.Hooks.RegisterOnBeforeSave<T>(hook);
+                App.Hooks.RegisterOnBeforeSave(hook);
             }
 
             /// <summary>
@@ -45,7 +46,7 @@ namespace Piranha.Extend
             /// </summary>
             /// <param name="hook">The hook</param>
             public void RegisterOnAfterSave(ModelDelegate<T> hook) { 
-                App.Hooks.RegisterOnAfterSave<T>(hook);
+                App.Hooks.RegisterOnAfterSave(hook);
             }
 
             /// <summary>
@@ -54,7 +55,7 @@ namespace Piranha.Extend
             /// </summary>
             /// <param name="hook">The hook</param>
             public void RegisterOnBeforeDelete(ModelDelegate<T> hook) { 
-                App.Hooks.RegisterOnBeforeDelete<T>(hook);
+                App.Hooks.RegisterOnBeforeDelete(hook);
             }
 
             /// <summary>
@@ -63,7 +64,7 @@ namespace Piranha.Extend
             /// </summary>
             /// <param name="hook">The hook</param>
             public void RegisterOnAfterDelete(ModelDelegate<T> hook) { 
-                App.Hooks.RegisterOnAfterDelete<T>(hook);
+                App.Hooks.RegisterOnAfterDelete(hook);
             }
 
             /// <summary>
@@ -91,37 +92,37 @@ namespace Piranha.Extend
         /// <summary>
         /// Gets the hooks available for aliases.
         /// </summary>
-        public RepositoryHooks<Data.Alias> Alias { get; private set; }
+        public RepositoryHooks<Alias> Alias { get; private set; }
 
         /// <summary>
         /// Gets the hooks available for categories.
         /// </summary>
-        public RepositoryHooks<Data.Category> Category { get; private set; }
+        public RepositoryHooks<Category> Category { get; private set; }
 
         /// <summary>
         /// Gets the hooks available for media.
         /// </summary>
-        public RepositoryHooks<Data.Media> Media { get; private set; }
+        public RepositoryHooks<Media> Media { get; private set; }
 
         /// <summary>
         /// Gets the hooks available for media folders.
         /// </summary>
-        public RepositoryHooks<Data.MediaFolder> MediaFolder { get; private set; }
+        public RepositoryHooks<MediaFolder> MediaFolder { get; private set; }
 
         /// <summary>
         /// Gets the hooks available for params.
         /// </summary>
-        public RepositoryHooks<Data.Param> Param { get; private set; }
+        public RepositoryHooks<Param> Param { get; private set; }
 
         /// <summary>
         /// Gets the hooks available for sites.
         /// </summary>
-        public RepositoryHooks<Data.Site> Site { get; private set; }
+        public RepositoryHooks<Site> Site { get; private set; }
 
         /// <summary>
         /// Gets the hooks available for tags.
         /// </summary>
-        public RepositoryHooks<Data.Tag> Tag { get; private set; }
+        public RepositoryHooks<Tag> Tag { get; private set; }
 
         /// <summary>
         /// Default constructor.
@@ -133,13 +134,13 @@ namespace Piranha.Extend
             onBeforeDelete = new Dictionary<Type, object>();
             onAfterDelete = new Dictionary<Type, object>();
 
-            Alias = new RepositoryHooks<Data.Alias>();
-            Category = new RepositoryHooks<Data.Category>();
-            Media = new RepositoryHooks<Data.Media>();
-            MediaFolder = new RepositoryHooks<Data.MediaFolder>();
-            Param = new RepositoryHooks<Data.Param>();
-            Site = new RepositoryHooks<Data.Site>();
-            Tag = new RepositoryHooks<Data.Tag>();
+            Alias = new RepositoryHooks<Alias>();
+            Category = new RepositoryHooks<Category>();
+            Media = new RepositoryHooks<Media>();
+            MediaFolder = new RepositoryHooks<MediaFolder>();
+            Param = new RepositoryHooks<Param>();
+            Site = new RepositoryHooks<Site>();
+            Tag = new RepositoryHooks<Tag>();
         }
 
         /// <summary>

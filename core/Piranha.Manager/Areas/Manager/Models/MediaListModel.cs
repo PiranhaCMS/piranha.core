@@ -8,16 +8,17 @@
  * 
  */
 
-using Piranha.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Piranha.Data;
+using Piranha.Models;
 
 namespace Piranha.Areas.Manager.Models
 {
     public class MediaListModel
     {
-        public IList<Data.Media> Media { get; set; }
+        public IList<Media> Media { get; set; }
         public MediaStructure Folders { get; set; }
         public IList<MediaStructureItem> Breadcrumb { get; set; }
         public Guid? CurrentFolderId { get; set; }
@@ -28,7 +29,7 @@ namespace Piranha.Areas.Manager.Models
         /// Default constructor.
         /// </summary>
         public MediaListModel() {
-            Media = new List<Data.Media>();
+            Media = new List<Media>();
             Folders = new MediaStructure();
         }
 
@@ -40,7 +41,8 @@ namespace Piranha.Areas.Manager.Models
         /// <param name="type">The optional media type</param>
         /// <returns>The model</returns>
         public static MediaListModel Get(IApi api, Guid? folderId = null, MediaType? type = null) {
-            var model = new MediaListModel() {
+            var model = new MediaListModel
+            {
                 CurrentFolderId = folderId,
                 ParentFolderId = null,
                 Filter = type

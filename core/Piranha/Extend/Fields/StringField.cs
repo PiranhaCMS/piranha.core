@@ -18,7 +18,7 @@ namespace Piranha.Extend.Fields
         /// </summary>
         /// <param name="str">The string value</param>
         public static implicit operator StringField(string str) {
-            return new StringField() { Value = str };
+            return new StringField { Value = str };
         }
 
         /// <summary>

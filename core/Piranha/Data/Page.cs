@@ -9,6 +9,7 @@
  */
 
 using System;
+using Piranha.Models;
 
 namespace Piranha.Data
 {
@@ -63,7 +64,7 @@ namespace Piranha.Data
         /// Gets/sets the redirect type.
         /// </summary>
         /// <returns></returns>
-        public Models.RedirectType RedirectType { get; set; }
+        public RedirectType RedirectType { get; set; }
 
         /// <summary>
         /// Gets/sets the site.
@@ -83,8 +84,9 @@ namespace Piranha.Data
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public Page() : base() {
-            RedirectType = Models.RedirectType.Temporary;
+        public Page()
+        {
+            RedirectType = RedirectType.Temporary;
         }
     }
 }

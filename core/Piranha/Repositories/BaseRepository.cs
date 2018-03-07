@@ -8,10 +8,10 @@
  * 
  */
 
-using Piranha.Data;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Piranha.Data;
 
 namespace Piranha.Repositories
 {
@@ -52,7 +52,7 @@ namespace Piranha.Repositories
                     .FirstOrDefault(m => m.Id == id);
 
                 if (model != null)
-                    App.Hooks.OnLoad<T>(model);
+                    App.Hooks.OnLoad(model);
 
                 if (cache != null && model != null)
                     AddToCache(model);
@@ -66,7 +66,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="model">The model</param>
         public virtual void Save(T model) {
-            App.Hooks.OnBeforeSave<T>(model);
+            App.Hooks.OnBeforeSave(model);
 
             if (db.Set<T>().Count(m => m.Id == model.Id) == 0)
                 Add(model);
@@ -74,7 +74,7 @@ namespace Piranha.Repositories
 
             db.SaveChanges();
 
-            App.Hooks.OnAfterSave<T>(model);
+            App.Hooks.OnAfterSave(model);
 
             if (cache != null)
                 cache.Remove(model.Id.ToString());
@@ -87,12 +87,12 @@ namespace Piranha.Repositories
         public virtual void Delete(Guid id) {
             var model = db.Set<T>().FirstOrDefault(m => m.Id == id);
             if (model != null) {
-                App.Hooks.OnBeforeDelete<T>(model);
+                App.Hooks.OnBeforeDelete(model);
 
                 db.Set<T>().Remove(model);
                 db.SaveChanges();
 
-                App.Hooks.OnAfterDelete<T>(model);
+                App.Hooks.OnAfterDelete(model);
             }
 
             if (cache != null)

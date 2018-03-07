@@ -1,6 +1,9 @@
+using System;
+using BasicWeb.Models;
+using BasicWeb.Models.Regions;
 using Microsoft.AspNetCore.Mvc;
 using Piranha;
-using System;
+using Piranha.Models;
 
 namespace BasicWeb.Controllers
 {
@@ -30,7 +33,8 @@ namespace BasicWeb.Controllers
             var bannerId = Guid.NewGuid();
 
             using (var stream = System.IO.File.OpenRead("seed/pexels-photo-355423.jpeg")) {
-                api.Media.Save(new Piranha.Models.StreamMediaContent() {
+                api.Media.Save(new StreamMediaContent
+                {
                     Id = bannerId,
                     Filename = "pexels-photo-355423.jpeg",
                     Data = stream
@@ -39,7 +43,7 @@ namespace BasicWeb.Controllers
 
             // Add the blog archived
             var blogId = Guid.NewGuid();
-            var blogPage = Models.BlogArchive.Create(api);
+            var blogPage = BlogArchive.Create(api);
             blogPage.Id = blogId;
             blogPage.SiteId = site.Id;
             blogPage.Title = "Blog Archive";
@@ -54,7 +58,7 @@ namespace BasicWeb.Controllers
 
             // Add a blog post
             var postId = Guid.NewGuid();
-            var post = Models.BlogPost.Create(api);
+            var post = BlogPost.Create(api);
             post.Id = postId;
             post.BlogId = blogPage.Id;
             post.Category = "Uncategorized";
@@ -70,7 +74,7 @@ namespace BasicWeb.Controllers
             api.Posts.Save(post);                  
             
             // Add the startpage
-            var startPage = Models.StartPage.Create(api);
+            var startPage = StartPage.Create(api);
             startPage.SiteId = site.Id;
             startPage.Title = "Porta Tortor Euismod";
             startPage.MetaKeywords = "Fusce, Tristique, Nullam, Parturient, Pellentesque";
@@ -82,13 +86,15 @@ namespace BasicWeb.Controllers
             startPage.Published = DateTime.Now;
 
             // Add teasers
-            startPage.Teasers.Add(new Models.Regions.Teaser() {
+            startPage.Teasers.Add(new Teaser
+            {
                 Title = "Lorem Consectetur",
                 SubTitle = "Ultricies Nullam Cras",
                 Body = "Aenean lacinia bibendum nulla sed consectetur. Donec id elit non mi porta gravida at eget metus.",
                 PageLink = blogPage
             });
-            startPage.Teasers.Add(new Models.Regions.Teaser() {
+            startPage.Teasers.Add(new Teaser
+            {
                 Title = "Vestibulum Bibendum",
                 SubTitle = "Tortor Cras Tristique",
                 Body = "Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac facilisis in, egestas eget quam.",

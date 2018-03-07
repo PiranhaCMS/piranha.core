@@ -16,11 +16,6 @@ namespace Piranha.Models
     public sealed class PageType : ContentType
     {
         /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public PageType() : base() {  }
-
-        /// <summary>
         /// Validates that the page type is correctly defined.
         /// </summary>
         public void Ensure() {

@@ -8,8 +8,9 @@
  * 
  */
 
-using Microsoft.EntityFrameworkCore;
 using System;
+using Microsoft.EntityFrameworkCore;
+using Piranha.Data;
 
 namespace Piranha
 {
@@ -21,79 +22,79 @@ namespace Piranha
         /// <summary>
         /// Gets/sets the alias set.
         /// </summary>
-        DbSet<Data.Alias> Aliases { get; set; }
+        DbSet<Alias> Aliases { get; set; }
 
         /// <summary>
         /// Gets/sets the category set.
         /// </summary>
-        DbSet<Data.Category> Categories { get; set; }
+        DbSet<Category> Categories { get; set; }
 
         /// <summary>
         /// Gets/sets the media set.
         /// </summary>
-        DbSet<Data.Media> Media { get; set; }
+        DbSet<Media> Media { get; set; }
 
         /// <summary>
         /// Gets/sets the media folder set.
         /// </summary>
-        DbSet<Data.MediaFolder> MediaFolders { get; set; }
+        DbSet<MediaFolder> MediaFolders { get; set; }
 
         /// <summary>
         /// Gets/sets the media version set.
         /// </summary>
-        DbSet<Data.MediaVersion> MediaVersions { get; set; }
+        DbSet<MediaVersion> MediaVersions { get; set; }
 
         /// <summary>
         /// Gets/sets the page set.
         /// </summary>
         /// <returns></returns>
-        DbSet<Data.Page> Pages { get; set; }
+        DbSet<Page> Pages { get; set; }
 
         /// <summary>
         /// Gets/sets the page field set.
         /// </summary>
         /// <returns></returns>
-        DbSet<Data.PageField> PageFields { get; set; }
+        DbSet<PageField> PageFields { get; set; }
 
         /// <summary>
         /// Gets/sets the page type set.
         /// </summary>
-        DbSet<Data.PageType> PageTypes { get; set; }
+        DbSet<PageType> PageTypes { get; set; }
 
         /// <summary>
         /// Gets/sets the param set.
         /// </summary>
-        DbSet<Data.Param> Params { get; set; }
+        DbSet<Param> Params { get; set; }
 
         /// <summary>
         /// Gets/sets the post set.
         /// </summary>
-        DbSet<Data.Post> Posts { get; set; }
+        DbSet<Post> Posts { get; set; }
 
         /// <summary>
         /// Gets/sets the post field set.
         /// </summary>        
-        DbSet<Data.PostField> PostFields { get; set; }
+        DbSet<PostField> PostFields { get; set; }
 
         /// <summary>
         /// Gets/sets the post tag set.
         /// </summary>
-        DbSet<Data.PostTag> PostTags { get; set; }
+        DbSet<PostTag> PostTags { get; set; }
 
         /// <summary>
         /// Gets/sets the post type set.
         /// </summary>
-        DbSet<Data.PostType> PostTypes { get; set; }
+        DbSet<PostType> PostTypes { get; set; }
 
         /// <summary>
         /// Gets/sets the site set.
         /// </summary>
-        DbSet<Data.Site> Sites { get; set; }
+        DbSet<Site> Sites { get; set; }
 
         /// <summary>
         /// Gets/sets the tag set.
         /// </summary>
-        DbSet<Data.Tag> Tags { get; set; }
+        DbSet<Tag> Tags { get; set; }
 
         /// <summary>
         /// Gets the entity set for the specified type.

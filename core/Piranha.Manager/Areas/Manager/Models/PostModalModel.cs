@@ -60,7 +60,8 @@ namespace Piranha.Areas.Manager.Models
 
             // Get the blogs available
             model.Blogs = api.Pages.GetAllBlogs(siteId.Value)
-                .Select(p => new BlogItem() {
+                .Select(p => new BlogItem
+                {
                     Id = p.Id,
                     Title = p.Title,
                     Slug = p.Slug
@@ -81,7 +82,8 @@ namespace Piranha.Areas.Manager.Models
 
                 // Get the available posts
                 model.Posts = api.Posts.GetAll(blogId.Value)
-                    .Select(p => new PostModalItem() {
+                    .Select(p => new PostModalItem
+                    {
                         Id = p.Id,
                         Title = p.Title,
                         Permalink = "/" + model.BlogSlug + "/" + p.Slug,

@@ -8,12 +8,12 @@
  * 
  */
 
+using System;
+using System.IO;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Primitives;
-using System;
-using System.IO;
 
 namespace Piranha.ImageSharp
 {
@@ -56,14 +56,16 @@ namespace Piranha.ImageSharp
         /// <param name="height">The requested height</param>
         public void Crop(Stream source, Stream dest, int width, int height) {
             using (var image = Image.Load(source)) {
-                image.Mutate(x => x.Crop(new Rectangle() {
+                image.Mutate(x => x.Crop(new Rectangle
+                {
                     Width = width,
                     Height = height,
                     X = width < image.Width ? (image.Width - width) / 2 : 0,
                     Y = height < image.Height ? (image.Height - height) / 2 : 0
                 }));
 
-                image.SaveAsJpeg(dest, new JpegEncoder() {
+                image.SaveAsJpeg(dest, new JpegEncoder
+                {
                     IgnoreMetadata = true,
                     Quality = 90
                 });
@@ -82,12 +84,14 @@ namespace Piranha.ImageSharp
             using (var image = Image.Load(source)) {
                 int height = (int)Math.Round(width * ((float)image.Height / image.Width));
 
-                image.Mutate(x => x.Resize(new ResizeOptions() {
+                image.Mutate(x => x.Resize(new ResizeOptions
+                {
                     Size = new Size(width, height),
                     Mode = ResizeMode.Crop
                 }));
 
-                image.SaveAsJpeg(dest, new JpegEncoder() {
+                image.SaveAsJpeg(dest, new JpegEncoder
+                {
                     IgnoreMetadata = true,
                     Quality = 90
                 });                
@@ -118,18 +122,21 @@ namespace Piranha.ImageSharp
                     cropWidth = (int)Math.Round(image.Height / newRatio);
                 }
 
-                image.Mutate(x => x.Crop(new Rectangle() {
+                image.Mutate(x => x.Crop(new Rectangle
+                {
                     Width = cropWidth,
                     Height = cropHeight,
                     X = cropWidth < image.Width ? (image.Width - cropWidth) / 2 : 0,
                     Y = cropHeight < image.Height ? (image.Height - cropHeight) / 2 : 0
                 }));
-                image.Mutate(x => x.Resize(new ResizeOptions() {
+                image.Mutate(x => x.Resize(new ResizeOptions
+                {
                     Size = new Size(width, height),
                     Mode = ResizeMode.Crop
                 }));
 
-                image.SaveAsJpeg(dest, new JpegEncoder() {
+                image.SaveAsJpeg(dest, new JpegEncoder
+                {
                     IgnoreMetadata = true,
                     Quality = 90
                 });                

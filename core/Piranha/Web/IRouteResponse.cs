@@ -8,6 +8,8 @@
  * 
  */
 
+using Piranha.Models;
+
 namespace Piranha.Web
 {
     public interface IRouteResponse
@@ -35,7 +37,7 @@ namespace Piranha.Web
         /// <summary>
         /// Gets/sets the redirect type.
         /// </summary>
-        Models.RedirectType RedirectType { get; set; }
+        RedirectType RedirectType { get; set; }
 
         /// <summary>
         /// Gets/sets the cache info.

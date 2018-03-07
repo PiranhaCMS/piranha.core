@@ -8,11 +8,13 @@
  * 
  */
 
-using Piranha.AttributeBuilder;
-using Piranha.Extend.Fields;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Piranha.AttributeBuilder;
+using Piranha.Data;
+using Piranha.Extend.Fields;
+using Piranha.Models;
 using Xunit;
 
 namespace Piranha.Tests.Repositories
@@ -41,10 +43,10 @@ namespace Piranha.Tests.Repositories
         #endregion
 
         [PageType(Title = "Blog page")]
-        public class BlogPage : Models.Page<BlogPage> { }        
+        public class BlogPage : Page<BlogPage> { }        
 
         [PostType(Title = "My PostType")]
-        public class MyPost : Models.Post<MyPost>
+        public class MyPost : Post<MyPost>
         {
             [Region]
             public TextField Ingress { get; set; }
@@ -53,7 +55,7 @@ namespace Piranha.Tests.Repositories
         }
 
         [PostType(Title = "My CollectionPost")]
-        public class MyCollectionPost : Models.Post<MyCollectionPost>
+        public class MyCollectionPost : Post<MyCollectionPost>
         {
             [Region]
             public IList<TextField> Texts { get; set; }
@@ -76,7 +78,8 @@ namespace Piranha.Tests.Repositories
                 postTypeBuilder.Build();
 
                 // Add site
-                var site = new Data.Site() {
+                var site = new Site
+                {
                     Id = SITE_ID,
                     Title = "Post Site",
                     InternalId = "PostSite",
@@ -91,7 +94,8 @@ namespace Piranha.Tests.Repositories
                 page.Title = "Blog";
                 api.Pages.Save(page);
 
-                var category = new Data.Category() {
+                var category = new Category
+                {
                     Id = CAT_1_ID,
                     BlogId = BLOG_ID,
                     Title = "My category"
@@ -129,13 +133,16 @@ namespace Piranha.Tests.Repositories
                 post4.BlogId = BLOG_ID;
                 post4.Category = category;
                 post4.Title = "My collection post";
-                post4.Texts.Add(new TextField() {
+                post4.Texts.Add(new TextField
+                {
                     Value = "First text"
                 });
-                post4.Texts.Add(new TextField() {
+                post4.Texts.Add(new TextField
+                {
                     Value = "Second text"
                 });
-                post4.Texts.Add(new TextField() {
+                post4.Texts.Add(new TextField
+                {
                     Value = "Third text"
                 });
                 api.Posts.Save(post4);
@@ -173,7 +180,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void IsCached() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                Assert.Equal(this.GetType() == typeof(PostsCached), api.IsCached);
+                Assert.Equal(GetType() == typeof(PostsCached), api.IsCached);
             }
         }
         

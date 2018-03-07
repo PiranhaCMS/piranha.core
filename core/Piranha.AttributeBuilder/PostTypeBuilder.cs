@@ -81,7 +81,8 @@ namespace Piranha.AttributeBuilder
                     attr.Id = type.Name;
 
                 if (!string.IsNullOrEmpty(attr.Id) && !string.IsNullOrEmpty(attr.Title)) {
-                    var postType = new PostType() {
+                    var postType = new PostType
+                    {
                         Id = attr.Id,
                         Title = attr.Title
                     };
@@ -89,7 +90,8 @@ namespace Piranha.AttributeBuilder
                     var routes = type.GetTypeInfo().GetCustomAttributes(typeof(PostTypeRouteAttribute));
                     foreach (PostTypeRouteAttribute route in routes) {
                         if (!string.IsNullOrWhiteSpace(route.Title) && !string.IsNullOrWhiteSpace(route.Route))
-                            postType.Routes.Add(new ContentTypeRoute() {
+                            postType.Routes.Add(new ContentTypeRoute
+                            {
                                 Title = route.Title,
                                 Route = route.Route
                             });

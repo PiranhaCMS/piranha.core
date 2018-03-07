@@ -8,9 +8,10 @@
  * 
  */
 
+using System;
+using CoreWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Piranha;
-using System;
 
 namespace CoreWeb.Controllers
 {
@@ -42,7 +43,7 @@ namespace CoreWeb.Controllers
         /// <param name="category">The optional category id</param>
         [Route("archive")]
         public IActionResult Archive(Guid id, int? year = null, int? month = null, int? page = null, Guid? category = null) {
-            var model = api.Archives.GetById<Models.StandardBlog>(id, page, category, year, month);
+            var model = api.Archives.GetById<StandardBlog>(id, page, category, year, month);
             ViewBag.CurrentPage = model.Id;
 
             return View(model);
@@ -54,7 +55,7 @@ namespace CoreWeb.Controllers
         /// <param name="id">The unique id</param>
         [Route("page")]
         public IActionResult Page(Guid id) {
-            var model = api.Pages.GetById<Models.StandardPage>(id);
+            var model = api.Pages.GetById<StandardPage>(id);
             ViewBag.CurrentPage = model.Id;
 
             return View(model);
@@ -66,7 +67,7 @@ namespace CoreWeb.Controllers
         /// <param name="id">The unique id</param>
         [Route("post")]
         public IActionResult Post(Guid id) {
-            var model = api.Posts.GetById<Models.ArticlePost>(id);
+            var model = api.Posts.GetById<ArticlePost>(id);
             ViewBag.CurrentPage = model.BlogId;
 
             return View(model);
@@ -79,7 +80,7 @@ namespace CoreWeb.Controllers
         /// <param name="startpage">If this is the site startpage</param>
         [Route("teaserpage")]
         public IActionResult TeaserPage(Guid id, bool startpage) {
-            var model = api.Pages.GetById<Models.TeaserPage>(id);
+            var model = api.Pages.GetById<TeaserPage>(id);
             ViewBag.CurrentPage = model.Id;
 
             if (startpage)

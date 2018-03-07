@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using BasicWeb.Models;
+using Microsoft.AspNetCore.Mvc;
 using Piranha;
-using System;
 
 namespace BasicWeb.Controllers
 {
@@ -26,7 +27,7 @@ namespace BasicWeb.Controllers
         /// <param name="category">The optional category</param>
         [Route("archive")]
         public IActionResult Archive(Guid id, int? year = null, int? month = null, int? page = null, Guid? category = null) {
-            var model = api.Archives.GetById<Models.BlogArchive>(id, page, category, year, month);
+            var model = api.Archives.GetById<BlogArchive>(id, page, category, year, month);
             ViewBag.CurrentPage = model.Id;
 
             return View(model);
@@ -38,7 +39,7 @@ namespace BasicWeb.Controllers
         /// <param name="id">The unique page id</param>
         [Route("page")]
         public IActionResult Page(Guid id) {
-            var model = api.Pages.GetById<Models.StandardPage>(id);
+            var model = api.Pages.GetById<StandardPage>(id);
             ViewBag.CurrentPage = model.Id;
 
             return View(model);
@@ -50,7 +51,7 @@ namespace BasicWeb.Controllers
         /// <param name="id">The unique post id</param>
         [Route("post")]
         public IActionResult Post(Guid id) {
-            var model = api.Posts.GetById<Models.BlogPost>(id);
+            var model = api.Posts.GetById<BlogPost>(id);
             ViewBag.CurrentPage = model.BlogId;
 
             return View(model);
@@ -62,7 +63,7 @@ namespace BasicWeb.Controllers
         /// <param name="id">The unique page id</param>
         [Route("start")]
         public IActionResult Start(Guid id) {
-            var model = api.Pages.GetById<Models.StartPage>(id);
+            var model = api.Pages.GetById<StartPage>(id);
             ViewBag.CurrentPage = model.Id;
 
             return View(model);

@@ -8,8 +8,9 @@
  * 
  */
 
-using Piranha.AttributeBuilder;
 using System.Collections.Generic;
+using CoreWeb.Models.Regions;
+using Piranha.AttributeBuilder;
 
 namespace CoreWeb.Models
 {
@@ -24,13 +25,13 @@ namespace CoreWeb.Models
         /// Gets/sets the available teasers.
         /// </summary>
         [Region(ListTitle = "Title", ListPlaceholder = "New Teaser")]
-        public IList<Regions.Teaser> Teasers { get; set; }
+        public IList<Teaser> Teasers { get; set; }
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         public TeaserPage() {
-            Teasers = new List<Regions.Teaser>();
+            Teasers = new List<Teaser>();
         }
     }
 }

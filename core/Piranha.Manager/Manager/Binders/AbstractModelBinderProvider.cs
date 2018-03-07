@@ -8,10 +8,11 @@
  * 
  */
 
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Piranha.Areas.Manager.Models;
+using Piranha.Extend;
 
 namespace Piranha.Manager.Binders
 {
@@ -28,24 +29,27 @@ namespace Piranha.Manager.Binders
         public IModelBinder GetBinder(ModelBinderProviderContext context) {
             if (context != null) {
                 // We only care about regions & fields
-                if (context.Metadata.ModelType == typeof(PageEditRegionBase) || context.Metadata.ModelType == typeof(Extend.IField)) {
+                if (context.Metadata.ModelType == typeof(PageEditRegionBase) || context.Metadata.ModelType == typeof(IField)) {
                     var binders = new Dictionary<string, AbstractBinderType>();
 
                     var metadata = context.MetadataProvider.GetMetadataForType(typeof(PageEditRegion));
-                    binders.Add(typeof(PageEditRegion).FullName, new AbstractBinderType() {
+                    binders.Add(typeof(PageEditRegion).FullName, new AbstractBinderType
+                    {
                         Type = typeof(PageEditRegion),
                         Binder = context.CreateBinder(metadata)
                     });
 
                     metadata = context.MetadataProvider.GetMetadataForType(typeof(PageEditRegionCollection));
-                    binders.Add(typeof(PageEditRegionCollection).FullName, new AbstractBinderType() {
+                    binders.Add(typeof(PageEditRegionCollection).FullName, new AbstractBinderType
+                    {
                         Type = typeof(PageEditRegionCollection),
                         Binder = context.CreateBinder(metadata)
                     });
 
                     foreach (var fieldType in App.Fields) {
                         metadata = context.MetadataProvider.GetMetadataForType(fieldType.Type);
-                        binders.Add(fieldType.TypeName, new AbstractBinderType() {
+                        binders.Add(fieldType.TypeName, new AbstractBinderType
+                        {
                             Type = fieldType.Type,
                             Binder = context.CreateBinder(metadata)
                         });

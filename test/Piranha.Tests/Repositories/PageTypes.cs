@@ -8,9 +8,9 @@
  * 
  */
 
-using Piranha.Models;
 using System.Collections.Generic;
 using System.Linq;
+using Piranha.Models;
 using Xunit;
 
 namespace Piranha.Tests.Repositories
@@ -30,14 +30,20 @@ namespace Piranha.Tests.Repositories
     {
         #region Members
         protected ICache cache;
-        private List<PageType> pageTypes = new List<PageType>() {
-            new PageType() {
+        private List<PageType> pageTypes = new List<PageType>
+        {
+            new PageType
+            {
                 Id = "MyFirstType",
-                Regions = new List<RegionType>() {
-                    new RegionType() {
+                Regions = new List<RegionType>
+                {
+                    new RegionType
+                    {
                         Id = "Body",
-                        Fields = new List<FieldType>() {
-                            new FieldType() {
+                        Fields = new List<FieldType>
+                        {
+                            new FieldType
+                            {
                                 Id = "Default",
                                 Type = "Html"
                             }
@@ -45,13 +51,18 @@ namespace Piranha.Tests.Repositories
                     }
                 }
             },
-            new PageType() {
+            new PageType
+            {
                 Id = "MySecondType",
-                Regions = new List<RegionType>() {
-                    new RegionType() {
+                Regions = new List<RegionType>
+                {
+                    new RegionType
+                    {
                         Id = "Body",
-                        Fields = new List<FieldType>() {
-                            new FieldType() {
+                        Fields = new List<FieldType>
+                        {
+                            new FieldType
+                            {
                                 Id = "Default",
                                 Type = "Text"
                             }
@@ -59,13 +70,18 @@ namespace Piranha.Tests.Repositories
                     }
                 }
             },
-            new PageType() {
+            new PageType
+            {
                 Id = "MyThirdType",
-                Regions = new List<RegionType>() {
-                    new RegionType() {
+                Regions = new List<RegionType>
+                {
+                    new RegionType
+                    {
                         Id = "Body",
-                        Fields = new List<FieldType>() {
-                            new FieldType() {
+                        Fields = new List<FieldType>
+                        {
+                            new FieldType
+                            {
                                 Id = "Default",
                                 Type = "Image"
                             }
@@ -73,13 +89,18 @@ namespace Piranha.Tests.Repositories
                     }
                 }
             },
-            new PageType() {
+            new PageType
+            {
                 Id = "MyFourthType",
-                Regions = new List<RegionType>() {
-                    new RegionType() {
+                Regions = new List<RegionType>
+                {
+                    new RegionType
+                    {
                         Id = "Body",
-                        Fields = new List<FieldType>() {
-                            new FieldType() {
+                        Fields = new List<FieldType>
+                        {
+                            new FieldType
+                            {
                                 Id = "Default",
                                 Type = "String"
                             }
@@ -87,13 +108,18 @@ namespace Piranha.Tests.Repositories
                     }
                 }
             },
-            new PageType() {
+            new PageType
+            {
                 Id = "MyFifthType",
-                Regions = new List<RegionType>() {
-                    new RegionType() {
+                Regions = new List<RegionType>
+                {
+                    new RegionType
+                    {
                         Id = "Body",
-                        Fields = new List<FieldType>() {
-                            new FieldType() {
+                        Fields = new List<FieldType>
+                        {
+                            new FieldType
+                            {
                                 Id = "Default",
                                 Type = "Text"
                             }
@@ -124,7 +150,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void IsCached() {
             using (var api = new Api(GetDb(), storage, cache)) {
-                Assert.Equal(this.GetType() == typeof(PageTypesCached), api.IsCached);
+                Assert.Equal(GetType() == typeof(PageTypesCached), api.IsCached);
             }
         }        
 

@@ -8,10 +8,12 @@
  * 
  */
 
-using Piranha.Extend;
 using System;
 using System.Linq;
 using System.Text;
+using Piranha.Data;
+using Piranha.Extend;
+using Piranha.Extend.Fields;
 using Xunit;
 
 namespace Piranha.Tests
@@ -19,13 +21,13 @@ namespace Piranha.Tests
     public class Fields : BaseTests
     {
         [Field(Name = "First", Shorthand = "1")]
-        public class MyFirstField : Extend.Fields.SimpleField<string> { }
+        public class MyFirstField : SimpleField<string> { }
 
         [Field(Name = "Second")]
-        public class MySecondField : Extend.Fields.SimpleField<string> { }
+        public class MySecondField : SimpleField<string> { }
 
         [Field(Name = "Third")]
-        public class MyThirdField : Extend.Fields.SimpleField<string> { }
+        public class MyThirdField : SimpleField<string> { }
 
         private FieldInfoList fields = new FieldInfoList();
 
@@ -50,7 +52,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void GetByType() {
-            var field = Piranha.App.Fields.GetByType(typeof(Extend.Fields.HtmlField));
+            var field = Piranha.App.Fields.GetByType(typeof(HtmlField));
 
             Assert.NotNull(field);
             Assert.Equal("Html", field.Name);
@@ -66,7 +68,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void GetByTypeName() {
-            var field = Piranha.App.Fields.GetByType(typeof(Extend.Fields.HtmlField).FullName);
+            var field = Piranha.App.Fields.GetByType(typeof(HtmlField).FullName);
 
             Assert.NotNull(field);
             Assert.Equal("Html", field.Name);
@@ -150,7 +152,7 @@ namespace Piranha.Tests
         public void DateFieldConversions() {
             var now = DateTime.Now;
 
-            Piranha.Extend.Fields.DateField field = now;
+            DateField field = now;
             Assert.Equal(now, field.Value);
         }
 
@@ -158,7 +160,7 @@ namespace Piranha.Tests
         public void HtmlFieldConversions() {
             var str = "<p>This is a paragraph</p>";
 
-            Piranha.Extend.Fields.HtmlField field = str;
+            HtmlField field = str;
             Assert.Equal(str, field.Value);
 
             string output = field;
@@ -167,41 +169,45 @@ namespace Piranha.Tests
 
         [Fact]
         public void ImageFieldConversions() {
-            var media = new Data.Media() {
+            var media = new Media
+            {
                 Id = Guid.NewGuid()
             };
 
-            Piranha.Extend.Fields.ImageField field = media;
+            ImageField field = media;
             Assert.Equal(media.Id, field.Id.Value);
         }
 
         [Fact]
         public void DocumentFieldConversions() {
-            var media = new Data.Media() {
+            var media = new Media
+            {
                 Id = Guid.NewGuid()
             };
 
-            Piranha.Extend.Fields.DocumentField field = media;
+            DocumentField field = media;
             Assert.Equal(media.Id, field.Id.Value);
         }
 
         [Fact]
         public void VideoFieldConversions() {
-            var media = new Data.Media() {
+            var media = new Media
+            {
                 Id = Guid.NewGuid()
             };
 
-            Piranha.Extend.Fields.VideoField field = media;
+            VideoField field = media;
             Assert.Equal(media.Id, field.Id.Value);
         }
 
         [Fact]
         public void MediaFieldConversions() {
-            var media = new Data.Media() {
+            var media = new Media
+            {
                 Id = Guid.NewGuid()
             };
 
-            Piranha.Extend.Fields.MediaField field = media;
+            MediaField field = media;
             Assert.Equal(media.Id, field.Id.Value);
         }
 
@@ -209,7 +215,7 @@ namespace Piranha.Tests
         public void ImageFieldConversionsNullImage() {
             var id = Guid.NewGuid();
 
-            Piranha.Extend.Fields.ImageField field = id;
+            ImageField field = id;
             Assert.Equal(id, field.Id.Value);
 
             string url = field;
@@ -220,7 +226,7 @@ namespace Piranha.Tests
         public void DocumentFieldConversionsNullDocument() {
             var id = Guid.NewGuid();
 
-            Piranha.Extend.Fields.DocumentField field = id;
+            DocumentField field = id;
             Assert.Equal(id, field.Id.Value);
 
             string url = field;
@@ -231,7 +237,7 @@ namespace Piranha.Tests
         public void VideoFieldConversionsNullVideo() {
             var id = Guid.NewGuid();
 
-            Piranha.Extend.Fields.VideoField field = id;
+            VideoField field = id;
             Assert.Equal(id, field.Id.Value);
 
             string url = field;
@@ -242,7 +248,7 @@ namespace Piranha.Tests
         public void MediaFieldConversionsNullMedia() {
             var id = Guid.NewGuid();
 
-            Piranha.Extend.Fields.MediaField field = id;
+            MediaField field = id;
             Assert.Equal(id, field.Id.Value);
 
             string url = field;
@@ -254,7 +260,7 @@ namespace Piranha.Tests
             var md = "This is a paragraph";
             var html = Piranha.App.Markdown.Transform(md);
 
-            Piranha.Extend.Fields.MarkdownField field = md;
+            MarkdownField field = md;
             Assert.Equal(md, field.Value);
 
             string outputHtml = field;
@@ -265,7 +271,7 @@ namespace Piranha.Tests
         public void StringFieldConversions() {
             var inStr = "This is a string";
 
-            Piranha.Extend.Fields.StringField field = inStr;
+            StringField field = inStr;
             Assert.Equal(inStr, field.Value);
 
             string outStr = field;
@@ -276,7 +282,7 @@ namespace Piranha.Tests
         public void TextFieldConversions() {
             var inStr = "This is a string";
 
-            Piranha.Extend.Fields.TextField field = inStr;
+            TextField field = inStr;
             Assert.Equal(inStr, field.Value);
 
             string outStr = field;
@@ -285,14 +291,14 @@ namespace Piranha.Tests
 
         [Fact]
         public void GetFieldTitleNull() {
-            var field = new Piranha.Extend.Fields.TextField();
+            var field = new TextField();
 
             Assert.Null(field.GetTitle());
         }
 
         [Fact]
         public void GetFieldTitle() {
-            Piranha.Extend.Fields.TextField field = "String value";
+            TextField field = "String value";
 
             Assert.Equal("String value", field.GetTitle());
         }
@@ -304,7 +310,7 @@ namespace Piranha.Tests
                 sb.Append("NineChars");
             }
 
-            Piranha.Extend.Fields.TextField field = sb.ToString();
+            TextField field = sb.ToString();
             
             Assert.Equal(43, field.GetTitle().Length);
         }

@@ -8,14 +8,17 @@
  * 
  */
 
-using AutoMapper;
 using System;
 using System.IO;
 using System.Reflection;
+using AutoMapper;
+using Piranha.Areas.Manager.Models;
+using Piranha.Extend;
+using Piranha.Models;
 
 namespace Piranha.Manager
 {
-    public class Module : Extend.IModule
+    public class Module : IModule
     {
         #region Properties
         /// <summary>
@@ -39,15 +42,15 @@ namespace Piranha.Manager
         /// </summary>
         public void Init() {
             var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<Models.PageBase, Areas.Manager.Models.PageEditModel>()
+                cfg.CreateMap<PageBase, PageEditModel>()
                     .ForMember(m => m.PageType, o => o.Ignore())
                     .ForMember(m => m.Regions, o => o.Ignore())
                     .ForMember(m => m.PageContentType, o => o.Ignore());
-                cfg.CreateMap<Areas.Manager.Models.PageEditModel, Models.PageBase>()
+                cfg.CreateMap<PageEditModel, PageBase>()
                     .ForMember(m => m.TypeId, o => o.Ignore())
                     .ForMember(m => m.Created, o => o.Ignore())
                     .ForMember(m => m.LastModified, o => o.Ignore());
-                cfg.CreateMap<Models.PostBase, Areas.Manager.Models.PostEditModel>()
+                cfg.CreateMap<PostBase, PostEditModel>()
                     .ForMember(m => m.PostType, o => o.Ignore())
                     .ForMember(m => m.Regions, o => o.Ignore())
                     .ForMember(m => m.AllCategories, o => o.Ignore())
@@ -55,7 +58,7 @@ namespace Piranha.Manager
                     .ForMember(m => m.SelectedCategory, o => o.Ignore())
                     .ForMember(m => m.SelectedTags, o => o.Ignore())
                     .ForMember(m => m.BlogSlug, o => o.Ignore());
-                cfg.CreateMap<Areas.Manager.Models.PostEditModel, Models.PostBase>()
+                cfg.CreateMap<PostEditModel, PostBase>()
                     .ForMember(m => m.TypeId, o => o.Ignore())
                     .ForMember(m => m.Created, o => o.Ignore())
                     .ForMember(m => m.LastModified, o => o.Ignore());
@@ -65,7 +68,7 @@ namespace Piranha.Manager
             Mapper = config.CreateMapper();
 
             // Get assembly information
-            Assembly = this.GetType().GetTypeInfo().Assembly;
+            Assembly = GetType().GetTypeInfo().Assembly;
             LastModified = new FileInfo(Assembly.Location).LastWriteTime;
         }
     }

@@ -23,7 +23,7 @@ namespace Piranha.Web
         /// <returns>The piranha response, null if no matching page was found</returns>
         public static IRouteResponse Invoke(IApi api, string url, Guid siteId) {
             if (!String.IsNullOrWhiteSpace(url) && url.Length > 1) {
-                var segments = url.Substring(1).Split(new char[] { '/' });
+                var segments = url.Substring(1).Split('/');
 
                 if (segments.Length >= 1) {
                     var blog = api.Pages.GetBySlug(segments[0], siteId);
@@ -79,11 +79,13 @@ namespace Piranha.Web
                             }
                         }
 
-                        return new RouteResponse() {
+                        return new RouteResponse
+                        {
                             Route = route,
                             QueryString = $"id={blog.Id}&year={year}&month={month}&page={page}&category={categoryId}&piranha_handled=true",
                             IsPublished = blog.Published.HasValue && blog.Published.Value <= DateTime.Now,
-                            CacheInfo = new HttpCacheInfo() {
+                            CacheInfo = new HttpCacheInfo
+                            {
                                 EntityTag = Utils.GenerateETag(blog.Id.ToString(), blog.LastModified),
                                 LastModified = blog.LastModified
                             }

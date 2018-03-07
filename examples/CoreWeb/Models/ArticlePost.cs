@@ -8,9 +8,10 @@
  * 
  */
 
+using CoreWeb.Models.Regions;
 using Piranha.AttributeBuilder;
-using Piranha.Models;
 using Piranha.Extend.Fields;
+using Piranha.Models;
 
 namespace CoreWeb.Models
 {
@@ -29,7 +30,7 @@ namespace CoreWeb.Models
         /// <summary>
         /// Gets/sets the heading.
         /// </summary>
-        [Region()]
-        public Regions.PageHeading Heading { get; set; }        
+        [Region]
+        public PageHeading Heading { get; set; }        
     }
 }

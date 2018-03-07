@@ -8,10 +8,12 @@
  * 
  */
 
-using Microsoft.Extensions.DependencyInjection;
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using System;
+using Microsoft.Extensions.DependencyInjection;
+using Piranha;
+using Piranha.AspNetCore;
 
 public static class SimpleSecurityExtensions
 {
@@ -20,14 +22,14 @@ public static class SimpleSecurityExtensions
     /// </summary>
     /// <param name="services">The current service collection</param>
     /// <returns>The updated collection</returns>
-    public static IServiceCollection AddPiranhaSimpleSecurity(this IServiceCollection services, params Piranha.AspNetCore.SimpleUser[] users) {
+    public static IServiceCollection AddPiranhaSimpleSecurity(this IServiceCollection services, params SimpleUser[] users) {
         services.AddAuthentication("Piranha.SimpleSecurity")
             .AddCookie("Piranha.SimpleSecurity", o => {
                 o.LoginPath = new PathString("/manager/login");
                 o.AccessDeniedPath = new PathString("/home/forbidden");
                 o.ExpireTimeSpan = new TimeSpan(0, 30, 0);
             });
-        return services.AddSingleton<Piranha.ISecurity>(new Piranha.AspNetCore.SimpleSecurity(users));
+        return services.AddSingleton<ISecurity>(new SimpleSecurity(users));
     }
 
     /// <summary>

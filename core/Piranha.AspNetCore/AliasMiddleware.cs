@@ -8,10 +8,11 @@
  * 
  */
 
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Piranha.Models;
 using Piranha.Web;
-using System.Threading.Tasks;
 
 namespace Piranha.AspNetCore
 {
@@ -39,7 +40,7 @@ namespace Piranha.AspNetCore
                     if (logger != null)
                         logger.LogInformation($"Found alias\n  Alias: {url}\n  Redirect: {response.RedirectUrl}");
 
-                    context.Response.Redirect(response.RedirectUrl, response.RedirectType == Models.RedirectType.Permanent);
+                    context.Response.Redirect(response.RedirectUrl, response.RedirectType == RedirectType.Permanent);
                     return;
                 }
             }

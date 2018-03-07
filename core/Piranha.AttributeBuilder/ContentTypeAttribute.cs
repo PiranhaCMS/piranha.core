@@ -8,12 +8,14 @@
  * 
  */
 
+using System;
+
 namespace Piranha.AttributeBuilder
 {
     /// <summary>
     /// Abstract class for building content types.
     /// </summary>
-    public abstract class ContentTypeAttribute : System.Attribute
+    public abstract class ContentTypeAttribute : Attribute
     {
         /// <summary>
         /// Gets/sets the unique id.

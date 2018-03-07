@@ -8,8 +8,10 @@
  * 
  */
 
-using Piranha.AttributeBuilder;
 using System;
+using Piranha.AttributeBuilder;
+using Piranha.Data;
+using Piranha.Models;
 using Xunit;
 
 namespace Piranha.Tests.Hooks
@@ -22,7 +24,7 @@ namespace Piranha.Tests.Hooks
         private Guid ID = Guid.NewGuid();
 
         [PageType(Title = "Blog page")]
-        public class BlogPage : Models.Page<BlogPage> { }        
+        public class BlogPage : Page<BlogPage> { }        
         class TagOnLoadException : Exception {}
         class TagOnBeforeSaveException : Exception {}
         class TagOnAfterSaveException : Exception {}
@@ -39,7 +41,8 @@ namespace Piranha.Tests.Hooks
                 pageTypeBuilder.Build();
 
                 // Add site
-                var site = new Data.Site() {
+                var site = new Site
+                {
                     Id = SITE_ID,
                     Title = "Hook Site",
                     IsDefault = true
@@ -54,7 +57,8 @@ namespace Piranha.Tests.Hooks
                 api.Pages.Save(page);
 
                 // Add tag
-                api.Tags.Save(new Data.Tag() {
+                api.Tags.Save(new Tag
+                {
                     Id = ID,
                     BlogId = BLOG_ID,
                     Title = "Hook Tag"
@@ -96,7 +100,8 @@ namespace Piranha.Tests.Hooks
             Piranha.App.Hooks.Tag.RegisterOnBeforeSave(m => throw new TagOnBeforeSaveException());
             using (var api = new Api(GetDb(), storage)) {
                 Assert.Throws<TagOnBeforeSaveException>(() => {
-                    api.Tags.Save(new Data.Tag() {
+                    api.Tags.Save(new Tag
+                    {
                         BlogId = BLOG_ID,
                         Title = "My First Hook Tag"
                     });
@@ -110,7 +115,8 @@ namespace Piranha.Tests.Hooks
             Piranha.App.Hooks.Tag.RegisterOnAfterSave(m => throw new TagOnAfterSaveException());
             using (var api = new Api(GetDb(), storage)) {
                 Assert.Throws<TagOnAfterSaveException>(() => {
-                    api.Tags.Save(new Data.Tag() {
+                    api.Tags.Save(new Tag
+                    {
                         BlogId = BLOG_ID,
                         Title = "My Second Hook Tag"
                     });

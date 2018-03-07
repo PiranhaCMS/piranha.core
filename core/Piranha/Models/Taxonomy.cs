@@ -9,6 +9,7 @@
  */
 
 using System;
+using Piranha.Data;
 
 namespace Piranha.Models
 {
@@ -34,7 +35,8 @@ namespace Piranha.Models
         /// </summary>
         /// <param name="str">The string</param>
         public static implicit operator Taxonomy(string str) {
-            return new Taxonomy() {
+            return new Taxonomy
+            {
                 Title = str
             };
         }
@@ -43,8 +45,9 @@ namespace Piranha.Models
         /// Operator for type casting a category to a taxonomy.
         /// </summary>
         /// <param name="category">The category</param>
-        public static implicit operator Taxonomy(Data.Category category) {
-            return new Taxonomy() {
+        public static implicit operator Taxonomy(Category category) {
+            return new Taxonomy
+            {
                 Id = category.Id,
                 Title = category.Title,
                 Slug = category.Slug
@@ -55,8 +58,9 @@ namespace Piranha.Models
         /// Operator for type casting a tag to a taxonomy.
         /// </summary>
         /// <param name="tag">The tag</param>
-        public static implicit operator Taxonomy(Data.Tag tag) {
-            return new Taxonomy() {
+        public static implicit operator Taxonomy(Tag tag) {
+            return new Taxonomy
+            {
                 Id = tag.Id,
                 Title = tag.Title,
                 Slug = tag.Slug

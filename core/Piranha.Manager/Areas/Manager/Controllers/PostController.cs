@@ -8,10 +8,11 @@
  * 
  */
 
-using Piranha.Manager;
+using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using Piranha.Areas.Manager.Models;
+using Piranha.Manager;
 
 namespace Piranha.Areas.Manager.Controllers
 {
@@ -31,7 +32,7 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/post/{id:Guid}")]
         [Authorize(Policy = Permission.PostsEdit)]
         public IActionResult Edit(Guid id) {
-            return View(Models.PostEditModel.GetById(api, id));
+            return View(PostEditModel.GetById(api, id));
         }
 
         /// <summary>
@@ -42,7 +43,7 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/post/add/{type}/{blogId:Guid}")]
         [Authorize(Policy = Permission.PostsEdit)]
         public IActionResult Add(string type, Guid blogId) {
-            var model = Models.PostEditModel.Create(api, type, blogId);
+            var model = PostEditModel.Create(api, type, blogId);
 
             return View("Edit", model);
         }        
@@ -54,7 +55,7 @@ namespace Piranha.Areas.Manager.Controllers
         [HttpPost]
         [Route("manager/post/save")]
         [Authorize(Policy = Permission.PostsSave)]
-        public IActionResult Save(Models.PostEditModel model) {
+        public IActionResult Save(PostEditModel model) {
             // Validate
             if (string.IsNullOrWhiteSpace(model.Title)) {
                 ErrorMessage("The post could not be saved. Title is mandatory", false);
@@ -69,10 +70,9 @@ namespace Piranha.Areas.Manager.Controllers
             if (model.Save(api)) {
                 SuccessMessage("The post has been saved.");
                 return RedirectToAction("Edit", new { id = model.Id });
-            } else {
-                ErrorMessage("The post could not be saved.", false);
-                return View("Edit", model.Refresh(api));
             }
+            ErrorMessage("The post could not be saved.", false);
+            return View("Edit", model.Refresh(api));
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Piranha.Areas.Manager.Controllers
         [HttpPost]
         [Route("manager/post/publish")]
         [Authorize(Policy = Permission.PostsPublish)]
-        public IActionResult Publish(Models.PostEditModel model) {
+        public IActionResult Publish(PostEditModel model) {
             // Validate
             if (string.IsNullOrWhiteSpace(model.Title)) {
                 ErrorMessage("The post could not be saved. Title is mandatory", false);
@@ -97,10 +97,9 @@ namespace Piranha.Areas.Manager.Controllers
             if (model.Save(api, true)) {
                 SuccessMessage("The post has been published.");
                 return RedirectToAction("Edit", new { id = model.Id });
-            } else {
-                ErrorMessage("The post could not be published.", false);
-                return View(model);
             }
+            ErrorMessage("The post could not be published.", false);
+            return View(model);
         }
 
         /// <summary>
@@ -110,14 +109,13 @@ namespace Piranha.Areas.Manager.Controllers
         [HttpPost]
         [Route("manager/post/unpublish")]
         [Authorize(Policy = Permission.PostsPublish)]
-        public IActionResult UnPublish(Models.PostEditModel model) {
+        public IActionResult UnPublish(PostEditModel model) {
             if (model.Save(api, false)) {
                 SuccessMessage("The post has been unpublished.");
                 return RedirectToAction("Edit", new { id = model.Id });
-            } else {
-                ErrorMessage("The post could not be unpublished.", false);
-                return View(model);
             }
+            ErrorMessage("The post could not be unpublished.", false);
+            return View(model);
         }        
 
         /// <summary>
@@ -135,10 +133,9 @@ namespace Piranha.Areas.Manager.Controllers
                 SuccessMessage("The post has been deleted");
 
                 return RedirectToAction("Edit", "Page", new { id = post.BlogId });
-            } else {
-                ErrorMessage("The post could not be deleted");
-                return RedirectToAction("List", "Page", new { id = "" });                
             }
+            ErrorMessage("The post could not be deleted");
+            return RedirectToAction("List", "Page", new { id = "" });
         }
 
         /// <summary>
@@ -149,7 +146,7 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/post/modal/{siteId:Guid?}/{blogId:Guid?}")]
         [Authorize(Policy = Permission.Posts)]
         public IActionResult Modal(Guid? siteId = null, Guid? blogId = null) {
-            return View(Models.PostModalModel.GetByBlogId(api, siteId, blogId));
+            return View(PostModalModel.GetByBlogId(api, siteId, blogId));
         }  
     }
 }

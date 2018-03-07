@@ -8,12 +8,17 @@
  * 
  */
 
-using AutoMapper;
-using Newtonsoft.Json;
-using Piranha.Extend;
-using Piranha.Extend.Serializers;
 using System;
 using System.Reflection;
+using AutoMapper;
+using Newtonsoft.Json;
+using Piranha.Data;
+using Piranha.Extend;
+using Piranha.Extend.Fields;
+using Piranha.Extend.Serializers;
+using Piranha.Models;
+using PageField = Piranha.Extend.Fields.PageField;
+using PostField = Piranha.Extend.Fields.PostField;
 
 namespace Piranha
 {
@@ -36,7 +41,7 @@ namespace Piranha
         /// <summary>
         /// The current state of the app.
         /// </summary>
-        private bool isInitialized = false;
+        private bool isInitialized;
 
         /// <summary>
         /// The currently registered fields.
@@ -192,23 +197,23 @@ namespace Piranha
                     if (!isInitialized) {
                         // Configure object mapper
                         var mapperConfig = new MapperConfiguration(cfg => {
-                            cfg.CreateMap<Data.Alias, Data.Alias>()
+                            cfg.CreateMap<Alias, Alias>()
                                 .ForMember(a => a.Id, o => o.Ignore())
                                 .ForMember(a => a.Created, o => o.Ignore());
-                            cfg.CreateMap<Data.Category, Data.Category>()
+                            cfg.CreateMap<Category, Category>()
                                 .ForMember(c => c.Id, o => o.Ignore())
                                 .ForMember(c => c.Created, o => o.Ignore());
-                            cfg.CreateMap<Data.MediaFolder, Data.MediaFolder>()
+                            cfg.CreateMap<MediaFolder, MediaFolder>()
                                 .ForMember(f => f.Id, o => o.Ignore())
                                 .ForMember(f => f.Created, o => o.Ignore())
                                 .ForMember(f => f.Media, o => o.Ignore());
-                            cfg.CreateMap<Data.MediaFolder, Models.MediaStructureItem>()
+                            cfg.CreateMap<MediaFolder, MediaStructureItem>()
                                 .ForMember(f => f.Level, o => o.Ignore())
                                 .ForMember(f => f.Items, o => o.Ignore());
-                            cfg.CreateMap<Data.Page, Models.PageBase>()
+                            cfg.CreateMap<Page, PageBase>()
                                 .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PageTypeId))
                                 .ForMember(p => p.Permalink, o => o.MapFrom(m => "/" + m.Slug));
-                            cfg.CreateMap<Models.PageBase, Data.Page>()
+                            cfg.CreateMap<PageBase, Page>()
                                 .ForMember(p => p.PageTypeId, o => o.MapFrom(m => m.TypeId))
                                 .ForMember(p => p.Fields, o => o.Ignore())
                                 .ForMember(p => p.Created, o => o.Ignore())
@@ -216,19 +221,19 @@ namespace Piranha
                                 .ForMember(p => p.PageType, o => o.Ignore())
                                 .ForMember(p => p.Site, o => o.Ignore())
                                 .ForMember(p => p.Parent, o => o.Ignore());
-                            cfg.CreateMap<Data.Page, Models.SitemapItem>()
+                            cfg.CreateMap<Page, SitemapItem>()
                                 .ForMember(p => p.MenuTitle, o => o.Ignore())
                                 .ForMember(p => p.Level, o => o.Ignore())
                                 .ForMember(p => p.Items, o => o.Ignore())
                                 .ForMember(p => p.PageTypeName, o => o.Ignore())
                                 .ForMember(p => p.Permalink, o => o.MapFrom(d => !d.ParentId.HasValue && d.SortOrder == 0 ? "/" : "/" + d.Slug));
-                            cfg.CreateMap<Data.Param, Data.Param>()
+                            cfg.CreateMap<Param, Param>()
                                 .ForMember(p => p.Id, o => o.Ignore())
                                 .ForMember(p => p.Created, o => o.Ignore());
-                            cfg.CreateMap<Data.Post, Models.PostBase>()
+                            cfg.CreateMap<Post, PostBase>()
                                 .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PostTypeId))
                                 .ForMember(p => p.Permalink, o => o.MapFrom(m => "/" + m.Blog.Slug + "/" + m.Slug));
-                            cfg.CreateMap<Models.PostBase, Data.Post>()
+                            cfg.CreateMap<PostBase, Post>()
                                 .ForMember(p => p.PostTypeId, o => o.MapFrom(m => m.TypeId))
                                 .ForMember(p => p.CategoryId, o => o.MapFrom(m => m.Category.Id))
                                 .ForMember(p => p.Fields, o => o.Ignore())
@@ -238,10 +243,10 @@ namespace Piranha
                                 .ForMember(p => p.Blog, o => o.Ignore())
                                 .ForMember(p => p.Category, o => o.Ignore())
                                 .ForMember(p => p.Tags, o => o.Ignore());
-                            cfg.CreateMap<Data.Site, Data.Site>()
+                            cfg.CreateMap<Site, Site>()
                                 .ForMember(s => s.Id, o => o.Ignore())
                                 .ForMember(s => s.Created, o => o.Ignore());
-                            cfg.CreateMap<Data.Tag, Data.Tag>()
+                            cfg.CreateMap<Tag, Tag>()
                                 .ForMember(t => t.Id, o => o.Ignore())
                                 .ForMember(t => t.Created, o => o.Ignore());
                         });
@@ -256,34 +261,34 @@ namespace Piranha
                         mediaTypes.Videos.Add(".mp4", "video/mp4");
 
                         // Compose content types
-                        contentTypes.Register<Models.IPage>("Page", "Page");
-                        contentTypes.Register<Models.IBlogPage>("Blog", "Archive", true);                        
+                        contentTypes.Register<IPage>("Page", "Page");
+                        contentTypes.Register<IBlogPage>("Blog", "Archive", true);                        
 
                         // Compose field types
-                        fields.Register<Extend.Fields.DateField>();
-                        fields.Register<Extend.Fields.DocumentField>();
-                        fields.Register<Extend.Fields.HtmlField>();
-                        fields.Register<Extend.Fields.ImageField>();
-                        fields.Register<Extend.Fields.MarkdownField>();
-                        fields.Register<Extend.Fields.MediaField>();
-                        fields.Register<Extend.Fields.PageField>();
-                        fields.Register<Extend.Fields.PostField>();
-                        fields.Register<Extend.Fields.StringField>();
-                        fields.Register<Extend.Fields.TextField>();
-                        fields.Register<Extend.Fields.VideoField>();
+                        fields.Register<DateField>();
+                        fields.Register<DocumentField>();
+                        fields.Register<HtmlField>();
+                        fields.Register<ImageField>();
+                        fields.Register<MarkdownField>();
+                        fields.Register<MediaField>();
+                        fields.Register<PageField>();
+                        fields.Register<PostField>();
+                        fields.Register<StringField>();
+                        fields.Register<TextField>();
+                        fields.Register<VideoField>();
 
                         // Compose serializers
-                        serializers.Register<Extend.Fields.DateField>(new DateFieldSerializer());
-                        serializers.Register<Extend.Fields.DocumentField>(new DocumentFieldSerializer());
-                        serializers.Register<Extend.Fields.HtmlField>(new StringFieldSerializer<Extend.Fields.HtmlField>());
-                        serializers.Register<Extend.Fields.MarkdownField>(new StringFieldSerializer<Extend.Fields.MarkdownField>());
-                        serializers.Register<Extend.Fields.MediaField>(new MediaFieldSerializer());
-                        serializers.Register<Extend.Fields.PageField>(new PageFieldSerializer());                        
-                        serializers.Register<Extend.Fields.PostField>(new PostFieldSerializer());
-                        serializers.Register<Extend.Fields.StringField>(new StringFieldSerializer<Extend.Fields.StringField>());
-                        serializers.Register<Extend.Fields.TextField>(new StringFieldSerializer<Extend.Fields.TextField>());
-                        serializers.Register<Extend.Fields.ImageField>(new ImageFieldSerializer());
-                        serializers.Register<Extend.Fields.VideoField>(new VideoFieldSerializer());
+                        serializers.Register<DateField>(new DateFieldSerializer());
+                        serializers.Register<DocumentField>(new DocumentFieldSerializer());
+                        serializers.Register<HtmlField>(new StringFieldSerializer<HtmlField>());
+                        serializers.Register<MarkdownField>(new StringFieldSerializer<MarkdownField>());
+                        serializers.Register<MediaField>(new MediaFieldSerializer());
+                        serializers.Register<PageField>(new PageFieldSerializer());                        
+                        serializers.Register<PostField>(new PostFieldSerializer());
+                        serializers.Register<StringField>(new StringFieldSerializer<StringField>());
+                        serializers.Register<TextField>(new StringFieldSerializer<TextField>());
+                        serializers.Register<ImageField>(new ImageFieldSerializer());
+                        serializers.Register<VideoField>(new VideoFieldSerializer());
 
                         // Create markdown converter
                         markdown = new DefaultMarkdown();

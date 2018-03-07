@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using Piranha.Extend;
 
 namespace Piranha.Models
 {
@@ -24,14 +25,14 @@ namespace Piranha.Models
         /// <summary>
         /// The current content types.
         /// </summary>
-        private readonly IEnumerable<Models.ContentType> types;
+        private readonly IEnumerable<ContentType> types;
         #endregion
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="types"></param>
-        public ContentFactory(IEnumerable<Models.ContentType> types) {
+        public ContentFactory(IEnumerable<ContentType> types) {
             this.types = types;
         }
 
@@ -46,11 +47,11 @@ namespace Piranha.Models
                 .SingleOrDefault(t => t.Id == typeId);
 
             if (contentType != null) {
-                var model = (T)Activator.CreateInstance<T>();
+                var model = Activator.CreateInstance<T>();
                 model.TypeId = typeId;
 
                 if (model is IDynamicModel) {
-                    var dynModel = (IDynamicModel)(object)model;
+                    var dynModel = (IDynamicModel)model;
 
                     foreach (var region in contentType.Regions) {
                         object value = null;
@@ -171,23 +172,22 @@ namespace Piranha.Models
         private object CreateRegion(Type regionType, RegionType region) {
             if (region.Fields.Count == 1) {
                 return CreateField(region.Fields[0], regionType);
-            } else {
-                var reg = Activator.CreateInstance(regionType);
-                var type = reg.GetType();
+            }
+            var reg = Activator.CreateInstance(regionType);
+            var type = reg.GetType();
 
-                foreach (var field in region.Fields) {
-                    var fieldType = GetFieldType(field);
+            foreach (var field in region.Fields) {
+                var fieldType = GetFieldType(field);
 
-                    if (type != null) {
-                        var prop = type.GetProperty(field.Id, App.PropertyBindings);
+                if (type != null) {
+                    var prop = type.GetProperty(field.Id, App.PropertyBindings);
 
-                        if (prop != null && fieldType.Type == prop.PropertyType) {
-                            prop.SetValue(reg, Activator.CreateInstance(fieldType.Type));
-                        }
+                    if (prop != null && fieldType.Type == prop.PropertyType) {
+                        prop.SetValue(reg, Activator.CreateInstance(fieldType.Type));
                     }
                 }
-                return reg;
             }
+            return reg;
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace Piranha.Models
         /// </summary>
         /// <param name="field">The field</param>
         /// <returns>The type, null if not found</returns>
-        private Extend.AppField GetFieldType(FieldType field) {
+        private AppField GetFieldType(FieldType field) {
             var type = App.Fields.GetByShorthand(field.Type);
             if (type == null)
                 type = App.Fields.GetByType(field.Type);

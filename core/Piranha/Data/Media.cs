@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using Piranha.Models;
 
 namespace Piranha.Data
 {
@@ -28,7 +29,7 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the media type.
         /// </summary>
-        public Models.MediaType Type { get; set; }
+        public MediaType Type { get; set; }
 
         /// <summary>
         /// Gets/sets the filename.

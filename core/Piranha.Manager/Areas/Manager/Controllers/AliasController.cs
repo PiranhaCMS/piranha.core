@@ -8,11 +8,13 @@
  * 
  */
 
-using Piranha.Manager;
-using Piranha.Models;
+using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using Piranha.Areas.Manager.Models;
+using Piranha.Data;
+using Piranha.Manager;
+using Piranha.Models;
 
 namespace Piranha.Areas.Manager.Controllers
 {
@@ -31,7 +33,7 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/aliases/{siteId:Guid?}")]
         [Authorize(Policy = Permission.Aliases)]
         public IActionResult List(Guid? siteId = null) {
-            return View("List", Models.AliasListModel.Get(api, siteId));
+            return View("List", AliasListModel.Get(api, siteId));
         }
 
         /// <summary>
@@ -40,9 +42,10 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/alias/add")]
         [HttpPost]
         [Authorize(Policy = Permission.AliasesEdit)]
-        public IActionResult Add(Models.AliasEditModel model) {
+        public IActionResult Add(AliasEditModel model) {
             try {
-                api.Aliases.Save(new Data.Alias() {
+                api.Aliases.Save(new Alias
+                {
                     SiteId = model.SiteId,
                     AliasUrl = model.AliasUrl,
                     RedirectUrl = model.RedirectUrl,

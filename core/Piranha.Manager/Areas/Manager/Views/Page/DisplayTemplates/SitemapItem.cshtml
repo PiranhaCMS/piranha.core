@@ -1,6 +1,9 @@
-﻿@model Piranha.Areas.Manager.Models.SiteItemModel
+﻿@using Piranha.Areas.Manager.Models
+@using Piranha.Manager
+@using Piranha.Models
+@model Piranha.Areas.Manager.Models.SiteItemModel
 @{
-    Piranha.Models.SitemapItem item = Model.Item;
+    SitemapItem item = Model.Item;
     string pageId = Model.PageId;
     int expanded = Model.ExpandedLevels;
 }
@@ -17,7 +20,7 @@
     </div>
     @if (!Model.ReadOnly) {
         <div class="actions three pull-right">
-            @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesAdd)).Succeeded) {
+            @if ((await Authorization.AuthorizeAsync(User, Permission.PagesAdd)).Succeeded) {
                 <a class="add-after first" href="@Url.Action("AddAt", new { type = "pageType", parentId = item.ParentId, sortOrder = item.SortOrder + 1 })" data-toggle="tooltip" data-original-title="Add after" data-placement="top">
                     <span class="glyphicon glyphicon-chevron-down"></span>
                 </a>
@@ -25,7 +28,7 @@
                     <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
             }
-            @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesDelete)).Succeeded) {
+            @if ((await Authorization.AuthorizeAsync(User, Permission.PagesDelete)).Succeeded) {
                 <a class="remove last confirm-delete" href="@Url.Action("Delete", new { id = item.Id })" @(item.Items.Count > 0 ? "style=visibility:hidden" : "") data-toggle="tooltip" data-original-title="Delete" data-placement="top" data-message="Are you sure you want to delete the page?">
                     <span class="glyphicon glyphicon-trash text-danger"></span>
                 </a>
@@ -39,7 +42,7 @@
         @item.PageTypeName
     </div>
     <div class="content">
-        @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesEdit)).Succeeded) {
+        @if ((await Authorization.AuthorizeAsync(User, Permission.PagesEdit)).Succeeded) {
             <a href="@Url.Action("Edit", "Page", new { id = item.Id })" data-id="@item.Id" data-title="@(item.NavigationTitle != null ? item.NavigationTitle : item.Title)" data-url="@item.Permalink">@(item.NavigationTitle != null ? item.NavigationTitle : item.Title)</a>
         } else {
             <span class="title">@(item.NavigationTitle != null ? item.NavigationTitle : item.Title)</span>
@@ -51,7 +54,8 @@
     @if (item.Items.Count > 0) {
         <ol class="dd-list">
             @foreach (var child in item.Items) {
-                @Html.Partial("DisplayTemplates/SitemapItem", new Piranha.Areas.Manager.Models.SiteItemModel() {
+                @Html.Partial("DisplayTemplates/SitemapItem", new SiteItemModel
+                {
                     Item = child,
                     PageId = Model.PageId,
                     ExpandedLevels = Model.ExpandedLevels,

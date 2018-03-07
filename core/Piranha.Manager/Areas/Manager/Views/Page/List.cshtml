@@ -1,4 +1,6 @@
-﻿@model Piranha.Areas.Manager.Models.PageListModel
+﻿@using Piranha.Areas.Manager.Models
+@using Piranha.Manager
+@model Piranha.Areas.Manager.Models.PageListModel
 @{
     ViewBag.Title = "Pages";
     ViewBag.Controller = "Page";
@@ -50,7 +52,7 @@
 
 <div class="row">
     <div class="col-sm-12 buttons">
-        @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesAdd)).Succeeded) {
+        @if ((await Authorization.AuthorizeAsync(User, Permission.PagesAdd)).Succeeded) {
             <div class="btn-group pull-right">
                 <button type="button" class="btn btn-labeled btn-primary" data-toggle="dropdown">
                     <span class="btn-label">
@@ -110,7 +112,8 @@
 </ol>
 <div class="dd">
     <ol class="sitemap dd-list">
-        @Html.Partial("Partial/_Sitemap", new Piranha.Areas.Manager.Models.SitemapModel() { 
+        @Html.Partial("Partial/_Sitemap", new SitemapModel
+        { 
             Sitemap = Model.Sitemap, 
             PageId = Model.PageId, 
             ExpandedLevels = Model.ExpandedLevels 

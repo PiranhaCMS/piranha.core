@@ -19,11 +19,6 @@ namespace Piranha.Models
     public abstract class Structure<TThis, T> : List<T> where T : StructureItem<T> where TThis : Structure<TThis, T>
     {
         /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public Structure() : base() {}
-
-        /// <summary>
         /// Gets the partial structure with the items positioned
         /// below the item with the given id.
         /// </summary>
@@ -57,12 +52,11 @@ namespace Piranha.Models
             foreach (var item in items) {
                 if (item.Id == id) {
                     return (TThis)item.Items;
-                } else {
-                    var partial = GetPartialRecursive(item.Items, id);
-
-                    if (partial != null)
-                        return (TThis)partial;
                 }
+                var partial = GetPartialRecursive(item.Items, id);
+
+                if (partial != null)
+                    return partial;
             }
             return null;
         }
@@ -77,17 +71,17 @@ namespace Piranha.Models
         private IList<T> GetBreadcrumbRecursive(IList<T> items, Guid id) {
             foreach (var item in items) {
                 if (item.Id == id) {
-                    return new List<T>() {
+                    return new List<T>
+                    {
                         item
                     };
-                } else {
-                    var crumb = GetBreadcrumbRecursive(item.Items, id);
+                }
+                var crumb = GetBreadcrumbRecursive(item.Items, id);
 
-                    if (crumb != null) {
-                        crumb.Insert(0, item);
+                if (crumb != null) {
+                    crumb.Insert(0, item);
 
-                        return crumb;
-                    }
+                    return crumb;
                 }
             }
             return null;

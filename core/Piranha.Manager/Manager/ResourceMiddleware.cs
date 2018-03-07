@@ -8,11 +8,11 @@
  * 
  */
 
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.FileProviders;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.FileProviders;
 
 namespace Piranha.Manager
 {
@@ -27,7 +27,8 @@ namespace Piranha.Manager
         /// <summary>
         /// The currently embedded asset types.
         /// </summary>
-        private readonly Dictionary<string, string> contentTypes = new Dictionary<string, string>() {
+        private readonly Dictionary<string, string> contentTypes = new Dictionary<string, string>
+        {
             { ".ico", "image/x-icon" },
             { ".png", "image/png" },
             { ".gif", "image/gif" },

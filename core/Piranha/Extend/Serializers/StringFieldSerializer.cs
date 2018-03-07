@@ -9,10 +9,11 @@
  */
 
 using System;
+using Piranha.Extend.Fields;
 
 namespace Piranha.Extend.Serializers
 {
-    public class StringFieldSerializer<T> : ISerializer where T : Fields.SimpleField<string>
+    public class StringFieldSerializer<T> : ISerializer where T : SimpleField<string>
     {        
         /// <summary>
         /// Serializes the given object.

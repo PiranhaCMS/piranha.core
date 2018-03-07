@@ -8,11 +8,11 @@
  * 
  */
 
-using Microsoft.EntityFrameworkCore;
-using Piranha.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Piranha.Data;
 
 namespace Piranha.Repositories
 {
@@ -138,7 +138,7 @@ namespace Piranha.Repositories
 
             var alias = db.Aliases.FirstOrDefault(s => s.Id == model.Id);
             if (alias != null) {
-                App.Mapper.Map<Alias, Alias>(model, alias);
+                App.Mapper.Map(model, alias);
             }
         }        
 

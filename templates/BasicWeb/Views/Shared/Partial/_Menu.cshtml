@@ -1,4 +1,5 @@
-@inject Piranha.IApi Api
+@using Piranha
+@inject IApi Api
 @{
     var sitemap = Api.Sites.GetSitemap();
 }
