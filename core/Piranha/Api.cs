@@ -131,18 +131,20 @@ namespace Piranha
         /// <param name="imageProcessor">The optional image processor</param>
         private void Setup(ICache modelCache = null, IImageProcessor imageProcessor = null) {
             cache = modelCache;
+            
+            var cacheLevel = (int)App.CacheLevel;
 
-            Aliases = new Repositories.AliasRepository(this, db, cache);
+            Aliases = new Repositories.AliasRepository(this, db, cacheLevel > 2 ? cache : null);
             Archives = new Repositories.ArchiveRepository(this, db);
-            Categories = new Repositories.CategoryRepository(this, db, cache);
-            Media = new Repositories.MediaRepository(this, db, storage, cache, imageProcessor);
-            Pages = new Repositories.PageRepository(this, db, cache);
-            PageTypes = new Repositories.PageTypeRepository(db, cache);
-            Params = new Repositories.ParamRepository(db, cache);
-            Posts = new Repositories.PostRepository(this, db, cache);
-            PostTypes = new Repositories.PostTypeRepository(db, cache);
-            Sites = new Repositories.SiteRepository(this, db, cache);
-            Tags = new Repositories.TagRepository(db, cache);
+            Categories = new Repositories.CategoryRepository(this, db, cacheLevel > 2 ? cache : null);
+            Media = new Repositories.MediaRepository(this, db, storage, cacheLevel > 2 ? cache : null, imageProcessor);
+            Pages = new Repositories.PageRepository(this, db, cacheLevel > 2 ? cache : null);
+            PageTypes = new Repositories.PageTypeRepository(db, cacheLevel > 1 ? cache : null);
+            Params = new Repositories.ParamRepository(db, cacheLevel > 0 ? cache : null);
+            Posts = new Repositories.PostRepository(this, db, cacheLevel > 2 ? cache : null);
+            PostTypes = new Repositories.PostTypeRepository(db, cacheLevel > 1 ? cache : null);
+            Sites = new Repositories.SiteRepository(this, db, cacheLevel > 0 ? cache : null);
+            Tags = new Repositories.TagRepository(db, cacheLevel > 2 ? cache : null);
         }
         #endregion
     }

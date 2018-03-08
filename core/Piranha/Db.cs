@@ -269,6 +269,15 @@ namespace Piranha
                     LastModified = DateTime.Now
                 });
 
+            param = Params.FirstOrDefault(p => p.Key == Config.MEDIA_CDN_URL);
+            if (param == null)
+                Params.Add(new Data.Param() {
+                    Id = Guid.NewGuid(),
+                    Key = Config.MEDIA_CDN_URL,
+                    Created = DateTime.Now,
+                    LastModified = DateTime.Now
+                });
+
             //
             // Default site
             //
