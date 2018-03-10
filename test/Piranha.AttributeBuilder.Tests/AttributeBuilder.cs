@@ -82,12 +82,12 @@ namespace Piranha.AttributeBuilder.Tests
 
                 Assert.Equal("Slider", type.Regions[0].Id);
                 Assert.Equal("Intro", type.Regions[0].Title);
-                Assert.Equal(true, type.Regions[0].Collection);
+                Assert.True(type.Regions[0].Collection);
                 Assert.Equal(1, type.Regions[0].Fields.Count);
 
                 Assert.Equal("Content", type.Regions[1].Id);
                 Assert.Equal("Main content", type.Regions[1].Title);
-                Assert.Equal(false, type.Regions[1].Collection);
+                Assert.False(type.Regions[1].Collection);
                 Assert.Equal(2, type.Regions[1].Fields.Count);
 
                 Assert.Equal(1, type.Routes.Count);
@@ -109,7 +109,7 @@ namespace Piranha.AttributeBuilder.Tests
                     .AddType(typeof(SimplePageType));
                 builder.DeleteOrphans();
 
-                Assert.Equal(1, api.PageTypes.GetAll().Count());
+                Assert.Single(api.PageTypes.GetAll());
             }
         }
 
