@@ -47,7 +47,17 @@ namespace Piranha.Areas.Manager.Controllers
         [Authorize(Policy = Permission.MediaAdd)]
         public async Task<IActionResult> Add(Models.MediaUploadModel model) {
             var uploaded = 0;
+            var dropzone = false;
 
+            // Allow for dropzone uploads
+            if (!model.Uploads.Any()) {
+                model.Uploads = HttpContext.Request.Form.Files;
+
+                if (model.Uploads.Any())
+                    dropzone = true;
+            }
+
+            // Go through all of the uploaded files
             foreach (var upload in model.Uploads) {
                 if (upload.Length > 0 && !string.IsNullOrWhiteSpace(upload.ContentType)) {
                     using (var stream = upload.OpenReadStream()) {
@@ -67,7 +77,9 @@ namespace Piranha.Areas.Manager.Controllers
                 ErrorMessage("Could not upload the media assets.");
             else InformationMessage($"Uploaded {uploaded} of {model.Uploads.Count()} media assets.");
 
-            return RedirectToAction("List", new { folderId = model.ParentId });
+            if (!dropzone)
+                return RedirectToAction("List", new { folderId = model.ParentId });
+            return Ok();
         }
 
         /// <summary>
