@@ -57,13 +57,13 @@ namespace Piranha.Tests
 
         [Fact]
         public void MarkdownNullString() {
-            Assert.Equal(null, Piranha.App.Markdown.Transform(null));
+            Assert.Null(Piranha.App.Markdown.Transform(null));
         }
 
         [Fact]
         public void Fields() {
             Assert.NotNull(Piranha.App.Fields);
-            Assert.NotEqual(0, Piranha.App.Fields.Count());
+            Assert.NotEmpty(Piranha.App.Fields);
         }
 
         [Fact]

@@ -180,7 +180,7 @@ namespace Piranha.Tests.Repositories
                 var models = api.Sites.GetAll();
 
                 Assert.NotNull(models);
-                Assert.NotEqual(0, models.Count());
+                Assert.NotEmpty(models);
             }
         }
 
@@ -238,7 +238,7 @@ namespace Piranha.Tests.Repositories
                 var sitemap = api.Sites.GetSitemap();
 
                 Assert.NotNull(sitemap);
-                Assert.Equal(1, sitemap.Count);
+                Assert.NotEmpty(sitemap);
                 Assert.Equal("Startpage", sitemap[0].Title);
             }
         }
@@ -249,7 +249,7 @@ namespace Piranha.Tests.Repositories
                 var sitemap = api.Sites.GetSitemap(SITE_1_ID);
 
                 Assert.NotNull(sitemap);
-                Assert.Equal(1, sitemap.Count);
+                Assert.NotEmpty(sitemap);
                 Assert.Equal("Startpage", sitemap[0].Title);
             }
         }

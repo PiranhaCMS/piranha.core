@@ -9,7 +9,6 @@
  */
 
 using System;
-using System.Data.SqlClient;
 using System.Linq;
 using Xunit;
 
@@ -139,7 +138,7 @@ namespace Piranha.Tests.Repositories
                 var models = api.Aliases.GetAll();
 
                 Assert.NotNull(models);
-                Assert.NotEqual(0, models.Count());
+                Assert.NotEmpty(models);
             }
         }
 

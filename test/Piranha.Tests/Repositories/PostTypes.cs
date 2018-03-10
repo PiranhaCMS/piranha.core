@@ -141,7 +141,7 @@ namespace Piranha.Tests.Repositories
                 var models = api.PostTypes.GetAll();
 
                 Assert.NotNull(models);
-                Assert.NotEqual(0, models.Count());
+                Assert.NotEmpty(models);
             }
         }
 

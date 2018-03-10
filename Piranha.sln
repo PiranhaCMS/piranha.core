@@ -55,6 +55,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasicWeb", "templates\BasicWeb\BasicWeb.csproj", "{E186CEDE-D427-410A-83AE-7DFC1184C63C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.ImageSharp.Tests", "test\Piranha.ImageSharp.Tests\Piranha.ImageSharp.Tests.csproj", "{D604FF1E-06C0-429A-9058-606A0641D301}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +111,10 @@ Global
 		{E186CEDE-D427-410A-83AE-7DFC1184C63C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E186CEDE-D427-410A-83AE-7DFC1184C63C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E186CEDE-D427-410A-83AE-7DFC1184C63C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D604FF1E-06C0-429A-9058-606A0641D301}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D604FF1E-06C0-429A-9058-606A0641D301}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D604FF1E-06C0-429A-9058-606A0641D301}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D604FF1E-06C0-429A-9058-606A0641D301}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -126,6 +132,7 @@ Global
 		{F1B30DE3-5B64-4A20-A41A-C391719E51FD} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 		{512309F2-0557-41DF-9BD0-FDE898C2D34A} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 		{E186CEDE-D427-410A-83AE-7DFC1184C63C} = {BB78ACA1-9978-4B95-8124-D92FBCC52C9B}
+		{D604FF1E-06C0-429A-9058-606A0641D301} = {DE1913AC-4AA3-4F66-83F1-615710D8367B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF88AA05-D127-4707-8214-A230F0DA569B}

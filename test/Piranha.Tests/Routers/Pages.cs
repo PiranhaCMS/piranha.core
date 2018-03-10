@@ -112,7 +112,7 @@ namespace Piranha.Tests.Routers
 
                 Assert.NotNull(response);
                 Assert.Equal("/page", response.Route);
-                Assert.Equal(true, response.IsPublished);
+                Assert.True(response.IsPublished);
                 Assert.Equal($"id={PAGE1_ID}&startpage=true&piranha_handled=true", response.QueryString);
             }
         }
@@ -124,7 +124,7 @@ namespace Piranha.Tests.Routers
 
                 Assert.NotNull(response);
                 Assert.Equal("/page/action", response.Route);
-                Assert.Equal(true, response.IsPublished);
+                Assert.True(response.IsPublished);
                 Assert.Equal($"id={PAGE1_ID}&startpage=true&piranha_handled=true", response.QueryString);
             }
         }
@@ -147,7 +147,7 @@ namespace Piranha.Tests.Routers
 
                 Assert.NotNull(response);
                 Assert.Equal("/page", response.Route);
-                Assert.Equal(true, response.IsPublished);
+                Assert.True(response.IsPublished);
                 Assert.Equal($"id={PAGE1_ID}&startpage=true&piranha_handled=true", response.QueryString);
             }
         }
@@ -177,7 +177,7 @@ namespace Piranha.Tests.Routers
 
                 Assert.NotNull(response);
                 Assert.Equal("/page", response.Route);
-                Assert.Equal(true, response.IsPublished);
+                Assert.True(response.IsPublished);
                 Assert.Equal($"id={PAGE2_ID}&startpage=true&piranha_handled=true", response.QueryString);
             }
         }
@@ -189,7 +189,7 @@ namespace Piranha.Tests.Routers
 
                 Assert.NotNull(response);
                 Assert.Equal("/page/action", response.Route);
-                Assert.Equal(true, response.IsPublished);
+                Assert.True(response.IsPublished);
                 Assert.Equal($"id={PAGE2_ID}&startpage=true&piranha_handled=true", response.QueryString);
             }
         }
@@ -201,7 +201,7 @@ namespace Piranha.Tests.Routers
 
                 Assert.NotNull(response);
                 Assert.Equal("/page", response.Route);
-                Assert.Equal(true, response.IsPublished);
+                Assert.True(response.IsPublished);
                 Assert.Equal($"id={PAGE2_ID}&startpage=true&piranha_handled=true", response.QueryString);
             }
         }

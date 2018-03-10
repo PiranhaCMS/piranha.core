@@ -176,7 +176,7 @@ namespace Piranha.Tests.Repositories
                 var model = api.Pages.GetStartpage();
 
                 Assert.NotNull(model);
-                Assert.Equal(null, model.ParentId);
+                Assert.Null(model.ParentId);
                 Assert.Equal(0, model.SortOrder);
             }
         }
@@ -187,7 +187,7 @@ namespace Piranha.Tests.Repositories
                 var model = api.Pages.GetStartpage(SITE_ID);
 
                 Assert.NotNull(model);
-                Assert.Equal(null, model.ParentId);
+                Assert.Null(model.ParentId);
                 Assert.Equal(0, model.SortOrder);
             }
         }
@@ -437,7 +437,7 @@ namespace Piranha.Tests.Repositories
 
                 Assert.NotNull(page);
                 Assert.Equal("Updated page", page.Title);
-                Assert.Equal(true, page.IsHidden);
+                Assert.True(page.IsHidden);
             }
         }
 

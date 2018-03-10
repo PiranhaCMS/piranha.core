@@ -37,7 +37,7 @@ namespace Piranha.Tests.Utils
         }
 
         [Fact]
-        public void Equals() {
+        public void EqualTags() {
             var id = Guid.NewGuid().ToString();
             var date = DateTime.Now;
 

@@ -69,11 +69,11 @@ namespace Piranha.Tests
         public void HierarchicalPageSlugs() {
             using (var api = new Api(GetDb(), storage)) {
                 using (var config = new Piranha.Config(api)) {
-                    Assert.Equal(true, config.HierarchicalPageSlugs);
+                    Assert.True(config.HierarchicalPageSlugs);
 
                     config.HierarchicalPageSlugs = false;
 
-                    Assert.Equal(false, config.HierarchicalPageSlugs);
+                    Assert.False(config.HierarchicalPageSlugs);
                 }
             }
         }

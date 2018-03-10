@@ -170,7 +170,7 @@ namespace Piranha.Tests.Repositories
                 var models = api.Categories.GetAll(BLOG_ID);
 
                 Assert.NotNull(models);
-                Assert.NotEqual(0, models.Count());
+                Assert.NotEmpty(models);
             }
         }
 
@@ -180,7 +180,7 @@ namespace Piranha.Tests.Repositories
                 var models = api.Categories.GetAll(Guid.NewGuid());
 
                 Assert.NotNull(models);
-                Assert.Equal(0, models.Count());
+                Assert.Empty(models);
             }
         }
 

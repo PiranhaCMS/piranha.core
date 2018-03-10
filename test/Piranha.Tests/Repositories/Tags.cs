@@ -177,7 +177,7 @@ namespace Piranha.Tests.Repositories
                 var models = api.Tags.GetAll(BLOG_ID);
 
                 Assert.NotNull(models);
-                Assert.NotEqual(0, models.Count());
+                Assert.NotEmpty(models);
             }
         }
 

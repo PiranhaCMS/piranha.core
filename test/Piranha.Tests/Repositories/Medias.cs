@@ -114,7 +114,7 @@ namespace Piranha.Tests.Repositories
             using (var api = new Api(GetDb(), storage, cache)) {
                 var media = api.Media.GetAll();
 
-                Assert.NotEqual(0, media.Count());
+                Assert.NotEmpty(media);
             }
         }
 
@@ -135,7 +135,7 @@ namespace Piranha.Tests.Repositories
             using (var api = new Api(GetDb(), storage, cache)) {
                 var media = api.Media.GetAll(folder1Id).ToList();
 
-                Assert.Equal(1, media.Count());
+                Assert.NotEmpty(media);
                 Assert.Equal("HLD_Screenshot_01_rise_1080.png", media[0].Filename);
             }
         }

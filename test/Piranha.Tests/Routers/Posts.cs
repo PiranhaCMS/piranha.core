@@ -150,7 +150,7 @@ namespace Piranha.Tests.Routers
 
                 Assert.NotNull(response);
                 Assert.Equal("/post", response.Route);
-                Assert.Equal(true, response.IsPublished);
+                Assert.True(response.IsPublished);
                 Assert.Equal($"id={POST1_ID}&piranha_handled=true", response.QueryString);
             }
         }
@@ -162,7 +162,7 @@ namespace Piranha.Tests.Routers
 
                 Assert.NotNull(response);
                 Assert.Equal("/post/action", response.Route);
-                Assert.Equal(true, response.IsPublished);
+                Assert.True(response.IsPublished);
                 Assert.Equal($"id={POST1_ID}&piranha_handled=true", response.QueryString);
             }
         }
@@ -269,7 +269,7 @@ namespace Piranha.Tests.Routers
 
                 Assert.NotNull(response);
                 Assert.Equal("/post", response.Route);
-                Assert.Equal(true, response.IsPublished);
+                Assert.True(response.IsPublished);
                 Assert.Equal($"id={POST2_ID}&piranha_handled=true", response.QueryString);
             }
         }
@@ -281,7 +281,7 @@ namespace Piranha.Tests.Routers
 
                 Assert.NotNull(response);
                 Assert.Equal("/post/action", response.Route);
-                Assert.Equal(true, response.IsPublished);
+                Assert.True(response.IsPublished);
                 Assert.Equal($"id={POST2_ID}&piranha_handled=true", response.QueryString);
             }
         }
