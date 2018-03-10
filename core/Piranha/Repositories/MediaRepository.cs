@@ -204,6 +204,9 @@ namespace Piranha.Repositories
                         }
                         db.MediaVersions.RemoveRange(model.Versions);
                     }
+
+                    // Delete the old file because we might have a different filename
+                    await session.DeleteAsync(GetResourceName(model));
                 }
             }
 

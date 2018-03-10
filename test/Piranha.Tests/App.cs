@@ -78,7 +78,9 @@ namespace Piranha.Tests
 
         [Fact]
         public void PropertyBindings() {
-            Assert.NotNull(Piranha.App.PropertyBindings);
+            Assert.True(Piranha.App.PropertyBindings.HasFlag(System.Reflection.BindingFlags.IgnoreCase));
+            Assert.True(Piranha.App.PropertyBindings.HasFlag(System.Reflection.BindingFlags.Public));
+            Assert.True(Piranha.App.PropertyBindings.HasFlag(System.Reflection.BindingFlags.Instance));
         }
     }
 }
