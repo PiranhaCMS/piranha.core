@@ -19,6 +19,7 @@ piranha.media = new function() {
     self.mediaName = '';
     self.mediaUrlId = '';
     self.mediaFilter = '';
+    self.currentFolder = '';
 
     self.init = function (e) {
         self.mediaId = e.data('mediaid');
@@ -32,8 +33,14 @@ piranha.media = new function() {
             url: baseUrl + 'manager/media/modal/' + folderId + '?filter=' + self.mediaFilter,
             success: function (data) {
                 $('#modalMedia .modal-body').html(data);
+                self.currentFolder = folderId;
+                self.bindDropzone();
             }
         });
+    };
+
+    self.reload = function (e) {
+        self.load(e, self.currentFolder);
     };
 
     self.set = function (e) {
@@ -57,6 +64,20 @@ piranha.media = new function() {
         $('#' + self.mediaName).data('contenttype', '');
         $('#' + self.mediaName).data('filesize', '');
         $('#' + self.mediaName).data('modified', '');
+    };
+
+    self.bindDropzone = function () {
+        console.log('initializing dropzone');
+        $("#dropzonemodal").dropzone({
+            paramName: 'Uploads',
+            url: '/manager/media/modal/add',
+            uploadMultiple: true,
+            init: function () {
+                this.on("queuecomplete", function(file) {
+                    piranha.media.reload();
+                });
+            }
+        });    
     };
 };
 

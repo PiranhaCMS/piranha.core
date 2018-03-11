@@ -37,13 +37,11 @@ $(document).on('click', '.dd-toggle span', function() {
 //
 // Sortable fix for FF
 //
-$(document)
-    .on('focus', '.region-list-item input, .region-list-item textarea', function () {
-        $(this).closest('.region-list-item').attr('draggable', false);
-    })
-    .on('blur', '.region-list-item input, .region-list-item textarea', function () {
-        $(this).closest('.region-list-item').attr('draggable', true);
-    });
+$(document).on('focus', '.region-list-item input, .region-list-item textarea', function () {
+    $(this).closest('.region-list-item').attr('draggable', false);
+}).on('blur', '.region-list-item input, .region-list-item textarea', function () {
+    $(this).closest('.region-list-item').attr('draggable', true);
+});
 
 //
 // Panel toggle buttons

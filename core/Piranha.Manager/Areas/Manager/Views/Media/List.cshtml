@@ -2,7 +2,12 @@
 @using Piranha.Models
 @{
     ViewBag.Title = "Media";
+    ViewBag.Subtitle = "";
     ViewBag.Controller = "Media";
+
+    foreach (var item in Model.Breadcrumb) {
+        ViewBag.Subtitle += $"<small>/ <a href=\"{Url.Action("List", new { folderId = item.Id })}\">{@item.Name}</a></small>";
+    }
 }
 
 @section script {
@@ -17,10 +22,6 @@
                     this.on("queuecomplete", function(file) {
                         location.reload();
                     });
-                    // Set up any event handlers
-                    //this.on('completemultiple', function () {
-                    //    location.reload();
-                    //});
                 }
             });
         });
@@ -58,21 +59,13 @@
 }
 
 <div class="row">
-    <div class="col-sm-12 breadcrumb">
-        <a href="@Url.Action("List", "Media", new { folderId = ""})">Media</a>
-        @foreach (var item in Model.Breadcrumb) {
-            <span>/ </span><a href="@Url.Action("List", new { folderId = item.Id })">@item.Name</a>
-        }
-    </div>
-</div>
-
-<div class="row">
     <div class="col-md-12">
         <form action="@Url.Action("Add")" class="dropzone needsclick dz-clickable" id="dropzone" enctype="multipart/form-data">
             @Html.Hidden("ParentId", Model.CurrentFolderId)
 
             <div class="dz-message needsclick">
-                Drop files here or click to upload.<br>
+                <span class="glyphicon glyphicon-cloud-upload"></span>
+                Drop files here or click to upload.
             </div>
         </form>
     </div>

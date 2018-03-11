@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
  * Copyright 2011-2016 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
@@ -9619,6 +9619,8 @@ li.sitemap-item .actions.one {
 .col-sm-12.buttons {
   text-align: right;
   margin-top: -50px;
+  float: right;
+  width: auto;
 }
 .col-sm-12.buttons .dropdown-menu {
   text-align: left;
@@ -9795,6 +9797,9 @@ li.sitemap-item .actions.one {
   font-size: 18px;
   color: #ddd;
   border-radius: 8px;
+}
+.dropzone .dz-message span {
+  margin-right: 5px;
 }
 @media (min-width: 990px) {
   .single-region .tab-content > .tab-pane {

@@ -91,6 +91,15 @@ namespace Piranha.Areas.Manager.Controllers
         [Authorize(Policy = Permission.MediaAdd)]
         public async Task<IActionResult> ModalAdd(Models.MediaUploadModel model) {
             var uploaded = 0;
+            var dropzone = false;
+
+            // Allow for dropzone uploads
+            if (!model.Uploads.Any()) {
+                model.Uploads = HttpContext.Request.Form.Files;
+
+                if (model.Uploads.Any())
+                    dropzone = true;
+            }
 
             foreach (var upload in model.Uploads) {
                 if (upload.Length > 0 && !string.IsNullOrWhiteSpace(upload.ContentType)) {
@@ -105,7 +114,9 @@ namespace Piranha.Areas.Manager.Controllers
                     }
                 }
             }
-            return Modal(model.ParentId);
+            if (!dropzone)
+                return Modal(model.ParentId);
+            return Ok();
         }
 
         /// <summary>

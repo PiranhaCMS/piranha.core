@@ -26,10 +26,11 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
-                <h1>@ViewBag.Title</h1>
-                @if (!String.IsNullOrWhiteSpace(ViewBag.SubTitle)) {
-                    <p class="subtitle">@ViewBag.SubTitle</p>
-                }
+                <h1>@ViewBag.Title
+                    @if (!String.IsNullOrWhiteSpace(ViewBag.Subtitle)) {
+                        @Html.Raw(ViewBag.Subtitle)
+                    }
+                </h1>
             </div>
         </div>
         @RenderBody()
