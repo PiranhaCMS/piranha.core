@@ -39,5 +39,15 @@ namespace Piranha.Extend
             }
             return item;
         }
+
+        /// <summary>
+        /// Registers a new select field and its associated serializer.
+        /// </summary>
+        public void RegisterSelect<TValue>() where TValue : struct {
+            Register<Extend.Fields.SelectField<TValue>>();
+            App.Serializers.Register<Extend.Fields.SelectField<TValue>>(
+                new Extend.Serializers.SelectFieldSerializer<Extend.Fields.SelectField<TValue>>()
+            );
+        }
     }
 }

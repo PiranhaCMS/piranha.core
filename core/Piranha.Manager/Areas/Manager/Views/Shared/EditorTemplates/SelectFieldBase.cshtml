@@ -1,0 +1,7 @@
+@model Piranha.Extend.Fields.SelectFieldBase
+
+<select id="" name="@Html.ViewData.TemplateInfo.GetFullHtmlFieldName("Value")" class="form-control small">
+    @foreach (var item in Model.Items) {
+        <option value="@item.Value" @(Model.EnumValue == item.Value.ToString() ? "selected=selected" : "")>@item.Title</option>
+    }
+</select>
