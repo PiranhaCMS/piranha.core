@@ -22310,6 +22310,7 @@ $(document).on('click', '.addRegionItem', function () {
         btn.data('regiontypeid'),
         btn.data('regionindex'),
         btn.data('itemindex'),
+        btn.data('contenttype'),
         function () {
             btn.data('itemindex', btn.data('itemindex') + 1);
         });
@@ -22475,9 +22476,9 @@ var manager = {
             });
         },
 
-        addregion: function (targetId, pageTypeId, regionTypeId, regionIndex, itemIndex, cb) {
+        addregion: function (targetId, pageTypeId, regionTypeId, regionIndex, itemIndex, contentType, cb) {
             $.ajax({
-                url: '/manager/page/region',
+                url: contentType == 'post' ? '/manager/post/region' : '/manager/page/region',
                 method: 'POST',
                 contentType: 'application/json',
                 dataType: 'html',
@@ -22524,7 +22525,7 @@ var manager = {
             var items = region.find('.region-list-item');
 
             for (var n = 0; n < items.length; n++) {
-                var inputs = $(items.get(n)).find('input, textarea');
+                var inputs = $(items.get(n)).find('input, textarea, select');
 
                 inputs.attr('id', function (i, val) {
                     return val.replace(/FieldSets_\d+__/, 'FieldSets_' + n + '__');

@@ -10,7 +10,11 @@
                 @if (Model.Count > 1) {
                     <label>@Model[n].Title</label>
                 }
-                @Html.EditorFor(m => m[n].Value, Model[n].Value.GetType().Name)
+                @if (Model[n].Value.GetType().IsGenericType) {
+                    @Html.EditorFor(m => m[n].Value, Model[n].Value.GetType().BaseType.Name)
+                } else {
+                    @Html.EditorFor(m => m[n].Value, Model[n].Value.GetType().Name)
+                }
             </div>
         </div>
     }

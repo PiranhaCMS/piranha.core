@@ -47,7 +47,7 @@ namespace Piranha.Areas.Manager.Controllers
             var model = Models.PostEditModel.Create(api, type, blogId);
 
             return View("Edit", model);
-        }        
+        }
 
         /// <summary>
         /// Saves the given post model
@@ -142,6 +142,33 @@ namespace Piranha.Areas.Manager.Controllers
                 return RedirectToAction("List", "Page", new { id = "" });                
             }
         }
+
+        /// <summary>
+        /// Adds a new region to a post.
+        /// </summary>
+        /// <param name="model">The model</param>
+        [HttpPost]
+        [Route("manager/post/region")]
+        [Authorize(Policy = Permission.Posts)]
+        public IActionResult AddRegion([FromBody]Models.PageRegionModel model) {
+            var postType = api.PostTypes.GetById(model.PageTypeId);
+
+            if (postType != null) {
+                var regionType = postType.Regions.SingleOrDefault(r => r.Id == model.RegionTypeId);
+
+                if (regionType != null) {
+                    var region = Piranha.Models.DynamicPost.CreateRegion(api,
+                        model.PageTypeId, model.RegionTypeId);
+
+                    var editModel = (Models.PageEditRegionCollection)Models.PostEditModel.CreateRegion(regionType, 
+                        new List<object>() { region });
+
+                    ViewData.TemplateInfo.HtmlFieldPrefix = $"Regions[{model.RegionIndex}].FieldSets[{model.ItemIndex}]";
+                    return View("EditorTemplates/PageEditRegionItem", editModel.FieldSets[0]);
+                }
+            }
+            return new NotFoundResult();
+        }        
 
         /// <summary>
         /// Gets the post modal for the specified blog.

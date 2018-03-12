@@ -182,7 +182,8 @@
                 @Html.EditorFor(m => m.Regions[n], Model.Regions[n].GetType().Name, new { 
                     pageTypeId = Model.PostType.Id,
                     regionTypeId = Model.Regions[n].Id,
-                    regionIndex = n
+                    regionIndex = n,
+                    contentType = "post"
                 })
             </div>
         }
