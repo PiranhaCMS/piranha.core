@@ -55,7 +55,7 @@ software include a copy of the MIT License terms and the copyright notice.
 #### Prerequisites
 
 * [.NET Core SDK 2.0](https://www.microsoft.com/net/core/)
-* Any IDE or Editor good for coding :)
+* An IDE or Editor of your choice
 
 #### Get the latest source code and get going:
 
