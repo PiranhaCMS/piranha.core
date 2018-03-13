@@ -51,7 +51,13 @@ meaning that it permits reuse within proprietary software provided all copies of
 software include a copy of the MIT License terms and the copyright notice.
 
 ## Getting started
-Get the latest source code and get going:
+
+#### Prerequisites
+
+* [.NET Core SDK 2.0](https://www.microsoft.com/net/core/)
+* Any IDE or Editor good for coding :)
+
+#### Get the latest source code and get going:
 
     > git clone https://github.com/PiranhaCMS/piranha.core.git
     > cd piranha.core
@@ -60,7 +66,7 @@ Get the latest source code and get going:
     > cd examples/CoreWeb
     > dotnet run
     
-To build and update the javascript/css in the **manager** and **example project**:
+#### Build and update javascript/css assets
 
     > cd piranha.core/core/Piranha.Manager
     > npm install
@@ -68,3 +74,7 @@ To build and update the javascript/css in the **manager** and **example project*
     > cd ../../examples/CoreWeb
     > npm install
     > bower install
+
+#### Visual Studio users
+
+For people running Visual Studio 2017 almost all of the above steps will be handled by the IDE. Just get the source code, open the `.sln` file and you're good to go.
