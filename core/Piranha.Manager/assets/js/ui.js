@@ -13,6 +13,21 @@ $(document).ready(function () {
     $('.select2').select2({
         tags: true
     });
+
+    $.each($(".markdown-editor"), function (i, e) {
+        var preview = $(e).parent().parent().find('.content-preview');
+        var simplemde = new SimpleMDE({ 
+            element: e,
+            status: false,
+            renderingConfig: {
+                singleLineBreaks: false
+            }
+        });
+
+        simplemde.codemirror.on('change', function () {
+            preview.html(simplemde.markdown(simplemde.value()));
+        });
+    });
 });
 
 //
@@ -86,25 +101,6 @@ $('.single-region textarea.raw-text').css({'overflow': 'hidden'}).autogrow({
     vertical: true, 
     horizontal: false
 });
-
-//
-// Refresh markdown content
-//
-$(document).on('keyup', '.markdown textarea.raw-text', function() {
-    var md = $(this);
-
-    $.ajax({
-        url: '/manager/markdown',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify($(this).val()),
-        dataType: 'json',
-        success: function(data) {
-            md.parent().next().html(data.body);
-        }
-    });
-});
-
 
 //
 // Toggle menu style

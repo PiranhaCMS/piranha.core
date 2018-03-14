@@ -27,6 +27,7 @@ var paths = {
         "assets/lib/jquery.ns-autogrow/dist/jquery.ns-autogrow.js",
         "assets/lib/select2/dist/js/select2.js",
         "assets/lib/dropzone/dist/dropzone.js",
+        "assets/lib/simplemde/dist/simplemde.min.js",
         "assets/js/piranha.media.js",
         "assets/js/piranha.page.js",
         "assets/js/piranha.post.js",

@@ -374,6 +374,33 @@
 	.nav-tabs {
 		margin-bottom: 15px;
 	}
+
+	.editor-toolbar {
+		border: 0 none;
+
+		&.fullscreen {
+			z-index: 2000;			
+		}
+	}
+
+	.editor-preview-side {
+		border-top: 0 none;
+		border-right: 0 none;
+		border-bottom: 0 none;
+		background: #fff;
+		padding: 10px 25px;		
+	}
+
+	.CodeMirror {
+		border: 0 none;
+		border-radius: 0;
+		font-family: Consolas,Courier,monospace;
+		font-size: 14px;
+		
+		&.CodeMirror-fullscreen {
+			z-index: 2000;
+		}
+	}
 }
 
 .region-list {
@@ -526,7 +553,7 @@
 				float: right;
 				width: 49%;
 				padding-left: 15px;
-				
+				margin-top: 60px;
 			}
 		}
 	}

@@ -11,7 +11,7 @@
     </ul>
     <div class="tab-content">
         <div id="@(prefix)_Markdown" role="tabpanel" class="tab-pane active content-markdown">
-            @Html.TextAreaFor(m => m.Value, new { @class = "form-control raw-text", rows = 10 })
+            @Html.TextAreaFor(m => m.Value, new { @class = "form-control raw-text markdown-editor", rows = 10 })
         </div>
         <div id="@(prefix)_Preview" role="tabpanel" class="tab-pane content-preview">
             @Html.Raw(Model.ToHtml())
