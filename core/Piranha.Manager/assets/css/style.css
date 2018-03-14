@@ -10179,7 +10179,7 @@ li.sitemap-item .actions.one {
 }
 .form .form-group .mce-tinymce {
   border-color: #ddd;
-  _border: 0 none !important;
+  background: #fff;
 }
 .form .form-group .mce-tinymce .mce-panel {
   background: #fff;
@@ -10195,8 +10195,16 @@ li.sitemap-item .actions.one {
 .form .form-group .mce-tinymce .mce-panel .mce-btn .mce-ico {
   font-size: 14px;
 }
+.form .form-group .mce-tinymce .mce-toolbar-grp {
+  padding: 20px;
+  opacity: .8;
+}
+.form .form-group .mce-tinymce .mce-toolbar-grp:hover {
+  opacity: 1;
+}
 .form .form-group .mce-tinymce .mce-edit-area {
   border-top: 0 none;
+  padding: 0 15px;
 }
 .form .panel-white .form-group,
 .form .table .form-group {

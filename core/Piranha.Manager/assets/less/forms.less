@@ -164,8 +164,8 @@
 
 		// TinyMCE editor
 		.mce-tinymce {
-            border-color: @border-color;
-			_border: 0 none !important;
+			border-color: @border-color;
+			background: #fff;
 
 			.mce-panel {
 				background: #fff;
@@ -184,8 +184,18 @@
 				}
 			}
 
+			.mce-toolbar-grp {
+				padding: 20px;
+				opacity: .8;
+				
+				&:hover {
+					opacity: 1;
+				}
+			}
+
 			.mce-edit-area {
 				border-top: 0 none;
+				padding: 0 15px;
 			}
 		}
 	}
