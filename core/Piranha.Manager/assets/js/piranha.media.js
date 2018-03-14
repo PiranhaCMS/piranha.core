@@ -20,6 +20,7 @@ piranha.media = new function() {
     self.mediaUrlId = '';
     self.mediaFilter = '';
     self.currentFolder = '';
+    self.callback = null;
 
     self.init = function (e) {
         self.mediaId = e.data('mediaid');
@@ -44,16 +45,25 @@ piranha.media = new function() {
     };
 
     self.set = function (e) {
-        if (self.mediaId)
-            $('#' + self.mediaId).val(e.data('id'));
-        $('#' + self.mediaName).text(e.data('name'));
-        if (self.mediaUrlId)
-            $('#' + self.mediaUrlId).val(e.data('url'));
-        $('#' + self.mediaName).data('filename', e.data('name'));
-        $('#' + self.mediaName).data('url', e.data('url'));
-        $('#' + self.mediaName).data('contenttype', e.data('contenttype'));
-        $('#' + self.mediaName).data('filesize', e.data('filesize'));
-        $('#' + self.mediaName).data('modified', e.data('modified'));
+        if (!self.callback) {
+            if (self.mediaId)
+                $('#' + self.mediaId).val(e.data('id'));
+            $('#' + self.mediaName).text(e.data('name'));
+            if (self.mediaUrlId)
+                $('#' + self.mediaUrlId).val(e.data('url'));
+            $('#' + self.mediaName).data('filename', e.data('name'));
+            $('#' + self.mediaName).data('url', e.data('url'));
+            $('#' + self.mediaName).data('contenttype', e.data('contenttype'));
+            $('#' + self.mediaName).data('filesize', e.data('filesize'));
+            $('#' + self.mediaName).data('modified', e.data('modified'));
+        } else {
+            self.callback({
+                id: e.data('id'),
+                name: e.data('name'),
+                url: e.data('url')
+            });
+            self.callback = null;
+        }
     };
 
     self.remove = function (e) {
@@ -67,7 +77,6 @@ piranha.media = new function() {
     };
 
     self.bindDropzone = function () {
-        console.log('initializing dropzone');
         $("#dropzonemodal").dropzone({
             paramName: 'Uploads',
             url: '/manager/media/modal/add',

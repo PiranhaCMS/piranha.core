@@ -10682,6 +10682,9 @@ li.sitemap-item .actions.one {
   -webkit-transition: all ease-in-out 0.4s;
   -o-transition: all ease-in-out 0.4s;
 }
+.modal-backdrop {
+  z-index: 2010;
+}
 .modal {
   z-index: 70000;
 }

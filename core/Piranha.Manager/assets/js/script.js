@@ -21895,6 +21895,7 @@ piranha.media = new function() {
     self.mediaUrlId = '';
     self.mediaFilter = '';
     self.currentFolder = '';
+    self.callback = null;
 
     self.init = function (e) {
         self.mediaId = e.data('mediaid');
@@ -21919,16 +21920,25 @@ piranha.media = new function() {
     };
 
     self.set = function (e) {
-        if (self.mediaId)
-            $('#' + self.mediaId).val(e.data('id'));
-        $('#' + self.mediaName).text(e.data('name'));
-        if (self.mediaUrlId)
-            $('#' + self.mediaUrlId).val(e.data('url'));
-        $('#' + self.mediaName).data('filename', e.data('name'));
-        $('#' + self.mediaName).data('url', e.data('url'));
-        $('#' + self.mediaName).data('contenttype', e.data('contenttype'));
-        $('#' + self.mediaName).data('filesize', e.data('filesize'));
-        $('#' + self.mediaName).data('modified', e.data('modified'));
+        if (!self.callback) {
+            if (self.mediaId)
+                $('#' + self.mediaId).val(e.data('id'));
+            $('#' + self.mediaName).text(e.data('name'));
+            if (self.mediaUrlId)
+                $('#' + self.mediaUrlId).val(e.data('url'));
+            $('#' + self.mediaName).data('filename', e.data('name'));
+            $('#' + self.mediaName).data('url', e.data('url'));
+            $('#' + self.mediaName).data('contenttype', e.data('contenttype'));
+            $('#' + self.mediaName).data('filesize', e.data('filesize'));
+            $('#' + self.mediaName).data('modified', e.data('modified'));
+        } else {
+            self.callback({
+                id: e.data('id'),
+                name: e.data('name'),
+                url: e.data('url')
+            });
+            self.callback = null;
+        }
     };
 
     self.remove = function (e) {
@@ -21942,7 +21952,6 @@ piranha.media = new function() {
     };
 
     self.bindDropzone = function () {
-        console.log('initializing dropzone');
         $("#dropzonemodal").dropzone({
             paramName: 'Uploads',
             url: '/manager/media/modal/add',
@@ -22274,6 +22283,41 @@ $(document).ready(function () {
         var simplemde = new SimpleMDE({ 
             element: e,
             status: false,
+            spellChecker: false,
+            hideIcons: ['preview', 'guide'],
+            toolbar: [
+                'bold', 'italic', 'heading', '|', 'quote', 'unordered-list', 'ordered-list', '|', 'link', 
+                {
+                    name: "image",
+                    action: function customFunction (editor) {
+                        // Show modal
+                        $('#modalMedia').modal('show');
+
+                        piranha.media.callback = function (data) {
+                            var cm = editor.codemirror;
+                            var active = simplemde.getState(cm).image;
+
+                            var startPoint = cm.getCursor("start");
+                            var endPoint = cm.getCursor("end");
+
+                            if (active) {
+                                text = cm.getLine(startPoint.line);
+                                cm.replaceRange('![' + data.name + '](' + data.url + ')', {
+                                    line: startPoint.line,
+                                    ch: 0
+                                });
+                            } else {
+                                cm.replaceSelection('![' + data.name + '](' + data.url + ')');
+                            }
+                            cm.setSelection(startPoint, endPoint);
+                            cm.focus();
+                        };
+                    },
+                    className: "fa fa-picture-o",
+                    title: "Image"
+                },
+                'side-by-side', 'fullscreen'
+            ],
             renderingConfig: {
                 singleLineBreaks: false
             }

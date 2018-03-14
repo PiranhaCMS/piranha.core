@@ -19,6 +19,41 @@ $(document).ready(function () {
         var simplemde = new SimpleMDE({ 
             element: e,
             status: false,
+            spellChecker: false,
+            hideIcons: ['preview', 'guide'],
+            toolbar: [
+                'bold', 'italic', 'heading', '|', 'quote', 'unordered-list', 'ordered-list', '|', 'link', 
+                {
+                    name: "image",
+                    action: function customFunction (editor) {
+                        // Show modal
+                        $('#modalMedia').modal('show');
+
+                        piranha.media.callback = function (data) {
+                            var cm = editor.codemirror;
+                            var active = simplemde.getState(cm).image;
+
+                            var startPoint = cm.getCursor("start");
+                            var endPoint = cm.getCursor("end");
+
+                            if (active) {
+                                text = cm.getLine(startPoint.line);
+                                cm.replaceRange('![' + data.name + '](' + data.url + ')', {
+                                    line: startPoint.line,
+                                    ch: 0
+                                });
+                            } else {
+                                cm.replaceSelection('![' + data.name + '](' + data.url + ')');
+                            }
+                            cm.setSelection(startPoint, endPoint);
+                            cm.focus();
+                        };
+                    },
+                    className: "fa fa-picture-o",
+                    title: "Image"
+                },
+                'side-by-side', 'fullscreen'
+            ],
             renderingConfig: {
                 singleLineBreaks: false
             }
