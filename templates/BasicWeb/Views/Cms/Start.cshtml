@@ -5,8 +5,9 @@
     ViewBag.HasImage = Model.Heading.PrimaryImage.HasValue;
 
     string PrimaryImage() {
-        if (Model.Heading.PrimaryImage.HasValue)
+        if (Model.Heading.PrimaryImage.HasValue) {
             return $"style=background-image:url({Url.Content(Model.Heading.PrimaryImage)})";
+        }
         return "";
     }
 }

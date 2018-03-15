@@ -4,8 +4,9 @@
     ViewBag.HasImage = Model.Heading.PrimaryImage.HasValue;
 
     string PrimaryImage() {
-        if (Model.Heading.PrimaryImage.HasValue)
+        if (Model.Heading.PrimaryImage.HasValue) {
             return $"style=background-image:url({Url.Content(Model.Heading.PrimaryImage)})";
+        } 
         return "";
     }
 }
@@ -32,10 +33,10 @@
         @foreach (var post in Model.Archive.Posts) {
             <div class="row archive-item">
                 <div class="col-sm-12">
-                    <h2><a href="@post.Permalink")">@post.Title</a></h2>
+                    <h2><a href="@post.Permalink">@post.Title</a></h2>
                     <p>
                         <strong>@post.Published.Value.ToString("yyyy-MM-dd")</strong> in 
-                        <a href="@Model.Permalink/category/@post.Category.Slug")">@post.Category.Title</a>
+                        <a href="@Model.Permalink/category/@post.Category.Slug">@post.Category.Title</a>
                     </p>
                 </div>
                 <div class="col-sm-9">
