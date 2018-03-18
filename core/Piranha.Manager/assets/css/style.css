@@ -9591,6 +9591,10 @@ a {
   background-color: #007eaa;
   color: #fff;
 }
+.alert.alert-info .btn-default {
+  background: #f2f2f2;
+  border-color: #f2f2f2;
+}
 .alert.alert-success {
   background-color: #439700;
   color: #fff;
@@ -10286,10 +10290,6 @@ li.sitemap-item .actions.one {
 .btn.btn-info {
   background: #5bc0de;
   border-color: #5bc0de;
-}
-.btn.btn-default {
-  background: #f2f2f2;
-  border-color: #f2f2f2;
 }
 #btn-sitepicker .btn-default {
   border-color: #fff;
