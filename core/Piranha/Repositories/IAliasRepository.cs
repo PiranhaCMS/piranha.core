@@ -39,6 +39,14 @@ namespace Piranha.Repositories
         Alias GetByAliasUrl(string url, Guid? siteId = null);
 
         /// <summary>
+        /// Gets the models with the given redirect url.
+        /// </summary>
+        /// <param name="url">The unique url</param>
+        /// <param name="siteId">The optional site id</param>
+        /// <returns>The models</returns>
+        IEnumerable<Alias> GetByRedirectUrl(string url, Guid? siteId = null);
+
+        /// <summary>
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>

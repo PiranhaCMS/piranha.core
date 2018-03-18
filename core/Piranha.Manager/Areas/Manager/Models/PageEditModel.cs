@@ -51,11 +51,16 @@ namespace Piranha.Areas.Manager.Models
         /// <param name="api">The current api</param>
         /// <param name="publish">If the page should be published</param>
         /// <returns>If the page was successfully saved</returns>
-        public bool Save(IApi api, bool? publish = null) {
+        public bool Save(IApi api, out string alias, bool? publish = null) {
             var page = api.Pages.GetById(Id);
+            alias = null;
 
-            if (page == null)
+            if (page == null) {
                 page = Piranha.Models.DynamicPage.Create(api, this.TypeId);
+            } else {
+                if (Slug != page.Slug)
+                    alias = page.Slug;
+            }
 
             Module.Mapper.Map<PageEditModel, Piranha.Models.PageBase>(this, page);
             SaveRegions(api, this, page);

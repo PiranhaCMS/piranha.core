@@ -117,8 +117,13 @@ namespace Piranha.Areas.Manager.Controllers
                 return View("Edit", model.Refresh(api));                
             }
 
+            var ret = model.Save(api, out var alias);
+
             // Save
-            if (model.Save(api)) {
+            if (ret) {
+                if (!string.IsNullOrWhiteSpace(alias))
+                    TempData["AliasSuggestion"] = alias;
+                    
                 SuccessMessage("The page has been saved.");
                 return RedirectToAction("Edit", new { id = model.Id });
             } else {
@@ -142,7 +147,7 @@ namespace Piranha.Areas.Manager.Controllers
             }
 
             // Save
-            if (model.Save(api, true)) {
+            if (model.Save(api, out var alias, true)) {
                 SuccessMessage("The page has been published.");
                 return RedirectToAction("Edit", new { id = model.Id });
             } else {
@@ -159,7 +164,7 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/page/unpublish")]
         [Authorize(Policy = Permission.PagesPublish)]
         public IActionResult UnPublish(Models.PageEditModel model) {
-            if (model.Save(api, false)) {
+            if (model.Save(api, out var alias, false)) {
                 SuccessMessage("The page has been unpublished.");
                 return RedirectToAction("Edit", new { id = model.Id });
             } else {
@@ -228,6 +233,23 @@ namespace Piranha.Areas.Manager.Controllers
             return new NotFoundResult();
         }
 
+        [HttpPost]
+        [Route("manager/page/alias")]
+        [Authorize(Policy = Permission.PagesEdit)]
+        public IActionResult AddAlias(Guid siteId, Guid pageId, string alias, string redirect) {
+            // Create alias
+            CreateAlias(siteId, alias, redirect);
+
+            // Check if there are posts for this page
+            var posts = api.Posts.GetAll(pageId);
+            foreach (var post in posts) {
+                CreateAlias(siteId, $"{alias}/{post.Slug}", $"{redirect}/{post.Slug}");
+            }
+
+            SuccessMessage("The alias list was updated.");
+            return RedirectToAction("Edit", new { id = pageId });
+        }
+
         /// <summary>
         /// Gets the page modal for the specified site.
         /// </summary>
@@ -240,6 +262,39 @@ namespace Piranha.Areas.Manager.Controllers
         
 
         #region Private methods
+        private void CreateAlias(Guid siteId, string alias, string redirect) {
+            // First check if there's an alias pointing to the old url
+            var aliases = api.Aliases.GetByRedirectUrl($"/{alias}", siteId);
+
+            if (aliases.Count() > 0) {
+                foreach (var model in aliases) {
+                    // Check for circular references
+                    if (model.AliasUrl == $"/{redirect}") {
+                        api.Aliases.Delete(model);
+                    } else {
+                        // Update the existing alias
+                        model.RedirectUrl = $"/{redirect}";
+                        api.Aliases.Save(model);
+                    }
+                }
+            } 
+            
+            // Check for an existing alias
+            var aliasModel = api.Aliases.GetByAliasUrl($"/{alias}", siteId);
+            if (aliasModel != null) {
+                aliasModel.RedirectUrl = redirect;
+                api.Aliases.Save(aliasModel);
+            } else {
+                // Let's create a new alias
+                api.Aliases.Save(new Data.Alias() {
+                    SiteId = siteId,
+                    AliasUrl = alias,
+                    RedirectUrl = redirect,
+                    Type = Piranha.Models.RedirectType.Permanent
+                });
+            }
+        }
+
         private bool MovePage(Models.PageStructureModel.PageStructureItem page, int sortOrder = 1, Guid? parentId = null) {
             var model = api.Pages.GetById(new Guid(page.Id));
 

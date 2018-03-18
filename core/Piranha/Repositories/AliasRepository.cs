@@ -92,6 +92,33 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Gets the model with the given redirect url.
+        /// </summary>
+        /// <param name="url">The unique url</param>
+        /// <param name="siteId">The optional site id</param>
+        /// <returns>The model</returns>
+        public IEnumerable<Alias> GetByRedirectUrl(string url, Guid? siteId = null) {
+            if (!siteId.HasValue) {
+                var site = api.Sites.GetDefault();
+                if (site != null)
+                    siteId = site.Id;
+            }
+
+            var models = new List<Alias>();
+
+            var aliases = db.Aliases
+                .AsNoTracking()
+                .Where(a => a.SiteId == siteId && a.RedirectUrl == url)
+                .Select(a => a.Id)
+                .ToList();
+
+            foreach (var id in aliases) {
+                models.Add(GetById(id));
+            }
+            return models;
+        }
+
+        /// <summary>
         /// Adds a new model to the database.
         /// </summary>
         /// <param name="model">The model</param>

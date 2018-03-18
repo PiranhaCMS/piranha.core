@@ -131,6 +131,14 @@ namespace Piranha.Tests.Repositories
             }
         }
 
+        [Fact]
+        public void GetNoneByRedirectUrl() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var none = api.Aliases.GetByRedirectUrl("/none-existing-alias");
+
+                Assert.Empty(none);
+            }            
+        }
 
         [Fact]
         public void GetAll() {
@@ -159,6 +167,16 @@ namespace Piranha.Tests.Repositories
 
                 Assert.NotNull(model);
                 Assert.Equal(ALIAS_1, model.AliasUrl);
+            }
+        }
+
+        [Fact]
+        public void GetByRedirectUrl() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var models = api.Aliases.GetByRedirectUrl("/redirect-1");
+
+                Assert.Single(models);
+                Assert.Equal(ALIAS_1, models.First().AliasUrl);
             }
         }
 

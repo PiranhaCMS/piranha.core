@@ -3,6 +3,8 @@
 @{
     ViewBag.Title = "Edit page";
     ViewBag.Controller = "Page";
+
+    var alias = (string)TempData["AliasSuggestion"];
 }
 
 @section script {
@@ -17,8 +19,21 @@
             $('#panel-settings').slideToggle('fast');
             return false;
         });
+        $(document).on('click', '#submit-alias', function (e) {
+            e.preventDefault();
+            $('form#alias-form').submit();
+        });
         document.getElementById('Title').focus();
     </script>
+}
+
+@if (!string.IsNullOrEmpty(alias)) {
+    using (var form = Html.BeginForm("AddAlias", "Page", FormMethod.Post, new { id="alias-form", @class = "form", role = "form" })) {
+        @Html.Hidden("siteId", Model.SiteId)
+        @Html.Hidden("pageId", Model.Id)
+        @Html.Hidden("alias", alias)
+        @Html.Hidden("redirect", Model.Slug)
+    }
 }
 
 @using (var form = Html.BeginForm("Save", "Page", FormMethod.Post, new { @id = "main-form", @class = "form", @role = "form" })) {
@@ -83,6 +98,27 @@
                 </div>
             </div>
         </div>
+    }
+
+    @if (!string.IsNullOrEmpty(alias)) {
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="alert alert-info">
+                    <div class="row">
+                        <div class="col-xs-10">
+                            <p>
+                                <strong>Info</strong>: It seems you have changed the permalink of the page. 
+                                Do you want to create an <strong>Alias</strong> from <code>/@alias</code> 
+                                to <code>/@Model.Slug</code>
+                            </p>
+                        </div>
+                        <div class="col-xs-2 text-right">
+                            <button id="submit-alias" class="btn btn-default btn-sm">Ok</button>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        </div>        
     }
 
     <div class="form-group">

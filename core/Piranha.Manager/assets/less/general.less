@@ -129,6 +129,28 @@ a {
 .alert {
 	border-radius: 0;
 	border-width: 0;
+	opacity: .7;
+	transition: opacity ease-in-out .2s;
+
+	&:hover {
+		opacity: 1;
+		transition: opacity ease-in-out .2s;
+	}
+
+	&.alert-info {
+		background-color: @link-color;
+		color: #fff;
+	}
+
+	&.alert-success {
+		background-color: @success-color;
+		color: #fff;
+	}
+
+	p {
+		line-height: 29px;
+		margin: 0;
+	}
 }
 
 .text-limit-cell {
