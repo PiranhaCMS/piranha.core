@@ -21,6 +21,7 @@ piranha.media = new function() {
     self.mediaFilter = '';
     self.currentFolder = '';
     self.callback = null;
+    self.initCallback = null;
 
     self.init = function (e) {
         self.mediaId = e.data('mediaid');
@@ -137,6 +138,10 @@ $('.modal').on('shown.bs.modal', function (event) {
 
 $('#modalMedia').on('show.bs.modal', function (event) {
     piranha.media.init($(event.relatedTarget));
+    if (piranha.media.initCallback) {
+        piranha.media.initCallback();
+        piranha.media.initCallback = null;
+    }
     piranha.media.load($(event.relatedTarget), '');
 });
 

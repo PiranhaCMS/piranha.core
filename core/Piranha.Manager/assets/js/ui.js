@@ -24,8 +24,13 @@ $(document).ready(function () {
             toolbar: [
                 'bold', 'italic', 'heading', '|', 'quote', 'unordered-list', 'ordered-list', '|', 'link', 
                 {
-                    name: "image",
+                    name: 'image',
                     action: function customFunction (editor) {
+                        piranha.media.initCallback = function () {
+                            console.log('setting media filter');
+                            piranha.media.mediaFilter = 'image';
+                        };
+
                         // Show modal
                         $('#modalMedia').modal('show');
 
@@ -33,8 +38,8 @@ $(document).ready(function () {
                             var cm = editor.codemirror;
                             var active = simplemde.getState(cm).image;
 
-                            var startPoint = cm.getCursor("start");
-                            var endPoint = cm.getCursor("end");
+                            var startPoint = cm.getCursor('start');
+                            var endPoint = cm.getCursor('end');
 
                             if (active) {
                                 text = cm.getLine(startPoint.line);
@@ -49,8 +54,8 @@ $(document).ready(function () {
                             cm.focus();
                         };
                     },
-                    className: "fa fa-picture-o",
-                    title: "Image"
+                    className: 'fa fa-picture-o',
+                    title: 'Image'
                 },
                 'side-by-side', 'fullscreen'
             ],
