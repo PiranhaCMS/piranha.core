@@ -67,8 +67,13 @@ namespace Piranha.Areas.Manager.Controllers
                 return View("Edit", model.Refresh(api));
             }
 
+            var ret = model.Save(api, out var alias);
+
             // Save
-            if (model.Save(api)) {
+            if (ret) {
+                if (!string.IsNullOrWhiteSpace(alias))
+                    TempData["AliasSuggestion"] = alias;
+
                 SuccessMessage("The post has been saved.");
                 return RedirectToAction("Edit", new { id = model.Id });
             } else {
@@ -96,7 +101,7 @@ namespace Piranha.Areas.Manager.Controllers
             }
 
             // Save
-            if (model.Save(api, true)) {
+            if (model.Save(api, out var alias, true)) {
                 SuccessMessage("The post has been published.");
                 return RedirectToAction("Edit", new { id = model.Id });
             } else {
@@ -113,7 +118,7 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/post/unpublish")]
         [Authorize(Policy = Permission.PostsPublish)]
         public IActionResult UnPublish(Models.PostEditModel model) {
-            if (model.Save(api, false)) {
+            if (model.Save(api, out var alias, false)) {
                 SuccessMessage("The post has been unpublished.");
                 return RedirectToAction("Edit", new { id = model.Id });
             } else {
@@ -168,7 +173,26 @@ namespace Piranha.Areas.Manager.Controllers
                 }
             }
             return new NotFoundResult();
-        }        
+        }
+
+
+        [HttpPost]
+        [Route("manager/post/alias")]
+        [Authorize(Policy = Permission.PostsEdit)]
+        public IActionResult AddAlias(Guid blogId, Guid postId, string alias, string redirect) {
+            // Get the blog page
+            var page = api.Pages.GetById(blogId);
+
+            if (page != null) {
+                // Create alias
+                Piranha.Manager.Utils.CreateAlias(api, page.SiteId, alias, redirect);
+
+                SuccessMessage("The alias list was updated.");
+                return RedirectToAction("Edit", new { id = postId });
+            }
+            ErrorMessage("The alias list could not be updated.");
+            return RedirectToAction("Edit", new { id = postId });
+        }
 
         /// <summary>
         /// Gets the post modal for the specified blog.

@@ -49,6 +49,7 @@ namespace Piranha.Areas.Manager.Models
         /// Saves the page model.
         /// </summary>
         /// <param name="api">The current api</param>
+        /// <param name="alias">The suggested alias</param>
         /// <param name="publish">If the page should be published</param>
         /// <returns>If the page was successfully saved</returns>
         public bool Save(IApi api, out string alias, bool? publish = null) {
@@ -58,7 +59,7 @@ namespace Piranha.Areas.Manager.Models
             if (page == null) {
                 page = Piranha.Models.DynamicPage.Create(api, this.TypeId);
             } else {
-                if (Slug != page.Slug)
+                if (Slug != page.Slug && Published.HasValue)
                     alias = page.Slug;
             }
 

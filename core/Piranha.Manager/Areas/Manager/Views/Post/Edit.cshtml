@@ -3,6 +3,8 @@
 @{
     ViewBag.Title = "Edit post";
     ViewBag.Controller = "Page";
+
+    var alias = (string)TempData["AliasSuggestion"];
 }
 
 @section script {
@@ -17,8 +19,21 @@
             $('#panel-settings').slideToggle('fast');
             return false;
         });
+        $(document).on('click', '#submit-alias', function (e) {
+            e.preventDefault();
+            $('form#alias-form').submit();
+        });
         document.getElementById('Title').focus();
     </script>
+}
+
+@if (!string.IsNullOrEmpty(alias)) {
+    using (var form = Html.BeginForm("AddAlias", "Post", FormMethod.Post, new { id="alias-form", @class = "form", role = "form" })) {
+        @Html.Hidden("blogId", Model.BlogId)
+        @Html.Hidden("postId", Model.Id)
+        @Html.Hidden("alias", $"{Model.BlogSlug}/{alias}")
+        @Html.Hidden("redirect", $"{Model.BlogSlug}/{Model.Slug}")
+    }
 }
 
 @using (var form = Html.BeginForm("Save", "Post", FormMethod.Post, new { @id = "main-form", @class = "form", @role = "form" })) {
@@ -82,6 +97,27 @@
                 </div>
             </div>
         </div>
+    }
+
+    @if (!string.IsNullOrEmpty(alias)) {
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="alert alert-info">
+                    <div class="row">
+                        <div class="col-xs-10">
+                            <p>
+                                <strong>Info</strong>: It seems you have changed the permalink of the post. 
+                                Do you want to create an <strong>Alias</strong> from <code>/@($"{Model.BlogSlug}/{alias}")</code> 
+                                to <code>/@($"{Model.BlogSlug}/{Model.Slug}")</code>
+                            </p>
+                        </div>
+                        <div class="col-xs-2 text-right">
+                            <button id="submit-alias" class="btn btn-default btn-sm">Ok</button>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        </div>        
     }
 
     <div class="form-group">

@@ -107,13 +107,19 @@ namespace Piranha.Areas.Manager.Models
         /// Saves the page model.
         /// </summary>
         /// <param name="api">The current api</param>
+        /// <param name="alias">The suggested alias</param>
         /// <param name="publish">If the page should be published</param>
         /// <returns>If the page was successfully saved</returns>
-        public bool Save(IApi api, bool? publish = null) {
+        public bool Save(IApi api, out string alias, bool? publish = null) {
             var post = api.Posts.GetById(Id);
+            alias = null;
 
-            if (post == null)
+            if (post == null) {
                 post = Piranha.Models.DynamicPost.Create(api, this.TypeId);
+            } else {
+                if (Slug != post.Slug && Published.HasValue)
+                    alias = post.Slug;                
+            }
 
             Module.Mapper.Map<PostEditModel, Piranha.Models.PostBase>(this, post);
             SaveRegions(api, this, post);
