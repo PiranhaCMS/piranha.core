@@ -18,7 +18,7 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework=".NETStandard2.0">
-        <dependency id="Piranha" version="4.2.0" />
+        <dependency id="Piranha" version="4.3.0-beta1" />
         <dependency id="Microsoft.AspNetCore.Http" version="2.0.1" />
         <dependency id="Microsoft.AspNetCore.Http.Extensions" version="2.0.1" />
         <dependency id="Microsoft.Extensions.Logging.Abstractions" version="2.0.0" />

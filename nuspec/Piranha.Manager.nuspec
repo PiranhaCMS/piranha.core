@@ -18,8 +18,8 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework=".NETStandard2.0">
-        <dependency id="Piranha" version="4.2.1" />
-        <dependency id="Piranha.AspNetCore" version="4.2.0" />
+        <dependency id="Piranha" version="4.3.0-beta1" />
+        <dependency id="Piranha.AspNetCore" version="4.3.0-beta1" />
         <dependency id="Microsoft.AspNetCore" version="2.0.1" />
         <dependency id="Microsoft.AspNetCore.Mvc" version="2.0.1" />
         <dependency id="Microsoft.AspNetCore.Session" version="2.0.1" />
