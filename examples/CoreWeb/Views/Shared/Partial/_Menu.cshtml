@@ -1,6 +1,6 @@
 ﻿@inject Piranha.IApi Api
 @{
-    var sitemap = Api.Sites.GetSitemap();
+    var sitemap = Api.Sites.GetSitemap((Guid)ViewBag.SiteId);
     var currentPage = ViewBag.CurrentPage;
 
     //

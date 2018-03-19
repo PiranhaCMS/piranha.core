@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using Piranha.Web;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Piranha.AspNetCore
@@ -34,8 +35,21 @@ namespace Piranha.AspNetCore
         /// <returns>An async task</returns>
         public override async Task Invoke(HttpContext context, IApi api) {
             if (!context.Request.Path.Value.StartsWith("/manager/")) {
+                Data.Site site = null;
+
+                // Try to get the requested site by hostname & prefix
+                var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
+                if (!string.IsNullOrEmpty(url) && url.Length > 1) {
+                    var segments = url.Substring(1).Split(new char[] { '/' });
+                    site = api.Sites.GetByHostname($"{context.Request.Host.Host}/{segments[0]}");
+
+                    if (site != null)
+                        context.Request.Path = "/" + string.Join("/", segments.Skip(1));
+                }
+
                 // Try to get the requested site by hostname
-                var site = api.Sites.GetByHostname(context.Request.Host.Host);
+                if (site == null)
+                    site = api.Sites.GetByHostname(context.Request.Host.Host);
 
                 // If we didn't find the site, get the default site
                 if (site == null)

@@ -44,6 +44,7 @@ namespace CoreWeb.Controllers
         public IActionResult Archive(Guid id, int? year = null, int? month = null, int? page = null, Guid? category = null) {
             var model = api.Archives.GetById<Models.StandardBlog>(id, page, category, year, month);
             ViewBag.CurrentPage = model.Id;
+            ViewBag.SiteId = (Guid)HttpContext.Items["Piranha_SiteId"];
 
             return View(model);
         }
@@ -56,6 +57,7 @@ namespace CoreWeb.Controllers
         public IActionResult Page(Guid id) {
             var model = api.Pages.GetById<Models.StandardPage>(id);
             ViewBag.CurrentPage = model.Id;
+            ViewBag.SiteId = (Guid)HttpContext.Items["Piranha_SiteId"];
 
             return View(model);
         }
@@ -68,6 +70,7 @@ namespace CoreWeb.Controllers
         public IActionResult Post(Guid id) {
             var model = api.Posts.GetById<Models.ArticlePost>(id);
             ViewBag.CurrentPage = model.BlogId;
+            ViewBag.SiteId = (Guid)HttpContext.Items["Piranha_SiteId"];
 
             return View(model);
         }
@@ -81,6 +84,7 @@ namespace CoreWeb.Controllers
         public IActionResult TeaserPage(Guid id, bool startpage) {
             var model = api.Pages.GetById<Models.TeaserPage>(id);
             ViewBag.CurrentPage = model.Id;
+            ViewBag.SiteId = (Guid)HttpContext.Items["Piranha_SiteId"];
 
             if (startpage)
                 return View("Start", model);
