@@ -10421,6 +10421,10 @@ li.sitemap-item .actions.one {
 .region-list .markdown .raw-text {
   height: 230px;
 }
+.region-list .markdown .content-markdown {
+  background: #fff;
+  border: solid 1px #ddd;
+}
 .region-list .markdown .content-preview {
   background: #fff;
   padding: 15px 15px 0;
