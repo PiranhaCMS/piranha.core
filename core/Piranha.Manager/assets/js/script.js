@@ -22270,6 +22270,9 @@ $('#modalPost').on('show.bs.modal', function (event) {
 //
 // Startup
 //
+
+var mdeEditors = new Array();
+
 $(document).ready(function () {
     $('.datepicker').datetimepicker({
         format: "YYYY-MM-DD"
@@ -22332,6 +22335,7 @@ $(document).ready(function () {
                 singleLineBreaks: false
             }
         });
+        mdeEditors[$(e).attr("id")] = simplemde;
 
         simplemde.codemirror.on('change', function () {
             preview.html(simplemde.markdown(simplemde.value()));
@@ -22379,7 +22383,21 @@ $(document).on('click', '.panel-heading .btn-toggle', function () {
     $(this).addClass('btn-primary');
     $(target).show();
 
+    // Refresh SimpleMDE editors inside tab
+    $.each($(target).find(".markdown-editor"), function (i, e) {
+        mdeEditors[$(e).attr("id")].codemirror.refresh();
+    });
+
     return false;
+});
+
+//
+// Refresh SimpleMDE editors inside a collapsible panel
+//
+$('.region-list-body').on('shown.bs.collapse', function () {
+    $.each($(this).find('.markdown-editor'), function (i, e) {
+        mdeEditors[$(e).attr('id')].codemirror.refresh();
+    });
 });
 
 //
