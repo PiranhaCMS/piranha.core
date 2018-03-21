@@ -38,7 +38,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuspec", ".nuspec", "{A1B6
 		nuspec\Piranha.AspNetCore.SimpleSecurity.nuspec = nuspec\Piranha.AspNetCore.SimpleSecurity.nuspec
 		nuspec\Piranha.AttributeBuilder.nuspec = nuspec\Piranha.AttributeBuilder.nuspec
 		nuspec\Piranha.Azure.BlobStorage.nuspec = nuspec\Piranha.Azure.BlobStorage.nuspec
-		nuspec\Piranha.BasicWeb.CSharp.nuspec = nuspec\Piranha.BasicWeb.CSharp.nuspec
 		nuspec\Piranha.ImageSharp.nuspec = nuspec\Piranha.ImageSharp.nuspec
 		nuspec\Piranha.Local.FileStorage.nuspec = nuspec\Piranha.Local.FileStorage.nuspec
 		nuspec\Piranha.Manager.nuspec = nuspec\Piranha.Manager.nuspec
@@ -52,8 +51,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.ImageSharp", "core\Piranha.ImageSharp\Piranha.ImageSharp.csproj", "{512309F2-0557-41DF-9BD0-FDE898C2D34A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{BB78ACA1-9978-4B95-8124-D92FBCC52C9B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasicWeb", "templates\BasicWeb\BasicWeb.csproj", "{E186CEDE-D427-410A-83AE-7DFC1184C63C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.ImageSharp.Tests", "test\Piranha.ImageSharp.Tests\Piranha.ImageSharp.Tests.csproj", "{D604FF1E-06C0-429A-9058-606A0641D301}"
 EndProject
