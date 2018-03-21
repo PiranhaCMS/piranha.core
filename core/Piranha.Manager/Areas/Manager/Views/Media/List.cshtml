@@ -25,7 +25,33 @@
                 }
             });
         });
+
+        function allowDrop (e) {
+            e.preventDefault();
+        }
+
+        function drag (e) {
+            e.dataTransfer.setData("text", $(e.target).attr('data-id'));
+        }
+
+        function drop (e) {
+            e.preventDefault();
+            var data = e.dataTransfer.getData("text");
+            var targetId = $(e.target).attr('data-id');
+            if (!targetId)
+                targetId = $(e.target).closest('tr').attr('data-id');
+        
+            $('#mediaId').val(e.dataTransfer.getData("text"));
+            $('#targetId').val(targetId);
+            $('#move-form').submit();
+        }        
     </script>    
+}
+
+@using (var form = Html.BeginForm("Move", "Media", FormMethod.Post, new { id="move-form", @class = "form", role = "form" })) {
+    <input type="hidden" id="mediaId" name="mediaId" value="">
+    <input type="hidden" id="folderId" name="folderId" value="@Model.CurrentFolderId">
+    <input type="hidden" id="targetId" name="targetId" value="">
 }
 
 <div class="row">
@@ -73,7 +99,7 @@
 
 <div class="row">
     <div class="col-sm-12">
-        <table class="table table-striped table-main">
+        <table class="table table-striped table-main table-media">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -85,7 +111,7 @@
             </thead>
             <tbody>
                 @if (Model.CurrentFolderId.HasValue) {
-                    <tr>
+                    <tr ondrop="drop(event)" ondragover="allowDrop(event)" data-id="@Model.ParentFolderId">
                         <td class="text-limit-cell">
                             <span class="text-limit">
                                 <span class="glyphicon glyphicon-folder-open media-icon"></span>
@@ -99,7 +125,7 @@
                     </tr>
                 }
                 @foreach (var folder in Model.Folders) {
-                    <tr>
+                    <tr ondrop="drop(event)" ondragover="allowDrop(event)" data-id="@folder.Id">
                         <td class="text-limit-cell">
                             <span class="text-limit">
                                 <span class="glyphicon glyphicon-folder-open media-icon"></span>
@@ -117,8 +143,11 @@
                     </tr>
                 }
                 @foreach (var item in Model.Media) {
-                    <tr>
+                    <tr data-id="@item.Id" draggable="true" ondragstart="drag(event)">
                         <td class="text-limit-cell">
+                            <div class="dd-handle">
+                                    <span class="glyphicon glyphicon-option-vertical"></span>
+                            </div>
                             <span class="text-limit">
                                 @if (item.Type == MediaType.Image) {
                                     <span class="glyphicon glyphicon-picture media-icon"></span>

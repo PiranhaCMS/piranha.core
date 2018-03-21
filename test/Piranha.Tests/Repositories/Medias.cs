@@ -141,6 +141,22 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void Move() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var media = api.Media.GetById(image1Id);
+                Assert.NotNull(media);
+                Assert.Null(media.FolderId);
+                api.Media.Move(media, folder1Id);
+
+                media = api.Media.GetById(image1Id);
+                Assert.NotNull(media.FolderId);
+                Assert.Equal(folder1Id, media.FolderId.Value);
+
+                api.Media.Move(media, null);
+            }            
+        }
+
+        [Fact]
         public void Insert() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_BETA_entrance.png")) {

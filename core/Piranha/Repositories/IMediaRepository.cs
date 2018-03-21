@@ -75,6 +75,13 @@ namespace Piranha.Repositories
         void SaveFolder(MediaFolder model);
 
         /// <summary>
+        /// Moves the media to the folder with the specified id.
+        /// </summary>
+        /// <param name="model">The media</param>
+        /// <param name="folderId">The folder id</param>
+        void Move(Media model, Guid? folderId);
+
+        /// <summary>
         /// Ensures that the image version with the given size exsists
         /// and returns its public URL. Please note that this method is 
         /// not really synchronous, it's just a wrapper for the async version.

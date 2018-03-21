@@ -184,6 +184,17 @@ namespace Piranha.Areas.Manager.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("/manager/media/move")]
+        [Authorize(Policy = Permission.MediaEdit)]
+        public IActionResult Move(Guid mediaId, Guid? targetId, Guid? folderId) {
+            var media = api.Media.GetById(mediaId);
+            if (media != null) {
+                api.Media.Move(media, targetId);
+            }
+            return RedirectToAction("List", new { folderId = folderId});
+        }
+
         [Route("/manager/media/modal/{folderId?}")]
         public IActionResult Modal(Guid? folderId = null, string filter = null) {
             MediaType? type = null;

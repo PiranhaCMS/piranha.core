@@ -9927,6 +9927,18 @@ body.collapsed .navmenu-inverse span.title {
   padding-right: 10px;
   color: #999;
 }
+.table.table-main.table-media .dd-handle,
+.panel .table.table-main.table-media .dd-handle {
+  padding: 8px 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 40px;
+}
+.table.table-main.table-media .text-limit-cell,
+.panel .table.table-main.table-media .text-limit-cell {
+  padding-left: 50px;
+}
 .table .gravatar,
 .panel .table .gravatar {
   width: 40px;
