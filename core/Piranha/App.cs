@@ -12,6 +12,7 @@ using AutoMapper;
 using Newtonsoft.Json;
 using Piranha.Extend;
 using Piranha.Extend.Serializers;
+using Piranha.Security;
 using System;
 using System.Reflection;
 
@@ -77,6 +78,11 @@ namespace Piranha
         /// The currently registered hooks.
         /// </summary>
         private HookManager hooks;
+
+        /// <summary>
+        /// The currently registered permissions;
+        /// </summary>
+        private PermissionManager permissions;
 
         /// <summary>
         /// The current cache level.
@@ -150,6 +156,13 @@ namespace Piranha
         }
 
         /// <summary>
+        /// Gets the currently registered permissions.
+        /// </summary>
+        public static Security.PermissionManager Permissions {
+            get { return instance.permissions; }
+        }
+
+        /// <summary>
         /// Gets/sets the current cache level.
         /// </summary>
         public static Cache.CacheLevel CacheLevel {
@@ -168,6 +181,7 @@ namespace Piranha
             serializers = new SerializerManager();
             contentTypes = new ContentTypeManager();
             hooks = new HookManager();
+            permissions = new PermissionManager();
         }
 
         /// <summary>
@@ -300,6 +314,18 @@ namespace Piranha
 
                         // Create markdown converter
                         markdown = new DefaultMarkdown();
+
+                        // Register permissions
+                        permissions["Core"].Add(new PermissionItem
+                        {
+                            Name = Permission.PagePreview,
+                            Title = "Page Preview"
+                        });
+                        permissions["Core"].Add(new PermissionItem
+                        {
+                            Name = Permission.PostPreview,
+                            Title = "Post Preview"
+                        });
 
                         // Initialize all modules
                         foreach (var module in modules) {

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -45,19 +45,14 @@ namespace CoreWeb
             services.AddMvc(config => {
                 config.ModelBinderProviders.Insert(0, new Piranha.Manager.Binders.AbstractModelBinderProvider());
             });
-            services.AddDbContext<Db>(options =>
-                options.UseSqlite("Filename=./piranha.coreweb.db"));            
+            services.AddDbContext<Db>(options => options.UseSqlite("Filename=./piranha.coreweb.db"));
             services.AddSingleton<IStorage, FileStorage>();
             services.AddSingleton<IImageProcessor, ImageSharpProcessor>();
             services.AddScoped<IDb, Db>();
+            services.AddScoped<Piranha.AspNetCore.Identity.Db, Piranha.AspNetCore.Identity.Db>();
             services.AddScoped<IApi, Api>();
-            services.AddPiranhaSimpleSecurity(
-                new Piranha.AspNetCore.SimpleUser(Piranha.Manager.Permission.All()) {
-                    UserName = "admin",
-                    Password = "password"
-                }
-            );
             services.AddPiranhaManager();
+            services.AddPiranhaIdentityWithSeed(options => options.UseSqlite("Filename=./piranha.coreweb.db"));
 
             return services.BuildServiceProvider();
         }
@@ -74,6 +69,9 @@ namespace CoreWeb
             var api = services.GetService<IApi>();
             App.Init(api);
 
+            var db = services.GetService<Piranha.AspNetCore.Identity.Db>();
+            var roles = db.Roles.ToList();
+
             // Build types
             var pageTypeBuilder = new Piranha.AttributeBuilder.PageTypeBuilder(api)
                 .AddType(typeof(Models.StandardBlog))
@@ -88,7 +86,7 @@ namespace CoreWeb
 
             // Register middleware
             app.UseStaticFiles();
-            app.UsePiranhaSimpleSecurity();
+            app.UseAuthentication();
             app.UsePiranha();
             app.UsePiranhaManager();
             app.UseMvc(routes => {

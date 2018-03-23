@@ -1,0 +1,96 @@
+@model Piranha.AspNetCore.Identity.Models.UserEditModel
+@{
+    ViewBag.Title = "Edit user";
+    ViewBag.Controller = "User";
+}
+
+@using (var form = Html.BeginForm("Save", "User", FormMethod.Post, new { @class = "form", @role = "form" })) {
+    @Html.HiddenFor(m => m.User.Id)
+
+    <div class="row">
+        <div class="col-sm-12 buttons">
+            <!-- Actions -->
+            <button type="submit" class="btn btn-labeled btn-success pull-right">
+                <span class="btn-label">
+                    <i class="glyphicon glyphicon-ok"></i>
+                </span>
+                @if (Model.User.Id != Guid.Empty) {
+                    <text>Update</text>
+                } else {
+                    <text>Save</text>
+                }
+            </button>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(ViewBag.Message)) {
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="@ViewBag.MessageCss">
+                    @Html.Raw(ViewBag.Message)
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">General information</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Username</label>
+                        @Html.TextBoxFor(m => m.User.UserName, new { @class = "form-control small", maxlength = 128 })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Email address</label>
+                        @Html.TextBoxFor(m => m.User.Email, new { @class = "form-control small", maxlength = 128 })
+                    </div>                
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Roles</label>
+                <ul class="list-group">
+                    @for (var n = 0; n < Model.Roles.Count(); n+=3)
+                    {
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="SelectedRoles[]" value="@Model.Roles[n].Name" @(Model.SelectedRoles.Contains(@Model.Roles[n].Name) ? "checked=checked" : "")> @Model.Roles[n].Name
+                                        </label>
+                                    </div>
+                                </div>
+                                @if (n + 1 < Model.Roles.Count())
+                                {
+                                    <div class="col-xs-4">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="SelectedRoles[]" value="@Model.Roles[n + 1].Name" @(Model.SelectedRoles.Contains(@Model.Roles[n + 1].Name) ? "checked=checked" : "")> @Model.Roles[n + 1].Name
+                                            </label>
+                                        </div>
+                                    </div>                                        
+                                }
+                                @if (n + 2 < @Model.Roles.Count())
+                                {
+                                    <div class="col-xs-4">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="SelectedClaims[]" value="@Model.Roles[n + 2].Name" @(Model.SelectedRoles.Contains(@Model.Roles[n + 2].Name) ? "checked=checked" : "")> @Model.Roles[n + 2].Name
+                                            </label>
+                                        </div>
+                                    </div>                                        
+                                }
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>   
+}

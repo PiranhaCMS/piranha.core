@@ -1,0 +1,110 @@
+@model Piranha.AspNetCore.Identity.Models.RoleEditModel
+@using Piranha
+@{
+    ViewBag.Title = "Edit role";
+    ViewBag.Controller = "Role";
+}
+
+@using (var form = Html.BeginForm("Save", "Role", FormMethod.Post, new { @class = "form", @role = "form" })) {
+    @Html.HiddenFor(m => m.Role.Id)
+
+    <div class="row">
+        <div class="col-sm-12 buttons">
+            <!-- Actions -->
+            <button type="submit" class="btn btn-labeled btn-success pull-right">
+                <span class="btn-label">
+                    <i class="glyphicon glyphicon-ok"></i>
+                </span>
+                @if (Model.Role.Id != Guid.Empty) {
+                    <text>Update</text>
+                } else {
+                    <text>Save</text>
+                }
+            </button>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(ViewBag.Message)) {
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="@ViewBag.MessageCss">
+                    @Html.Raw(ViewBag.Message)
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">General information</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Name</label>
+                        @Html.TextBoxFor(m => m.Role.Name, new { @class = "form-control small", maxlength = 128 })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Normalized name</label>
+                        @Html.TextBoxFor(m => m.Role.NormalizedName, new { @class = "form-control small", maxlength = 128 })
+                    </div>                
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Permissions</h3>
+        </div>
+        <div class="panel-body">
+            @foreach (var module in App.Permissions.GetModules())
+            {
+                var permissions = App.Permissions.GetPermissions(module);
+
+                <div class="form-group">
+                    <label>@module</label>
+                    <ul class="list-group">
+                        @for (var n = 0; n < permissions.Count(); n+=3)
+                        {
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="SelectedClaims[]" value="@permissions[n].Name" @(Model.SelectedClaims.Contains(permissions[n].Name) ? "checked=checked" : "")> @permissions[n].Title
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @if (n + 1 < permissions.Count())
+                                    {
+                                        <div class="col-xs-4">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" name="SelectedClaims[]" value="@permissions[n + 1].Name" @(Model.SelectedClaims.Contains(permissions[n + 1].Name) ? "checked=checked" : "")> @permissions[n + 1].Title
+                                                </label>
+                                            </div>
+                                        </div>                                        
+                                    }
+                                    @if (n + 2 < permissions.Count())
+                                    {
+                                        <div class="col-xs-4">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" name="SelectedClaims[]" value="@permissions[n + 2].Name" @(Model.SelectedClaims.Contains(permissions[n + 2].Name) ? "checked=checked" : "")> @permissions[n + 2].Title
+                                                </label>
+                                            </div>
+                                        </div>                                        
+                                    }
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    </div>
+}
