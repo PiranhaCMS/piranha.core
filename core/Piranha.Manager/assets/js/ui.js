@@ -4,6 +4,61 @@
 
 var mdeEditors = new Array();
 
+function RegisterMarkdown (e) {
+    var preview = $(e).parent().parent().find('.content-preview');
+    var simplemde = new SimpleMDE({ 
+        element: e,
+        status: false,
+        spellChecker: false,
+        hideIcons: ['preview', 'guide'],
+        toolbar: [
+            'bold', 'italic', 'heading', '|', 'quote', 'unordered-list', 'ordered-list', '|', 'link', 
+            {
+                name: 'image',
+                action: function customFunction (editor) {
+                    piranha.media.initCallback = function () {
+                        piranha.media.mediaFilter = 'image';
+                    };
+
+                    // Show modal
+                    $('#modalMedia').modal('show');
+
+                    piranha.media.callback = function (data) {
+                        var cm = editor.codemirror;
+                        var active = simplemde.getState(cm).image;
+
+                        var startPoint = cm.getCursor('start');
+                        var endPoint = cm.getCursor('end');
+
+                        if (active) {
+                            text = cm.getLine(startPoint.line);
+                            cm.replaceRange('![' + data.name + '](' + data.url + ')', {
+                                line: startPoint.line,
+                                ch: 0
+                            });
+                        } else {
+                            cm.replaceSelection('![' + data.name + '](' + data.url + ')');
+                        }
+                        cm.setSelection(startPoint, endPoint);
+                        cm.focus();
+                    };
+                },
+                className: 'fa fa-picture-o',
+                title: 'Image'
+            },
+            'side-by-side', 'fullscreen'
+        ],
+        renderingConfig: {
+            singleLineBreaks: false
+        }
+    });
+    mdeEditors[$(e).attr("id")] = simplemde;
+
+    simplemde.codemirror.on('change', function () {
+        preview.html(simplemde.markdown(simplemde.value()));
+    });
+};
+
 $(document).ready(function () {
     $('.datepicker').datetimepicker({
         format: "YYYY-MM-DD"
@@ -18,59 +73,7 @@ $(document).ready(function () {
     });
 
     $.each($(".markdown-editor"), function (i, e) {
-        var preview = $(e).parent().parent().find('.content-preview');
-        var simplemde = new SimpleMDE({ 
-            element: e,
-            status: false,
-            spellChecker: false,
-            hideIcons: ['preview', 'guide'],
-            toolbar: [
-                'bold', 'italic', 'heading', '|', 'quote', 'unordered-list', 'ordered-list', '|', 'link', 
-                {
-                    name: 'image',
-                    action: function customFunction (editor) {
-                        piranha.media.initCallback = function () {
-                            console.log('setting media filter');
-                            piranha.media.mediaFilter = 'image';
-                        };
-
-                        // Show modal
-                        $('#modalMedia').modal('show');
-
-                        piranha.media.callback = function (data) {
-                            var cm = editor.codemirror;
-                            var active = simplemde.getState(cm).image;
-
-                            var startPoint = cm.getCursor('start');
-                            var endPoint = cm.getCursor('end');
-
-                            if (active) {
-                                text = cm.getLine(startPoint.line);
-                                cm.replaceRange('![' + data.name + '](' + data.url + ')', {
-                                    line: startPoint.line,
-                                    ch: 0
-                                });
-                            } else {
-                                cm.replaceSelection('![' + data.name + '](' + data.url + ')');
-                            }
-                            cm.setSelection(startPoint, endPoint);
-                            cm.focus();
-                        };
-                    },
-                    className: 'fa fa-picture-o',
-                    title: 'Image'
-                },
-                'side-by-side', 'fullscreen'
-            ],
-            renderingConfig: {
-                singleLineBreaks: false
-            }
-        });
-        mdeEditors[$(e).attr("id")] = simplemde;
-
-        simplemde.codemirror.on('change', function () {
-            preview.html(simplemde.markdown(simplemde.value()));
-        });
+        RegisterMarkdown(e);
     });
 });
 
@@ -311,6 +314,11 @@ var manager = {
                         tinyMCE.execCommand('mceAddEditor', false, this.id);
                     });
 
+                    // Initialize markdown editors.
+                    $(res).find('.markdown-editor').each(function () {
+                        RegisterMarkdown($('#' + $(this).attr('id')).get(0));
+                    });           
+
                     if (cb)
                         cb();
 
@@ -342,10 +350,14 @@ var manager = {
                 var inputs = $(items.get(n)).find('input, textarea, select');
 
                 inputs.attr('id', function (i, val) {
-                    return val.replace(/FieldSets_\d+__/, 'FieldSets_' + n + '__');
+                    if (val)
+                        return val.replace(/FieldSets_\d+__/, 'FieldSets_' + n + '__');
+                    return val;
                 });
                 inputs.attr('name', function (i, val) {
-                    return val.replace(/FieldSets\[\d+\]/, 'FieldSets[' + n + ']');
+                    if (val)
+                        return val.replace(/FieldSets\[\d+\]/, 'FieldSets[' + n + ']');
+                    return val;
                 });
             }
         },
