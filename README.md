@@ -36,6 +36,12 @@ Middleware components and other tools for building a .NET Core web application w
 
 Components for automatically build and import page types by adding simple attributes to your models.
 
+### Piranha.Azure.BlobStorage
+
+[`WindowsAzure.Storage`]
+
+Provider for storing uploaded media files on Azure Blob Storage.
+
 ### Piranha.Local.FileStorage
 
 Provider for storing uploaded media files on the local filesystem.
