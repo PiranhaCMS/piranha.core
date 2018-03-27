@@ -55,6 +55,15 @@ namespace Piranha.Tests.Repositories
             public MarkdownField Body { get; set; }
         }
 
+        [PageType(Title = "Missing PageType")]
+        public class MissingPage : Models.Page<MissingPage>
+        {
+            [Region]
+            public TextField Ingress { get; set; }
+            [Region]
+            public MarkdownField Body { get; set; }
+        }
+
         [PageType(Title = "My CollectionPage")]
         public class MyCollectionPage : Models.Page<MyCollectionPage>
         {
@@ -74,10 +83,11 @@ namespace Piranha.Tests.Repositories
                 Piranha.App.Init(api);
 
                 var builder = new PageTypeBuilder(api)
+                    .AddType(typeof(MissingPage))
                     .AddType(typeof(MyPage))
                     .AddType(typeof(MyCollectionPage));
                 builder.Build();
-
+                
                 var site = new Data.Site() {
                     Id = SITE_ID,
                     Title = "Default Site",
@@ -203,6 +213,26 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void GetAllByBaseClass() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var pages = api.Pages.GetAll<Models.PageBase>(SITE_ID);
+
+                Assert.NotNull(pages);
+                Assert.NotEmpty(pages);
+            }
+        }
+
+        [Fact]
+        public void GetAllByMissing() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var pages = api.Pages.GetAll<MissingPage>(SITE_ID);
+
+                Assert.NotNull(pages);
+                Assert.Empty(pages);
+            }
+        }        
+
+        [Fact]
         public void GetGenericById() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 var model = api.Pages.GetById<MyPage>(PAGE_1_ID);
@@ -214,6 +244,27 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void GetBaseClassById() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var model = api.Pages.GetById<Models.PageBase>(PAGE_1_ID);
+
+                Assert.NotNull(model);
+                Assert.Equal(typeof(MyPage), model.GetType());
+                Assert.Equal("my-first-page", model.Slug);
+                Assert.Equal("My first body", ((MyPage)model).Body.Value);
+            }
+        }
+
+        [Fact]
+        public void GetMissingById() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var model = api.Pages.GetById<MissingPage>(PAGE_1_ID);
+
+                Assert.Null(model);
+            }
+        }
+
+        [Fact]
         public void GetGenericBySlug() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 var model = api.Pages.GetBySlug<MyPage>("my-first-page");
@@ -221,6 +272,27 @@ namespace Piranha.Tests.Repositories
                 Assert.NotNull(model);
                 Assert.Equal("my-first-page", model.Slug);
                 Assert.Equal("My first body", model.Body.Value);
+            }
+        }
+
+        [Fact]
+        public void GetBaseClassBySlug() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var model = api.Pages.GetBySlug<Models.PageBase>("my-first-page");
+
+                Assert.NotNull(model);
+                Assert.Equal(typeof(MyPage), model.GetType());
+                Assert.Equal("my-first-page", model.Slug);
+                Assert.Equal("My first body", ((MyPage)model).Body.Value);
+            }
+        }
+
+        [Fact]
+        public void GetMissingBySlug() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var model = api.Pages.GetBySlug<MissingPage>("my-first-page");
+
+                Assert.Null(model);
             }
         }
 
@@ -265,6 +337,18 @@ namespace Piranha.Tests.Repositories
                 Assert.NotNull(page);
                 Assert.Equal(3, page.Texts.Count);
                 Assert.Equal("Second text", page.Texts[1].Value);
+            }
+        }
+
+        [Fact]
+        public void GetCollectionPageBaseClass() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var page = api.Pages.GetBySlug<Models.PageBase>("my-collection-page");
+
+                Assert.NotNull(page);
+                Assert.Equal(typeof(MyCollectionPage), page.GetType());
+                Assert.Equal(3, ((MyCollectionPage)page).Texts.Count);
+                Assert.Equal("Second text", ((MyCollectionPage)page).Texts[1].Value);
             }
         }
 

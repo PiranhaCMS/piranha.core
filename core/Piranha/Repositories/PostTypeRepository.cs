@@ -95,6 +95,7 @@ namespace Piranha.Repositories
                 };
                 db.PostTypes.Add(type);
             }
+            type.CLRType = model.CLRType;
             type.Body = JsonConvert.SerializeObject(model);
             type.LastModified = DateTime.Now;
 

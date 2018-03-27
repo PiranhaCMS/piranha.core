@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2017 Håkan Edling
+ * Copyright (c) 2016-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -35,6 +35,15 @@ namespace Piranha.Repositories
         /// <param name="siteId">The optional site id</param>
         /// <returns>The pages</returns>
         public IEnumerable<Models.DynamicPage> GetAll(Guid? siteId = null) {
+            return GetAll<Models.DynamicPage>(siteId);
+        }
+
+        /// <summary>
+        /// Gets all of the available pages for the current site.
+        /// </summary>
+        /// <param name="siteId">The optional site id</param>
+        /// <returns>The pages</returns>
+        public IEnumerable<T> GetAll<T>(Guid? siteId = null) where T : Models.PageBase {
             if (!siteId.HasValue) {
                 var site = api.Sites.GetDefault();
 
@@ -49,15 +58,15 @@ namespace Piranha.Repositories
                 .ThenBy(p => p.SortOrder)
                 .Select(p => p.Id);
 
-            var models = new List<Models.DynamicPage>();
+            var models = new List<T>();
 
             foreach (var page in pages) {
-                var model = GetById(page);
+                var model = GetById<T>(page);
 
                 if (model != null)
                     models.Add(model);
             }
-            return models;
+            return models;            
         }
 
         /// <summary>
@@ -66,6 +75,15 @@ namespace Piranha.Repositories
         /// <param name="siteId">The optional site id</param>
         /// <returns>The pages</returns>
         public IEnumerable<Models.DynamicPage> GetAllBlogs(Guid? siteId = null) {
+            return GetAllBlogs<Models.DynamicPage>(siteId);
+        }
+
+        /// <summary>
+        /// Gets the available blog pages for the current site.
+        /// </summary>
+        /// <param name="siteId">The optional site id</param>
+        /// <returns>The pages</returns>
+        public IEnumerable<T> GetAllBlogs<T>(Guid? siteId = null) where T : Models.PageBase {
             if (!siteId.HasValue) {
                 var site = api.Sites.GetDefault();
 
@@ -80,16 +98,16 @@ namespace Piranha.Repositories
                 .ThenBy(p => p.SortOrder)
                 .Select(p => p.Id);
 
-            var models = new List<Models.DynamicPage>();
+            var models = new List<T>();
 
             foreach (var page in pages) {
-                var model = GetById(page);
+                var model = GetById<T>(page);
 
                 if (model != null)
                     models.Add(model);
             }
             return models;            
-        }          
+        }
 
         /// <summary>
         /// Gets the site startpage.
@@ -106,7 +124,7 @@ namespace Piranha.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>
-        public T GetStartpage<T>(Guid? siteId = null) where T : Models.GenericPage<T> {
+        public T GetStartpage<T>(Guid? siteId = null) where T : Models.PageBase {
             if (!siteId.HasValue) {
                 var site = api.Sites.GetDefault();
                 if (site != null)
@@ -147,7 +165,7 @@ namespace Piranha.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
         /// <returns>The page model</returns>
-        public T GetById<T>(Guid id) where T : Models.GenericPage<T> {
+        public T GetById<T>(Guid id) where T : Models.PageBase {
             var page = cache != null ? cache.Get<Page>(id.ToString()) : null;
 
             if (page == null) {
@@ -184,7 +202,7 @@ namespace Piranha.Repositories
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>
-        public T GetBySlug<T>(string slug, Guid? siteId = null) where T : Models.GenericPage<T> {
+        public T GetBySlug<T>(string slug, Guid? siteId = null) where T : Models.PageBase {
             if (!siteId.HasValue) {
                 var site = api.Sites.GetDefault();
                 if (site != null)
@@ -254,7 +272,7 @@ namespace Piranha.Repositories
         /// <param name="model">The page to move</param>
         /// <param name="parentId">The new parent id</param>
         /// <param name="sortOrder">The new sort order</param>
-        public void Move<T>(T model, Guid? parentId, int sortOrder) where T : Models.GenericPage<T> {
+        public void Move<T>(T model, Guid? parentId, int sortOrder) where T : Models.PageBase {
             IEnumerable<Page> oldSiblings = null;
             IEnumerable<Page> newSiblings = null;
 
@@ -295,7 +313,7 @@ namespace Piranha.Repositories
         /// Saves the given page model
         /// </summary>
         /// <param name="model">The page model</param>
-        public void Save<T>(T model) where T : Models.GenericPage<T> {
+        public void Save<T>(T model) where T : Models.PageBase {
             var type = api.PageTypes.GetById(model.TypeId);
 
             if (type != null) {
@@ -424,11 +442,10 @@ namespace Piranha.Repositories
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        public virtual void Delete<T>(T model) where T : Models.GenericPage<T> {
+        public virtual void Delete<T>(T model) where T : Models.PageBase {
             Delete(model.Id);
         }
 
-        #region Private helper methods
         /// <summary>
         /// Moves the pages around. This is done when a page is deleted or moved in the structure.
         /// </summary>
@@ -445,7 +462,23 @@ namespace Piranha.Repositories
             foreach (var page in pages)
                 page.SortOrder = increase ? page.SortOrder + 1 : page.SortOrder - 1;
         }
-        #endregion
+
+        /// <summary>
+        /// Updates the LastModified date of the pages and
+        /// removes it from the cache.
+        /// </summary>
+        /// <param name="pages">The id of the pages</param>
+        internal void Touch(params Guid[] pages) {
+            var models = db.Pages
+                .Where(p => pages.Contains(p.Id))
+                .ToArray();
+
+            foreach (var page in models) {
+                page.LastModified = DateTime.Now;
+                db.SaveChanges();
+                RemoveFromCache(page);
+            }
+        }
 
         /// <summary>
         /// Internal method for getting the data page by id.
@@ -469,7 +502,6 @@ namespace Piranha.Repositories
             return page;
         }
 
-        #region Private cache methods
         /// <summary>
         /// Adds the given model to cache.
         /// </summary>
@@ -491,6 +523,5 @@ namespace Piranha.Repositories
             if (!page.ParentId.HasValue && page.SortOrder == 0)
                 cache.Remove($"Page_{page.SiteId}");
         }
-        #endregion
     }
 }

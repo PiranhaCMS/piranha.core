@@ -48,20 +48,33 @@ namespace Piranha.Repositories
         /// <param name="type">The content type</param>
         /// <returns>The page model</returns>
         protected T Load<T, TModelBase>(TContent content, Models.ContentType type, Action<TContent, T> process = null) 
-            where T : Models.RoutedContent, TModelBase
-            where TModelBase : Models.RoutedContent
+            where T : Models.Content, TModelBase
+            where TModelBase : Models.Content
         {
             if (type != null) {
+                var modelType = typeof(T);
+
+                if (!typeof(Models.IDynamicModel).IsAssignableFrom(modelType)) {
+                    modelType = Type.GetType(type.CLRType);
+
+                    if (modelType != typeof(T) && !typeof(T).IsAssignableFrom(modelType))
+                        return null;
+                }
+
                 // Create an initialized model
-                var model = (T)typeof(T).GetMethod("Create", BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy).Invoke(null, new object[] { api, type.Id });
+                var model = (T)modelType.GetMethod("Create", BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy).Invoke(null, new object[] { api, type.Id });
                 var currentRegions = type.Regions.Select(r => r.Id).ToArray();
 
                 // Map basic fields
                 App.Mapper.Map<TContent, TModelBase>(content, model);
 
-                // Map page type route (if available)
-                if (string.IsNullOrWhiteSpace(model.Route) && type.Routes.Count > 0)
-                    model.Route = type.Routes.First();
+                if (model is Models.RoutedContent) {
+                    var routeModel = (Models.RoutedContent)(object)model;
+
+                    // Map route (if available)
+                    if (string.IsNullOrWhiteSpace(routeModel.Route) && type.Routes.Count > 0)
+                        routeModel.Route = type.Routes.First();
+                }
 
                 // Map regions
                 foreach (var regionKey in currentRegions) {
@@ -111,7 +124,7 @@ namespace Piranha.Repositories
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <param name="field">The field</param>
-        protected void SetSimpleValue<T>(T model, string regionId, TField field) where T : Models.RoutedContent {
+        protected void SetSimpleValue<T>(T model, string regionId, TField field) where T : Models.Content {
             if (model is Models.IDynamicModel) {
                 ((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId] =
                     DeserializeValue(field);
@@ -128,7 +141,7 @@ namespace Piranha.Repositories
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <param name="field">The field</param>
-        private void AddSimpleValue<T>(T model, string regionId, TField field) where T : Models.RoutedContent {
+        private void AddSimpleValue<T>(T model, string regionId, TField field) where T : Models.Content {
             if (model is Models.IDynamicModel) {
                 ((IList)((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId]).Add(
                     DeserializeValue(field));
@@ -146,7 +159,7 @@ namespace Piranha.Repositories
         /// <param name="regionId">The region id</param>
         /// <param name="fieldId">The field id</param>
         /// <param name="field">The field</param>
-        protected void SetComplexValue<T>(T model, string regionId, string fieldId, TField field) where T : Models.RoutedContent {
+        protected void SetComplexValue<T>(T model, string regionId, string fieldId, TField field) where T : Models.Content {
             if (model is Models.IDynamicModel) {
                 ((IDictionary<string, object>)((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId])[fieldId] =
                     DeserializeValue(field);
@@ -165,7 +178,7 @@ namespace Piranha.Repositories
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <param name="fields">The field</param>
-        private void AddComplexValue<T>(T model, string regionId, IList<TField> fields) where T : Models.RoutedContent {
+        private void AddComplexValue<T>(T model, string regionId, IList<TField> fields) where T : Models.Content {
             if (fields.Count > 0) {
                 if (model is Models.IDynamicModel) {
                     var list = (IList)((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId];
@@ -218,7 +231,7 @@ namespace Piranha.Repositories
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <returns>If the region exists</returns>
-        protected bool HasRegion<T>(T model, string regionId) where T : Models.RoutedContent {
+        protected bool HasRegion<T>(T model, string regionId) where T : Models.Content {
             if (model is Models.IDynamicModel) {
                 return ((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions).ContainsKey(regionId);
             } else {
@@ -233,7 +246,7 @@ namespace Piranha.Repositories
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <returns>The region</returns>
-        protected object GetRegion<T>(T model, string regionId) where T : Models.RoutedContent {
+        protected object GetRegion<T>(T model, string regionId) where T : Models.Content {
             if (model is Models.IDynamicModel) {
                 return ((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId];
             } else {
@@ -262,7 +275,7 @@ namespace Piranha.Repositories
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <returns>The enumerator</returns>
-        protected IEnumerable GetEnumerable<T>(T model, string regionId) where T : Models.RoutedContent {
+        protected IEnumerable GetEnumerable<T>(T model, string regionId) where T : Models.Content {
             object value = null;
 
             if (model is Models.IDynamicModel) {
@@ -285,7 +298,7 @@ namespace Piranha.Repositories
         /// <param name="regionType">The region type</param>
         /// <param name="regionId">The region id</param>
         /// <param name="sortOrder">The optional sort order</param>
-        protected IList<Guid> MapRegion<T>(T model, TContent content, object region, Models.RegionType regionType, string regionId, int sortOrder = 0) where T : Models.RoutedContent {
+        protected IList<Guid> MapRegion<T>(T model, TContent content, object region, Models.RegionType regionType, string regionId, int sortOrder = 0) where T : Models.Content {
             var items = new List<Guid>();
 
             // Now map all of the fields

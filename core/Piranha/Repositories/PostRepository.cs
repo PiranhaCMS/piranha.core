@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2017 Håkan Edling
+ * Copyright (c) 2016-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -32,6 +32,15 @@ namespace Piranha.Repositories
         /// <param name="blogId">The unique blog id</param>
         /// <returns>The posts</returns>
         public IEnumerable<Models.DynamicPost> GetAll(Guid blogId) {
+            return GetAll<Models.DynamicPost>(blogId);
+        }
+
+        /// <summary>
+        /// Gets the available post items.
+        /// </summary>
+        /// <param name="blogId">The unique id</param>
+        /// <returns>The posts</returns>
+        public IEnumerable<T> GetAll<T>(Guid blogId) where T : Models.PostBase {
             var posts = db.Posts
                 .AsNoTracking()
                 .Where(p => p.BlogId == blogId)
@@ -40,10 +49,10 @@ namespace Piranha.Repositories
                 .ThenBy(p => p.Title)
                 .Select(p => p.Id);
 
-            var models = new List<Models.DynamicPost>();
+            var models = new List<T>();
 
             foreach (var post in posts) {
-                var model = GetById(post);
+                var model = GetById<T>(post);
 
                 if (model != null)
                     models.Add(model);
@@ -58,6 +67,16 @@ namespace Piranha.Repositories
         /// <param name="siteId">The optional site id</param>
         /// <returns>The posts</returns>
         public IEnumerable<Models.DynamicPost> GetAll(string slug, Guid? siteId = null) {
+            return GetAll<Models.DynamicPost>(slug, siteId);
+        }
+
+        /// <summary>
+        /// Gets the available posts for the specified blog.
+        /// </summary>
+        /// <param name="slug">The blog slug</param>
+        /// <param name="siteId">The optional site id</param>
+        /// <returns>The posts</returns>
+        public IEnumerable<T> GetAll<T>(string slug, Guid? siteId = null) where T : Models.PostBase {
             if (!siteId.HasValue) {
                 var site = api.Sites.GetDefault();
                 if (site != null)
@@ -67,8 +86,8 @@ namespace Piranha.Repositories
             var blogId = api.Pages.GetIdBySlug(slug, siteId);
 
             if (blogId.HasValue)
-                return GetAll(blogId.Value);
-            return new List<Models.DynamicPost>();
+                return GetAll<T>(blogId.Value);
+            return new List<T>();            
         }
 
         /// <summary>
@@ -86,7 +105,7 @@ namespace Piranha.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
         /// <returns>The post model</returns>
-        public T GetById<T>(Guid id) where T : Models.Post<T> {
+        public T GetById<T>(Guid id) where T : Models.PostBase {
             var post = cache != null ? cache.Get<Post>(id.ToString()) : null;
 
             if (post == null) {
@@ -127,7 +146,7 @@ namespace Piranha.Repositories
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The post model</returns>
-        public T GetBySlug<T>(string blog, string slug, Guid? siteId = null) where T : Models.Post<T> {
+        public T GetBySlug<T>(string blog, string slug, Guid? siteId = null) where T : Models.PostBase {
             if (!siteId.HasValue) {
                 var site = api.Sites.GetDefault();
                 if (site != null)
@@ -158,7 +177,7 @@ namespace Piranha.Repositories
         /// <param name="blog">The unique blog slug</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The post model</returns>
-        public T GetBySlug<T>(Guid blogId, string slug) where T : Models.Post<T> {
+        public T GetBySlug<T>(Guid blogId, string slug) where T : Models.PostBase {
             var postId = cache != null ? cache.Get<Guid?>($"PostId_{blogId}_{slug}") : (Guid?)null;
 
             if (postId.HasValue) {
@@ -187,7 +206,7 @@ namespace Piranha.Repositories
         /// Saves the given post model
         /// </summary>
         /// <param name="model">The post model</param>
-        public void Save<T>(T model) where T : Models.Post<T> {
+        public void Save<T>(T model) where T : Models.PostBase {
             var type = api.PostTypes.GetById(model.TypeId);
 
             if (type != null) {
@@ -358,7 +377,7 @@ namespace Piranha.Repositories
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        public void Delete<T>(T model) where T : Models.Post<T> {
+        public void Delete<T>(T model) where T : Models.PostBase {
             Delete(model.Id);
         }
 
