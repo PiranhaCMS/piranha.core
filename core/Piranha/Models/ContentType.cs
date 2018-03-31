@@ -23,6 +23,11 @@ namespace Piranha.Models
         public string Id { get; set; }
 
         /// <summary>
+        /// Gets/sets the CLR type of the content model.
+        /// </summary>
+        public string CLRType { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional title.
         /// </summary>
         public string Title { get; set; }

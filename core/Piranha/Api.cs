@@ -20,7 +20,6 @@ namespace Piranha
     /// </summary>
     public sealed class Api : IApi, IDisposable
     {
-        #region Members
         /// <summary>
         /// The private db context.
         /// </summary>
@@ -35,9 +34,7 @@ namespace Piranha
         /// The private model cache.
         /// </summary>
         private ICache cache;
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets/sets the alias repository.
         /// </summary>
@@ -100,7 +97,6 @@ namespace Piranha
         public bool IsCached {
             get { return cache != null; }
         }
-        #endregion
 
         /// <summary>
         /// Default constructor.

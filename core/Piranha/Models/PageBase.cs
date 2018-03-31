@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2017 Håkan Edling
+ * Copyright (c) 2016-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace Piranha.Models
 {
@@ -17,7 +18,6 @@ namespace Piranha.Models
     /// </summary>
     public abstract class PageBase : RoutedContent, IMeta
     {
-        #region Properties
         /// <summary>
         /// Gets/sets the site id.
         /// </summary>
@@ -58,7 +58,6 @@ namespace Piranha.Models
         /// Gets/sets the redirect type.
         /// </summary>
         /// <returns></returns>
-        public RedirectType RedirectType { get; set; }        
-        #endregion
+        public RedirectType RedirectType { get; set; }
     }
 }

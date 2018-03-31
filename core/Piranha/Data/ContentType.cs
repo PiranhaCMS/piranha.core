@@ -20,6 +20,11 @@ namespace Piranha.Data
         public string Id { get; set; }
 
         /// <summary>
+        /// Gets/sets the CLR type of the content model.
+        /// </summary>
+        public string CLRType { get; set; }
+
+        /// <summary>
         /// Gets/sets the JSON serialized body of the post type.
         /// </summary>
         public string Body { get; set; }

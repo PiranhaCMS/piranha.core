@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -52,6 +52,15 @@ namespace Piranha.Tests.Repositories
             public MarkdownField Body { get; set; }
         }
 
+        [PostType(Title = "Missing PostType")]
+        public class MissingPost : Models.Post<MissingPost>
+        {
+            [Region]
+            public TextField Ingress { get; set; }
+            [Region]
+            public MarkdownField Body { get; set; }
+        }
+
         [PostType(Title = "My CollectionPost")]
         public class MyCollectionPost : Models.Post<MyCollectionPost>
         {
@@ -71,6 +80,7 @@ namespace Piranha.Tests.Repositories
                     .AddType(typeof(BlogPage));
                 pageTypeBuilder.Build();
                 var postTypeBuilder = new PostTypeBuilder(api)
+                    .AddType(typeof(MissingPost))
                     .AddType(typeof(MyPost))
                     .AddType(typeof(MyCollectionPost));
                 postTypeBuilder.Build();
@@ -233,12 +243,52 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void GetAllBaseClassById() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var posts = api.Posts.GetAll<Models.PostBase>(BLOG_ID);
+
+                Assert.NotNull(posts);
+                Assert.NotEmpty(posts);
+            }
+        }
+
+        [Fact]
+        public void GetAllByIdMissing() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var posts = api.Posts.GetAll<MissingPost>(BLOG_ID);
+
+                Assert.NotNull(posts);
+                Assert.Empty(posts);
+            }
+        }
+
+        [Fact]
         public void GetAllBySlug() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 var posts = api.Posts.GetAll("blog");
 
                 Assert.NotNull(posts);
                 Assert.NotEmpty(posts);
+            }
+        }
+
+        [Fact]
+        public void GetAllBaseClassBySlug() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var posts = api.Posts.GetAll<Models.PostBase>("blog");
+
+                Assert.NotNull(posts);
+                Assert.NotEmpty(posts);
+            }
+        }
+
+        [Fact]
+        public void GetAllBySlugMissing() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var posts = api.Posts.GetAll<MissingPost>("blog");
+
+                Assert.NotNull(posts);
+                Assert.Empty(posts);
             }
         }
 
@@ -295,6 +345,28 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void GetBaseClassById() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var model = api.Posts.GetById<Models.PostBase>(POST_1_ID);
+
+                Assert.NotNull(model);
+                Assert.Equal(typeof(MyPost), model.GetType());
+                Assert.Equal("my-first-post", model.Slug);
+                Assert.Equal("/blog/my-first-post", model.Permalink);
+                Assert.Equal("My first body", ((MyPost)model).Body.Value);
+            }
+        }
+
+        [Fact]
+        public void GetMissingById() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var model = api.Posts.GetById<MissingPost>(POST_1_ID);
+
+                Assert.Null(model);
+            }
+        }
+
+        [Fact]
         public void GetGenericBySlug() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 var model = api.Posts.GetBySlug<MyPost>("blog", "my-first-post");
@@ -303,6 +375,28 @@ namespace Piranha.Tests.Repositories
                 Assert.Equal("my-first-post", model.Slug);
                 Assert.Equal("/blog/my-first-post", model.Permalink);
                 Assert.Equal("My first body", model.Body.Value);
+            }
+        }
+
+        [Fact]
+        public void GetBaseClassBySlug() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var model = api.Posts.GetBySlug<Models.PostBase>("blog", "my-first-post");
+
+                Assert.NotNull(model);
+                Assert.Equal(typeof(MyPost), model.GetType());
+                Assert.Equal("my-first-post", model.Slug);
+                Assert.Equal("/blog/my-first-post", model.Permalink);
+                Assert.Equal("My first body", ((MyPost)model).Body.Value);
+            }
+        }
+
+        [Fact]
+        public void GetMissingBySlug() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var model = api.Posts.GetBySlug<MissingPost>("blog", "my-first-post");
+
+                Assert.Null(model);
             }
         }
 
@@ -351,6 +445,17 @@ namespace Piranha.Tests.Repositories
             }
         }
 
+        [Fact]
+        public void GetBaseClassCollectionPost() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var post = api.Posts.GetBySlug<Models.PostBase>(BLOG_ID, "my-collection-post");
+
+                Assert.NotNull(post);
+                Assert.Equal(typeof(MyCollectionPost), post.GetType());
+                Assert.Equal(3, ((MyCollectionPost)post).Texts.Count);
+                Assert.Equal("Second text", ((MyCollectionPost)post).Texts[1].Value);
+            }
+        }
         [Fact]
         public void GetDynamicCollectionPost() {
             using (var api = new Api(GetDb(), storage, cache)) {

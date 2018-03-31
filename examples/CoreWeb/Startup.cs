@@ -171,7 +171,7 @@ namespace CoreWeb
                             Image = githubId,
                             Body = "Everything is Open Source and released under the `MIT` license for maximum flexibility."
                         });
-
+                        
                         api.Pages.Save(startPage);
 
                         var docsPage = Models.StandardPage.Create(api);

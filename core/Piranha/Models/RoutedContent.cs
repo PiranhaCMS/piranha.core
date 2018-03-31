@@ -41,5 +41,10 @@ namespace Piranha.Models
         /// Gets/sets the optional route used by the middleware.
         /// </summary>
         public string Route { get; set; }
+
+        /// <summary>
+        /// Gets/sets the published date.
+        /// </summary>
+        public DateTime? Published { get; set; }
     }
 }

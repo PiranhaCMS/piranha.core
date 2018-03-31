@@ -11,11 +11,11 @@ using System;
 
 namespace Piranha.Migrations
 {
-    [NoCoverage]
     [DbContext(typeof(Db))]
-    partial class DbModelSnapshot : ModelSnapshot
+    [Migration("20180331212736_AddCLRContentType")]
+    partial class AddCLRContentType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

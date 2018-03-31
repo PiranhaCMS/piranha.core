@@ -167,6 +167,7 @@ namespace Piranha
 
             mb.Entity<Data.PageType>().ToTable("Piranha_PageTypes");
             mb.Entity<Data.PageType>().Property(p => p.Id).HasMaxLength(64).IsRequired();
+            mb.Entity<Data.PageType>().Property(p => p.CLRType).HasMaxLength(256);
 
             mb.Entity<Data.Param>().ToTable("Piranha_Params");
             mb.Entity<Data.Param>().Property(p => p.Key).HasMaxLength(64).IsRequired();
@@ -196,6 +197,7 @@ namespace Piranha
 
             mb.Entity<Data.PostType>().ToTable("Piranha_PostTypes");
             mb.Entity<Data.PostType>().Property(p => p.Id).HasMaxLength(64).IsRequired();
+            mb.Entity<Data.PostType>().Property(p => p.CLRType).HasMaxLength(256);
 
             mb.Entity<Data.Site>().ToTable("Piranha_Sites");
             mb.Entity<Data.Site>().Property(s => s.InternalId).HasMaxLength(64).IsRequired();

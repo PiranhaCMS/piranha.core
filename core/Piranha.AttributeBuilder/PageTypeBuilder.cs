@@ -83,6 +83,7 @@ namespace Piranha.AttributeBuilder
                 if (!string.IsNullOrEmpty(attr.Id) && !string.IsNullOrEmpty(attr.Title)) {
                     var pageType = new PageType() {
                         Id = attr.Id,
+                        CLRType = type.GetTypeInfo().AssemblyQualifiedName,
                         Title = attr.Title,
                         ContentTypeId = App.ContentTypes.GetId(type)
                     };
