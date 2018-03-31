@@ -31,10 +31,11 @@ namespace Piranha.Tests.Repositories
     public class Pages : BaseTests
     {
         #region Members
-        public static readonly Guid SITE_ID = new Guid("8170A7B1-00C5-4014-90BD-6401710E93BD");
-        public static readonly Guid PAGE_1_ID = new Guid("C86E47BA-8D0A-4A54-8EB2-2EE2E05E79D5");
-        public static readonly Guid PAGE_2_ID = new Guid("BF61DBD2-BA79-4AF5-A4F5-66331AC3213E");
-        public static readonly Guid PAGE_3_ID = new Guid("AF62769D-019F-44BF-B44F-E3D61F421DD2");
+        public static readonly Guid SITE_ID = Guid.NewGuid();
+        public static readonly Guid SITE_EMPTY_ID = Guid.NewGuid();
+        public static readonly Guid PAGE_1_ID = Guid.NewGuid();
+        public static readonly Guid PAGE_2_ID = Guid.NewGuid();
+        public static readonly Guid PAGE_3_ID = Guid.NewGuid();
         protected ICache cache;
         #endregion
 
@@ -48,6 +49,15 @@ namespace Piranha.Tests.Repositories
 
         [PageType(Title = "My PageType")]
         public class MyPage : Models.Page<MyPage>
+        {
+            [Region]
+            public TextField Ingress { get; set; }
+            [Region]
+            public MarkdownField Body { get; set; }
+        }
+
+        [PageType(Title = "My BlogType")]
+        public class MyBlogPage : Models.BlogPage<MyBlogPage>
         {
             [Region]
             public TextField Ingress { get; set; }
@@ -84,6 +94,7 @@ namespace Piranha.Tests.Repositories
 
                 var builder = new PageTypeBuilder(api)
                     .AddType(typeof(MissingPage))
+                    .AddType(typeof(MyBlogPage))
                     .AddType(typeof(MyPage))
                     .AddType(typeof(MyCollectionPage));
                 builder.Build();
@@ -94,7 +105,14 @@ namespace Piranha.Tests.Repositories
                     InternalId = "DefaultSite",
                     IsDefault = true
                 };
+                var emptysite = new Data.Site() {
+                    Id = SITE_ID,
+                    Title = "Empty Site",
+                    InternalId = "EmptySite",
+                    IsDefault = false
+                };
                 api.Sites.Save(site);
+                api.Sites.Save(emptysite);
 
                 var page1 = MyPage.Create(api);
                 page1.Id = PAGE_1_ID;
@@ -134,6 +152,11 @@ namespace Piranha.Tests.Repositories
                     Value = "Third text"
                 });
                 api.Pages.Save(page4);
+
+                var page5 = MyBlogPage.Create(api);
+                page5.SiteId = SITE_ID;
+                page5.Title = "Blog Archive";
+                api.Pages.Save(page5);
             }
         }
 
@@ -203,6 +226,35 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void GetStartpageNone() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var model = api.Pages.GetStartpage(SITE_EMPTY_ID);
+
+                Assert.Null(model);
+            }
+        }
+
+        [Fact]
+        public void GetIdBySlug() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var model = api.Pages.GetIdBySlug("my-first-page");
+
+                Assert.NotNull(model);
+                Assert.Equal(PAGE_1_ID, model.Value);
+            }
+        }
+
+        [Fact]
+        public void GetIdBySlugSiteId() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var model = api.Pages.GetIdBySlug("my-first-page", SITE_ID);
+
+                Assert.NotNull(model);
+                Assert.Equal(PAGE_1_ID, model.Value);
+            }
+        }
+
+        [Fact]
         public void GetAll() {
             using (var api = new Api(GetDb(), storage, cache)) {
                 var pages = api.Pages.GetAll(SITE_ID);
@@ -220,6 +272,26 @@ namespace Piranha.Tests.Repositories
                 Assert.NotNull(pages);
                 Assert.NotEmpty(pages);
             }
+        }
+
+        [Fact]
+        public void GetAllBlogs() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var pages = api.Pages.GetAllBlogs(SITE_ID);
+
+                Assert.NotNull(pages);
+                Assert.NotEmpty(pages);
+            }            
+        }
+
+        [Fact]
+        public void GetAllBlogsByBaseClass() {
+            using (var api = new Api(GetDb(), storage, cache)) {
+                var pages = api.Pages.GetAllBlogs<MyBlogPage>(SITE_ID);
+
+                Assert.NotNull(pages);
+                Assert.NotEmpty(pages);
+            }            
         }
 
         [Fact]
