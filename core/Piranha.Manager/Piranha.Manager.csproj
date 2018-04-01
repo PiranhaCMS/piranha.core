@@ -44,4 +44,7 @@
     <EmbeddedResource Include="assets\lib\bootstrap\fonts\*" />
     <EmbeddedResource Include="assets\tinymce\**\*.*" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Remove="Areas\Manager\Views\Shared\EditorTemplates\CheckBoxField.cshtml" />
+  </ItemGroup>
 </Project>

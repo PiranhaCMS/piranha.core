@@ -12,7 +12,7 @@ using System;
 
 namespace Piranha.Extend.Serializers
 {
-    public class StringFieldSerializer<T> : ISerializer where T : Fields.SimpleField<string>
+    public class CheckBoxFieldSerializer<T> : ISerializer where T : Fields.SimpleField<bool>
     {
         /// <summary>
         /// Serializes the given object.
@@ -23,7 +23,7 @@ namespace Piranha.Extend.Serializers
         {
             if (obj is T)
             {
-                return ((T)obj).Value;
+                return ((T)obj).Value.ToString();
             }
             throw new ArgumentException("The given object doesn't match the serialization type");
         }
@@ -36,7 +36,7 @@ namespace Piranha.Extend.Serializers
         public object Deserialize(string str)
         {
             var ret = Activator.CreateInstance<T>();
-            ret.Value = str;
+            ret.Value = bool.Parse(str);
 
             return ret;
         }
