@@ -273,6 +273,7 @@ namespace Piranha
                         contentTypes.Register<Models.IBlogPage>("Blog", "Archive", true);                        
 
                         // Compose field types
+                        fields.Register<Extend.Fields.CheckBoxField>();
                         fields.Register<Extend.Fields.DateField>();
                         fields.Register<Extend.Fields.DocumentField>();
                         fields.Register<Extend.Fields.HtmlField>();
@@ -286,6 +287,7 @@ namespace Piranha
                         fields.Register<Extend.Fields.VideoField>();
 
                         // Compose serializers
+                        serializers.Register<Extend.Fields.CheckBoxField>(new CheckBoxFieldSerializer<Extend.Fields.CheckBoxField>());
                         serializers.Register<Extend.Fields.DateField>(new DateFieldSerializer());
                         serializers.Register<Extend.Fields.DocumentField>(new DocumentFieldSerializer());
                         serializers.Register<Extend.Fields.HtmlField>(new StringFieldSerializer<Extend.Fields.HtmlField>());
