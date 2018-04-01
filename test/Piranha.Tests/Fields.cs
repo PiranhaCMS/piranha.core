@@ -147,6 +147,15 @@ namespace Piranha.Tests
         }
 
         [Fact]
+        public void CheckBoxFieldConversions()
+        {
+            var value = true;
+
+            Piranha.Extend.Fields.CheckBoxField field = value;
+            Assert.Equal(value, field.Value);
+        }
+
+        [Fact]
         public void DateFieldConversions() {
             var now = DateTime.Now;
 

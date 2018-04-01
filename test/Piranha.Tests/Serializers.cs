@@ -46,6 +46,42 @@ namespace Piranha.Tests
         }
 
         [Fact]
+        public void SerializeCheckBoxField()
+        {
+            var serializer = new CheckBoxFieldSerializer<CheckBoxField>();
+            var value = true;
+
+            var str = serializer.Serialize(new CheckBoxField()
+            {
+                Value = value
+            });
+
+            Assert.Equal(value.ToString(), str);
+        }
+
+        [Fact]
+        public void DeserializeCheckBoxField()
+        {
+            var serializer = new CheckBoxFieldSerializer<CheckBoxField>();
+            var value = true;
+
+            var field = (CheckBoxField)serializer.Deserialize(value.ToString());
+
+            Assert.Equal(value, field.Value);
+        }
+
+        [Fact]
+        public void WrongInputCheckBoxField()
+        {
+            var serializer = new CheckBoxFieldSerializer<CheckBoxField>();
+
+            Assert.Throws<ArgumentException>(() => serializer.Serialize(new DateField()
+            {
+                Value = DateTime.Now
+            }));
+        }
+
+        [Fact]
         public void SerializeDateField() {
             var serializer = new DateFieldSerializer();
 
