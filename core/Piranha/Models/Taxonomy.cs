@@ -44,11 +44,13 @@ namespace Piranha.Models
         /// </summary>
         /// <param name="category">The category</param>
         public static implicit operator Taxonomy(Data.Category category) {
-            return new Taxonomy() {
-                Id = category.Id,
-                Title = category.Title,
-                Slug = category.Slug
-            };
+            if (category != null)
+                return new Taxonomy() {
+                    Id = category.Id,
+                    Title = category.Title,
+                    Slug = category.Slug
+                };
+            return null;
         }
 
         /// <summary>
@@ -56,11 +58,13 @@ namespace Piranha.Models
         /// </summary>
         /// <param name="tag">The tag</param>
         public static implicit operator Taxonomy(Data.Tag tag) {
-            return new Taxonomy() {
-                Id = tag.Id,
-                Title = tag.Title,
-                Slug = tag.Slug
-            };
+            if (tag != null)
+                return new Taxonomy() {
+                    Id = tag.Id,
+                    Title = tag.Title,
+                    Slug = tag.Slug
+                };
+            return null;
         }   
     }
 }

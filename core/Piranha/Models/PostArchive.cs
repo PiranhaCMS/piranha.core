@@ -47,6 +47,11 @@ namespace Piranha.Models
         public Taxonomy Category { get; set; }
 
         /// <summary>
+        /// Gets/sets the optionally selected tag.
+        /// </summary>
+        public Taxonomy Tag { get; set; }
+
+        /// <summary>
         /// Gets/sets the available posts.
         /// </summary>
         public IList<DynamicPost> Posts { get; set; }

@@ -49,6 +49,51 @@ namespace Piranha.Repositories
         /// <param name="pageSize">The optional page size</param>
         /// <returns>The archive model</returns>
         public T GetById<T>(Guid id, int? page = 1, Guid? categoryId = null, int? year = null, int? month = null, int? pageSize = null) where T : Models.BlogPage<T> {
+            return Get<T>(id, page, categoryId, null, year, month, pageSize);
+        }
+
+        /// <summary>
+        /// Gets the post archive for the specified blog and tag.
+        /// </summary>
+        /// <param name="id">The unique blog id</param>
+        /// <param name="page">The optional page</param>
+        /// <param name="year">The optional year</param>
+        /// <param name="month">The optional month</param>
+        /// <param name="pageSize">The optional page size</param>
+        /// <returns>The archive model</returns>
+        public T GetById<T>(Guid id, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : Models.BlogPage<T> {
+            return Get<T>(id, page, null, null, year, month, pageSize);
+        }
+
+        /// <summary>
+        /// Gets the post archive for the specified blog and tag.
+        /// </summary>
+        /// <param name="id">The unique blog id</param>
+        /// <param name="categoryId">The unique category id</param>
+        /// <param name="page">The optional page</param>
+        /// <param name="year">The optional year</param>
+        /// <param name="month">The optional month</param>
+        /// <param name="pageSize">The optional page size</param>
+        /// <returns>The archive model</returns>
+        public T GetByCategoryId<T>(Guid id, Guid categoryId, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : Models.BlogPage<T> {
+            return Get<T>(id, page, categoryId, null, year, month, pageSize);
+        }
+
+        /// <summary>
+        /// Gets the post archive for the specified blog and tag.
+        /// </summary>
+        /// <param name="id">The unique blog id</param>
+        /// <param name="tagId">The unique tag id</param>
+        /// <param name="page">The optional page</param>
+        /// <param name="year">The optional year</param>
+        /// <param name="month">The optional month</param>
+        /// <param name="pageSize">The optional page size</param>
+        /// <returns>The archive model</returns>
+        public T GetByTagId<T>(Guid id, Guid tagId, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : Models.BlogPage<T> {
+            return Get<T>(id, page, null, tagId, year, month, pageSize);
+        }
+
+        private T Get<T>(Guid id, int? page = 1, Guid? categoryId = null, Guid? tagId = null, int? year = null, int? month = null, int? pageSize = null) where T : Models.BlogPage<T> {
             // Get the requested blog page
             var model = api.Pages.GetById<T>(id);
 
@@ -70,6 +115,11 @@ namespace Piranha.Repositories
                     model.Archive.Category = api.Categories.GetById(categoryId.Value);
                     
                     query = query.Where(p => p.CategoryId == categoryId.Value);
+                }
+                if (tagId.HasValue) {
+                    model.Archive.Tag = api.Tags.GetById(tagId.Value);
+
+                    query = query.Where(p => p.Tags.Any(t => t.TagId == tagId.Value));
                 }
 
                 if (year.HasValue) {
@@ -114,27 +164,7 @@ namespace Piranha.Repositories
                 }
                 return model;
             }
-            return null;
-        }
-
-        /// <summary>
-        /// Gets the post archive for the category with the given slug.
-        /// </summary>
-        /// <param name="slug">The unique category slug</param>
-        /// <param name="page">The optional page</param>
-        /// <param name="categoryId">The optional category id</param>
-        /// <param name="year">The optional year</param>
-        /// <param name="month">The optional month</param>
-        /// <param name="siteId">The optional site id</param>
-        /// <param name="pageSize">The optional page size</param>
-        /// <returns>The archive model</returns>
-        public T GetBySlug<T>(string slug, int? page = 1, Guid? categoryId = null, int? year = null, int? month = null, Guid? siteId = null, int? pageSize = null) where T : Models.BlogPage<T> {
-            // Get the id of the blog page with the given type
-            var blogId = api.Pages.GetIdBySlug(slug, siteId);
-
-            if (blogId.HasValue)
-                return GetById<T>(blogId.Value, page, categoryId, year, month, pageSize);
-            return null;
+            return null;            
         }
     }
 }

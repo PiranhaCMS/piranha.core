@@ -35,12 +35,19 @@ namespace Piranha.Web
                         int? year = null;
                         int? month = null;
                         Guid? categoryId = null;
+                        Guid? tagId = null;
                         bool foundCategory = false;
+                        bool foundTag = false;
                         bool foundPage = false;
 
                         for (var n = 1; n < segments.Length; n++) {
                             if (segments[n] == "category" && !foundPage) {
                                 foundCategory = true;
+                                continue;
+                            }
+
+                            if (segments[n] == "tag" && !foundPage && !foundCategory) {
+                                foundTag = true;
                                 continue;
                             }
 
@@ -52,10 +59,25 @@ namespace Piranha.Web
                             if (foundCategory) {
                                 try {
                                     categoryId = api.Categories.GetBySlug(blog.Id, segments[n])?.Id;
+
+                                    if (!categoryId.HasValue)
+                                        categoryId = Guid.Empty;
                                 } catch { 
                                 } finally {
                                     foundCategory = false;
                                 }
+                            }
+
+                            if (foundTag) {
+                                try {
+                                    tagId = api.Tags.GetBySlug(blog.Id, segments[n])?.Id;
+
+                                    if (!tagId.HasValue)
+                                        tagId = Guid.Empty;
+                                } catch { 
+                                } finally {
+                                    foundTag = false;
+                                }                                
                             }
 
                             if (foundPage) {
@@ -81,7 +103,7 @@ namespace Piranha.Web
 
                         return new RouteResponse() {
                             Route = route,
-                            QueryString = $"id={blog.Id}&year={year}&month={month}&page={page}&category={categoryId}&piranha_handled=true",
+                            QueryString = $"id={blog.Id}&year={year}&month={month}&page={page}&category={categoryId}&tag={tagId}&piranha_handled=true",
                             IsPublished = blog.Published.HasValue && blog.Published.Value <= DateTime.Now,
                             CacheInfo = new HttpCacheInfo() {
                                 EntityTag = Utils.GenerateETag(blog.Id.ToString(), blog.LastModified),
