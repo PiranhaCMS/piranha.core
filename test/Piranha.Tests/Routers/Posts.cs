@@ -28,6 +28,8 @@ namespace Piranha.Tests.Routers
         private Guid PAGE2_ID = Guid.NewGuid();
         private Guid CATEGORY2_ID = Guid.NewGuid();
         private Guid POST2_ID = Guid.NewGuid();
+        private Guid TAG1_ID = Guid.NewGuid();
+        private Guid TAG2_ID = Guid.NewGuid();
 
         [PageType(Title = "My PageType")]
         public class MyPage : Models.BlogPage<MyPage>
@@ -102,6 +104,21 @@ namespace Piranha.Tests.Routers
                 };
                 api.Categories.Save(category2);
 
+                // Add tags
+                var tag = new Data.Tag() {
+                    Id = TAG1_ID,
+                    BlogId = PAGE1_ID,
+                    Title = "My tag"
+                };
+                api.Tags.Save(tag);
+
+                tag = new Data.Tag() {
+                    Id = TAG2_ID,
+                    BlogId = PAGE2_ID,
+                    Title = "My other tag"
+                };
+                api.Tags.Save(tag);
+
                 // Add posts
                 var post1 = MyPost.Create(api);
                 post1.Id = POST1_ID;
@@ -109,6 +126,7 @@ namespace Piranha.Tests.Routers
                 post1.Category = category1;
                 post1.Title = "My first post";
                 post1.Body = "My first body";
+                post1.Tags.Add("My tag");
                 post1.Published = DateTime.Now;
                 api.Posts.Save(post1);
 
@@ -118,6 +136,7 @@ namespace Piranha.Tests.Routers
                 post2.Category = category2;
                 post2.Title = "My second post";
                 post2.Body = "My second body";
+                post2.Tags.Add("My other tag");
                 post2.Published = DateTime.Now;
                 api.Posts.Save(post2);
             }
@@ -183,7 +202,7 @@ namespace Piranha.Tests.Routers
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
-                Assert.Equal($"id={PAGE1_ID}&year=&month=&page=&category=&piranha_handled=true", response.QueryString);
+                Assert.Equal($"id={PAGE1_ID}&year=&month=&page=&category=&tag=&piranha_handled=true", response.QueryString);
             }            
         }
 
@@ -194,7 +213,7 @@ namespace Piranha.Tests.Routers
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
-                Assert.Equal($"id={PAGE1_ID}&year=2018&month=&page=&category=&piranha_handled=true", response.QueryString);
+                Assert.Equal($"id={PAGE1_ID}&year=2018&month=&page=&category=&tag=&piranha_handled=true", response.QueryString);
             }            
         }
 
@@ -205,7 +224,7 @@ namespace Piranha.Tests.Routers
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
-                Assert.Equal($"id={PAGE1_ID}&year=2018&month=2&page=&category=&piranha_handled=true", response.QueryString);
+                Assert.Equal($"id={PAGE1_ID}&year=2018&month=2&page=&category=&tag=&piranha_handled=true", response.QueryString);
             }            
         }
 
@@ -216,7 +235,7 @@ namespace Piranha.Tests.Routers
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
-                Assert.Equal($"id={PAGE1_ID}&year=2018&month=2&page=1&category=&piranha_handled=true", response.QueryString);
+                Assert.Equal($"id={PAGE1_ID}&year=2018&month=2&page=1&category=&tag=&piranha_handled=true", response.QueryString);
             }            
         }
 
@@ -227,7 +246,7 @@ namespace Piranha.Tests.Routers
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
-                Assert.Equal($"id={PAGE1_ID}&year=2018&month=2&page=1&category={CATEGORY1_ID}&piranha_handled=true", response.QueryString);
+                Assert.Equal($"id={PAGE1_ID}&year=2018&month=2&page=1&category={CATEGORY1_ID}&tag=&piranha_handled=true", response.QueryString);
             }            
         }
 
@@ -238,7 +257,40 @@ namespace Piranha.Tests.Routers
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
-                Assert.Equal($"id={PAGE1_ID}&year=&month=&page=&category={CATEGORY1_ID}&piranha_handled=true", response.QueryString);
+                Assert.Equal($"id={PAGE1_ID}&year=&month=&page=&category={CATEGORY1_ID}&tag=&piranha_handled=true", response.QueryString);
+            }            
+        }
+
+        [Fact]
+        public void GetArchiveMissingCategoryDefaultSite() {
+            using (var api = new Api(GetDb(), storage)) {
+                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog/category/missing-category", SITE1_ID);
+
+                Assert.NotNull(response);
+                Assert.Equal("/archive", response.Route);
+                Assert.Equal($"id={PAGE1_ID}&year=&month=&page=&category={Guid.Empty}&tag=&piranha_handled=true", response.QueryString);
+            }            
+        }
+
+        [Fact]
+        public void GetArchiveTagDefaultSite() {
+            using (var api = new Api(GetDb(), storage)) {
+                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog/tag/my-tag", SITE1_ID);
+
+                Assert.NotNull(response);
+                Assert.Equal("/archive", response.Route);
+                Assert.Equal($"id={PAGE1_ID}&year=&month=&page=&category=&tag={TAG1_ID}&piranha_handled=true", response.QueryString);
+            }            
+        }
+
+        [Fact]
+        public void GetArchiveMissingTagDefaultSite() {
+            using (var api = new Api(GetDb(), storage)) {
+                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog/tag/my-other-tag", SITE1_ID);
+
+                Assert.NotNull(response);
+                Assert.Equal("/archive", response.Route);
+                Assert.Equal($"id={PAGE1_ID}&year=&month=&page=&category=&tag={Guid.Empty}&piranha_handled=true", response.QueryString);
             }            
         }
 
@@ -249,7 +301,7 @@ namespace Piranha.Tests.Routers
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
-                Assert.Equal($"id={PAGE1_ID}&year=&month=&page=1&category=&piranha_handled=true", response.QueryString);
+                Assert.Equal($"id={PAGE1_ID}&year=&month=&page=1&category=&tag=&piranha_handled=true", response.QueryString);
             }            
         }
 
@@ -302,7 +354,7 @@ namespace Piranha.Tests.Routers
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
-                Assert.Equal($"id={PAGE2_ID}&year=&month=&page=&category=&piranha_handled=true", response.QueryString);
+                Assert.Equal($"id={PAGE2_ID}&year=&month=&page=&category=&tag=&piranha_handled=true", response.QueryString);
             }            
         }
 
