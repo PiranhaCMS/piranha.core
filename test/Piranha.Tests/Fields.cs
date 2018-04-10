@@ -18,13 +18,13 @@ namespace Piranha.Tests
 {
     public class Fields : BaseTests
     {
-        [Field(Name = "First", Shorthand = "1")]
+        [FieldType(Name = "First", Shorthand = "1")]
         public class MyFirstField : Extend.Fields.SimpleField<string> { }
 
-        [Field(Name = "Second")]
+        [FieldType(Name = "Second")]
         public class MySecondField : Extend.Fields.SimpleField<string> { }
 
-        [Field(Name = "Third")]
+        [FieldType(Name = "Third")]
         public class MyThirdField : Extend.Fields.SimpleField<string> { }
 
         private FieldInfoList fields = new FieldInfoList();

@@ -12,7 +12,7 @@ using System;
 
 namespace Piranha.Extend.Fields
 {
-    [Field(Name = "Date", Shorthand = "Date")]
+    [FieldType(Name = "Date", Shorthand = "Date")]
     public class DateField : SimpleField<DateTime?>
     {
         public static implicit operator DateField(DateTime date) {

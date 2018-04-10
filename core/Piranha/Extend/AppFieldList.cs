@@ -32,7 +32,7 @@ namespace Piranha.Extend
         /// <param name="item">The item</param>
         /// <returns>The processed item</returns>
         protected override AppField OnRegister<TValue>(AppField item) {
-            var attr = typeof(TValue).GetTypeInfo().GetCustomAttribute<Extend.FieldAttribute>();
+            var attr = typeof(TValue).GetTypeInfo().GetCustomAttribute<Extend.FieldTypeAttribute>();
             if (attr != null) {
                 item.Name = attr.Name;
                 item.Shorthand = attr.Shorthand;

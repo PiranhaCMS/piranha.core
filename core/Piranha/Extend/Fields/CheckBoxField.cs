@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Piranha.Extend.Fields
 {
-    [Field(Name = "Checkbox", Shorthand = "Checkbox")]
+    [FieldType(Name = "Checkbox", Shorthand = "Checkbox")]
     public class CheckBoxField : SimpleField<bool>
     {
         /// <summary>

@@ -10,7 +10,7 @@
 
 namespace Piranha.Extend.Fields
 {
-    [Field(Name = "Html", Shorthand = "Html")]
+    [FieldType(Name = "Html", Shorthand = "Html")]
     public class HtmlField : SimpleField<string>
     {
         /// <summary>

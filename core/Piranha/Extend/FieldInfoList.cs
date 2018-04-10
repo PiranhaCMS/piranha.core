@@ -41,7 +41,7 @@ namespace Piranha.Extend
                     Type = type
                 };
 
-                var attr = type.GetTypeInfo().GetCustomAttribute<FieldAttribute>();
+                var attr = type.GetTypeInfo().GetCustomAttribute<FieldTypeAttribute>();
                 if (attr != null) {
                     field.Name = attr.Name;
                     field.Shorthand = attr.Shorthand;

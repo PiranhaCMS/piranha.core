@@ -13,7 +13,7 @@ using System;
 
 namespace Piranha.Extend.Fields
 {
-    [Field(Name = "Post", Shorthand = "Post")]
+    [FieldType(Name = "Post", Shorthand = "Post")]
     public class PostField : IField
     {
         /// <summary>

@@ -17,7 +17,7 @@ namespace Piranha.Extend.Fields
     /// <summary>
     /// Generic select field.
     /// </summary>
-    [Field(Name = "Select", Shorthand = "Select")]
+    [FieldType(Name = "Select", Shorthand = "Select")]
     public class SelectField<T> : SelectFieldBase where T : struct
     {
         /// <summary>

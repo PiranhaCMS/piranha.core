@@ -12,7 +12,7 @@ using System;
 
 namespace Piranha.Extend.Fields
 {
-    [Field(Name = "Document", Shorthand = "Document")]
+    [FieldType(Name = "Document", Shorthand = "Document")]
     public class DocumentField : MediaFieldBase
     {
         /// <summary>

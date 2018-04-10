@@ -13,7 +13,7 @@ using System;
 
 namespace Piranha.Extend.Fields
 {
-    [Field(Name = "Page", Shorthand = "Page")]
+    [FieldType(Name = "Page", Shorthand = "Page")]
     public class PageField : IField
     {
         /// <summary>

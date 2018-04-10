@@ -12,8 +12,7 @@ using System;
 
 namespace Piranha.Extend
 {
-    [Obsolete("Piranha.Extend.FieldAttribute has been moved to Piranha.Extend.FieldTypeAttribute to avoid name conflicts.", true)]
-    public class FieldAttribute : Attribute
+    public class FieldTypeAttribute : Attribute
     {
         /// <summary>
         /// Gets/sets the display name.
