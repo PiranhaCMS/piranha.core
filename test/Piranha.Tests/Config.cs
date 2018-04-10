@@ -21,7 +21,7 @@ namespace Piranha.Tests
         /// Sets up & initializes the tests.
         /// </summary>
         protected override void Init() {
-            using (var api = new Api(GetDb(), storage)) {
+            using (var api = new Api(services, GetDb(), storage)) {
                 Piranha.App.Init(api);
 
                 using (var config = new Piranha.Config(api)) {
@@ -41,7 +41,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void CacheExpiresPages() {
-            using (var api = new Api(GetDb(), storage)) {
+            using (var api = new Api(services, GetDb(), storage)) {
                 using (var config = new Piranha.Config(api)) {
                     Assert.Equal(0, config.CacheExpiresPages);
 
@@ -54,7 +54,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void CacheExpiresPosts() {
-            using (var api = new Api(GetDb(), storage)) {
+            using (var api = new Api(services, GetDb(), storage)) {
                 using (var config = new Piranha.Config(api)) {
                     Assert.Equal(0, config.CacheExpiresPosts);
 
@@ -67,7 +67,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void HierarchicalPageSlugs() {
-            using (var api = new Api(GetDb(), storage)) {
+            using (var api = new Api(services, GetDb(), storage)) {
                 using (var config = new Piranha.Config(api)) {
                     Assert.True(config.HierarchicalPageSlugs);
 
@@ -80,7 +80,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void ManagerExpandedSitemapLevels() {
-            using (var api = new Api(GetDb(), storage)) {
+            using (var api = new Api(services, GetDb(), storage)) {
                 using (var config = new Piranha.Config(api)) {
                     Assert.Equal(0, config.ManagerExpandedSitemapLevels);
 
@@ -93,7 +93,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void MediaCDN() {
-            using (var api = new Api(GetDb(), storage)) {
+            using (var api = new Api(services, GetDb(), storage)) {
                 using (var config = new Piranha.Config(api)) {
                     config.MediaCDN = "https://mycdn.org/uploads/";
 
@@ -104,7 +104,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void MediaCDNTrailingSlash() {
-            using (var api = new Api(GetDb(), storage)) {
+            using (var api = new Api(services, GetDb(), storage)) {
                 using (var config = new Piranha.Config(api)) {
                     config.MediaCDN = "https://mycdn.org/uploads";
 

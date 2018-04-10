@@ -27,7 +27,7 @@ namespace Piranha.Repositories
         /// <param name="api">The current api</param>
         /// <param name="db">The current db connection</param>
         /// <param name="modelCache">The optional model cache</param>
-        public PageRepository(Api api, IDb db, ICache modelCache = null) : base(api, db, modelCache) { }
+        public PageRepository(Api api, IDb db, IServiceProvider services, ICache modelCache = null) : base(api, db, services, modelCache) { }
 
         /// <summary>
         /// Gets all of the available pages for the current site.

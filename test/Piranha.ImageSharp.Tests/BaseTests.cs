@@ -9,6 +9,7 @@
  */
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace Piranha.ImageSharp.Tests
@@ -19,6 +20,7 @@ namespace Piranha.ImageSharp.Tests
     public abstract class BaseTests : IDisposable
     {
         protected readonly IStorage storage = new Local.FileStorage("uploads/", "~/uploads/");
+        protected IServiceProvider services = new ServiceCollection().BuildServiceProvider();
         protected readonly IImageProcessor processor = new ImageSharpProcessor();
 
         /// <summary>

@@ -20,11 +20,5 @@ namespace Piranha.Extend
         /// a collection regions.
         /// </summary>
         string GetTitle();
-
-        /// <summary>
-        /// Initializes the field for client use.
-        /// </summary>
-        /// <param name="api">The current api</param>
-        void Init(IApi api);
     }
 }

@@ -73,7 +73,7 @@ namespace Piranha.Tests.Repositories
         }
 
         protected override void Init() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 Piranha.App.Init(api);
 
                 var pageTypeBuilder = new PageTypeBuilder(api)
@@ -153,7 +153,7 @@ namespace Piranha.Tests.Repositories
         }
 
         protected override void Cleanup() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var posts = api.Posts.GetAll(BLOG_ID);
                 foreach (var post in posts)
                     api.Posts.Delete(post);
@@ -182,14 +182,14 @@ namespace Piranha.Tests.Repositories
         
         [Fact]
         public void IsCached() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 Assert.Equal(this.GetType() == typeof(PostsCached), api.IsCached);
             }
         }
         
         [Fact]
         public void GetNoneById() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var none = api.Posts.GetById(Guid.NewGuid());
 
                 Assert.Null(none);
@@ -198,7 +198,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetNoneBySlug() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var none = api.Posts.GetBySlug("blog", "none-existing-slug");
 
                 Assert.Null(none);
@@ -207,7 +207,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetNoneBySlugId() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var none = api.Posts.GetBySlug(BLOG_ID, "none-existing-slug");
 
                 Assert.Null(none);
@@ -216,7 +216,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetNoneBySlugBlog() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var none = api.Posts.GetBySlug("no-blog", "none-existing-slug");
 
                 Assert.Null(none);
@@ -225,7 +225,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetNoneBySlugBlogId() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var none = api.Posts.GetBySlug(Guid.NewGuid(), "none-existing-slug");
 
                 Assert.Null(none);
@@ -234,7 +234,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetAllById() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var posts = api.Posts.GetAll(BLOG_ID);
 
                 Assert.NotNull(posts);
@@ -244,7 +244,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetAllBaseClassById() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var posts = api.Posts.GetAll<Models.PostBase>(BLOG_ID);
 
                 Assert.NotNull(posts);
@@ -254,7 +254,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetAllByIdMissing() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var posts = api.Posts.GetAll<MissingPost>(BLOG_ID);
 
                 Assert.NotNull(posts);
@@ -264,7 +264,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetAllBySlug() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var posts = api.Posts.GetAll("blog");
 
                 Assert.NotNull(posts);
@@ -274,7 +274,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetAllBaseClassBySlug() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var posts = api.Posts.GetAll<Models.PostBase>("blog");
 
                 Assert.NotNull(posts);
@@ -284,7 +284,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetAllBySlugMissing() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var posts = api.Posts.GetAll<MissingPost>("blog");
 
                 Assert.NotNull(posts);
@@ -294,7 +294,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetAllBySlugAndSite() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var posts = api.Posts.GetAll("blog", SITE_ID);
 
                 Assert.NotNull(posts);
@@ -304,7 +304,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetAllNoneById() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var posts = api.Posts.GetAll(Guid.NewGuid());
 
                 Assert.NotNull(posts);
@@ -314,7 +314,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetAllNoneBySlug() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var posts = api.Posts.GetAll("no-blog");
 
                 Assert.NotNull(posts);
@@ -324,7 +324,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetAllNoneBySlugAndSite() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var posts = api.Posts.GetAll("blog", Guid.NewGuid());
 
                 Assert.NotNull(posts);
@@ -334,7 +334,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetGenericById() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = api.Posts.GetById<MyPost>(POST_1_ID);
 
                 Assert.NotNull(model);
@@ -346,7 +346,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetBaseClassById() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = api.Posts.GetById<Models.PostBase>(POST_1_ID);
 
                 Assert.NotNull(model);
@@ -359,7 +359,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetMissingById() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = api.Posts.GetById<MissingPost>(POST_1_ID);
 
                 Assert.Null(model);
@@ -368,7 +368,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetGenericBySlug() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = api.Posts.GetBySlug<MyPost>("blog", "my-first-post");
 
                 Assert.NotNull(model);
@@ -380,7 +380,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetBaseClassBySlug() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = api.Posts.GetBySlug<Models.PostBase>("blog", "my-first-post");
 
                 Assert.NotNull(model);
@@ -393,7 +393,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetMissingBySlug() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = api.Posts.GetBySlug<MissingPost>("blog", "my-first-post");
 
                 Assert.Null(model);
@@ -402,7 +402,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetDynamicById() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = api.Posts.GetById(POST_1_ID);
 
                 Assert.NotNull(model);
@@ -414,7 +414,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetDynamicBySlug() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = api.Posts.GetBySlug("blog", "my-first-post");
 
                 Assert.NotNull(model);
@@ -425,7 +425,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void CheckPermlinkSyntax() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = api.Posts.GetById(POST_1_ID);
 
                 Assert.NotNull(model);
@@ -436,7 +436,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetCollectionPost() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var post = api.Posts.GetBySlug<MyCollectionPost>(BLOG_ID, "my-collection-post");
 
                 Assert.NotNull(post);
@@ -447,7 +447,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetBaseClassCollectionPost() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var post = api.Posts.GetBySlug<Models.PostBase>(BLOG_ID, "my-collection-post");
 
                 Assert.NotNull(post);
@@ -458,7 +458,7 @@ namespace Piranha.Tests.Repositories
         }
         [Fact]
         public void GetDynamicCollectionPost() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var post = api.Posts.GetBySlug(BLOG_ID, "my-collection-post");
 
                 Assert.NotNull(post);
@@ -469,7 +469,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Add() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var count = api.Posts.GetAll(BLOG_ID).Count();
                 var catCount = api.Categories.GetAll(BLOG_ID).Count();
                 var post = MyPost.Create(api, "MyPost");
@@ -488,7 +488,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void AddWithTags() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var count = api.Posts.GetAll(BLOG_ID).Count();
                 var catCount = api.Categories.GetAll(BLOG_ID).Count();
                 var tagCount = api.Tags.GetAll(BLOG_ID).Count();
@@ -526,7 +526,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Update() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var post = api.Posts.GetById<MyPost>(POST_1_ID);
 
                 Assert.NotNull(post);
@@ -544,7 +544,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void UpdateCollectionPost() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var post = api.Posts.GetBySlug<MyCollectionPost>("blog", "my-collection-post");
 
                 Assert.NotNull(post);
@@ -565,7 +565,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Delete() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var post = api.Posts.GetById<MyPost>(POST_3_ID);
                 var count = api.Posts.GetAll(BLOG_ID).Count();
 
@@ -579,7 +579,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void DeleteById() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var count = api.Posts.GetAll(BLOG_ID).Count();
 
                 api.Posts.Delete(POST_2_ID);

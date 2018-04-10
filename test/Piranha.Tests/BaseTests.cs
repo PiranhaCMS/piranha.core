@@ -9,6 +9,7 @@
  */
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace Piranha.Tests
@@ -19,6 +20,7 @@ namespace Piranha.Tests
     public abstract class BaseTests : IDisposable
     {
         protected IStorage storage = new Local.FileStorage("uploads/", "~/uploads/");
+        protected IServiceProvider services = new ServiceCollection().BuildServiceProvider();
 
         /// <summary>
         /// Default constructor.

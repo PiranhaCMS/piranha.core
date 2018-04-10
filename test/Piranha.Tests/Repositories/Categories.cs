@@ -49,7 +49,7 @@ namespace Piranha.Tests.Repositories
         public class BlogPage : Models.Page<BlogPage> { }        
 
         protected override void Init() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 Piranha.App.Init(api);
 
                 var pageTypeBuilder = new PageTypeBuilder(api)
@@ -92,7 +92,7 @@ namespace Piranha.Tests.Repositories
         }
 
         protected override void Cleanup() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var categories = api.Categories.GetAll(BLOG_ID);
 
                 foreach (var c in categories)
@@ -110,14 +110,14 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void IsCached() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 Assert.Equal(this.GetType() == typeof(CategoriesCached), api.IsCached);
             }
         }        
 
         [Fact]
         public void Add() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 api.Categories.Save(new Data.Category() {
                     BlogId = BLOG_ID,
                     Title = CAT_2
@@ -127,7 +127,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void AddDuplicateSlug() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 Assert.ThrowsAny<Exception>(() =>
                     api.Categories.Save(new Data.Category() {
                         BlogId = BLOG_ID,
@@ -138,7 +138,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void AddNoTitle() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 Assert.ThrowsAny<ArgumentException>(() =>
                     api.Categories.Save(new Data.Category() {
                         BlogId = BLOG_ID
@@ -148,7 +148,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetNoneById() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var none = api.Categories.GetById(Guid.NewGuid());
 
                 Assert.Null(none);
@@ -157,7 +157,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetNoneBySlug() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var none = api.Categories.GetBySlug(BLOG_ID, "none-existing-slug");
 
                 Assert.Null(none);
@@ -166,7 +166,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetAll() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var models = api.Categories.GetAll(BLOG_ID);
 
                 Assert.NotNull(models);
@@ -176,7 +176,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetNone() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var models = api.Categories.GetAll(Guid.NewGuid());
 
                 Assert.NotNull(models);
@@ -186,7 +186,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetById() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = api.Categories.GetById(CAT_1_ID);
 
                 Assert.NotNull(model);
@@ -196,7 +196,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetBySlug() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = api.Categories.GetBySlug(BLOG_ID, Piranha.Utils.GenerateSlug(CAT_1));
 
                 Assert.NotNull(model);
@@ -206,7 +206,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetByTitle() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = api.Categories.GetByTitle(BLOG_ID, CAT_1);
 
                 Assert.NotNull(model);
@@ -216,7 +216,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetNoneByTitle() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = api.Categories.GetByTitle(BLOG_ID, "Missing Title");
 
                 Assert.Null(model);
@@ -225,7 +225,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Update() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = api.Categories.GetById(CAT_1_ID);
 
                 Assert.Equal(CAT_1, model.Title);
@@ -238,7 +238,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Delete() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = api.Categories.GetBySlug(BLOG_ID, Piranha.Utils.GenerateSlug(CAT_4));
 
                 Assert.NotNull(model);
@@ -249,7 +249,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void DeleteById() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = api.Categories.GetById(CAT_5_ID);
 
                 Assert.NotNull(model);

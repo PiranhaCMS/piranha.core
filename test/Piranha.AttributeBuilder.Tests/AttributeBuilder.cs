@@ -9,6 +9,7 @@
  */
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,8 @@ namespace Piranha.AttributeBuilder.Tests
 {
     public class AttributeBuilder : IDisposable
     {
+        protected IServiceProvider services = new ServiceCollection().BuildServiceProvider();
+
         #region Inner classes
         [PageType(Id = "Simple", Title = "Simple Page Type")]
         public class SimplePageType
@@ -47,14 +50,14 @@ namespace Piranha.AttributeBuilder.Tests
         #endregion
 
         public AttributeBuilder() {
-            using (var api = new Api(GetDb(), null)) {
+            using (var api = new Api(services, GetDb(), null)) {
                 App.Init(api);
             }
         }
 
         [Fact]
         public void AddSimple() {
-            using (var api = new Api(GetDb(), null)) {
+            using (var api = new Api(services, GetDb(), null)) {
                 var builder = new PageTypeBuilder(api)
                     .AddType(typeof(SimplePageType));
                 builder.Build();
@@ -70,7 +73,7 @@ namespace Piranha.AttributeBuilder.Tests
 
         [Fact]
         public void AddComplex() {
-            using (var api = new Api(GetDb(), null)) {
+            using (var api = new Api(services, GetDb(), null)) {
                 var builder = new PageTypeBuilder(api)
                     .AddType(typeof(ComplexPageType));
                 builder.Build();
@@ -97,7 +100,7 @@ namespace Piranha.AttributeBuilder.Tests
 
         [Fact]
         public void DeleteOrphans() {
-            using (var api = new Api(GetDb(), null)) {
+            using (var api = new Api(services, GetDb(), null)) {
                 var builder = new PageTypeBuilder(api)
                     .AddType(typeof(SimplePageType))
                     .AddType(typeof(ComplexPageType));
@@ -114,7 +117,7 @@ namespace Piranha.AttributeBuilder.Tests
         }
 
         public void Dispose() {
-            using (var api = new Api(GetDb(), null)) {
+            using (var api = new Api(services, GetDb(), null)) {
                 var types = api.PageTypes.GetAll();
 
                 foreach (var t in types)

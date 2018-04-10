@@ -20,7 +20,7 @@ namespace Piranha.ImageSharp.Tests
         private Guid imageId;
 
         protected override void Init() {
-            using (var api = new Api(GetDb(), storage, null, processor)) {
+            using (var api = new Api(services, GetDb(), storage, null, processor)) {
                 App.Init(api);
 
                 // Add media
@@ -36,14 +36,14 @@ namespace Piranha.ImageSharp.Tests
             }
         }
         protected override void Cleanup() {
-            using (var api = new Api(GetDb(), storage, null, processor)) {
+            using (var api = new Api(services, GetDb(), storage, null, processor)) {
                 api.Media.Delete(imageId);
             }
         }
 
         [Fact]
         public void GetOriginal() {
-            using (var api = new Api(GetDb(), storage, null, processor)) {
+            using (var api = new Api(services, GetDb(), storage, null, processor)) {
                 var media = api.Media.GetById(imageId);
 
                 Assert.NotNull(media);
@@ -53,7 +53,7 @@ namespace Piranha.ImageSharp.Tests
 
         [Fact]
         public void GetScaled() {
-            using (var api = new Api(GetDb(), storage, null, processor)) {
+            using (var api = new Api(services, GetDb(), storage, null, processor)) {
                 var url = api.Media.EnsureVersion(imageId, 640);
 
                 Assert.NotNull(url);
@@ -63,7 +63,7 @@ namespace Piranha.ImageSharp.Tests
 
         [Fact]
         public void GetCropped() {
-            using (var api = new Api(GetDb(), storage, null, processor)) {
+            using (var api = new Api(services, GetDb(), storage, null, processor)) {
                 var url = api.Media.EnsureVersion(imageId, 640, 300);
 
                 Assert.NotNull(url);
@@ -73,7 +73,7 @@ namespace Piranha.ImageSharp.Tests
 
         [Fact]
         public void GetScaledOrgSize() {
-            using (var api = new Api(GetDb(), storage, null, processor)) {
+            using (var api = new Api(services, GetDb(), storage, null, processor)) {
                 var url = api.Media.EnsureVersion(imageId, 1920);
 
                 Assert.NotNull(url);
@@ -83,7 +83,7 @@ namespace Piranha.ImageSharp.Tests
 
         [Fact]
         public void GetCroppedOrgSize() {
-            using (var api = new Api(GetDb(), storage, null, processor)) {
+            using (var api = new Api(services, GetDb(), storage, null, processor)) {
                 var url = api.Media.EnsureVersion(imageId, 1920, 1080);
 
                 Assert.NotNull(url);

@@ -24,7 +24,7 @@ namespace Piranha.Repositories
         /// <param name="api">The current api</param>
         /// <param name="db">The current db connection</param>
         /// <param name="modelCache">The optional model cache</param>
-        public PostRepository(Api api, IDb db, ICache modelCache = null) : base(api, db, modelCache) { }
+        public PostRepository(Api api, IDb db, IServiceProvider services, ICache modelCache = null) : base(api, db, services, modelCache) { }
 
         /// <summary>
         /// Gets the available posts for the specified blog.

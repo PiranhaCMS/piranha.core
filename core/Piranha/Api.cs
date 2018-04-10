@@ -31,6 +31,11 @@ namespace Piranha
         private readonly IStorage storage;
 
         /// <summary>
+        /// The private service provider.
+        /// </summary>
+        private readonly IServiceProvider services;
+
+        /// <summary>
         /// The private model cache.
         /// </summary>
         private ICache cache;
@@ -101,13 +106,15 @@ namespace Piranha
         /// <summary>
         /// Default constructor.
         /// </summary>
+        /// <param name="services">The service provider</param>
         /// <param name="db">The current db context</param>
         /// <param name="storage">The current storage</param>
         /// <param name="modelCache">The optional model cache</param>
         /// <param name="imageProcessor">The optional image processor</param>
-        public Api(IDb db, IStorage storage, ICache modelCache = null, IImageProcessor imageProcessor = null) {
+        public Api(IServiceProvider services, IDb db, IStorage storage = null, ICache modelCache = null, IImageProcessor imageProcessor = null) {
             this.db = db;
             this.storage = storage;
+            this.services = services;
 
             Setup(modelCache, imageProcessor);
         }
@@ -134,10 +141,10 @@ namespace Piranha
             Archives = new Repositories.ArchiveRepository(this, db);
             Categories = new Repositories.CategoryRepository(this, db, cacheLevel > 2 ? cache : null);
             Media = new Repositories.MediaRepository(this, db, storage, cacheLevel > 2 ? cache : null, imageProcessor);
-            Pages = new Repositories.PageRepository(this, db, cacheLevel > 2 ? cache : null);
+            Pages = new Repositories.PageRepository(this, db, services, cacheLevel > 2 ? cache : null);
             PageTypes = new Repositories.PageTypeRepository(db, cacheLevel > 1 ? cache : null);
             Params = new Repositories.ParamRepository(db, cacheLevel > 0 ? cache : null);
-            Posts = new Repositories.PostRepository(this, db, cacheLevel > 2 ? cache : null);
+            Posts = new Repositories.PostRepository(this, db, services, cacheLevel > 2 ? cache : null);
             PostTypes = new Repositories.PostTypeRepository(db, cacheLevel > 1 ? cache : null);
             Sites = new Repositories.SiteRepository(this, db, cacheLevel > 0 ? cache : null);
             Tags = new Repositories.TagRepository(db, cacheLevel > 2 ? cache : null);

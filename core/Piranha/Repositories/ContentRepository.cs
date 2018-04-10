@@ -26,6 +26,7 @@ namespace Piranha.Repositories
         // Members
         protected readonly Api api;
         protected readonly IDb db;
+        protected readonly IServiceProvider services;
         protected readonly ICache cache;
 
         /// <summary>
@@ -34,9 +35,10 @@ namespace Piranha.Repositories
         /// <param name="api">The current api</param>
         /// <param name="db">The current db connection</param>
         /// <param name="modelCache">The optional model cache</param>
-        protected ContentRepository(Api api, IDb db, ICache modelCache = null) {
+        protected ContentRepository(Api api, IDb db, IServiceProvider services, ICache modelCache = null) {
             this.api = api;
             this.db = db;
+            this.services = services;
             this.cache = modelCache;
         }
 
@@ -217,8 +219,21 @@ namespace Piranha.Repositories
 
             if (type != null) {
                 var val = (Extend.IField)App.DeserializeObject(field.Value, type.Type);
-                if (val != null)
-                    val.Init(api);
+                if (val != null) {
+                    var init = val.GetType().GetMethod("Init");
+
+                    if (init != null) {
+                        var param = new List<object>();
+
+                        foreach (var p in init.GetParameters()) {
+                            if (p.ParameterType == typeof(IApi))
+                                param.Add(api);
+                            else param.Add(services.GetService(p.ParameterType));
+                        }
+                        init.Invoke(val, param.ToArray());
+                    }
+                    //val.Init(api);
+                }
                 return val;
             } 
             return null;

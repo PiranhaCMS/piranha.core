@@ -40,7 +40,7 @@ namespace Piranha.Tests.Repositories
         #endregion
 
         protected override void Init() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 // Add site
                 var site = new Data.Site() {
                     Id = SITE_ID,
@@ -72,7 +72,7 @@ namespace Piranha.Tests.Repositories
         }
 
         protected override void Cleanup() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var aliases = api.Aliases.GetAll();
                 foreach (var a in aliases)
                     api.Aliases.Delete(a);
@@ -85,14 +85,14 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void IsCached() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 Assert.Equal(this.GetType() == typeof(AliasesCached), api.IsCached);
             }
         }        
 
         [Fact]
         public void Add() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 api.Aliases.Save(new Data.Alias() {
                     SiteId = SITE_ID,
                     AliasUrl = ALIAS_2,
@@ -103,7 +103,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void AddDuplicateKey() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 Assert.ThrowsAny<Exception>(() =>
                     api.Aliases.Save(new Data.Alias() {
                         SiteId = SITE_ID,
@@ -115,7 +115,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetNoneById() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var none = api.Aliases.GetById(Guid.NewGuid());
 
                 Assert.Null(none);
@@ -124,7 +124,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetNoneByAliasUrl() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var none = api.Aliases.GetByAliasUrl("/none-existing-alias");
 
                 Assert.Null(none);
@@ -133,7 +133,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetNoneByRedirectUrl() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var none = api.Aliases.GetByRedirectUrl("/none-existing-alias");
 
                 Assert.Empty(none);
@@ -142,7 +142,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetAll() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var models = api.Aliases.GetAll();
 
                 Assert.NotNull(models);
@@ -152,7 +152,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetById() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = api.Aliases.GetById(ALIAS_1_ID);
 
                 Assert.NotNull(model);
@@ -162,7 +162,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetByAliasUrl() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = api.Aliases.GetByAliasUrl(ALIAS_1);
 
                 Assert.NotNull(model);
@@ -172,7 +172,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetByRedirectUrl() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var models = api.Aliases.GetByRedirectUrl("/redirect-1");
 
                 Assert.Single(models);
@@ -182,7 +182,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Update() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = api.Aliases.GetById(ALIAS_1_ID);
 
                 Assert.Equal("/redirect-1", model.RedirectUrl);
@@ -195,7 +195,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void FixAliasUrl() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = new Data.Alias() {
                     SiteId = SITE_ID,
                     AliasUrl = "the-alias-url-1",
@@ -210,7 +210,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void FixRedirectUrl() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = new Data.Alias() {
                     SiteId = SITE_ID,
                     AliasUrl = "/the-alias-url-2",
@@ -225,7 +225,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void AllowHttpUrl() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = new Data.Alias() {
                     SiteId = SITE_ID,
                     AliasUrl = "/the-alias-url-3",
@@ -240,7 +240,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void AllowHttpsUrl() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = new Data.Alias() {
                     SiteId = SITE_ID,
                     AliasUrl = "/the-alias-url-4",
@@ -255,7 +255,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Delete() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = api.Aliases.GetByAliasUrl(ALIAS_4);
 
                 Assert.NotNull(model);
@@ -266,7 +266,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void DeleteById() {
-            using (var api = new Api(GetDb(), storage, cache)) {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
                 var model = api.Aliases.GetByAliasUrl(ALIAS_5);
 
                 Assert.NotNull(model);

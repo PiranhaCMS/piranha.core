@@ -32,7 +32,7 @@ namespace Piranha.Tests.Hooks
         class CategoryOnAfterDeleteException : Exception {}
 
         protected override void Init() {
-            using (var api = new Api(GetDb(), storage)) {
+            using (var api = new Api(services, GetDb(), storage)) {
                 // Initialize
                 Piranha.App.Init(api);
 
@@ -65,7 +65,7 @@ namespace Piranha.Tests.Hooks
         }
 
         protected override void Cleanup() {
-            using (var api = new Api(GetDb(), storage)) {
+            using (var api = new Api(services, GetDb(), storage)) {
                 // Remove test data
                 var categories = api.Categories.GetAll(BLOG_ID);
                 foreach (var c in categories)
@@ -85,7 +85,7 @@ namespace Piranha.Tests.Hooks
         public void OnLoad() {
             Piranha.App.Hooks.Category.RegisterOnLoad(m => throw new CategoryOnLoadException());
 
-            using (var api = new Api(GetDb(), storage)) {
+            using (var api = new Api(services, GetDb(), storage)) {
                 Assert.Throws<CategoryOnLoadException>(() => {
                     api.Categories.GetById(ID);
                 });
@@ -96,7 +96,7 @@ namespace Piranha.Tests.Hooks
         [Fact]
         public void OnBeforeSave() {
             Piranha.App.Hooks.Category.RegisterOnBeforeSave(m => throw new CategoryOnBeforeSaveException());
-            using (var api = new Api(GetDb(), storage)) {
+            using (var api = new Api(services, GetDb(), storage)) {
                 Assert.Throws<CategoryOnBeforeSaveException>(() => {
                     api.Categories.Save(new Data.Category() {
                         BlogId = BLOG_ID,
@@ -110,7 +110,7 @@ namespace Piranha.Tests.Hooks
         [Fact]
         public void OnAfterSave() {
             Piranha.App.Hooks.Category.RegisterOnAfterSave(m => throw new CategoryOnAfterSaveException());
-            using (var api = new Api(GetDb(), storage)) {
+            using (var api = new Api(services, GetDb(), storage)) {
                 Assert.Throws<CategoryOnAfterSaveException>(() => {
                     api.Categories.Save(new Data.Category() {
                         BlogId = BLOG_ID,
@@ -124,7 +124,7 @@ namespace Piranha.Tests.Hooks
         [Fact]
         public void OnBeforeDelete() {
             Piranha.App.Hooks.Category.RegisterOnBeforeDelete(m => throw new CategoryOnBeforeDeleteException());
-            using (var api = new Api(GetDb(), storage)) {
+            using (var api = new Api(services, GetDb(), storage)) {
                 Assert.Throws<CategoryOnBeforeDeleteException>(() => {
                     api.Categories.Delete(ID);
                 });
@@ -135,7 +135,7 @@ namespace Piranha.Tests.Hooks
         [Fact]
         public void OnAfterDelete() {
             Piranha.App.Hooks.Category.RegisterOnAfterDelete(m => throw new CategoryOnAfterDeleteException());
-            using (var api = new Api(GetDb(), storage)) {
+            using (var api = new Api(services, GetDb(), storage)) {
                 Assert.Throws<CategoryOnAfterDeleteException>(() => {
                     api.Categories.Delete(ID);
                 });
