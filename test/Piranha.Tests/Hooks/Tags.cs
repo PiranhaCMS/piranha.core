@@ -75,6 +75,10 @@ namespace Piranha.Tests.Hooks
                 foreach (var p in pages)
                     api.Pages.Delete(p);
 
+                var types = api.PageTypes.GetAll();
+                foreach (var t in types)
+                    api.PageTypes.Delete(t);
+
                 var sites = api.Sites.GetAll();
                 foreach (var s in sites)
                     api.Sites.Delete(s);

@@ -8,6 +8,7 @@
  * 
  */
 
+using Microsoft.Extensions.DependencyInjection;
 using Piranha.AttributeBuilder;
 using Piranha.Extend.Fields;
 using System;
@@ -36,8 +37,28 @@ namespace Piranha.Tests.Repositories
         public static readonly Guid PAGE_1_ID = Guid.NewGuid();
         public static readonly Guid PAGE_2_ID = Guid.NewGuid();
         public static readonly Guid PAGE_3_ID = Guid.NewGuid();
+        public static readonly Guid PAGE_DI_ID = Guid.NewGuid();
         protected ICache cache;
         #endregion
+
+        public interface IMyService {
+            string Value { get; }
+        }
+
+        public class MyService : IMyService {
+            public string Value { get; private set; }
+
+            public MyService() {
+                Value = "My service value";
+            }
+        }        
+
+        [Piranha.Extend.FieldType(Name = "Fourth")]
+        public class MyFourthField : Extend.Fields.SimpleField<string> {
+            public void Init(IMyService myService) {
+                Value = myService.Value;
+            }
+        }        
 
         public class ComplexRegion
         {
@@ -88,15 +109,30 @@ namespace Piranha.Tests.Repositories
             }
         }
 
+        [PageType(Title = "Injection PageType")]
+        public class MyDIPage : Models.Page<MyDIPage>
+        {
+            [Region]
+            public MyFourthField Body { get; set; }
+        }
+        
+
         protected override void Init() {
+            services = new ServiceCollection()
+                .AddSingleton<IMyService, MyService>()
+                .BuildServiceProvider();
+
             using (var api = new Api(services, GetDb(), storage, cache)) {
                 Piranha.App.Init(api);
+
+                Piranha.App.Fields.Register<MyFourthField>();
 
                 var builder = new PageTypeBuilder(api)
                     .AddType(typeof(MissingPage))
                     .AddType(typeof(MyBlogPage))
                     .AddType(typeof(MyPage))
-                    .AddType(typeof(MyCollectionPage));
+                    .AddType(typeof(MyCollectionPage))
+                    .AddType(typeof(MyDIPage));
                 builder.Build();
                 
                 var site = new Data.Site() {
@@ -157,6 +193,12 @@ namespace Piranha.Tests.Repositories
                 page5.SiteId = SITE_ID;
                 page5.Title = "Blog Archive";
                 api.Pages.Save(page5);
+
+                var page6 = MyDIPage.Create(api);
+                page6.Id = PAGE_DI_ID;
+                page6.SiteId = SITE_ID;
+                page6.Title = "My Injection Page";
+                api.Pages.Save(page6);
             }
         }
 
@@ -659,6 +701,26 @@ namespace Piranha.Tests.Repositories
 
                 Assert.Equal(count - 1, api.Pages.GetAll(SITE_ID).Count());
             }
+        }
+
+        [Fact]
+        public void GetDIGeneric() {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
+                var page = api.Pages.GetById<MyDIPage>(PAGE_DI_ID);
+
+                Assert.NotNull(page);
+                Assert.Equal("My service value", page.Body.Value);
+            }            
+        }
+
+        [Fact]
+        public void GetDIDynamic() {
+            using (var api = new Api(services, GetDb(), storage, cache)) {
+                var page = api.Pages.GetById(PAGE_DI_ID);
+
+                Assert.NotNull(page);
+                Assert.Equal("My service value", page.Regions.Body.Value);
+            }            
         }
     }
 }
