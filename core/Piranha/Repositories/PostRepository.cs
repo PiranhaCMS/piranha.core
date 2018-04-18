@@ -27,11 +27,11 @@ namespace Piranha.Repositories
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="db">The current db connection</param>
         /// <param name="api">The current api</param>
+        /// <param name="db">The current db connection</param>
         /// <param name="factory">The current content service factory</param>
         /// <param name="cache">The optional model cache</param>
-        public PostRepository(IDb db, IApi api, IContentServiceFactory factory, ICache cache = null) { 
+        public PostRepository(IApi api, IDb db, IContentServiceFactory factory, ICache cache = null) { 
             this.db = db;
             this.api = api;
             this.contentService = factory.CreatePostService();

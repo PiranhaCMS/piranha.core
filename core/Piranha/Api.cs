@@ -140,7 +140,7 @@ namespace Piranha
             Pages = new PageRepository(this, db, factory, cacheLevel > 2 ? cache : null);
             PageTypes = new PageTypeRepository(db, cacheLevel > 1 ? cache : null);
             Params = new ParamRepository(db, cacheLevel > 0 ? cache : null);
-            Posts = new PostRepository(db, this, factory, cacheLevel > 2 ? cache : null);
+            Posts = new PostRepository(this, db, factory, cacheLevel > 2 ? cache : null);
             PostTypes = new PostTypeRepository(db, cacheLevel > 1 ? cache : null);
             Sites = new SiteRepository(this, db, cacheLevel > 0 ? cache : null);
             Tags = new TagRepository(db, cacheLevel > 2 ? cache : null);
