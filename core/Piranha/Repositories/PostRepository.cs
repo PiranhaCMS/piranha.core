@@ -10,21 +10,33 @@
 
 using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
+using Piranha.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Piranha.Repositories
 {
-    public class PostRepository : ContentRepository<Post, PostField>, IPostRepository
+    public class PostRepository : IPostRepository
     {
+        private readonly IDb db;
+        private readonly IApi api;
+        private readonly IContentService<Post, PostField, Models.PostBase> contentService;
+        private readonly ICache cache;
+
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="api">The current api</param>
         /// <param name="db">The current db connection</param>
-        /// <param name="modelCache">The optional model cache</param>
-        public PostRepository(Api api, IDb db, IServiceProvider services, ICache modelCache = null) : base(api, db, services, modelCache) { }
+        /// <param name="api">The current api</param>
+        /// <param name="factory">The current content service factory</param>
+        /// <param name="cache">The optional model cache</param>
+        public PostRepository(IDb db, IApi api, IContentServiceFactory factory, ICache cache = null) { 
+            this.db = db;
+            this.api = api;
+            this.contentService = factory.CreatePostService();
+            this.cache = cache;
+        }
 
         /// <summary>
         /// Gets the available posts for the specified blog.
@@ -118,12 +130,15 @@ namespace Piranha.Repositories
                     if (cache != null)
                         AddToCache(post);
                     post.Category = api.Categories.GetById(post.CategoryId);
+                    //
+                    // TODO: Ugly hardcoded reference!!!!
+                    //
                     post.Blog = ((Repositories.PageRepository)api.Pages).GetPageById(post.BlogId);
                 }
             }
 
             if (post != null)
-                return Load<T, Models.PostBase>(post, api.PostTypes.GetById(post.PostTypeId), Process);
+                return contentService.Transform<T>(post, api.PostTypes.GetById(post.PostTypeId), Process);
             return null;
         }
 
@@ -196,7 +211,7 @@ namespace Piranha.Repositories
                     post.Category = api.Categories.GetById(post.CategoryId);
                     post.Blog = ((Repositories.PageRepository)api.Pages).GetPageById(post.BlogId);
             
-                    return Load<T, Models.PostBase>(post, api.PostTypes.GetById(post.PostTypeId), Process);
+                    return contentService.Transform<T>(post, api.PostTypes.GetById(post.PostTypeId), Process);
                 }                    
                 return null;
             }
@@ -210,8 +225,6 @@ namespace Piranha.Repositories
             var type = api.PostTypes.GetById(model.TypeId);
 
             if (type != null) {
-                var currentRegions = type.Regions.Select(r => r.Id).ToArray();
-
                 // Ensure category
                 if (model.Category.Id == Guid.Empty) {
                     Data.Category category = null;
@@ -255,6 +268,11 @@ namespace Piranha.Repositories
                     }
                 }
 
+                // Ensure that we have a slug
+                if (string.IsNullOrWhiteSpace(model.Slug))
+                    model.Slug = Utils.GenerateSlug(model.Title);
+                else model.Slug = Utils.GenerateSlug(model.Slug);                
+
                 var post = db.Posts
                     .Include(p => p.Fields)
                     .Include(p => p.Tags)
@@ -272,14 +290,7 @@ namespace Piranha.Repositories
                 } else {
                     post.LastModified = DateTime.Now;
                 }
-
-                // Ensure that we have a slug
-                if (string.IsNullOrWhiteSpace(model.Slug))
-                    model.Slug = Utils.GenerateSlug(model.Title);
-                else model.Slug = Utils.GenerateSlug(model.Slug);
-
-                // Map basic fields
-                App.Mapper.Map<Models.PostBase, Post>(model, post);
+                post = contentService.Transform<T>(model, type, post);
 
                 // Remove tags
                 var removedTags = new List<PostTag>();
@@ -287,8 +298,8 @@ namespace Piranha.Repositories
                     if (!model.Tags.Any(t => t.Id == tag.TagId))
                         removedTags.Add(tag);
                 }
-                if (removedTags.Count > 0)
-                    db.PostTags.RemoveRange(removedTags);
+                foreach (var removed in removedTags)
+                    post.Tags.Remove(removed);
 
                 // Add tags
                 foreach (var tag in model.Tags) {
@@ -298,43 +309,7 @@ namespace Piranha.Repositories
                             TagId = tag.Id
                         });
                 }
-
-                // Map regions
-                foreach (var regionKey in currentRegions) {
-                    // Check that the region exists in the current model
-                    if (HasRegion(model, regionKey)) {
-                        var regionType = type.Regions.Single(r => r.Id == regionKey);
-
-                        if (!regionType.Collection) {
-                            MapRegion(model, post, GetRegion(model, regionKey), regionType, regionKey);
-                        } else {
-                            var items = new List<Guid>();
-                            var sortOrder = 0;
-                            foreach (var region in GetEnumerable(model, regionKey)) {
-                                var fields = MapRegion(model, post, region, regionType, regionKey, sortOrder++);
-
-                                if (fields.Count > 0)
-                                    items.AddRange(fields);
-                            }
-                            // Now delete removed collection items
-                            var removedFields = db.PostFields
-                                .Where(f => f.PostId == model.Id && f.RegionId == regionKey && !items.Contains(f.Id))
-                                .ToList();
-
-                            if (removedFields.Count > 0)
-                                db.PostFields.RemoveRange(removedFields);
-                        }
-                    }
-                }                
-
-                // If this is a published post, update last modified for the
-                // blog page for caching purposes.
-                if (post.Published.HasValue) {
-                    var page = db.Pages
-                        .FirstOrDefault(p => p.Id == post.BlogId);
-                    page.LastModified = DateTime.Now;
-                }
-
+                
                 db.SaveChanges();
 
                 if (cache != null)

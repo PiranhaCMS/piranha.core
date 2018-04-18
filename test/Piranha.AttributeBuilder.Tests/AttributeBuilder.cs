@@ -8,6 +8,7 @@
  * 
  */
 
+using Piranha.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -50,14 +51,14 @@ namespace Piranha.AttributeBuilder.Tests
         #endregion
 
         public AttributeBuilder() {
-            using (var api = new Api(services, GetDb(), null)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null)) {
                 App.Init(api);
             }
         }
 
         [Fact]
         public void AddSimple() {
-            using (var api = new Api(services, GetDb(), null)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null)) {
                 var builder = new PageTypeBuilder(api)
                     .AddType(typeof(SimplePageType));
                 builder.Build();
@@ -73,7 +74,7 @@ namespace Piranha.AttributeBuilder.Tests
 
         [Fact]
         public void AddComplex() {
-            using (var api = new Api(services, GetDb(), null)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null)) {
                 var builder = new PageTypeBuilder(api)
                     .AddType(typeof(ComplexPageType));
                 builder.Build();
@@ -100,7 +101,7 @@ namespace Piranha.AttributeBuilder.Tests
 
         [Fact]
         public void DeleteOrphans() {
-            using (var api = new Api(services, GetDb(), null)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null)) {
                 var builder = new PageTypeBuilder(api)
                     .AddType(typeof(SimplePageType))
                     .AddType(typeof(ComplexPageType));
@@ -117,7 +118,7 @@ namespace Piranha.AttributeBuilder.Tests
         }
 
         public void Dispose() {
-            using (var api = new Api(services, GetDb(), null)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null)) {
                 var types = api.PageTypes.GetAll();
 
                 foreach (var t in types)

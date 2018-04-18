@@ -10,6 +10,7 @@
 
 using Piranha.AttributeBuilder;
 using Piranha.Extend.Fields;
+using Piranha.Services;
 using System;
 using System.Linq;
 using Xunit;
@@ -50,7 +51,7 @@ namespace Piranha.Tests.Repositories
         }
 
         protected override void Init() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 Piranha.App.Init(api);
 
                 var builder = new PageTypeBuilder(api)
@@ -104,7 +105,7 @@ namespace Piranha.Tests.Repositories
         }
 
         protected override void Cleanup() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var pages = api.Pages.GetAll(SITE_1_ID);
                 foreach (var page in pages.Where(p => p.ParentId.HasValue))
                     api.Pages.Delete(page);
@@ -123,14 +124,14 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void IsCached() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 Assert.Equal(this.GetType() == typeof(SitesCached), api.IsCached);
             }
         }        
 
         [Fact]
         public void Add() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 api.Sites.Save(new Data.Site() {
                     InternalId = SITE_2,
                     Title = SITE_2
@@ -140,7 +141,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void AddDuplicateKey() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 Assert.ThrowsAny<Exception>(() =>
                     api.Sites.Save(new Data.Site() {
                         InternalId = SITE_1,
@@ -151,7 +152,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void AddEmptyFailure() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 Assert.ThrowsAny<ArgumentException>(() =>
                     api.Sites.Save(new Data.Site()));
             }            
@@ -161,7 +162,7 @@ namespace Piranha.Tests.Repositories
         public void AddAndGenerateInternalId() {
             var id = Guid.NewGuid();
 
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 api.Sites.Save(new Data.Site() {
                     Id = id,
                     Title = "Generate internal id"
@@ -176,7 +177,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetAll() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var models = api.Sites.GetAll();
 
                 Assert.NotNull(models);
@@ -186,7 +187,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetNoneById() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var none = api.Sites.GetById(Guid.NewGuid());
 
                 Assert.Null(none);
@@ -195,7 +196,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetNoneByInternalId() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var none = api.Sites.GetByInternalId("none-existing-id");
 
                 Assert.Null(none);
@@ -204,7 +205,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetById() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var model = api.Sites.GetById(SITE_1_ID);
 
                 Assert.NotNull(model);
@@ -214,7 +215,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetByInternalId() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var model = api.Sites.GetByInternalId(SITE_1);
 
                 Assert.NotNull(model);
@@ -224,7 +225,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetDefault() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var model = api.Sites.GetDefault();
 
                 Assert.NotNull(model);
@@ -234,7 +235,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetSitemap() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var sitemap = api.Sites.GetSitemap();
 
                 Assert.NotNull(sitemap);
@@ -245,7 +246,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetSitemapById() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var sitemap = api.Sites.GetSitemap(SITE_1_ID);
 
                 Assert.NotNull(sitemap);
@@ -256,7 +257,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void CheckPermlinkSyntax() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var sitemap = api.Sites.GetSitemap();
 
                 foreach (var item in sitemap) {
@@ -268,7 +269,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetUnpublishedSitemap() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var sitemap = api.Sites.GetSitemap(onlyPublished: false);
 
                 Assert.NotNull(sitemap);
@@ -281,7 +282,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void CheckHiddenSitemapItems() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var sitemap = api.Sites.GetSitemap();
 
                 Assert.Equal(1, sitemap.Count(s => s.IsHidden));
@@ -290,7 +291,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void ChangeDefaultSite() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var site6 = api.Sites.GetByInternalId(SITE_6);
 
                 Assert.False(site6.IsDefault);
@@ -307,7 +308,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void CantRemoveDefault() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var site1 = api.Sites.GetById(SITE_1_ID);
 
                 Assert.True(site1.IsDefault);
@@ -322,7 +323,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetUnpublishedSitemapById() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var sitemap = api.Sites.GetSitemap(SITE_1_ID, onlyPublished: false);
 
                 Assert.NotNull(sitemap);
@@ -335,7 +336,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Update() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var model = api.Sites.GetById(SITE_1_ID);
 
                 Assert.Equal(SITE_1_HOSTS, model.Hostnames);
@@ -348,7 +349,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Delete() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var model = api.Sites.GetByInternalId(SITE_4);
 
                 Assert.NotNull(model);
@@ -359,7 +360,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void DeleteById() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var model = api.Sites.GetByInternalId(SITE_5);
 
                 Assert.NotNull(model);

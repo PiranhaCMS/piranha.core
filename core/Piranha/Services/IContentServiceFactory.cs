@@ -1,0 +1,36 @@
+/*
+ * Copyright (c) 2018 Håkan Edling
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ * 
+ * http://github.com/piranhacms/piranha
+ * 
+ */
+
+namespace Piranha.Services
+{
+    public interface IContentServiceFactory
+    {
+        /// <summary>
+        /// Creates a new content service for the specified types.
+        /// </summary>
+        /// <returns>The content service</returns>
+        IContentService<TContent, TField, TModelBase> Create<TContent, TField, TModelBase>() 
+            where TContent : Data.Content<TField> 
+            where TField : Data.ContentField
+            where TModelBase : Models.Content;
+
+        /// <summary>
+        /// Creates a new page content service.
+        /// </summary>
+        /// <returns>The content service</returns>
+        IContentService<Data.Page, Data.PageField, Models.PageBase> CreatePageService();
+
+        /// <summary>
+        /// Creates a new post content service.
+        /// </summary>
+        /// <returns>The content service</returns>
+        IContentService<Data.Post, Data.PostField, Models.PostBase> CreatePostService();
+    }
+}

@@ -8,6 +8,7 @@
  * 
  */
 
+using Piranha.Services;
 using System;
 using Xunit;
 
@@ -19,7 +20,7 @@ namespace Piranha.Tests.Utils
         /// Sets up & initializes the tests.
         /// </summary>
         protected override void Init() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 Piranha.App.Init(api);
             }
         }

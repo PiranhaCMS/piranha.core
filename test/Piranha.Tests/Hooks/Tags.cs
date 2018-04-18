@@ -9,6 +9,7 @@
  */
 
 using Piranha.AttributeBuilder;
+using Piranha.Services;
 using System;
 using System.Data.SqlClient;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace Piranha.Tests.Hooks
         class TagOnAfterDeleteException : Exception {}
 
         protected override void Init() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 // Initialize
                 Piranha.App.Init(api);
 
@@ -65,7 +66,7 @@ namespace Piranha.Tests.Hooks
         }
 
         protected override void Cleanup() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 // Remove test data
                 var tags = api.Tags.GetAll(BLOG_ID);
                 foreach (var t in tags)
@@ -89,7 +90,7 @@ namespace Piranha.Tests.Hooks
         public void OnLoad() {
             Piranha.App.Hooks.Tag.RegisterOnLoad(m => throw new TagOnLoadException());
 
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 Assert.Throws<TagOnLoadException>(() => {
                     api.Tags.GetById(ID);
                 });
@@ -100,7 +101,7 @@ namespace Piranha.Tests.Hooks
         [Fact]
         public void OnBeforeSave() {
             Piranha.App.Hooks.Tag.RegisterOnBeforeSave(m => throw new TagOnBeforeSaveException());
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 Assert.Throws<TagOnBeforeSaveException>(() => {
                     api.Tags.Save(new Data.Tag() {
                         BlogId = BLOG_ID,
@@ -114,7 +115,7 @@ namespace Piranha.Tests.Hooks
         [Fact]
         public void OnAfterSave() {
             Piranha.App.Hooks.Tag.RegisterOnAfterSave(m => throw new TagOnAfterSaveException());
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 Assert.Throws<TagOnAfterSaveException>(() => {
                     api.Tags.Save(new Data.Tag() {
                         BlogId = BLOG_ID,
@@ -128,7 +129,7 @@ namespace Piranha.Tests.Hooks
         [Fact]
         public void OnBeforeDelete() {
             Piranha.App.Hooks.Tag.RegisterOnBeforeDelete(m => throw new TagOnBeforeDeleteException());
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 Assert.Throws<TagOnBeforeDeleteException>(() => {
                     api.Tags.Delete(ID);
                 });
@@ -139,7 +140,7 @@ namespace Piranha.Tests.Hooks
         [Fact]
         public void OnAfterDelete() {
             Piranha.App.Hooks.Tag.RegisterOnAfterDelete(m => throw new TagOnAfterDeleteException());
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 Assert.Throws<TagOnAfterDeleteException>(() => {
                     api.Tags.Delete(ID);
                 });

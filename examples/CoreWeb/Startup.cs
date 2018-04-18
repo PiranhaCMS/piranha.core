@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using Piranha;
 using Piranha.ImageSharp;
 using Piranha.Local;
+using Piranha.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -49,8 +50,7 @@ namespace CoreWeb
                 options.UseSqlite("Filename=./piranha.coreweb.db"));            
             services.AddSingleton<IStorage, FileStorage>();
             services.AddSingleton<IImageProcessor, ImageSharpProcessor>();
-            services.AddScoped<IDb, Db>();
-            services.AddScoped<IApi, Api>();
+            services.AddPiranhaEF();
             services.AddPiranhaSimpleSecurity(
                 new Piranha.AspNetCore.SimpleUser(Piranha.Manager.Permission.All()) {
                     UserName = "admin",

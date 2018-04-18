@@ -8,6 +8,7 @@
  * 
  */
 
+using Piranha.Services;
 using System;
 using System.Data.SqlClient;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace Piranha.Tests.Routers
         private Guid SITE2_ID = Guid.NewGuid();
 
         protected override void Init() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 // Add site
                 var site1 = new Data.Site() {
                     Id = SITE1_ID,
@@ -58,7 +59,7 @@ namespace Piranha.Tests.Routers
         }
 
         protected override void Cleanup() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 var aliases = api.Aliases.GetAll();
                 foreach (var a in aliases)
                     api.Aliases.Delete(a);
@@ -71,7 +72,7 @@ namespace Piranha.Tests.Routers
 
         [Fact]
         public void GetAliasByUrlDefaultSite() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 var response = Piranha.Web.AliasRouter.Invoke(api, "/old-url", SITE1_ID);
 
                 Assert.NotNull(response);
@@ -81,7 +82,7 @@ namespace Piranha.Tests.Routers
 
         [Fact]
         public void GetAliasByUrlNoneDefaultSite() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 var response = Piranha.Web.AliasRouter.Invoke(api, "/missing-url", SITE1_ID);
 
                 Assert.Null(response);
@@ -90,7 +91,7 @@ namespace Piranha.Tests.Routers
 
         [Fact]
         public void GetAliasByUrlOtherSite() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 var response = Piranha.Web.AliasRouter.Invoke(api, "/old-url", SITE2_ID);
 
                 Assert.NotNull(response);
@@ -100,7 +101,7 @@ namespace Piranha.Tests.Routers
 
         [Fact]
         public void GetAliasByUrlNoneOtherSite() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 var response = Piranha.Web.AliasRouter.Invoke(api, "/missing-url", SITE2_ID);
 
                 Assert.Null(response);

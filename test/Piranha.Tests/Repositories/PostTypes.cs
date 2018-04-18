@@ -9,6 +9,7 @@
  */
 
 using Piranha.Models;
+using Piranha.Services;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -105,7 +106,7 @@ namespace Piranha.Tests.Repositories
         #endregion
 
         protected override void Init() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 api.PostTypes.Save(postTypes[0]);
                 api.PostTypes.Save(postTypes[3]);
                 api.PostTypes.Save(postTypes[4]);
@@ -113,7 +114,7 @@ namespace Piranha.Tests.Repositories
         }
 
         protected override void Cleanup() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var postTypes = api.PostTypes.GetAll();
 
                 foreach (var p in postTypes)
@@ -123,21 +124,21 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void IsCached() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 Assert.Equal(this.GetType() == typeof(PostTypesCached), api.IsCached);
             }
         }        
 
         [Fact]
         public void Add() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 api.PostTypes.Save(postTypes[1]);
             }
         }
 
         [Fact]
         public void GetAll() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var models = api.PostTypes.GetAll();
 
                 Assert.NotNull(models);
@@ -147,7 +148,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetNoneById() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var none = api.PostTypes.GetById("none-existing-type");
 
                 Assert.Null(none);
@@ -157,7 +158,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetById() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var model = api.PostTypes.GetById(postTypes[0].Id);
 
                 Assert.NotNull(model);
@@ -167,7 +168,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Update() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var model = api.PostTypes.GetById(postTypes[0].Id);
 
                 Assert.Null(model.Title);
@@ -180,7 +181,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Delete() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var model = api.PostTypes.GetById(postTypes[3].Id);
 
                 Assert.NotNull(model);
@@ -191,7 +192,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void DeleteById() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var model = api.PostTypes.GetById(postTypes[4].Id);
 
                 Assert.NotNull(model);

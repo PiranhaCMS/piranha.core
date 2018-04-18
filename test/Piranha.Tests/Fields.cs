@@ -9,6 +9,7 @@
  */
 
 using Piranha.Extend;
+using Piranha.Services;
 using System;
 using System.Linq;
 using System.Text;
@@ -33,7 +34,7 @@ namespace Piranha.Tests
         /// Sets up & initializes the tests.
         /// </summary>
         protected override void Init() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 Piranha.App.Init(api);
                 Piranha.App.Fields.Register<MyFirstField>();
 

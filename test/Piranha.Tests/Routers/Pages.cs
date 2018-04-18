@@ -10,6 +10,7 @@
 
 using Piranha.AttributeBuilder;
 using Piranha.Extend.Fields;
+using Piranha.Services;
 using System;
 using System.Data.SqlClient;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace Piranha.Tests.Routers
         
 
         protected override void Init() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 Piranha.App.Init(api);
 
                 var builder = new PageTypeBuilder(api)
@@ -90,7 +91,7 @@ namespace Piranha.Tests.Routers
         }
 
         protected override void Cleanup() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 var pages = api.Pages.GetAll();
                 foreach (var p in pages)
                     api.Pages.Delete(p);
@@ -107,7 +108,7 @@ namespace Piranha.Tests.Routers
 
         [Fact]
         public void GetPageByUrlDefaultSite() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 var response = Piranha.Web.PageRouter.Invoke(api, "/my-first-page", SITE1_ID);
 
                 Assert.NotNull(response);
@@ -119,7 +120,7 @@ namespace Piranha.Tests.Routers
 
         [Fact]
         public void GetPageByUrlDefaultSiteWithAction() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 var response = Piranha.Web.PageRouter.Invoke(api, "/my-first-page/action", SITE1_ID);
 
                 Assert.NotNull(response);
@@ -131,7 +132,7 @@ namespace Piranha.Tests.Routers
 
         [Fact]
         public void GetPageByUrlDefaultSiteWithRedirect() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 var response = Piranha.Web.PageRouter.Invoke(api, "/my-third-page", SITE1_ID);
 
                 Assert.NotNull(response);
@@ -142,7 +143,7 @@ namespace Piranha.Tests.Routers
 
         [Fact]
         public void GetStartpageDefaultSite() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 var response = Piranha.Web.StartPageRouter.Invoke(api, "/", SITE1_ID);
 
                 Assert.NotNull(response);
@@ -154,7 +155,7 @@ namespace Piranha.Tests.Routers
 
         [Fact]
         public void GetPageByUrlNoneDefaultSite() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 var response = Piranha.Web.PageRouter.Invoke(api, "/my-second-page", SITE1_ID);
 
                 Assert.Null(response);
@@ -163,7 +164,7 @@ namespace Piranha.Tests.Routers
 
         [Fact]
         public void GetStartpageDefaultSiteNone() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 var response = Piranha.Web.StartPageRouter.Invoke(api, "/slug", SITE1_ID);
 
                 Assert.Null(response);
@@ -172,7 +173,7 @@ namespace Piranha.Tests.Routers
 
         [Fact]
         public void GetPageByUrlOtherSite() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 var response = Piranha.Web.PageRouter.Invoke(api, "/my-second-page", SITE2_ID);
 
                 Assert.NotNull(response);
@@ -184,7 +185,7 @@ namespace Piranha.Tests.Routers
 
         [Fact]
         public void GetPageByUrlOtherSiteWithAction() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 var response = Piranha.Web.PageRouter.Invoke(api, "/my-second-page/action", SITE2_ID);
 
                 Assert.NotNull(response);
@@ -196,7 +197,7 @@ namespace Piranha.Tests.Routers
 
         [Fact]
         public void GetStartpageOtherSite() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 var response = Piranha.Web.StartPageRouter.Invoke(api, "/", SITE2_ID);
 
                 Assert.NotNull(response);
@@ -208,7 +209,7 @@ namespace Piranha.Tests.Routers
 
         [Fact]
         public void GetPageByUrlNoneOtherSite() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 var response = Piranha.Web.PageRouter.Invoke(api, "/my-first-page", SITE2_ID);
 
                 Assert.Null(response);
@@ -217,7 +218,7 @@ namespace Piranha.Tests.Routers
 
         [Fact]
         public void GetStartpageOtherSiteNone() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 var response = Piranha.Web.StartPageRouter.Invoke(api, "/slug", SITE2_ID);
 
                 Assert.Null(response);

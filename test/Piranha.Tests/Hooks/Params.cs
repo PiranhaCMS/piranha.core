@@ -8,6 +8,7 @@
  * 
  */
 
+using Piranha.Services;
 using System;
 using System.Data.SqlClient;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace Piranha.Tests.Hooks
         class ParamOnAfterDeleteException : Exception {}
 
         protected override void Init() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 // Initialize
                 Piranha.App.Init(api);
 
@@ -41,7 +42,7 @@ namespace Piranha.Tests.Hooks
         }
 
         protected override void Cleanup() {
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 // Remove test data
                 var param = api.Params.GetAll();
 
@@ -54,7 +55,7 @@ namespace Piranha.Tests.Hooks
         public void OnLoad() {
             Piranha.App.Hooks.Param.RegisterOnLoad(m => throw new ParamOnLoadException());
 
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 Assert.Throws<ParamOnLoadException>(() => {
                     api.Params.GetById(ID);
                 });
@@ -65,7 +66,7 @@ namespace Piranha.Tests.Hooks
         [Fact]
         public void OnBeforeSave() {
             Piranha.App.Hooks.Param.RegisterOnBeforeSave(m => throw new ParamOnBeforeSaveException());
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 Assert.Throws<ParamOnBeforeSaveException>(() => {
                     api.Params.Save(new Data.Param() {
                         Key = "MyFirstHookKey"
@@ -78,7 +79,7 @@ namespace Piranha.Tests.Hooks
         [Fact]
         public void OnAfterSave() {
             Piranha.App.Hooks.Param.RegisterOnAfterSave(m => throw new ParamOnAfterSaveException());
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 Assert.Throws<ParamOnAfterSaveException>(() => {
                     api.Params.Save(new Data.Param() {
                         Key = "MySecondHookKey"
@@ -91,7 +92,7 @@ namespace Piranha.Tests.Hooks
         [Fact]
         public void OnBeforeDelete() {
             Piranha.App.Hooks.Param.RegisterOnBeforeDelete(m => throw new ParamOnBeforeDeleteException());
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 Assert.Throws<ParamOnBeforeDeleteException>(() => {
                     api.Params.Delete(ID);
                 });
@@ -102,7 +103,7 @@ namespace Piranha.Tests.Hooks
         [Fact]
         public void OnAfterDelete() {
             Piranha.App.Hooks.Param.RegisterOnAfterDelete(m => throw new ParamOnAfterDeleteException());
-            using (var api = new Api(services, GetDb(), storage)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 Assert.Throws<ParamOnAfterDeleteException>(() => {
                     api.Params.Delete(ID);
                 });

@@ -20,7 +20,8 @@ namespace Piranha.Tests
     public abstract class BaseTests : IDisposable
     {
         protected IStorage storage = new Local.FileStorage("uploads/", "~/uploads/");
-        protected IServiceProvider services = new ServiceCollection().BuildServiceProvider();
+        protected IServiceProvider services = new ServiceCollection()
+            .BuildServiceProvider();
 
         /// <summary>
         /// Default constructor.

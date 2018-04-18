@@ -8,6 +8,7 @@
  * 
  */
 
+using Piranha.Services;
 using System;
 using System.IO;
 using System.Linq;
@@ -36,7 +37,7 @@ namespace Piranha.Tests.Repositories
         protected ICache cache;
 
         protected override void Init() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 Piranha.App.Init(api);
 
                 // Add media folders
@@ -81,7 +82,7 @@ namespace Piranha.Tests.Repositories
         }
 
         protected override void Cleanup() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var media = api.Media.GetAll();
 
                 foreach (var item in media) {
@@ -103,7 +104,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void IsCached() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 Assert.Equal(this.GetType() == typeof(MediasCached), api.IsCached);
             }
         }
@@ -111,7 +112,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetAll() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var media = api.Media.GetAll();
 
                 Assert.NotEmpty(media);
@@ -120,7 +121,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetById() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var media = api.Media.GetById(image1Id);
 
                 Assert.NotNull(media);
@@ -132,7 +133,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetByFolderId() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var media = api.Media.GetAll(folder1Id).ToList();
 
                 Assert.NotEmpty(media);
@@ -142,7 +143,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Move() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var media = api.Media.GetById(image1Id);
                 Assert.NotNull(media);
                 Assert.Null(media.FolderId);
@@ -158,7 +159,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Insert() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_BETA_entrance.png")) {
                     var image = new Models.StreamMediaContent() {
                         Filename = "HLD_Screenshot_BETA_entrance.png",
@@ -175,7 +176,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void PublicUrl() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 using (var config = new Piranha.Config(api)) {
                     config.MediaCDN = null;
                 }
@@ -189,7 +190,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void PublicUrlCDN() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 using (var config = new Piranha.Config(api)) {
                     config.MediaCDN = "https://mycdn.org/uploads";
                 }
@@ -203,7 +204,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Delete() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var media = api.Media.GetById(image3Id);
 
                 api.Media.Delete(media);
@@ -212,7 +213,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void DeleteById() {
-            using (var api = new Api(services, GetDb(), storage, cache)) {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var media = api.Media.GetById(image4Id);
 
                 api.Media.Delete(image4Id);

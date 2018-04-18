@@ -10,6 +10,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
+using Piranha.Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,15 +20,26 @@ using System.Reflection;
 
 namespace Piranha.Repositories
 {
-    public class PageRepository : ContentRepository<Page, PageField>, IPageRepository
+    public class PageRepository : IPageRepository
     {
+        private readonly IDb db;
+        private readonly IApi api;
+        private readonly IContentService<Page, PageField, Models.PageBase> contentService;
+        private readonly ICache cache;
+
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        /// <param name="db">The current db connection</param>
-        /// <param name="modelCache">The optional model cache</param>
-        public PageRepository(Api api, IDb db, IServiceProvider services, ICache modelCache = null) : base(api, db, services, modelCache) { }
+        /// <param name="db">The current db context</param>
+        /// <param name="factory">The content service factory</param>
+        /// <param name="cache">The optional model cache</param>
+        public PageRepository(IApi api, IDb db, IContentServiceFactory factory, ICache cache = null) {
+            this.api = api;
+            this.db = db;
+            this.contentService = factory.CreatePageService();
+            this.cache = cache;
+        }
 
         /// <summary>
         /// Gets all of the available pages for the current site.
@@ -145,7 +157,7 @@ namespace Piranha.Repositories
             }
 
             if (page != null) {
-                return Load<T, Models.PageBase>(page, api.PageTypes.GetById(page.PageTypeId));
+                return contentService.Transform<T>(page, api.PageTypes.GetById(page.PageTypeId));
             }
             return null;
         }
@@ -181,7 +193,7 @@ namespace Piranha.Repositories
             }
 
             if (page != null)
-                return Load<T, Models.PageBase>(page, api.PageTypes.GetById(page.PageTypeId));
+                return contentService.Transform<T>(page, api.PageTypes.GetById(page.PageTypeId));
             return null;
         }
 
@@ -225,7 +237,7 @@ namespace Piranha.Repositories
                 if (page != null) {
                     if (cache != null)
                         AddToCache(page);
-                    return Load<T, Models.PageBase>(page, api.PageTypes.GetById(page.PageTypeId));
+                    return contentService.Transform<T>(page, api.PageTypes.GetById(page.PageTypeId));
                 }                    
                 return null;
             }
@@ -263,6 +275,45 @@ namespace Piranha.Repositories
                 }                    
                 return null;                
             }
+        }
+
+        /// <summary>
+        /// Gets the hierachical sitemap structure.
+        /// </summary>
+        /// <param name="id">The optional site id</param>
+        /// <param name="onlyPublished">If only published items should be included</param>
+        /// <returns>The sitemap</returns>
+        public Models.Sitemap GetSitemap(Guid? siteId = null, bool onlyPublished = true) {
+            if (!siteId.HasValue) {
+                var site = api.Sites.GetDefault();
+
+                if (site != null)
+                    siteId = site.Id;
+            }
+
+            if (siteId != null) {
+                var sitemap = onlyPublished && cache != null ? cache.Get<Models.Sitemap>($"Sitemap_{siteId}") : null;
+
+                if (sitemap == null) {
+                    var pages = db.Pages
+                        .AsNoTracking()
+                        .Where(p => p.SiteId == siteId)
+                        .OrderBy(p => p.ParentId)
+                        .ThenBy(p => p.SortOrder)
+                        .ToList();
+
+                    var pageTypes = api.PageTypes.GetAll();
+
+                    if (onlyPublished)
+                        pages = pages.Where(p => p.Published.HasValue).ToList();
+                    sitemap = Sort(pages, pageTypes);
+
+                    if (onlyPublished && cache != null)
+                        cache.Set($"Sitemap_{siteId}", sitemap);
+                }
+                return sitemap;
+            }
+            return null;
         }
 
         /// <summary>
@@ -305,7 +356,7 @@ namespace Piranha.Repositories
                     RemoveFromCache(sibling);
                 foreach (var sibling in newSiblings)
                     RemoveFromCache(sibling);
-                ((SiteRepository)api.Sites).InvalidateSitemap(model.SiteId);
+                InvalidateSitemap(model.SiteId);
             }
         }
 
@@ -317,13 +368,33 @@ namespace Piranha.Repositories
             var type = api.PageTypes.GetById(model.TypeId);
 
             if (type != null) {
-                var currentRegions = type.Regions.Select(r => r.Id).ToArray();
+                // Ensure that we have a slug
+                if (string.IsNullOrWhiteSpace(model.Slug)) {
+                    var prefix = "";
+
+                    // Check if we should generate hierarchical slugs
+                    using (var config = new Config(api)) {
+                        if (config.HierarchicalPageSlugs && model.ParentId.HasValue) {
+                            var parentSlug = db.Pages
+                                .AsNoTracking()
+                                .FirstOrDefault(p => p.Id == model.ParentId)?.Slug;
+
+                            if (!string.IsNullOrWhiteSpace(parentSlug)) {
+                                prefix = parentSlug + "/";
+                            }
+                        }
+                        model.Slug = prefix + Utils.GenerateSlug(model.NavigationTitle != null ? model.NavigationTitle : model.Title);
+                    }
+                } else model.Slug = Utils.GenerateSlug(model.Slug);
+
+                // Set content type
+                model.ContentType = type.ContentTypeId;
 
                 var page = db.Pages
                     .Include(p => p.Fields)
                     .FirstOrDefault(p => p.Id == model.Id);
 
-                // If not, create a new page
+                // Transform the model
                 if (page == null) {
                     page = new Page() {
                         Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
@@ -337,77 +408,24 @@ namespace Piranha.Repositories
                     model.Id = page.Id;
 
                     // Make room for the new page
-                    MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true);
+                    MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true);                    
                 } else {
-                    page.LastModified = DateTime.Now;
-
                     // Check if the page has been moved
                     if (page.ParentId != model.ParentId || page.SortOrder != model.SortOrder) {
                         // Remove the old position for the page
-                        MovePages(page.Id, model.SiteId, page.ParentId, page.SortOrder + 1, false);
+                        MovePages(page.Id, page.SiteId, page.ParentId, page.SortOrder + 1, false);
                         // Add room for the new position of the page
                         MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true);
-                    }
+                    }                    
+                    page.LastModified = DateTime.Now;
                 }
-
-                // Ensure that we have a slug
-                if (string.IsNullOrWhiteSpace(model.Slug)) {
-                    var prefix = "";
-
-                    // Check if we should generate hierarchical slugs
-                    using (var config = new Config(api)) {
-                        if (config.HierarchicalPageSlugs && page.ParentId.HasValue) {
-                            var parentSlug = db.Pages
-                                .AsNoTracking()
-                                .FirstOrDefault(p => p.Id == page.ParentId)?.Slug;
-
-                            if (!string.IsNullOrWhiteSpace(parentSlug)) {
-                                prefix = parentSlug + "/";
-                            }
-                        }
-                    }
-                    model.Slug = prefix + Utils.GenerateSlug(model.NavigationTitle != null ? model.NavigationTitle : model.Title);
-                } else model.Slug = Utils.GenerateSlug(model.Slug);
-
-                // Set content type
-                model.ContentType = type.ContentTypeId;
-
-                // Map basic fields
-                App.Mapper.Map<Models.PageBase, Page>(model, page);
-
-                // Map regions
-                foreach (var regionKey in currentRegions) {
-                    // Check that the region exists in the current model
-                    if (HasRegion(model, regionKey)) {
-                        var regionType = type.Regions.Single(r => r.Id == regionKey);
-
-                        if (!regionType.Collection) {
-                            MapRegion(model, page, GetRegion(model, regionKey), regionType, regionKey);
-                        } else {
-                            var items = new List<Guid>();
-                            var sortOrder = 0;
-                            foreach (var region in GetEnumerable(model, regionKey)) {
-                                var fields = MapRegion(model, page, region, regionType, regionKey, sortOrder++);
-
-                                if (fields.Count > 0)
-                                    items.AddRange(fields);
-                            }
-                            // Now delete removed collection items
-                            var removedFields = db.PageFields
-                                .Where(f => f.PageId == model.Id && f.RegionId == regionKey && !items.Contains(f.Id))
-                                .ToList();
-
-                            if (removedFields.Count > 0)
-                                db.PageFields.RemoveRange(removedFields);
-                        }
-                    }
-                }
+                page = contentService.Transform<T>(model, type, page);
 
                 db.SaveChanges();
 
                 if (cache != null)
                     RemoveFromCache(page);
-                ((SiteRepository)api.Sites).InvalidateSitemap(model.SiteId);                        
+                InvalidateSitemap(model.SiteId);
             }
         }
 
@@ -433,7 +451,7 @@ namespace Piranha.Repositories
                     var page = cache.Get<Page>(model.Id.ToString());
                     if (page != null)
                         RemoveFromCache(page);
-                    ((SiteRepository)api.Sites).InvalidateSitemap(model.SiteId);
+                    InvalidateSitemap(model.SiteId);
                 }   
             }
         }
@@ -503,6 +521,27 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Sorts the items.
+        /// </summary>
+        /// <param name="pages">The full page list</param>
+        /// <param name="parentId">The current parent id</param>
+        /// <returns>The sitemap</returns>
+        private Models.Sitemap Sort(IEnumerable<Page> pages, IEnumerable<Models.PageType> pageTypes, Guid? parentId = null, int level = 0) {
+            var result = new Models.Sitemap();
+
+            foreach (var page in pages.Where(p => p.ParentId == parentId).OrderBy(p => p.SortOrder)) {
+                var item = App.Mapper.Map<Page, Models.SitemapItem>(page);
+
+                item.Level = level;
+                item.PageTypeName = pageTypes.First(t => t.Id == page.PageTypeId).Title;
+                item.Items = Sort(pages, pageTypes, page.Id, level + 1);
+
+                result.Add(item);
+            }
+            return result;
+        }        
+
+        /// <summary>
         /// Adds the given model to cache.
         /// </summary>
         /// <param name="page">The page</param>
@@ -523,5 +562,15 @@ namespace Piranha.Repositories
             if (!page.ParentId.HasValue && page.SortOrder == 0)
                 cache.Remove($"Page_{page.SiteId}");
         }
+
+        /// <summary>
+        /// Removes the specified public sitemap from
+        /// the cache.
+        /// </summary>
+        /// <param name="id">The site id</param>
+        private void InvalidateSitemap(Guid id) {
+            if (cache != null)
+                cache.Remove($"Sitemap_{id}");
+        }        
     }
 }
