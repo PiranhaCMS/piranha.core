@@ -90,6 +90,13 @@ namespace Piranha.Extend
         public delegate void ModelDelegate<T>(T model);
 
         /// <summary>
+        /// Delegate for generating a slug.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public delegate string SlugDelegate(string str);
+
+        /// <summary>
         /// Gets the hooks available for aliases.
         /// </summary>
         public RepositoryHooks<Data.Alias> Alias { get; private set; }
@@ -123,6 +130,11 @@ namespace Piranha.Extend
         /// Gets the hooks available for tags.
         /// </summary>
         public RepositoryHooks<Data.Tag> Tag { get; private set; }
+
+        /// <summary>
+        /// Gets the hook for slug generation.
+        /// </summary>
+        public SlugDelegate OnGenerateSlug;
 
         /// <summary>
         /// Default constructor.

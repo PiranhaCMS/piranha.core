@@ -48,34 +48,39 @@ namespace Piranha
         /// <param name="str">The string</param>
         /// <returns>The slug</returns>
         public static string GenerateSlug(string str) {
-            // Trim & make lower case
-            var slug = str.Trim().ToLower();
+            if (App.Hooks != null && App.Hooks.OnGenerateSlug != null) {
+                // Call the registered slug generation
+                return App.Hooks.OnGenerateSlug(str);
+            } else {
+                // Trim & make lower case
+                var slug = str.Trim().ToLower();
 
-            // Remove whitespaces
-            slug = Regex.Replace(slug.Replace("-", " "), @"\s+", " ").Replace(" ", "-");
+                // Remove whitespaces
+                slug = Regex.Replace(slug.Replace("-", " "), @"\s+", " ").Replace(" ", "-");
 
-            // Convert culture specific characters
-            slug = slug
-                .Replace("å", "a")
-                .Replace("ä", "a")
-                .Replace("á", "a")
-                .Replace("à", "a")
-                .Replace("ö", "o")
-                .Replace("ó", "o")
-                .Replace("ò", "o")
-                .Replace("é", "e")
-                .Replace("è", "e")
-                .Replace("í", "i")
-                .Replace("ì", "i");
+                // Convert culture specific characters
+                slug = slug
+                    .Replace("å", "a")
+                    .Replace("ä", "a")
+                    .Replace("á", "a")
+                    .Replace("à", "a")
+                    .Replace("ö", "o")
+                    .Replace("ó", "o")
+                    .Replace("ò", "o")
+                    .Replace("é", "e")
+                    .Replace("è", "e")
+                    .Replace("í", "i")
+                    .Replace("ì", "i");
 
-            // Remove special characters
-            slug = Regex.Replace(slug, @"[^a-z0-9-/]", "");
+                // Remove special characters
+                slug = Regex.Replace(slug, @"[^a-z0-9-/]", "");
 
-            if (slug.EndsWith("-"))
-                slug = slug.Substring(0, slug.LastIndexOf("-"));
-            if (slug.StartsWith("-"))
-                slug = slug.Substring(Math.Min(slug.IndexOf("-") + 1, slug.Length));
-            return slug;
+                if (slug.EndsWith("-"))
+                    slug = slug.Substring(0, slug.LastIndexOf("-"));
+                if (slug.StartsWith("-"))
+                    slug = slug.Substring(Math.Min(slug.IndexOf("-") + 1, slug.Length));
+                return slug;
+            }
         }
 
         /// <summary>
