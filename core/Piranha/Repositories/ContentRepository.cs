@@ -100,7 +100,7 @@ namespace Piranha.Repositories
                         var fieldCount = content.Fields.Where(f => f.RegionId == regionKey).Select(f => f.SortOrder).DefaultIfEmpty(-1).Max() + 1;
                         var sortOrder = 0;
 
-                        do {
+                        while (fieldCount > sortOrder) {
                             if (region.Fields.Count == 1) {
                                 var field = fields.SingleOrDefault(f => f.FieldId == region.Fields[0].Id && f.SortOrder == sortOrder);
                                 if (field != null)
@@ -109,7 +109,7 @@ namespace Piranha.Repositories
                                 AddComplexValue(model, regionKey, fields.Where(f => f.SortOrder == sortOrder).ToList());
                             }
                             sortOrder++;
-                        } while (fieldCount > sortOrder);
+                        }
                     }
                 }
                 process?.Invoke(content, model);
