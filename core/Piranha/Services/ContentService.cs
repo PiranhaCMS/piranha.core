@@ -8,6 +8,7 @@
  * 
  */
 
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -185,68 +186,70 @@ namespace Piranha.Services
         public T Transform<T>(TContent content, Models.ContentType type, Action<TContent, T> process = null) 
             where T : Models.Content, TModelBase
         {
-            if (type != null) {
-                var modelType = typeof(T);
+            using (var scope = services.CreateScope()) {
+                if (type != null) {
+                    var modelType = typeof(T);
 
-                if (!typeof(Models.IDynamicModel).IsAssignableFrom(modelType)) {
-                    modelType = Type.GetType(type.CLRType);
+                    if (!typeof(Models.IDynamicModel).IsAssignableFrom(modelType)) {
+                        modelType = Type.GetType(type.CLRType);
 
-                    if (modelType != typeof(T) && !typeof(T).IsAssignableFrom(modelType))
-                        return null;
-                }
+                        if (modelType != typeof(T) && !typeof(T).IsAssignableFrom(modelType))
+                            return null;
+                    }
 
-                // Create an initialized model
-                var model = Create<T>(type);
-                var currentRegions = type.Regions.Select(r => r.Id).ToArray();
+                    // Create an initialized model
+                    var model = Create<T>(type);
+                    var currentRegions = type.Regions.Select(r => r.Id).ToArray();
 
-                // Map basic fields
-                App.Mapper.Map<TContent, TModelBase>(content, model);
+                    // Map basic fields
+                    App.Mapper.Map<TContent, TModelBase>(content, model);
 
-                if (model is Models.RoutedContent) {
-                    var routeModel = (Models.RoutedContent)(object)model;
+                    if (model is Models.RoutedContent) {
+                        var routeModel = (Models.RoutedContent)(object)model;
 
-                    // Map route (if available)
-                    if (string.IsNullOrWhiteSpace(routeModel.Route) && type.Routes.Count > 0)
-                        routeModel.Route = type.Routes.First();
-                }
+                        // Map route (if available)
+                        if (string.IsNullOrWhiteSpace(routeModel.Route) && type.Routes.Count > 0)
+                            routeModel.Route = type.Routes.First();
+                    }
 
-                // Map regions
-                foreach (var regionKey in currentRegions) {
-                    var region = type.Regions.Single(r => r.Id == regionKey);
-                    var fields = content.Fields.Where(f => f.RegionId == regionKey).OrderBy(f => f.SortOrder).ToList();
+                    // Map regions
+                    foreach (var regionKey in currentRegions) {
+                        var region = type.Regions.Single(r => r.Id == regionKey);
+                        var fields = content.Fields.Where(f => f.RegionId == regionKey).OrderBy(f => f.SortOrder).ToList();
 
-                    if (!region.Collection) {
-                        foreach (var fieldDef in region.Fields) {
-                            var field = fields.SingleOrDefault(f => f.FieldId == fieldDef.Id && f.SortOrder == 0);
+                        if (!region.Collection) {
+                            foreach (var fieldDef in region.Fields) {
+                                var field = fields.SingleOrDefault(f => f.FieldId == fieldDef.Id && f.SortOrder == 0);
 
-                            if (field != null) {
-                                if (region.Fields.Count == 1) {
-                                    SetSimpleValue(model, regionKey, field);
-                                    break;
-                                } else {
-                                    SetComplexValue(model, regionKey, fieldDef.Id, field);
+                                if (field != null) {
+                                    if (region.Fields.Count == 1) {
+                                        SetSimpleValue(scope, model, regionKey, field);
+                                        break;
+                                    } else {
+                                        SetComplexValue(scope, model, regionKey, fieldDef.Id, field);
+                                    }
                                 }
                             }
-                        }
-                    } else {
-                        var fieldCount = content.Fields.Where(f => f.RegionId == regionKey).Select(f => f.SortOrder).DefaultIfEmpty(-1).Max() + 1;
-                        var sortOrder = 0;
+                        } else {
+                            var fieldCount = content.Fields.Where(f => f.RegionId == regionKey).Select(f => f.SortOrder).DefaultIfEmpty(-1).Max() + 1;
+                            var sortOrder = 0;
 
-                        while (fieldCount > sortOrder) {
-                            if (region.Fields.Count == 1) {
-                                var field = fields.SingleOrDefault(f => f.FieldId == region.Fields[0].Id && f.SortOrder == sortOrder);
-                                if (field != null)
-                                    AddSimpleValue(model, regionKey, field);
-                            } else {
-                                AddComplexValue(model, type, regionKey, fields.Where(f => f.SortOrder == sortOrder).ToList());
+                            while (fieldCount > sortOrder) {
+                                if (region.Fields.Count == 1) {
+                                    var field = fields.SingleOrDefault(f => f.FieldId == region.Fields[0].Id && f.SortOrder == sortOrder);
+                                    if (field != null)
+                                        AddSimpleValue(scope, model, regionKey, field);
+                                } else {
+                                    AddComplexValue(scope, model, type, regionKey, fields.Where(f => f.SortOrder == sortOrder).ToList());
+                                }
+                                sortOrder++;
                             }
-                            sortOrder++;
                         }
                     }
-                }
-                process?.Invoke(content, model);
+                    process?.Invoke(content, model);
 
-                return model;
+                    return model;
+                }
             }
             return null;
         }
@@ -375,13 +378,13 @@ namespace Piranha.Services
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <param name="field">The field</param>
-        private void SetSimpleValue<T>(T model, string regionId, TField field) where T : Models.Content {
+        private void SetSimpleValue<T>(IServiceScope scope, T model, string regionId, TField field) where T : Models.Content {
             if (model is Models.IDynamicModel) {
                 ((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId] =
-                    DeserializeValue(field);
+                    DeserializeValue(scope, field);
             } else {
                 model.GetType().GetProperty(regionId, App.PropertyBindings).SetValue(model,
-                    DeserializeValue(field));
+                    DeserializeValue(scope, field));
             }
         }
 
@@ -392,13 +395,13 @@ namespace Piranha.Services
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <param name="field">The field</param>
-        private void AddSimpleValue<T>(T model, string regionId, TField field) where T : Models.Content {
+        private void AddSimpleValue<T>(IServiceScope scope, T model, string regionId, TField field) where T : Models.Content {
             if (model is Models.IDynamicModel) {
                 ((IList)((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId]).Add(
-                    DeserializeValue(field));
+                    DeserializeValue(scope, field));
             } else {
                 ((IList)model.GetType().GetProperty(regionId, App.PropertyBindings).GetValue(model)).Add(
-                    DeserializeValue(field));
+                    DeserializeValue(scope, field));
             }
         }
         
@@ -410,15 +413,15 @@ namespace Piranha.Services
         /// <param name="regionId">The region id</param>
         /// <param name="fieldId">The field id</param>
         /// <param name="field">The field</param>
-        private void SetComplexValue<T>(T model, string regionId, string fieldId, TField field) where T : Models.Content {
+        private void SetComplexValue<T>(IServiceScope scope, T model, string regionId, string fieldId, TField field) where T : Models.Content {
             if (model is Models.IDynamicModel) {
                 ((IDictionary<string, object>)((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId])[fieldId] =
-                    DeserializeValue(field);
+                    DeserializeValue(scope, field);
             } else {
                 var obj = model.GetType().GetProperty(regionId, App.PropertyBindings).GetValue(model);
                 if (obj != null)
                     obj.GetType().GetProperty(fieldId, App.PropertyBindings).SetValue(obj,
-                        DeserializeValue(field));
+                        DeserializeValue(scope, field));
             }
         }
 
@@ -429,7 +432,7 @@ namespace Piranha.Services
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <param name="fields">The field</param>
-        private void AddComplexValue<T>(T model, Models.ContentType contentType, string regionId, IList<TField> fields) where T : Models.Content {
+        private void AddComplexValue<T>(IServiceScope scope, T model, Models.ContentType contentType, string regionId, IList<TField> fields) where T : Models.Content {
             if (fields.Count > 0) {
                 if (model is Models.IDynamicModel) {
                     var list = (IList)((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId];
@@ -438,7 +441,7 @@ namespace Piranha.Services
                     foreach (var field in fields) {
                         if (((IDictionary<string, object>)obj).ContainsKey(field.FieldId)) {
                             ((IDictionary<string, object>)obj)[field.FieldId] =
-                                DeserializeValue(field);
+                                DeserializeValue(scope, field);
                         }
                     }
                     list.Add(obj);
@@ -450,7 +453,7 @@ namespace Piranha.Services
                     foreach (var field in fields) {
                         var prop = obj.GetType().GetProperty(field.FieldId, App.PropertyBindings);
                         if (prop != null) {
-                            prop.SetValue(obj, DeserializeValue(field));
+                            prop.SetValue(obj, DeserializeValue(scope, field));
                         }
                     }
                     list.Add(obj);
@@ -463,7 +466,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="field">The page field</param>
         /// <returns>The value</returns>
-        private object DeserializeValue(TField field) {
+        private object DeserializeValue(IServiceScope scope, TField field) {
             var type = App.Fields.GetByType(field.CLRType);
 
             if (type != null) {
@@ -475,7 +478,7 @@ namespace Piranha.Services
                         var param = new List<object>();
 
                         foreach (var p in init.GetParameters()) {
-                            param.Add(services.GetService(p.ParameterType));
+                            param.Add(scope.ServiceProvider.GetService(p.ParameterType));
                         }
                         init.Invoke(val, param.ToArray());
                     }
