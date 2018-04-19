@@ -97,7 +97,7 @@ namespace Piranha.Repositories
                             }
                         }
                     } else {
-                        var fieldCount = content.Fields.Count(f => f.RegionId == regionKey && f.FieldId == region.Fields[0].Id);
+                        var fieldCount = content.Fields.Where(f => f.RegionId == regionKey).Select(f => f.SortOrder).Max() + 1;
                         var sortOrder = 0;
 
                         do {
