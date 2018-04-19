@@ -32,12 +32,12 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the maximum number of items if this is a collection.
         /// </summary>
-        public int Max { get; set; }
+        //public int Max { get; set; }
 
         /// <summary>
         /// Gets/sets the minimum number of items if this is a collection.
         /// </summary>
-        public int Min { get; set; }
+        //public int Min { get; set; }
 
         /// <summary>
         /// Gets/sets the field that should be used to render list item title.

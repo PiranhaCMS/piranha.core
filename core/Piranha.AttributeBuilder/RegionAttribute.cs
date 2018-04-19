@@ -47,16 +47,6 @@ namespace Piranha.AttributeBuilder
         public int SortOrder { get; set; }
 
         /// <summary>
-        /// Gets/sets the maximum number of items if this is a collection.
-        /// </summary>
-        public int Max { get; set; }
-
-        /// <summary>
-        /// Gets/sets the minimum number of items if this is a collection.
-        /// </summary>
-        public int Min { get; set; }
-
-        /// <summary>
         /// Default constructor.
         /// </summary>
         public RegionAttribute() {

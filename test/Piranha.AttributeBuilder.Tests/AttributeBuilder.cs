@@ -42,7 +42,7 @@ namespace Piranha.AttributeBuilder.Tests
                 public Extend.Fields.TextField Body { get; set; }
             }
 
-            [Region(Title = "Intro", Min = 3, Max = 6)]
+            [Region(Title = "Intro")]
             public IList<Extend.Fields.TextField> Slider { get; set; }
 
             [Region(Title = "Main content")]
