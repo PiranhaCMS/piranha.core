@@ -28,7 +28,7 @@ namespace Piranha.Tests
         [FieldType(Name = "Third")]
         public class MyThirdField : Extend.Fields.SimpleField<string> { }
 
-        private FieldInfoList fields = new FieldInfoList();
+        private AppFieldList fields = new AppFieldList();
 
         /// <summary>
         /// Sets up & initializes the tests.
