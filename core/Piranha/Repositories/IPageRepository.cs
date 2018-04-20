@@ -16,6 +16,12 @@ namespace Piranha.Repositories
     public interface IPageRepository
     {
         /// <summary>
+        /// Creates and initializes a new page of the specified type.
+        /// </summary>
+        /// <returns>The created page</returns>
+        T Create<T>(string typeId = null) where T : Models.PageBase;
+
+        /// <summary>
         /// Gets all of the available pages for the current site.
         /// </summary>
         /// <param name="siteId">The optional site id</param>

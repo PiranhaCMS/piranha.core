@@ -44,54 +44,56 @@ namespace Piranha.Services
         /// <param name="typeId">The content type id</param>
         /// <returns>The model</returns>
         public T Create<T>(Models.ContentType contentType) where T : Models.Content {
-            if (contentType != null) {
-                var modelType = typeof(T);
+            using (var scope = services.CreateScope()) {
+                if (contentType != null) {
+                    var modelType = typeof(T);
 
-                if (!typeof(Models.IDynamicModel).IsAssignableFrom(modelType)) {
-                    modelType = Type.GetType(contentType.CLRType);
+                    if (!typeof(Models.IDynamicModel).IsAssignableFrom(modelType)) {
+                        modelType = Type.GetType(contentType.CLRType);
 
-                    if (modelType != typeof(T) && !typeof(T).IsAssignableFrom(modelType))
-                        return null;
-                }
-
-                var model = (T)Activator.CreateInstance(modelType);
-                model.TypeId = contentType.Id;
-
-                if (model is IDynamicModel) {
-                    var dynModel = (IDynamicModel)(object)model;
-
-                    foreach (var region in contentType.Regions) {
-                        object value = null;
-
-                        if (region.Collection) {
-                            var reg = CreateDynamicRegion(region);
-
-                            if (reg != null) {
-                                value = Activator.CreateInstance(typeof(RegionList<>).MakeGenericType(reg.GetType()));
-                                ((IRegionList)value).Model = (IDynamicModel)model;
-                                ((IRegionList)value).TypeId = contentType.Id;
-                                ((IRegionList)value).RegionId = region.Id;
-                            }
-                        } else {
-                            value = CreateDynamicRegion(region);
-                        }
-
-                        if (value != null)
-                            ((IDictionary<string, object>)dynModel.Regions).Add(region.Id, value);
+                        if (modelType != typeof(T) && !typeof(T).IsAssignableFrom(modelType))
+                            return null;
                     }
-                } else {
-                    var type = model.GetType();
 
-                    foreach (var region in contentType.Regions) {
-                        if (!region.Collection) {
-                            var prop = type.GetProperty(region.Id, App.PropertyBindings);
-                            if (prop != null) {
-                                prop.SetValue(model, CreateRegion(prop.PropertyType, region));
+                    var model = (T)Activator.CreateInstance(modelType);
+                    model.TypeId = contentType.Id;
+
+                    if (model is IDynamicModel) {
+                        var dynModel = (IDynamicModel)(object)model;
+
+                        foreach (var region in contentType.Regions) {
+                            object value = null;
+
+                            if (region.Collection) {
+                                var reg = CreateDynamicRegion(scope, region);
+
+                                if (reg != null) {
+                                    value = Activator.CreateInstance(typeof(RegionList<>).MakeGenericType(reg.GetType()));
+                                    ((IRegionList)value).Model = (IDynamicModel)model;
+                                    ((IRegionList)value).TypeId = contentType.Id;
+                                    ((IRegionList)value).RegionId = region.Id;
+                                }
+                            } else {
+                                value = CreateDynamicRegion(scope, region);
+                            }
+
+                            if (value != null)
+                                ((IDictionary<string, object>)dynModel.Regions).Add(region.Id, value);
+                        }
+                    } else {
+                        var type = model.GetType();
+
+                        foreach (var region in contentType.Regions) {
+                            if (!region.Collection) {
+                                var prop = type.GetProperty(region.Id, App.PropertyBindings);
+                                if (prop != null) {
+                                    prop.SetValue(model, CreateRegion(scope, prop.PropertyType, region));
+                                }
                             }
                         }
                     }
+                    return model;
                 }
-                return model;
             }
             return null;
         }
@@ -103,11 +105,13 @@ namespace Piranha.Services
         /// <param name="regionId">The region id</param>
         /// <returns>The new region value</returns>
         public object CreateDynamicRegion(Models.ContentType contentType, string regionId) {
-            var region = contentType.Regions.SingleOrDefault(r => r.Id == regionId);
+            using (var scope = services.CreateScope()) {
+                var region = contentType.Regions.SingleOrDefault(r => r.Id == regionId);
 
-            if (region != null)
-                return CreateDynamicRegion(region);
-            return null;
+                if (region != null)
+                    return CreateDynamicRegion(scope, region);
+                return null;
+            }
         }
 
         /// <summary>
@@ -118,11 +122,13 @@ namespace Piranha.Services
         /// <param name="regionId">The region id</param>
         /// <returns>The region value</returns>
         public TValue CreateRegion<TValue>(Models.ContentType contentType, string regionId) {
-            var region = contentType.Regions.SingleOrDefault(r => r.Id == regionId);
+            using (var scope = services.CreateScope()) {
+                var region = contentType.Regions.SingleOrDefault(r => r.Id == regionId);
 
-            if (region != null)
-                return (TValue)CreateRegion(typeof(TValue), region);
-            return default(TValue);
+                if (region != null)
+                    return (TValue)CreateRegion(scope, typeof(TValue), region);
+                return default(TValue);
+            }
         }
         
 
@@ -507,14 +513,14 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="region">The region type</param>
         /// <returns>The created value</returns>
-        private object CreateDynamicRegion(RegionType region) {
+        private object CreateDynamicRegion(IServiceScope scope, RegionType region) {
             if (region.Fields.Count == 1) {
                 var type = App.Fields.GetByShorthand(region.Fields[0].Type);
                 if (type == null)
                     type = App.Fields.GetByType(region.Fields[0].Type);
 
                 if (type != null)
-                    return Activator.CreateInstance(type.Type);
+                    return InitField(scope, Activator.CreateInstance(type.Type));
             } else {
                 var reg = new ExpandoObject();
 
@@ -522,7 +528,7 @@ namespace Piranha.Services
                     var type = GetFieldType(field);
 
                     if (type != null)
-                        ((IDictionary<string, object>)reg).Add(field.Id, Activator.CreateInstance(type.Type));
+                        ((IDictionary<string, object>)reg).Add(field.Id, InitField(scope, Activator.CreateInstance(type.Type)));
                 }
                 return reg;
             }
@@ -535,9 +541,9 @@ namespace Piranha.Services
         /// <param name="regionType">The region type</param>
         /// <param name="region">The region</param>
         /// <returns>The created value</returns>
-        private object CreateRegion(Type regionType, RegionType region) {
+        private object CreateRegion(IServiceScope scope, Type regionType, RegionType region) {
             if (region.Fields.Count == 1) {
-                return CreateField(region.Fields[0], regionType);
+                return CreateField(scope, region.Fields[0], regionType);
             } else {
                 var reg = Activator.CreateInstance(regionType);
                 var type = reg.GetType();
@@ -549,7 +555,7 @@ namespace Piranha.Services
                         var prop = type.GetProperty(field.Id, App.PropertyBindings);
 
                         if (prop != null && fieldType.Type == prop.PropertyType) {
-                            prop.SetValue(reg, Activator.CreateInstance(fieldType.Type));
+                            prop.SetValue(reg, InitField(scope, Activator.CreateInstance(fieldType.Type)));
                         }
                     }
                 }
@@ -575,12 +581,27 @@ namespace Piranha.Services
         /// <param name="field">The field type</param>
         /// <param name="expectedType">The expected type</param>
         /// <returns></returns>
-        private object CreateField(FieldType field, Type expectedType = null) {
+        private object CreateField(IServiceScope scope, FieldType field, Type expectedType = null) {
             var type = GetFieldType(field);
 
-            if (type != null && (expectedType == null || type.Type == expectedType))
-                return Activator.CreateInstance(type.Type);
+            if (type != null && (expectedType == null || type.Type == expectedType)) {
+                return InitField(scope, Activator.CreateInstance(type.Type));
+            }
             return null;
-        }        
+        }
+
+        private object InitField(IServiceScope scope, object field) {
+            var init = field.GetType().GetMethod("Init");
+
+            if (init != null) {
+                var param = new List<object>();
+
+                foreach (var p in init.GetParameters()) {
+                    param.Add(scope.ServiceProvider.GetService(p.ParameterType));
+                }
+                init.Invoke(field, param.ToArray());
+            }
+            return field;
+        }
     }
 }

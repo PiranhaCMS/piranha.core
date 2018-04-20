@@ -8,6 +8,8 @@
  * 
  */
 
+using Piranha.Services;
+
 namespace Piranha.Models
 {
     /// <summary>
@@ -32,12 +34,7 @@ namespace Piranha.Models
         /// <param name="typeId">The unique page type id</param>
         /// <returns>The new model</returns>
         public static T Create(IApi api, string typeId = null) {
-            if (string.IsNullOrWhiteSpace(typeId))
-                typeId = typeof(T).Name;
-
-            using (var factory = new ContentFactory(api.PageTypes.GetAll())) {
-                return factory.Create<T>(typeId);
-            }
+            return api.Pages.Create<T>(typeId);
         }
 
         /// <summary>

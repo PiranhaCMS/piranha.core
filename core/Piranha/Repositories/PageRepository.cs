@@ -42,6 +42,17 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Creates and initializes a new page of the specified type.
+        /// </summary>
+        /// <returns>The created page</returns>
+        public T Create<T>(string typeId = null) where T : Models.PageBase {
+            if (string.IsNullOrWhiteSpace(typeId))
+                typeId = typeof(T).Name;
+
+            return contentService.Create<T>(api.PageTypes.GetById(typeId));
+        }        
+
+        /// <summary>
         /// Gets all of the available pages for the current site.
         /// </summary>
         /// <param name="siteId">The optional site id</param>

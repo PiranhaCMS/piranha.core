@@ -8,6 +8,7 @@
  * 
  */
 
+using Microsoft.Extensions.DependencyInjection;
 using Piranha.AttributeBuilder;
 using Piranha.Extend.Fields;
 using Piranha.Services;
@@ -31,15 +32,33 @@ namespace Piranha.Tests.Repositories
     [Collection("Integration tests")]
     public class Posts : BaseTests
     {
-        #region Members
         private Guid SITE_ID = Guid.NewGuid();
         private Guid BLOG_ID = Guid.NewGuid();
-        public Guid CAT_1_ID = Guid.NewGuid();
-        public Guid POST_1_ID = Guid.NewGuid();
-        public Guid POST_2_ID = Guid.NewGuid();
-        public Guid POST_3_ID = Guid.NewGuid();
+        private Guid CAT_1_ID = Guid.NewGuid();
+        private Guid POST_1_ID = Guid.NewGuid();
+        private Guid POST_2_ID = Guid.NewGuid();
+        private Guid POST_3_ID = Guid.NewGuid();
+        private Guid POST_DI_ID = Guid.NewGuid();
         protected ICache cache;
-        #endregion
+
+        public interface IMyService {
+            string Value { get; }
+        }
+
+        public class MyService : IMyService {
+            public string Value { get; private set; }
+
+            public MyService() {
+                Value = "My service value";
+            }
+        }        
+
+        [Piranha.Extend.FieldType(Name = "Fourth")]
+        public class MyFourthField : Extend.Fields.SimpleField<string> {
+            public void Init(IMyService myService) {
+                Value = myService.Value;
+            }
+        }        
 
         [PageType(Title = "Blog page")]
         public class BlogPage : Models.Page<BlogPage> { }        
@@ -73,9 +92,22 @@ namespace Piranha.Tests.Repositories
             }
         }
 
+        [PostType(Title = "Injection PostType")]
+        public class MyDIPost : Models.Post<MyDIPost>
+        {
+            [Region]
+            public MyFourthField Body { get; set; }
+        }        
+
         protected override void Init() {
+            services = new ServiceCollection()
+                .AddSingleton<IMyService, MyService>()
+                .BuildServiceProvider();
+
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 Piranha.App.Init(api);
+
+                Piranha.App.Fields.Register<MyFourthField>();                
 
                 var pageTypeBuilder = new PageTypeBuilder(api)
                     .AddType(typeof(BlogPage));
@@ -83,7 +115,8 @@ namespace Piranha.Tests.Repositories
                 var postTypeBuilder = new PostTypeBuilder(api)
                     .AddType(typeof(MissingPost))
                     .AddType(typeof(MyPost))
-                    .AddType(typeof(MyCollectionPost));
+                    .AddType(typeof(MyCollectionPost))
+                    .AddType(typeof(MyDIPost));
                 postTypeBuilder.Build();
 
                 // Add site
@@ -150,6 +183,13 @@ namespace Piranha.Tests.Repositories
                     Value = "Third text"
                 });
                 api.Posts.Save(post4);
+
+                var post6 = MyDIPost.Create(api);
+                post6.Id = POST_DI_ID;
+                post6.BlogId = BLOG_ID;
+                post6.Category = category;
+                post6.Title = "My Injection Post";
+                api.Posts.Save(post6);                
             }
         }
 
@@ -588,5 +628,47 @@ namespace Piranha.Tests.Repositories
                 Assert.Equal(count - 1, api.Posts.GetAll(BLOG_ID).Count());
             }
         }
+
+        [Fact]
+        public void GetDIGeneric() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var post = api.Posts.GetById<MyDIPost>(POST_DI_ID);
+
+                Assert.NotNull(post);
+                Assert.Equal("My service value", post.Body.Value);
+            }            
+        }
+
+        [Fact]
+        public void GetDIDynamic() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var post = api.Posts.GetById(POST_DI_ID);
+
+                Assert.NotNull(post);
+                Assert.Equal("My service value", post.Regions.Body.Value);
+            }            
+        }
+
+        /*
+        [Fact]
+        public void CreateDIGeneric() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var post = MyDIPost.Create(api);
+
+                Assert.NotNull(post);
+                Assert.Equal("My service value", post.Body.Value);
+            }            
+        }
+
+        [Fact]
+        public void CreateDIDynamic() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var post = Models.DynamicPost.Create(api, nameof(MyDIPost));
+
+                Assert.NotNull(post);
+                Assert.Equal("My service value", post.Regions.Body.Value);
+            }            
+        }
+        */
     }
 }

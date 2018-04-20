@@ -723,5 +723,25 @@ namespace Piranha.Tests.Repositories
                 Assert.Equal("My service value", page.Regions.Body.Value);
             }            
         }
+
+        [Fact]
+        public void CreateDIGeneric() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var page = MyDIPage.Create(api);
+
+                Assert.NotNull(page);
+                Assert.Equal("My service value", page.Body.Value);
+            }            
+        }
+
+        [Fact]
+        public void CreateDIDynamic() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var page = Models.DynamicPage.Create(api, nameof(MyDIPage));
+
+                Assert.NotNull(page);
+                Assert.Equal("My service value", page.Regions.Body.Value);
+            }            
+        }
     }
 }
