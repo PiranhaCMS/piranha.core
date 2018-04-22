@@ -1,0 +1,10 @@
+@model Piranha.Extend.Blocks.HtmlBlock
+@{
+    var prefix = Html.ViewData.TemplateInfo.HtmlFieldPrefix
+        .Replace("[", "_").Replace("]", "_").Replace(".", "_");    
+}
+
+@Html.HiddenFor(m => m.Body.Value)
+<div class="block-editor content-preview editor-area" data-id="@(prefix)_Body_Value">
+    @Html.Raw(Model.Body.Value)
+</div>

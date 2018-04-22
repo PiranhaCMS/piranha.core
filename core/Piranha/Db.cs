@@ -34,6 +34,16 @@ namespace Piranha
         public DbSet<Data.Alias> Aliases { get; set; }
 
         /// <summary>
+        /// Gets/sets the block set.
+        /// </summary>
+        public DbSet<Data.Block> Blocks { get; set; }
+
+        /// <summary>
+        /// Gets/sets the block field set.
+        /// </summary>
+        public DbSet<Data.BlockField> BlockFields { get; set; }
+
+        /// <summary>
         /// Gets/sets the category set.
         /// </summary>
         public DbSet<Data.Category> Categories { get; set; }
@@ -57,6 +67,11 @@ namespace Piranha
         /// Gets/sets the page set.
         /// </summary>
         public DbSet<Data.Page> Pages { get; set; }
+
+        /// <summary>
+        /// Gets/sets the page block set.
+        /// </summary>
+        public DbSet<Data.PageBlock> PageBlocks { get; set; }
 
         /// <summary>
         /// Gets/sets the page field set.
@@ -132,6 +147,15 @@ namespace Piranha
             mb.Entity<Data.Alias>().Property(a => a.RedirectUrl).IsRequired().HasMaxLength(256);
             mb.Entity<Data.Alias>().HasIndex(a => new { a.SiteId, a.AliasUrl }).IsUnique();
 
+            mb.Entity<Data.Block>().ToTable("Piranha_Blocks");
+            mb.Entity<Data.Block>().Property(b => b.CLRType).IsRequired().HasMaxLength(256);
+            mb.Entity<Data.Block>().Property(b => b.Title).HasMaxLength(128);
+
+            mb.Entity<Data.BlockField>().ToTable("Piranha_BlockFields");
+            mb.Entity<Data.BlockField>().Property(f => f.FieldId).IsRequired().HasMaxLength(64);
+            mb.Entity<Data.BlockField>().Property(f => f.CLRType).IsRequired().HasMaxLength(256);
+            mb.Entity<Data.BlockField>().HasIndex(f => new { f.BlockId, f.FieldId, f.SortOrder }).IsUnique();
+
             mb.Entity<Data.Category>().ToTable("Piranha_Categories");
             mb.Entity<Data.Category>().Property(c => c.Title).IsRequired().HasMaxLength(64);
             mb.Entity<Data.Category>().Property(c => c.Slug).IsRequired().HasMaxLength(64);
@@ -158,6 +182,9 @@ namespace Piranha
             mb.Entity<Data.Page>().Property(p => p.Route).HasMaxLength(256);
             mb.Entity<Data.Page>().Property(p => p.RedirectUrl).HasMaxLength(256);
             mb.Entity<Data.Page>().HasIndex(p => new { p.SiteId, p.Slug }).IsUnique();
+
+            mb.Entity<Data.PageBlock>().ToTable("Piranha_PageBlocks");
+            mb.Entity<Data.PageBlock>().HasIndex(b => new { b.PageId, b.SortOrder }).IsUnique();
 
             mb.Entity<Data.PageField>().ToTable("Piranha_PageFields");
             mb.Entity<Data.PageField>().Property(f => f.RegionId).HasMaxLength(64).IsRequired();

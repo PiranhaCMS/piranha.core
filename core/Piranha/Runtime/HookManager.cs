@@ -12,7 +12,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Piranha.Extend
+namespace Piranha.Runtime
 {
     public sealed class HookManager
     {

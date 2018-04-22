@@ -8,7 +8,9 @@
  * 
  */
 
+using Piranha.Areas.Manager.Services;
 using Piranha.Manager;
+using Piranha.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,12 +23,19 @@ namespace Piranha.Areas.Manager.Controllers
     public class PageController : ManagerAreaControllerBase
     {
         private const string COOKIE_SELECTEDSITE = "PiranhaManager_SelectedSite";
+        private readonly PageEditService editService;
+        private readonly IContentService<Data.Page, Data.PageField, Piranha.Models.PageBase> contentService;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public PageController(IApi api) : base(api) { }
+        /// <param name="editService">The current page edit service</param>
+        /// <param name="factory">The content service factory</param>
+        public PageController(IApi api, PageEditService editService, IContentServiceFactory factory) : base(api) { 
+            this.editService = editService;
+            this.contentService = factory.CreatePageService();
+        }
 
         /// <summary>
         /// Gets the list view for the pages.
@@ -68,7 +77,7 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/page/{id:Guid}")]
         [Authorize(Policy = Permission.PagesEdit)]
         public IActionResult Edit(Guid id) {
-            return View(Models.PageEditModel.GetById(api, id));
+            return View(editService.GetById(id));
         }
 
         /// <summary>
@@ -80,7 +89,7 @@ namespace Piranha.Areas.Manager.Controllers
         [Authorize(Policy = Permission.PagesAdd)]
         public IActionResult Add(string type, Guid? siteId = null) {
             var sitemap = api.Sites.GetSitemap(siteId, onlyPublished: false);
-            var model = Models.PageEditModel.Create(api, type, siteId);
+            var model = editService.Create(type, siteId);
             model.SortOrder = sitemap.Count;
 
             return View("Edit", model);
@@ -95,7 +104,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="siteId">The optional site id</param>
         [Route("manager/page/add/{type}/{sortOrder:int}/{parentId:Guid?}/{siteId:Guid?}")]
         public IActionResult AddAt(string type, int sortOrder, Guid? parentId = null, Guid? siteId = null) {
-            var model = Models.PageEditModel.Create(api, type, siteId);
+            var model = editService.Create(type, siteId);
 
             model.ParentId = parentId;
             model.SortOrder = sortOrder;
@@ -114,10 +123,10 @@ namespace Piranha.Areas.Manager.Controllers
             // Validate
             if (string.IsNullOrWhiteSpace(model.Title)) {
                 ErrorMessage("The page could not be saved. Title is mandatory", false);
-                return View("Edit", model.Refresh(api));                
+                return View("Edit", editService.Refresh(model));                
             }
 
-            var ret = model.Save(api, out var alias);
+            var ret = editService.Save(model, out var alias);
 
             // Save
             if (ret) {
@@ -128,7 +137,7 @@ namespace Piranha.Areas.Manager.Controllers
                 return RedirectToAction("Edit", new { id = model.Id });
             } else {
                 ErrorMessage("The page could not be saved.", false);
-                return View("Edit", model.Refresh(api));
+                return View("Edit", editService.Refresh(model));
             }
         }
 
@@ -143,11 +152,11 @@ namespace Piranha.Areas.Manager.Controllers
             // Validate
             if (string.IsNullOrWhiteSpace(model.Title)) {
                 ErrorMessage("The page could not be saved. Title is mandatory", false);
-                return View("Edit", model.Refresh(api));                
+                return View("Edit", editService.Refresh(model));
             }
 
             // Save
-            if (model.Save(api, out var alias, true)) {
+            if (editService.Save(model, out var alias, true)) {
                 SuccessMessage("The page has been published.");
                 return RedirectToAction("Edit", new { id = model.Id });
             } else {
@@ -164,7 +173,7 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/page/unpublish")]
         [Authorize(Policy = Permission.PagesPublish)]
         public IActionResult UnPublish(Models.PageEditModel model) {
-            if (model.Save(api, out var alias, false)) {
+            if (editService.Save(model, out var alias, false)) {
                 SuccessMessage("The page has been unpublished.");
                 return RedirectToAction("Edit", new { id = model.Id });
             } else {
@@ -223,12 +232,29 @@ namespace Piranha.Areas.Manager.Controllers
                     var region = Piranha.Models.DynamicPage.CreateRegion(api,
                         model.PageTypeId, model.RegionTypeId);
 
-                    var editModel = (Models.PageEditRegionCollection)Models.PageEditModel.CreateRegion(regionType, 
+                    var editModel = (Models.PageEditRegionCollection)editService.CreateRegion(regionType, 
                         new List<object>() { region});
 
                     ViewData.TemplateInfo.HtmlFieldPrefix = $"Regions[{model.RegionIndex}].FieldSets[{model.ItemIndex}]";
                     return View("EditorTemplates/PageEditRegionItem", editModel.FieldSets[0]);
                 }
+            }
+            return new NotFoundResult();
+        }
+
+        /// <summary>
+        /// Adds a new block to the page.
+        /// </summary>
+        /// <param name="model">The model</param>
+        [HttpPost]
+        [Route("manager/page/block")]
+        [Authorize(Policy = Permission.Pages)]        
+        public IActionResult AddBlock([FromBody]Models.PageBlockModel model) {
+            var block = contentService.CreateBlock(model.TypeName);
+
+            if (block != null) {
+                ViewData.TemplateInfo.HtmlFieldPrefix = $"Blocks[{model.BlockIndex}]";
+                return View("EditorTemplates/PageEditBlock", block);
             }
             return new NotFoundResult();
         }

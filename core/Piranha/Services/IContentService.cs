@@ -44,6 +44,8 @@ namespace Piranha.Services
         /// <returns>The region value</returns>
         T CreateRegion<T>(Models.ContentType contentType, string regionId);
 
+        object CreateBlock(string typeName);
+
         /// <summary>
         /// Transforms the given data into a new model.
         /// </summary>
@@ -62,6 +64,20 @@ namespace Piranha.Services
         /// <param name="dest">The optional dest object</param>
         /// <returns>The content data</returns>
         TContent Transform<T>(T model, Models.ContentType type, TContent dest = null)
-            where T : Models.Content, TModelBase;            
+            where T : Models.Content, TModelBase;
+
+        /// <summary>
+        /// Transforms the given block data into block models.
+        /// </summary>
+        /// <param name="blocks">The data</param>
+        /// <returns>The transformed blocks</returns>
+        IList<Extend.Block> TransformBlocks(IEnumerable<Data.Block> blocks);
+
+        /// <summary>
+        /// Transforms the given blocks to the internal data model.
+        /// </summary>
+        /// <param name="models">The blocks</param>
+        /// <returns>The data model</returns>
+        IList<Data.Block> TransformBlocks(IList<Extend.Block> models);
     }
 }

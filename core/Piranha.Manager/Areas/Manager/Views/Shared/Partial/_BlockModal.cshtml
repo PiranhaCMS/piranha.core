@@ -1,0 +1,28 @@
+<div id="modalBlock" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Create Block</h4>
+            </div>
+            <div class="modal-body">
+                @foreach (var category in Piranha.App.Blocks.GetCategories()) {
+                    <h2>@category</h2>
+                    <div class="row">
+                        @foreach (var block in Piranha.App.Blocks.GetByCategory(category)) {
+                            <div class="col-xs-3">
+                                @if (!string.IsNullOrWhiteSpace(block.Icon)) {
+                                    <span class="@block.Icon"></span>
+                                }
+                                @block.Name
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

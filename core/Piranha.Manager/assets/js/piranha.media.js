@@ -50,8 +50,15 @@ piranha.media = new function() {
             if (self.mediaId)
                 $('#' + self.mediaId).val(e.data('id'));
             $('#' + self.mediaName).text(e.data('name'));
-            if (self.mediaUrlId)
-                $('#' + self.mediaUrlId).val(e.data('url'));
+            if (self.mediaUrlId) {
+                var mediaUrlCtrl = $('#' + self.mediaUrlId);
+
+                if (mediaUrlCtrl.prop('tagName') == 'IMG') {
+                    mediaUrlCtrl.attr('src', e.data('url'));
+                } else {
+                    mediaUrlCtrl.val(e.data('url'));
+                }
+            }
             $('#' + self.mediaName).data('filename', e.data('name'));
             $('#' + self.mediaName).data('url', e.data('url'));
             $('#' + self.mediaName).data('contenttype', e.data('contenttype'));
@@ -69,13 +76,20 @@ piranha.media = new function() {
 
     self.remove = function (e) {
         $('#' + self.mediaId).val('');
-        $('#' + self.mediaName).text('');
+        $('#' + self.mediaName).html('&nbsp;');
         $('#' + self.mediaName).data('filename', '');
         $('#' + self.mediaName).data('url', '');
         $('#' + self.mediaName).data('contenttype', '');
         $('#' + self.mediaName).data('filesize', '');
         $('#' + self.mediaName).data('modified', '');
-    };
+        if (self.mediaUrlId) {
+            var mediaUrlCtrl = $('#' + self.mediaUrlId);
+
+            if (mediaUrlCtrl.prop('tagName') == 'IMG') {
+                mediaUrlCtrl.attr('src', '/manager/assets/img/block-img-placeholder.png');
+            }
+        }
+};
 
     self.bindDropzone = function () {
         $("#dropzonemodal").dropzone({

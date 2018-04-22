@@ -50,6 +50,56 @@ namespace Piranha.Migrations
                     b.ToTable("Piranha_Aliases");
                 });
 
+            modelBuilder.Entity("Piranha.Data.Block", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CLRType")
+                        .IsRequired()
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime>("Created");
+
+                    b.Property<bool>("IsReusable");
+
+                    b.Property<DateTime>("LastModified");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(128);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Piranha_Blocks");
+                });
+
+            modelBuilder.Entity("Piranha.Data.BlockField", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("BlockId");
+
+                    b.Property<string>("CLRType")
+                        .IsRequired()
+                        .HasMaxLength(256);
+
+                    b.Property<string>("FieldId")
+                        .IsRequired()
+                        .HasMaxLength(64);
+
+                    b.Property<int>("SortOrder");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BlockId", "FieldId", "SortOrder")
+                        .IsUnique();
+
+                    b.ToTable("Piranha_BlockFields");
+                });
+
             modelBuilder.Entity("Piranha.Data.Category", b =>
                 {
                     b.Property<Guid>("Id")
@@ -216,6 +266,27 @@ namespace Piranha.Migrations
                         .IsUnique();
 
                     b.ToTable("Piranha_Pages");
+                });
+
+            modelBuilder.Entity("Piranha.Data.PageBlock", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("BlockId");
+
+                    b.Property<Guid>("PageId");
+
+                    b.Property<int>("SortOrder");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BlockId");
+
+                    b.HasIndex("PageId", "SortOrder")
+                        .IsUnique();
+
+                    b.ToTable("Piranha_PageBlocks");
                 });
 
             modelBuilder.Entity("Piranha.Data.PageField", b =>
@@ -477,6 +548,14 @@ namespace Piranha.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Piranha.Data.BlockField", b =>
+                {
+                    b.HasOne("Piranha.Data.Block", "Block")
+                        .WithMany("Fields")
+                        .HasForeignKey("BlockId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Piranha.Data.Category", b =>
                 {
                     b.HasOne("Piranha.Data.Page", "Blog")
@@ -514,6 +593,19 @@ namespace Piranha.Migrations
                     b.HasOne("Piranha.Data.Site", "Site")
                         .WithMany()
                         .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Piranha.Data.PageBlock", b =>
+                {
+                    b.HasOne("Piranha.Data.Block", "Block")
+                        .WithMany("PageBlocks")
+                        .HasForeignKey("BlockId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Piranha.Data.Page", "Page")
+                        .WithMany("Blocks")
+                        .HasForeignKey("PageId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

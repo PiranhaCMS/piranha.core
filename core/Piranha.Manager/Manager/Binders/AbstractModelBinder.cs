@@ -54,6 +54,8 @@ namespace Piranha.Manager.Binders
                 typeName = bc.ValueProvider.GetValue(bc.ModelName + ".CLRType").FirstValue;
             else if (bc.ModelType == typeof(Extend.IField))
                 typeName = bc.ValueProvider.GetValue(bc.ModelName.Replace(".Value", "") + ".CLRType").FirstValue;
+            else if (bc.ModelType == typeof(Extend.Block))
+                typeName = bc.ValueProvider.GetValue(bc.ModelName.Replace(".Value", "") + ".CLRType").FirstValue;
 
             if (!String.IsNullOrEmpty(typeName)) {
                 try {

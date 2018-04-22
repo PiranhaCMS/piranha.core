@@ -1,0 +1,21 @@
+@model Piranha.Areas.Manager.Models.PageEditBlock
+
+<div class="sortable-item">
+    <div class="block">
+        <div class="block-actions">
+            <div class="btn btn-secondary btn-sm sortable-handle"><span class="glyphicon glyphicon-option-vertical"></span></div>
+            <button class="btn btn-secondary btn-sm block-settings"><span class="glyphicon glyphicon-cog"></span></button>
+            <button class="btn btn-secondary btn-sm block-remove"><span class="glyphicon glyphicon-trash"></span></button>
+        </div>
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.CLRType)
+        @Html.HiddenFor(m => m.IsReusable)
+        @Html.HiddenFor(m => m.Value.Id )
+        @Html.EditorFor(m => m.Value, Model.Value.GetType().Name)
+    </div>
+    <div class="block-add">
+        <a href="#" data-toggle="modal" data-target="#modalBlock">
+            <hr><span class="glyphicon glyphicon-plus"></span>
+        </a>
+    </div>
+</div>

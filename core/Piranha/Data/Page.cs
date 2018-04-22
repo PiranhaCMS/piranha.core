@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace Piranha.Data
 {
@@ -81,10 +82,16 @@ namespace Piranha.Data
         public Page Parent { get; set; }
 
         /// <summary>
+        /// Gets/sets the available page blocks.
+        /// </summary>
+        public IList<PageBlock> Blocks { get; set; }
+
+        /// <summary>
         /// Default constructor.
         /// </summary>
         public Page() : base() {
             RedirectType = Models.RedirectType.Temporary;
+            Blocks = new List<PageBlock>();
         }
     }
 }

@@ -43,6 +43,7 @@ namespace Piranha.Manager
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<Models.PageBase, Areas.Manager.Models.PageEditModel>()
                     .ForMember(m => m.PageType, o => o.Ignore())
+                    .ForMember(m => m.Blocks, o => o.Ignore())
                     .ForMember(m => m.Regions, o => o.Ignore())
                     .ForMember(m => m.PageContentType, o => o.Ignore());
                 cfg.CreateMap<Areas.Manager.Models.PageEditModel, Models.PageBase>()

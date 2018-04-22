@@ -25,5 +25,9 @@ namespace Piranha.Models
     /// </summary>
     public interface IPage 
     {
+        /// <summary>
+        /// Gets/sets the available blocks.
+        /// </summary>
+        IList<Extend.Block> Blocks { get; set; }        
     }    
 }

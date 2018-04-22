@@ -196,7 +196,7 @@ namespace Piranha.Models
         /// </summary>
         /// <param name="field">The field</param>
         /// <returns>The type, null if not found</returns>
-        private Extend.AppField GetFieldType(FieldType field) {
+        private Runtime.AppField GetFieldType(FieldType field) {
             var type = App.Fields.GetByShorthand(field.Type);
             if (type == null)
                 type = App.Fields.GetByType(field.Type);

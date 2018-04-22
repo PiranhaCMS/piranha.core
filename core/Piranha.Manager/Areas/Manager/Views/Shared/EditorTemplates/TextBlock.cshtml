@@ -1,0 +1,8 @@
+@model Piranha.Extend.Blocks.TextBlock
+
+@Html.HiddenFor(m => m.Body.Value, "")
+<div class="content-preview">
+    <div contenteditable="true">
+        @Html.Raw(Model.Body.Value)
+    </div>
+</div>

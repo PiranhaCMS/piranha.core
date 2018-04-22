@@ -14,5 +14,9 @@ namespace Piranha.Models
 {
     public interface IDynamicPage
     {
+        /// <summary>
+        /// Gets/sets the available blocks.
+        /// </summary>
+        IList<Extend.Block> Blocks { get; set; }        
     }
 }

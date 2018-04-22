@@ -159,6 +159,7 @@ namespace Piranha.Repositories
             if (page == null) {
                 page = db.Pages
                     .AsNoTracking()
+                    .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                     .Include(p => p.Fields)
                     .FirstOrDefault(p => p.SiteId == siteId && p.ParentId == null && p.SortOrder == 0);
                 if (page != null) {
@@ -168,7 +169,7 @@ namespace Piranha.Repositories
             }
 
             if (page != null) {
-                return contentService.Transform<T>(page, api.PageTypes.GetById(page.PageTypeId));
+                return contentService.Transform<T>(page, api.PageTypes.GetById(page.PageTypeId), Process);
             }
             return null;
         }
@@ -194,6 +195,7 @@ namespace Piranha.Repositories
             if (page == null) {
                 page = db.Pages
                     .AsNoTracking()
+                    .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                     .Include(p => p.Fields)
                     .FirstOrDefault(p => p.Id == id);
 
@@ -204,7 +206,7 @@ namespace Piranha.Repositories
             }
 
             if (page != null)
-                return contentService.Transform<T>(page, api.PageTypes.GetById(page.PageTypeId));
+                return contentService.Transform<T>(page, api.PageTypes.GetById(page.PageTypeId), Process);
             return null;
         }
 
@@ -242,13 +244,14 @@ namespace Piranha.Repositories
                 // No cache found, load from database
                 var page = db.Pages
                     .AsNoTracking()
+                    .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                     .Include(p => p.Fields)
                     .FirstOrDefault(p => p.SiteId == siteId && p.Slug == slug);
 
                 if (page != null) {
                     if (cache != null)
                         AddToCache(page);
-                    return contentService.Transform<T>(page, api.PageTypes.GetById(page.PageTypeId));
+                    return contentService.Transform<T>(page, api.PageTypes.GetById(page.PageTypeId), Process);
                 }                    
                 return null;
             }
@@ -276,6 +279,7 @@ namespace Piranha.Repositories
                 // No cache found, load from database
                 var page = db.Pages
                     .AsNoTracking()
+                    .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                     .Include(p => p.Fields)
                     .FirstOrDefault(p => p.SiteId == siteId && p.Slug == slug);
 
@@ -402,6 +406,7 @@ namespace Piranha.Repositories
                 model.ContentType = type.ContentTypeId;
 
                 var page = db.Pages
+                    .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                     .Include(p => p.Fields)
                     .FirstOrDefault(p => p.Id == model.Id);
 
@@ -432,6 +437,73 @@ namespace Piranha.Repositories
                 }
                 page = contentService.Transform<T>(model, type, page);
 
+                // Transform blocks
+                IList<Extend.Block> blockModels = null;
+                if (model is Models.IPage)
+                    blockModels = ((Models.IPage)model).Blocks;
+                else if (model is Models.IDynamicPage)
+                    blockModels = ((Models.IDynamicPage)model).Blocks;
+
+                if (blockModels != null && blockModels.Count > 0) {
+                    var blocks = contentService.TransformBlocks(blockModels);
+                    var current = blocks.Select(b => b.Id).ToArray();
+
+                    // Delete removed blocks
+                    var removed = page.Blocks
+                        .Where(b => !current.Contains(b.BlockId))
+                        .Select(b => b.Block);
+                    db.Blocks.RemoveRange(removed);
+
+                    // Delete the old page blocks
+                    page.Blocks.Clear();
+
+                    // Now map the new block
+                    for (var n = 0; n < blocks.Count; n++) {
+                        var block = db.Blocks
+                            .Include(b => b.Fields)
+                            .FirstOrDefault(b => b.Id == blocks[n].Id);
+                        if (block == null) {
+                            block = new Block() {
+                                Id = blocks[n].Id != Guid.Empty ? blocks[n].Id : Guid.NewGuid(),
+                                Created = DateTime.Now
+                            };
+                            db.Blocks.Add(block);
+                        }
+                        block.CLRType = blocks[n].CLRType;
+                        block.IsReusable = blocks[n].IsReusable;
+                        block.Title = blocks[n].Title;
+                        block.LastModified = DateTime.Now;
+
+                        var currentFields = blocks[n].Fields.Select(f => f.FieldId).Distinct();
+                        var removedFields = block.Fields.Where(f => !currentFields.Contains(f.FieldId));
+                        db.BlockFields.RemoveRange(removedFields);
+
+                        foreach (var newField in blocks[n].Fields) {
+                            var field = block.Fields.FirstOrDefault(f => f.FieldId == newField.FieldId);
+                            if (field == null) {
+                                field = new BlockField() {
+                                    Id = newField.Id != Guid.Empty ? newField.Id : Guid.NewGuid(),
+                                    BlockId = block.Id,
+                                    FieldId = newField.FieldId
+                                };
+                                db.BlockFields.Add(field);
+                                block.Fields.Add(field);
+                            }
+                            field.SortOrder = newField.SortOrder;
+                            field.CLRType = newField.CLRType;
+                            field.Value = newField.Value;
+                        }
+
+                        // Create the page block
+                        page.Blocks.Add(new PageBlock() {
+                            Id = Guid.NewGuid(),
+                            BlockId = block.Id,
+                            Block = block,
+                            PageId = page.Id,
+                            SortOrder = n
+                        });
+                    }
+                }
                 db.SaveChanges();
 
                 if (cache != null)
@@ -446,6 +518,7 @@ namespace Piranha.Repositories
         /// <param name="id">The unique id</param>
         public virtual void Delete(Guid id) {
             var model = db.Pages
+                .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                 .Include(p => p.Fields)
                 .FirstOrDefault(p => p.Id == id);
 
@@ -474,6 +547,25 @@ namespace Piranha.Repositories
         public virtual void Delete<T>(T model) where T : Models.PageBase {
             Delete(model.Id);
         }
+
+        /// <summary>
+        /// Performs additional processing and loads related models.
+        /// </summary>
+        /// <param name="page">The source page</param>
+        /// <param name="model">The targe model</param>
+        private void Process<T>(Data.Page page, T model) where T : Models.PageBase {
+            if (page.Blocks.Count > 0) {
+                var blocks = page.Blocks
+                    .OrderBy(b => b.SortOrder)
+                    .Select(b => b.Block)
+                    .ToList();
+
+                if (model is Models.IPage)
+                    ((Models.IPage)model).Blocks = contentService.TransformBlocks(blocks);
+                else if (model is Models.IDynamicPage)
+                    ((Models.IDynamicPage)model).Blocks = contentService.TransformBlocks(blocks);
+            }
+        }        
 
         /// <summary>
         /// Moves the pages around. This is done when a page is deleted or moved in the structure.
@@ -520,6 +612,7 @@ namespace Piranha.Repositories
             if (page == null) {
                 page = db.Pages
                     .AsNoTracking()
+                    .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                     .Include(p => p.Fields)
                     .FirstOrDefault(p => p.Id == id);
 

@@ -145,7 +145,7 @@ namespace CoreWeb
                     using (var reader = new StreamReader(stream)) {
                         var startPage = Models.TeaserPage.Create(api);
 
-                        // Add main content
+                        // Add meta info
                         startPage.SiteId = site.Id;
                         startPage.Title = "Welcome to Piranha CMS";
                         startPage.MetaKeywords = "Piranha, Piranha CMS, CMS, AspNetCore, DotNetCore, MVC";
@@ -154,6 +154,20 @@ namespace CoreWeb
                         startPage.Heading.Ingress = "The CMS framework with an extra bite";
                         startPage.Body = reader.ReadToEnd();
                         startPage.Published = DateTime.Now;
+
+                        // Add main content
+                        startPage.Blocks.Add(new Piranha.Extend.Blocks.HtmlBlock() {
+                            Body =
+                                "<h2>Welcome to the Test Page!</h2>" +
+                                "<p>Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec ullamcorper nulla non metus auctor fringilla. Donec id elit non mi porta gravida at eget metus. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>"
+                        });
+                        startPage.Blocks.Add(new Piranha.Extend.Blocks.QuoteBlock() {
+                            Body = "Vestibulum id ligula porta felis euismod semper. Etiam porta sem malesuada magna mollis euismod.",
+                        });
+                        startPage.Blocks.Add(new Piranha.Extend.Blocks.HtmlColumnBlock() {
+                            Column1 = "<p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Aenean lacinia bibendum nulla sed consectetur. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>",
+                            Column2 = "<p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Curabitur blandit tempus porttitor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>"
+                        });
 
                         // Add teasers
                         startPage.Teasers.Add(new Models.Regions.Teaser() {

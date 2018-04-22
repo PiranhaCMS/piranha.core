@@ -24,6 +24,16 @@ namespace Piranha
         DbSet<Data.Alias> Aliases { get; set; }
 
         /// <summary>
+        /// Gets/sets the block set.
+        /// </summary>
+        DbSet<Data.Block> Blocks { get; set; }
+
+        /// <summary>
+        /// Gets/sets the block field set.
+        /// </summary>
+        DbSet<Data.BlockField> BlockFields { get; set; }
+
+        /// <summary>
         /// Gets/sets the category set.
         /// </summary>
         DbSet<Data.Category> Categories { get; set; }
@@ -46,13 +56,16 @@ namespace Piranha
         /// <summary>
         /// Gets/sets the page set.
         /// </summary>
-        /// <returns></returns>
         DbSet<Data.Page> Pages { get; set; }
+
+        /// <summary>
+        /// Gets/sets the page block set.
+        /// </summary>
+        DbSet<Data.PageBlock> PageBlocks { get; set; }
 
         /// <summary>
         /// Gets/sets the page field set.
         /// </summary>
-        /// <returns></returns>
         DbSet<Data.PageField> PageFields { get; set; }
 
         /// <summary>
