@@ -7,14 +7,14 @@
 @Html.HiddenFor(m => m.Column1.Value, "")
 @Html.HiddenFor(m => m.Column2.Value, "")
 <div class="row">
-    <div id="@(prefix)_Body_Value_Col1Editor" class="col-sm-6 block-editor content-preview editor-area" data-id="@(prefix)_Column1_Value">
+    <div id="Editor_@Guid.NewGuid()" class="col-sm-6 block-editor content-preview editor-area" data-id="@(prefix)_Column1_Value">
         @if (!string.IsNullOrWhiteSpace(Model.Column1.Value)) {
             @Html.Raw(Model.Column1.Value)
         } else {
             <text>&nbsp;</text>
         }
     </div>
-    <div id="@(prefix)_Body_Value_Col2Editor" class="col-sm-6 block-editor content-preview editor-area" data-id="@(prefix)_Column2_Value">
+    <div id="Editor_@Guid.NewGuid()" class="col-sm-6 block-editor content-preview editor-area" data-id="@(prefix)_Column2_Value">
         @if (!string.IsNullOrWhiteSpace(Model.Column2.Value)) {
             @Html.Raw(Model.Column2.Value)
         } else {

@@ -5,7 +5,7 @@
 }
 
 @Html.HiddenFor(m => m.Body.Value, "")
-<div id="@(prefix)_Body_Value_BodyEditor" class="block-editor content-preview editor-area" data-id="@(prefix)_Body_Value">
+<div id="Editor_@Guid.NewGuid()" class="block-editor content-preview editor-area" data-id="@(prefix)_Body_Value">
     @if (!string.IsNullOrWhiteSpace(Model.Body.Value)) {
         @Html.Raw(Model.Body.Value)
     } else {
