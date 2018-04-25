@@ -10556,7 +10556,6 @@ li.sitemap-item .actions.one {
 #page-blocks {
   background: url('/manager/assets/img/cream_pixels.png');
   padding: 0;
-  overflow: hidden;
 }
 #page-blocks .page-blocks-body {
   background: #fff;
@@ -10565,7 +10564,6 @@ li.sitemap-item .actions.one {
   margin: 0 auto;
   border-left: solid 1px #e2e2e2;
   border-right: solid 1px #e2e2e2;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
 }
 #page-blocks img {
   max-width: 100%;

@@ -148,10 +148,22 @@
         </div>
         <div id="page-blocks" class="panel-body">
             <div class="page-blocks-body">
-                <div class="block-add">
-                    <hr><span class="glyphicon glyphicon-plus"></span>
-                </div>
                 <div class="sortable">
+                    <div>
+                        <div class="block-add">
+                            <div class="block-add-dialog">
+                                @foreach (var category in Piranha.App.Blocks.GetCategories()) {
+                                    <label>@category</label>
+                                    @foreach (var block in Piranha.App.Blocks.GetByCategory(category)) {
+                                        <a href="#" data-typename="@block.TypeName"><i class="@block.Icon"></i>@block.Name</a>
+                                    }
+                                }
+                            </div>
+                            <a href="#" class="block-add-toggle">
+                                <hr><span class="glyphicon glyphicon-plus"></span>
+                            </a>
+                        </div>
+                    </div>
                     @Html.EditorFor(m => m.Blocks)
                 </div>
             </div>
