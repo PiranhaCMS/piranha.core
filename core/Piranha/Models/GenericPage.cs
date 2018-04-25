@@ -9,6 +9,7 @@
  */
 
 using Piranha.Services;
+using System.Collections.Generic;
 
 namespace Piranha.Models
 {
@@ -18,14 +19,24 @@ namespace Piranha.Models
     /// <typeparam name="T">The model type</typeparam>
     public class GenericPage<T> : PageBase where T : GenericPage<T>
     {
-        #region Properties
         /// <summary>
         /// Gets if this is the startpage of the site.
         /// </summary>
         public bool IsStartPage {
             get { return !ParentId.HasValue && SortOrder == 0; }
         }
-        #endregion
+
+        /// <summary>
+        /// Gets/sets the available blocks.
+        /// </summary>
+        public IList<Extend.Block> Blocks { get; set; }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public GenericPage() : base() {
+            Blocks = new List<Extend.Block>();
+        }
 
         /// <summary>
         /// Creates a new page model using the given page type id.

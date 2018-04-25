@@ -12,6 +12,7 @@ using AutoMapper;
 using Newtonsoft.Json;
 using Piranha.Extend;
 using Piranha.Extend.Serializers;
+using Piranha.Runtime;
 using System;
 using System.Reflection;
 
@@ -37,6 +38,11 @@ namespace Piranha
         /// The current state of the app.
         /// </summary>
         private bool isInitialized = false;
+
+        /// <summary>
+        /// The currently registered blocks.
+        /// </summary>
+        private AppBlockList blocks;
 
         /// <summary>
         /// The currently registered fields.
@@ -85,6 +91,13 @@ namespace Piranha
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets the currently registered block types.
+        /// </summary>
+        public static AppBlockList Blocks {
+            get { return instance.blocks; }
+        }
+
         /// <summary>
         /// Gets the currently registered field types.
         /// </summary>
@@ -162,6 +175,7 @@ namespace Piranha
         /// Default private constructor.
         /// </summary>
         private App() {
+            blocks = new AppBlockList();
             fields = new AppFieldList();
             modules = new AppModuleList();
             mediaTypes = new MediaManager();
@@ -223,6 +237,7 @@ namespace Piranha
                                 .ForMember(p => p.Permalink, o => o.MapFrom(m => "/" + m.Slug));
                             cfg.CreateMap<Models.PageBase, Data.Page>()
                                 .ForMember(p => p.PageTypeId, o => o.MapFrom(m => m.TypeId))
+                                .ForMember(p => p.Blocks, o => o.Ignore())
                                 .ForMember(p => p.Fields, o => o.Ignore())
                                 .ForMember(p => p.Created, o => o.Ignore())
                                 .ForMember(p => p.LastModified, o => o.Ignore())
@@ -285,6 +300,13 @@ namespace Piranha
                         fields.Register<Extend.Fields.StringField>();
                         fields.Register<Extend.Fields.TextField>();
                         fields.Register<Extend.Fields.VideoField>();
+
+                        // Compose block types
+                        blocks.Register<Extend.Blocks.HtmlBlock>();
+                        blocks.Register<Extend.Blocks.HtmlColumnBlock>();
+                        blocks.Register<Extend.Blocks.ImageBlock>();
+                        blocks.Register<Extend.Blocks.QuoteBlock>();
+                        blocks.Register<Extend.Blocks.TextBlock>();
 
                         // Compose serializers
                         serializers.Register<Extend.Fields.CheckBoxField>(new CheckBoxFieldSerializer<Extend.Fields.CheckBoxField>());

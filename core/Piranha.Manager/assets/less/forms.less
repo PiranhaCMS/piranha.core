@@ -236,8 +236,17 @@
 	}
 }
 
+.mce-floatpanel {
+	border-width: 0 !important;
+}
+
 .btn {
 	.border-radius(0);
+
+	&.btn-secondary {
+		background: @bg-color;
+		color: #333;
+	}
 
 	&.btn-primary {
 		background: @link-color;
@@ -552,7 +561,6 @@
 		}
 	}
 }
-
 
 @media (min-width: 990px) {
 	.single-region {

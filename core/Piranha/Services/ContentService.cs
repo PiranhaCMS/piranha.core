@@ -114,6 +114,26 @@ namespace Piranha.Services
             }
         }
 
+        public object CreateBlock(string typeName) {
+            var blockType = App.Blocks.GetByType(typeName);
+
+            if (blockType != null) {
+                using (var scope = services.CreateScope()) {
+                    var block = Activator.CreateInstance(blockType.Type);
+
+                    foreach (var prop in blockType.Type.GetProperties(App.PropertyBindings)) {
+                        if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType)) {
+                            var field = Activator.CreateInstance(prop.PropertyType);
+                            InitField(scope, field);
+                            prop.SetValue(block, field);
+                        }
+                    }
+                    return block;
+                }
+            }
+            return null;
+        }
+
         /// <summary>
         /// Creates a dynamic region.
         /// </summary>
@@ -312,6 +332,92 @@ namespace Piranha.Services
                 }
             }
             return content;
+        }
+
+        /// <summary>
+        /// Transforms the given block data into block models.
+        /// </summary>
+        /// <param name="blocks">The data</param>
+        /// <returns>The transformed blocks</returns>
+        public IList<Extend.Block> TransformBlocks(IEnumerable<Block> blocks) {
+            using (var scope = services.CreateScope()) {
+                var models = new List<Extend.Block>();
+
+                foreach (var block in blocks) {
+                    var blockType = App.Blocks.GetByType(block.CLRType);
+
+                    if (blockType != null) {
+                        var model = (Extend.Block)Activator.CreateInstance(blockType.Type);
+                        model.Id = block.Id;
+
+                        foreach (var field in block.Fields) {
+                            var prop = model.GetType().GetProperty(field.FieldId, App.PropertyBindings);
+
+                            if (prop != null) {
+                                var type = App.Fields.GetByType(field.CLRType);
+                                var val = (Extend.IField)App.DeserializeObject(field.Value, type.Type);
+
+                                if (val != null) {
+                                    var init = val.GetType().GetMethod("Init");
+
+                                    if (init != null) {
+                                        var param = new List<object>();
+
+                                        foreach (var p in init.GetParameters()) {
+                                            param.Add(scope.ServiceProvider.GetService(p.ParameterType));
+                                        }
+                                        init.Invoke(val, param.ToArray());
+                                    }
+                                }
+                                prop.SetValue(model, val);
+                            }
+                        }
+                        models.Add(model);
+                    }
+                }
+                return models;
+            }
+        }
+
+        /// <summary>
+        /// Transforms the given blocks to the internal data model.
+        /// </summary>
+        /// <param name="models">The blocks</param>
+        /// <returns>The data model</returns>
+        public IList<Block> TransformBlocks(IList<Extend.Block> models) {
+            var blocks = new List<Block>();
+
+            if (models != null) {
+                for (var n = 0; n < models.Count; n++) {
+                    var type = App.Blocks.GetByType(models[n].GetType().FullName);
+
+                    if (type != null) {
+                        var block = new Block() {
+                            Id = models[n].Id != Guid.Empty ? models[n].Id : Guid.NewGuid(),
+                            CLRType = models[n].GetType().FullName,
+                            Created = DateTime.Now,
+                            LastModified = DateTime.Now
+                        };
+
+                        foreach (var prop in models[n].GetType().GetProperties(App.PropertyBindings)) {
+                            if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType)) {
+                                // Only save fields to the database
+                                var field = new BlockField() {
+                                    Id = Guid.NewGuid(),
+                                    BlockId = block.Id,
+                                    FieldId = prop.Name,
+                                    SortOrder = 0,
+                                    CLRType = prop.PropertyType.FullName,
+                                    Value = App.SerializeObject(prop.GetValue(models[n]), prop.PropertyType)
+                                };
+                                block.Fields.Add(field);
+                            }
+                        }
+                        blocks.Add(block);
+                    }
+                }
+            }
+            return blocks;
         }
 
         /// <summary>
@@ -568,7 +674,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="field">The field</param>
         /// <returns>The type, null if not found</returns>
-        private Extend.AppField GetFieldType(FieldType field) {
+        private Runtime.AppField GetFieldType(FieldType field) {
             var type = App.Fields.GetByShorthand(field.Type);
             if (type == null)
                 type = App.Fields.GetByType(field.Type);

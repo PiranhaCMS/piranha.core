@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -8,10 +8,11 @@
  * 
  */
 
+using Piranha.Extend;
 using System;
 using System.Collections.Generic;
 
-namespace Piranha.Extend
+namespace Piranha.Runtime
 {
     public sealed class ContentTypeManager
     {

@@ -9,6 +9,7 @@
  */
 
 using Piranha.Extend;
+using Piranha.Runtime;
 using Piranha.Services;
 using System;
 using System.Linq;

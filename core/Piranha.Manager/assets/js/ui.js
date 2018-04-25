@@ -87,22 +87,38 @@ $('body').tooltip({
 //
 // Sortable
 //
-$('.sortable').sortable({
+var sortables = sortable('.sortable', {
     handle: '.sortable-handle'
-}).bind('sortupdate', function(e, ui) {
-    manager.tools.recalcregion($(ui.item).parent());
 });
-$(document).on('click', '.dd-toggle span', function() {
-    $(this).parent().parent().toggleClass('expanded');
-});
+for (var n = 0; n < sortables.length; n++) {
+    sortables[n].addEventListener('sortupdate', function(e) {
+        manager.tools.recalcblocks();
+    });
+}
 
 //
-// Sortable fix for FF
+// Blocks
 //
-$(document).on('focus', '.region-list-item input, .region-list-item textarea', function () {
-    $(this).closest('.region-list-item').attr('draggable', false);
-}).on('blur', '.region-list-item input, .region-list-item textarea', function () {
-    $(this).closest('.region-list-item').attr('draggable', true);
+$(document).on('click', '.block-remove', function() {
+    $(this).closest('.sortable-item').remove();
+    manager.tools.recalcblocks();
+});
+$(document).on('click', '.block-add-toggle', function(e) {
+    e.preventDefault();
+    
+    var active = $(this).parent().hasClass('active');
+    $('.block-add').removeClass('active');
+
+    if (!active)
+        $(this).parent().addClass('active');
+});
+$(document).on('click', '.block-add-dialog a', function(e) {
+    e.preventDefault();
+
+    manager.tools.addblock($(this).parent().parent().parent(), $(this).attr('data-typename'), 'page', function() {
+        manager.tools.recalcblocks();
+        $('.block-add').removeClass('active');    
+    });
 });
 
 //
@@ -187,6 +203,16 @@ $(document).on('click', 'a.confirm-delete, button.confirm-delete', function (e) 
     return false;
 });
 
+//
+// Copy editable data
+//
+$(document).on('submit', 'form', function (e) {
+    console.log("form submit");
+    $(this).find('.editor-area').each(function () {
+        console.log('copying data');
+        $('#' + $(this).attr('data-id')).val($(this).html());
+    });
+});
 
 //
 // Table filters
@@ -322,12 +348,7 @@ var manager = {
                     if (cb)
                         cb();
 
-                    $('.sortable').sortable('destroy');
-                    $('.sortable').sortable({
-                        handle: '.sortable-handle'
-                    }).bind('sortupdate', function(e, ui) {
-                        manager.tools.recalcregion($(ui.item).parent());
-                    });
+                    sortable('.sortable');
                 }
             });
         },
@@ -357,6 +378,67 @@ var manager = {
                 inputs.attr('name', function (i, val) {
                     if (val)
                         return val.replace(/FieldSets\[\d+\]/, 'FieldSets[' + n + ']');
+                    return val;
+                });
+            }
+        },
+
+        addblock: function(target, blockType, contentType, cb) {
+            $.ajax({
+                url: contentType == 'post' ? '/manager/post/block' : '/manager/page/block',
+                method: 'POST',
+                contentType: 'application/json',
+                dataType: 'html',
+                data: JSON.stringify({
+                    TypeName: blockType,
+                    BlockIndex: 0
+                }),
+                success: function (res) {
+                    $(res).insertAfter(target);
+
+                    console.log('scanning for new editors.');
+                    // If the new region contains a html editor, make sure
+                    // we initialize it.
+                    var editors = $(res).find('.block-editor').each(function () {
+                        console.log("activating editor after insert");
+                        tinyMCE.execCommand('mceAddEditor', false, this.id);
+                    });
+
+                    // Initialize markdown editors.
+                    $(res).find('.markdown-editor').each(function () {
+                        RegisterMarkdown($('#' + $(this).attr('id')).get(0));
+                    });           
+
+                    if (cb)
+                        cb();
+
+                    sortable('.sortable');
+                }
+            });            
+        },
+        
+        recalcblocks: function () {
+            var items = $('.page-blocks-body .sortable-item');
+
+            for (var n = 0; n < items.length; n++) {
+                var inputs = $(items.get(n)).find('input, textarea, select');
+
+                inputs.attr('id', function (i, val) {
+                    if (val)
+                        return val.replace(/Blocks_\d+__/, 'Blocks_' + n + '__');
+                    return val;
+                });
+                inputs.attr('name', function (i, val) {
+                    if (val)
+                        return val.replace(/Blocks\[\d+\]/, 'Blocks[' + n + ']');
+                    return val;
+                });
+
+                var content = $(items.get(n)).find('[contenteditable=true]');
+
+                content.attr('data-id', function (i, val) {
+                    if (val)
+                        return val.replace(/Blocks_\d+__/, 'Blocks_' + n + '__');
                     return val;
                 });
             }

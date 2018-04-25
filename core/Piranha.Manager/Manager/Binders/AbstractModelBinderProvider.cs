@@ -27,8 +27,8 @@ namespace Piranha.Manager.Binders
         /// <returns>The model binder</returns>
         public IModelBinder GetBinder(ModelBinderProviderContext context) {
             if (context != null) {
-                // We only care about regions & fields
-                if (context.Metadata.ModelType == typeof(PageEditRegionBase) || context.Metadata.ModelType == typeof(Extend.IField)) {
+                // We only care about regions, blocks and fields
+                if (context.Metadata.ModelType == typeof(PageEditRegionBase) || context.Metadata.ModelType == typeof(Extend.IField) || context.Metadata.ModelType == typeof(Extend.Block)) {
                     var binders = new Dictionary<string, AbstractBinderType>();
 
                     var metadata = context.MetadataProvider.GetMetadataForType(typeof(PageEditRegion));
@@ -49,6 +49,14 @@ namespace Piranha.Manager.Binders
                             Type = fieldType.Type,
                             Binder = context.CreateBinder(metadata)
                         });
+                    }
+
+                    foreach (var blockType in App.Blocks) {
+                        metadata = context.MetadataProvider.GetMetadataForType(blockType.Type);
+                        binders.Add(blockType.TypeName, new AbstractBinderType() {
+                            Type = blockType.Type,
+                            Binder = context.CreateBinder(metadata)
+                        });                        
                     }
                     return new AbstractModelBinder(context.MetadataProvider, binders);
                 }

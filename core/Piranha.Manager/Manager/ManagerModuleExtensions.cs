@@ -8,6 +8,7 @@
  * 
  */
 
+using Piranha.Areas.Manager.Services;
 using Piranha.Manager;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -34,6 +35,9 @@ public static class ManagerModuleExtensions
 
         // Add the manager module
         Piranha.App.Modules.Register<Piranha.Manager.Module>();
+
+        // Add the manager services
+        services.AddScoped<PageEditService, PageEditService>();
 
         // Add session support
         services.AddSession();
