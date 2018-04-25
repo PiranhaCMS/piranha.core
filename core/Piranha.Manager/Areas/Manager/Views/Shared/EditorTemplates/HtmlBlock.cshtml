@@ -4,7 +4,11 @@
         .Replace("[", "_").Replace("]", "_").Replace(".", "_");    
 }
 
-@Html.HiddenFor(m => m.Body.Value)
-<div class="block-editor content-preview editor-area" data-id="@(prefix)_Body_Value">
-    @Html.Raw(Model.Body.Value)
+@Html.HiddenFor(m => m.Body.Value, "")
+<div id="@(prefix)_Body_Value_BodyEditor" class="block-editor content-preview editor-area" data-id="@(prefix)_Body_Value">
+    @if (!string.IsNullOrWhiteSpace(Model.Body.Value)) {
+        @Html.Raw(Model.Body.Value)
+    } else {
+        <text>&nbsp;</text>
+    }
 </div>

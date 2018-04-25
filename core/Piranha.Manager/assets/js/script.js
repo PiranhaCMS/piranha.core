@@ -23383,6 +23383,23 @@ $(document).on('click', '.block-remove', function() {
     $(this).closest('.sortable-item').remove();
     manager.tools.recalcblocks();
 });
+$(document).on('click', '.block-add-toggle', function(e) {
+    e.preventDefault();
+    
+    var active = $(this).parent().hasClass('active');
+    $('.block-add').removeClass('active');
+
+    if (!active)
+        $(this).parent().addClass('active');
+});
+$(document).on('click', '.block-add-dialog a', function(e) {
+    e.preventDefault();
+
+    manager.tools.addblock($(this).parent().parent().parent(), $(this).attr('data-typename'), 'page', function() {
+        manager.tools.recalcblocks();
+        $('.block-add').removeClass('active');    
+    });
+});
 
 //
 // Panel toggle buttons
@@ -23644,6 +23661,40 @@ var manager = {
                     return val;
                 });
             }
+        },
+
+        addblock: function(target, blockType, contentType, cb) {
+            $.ajax({
+                url: contentType == 'post' ? '/manager/post/block' : '/manager/page/block',
+                method: 'POST',
+                contentType: 'application/json',
+                dataType: 'html',
+                data: JSON.stringify({
+                    TypeName: blockType,
+                    BlockIndex: 0
+                }),
+                success: function (res) {
+                    $(res).insertAfter(target);
+
+                    console.log('scanning for new editors.');
+                    // If the new region contains a html editor, make sure
+                    // we initialize it.
+                    var editors = $(res).find('.block-editor').each(function () {
+                        console.log("activating editor after insert");
+                        tinyMCE.execCommand('mceAddEditor', false, this.id);
+                    });
+
+                    // Initialize markdown editors.
+                    $(res).find('.markdown-editor').each(function () {
+                        RegisterMarkdown($('#' + $(this).attr('id')).get(0));
+                    });           
+
+                    if (cb)
+                        cb();
+
+                    sortable('.sortable');
+                }
+            });            
         },
         
         recalcblocks: function () {

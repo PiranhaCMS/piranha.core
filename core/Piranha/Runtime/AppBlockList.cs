@@ -45,7 +45,6 @@ namespace Piranha.Runtime
         public IEnumerable<AppBlock> GetByCategory(string category) {
             return items
                 .Where(i => i.Category == category)
-                .OrderBy(i => i.Name)
                 .ToArray();
         }
 

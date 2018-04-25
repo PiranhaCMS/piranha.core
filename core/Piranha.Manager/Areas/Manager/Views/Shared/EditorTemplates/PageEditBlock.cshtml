@@ -1,4 +1,7 @@
 @model Piranha.Areas.Manager.Models.PageEditBlock
+@{
+    Layout = null;
+}
 
 <div class="sortable-item">
     <div class="block">
@@ -14,7 +17,15 @@
         @Html.EditorFor(m => m.Value, Model.Value.GetType().Name)
     </div>
     <div class="block-add">
-        <a href="#" data-toggle="modal" data-target="#modalBlock">
+        <div class="block-add-dialog">
+            @foreach (var category in Piranha.App.Blocks.GetCategories()) {
+                <label>@category</label>
+                @foreach (var block in Piranha.App.Blocks.GetByCategory(category)) {
+                    <a href="#" data-typename="@block.TypeName"><i class="@block.Icon"></i>@block.Name</a>
+                }
+            }
+        </div>
+        <a href="#" class="block-add-toggle">
             <hr><span class="glyphicon glyphicon-plus"></span>
         </a>
     </div>

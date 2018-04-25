@@ -13,7 +13,7 @@ using System;
 
 namespace Piranha.Extend.Blocks
 {
-    [BlockType(Name = "Html", Category = "Basic", Icon = "glyphicon glyphicon-font")]
+    [BlockType(Name = "One Col", Category = "Content", Icon = "fab fa-html5")]
     public class HtmlBlock : Block
     {
         public HtmlField Body { get; set; }

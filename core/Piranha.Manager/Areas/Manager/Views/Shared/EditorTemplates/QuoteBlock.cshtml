@@ -4,11 +4,15 @@
         .Replace("[", "_").Replace("]", "_").Replace(".", "_");    
 }
 
-@Html.HiddenFor(m => m.Body.Value)
+@Html.HiddenFor(m => m.Body.Value, "")
 <div class="content-preview">
     <blockquote>
         <div class="editor-area" contenteditable="true" data-id="@(prefix)_Body_Value">
-            @Html.Raw(Model.Body.Value)
+            @if (!string.IsNullOrWhiteSpace(Model.Body.Value)) {
+                @Html.Raw(Model.Body.Value)
+            } else {
+                <text>&nbsp;</text>
+            }
         </div>
     </blockquote>
 </div>

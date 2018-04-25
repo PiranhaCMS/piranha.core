@@ -14,7 +14,7 @@ using System.Collections.Generic;
 
 namespace Piranha.Extend.Blocks
 {
-    [BlockType(Name = "Image Gallery", Category = "Media")]
+    [BlockType(Name = "Gallery", Category = "Media", Icon = "fas fa-images")]
     public class ImageGalleryBlock : Block
     {
         public IList<ImageField> Items { get; set; }

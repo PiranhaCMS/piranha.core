@@ -13,7 +13,7 @@ using System;
 
 namespace Piranha.Extend.Blocks
 {
-    [BlockType(Name = "Text", Category = "Basic")]
+    [BlockType(Name = "Text", Category = "Content", Icon = "fas fa-font")]
     public class TextBlock : Block
     {
         public TextField Body { get; set; }

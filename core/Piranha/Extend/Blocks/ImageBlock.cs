@@ -13,7 +13,7 @@ using System;
 
 namespace Piranha.Extend.Blocks
 {
-    [BlockType(Name = "Image", Category = "Media", Icon = "glyphicon glyphicon-picture")]
+    [BlockType(Name = "Image", Category = "Media", Icon = "fas fa-image")]
     public class ImageBlock : Block
     {
         public ImageField Body { get; set; }

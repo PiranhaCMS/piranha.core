@@ -92,29 +92,29 @@ namespace Piranha.Manager
         /// </summary>
         public static MenuItemList Items = new MenuItemList() {
             new MenuItem() {
-                InternalId = "Content", Name = "Content", Css = "glyphicon glyphicon-pencil", Items = new MenuItemList() {
+                InternalId = "Content", Name = "Content", Css = "fas fa-pencil-alt", Items = new MenuItemList() {
                     new MenuItem() {
-                        InternalId = "Pages", Name = "Pages", Controller = "Page", Action = "List", Policy = Permission.Pages, Css = "glyphicon glyphicon-duplicate"
+                        InternalId = "Pages", Name = "Pages", Controller = "Page", Action = "List", Policy = Permission.Pages, Css = "fas fa-copy"
                     },
                     new MenuItem() {
-                        InternalId = "Media", Name = "Media", Controller = "Media", Action = "List", Policy = Permission.Media, Css = "glyphicon glyphicon-picture"
+                        InternalId = "Media", Name = "Media", Controller = "Media", Action = "List", Policy = Permission.Media, Css = "fas fa-image"
                     }
                 }
             },
             new MenuItem() {
-                InternalId = "Settings", Name = "Settings", Css = "glyphicon glyphicon-wrench", Items = new MenuItemList {
+                InternalId = "Settings", Name = "Settings", Css = "fas fa-wrench", Items = new MenuItemList {
                     new MenuItem() {
-                        InternalId = "Aliases", Name = "Aliases", Controller = "Alias", Action = "List", Policy = Permission.Aliases, Css = "glyphicon glyphicon-random"
+                        InternalId = "Aliases", Name = "Aliases", Controller = "Alias", Action = "List", Policy = Permission.Aliases, Css = "fas fa-random"
                     },
                     new MenuItem() {
-                        InternalId = "Sites", Name = "Sites", Controller = "Site", Action = "List", Policy = Permission.Sites, Css = "glyphicon glyphicon-globe"
+                        InternalId = "Sites", Name = "Sites", Controller = "Site", Action = "List", Policy = Permission.Sites, Css = "fas fa-globe"
                     }
                 }
             },
             new MenuItem() {
-                InternalId = "System", Name = "System", Css = "glyphicon glyphicon-cog", Items = new MenuItemList()  {
+                InternalId = "System", Name = "System", Css = "fas fa-cog", Items = new MenuItemList()  {
                     new MenuItem() {
-                        InternalId = "Config", Name = "Config", Controller = "Config", Action = "Edit", Policy = Permission.Config, Css = "glyphicon glyphicon-tasks"
+                        InternalId = "Config", Name = "Config", Controller = "Config", Action = "Edit", Policy = Permission.Config, Css = "fas fa-cogs"
                     }
                 }
             }

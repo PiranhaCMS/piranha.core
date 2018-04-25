@@ -250,11 +250,15 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/page/block")]
         [Authorize(Policy = Permission.Pages)]        
         public IActionResult AddBlock([FromBody]Models.PageBlockModel model) {
-            var block = contentService.CreateBlock(model.TypeName);
+            var block = (Extend.Block)contentService.CreateBlock(model.TypeName);
 
             if (block != null) {
                 ViewData.TemplateInfo.HtmlFieldPrefix = $"Blocks[{model.BlockIndex}]";
-                return View("EditorTemplates/PageEditBlock", block);
+                return View("EditorTemplates/PageEditBlock", new Models.PageEditBlock() {
+                    Id = block.Id,
+                    CLRType = block.GetType().FullName,
+                    Value = block
+                });
             }
             return new NotFoundResult();
         }

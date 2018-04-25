@@ -13,7 +13,7 @@ using Piranha.Extend.Fields;
 
 namespace Piranha.Extend.Blocks
 {
-    [BlockType(Name = "Quote", Category = "Basic", Icon = "glyphicon glyphicon-italic")]
+    [BlockType(Name = "Quote", Category = "Content", Icon = "fas fa-quote-right")]
     public class QuoteBlock : Block
     {
         public TextField Body { get; set; }

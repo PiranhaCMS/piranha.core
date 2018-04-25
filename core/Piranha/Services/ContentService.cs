@@ -122,7 +122,7 @@ namespace Piranha.Services
                     var block = Activator.CreateInstance(blockType.Type);
 
                     foreach (var prop in blockType.Type.GetProperties(App.PropertyBindings)) {
-                        if (prop.PropertyType is Extend.IField) {
+                        if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType)) {
                             var field = Activator.CreateInstance(prop.PropertyType);
                             InitField(scope, field);
                             prop.SetValue(block, field);
@@ -348,6 +348,7 @@ namespace Piranha.Services
 
                     if (blockType != null) {
                         var model = (Extend.Block)Activator.CreateInstance(blockType.Type);
+                        model.Id = block.Id;
 
                         foreach (var field in block.Fields) {
                             var prop = model.GetType().GetProperty(field.FieldId, App.PropertyBindings);

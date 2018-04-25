@@ -40,3 +40,16 @@
 	margin-top: @margin-top;
 	right: 0;
 }
+
+.arrow-down(@color, @size, @margin-top) {
+	content: "";
+	display: block;
+	width: 0;
+	height: 0;
+	border: solid @size transparent;
+	border-top-color: @color;
+	position: absolute;
+	margin-top: @margin-top;
+	left: 50%;
+	margin-left: -@size;
+}
