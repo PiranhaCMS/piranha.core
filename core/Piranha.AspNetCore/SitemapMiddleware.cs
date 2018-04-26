@@ -70,7 +70,7 @@ namespace Piranha.AspNetCore
         private List<Url> GetPageUrls(IApi api, Models.SitemapItem item, string baseUrl) {
             var urls = new List<Url>();
 
-            if (item.Published.HasValue) {
+            if (item.Published.HasValue && item.Published.Value <= DateTime.Now) {
                 urls.Add(new Url() {
                     ChangeFrequency = ChangeFrequency.Daily,
                     Location = baseUrl + item.Permalink,
@@ -78,18 +78,16 @@ namespace Piranha.AspNetCore
                     TimeStamp = item.LastModified
                 });
 
-                // Check if this is a blog page
-                var page = api.Pages.GetById(item.Id);
-                if (page.ContentType == "Blog") {
-                    // Get all posts for the blog
-                    var posts = api.Posts.GetAll(page.Id);
-                    foreach (var post in posts) {
+                // Get all posts for the blog
+                var posts = api.Posts.GetAll(item.Id);
+                foreach (var post in posts) {
+                    if (post.Published.HasValue && post.Published.Value <= DateTime.Now) {
                         urls.Add(new Url() {
                             ChangeFrequency = ChangeFrequency.Daily,
                             Location = baseUrl + post.Permalink,
                             Priority = 0.5,
                             TimeStamp = post.LastModified
-                        });                        
+                        });
                     }
                 }
 
