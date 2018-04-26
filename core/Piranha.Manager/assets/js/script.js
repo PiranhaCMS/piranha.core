@@ -23368,7 +23368,8 @@ $('body').tooltip({
 // Sortable
 //
 var sortables = sortable('.sortable', {
-    handle: '.sortable-handle'
+    handle: '.sortable-handle',
+    items: ':not(.unsortable)'
 });
 for (var n = 0; n < sortables.length; n++) {
     sortables[n].addEventListener('sortupdate', function(e) {
