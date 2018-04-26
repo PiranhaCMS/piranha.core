@@ -194,6 +194,25 @@ namespace Piranha.Tests
         }
 
         [Fact]
+        public void SerializeImageBlock() {
+            var models = new List<Extend.Block>();
+            models.Add(new Extend.Blocks.ImageBlock() {
+                Body = new Extend.Fields.ImageField() {
+                    Id = image1Id
+                }
+            });
+            
+            var blocks = contentService.TransformBlocks(models);
+
+            Assert.NotNull(blocks);
+            Assert.Single(blocks);
+
+            Assert.Equal(typeof(Extend.Blocks.ImageBlock).FullName, blocks[0].CLRType);
+            Assert.Equal(typeof(Extend.Fields.ImageField).FullName, blocks[0].Fields[0].CLRType);
+            Assert.Equal(image1Id.ToString(), blocks[0].Fields[0].Value);
+        }
+
+        [Fact]
         public void DeserializeTextBlock() {
             var blocks = new List<Block>();
             blocks.Add(new Block() {
@@ -216,7 +235,26 @@ namespace Piranha.Tests
 
             Assert.Equal(typeof(Extend.Blocks.TextBlock), models.First().GetType());
             Assert.Equal("Lorem ipsum", ((Extend.Blocks.TextBlock)models[0]).Body.Value);
-        }        
+        }
+
+        [Fact]
+        public void SerializeTextBlock() {
+            var models = new List<Extend.Block>();
+            models.Add(new Extend.Blocks.TextBlock() {
+                Body = new Extend.Fields.TextField() {
+                    Value = "Lorem ipsum"
+                }
+            });
+            
+            var blocks = contentService.TransformBlocks(models);
+
+            Assert.NotNull(blocks);
+            Assert.Single(blocks);
+
+            Assert.Equal(typeof(Extend.Blocks.TextBlock).FullName, blocks[0].CLRType);
+            Assert.Equal(typeof(Extend.Fields.TextField).FullName, blocks[0].Fields[0].CLRType);
+            Assert.Equal("Lorem ipsum", blocks[0].Fields[0].Value);
+        }
 
         [Fact]
         public void DeserializeQuoteBlock() {
@@ -241,6 +279,25 @@ namespace Piranha.Tests
 
             Assert.Equal(typeof(Extend.Blocks.QuoteBlock), models.First().GetType());
             Assert.Equal("Lorem ipsum", ((Extend.Blocks.QuoteBlock)models[0]).Body.Value);
-        }        
+        }
+
+        [Fact]
+        public void SerializeQuoteBlock() {
+            var models = new List<Extend.Block>();
+            models.Add(new Extend.Blocks.QuoteBlock() {
+                Body = new Extend.Fields.TextField() {
+                    Value = "Lorem ipsum"
+                }
+            });
+            
+            var blocks = contentService.TransformBlocks(models);
+
+            Assert.NotNull(blocks);
+            Assert.Single(blocks);
+
+            Assert.Equal(typeof(Extend.Blocks.QuoteBlock).FullName, blocks[0].CLRType);
+            Assert.Equal(typeof(Extend.Fields.TextField).FullName, blocks[0].Fields[0].CLRType);
+            Assert.Equal("Lorem ipsum", blocks[0].Fields[0].Value);
+        }
     }
 }

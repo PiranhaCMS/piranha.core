@@ -62,6 +62,7 @@ namespace Piranha.AspNetCore
                             sitemap.AddRange(urls);
                     }
                     await context.Response.WriteAsync(sitemap.ToXml());
+                    return;
                 }
             }
             await next.Invoke(context);
