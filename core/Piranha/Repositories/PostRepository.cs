@@ -39,6 +39,17 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Creates and initializes a new post of the specified type.
+        /// </summary>
+        /// <returns>The created post</returns>
+        public T Create<T>(string typeId = null) where T : Models.PostBase {
+            if (string.IsNullOrWhiteSpace(typeId))
+                typeId = typeof(T).Name;
+
+            return contentService.Create<T>(api.PostTypes.GetById(typeId));
+        }        
+
+        /// <summary>
         /// Gets the available posts for the specified blog.
         /// </summary>
         /// <param name="blogId">The unique blog id</param>

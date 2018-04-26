@@ -31,8 +31,10 @@ namespace Piranha.AttributeBuilder
             foreach (var type in types) {
                 var pageType = GetContentType(type);
 
-                if (pageType != null)
+                if (pageType != null) {
+                    pageType.Ensure();
                     api.PageTypes.Save(pageType);
+                }
             }
             return this;
         }

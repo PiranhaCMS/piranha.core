@@ -31,8 +31,10 @@ namespace Piranha.AttributeBuilder
             foreach (var type in types) {
                 var postType = GetContentType(type);
 
-                if (postType != null)
+                if (postType != null) {
+                    postType.Ensure();
                     api.PostTypes.Save(postType);
+                }
             }
             return this;
         }
