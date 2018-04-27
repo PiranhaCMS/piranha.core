@@ -50,7 +50,7 @@ namespace Piranha.Repositories
                 typeId = typeof(T).Name;
 
             return contentService.Create<T>(api.PageTypes.GetById(typeId));
-        }        
+        }
 
         /// <summary>
         /// Gets all of the available pages for the current site.

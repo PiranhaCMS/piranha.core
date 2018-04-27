@@ -24,7 +24,7 @@ piranha.media = new function() {
     self.initCallback = null;
 
     self.init = function (e) {
-        self.mediaId = e.data('mediaid');
+        self.mediaId = e.attr('data-mediaid');
         self.mediaName = e.data('medianame');
         self.mediaUrlId = e.data('mediaurlid');
         self.mediaFilter = e.data('filter');

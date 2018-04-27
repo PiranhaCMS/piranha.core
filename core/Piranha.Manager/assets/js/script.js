@@ -22896,7 +22896,7 @@ piranha.media = new function() {
     self.initCallback = null;
 
     self.init = function (e) {
-        self.mediaId = e.data('mediaid');
+        self.mediaId = e.attr('data-mediaid');
         self.mediaName = e.data('medianame');
         self.mediaUrlId = e.data('mediaurlid');
         self.mediaFilter = e.data('filter');
@@ -23681,7 +23681,6 @@ var manager = {
                     // If the new region contains a html editor, make sure
                     // we initialize it.
                     var editors = $(res).find('.block-editor').each(function () {
-                        console.log("activating editor after insert");
                         tinyMCE.execCommand('mceAddEditor', false, this.id);
                     });
 
@@ -23716,8 +23715,14 @@ var manager = {
                 });
 
                 var content = $(items.get(n)).find('[contenteditable=true]');
-
                 content.attr('data-id', function (i, val) {
+                    if (val)
+                        return val.replace(/Blocks_\d+__/, 'Blocks_' + n + '__');
+                    return val;
+                });
+
+                var media = $(items.get(n)).find('button');
+                media.attr('data-mediaid', function (i, val) {
                     if (val)
                         return val.replace(/Blocks_\d+__/, 'Blocks_' + n + '__');
                     return val;
