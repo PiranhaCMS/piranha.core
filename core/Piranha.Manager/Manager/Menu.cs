@@ -115,6 +115,9 @@ namespace Piranha.Manager
                 InternalId = "System", Name = "System", Css = "fas fa-cog", Items = new MenuItemList()  {
                     new MenuItem() {
                         InternalId = "Config", Name = "Config", Controller = "Config", Action = "Edit", Policy = Permission.Config, Css = "fas fa-cogs"
+                    },
+                    new MenuItem() {
+                        InternalId = "Modules", Name = "Modules", Controller = "Module", Action = "List", Policy = Permission.Config, Css = "fas fa-microchip"
                     }
                 }
             }

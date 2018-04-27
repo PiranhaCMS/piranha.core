@@ -102,6 +102,12 @@ public static class ManagerModuleExtensions
                 policy.RequireClaim(Permission.MediaDeleteFolder, Permission.MediaDeleteFolder);
             });
 
+            // Module policies
+            o.AddPolicy(Permission.Modules, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Modules, Permission.Modules);
+            });
+
             // Page policies
             o.AddPolicy(Permission.Pages, policy => {
                 policy.RequireClaim(Permission.Admin, Permission.Admin);
