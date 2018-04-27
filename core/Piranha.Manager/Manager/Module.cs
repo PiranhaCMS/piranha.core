@@ -20,6 +20,37 @@ namespace Piranha.Manager
     public class Module : Extend.IModule
     {
         #region Properties
+
+        /// <summary>
+        /// Gets the Author
+        /// </summary>
+        public string Author => "Piranha";
+
+        /// <summary>
+        /// Gets the Name
+        /// </summary>
+        public string Name => "Piranha Manager";
+
+        /// <summary>
+        /// Gets the Version
+        /// </summary>
+        public string Version => "4.4";
+
+        /// <summary>
+        /// Gets the release date
+        /// </summary>
+        public string ReleaseDate => "2018-04-02";
+
+        /// <summary>
+        /// Gets the description
+        /// </summary>
+        public string Description => "Manager panel for Piranha CMS for AspNetCore.";
+
+        /// <summary>
+        /// Gets the package url.
+        /// </summary>
+        public string PackageURL => "https://www.nuget.org/packages/Piranha.Manager/";
+
         /// <summary>
         /// Gets the mapper.
         /// </summary>
