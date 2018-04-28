@@ -16,6 +16,36 @@ namespace Piranha.Extend
     public interface IModule
     {
         /// <summary>
+        /// Get the author for this module
+        /// </summary>
+        string Author { get; }
+
+        /// <summary>
+        /// Get the name of the module
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
+        /// Get the module version
+        /// </summary>
+        string Version { get; }
+
+        /// <summary>
+        /// Get the module release date
+        /// </summary>
+        string ReleaseDate { get; }
+
+        /// <summary>
+        /// Get the module description
+        /// </summary>
+        string Description { get; }
+
+        /// <summary>
+        /// Get the package url for this module
+        /// </summary>
+        string PackageURL { get; }
+
+        /// <summary>
         /// Initializes the module.
         /// </summary>
         void Init();

@@ -27,6 +27,7 @@ namespace Piranha.Manager
         public const string MediaEdit = "PiranhaMediaEdit";
         public const string MediaAddFolder = "PiranhaMediaAddFolder";
         public const string MediaDeleteFolder = "PiranhaMediaDeleteFolder";
+        public const string Modules = "PiranhaModules";
         public const string Pages = "PiranhaPages";
         public const string PagesAdd = "PiranhaPagesAdd";
         public const string PagesDelete = "PiranhaPagesDelete";
@@ -63,6 +64,7 @@ namespace Piranha.Manager
                 MediaEdit,
                 MediaAddFolder,
                 MediaDeleteFolder,
+                Modules,
                 Pages,
                 PagesAdd,
                 PagesDelete,

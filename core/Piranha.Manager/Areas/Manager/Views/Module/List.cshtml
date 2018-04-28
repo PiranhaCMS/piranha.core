@@ -1,0 +1,33 @@
+@model Piranha.Areas.Manager.Models.ModuleListModel
+@{
+    ViewBag.Title = "Modules";
+    ViewBag.Controller = "Module";
+}
+<div class="row">
+    <div class="col-sm-9">
+        @foreach (var author in Model.Modules.Keys) {
+            <div class="list-group">
+                <div class="list-group-item">
+                    <h4 class="list-group-item-heading">@author</h4>
+                </div>
+                @foreach (var module in Model.Modules[author]) {
+                    <div class="list-group-item">
+                        <label class="list-group-item-heading">@module.Name</label>
+                        <p class="list-group-item-text">@module.Description</p>
+                        <hr />
+                        <dl class="dl-horizontal">
+                            <dt>Version</dt>
+                            <dd>@module.Version</dd>
+
+                            <dt>Release Date</dt>
+                            <dd>@module.ReleaseDate</dd>
+
+                            <dt>Package URL</dt>
+                            <dd><a href="@module.PackageURL">@module.PackageURL</a></dd>
+                        </dl>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
