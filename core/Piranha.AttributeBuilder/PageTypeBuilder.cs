@@ -87,7 +87,8 @@ namespace Piranha.AttributeBuilder
                         Id = attr.Id,
                         CLRType = type.GetTypeInfo().AssemblyQualifiedName,
                         Title = attr.Title,
-                        ContentTypeId = App.ContentTypes.GetId(type)
+                        ContentTypeId = App.ContentTypes.GetId(type),
+                        UseBlocks = attr.UseBlocks
                     };
 
                     var routes = type.GetTypeInfo().GetCustomAttributes(typeof(PageTypeRouteAttribute));

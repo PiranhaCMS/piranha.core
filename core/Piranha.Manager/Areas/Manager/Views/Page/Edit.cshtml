@@ -49,18 +49,18 @@
         <div class="col-sm-12 buttons">
             <!-- Back -->
             <a href="@Url.Action("List", "Page", new { pageId = Model.Id })" class="btn btn-info">
-                <span class="glyphicon glyphicon-chevron-left"></span>
+                <span class="fas fa-angle-left"></span>
             </a>
             <!-- Settings -->
             <button id="btn-settings" type="button" class="btn btn-primary">
-                <span class="glyphicon glyphicon-cog"></span>
+                <span class="fas fa-cog"></span>
             </button>
 
             <!-- Actions -->
             <div class="btn-group">
                 <button type="submit" class="btn btn-labeled btn-success">
                     <span class="btn-label">
-                        <i class="glyphicon glyphicon-ok"></i>
+                        <i class="fas fa-check"></i>
                     </span>
                     @if (Model.Published.HasValue) {
                         <text>Update</text>
@@ -138,9 +138,12 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             @for (var n = Model.Regions.Count - 1; n >= 0; n--) {
-                <button class="btn btn-sm btn-secondary pull-right btn-toggle" data-target="#region-@Model.Regions[n].Id">@Model.Regions[n].Title</button>
+                var primary = n == 0 && !Model.PageType.UseBlocks && !Model.PageContentType.CustomEditor;
+                <button class="btn btn-sm btn-secondary pull-right btn-toggle @(primary ? "btn-primary" : "")" data-target="#region-@Model.Regions[n].Id">@Model.Regions[n].Title</button>
             }
-            <button class="btn btn-sm btn-secondary pull-right btn-toggle @(!Model.PageContentType.CustomEditor ? "btn-primary" : "")" data-target="#page-blocks">Content</button>
+            @if (Model.PageType.UseBlocks) {
+                <button class="btn btn-sm btn-secondary pull-right btn-toggle @(!Model.PageContentType.CustomEditor ? "btn-primary" : "")" data-target="#page-blocks">Content</button>
+            }
             @if (Model.PageContentType.CustomEditor) {
                 <button class="btn btn-sm btn-secondary pull-right btn-toggle btn-primary" data-target="#custom-editor">@Model.PageContentType.Title</button>
             }
@@ -150,31 +153,34 @@
             <div id="custom-editor" class="panel-body custom-editor">
                 @Html.EditorFor(m => m, Model.PageContentType.Id)
             </div>
-        } 
-        <div id="page-blocks" class="panel-body" @(Model.PageContentType.CustomEditor ? "style=display:none" : "")>
-            <div class="page-blocks-body">
-                <div class="sortable">
-                    <div class="unsortable">
-                        <div class="block-add">
-                            <div class="block-add-dialog">
-                                @foreach (var category in Piranha.App.Blocks.GetCategories()) {
-                                    <label>@category</label>
-                                    @foreach (var block in Piranha.App.Blocks.GetByCategory(category)) {
-                                        <a href="#" data-typename="@block.TypeName"><i class="@block.Icon"></i>@block.Name</a>
+        }
+        @if (Model.PageType.UseBlocks) {
+            <div id="page-blocks" class="panel-body" @(Model.PageContentType.CustomEditor ? "style=display:none" : "")>
+                <div class="page-blocks-body">
+                    <div class="sortable">
+                        <div class="unsortable">
+                            <div class="block-add">
+                                <div class="block-add-dialog">
+                                    @foreach (var category in Piranha.App.Blocks.GetCategories()) {
+                                        <label>@category</label>
+                                        @foreach (var block in Piranha.App.Blocks.GetByCategory(category)) {
+                                            <a href="#" data-typename="@block.TypeName"><i class="@block.Icon"></i>@block.Name</a>
+                                        }
                                     }
-                                }
+                                </div>
+                                <a href="#" class="block-add-toggle">
+                                    <hr><span class="fas fa-plus"></span>
+                                </a>
                             </div>
-                            <a href="#" class="block-add-toggle">
-                                <hr><span class="glyphicon glyphicon-plus"></span>
-                            </a>
                         </div>
+                        @Html.EditorFor(m => m.Blocks)
                     </div>
-                    @Html.EditorFor(m => m.Blocks)
                 </div>
             </div>
-        </div>
+        }
         @for (var n = 0; n < Model.Regions.Count; n++) {
-            <div id="region-@Model.Regions[n].Id" class="panel-body" style="display:none">
+            var primary = n == 0 && !Model.PageType.UseBlocks && !Model.PageContentType.CustomEditor;
+            <div id="region-@Model.Regions[n].Id" class="panel-body" @(!primary ? "style=display:none" : "")>
                 @Html.HiddenFor(m => m.Regions[n].Id)
                 @Html.HiddenFor(m => m.Regions[n].Title)
                 @Html.HiddenFor(m => m.Regions[n].CLRType)
