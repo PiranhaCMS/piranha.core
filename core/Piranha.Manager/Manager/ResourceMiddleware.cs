@@ -55,7 +55,12 @@ namespace Piranha.Manager
             if (path.StartsWith("/manager/assets/")) {
                 var provider = new EmbeddedFileProvider(Module.Assembly, "Piranha");
 
-                var fileInfo = provider.GetFileInfo(path.Replace("/manager/", ""));
+                var folders = path.Substring(0, path.LastIndexOf("/"));
+                var file = path.Substring(path.LastIndexOf("/"));
+
+                path = folders.Replace("/manager/", "").Replace("-", "_") + file;
+
+                var fileInfo = provider.GetFileInfo(path);
 
                 if (fileInfo.Exists) {
                     var headers = context.Response.GetTypedHeaders();

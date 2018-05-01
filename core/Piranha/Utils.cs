@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -165,6 +166,17 @@ namespace Piranha
             var matches = reg.Matches(html.Value) ;
 
             return matches.Count > 0 ? matches[0].Value : "" ;
-        }        
+        }
+
+        /// <summary>
+        /// Gets the formatted three digit version number of the given assembly.
+        /// </summary>
+        /// <param name="assembly">The assembly</param>
+        /// <returns>The version string</returns>
+        public static string GetAssemblyVersion(Assembly assembly) {
+            var version = assembly.GetName().Version;
+
+            return $"{version.Major}.{version.Minor}.{version.Build}";
+        }
     }
 }

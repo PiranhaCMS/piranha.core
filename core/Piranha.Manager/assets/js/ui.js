@@ -395,6 +395,7 @@ var manager = {
                     BlockIndex: 0
                 }),
                 success: function (res) {
+                    $('.block-info').remove();
                     $(res).insertAfter(target);
 
                     console.log('scanning for new editors.');

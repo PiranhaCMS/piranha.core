@@ -19,8 +19,6 @@ namespace Piranha.Manager
 {
     public class Module : Extend.IModule
     {
-        #region Properties
-
         /// <summary>
         /// Gets the Author
         /// </summary>
@@ -34,12 +32,12 @@ namespace Piranha.Manager
         /// <summary>
         /// Gets the Version
         /// </summary>
-        public string Version => "4.4";
+        public string Version => Piranha.Utils.GetAssemblyVersion(this.GetType().Assembly);
 
         /// <summary>
         /// Gets the release date
         /// </summary>
-        public string ReleaseDate => "2018-04-02";
+        public string ReleaseDate => "2018-03-25";
 
         /// <summary>
         /// Gets the description
@@ -49,7 +47,7 @@ namespace Piranha.Manager
         /// <summary>
         /// Gets the package url.
         /// </summary>
-        public string PackageURL => "https://www.nuget.org/packages/Piranha.Manager/";
+        public string PackageURL => "https://www.nuget.org/packages/Piranha.Manager";
 
         /// <summary>
         /// Gets the mapper.
@@ -65,7 +63,6 @@ namespace Piranha.Manager
         /// Last modification date of the assembly.
         /// </summary>
         internal static DateTime LastModified;
-        #endregion
 
         /// <summary>
         /// Initializes the module.
