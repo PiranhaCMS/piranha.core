@@ -175,12 +175,14 @@
                         </div>
                         @Html.EditorFor(m => m.Blocks)
                     </div>
-                    <div class="block-info content-preview">
-                        <p>
-                            It looks like this page doesn't have any content yet! To get started just press the
-                            plus above to add your first block.
-                        </p>
-                    </div>
+                    @if (Model.Blocks.Count == 0) {
+                        <div class="block-info content-preview">
+                            <p>
+                                It looks like this page doesn't have any content yet! To get started just press the
+                                plus above to add your first block.
+                            </p>
+                        </div>
+                    }
                 </div>
             </div>
         }

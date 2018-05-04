@@ -7,27 +7,27 @@
 
 <li class="sitemap-item dd-item @(!item.Published.HasValue ? "unpublished" : "") @(Model.CurrentLevel < Model.ExpandedLevels || (!string.IsNullOrEmpty(pageId) && item.HasChild(new Guid(pageId))) ? "expanded" : "")" data-id="@item.Id">
     <div class="dd-handle">
-        <span class="glyphicon glyphicon-option-vertical"></span>
+        <span class="fas fa-ellipsis-v"></span>
     </div>
     <div class="dd-toggle @(item.Items.Count == 0 ? "empty" : "")">
         @if (item.Items.Count > 0) {
-            <span class="glyphicon glyphicon-plus-sign"></span>
-            <span class="glyphicon glyphicon-minus-sign"></span>
+            <span class="fas fa-plus-circle"></span>
+            <span class="fas fa-minus-circle"></span>
         }
     </div>
     @if (!Model.ReadOnly) {
         <div class="actions three pull-right">
             @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesAdd)).Succeeded) {
                 <a class="add-after first" href="@Url.Action("AddAt", new { type = "pageType", parentId = item.ParentId, sortOrder = item.SortOrder + 1 })" data-toggle="tooltip" data-original-title="Add after" data-placement="top">
-                    <span class="glyphicon glyphicon-chevron-down"></span>
+                    <span class="fas fa-angle-down"></span>
                 </a>
                 <a class="add-below" href="@Url.Action("AddAt", new { type = "pageType", parentId = item.Id, sortOrder = 0 })" data-toggle="tooltip" data-original-title="Add below" data-placement="top" data-parentid="@item.Id" data-sortorder="0">
-                    <span class="glyphicon glyphicon-chevron-right"></span>
+                    <span class="fas fa-angle-right"></span>
                 </a>
             }
             @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesDelete)).Succeeded) {
                 <a class="remove last confirm-delete" href="@Url.Action("Delete", new { id = item.Id })" @(item.Items.Count > 0 ? "style=visibility:hidden" : "") data-toggle="tooltip" data-original-title="Delete" data-placement="top" data-message="Are you sure you want to delete the page?">
-                    <span class="glyphicon glyphicon-trash text-danger"></span>
+                    <span class="fas fa-trash text-danger"></span>
                 </a>
             }
         </div>

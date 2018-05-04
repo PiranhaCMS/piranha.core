@@ -322,17 +322,17 @@ li.sitemap-item {
 
 		}
 
-		.glyphicon-minus-sign {
+		.fa-minus-circle {
 			display: none;
 		}			
 	}
 
 	&.expanded {
 		>.dd-toggle {
-			.glyphicon-plus-sign {
+			.fa-plus-circle {
 				display: none;
 			}
-			.glyphicon-minus-sign {
+			.fa-minus-circle {
 				display: inline;
 			}
 		}
@@ -404,7 +404,12 @@ li.sitemap-item {
         a {
             display: inline-block;
             font-size: 14px;
-            margin-top: 2px;
+			margin-top: 2px;
+			
+			&.add-after, &.add-below {
+				font-size: 16px;
+				line-height: 14px;
+			}
         }
 
         &.one {

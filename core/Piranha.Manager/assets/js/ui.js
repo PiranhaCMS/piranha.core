@@ -96,6 +96,9 @@ for (var n = 0; n < sortables.length; n++) {
         manager.tools.recalcblocks();
     });
 }
+$(document).on('click', '.dd-toggle span', function() {
+    $(this).parent().parent().toggleClass('expanded');
+});
 
 //
 // Blocks
@@ -287,7 +290,8 @@ $(document).on('mouseenter', 'a.add-below', function (e) {
             parent.addClass('expanded');
         }
     } else {
-        parent.append('<ol id="add-page-below-placeholder" class="dd-list"><div class="dd-placeholder"><span>Your new page</span></div></ol>');
+        parent.append('<ol id="add-page-below-placeholder" class="dd-list hover-expanded"><div class="dd-placeholder"><span>Your new page</span></div></ol>');
+        parent.addClass('expanded');
     }
 });
 $(document).on('mouseleave', 'a.add-below', function (e) {

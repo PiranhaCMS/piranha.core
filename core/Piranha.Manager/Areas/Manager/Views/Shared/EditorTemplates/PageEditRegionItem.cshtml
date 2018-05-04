@@ -8,10 +8,10 @@
 <div class="region-list-item">
     <div class="region-list-heading" role="tab" id="heading-@unique">
         <div class="region-tool handle sortable-handle @(Model.NoExpand ? "no-expand" : "")">
-            <span class="glyphicon glyphicon-option-vertical"></span>
+            <span class="fas fa-ellipsis-v"></span>
         </div>                    
         <div class="region-tool region-actions @(Model.NoExpand ? "no-expand" : "")">
-            <button type="button" class="delete" data-toggle="tooltip" data-original-title="Delete" data-placement="top"><span class="glyphicon glyphicon-trash text-danger"></span></button>
+            <button type="button" class="delete" data-toggle="tooltip" data-original-title="Delete" data-placement="top"><span class="fas fa-trash text-danger"></span></button>
         </div>
         <div class="region-content">
             @if (Model.NoExpand) {

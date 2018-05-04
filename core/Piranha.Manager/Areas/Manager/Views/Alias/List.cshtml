@@ -9,7 +9,7 @@
         @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.AliasesEdit)).Succeeded) {        
             <a href="#" class="btn btn-labeled btn-primary pull-right" data-toggle="modal" data-target="#modalAddAlias">
                 <span class="btn-label">
-                    <i class="glyphicon glyphicon-plus"></i>
+                    <i class="fas fa-plus"></i>
                 </span>Add alias
             </a>
         }
@@ -18,7 +18,7 @@
             <div id="btn-sitepicker" class="btn-group pull-right" style="margin-right: 15px">
                 <button type="button" class="btn btn-labeled btn-default" data-toggle="dropdown">
                     <span class="btn-label">
-                        <i class="glyphicon glyphicon-globe"></i>
+                        <i class="fas fa-globe"></i>
                     </span>@Model.SiteTitle
                 </button>
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -65,13 +65,13 @@
                 </td>
                 <td class="text-center">
                     @if (alias.Type == Piranha.Models.RedirectType.Permanent) {
-                        <span class="glyphicon glyphicon-ok"></span>
+                        <span class="fas fa-check"></span>
                     }
                 </td>
                 <td class="actions one">
                     @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.AliasesDelete)).Succeeded) {        
                         <a class="remove" href="@Url.Action("Delete", new { id = alias.Id })">
-                            <span class="glyphicon glyphicon-trash text-danger"></span>
+                            <span class="fas fa-trash text-danger"></span>
                         </a>
                     }
                 </td>

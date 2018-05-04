@@ -59,7 +59,7 @@
         <div class="btn-group pull-right">
             <button type="button" class="btn btn-labeled btn-primary" data-toggle="dropdown">
                 <span class="btn-label">
-                    <i class="glyphicon glyphicon-plus"></i>
+                    <i class="fas fa-plus"></i>
                 </span>Add
             </button>
             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -90,7 +90,7 @@
             @Html.Hidden("ParentId", Model.CurrentFolderId)
 
             <div class="dz-message needsclick">
-                <span class="glyphicon glyphicon-cloud-upload"></span>
+                <span class="fas fa-cloud-upload-alt"></span>
                 Drop files here or click to upload.
             </div>
         </form>
@@ -114,7 +114,7 @@
                     <tr ondrop="drop(event)" ondragover="allowDrop(event)" data-id="@Model.ParentFolderId">
                         <td class="text-limit-cell">
                             <span class="text-limit">
-                                <span class="glyphicon glyphicon-folder-open media-icon"></span>
+                                <span class="fas fa-folder-open media-icon"></span>
                                 <a href="@Url.Action("List", new { folderId = Model.ParentFolderId })">...</a>
                             </span>
                         </td>
@@ -128,7 +128,7 @@
                     <tr ondrop="drop(event)" ondragover="allowDrop(event)" data-id="@folder.Id">
                         <td class="text-limit-cell">
                             <span class="text-limit">
-                                <span class="glyphicon glyphicon-folder-open media-icon"></span>
+                                <span class="fas fa-folder-open media-icon"></span>
                                 <a href="@Url.Action("List", new { folderId = folder.Id})">@folder.Name</a>
                             </span>
                         </td>
@@ -137,7 +137,7 @@
                         <td>@folder.Created.ToString("yyyy-MM-dd")</td>
                         <td class="actions one">
                             <a href="@Url.Action("DeleteFolder", new { id = folder.Id})" data-toggle="tooltip" data-original-title="Delete folder" data-placement="top">
-                                <span class="glyphicon glyphicon-trash text-danger"></span>
+                                <span class="fas fa-trash text-danger"></span>
                             </a>
                         </td>
                     </tr>
@@ -146,17 +146,17 @@
                     <tr data-id="@item.Id" draggable="true" ondragstart="drag(event)">
                         <td class="text-limit-cell">
                             <div class="dd-handle">
-                                    <span class="glyphicon glyphicon-option-vertical"></span>
+                                    <span class="fas fa-ellipsis-v"></span>
                             </div>
                             <span class="text-limit">
                                 @if (item.Type == MediaType.Image) {
-                                    <span class="glyphicon glyphicon-picture media-icon"></span>
+                                    <span class="fas fa-image media-icon"></span>
                                 } else if (item.Type == MediaType.Video) {
-                                    <span class="glyphicon glyphicon-film media-icon"></span>
+                                    <span class="fas fa-film media-icon"></span>
                                 } else if (item.Type == MediaType.Document) {
-                                    <span class="glyphicon glyphicon-book media-icon"></span>
+                                    <span class="fas fa-book media-icon"></span>
                                 } else {
-                                    <span class="glyphicon glyphicon-exclamation-sign media-icon"></span>                                
+                                    <span class="fas fa-exclamation-triangle media-icon"></span>                                
                                 }
                                 <a href="#" target="_blank" data-toggle="modal" data-target="#modalImgPreview" data-filename="@item.Filename" data-url="@Url.Content(item.PublicUrl)" data-contenttype="@item.ContentType" data-filesize="@Piranha.Utils.FormatByteSize(item.Size)" data-modified="@item.LastModified.ToString("yyyy-MM-dd")" data-id="@item.Id" data-parentid="@item.FolderId">@item.Filename</a>
                             </span>
@@ -166,7 +166,7 @@
                         <td>@item.LastModified.ToString("yyyy-MM-dd")</td>
                         <td class="actions one">
                             <a href="@Url.Action("Delete", new { id = item.Id})" data-toggle="tooltip" data-original-title="Delete" data-placement="top">
-                                <span class="glyphicon glyphicon-trash text-danger"></span>
+                                <span class="fas fa-trash text-danger"></span>
                             </a>
                         </td>
                     </tr>

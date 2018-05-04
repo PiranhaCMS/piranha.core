@@ -14,7 +14,7 @@
                             <div class="btn-group pull-right">
                                 <button type="button" class="btn btn-labeled btn-primary btn-sm" data-toggle="dropdown">
                                     <span class="btn-label">
-                                        <i class="glyphicon glyphicon-plus"></i>
+                                        <i class="fas fa-plus"></i>
                                     </span>Add a new post
                                 </button>
                                 <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
@@ -74,7 +74,7 @@
                         <td class="actions one">
                             @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PostsDelete)).Succeeded) {
                                 <a class="remove" href="@Url.Action("Delete", "Post", new { id = post.Id })">
-                                    <span class="glyphicon glyphicon-trash text-danger"></span>
+                                    <span class="fas fa-trash text-danger"></span>
                                 </a>
                             }
                         </td>

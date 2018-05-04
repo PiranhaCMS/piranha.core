@@ -12085,6 +12085,7 @@ span.CodeMirror-selectedtext {
   border-right: solid 2px #f2f2f2;
   box-sizing: border-box;
   cursor: pointer;
+  text-align: center;
 }
 .dd-handle span {
   padding: 4px 0;
@@ -12720,13 +12721,13 @@ li.sitemap-item .dd-toggle {
 li.sitemap-item .dd-toggle span {
   cursor: pointer;
 }
-li.sitemap-item .dd-toggle .glyphicon-minus-sign {
+li.sitemap-item .dd-toggle .fa-minus-circle {
   display: none;
 }
-li.sitemap-item.expanded > .dd-toggle .glyphicon-plus-sign {
+li.sitemap-item.expanded > .dd-toggle .fa-plus-circle {
   display: none;
 }
-li.sitemap-item.expanded > .dd-toggle .glyphicon-minus-sign {
+li.sitemap-item.expanded > .dd-toggle .fa-minus-circle {
   display: inline;
 }
 li.sitemap-item.expanded > .dd-list {
@@ -12784,6 +12785,11 @@ li.sitemap-item .actions a {
   display: inline-block;
   font-size: 14px;
   margin-top: 2px;
+}
+li.sitemap-item .actions a.add-after,
+li.sitemap-item .actions a.add-below {
+  font-size: 16px;
+  line-height: 14px;
 }
 li.sitemap-item .actions.one {
   width: 60px;
@@ -13295,6 +13301,9 @@ li.sitemap-item .actions.one {
   z-index: 2000;
   display: none;
   transition: display ease-in-out 0.2s;
+}
+#page-blocks .block .block-actions .btn {
+  width: 34px;
 }
 #page-blocks .block div[contenteditable="true"] {
   min-height: 30px;

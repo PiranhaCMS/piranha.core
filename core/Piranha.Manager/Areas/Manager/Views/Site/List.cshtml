@@ -8,7 +8,7 @@
     <div class="col-sm-12 buttons">
         <a href="@Url.Action("Add")" class="btn btn-labeled btn-primary pull-right">
             <span class="btn-label">
-                <i class="glyphicon glyphicon-plus"></i>
+                <i class="fas fa-plus"></i>
             </span>Add site
         </a>
     </div>
@@ -44,7 +44,7 @@
                 </td>
                 <td class="text-center">
                     @if (site.IsDefault) {
-                        <span class="glyphicon glyphicon-ok"></span>
+                        <span class="fas fa-check"></span>
                     }
                 </td>
                 <td>@site.LastModified.ToString("yyyy-MM-dd")</td>
@@ -52,7 +52,7 @@
                 <td class="actions one">
                     @if (!site.IsDefault) {
                         <a class="remove" href="@Url.Action("Delete", new { id = site.Id })">
-                            <span class="glyphicon glyphicon-trash text-danger"></span>
+                            <span class="fas fa-trash text-danger"></span>
                         </a>
                     }
                 </td>

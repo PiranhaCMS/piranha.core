@@ -97,7 +97,7 @@ namespace Piranha.Manager
                         InternalId = "Pages", Name = "Pages", Controller = "Page", Action = "List", Policy = Permission.Pages, Css = "fas fa-copy"
                     },
                     new MenuItem() {
-                        InternalId = "Media", Name = "Media", Controller = "Media", Action = "List", Policy = Permission.Media, Css = "fas fa-image"
+                        InternalId = "Media", Name = "Media", Controller = "Media", Action = "List", Policy = Permission.Media, Css = "fas fa-images"
                     }
                 }
             },
