@@ -8,9 +8,12 @@
  * 
  */
 
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Piranha.AspNetCore.Identity.Models
 {
@@ -19,11 +22,22 @@ namespace Piranha.AspNetCore.Identity.Models
         public Data.User User { get; set; }
         public IList<Data.Role> Roles { get; set; }
         public IList<string> SelectedRoles { get; set; }
+        public string Password { get; set; }
+        public string PasswordConfirm { get; set; }
 
         public UserEditModel() 
         {
             Roles = new List<Data.Role>();
             SelectedRoles = new List<string>();
+        }
+
+        public static UserEditModel Create(Db db) 
+        {
+            return new UserEditModel
+            {
+                User = new Data.User(),
+                Roles = db.Roles.OrderBy(r => r.Name).ToList()
+            };
         }
 
         public static UserEditModel GetById(Db db, Guid id) 
@@ -48,17 +62,41 @@ namespace Piranha.AspNetCore.Identity.Models
             return null;
         }
 
-        public bool Save(Db db)
+        public async Task<bool> Save(Db db, UserManager<Data.User> userManager)
         {
             var user = db.Users.FirstOrDefault(u => u.Id == User.Id);
 
             if (user == null)
             {
-                User.Id = User.Id != Guid.Empty ? User.Id : Guid.NewGuid();                
-            }
-            user.UserName = User.UserName;
-            user.Email = User.Email;
+                user = new Data.User {
+                    Id = User.Id != Guid.Empty ? User.Id : Guid.NewGuid(),
+                    UserName = User.UserName,
+                    Email = User.Email
+                };
+                User.Id = user.Id;
 
+                var createResult = await userManager.CreateAsync(user, "password");
+            }
+            else 
+            {
+                user.UserName = User.UserName;
+                user.Email = User.Email;
+            }
+
+            // Remove current roles.
+            foreach (var userRole in db.UserRoles.Where(r => r.UserId == user.Id))
+            {
+                var role = db.Roles.FirstOrDefault(r => r.Id == userRole.RoleId);
+
+                if (role != null)
+                    await userManager.RemoveFromRoleAsync(user, role.Name);
+            }
+            
+            // Add the currently selected roles.
+            foreach (var role in SelectedRoles)
+            {
+                await userManager.AddToRoleAsync(user, role);
+            }
             db.SaveChanges();
 
             return true;
