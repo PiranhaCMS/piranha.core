@@ -18,20 +18,19 @@ namespace Piranha.AspNetCore.Identity
     /// </summary>
     public class Module : Extend.IModule
     {
-        private readonly Dictionary<string, string> _permissionNames = new Dictionary<string, string>()
-        {
-            { Permissions.Roles, "Roles"},
-            { Permissions.RolesAdd, "Roles - Add"},
-            { Permissions.RolesDelete, "Roles - Delete"},
-            { Permissions.RolesEdit, "Roles - Edit"},
-            { Permissions.RolesSave, "Roles - Save"},
-            { Permissions.Users, "Users"},
-            { Permissions.UsersAdd, "Users - Add"},
-            { Permissions.UsersDelete, "Users - Delete"},
-            { Permissions.UsersEdit, "Users - Edit"},
-            { Permissions.UsersSave, "Users - Save"}
+        private readonly List<PermissionItem> _permissions = new List<PermissionItem>() {
+            new PermissionItem { Name = Permissions.Roles, Title = "List Roles", Category = "Roles"},
+            new PermissionItem { Name = Permissions.RolesAdd, Title = "Add Roles", Category = "Roles" },
+            new PermissionItem { Name = Permissions.RolesDelete, Title = "Delete Roles", Category = "Roles" },
+            new PermissionItem { Name = Permissions.RolesEdit, Title = "Edit Roles", Category = "Roles" },
+            new PermissionItem { Name = Permissions.RolesSave, Title = "Save Roles", Category = "Roles" },
+            new PermissionItem { Name = Permissions.Users, Title = "List Users", Category = "Users" },
+            new PermissionItem { Name = Permissions.UsersAdd, Title = "Add Users", Category = "Users" },
+            new PermissionItem { Name = Permissions.UsersDelete, Title = "Delete Users", Category = "Users" },
+            new PermissionItem { Name = Permissions.UsersEdit, Title = "Edit Users", Category = "Users" },
+            new PermissionItem { Name = Permissions.UsersSave, Title = "Save Users", Category = "Users" }
         };
-
+        
         /// <summary>
         /// Gets the Author
         /// </summary>
@@ -68,17 +67,13 @@ namespace Piranha.AspNetCore.Identity
         public void Init()
         {
             // Register permissions
-            foreach (var permission in _permissionNames.Keys)
+            foreach (var permission in _permissions)
             {
-                App.Permissions["Manager"].Add(new PermissionItem
-                {
-                    Name = permission,
-                    Title = _permissionNames[permission]
-                });
+                App.Permissions["Manager"].Add(permission);
             }
 
             // Add manager menu items
-            Piranha.Manager.Menu.Items["System"].Items.Add(new Manager.Menu.MenuItem()
+            Piranha.Manager.Menu.Items["System"].Items.Insert(0, new Manager.Menu.MenuItem()
             {
                 InternalId = "Users",
                 Name = "Users",
@@ -87,7 +82,7 @@ namespace Piranha.AspNetCore.Identity
                 Policy = Permissions.Users,
                 Css = "fas fa-users"
             });
-            Piranha.Manager.Menu.Items["System"].Items.Add(new Manager.Menu.MenuItem()
+            Piranha.Manager.Menu.Items["System"].Items.Insert(1, new Manager.Menu.MenuItem()
             {
                 InternalId = "Roles",
                 Name = "Roles",

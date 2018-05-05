@@ -56,55 +56,60 @@
         </div>
     </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Permissions</h3>
-        </div>
-        <div class="panel-body">
-            @foreach (var module in App.Permissions.GetModules())
-            {
-                var permissions = App.Permissions.GetPermissions(module);
+    @foreach (var module in App.Permissions.GetModules())
+    {
+        var permissions = App.Permissions.GetPermissions(module);
+        var categories = permissions.Select(p => p.Category).Distinct().OrderBy(c => c);
 
-                <div class="form-group">
-                    <label>@module</label>
-                    <ul class="list-group">
-                        @for (var n = 0; n < permissions.Count(); n+=3)
-                        {
-                            <li class="list-group-item">
-                                <div class="row">
-                                    <div class="col-xs-4">
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" name="SelectedClaims[]" value="@permissions[n].Name" @(Model.SelectedClaims.Contains(permissions[n].Name) ? "checked=checked" : "")> @permissions[n].Title
-                                            </label>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">@module Permissions</h3>
+            </div>
+            <div class="panel-body">
+                @foreach (var category in categories) {
+                    var categoryPermissions = permissions.Where(p => p.Category == category).OrderBy(p => p.Title).ToList();
+
+                    <div class="form-group">
+                        <label>@category</label>
+                        <ul class="list-group">
+                            @for (var n = 0; n < categoryPermissions.Count(); n+=3)
+                            {
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-xs-4">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" name="SelectedClaims[]" value="@categoryPermissions[n].Name" @(Model.SelectedClaims.Contains(permissions[n].Name) ? "checked=checked" : "")> @categoryPermissions[n].Title
+                                                </label>
+                                            </div>
                                         </div>
+                                        @if (n + 1 < categoryPermissions.Count())
+                                        {
+                                            <div class="col-xs-4">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" name="SelectedClaims[]" value="@categoryPermissions[n + 1].Name" @(Model.SelectedClaims.Contains(permissions[n + 1].Name) ? "checked=checked" : "")> @categoryPermissions[n + 1].Title
+                                                    </label>
+                                                </div>
+                                            </div>                                        
+                                        }
+                                        @if (n + 2 < categoryPermissions.Count())
+                                        {
+                                            <div class="col-xs-4">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" name="SelectedClaims[]" value="@categoryPermissions[n + 2].Name" @(Model.SelectedClaims.Contains(permissions[n + 2].Name) ? "checked=checked" : "")> @categoryPermissions[n + 2].Title
+                                                    </label>
+                                                </div>
+                                            </div>                                        
+                                        }
                                     </div>
-                                    @if (n + 1 < permissions.Count())
-                                    {
-                                        <div class="col-xs-4">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" name="SelectedClaims[]" value="@permissions[n + 1].Name" @(Model.SelectedClaims.Contains(permissions[n + 1].Name) ? "checked=checked" : "")> @permissions[n + 1].Title
-                                                </label>
-                                            </div>
-                                        </div>                                        
-                                    }
-                                    @if (n + 2 < permissions.Count())
-                                    {
-                                        <div class="col-xs-4">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" name="SelectedClaims[]" value="@permissions[n + 2].Name" @(Model.SelectedClaims.Contains(permissions[n + 2].Name) ? "checked=checked" : "")> @permissions[n + 2].Title
-                                                </label>
-                                            </div>
-                                        </div>                                        
-                                    }
-                                </div>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            }
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
         </div>
-    </div>
+    }
 }

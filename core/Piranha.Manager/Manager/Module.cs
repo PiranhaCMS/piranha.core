@@ -14,42 +14,42 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using Piranha.Security;
 
 namespace Piranha.Manager
 {
     public class Module : Extend.IModule
     {
-        private readonly Dictionary<string, string> _permissionNames = new Dictionary<string, string>()
-        {
-            { Permission.Admin, "Admin"},
-            { Permission.Aliases, "Aliases"},
-            { Permission.AliasesDelete, "Aliases - Delete"},
-            { Permission.AliasesEdit, "Aliases - Edit"},
-            { Permission.Config, "Config"},
-            { Permission.ConfigEdit, "Config - Edit"},
-            { Permission.Media, "Media"},
-            { Permission.MediaAdd, "Media - Add"},
-            { Permission.MediaAddFolder, "Media - Add folder"},
-            { Permission.MediaDelete, "Media - Delete"},
-            { Permission.MediaDeleteFolder, "Media - Delete folder"},
-            { Permission.MediaEdit, "Media - Edit"},
-            { Permission.Pages, "Pages"},
-            { Permission.PagesAdd, "Pages - Add"},
-            { Permission.PagesDelete, "Pages - Delete"},
-            { Permission.PagesEdit, "Pages - Edit"},
-            { Permission.PagesPublish, "Pages - Publish"},
-            { Permission.PagesSave, "Pages - Save"},
-            { Permission.Posts, "Posts"},
-            { Permission.PostsAdd, "Posts - Add"},
-            { Permission.PostsDelete, "Posts - Delete"},
-            { Permission.PostsEdit, "Posts - Edit"},
-            { Permission.PostsPublish, "Posts - Publish"},
-            { Permission.PostsSave, "Posts - Save"},
-            { Permission.Sites, "Sites"},
-            { Permission.SitesAdd, "Sites - Add"},
-            { Permission.SitesDelete, "Sites - Delete"},
-            { Permission.SitesEdit, " Sites - Edit"},
-            { Permission.SitesSave, "Sites - Save"}
+        private readonly List<PermissionItem> _permissions = new List<PermissionItem>() {
+            new PermissionItem() { Name = Permission.Admin, Title = "Admin"},
+            new PermissionItem() { Name = Permission.Aliases, Title = "List Aliases", Category = "Aliases" },
+            new PermissionItem() { Name = Permission.AliasesDelete, Title = "Delete Aliases", Category = "Aliases" },
+            new PermissionItem() { Name = Permission.AliasesEdit, Title = "Edit Aliases", Category = "Aliases" },
+            new PermissionItem() { Name = Permission.Config, Title = "View Config", Category = "Config" },
+            new PermissionItem() { Name = Permission.ConfigEdit, Title = "Edit Config", Category = "Config" },
+            new PermissionItem() { Name = Permission.Media, Title = "List Media", Category = "Media" },
+            new PermissionItem() { Name = Permission.MediaAdd, Title = "Add Media", Category = "Media" },
+            new PermissionItem() { Name = Permission.MediaAddFolder, Title = "Add Media Folders", Category = "Media" },
+            new PermissionItem() { Name = Permission.MediaDelete, Title = "Delete Media", Category = "Media" },
+            new PermissionItem() { Name = Permission.MediaDeleteFolder, Title = "Delete Media Folders", Category = "Media" },
+            new PermissionItem() { Name = Permission.MediaEdit, Title = "Edit Media", Category = "Media" },
+            new PermissionItem() { Name = Permission.Pages, Title = "List Pages", Category = "Pages" },
+            new PermissionItem() { Name = Permission.PagesAdd, Title = "Add Pages", Category = "Pages" },
+            new PermissionItem() { Name = Permission.PagesDelete, Title = "Delete Pages", Category = "Pages" },
+            new PermissionItem() { Name = Permission.PagesEdit, Title = "Edit Pages", Category = "Pages" },
+            new PermissionItem() { Name = Permission.PagesPublish, Title = "Publish Pages", Category = "Pages" },
+            new PermissionItem() { Name = Permission.PagesSave, Title = "Pages - Save", Category = "Pages" },
+            new PermissionItem() { Name = Permission.Posts, Title = "List Posts", Category = "Posts" },
+            new PermissionItem() { Name = Permission.PostsAdd, Title = "Add Posts", Category = "Posts" },
+            new PermissionItem() { Name = Permission.PostsDelete, Title = "Delete Posts", Category = "Posts" },
+            new PermissionItem() { Name = Permission.PostsEdit, Title = "Edit Posts", Category = "Posts" },
+            new PermissionItem() { Name = Permission.PostsPublish, Title = "Publish Posts", Category = "Posts" },
+            new PermissionItem() { Name = Permission.PostsSave, Title = "Save Posts", Category = "Posts" },
+            new PermissionItem() { Name = Permission.Sites, Title = "List Sites", Category = "Sites" },
+            new PermissionItem() { Name = Permission.SitesAdd, Title = "Add Sites", Category = "Sites" },
+            new PermissionItem() { Name = Permission.SitesDelete, Title = "Delete Sites", Category = "Sites" },
+            new PermissionItem() { Name = Permission.SitesEdit, Title = "Edit Sites", Category = "Sites" },
+            new PermissionItem() { Name = Permission.SitesSave, Title = "Save Sites", Category = "Sites" }
         };
 
         /// <summary>
@@ -129,13 +129,9 @@ namespace Piranha.Manager
             Mapper = config.CreateMapper();
 
             // Register permissions
-            foreach (var permission in _permissionNames.Keys)
+            foreach (var permission in _permissions)
             {
-                App.Permissions["Manager"].Add(new Security.PermissionItem
-                {
-                    Name = permission,
-                    Title = _permissionNames[permission]
-                });
+                App.Permissions["Manager"].Add(permission);
             }
 
             // Get assembly information
