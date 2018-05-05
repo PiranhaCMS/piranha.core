@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>4.3.0-beta1</Version>
+    <Company>Piranha CMS</Company>
+    <AssemblyTitle>Piranha.AspNetCore.Identity</AssemblyTitle>
+    <RootNamespace>Piranha.AspNetCore.Identity</RootNamespace>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PackageId>Piranha.AspNetCore.Identity</PackageId>
+    <PackageVersion>4.3.0-beta1</PackageVersion>
+    <Authors>Håkan Edling</Authors>
+    <Description>AspNetCore Identity security implementation.</Description>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageTags>cms mvc aspnetcore netstandard identity authentication</PackageTags>
+    <Copyright>Copyright 2018 (c) Håkan Edling</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.1" />
+    <ProjectReference Include="..\Piranha\Piranha.csproj" />
+    <ProjectReference Include="..\Piranha.Manager\Piranha.Manager.csproj" />
+  </ItemGroup>
+   <ItemGroup>
+    <EmbeddedResource Include="Areas\Manager\Views\**\*.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.1" />
+  </ItemGroup>
+
+</Project>

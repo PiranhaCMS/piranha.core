@@ -19,6 +19,39 @@ namespace Piranha.Manager
 {
     public class Module : Extend.IModule
     {
+        private readonly Dictionary<string, string> _permissionNames = new Dictionary<string, string>()
+        {
+            { Permission.Admin, "Admin"},
+            { Permission.Aliases, "Aliases"},
+            { Permission.AliasesDelete, "Aliases - Delete"},
+            { Permission.AliasesEdit, "Aliases - Edit"},
+            { Permission.Config, "Config"},
+            { Permission.ConfigEdit, "Config - Edit"},
+            { Permission.Media, "Media"},
+            { Permission.MediaAdd, "Media - Add"},
+            { Permission.MediaAddFolder, "Media - Add folder"},
+            { Permission.MediaDelete, "Media - Delete"},
+            { Permission.MediaDeleteFolder, "Media - Delete folder"},
+            { Permission.MediaEdit, "Media - Edit"},
+            { Permission.Pages, "Pages"},
+            { Permission.PagesAdd, "Pages - Add"},
+            { Permission.PagesDelete, "Pages - Delete"},
+            { Permission.PagesEdit, "Pages - Edit"},
+            { Permission.PagesPublish, "Pages - Publish"},
+            { Permission.PagesSave, "Pages - Save"},
+            { Permission.Posts, "Posts"},
+            { Permission.PostsAdd, "Posts - Add"},
+            { Permission.PostsDelete, "Posts - Delete"},
+            { Permission.PostsEdit, "Posts - Edit"},
+            { Permission.PostsPublish, "Posts - Publish"},
+            { Permission.PostsSave, "Posts - Save"},
+            { Permission.Sites, "Sites"},
+            { Permission.SitesAdd, "Sites - Add"},
+            { Permission.SitesDelete, "Sites - Delete"},
+            { Permission.SitesEdit, " Sites - Edit"},
+            { Permission.SitesSave, "Sites - Save"}
+        };
+
         /// <summary>
         /// Gets the Author
         /// </summary>
@@ -94,6 +127,16 @@ namespace Piranha.Manager
 
             config.AssertConfigurationIsValid();
             Mapper = config.CreateMapper();
+
+            // Register permissions
+            foreach (var permission in _permissionNames.Keys)
+            {
+                App.Permissions["Manager"].Add(new Security.PermissionItem
+                {
+                    Name = permission,
+                    Title = _permissionNames[permission]
+                });
+            }
 
             // Get assembly information
             Assembly = this.GetType().GetTypeInfo().Assembly;

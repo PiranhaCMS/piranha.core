@@ -48,10 +48,6 @@ namespace Piranha.Manager
 
         public static string[] All() {
             return new string[] {
-                // Core permissions
-                Piranha.Security.Permission.PagePreview,
-
-                // Admin permissions
                 Admin,
                 Aliases,
                 AliasesDelete,

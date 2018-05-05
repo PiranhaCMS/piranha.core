@@ -15,15 +15,6 @@ namespace Piranha
     public interface ISecurity
     {
         /// <summary>
-        /// Authenticates the given credentials without
-        /// signing in the user.
-        /// </summary>
-        /// <param name="username">The username</param>
-        /// <param name="password">The password</param>
-        /// <returns>If the given credentials were correct</returns>
-        bool Authenticate(string username, string password);
-
-        /// <summary>
         /// Authenticates and signs in the user with the
         /// given credentials.
         /// </summary>
