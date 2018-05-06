@@ -13162,6 +13162,12 @@ li.sitemap-item .actions.one {
   border-radius: 0;
   box-shadow: unset;
 }
+.list-group-header {
+  background: #f8f8f8;
+}
+.list-group-header label {
+  margin: 0;
+}
 .custom-editor {
   padding: 0px 15px;
 }
@@ -13574,7 +13580,7 @@ li.sitemap-item .actions.one {
   width: 180px;
   height: 180px;
   left: 50%;
-  top: 100%%;
+  top: 100%;
   margin: -90px 0 0 -90px;
 }
 .pre-saved .notification {
