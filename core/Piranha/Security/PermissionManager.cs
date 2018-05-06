@@ -14,33 +14,15 @@ using System.Linq;
 namespace Piranha.Security
 {
     /// <summary>
-    /// An item in the permission manager.
-    /// </summary>
-    public class PermissionItem
-    {
-        /// <summary>
-        /// The name of the claim.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// The display title.
-        /// </summary>
-        public string Title { get; set; }
-        
-        /// <summary>
-        /// Gets/sets the optional category for grouping.
-        /// </summary>
-        public string Category { get; set; }
-    }
-
-    /// <summary>
     /// The permission manager.
     /// </summary>
     public class PermissionManager 
     {
         private readonly Dictionary<string, IList<PermissionItem>> _modules;
 
+        /// <summary>
+        /// Gets the permission items for the given module.
+        /// </summary>
         public IList<PermissionItem> this[string module]
         {
             get
@@ -54,21 +36,37 @@ namespace Piranha.Security
             }
         }
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public PermissionManager()
         {
             _modules = new Dictionary<string, IList<PermissionItem>>();
         }
 
+        /// <summary>
+        /// Gets the registered permission modules.
+        /// </summary>
+        /// <returns>The module names</returns>
         public IList<string> GetModules()
         {
             return _modules.Keys.OrderBy(k => k).ToList();
         }
 
+        /// <summary>
+        /// Gets the permissions for the given module.
+        /// </summary>
+        /// <param name="module">The module name</param>
+        /// <returns>The available permissions</returns>
         public IList<PermissionItem> GetPermissions(string module) 
         {
             return this[module].OrderBy(p => p.Name).ToList();
         }
 
+        /// <summary>
+        /// Gets all of the available permissions.
+        /// </summary>
+        /// <returns>The available permissions</returns>
         public IList<PermissionItem> GetPermissions() 
         {
             var all = new Dictionary<string, PermissionItem>();
