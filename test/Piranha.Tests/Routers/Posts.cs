@@ -192,7 +192,7 @@ namespace Piranha.Tests.Routers
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 var response = Piranha.Web.PostRouter.Invoke(api, "/news/my-second-page", SITE1_ID);
 
-                Assert.Null(response);
+                Assert.True(response.NotFound);
             }
         }
 
@@ -344,7 +344,7 @@ namespace Piranha.Tests.Routers
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 var response = Piranha.Web.PostRouter.Invoke(api, "/blog/my-first-post", SITE2_ID);
 
-                Assert.Null(response);
+                Assert.True(response.NotFound);
             }
         }
 
