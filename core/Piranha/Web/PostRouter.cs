@@ -26,25 +26,28 @@ namespace Piranha.Web
                 var segments = url.Substring(1).Split(new char[] { '/' });
 
                 if (segments.Length >= 2) {
-                    var post = api.Posts.GetBySlug(segments[0], segments[1], siteId);                    
-
-                    if (post != null) {
-                        var route = post.Route ?? "/post";
-
-                        if (segments.Length > 2) {
-                            route += "/" + string.Join("/", segments.Subset(2));
-                        }
-
+                    var post = api.Posts.GetBySlug(segments[0], segments[1], siteId);
+                    if (post == null) {
                         return new RouteResponse() {
-                            Route = route,
-                            QueryString = $"id={post.Id}&piranha_handled=true",
-                            IsPublished = post.Published.HasValue && post.Published.Value <= DateTime.Now,
-                            CacheInfo = new HttpCacheInfo() {
-                                EntityTag = Utils.GenerateETag(post.Id.ToString(), post.LastModified),
-                                LastModified = post.LastModified
-                            }
+                            NotFound = true
                         };
+                    }                        
+
+                    var route = post.Route ?? "/post";
+                    if (segments.Length > 2) {
+                        route += "/" + string.Join("/", segments.Subset(2));
                     }
+
+                    return new RouteResponse() {
+                        Route = route,
+                        QueryString = $"id={post.Id}&piranha_handled=true",
+                        IsPublished = post.Published.HasValue && post.Published.Value <= DateTime.Now,
+                        CacheInfo = new HttpCacheInfo()
+                        {
+                            EntityTag = Utils.GenerateETag(post.Id.ToString(), post.LastModified),
+                            LastModified = post.LastModified
+                        }
+                    };
                 }
             }
             return null;
