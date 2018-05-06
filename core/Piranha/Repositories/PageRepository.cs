@@ -523,6 +523,12 @@ namespace Piranha.Repositories
                 .FirstOrDefault(p => p.Id == id);
 
             if (model != null) {
+                // Remove all blocks that are not reusable
+                foreach (var pageBlock in model.Blocks) {
+                    if (!pageBlock.Block.IsReusable)
+                        db.Blocks.Remove(pageBlock.Block);
+                }
+                // Remove the main page.
                 db.Pages.Remove(model);
 
                 // Move all remaining pages after this page in the site structure.

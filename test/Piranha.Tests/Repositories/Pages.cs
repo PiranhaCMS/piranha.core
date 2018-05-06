@@ -157,6 +157,12 @@ namespace Piranha.Tests.Repositories
                 page1.Title = "My first page";
                 page1.Ingress = "My first ingress";
                 page1.Body = "My first body";
+                page1.Blocks.Add(new Extend.Blocks.TextBlock {
+                    Body = "Sollicitudin Aenean"
+                });
+                page1.Blocks.Add(new Extend.Blocks.TextBlock {
+                    Body = "Ipsum Elit"
+                });
                 api.Pages.Save(page1);
 
                 var page2 = MyPage.Create(api);
@@ -368,6 +374,18 @@ namespace Piranha.Tests.Repositories
                 Assert.Equal("my-first-page", model.Slug);
                 Assert.Equal("My first body", ((MyPage)model).Body.Value);
             }
+        }
+
+        [Fact]
+        public void GetBlocksById() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var model = api.Pages.GetById<MyPage>(PAGE_1_ID);
+
+                Assert.NotNull(model);
+                Assert.Equal(2, model.Blocks.Count);
+                Assert.IsType<Extend.Blocks.TextBlock>(model.Blocks[0]);
+                Assert.IsType<Extend.Blocks.TextBlock>(model.Blocks[1]);
+            }            
         }
 
         [Fact]

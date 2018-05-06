@@ -50,12 +50,6 @@ namespace CoreWeb
             services.AddSingleton<IStorage, FileStorage>();
             services.AddSingleton<IImageProcessor, ImageSharpProcessor>();
             services.AddPiranhaEF();
-            services.AddPiranhaSimpleSecurity(
-                new Piranha.AspNetCore.SimpleUser(Piranha.Manager.Permission.All()) {
-                    UserName = "admin",
-                    Password = "password"
-                }
-            );
             services.AddScoped<Piranha.AspNetCore.Identity.Db, Piranha.AspNetCore.Identity.Db>();
             services.AddPiranhaManager();
             services.AddPiranhaIdentityWithSeed(options => options.UseSqlite("Filename=./piranha.coreweb.db"));
