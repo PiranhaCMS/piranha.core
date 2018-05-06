@@ -155,6 +155,24 @@ namespace Piranha.Tests
         }
 
         [Fact]
+        public void DeserializeEmptyImageField() {
+            var serializer = new ImageFieldSerializer();
+
+            var field = (ImageField)serializer.Deserialize(null);
+
+            Assert.False(field.HasValue);            
+        }
+
+        [Fact]
+        public void WrongInputToImageField() {
+            var serializer = new ImageFieldSerializer();
+
+            Assert.Throws<ArgumentException>(() => serializer.Serialize(new StringField() {
+                Value = "Exception"
+            }));
+        }
+
+        [Fact]
         public void SerializeDocumentField() {
             var serializer = new DocumentFieldSerializer();
             var id = Guid.NewGuid();
@@ -174,6 +192,24 @@ namespace Piranha.Tests
             var field = (DocumentField)serializer.Deserialize(id.ToString());
 
             Assert.Equal(id, field.Id.Value);
+        }
+
+        [Fact]
+        public void DeserializeEmptyDocumentField() {
+            var serializer = new DocumentFieldSerializer();
+
+            var field = (DocumentField)serializer.Deserialize(null);
+
+            Assert.False(field.HasValue);            
+        }
+
+        [Fact]
+        public void WrongInputToDocumentField() {
+            var serializer = new DocumentFieldSerializer();
+
+            Assert.Throws<ArgumentException>(() => serializer.Serialize(new StringField() {
+                Value = "Exception"
+            }));
         }
 
         [Fact]
@@ -199,6 +235,24 @@ namespace Piranha.Tests
         }
 
         [Fact]
+        public void DeserializeEmptyVideoField() {
+            var serializer = new VideoFieldSerializer();
+
+            var field = (VideoField)serializer.Deserialize(null);
+
+            Assert.False(field.HasValue);            
+        }
+
+        [Fact]
+        public void WrongInputToVideoField() {
+            var serializer = new VideoFieldSerializer();
+
+            Assert.Throws<ArgumentException>(() => serializer.Serialize(new StringField() {
+                Value = "Exception"
+            }));
+        }
+
+        [Fact]
         public void SerializeMediaField() {
             var serializer = new MediaFieldSerializer();
             var id = Guid.NewGuid();
@@ -221,14 +275,22 @@ namespace Piranha.Tests
         }
 
         [Fact]
-        public void WrongInputToImageField() {
-            var serializer = new ImageFieldSerializer();
+        public void DeserializeEmptyMediaField() {
+            var serializer = new MediaFieldSerializer();
+
+            var field = (MediaField)serializer.Deserialize(null);
+
+            Assert.False(field.HasValue);            
+        }
+
+        [Fact]
+        public void WrongInputToMediaField() {
+            var serializer = new MediaFieldSerializer();
 
             Assert.Throws<ArgumentException>(() => serializer.Serialize(new StringField() {
                 Value = "Exception"
             }));
         }
-        
 
         [Fact]
         public void SerializeStringField() {
