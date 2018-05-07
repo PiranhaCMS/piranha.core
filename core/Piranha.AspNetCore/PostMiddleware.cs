@@ -40,6 +40,12 @@ namespace Piranha.AspNetCore
 
                 var response = PostRouter.Invoke(api, url, siteId);
                 if (response != null) {
+
+                    if (response.NotFound) {
+                        context.Response.StatusCode = 404;
+                        return;
+                    }                        
+
                     if (logger != null)
                         logger.LogInformation($"Found post\n  Route: {response.Route}\n  Params: {response.QueryString}");
 

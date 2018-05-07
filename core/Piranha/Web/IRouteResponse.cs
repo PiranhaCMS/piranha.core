@@ -33,6 +33,11 @@ namespace Piranha.Web
         bool IsPublished { get; set; }
 
         /// <summary>
+        /// Gets/sets if the route was not found
+        /// </summary>
+        bool NotFound { get; set; }
+
+        /// <summary>
         /// Gets/sets the redirect type.
         /// </summary>
         Models.RedirectType RedirectType { get; set; }
