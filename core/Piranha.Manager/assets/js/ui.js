@@ -342,7 +342,8 @@ var manager = {
                     // If the new region contains a html editor, make sure
                     // we initialize it.
                     var editors = $(res).find('.editor').each(function () {
-                        tinyMCE.execCommand('mceAddEditor', false, this.id);
+                        addFormEditor('#' + this.id);
+                        //tinyMCE.execCommand('mceAddEditor', false, this.id);
                     });
 
                     // Initialize markdown editors.
@@ -406,7 +407,8 @@ var manager = {
                     // If the new region contains a html editor, make sure
                     // we initialize it.
                     var editors = $(res).find('.block-editor').each(function () {
-                        tinyMCE.execCommand('mceAddEditor', false, this.id);
+                        addInlineEditor('#' + this.id);
+                        //tinyMCE.execCommand('mceAddEditor', false, this.id);
                     });
 
                     // Initialize markdown editors.
