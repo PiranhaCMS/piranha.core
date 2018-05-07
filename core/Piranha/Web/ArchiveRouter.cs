@@ -29,6 +29,17 @@ namespace Piranha.Web
                     var blog = api.Pages.GetBySlug(segments[0], siteId);
 
                     if (blog != null && blog.ContentType == "Blog") {
+                        // First check that this is a valid archive URL
+                        if (segments.Length == 2) {
+                            try {
+                                var number = Convert.ToInt32(segments[1]);
+                                if (number < 1900 || number > DateTime.Now.Year)
+                                    return null;
+                            } catch { 
+                                return null;
+                            }
+                        }
+
                         var route = blog.Route ?? "/archive";
 
                         int? page = null;
