@@ -22,7 +22,6 @@ var paths = {
         "assets/lib/jasny-bootstrap/dist/js/jasny-bootstrap.js",
         "assets/lib/moment/min/moment.min.js",
         "assets/lib/bootstrap-datetimepicker-3/build/js/bootstrap-datetimepicker.min.js",
-        //"assets/lib/bootstrap-html5sortable/jquery.sortable.js",
         "assets/lib/jquery-nestable/jquery.nestable.js",
         "assets/lib/jquery.ns-autogrow/dist/jquery.ns-autogrow.js",
         "assets/lib/select2/dist/js/select2.js",

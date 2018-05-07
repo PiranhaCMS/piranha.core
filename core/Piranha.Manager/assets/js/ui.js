@@ -343,7 +343,6 @@ var manager = {
                     // we initialize it.
                     var editors = $(res).find('.editor').each(function () {
                         addFormEditor('#' + this.id);
-                        //tinyMCE.execCommand('mceAddEditor', false, this.id);
                     });
 
                     // Initialize markdown editors.
@@ -408,7 +407,6 @@ var manager = {
                     // we initialize it.
                     var editors = $(res).find('.block-editor').each(function () {
                         addInlineEditor('#' + this.id);
-                        //tinyMCE.execCommand('mceAddEditor', false, this.id);
                     });
 
                     // Initialize markdown editors.
