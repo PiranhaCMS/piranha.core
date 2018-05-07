@@ -450,7 +450,7 @@ namespace Piranha.Repositories
 
                     // Delete removed blocks
                     var removed = page.Blocks
-                        .Where(b => !current.Contains(b.BlockId))
+                        .Where(b => !current.Contains(b.BlockId) && !b.Block.IsReusable)
                         .Select(b => b.Block);
                     db.Blocks.RemoveRange(removed);
 

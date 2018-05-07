@@ -16,6 +16,12 @@ namespace Piranha.AspNetCore.Identity
 {
     public static class Utils
     {
+        /// <summary>
+        /// Gets the gravatar URL from the given parameters.
+        /// </summary>
+        /// <param name="email">The email address</param>
+        /// <param name="size">The requested size</param>
+        /// <returns>The gravatar URL</returns>
 		public static string GetGravatarUrl(string email, int size = 0) 
         {
             using (var md5 = MD5.Create())
