@@ -13,7 +13,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Piranha
+namespace Piranha.Runtime
 {
     public abstract class AppDataList<T, TItem> : IEnumerable<TItem> where TItem : AppDataItem
     {

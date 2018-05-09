@@ -46,13 +46,11 @@ namespace CoreWeb
             services.AddMvc(config => {
                 config.ModelBinderProviders.Insert(0, new Piranha.Manager.Binders.AbstractModelBinderProvider());
             });
-            services.AddDbContext<Db>(options => options.UseSqlite("Filename=./piranha.coreweb.db"));
-            services.AddSingleton<IStorage, FileStorage>();
-            services.AddSingleton<IImageProcessor, ImageSharpProcessor>();
-            services.AddPiranhaEF();
-            services.AddScoped<Piranha.AspNetCore.Identity.Db, Piranha.AspNetCore.Identity.Db>();
-            services.AddPiranhaManager();
+            services.AddPiranhaFileStorage();
+            services.AddPiranhaImageSharp();
+            services.AddPiranhaEF(options => options.UseSqlite("Filename=./piranha.coreweb.db"));
             services.AddPiranhaIdentityWithSeed(options => options.UseSqlite("Filename=./piranha.coreweb.db"));
+            services.AddPiranhaManager();
 
             return services.BuildServiceProvider();
         }

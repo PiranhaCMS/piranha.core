@@ -39,7 +39,7 @@ namespace Piranha.Areas.Manager.Models
         /// <summary>
         /// Gets/sets the page content type.
         /// </summary>
-        public Extend.AppContentType PageContentType { get; set; }
+        public Runtime.AppContentType PageContentType { get; set; }
 
         /// <summary>
         /// Default constructor.

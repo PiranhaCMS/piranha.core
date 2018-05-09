@@ -101,6 +101,7 @@ public static class IdentityModuleExtensions
         });        
 
         services.AddDbContext<Db>(dbOptions);
+        services.AddScoped<Db, Db>();
         services.AddIdentity<User, Role>()
             .AddEntityFrameworkStores<Db>()
             .AddDefaultTokenProviders();

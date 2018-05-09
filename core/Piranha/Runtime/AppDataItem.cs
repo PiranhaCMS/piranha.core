@@ -10,7 +10,7 @@
 
 using System;
 
-namespace Piranha
+namespace Piranha.Runtime
 {
     /// <summary>
     /// An item in an app data list.
