@@ -87,6 +87,11 @@ namespace Piranha.Data
         public IList<PageBlock> Blocks { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional page this page is a copy of
+        /// </summary>
+        public Guid? OriginalPageId { get; set; }
+
+        /// <summary>
         /// Default constructor.
         /// </summary>
         public Page() : base() {

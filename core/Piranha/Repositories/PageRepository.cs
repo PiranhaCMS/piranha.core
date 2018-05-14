@@ -53,6 +53,46 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Creates and initializes a copy of the given page.
+        /// </summary>
+        /// <returns>The created copy</returns>
+        public T Copy<T>(T originalPage) where T : Models.PageBase {
+            var model = contentService.Create<T>(api.PageTypes.GetById(originalPage.TypeId));
+            model.OriginalPageId = originalPage.Id;
+            model.Slug = null;
+            return model;
+        }
+
+        /// <summary>
+        /// Detaches a copy and initializes it as a standalone page
+        /// </summary>
+        /// <returns>The standalone page</returns>
+        public void Detach<T>(T page) where T : Models.PageBase {
+            Func<T, IList<Extend.Block>> getBlocks = p => {
+                if (p is Models.IPage)
+                    return ((Models.IPage)p).Blocks;
+                else if (p is Models.IDynamicPage)
+                    return ((Models.IDynamicPage)p).Blocks;
+                else
+                    return new List<Extend.Block>();
+            };
+
+            if (!page.OriginalPageId.HasValue) {
+                throw new Exception("Page is not an copy");
+            }
+
+            var model = GetById<T>(page.Id);
+            model.OriginalPageId = null;
+
+            foreach(var pageBlock in getBlocks(model))
+            {
+                pageBlock.Id = Guid.Empty;
+            }
+
+            Save(model);
+        }
+
+        /// <summary>
         /// Gets all of the available pages for the current site.
         /// </summary>
         /// <param name="siteId">The optional site id</param>
@@ -162,6 +202,7 @@ namespace Piranha.Repositories
                     .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                     .Include(p => p.Fields)
                     .FirstOrDefault(p => p.SiteId == siteId && p.ParentId == null && p.SortOrder == 0);
+
                 if (page != null) {
                     if (cache != null)
                         AddToCache(page);
@@ -169,6 +210,9 @@ namespace Piranha.Repositories
             }
 
             if (page != null) {
+                if (page.OriginalPageId.HasValue)
+                    return MapOriginalPage<T>(page);
+
                 return contentService.Transform<T>(page, api.PageTypes.GetById(page.PageTypeId), Process);
             }
             return null;
@@ -205,8 +249,12 @@ namespace Piranha.Repositories
                 }
             }
 
-            if (page != null)
+            if (page != null) {
+                if (page.OriginalPageId.HasValue)
+                    return MapOriginalPage<T>(page);
+
                 return contentService.Transform<T>(page, api.PageTypes.GetById(page.PageTypeId), Process);
+            }
             return null;
         }
 
@@ -251,8 +299,12 @@ namespace Piranha.Repositories
                 if (page != null) {
                     if (cache != null)
                         AddToCache(page);
+
+                    if (page.OriginalPageId.HasValue)
+                        return MapOriginalPage<T>(page);
+
                     return contentService.Transform<T>(page, api.PageTypes.GetById(page.PageTypeId), Process);
-                }                    
+                }
                 return null;
             }
         }
@@ -410,6 +462,56 @@ namespace Piranha.Repositories
                     .Include(p => p.Fields)
                     .FirstOrDefault(p => p.Id == model.Id);
 
+                if (model.OriginalPageId.HasValue) {
+                    var originalPageIsCopy = db.Pages.FirstOrDefault(p => p.Id == model.OriginalPageId)?.OriginalPageId.HasValue ?? false;
+                    if (originalPageIsCopy) {
+                        throw new Exception("Can not set copy of an copy");
+                    }
+
+                    var originalPageType = db.Pages.FirstOrDefault(p => p.Id == model.OriginalPageId)?.PageTypeId;
+                    if (originalPageType != model.TypeId) {
+                        throw new Exception("Copy can not have a different content type");
+                    }
+
+                    // Transform the model
+                    if (page == null) {
+                        page = new Page() {
+                            Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
+                        };
+
+                        db.Pages.Add(page);
+
+                        // Make room for the new page
+                        MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true);
+                    } else {
+                        // Check if the page has been moved
+                        if (page.ParentId != model.ParentId || page.SortOrder != model.SortOrder) {
+                            // Remove the old position for the page
+                            MovePages(page.Id, page.SiteId, page.ParentId, page.SortOrder + 1, false);
+                            // Add room for the new position of the page
+                            MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true);
+                        }
+                    }
+
+                    page.PageTypeId = model.TypeId;
+                    page.OriginalPageId = model.OriginalPageId;
+                    page.SiteId = model.SiteId;
+                    page.Title = model.Title;
+                    page.NavigationTitle = model.NavigationTitle;
+                    page.Slug = model.Slug;
+                    page.ParentId = model.ParentId;
+                    page.SortOrder = model.SortOrder;
+                    page.IsHidden = model.IsHidden;
+                    page.Route = model.Route;
+
+                    db.SaveChanges();
+                    if (cache != null)
+                        RemoveFromCache(page);
+
+                    InvalidateSitemap(model.SiteId);
+                    return;
+                }
+
                 // Transform the model
                 if (page == null) {
                     page = new Page() {
@@ -435,6 +537,7 @@ namespace Piranha.Repositories
                     }                    
                     page.LastModified = DateTime.Now;
                 }
+
                 page = contentService.Transform<T>(model, type, page);
 
                 // Transform blocks
@@ -523,11 +626,17 @@ namespace Piranha.Repositories
                 .FirstOrDefault(p => p.Id == id);
 
             if (model != null) {
+                // Make sure this page isn't copied
+                var copyCount = db.Pages.Count(p => p.OriginalPageId == model.Id);
+                if (copyCount > 0)
+                    throw new Exception("Can not delete page because it has copies");
+                
                 // Remove all blocks that are not reusable
                 foreach (var pageBlock in model.Blocks) {
                     if (!pageBlock.Block.IsReusable)
                         db.Blocks.Remove(pageBlock.Block);
                 }
+
                 // Remove the main page.
                 db.Pages.Remove(model);
 
@@ -628,6 +737,27 @@ namespace Piranha.Repositories
                 }
             }
             return page;
+        }
+
+        private T MapOriginalPage<T>(Page page) where T : Models.PageBase {
+            var originalPage = GetById<T>(page.OriginalPageId.Value);
+            if (originalPage == null)
+                return null;
+            return SetOriginalPageProperties(originalPage, page);
+        }
+
+        private T SetOriginalPageProperties<T>(T originalPage, Page page) where T : Models.PageBase {
+            originalPage.Id = page.Id;
+            originalPage.SiteId = page.SiteId;
+            originalPage.Title = page.Title;
+            originalPage.NavigationTitle = page.NavigationTitle;
+            originalPage.Slug = page.Slug;
+            originalPage.ParentId = page.ParentId;
+            originalPage.SortOrder = page.SortOrder;
+            originalPage.IsHidden = page.IsHidden;
+            originalPage.Route = page.Route;
+            originalPage.OriginalPageId = page.OriginalPageId;
+            return originalPage;
         }
 
         /// <summary>
