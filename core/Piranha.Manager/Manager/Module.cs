@@ -53,6 +53,16 @@ namespace Piranha.Manager
         };
 
         /// <summary>
+        /// The currently registered custom scripts.
+        /// </summary>
+        public List<string> Scripts { get; private set; }
+
+        /// <summary>
+        /// The currently registered custom styles.
+        /// </summary>
+        public List<string> Styles { get; private set; }
+
+        /// <summary>
         /// Gets the Author
         /// </summary>
         public string Author => "Piranha";
@@ -96,6 +106,14 @@ namespace Piranha.Manager
         /// Last modification date of the assembly.
         /// </summary>
         internal static DateTime LastModified;
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public Module() {
+            Scripts = new List<string>();
+            Styles = new List<string>();
+        }
 
         /// <summary>
         /// Initializes the module.

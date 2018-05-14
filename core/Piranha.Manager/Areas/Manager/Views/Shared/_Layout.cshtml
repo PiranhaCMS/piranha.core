@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var module = Piranha.App.Modules.Get<Piranha.Manager.Module>();
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -9,6 +12,9 @@
     <link href="//fonts.googleapis.com/css?family=Gentium+Book+Basic:700" rel="stylesheet"> 
     <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
     <link href="~/manager/assets/css/style.min.css" rel="stylesheet" type="text/css" />
+    @foreach (var style in module.Styles) {
+    <link href="@Url.Content(style)" rel="stylesheet" type="text/css" />        
+    }
     <link type="image/x-icon" rel="icon" href="~/manager/assets/img/icon.ico">
     <link type="image/x-icon" rel="shortcut icon" href="~/manager/assets/img/icon.ico">
 
@@ -51,6 +57,9 @@
     </script>
     <script type="text/javascript" src="~/manager/assets/js/script.min.js"></script>
     <script type="text/javascript" src="~/manager/assets/tinymce/tinymce.min.js"></script>
+    @foreach (var script in module.Scripts) {
+    <script type="text/javascript" src="@Url.Content(script)"></script>
+    }
     @Html.Partial("Partial/_EditorSetup")
     @RenderSection("script", required: false)
 </body>
