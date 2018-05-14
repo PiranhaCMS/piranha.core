@@ -38,6 +38,8 @@ namespace Piranha.Tests.Repositories
         public static readonly Guid PAGE_1_ID = Guid.NewGuid();
         public static readonly Guid PAGE_2_ID = Guid.NewGuid();
         public static readonly Guid PAGE_3_ID = Guid.NewGuid();
+        public static readonly Guid PAGE_7_ID = Guid.NewGuid();
+        public static readonly Guid PAGE_8_ID = Guid.NewGuid();
         public static readonly Guid PAGE_DI_ID = Guid.NewGuid();
         protected ICache cache;
         #endregion
@@ -200,12 +202,37 @@ namespace Piranha.Tests.Repositories
                 page6.SiteId = SITE_ID;
                 page6.Title = "My Injection Page";
                 api.Pages.Save(page6);
+
+                var page7 = MyPage.Create(api);
+                page7.Id = PAGE_7_ID;
+                page7.SiteId = SITE_ID;
+                page7.Title = "My base page";
+                page7.Ingress = "My base ingress";
+                page7.Body = "My base body";
+                page7.ParentId = PAGE_1_ID;
+                page7.SortOrder = 1;
+                api.Pages.Save(page7);
+
+                var page8 = MyPage.Create(api);
+                page8.OriginalPageId = PAGE_7_ID;
+                page8.Id = PAGE_8_ID;
+                page8.SiteId = SITE_ID;
+                page8.Title = "My copied page";
+                page8.ParentId = PAGE_1_ID;
+                page8.SortOrder = 2;
+                page8.IsHidden = true;
+                page8.Route = "test-route";
+
+                api.Pages.Save(page8);
             }
         }
 
         protected override void Cleanup() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var pages = api.Pages.GetAll(SITE_ID);
+
+                foreach (var page in pages.Where(p => p.OriginalPageId.HasValue))
+                    api.Pages.Delete(page);
                 foreach (var page in pages.Where(p => p.ParentId.HasValue))
                     api.Pages.Delete(page);
                 foreach (var page in pages.Where(p => !p.ParentId.HasValue))
@@ -218,6 +245,12 @@ namespace Piranha.Tests.Repositories
                 var site = api.Sites.GetById(SITE_ID);
                 if (site != null)
                     api.Sites.Delete(site);
+
+                var db = GetDb();
+                foreach(var block in db.Blocks.Where(a => !a.IsReusable))
+                    db.Blocks.Remove(block);
+
+                db.SaveChanges();
             }
         }
 
@@ -742,6 +775,145 @@ namespace Piranha.Tests.Repositories
                 Assert.NotNull(page);
                 Assert.Equal("My service value", page.Regions.Body.Value);
             }            
+        }
+
+        [Fact]
+        public void GetCopyGenericById() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var model = api.Pages.GetById<MyPage>(PAGE_8_ID);
+
+                Assert.NotNull(model);
+                Assert.Equal("My copied page", model.Title);
+                Assert.Equal("my-first-page/my-copied-page", model.Slug);
+                Assert.Equal(PAGE_1_ID, model.ParentId);
+                Assert.Equal(2, model.SortOrder);
+                Assert.True(model.IsHidden);
+                Assert.Equal("test-route", model.Route);
+
+                Assert.Equal(PAGE_7_ID, model.OriginalPageId);
+                Assert.Equal("My base body", model.Body.Value);
+            }
+        }
+
+        [Fact]
+        public void GetCopyGenericBySlug() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var model = api.Pages.GetBySlug<MyPage>("my-first-page/my-copied-page");
+
+                Assert.NotNull(model);
+                Assert.Equal("My copied page", model.Title);
+                Assert.Equal("my-first-page/my-copied-page", model.Slug);
+                Assert.Equal(PAGE_1_ID, model.ParentId);
+                Assert.Equal(2, model.SortOrder);
+                Assert.True(model.IsHidden);
+                Assert.Equal("test-route", model.Route);
+
+                Assert.Equal(PAGE_7_ID, model.OriginalPageId);
+                Assert.Equal("My base body", model.Body.Value);
+            }
+        }
+
+        [Fact]
+        public void UpdatingCopyShouldIgnoreBodyAndDate() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var page = api.Pages.GetById<MyPage>(PAGE_8_ID);
+                page.Created = DateTime.Parse("2001-01-01");
+                page.LastModified = DateTime.Parse("2001-01-01");
+                page.Body = "My edits to the body";
+
+                api.Pages.Save(page);
+                page = api.Pages.GetById<MyPage>(PAGE_8_ID);
+
+                Assert.NotEqual(DateTime.Parse("2001-01-01"), page.Created);
+                Assert.NotEqual(DateTime.Parse("2001-01-01"), page.LastModified);
+                Assert.NotEqual("My edits to the body", page.Body.ToString());
+            }
+        }
+
+        [Fact]
+        public void CanNotUpdateCopyOriginalPageWithAnotherCopy() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var page = MyPage.Create(api);
+                page.Title = "New title";
+                page.OriginalPageId = PAGE_8_ID; // PAGE_8 is an copy of PAGE_7
+
+                var exn = Assert.Throws<Exception>(() => {
+                    api.Pages.Save(page);
+                });
+
+                Assert.Equal("Can not set copy of an copy", exn.Message);
+            }
+        }
+
+        [Fact]
+        public void CanNotUpdateCopyWithAnotherTypeIdOtherThanOriginalPageTypeId() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var page = MissingPage.Create(api);
+                page.Title = "New title";
+                page.OriginalPageId = PAGE_7_ID;
+
+                var exn = Assert.Throws<Exception>(() => {
+                    api.Pages.Save(page);
+                });
+
+                Assert.Equal("Copy can not have a different content type", exn.Message);
+            }
+        }
+
+        [Fact]
+        public void DetachShouldCopyBlocks() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var originalPage = api.Pages.GetById<MyPage>(PAGE_7_ID);
+                var copy = api.Pages.GetById<MyPage>(PAGE_8_ID);
+                var originalBlock = new Extend.Blocks.TextBlock {
+                    Id = Guid.NewGuid(),
+                    Body = "test",
+                };
+
+                originalPage.Blocks.Add(originalBlock);
+                api.Pages.Save(originalPage);
+
+                api.Pages.Detach(copy);
+
+                var p = api.Pages.GetById<MyPage>(PAGE_8_ID);
+                Assert.Collection(p.Blocks, e => {
+                    Assert.NotEqual(e.Id, originalBlock.Id);
+                    var eBlock = Assert.IsType<Extend.Blocks.TextBlock>(e);
+                    Assert.Equal(eBlock.Body.Value, originalBlock.Body.Value);
+                });
+            }
+        }
+
+        [Fact]
+        public void DetachShouldCopyRegions() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var originalPage = api.Pages.GetById<MyPage>(PAGE_7_ID);
+                originalPage.Body = "body to be copied";
+                originalPage.Ingress = "ingress to be copied";
+                api.Pages.Save(originalPage);
+
+                var copy = api.Pages.GetById<MyPage>(PAGE_8_ID);
+                api.Pages.Detach(copy);
+
+                originalPage = api.Pages.GetById<MyPage>(PAGE_7_ID);
+                originalPage.Body = "body should not be copied";
+                originalPage.Ingress = "ingress should not be copied";
+                api.Pages.Save(originalPage);
+
+                var p = api.Pages.GetById<MyPage>(PAGE_8_ID);
+                Assert.Equal("body to be copied", p.Body.Value);
+                Assert.Equal("ingress to be copied", p.Ingress.Value);
+            }
+        }
+
+        [Fact]
+        public void DeleteShouldThrowWhenPageHasCopies() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var exn = Assert.Throws<Exception>(() => {
+                    api.Pages.Delete(PAGE_7_ID);
+                });
+                Assert.Equal("Can not delete page because it has copies", exn.Message);
+            }
         }
     }
 }

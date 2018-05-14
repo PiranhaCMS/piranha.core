@@ -58,6 +58,11 @@ namespace Piranha.Models
         /// Gets/sets the redirect type.
         /// </summary>
         /// <returns></returns>
-        public RedirectType RedirectType { get; set; }        
+        public RedirectType RedirectType { get; set; }
+
+        /// <summary>
+        /// Gets/sets the id of the page this page is a copy of
+        /// </summary>
+        public Guid? OriginalPageId { get; set; }
     }
 }
