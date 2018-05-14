@@ -15,7 +15,7 @@
                                 <button type="button" class="btn btn-labeled btn-primary btn-sm" data-toggle="dropdown">
                                     <span class="btn-label">
                                         <i class="fas fa-plus"></i>
-                                    </span>Add a new post
+                                    </span>Add new item
                                 </button>
                                 <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
                                     <span class="caret"></span>
@@ -33,7 +33,7 @@
                             <button class="btn btn-sm" data-filter="draft">Drafts</button>
                             <button class="btn btn-sm" data-filter="scheduled">Scheduled</button>
                             <select id="blog-type-filter" class="form-control input-sm" style="display:inline;width:auto">
-                                <option value="">All post types</option>
+                                <option value="">All types</option>
                                 @foreach (var type in blogModel.CurrentPostTypes) {
                                     <option value="@type.Id">@type.Title</option>
                                 }
