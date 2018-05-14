@@ -22,6 +22,18 @@ namespace Piranha.Repositories
         T Create<T>(string typeId = null) where T : Models.PageBase;
 
         /// <summary>
+        /// Creates and initializes a copy of the given page.
+        /// </summary>
+        /// <returns>The created copy</returns>
+        T Copy<T>(T originalPage) where T : Models.PageBase;
+
+        /// <summary>
+        /// Detaches a copy and initializes it as a standalone page
+        /// </summary>
+        /// <returns>The standalone page</returns>
+        void Detach<T>(T originalPage) where T : Models.PageBase;
+
+        /// <summary>
         /// Gets all of the available pages for the current site.
         /// </summary>
         /// <param name="siteId">The optional site id</param>
