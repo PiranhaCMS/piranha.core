@@ -20,108 +20,143 @@ namespace Piranha.Areas.Manager.Services
     /// <summary>
     /// The page edit service.
     /// </summary>
-    public class PageEditService
+    public class PostEditService
     {
         private readonly IApi api;
 
-        public PageEditService(IApi api) {
+        public PostEditService(IApi api) {
             this.api = api;
         }
 
         /// <summary>
-        /// Saves the page model.
+        /// Saves the post model.
         /// </summary>
-        /// <param name="model">The page edit model</param>
+        /// <param name="model">The post edit model</param>
         /// <param name="alias">The suggested alias</param>
-        /// <param name="publish">If the page should be published</param>
-        /// <returns>If the page was successfully saved</returns>
-        public bool Save(PageEditModel model, out string alias, bool? publish = null) {
-            var page = api.Pages.GetById(model.Id);
+        /// <param name="publish">If the post should be published</param>
+        /// <returns>If the post was successfully saved</returns>
+        public bool Save(PostEditModel model, out string alias, bool? publish = null) {
+            var post = api.Posts.GetById(model.Id);
             alias = null;
 
-            if (page == null) {
-                page = Piranha.Models.DynamicPage.Create(api, model.TypeId);
+            if (post == null) {
+                post = Piranha.Models.DynamicPost.Create(api, model.TypeId);
             } else {
-                if (model.Slug != page.Slug && model.Published.HasValue)
-                    alias = page.Slug;
+                if (model.Slug != post.Slug && model.Published.HasValue)
+                    alias = post.Slug;                
             }
 
-            Module.Mapper.Map<PageEditModel, Piranha.Models.PageBase>(model, page);
-            SaveRegions(model, page);
-            SaveBlocks(model, page);
+            Module.Mapper.Map<PostEditModel, Piranha.Models.PostBase>(model, post);
+            SaveRegions(model, post);
+            SaveBlocks(model, post);
+
+            // Update category
+            var category = api.Categories.GetBySlug(model.BlogId, model.SelectedCategory);
+            if (category != null)
+                post.Category = category;
+            else post.Category = new Piranha.Models.Taxonomy() {
+                Title = model.SelectedCategory
+            };
+
+            // Update tags
+            post.Tags.RemoveAll(t => !model.SelectedTags.Contains(t.Slug));
+
+            foreach (var selectedTag in model.SelectedTags) {
+                if (!post.Tags.Any(t => t.Slug == selectedTag)) {
+                    var tag = api.Tags.GetBySlug(model.BlogId, selectedTag);
+
+                    if (tag != null) {
+                        post.Tags.Add(new Piranha.Models.Taxonomy() {
+                            Id = tag.Id,
+                            Title = tag.Title,
+                            Slug = tag.Slug
+                        });
+                    } else {
+                        post.Tags.Add(new Piranha.Models.Taxonomy() {
+                            Title = selectedTag
+                        });
+                    }
+                }
+            }                        
 
             if (publish.HasValue) {
-                if (publish.Value && !page.Published.HasValue)
-                    page.Published = DateTime.Now;
+                if (publish.Value && !post.Published.HasValue)
+                    post.Published = DateTime.Now;
                 else if (!publish.Value)
-                    page.Published = null;
+                    post.Published = null;
             }
-            api.Pages.Save(page);
-            model.Id = page.Id;
+            api.Posts.Save(post);
+            model.Id = post.Id;
+
+            // Now tidy up the categories & tags for the blog
+            api.Categories.DeleteUnused(post.BlogId);
+            api.Tags.DeleteUnused(post.BlogId);
 
             return true;
         }
 
         /// <summary>
-        /// Gets the edit model for the page with the given id.
+        /// Gets the edit model for the post with the given id.
         /// </summary>
         /// <param name="api">The current api</param>
-        /// <param name="id">The page id</param>
-        /// <returns>The page model</returns>
-        public PageEditModel GetById(Guid id) {
-            var page = api.Pages.GetById(id);
-            if (page != null) {
-                var model = Module.Mapper.Map<Piranha.Models.PageBase, PageEditModel>(page);
-                model.PageType = api.PageTypes.GetById(model.TypeId);
-                model.PageContentType = App.ContentTypes.GetById(model.PageType.ContentTypeId);
-                LoadRegions(page, model);
-                LoadBlocks(page, model);
+        /// <param name="id">The post id</param>
+        /// <returns>The post model</returns>
+        public PostEditModel GetById(Guid id) {
+            var post = api.Posts.GetById(id);
+            if (post != null) {
+                var page = api.Pages.GetById(post.BlogId);
+                var model = Module.Mapper.Map<Piranha.Models.PostBase, PostEditModel>(post);
+                model.PostType = api.PostTypes.GetById(model.TypeId);
+                model.AllCategories = api.Categories.GetAll(post.BlogId);
+                model.AllTags = api.Tags.GetAll(post.BlogId);
+                model.SelectedCategory = post.Category.Slug;
+                model.SelectedTags = post.Tags.Select(t => t.Slug).ToList();
+                model.BlogSlug = page.Slug;
+
+                LoadRegions(post, model);
+                LoadBlocks(post, model);
 
                 return model;
             }
-            throw new KeyNotFoundException($"No page found with the id '{id}'");
+            throw new KeyNotFoundException($"No post found with the id '{id}'");
         }
 
         /// <summary>
         /// Refreshes the model after an unsuccessful save.
         /// </summary>
-        public PageEditModel Refresh(PageEditModel model) {
+        public PostEditModel Refresh(PostEditModel model) {
             if (!string.IsNullOrWhiteSpace(model.TypeId)) {
-                model.PageType = api.PageTypes.GetById(model.TypeId);
-                model.PageContentType = App.ContentTypes.GetById(model.PageType.ContentTypeId);
+                model.PostType = api.PostTypes.GetById(model.TypeId);
+                model.AllCategories = api.Categories.GetAll(model.BlogId);
+                model.AllTags = api.Tags.GetAll(model.BlogId);
             }
             return model;
         }
 
         /// <summary>
-        /// Creates a new edit model with the given page typeparamref.
+        /// Creates a new edit model with the given post typeparamref.
         /// </summary>
-        /// <param name="pageTypeId">The page type id</param>
-        /// <param name="siteId">The optional site id</param>
-        /// <returns>The page model</returns>        
-        public PageEditModel Create(string pageTypeId, Guid? siteId = null) {
-            var type = api.PageTypes.GetById(pageTypeId);
+        /// <param name="postTypeId">The post type id</param>
+        /// <param name="blogId">The blog id</param>
+        /// <returns>The post edit model</returns>        
+        public PostEditModel Create(string postTypeId, Guid blogId) {
+            var type = api.PostTypes.GetById(postTypeId);
+            var page = api.Pages.GetById(blogId);
 
-            if (!siteId.HasValue) {
-                var site = api.Sites.GetDefault();
+            if (type != null && page != null) {
+                var post = Piranha.Models.DynamicPost.Create(api, postTypeId);
+                var model = Module.Mapper.Map<Piranha.Models.PostBase, PostEditModel>(post);
+                model.BlogId = blogId;
+                model.PostType = type;
+                model.AllCategories = api.Categories.GetAll(blogId);
+                model.AllTags = api.Tags.GetAll(blogId);
+                model.BlogSlug = page.Slug;
 
-                if (site != null)
-                    siteId = site.Id;
-            }
-
-            if (type != null) {
-                var page = Piranha.Models.DynamicPage.Create(api, pageTypeId);
-                var model = Module.Mapper.Map<Piranha.Models.PageBase, PageEditModel>(page);
-                model.SiteId = siteId.Value;
-                model.PageType = type;
-                model.PageContentType = App.ContentTypes.GetById(type.ContentTypeId);
-                model.ContentType = model.PageContentType != null ? model.PageContentType.Id : null;
-
-                LoadRegions(page, model);
+                LoadRegions(post, model);
 
                 return model;
             }
-            throw new KeyNotFoundException($"No page type found with the id '{pageTypeId}'");
+            throw new KeyNotFoundException($"No post type found with the id '{postTypeId}'");
         }
 
         /// <summary>
@@ -217,9 +252,9 @@ namespace Piranha.Areas.Manager.Services
         /// </summary>
         /// <param name="src">The source</param>
         /// <param name="dest">The destination</param>
-        private void LoadRegions(Piranha.Models.DynamicPage src, PageEditModel dest) {
-            if (dest.PageType != null) {
-                foreach (var region in dest.PageType.Regions) {
+        private void LoadRegions(Piranha.Models.DynamicPost src, PostEditModel dest) {
+            if (dest.PostType != null) {
+                foreach (var region in dest.PostType.Regions) {
                     var regions = (IDictionary<string, object>)src.Regions;
 
                     if (regions.ContainsKey(region.Id)) {
@@ -235,7 +270,7 @@ namespace Piranha.Areas.Manager.Services
         /// </summary>
         /// <param name="src">The source</param>
         /// <param name="dest">The destination</param>
-        private void LoadBlocks(Piranha.Models.DynamicPage src, PageEditModel dest) {
+        private void LoadBlocks(Piranha.Models.DynamicPost src, PostEditModel dest) {
             foreach (var srcBlock in src.Blocks) {
                 dest.Blocks.Add(new ContentEditBlock() {
                     Id = srcBlock.Id,
@@ -245,7 +280,7 @@ namespace Piranha.Areas.Manager.Services
             }
         }
 
-        private void SaveBlocks(PageEditModel src, Piranha.Models.DynamicPage dest) {
+        private void SaveBlocks(PostEditModel src, Piranha.Models.DynamicPost dest) {
             // Clear the block list
             dest.Blocks.Clear();
 
@@ -257,15 +292,14 @@ namespace Piranha.Areas.Manager.Services
         /// <summary>
         /// Saves all of the regions from the source model into the destination.
         /// </summary>
-        /// <param name="api">The current api</param>
         /// <param name="src">The source</param>
         /// <param name="dest">The destination</param>
-        private void SaveRegions(PageEditModel src, Piranha.Models.DynamicPage dest) {
+        private void SaveRegions(PostEditModel src, Piranha.Models.DynamicPost dest) {
             var modelRegions = (IDictionary<string, object>)dest.Regions;
             foreach (var region in src.Regions) {
                 if (region is PageEditRegion) {
                     if (!modelRegions.ContainsKey(region.Id))
-                        modelRegions[region.Id] = Piranha.Models.DynamicPage.CreateRegion(api, dest.TypeId, region.Id);
+                        modelRegions[region.Id] = Piranha.Models.DynamicPost.CreateRegion(api, dest.TypeId, region.Id);
 
                     var reg = (PageEditRegion)region;
 
@@ -290,7 +324,7 @@ namespace Piranha.Areas.Manager.Services
                             if (set.Count == 1) {
                                 list.Add(set[0].Value);
                             } else {
-                                var modelFields = (IDictionary<string, object>)Piranha.Models.DynamicPage.CreateRegion(api, dest.TypeId, region.Id);
+                                var modelFields = (IDictionary<string, object>)Piranha.Models.DynamicPost.CreateRegion(api, dest.TypeId, region.Id);
 
                                 foreach (var field in set) {
                                     modelFields[field.Id] = field.Value;

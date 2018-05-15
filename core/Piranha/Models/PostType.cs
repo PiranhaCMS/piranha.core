@@ -18,9 +18,17 @@ namespace Piranha.Models
     public sealed class PostType : ContentType
     {
         /// <summary>
+        /// Gets/sets if the post type should use the block editor
+        /// for its main content. The default value is True.
+        /// </summary>
+        public bool UseBlocks { get; set; }
+
+        /// <summary>
         /// Default constructor.
         /// </summary>
-        public PostType() : base() {  }
+        public PostType() : base() {  
+            UseBlocks = true;
+        }
 
         /// <summary>
         /// Validates that the page type is correctly defined.

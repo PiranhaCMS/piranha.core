@@ -251,12 +251,6 @@ namespace Piranha.Tests.Repositories
                 var site = api.Sites.GetById(SITE_ID);
                 if (site != null)
                     api.Sites.Delete(site);
-
-                var db = GetDb();
-                foreach(var block in db.Blocks.Where(a => !a.IsReusable))
-                    db.Blocks.Remove(block);
-
-                db.SaveChanges();
             }
         }
 

@@ -68,15 +68,6 @@ namespace Piranha.Repositories
         /// </summary>
         /// <returns>The standalone page</returns>
         public void Detach<T>(T page) where T : Models.PageBase {
-            Func<T, IList<Extend.Block>> getBlocks = p => {
-                if (p is Models.IPage)
-                    return ((Models.IPage)p).Blocks;
-                else if (p is Models.IDynamicPage)
-                    return ((Models.IDynamicPage)p).Blocks;
-                else
-                    return new List<Extend.Block>();
-            };
-
             if (!page.OriginalPageId.HasValue) {
                 throw new Exception("Page is not an copy");
             }
@@ -84,7 +75,7 @@ namespace Piranha.Repositories
             var model = GetById<T>(page.Id);
             model.OriginalPageId = null;
 
-            foreach(var pageBlock in getBlocks(model))
+            foreach(var pageBlock in model.Blocks)
             {
                 pageBlock.Id = Guid.Empty;
             }
@@ -541,11 +532,7 @@ namespace Piranha.Repositories
                 page = contentService.Transform<T>(model, type, page);
 
                 // Transform blocks
-                IList<Extend.Block> blockModels = null;
-                if (model is Models.IPage)
-                    blockModels = ((Models.IPage)model).Blocks;
-                else if (model is Models.IDynamicPage)
-                    blockModels = ((Models.IDynamicPage)model).Blocks;
+                var blockModels = model.Blocks;
 
                 if (blockModels != null && blockModels.Count > 0) {
                     var blocks = contentService.TransformBlocks(blockModels);
@@ -675,10 +662,7 @@ namespace Piranha.Repositories
                     .Select(b => b.Block)
                     .ToList();
 
-                if (model is Models.IPage)
-                    ((Models.IPage)model).Blocks = contentService.TransformBlocks(blocks);
-                else if (model is Models.IDynamicPage)
-                    ((Models.IDynamicPage)model).Blocks = contentService.TransformBlocks(blocks);
+                model.Blocks = contentService.TransformBlocks(blocks);
             }
         }        
 

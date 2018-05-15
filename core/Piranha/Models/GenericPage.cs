@@ -25,18 +25,11 @@ namespace Piranha.Models
         public bool IsStartPage {
             get { return !ParentId.HasValue && SortOrder == 0; }
         }
-
-        /// <summary>
-        /// Gets/sets the available blocks.
-        /// </summary>
-        public IList<Extend.Block> Blocks { get; set; }
-
+        
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public GenericPage() : base() {
-            Blocks = new List<Extend.Block>();
-        }
+        public GenericPage() : base() { }
 
         /// <summary>
         /// Creates a new page model using the given page type id.

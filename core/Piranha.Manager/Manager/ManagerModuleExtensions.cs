@@ -38,6 +38,7 @@ public static class ManagerModuleExtensions
 
         // Add the manager services
         services.AddScoped<PageEditService, PageEditService>();
+        services.AddScoped<PostEditService, PostEditService>();
 
         // Add session support
         services.AddSession();

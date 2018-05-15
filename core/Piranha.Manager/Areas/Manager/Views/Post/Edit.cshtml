@@ -206,12 +206,49 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             @for (var n = Model.Regions.Count - 1; n >= 0; n--) {
-                <button class="btn btn-sm btn-secondary pull-right btn-toggle @(n == 0 ? "btn-primary" : "")" data-target="#region-@Model.Regions[n].Id">@Model.Regions[n].Title</button>
+                var primary = n == 0 && !Model.PostType.UseBlocks;
+                <button class="btn btn-sm btn-secondary pull-right btn-toggle @(primary ? "btn-primary" : "")" data-target="#region-@Model.Regions[n].Id">@Model.Regions[n].Title</button>
+            }
+            @if (Model.PostType.UseBlocks) {
+                <button class="btn btn-sm btn-secondary pull-right btn-toggle btn-primary" data-target="#page-blocks">Content</button>
             }
             <h3 class="panel-title">Content</h3>
         </div>
+        @if (Model.PostType.UseBlocks) {
+            <div id="page-blocks" class="panel-body">
+                <div class="page-blocks-body">
+                    <div class="sortable">
+                        <div class="unsortable">
+                            <div class="block-add">
+                                <div class="block-add-dialog">
+                                    @foreach (var category in Piranha.App.Blocks.GetCategories()) {
+                                        <label>@category</label>
+                                        @foreach (var block in Piranha.App.Blocks.GetByCategory(category)) {
+                                            <a href="#" data-typename="@block.TypeName"><i class="@block.Icon"></i>@block.Name</a>
+                                        }
+                                    }
+                                </div>
+                                <a href="#" class="block-add-toggle">
+                                    <hr><span class="fas fa-plus"></span>
+                                </a>
+                            </div>
+                        </div>
+                        @Html.EditorFor(m => m.Blocks)
+                    </div>
+                    @if (Model.Blocks.Count == 0) {
+                        <div class="block-info content-preview">
+                            <p>
+                                It looks like this post doesn't have any content yet! To get started just press the
+                                plus above to add your first block.
+                            </p>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
         @for (var n = 0; n < Model.Regions.Count; n++) {
-            <div id="region-@Model.Regions[n].Id" class="panel-body" @(n > 0 ? "style=display:none" : "")>
+            var primary = n == 0 && !Model.PostType.UseBlocks;
+            <div id="region-@Model.Regions[n].Id" class="panel-body" @(!primary ? "style=display:none" : "")>
                 @Html.HiddenFor(m => m.Regions[n].Id)
                 @Html.HiddenFor(m => m.Regions[n].Title)
                 @Html.HiddenFor(m => m.Regions[n].CLRType)

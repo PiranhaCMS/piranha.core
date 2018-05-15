@@ -134,6 +134,7 @@ namespace Piranha.Repositories
             if (post == null) {
                 post = db.Posts
                     .AsNoTracking()
+                    .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                     .Include(p => p.Fields)
                     .FirstOrDefault(p => p.Id == id);
 
@@ -213,6 +214,7 @@ namespace Piranha.Repositories
                 // No cache found, load from database
                 var post = db.Posts
                     .AsNoTracking()
+                    .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                     .Include(p => p.Fields)
                     .FirstOrDefault(p => p.BlogId == blogId && p.Slug == slug);
 
@@ -285,6 +287,7 @@ namespace Piranha.Repositories
                 else model.Slug = Utils.GenerateSlug(model.Slug);                
 
                 var post = db.Posts
+                    .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                     .Include(p => p.Fields)
                     .Include(p => p.Tags)
                     .FirstOrDefault(p => p.Id == model.Id);
@@ -302,6 +305,70 @@ namespace Piranha.Repositories
                     post.LastModified = DateTime.Now;
                 }
                 post = contentService.Transform<T>(model, type, post);
+
+                // Transform blocks
+                var blockModels = model.Blocks;
+
+                if (blockModels != null && blockModels.Count > 0) {
+                    var blocks = contentService.TransformBlocks(blockModels);
+                    var current = blocks.Select(b => b.Id).ToArray();
+
+                    // Delete removed blocks
+                    var removed = post.Blocks
+                        .Where(b => !current.Contains(b.BlockId) && !b.Block.IsReusable)
+                        .Select(b => b.Block);
+                    db.Blocks.RemoveRange(removed);
+
+                    // Delete the old page blocks
+                    post.Blocks.Clear();
+
+                    // Now map the new block
+                    for (var n = 0; n < blocks.Count; n++) {
+                        var block = db.Blocks
+                            .Include(b => b.Fields)
+                            .FirstOrDefault(b => b.Id == blocks[n].Id);
+                        if (block == null) {
+                            block = new Block() {
+                                Id = blocks[n].Id != Guid.Empty ? blocks[n].Id : Guid.NewGuid(),
+                                Created = DateTime.Now
+                            };
+                            db.Blocks.Add(block);
+                        }
+                        block.CLRType = blocks[n].CLRType;
+                        block.IsReusable = blocks[n].IsReusable;
+                        block.Title = blocks[n].Title;
+                        block.LastModified = DateTime.Now;
+
+                        var currentFields = blocks[n].Fields.Select(f => f.FieldId).Distinct();
+                        var removedFields = block.Fields.Where(f => !currentFields.Contains(f.FieldId));
+                        db.BlockFields.RemoveRange(removedFields);
+
+                        foreach (var newField in blocks[n].Fields) {
+                            var field = block.Fields.FirstOrDefault(f => f.FieldId == newField.FieldId);
+                            if (field == null) {
+                                field = new BlockField() {
+                                    Id = newField.Id != Guid.Empty ? newField.Id : Guid.NewGuid(),
+                                    BlockId = block.Id,
+                                    FieldId = newField.FieldId
+                                };
+                                db.BlockFields.Add(field);
+                                block.Fields.Add(field);
+                            }
+                            field.SortOrder = newField.SortOrder;
+                            field.CLRType = newField.CLRType;
+                            field.Value = newField.Value;
+                        }
+
+                        // Create the page block
+                        post.Blocks.Add(new PostBlock() {
+                            Id = Guid.NewGuid(),
+                            BlockId = block.Id,
+                            Block = block,
+                            PostId = post.Id,
+                            SortOrder = n
+                        });
+                    }
+                }                
 
                 // Remove tags
                 var removedTags = new List<PostTag>();
@@ -334,10 +401,17 @@ namespace Piranha.Repositories
         /// <param name="id">The unique id</param>
         public void Delete(Guid id) {
             var model = db.Posts
+                .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                 .Include(p => p.Fields)
                 .FirstOrDefault(p => p.Id == id);
 
             if (model != null) {
+                // Remove all blocks that are not reusable
+                foreach (var postBlock in model.Blocks) {
+                    if (!postBlock.Block.IsReusable)
+                        db.Blocks.Remove(postBlock.Block);
+                }
+
                 db.Posts.Remove(model);
 
                 // If this is a published post, update last modified for the
@@ -373,6 +447,14 @@ namespace Piranha.Repositories
         /// <param name="post">The source post</param>
         /// <param name="model">The targe model</param>
         private void Process<T>(Data.Post post, T model) where T : Models.PostBase {
+            if (post.Blocks.Count > 0) {
+                var blocks = post.Blocks
+                    .OrderBy(b => b.SortOrder)
+                    .Select(b => b.Block)
+                    .ToList();
+                model.Blocks = contentService.TransformBlocks(blocks);
+            }
+
             model.Category = api.Categories.GetById(post.CategoryId);
 
             foreach (var tag in api.Tags.GetByPostId(post.Id).OrderBy(t => t.Title)) {

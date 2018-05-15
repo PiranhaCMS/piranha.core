@@ -149,6 +149,12 @@ namespace Piranha.Tests.Repositories
                 post1.Title = "My first post";
                 post1.Ingress = "My first ingress";
                 post1.Body = "My first body";
+                post1.Blocks.Add(new Extend.Blocks.TextBlock {
+                    Body = "Sollicitudin Aenean"
+                });
+                post1.Blocks.Add(new Extend.Blocks.TextBlock {
+                    Body = "Ipsum Elit"
+                });
                 api.Posts.Save(post1);
 
                 var post2 = MyPost.Create(api);
@@ -217,7 +223,7 @@ namespace Piranha.Tests.Repositories
                 foreach (var t in pageTypes)
                     api.PageTypes.Delete(t);
 
-                api.Sites.Delete(SITE_ID);                    
+                api.Sites.Delete(SITE_ID);
             }
         }
         
@@ -397,6 +403,19 @@ namespace Piranha.Tests.Repositories
                 Assert.Equal("My first body", ((MyPost)model).Body.Value);
             }
         }
+
+
+        [Fact]
+        public void GetBlocksById() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var model = api.Posts.GetById<MyPost>(POST_1_ID);
+
+                Assert.NotNull(model);
+                Assert.Equal(2, model.Blocks.Count);
+                Assert.IsType<Extend.Blocks.TextBlock>(model.Blocks[0]);
+                Assert.IsType<Extend.Blocks.TextBlock>(model.Blocks[1]);
+            }            
+        }        
 
         [Fact]
         public void GetMissingById() {

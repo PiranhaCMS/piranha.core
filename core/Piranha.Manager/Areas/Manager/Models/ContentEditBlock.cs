@@ -13,9 +13,9 @@ using System;
 namespace Piranha.Areas.Manager.Models
 {
     /// <summary>
-    /// Base class for page blocks.
+    /// Base class for content blocks.
     /// </summary>
-    public class PageEditBlock
+    public class ContentEditBlock
     {
         /// <summary>
         /// Gets/sets the block id.

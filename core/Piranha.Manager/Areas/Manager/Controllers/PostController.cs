@@ -8,7 +8,9 @@
  * 
  */
 
+using Piranha.Areas.Manager.Services;
 using Piranha.Manager;
+using Piranha.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -20,11 +22,17 @@ namespace Piranha.Areas.Manager.Controllers
     [Area("Manager")]
     public class PostController : ManagerAreaControllerBase
     {
+        private readonly PostEditService editService;
+        private readonly IContentService<Data.Post, Data.PostField, Piranha.Models.PostBase> contentService;
+        
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public PostController(IApi api) : base(api) { }
+        public PostController(IApi api, PostEditService editService, IContentServiceFactory factory) : base(api) { 
+            this.editService = editService;
+            this.contentService = factory.CreatePostService();
+        }
 
         /// <summary>
         /// Gets the edit view for a post.
@@ -33,7 +41,7 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/post/{id:Guid}")]
         [Authorize(Policy = Permission.PostsEdit)]
         public IActionResult Edit(Guid id) {
-            return View(Models.PostEditModel.GetById(api, id));
+            return View(editService.GetById(id));
         }
 
         /// <summary>
@@ -44,7 +52,7 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/post/add/{type}/{blogId:Guid}")]
         [Authorize(Policy = Permission.PostsEdit)]
         public IActionResult Add(string type, Guid blogId) {
-            var model = Models.PostEditModel.Create(api, type, blogId);
+            var model = editService.Create(type, blogId);
 
             return View("Edit", model);
         }
@@ -60,14 +68,14 @@ namespace Piranha.Areas.Manager.Controllers
             // Validate
             if (string.IsNullOrWhiteSpace(model.Title)) {
                 ErrorMessage("The post could not be saved. Title is mandatory", false);
-                return View("Edit", model.Refresh(api));
+                return View("Edit", editService.Refresh(model));
             }
             if (string.IsNullOrWhiteSpace(model.SelectedCategory)) {
                 ErrorMessage("The post could not be saved. Category is mandatory", false);
-                return View("Edit", model.Refresh(api));
+                return View("Edit", editService.Refresh(model));
             }
 
-            var ret = model.Save(api, out var alias);
+            var ret = editService.Save(model, out var alias);
 
             // Save
             if (ret) {
@@ -78,7 +86,7 @@ namespace Piranha.Areas.Manager.Controllers
                 return RedirectToAction("Edit", new { id = model.Id });
             } else {
                 ErrorMessage("The post could not be saved.", false);
-                return View("Edit", model.Refresh(api));
+                return View("Edit", editService.Refresh(model));
             }
         }
 
@@ -93,15 +101,15 @@ namespace Piranha.Areas.Manager.Controllers
             // Validate
             if (string.IsNullOrWhiteSpace(model.Title)) {
                 ErrorMessage("The post could not be saved. Title is mandatory", false);
-                return View("Edit", model.Refresh(api));
+                return View("Edit", editService.Refresh(model));
             }
             if (string.IsNullOrWhiteSpace(model.SelectedCategory)) {
                 ErrorMessage("The post could not be saved. Category is mandatory", false);
-                return View("Edit", model.Refresh(api));
+                return View("Edit", editService.Refresh(model));
             }
 
             // Save
-            if (model.Save(api, out var alias, true)) {
+            if (editService.Save(model, out var alias, true)) {
                 SuccessMessage("The post has been published.");
                 return RedirectToAction("Edit", new { id = model.Id });
             } else {
@@ -118,7 +126,7 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/post/unpublish")]
         [Authorize(Policy = Permission.PostsPublish)]
         public IActionResult UnPublish(Models.PostEditModel model) {
-            if (model.Save(api, out var alias, false)) {
+            if (editService.Save(model, out var alias, false)) {
                 SuccessMessage("The post has been unpublished.");
                 return RedirectToAction("Edit", new { id = model.Id });
             } else {
@@ -165,7 +173,7 @@ namespace Piranha.Areas.Manager.Controllers
                     var region = Piranha.Models.DynamicPost.CreateRegion(api,
                         model.PageTypeId, model.RegionTypeId);
 
-                    var editModel = (Models.PageEditRegionCollection)Models.PostEditModel.CreateRegion(regionType, 
+                    var editModel = (Models.PageEditRegionCollection)editService.CreateRegion(regionType, 
                         new List<object>() { region });
 
                     ViewData.TemplateInfo.HtmlFieldPrefix = $"Regions[{model.RegionIndex}].FieldSets[{model.ItemIndex}]";

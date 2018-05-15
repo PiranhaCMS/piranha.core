@@ -44,9 +44,15 @@ namespace Piranha.Models
         public TaxonomyList Tags { get; set; }
 
         /// <summary>
+        /// Gets/sets the available blocks.
+        /// </summary>
+        public IList<Extend.Block> Blocks { get; set; }
+        
+        /// <summary>
         /// Default constructor.
         /// </summary>
         public PostBase() {
+            Blocks = new List<Extend.Block>();
             Tags = new TaxonomyList();
         }
     }

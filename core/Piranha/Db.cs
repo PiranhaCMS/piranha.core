@@ -94,6 +94,11 @@ namespace Piranha
         public DbSet<Data.Post> Posts { get; set; }
 
         /// <summary>
+        /// Gets/sets the post block set.
+        /// </summary>
+        public DbSet<Data.PostBlock> PostBlocks { get; set; }
+
+        /// <summary>
         /// Gets/sets the post field set.
         /// </summary>        
         public DbSet<Data.PostField> PostFields { get; set; }
@@ -211,6 +216,9 @@ namespace Piranha
             mb.Entity<Data.Post>().Property(p => p.RedirectUrl).HasMaxLength(256);
             mb.Entity<Data.Post>().HasOne(p => p.Category).WithMany().IsRequired().OnDelete(DeleteBehavior.Restrict);
             mb.Entity<Data.Post>().HasIndex(p => new { p.BlogId, p.Slug }).IsUnique();
+
+            mb.Entity<Data.PostBlock>().ToTable("Piranha_PostBlocks");
+            mb.Entity<Data.PostBlock>().HasIndex(b => new { b.PostId, b.SortOrder }).IsUnique();            
 
             mb.Entity<Data.PostField>().ToTable("Piranha_PostFields");
             mb.Entity<Data.PostField>().Property(f => f.RegionId).HasMaxLength(64).IsRequired();

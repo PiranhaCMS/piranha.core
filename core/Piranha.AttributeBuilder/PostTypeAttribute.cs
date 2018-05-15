@@ -16,5 +16,18 @@ namespace Piranha.AttributeBuilder
     /// Attribute for marking a class as a page type.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class PostTypeAttribute : ContentTypeAttribute { }
+    public class PostTypeAttribute : ContentTypeAttribute { 
+        /// <summary>
+        /// Gets/sets if the post type should use the block editor
+        /// for its main content. The default value is True.
+        /// </summary>
+        public bool UseBlocks { get; set; }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public PostTypeAttribute() : base() {
+            UseBlocks = true;
+        }        
+    }
 }

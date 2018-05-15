@@ -86,7 +86,8 @@ namespace Piranha.AttributeBuilder
                     var postType = new PostType() {
                         Id = attr.Id,
                         CLRType = type.GetTypeInfo().AssemblyQualifiedName,
-                        Title = attr.Title
+                        Title = attr.Title,
+                        UseBlocks = attr.UseBlocks
                     };
 
                     var routes = type.GetTypeInfo().GetCustomAttributes(typeof(PostTypeRouteAttribute));

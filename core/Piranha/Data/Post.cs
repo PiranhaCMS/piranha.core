@@ -64,9 +64,15 @@ namespace Piranha.Data
         public IList<PostTag> Tags { get; set; }
 
         /// <summary>
+        /// Gets/sets the available post blocks.
+        /// </summary>
+        public IList<PostBlock> Blocks { get; set; }        
+
+        /// <summary>
         /// Default constructor.
         /// </summary>
         public Post() : base() { 
+            Blocks = new List<PostBlock>();
             Tags = new List<PostTag>();
         }
     }

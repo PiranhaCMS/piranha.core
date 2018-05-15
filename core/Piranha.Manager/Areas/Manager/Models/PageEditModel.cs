@@ -29,7 +29,7 @@ namespace Piranha.Areas.Manager.Models
         /// <summary>
         /// Gets/sets the available blocks.
         /// </summary>
-        public IList<PageEditBlock> Blocks { get; set; }
+        public new IList<ContentEditBlock> Blocks { get; set; }
 
         /// <summary>
         /// Gets/sets the available regions.
@@ -45,7 +45,7 @@ namespace Piranha.Areas.Manager.Models
         /// Default constructor.
         /// </summary>
         public PageEditModel() {
-            Blocks = new List<PageEditBlock>();
+            Blocks = new List<ContentEditBlock>();
             Regions = new List<PageEditRegionBase>();
         }
     }

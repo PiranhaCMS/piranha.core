@@ -64,5 +64,14 @@ namespace Piranha.Models
         /// Gets/sets the id of the page this page is a copy of
         /// </summary>
         public Guid? OriginalPageId { get; set; }
+
+        /// <summary>
+        /// Gets/sets the available blocks.
+        /// </summary>
+        public IList<Extend.Block> Blocks { get; set; }
+        
+        public PageBase() {
+            Blocks = new List<Extend.Block>();
+        }
     }
 }

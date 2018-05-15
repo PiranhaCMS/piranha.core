@@ -84,6 +84,11 @@ namespace Piranha
         DbSet<Data.Post> Posts { get; set; }
 
         /// <summary>
+        /// Gets/sets the post block set.
+        /// </summary>
+        DbSet<Data.PostBlock> PostBlocks { get; set; }
+
+        /// <summary>
         /// Gets/sets the post field set.
         /// </summary>        
         DbSet<Data.PostField> PostFields { get; set; }
