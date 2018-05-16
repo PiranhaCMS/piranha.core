@@ -49,7 +49,7 @@ namespace Piranha.AspNetCore.Identity
         /// <summary>
         /// Gets the release date
         /// </summary>
-        public string ReleaseDate => "2018-05-04";
+        public string ReleaseDate => "2018-05-16";
 
         /// <summary>
         /// Gets the description

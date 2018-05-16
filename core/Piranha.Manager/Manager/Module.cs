@@ -80,7 +80,7 @@ namespace Piranha.Manager
         /// <summary>
         /// Gets the release date
         /// </summary>
-        public string ReleaseDate => "2018-03-25";
+        public string ReleaseDate => "2018-05-16";
 
         /// <summary>
         /// Gets the description
