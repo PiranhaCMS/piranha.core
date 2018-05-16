@@ -11,7 +11,5 @@
 @Html.Partial("Partial/Teasers", Model.Teasers)
 
 <div class="container body @(Model.Teasers.Count == 0 ? "arrow" : "")">
-    @Html.Raw(Model.Body)
-
     @Html.DisplayFor(m => m.Blocks)
 </div>

@@ -26,12 +26,6 @@ namespace CoreWeb.Models.Regions
         public StringField Title { get; set; }
 
         /// <summary>
-        /// Gets/sets the subtitle.
-        /// </summary>
-        [Field(Options = FieldOption.HalfWidth)]
-        public StringField SubTitle { get; set; }
-
-        /// <summary>
         /// Gets/sets the optional teaser image.
         /// </summary>
         [Field]
@@ -41,6 +35,6 @@ namespace CoreWeb.Models.Regions
         /// Gets/sets the body.
         /// </summary>
         [Field]
-        public MarkdownField Body { get; set; }
+        public HtmlField Body { get; set; }
     }
 }

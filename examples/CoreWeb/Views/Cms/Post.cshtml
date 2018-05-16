@@ -1,4 +1,4 @@
-﻿@model CoreWeb.Models.ArticlePost
+﻿@model CoreWeb.Models.BlogPost
 @inject Piranha.IApi Api
 @{
     ViewBag.Title = Model.Title;
@@ -24,9 +24,8 @@
     }
 
     @if (!string.IsNullOrEmpty(Model.Heading.Ingress.Value)) {
-        <p class="ingress">@Model.Heading.Ingress.Value</p>
+        <div class="lead">@Html.Raw(Model.Heading.Ingress.Value)</div>
     }
 
-    @Html.Raw(Model.Body)
     @Html.DisplayFor(m => m.Blocks)
 </div>

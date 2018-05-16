@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Piranha;
+using Piranha.Extend.Blocks;
 using Piranha.ImageSharp;
 using Piranha.Local;
 using Piranha.Services;
@@ -72,13 +73,13 @@ namespace CoreWeb
 
             // Build types
             var pageTypeBuilder = new Piranha.AttributeBuilder.PageTypeBuilder(api)
-                .AddType(typeof(Models.StandardBlog))
+                .AddType(typeof(Models.BlogArchive))
                 .AddType(typeof(Models.StandardPage))
                 .AddType(typeof(Models.TeaserPage));
             pageTypeBuilder.Build()
                 .DeleteOrphans();
             var postTypeBuilder = new Piranha.AttributeBuilder.PostTypeBuilder(api)
-                .AddType(typeof(Models.ArticlePost));
+                .AddType(typeof(Models.BlogPost));
             postTypeBuilder.Build()
                 .DeleteOrphans();
 
@@ -137,66 +138,76 @@ namespace CoreWeb
                 }
 
                 // Add the startpage
-                using (var stream = File.OpenRead("assets/seed/startpage.md")) {
-                    using (var reader = new StreamReader(stream)) {
-                        var startPage = Models.TeaserPage.Create(api);
+                var startPage = Models.TeaserPage.Create(api);
 
-                        // Add meta info
-                        startPage.SiteId = site.Id;
-                        startPage.Title = "Welcome to Piranha CMS";
-                        startPage.MetaKeywords = "Piranha, Piranha CMS, CMS, AspNetCore, DotNetCore, MVC";
-                        startPage.MetaDescription = "Piranha is the fun, fast and lightweight framework for developing cms-based web applications with AspNetCore.";
-                        startPage.NavigationTitle = "Home";
-                        startPage.Heading.Ingress = "The CMS framework with an extra bite";
-                        startPage.Body = reader.ReadToEnd();
-                        startPage.Published = DateTime.Now;
+                // Add meta info
+                startPage.SiteId = site.Id;
+                startPage.Title = "Welcome to Piranha CMS";
+                startPage.MetaKeywords = "Piranha, Piranha CMS, CMS, AspNetCore, DotNetCore, MVC";
+                startPage.MetaDescription = "Piranha is the fun, fast and lightweight framework for developing cms-based web applications with AspNetCore.";
+                startPage.NavigationTitle = "Home";
+                startPage.Heading.Ingress = "The CMS framework with an extra bite";
+                startPage.Blocks.Add(new HtmlBlock {
+                    Body =
+                        "<h2>What is Piranha.Core</h2>" +
+                        "<p>" +
+                        "This is a <strong>complete rewrite</strong> of Piranha CMS for <code>NetStandard</code>. The " +
+                        "goal of this rewrite is to create a version capable of targeting multiple platforms &amp; " +
+                        "frameworks with minimal depenencies, but still provide a flexible & high performance CMS library." +
+                        "</p>"
+                });
+                startPage.Blocks.Add(new HtmlBlock {
+                    Body =
+                        "<p>Piranha is currently built for <code>NetStandard 2.0</code> and uses the following awesome packages:</p>" +
+                        "<ul> " +
+                        "<li>AutoMapper <code>6.2.1</code></li>" +
+                        "<li>Markdig <code>0.14.6</code></li>" +
+                        "<li>Microsoft.EntityFrameworkCore <code>2.0.1</code></li>" +
+                        "<li>Newtonsoft.Json <code>10.0.3</code></li>" +
+                        "</ul>"
+                });
+                startPage.Blocks.Add(new HtmlBlock {
+                    Body =
+                        "<h2>Licensing</h2>" +
+                        "<p>" +
+                            "Piranha CMS is released under the <strong>MIT</strong> license. It is a permissive free " +
+                            "software license, meaning that it permits reuse within proprietary software provided all " +
+                            "copies of the licensed software include a copy of the MIT License terms and the copyright " +
+                            "notice." +
+                        "</p>"
+                });
+                startPage.Published = DateTime.Now;
 
-                        // Add main content
-                        startPage.Blocks.Add(new Piranha.Extend.Blocks.HtmlBlock() {
-                            Body =
-                                "<h2>Welcome to the Test Page!</h2>" +
-                                "<p>Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec ullamcorper nulla non metus auctor fringilla. Donec id elit non mi porta gravida at eget metus. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>"
-                        });
-                        startPage.Blocks.Add(new Piranha.Extend.Blocks.QuoteBlock() {
-                            Body = "Vestibulum id ligula porta felis euismod semper. Etiam porta sem malesuada magna mollis euismod.",
-                        });
-                        startPage.Blocks.Add(new Piranha.Extend.Blocks.HtmlColumnBlock() {
-                            Column1 = "<p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Aenean lacinia bibendum nulla sed consectetur. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>",
-                            Column2 = "<p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Curabitur blandit tempus porttitor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>"
-                        });
+                // Add teasers
+                startPage.Teasers.Add(new Models.Regions.Teaser() {
+                    Title = "Cross Platform",
+                    Image = platformId,
+                    Body = "<p>Built for <code>NetStandard</code> and <code>AspNet Core</code>, Piranha CMS can be run on Windows, Linux and Mac OS X.</p>"
+                });
+                startPage.Teasers.Add(new Models.Regions.Teaser() {
+                    Title = "Super Fast",
+                    Image = stopwatchId,
+                    Body = "<p>Designed from the ground up for super-fast performance using <code>EF Core</code> and optional Caching.</p>"
+                });
+                startPage.Teasers.Add(new Models.Regions.Teaser() {
+                    Title = "Open Source",
+                    Image = githubId,
+                    Body = "<p>Everything is Open Source and released under the <code>MIT</code> license for maximum flexibility.</p>"
+                });
+                
+                api.Pages.Save(startPage);
 
-                        // Add teasers
-                        startPage.Teasers.Add(new Models.Regions.Teaser() {
-                            Title = "Cross Platform",
-                            Image = platformId,
-                            Body = "Built for `NetStandard` and `AspNet Core`, Piranha CMS can be run on Windows, Linux and Mac OS X."
-                        });
-                        startPage.Teasers.Add(new Models.Regions.Teaser() {
-                            Title = "Super Fast",
-                            Image = stopwatchId,
-                            Body = "Designed from the ground up for super-fast performance using `EF Core` and optional Caching."
-                        });
-                        startPage.Teasers.Add(new Models.Regions.Teaser() {
-                            Title = "Open Source",
-                            Image = githubId,
-                            Body = "Everything is Open Source and released under the `MIT` license for maximum flexibility."
-                        });
-                        
-                        api.Pages.Save(startPage);
+                var docsPage = Models.StandardPage.Create(api);
+                docsPage.SiteId = site.Id;
+                docsPage.SortOrder = 1;
+                docsPage.Title = "Docs";
+                docsPage.RedirectUrl = "https://github.com/PiranhaCMS/piranha.core/wiki";
+                docsPage.Published = DateTime.Now;
 
-                        var docsPage = Models.StandardPage.Create(api);
-                        docsPage.SiteId = site.Id;
-                        docsPage.SortOrder = 1;
-                        docsPage.Title = "Docs";
-                        docsPage.RedirectUrl = "https://github.com/PiranhaCMS/piranha.core/wiki";
-                        docsPage.Published = DateTime.Now;
-
-                        api.Pages.Save(docsPage);
-                    }
-                }
+                api.Pages.Save(docsPage);
 
                 // Add the blog page
-                var blogPage = Models.StandardBlog.Create(api);
+                var blogPage = Models.BlogArchive.Create(api);
 
                 blogPage.SiteId = site.Id;
                 blogPage.Title = "Blog Archive";
@@ -212,7 +223,7 @@ namespace CoreWeb
                 // Add a blog post
                 using (var stream = File.OpenRead("assets/seed/blogpost.md")) {
                     using (var reader = new StreamReader(stream)) {
-                        var post = Models.ArticlePost.Create(api);
+                        var post = Models.BlogPost.Create(api);
 
                         // Add main content
                         post.BlogId = blogPage.Id;
@@ -220,7 +231,14 @@ namespace CoreWeb
                         post.Title = "My first post";
                         post.MetaKeywords = "First, Blog, AspNetCore, DotNetCore";
                         post.MetaDescription = "The first post ever written by a Piranha";
-                        post.Body = reader.ReadToEnd();
+                        post.Heading.Ingress = 
+                            "<p>" +
+                            "Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. " +
+                            "Etiam porta sem malesuada magna mollis euismod. Lorem ipsum dolor sit amet, consectetur adipiscing elit." +
+                            "</p>";
+                        post.Blocks.Add(new HtmlBlock() {
+                            Body = App.Markdown.Transform(reader.ReadToEnd())
+                        });
                         post.Published = DateTime.Now;
                         post.Tags.Add("Tech", "AspNetCore", "NetCore");  
 

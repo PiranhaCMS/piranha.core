@@ -42,13 +42,13 @@ namespace CoreWeb.Controllers
         /// <param name="category">The optional category id</param>
         [Route("archive")]
         public IActionResult Archive(Guid id, int? year = null, int? month = null, int? page = null, Guid? category = null, Guid? tag = null) {
-            Models.StandardBlog model;
+            Models.BlogArchive model;
 
             if (category.HasValue)
-                model = api.Archives.GetByCategoryId<Models.StandardBlog>(id, category.Value, page, year, month);
+                model = api.Archives.GetByCategoryId<Models.BlogArchive>(id, category.Value, page, year, month);
             else if (tag.HasValue)
-                model = api.Archives.GetByTagId<Models.StandardBlog>(id, tag.Value, page, year, month);
-            else model = api.Archives.GetById<Models.StandardBlog>(id, page, year, month);
+                model = api.Archives.GetByTagId<Models.BlogArchive>(id, tag.Value, page, year, month);
+            else model = api.Archives.GetById<Models.BlogArchive>(id, page, year, month);
             
             ViewBag.CurrentPage = model.Id;
             ViewBag.SiteId = (Guid)HttpContext.Items["Piranha_SiteId"];
@@ -75,7 +75,7 @@ namespace CoreWeb.Controllers
         /// <param name="id">The unique id</param>
         [Route("post")]
         public IActionResult Post(Guid id) {
-            var model = api.Posts.GetById<Models.ArticlePost>(id);
+            var model = api.Posts.GetById<Models.BlogPost>(id);
             ViewBag.CurrentPage = model.BlogId;
             ViewBag.SiteId = (Guid)HttpContext.Items["Piranha_SiteId"];
 

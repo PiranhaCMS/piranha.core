@@ -20,15 +20,9 @@ namespace CoreWeb.Models
     public abstract class BasePage<T> : Page<T> where T : BasePage<T>
     {
         /// <summary>
-        /// Gets/sets the main content.
-        /// </summary>
-        [Region(Title = "Main content", SortOrder = 0)]
-        public MarkdownField Body { get; set; }
-
-        /// <summary>
         /// Gets/sets the page heading.
         /// </summary>
-        [Region(SortOrder = 1)]
+        [Region(SortOrder = 0)]
         public Regions.PageHeading Heading { get; set; }
     }
 }

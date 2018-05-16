@@ -17,15 +17,9 @@ namespace CoreWeb.Models
     /// <summary>
     /// Basic post with main content in markdown.
     /// </summary>
-    [PostType(Title = "Article")]
-    public class ArticlePost : Post<ArticlePost>
+    [PostType(Title = "BlogPost")]
+    public class BlogPost : Post<BlogPost>
     {
-        /// <summary>
-        /// Gets/sets the main content.
-        /// </summary>
-        [Region(Title = "Main content")]
-        public MarkdownField Body { get; set; }
-
         /// <summary>
         /// Gets/sets the heading.
         /// </summary>

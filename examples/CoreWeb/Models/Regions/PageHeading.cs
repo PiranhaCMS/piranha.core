@@ -19,11 +19,6 @@ namespace CoreWeb.Models.Regions
     public class PageHeading
     {
         /// <summary>
-        /// Gets/sets the optional subtitle.
-        /// </summary>
-        public StringField Subtitle { get; set; }
-
-        /// <summary>
         /// Gets/sets the optional primary image.
         /// </summary>
         [Field(Title = "Primary Image")]
