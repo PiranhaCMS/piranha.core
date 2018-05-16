@@ -24,7 +24,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
     [Area("Manager")]
     public class UserController : Areas.Manager.Controllers.MessageControllerBase
     {
-        private readonly Db _db;
+        private readonly IDb _db;
         private UserManager<Data.User> _userManager;
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
         /// </summary>
         /// <param name="db">The current db context</param>
         /// <param name="userManager">The current user manager</param>
-        public UserController(Db db, UserManager<Data.User> userManager)
+        public UserController(IDb db, UserManager<Data.User> userManager)
         {
             _db = db;
             _userManager = userManager;

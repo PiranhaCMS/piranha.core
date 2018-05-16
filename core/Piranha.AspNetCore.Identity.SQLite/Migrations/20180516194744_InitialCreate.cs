@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Piranha.AspNetCore.Identity.Migrations
+namespace Piranha.AspNetCore.Identity.SQLite.Migrations
 {
     [NoCoverage]
     public partial class InitialCreate : Migration

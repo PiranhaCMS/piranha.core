@@ -19,9 +19,9 @@ namespace Piranha.AspNetCore.Identity.Controllers
     [Area("Manager")]
     public class RoleController : Areas.Manager.Controllers.MessageControllerBase
     {
-        private readonly Db _db;
+        private readonly IDb _db;
 
-        public RoleController(Db db)
+        public RoleController(IDb db)
         {
             _db = db;
         }

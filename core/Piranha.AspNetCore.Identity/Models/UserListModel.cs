@@ -38,7 +38,7 @@ namespace Piranha.AspNetCore.Identity.Models
             Users = new List<ListItem>();
         }
 
-        public static UserListModel Get(Db db) 
+        public static UserListModel Get(IDb db) 
         {
             var model = new UserListModel();
 

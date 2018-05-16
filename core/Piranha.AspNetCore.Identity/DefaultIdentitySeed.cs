@@ -23,7 +23,7 @@ namespace Piranha.AspNetCore.Identity
         /// <summary>
         /// The private DbContext.
         /// </summary>
-        private readonly Db _db;
+        private readonly IDb _db;
 
         /// <summary>
         /// The private user manager.
@@ -35,7 +35,7 @@ namespace Piranha.AspNetCore.Identity
         /// </summary>
         /// <param name="db">The current DbContext</param>
         /// <param name="userManager">The current UserManager</param>
-        public DefaultIdentitySeed(Db db, UserManager<Data.User> userManager)
+        public DefaultIdentitySeed(IDb db, UserManager<Data.User> userManager)
         {
             _db = db;
             _userManager = userManager;

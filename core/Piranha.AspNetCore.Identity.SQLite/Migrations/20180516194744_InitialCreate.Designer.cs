@@ -5,16 +5,16 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
-using Piranha.AspNetCore.Identity;
+using Piranha.AspNetCore.Identity.SQLite;
 using System;
 
-namespace Piranha.AspNetCore.Identity.Migrations
+namespace Piranha.AspNetCore.Identity.SQLite.Migrations
 {
-    [NoCoverage]
-    [DbContext(typeof(Db))]
-    partial class DbModelSnapshot : ModelSnapshot
+    [DbContext(typeof(IdentitySQLiteDb))]
+    [Migration("20180516194744_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

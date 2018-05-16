@@ -31,7 +31,7 @@ namespace Piranha.AspNetCore.Identity.Models
             SelectedRoles = new List<string>();
         }
 
-        public static UserEditModel Create(Db db) 
+        public static UserEditModel Create(IDb db) 
         {
             return new UserEditModel
             {
@@ -40,7 +40,7 @@ namespace Piranha.AspNetCore.Identity.Models
             };
         }
 
-        public static UserEditModel GetById(Db db, Guid id) 
+        public static UserEditModel GetById(IDb db, Guid id) 
         {
             var user = db.Users.FirstOrDefault(u => u.Id == id);
 
@@ -62,7 +62,7 @@ namespace Piranha.AspNetCore.Identity.Models
             return null;
         }
 
-        public async Task<bool> Save(Db db, UserManager<Data.User> userManager)
+        public async Task<bool> Save(IDb db, UserManager<Data.User> userManager)
         {
             var user = db.Users.FirstOrDefault(u => u.Id == User.Id);
 

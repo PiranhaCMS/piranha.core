@@ -32,7 +32,7 @@ namespace Piranha.AspNetCore.Identity.Models
             Roles = new List<ListItem>();
         }
 
-        public static RoleListModel Get(Db db) 
+        public static RoleListModel Get(IDb db) 
         {
             var model = new RoleListModel();
 

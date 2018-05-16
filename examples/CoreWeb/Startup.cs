@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Piranha;
+using Piranha.AspNetCore.Identity.SQLite;
 using Piranha.Extend.Blocks;
 using Piranha.ImageSharp;
 using Piranha.Local;
@@ -50,7 +51,7 @@ namespace CoreWeb
             services.AddPiranhaFileStorage();
             services.AddPiranhaImageSharp();
             services.AddPiranhaEF(options => options.UseSqlite("Filename=./piranha.coreweb.db"));
-            services.AddPiranhaIdentityWithSeed(options => options.UseSqlite("Filename=./piranha.coreweb.db"));
+            services.AddPiranhaIdentityWithSeed<IdentitySQLiteDb>(options => options.UseSqlite("Filename=./piranha.coreweb.db"));
             services.AddPiranhaManager();
 
             return services.BuildServiceProvider();
@@ -67,9 +68,6 @@ namespace CoreWeb
             // Initialize Piranha
             var api = services.GetService<IApi>();
             App.Init(api);
-
-            var db = services.GetService<Piranha.AspNetCore.Identity.Db>();
-            var roles = db.Roles.ToList();
 
             // Build types
             var pageTypeBuilder = new Piranha.AttributeBuilder.PageTypeBuilder(api)

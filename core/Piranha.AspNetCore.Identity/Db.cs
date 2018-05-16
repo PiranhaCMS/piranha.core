@@ -17,7 +17,15 @@ using System.Linq;
 
 namespace Piranha.AspNetCore.Identity
 {
-    public sealed class Db : IdentityDbContext<User, Role, Guid, IdentityUserClaim<Guid>, IdentityUserRole<Guid>, IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
+    public abstract class Db<T> : 
+        IdentityDbContext<User, Role, Guid, 
+        IdentityUserClaim<Guid>, 
+        IdentityUserRole<Guid>, 
+        IdentityUserLogin<Guid>, 
+        IdentityRoleClaim<Guid>, 
+        IdentityUserToken<Guid>>,
+        IDb
+        where T : Db<T>
     {
         /// <summary>
         /// Gets/sets whether the db context as been initialized. This
@@ -34,7 +42,7 @@ namespace Piranha.AspNetCore.Identity
         /// Default constructor.
         /// </summary>
         /// <param name="options">Configuration options</param>
-        public Db(DbContextOptions<Db> options) : base(options) 
+        public Db(DbContextOptions<T> options) : base(options) 
         {
             if (IsInitialized)
                 return;

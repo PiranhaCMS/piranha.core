@@ -27,10 +27,11 @@ public static class IdentityModuleExtensions
     /// </summary>
     /// <param name="services">The current service collection</param>
     /// <returns>The services</returns>
-    public static IServiceCollection AddPiranhaIdentity(this IServiceCollection services, 
+    public static IServiceCollection AddPiranhaIdentity<T>(this IServiceCollection services, 
         Action<DbContextOptionsBuilder> dbOptions, 
         Action<IdentityOptions> identityOptions = null,
         Action<CookieAuthenticationOptions> cookieOptions = null) 
+        where T : Db<T>
     {
         // Add the identity module
         Piranha.App.Modules.Register<Piranha.AspNetCore.Identity.Module>();
@@ -100,10 +101,11 @@ public static class IdentityModuleExtensions
             });
         });        
 
-        services.AddDbContext<Db>(dbOptions);
-        services.AddScoped<Db, Db>();
+        services.AddDbContext<T>(dbOptions);
+        services.AddScoped<IDb, T>();
+        services.AddScoped<T, T>();
         services.AddIdentity<User, Role>()
-            .AddEntityFrameworkStores<Db>()
+            .AddEntityFrameworkStores<T>()
             .AddDefaultTokenProviders();
         services.Configure<IdentityOptions>(identityOptions != null ? identityOptions : SetDefaultOptions);
         services.ConfigureApplicationCookie(cookieOptions != null ? cookieOptions : SetDefaultCookieOptions);
@@ -117,13 +119,15 @@ public static class IdentityModuleExtensions
     /// </summary>
     /// <param name="services">The current service collection</param>
     /// <returns>The services</returns>
-    public static IServiceCollection AddPiranhaIdentityWithSeed<T>(this IServiceCollection services, 
+    public static IServiceCollection AddPiranhaIdentityWithSeed<T, TSeed>(this IServiceCollection services, 
         Action<DbContextOptionsBuilder> dbOptions, 
         Action<IdentityOptions> identityOptions = null,
-        Action<CookieAuthenticationOptions> cookieOptions = null) where T : class, IIdentitySeed
+        Action<CookieAuthenticationOptions> cookieOptions = null) 
+        where T : Db<T>
+        where TSeed : class, IIdentitySeed
     {
-        services = AddPiranhaIdentity(services, dbOptions, identityOptions, cookieOptions);
-        services.AddScoped<IIdentitySeed, T>();
+        services = AddPiranhaIdentity<T>(services, dbOptions, identityOptions, cookieOptions);
+        services.AddScoped<IIdentitySeed, TSeed>();
 
         return services;
     }
@@ -133,12 +137,13 @@ public static class IdentityModuleExtensions
     /// </summary>
     /// <param name="services">The current service collection</param>
     /// <returns>The services</returns>
-    public static IServiceCollection AddPiranhaIdentityWithSeed(this IServiceCollection services, 
+    public static IServiceCollection AddPiranhaIdentityWithSeed<T>(this IServiceCollection services, 
         Action<DbContextOptionsBuilder> dbOptions, 
         Action<IdentityOptions> identityOptions = null,
         Action<CookieAuthenticationOptions> cookieOptions = null)
+        where T : Db<T>
     {
-        return AddPiranhaIdentityWithSeed<DefaultIdentitySeed>(services, dbOptions, identityOptions, cookieOptions);
+        return AddPiranhaIdentityWithSeed<T, DefaultIdentitySeed>(services, dbOptions, identityOptions, cookieOptions);
     }
 
     /// <summary>

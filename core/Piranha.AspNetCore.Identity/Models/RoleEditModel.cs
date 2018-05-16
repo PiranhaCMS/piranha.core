@@ -25,7 +25,7 @@ namespace Piranha.AspNetCore.Identity.Models
             SelectedClaims = new List<string>();
         }
 
-        public static RoleEditModel GetById(Db db, Guid id) 
+        public static RoleEditModel GetById(IDb db, Guid id) 
         {
             var role = db.Roles.FirstOrDefault(r => r.Id == id);
 
@@ -54,7 +54,7 @@ namespace Piranha.AspNetCore.Identity.Models
             };
         }
 
-        public bool Save(Db db) 
+        public bool Save(IDb db) 
         {
             var role = db.Roles.FirstOrDefault(r => r.Id == Role.Id);
 
