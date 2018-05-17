@@ -87,13 +87,21 @@ $('body').tooltip({
 //
 // Sortable
 //
-var sortables = sortable('.sortable', {
+var sortableBlocks = sortable('.page-blocks-body .sortable', {
     handle: '.sortable-handle',
     items: ':not(.unsortable)'
 });
-for (var n = 0; n < sortables.length; n++) {
-    sortables[n].addEventListener('sortupdate', function(e) {
+for (var n = 0; n < sortableBlocks.length; n++) {
+    sortableBlocks[n].addEventListener('sortupdate', function(e) {
         manager.tools.recalcblocks();
+    });
+}
+var sortableRegions = sortable('.region-list.sortable', {
+    handle: '.sortable-handle'
+});
+for (var n = 0; n < sortableRegions.length; n++) {
+    sortableRegions[n].addEventListener('sortupdate', function(e) {
+        manager.tools.recalcregion($(e.target));
     });
 }
 $(document).on('click', '.dd-toggle span', function() {
