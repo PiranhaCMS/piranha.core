@@ -23381,6 +23381,13 @@ var sortableRegions = sortable('.region-list.sortable', {
 });
 for (var n = 0; n < sortableRegions.length; n++) {
     sortableRegions[n].addEventListener('sortupdate', function(e) {
+        // Fix for Chrome
+        $.each($(e.target).find('.region-list-item'), function (i, e) {
+            $(e).removeClass("sortable-draggin");
+            $(e).attr('aria-grabbed', 'false');
+            $(e).removeAttr('style');
+        });
+
         manager.tools.recalcregion($(e.target));
     });
 }
@@ -23499,9 +23506,7 @@ $(document).on('click', 'a.confirm-delete, button.confirm-delete', function (e) 
 // Copy editable data
 //
 $(document).on('submit', 'form', function (e) {
-    console.log("form submit");
     $(this).find('.editor-area').each(function () {
-        console.log('copying data');
         $('#' + $(this).attr('data-id')).val($(this).html());
     });
 });
