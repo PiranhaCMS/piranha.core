@@ -187,6 +187,19 @@ namespace Piranha.Tests
         }
 
         [Fact]
+        public void ImageFieldInitMissing() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+                var field = new Piranha.Extend.Fields.ImageField {
+                    Id = Guid.NewGuid()
+                };
+
+                field.Init(api);
+
+                Assert.Null(field.Id);
+            }
+        }
+
+        [Fact]
         public void DocumentFieldConversions() {
             var media = new Data.Media() {
                 Id = Guid.NewGuid()
@@ -195,6 +208,19 @@ namespace Piranha.Tests
             Piranha.Extend.Fields.DocumentField field = media;
             Assert.Equal(media.Id, field.Id.Value);
         }
+
+        [Fact]
+        public void DocumentFieldInitMissing() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+                var field = new Piranha.Extend.Fields.DocumentField {
+                    Id = Guid.NewGuid()
+                };
+
+                field.Init(api);
+
+                Assert.Null(field.Id);
+            }
+        }        
 
         [Fact]
         public void VideoFieldConversions() {
@@ -207,6 +233,19 @@ namespace Piranha.Tests
         }
 
         [Fact]
+        public void VideoFieldInitMissing() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+                var field = new Piranha.Extend.Fields.VideoField {
+                    Id = Guid.NewGuid()
+                };
+
+                field.Init(api);
+
+                Assert.Null(field.Id);
+            }
+        }        
+
+        [Fact]
         public void MediaFieldConversions() {
             var media = new Data.Media() {
                 Id = Guid.NewGuid()
@@ -215,6 +254,19 @@ namespace Piranha.Tests
             Piranha.Extend.Fields.MediaField field = media;
             Assert.Equal(media.Id, field.Id.Value);
         }
+
+        [Fact]
+        public void MediaFieldInitMissing() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+                var field = new Piranha.Extend.Fields.MediaField {
+                    Id = Guid.NewGuid()
+                };
+
+                field.Init(api);
+
+                Assert.Null(field.Id);
+            }
+        }        
 
         [Fact]
         public void ImageFieldConversionsNullImage() {

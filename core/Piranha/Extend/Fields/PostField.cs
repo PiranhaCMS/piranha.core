@@ -62,16 +62,6 @@ namespace Piranha.Extend.Fields
         }
 
         /// <summary>
-        /// Initializes the field for manager use. This
-        /// method can be used for loading additional meta
-        /// data needed.
-        /// </summary>
-        /// <param name="api">The current api</param>
-        public virtual void InitManager(IApi api) { 
-            Init(api);
-        }
-
-        /// <summary>
         /// Gets the referenced post.
         /// </summary>
         /// <param name="api">The current api</param>
