@@ -23383,7 +23383,7 @@ for (var n = 0; n < sortableRegions.length; n++) {
     sortableRegions[n].addEventListener('sortupdate', function(e) {
         // Fix for Chrome
         $.each($(e.target).find('.region-list-item'), function (i, e) {
-            $(e).removeClass("sortable-draggin");
+            $(e).removeClass("sortable-dragging");
             $(e).attr('aria-grabbed', 'false');
             $(e).removeAttr('style');
         });
@@ -23683,7 +23683,7 @@ var manager = {
 
         addblock: function(target, blockType, contentType, cb) {
             $.ajax({
-                url: contentType == 'post' ? '/manager/post/block' : '/manager/page/block',
+                url: '/manager/block/create',
                 method: 'POST',
                 contentType: 'application/json',
                 dataType: 'html',

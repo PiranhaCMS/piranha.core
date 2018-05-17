@@ -403,7 +403,7 @@ var manager = {
 
         addblock: function(target, blockType, contentType, cb) {
             $.ajax({
-                url: contentType == 'post' ? '/manager/post/block' : '/manager/page/block',
+                url: '/manager/block/create',
                 method: 'POST',
                 contentType: 'application/json',
                 dataType: 'html',
