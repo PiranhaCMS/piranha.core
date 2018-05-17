@@ -102,7 +102,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
                 return View("Edit", model);                   
             }
 
-            if (await model.Save(_db, _userManager))
+            if (await model.Save(_userManager))
             {
                 SuccessMessage("The user has been saved.");
                 return RedirectToAction("Edit", new { id = model.User.Id });

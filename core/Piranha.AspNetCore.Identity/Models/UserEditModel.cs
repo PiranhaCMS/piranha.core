@@ -62,9 +62,9 @@ namespace Piranha.AspNetCore.Identity.Models
             return null;
         }
 
-        public async Task<bool> Save(IDb db, UserManager<Data.User> userManager)
+        public async Task<bool> Save(UserManager<Data.User> userManager)
         {
-            var user = db.Users.FirstOrDefault(u => u.Id == User.Id);
+            var user = await userManager.FindByIdAsync(User.Id.ToString());
 
             if (user == null)
             {
@@ -75,30 +75,25 @@ namespace Piranha.AspNetCore.Identity.Models
                 };
                 User.Id = user.Id;
 
-                var createResult = await userManager.CreateAsync(user, "password");
+                var createResult = await userManager.CreateAsync(user, Password);
             }
             else 
             {
-                user.UserName = User.UserName;
-                user.Email = User.Email;
+                await userManager.SetUserNameAsync(user, User.UserName);
+                await userManager.SetEmailAsync(user, User.Email);
             }
 
-            // Remove current roles.
-            foreach (var userRole in db.UserRoles.Where(r => r.UserId == user.Id))
-            {
-                var role = db.Roles.FirstOrDefault(r => r.Id == userRole.RoleId);
+            // Remove old roles
+            var roles = await userManager.GetRolesAsync(user);
+            await userManager.RemoveFromRolesAsync(user, roles);
 
-                if (role != null)
-                    await userManager.RemoveFromRoleAsync(user, role.Name);
-            }
-            
-            // Add the currently selected roles.
-            foreach (var role in SelectedRoles)
-            {
-                await userManager.AddToRoleAsync(user, role);
-            }
-            db.SaveChanges();
+            // Add current roles
+            await userManager.AddToRolesAsync(user, SelectedRoles);
 
+            if (!string.IsNullOrWhiteSpace(Password)) {
+                await userManager.RemovePasswordAsync(user);
+                await userManager.AddPasswordAsync(user, Password);
+            }
             return true;
         }
     }
