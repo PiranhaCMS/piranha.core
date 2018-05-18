@@ -32,6 +32,7 @@ namespace Piranha.Tests.Utils
         [Fact]
         public void ReplaceDoubleDashes() {
             Assert.Equal("no-whitespaces", Piranha.Utils.GenerateSlug("no - whitespaces"));
+            Assert.Equal("no-whitespaces", Piranha.Utils.GenerateSlug("no & whitespaces"));
         }
 
         [Fact]
@@ -47,6 +48,11 @@ namespace Piranha.Tests.Utils
         [Fact]
         public void RemoveHyphenCharacters() {
             Assert.Equal("aaooeeiiaaooeeii", Piranha.Utils.GenerateSlug("áàóòéèíìÁÀÓÒÉÈÍÌ"));
+        }
+
+        [Fact]
+        public void RemoveSlashesForNonHierarchical() {
+            Assert.Equal("no-more-dashes", Piranha.Utils.GenerateSlug("no/more / dashes", false));
         }
     }
 }

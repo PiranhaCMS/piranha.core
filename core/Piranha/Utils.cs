@@ -48,16 +48,13 @@ namespace Piranha
         /// </summary>
         /// <param name="str">The string</param>
         /// <returns>The slug</returns>
-        public static string GenerateSlug(string str) {
+        public static string GenerateSlug(string str, bool hierarchical = true) {
             if (App.Hooks != null && App.Hooks.OnGenerateSlug != null) {
                 // Call the registered slug generation
                 return App.Hooks.OnGenerateSlug(str);
             } else {
                 // Trim & make lower case
                 var slug = str.Trim().ToLower();
-
-                // Remove whitespaces
-                slug = Regex.Replace(slug.Replace("-", " "), @"\s+", " ").Replace(" ", "-");
 
                 // Convert culture specific characters
                 slug = slug
@@ -74,8 +71,19 @@ namespace Piranha
                     .Replace("ì", "i");
 
                 // Remove special characters
-                slug = Regex.Replace(slug, @"[^a-z0-9-/]", "");
+                slug = Regex.Replace(slug, @"[^a-z0-9-/ ]", "").Replace("--", "-");
 
+                // Remove whitespaces
+                slug = Regex.Replace(slug.Replace("-", " "), @"\s+", " ").Replace(" ", "-");                
+
+                // Remove slash if non-hierarchical
+                if (!hierarchical)
+                    slug = slug.Replace("/", "-");
+
+                // Remove multiple dashes
+                slug = Regex.Replace(slug, @"[-]+", "-");
+
+                // Remove leading & trailing dashes
                 if (slug.EndsWith("-"))
                     slug = slug.Substring(0, slug.LastIndexOf("-"));
                 if (slug.StartsWith("-"))
