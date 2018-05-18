@@ -131,8 +131,8 @@ namespace Piranha.Repositories
 
             // Ensure slug
             if (string.IsNullOrWhiteSpace(model.Slug))
-                model.Slug = Utils.GenerateSlug(model.Title);
-            else model.Slug = Utils.GenerateSlug(model.Slug);
+                model.Slug = Utils.GenerateSlug(model.Title, false);
+            else model.Slug = Utils.GenerateSlug(model.Slug, false);
 
             db.Categories.Add(model);
         }
