@@ -283,8 +283,8 @@ namespace Piranha.Repositories
 
                 // Ensure that we have a slug
                 if (string.IsNullOrWhiteSpace(model.Slug))
-                    model.Slug = Utils.GenerateSlug(model.Title);
-                else model.Slug = Utils.GenerateSlug(model.Slug);                
+                    model.Slug = Utils.GenerateSlug(model.Title, false);
+                else model.Slug = Utils.GenerateSlug(model.Slug, false);                
 
                 var post = db.Posts
                     .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
