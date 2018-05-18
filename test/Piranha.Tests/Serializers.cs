@@ -293,6 +293,59 @@ namespace Piranha.Tests
         }
 
         [Fact]
+        public void SerializeNumberField() {
+            var serializer = new IntegerFieldSerializer<NumberField>();
+
+            var str = serializer.Serialize(new NumberField() {
+                Value = 25
+            });
+
+            Assert.Equal("25", str);
+        }
+
+        [Fact]
+        public void SerializeEmptyNumberField() {
+            var serializer = new IntegerFieldSerializer<NumberField>();
+
+            var str = serializer.Serialize(new NumberField());
+
+            Assert.Null(str);
+        }
+
+        [Fact]
+        public void DeserializeNumberField() {
+            var serializer = new IntegerFieldSerializer<NumberField>();
+            var number = new NumberField() {
+                Value = 25
+            };
+            var str = "25";
+
+            var field = (NumberField)serializer.Deserialize(str);
+
+            Assert.NotNull(field);
+            Assert.Equal(number.Value, field.Value);
+        }
+
+        [Fact]
+        public void DeserializeEmptyNumberField() {
+            var serializer = new IntegerFieldSerializer<NumberField>();
+
+            var field = (NumberField)serializer.Deserialize(null);
+
+            Assert.False(field.Value.HasValue);
+        }
+
+        [Fact]
+        public void WrongInputToNumberField() {
+            var serializer = new IntegerFieldSerializer<NumberField>();
+
+            Assert.Throws<ArgumentException>(() => serializer.Serialize(new StringField()
+            {
+                Value = "Exception"
+            }));
+        }
+
+        [Fact]
         public void SerializeStringField() {
             var serializer = new StringFieldSerializer<StringField>();
             var ipsum = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet.";

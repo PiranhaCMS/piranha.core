@@ -312,6 +312,7 @@ namespace Piranha
                         fields.Register<Extend.Fields.ImageField>();
                         fields.Register<Extend.Fields.MarkdownField>();
                         fields.Register<Extend.Fields.MediaField>();
+                        fields.Register<Extend.Fields.NumberField>();
                         fields.Register<Extend.Fields.PageField>();
                         fields.Register<Extend.Fields.PostField>();
                         fields.Register<Extend.Fields.StringField>();
@@ -332,6 +333,7 @@ namespace Piranha
                         serializers.Register<Extend.Fields.HtmlField>(new StringFieldSerializer<Extend.Fields.HtmlField>());
                         serializers.Register<Extend.Fields.MarkdownField>(new StringFieldSerializer<Extend.Fields.MarkdownField>());
                         serializers.Register<Extend.Fields.MediaField>(new MediaFieldSerializer());
+                        serializers.Register<Extend.Fields.NumberField>(new IntegerFieldSerializer<Extend.Fields.NumberField>());
                         serializers.Register<Extend.Fields.PageField>(new PageFieldSerializer());                        
                         serializers.Register<Extend.Fields.PostField>(new PostFieldSerializer());
                         serializers.Register<Extend.Fields.StringField>(new StringFieldSerializer<Extend.Fields.StringField>());

@@ -325,6 +325,14 @@ namespace Piranha.Tests
         }
 
         [Fact]
+        public void NumberFieldConversions() {
+            var number = 25;
+
+            Piranha.Extend.Fields.NumberField field = number;
+            Assert.Equal(number, field.Value);
+        }
+
+        [Fact]
         public void StringFieldConversions() {
             var inStr = "This is a string";
 

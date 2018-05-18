@@ -1,0 +1,32 @@
+﻿/*
+ * Copyright (c) 2016-2017 Håkan Edling
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ * 
+ * https://github.com/piranhacms/piranha.core
+ * 
+ */
+
+namespace Piranha.Extend.Fields
+{
+    [FieldType(Name = "Number", Shorthand = "Number")]
+    public class NumberField : SimpleField<int?>
+    {
+        /// <summary>
+        /// Implicit operator for converting a int to a field.
+        /// </summary>
+        /// <param name="str">The string value</param>
+        public static implicit operator NumberField(int number) {
+            return new NumberField() { Value = number };
+        }
+
+        /// <summary>
+        /// Implicitly converts the Number field to a int.
+        /// </summary>
+        /// <param name="field">The field</param>
+        public static implicit operator int?(NumberField field) {
+            return field.Value;
+        }
+    }
+}
