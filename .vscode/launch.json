@@ -6,9 +6,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}/examples/CoreWeb/bin/Debug/netcoreapp1.1/CoreWeb.dll",
+            "program": "${workspaceRoot}/examples/CoreWeb/bin/Debug/netcoreapp2.0/CoreWeb.dll",
             "args": [],
-            "cwd": "${workspaceRoot}",
+            "cwd": "${workspaceRoot}/examples/CoreWeb",
             "stopAtEntry": false,
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {
