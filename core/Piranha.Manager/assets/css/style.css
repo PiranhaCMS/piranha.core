@@ -12578,6 +12578,12 @@ body.collapsed .navmenu-inverse span.title {
 .panel .table > tbody > tr.level-5 td:first-child {
   padding-left: 95px;
 }
+.table > tbody > tr.scheduled td:first-child a,
+.panel .table > tbody > tr.scheduled td:first-child a,
+.table > tbody > tr.draft td:first-child a,
+.panel .table > tbody > tr.draft td:first-child a {
+  opacity: 0.5;
+}
 .table .date,
 .panel .table .date {
   width: 114px;

@@ -51,7 +51,7 @@
                 <td>@site.Created.ToString("yyyy-MM-dd")</td>
                 <td class="actions one">
                     @if (!site.IsDefault) {
-                        <a class="remove" href="@Url.Action("Delete", new { id = site.Id })">
+                        <a class="remove confirm-delete" href="@Url.Action("Delete", new { id = site.Id })"  data-message="Are you sure you want to delete the site?">
                             <span class="fas fa-trash text-danger"></span>
                         </a>
                     }

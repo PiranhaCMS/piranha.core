@@ -46,6 +46,8 @@
         }
         @if (!item.Published.HasValue) {
             <span class="label label-info">Unpublished</span>
+        } else if (item.Published.Value > DateTime.Now) {
+            <span class="label label-info">Scheduled</span>            
         }
     </div>
     @if (item.Items.Count > 0) {

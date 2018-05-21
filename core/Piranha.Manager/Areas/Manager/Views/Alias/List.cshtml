@@ -70,7 +70,7 @@
                 </td>
                 <td class="actions one">
                     @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.AliasesDelete)).Succeeded) {        
-                        <a class="remove" href="@Url.Action("Delete", new { id = alias.Id })">
+                        <a class="remove confirm-delete" href="@Url.Action("Delete", new { id = alias.Id })" data-message="Are you sure you want to delete the alias?">
                             <span class="fas fa-trash text-danger"></span>
                         </a>
                     }

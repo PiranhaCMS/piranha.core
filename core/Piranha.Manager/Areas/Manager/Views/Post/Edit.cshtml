@@ -82,7 +82,7 @@
                     }
                     @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PostsDelete)).Succeeded) {
                         <li class="divider"></li>
-                        <li><a href="@Url.Action("Delete", new { @id = Model.Id })"><span class="text-danger">Delete post</span></a></li>
+                        <li><a href="@Url.Action("Delete", new { @id = Model.Id })" class="confirm-delete" data-message="Are you sure you want to delete the post?"><span class="text-danger">Delete post</span></a></li>
                     }
                 </ul>
             </div>

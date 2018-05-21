@@ -157,7 +157,11 @@
                     padding-left: 95px;
                 }
             }
-		}
+			&.scheduled, &.draft {
+				td:first-child a {
+					opacity: 0.5;
+				}
+			}		}
   	}
 	.date {
 		width: 114px;

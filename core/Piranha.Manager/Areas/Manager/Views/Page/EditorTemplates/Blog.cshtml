@@ -65,7 +65,7 @@
                             }
                             @if (post.Published.HasValue) {
                                 <small class="post-meta">
-                                        <text>Published: @post.Published.Value.ToString("yyyy-MM-dd")</text>
+                                        <text>@(post.Published.Value < DateTime.Now ? "Published" : "Scheduled"): @post.Published.Value.ToString("yyyy-MM-dd")</text>
                                 </small>
                             }
                         </td>
@@ -73,7 +73,7 @@
                         <td>@post.Category</td>
                         <td class="actions one">
                             @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PostsDelete)).Succeeded) {
-                                <a class="remove" href="@Url.Action("Delete", "Post", new { id = post.Id })">
+                                <a class="remove confirm-delete" href="@Url.Action("Delete", "Post", new { id = post.Id })" data-message="Are you sure you want to delete the post?">
                                     <span class="fas fa-trash text-danger"></span>
                                 </a>
                             }
