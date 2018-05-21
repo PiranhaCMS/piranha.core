@@ -23432,7 +23432,7 @@ $(document).on('click', '.block-add-dialog a', function (e) {
 $(document).on('click', '.block-html-swap', function (e) {
     e.preventDefault();
 
-    var columns = $(this).parent().find('.col-sm-6');
+    var columns = $(this).parent().parent().find('.col-sm-6');
     if (columns.length == 2) {
         var col1 = $(columns[0]).html();
         var col2 = $(columns[1]).html();

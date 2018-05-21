@@ -229,16 +229,25 @@
 		}
 	}
 
-	.block-html-swap {
+	.block-extras {
 		display: none;
 		position: absolute;
+		background: #fff;
 		top: 2px;
 		right: 80px;
-		width: 42px;
 		height: 42px;
 		z-index: 2000;
-		border: solid 6px #fff;
-		border-right-width: 4px;	
+		padding: 6px 4px 6px 6px;
+
+		button {
+			width: 34px;
+		}
+	}
+
+	.block:hover {
+		.block-extras {
+			display: block;
+		}
 	}
 
 	.block:hover {

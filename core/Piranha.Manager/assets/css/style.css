@@ -13446,16 +13446,21 @@ li.sitemap-item .actions.one {
   opacity: 1;
   transition: opacity ease-in-out 0.2s;
 }
-#page-blocks .block-html-swap {
+#page-blocks .block-extras {
   display: none;
   position: absolute;
+  background: #fff;
   top: 2px;
   right: 80px;
-  width: 42px;
   height: 42px;
   z-index: 2000;
-  border: solid 6px #fff;
-  border-right-width: 4px;
+  padding: 6px 4px 6px 6px;
+}
+#page-blocks .block-extras button {
+  width: 34px;
+}
+#page-blocks .block:hover .block-extras {
+  display: block;
 }
 #page-blocks .block:hover .block-html-swap {
   display: inline-block;
