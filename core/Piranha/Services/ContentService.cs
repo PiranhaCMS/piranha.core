@@ -48,7 +48,7 @@ namespace Piranha.Services
                 if (contentType != null) {
                     var modelType = typeof(T);
 
-                    if (!typeof(Models.IDynamicModel).IsAssignableFrom(modelType)) {
+                    if (!typeof(IDynamicModel).IsAssignableFrom(modelType) && !typeof(IContentInfo).IsAssignableFrom(modelType)) {
                         modelType = Type.GetType(contentType.CLRType);
 
                         if (modelType != typeof(T) && !typeof(T).IsAssignableFrom(modelType))
@@ -58,36 +58,38 @@ namespace Piranha.Services
                     var model = (T)Activator.CreateInstance(modelType);
                     model.TypeId = contentType.Id;
 
-                    if (model is IDynamicModel) {
-                        var dynModel = (IDynamicModel)(object)model;
+                    if (!(model is IContentInfo)) {
+                        if (model is IDynamicModel) {
+                            var dynModel = (IDynamicModel)(object)model;
 
-                        foreach (var region in contentType.Regions) {
-                            object value = null;
+                            foreach (var region in contentType.Regions) {
+                                object value = null;
 
-                            if (region.Collection) {
-                                var reg = CreateDynamicRegion(scope, region);
+                                if (region.Collection) {
+                                    var reg = CreateDynamicRegion(scope, region);
 
-                                if (reg != null) {
-                                    value = Activator.CreateInstance(typeof(RegionList<>).MakeGenericType(reg.GetType()));
-                                    ((IRegionList)value).Model = (IDynamicModel)model;
-                                    ((IRegionList)value).TypeId = contentType.Id;
-                                    ((IRegionList)value).RegionId = region.Id;
+                                    if (reg != null) {
+                                        value = Activator.CreateInstance(typeof(RegionList<>).MakeGenericType(reg.GetType()));
+                                        ((IRegionList)value).Model = (IDynamicModel)model;
+                                        ((IRegionList)value).TypeId = contentType.Id;
+                                        ((IRegionList)value).RegionId = region.Id;
+                                    }
+                                } else {
+                                    value = CreateDynamicRegion(scope, region);
                                 }
-                            } else {
-                                value = CreateDynamicRegion(scope, region);
+
+                                if (value != null)
+                                    ((IDictionary<string, object>)dynModel.Regions).Add(region.Id, value);
                             }
+                        } else {
+                            var type = model.GetType();
 
-                            if (value != null)
-                                ((IDictionary<string, object>)dynModel.Regions).Add(region.Id, value);
-                        }
-                    } else {
-                        var type = model.GetType();
-
-                        foreach (var region in contentType.Regions) {
-                            if (!region.Collection) {
-                                var prop = type.GetProperty(region.Id, App.PropertyBindings);
-                                if (prop != null) {
-                                    prop.SetValue(model, CreateRegion(scope, prop.PropertyType, region));
+                            foreach (var region in contentType.Regions) {
+                                if (!region.Collection) {
+                                    var prop = type.GetProperty(region.Id, App.PropertyBindings);
+                                    if (prop != null) {
+                                        prop.SetValue(model, CreateRegion(scope, prop.PropertyType, region));
+                                    }
                                 }
                             }
                         }
@@ -216,7 +218,7 @@ namespace Piranha.Services
                 if (type != null) {
                     var modelType = typeof(T);
 
-                    if (!typeof(Models.IDynamicModel).IsAssignableFrom(modelType)) {
+                    if (!typeof(Models.IDynamicModel).IsAssignableFrom(modelType) && !typeof(Models.IContentInfo).IsAssignableFrom(modelType)) {
                         modelType = Type.GetType(type.CLRType);
 
                         if (modelType != typeof(T) && !typeof(T).IsAssignableFrom(modelType))
@@ -225,7 +227,6 @@ namespace Piranha.Services
 
                     // Create an initialized model
                     var model = Create<T>(type);
-                    var currentRegions = type.Regions.Select(r => r.Id).ToArray();
 
                     // Map basic fields
                     App.Mapper.Map<TContent, TModelBase>(content, model);
@@ -239,36 +240,40 @@ namespace Piranha.Services
                     }
 
                     // Map regions
-                    foreach (var regionKey in currentRegions) {
-                        var region = type.Regions.Single(r => r.Id == regionKey);
-                        var fields = content.Fields.Where(f => f.RegionId == regionKey).OrderBy(f => f.SortOrder).ToList();
+                    if (!(model is IContentInfo)) {
+                        var currentRegions = type.Regions.Select(r => r.Id).ToArray();
+                        
+                        foreach (var regionKey in currentRegions) {
+                            var region = type.Regions.Single(r => r.Id == regionKey);
+                            var fields = content.Fields.Where(f => f.RegionId == regionKey).OrderBy(f => f.SortOrder).ToList();
 
-                        if (!region.Collection) {
-                            foreach (var fieldDef in region.Fields) {
-                                var field = fields.SingleOrDefault(f => f.FieldId == fieldDef.Id && f.SortOrder == 0);
+                            if (!region.Collection) {
+                                foreach (var fieldDef in region.Fields) {
+                                    var field = fields.SingleOrDefault(f => f.FieldId == fieldDef.Id && f.SortOrder == 0);
 
-                                if (field != null) {
-                                    if (region.Fields.Count == 1) {
-                                        SetSimpleValue(scope, model, regionKey, field);
-                                        break;
-                                    } else {
-                                        SetComplexValue(scope, model, regionKey, fieldDef.Id, field);
+                                    if (field != null) {
+                                        if (region.Fields.Count == 1) {
+                                            SetSimpleValue(scope, model, regionKey, field);
+                                            break;
+                                        } else {
+                                            SetComplexValue(scope, model, regionKey, fieldDef.Id, field);
+                                        }
                                     }
                                 }
-                            }
-                        } else {
-                            var fieldCount = content.Fields.Where(f => f.RegionId == regionKey).Select(f => f.SortOrder).DefaultIfEmpty(-1).Max() + 1;
-                            var sortOrder = 0;
+                            } else {
+                                var fieldCount = content.Fields.Where(f => f.RegionId == regionKey).Select(f => f.SortOrder).DefaultIfEmpty(-1).Max() + 1;
+                                var sortOrder = 0;
 
-                            while (fieldCount > sortOrder) {
-                                if (region.Fields.Count == 1) {
-                                    var field = fields.SingleOrDefault(f => f.FieldId == region.Fields[0].Id && f.SortOrder == sortOrder);
-                                    if (field != null)
-                                        AddSimpleValue(scope, model, regionKey, field);
-                                } else {
-                                    AddComplexValue(scope, model, type, regionKey, fields.Where(f => f.SortOrder == sortOrder).ToList());
+                                while (fieldCount > sortOrder) {
+                                    if (region.Fields.Count == 1) {
+                                        var field = fields.SingleOrDefault(f => f.FieldId == region.Fields[0].Id && f.SortOrder == sortOrder);
+                                        if (field != null)
+                                            AddSimpleValue(scope, model, regionKey, field);
+                                    } else {
+                                        AddComplexValue(scope, model, type, regionKey, fields.Where(f => f.SortOrder == sortOrder).ToList());
+                                    }
+                                    sortOrder++;
                                 }
-                                sortOrder++;
                             }
                         }
                     }

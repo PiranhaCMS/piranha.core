@@ -427,6 +427,18 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void GetInfoById() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var model = api.Posts.GetById<Models.PostInfo>(POST_1_ID);
+
+                Assert.NotNull(model);
+                Assert.Equal("my-first-post", model.Slug);
+                Assert.Equal("/blog/my-first-post", model.Permalink);
+                Assert.Empty(model.Blocks);
+            }            
+        }        
+
+        [Fact]
         public void GetGenericBySlug() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var model = api.Posts.GetBySlug<MyPost>("blog", "my-first-post");
@@ -459,6 +471,18 @@ namespace Piranha.Tests.Repositories
                 Assert.Null(model);
             }
         }
+
+        [Fact]
+        public void GetInfoBySlug() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var model = api.Posts.GetBySlug<Models.PostInfo>("blog", "my-first-post");
+
+                Assert.NotNull(model);
+                Assert.Equal("my-first-post", model.Slug);
+                Assert.Equal("/blog/my-first-post", model.Permalink);
+                Assert.Empty(model.Blocks);
+            }
+        }        
 
         [Fact]
         public void GetDynamicById() {

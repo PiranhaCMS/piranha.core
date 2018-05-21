@@ -188,14 +188,11 @@ namespace Piranha.Repositories
             var page = cache != null ? cache.Get<Page>($"Page_{siteId}") : null;
 
             if (page == null) {
-                page = db.Pages
-                    .AsNoTracking()
-                    .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
-                    .Include(p => p.Fields)
+                page = GetQuery<T>(out var fullQuery)
                     .FirstOrDefault(p => p.SiteId == siteId && p.ParentId == null && p.SortOrder == 0);
 
                 if (page != null) {
-                    if (cache != null)
+                    if (cache != null && fullQuery)
                         AddToCache(page);
                 }
             }
@@ -228,14 +225,11 @@ namespace Piranha.Repositories
             var page = cache != null ? cache.Get<Page>(id.ToString()) : null;
 
             if (page == null) {
-                page = db.Pages
-                    .AsNoTracking()
-                    .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
-                    .Include(p => p.Fields)
+                page = GetQuery<T>(out var fullQuery)
                     .FirstOrDefault(p => p.Id == id);
 
                 if (page != null) {
-                    if (cache != null)
+                    if (cache != null && fullQuery)
                         AddToCache(page);
                 }
             }
@@ -281,14 +275,11 @@ namespace Piranha.Repositories
                 return GetById<T>(pageId.Value);
             } else {
                 // No cache found, load from database
-                var page = db.Pages
-                    .AsNoTracking()
-                    .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
-                    .Include(p => p.Fields)
+                var page = GetQuery<T>(out var fullQuery)
                     .FirstOrDefault(p => p.SiteId == siteId && p.Slug == slug);
 
                 if (page != null) {
-                    if (cache != null)
+                    if (cache != null && fullQuery)
                         AddToCache(page);
 
                     if (page.OriginalPageId.HasValue)
@@ -322,15 +313,10 @@ namespace Piranha.Repositories
                 // No cache found, load from database
                 var page = db.Pages
                     .AsNoTracking()
-                    .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
-                    .Include(p => p.Fields)
                     .FirstOrDefault(p => p.SiteId == siteId && p.Slug == slug);
 
-                if (page != null) {
-                    if (cache != null)
-                        AddToCache(page);
+                if (page != null)
                     return page.Id;
-                }                    
                 return null;                
             }
         }
@@ -651,18 +637,43 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Gets the base query for loading pages.
+        /// </summary>
+        /// <param name="fullModel">If this is a full load or not</param>
+        /// <typeparam name="T">The requested model type</typeparam>
+        /// <returns>The queryable</returns>
+        private IQueryable<Page> GetQuery<T>(out bool fullModel) {
+            var loadRelated = !typeof(Models.IContentInfo).IsAssignableFrom(typeof(T));
+
+            var query = db.Pages
+                .AsNoTracking();
+
+            if (loadRelated) {
+                query = query
+                    .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
+                    .Include(p => p.Fields);
+                fullModel = true;
+            } else {
+                fullModel = false;
+            }
+            return query;
+        }        
+
+        /// <summary>
         /// Performs additional processing and loads related models.
         /// </summary>
         /// <param name="page">The source page</param>
         /// <param name="model">The targe model</param>
         private void Process<T>(Data.Page page, T model) where T : Models.PageBase {
-            if (page.Blocks.Count > 0) {
-                var blocks = page.Blocks
-                    .OrderBy(b => b.SortOrder)
-                    .Select(b => b.Block)
-                    .ToList();
+            if (!(model is Models.IContentInfo)) {
+                if (page.Blocks.Count > 0) {
+                    var blocks = page.Blocks
+                        .OrderBy(b => b.SortOrder)
+                        .Select(b => b.Block)
+                        .ToList();
 
-                model.Blocks = contentService.TransformBlocks(blocks);
+                    model.Blocks = contentService.TransformBlocks(blocks);
+                }
             }
         }        
 

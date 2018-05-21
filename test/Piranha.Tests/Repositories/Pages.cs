@@ -425,6 +425,17 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void GetInfoById() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var model = api.Pages.GetById<Models.PageInfo>(PAGE_1_ID);
+
+                Assert.NotNull(model);
+                Assert.Equal("my-first-page", model.Slug);
+                Assert.Empty(model.Blocks);
+            }            
+        }
+
+        [Fact]
         public void GetGenericBySlug() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var model = api.Pages.GetBySlug<MyPage>("my-first-page");
@@ -455,6 +466,17 @@ namespace Piranha.Tests.Repositories
                 Assert.Null(model);
             }
         }
+
+        [Fact]
+        public void GetInfoBySlug() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var model = api.Pages.GetBySlug<Models.PageInfo>("my-first-page");
+
+                Assert.NotNull(model);
+                Assert.Equal("my-first-page", model.Slug);
+                Assert.Empty(model.Blocks);
+            }
+        }        
 
         [Fact]
         public void GetDynamicById() {
@@ -823,6 +845,7 @@ namespace Piranha.Tests.Repositories
                 Assert.Equal(PAGE_7_ID, model.OriginalPageId);
                 Assert.Equal("My base body", model.Body.Value);
             }
+            
         }
 
         [Fact]

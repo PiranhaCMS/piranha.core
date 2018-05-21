@@ -132,14 +132,11 @@ namespace Piranha.Repositories
             var post = cache != null ? cache.Get<Post>(id.ToString()) : null;
 
             if (post == null) {
-                post = db.Posts
-                    .AsNoTracking()
-                    .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
-                    .Include(p => p.Fields)
+                post = GetQuery<T>(out var fullQuery)
                     .FirstOrDefault(p => p.Id == id);
 
                 if (post != null) {
-                    if (cache != null)
+                    if (cache != null && fullQuery)
                         AddToCache(post);
                     post.Category = api.Categories.GetById(post.CategoryId);
                     //
@@ -212,14 +209,11 @@ namespace Piranha.Repositories
                 return GetById<T>(postId.Value);
             } else {
                 // No cache found, load from database
-                var post = db.Posts
-                    .AsNoTracking()
-                    .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
-                    .Include(p => p.Fields)
+                var post = GetQuery<T>(out var fullQuery)
                     .FirstOrDefault(p => p.BlogId == blogId && p.Slug == slug);
 
                 if (post != null) {
-                    if (cache != null)
+                    if (cache != null && fullQuery)
                         AddToCache(post);
                     post.Category = api.Categories.GetById(post.CategoryId);
                     post.Blog = ((Repositories.PageRepository)api.Pages).GetPageById(post.BlogId);
@@ -442,19 +436,43 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Gets the base query for loading posts.
+        /// </summary>
+        /// <param name="fullModel">If this is a full load or not</param>
+        /// <typeparam name="T">The requested model type</typeparam>
+        /// <returns>The queryable</returns>
+        private IQueryable<Post> GetQuery<T>(out bool fullModel) {
+            var loadRelated = !typeof(Models.IContentInfo).IsAssignableFrom(typeof(T));
+
+            var query = db.Posts
+                .AsNoTracking();
+
+            if (loadRelated) {
+                query = query
+                    .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
+                    .Include(p => p.Fields);
+                fullModel = true;
+            } else {
+                fullModel = false;
+            }
+            return query;
+        }        
+
+        /// <summary>
         /// Performs additional processing and loads related models.
         /// </summary>
         /// <param name="post">The source post</param>
         /// <param name="model">The targe model</param>
         private void Process<T>(Data.Post post, T model) where T : Models.PostBase {
-            if (post.Blocks.Count > 0) {
-                var blocks = post.Blocks
-                    .OrderBy(b => b.SortOrder)
-                    .Select(b => b.Block)
-                    .ToList();
-                model.Blocks = contentService.TransformBlocks(blocks);
+            if (!(model is Models.IContentInfo)) {
+                if (post.Blocks.Count > 0) {
+                    var blocks = post.Blocks
+                        .OrderBy(b => b.SortOrder)
+                        .Select(b => b.Block)
+                        .ToList();
+                    model.Blocks = contentService.TransformBlocks(blocks);
+                }
             }
-
             model.Category = api.Categories.GetById(post.CategoryId);
 
             foreach (var tag in api.Tags.GetByPostId(post.Id).OrderBy(t => t.Title)) {
