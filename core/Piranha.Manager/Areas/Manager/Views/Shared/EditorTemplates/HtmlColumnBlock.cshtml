@@ -6,6 +6,9 @@
 
 @Html.HiddenFor(m => m.Column1.Value, "")
 @Html.HiddenFor(m => m.Column2.Value, "")
+<button class="btn btn-secondary btn-sm block-html-swap">
+    <span class="fas fa-exchange-alt"></span>
+</button>
 <div class="row">
     <div id="Editor_@Guid.NewGuid()" class="col-sm-6 block-editor content-preview editor-area" data-id="@(prefix)_Column1_Value">
         @if (!string.IsNullOrWhiteSpace(Model.Column1.Value)) {

@@ -19,6 +19,7 @@ piranha.page = new function() {
     self.pageTitle = '';
     self.siteId = '';
     self.pageUrlId = '';
+    self.callback = null;
 
     self.init = function (e) {
         self.pageId = e.data('pageid');
@@ -39,12 +40,21 @@ piranha.page = new function() {
     };
 
     self.set = function (e) {
-        if (self.pageUrlId) {
-            $('#' + self.pageUrlId).val(e.data('url'));
+        if (!self.callback) {
+            if (self.pageUrlId) {
+                $('#' + self.pageUrlId).val(e.data('url'));
+            } else {
+                if (self.pageId)
+                    $('#' + self.pageId).val(e.data('id'));
+                $('#' + self.pageTitle).text(e.data('title'));
+            }
         } else {
-            if (self.pageId)
-                $('#' + self.pageId).val(e.data('id'));
-            $('#' + self.pageTitle).text(e.data('title'));
+            self.callback({
+                id:  e.data('id'),
+                title: e.data('title'),
+                url: e.data('url')
+            });
+            self.callback = null;
         }
     };
 

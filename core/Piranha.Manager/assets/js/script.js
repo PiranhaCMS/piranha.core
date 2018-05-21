@@ -23091,6 +23091,7 @@ piranha.page = new function() {
     self.pageTitle = '';
     self.siteId = '';
     self.pageUrlId = '';
+    self.callback = null;
 
     self.init = function (e) {
         self.pageId = e.data('pageid');
@@ -23111,12 +23112,21 @@ piranha.page = new function() {
     };
 
     self.set = function (e) {
-        if (self.pageUrlId) {
-            $('#' + self.pageUrlId).val(e.data('url'));
+        if (!self.callback) {
+            if (self.pageUrlId) {
+                $('#' + self.pageUrlId).val(e.data('url'));
+            } else {
+                if (self.pageId)
+                    $('#' + self.pageId).val(e.data('id'));
+                $('#' + self.pageTitle).text(e.data('title'));
+            }
         } else {
-            if (self.pageId)
-                $('#' + self.pageId).val(e.data('id'));
-            $('#' + self.pageTitle).text(e.data('title'));
+            self.callback({
+                id:  e.data('id'),
+                title: e.data('title'),
+                url: e.data('url')
+            });
+            self.callback = null;
         }
     };
 
@@ -23411,13 +23421,25 @@ $(document).on('click', '.block-add-toggle', function(e) {
     if (!active)
         $(this).parent().addClass('active');
 });
-$(document).on('click', '.block-add-dialog a', function(e) {
+$(document).on('click', '.block-add-dialog a', function (e) {
     e.preventDefault();
 
     manager.tools.addblock($(this).parent().parent().parent(), $(this).attr('data-typename'), 'page', function() {
         manager.tools.recalcblocks();
         $('.block-add').removeClass('active');    
     });
+});
+$(document).on('click', '.block-html-swap', function (e) {
+    e.preventDefault();
+
+    var columns = $(this).parent().find('.col-sm-6');
+    if (columns.length == 2) {
+        var col1 = $(columns[0]).html();
+        var col2 = $(columns[1]).html();
+
+        $(columns[0]).html(col2);
+        $(columns[1]).html(col1);
+    }
 });
 
 //

@@ -13446,6 +13446,20 @@ li.sitemap-item .actions.one {
   opacity: 1;
   transition: opacity ease-in-out 0.2s;
 }
+#page-blocks .block-html-swap {
+  display: none;
+  position: absolute;
+  top: 2px;
+  right: 80px;
+  width: 42px;
+  height: 42px;
+  z-index: 2000;
+  border: solid 6px #fff;
+  border-right-width: 4px;
+}
+#page-blocks .block:hover .block-html-swap {
+  display: inline-block;
+}
 .select2-container--default .select2-selection--single,
 .select2-container--default .select2-selection--multiple {
   border-radius: 0;

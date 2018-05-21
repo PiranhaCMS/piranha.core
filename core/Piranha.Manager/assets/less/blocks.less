@@ -228,4 +228,22 @@
 			}
 		}
 	}
+
+	.block-html-swap {
+		display: none;
+		position: absolute;
+		top: 2px;
+		right: 80px;
+		width: 42px;
+		height: 42px;
+		z-index: 2000;
+		border: solid 6px #fff;
+		border-right-width: 4px;	
+	}
+
+	.block:hover {
+		.block-html-swap {
+			display: inline-block;
+		}		
+	}
 }
