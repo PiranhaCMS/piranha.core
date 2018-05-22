@@ -90,9 +90,13 @@ namespace Piranha.AttributeBuilder
                     var appFieldType = App.Fields.GetByType(type);
 
                     if (appFieldType == null) {
+                        RegisterField(type);
+                        appFieldType = App.Fields.GetByType(type);
+
                         // This is a single field region, but the type is missing.
                         // Discard the entire region
-                        return null;
+                        if (appFieldType == null)
+                            return null;
                     }
 
                     regionType.Fields.Add(new FieldType() {
@@ -126,6 +130,12 @@ namespace Piranha.AttributeBuilder
             if (attr != null) {
                 var appFieldType = App.Fields.GetByType(prop.PropertyType);
 
+                // Missing field type, check if we can register it on the fly
+                if (appFieldType == null) {
+                    RegisterField(prop.PropertyType);
+                    appFieldType = App.Fields.GetByType(prop.PropertyType);
+                }
+
                 if (appFieldType != null) {
                     return new FieldType() {
                         Id = prop.Name,
@@ -136,6 +146,27 @@ namespace Piranha.AttributeBuilder
                 }
             }
             return null;
+        }
+
+        private void RegisterField(Type type) {
+            if (typeof(IEnumerable).IsAssignableFrom(type))
+                type = type.GenericTypeArguments.First();
+
+            if (typeof(IField).IsAssignableFrom(type)) {
+                if (type.GetCustomAttribute<FieldTypeAttribute>() != null) {
+                    MethodInfo generic = null;
+
+                    if (typeof(Extend.Fields.SelectFieldBase).IsAssignableFrom(type)) {
+                        var method = typeof(Runtime.AppFieldList).GetMethod("RegisterSelect");
+                        generic = method.MakeGenericMethod(type.GenericTypeArguments.First());
+                    } else {
+                        var method = typeof(Runtime.AppFieldList).GetMethod("Register");
+                        generic = method.MakeGenericMethod(type);
+                    }
+                    
+                    generic.Invoke(App.Fields, null);
+                }
+            }
         }
         #endregion
     }
