@@ -11,6 +11,7 @@
     "select2": "4.0.5",
     "dropzone": "4.3.0",
     "simplemde": "1.11.2",
+    "object.assign-polyfill": "1.0.3",
     "components-font-awesome": "latest"
   },
   "resolutions": {

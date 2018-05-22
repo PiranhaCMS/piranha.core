@@ -12,6 +12,7 @@
       "assets/lib/select2/dist/js/select2.js",
       "assets/lib/dropzone/dist/dropzone.js",
       "assets/lib/simplemde/dist/simplemde.min.js",
+      "assets/lib/object.assign-polyfill/object.assign.js",
       "assets/js/html5sortable.js",
       "assets/js/piranha.media.js",
       "assets/js/piranha.page.js",
