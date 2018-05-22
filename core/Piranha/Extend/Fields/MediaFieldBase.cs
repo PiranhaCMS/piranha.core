@@ -13,7 +13,7 @@ using System;
 
 namespace Piranha.Extend.Fields
 {
-    public class MediaFieldBase : IField
+    public class MediaFieldBase<T> : IField, IEquatable<T> where T : MediaFieldBase<T>
     {
         /// <summary>
         /// Gets the list item title if this field is used in
@@ -58,6 +58,53 @@ namespace Piranha.Extend.Fields
                     Id = null;
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the hash code for the field.
+        /// </summary>
+        public override int GetHashCode() {
+            return Id.HasValue ? Id.GetHashCode() : 0;
+        }
+
+        /// <summary>
+        /// Checks if the given object is equal to the field.
+        /// </summary>
+        /// <param name="obj">The object</param>
+        /// <returns>True if the fields are equal</returns>
+        public override bool Equals(object obj) {
+            if (obj is T)
+                return Equals((T)obj);
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if the given field is equal to the field.
+        /// </summary>
+        /// <param name="obj">The field</param>
+        /// <returns>True if the fields are equal</returns>
+        public virtual bool Equals(T obj) {
+            return Id == obj.Id;
+        }
+
+        /// <summary>
+        /// Checks if the fields are equal.
+        /// </summary>
+        /// <param name="field1">The first field</param>
+        /// <param name="field2">The second field</param>
+        /// <returns>True if the fields are equal</returns>
+        public static bool operator ==(MediaFieldBase<T> field1, MediaFieldBase<T> field2) {
+            return field1.Equals(field2);
+        }
+
+        /// <summary>
+        /// Checks if the fields are not equal.
+        /// </summary>
+        /// <param name="field1">The first field</param>
+        /// <param name="field2">The second field</param>
+        /// <returns>True if the fields are equal</returns>
+        public static bool operator !=(MediaFieldBase<T> field1, MediaFieldBase<T> field2) {
+            return !field1.Equals(field2);
         }
     }
 }

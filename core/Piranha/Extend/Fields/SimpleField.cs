@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2017 Håkan Edling
+ * Copyright (c) 2016-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -8,13 +8,16 @@
  * 
  */
 
+using System;
+using System.Collections.Generic;
+
 namespace Piranha.Extend.Fields
 {
     /// <summary>
     /// Base class for simple single type fields.
     /// </summary>
     /// <typeparam name="T">The field type</typeparam>
-    public abstract class SimpleField<T> : Field
+    public abstract class SimpleField<T> : Field, IEquatable<SimpleField<T>>
     {
         /// <summary>
         /// Gets/sets the field value.
@@ -35,5 +38,52 @@ namespace Piranha.Extend.Fields
             }
             return null;
         }
+
+        /// <summary>
+        /// Gets the hash code for the field.
+        /// </summary>
+        public override int GetHashCode() {
+            return Value != null ? Value.GetHashCode() : 0;
+        }
+
+        /// <summary>
+        /// Checks if the given object is equal to the field.
+        /// </summary>
+        /// <param name="obj">The object</param>
+        /// <returns>True if the fields are equal</returns>
+        public override bool Equals(object obj) {
+            if (obj is SimpleField<T>)
+                return Equals((SimpleField<T>)obj);
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if the given field is equal to the field.
+        /// </summary>
+        /// <param name="obj">The field</param>
+        /// <returns>True if the fields are equal</returns>
+        public virtual bool Equals(SimpleField<T> obj) {
+            return EqualityComparer<T>.Default.Equals(Value, obj.Value);
+        }
+
+        /// <summary>
+        /// Checks if the fields are equal.
+        /// </summary>
+        /// <param name="field1">The first field</param>
+        /// <param name="field2">The second field</param>
+        /// <returns>True if the fields are equal</returns>
+        public static bool operator ==(SimpleField<T> field1, SimpleField<T> field2) {
+            return field1.Equals(field2);
+        }
+
+        /// <summary>
+        /// Checks if the fields are not equal.
+        /// </summary>
+        /// <param name="field1">The first field</param>
+        /// <param name="field2">The second field</param>
+        /// <returns>True if the fields are equal</returns>
+        public static bool operator !=(SimpleField<T> field1, SimpleField<T> field2) {
+            return !field1.Equals(field2);
+        }        
     }
 }

@@ -18,7 +18,7 @@ namespace Piranha.Extend.Fields
     /// Generic select field.
     /// </summary>
     [FieldType(Name = "Select", Shorthand = "Select")]
-    public class SelectField<T> : SelectFieldBase where T : struct
+    public class SelectField<T> : SelectFieldBase, IEquatable<SelectField<T>> where T : struct
     {
         /// <summary>
         /// The static list of available items.
@@ -82,6 +82,53 @@ namespace Piranha.Extend.Fields
         public override void Init(IApi api) {
             InitMetaData();
         }
+
+        /// <summary>
+        /// Gets the hash code for the field.
+        /// </summary>
+        public override int GetHashCode() {
+            return Value.GetHashCode();
+        }
+
+        /// <summary>
+        /// Checks if the given object is equal to the field.
+        /// </summary>
+        /// <param name="obj">The object</param>
+        /// <returns>True if the fields are equal</returns>
+        public override bool Equals(object obj) {
+            if (obj is SelectField<T>)
+                return Equals((SelectField<T>)obj);
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if the given field is equal to the field.
+        /// </summary>
+        /// <param name="obj">The field</param>
+        /// <returns>True if the fields are equal</returns>
+        public virtual bool Equals(SelectField<T> obj) {
+            return EqualityComparer<T>.Default.Equals(Value, obj.Value);
+        }
+
+        /// <summary>
+        /// Checks if the fields are equal.
+        /// </summary>
+        /// <param name="field1">The first field</param>
+        /// <param name="field2">The second field</param>
+        /// <returns>True if the fields are equal</returns>
+        public static bool operator ==(SelectField<T> field1, SelectField<T> field2) {
+            return field1.Equals(field2);
+        }
+
+        /// <summary>
+        /// Checks if the fields are not equal.
+        /// </summary>
+        /// <param name="field1">The first field</param>
+        /// <param name="field2">The second field</param>
+        /// <returns>True if the fields are equal</returns>
+        public static bool operator !=(SelectField<T> field1, SelectField<T> field2) {
+            return !field1.Equals(field2);
+        }        
 
         /// <summary>
         /// Gets the display title for the given enum. If the DisplayAttribute

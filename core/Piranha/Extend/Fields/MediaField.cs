@@ -13,7 +13,7 @@ using System;
 namespace Piranha.Extend.Fields
 {
     [FieldType(Name = "Media", Shorthand = "Media")]
-    public class MediaField : MediaFieldBase
+    public class MediaField : MediaFieldBase<MediaField>
     {
         /// <summary>
         /// Implicit operator for converting a Guid id to a field.
