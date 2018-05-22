@@ -45,12 +45,24 @@
                 });
             });
         });
+
+        $(document).on('click', '#btn-copy', function (e) {
+            e.preventDefault();
+
+            // Show modal
+            $('#modalPage').modal('show');
+            piranha.page.callback = function (ret) {
+                console.log(ret.id);
+                window.location.href = '/manager/page/copy/' + ret.id + '/@Model.SiteId';
+            };
+        });
     </script>
 }
 
 <div class="row">
     <div class="col-sm-12 buttons">
         @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesAdd)).Succeeded) {
+            <!-- Add new -->
             <div class="btn-group pull-right">
                 <button type="button" class="btn btn-labeled btn-primary" data-toggle="dropdown">
                     <span class="btn-label">
@@ -65,6 +77,8 @@
                     @foreach (var type in Model.PageTypes) {
                         <li><a href="@Url.Action("Add", new { type = type.Id, siteId = Model.SiteId })">@type.Title</a></li>
                     }
+                    <li class="divider"></li>
+                    <li><a id="btn-copy" href="#">Copy page</a></li>
                 </ul>
             </div>
         }

@@ -12709,9 +12709,6 @@ li.sitemap-item a:first-child,
 li.sitemap-item a.first {
   padding-left: 20px;
 }
-li.sitemap-item .label {
-  margin-left: 10px;
-}
 li.sitemap-item ol {
   padding-left: 0;
 }
@@ -12751,6 +12748,9 @@ li.sitemap-item .content .title {
   font-family: "Open Sans", Arial;
   font-size: 16px;
   padding: 0 !important;
+}
+li.sitemap-item .content .label:first-of-type {
+  margin-left: 10px;
 }
 li.sitemap-item.hover-remove {
   opacity: 0.8;

@@ -16,6 +16,11 @@ namespace Piranha.Models
     {
         #region Properties
         /// <summary>
+        /// Gets/sets the optional original id.
+        /// </summary>
+        public Guid? OriginalPageId { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional parent id.
         /// </summary>
         public Guid? ParentId { get; set; }

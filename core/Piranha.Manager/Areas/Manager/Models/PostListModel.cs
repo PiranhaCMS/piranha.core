@@ -48,7 +48,7 @@ namespace Piranha.Areas.Manager.Models
         public static PostListModel GetByBlogId(IApi api, Guid blogId) {
             var model = new PostListModel();
 
-            model.Posts = api.Posts.GetAll(blogId)
+            model.Posts = api.Posts.GetAll<PostInfo>(blogId)
                 .Select(p => new PostListItem() {
                     Id = p.Id,
                     TypeId = p.TypeId,

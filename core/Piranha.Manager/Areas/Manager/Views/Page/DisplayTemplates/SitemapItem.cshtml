@@ -44,6 +44,9 @@
         } else {
             <span class="title">@(item.NavigationTitle != null ? item.NavigationTitle : item.Title)</span>
         }
+        @if (item.OriginalPageId.HasValue) {
+            <span class="label label-warning">Copy</span>            
+        }
         @if (!item.Published.HasValue) {
             <span class="label label-info">Unpublished</span>
         } else if (item.Published.Value > DateTime.Now) {

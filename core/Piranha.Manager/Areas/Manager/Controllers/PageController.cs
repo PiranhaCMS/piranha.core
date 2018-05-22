@@ -103,6 +103,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="parentId">The parent id</param>
         /// <param name="siteId">The optional site id</param>
         [Route("manager/page/add/{type}/{sortOrder:int}/{parentId:Guid?}/{siteId:Guid?}")]
+        [Authorize(Policy = Permission.PagesAdd)]
         public IActionResult AddAt(string type, int sortOrder, Guid? parentId = null, Guid? siteId = null) {
             var model = editService.Create(type, siteId);
 
@@ -110,6 +111,61 @@ namespace Piranha.Areas.Manager.Controllers
             model.SortOrder = sortOrder;
 
             return View("Edit", model);
+        }
+
+        /// <summary>
+        /// Adds a new copy of the specified page.
+        /// </summary>
+        /// <param name="id">The page to copy</param>
+        /// <param name="siteId">The optional site id</param>
+        [Route("manager/page/copy/{originalId:Guid}/{siteId:Guid?}")]
+        [Authorize(Policy = Permission.PagesAdd)]
+        public IActionResult AddCopy(Guid originalId, Guid? siteId = null) {
+            if (!siteId.HasValue) {
+                var site = api.Sites.GetDefault();
+                siteId = site.Id;
+            }
+
+            var sitemap = api.Sites.GetSitemap(siteId, onlyPublished: false);
+            var model = editService.GetById(originalId);
+
+            if (model.OriginalPageId.HasValue) {
+                ErrorMessage("Can't create a copy from a copied page.");
+                return RedirectToAction("List", new { siteId = siteId.Value });
+            }
+
+            model.OriginalPageId = originalId;
+            model.Id = Guid.NewGuid();
+            model.SiteId = siteId.Value;
+            model.ParentId = null;
+            model.SortOrder = sitemap.Count;     
+            model.Title = "Copy of " + model.Title;
+            model.NavigationTitle = "";
+            model.Created = model.LastModified = DateTime.MinValue;
+            model.Published = null;
+            model.Slug = null;
+
+            return View("Edit", model);
+        }
+
+        /// <summary>
+        /// Detaches a copied page.
+        /// </summary>
+        /// <param name="id">The page id</param>
+        [Route("manager/page/detach/{id:Guid}")]
+        [Authorize(Policy = Permission.PagesSave)]
+        public IActionResult Detach(Guid id) {
+            var page = api.Pages.GetById(id);
+
+            if (page != null && page.OriginalPageId.HasValue) {
+                api.Pages.Detach(page);
+
+                SuccessMessage("The page has been detached from its original.");
+                return RedirectToAction("Edit", new { id = id});
+            } else {
+                ErrorMessage("The page could not be be detached.");
+                return RedirectToAction("Edit", new { id = id});                
+            }
         }
 
         /// <summary>

@@ -480,6 +480,7 @@ namespace Piranha.Repositories
                     page.SortOrder = model.SortOrder;
                     page.IsHidden = model.IsHidden;
                     page.Route = model.Route;
+                    page.Published = model.Published;
 
                     db.SaveChanges();
                     if (cache != null)
@@ -752,6 +753,9 @@ namespace Piranha.Repositories
             originalPage.IsHidden = page.IsHidden;
             originalPage.Route = page.Route;
             originalPage.OriginalPageId = page.OriginalPageId;
+            originalPage.Published = page.Published;
+            originalPage.Created = page.Created;
+            originalPage.LastModified = page.LastModified;
             return originalPage;
         }
 
