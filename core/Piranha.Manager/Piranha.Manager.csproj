@@ -1,21 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web" ToolsVersion="15.0">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>5.0.0-alpha1</Version>
+    <Version>5.0.0-alpha2</Version>
     <Company>Piranha CMS</Company>
     <AssemblyTitle>Piranha.Manager</AssemblyTitle>
     <RootNamespace>Piranha</RootNamespace>
     <OutputType>Library</OutputType>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PackageId>Piranha.Manager</PackageId>
-    <PackageVersion>5.0.0-alpha1</PackageVersion>
-    <Authors>Håkan Edling</Authors>
-    <Description>Manager panel for Piranha CMS for AspNetCore.</Description>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes></PackageReleaseNotes>
-    <PackageTags>cms mvc aspnetcore netstandard</PackageTags>
-    <Copyright>Copyright 2017-2018 (c) Håkan Edling</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
