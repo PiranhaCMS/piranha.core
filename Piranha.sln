@@ -9,17 +9,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{A8
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{DE1913AC-4AA3-4F66-83F1-615710D8367B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha", "core\Piranha\Piranha.csproj", "{7D7EC9B2-BB1B-43FA-BBDC-1AB11D132F07}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha", "core\Piranha\Piranha.csproj", "{7D7EC9B2-BB1B-43FA-BBDC-1AB11D132F07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.AspNetCore", "core\Piranha.AspNetCore\Piranha.AspNetCore.csproj", "{EB8EB8B1-5A47-4223-8498-434591BF624B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AspNetCore", "core\Piranha.AspNetCore\Piranha.AspNetCore.csproj", "{EB8EB8B1-5A47-4223-8498-434591BF624B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.AttributeBuilder", "core\Piranha.AttributeBuilder\Piranha.AttributeBuilder.csproj", "{C510A898-BFE5-4632-AB58-4F8B92CAEE34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AttributeBuilder", "core\Piranha.AttributeBuilder\Piranha.AttributeBuilder.csproj", "{C510A898-BFE5-4632-AB58-4F8B92CAEE34}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreWeb", "examples\CoreWeb\CoreWeb.csproj", "{C2FD396D-ED18-4D01-8437-4D8488A0AEA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreWeb", "examples\CoreWeb\CoreWeb.csproj", "{C2FD396D-ED18-4D01-8437-4D8488A0AEA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Tests", "test\Piranha.Tests\Piranha.Tests.csproj", "{9B19D8C3-E991-41BD-87C9-DE87C44A5BAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Tests", "test\Piranha.Tests\Piranha.Tests.csproj", "{9B19D8C3-E991-41BD-87C9-DE87C44A5BAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.AttributeBuilder.Tests", "test\Piranha.AttributeBuilder.Tests\Piranha.AttributeBuilder.Tests.csproj", "{9C4D5E1B-58DD-47F2-B310-095B352C0D3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AttributeBuilder.Tests", "test\Piranha.AttributeBuilder.Tests\Piranha.AttributeBuilder.Tests.csproj", "{9C4D5E1B-58DD-47F2-B310-095B352C0D3D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".global", ".global", "{88054E40-5547-4EA5-B75E-D446E8E5A021}"
 	ProjectSection(SolutionItems) = preProject
@@ -28,12 +28,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".global", ".global", "{8805
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Manager", "core\Piranha.Manager\Piranha.Manager.csproj", "{444EF37E-1F2F-4C3F-88E7-DB291B01E261}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Manager", "core\Piranha.Manager\Piranha.Manager.csproj", "{444EF37E-1F2F-4C3F-88E7-DB291B01E261}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Local.FileStorage", "core\Piranha.Local.FileStorage\Piranha.Local.FileStorage.csproj", "{4587BC7F-94D4-4DF5-B46E-4CC0E462FF03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Local.FileStorage", "core\Piranha.Local.FileStorage\Piranha.Local.FileStorage.csproj", "{4587BC7F-94D4-4DF5-B46E-4CC0E462FF03}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuspec", ".nuspec", "{A1B6ED88-8C91-45B0-9585-036E8A1C4A3C}"
 	ProjectSection(SolutionItems) = preProject
+		nuspec\Piranha.AspNetCore.Identity.nuspec = nuspec\Piranha.AspNetCore.Identity.nuspec
+		nuspec\Piranha.AspNetCore.Identity.SQLite.nuspec = nuspec\Piranha.AspNetCore.Identity.SQLite.nuspec
+		nuspec\Piranha.AspNetCore.Identity.SQLServer.nuspec = nuspec\Piranha.AspNetCore.Identity.SQLServer.nuspec
 		nuspec\Piranha.AspNetCore.nuspec = nuspec\Piranha.AspNetCore.nuspec
 		nuspec\Piranha.AspNetCore.SimpleSecurity.nuspec = nuspec\Piranha.AspNetCore.SimpleSecurity.nuspec
 		nuspec\Piranha.AttributeBuilder.nuspec = nuspec\Piranha.AttributeBuilder.nuspec
@@ -44,21 +47,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuspec", ".nuspec", "{A1B6
 		nuspec\Piranha.nuspec = nuspec\Piranha.nuspec
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.AspNetCore.SimpleSecurity", "core\Piranha.AspNetCore.SimpleSecurity\Piranha.AspNetCore.SimpleSecurity.csproj", "{DAE71F77-F4C7-4727-83D3-3AFC7362886D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AspNetCore.SimpleSecurity", "core\Piranha.AspNetCore.SimpleSecurity\Piranha.AspNetCore.SimpleSecurity.csproj", "{DAE71F77-F4C7-4727-83D3-3AFC7362886D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Azure.BlobStorage", "core\Piranha.Azure.BlobStorage\Piranha.Azure.BlobStorage.csproj", "{F1B30DE3-5B64-4A20-A41A-C391719E51FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Azure.BlobStorage", "core\Piranha.Azure.BlobStorage\Piranha.Azure.BlobStorage.csproj", "{F1B30DE3-5B64-4A20-A41A-C391719E51FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.ImageSharp", "core\Piranha.ImageSharp\Piranha.ImageSharp.csproj", "{512309F2-0557-41DF-9BD0-FDE898C2D34A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.ImageSharp", "core\Piranha.ImageSharp\Piranha.ImageSharp.csproj", "{512309F2-0557-41DF-9BD0-FDE898C2D34A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{BB78ACA1-9978-4B95-8124-D92FBCC52C9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.ImageSharp.Tests", "test\Piranha.ImageSharp.Tests\Piranha.ImageSharp.Tests.csproj", "{D604FF1E-06C0-429A-9058-606A0641D301}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.ImageSharp.Tests", "test\Piranha.ImageSharp.Tests\Piranha.ImageSharp.Tests.csproj", "{D604FF1E-06C0-429A-9058-606A0641D301}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.AspNetCore.Identity", "core\Piranha.AspNetCore.Identity\Piranha.AspNetCore.Identity.csproj", "{4BCC1E64-AACC-4D9B-973E-6072416D98A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AspNetCore.Identity", "core\Piranha.AspNetCore.Identity\Piranha.AspNetCore.Identity.csproj", "{4BCC1E64-AACC-4D9B-973E-6072416D98A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.AspNetCore.Identity.SQLite", "core\Piranha.AspNetCore.Identity.SQLite\Piranha.AspNetCore.Identity.SQLite.csproj", "{1F5FD0E8-1B4D-4381-9DFC-C235D3BC4C77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AspNetCore.Identity.SQLite", "core\Piranha.AspNetCore.Identity.SQLite\Piranha.AspNetCore.Identity.SQLite.csproj", "{1F5FD0E8-1B4D-4381-9DFC-C235D3BC4C77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.AspNetCore.Identity.SQLServer", "core\Piranha.AspNetCore.Identity.SQLServer\Piranha.AspNetCore.Identity.SQLServer.csproj", "{CC742AA4-A544-46D4-901C-7A605B4F132B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AspNetCore.Identity.SQLServer", "core\Piranha.AspNetCore.Identity.SQLServer\Piranha.AspNetCore.Identity.SQLServer.csproj", "{CC742AA4-A544-46D4-901C-7A605B4F132B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

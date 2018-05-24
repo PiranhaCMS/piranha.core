@@ -17,6 +17,7 @@ var gulp = require("gulp"),
 
 var paths = {
     js: [
+        "assets/js/polyfill.js",
         "assets/lib/jquery/dist/jquery.js",
         "assets/lib/bootstrap/dist/js/bootstrap.js",
         "assets/lib/jasny-bootstrap/dist/js/jasny-bootstrap.js",
