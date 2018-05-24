@@ -12641,24 +12641,6 @@ body.collapsed .navmenu-inverse span.title {
   -webkit-border-radius: 20px;
   -o-border-radius: 20px;
 }
-/*
-.panel .table {
-	>tbody {
-		>tr {
-			>td {
-				padding: 10px;
-				border-top: 1px solid @bg-color;				
-			}
-
-			&:nth-child(2n+1) {
-				>td {
-					background-color: @bg-color;
-				}
-			}
-		}
-	}
-}
-*/
 ol.sitemap {
   padding-left: 0;
 }
@@ -12672,7 +12654,7 @@ ol.sitemap .actions.two {
   width: 88px;
 }
 ol.sitemap .actions.three {
-  width: 122px;
+  width: 105px;
 }
 ol.sitemap.header {
   background: #e2e2e2;
@@ -12796,6 +12778,7 @@ li.sitemap-item .actions a.add-after,
 li.sitemap-item .actions a.add-below {
   font-size: 16px;
   line-height: 14px;
+  padding-top: 12px;
 }
 li.sitemap-item .actions.one {
   width: 60px;

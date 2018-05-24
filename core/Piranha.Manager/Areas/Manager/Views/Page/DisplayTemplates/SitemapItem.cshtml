@@ -18,10 +18,10 @@
     @if (!Model.ReadOnly) {
         <div class="actions three pull-right">
             @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesAdd)).Succeeded) {
-                <a class="add-after first" href="@Url.Action("AddAt", new { type = "pageType", parentId = item.ParentId, sortOrder = item.SortOrder + 1 })" data-toggle="tooltip" data-original-title="Add after" data-placement="top">
+                <a class="add-after first pull-left" href="@Url.Action("AddAt", new { type = "pageType", parentId = item.ParentId, sortOrder = item.SortOrder + 1 })" data-toggle="tooltip" data-original-title="Add after" data-placement="top">
                     <span class="fas fa-angle-down"></span>
                 </a>
-                <a class="add-below" href="@Url.Action("AddAt", new { type = "pageType", parentId = item.Id, sortOrder = 0 })" data-toggle="tooltip" data-original-title="Add below" data-placement="top" data-parentid="@item.Id" data-sortorder="0">
+                <a class="add-below pull-left" href="@Url.Action("AddAt", new { type = "pageType", parentId = item.Id, sortOrder = 0 })" data-toggle="tooltip" data-original-title="Add below" data-placement="top" data-parentid="@item.Id" data-sortorder="0">
                     <span class="fas fa-angle-right"></span>
                 </a>
             }
