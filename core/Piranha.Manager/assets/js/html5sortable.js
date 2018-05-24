@@ -1001,7 +1001,7 @@ function sortable(sortableElements, options) {
                 // Check if `element` is bigger than the draggable. If it is, we have to define a dead zone to prevent flickering
                 if (thisHeight > draggingHeight) {
                     // Dead zone?
-                    var deadZone = thisHeight - draggingHeight;
+                    var deadZone = (thisHeight - draggingHeight);
                     var offsetTop = offset(element).top;
                     if (placeholderIndex < thisIndex && pageY < offsetTop) {
                         return;
@@ -1017,12 +1017,27 @@ function sortable(sortableElements, options) {
                 if (dragging.style.display !== 'none') {
                     dragging.style.display = 'none';
                 }
+
+                // To avoid flicker, determine where to position the placeholder
+                // based on where the mouse pointer is relative to the elements
+                // vertical center.
+                var elementMiddle = offset(element).top + element.offsetHeight / 2;
+                if (pageY >= elementMiddle) {
+                    insertAfter(element, store(sortableElement).placeholder);
+                }
+                else {
+                    insertBefore(element, store(sortableElement).placeholder);
+                }
+
+                /* OLD CODE!
                 if (placeholderIndex < thisIndex) {
                     insertAfter(element, store(sortableElement).placeholder);
                 }
                 else {
                     insertBefore(element, store(sortableElement).placeholder);
                 }
+                */
+               
                 // get placeholders from all stores & remove all but current one
                 Array.from(stores.values())
                     .filter(function (data) { return data.placeholder !== undefined; })
