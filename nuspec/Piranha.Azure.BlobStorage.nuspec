@@ -7,7 +7,7 @@
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Library for storing media assets on Azure Blog Storage.</description>
+    <description>Library for storing media assets on Azure Blob Storage.</description>
     <copyright>Copyright 2018 (c) Håkan Edling</copyright>
     <tags>cms mvc aspnetcore netstandard</tags>
     <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
