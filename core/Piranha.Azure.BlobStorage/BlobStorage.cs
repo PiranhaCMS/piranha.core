@@ -21,41 +21,45 @@ namespace Piranha.Azure
         /// <summary>
         /// The private storage account.
         /// </summary>
-        private readonly CloudStorageAccount storage;
+        private readonly CloudStorageAccount _storage;
 
         /// <summary>
         /// The name of the container to use.
         /// </summary>
-        private readonly string containerName;
+        private readonly string _containerName;
 
         /// <summary>
         /// The container url.
         /// </summary>
-        private string containerUrl;
+        private string _containerUrl;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public BlobStorage(StorageCredentials credentials, string containerName = "uploads") {
-            this.storage = new CloudStorageAccount(credentials, true);
-            this.containerName = containerName;
+        public BlobStorage(StorageCredentials credentials, string containerName = "uploads")
+        {
+            _storage = new CloudStorageAccount(credentials, true);
+            _containerName = containerName;
         }
 
         /// <summary>
         /// Opens a new storage session.
         /// </summary>
         /// <returns>A new open session</returns>
-        public async Task<IStorageSession> OpenAsync() {
-            var session = storage.CreateCloudBlobClient();
-            var container = session.GetContainerReference(containerName);
+        public async Task<IStorageSession> OpenAsync()
+        {
+            var session = _storage.CreateCloudBlobClient();
+            var container = session.GetContainerReference(_containerName);
 
-            if (!await container.ExistsAsync()) {
+            if (!await container.ExistsAsync())
+            {
                 await container.CreateAsync();
-                await container.SetPermissionsAsync(new BlobContainerPermissions() {
+                await container.SetPermissionsAsync(new BlobContainerPermissions()
+                {
                     PublicAccess = BlobContainerPublicAccessType.Blob
                 });
             }
-            containerUrl = container.Uri.AbsoluteUri;
+            _containerUrl = container.Uri.AbsoluteUri;
 
             return new BlobStorageSession(container);
         }
@@ -65,15 +69,18 @@ namespace Piranha.Azure
         /// </summary>
         /// <param name="id">The media resource id</param>
         /// <returns>The public url</returns>
-        public string GetPublicUrl(string id) {
-            if (!string.IsNullOrWhiteSpace(id)) {
-                if (string.IsNullOrEmpty(containerUrl)) {
-                    var session = storage.CreateCloudBlobClient();
-                    var container = session.GetContainerReference(containerName);
+        public string GetPublicUrl(string id)
+        {
+            if (!string.IsNullOrWhiteSpace(id))
+            {
+                if (string.IsNullOrEmpty(_containerUrl))
+                {
+                    var session = _storage.CreateCloudBlobClient();
+                    var container = session.GetContainerReference(_containerName);
 
-                    containerUrl = container.Uri.AbsoluteUri;                
+                    _containerUrl = container.Uri.AbsoluteUri;
                 }
-                return containerUrl + "/" + id;
+                return _containerUrl + "/" + id;
             }
             return null;
         }
