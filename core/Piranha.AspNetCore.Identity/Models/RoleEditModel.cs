@@ -20,12 +20,12 @@ namespace Piranha.AspNetCore.Identity.Models
         public Data.Role Role { get; set; }
         public IList<string> SelectedClaims { get; set; }
 
-        public RoleEditModel() 
+        public RoleEditModel()
         {
             SelectedClaims = new List<string>();
         }
 
-        public static RoleEditModel GetById(IDb db, Guid id) 
+        public static RoleEditModel GetById(IDb db, Guid id)
         {
             var role = db.Roles.FirstOrDefault(r => r.Id == id);
 
@@ -54,7 +54,7 @@ namespace Piranha.AspNetCore.Identity.Models
             };
         }
 
-        public bool Save(IDb db) 
+        public bool Save(IDb db)
         {
             var role = db.Roles.FirstOrDefault(r => r.Id == Role.Id);
 
@@ -62,8 +62,9 @@ namespace Piranha.AspNetCore.Identity.Models
             {
                 Role.Id = Role.Id != Guid.Empty ? Role.Id : Guid.NewGuid();
                 Role.NormalizedName = !string.IsNullOrEmpty(Role.NormalizedName) ? Role.NormalizedName.ToUpper() : Role.Name.ToUpper();
-                
-                role = new Data.Role {
+
+                role = new Data.Role
+                {
                     Id = Role.Id
                 };
                 db.Roles.Add(role);

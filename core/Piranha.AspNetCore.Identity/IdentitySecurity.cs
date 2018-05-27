@@ -9,8 +9,6 @@
  */
 
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Piranha.AspNetCore.Identity
@@ -30,7 +28,7 @@ namespace Piranha.AspNetCore.Identity
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public IdentitySecurity(SignInManager<Data.User> signInManager, IIdentitySeed seed = null) 
+        public IdentitySecurity(SignInManager<Data.User> signInManager, IIdentitySeed seed = null)
         {
             _signInManager = signInManager;
             _seed = seed;
@@ -44,7 +42,8 @@ namespace Piranha.AspNetCore.Identity
         /// <param name="username">The username</param>
         /// <param name="password">The password</param>
         /// <returns>If the user was signed in</returns>
-        public async Task<bool> SignIn(object context, string username, string password) {
+        public async Task<bool> SignIn(object context, string username, string password)
+        {
             if (_seed != null)
                 await _seed.CreateAsync();
 
@@ -56,8 +55,9 @@ namespace Piranha.AspNetCore.Identity
         /// Signs out the current user.
         /// </summary>
         /// <param name="context">The current application context</param>
-        public Task SignOut(object context) {
+        public Task SignOut(object context)
+        {
             return _signInManager.SignOutAsync();
-        }        
+        }
     }
 }

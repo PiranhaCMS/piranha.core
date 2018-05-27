@@ -30,7 +30,7 @@ namespace Piranha.AspNetCore.Identity
             new PermissionItem { Name = Permissions.UsersEdit, Title = "Edit Users", Category = "Users" },
             new PermissionItem { Name = Permissions.UsersSave, Title = "Save Users", Category = "Users" }
         };
-        
+
         /// <summary>
         /// Gets the Author
         /// </summary>
@@ -73,7 +73,7 @@ namespace Piranha.AspNetCore.Identity
             }
 
             // Add manager menu items
-            Piranha.Manager.Menu.Items["System"].Items.Insert(0, new Manager.Menu.MenuItem()
+            Manager.Menu.Items["System"].Items.Insert(0, new Manager.Menu.MenuItem()
             {
                 InternalId = "Users",
                 Name = "Users",
@@ -82,7 +82,7 @@ namespace Piranha.AspNetCore.Identity
                 Policy = Permissions.Users,
                 Css = "fas fa-users"
             });
-            Piranha.Manager.Menu.Items["System"].Items.Insert(1, new Manager.Menu.MenuItem()
+            Manager.Menu.Items["System"].Items.Insert(1, new Manager.Menu.MenuItem()
             {
                 InternalId = "Roles",
                 Name = "Roles",

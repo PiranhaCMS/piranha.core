@@ -10,7 +10,6 @@
 
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.Encodings;
 
 namespace Piranha.AspNetCore.Identity
 {
@@ -22,19 +21,20 @@ namespace Piranha.AspNetCore.Identity
         /// <param name="email">The email address</param>
         /// <param name="size">The requested size</param>
         /// <returns>The gravatar URL</returns>
-		public static string GetGravatarUrl(string email, int size = 0) 
+		public static string GetGravatarUrl(string email, int size = 0)
         {
             using (var md5 = MD5.Create())
             {
                 var bytes = md5.ComputeHash(System.Text.Encoding.UTF8.GetBytes(email));
 
                 var sb = new StringBuilder(bytes.Length * 2);
-                for (int n = 0; n < bytes.Length; n++) {
+                for (int n = 0; n < bytes.Length; n++)
+                {
                     sb.Append(bytes[n].ToString("X2"));
                 }
                 return "http://www.gravatar.com/avatar/" + sb.ToString().ToLower() +
                     (size > 0 ? "?s=" + size : "");
             }
-		}        
+        }
     }
 }

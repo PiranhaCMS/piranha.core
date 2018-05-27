@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Piranha.AspNetCore.Identity.SQLServer
 {
-    public class IdentitySQLServerDb : Identity.Db<IdentitySQLServerDb> 
-    { 
+    public class IdentitySQLServerDb : Db<IdentitySQLServerDb>
+    {
         /// <summary>
         /// Default constructor.
         /// </summary>

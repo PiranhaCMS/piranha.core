@@ -78,28 +78,28 @@ namespace Piranha.AspNetCore.Identity.Controllers
         [Authorize(Policy = Permissions.UsersSave)]
         public async Task<IActionResult> Save(Models.UserEditModel model)
         {
-            if (string.IsNullOrWhiteSpace(model.User.UserName)) 
+            if (string.IsNullOrWhiteSpace(model.User.UserName))
             {
                 ErrorMessage("User name is mandatory.", false);
-                return View("Edit", model);   
+                return View("Edit", model);
             }
 
-            if (string.IsNullOrWhiteSpace(model.User.Email)) 
+            if (string.IsNullOrWhiteSpace(model.User.Email))
             {
                 ErrorMessage("Email is mandatory.", false);
-                return View("Edit", model);   
+                return View("Edit", model);
             }
 
-            if (!string.IsNullOrWhiteSpace(model.Password) && model.Password != model.PasswordConfirm) 
+            if (!string.IsNullOrWhiteSpace(model.Password) && model.Password != model.PasswordConfirm)
             {
                 ErrorMessage($"The new passwords does not match. {model.Password} - {model.PasswordConfirm}", false);
-                return View("Edit", model);   
+                return View("Edit", model);
             }
 
             if (model.User.Id == Guid.Empty && string.IsNullOrWhiteSpace(model.Password))
             {
                 ErrorMessage("Password is mandatory when creating a new user.", false);
-                return View("Edit", model);                   
+                return View("Edit", model);
             }
 
             if (await model.Save(_userManager))
@@ -108,7 +108,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
                 return RedirectToAction("Edit", new { id = model.User.Id });
             }
             ErrorMessage("The user could not be saved.", false);
-            return View("Edit", model);        
+            return View("Edit", model);
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
         /// </summary>
         /// <param name="id">The user id</param>
         [Route("/manager/user/delete/{id:Guid}")]
-        [Authorize(Policy = Permissions.UsersSave)]        
+        [Authorize(Policy = Permissions.UsersSave)]
         public IActionResult Delete(Guid id)
         {
             var user = _db.Users.FirstOrDefault(u => u.Id == id);

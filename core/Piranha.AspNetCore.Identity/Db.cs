@@ -17,12 +17,12 @@ using System.Linq;
 
 namespace Piranha.AspNetCore.Identity
 {
-    public abstract class Db<T> : 
-        IdentityDbContext<User, Role, Guid, 
-        IdentityUserClaim<Guid>, 
-        IdentityUserRole<Guid>, 
-        IdentityUserLogin<Guid>, 
-        IdentityRoleClaim<Guid>, 
+    public abstract class Db<T> :
+        IdentityDbContext<User, Role, Guid,
+        IdentityUserClaim<Guid>,
+        IdentityUserRole<Guid>,
+        IdentityUserLogin<Guid>,
+        IdentityRoleClaim<Guid>,
         IdentityUserToken<Guid>>,
         IDb
         where T : Db<T>
@@ -42,30 +42,30 @@ namespace Piranha.AspNetCore.Identity
         /// Default constructor.
         /// </summary>
         /// <param name="options">Configuration options</param>
-        public Db(DbContextOptions<T> options) : base(options) 
+        public Db(DbContextOptions<T> options) : base(options)
         {
             if (IsInitialized)
                 return;
 
-            lock (Mutex) 
+            lock (Mutex)
             {
                 if (IsInitialized)
                     return;
 
                 // Migrate database
                 Database.Migrate();
-                
+
                 Seed();
 
                 IsInitialized = true;
             }
-        }  
+        }
 
         /// <summary>
         /// Creates and configures the data model.
         /// </summary>
         /// <param name="mb">The current model builder</param>
-        protected override void OnModelCreating(ModelBuilder mb) 
+        protected override void OnModelCreating(ModelBuilder mb)
         {
             base.OnModelCreating(mb);
 
@@ -81,14 +81,15 @@ namespace Piranha.AspNetCore.Identity
         /// <summary>
         /// Seeds the default data.
         /// </summary>
-        private void Seed() {
+        private void Seed()
+        {
             SaveChanges();
 
             // Make sure we have a SysAdmin role
             var role = Roles.FirstOrDefault(r => r.Name == "SysAdmin");
-            if (role == null) 
+            if (role == null)
             {
-                role = new Role 
+                role = new Role
                 {
                     Id = Guid.NewGuid(),
                     Name = "SysAdmin",
@@ -104,32 +105,14 @@ namespace Piranha.AspNetCore.Identity
                 var roleClaim = RoleClaims.FirstOrDefault(c => c.RoleId == role.Id && c.ClaimType == permission.Name && c.ClaimValue == permission.Name);
                 if (roleClaim == null)
                 {
-                    RoleClaims.Add(new IdentityRoleClaim<Guid> 
+                    RoleClaims.Add(new IdentityRoleClaim<Guid>
                     {
                         RoleId = role.Id,
                         ClaimType = permission.Name,
                         ClaimValue = permission.Name
-                    });                
+                    });
                 }
             }
-
-            // Make sure our SysAdmin role has all of the available manager claims
-            /*
-            foreach (var claim in Piranha.Manager.Permission.All()) 
-            {
-                var roleClaim = RoleClaims.FirstOrDefault(c => c.RoleId == role.Id && c.ClaimType == claim && c.ClaimValue == claim);
-                if (roleClaim == null)
-                {
-                    RoleClaims.Add(new IdentityRoleClaim<Guid> 
-                    {
-                        RoleId = role.Id,
-                        ClaimType = claim,
-                        ClaimValue = claim
-                    });                
-                }
-            }
-            */
-
             SaveChanges();
         }
     }
