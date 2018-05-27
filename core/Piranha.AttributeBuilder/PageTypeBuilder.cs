@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2017 Håkan Edling
+ * Copyright (c) 2016-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -27,13 +27,16 @@ namespace Piranha.AttributeBuilder
         /// <summary>
         /// Builds the page types.
         /// </summary>
-        public override PageTypeBuilder Build() {
-            foreach (var type in types) {
+        public override PageTypeBuilder Build()
+        {
+            foreach (var type in _types)
+            {
                 var pageType = GetContentType(type);
 
-                if (pageType != null) {
+                if (pageType != null)
+                {
                     pageType.Ensure();
-                    api.PageTypes.Save(pageType);
+                    _api.PageTypes.Save(pageType);
                 }
             }
             return this;
@@ -44,12 +47,14 @@ namespace Piranha.AttributeBuilder
         ///  exist in the database,
         /// </summary>
         /// <returns>The builder</returns>
-        public PageTypeBuilder DeleteOrphans() {
+        public PageTypeBuilder DeleteOrphans()
+        {
             var orphans = new List<PageType>();
             var importTypes = new List<PageType>();
 
             // Get all page types added for import.
-            foreach (var type in types) {
+            foreach (var type in _types)
+            {
                 var importType = GetContentType(type);
 
                 if (importType != null)
@@ -57,14 +62,16 @@ namespace Piranha.AttributeBuilder
             }
 
             // Get all previously imported page types.
-            foreach (var pageType in api.PageTypes.GetAll()) {
+            foreach (var pageType in _api.PageTypes.GetAll())
+            {
                 if (!importTypes.Any(t => t.Id == pageType.Id))
                     orphans.Add(pageType);
             }
 
             // Delete all orphans.
-            foreach (var pageType in orphans) {
-                api.PageTypes.Delete(pageType);
+            foreach (var pageType in orphans)
+            {
+                _api.PageTypes.Delete(pageType);
             }
             return this;
         }
@@ -75,15 +82,19 @@ namespace Piranha.AttributeBuilder
         /// </summary>
         /// <param name="type">The type</param>
         /// <returns>The page type</returns>
-        protected override PageType GetContentType(Type type) {
+        protected override PageType GetContentType(Type type)
+        {
             var attr = type.GetTypeInfo().GetCustomAttribute<PageTypeAttribute>();
 
-            if (attr != null) {
+            if (attr != null)
+            {
                 if (string.IsNullOrWhiteSpace(attr.Id))
                     attr.Id = type.Name;
 
-                if (!string.IsNullOrEmpty(attr.Id) && !string.IsNullOrEmpty(attr.Title)) {
-                    var pageType = new PageType() {
+                if (!string.IsNullOrEmpty(attr.Id) && !string.IsNullOrEmpty(attr.Title))
+                {
+                    var pageType = new PageType
+                    {
                         Id = attr.Id,
                         CLRType = type.GetTypeInfo().AssemblyQualifiedName,
                         Title = attr.Title,
@@ -92,20 +103,24 @@ namespace Piranha.AttributeBuilder
                     };
 
                     var routes = type.GetTypeInfo().GetCustomAttributes(typeof(PageTypeRouteAttribute));
-                    foreach (PageTypeRouteAttribute route in routes) {
+                    foreach (PageTypeRouteAttribute route in routes)
+                    {
                         if (!string.IsNullOrWhiteSpace(route.Title) && !string.IsNullOrWhiteSpace(route.Route))
-                            pageType.Routes.Add(new ContentTypeRoute() {
+                            pageType.Routes.Add(new ContentTypeRoute
+                            {
                                 Title = route.Title,
                                 Route = route.Route
                             });
                     }
 
-                    var regionTypes = new List<Tuple<int?,RegionType>>();
+                    var regionTypes = new List<Tuple<int?, RegionType>>();
 
-                    foreach (var prop in type.GetProperties(App.PropertyBindings)) {
+                    foreach (var prop in type.GetProperties(App.PropertyBindings))
+                    {
                         var regionType = GetRegionType(prop);
 
-                        if (regionType != null) {
+                        if (regionType != null)
+                        {
                             regionTypes.Add(regionType);
                         }
                     }
@@ -120,7 +135,9 @@ namespace Piranha.AttributeBuilder
 
                     return pageType;
                 }
-            } else {
+            }
+            else
+            {
                 throw new ArgumentException($"Title is mandatory in PageTypeAttribute. No title provided for {type.Name}");
             }
             return null;
