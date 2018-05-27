@@ -18,19 +18,11 @@ namespace Piranha.Runtime
     public sealed class AppBlockList : AppDataList<Block, AppBlock>
     {
         /// <summary>
-        /// Gets a single item by its shorthand name.
-        /// </summary>
-        /// <param name="shorthand">The shorthand name</param>
-        /// <returns>The item, null if not found</returns>
-        public AppBlock GetByShorthand(string shorthand) {
-            return items.FirstOrDefault(i => i.Shorthand == shorthand);
-        }
-
-        /// <summary>
         /// Gets the block categories sorted in alphabetical order.
         /// </summary>
         /// <returns>The category types</returns>
-        public IEnumerable<string> GetCategories() {
+        public IEnumerable<string> GetCategories()
+        {
             return items
                 .Select(i => i.Category)
                 .Distinct().OrderBy(c => c)
@@ -42,7 +34,8 @@ namespace Piranha.Runtime
         /// </summary>
         /// <param name="category">The category</param>
         /// <returns>The block types</returns>
-        public IEnumerable<AppBlock> GetByCategory(string category) {
+        public IEnumerable<AppBlock> GetByCategory(string category)
+        {
             return items
                 .Where(i => i.Category == category)
                 .ToArray();
@@ -55,13 +48,14 @@ namespace Piranha.Runtime
         /// <typeparam name="TValue">The value type</typeparam>
         /// <param name="item">The item</param>
         /// <returns>The processed item</returns>
-        protected override AppBlock OnRegister<TValue>(AppBlock item) {
-            var attr = typeof(TValue).GetTypeInfo().GetCustomAttribute<Extend.BlockTypeAttribute>();
-            if (attr != null) {
+        protected override AppBlock OnRegister<TValue>(AppBlock item)
+        {
+            var attr = typeof(TValue).GetTypeInfo().GetCustomAttribute<BlockTypeAttribute>();
+            if (attr != null)
+            {
                 item.Name = attr.Name;
                 item.Category = attr.Category;
                 item.Icon = attr.Icon;
-                item.Shorthand = attr.Shorthand;
             }
             return item;
         }
