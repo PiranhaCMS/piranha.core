@@ -21,12 +21,12 @@ namespace Piranha
         /// Gets/sets whether the db context as been initialized. This
         /// is only performed once in the application lifecycle.
         /// </summary>
-        static bool isInitialized = false;
+        static bool IsInitialized = false;
 
         /// <summary>
         /// The object mutext used for initializing the context.
         /// </summary>
-        static object mutex = new object();
+        static object Mutex = new object();
 
         /// <summary>
         /// Gets/sets the alias set.
@@ -127,26 +127,31 @@ namespace Piranha
         /// Default constructor.
         /// </summary>
         /// <param name="options">Configuration options</param>
-        public Db(DbContextOptions<Db> options) : base(options) {
-            if (!isInitialized) {
-                lock (mutex) {
-                    if (!isInitialized) {
+        public Db(DbContextOptions<Db> options) : base(options)
+        {
+            if (!IsInitialized)
+            {
+                lock (Mutex)
+                {
+                    if (!IsInitialized)
+                    {
                         // Migrate database
                         Database.Migrate();
                         // Seed
                         Seed();
 
-                        isInitialized = true;
+                        IsInitialized = true;
                     }
                 }
             }
-        }        
+        }
 
         /// <summary>
         /// Creates and configures the data model.
         /// </summary>
         /// <param name="mb">The current model builder</param>
-        protected override void OnModelCreating(ModelBuilder mb) {
+        protected override void OnModelCreating(ModelBuilder mb)
+        {
             mb.Entity<Data.Alias>().ToTable("Piranha_Aliases");
             mb.Entity<Data.Alias>().Property(a => a.AliasUrl).IsRequired().HasMaxLength(256);
             mb.Entity<Data.Alias>().Property(a => a.RedirectUrl).IsRequired().HasMaxLength(256);
@@ -218,7 +223,7 @@ namespace Piranha
             mb.Entity<Data.Post>().HasIndex(p => new { p.BlogId, p.Slug }).IsUnique();
 
             mb.Entity<Data.PostBlock>().ToTable("Piranha_PostBlocks");
-            mb.Entity<Data.PostBlock>().HasIndex(b => new { b.PostId, b.SortOrder }).IsUnique();            
+            mb.Entity<Data.PostBlock>().HasIndex(b => new { b.PostId, b.SortOrder }).IsUnique();
 
             mb.Entity<Data.PostField>().ToTable("Piranha_PostFields");
             mb.Entity<Data.PostField>().Property(f => f.RegionId).HasMaxLength(64).IsRequired();
@@ -250,7 +255,8 @@ namespace Piranha
         /// <summary>
         /// Seeds the default data.
         /// </summary>
-        private void Seed() {
+        private void Seed()
+        {
             SaveChanges();
 
             //
@@ -258,7 +264,8 @@ namespace Piranha
             //
             var param = Params.FirstOrDefault(p => p.Key == Config.ARCHIVE_PAGE_SIZE);
             if (param == null)
-                Params.Add(new Data.Param() {
+                Params.Add(new Data.Param
+                {
                     Id = Guid.NewGuid(),
                     Key = Config.ARCHIVE_PAGE_SIZE,
                     Value = 5.ToString(),
@@ -268,7 +275,8 @@ namespace Piranha
 
             param = Params.FirstOrDefault(p => p.Key == Config.CACHE_EXPIRES_PAGES);
             if (param == null)
-                Params.Add(new Data.Param() {
+                Params.Add(new Data.Param
+                {
                     Id = Guid.NewGuid(),
                     Key = Config.CACHE_EXPIRES_PAGES,
                     Value = 0.ToString(),
@@ -278,7 +286,8 @@ namespace Piranha
 
             param = Params.FirstOrDefault(p => p.Key == Config.CACHE_EXPIRES_POSTS);
             if (param == null)
-                Params.Add(new Data.Param() {
+                Params.Add(new Data.Param
+                {
                     Id = Guid.NewGuid(),
                     Key = Config.CACHE_EXPIRES_POSTS,
                     Value = 0.ToString(),
@@ -288,7 +297,8 @@ namespace Piranha
 
             param = Params.FirstOrDefault(p => p.Key == Config.PAGES_HIERARCHICAL_SLUGS);
             if (param == null)
-                Params.Add(new Data.Param() {
+                Params.Add(new Data.Param
+                {
                     Id = Guid.NewGuid(),
                     Key = Config.PAGES_HIERARCHICAL_SLUGS,
                     Value = true.ToString(),
@@ -298,7 +308,8 @@ namespace Piranha
 
             param = Params.FirstOrDefault(p => p.Key == Config.MANAGER_EXPANDED_SITEMAP_LEVELS);
             if (param == null)
-                Params.Add(new Data.Param() {
+                Params.Add(new Data.Param
+                {
                     Id = Guid.NewGuid(),
                     Key = Config.MANAGER_EXPANDED_SITEMAP_LEVELS,
                     Value = 1.ToString(),
@@ -308,7 +319,8 @@ namespace Piranha
 
             param = Params.FirstOrDefault(p => p.Key == Config.MEDIA_CDN_URL);
             if (param == null)
-                Params.Add(new Data.Param() {
+                Params.Add(new Data.Param
+                {
                     Id = Guid.NewGuid(),
                     Key = Config.MEDIA_CDN_URL,
                     Created = DateTime.Now,
@@ -319,7 +331,8 @@ namespace Piranha
             // Default site
             //
             if (Sites.Count() == 0)
-                Sites.Add(new Data.Site() {
+                Sites.Add(new Data.Site
+                {
                     Id = Guid.NewGuid(),
                     InternalId = "Default",
                     IsDefault = true,

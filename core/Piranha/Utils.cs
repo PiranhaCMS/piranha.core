@@ -31,12 +31,14 @@ namespace Piranha
         /// <param name="startpos">The startpos</param>
         /// <param name="length">The length</param>
         /// <returns>The new array</returns>
-        public static T[] Subset<T>(this T[] arr, int startpos = 0, int length = 0) {
+        public static T[] Subset<T>(this T[] arr, int startpos = 0, int length = 0)
+        {
             List<T> tmp = new List<T>();
 
             length = length > 0 ? length : arr.Length - startpos;
 
-            for (var i = 0; i < arr.Length; i++) {
+            for (var i = 0; i < arr.Length; i++)
+            {
                 if (i >= startpos && i < (startpos + length))
                     tmp.Add(arr[i]);
             }
@@ -48,11 +50,15 @@ namespace Piranha
         /// </summary>
         /// <param name="str">The string</param>
         /// <returns>The slug</returns>
-        public static string GenerateSlug(string str, bool hierarchical = true) {
-            if (App.Hooks != null && App.Hooks.OnGenerateSlug != null) {
+        public static string GenerateSlug(string str, bool hierarchical = true)
+        {
+            if (App.Hooks != null && App.Hooks.OnGenerateSlug != null)
+            {
                 // Call the registered slug generation
                 return App.Hooks.OnGenerateSlug(str);
-            } else {
+            }
+            else
+            {
                 // Trim & make lower case
                 var slug = str.Trim().ToLower();
 
@@ -74,7 +80,7 @@ namespace Piranha
                 slug = Regex.Replace(slug, @"[^a-z0-9-/ ]", "").Replace("--", "-");
 
                 // Remove whitespaces
-                slug = Regex.Replace(slug.Replace("-", " "), @"\s+", " ").Replace(" ", "-");                
+                slug = Regex.Replace(slug.Replace("-", " "), @"\s+", " ").Replace(" ", "-");
 
                 // Remove slash if non-hierarchical
                 if (!hierarchical)
@@ -97,7 +103,8 @@ namespace Piranha
         /// </summary>
         /// <param name="str">The string</param>
         /// <returns>The internal id</returns>
-        public static string GenerateInteralId(string str) {
+        public static string GenerateInteralId(string str)
+        {
             var ti = new CultureInfo("en-US", false).TextInfo;
             return ti.ToTitleCase(GenerateSlug(str).Replace('-', ' ')).Replace(" ", "");
         }
@@ -109,10 +116,12 @@ namespace Piranha
         /// <param name="name">The resource name</param>
         /// <param name="date">The modification date</param>
         /// <returns>The etag</returns>
-        public static string GenerateETag(string name, DateTime date) {
+        public static string GenerateETag(string name, DateTime date)
+        {
             var encoding = new UTF8Encoding();
 
-            using (var crypto = MD5.Create()) {
+            using (var crypto = MD5.Create())
+            {
                 var str = name + date.ToString("yyyy-MM-dd HH:mm:ss");
                 var bytes = crypto.ComputeHash(encoding.GetBytes(str));
                 return Convert.ToBase64String(bytes);
@@ -129,7 +138,8 @@ namespace Piranha
             string[] SizeSuffixes = { "bytes", "KB", "MB", "GB" };
 
             int index = 0;
-            if (bytes > 1023) {
+            if (bytes > 1023)
+            {
                 do
                 {
                     bytes /= 1024;
@@ -145,11 +155,12 @@ namespace Piranha
         /// </summary>
         /// <param name="str">The string</param>
         /// <returns>The first paragraph</returns>
-        public static string FirstParagraph(string str) {
-            Regex reg = new Regex("<p[^>]*>.*?</p>") ;
-            var matches = reg.Matches(str) ;
+        public static string FirstParagraph(string str)
+        {
+            Regex reg = new Regex("<p[^>]*>.*?</p>");
+            var matches = reg.Matches(str);
 
-            return matches.Count > 0 ? matches[0].Value : "" ;
+            return matches.Count > 0 ? matches[0].Value : "";
         }
 
         /// <summary>
@@ -157,23 +168,25 @@ namespace Piranha
         /// </summary>
         /// <param name="md">The field</param>
         /// <returns>The first paragraph</returns>
-        public static string FirstParagraph(Extend.Fields.MarkdownField md) {
-            Regex reg = new Regex("<p[^>]*>.*?</p>") ;
-            var matches = reg.Matches(md.ToHtml()) ;
+        public static string FirstParagraph(Extend.Fields.MarkdownField md)
+        {
+            Regex reg = new Regex("<p[^>]*>.*?</p>");
+            var matches = reg.Matches(md.ToHtml());
 
-            return matches.Count > 0 ? matches[0].Value : "" ;
-        }        
+            return matches.Count > 0 ? matches[0].Value : "";
+        }
 
         /// <summary>
         /// Gets the first paragraph from the given html field.
         /// </summary>
         /// <param name="html">The field</param>
         /// <returns>The first paragraph</returns>
-        public static string FirstParagraph(Extend.Fields.HtmlField html) {
-            Regex reg = new Regex("<p[^>]*>.*?</p>") ;
-            var matches = reg.Matches(html.Value) ;
+        public static string FirstParagraph(Extend.Fields.HtmlField html)
+        {
+            Regex reg = new Regex("<p[^>]*>.*?</p>");
+            var matches = reg.Matches(html.Value);
 
-            return matches.Count > 0 ? matches[0].Value : "" ;
+            return matches.Count > 0 ? matches[0].Value : "";
         }
 
         /// <summary>
@@ -181,7 +194,8 @@ namespace Piranha
         /// </summary>
         /// <param name="assembly">The assembly</param>
         /// <returns>The version string</returns>
-        public static string GetAssemblyVersion(Assembly assembly) {
+        public static string GetAssemblyVersion(Assembly assembly)
+        {
             var version = assembly.GetName().Version;
 
             return $"{version.Major}.{version.Minor}.{version.Build}";

@@ -8,12 +8,9 @@
  * 
  */
 
-using Piranha.Data;
 using Piranha.Services;
 using Piranha.Repositories;
 using System;
-using System.IO;
-using System.Reflection;
 
 namespace Piranha
 {
@@ -25,17 +22,17 @@ namespace Piranha
         /// <summary>
         /// The private db context.
         /// </summary>
-        private readonly IDb db;
+        private readonly IDb _db;
 
         /// <summary>
         /// The private storage provider.
         /// </summary>
-        private readonly IStorage storage;
+        private readonly IStorage _storage;
 
         /// <summary>
         /// The private model cache.
         /// </summary>
-        private ICache cache;
+        private ICache _cache;
 
         /// <summary>
         /// Gets/sets the alias repository.
@@ -96,9 +93,7 @@ namespace Piranha
         /// <summary>
         /// Gets if the current repository has caching enabled or not.
         /// </summary>
-        public bool IsCached {
-            get { return cache != null; }
-        }
+        public bool IsCached => _cache != null;
 
         /// <summary>
         /// Default constructor.
@@ -108,9 +103,10 @@ namespace Piranha
         /// <param name="storage">The current storage</param>
         /// <param name="modelCache">The optional model cache</param>
         /// <param name="imageProcessor">The optional image processor</param>
-        public Api(IDb db, IContentServiceFactory factory, IStorage storage = null, ICache modelCache = null, IImageProcessor imageProcessor = null) {
-            this.db = db;
-            this.storage = storage;
+        public Api(IDb db, IContentServiceFactory factory, IStorage storage = null, ICache modelCache = null, IImageProcessor imageProcessor = null)
+        {
+            _db = db;
+            _storage = storage;
 
             Setup(factory, modelCache, imageProcessor);
         }
@@ -118,8 +114,9 @@ namespace Piranha
         /// <summary>
         /// Disposes the current api.
         /// </summary>
-        public void Dispose() {
-            db.Dispose();
+        public void Dispose()
+        {
+            _db.Dispose();
         }
 
         #region Private methods
@@ -128,22 +125,23 @@ namespace Piranha
         /// </summary>
         /// <param name="modelCache">The optional model cache</param>
         /// <param name="imageProcessor">The optional image processor</param>
-        private void Setup(IContentServiceFactory factory, ICache modelCache = null, IImageProcessor imageProcessor = null) {
-            cache = modelCache;
-            
+        private void Setup(IContentServiceFactory factory, ICache modelCache = null, IImageProcessor imageProcessor = null)
+        {
+            _cache = modelCache;
+
             var cacheLevel = (int)App.CacheLevel;
 
-            Aliases = new AliasRepository(this, db, cacheLevel > 2 ? cache : null);
-            Archives = new ArchiveRepository(this, db);
-            Categories = new CategoryRepository(this, db, cacheLevel > 2 ? cache : null);
-            Media = new MediaRepository(this, db, storage, cacheLevel > 2 ? cache : null, imageProcessor);
-            Pages = new PageRepository(this, db, factory, cacheLevel > 2 ? cache : null);
-            PageTypes = new PageTypeRepository(db, cacheLevel > 1 ? cache : null);
-            Params = new ParamRepository(db, cacheLevel > 0 ? cache : null);
-            Posts = new PostRepository(this, db, factory, cacheLevel > 2 ? cache : null);
-            PostTypes = new PostTypeRepository(db, cacheLevel > 1 ? cache : null);
-            Sites = new SiteRepository(this, db, cacheLevel > 0 ? cache : null);
-            Tags = new TagRepository(db, cacheLevel > 2 ? cache : null);
+            Aliases = new AliasRepository(this, _db, cacheLevel > 2 ? _cache : null);
+            Archives = new ArchiveRepository(this, _db);
+            Categories = new CategoryRepository(this, _db, cacheLevel > 2 ? _cache : null);
+            Media = new MediaRepository(this, _db, _storage, cacheLevel > 2 ? _cache : null, imageProcessor);
+            Pages = new PageRepository(this, _db, factory, cacheLevel > 2 ? _cache : null);
+            PageTypes = new PageTypeRepository(_db, cacheLevel > 1 ? _cache : null);
+            Params = new ParamRepository(_db, cacheLevel > 0 ? _cache : null);
+            Posts = new PostRepository(this, _db, factory, cacheLevel > 2 ? _cache : null);
+            PostTypes = new PostTypeRepository(_db, cacheLevel > 1 ? _cache : null);
+            Sites = new SiteRepository(this, _db, cacheLevel > 0 ? _cache : null);
+            Tags = new TagRepository(_db, cacheLevel > 2 ? _cache : null);
         }
         #endregion
     }
