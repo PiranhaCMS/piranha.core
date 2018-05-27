@@ -9,7 +9,6 @@
  */
 
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -21,9 +20,11 @@ public static class SimpleSecurityExtensions
     /// </summary>
     /// <param name="services">The current service collection</param>
     /// <returns>The updated collection</returns>
-    public static IServiceCollection AddPiranhaSimpleSecurity(this IServiceCollection services, params Piranha.AspNetCore.SimpleUser[] users) {
+    public static IServiceCollection AddPiranhaSimpleSecurity(this IServiceCollection services, params Piranha.AspNetCore.SimpleUser[] users)
+    {
         services.AddAuthentication("Piranha.SimpleSecurity")
-            .AddCookie("Piranha.SimpleSecurity", o => {
+            .AddCookie("Piranha.SimpleSecurity", o =>
+            {
                 o.LoginPath = new PathString("/manager/login");
                 o.AccessDeniedPath = new PathString("/home/forbidden");
                 o.ExpireTimeSpan = new TimeSpan(0, 30, 0);
@@ -36,7 +37,8 @@ public static class SimpleSecurityExtensions
     /// </summary>
     /// <param name="builder">The current application builder</param>
     /// <returns>The builder</returns>    
-    public static IApplicationBuilder UsePiranhaSimpleSecurity(this IApplicationBuilder builder) {
+    public static IApplicationBuilder UsePiranhaSimpleSecurity(this IApplicationBuilder builder)
+    {
         return builder.UseAuthentication();
     }
 }

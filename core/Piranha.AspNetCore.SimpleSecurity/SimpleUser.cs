@@ -41,7 +41,8 @@ namespace Piranha.AspNetCore
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public SimpleUser() {
+        public SimpleUser()
+        {
             Id = Guid.NewGuid().ToString();
             Claims = new List<string>();
         }
@@ -50,7 +51,8 @@ namespace Piranha.AspNetCore
         /// Creates a new user with the given claims.
         /// </summary>
         /// <param name="claims">The claims</param>
-        public SimpleUser(params string[] claims) : this() {
+        public SimpleUser(params string[] claims) : this()
+        {
             Claims.AddRange(claims);
         }
     }

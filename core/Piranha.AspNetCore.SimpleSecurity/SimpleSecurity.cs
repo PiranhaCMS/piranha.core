@@ -28,7 +28,8 @@ namespace Piranha.AspNetCore
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public SimpleSecurity() {
+        public SimpleSecurity()
+        {
             Users = new List<SimpleUser>();
         }
 
@@ -36,7 +37,8 @@ namespace Piranha.AspNetCore
         /// Creates a new security object for the given users.
         /// </summary>
         /// <param name="users">The users</param>
-        public SimpleSecurity(params SimpleUser[] users) : this() {
+        public SimpleSecurity(params SimpleUser[] users) : this()
+        {
             Users.AddRange(users);
         }
 
@@ -47,7 +49,8 @@ namespace Piranha.AspNetCore
         /// <param name="username">The username</param>
         /// <param name="password">The password</param>
         /// <returns>If the given credentials were correct</returns>
-        public bool Authenticate(string username, string password) {
+        public bool Authenticate(string username, string password)
+        {
             return Users.Count(u => u.UserName == username && u.Password == password) == 1;
         }
 
@@ -59,13 +62,17 @@ namespace Piranha.AspNetCore
         /// <param name="username">The username</param>
         /// <param name="password">The password</param>
         /// <returns>If the user was signed in</returns>
-        public async Task<bool> SignIn(object context, string username, string password) {
-            if (context is HttpContext) {
-                if (Authenticate(username, password)) {
+        public async Task<bool> SignIn(object context, string username, string password)
+        {
+            if (context is HttpContext)
+            {
+                if (Authenticate(username, password))
+                {
                     var user = Users.Single(u => u.UserName == username && u.Password == password);
 
                     var claims = new List<Claim>();
-                    foreach (var claim in user.Claims) {
+                    foreach (var claim in user.Claims)
+                    {
                         claims.Add(new Claim(claim, claim));
                     }
                     claims.Add(new Claim(ClaimTypes.Name, user.UserName));
@@ -76,7 +83,7 @@ namespace Piranha.AspNetCore
 
                     await ((HttpContext)context).SignInAsync("Piranha.SimpleSecurity", principle);
 
-                    return true;                
+                    return true;
                 }
                 return false;
             }
@@ -87,8 +94,10 @@ namespace Piranha.AspNetCore
         /// Signs out the current user.
         /// </summary>
         /// <param name="context">The current application context</param>
-        public Task SignOut(object context) {
-            if (context is HttpContext) {
+        public Task SignOut(object context)
+        {
+            if (context is HttpContext)
+            {
                 return ((HttpContext)context).SignOutAsync("Piranha.SimpleSecurity");
             }
             throw new ArgumentException("SimpleSecurity only works with a HttpContext");
