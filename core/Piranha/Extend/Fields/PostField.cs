@@ -31,15 +31,14 @@ namespace Piranha.Extend.Fields
         /// <summary>
         /// Gets if the field has a post object available.
         /// </summary>
-        public bool HasValue {
-            get { return Post != null; }
-        }
+        public bool HasValue => Post != null;
 
         /// <summary>
         /// Gets the list item title if this field is used in
         /// a collection regions.
         /// </summary>
-        public virtual string GetTitle() {
+        public virtual string GetTitle()
+        {
             if (Post != null)
                 return Post.Title;
             return null;
@@ -49,11 +48,14 @@ namespace Piranha.Extend.Fields
         /// Initializes the field for client use.
         /// </summary>
         /// <param name="api">The current api</param>
-        public virtual void Init(IApi api) { 
-            if (Id.HasValue) {
+        public virtual void Init(IApi api)
+        {
+            if (Id.HasValue)
+            {
                 Post = api.Posts.GetById(Id.Value);
 
-                if (Post == null) {
+                if (Post == null)
+                {
                     // The post has been removed, remove the
                     // missing id.
                     Id = null;
@@ -66,7 +68,8 @@ namespace Piranha.Extend.Fields
         /// </summary>
         /// <param name="api">The current api</param>
         /// <returns>The referenced post</returns>
-        public virtual T GetPost<T>(IApi api) where T : Models.Post<T> {
+        public virtual T GetPost<T>(IApi api) where T : Models.Post<T>
+        {
             if (Id.HasValue)
                 return api.Posts.GetById<T>(Id.Value);
             return null;
@@ -76,7 +79,8 @@ namespace Piranha.Extend.Fields
         /// Implicit operator for converting a Guid id to a field.
         /// </summary>
         /// <param name="str">The string value</param>
-        public static implicit operator PostField(Guid guid) {
+        public static implicit operator PostField(Guid guid)
+        {
             return new PostField() { Id = guid };
         }
 
@@ -84,14 +88,16 @@ namespace Piranha.Extend.Fields
         /// Implicit operator for converting a post object to a field.
         /// </summary>
         /// <param name="post">The post object</param>
-        public static implicit operator PostField(Models.PostBase post) {
+        public static implicit operator PostField(Models.PostBase post)
+        {
             return new PostField() { Id = post.Id };
         }
 
         /// <summary>
         /// Gets the hash code for the field.
         /// </summary>
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return Id.HasValue ? Id.GetHashCode() : 0;
         }
 
@@ -100,7 +106,8 @@ namespace Piranha.Extend.Fields
         /// </summary>
         /// <param name="obj">The object</param>
         /// <returns>True if the fields are equal</returns>
-        public override bool Equals(object obj) {
+        public override bool Equals(object obj)
+        {
             if (obj is PostField)
                 return Equals((PostField)obj);
             return false;
@@ -111,7 +118,8 @@ namespace Piranha.Extend.Fields
         /// </summary>
         /// <param name="obj">The field</param>
         /// <returns>True if the fields are equal</returns>
-        public virtual bool Equals(PostField obj) {
+        public virtual bool Equals(PostField obj)
+        {
             return Id == obj.Id;
         }
 
@@ -121,7 +129,8 @@ namespace Piranha.Extend.Fields
         /// <param name="field1">The first field</param>
         /// <param name="field2">The second field</param>
         /// <returns>True if the fields are equal</returns>
-        public static bool operator ==(PostField field1, PostField field2) {
+        public static bool operator ==(PostField field1, PostField field2)
+        {
             return field1.Equals(field2);
         }
 
@@ -131,7 +140,8 @@ namespace Piranha.Extend.Fields
         /// <param name="field1">The first field</param>
         /// <param name="field2">The second field</param>
         /// <returns>True if the fields are equal</returns>
-        public static bool operator !=(PostField field1, PostField field2) {
+        public static bool operator !=(PostField field1, PostField field2)
+        {
             return !field1.Equals(field2);
         }
     }

@@ -23,17 +23,17 @@ namespace Piranha.Extend.Fields
         /// <summary>
         /// The static list of available items.
         /// </summary>
-        private static List<SelectFieldItem> items = new List<SelectFieldItem>();
+        private static List<SelectFieldItem> _items = new List<SelectFieldItem>();
 
         /// <summary>
         /// Initialization mutex.
         /// </summary>
-        private static object mutex = new object();
+        private static object Mutex = new object();
 
         /// <summary>
         /// The initialization state.
         /// </summary>
-        private static bool isInitialized = false;
+        private static bool IsInitialized = false;
 
         /// <summary>
         /// Gets/sets the selected value.
@@ -60,10 +60,10 @@ namespace Piranha.Extend.Fields
         /// from the manager interface.
         /// </summary>
         public override List<SelectFieldItem> Items {
-            get { 
+            get {
                 InitMetaData();
-                
-                return items; 
+
+                return _items;
             }
         }
 
@@ -71,7 +71,8 @@ namespace Piranha.Extend.Fields
         /// Gets the list item title if this field is used in
         /// a collection regions.
         /// </summary>
-        public override string GetTitle() {
+        public override string GetTitle()
+        {
             return GetEnumTitle((Enum)(object)Value);
         }
 
@@ -79,14 +80,16 @@ namespace Piranha.Extend.Fields
         /// Initializes the field for client use.
         /// </summary>
         /// <param name="api">The current api</param>
-        public override void Init(IApi api) {
+        public override void Init(IApi api)
+        {
             InitMetaData();
         }
 
         /// <summary>
         /// Gets the hash code for the field.
         /// </summary>
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return Value.GetHashCode();
         }
 
@@ -95,7 +98,8 @@ namespace Piranha.Extend.Fields
         /// </summary>
         /// <param name="obj">The object</param>
         /// <returns>True if the fields are equal</returns>
-        public override bool Equals(object obj) {
+        public override bool Equals(object obj)
+        {
             if (obj is SelectField<T>)
                 return Equals((SelectField<T>)obj);
             return false;
@@ -106,7 +110,8 @@ namespace Piranha.Extend.Fields
         /// </summary>
         /// <param name="obj">The field</param>
         /// <returns>True if the fields are equal</returns>
-        public virtual bool Equals(SelectField<T> obj) {
+        public virtual bool Equals(SelectField<T> obj)
+        {
             return EqualityComparer<T>.Default.Equals(Value, obj.Value);
         }
 
@@ -116,7 +121,8 @@ namespace Piranha.Extend.Fields
         /// <param name="field1">The first field</param>
         /// <param name="field2">The second field</param>
         /// <returns>True if the fields are equal</returns>
-        public static bool operator ==(SelectField<T> field1, SelectField<T> field2) {
+        public static bool operator ==(SelectField<T> field1, SelectField<T> field2)
+        {
             return field1.Equals(field2);
         }
 
@@ -126,9 +132,10 @@ namespace Piranha.Extend.Fields
         /// <param name="field1">The first field</param>
         /// <param name="field2">The second field</param>
         /// <returns>True if the fields are equal</returns>
-        public static bool operator !=(SelectField<T> field1, SelectField<T> field2) {
+        public static bool operator !=(SelectField<T> field1, SelectField<T> field2)
+        {
             return !field1.Equals(field2);
-        }        
+        }
 
         /// <summary>
         /// Gets the display title for the given enum. If the DisplayAttribute
@@ -137,15 +144,19 @@ namespace Piranha.Extend.Fields
         /// </summary>
         /// <param name="val">The enum value</param>
         /// <returns>The display title</returns>
-        private string GetEnumTitle(Enum val) {
+        private string GetEnumTitle(Enum val)
+        {
             var members = typeof(T).GetMember(val.ToString());
 
-            if (members != null && members.Length > 0) {
+            if (members != null && members.Length > 0)
+            {
                 var attrs = members[0].GetCustomAttributes(false);
-                
-                foreach (var attr in attrs) {
-                    if (attr is DisplayAttribute) {
-                        return  ((DisplayAttribute)attr).Description;
+
+                foreach (var attr in attrs)
+                {
+                    if (attr is DisplayAttribute)
+                    {
+                        return ((DisplayAttribute)attr).Description;
                     }
                 }
             }
@@ -155,21 +166,25 @@ namespace Piranha.Extend.Fields
         /// <summary>
         /// Initializes the meta data needed in the manager interface.
         /// </summary>
-        private void InitMetaData() {
-            if (isInitialized)
+        private void InitMetaData()
+        {
+            if (IsInitialized)
                 return;
 
-            lock (mutex) {
-                if (isInitialized)
+            lock (Mutex)
+            {
+                if (IsInitialized)
                     return;
 
-                foreach (var val in Enum.GetValues(typeof(T))) {
-                    items.Add(new SelectFieldItem() {
+                foreach (var val in Enum.GetValues(typeof(T)))
+                {
+                    _items.Add(new SelectFieldItem()
+                    {
                         Title = GetEnumTitle((Enum)val),
                         Value = (Enum)val
                     });
                 }
-                isInitialized = true;
+                IsInitialized = true;
             }
         }
     }

@@ -23,7 +23,7 @@ namespace Piranha.Runtime
         /// <returns>The category types</returns>
         public IEnumerable<string> GetCategories()
         {
-            return items
+            return _items
                 .Select(i => i.Category)
                 .Distinct().OrderBy(c => c)
                 .ToArray();
@@ -36,7 +36,7 @@ namespace Piranha.Runtime
         /// <returns>The block types</returns>
         public IEnumerable<AppBlock> GetByCategory(string category)
         {
-            return items
+            return _items
                 .Where(i => i.Category == category)
                 .ToArray();
         }

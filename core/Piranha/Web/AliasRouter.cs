@@ -21,13 +21,17 @@ namespace Piranha.Web
         /// <param name="url">The requested url</param>
         /// <param name="siteId">The requested site id</param>
         /// <returns>The piranha response, null if no matching page was found</returns>
-        public static IRouteResponse Invoke(IApi api, string url, Guid siteId) {
-            if (!String.IsNullOrWhiteSpace(url) && url.Length > 1) {
+        public static IRouteResponse Invoke(IApi api, string url, Guid siteId)
+        {
+            if (!String.IsNullOrWhiteSpace(url) && url.Length > 1)
+            {
                 // Check if we can find an alias with the requested url
                 var alias = api.Aliases.GetByAliasUrl(url, siteId);
 
-                if (alias != null) {
-                    return new RouteResponse() {
+                if (alias != null)
+                {
+                    return new RouteResponse
+                    {
                         IsPublished = true,
                         RedirectUrl = alias.RedirectUrl,
                         RedirectType = alias.Type

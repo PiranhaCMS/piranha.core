@@ -12,7 +12,7 @@ using System;
 
 namespace Piranha.Data
 {
-    public sealed class Alias : IModel 
+    public sealed class Alias : IModel
     {
         /// <summary>
         /// Gets/sets the unique id.
@@ -59,7 +59,8 @@ namespace Piranha.Data
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public Alias() {
+        public Alias()
+        {
             Type = Models.RedirectType.Temporary;
         }
     }

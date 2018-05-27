@@ -17,7 +17,7 @@ namespace Piranha.Extend.Fields
     /// <summary>
     /// Base class for all SelectFields.
     /// </summary>
-    public abstract class SelectFieldBase : IField 
+    public abstract class SelectFieldBase : IField
     {
         /// <summary>
         /// Gets the type of the enum.
@@ -36,7 +36,7 @@ namespace Piranha.Extend.Fields
         /// from the manager interface.
         /// </summary>
         [JsonIgnore]
-        public abstract List<SelectFieldItem> Items { get; }                
+        public abstract List<SelectFieldItem> Items { get; }
 
         /// <summary>
         /// Gets the list item title if this field is used in

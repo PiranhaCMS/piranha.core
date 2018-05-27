@@ -43,7 +43,8 @@ namespace Piranha.Data
         /// <summary>
         /// Default constructor.
         /// </summary>
-        protected Content() {
+        protected Content()
+        {
             Fields = new List<T>();
         }
     }

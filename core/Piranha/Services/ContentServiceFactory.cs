@@ -14,42 +14,45 @@ namespace Piranha.Services
 {
     public class ContentServiceFactory : IContentServiceFactory
     {
-        private readonly IServiceProvider services;
+        private readonly IServiceProvider _services;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="services">The service provider</param>
-        public ContentServiceFactory(IServiceProvider services) {
-            this.services = services;
+        public ContentServiceFactory(IServiceProvider services)
+        {
+            _services = services;
         }
 
         /// <summary>
         /// Creates a new content service for the specified types.
         /// </summary>
         /// <returns>The content service</returns>
-        public IContentService<TContent, TField, TModelBase> Create<TContent, TField, TModelBase>() 
-            where TContent : Data.Content<TField> 
+        public IContentService<TContent, TField, TModelBase> Create<TContent, TField, TModelBase>()
+            where TContent : Data.Content<TField>
             where TField : Data.ContentField
             where TModelBase : Models.Content
         {
-            return new ContentService<TContent, TField, TModelBase>(services);
+            return new ContentService<TContent, TField, TModelBase>(_services);
         }
 
         /// <summary>
         /// Creates a new page content service.
         /// </summary>
         /// <returns>The content service</returns>
-        public IContentService<Data.Page, Data.PageField, Models.PageBase> CreatePageService() {
-            return new ContentService<Data.Page, Data.PageField, Models.PageBase>(services);
+        public IContentService<Data.Page, Data.PageField, Models.PageBase> CreatePageService()
+        {
+            return new ContentService<Data.Page, Data.PageField, Models.PageBase>(_services);
         }
 
         /// <summary>
         /// Creates a new post content service.
         /// </summary>
         /// <returns>The content service</returns>
-        public IContentService<Data.Post, Data.PostField, Models.PostBase> CreatePostService() {
-            return new ContentService<Data.Post, Data.PostField, Models.PostBase>(services);
+        public IContentService<Data.Post, Data.PostField, Models.PostBase> CreatePostService()
+        {
+            return new ContentService<Data.Post, Data.PostField, Models.PostBase>(_services);
         }
     }
 }

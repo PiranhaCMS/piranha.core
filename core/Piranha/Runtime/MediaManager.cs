@@ -43,8 +43,10 @@ namespace Piranha.Runtime
             /// </summary>
             /// <param name="extension">The file extension</param>
             /// <param name="contentType">The content type</param>
-            public void Add(string extension, string contentType) {
-                Add(new MediaTypeItem() {
+            public void Add(string extension, string contentType)
+            {
+                Add(new MediaTypeItem
+                {
                     Extension = extension,
                     ContentType = contentType
                 });
@@ -55,7 +57,8 @@ namespace Piranha.Runtime
             /// </summary>
             /// <param name="extension">The file extension</param>
             /// <returns>If the extension exists</returns>
-            public bool ContainsExtension(string extension) {
+            public bool ContainsExtension(string extension)
+            {
                 return this.Any(t => t.Extension.Equals(extension, System.StringComparison.OrdinalIgnoreCase));
             }
         }
@@ -78,7 +81,8 @@ namespace Piranha.Runtime
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public MediaManager() {
+        public MediaManager()
+        {
             Documents = new MediaTypeList();
             Images = new MediaTypeList();
             Videos = new MediaTypeList();
@@ -89,11 +93,12 @@ namespace Piranha.Runtime
         /// </summary>
         /// <param name="filename">The path or filename</param>
         /// <returns>If it is supported</returns>
-        public bool IsSupported(string filename) {
+        public bool IsSupported(string filename)
+        {
             var extension = Path.GetExtension(filename);
 
-            return Documents.ContainsExtension(extension) || 
-                Images.ContainsExtension(extension) || 
+            return Documents.ContainsExtension(extension) ||
+                Images.ContainsExtension(extension) ||
                 Videos.ContainsExtension(extension);
         }
 
@@ -103,16 +108,17 @@ namespace Piranha.Runtime
         /// </summary>
         /// <param name="filename">The path or filename</param>
         /// <returns>The media type</returns>
-        public Models.MediaType GetMediaType(string filename) {
+        public MediaType GetMediaType(string filename)
+        {
             var extension = Path.GetExtension(filename);
 
             if (Documents.ContainsExtension(extension))
-                return Models.MediaType.Document;
+                return MediaType.Document;
             else if (Images.ContainsExtension(extension))
-                return Models.MediaType.Image;
+                return MediaType.Image;
             else if (Videos.ContainsExtension(extension))
-                return Models.MediaType.Video;
-            return Models.MediaType.Unknown;
+                return MediaType.Video;
+            return MediaType.Unknown;
         }
 
         /// <summary>
@@ -121,7 +127,8 @@ namespace Piranha.Runtime
         /// </summary>
         /// <param name="filename">The path or filename</param>
         /// <returns>The media type</returns>
-        public string GetContentType(string filename) {
+        public string GetContentType(string filename)
+        {
             var extension = Path.GetExtension(filename);
             MediaTypeItem item = null;
 

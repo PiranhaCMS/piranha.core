@@ -51,7 +51,7 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the blog page this category belongs to.
         /// </summary>
-        public Page Blog { get; set; }        
+        public Page Blog { get; set; }
 
         /// <summary>
         /// Gets/sets the post category.
@@ -66,12 +66,13 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the available post blocks.
         /// </summary>
-        public IList<PostBlock> Blocks { get; set; }        
+        public IList<PostBlock> Blocks { get; set; }
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public Post() : base() { 
+        public Post() : base()
+        {
             Blocks = new List<PostBlock>();
             Tags = new List<PostTag>();
         }

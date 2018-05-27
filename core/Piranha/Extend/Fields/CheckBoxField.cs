@@ -1,6 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿/*
+ * Copyright (c) 2018 @wiruzman
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ * 
+ * https://github.com/piranhacms/piranha.core
+ * 
+ */
 
 namespace Piranha.Extend.Fields
 {
@@ -13,7 +19,7 @@ namespace Piranha.Extend.Fields
         /// <param name="str">The string value</param>
         public static implicit operator CheckBoxField(bool str)
         {
-            return new CheckBoxField() { Value = str };
+            return new CheckBoxField { Value = str };
         }
 
         /// <summary>

@@ -13,14 +13,16 @@ using System;
 namespace Piranha.Extend.Serializers
 {
     public class SelectFieldSerializer<T> : ISerializer where T : Fields.SelectFieldBase
-    {        
+    {
         /// <summary>
         /// Serializes the given object.
         /// </summary>
         /// <param name="obj">The object</param>
         /// <returns>The serialized value</returns>
-        public string Serialize(object obj) {
-            if (obj is Fields.SelectFieldBase) {
+        public string Serialize(object obj)
+        {
+            if (obj is Fields.SelectFieldBase)
+            {
                 return ((Fields.SelectFieldBase)obj).EnumValue;
             }
             throw new ArgumentException("The given object doesn't match the serialization type");
@@ -31,13 +33,17 @@ namespace Piranha.Extend.Serializers
         /// </summary>
         /// <param name="str">The serialized value</param>
         /// <returns>The object</returns>
-        public object Deserialize(string str) {
+        public object Deserialize(string str)
+        {
             var field = Activator.CreateInstance<T>();
 
-            if (!string.IsNullOrWhiteSpace(str)) {
-                try {
+            if (!string.IsNullOrWhiteSpace(str))
+            {
+                try
+                {
                     field.EnumValue = str;
-                } catch { }
+                }
+                catch { }
             }
             return field;
         }

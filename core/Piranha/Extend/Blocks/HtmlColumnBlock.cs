@@ -9,14 +9,23 @@
  */
 
 using Piranha.Extend.Fields;
-using System;
 
 namespace Piranha.Extend.Blocks
 {
+    /// <summary>
+    /// Two column HTML block.
+    /// </summary>
     [BlockType(Name = "Two Cols", Category = "Content", Icon = "fab fa-html5")]
     public class HtmlColumnBlock : Block
     {
+        /// <summary>
+        /// Gets/sets the first column.
+        /// </summary>
         public HtmlField Column1 { get; set; }
+
+        /// <summary>
+        /// Gets/sets the second column.
+        /// </summary>
         public HtmlField Column2 { get; set; }
     }
 }

@@ -20,7 +20,8 @@ namespace Piranha.Runtime
         /// </summary>
         /// <typeparam name="T">The module type</typeparam>
         /// <returns>The module instance</returns>
-        public T Get<T>() where T : IModule {
+        public T Get<T>() where T : IModule
+        {
             var module = GetByType(typeof(T));
 
             return (T)module?.Instance;
@@ -33,7 +34,8 @@ namespace Piranha.Runtime
         /// <typeparam name="TValue">The value type</typeparam>
         /// <param name="item">The item</param>
         /// <returns>The processed item</returns>
-        protected override AppModule OnRegister<TValue>(AppModule item) {
+        protected override AppModule OnRegister<TValue>(AppModule item)
+        {
             item.Instance = Activator.CreateInstance<TValue>();
 
             return item;

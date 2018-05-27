@@ -21,8 +21,9 @@ namespace Piranha.Runtime
         /// </summary>
         /// <param name="shorthand">The shorthand name</param>
         /// <returns>The item, null if not found</returns>
-        public AppField GetByShorthand(string shorthand) {
-            return items.FirstOrDefault(i => i.Shorthand == shorthand);
+        public AppField GetByShorthand(string shorthand)
+        {
+            return _items.FirstOrDefault(i => i.Shorthand == shorthand);
         }
 
         /// <summary>
@@ -32,9 +33,11 @@ namespace Piranha.Runtime
         /// <typeparam name="TValue">The value type</typeparam>
         /// <param name="item">The item</param>
         /// <returns>The processed item</returns>
-        protected override AppField OnRegister<TValue>(AppField item) {
+        protected override AppField OnRegister<TValue>(AppField item)
+        {
             var attr = typeof(TValue).GetTypeInfo().GetCustomAttribute<Extend.FieldTypeAttribute>();
-            if (attr != null) {
+            if (attr != null)
+            {
                 item.Name = attr.Name;
                 item.Shorthand = attr.Shorthand;
             }
@@ -44,7 +47,8 @@ namespace Piranha.Runtime
         /// <summary>
         /// Registers a new select field and its associated serializer.
         /// </summary>
-        public void RegisterSelect<TValue>() where TValue : struct {
+        public void RegisterSelect<TValue>() where TValue : struct
+        {
             Register<Extend.Fields.SelectField<TValue>>();
             App.Serializers.Register<Extend.Fields.SelectField<TValue>>(
                 new Extend.Serializers.SelectFieldSerializer<Extend.Fields.SelectField<TValue>>()

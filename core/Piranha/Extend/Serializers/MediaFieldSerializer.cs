@@ -13,14 +13,16 @@ using System;
 namespace Piranha.Extend.Serializers
 {
     public class MediaFieldSerializer : ISerializer
-    {        
+    {
         /// <summary>
         /// Serializes the given object.
         /// </summary>
         /// <param name="obj">The object</param>
         /// <returns>The serialized value</returns>
-        public string Serialize(object obj) {
-            if (obj is Fields.MediaField) {
+        public string Serialize(object obj)
+        {
+            if (obj is Fields.MediaField)
+            {
                 return ((Fields.MediaField)obj).Id.ToString();
             }
             throw new ArgumentException("The given object doesn't match the serialization type");
@@ -31,8 +33,10 @@ namespace Piranha.Extend.Serializers
         /// </summary>
         /// <param name="str">The serialized value</param>
         /// <returns>The object</returns>
-        public object Deserialize(string str) {
-            return new Fields.MediaField() {
+        public object Deserialize(string str)
+        {
+            return new Fields.MediaField
+            {
                 Id = !string.IsNullOrEmpty(str) ? new Guid(str) : (Guid?)null
             };
         }

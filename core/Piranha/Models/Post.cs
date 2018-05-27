@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2017 Håkan Edling
+ * Copyright (c) 2016-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -22,7 +22,8 @@ namespace Piranha.Models
         /// <param name="api">The current api</param>
         /// <param name="typeId">The unique post type id</param>
         /// <returns>The new model</returns>
-        public static T Create(IApi api, string typeId = null) {
+        public static T Create(IApi api, string typeId = null)
+        {
             return api.Posts.Create<T>(typeId);
         }
 
@@ -33,8 +34,10 @@ namespace Piranha.Models
         /// <param name="typeId">The page type id</param>
         /// <param name="regionId">The region id</param>
         /// <returns>The new region value</returns>
-        public static object CreateRegion(IApi api, string typeId, string regionId) {
-            using (var factory = new ContentFactory(api.PostTypes.GetAll())) {
+        public static object CreateRegion(IApi api, string typeId, string regionId)
+        {
+            using (var factory = new ContentFactory(api.PostTypes.GetAll()))
+            {
                 return factory.CreateDynamicRegion(typeId, regionId);
             }
         }
@@ -45,7 +48,8 @@ namespace Piranha.Models
         /// <param name="api">The current api</param>
         /// <param name="regionId">The region id</param>
         /// <returns>The new region value</returns>
-        public object CreateRegion(IApi api, string regionId) {
+        public object CreateRegion(IApi api, string regionId)
+        {
             return CreateRegion(api, TypeId, regionId);
         }
     }

@@ -23,5 +23,13 @@ namespace Piranha.Extend
         /// </summary>
         [JsonIgnore]
         public IList<Block> Items { get; set; }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public BlockGroup()
+        {
+            Items = new List<Block>();
+        }
     }
 }

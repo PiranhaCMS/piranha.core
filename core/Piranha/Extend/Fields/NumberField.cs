@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2017 Håkan Edling
+ * Copyright (c) 2018 Filip Jansson
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -17,15 +17,17 @@ namespace Piranha.Extend.Fields
         /// Implicit operator for converting a int to a field.
         /// </summary>
         /// <param name="str">The string value</param>
-        public static implicit operator NumberField(int number) {
-            return new NumberField() { Value = number };
+        public static implicit operator NumberField(int number)
+        {
+            return new NumberField { Value = number };
         }
 
         /// <summary>
         /// Implicitly converts the Number field to a int.
         /// </summary>
         /// <param name="field">The field</param>
-        public static implicit operator int?(NumberField field) {
+        public static implicit operator int? (NumberField field)
+        {
             return field.Value;
         }
     }

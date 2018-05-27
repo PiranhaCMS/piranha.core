@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -15,13 +15,7 @@ namespace Piranha.Data
     /// <summary>
     /// String parameter.
     /// </summary>
-    public sealed class Param : Param<string> { }
-
-    /// <summary>
-    /// Generic system parameter.
-    /// </summary>
-    /// <typeparam name="T">The value type</typeparam>
-    public class Param<T> : IModel, ICreated, IModified
+    public sealed class Param : IModel, ICreated, IModified
     {
         /// <summary>
         /// Gets/sets the unique id.
@@ -36,7 +30,7 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the value.
         /// </summary>
-        public T Value { get; set; }
+        public string Value { get; set; }
 
         /// <summary>
         /// Gets/sets the optional description.

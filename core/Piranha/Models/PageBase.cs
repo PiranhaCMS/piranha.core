@@ -69,8 +69,9 @@ namespace Piranha.Models
         /// Gets/sets the available blocks.
         /// </summary>
         public IList<Extend.Block> Blocks { get; set; }
-        
-        public PageBase() {
+
+        public PageBase()
+        {
             Blocks = new List<Extend.Block>();
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -22,7 +22,8 @@ namespace Piranha.Extend
         /// </summary>
         /// <param name="md">The markdown</param>
         /// <returns>The transformed html</returns>
-        public string Transform(string md) {
+        public string Transform(string md)
+        {
             if (!string.IsNullOrEmpty(md))
                 return Markdown.ToHtml(md);
             return md;

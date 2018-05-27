@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2017 Håkan Edling
+ * Copyright (c) 2016-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -17,30 +17,30 @@ namespace Piranha.Runtime
 {
     public abstract class AppDataList<T, TItem> : IEnumerable<TItem> where TItem : AppDataItem
     {
-        #region Members
         /// <summary>
         /// The items collection.
         /// </summary>
-        protected readonly List<TItem> items = new List<TItem>();
-        #endregion
+        protected readonly List<TItem> _items = new List<TItem>();
 
         /// <summary>
         /// Registers a new item.
         /// </summary>
         /// <typeparam name="TValue">The value type</typeparam>
-        public virtual void Register<TValue>() where TValue : T {
+        public virtual void Register<TValue>() where TValue : T
+        {
             var type = typeof(TValue);
 
             //
             // Make sure we don't register the same type multiple times.
             //
-            if (items.Where(i => i.Type == type).Count() == 0) {
+            if (_items.Where(i => i.Type == type).Count() == 0)
+            {
                 var item = Activator.CreateInstance<TItem>();
 
                 item.Type = type;
                 item.TypeName = type.FullName;
 
-                items.Add(OnRegister<TValue>(item));
+                _items.Add(OnRegister<TValue>(item));
             }
         }
 
@@ -48,10 +48,11 @@ namespace Piranha.Runtime
         /// Unregisters a previously registered item.
         /// </summary>
         /// <typeparam name="TValue">The value type</typeparam>
-        public virtual void UnRegister<TValue>()  where TValue : T {
-            var item = items.SingleOrDefault(i => i.Type == typeof(TValue));
+        public virtual void UnRegister<TValue>() where TValue : T
+        {
+            var item = _items.SingleOrDefault(i => i.Type == typeof(TValue));
             if (item != null)
-                items.Remove(item);
+                _items.Remove(item);
         }
 
         /// <summary>
@@ -59,8 +60,9 @@ namespace Piranha.Runtime
         /// </summary>
         /// <param name="type">The type</param>
         /// <returns>The item, null if not found</returns>
-        public virtual TItem GetByType(Type type) {
-            return items.SingleOrDefault(i => i.Type == type);
+        public virtual TItem GetByType(Type type)
+        {
+            return _items.SingleOrDefault(i => i.Type == type);
         }
 
         /// <summary>
@@ -68,24 +70,27 @@ namespace Piranha.Runtime
         /// </summary>
         /// <param name="typeName">The type name</param>
         /// <returns>The item, null if not found</returns>
-        public virtual TItem GetByType(string typeName) {
-            return items.SingleOrDefault(i => i.TypeName == typeName);
+        public virtual TItem GetByType(string typeName)
+        {
+            return _items.SingleOrDefault(i => i.TypeName == typeName);
         }
 
         /// <summary>
         /// Gets the generic enumerator for the items.
         /// </summary>
         /// <returns>The enumerator</returns>
-        public IEnumerator<TItem> GetEnumerator() {
-            return items.GetEnumerator();
+        public IEnumerator<TItem> GetEnumerator()
+        {
+            return _items.GetEnumerator();
         }
 
         /// <summary>
         /// Gets the enumerator for the items.
         /// </summary>
         /// <returns>The enumerator</returns>
-        IEnumerator IEnumerable.GetEnumerator() {
-            return items.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _items.GetEnumerator();
         }
 
         /// <summary>
@@ -95,7 +100,8 @@ namespace Piranha.Runtime
         /// <typeparam name="TValue">The value type</typeparam>
         /// <param name="item">The item</param>
         /// <returns>The processed item</returns>
-        protected virtual TItem OnRegister<TValue>(TItem item) where TValue : T {
+        protected virtual TItem OnRegister<TValue>(TItem item) where TValue : T
+        {
             return item;
         }
     }

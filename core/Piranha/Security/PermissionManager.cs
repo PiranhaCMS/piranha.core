@@ -16,20 +16,18 @@ namespace Piranha.Security
     /// <summary>
     /// The permission manager.
     /// </summary>
-    public class PermissionManager 
+    public class PermissionManager
     {
         private readonly Dictionary<string, IList<PermissionItem>> _modules;
 
         /// <summary>
         /// Gets the permission items for the given module.
         /// </summary>
-        public IList<PermissionItem> this[string module]
-        {
-            get
-            {
+        public IList<PermissionItem> this[string module] {
+            get {
                 if (_modules.TryGetValue(module, out var items))
                     return items;
-                
+
                 _modules[module] = items = new List<PermissionItem>();
 
                 return items;
@@ -58,7 +56,7 @@ namespace Piranha.Security
         /// </summary>
         /// <param name="module">The module name</param>
         /// <returns>The available permissions</returns>
-        public IList<PermissionItem> GetPermissions(string module) 
+        public IList<PermissionItem> GetPermissions(string module)
         {
             return this[module].OrderBy(p => p.Name).ToList();
         }
@@ -67,7 +65,7 @@ namespace Piranha.Security
         /// Gets all of the available permissions.
         /// </summary>
         /// <returns>The available permissions</returns>
-        public IList<PermissionItem> GetPermissions() 
+        public IList<PermissionItem> GetPermissions()
         {
             var all = new Dictionary<string, PermissionItem>();
 

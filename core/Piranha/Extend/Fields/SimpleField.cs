@@ -28,8 +28,10 @@ namespace Piranha.Extend.Fields
         /// Gets the list item title if this field is used in
         /// a collection regions.
         /// </summary>
-        public override string GetTitle() {
-            if (Value != null) {
+        public override string GetTitle()
+        {
+            if (Value != null)
+            {
                 var title = Value.ToString();
 
                 if (title.Length > 40)
@@ -42,7 +44,8 @@ namespace Piranha.Extend.Fields
         /// <summary>
         /// Gets the hash code for the field.
         /// </summary>
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return Value != null ? Value.GetHashCode() : 0;
         }
 
@@ -51,7 +54,8 @@ namespace Piranha.Extend.Fields
         /// </summary>
         /// <param name="obj">The object</param>
         /// <returns>True if the fields are equal</returns>
-        public override bool Equals(object obj) {
+        public override bool Equals(object obj)
+        {
             if (obj is SimpleField<T>)
                 return Equals((SimpleField<T>)obj);
             return false;
@@ -62,7 +66,8 @@ namespace Piranha.Extend.Fields
         /// </summary>
         /// <param name="obj">The field</param>
         /// <returns>True if the fields are equal</returns>
-        public virtual bool Equals(SimpleField<T> obj) {
+        public virtual bool Equals(SimpleField<T> obj)
+        {
             return EqualityComparer<T>.Default.Equals(Value, obj.Value);
         }
 
@@ -72,7 +77,8 @@ namespace Piranha.Extend.Fields
         /// <param name="field1">The first field</param>
         /// <param name="field2">The second field</param>
         /// <returns>True if the fields are equal</returns>
-        public static bool operator ==(SimpleField<T> field1, SimpleField<T> field2) {
+        public static bool operator ==(SimpleField<T> field1, SimpleField<T> field2)
+        {
             return field1.Equals(field2);
         }
 
@@ -82,8 +88,9 @@ namespace Piranha.Extend.Fields
         /// <param name="field1">The first field</param>
         /// <param name="field2">The second field</param>
         /// <returns>True if the fields are equal</returns>
-        public static bool operator !=(SimpleField<T> field1, SimpleField<T> field2) {
+        public static bool operator !=(SimpleField<T> field1, SimpleField<T> field2)
+        {
             return !field1.Equals(field2);
-        }        
+        }
     }
 }

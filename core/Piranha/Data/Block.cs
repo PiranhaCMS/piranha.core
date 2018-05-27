@@ -63,7 +63,8 @@ namespace Piranha.Data
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public Block() {
+        public Block()
+        {
             Fields = new List<BlockField>();
             PageBlocks = new List<PageBlock>();
         }
