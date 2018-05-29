@@ -45,10 +45,19 @@ namespace Piranha.Areas.Manager.Models
         /// </summary>
         public string SiteId { get; set; }
 
+
         /// <summary>
         /// Gets/sets the current site title.
         /// </summary>
         public string SiteTitle { get; set; }
+
+        /// <summary>
+        /// Gets/sets if the user should be able 
+        /// to edit the site content.
+        /// </summary>
+        public bool HasSiteContent { get; set; }
+
+        public Guid SiteContentId { get; set; }
 
         /// <summary>
         /// Gets/sets the current page id.
@@ -89,6 +98,8 @@ namespace Piranha.Areas.Manager.Models
 
             model.SiteId = site.Id == defaultSite.Id ? "" : site.Id.ToString();
             model.SiteTitle = site.Title;
+            model.HasSiteContent = !string.IsNullOrWhiteSpace(site.SiteTypeId);
+            model.SiteContentId = site.Id;
             model.PageId = pageId;
             model.PageTypes = api.PageTypes.GetAll().ToList();
             model.Sitemap = api.Sites.GetSitemap(site.Id, onlyPublished: false);

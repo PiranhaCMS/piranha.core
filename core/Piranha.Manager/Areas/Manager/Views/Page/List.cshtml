@@ -82,6 +82,16 @@
                 </ul>
             </div>
         }
+
+        @if (Model.HasSiteContent) {
+            <div id="btn-sitepicker" class="btn-group pull-right" style="margin-right: 15px">
+                <a class="btn btn-labeled btn-primary" href="@Url.Action("EditContent", "Site", new { id = Model.SiteContentId })">
+                    <span class="btn-label">
+                        <i class="fas fa-edit"></i>
+                    </span>Edit site
+                </a>
+            </div>
+        }        
         
         @if (Model.Sites.Count > 1) {
             <div id="btn-sitepicker" class="btn-group pull-right" style="margin-right: 15px">

@@ -70,14 +70,33 @@
                     @Html.TextBoxFor(m => m.Site.Hostnames, new { @class = "form-control small", maxlength = 256 })
                 </div>
             </div>
-            <div class="form-group">
-                <label>IsDefault</label>
-                <div class="checkbox">
-                    <label>
-                        @Html.CheckBoxFor(m => m.Site.IsDefault, new { @class = "checkbox" })
-                        If this should be the default site of the installation.
-                    </label>
-                </div>            
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>IsDefault</label>
+                        <div class="checkbox">
+                            <label>
+                                @Html.CheckBoxFor(m => m.Site.IsDefault, new { @class = "checkbox" })
+                                If this should be the default site of the installation.
+                            </label>
+                        </div>            
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    @if (Model.SiteTypes.Count() > 0)
+                    {
+                        <div class="form-group">
+                            <label>Site Type</label>
+                            <select name="Site.SiteTypeId" class="form-control small">
+                                <option @(string.IsNullOrEmpty(Model.Site.SiteTypeId) ? "selected=selected": "")></option>
+                                @foreach (var type in Model.SiteTypes)
+                                {
+                                    <option value="@type.Id" @(Model.Site.SiteTypeId == type.Id ? "selected=selected": "")>@type.Title</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     </div>

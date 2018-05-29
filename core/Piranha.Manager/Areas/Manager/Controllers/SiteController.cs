@@ -9,6 +9,7 @@
  */
 
 using Piranha.Areas.Manager.Models;
+using Piranha.Areas.Manager.Services;
 using Piranha.Manager;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,11 +20,15 @@ namespace Piranha.Areas.Manager.Controllers
     [Area("Manager")]
     public class SiteController : ManagerAreaControllerBase
     {
+        SiteContentEditService service;
+
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public SiteController(IApi api) : base(api) { }
+        public SiteController(IApi api, SiteContentEditService service) : base(api) { 
+            this.service = service;
+        }
         
         /// <summary>
         /// Gets the list view for the current sites.
@@ -37,7 +42,7 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/site/add")]
         [Authorize(Policy = Permission.SitesAdd)]
         public IActionResult Add() {
-            return View("Edit", new SiteEditModel());
+            return View("Edit", SiteEditModel.Create(api));
         }
 
         [Route("manager/site/{id:Guid}")]
@@ -79,6 +84,25 @@ namespace Piranha.Areas.Manager.Controllers
                 ErrorMessage("This site could not be found.");
             }
             return RedirectToAction("List");
+        }
+
+        [Route("manager/site/content/{id:Guid}")]
+        [Authorize(Policy = Permission.PagesEdit)]
+        public IActionResult EditContent(Guid id) {
+            return View("EditContent", service.GetById(id));
+        }
+
+        [HttpPost]
+        [Route("manager/site/content/save")]
+        [Authorize(Policy = Permission.PagesEdit)]
+        public IActionResult SaveContent(SiteContentEditModel model) {
+            if (service.Save(model)) {
+                SuccessMessage("The site content has been saved.");
+                return RedirectToAction("EditContent", new { id = model.Id });
+            } else {
+                ErrorMessage("The site content could not be saved.", false);
+                return View("EditContent", service.Refresh(model));
+            }
         }
     }
 }
