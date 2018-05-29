@@ -14,6 +14,8 @@ using Piranha.Manager;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Piranha.Areas.Manager.Controllers
 {
@@ -104,5 +106,32 @@ namespace Piranha.Areas.Manager.Controllers
                 return View("EditContent", service.Refresh(model));
             }
         }
+
+        /// <summary>
+        /// Adds a new region to a site.
+        /// </summary>
+        /// <param name="model">The model</param>
+        [HttpPost]
+        [Route("manager/site/region")]
+        [Authorize(Policy = Permission.Posts)]
+        public IActionResult AddRegion([FromBody]Models.PageRegionModel model) {
+            var siteType = api.SiteTypes.GetById(model.PageTypeId);
+
+            if (siteType != null) {
+                var regionType = siteType.Regions.SingleOrDefault(r => r.Id == model.RegionTypeId);
+
+                if (regionType != null) {
+                    var region = Piranha.Models.DynamicSiteContent.CreateRegion(api,
+                        model.PageTypeId, model.RegionTypeId);
+
+                    var editModel = (Models.PageEditRegionCollection)service.CreateRegion(regionType, 
+                        new List<object>() { region });
+
+                    ViewData.TemplateInfo.HtmlFieldPrefix = $"Regions[{model.RegionIndex}].FieldSets[{model.ItemIndex}]";
+                    return View("EditorTemplates/PageEditRegionItem", editModel.FieldSets[0]);
+                }
+            }
+            return new NotFoundResult();
+        }        
     }
 }
