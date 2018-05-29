@@ -86,6 +86,11 @@ namespace Piranha
         public ISiteRepository Sites { get; private set; }
 
         /// <summary>
+        /// Gets the site type repository.
+        /// </summary>
+        public ISiteTypeRepository SiteTypes { get; private set; }
+
+        /// <summary>
         /// Gets the tag repository.
         /// </summary>
         public ITagRepository Tags { get; private set; }
@@ -140,7 +145,8 @@ namespace Piranha
             Params = new ParamRepository(_db, cacheLevel > 0 ? _cache : null);
             Posts = new PostRepository(this, _db, factory, cacheLevel > 2 ? _cache : null);
             PostTypes = new PostTypeRepository(_db, cacheLevel > 1 ? _cache : null);
-            Sites = new SiteRepository(this, _db, cacheLevel > 0 ? _cache : null);
+            Sites = new SiteRepository(this, _db, factory, cacheLevel > 0 ? _cache : null);
+            SiteTypes = new SiteTypeRepository(_db, cacheLevel > 0 ? _cache : null);
             Tags = new TagRepository(_db, cacheLevel > 2 ? _cache : null);
         }
         #endregion

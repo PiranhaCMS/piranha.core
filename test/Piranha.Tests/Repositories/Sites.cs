@@ -30,7 +30,6 @@ namespace Piranha.Tests.Repositories
     [Collection("Integration tests")]
     public class Sites : BaseTests
     {
-        #region Members
         private const string SITE_1 = "MyFirstSite";
         private const string SITE_2 = "MySecondSite";
         private const string SITE_3 = "MyThirdSite";
@@ -41,7 +40,6 @@ namespace Piranha.Tests.Repositories
         protected ICache cache;
 
         private Guid SITE_1_ID = Guid.NewGuid();
-        #endregion
 
         [PageType(Title = "PageType")]
         public class MyPage : Models.Page<MyPage>
@@ -49,6 +47,16 @@ namespace Piranha.Tests.Repositories
             [Region]
             public TextField Text { get; set; }
         }
+
+        [SiteType(Title = "SiteType")]
+        public class MySiteContent : Models.SiteContent<MySiteContent>
+        {
+            [Region]
+            public HtmlField Header { get; set; }
+
+            [Region]
+            public HtmlField Footer { get; set; }
+        }        
 
         protected override void Init() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
@@ -58,8 +66,13 @@ namespace Piranha.Tests.Repositories
                     .AddType(typeof(MyPage));
                 builder.Build();
 
+                var siteBuilder = new SiteTypeBuilder(api)
+                    .AddType(typeof(MySiteContent));
+                siteBuilder.Build();
+
                 api.Sites.Save(new Data.Site() {
                     Id = SITE_1_ID,
+                    SiteTypeId = "MySiteContent",
                     InternalId = SITE_1,
                     Title = SITE_1,
                     Hostnames = SITE_1_HOSTS,
@@ -78,6 +91,11 @@ namespace Piranha.Tests.Repositories
                     InternalId = SITE_6,
                     Title = SITE_6
                 });
+
+                var content = MySiteContent.Create(api);
+                content.Header = "<p>Lorem ipsum</p>";
+                content.Footer = "<p>Tellus Ligula</p>";
+                api.Sites.SaveContent(SITE_1_ID, content);
 
                 var page1 = MyPage.Create(api);
                 page1.SiteId = SITE_1_ID;
@@ -119,6 +137,10 @@ namespace Piranha.Tests.Repositories
                 var sites = api.Sites.GetAll();
                 foreach (var site in sites)
                     api.Sites.Delete(site);
+
+                var siteTypes = api.SiteTypes.GetAll();
+                foreach (var t in siteTypes)
+                    api.SiteTypes.Delete(t);
             }
         }
 
@@ -367,6 +389,56 @@ namespace Piranha.Tests.Repositories
 
                 api.Sites.Delete(model.Id);
             }
+        }
+
+        [Fact]
+        public void GetSiteContent() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var model = api.Sites.GetContentById<MySiteContent>(SITE_1_ID);
+
+                Assert.NotNull(model);
+                Assert.Equal("<p>Lorem ipsum</p>", model.Header.Value);
+            }            
+        }
+
+        [Fact]
+        public void UpdateSiteContent() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var model = api.Sites.GetContentById<MySiteContent>(SITE_1_ID);
+
+                Assert.NotNull(model);
+                model.Footer = "<p>Fusce Parturient</p>";
+                api.Sites.SaveContent(SITE_1_ID, model);
+
+                model = api.Sites.GetContentById<MySiteContent>(SITE_1_ID);
+                Assert.NotNull(model);
+                Assert.Equal("<p>Fusce Parturient</p>", model.Footer.Value);                
+            }            
+        }
+
+        [Fact]
+        public void GetDynamicSiteContent() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var model = api.Sites.GetContentById(SITE_1_ID);
+
+                Assert.NotNull(model);
+                Assert.Equal("<p>Lorem ipsum</p>", model.Regions.Header.Value);
+            }            
+        }
+
+        [Fact]
+        public void UpdateDynamicSiteContent() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var model = api.Sites.GetContentById(SITE_1_ID);
+
+                Assert.NotNull(model);
+                model.Regions.Footer.Value = "<p>Purus Sit</p>";
+                api.Sites.SaveContent(SITE_1_ID, model);
+
+                model = api.Sites.GetContentById(SITE_1_ID);
+                Assert.NotNull(model);
+                Assert.Equal("<p>Purus Sit</p>", model.Regions.Footer.Value);                
+            }            
         }
     }
 }

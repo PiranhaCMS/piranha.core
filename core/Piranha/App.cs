@@ -282,6 +282,17 @@ namespace Piranha
                             cfg.CreateMap<Data.Site, Data.Site>()
                                 .ForMember(s => s.Id, o => o.Ignore())
                                 .ForMember(s => s.Created, o => o.Ignore());
+                            cfg.CreateMap<Data.Site, Models.SiteContentBase>()
+                                .ForMember(s => s.TypeId, o => o.MapFrom(m => m.SiteTypeId));
+                            cfg.CreateMap<Models.SiteContentBase, Data.Site>()
+                                .ForMember(s => s.SiteTypeId, o => o.Ignore())
+                                .ForMember(s => s.InternalId, o => o.Ignore())
+                                .ForMember(s => s.Description, o => o.Ignore())
+                                .ForMember(s => s.Hostnames, o => o.Ignore())
+                                .ForMember(s => s.IsDefault, o => o.Ignore())
+                                .ForMember(s => s.Fields, o => o.Ignore())
+                                .ForMember(s => s.Created, o => o.Ignore())
+                                .ForMember(s => s.LastModified, o => o.Ignore());
                             cfg.CreateMap<Data.Tag, Data.Tag>()
                                 .ForMember(t => t.Id, o => o.Ignore())
                                 .ForMember(t => t.Created, o => o.Ignore());

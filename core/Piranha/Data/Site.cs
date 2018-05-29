@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -12,22 +12,17 @@ using System;
 
 namespace Piranha.Data
 {
-    public sealed class Site : IModel, ICreated, IModified
+    public sealed class Site : Content<SiteField>, IModel, ICreated, IModified
     {
         /// <summary>
-        /// Gets/sets the unique id.
+        /// Gets/sets the optional site type id.
         /// </summary>
-        public Guid Id { get; set; }
+        public string SiteTypeId { get; set; }
 
         /// <summary>
         /// Gets/sets the internal textual id.
         /// </summary>
         public string InternalId { get; set; }
-
-        /// <summary>
-        /// Gets/sets the main title.
-        /// </summary>
-        public string Title { get; set; }
 
         /// <summary>
         /// Gets/sets the optional description.
@@ -43,15 +38,5 @@ namespace Piranha.Data
         /// Gets/sets if this is the default site.
         /// </summary>
         public bool IsDefault { get; set; }
-
-        /// <summary>
-        /// Gets/sets the created date.
-        /// </summary>
-        public DateTime Created { get; set; }
-
-        /// <summary>
-        /// Gets/sets the last modification date.
-        /// </summary>
-        public DateTime LastModified { get; set; }
     }
 }

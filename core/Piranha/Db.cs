@@ -119,6 +119,16 @@ namespace Piranha
         public DbSet<Data.Site> Sites { get; set; }
 
         /// <summary>
+        /// Gets/sets the site field set.
+        /// </summary>        
+        public DbSet<Data.SiteField> SiteFields { get; set; }
+
+        /// <summary>
+        /// Gets/sets the site type set.
+        /// </summary>
+        public DbSet<Data.SiteType> SiteTypes { get; set; }
+
+        /// <summary>
         /// Gets/sets the tag set.
         /// </summary>
         public DbSet<Data.Tag> Tags { get; set; }
@@ -240,11 +250,22 @@ namespace Piranha
             mb.Entity<Data.PostType>().Property(p => p.CLRType).HasMaxLength(256);
 
             mb.Entity<Data.Site>().ToTable("Piranha_Sites");
+            mb.Entity<Data.Site>().Property(s => s.SiteTypeId).HasMaxLength(64);
             mb.Entity<Data.Site>().Property(s => s.InternalId).HasMaxLength(64).IsRequired();
             mb.Entity<Data.Site>().Property(s => s.Title).HasMaxLength(128);
             mb.Entity<Data.Site>().Property(s => s.Description).HasMaxLength(256);
             mb.Entity<Data.Site>().Property(s => s.Hostnames).HasMaxLength(256);
             mb.Entity<Data.Site>().HasIndex(s => s.InternalId).IsUnique();
+
+            mb.Entity<Data.SiteField>().ToTable("Piranha_SiteFields");
+            mb.Entity<Data.SiteField>().Property(f => f.RegionId).HasMaxLength(64).IsRequired();
+            mb.Entity<Data.SiteField>().Property(f => f.FieldId).HasMaxLength(64).IsRequired();
+            mb.Entity<Data.SiteField>().Property(f => f.CLRType).HasMaxLength(256).IsRequired();
+            mb.Entity<Data.SiteField>().HasIndex(f => new { f.SiteId, f.RegionId, f.FieldId, f.SortOrder });
+
+            mb.Entity<Data.SiteType>().ToTable("Piranha_SiteTypes");
+            mb.Entity<Data.SiteType>().Property(s => s.Id).HasMaxLength(64).IsRequired();
+            mb.Entity<Data.SiteType>().Property(s => s.CLRType).HasMaxLength(256);            
 
             mb.Entity<Data.Tag>().ToTable("Piranha_Tags");
             mb.Entity<Data.Tag>().Property(t => t.Title).IsRequired().HasMaxLength(64);
