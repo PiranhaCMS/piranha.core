@@ -70,7 +70,7 @@ namespace Piranha.Manager
         /// <summary>
         /// Gets the Name
         /// </summary>
-        public string Name => "Piranha Manager";
+        public string Name => "Piranha.Manager";
 
         /// <summary>
         /// Gets the Version
@@ -80,7 +80,7 @@ namespace Piranha.Manager
         /// <summary>
         /// Gets the release date
         /// </summary>
-        public string ReleaseDate => "2018-05-16";
+        public string ReleaseDate => "2018-05-30";
 
         /// <summary>
         /// Gets the description

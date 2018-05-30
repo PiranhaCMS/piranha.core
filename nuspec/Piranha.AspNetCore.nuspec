@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.AspNetCore</id>
     <title>Piranha AspNetCore</title>
-    <version>5.0.0</version>
+    <version>5.1.0-alpha1</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -18,7 +18,7 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework=".NETStandard2.0">
-        <dependency id="Piranha" version="5.0.0" />
+        <dependency id="Piranha" version="5.1.0-alpha1" />
         <dependency id="Microsoft.AspNetCore.Http" version="2.0.1" />
         <dependency id="Microsoft.AspNetCore.Http.Extensions" version="2.0.1" />
         <dependency id="Microsoft.Extensions.Logging.Abstractions" version="2.0.0" />

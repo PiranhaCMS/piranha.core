@@ -39,7 +39,7 @@ namespace Piranha.AspNetCore.Identity
         /// <summary>
         /// Gets the Name
         /// </summary>
-        public string Name => "Piranha AspNetCore Identity";
+        public string Name => "Piranha.AspNetCore.Identity";
 
         /// <summary>
         /// Gets the Version
@@ -49,7 +49,7 @@ namespace Piranha.AspNetCore.Identity
         /// <summary>
         /// Gets the release date
         /// </summary>
-        public string ReleaseDate => "2018-05-16";
+        public string ReleaseDate => "2018-05-30";
 
         /// <summary>
         /// Gets the description
