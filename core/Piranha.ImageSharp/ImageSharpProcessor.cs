@@ -9,8 +9,9 @@
  */
 
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Processing.Transforms;
 using SixLabors.Primitives;
 using System;
 using System.IO;
@@ -60,7 +61,7 @@ namespace Piranha.ImageSharp
         /// <param name="height">The requested height</param>
         public void Crop(Stream source, Stream dest, int width, int height)
         {
-            using (var image = Image.Load(source))
+            using (var image = Image.Load(source, out IImageFormat format))
             {
                 image.Mutate(x => x.Crop(new Rectangle
                 {
@@ -70,11 +71,7 @@ namespace Piranha.ImageSharp
                     Y = height < image.Height ? (image.Height - height) / 2 : 0
                 }));
 
-                image.SaveAsJpeg(dest, new JpegEncoder
-                {
-                    IgnoreMetadata = true,
-                    Quality = 90
-                });
+                image.Save(dest, format);
             }
         }
 
@@ -88,7 +85,7 @@ namespace Piranha.ImageSharp
         /// <param name="width">The requested width</param>
         public void Scale(Stream source, Stream dest, int width)
         {
-            using (var image = Image.Load(source))
+            using (var image = Image.Load(source, out IImageFormat format))
             {
                 int height = (int)Math.Round(width * ((float)image.Height / image.Width));
 
@@ -98,11 +95,7 @@ namespace Piranha.ImageSharp
                     Mode = ResizeMode.Crop
                 }));
 
-                image.SaveAsJpeg(dest, new JpegEncoder
-                {
-                    IgnoreMetadata = true,
-                    Quality = 90
-                });
+                image.Save(dest, format);
             }
         }
 
@@ -117,7 +110,7 @@ namespace Piranha.ImageSharp
         /// <param name="height">The requested height</param>
         public void CropScale(Stream source, Stream dest, int width, int height)
         {
-            using (var image = Image.Load(source))
+            using (var image = Image.Load(source, out IImageFormat format))
             {
                 var oldRatio = (float)image.Height / image.Width;
                 var newRatio = (float)height / width;
@@ -148,11 +141,7 @@ namespace Piranha.ImageSharp
                     Mode = ResizeMode.Crop
                 }));
 
-                image.SaveAsJpeg(dest, new JpegEncoder
-                {
-                    IgnoreMetadata = true,
-                    Quality = 90
-                });
+                image.Save(dest, format);
             }
         }
     }

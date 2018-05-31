@@ -189,6 +189,7 @@ namespace Piranha
             mb.Entity<Data.MediaFolder>().Property(f => f.Name).HasMaxLength(128).IsRequired();
 
             mb.Entity<Data.MediaVersion>().ToTable("Piranha_MediaVersions");
+            mb.Entity<Data.MediaVersion>().Property(v => v.FileExtension).HasMaxLength(8);
             mb.Entity<Data.MediaVersion>().HasIndex(v => new { v.MediaId, v.Width, v.Height }).IsUnique();
 
             mb.Entity<Data.Page>().ToTable("Piranha_Pages");

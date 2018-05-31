@@ -14,11 +14,11 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore" Version="2.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.0.1" />    
-    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.1" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.1.0" />    
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="2.1.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Piranha.AspNetCore\Piranha.AspNetCore.csproj" />
@@ -34,8 +34,5 @@
     <EmbeddedResource Include="assets\lib\bootstrap\fonts\*" />
     <EmbeddedResource Include="assets\lib\components-font-awesome\webfonts\*" />
     <EmbeddedResource Include="assets\tinymce\**\*.*" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Remove="Areas\Manager\Views\Shared\EditorTemplates\CheckBoxField.cshtml" />
   </ItemGroup>
 </Project>
