@@ -58,7 +58,7 @@ namespace Piranha.ImageSharp.Tests
                 var url = api.Media.EnsureVersion(imageId, 640);
 
                 Assert.NotNull(url);
-                Assert.Equal($"~/uploads/{imageId}-HLD_Screenshot_01_mech_1080_640.jpg", url);
+                Assert.Equal($"~/uploads/{imageId}-HLD_Screenshot_01_mech_1080_640.png", url);
             }
         }
 
@@ -68,7 +68,7 @@ namespace Piranha.ImageSharp.Tests
                 var url = api.Media.EnsureVersion(imageId, 640, 300);
 
                 Assert.NotNull(url);
-                Assert.Equal($"~/uploads/{imageId}-HLD_Screenshot_01_mech_1080_640x300.jpg", url);
+                Assert.Equal($"~/uploads/{imageId}-HLD_Screenshot_01_mech_1080_640x300.png", url);
             }
         }
 
