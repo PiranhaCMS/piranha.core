@@ -77,7 +77,7 @@ namespace Piranha.AspNetCore
                                         MaxAge = TimeSpan.FromMinutes(expires),
                                     };
 
-                                    headers.Headers["ETag"] = response.CacheInfo.EntityTag;
+                                    headers.ETag = new EntityTagHeaderValue(response.CacheInfo.EntityTag);
                                     headers.LastModified = response.CacheInfo.LastModified;
                                 }
                                 else

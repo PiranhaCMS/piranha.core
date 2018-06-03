@@ -124,7 +124,7 @@ namespace Piranha
             {
                 var str = name + date.ToString("yyyy-MM-dd HH:mm:ss");
                 var bytes = crypto.ComputeHash(encoding.GetBytes(str));
-                return Convert.ToBase64String(bytes);
+                return $"\"{Convert.ToBase64String(bytes)}\"";
             }
         }
 
