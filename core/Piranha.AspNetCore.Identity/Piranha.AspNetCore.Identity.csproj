@@ -15,4 +15,7 @@
     <ProjectReference Include="..\Piranha.Manager\Piranha.Manager.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Areas\Manager\Views\**\*.cshtml" />
+  </ItemGroup>
 </Project>
