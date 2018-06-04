@@ -25,7 +25,7 @@ namespace Piranha.Web
         {
             if (string.IsNullOrWhiteSpace(url) || url == "/")
             {
-                var page = api.Pages.GetStartpage(siteId);
+                var page = api.Pages.GetStartpage<Models.PageInfo>(siteId);
 
                 if (page != null)
                 {

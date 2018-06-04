@@ -29,7 +29,7 @@ namespace Piranha.Web
 
                 if (segments.Length >= 2)
                 {
-                    var post = api.Posts.GetBySlug(segments[0], segments[1], siteId);
+                    var post = api.Posts.GetBySlug<Models.PostInfo>(segments[0], segments[1], siteId);
 
                     if (post != null)
                     {

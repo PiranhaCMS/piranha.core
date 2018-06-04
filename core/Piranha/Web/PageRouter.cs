@@ -33,7 +33,7 @@ namespace Piranha.Web
                 for (var n = include; n > 0; n--)
                 {
                     var slug = string.Join("/", segments.Subset(0, n));
-                    var page = api.Pages.GetBySlug(slug, siteId);
+                    var page = api.Pages.GetBySlug<Models.PageInfo>(slug, siteId);
 
                     if (page != null && page.ContentType == "Page")
                     {
@@ -46,10 +46,12 @@ namespace Piranha.Web
                                 route += "/" + string.Join("/", segments.Subset(n));
                             }
 
+                            var isStartPage = !page.ParentId.HasValue && page.SortOrder == 0;
+
                             return new RouteResponse
                             {
                                 Route = route,
-                                QueryString = $"id={page.Id}&startpage={page.IsStartPage.ToString().ToLower()}&piranha_handled=true",
+                                QueryString = $"id={page.Id}&startpage={isStartPage.ToString().ToLower()}&piranha_handled=true",
                                 IsPublished = page.Published.HasValue && page.Published.Value <= DateTime.Now,
                                 CacheInfo = new HttpCacheInfo
                                 {
