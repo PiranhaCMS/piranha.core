@@ -17,7 +17,6 @@ namespace Piranha.Models
     /// </summary>
     public abstract class Content
     {
-        #region Properties
         /// <summary>
         /// Gets/sets the unique id.
         /// </summary>
@@ -42,6 +41,5 @@ namespace Piranha.Models
         /// Gets/sets the last modification date.
         /// </summary>
         public DateTime LastModified { get; set; }
-        #endregion
     }
 }

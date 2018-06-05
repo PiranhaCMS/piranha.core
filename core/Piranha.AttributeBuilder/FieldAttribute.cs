@@ -17,7 +17,7 @@ namespace Piranha.AttributeBuilder
     /// Attribute for marking a property as a field.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    public class FieldAttribute : System.Attribute
+    public class FieldAttribute : Attribute
     {
         /// <summary>
         /// Gets/sets the optional title.

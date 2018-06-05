@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2017 Håkan Edling
+ * Copyright (c) 2016-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -21,16 +21,17 @@ namespace Piranha.AttributeBuilder
     public abstract class ContentTypeBuilder<T, TType> where T : ContentTypeBuilder<T, TType> where TType : ContentType
     {
         #region Members
-        protected readonly List<Type> types = new List<Type>();
-        protected readonly IApi api;
+        protected readonly List<Type> _types = new List<Type>();
+        protected readonly IApi _api;
         #endregion
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public ContentTypeBuilder(IApi api) {
-            this.api = api;
+        public ContentTypeBuilder(IApi api)
+        {
+            _api = api;
         }
 
         /// <summary>
@@ -38,8 +39,9 @@ namespace Piranha.AttributeBuilder
         /// </summary>
         /// <param name="type">The type</param>
         /// <returns>The builder</returns>
-        public T AddType(Type type) {
-            types.Add(type);
+        public T AddType(Type type)
+        {
+            _types.Add(type);
 
             return (T)this;
         }
@@ -62,13 +64,16 @@ namespace Piranha.AttributeBuilder
         /// </summary>
         /// <param name="prop">The property info</param>
         /// <returns>The region type</returns>
-        protected Tuple<int?, RegionType> GetRegionType(PropertyInfo prop) {
+        protected Tuple<int?, RegionType> GetRegionType(PropertyInfo prop)
+        {
             var attr = prop.GetCustomAttribute<RegionAttribute>();
 
-            if (attr != null) {
+            if (attr != null)
+            {
                 var isCollection = typeof(IEnumerable).IsAssignableFrom(prop.PropertyType);
 
-                var regionType = new RegionType() {
+                var regionType = new RegionType
+                {
                     Id = prop.Name,
                     Title = attr.Title,
                     Collection = isCollection,
@@ -80,16 +85,21 @@ namespace Piranha.AttributeBuilder
 
                 Type type = null;
 
-                if (!isCollection) {
+                if (!isCollection)
+                {
                     type = prop.PropertyType;
-                } else {
+                }
+                else
+                {
                     type = prop.PropertyType.GenericTypeArguments.First();
                 }
 
-                if (typeof(IField).IsAssignableFrom(type)) {
+                if (typeof(IField).IsAssignableFrom(type))
+                {
                     var appFieldType = App.Fields.GetByType(type);
 
-                    if (appFieldType == null) {
+                    if (appFieldType == null)
+                    {
                         RegisterField(type);
                         appFieldType = App.Fields.GetByType(type);
 
@@ -99,12 +109,16 @@ namespace Piranha.AttributeBuilder
                             return null;
                     }
 
-                    regionType.Fields.Add(new FieldType() {
+                    regionType.Fields.Add(new FieldType
+                    {
                         Id = "Default",
                         Type = appFieldType.TypeName
                     });
-                } else {
-                    foreach (var fieldProp in type.GetProperties(App.PropertyBindings)) {
+                }
+                else
+                {
+                    foreach (var fieldProp in type.GetProperties(App.PropertyBindings))
+                    {
                         var fieldType = GetFieldType(fieldProp);
 
                         if (fieldType != null)
@@ -124,20 +138,25 @@ namespace Piranha.AttributeBuilder
         /// </summary>
         /// <param name="prop">The property</param>
         /// <returns>The field type</returns>
-        protected FieldType GetFieldType(PropertyInfo prop) {
+        protected FieldType GetFieldType(PropertyInfo prop)
+        {
             var attr = prop.GetCustomAttribute<FieldAttribute>();
 
-            if (attr != null) {
+            if (attr != null)
+            {
                 var appFieldType = App.Fields.GetByType(prop.PropertyType);
 
                 // Missing field type, check if we can register it on the fly
-                if (appFieldType == null) {
+                if (appFieldType == null)
+                {
                     RegisterField(prop.PropertyType);
                     appFieldType = App.Fields.GetByType(prop.PropertyType);
                 }
 
-                if (appFieldType != null) {
-                    return new FieldType() {
+                if (appFieldType != null)
+                {
+                    return new FieldType
+                    {
                         Id = prop.Name,
                         Title = attr.Title,
                         Type = appFieldType.TypeName,
@@ -148,22 +167,28 @@ namespace Piranha.AttributeBuilder
             return null;
         }
 
-        private void RegisterField(Type type) {
+        private void RegisterField(Type type)
+        {
             if (typeof(IEnumerable).IsAssignableFrom(type))
                 type = type.GenericTypeArguments.First();
 
-            if (typeof(IField).IsAssignableFrom(type)) {
-                if (type.GetCustomAttribute<FieldTypeAttribute>() != null) {
+            if (typeof(IField).IsAssignableFrom(type))
+            {
+                if (type.GetCustomAttribute<FieldTypeAttribute>() != null)
+                {
                     MethodInfo generic = null;
 
-                    if (typeof(Extend.Fields.SelectFieldBase).IsAssignableFrom(type)) {
+                    if (typeof(Extend.Fields.SelectFieldBase).IsAssignableFrom(type))
+                    {
                         var method = typeof(Runtime.AppFieldList).GetMethod("RegisterSelect");
                         generic = method.MakeGenericMethod(type.GenericTypeArguments.First());
-                    } else {
+                    }
+                    else
+                    {
                         var method = typeof(Runtime.AppFieldList).GetMethod("Register");
                         generic = method.MakeGenericMethod(type);
                     }
-                    
+
                     generic.Invoke(App.Fields, null);
                 }
             }

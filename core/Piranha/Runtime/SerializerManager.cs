@@ -14,7 +14,7 @@ using System.Collections.Generic;
 
 namespace Piranha.Runtime
 {
-    public sealed class SerializerManager 
+    public sealed class SerializerManager
     {
         /// <summary>
         /// The currently available serializers.
@@ -25,7 +25,7 @@ namespace Piranha.Runtime
         /// Gets the serializer for the specified type.
         /// </summary>
         public ISerializer this[Type type] {
-            get { 
+            get {
                 ISerializer serializer = null;
 
                 if (serializers.TryGetValue(type, out serializer))
@@ -37,7 +37,8 @@ namespace Piranha.Runtime
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public SerializerManager() {
+        public SerializerManager()
+        {
             serializers = new Dictionary<Type, ISerializer>();
         }
 
@@ -45,14 +46,16 @@ namespace Piranha.Runtime
         /// Registers the given serializer for the specified type
         /// </summary>
         /// <param name="serializer">The serializer</param>
-        public void Register<T>(ISerializer serializer) {
+        public void Register<T>(ISerializer serializer)
+        {
             serializers[typeof(T)] = serializer;
         }
 
         /// <summary>
         /// Unregisters the current serializer for the specified type
         /// </summary>
-        public void UnRegister<T>() {
+        public void UnRegister<T>()
+        {
             serializers.Remove(typeof(T));
         }
     }

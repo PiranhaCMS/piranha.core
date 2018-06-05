@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2017 Håkan Edling
+ * Copyright (c) 2016-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -16,7 +16,7 @@ namespace Piranha.AttributeBuilder
     /// Attribute for marking a property as a region.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    public class RegionAttribute : System.Attribute
+    public class RegionAttribute : Attribute
     {
         /// <summary>
         /// Gets/sets the optional title.
@@ -49,7 +49,8 @@ namespace Piranha.AttributeBuilder
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public RegionAttribute() {
+        public RegionAttribute()
+        {
             SortOrder = Int32.MaxValue;
             ListExpand = true;
         }

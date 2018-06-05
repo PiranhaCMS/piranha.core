@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2018 Filip Jansson
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -21,10 +21,11 @@ namespace Piranha.Extend.Serializers
         /// <returns>The serialized value</returns>
         public string Serialize(object obj)
         {
-            if (obj is T) {
+            if (obj is T)
+            {
                 if (((T)obj).Value.HasValue)
                     return ((T)obj).Value.Value.ToString();
-                return null;                
+                return null;
             }
             throw new ArgumentException("The given object doesn't match the serialization type");
         }
@@ -38,8 +39,10 @@ namespace Piranha.Extend.Serializers
         {
             var field = Activator.CreateInstance<T>();
 
-            if (!string.IsNullOrWhiteSpace(str)) {
-                try {
+            if (!string.IsNullOrWhiteSpace(str))
+            {
+                try
+                {
                     field.Value = int.Parse(str);
                 }
                 catch { }

@@ -1,0 +1,56 @@
+@model Piranha.Areas.Manager.Models.SiteContentEditModel
+@{
+    ViewBag.Title = Model.Title;
+    ViewBag.Controller = "Page";
+}
+
+@using (var form = Html.BeginForm("SaveContent", "Site", FormMethod.Post, new { @class = "form", @role = "form" })) {
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.Title)
+    @Html.HiddenFor(m => m.TypeId)
+
+    <div class="row">
+        <div class="col-sm-12 buttons">
+            <!-- Actions -->
+            <button type="submit" class="btn btn-labeled btn-success pull-right">
+                <span class="btn-label">
+                    <i class="fas fa-check"></i>
+                </span>Save
+            </button>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(ViewBag.Message)) {
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="@ViewBag.MessageCss">
+                    @Html.Raw(ViewBag.Message)
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            @for (var n = Model.Regions.Count - 1; n >= 0; n--) {
+                var primary = n == 0;
+                <button class="btn btn-sm btn-secondary pull-right btn-toggle @(primary ? "btn-primary" : "")" data-target="#region-@Model.Regions[n].Id">@Model.Regions[n].Title</button>
+            }
+            <h3 class="panel-title">Content</h3>
+        </div>
+        @for (var n = 0; n < Model.Regions.Count; n++) {
+            var primary = n == 0;
+            <div id="region-@Model.Regions[n].Id" class="panel-body" @(!primary ? "style=display:none" : "")>
+                @Html.HiddenFor(m => m.Regions[n].Id)
+                @Html.HiddenFor(m => m.Regions[n].Title)
+                @Html.HiddenFor(m => m.Regions[n].CLRType)
+                @Html.EditorFor(m => m.Regions[n], Model.Regions[n].GetType().Name, new { 
+                    pageTypeId = Model.SiteType.Id,
+                    regionTypeId = Model.Regions[n].Id,
+                    regionIndex = n,
+                    contentType = "site"
+                })
+            </div>
+        }
+    </div>    
+}

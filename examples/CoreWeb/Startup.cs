@@ -85,6 +85,10 @@ namespace CoreWeb
                 .AddType(typeof(Models.BlogPost));
             postTypeBuilder.Build()
                 .DeleteOrphans();
+            var siteTypeBuilder = new Piranha.AttributeBuilder.SiteTypeBuilder(api)
+                .AddType(typeof(Models.StandardSite));
+            siteTypeBuilder.Build()
+                .DeleteOrphans();
 
             // Register middleware
             app.UseStaticFiles();

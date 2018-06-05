@@ -13,14 +13,16 @@ using System;
 namespace Piranha.Extend.Serializers
 {
     public class DateFieldSerializer : ISerializer
-    {        
+    {
         /// <summary>
         /// Serializes the given object.
         /// </summary>
         /// <param name="obj">The object</param>
         /// <returns>The serialized value</returns>
-        public string Serialize(object obj) {
-            if (obj is Fields.DateField) {
+        public string Serialize(object obj)
+        {
+            if (obj is Fields.DateField)
+            {
                 var field = (Fields.DateField)obj;
 
                 if (field.Value.HasValue)
@@ -35,13 +37,17 @@ namespace Piranha.Extend.Serializers
         /// </summary>
         /// <param name="str">The serialized value</param>
         /// <returns>The object</returns>
-        public object Deserialize(string str) {
+        public object Deserialize(string str)
+        {
             var field = new Fields.DateField();
 
-            if (!string.IsNullOrWhiteSpace(str)) {
-                try {
+            if (!string.IsNullOrWhiteSpace(str))
+            {
+                try
+                {
                     field.Value = DateTime.Parse(str);
-                } catch { }
+                }
+                catch { }
             }
             return field;
         }

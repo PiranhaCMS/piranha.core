@@ -9,7 +9,6 @@
  */
 
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,13 +24,13 @@ namespace Piranha.AspNetCore.Identity.Models
         public string Password { get; set; }
         public string PasswordConfirm { get; set; }
 
-        public UserEditModel() 
+        public UserEditModel()
         {
             Roles = new List<Data.Role>();
             SelectedRoles = new List<string>();
         }
 
-        public static UserEditModel Create(IDb db) 
+        public static UserEditModel Create(IDb db)
         {
             return new UserEditModel
             {
@@ -40,7 +39,7 @@ namespace Piranha.AspNetCore.Identity.Models
             };
         }
 
-        public static UserEditModel GetById(IDb db, Guid id) 
+        public static UserEditModel GetById(IDb db, Guid id)
         {
             var user = db.Users.FirstOrDefault(u => u.Id == id);
 
@@ -68,7 +67,8 @@ namespace Piranha.AspNetCore.Identity.Models
 
             if (user == null)
             {
-                user = new Data.User {
+                user = new Data.User
+                {
                     Id = User.Id != Guid.Empty ? User.Id : Guid.NewGuid(),
                     UserName = User.UserName,
                     Email = User.Email
@@ -77,7 +77,7 @@ namespace Piranha.AspNetCore.Identity.Models
 
                 var createResult = await userManager.CreateAsync(user, Password);
             }
-            else 
+            else
             {
                 await userManager.SetUserNameAsync(user, User.UserName);
                 await userManager.SetEmailAsync(user, User.Email);
@@ -90,7 +90,8 @@ namespace Piranha.AspNetCore.Identity.Models
             // Add current roles
             await userManager.AddToRolesAsync(user, SelectedRoles);
 
-            if (!string.IsNullOrWhiteSpace(Password)) {
+            if (!string.IsNullOrWhiteSpace(Password))
+            {
                 await userManager.RemovePasswordAsync(user);
                 await userManager.AddPasswordAsync(user, Password);
             }

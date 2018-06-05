@@ -14,27 +14,27 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using System.Reflection;
 using Piranha.Data;
 using Piranha.Models;
 
 namespace Piranha.Services
 {
     public class ContentService<TContent, TField, TModelBase> : IContentService<TContent, TField, TModelBase>
-        where TContent : Content<TField> 
+        where TContent : Content<TField>
         where TField : ContentField
-        where TModelBase : Models.Content
+        where TModelBase : Content
     {
         //
         // Members
-        protected readonly IServiceProvider services;
+        protected readonly IServiceProvider _services;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="service">The current service provider</param>
-        public ContentService(IServiceProvider services) {
-            this.services = services;
+        public ContentService(IServiceProvider services)
+        {
+            _services = services;
         }
 
         /// <summary>
@@ -43,12 +43,16 @@ namespace Piranha.Services
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="typeId">The content type id</param>
         /// <returns>The model</returns>
-        public T Create<T>(Models.ContentType contentType) where T : Models.Content {
-            using (var scope = services.CreateScope()) {
-                if (contentType != null) {
+        public T Create<T>(Models.ContentType contentType) where T : Models.Content
+        {
+            using (var scope = _services.CreateScope())
+            {
+                if (contentType != null)
+                {
                     var modelType = typeof(T);
 
-                    if (!typeof(IDynamicModel).IsAssignableFrom(modelType) && !typeof(IContentInfo).IsAssignableFrom(modelType)) {
+                    if (!typeof(IDynamicModel).IsAssignableFrom(modelType) && !typeof(IContentInfo).IsAssignableFrom(modelType))
+                    {
                         modelType = Type.GetType(contentType.CLRType);
 
                         if (modelType != typeof(T) && !typeof(T).IsAssignableFrom(modelType))
@@ -58,36 +62,48 @@ namespace Piranha.Services
                     var model = (T)Activator.CreateInstance(modelType);
                     model.TypeId = contentType.Id;
 
-                    if (!(model is IContentInfo)) {
-                        if (model is IDynamicModel) {
+                    if (!(model is IContentInfo))
+                    {
+                        if (model is IDynamicModel)
+                        {
                             var dynModel = (IDynamicModel)(object)model;
 
-                            foreach (var region in contentType.Regions) {
+                            foreach (var region in contentType.Regions)
+                            {
                                 object value = null;
 
-                                if (region.Collection) {
+                                if (region.Collection)
+                                {
                                     var reg = CreateDynamicRegion(scope, region);
 
-                                    if (reg != null) {
+                                    if (reg != null)
+                                    {
                                         value = Activator.CreateInstance(typeof(RegionList<>).MakeGenericType(reg.GetType()));
                                         ((IRegionList)value).Model = (IDynamicModel)model;
                                         ((IRegionList)value).TypeId = contentType.Id;
                                         ((IRegionList)value).RegionId = region.Id;
                                     }
-                                } else {
+                                }
+                                else
+                                {
                                     value = CreateDynamicRegion(scope, region);
                                 }
 
                                 if (value != null)
                                     ((IDictionary<string, object>)dynModel.Regions).Add(region.Id, value);
                             }
-                        } else {
+                        }
+                        else
+                        {
                             var type = model.GetType();
 
-                            foreach (var region in contentType.Regions) {
-                                if (!region.Collection) {
+                            foreach (var region in contentType.Regions)
+                            {
+                                if (!region.Collection)
+                                {
                                     var prop = type.GetProperty(region.Id, App.PropertyBindings);
-                                    if (prop != null) {
+                                    if (prop != null)
+                                    {
                                         prop.SetValue(model, CreateRegion(scope, prop.PropertyType, region));
                                     }
                                 }
@@ -106,8 +122,10 @@ namespace Piranha.Services
         /// <param name="typeId">The content type id</param>
         /// <param name="regionId">The region id</param>
         /// <returns>The new region value</returns>
-        public object CreateDynamicRegion(Models.ContentType contentType, string regionId) {
-            using (var scope = services.CreateScope()) {
+        public object CreateDynamicRegion(Models.ContentType contentType, string regionId)
+        {
+            using (var scope = _services.CreateScope())
+            {
                 var region = contentType.Regions.SingleOrDefault(r => r.Id == regionId);
 
                 if (region != null)
@@ -116,15 +134,20 @@ namespace Piranha.Services
             }
         }
 
-        public object CreateBlock(string typeName) {
+        public object CreateBlock(string typeName)
+        {
             var blockType = App.Blocks.GetByType(typeName);
 
-            if (blockType != null) {
-                using (var scope = services.CreateScope()) {
+            if (blockType != null)
+            {
+                using (var scope = _services.CreateScope())
+                {
                     var block = Activator.CreateInstance(blockType.Type);
 
-                    foreach (var prop in blockType.Type.GetProperties(App.PropertyBindings)) {
-                        if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType)) {
+                    foreach (var prop in blockType.Type.GetProperties(App.PropertyBindings))
+                    {
+                        if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
+                        {
                             var field = Activator.CreateInstance(prop.PropertyType);
                             InitField(scope, field);
                             prop.SetValue(block, field);
@@ -143,8 +166,10 @@ namespace Piranha.Services
         /// <param name="type">The content type</param>
         /// <param name="regionId">The region id</param>
         /// <returns>The region value</returns>
-        public TValue CreateRegion<TValue>(Models.ContentType contentType, string regionId) {
-            using (var scope = services.CreateScope()) {
+        public TValue CreateRegion<TValue>(Models.ContentType contentType, string regionId)
+        {
+            using (var scope = _services.CreateScope())
+            {
                 var region = contentType.Regions.SingleOrDefault(r => r.Id == regionId);
 
                 if (region != null)
@@ -152,7 +177,7 @@ namespace Piranha.Services
                 return default(TValue);
             }
         }
-        
+
 
         /// <summary>
         /// Gets the enumerator for the given region collection.
@@ -161,18 +186,22 @@ namespace Piranha.Services
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <returns>The enumerator</returns>
-        public IEnumerable GetEnumerable<T>(T model, string regionId) where T : Models.Content {
+        public IEnumerable GetEnumerable<T>(T model, string regionId) where T : Models.Content
+        {
             object value = null;
 
-            if (model is Models.IDynamicModel) {
+            if (model is Models.IDynamicModel)
+            {
                 value = ((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId];
-            } else {
+            }
+            else
+            {
                 value = model.GetType().GetProperty(regionId, App.PropertyBindings).GetValue(model);
             }
             if (value is IEnumerable)
                 return (IEnumerable)value;
             return null;
-        }     
+        }
 
         /// <summary>
         /// Gets the region with the given key.
@@ -181,10 +210,14 @@ namespace Piranha.Services
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <returns>The region</returns>
-        public object GetRegion<T>(T model, string regionId) where T : Models.Content {
-            if (model is Models.IDynamicModel) {
+        public object GetRegion<T>(T model, string regionId) where T : Models.Content
+        {
+            if (model is Models.IDynamicModel)
+            {
                 return ((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId];
-            } else {
+            }
+            else
+            {
                 return model.GetType().GetProperty(regionId, App.PropertyBindings).GetValue(model);
             }
         }
@@ -196,13 +229,17 @@ namespace Piranha.Services
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <returns>If the region exists</returns>
-        public bool HasRegion<T>(T model, string regionId) where T : Models.Content {
-            if (model is Models.IDynamicModel) {
+        public bool HasRegion<T>(T model, string regionId) where T : Models.Content
+        {
+            if (model is Models.IDynamicModel)
+            {
                 return ((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions).ContainsKey(regionId);
-            } else {
+            }
+            else
+            {
                 return model.GetType().GetProperty(regionId, App.PropertyBindings) != null;
             }
-        }        
+        }
 
         /// <summary>
         /// Loads the given data into a new model.
@@ -211,14 +248,17 @@ namespace Piranha.Services
         /// <param name="content">The content entity</param>
         /// <param name="type">The content type</param>
         /// <returns>The page model</returns>
-        public T Transform<T>(TContent content, Models.ContentType type, Action<TContent, T> process = null) 
+        public T Transform<T>(TContent content, Models.ContentType type, Action<TContent, T> process = null)
             where T : Models.Content, TModelBase
         {
-            using (var scope = services.CreateScope()) {
-                if (type != null) {
+            using (var scope = _services.CreateScope())
+            {
+                if (type != null)
+                {
                     var modelType = typeof(T);
 
-                    if (!typeof(Models.IDynamicModel).IsAssignableFrom(modelType) && !typeof(Models.IContentInfo).IsAssignableFrom(modelType)) {
+                    if (!typeof(Models.IDynamicModel).IsAssignableFrom(modelType) && !typeof(Models.IContentInfo).IsAssignableFrom(modelType))
+                    {
                         modelType = Type.GetType(type.CLRType);
 
                         if (modelType != typeof(T) && !typeof(T).IsAssignableFrom(modelType))
@@ -231,7 +271,8 @@ namespace Piranha.Services
                     // Map basic fields
                     App.Mapper.Map<TContent, TModelBase>(content, model);
 
-                    if (model is Models.RoutedContent) {
+                    if (model is Models.RoutedContent)
+                    {
                         var routeModel = (Models.RoutedContent)(object)model;
 
                         // Map route (if available)
@@ -240,36 +281,50 @@ namespace Piranha.Services
                     }
 
                     // Map regions
-                    if (!(model is IContentInfo)) {
+                    if (!(model is IContentInfo))
+                    {
                         var currentRegions = type.Regions.Select(r => r.Id).ToArray();
-                        
-                        foreach (var regionKey in currentRegions) {
+
+                        foreach (var regionKey in currentRegions)
+                        {
                             var region = type.Regions.Single(r => r.Id == regionKey);
                             var fields = content.Fields.Where(f => f.RegionId == regionKey).OrderBy(f => f.SortOrder).ToList();
 
-                            if (!region.Collection) {
-                                foreach (var fieldDef in region.Fields) {
+                            if (!region.Collection)
+                            {
+                                foreach (var fieldDef in region.Fields)
+                                {
                                     var field = fields.SingleOrDefault(f => f.FieldId == fieldDef.Id && f.SortOrder == 0);
 
-                                    if (field != null) {
-                                        if (region.Fields.Count == 1) {
+                                    if (field != null)
+                                    {
+                                        if (region.Fields.Count == 1)
+                                        {
                                             SetSimpleValue(scope, model, regionKey, field);
                                             break;
-                                        } else {
+                                        }
+                                        else
+                                        {
                                             SetComplexValue(scope, model, regionKey, fieldDef.Id, field);
                                         }
                                     }
                                 }
-                            } else {
+                            }
+                            else
+                            {
                                 var fieldCount = content.Fields.Where(f => f.RegionId == regionKey).Select(f => f.SortOrder).DefaultIfEmpty(-1).Max() + 1;
                                 var sortOrder = 0;
 
-                                while (fieldCount > sortOrder) {
-                                    if (region.Fields.Count == 1) {
+                                while (fieldCount > sortOrder)
+                                {
+                                    if (region.Fields.Count == 1)
+                                    {
                                         var field = fields.SingleOrDefault(f => f.FieldId == region.Fields[0].Id && f.SortOrder == sortOrder);
                                         if (field != null)
                                             AddSimpleValue(scope, model, regionKey, field);
-                                    } else {
+                                    }
+                                    else
+                                    {
                                         AddComplexValue(scope, model, type, regionKey, fields.Where(f => f.SortOrder == sortOrder).ToList());
                                     }
                                     sortOrder++;
@@ -298,9 +353,12 @@ namespace Piranha.Services
             var content = dest == null ? Activator.CreateInstance<TContent>() : dest;
 
             // Map id
-            if (model.Id != Guid.Empty) {
+            if (model.Id != Guid.Empty)
+            {
                 content.Id = model.Id;
-            } else {
+            }
+            else
+            {
                 content.Id = model.Id = Guid.NewGuid();
             }
             content.Created = DateTime.Now;
@@ -311,17 +369,23 @@ namespace Piranha.Services
             // Map regions
             var currentRegions = type.Regions.Select(r => r.Id).ToArray();
 
-            foreach (var regionKey in currentRegions) {
+            foreach (var regionKey in currentRegions)
+            {
                 // Check that the region exists in the current model
-                if (HasRegion(model, regionKey)) {
+                if (HasRegion(model, regionKey))
+                {
                     var regionType = type.Regions.Single(r => r.Id == regionKey);
 
-                    if (!regionType.Collection) {
+                    if (!regionType.Collection)
+                    {
                         MapRegion(model, content, GetRegion(model, regionKey), regionType, regionKey);
-                    } else {
+                    }
+                    else
+                    {
                         var items = new List<Guid>();
                         var sortOrder = 0;
-                        foreach (var region in GetEnumerable(model, regionKey)) {
+                        foreach (var region in GetEnumerable(model, regionKey))
+                        {
                             var fields = MapRegion(model, content, region, regionType, regionKey, sortOrder++);
 
                             if (fields.Count > 0)
@@ -344,31 +408,40 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="blocks">The data</param>
         /// <returns>The transformed blocks</returns>
-        public IList<Extend.Block> TransformBlocks(IEnumerable<Block> blocks) {
-            using (var scope = services.CreateScope()) {
+        public IList<Extend.Block> TransformBlocks(IEnumerable<Block> blocks)
+        {
+            using (var scope = _services.CreateScope())
+            {
                 var models = new List<Extend.Block>();
 
-                foreach (var block in blocks) {
+                foreach (var block in blocks)
+                {
                     var blockType = App.Blocks.GetByType(block.CLRType);
 
-                    if (blockType != null) {
+                    if (blockType != null)
+                    {
                         var model = (Extend.Block)Activator.CreateInstance(blockType.Type);
                         model.Id = block.Id;
 
-                        foreach (var field in block.Fields) {
+                        foreach (var field in block.Fields)
+                        {
                             var prop = model.GetType().GetProperty(field.FieldId, App.PropertyBindings);
 
-                            if (prop != null) {
+                            if (prop != null)
+                            {
                                 var type = App.Fields.GetByType(field.CLRType);
                                 var val = (Extend.IField)App.DeserializeObject(field.Value, type.Type);
 
-                                if (val != null) {
+                                if (val != null)
+                                {
                                     var init = val.GetType().GetMethod("Init");
 
-                                    if (init != null) {
+                                    if (init != null)
+                                    {
                                         var param = new List<object>();
 
-                                        foreach (var p in init.GetParameters()) {
+                                        foreach (var p in init.GetParameters())
+                                        {
                                             param.Add(scope.ServiceProvider.GetService(p.ParameterType));
                                         }
                                         init.Invoke(val, param.ToArray());
@@ -389,25 +462,33 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="models">The blocks</param>
         /// <returns>The data model</returns>
-        public IList<Block> TransformBlocks(IList<Extend.Block> models) {
+        public IList<Block> TransformBlocks(IList<Extend.Block> models)
+        {
             var blocks = new List<Block>();
 
-            if (models != null) {
-                for (var n = 0; n < models.Count; n++) {
+            if (models != null)
+            {
+                for (var n = 0; n < models.Count; n++)
+                {
                     var type = App.Blocks.GetByType(models[n].GetType().FullName);
 
-                    if (type != null) {
-                        var block = new Block() {
+                    if (type != null)
+                    {
+                        var block = new Block()
+                        {
                             Id = models[n].Id != Guid.Empty ? models[n].Id : Guid.NewGuid(),
                             CLRType = models[n].GetType().FullName,
                             Created = DateTime.Now,
                             LastModified = DateTime.Now
                         };
 
-                        foreach (var prop in models[n].GetType().GetProperties(App.PropertyBindings)) {
-                            if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType)) {
+                        foreach (var prop in models[n].GetType().GetProperties(App.PropertyBindings))
+                        {
+                            if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
+                            {
                                 // Only save fields to the database
-                                var field = new BlockField() {
+                                var field = new BlockField()
+                                {
                                     Id = Guid.NewGuid(),
                                     BlockId = block.Id,
                                     FieldId = prop.Name,
@@ -435,27 +516,34 @@ namespace Piranha.Services
         /// <param name="regionType">The region type</param>
         /// <param name="regionId">The region id</param>
         /// <param name="sortOrder">The optional sort order</param>
-        public IList<Guid> MapRegion<T>(T model, TContent content, object region, Models.RegionType regionType, string regionId, int sortOrder = 0) where T : Models.Content {
+        public IList<Guid> MapRegion<T>(T model, TContent content, object region, Models.RegionType regionType, string regionId, int sortOrder = 0) where T : Models.Content
+        {
             var items = new List<Guid>();
 
             // Now map all of the fields
-            for (var n = 0; n < regionType.Fields.Count; n++) {
+            for (var n = 0; n < regionType.Fields.Count; n++)
+            {
                 var fieldDef = regionType.Fields[n];
                 var fieldType = App.Fields.GetByShorthand(fieldDef.Type);
                 if (fieldType == null)
                     fieldType = App.Fields.GetByType(fieldDef.Type);
 
-                if (fieldType != null) {
+                if (fieldType != null)
+                {
                     object fieldValue = null;
-                    if (regionType.Fields.Count == 1) {
+                    if (regionType.Fields.Count == 1)
+                    {
                         // Get the field value for simple region
                         fieldValue = region;
-                    } else {
+                    }
+                    else
+                    {
                         // Get the field value for complex region
                         fieldValue = GetComplexValue(region, fieldDef.Id);
                     }
 
-                    if (fieldValue != null) {
+                    if (fieldValue != null)
+                    {
                         // Check that the returned value matches the type specified
                         // for the page type, otherwise deserialization won't work
                         // when the model is retrieved from the database.
@@ -467,7 +555,8 @@ namespace Piranha.Services
                             .SingleOrDefault(f => f.RegionId == regionId && f.FieldId == fieldDef.Id && f.SortOrder == sortOrder);
 
                         // If not, create a new field
-                        if (field == null) {
+                        if (field == null)
+                        {
                             field = Activator.CreateInstance<TField>();
                             field.Id = Guid.NewGuid();
                             field.RegionId = regionId;
@@ -495,11 +584,15 @@ namespace Piranha.Services
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <param name="field">The field</param>
-        private void SetSimpleValue<T>(IServiceScope scope, T model, string regionId, TField field) where T : Models.Content {
-            if (model is Models.IDynamicModel) {
+        private void SetSimpleValue<T>(IServiceScope scope, T model, string regionId, TField field) where T : Models.Content
+        {
+            if (model is Models.IDynamicModel)
+            {
                 ((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId] =
                     DeserializeValue(scope, field);
-            } else {
+            }
+            else
+            {
                 model.GetType().GetProperty(regionId, App.PropertyBindings).SetValue(model,
                     DeserializeValue(scope, field));
             }
@@ -512,16 +605,20 @@ namespace Piranha.Services
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <param name="field">The field</param>
-        private void AddSimpleValue<T>(IServiceScope scope, T model, string regionId, TField field) where T : Models.Content {
-            if (model is Models.IDynamicModel) {
+        private void AddSimpleValue<T>(IServiceScope scope, T model, string regionId, TField field) where T : Models.Content
+        {
+            if (model is Models.IDynamicModel)
+            {
                 ((IList)((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId]).Add(
                     DeserializeValue(scope, field));
-            } else {
+            }
+            else
+            {
                 ((IList)model.GetType().GetProperty(regionId, App.PropertyBindings).GetValue(model)).Add(
                     DeserializeValue(scope, field));
             }
         }
-        
+
         /// <summary>
         /// Sets the value of a complex region.
         /// </summary>
@@ -530,11 +627,15 @@ namespace Piranha.Services
         /// <param name="regionId">The region id</param>
         /// <param name="fieldId">The field id</param>
         /// <param name="field">The field</param>
-        private void SetComplexValue<T>(IServiceScope scope, T model, string regionId, string fieldId, TField field) where T : Models.Content {
-            if (model is Models.IDynamicModel) {
+        private void SetComplexValue<T>(IServiceScope scope, T model, string regionId, string fieldId, TField field) where T : Models.Content
+        {
+            if (model is Models.IDynamicModel)
+            {
                 ((IDictionary<string, object>)((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId])[fieldId] =
                     DeserializeValue(scope, field);
-            } else {
+            }
+            else
+            {
                 var obj = model.GetType().GetProperty(regionId, App.PropertyBindings).GetValue(model);
                 if (obj != null)
                     obj.GetType().GetProperty(fieldId, App.PropertyBindings).SetValue(obj,
@@ -549,27 +650,36 @@ namespace Piranha.Services
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <param name="fields">The field</param>
-        private void AddComplexValue<T>(IServiceScope scope, T model, Models.ContentType contentType, string regionId, IList<TField> fields) where T : Models.Content {
-            if (fields.Count > 0) {
-                if (model is Models.IDynamicModel) {
+        private void AddComplexValue<T>(IServiceScope scope, T model, Models.ContentType contentType, string regionId, IList<TField> fields) where T : Models.Content
+        {
+            if (fields.Count > 0)
+            {
+                if (model is Models.IDynamicModel)
+                {
                     var list = (IList)((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId];
                     var obj = CreateDynamicRegion(contentType, regionId);
 
-                    foreach (var field in fields) {
-                        if (((IDictionary<string, object>)obj).ContainsKey(field.FieldId)) {
+                    foreach (var field in fields)
+                    {
+                        if (((IDictionary<string, object>)obj).ContainsKey(field.FieldId))
+                        {
                             ((IDictionary<string, object>)obj)[field.FieldId] =
                                 DeserializeValue(scope, field);
                         }
                     }
                     list.Add(obj);
 
-                } else {
+                }
+                else
+                {
                     var list = (IList)model.GetType().GetProperty(regionId, App.PropertyBindings).GetValue(model);
                     var obj = Activator.CreateInstance(list.GetType().GenericTypeArguments.First());
 
-                    foreach (var field in fields) {
+                    foreach (var field in fields)
+                    {
                         var prop = obj.GetType().GetProperty(field.FieldId, App.PropertyBindings);
-                        if (prop != null) {
+                        if (prop != null)
+                        {
                             prop.SetValue(obj, DeserializeValue(scope, field));
                         }
                     }
@@ -583,25 +693,30 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="field">The page field</param>
         /// <returns>The value</returns>
-        private object DeserializeValue(IServiceScope scope, TField field) {
+        private object DeserializeValue(IServiceScope scope, TField field)
+        {
             var type = App.Fields.GetByType(field.CLRType);
 
-            if (type != null) {
+            if (type != null)
+            {
                 var val = (Extend.IField)App.DeserializeObject(field.Value, type.Type);
-                if (val != null) {
+                if (val != null)
+                {
                     var init = val.GetType().GetMethod("Init");
 
-                    if (init != null) {
+                    if (init != null)
+                    {
                         var param = new List<object>();
 
-                        foreach (var p in init.GetParameters()) {
+                        foreach (var p in init.GetParameters())
+                        {
                             param.Add(scope.ServiceProvider.GetService(p.ParameterType));
                         }
                         init.Invoke(val, param.ToArray());
                     }
                 }
                 return val;
-            } 
+            }
             return null;
         }
 
@@ -611,10 +726,14 @@ namespace Piranha.Services
         /// <param name="region">The region</param>
         /// <param name="fieldId">The field id</param>
         /// <returns>The value</returns>
-        private object GetComplexValue(object region, string fieldId) {
-            if (region is ExpandoObject) {
+        private object GetComplexValue(object region, string fieldId)
+        {
+            if (region is ExpandoObject)
+            {
                 return ((IDictionary<string, object>)region)[fieldId];
-            } else {
+            }
+            else
+            {
                 return region.GetType().GetProperty(fieldId, App.PropertyBindings).GetValue(region);
             }
         }
@@ -624,18 +743,23 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="region">The region type</param>
         /// <returns>The created value</returns>
-        private object CreateDynamicRegion(IServiceScope scope, RegionType region) {
-            if (region.Fields.Count == 1) {
+        private object CreateDynamicRegion(IServiceScope scope, RegionType region)
+        {
+            if (region.Fields.Count == 1)
+            {
                 var type = App.Fields.GetByShorthand(region.Fields[0].Type);
                 if (type == null)
                     type = App.Fields.GetByType(region.Fields[0].Type);
 
                 if (type != null)
                     return InitField(scope, Activator.CreateInstance(type.Type));
-            } else {
+            }
+            else
+            {
                 var reg = new ExpandoObject();
 
-                foreach (var field in region.Fields) {
+                foreach (var field in region.Fields)
+                {
                     var type = GetFieldType(field);
 
                     if (type != null)
@@ -652,20 +776,27 @@ namespace Piranha.Services
         /// <param name="regionType">The region type</param>
         /// <param name="region">The region</param>
         /// <returns>The created value</returns>
-        private object CreateRegion(IServiceScope scope, Type regionType, RegionType region) {
-            if (region.Fields.Count == 1) {
+        private object CreateRegion(IServiceScope scope, Type regionType, RegionType region)
+        {
+            if (region.Fields.Count == 1)
+            {
                 return CreateField(scope, region.Fields[0], regionType);
-            } else {
+            }
+            else
+            {
                 var reg = Activator.CreateInstance(regionType);
                 var type = reg.GetType();
 
-                foreach (var field in region.Fields) {
+                foreach (var field in region.Fields)
+                {
                     var fieldType = GetFieldType(field);
 
-                    if (type != null) {
+                    if (type != null)
+                    {
                         var prop = type.GetProperty(field.Id, App.PropertyBindings);
 
-                        if (prop != null && fieldType.Type == prop.PropertyType) {
+                        if (prop != null && fieldType.Type == prop.PropertyType)
+                        {
                             prop.SetValue(reg, InitField(scope, Activator.CreateInstance(fieldType.Type)));
                         }
                     }
@@ -679,7 +810,8 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="field">The field</param>
         /// <returns>The type, null if not found</returns>
-        private Runtime.AppField GetFieldType(FieldType field) {
+        private Runtime.AppField GetFieldType(FieldType field)
+        {
             var type = App.Fields.GetByShorthand(field.Type);
             if (type == null)
                 type = App.Fields.GetByType(field.Type);
@@ -692,22 +824,27 @@ namespace Piranha.Services
         /// <param name="field">The field type</param>
         /// <param name="expectedType">The expected type</param>
         /// <returns></returns>
-        private object CreateField(IServiceScope scope, FieldType field, Type expectedType = null) {
+        private object CreateField(IServiceScope scope, FieldType field, Type expectedType = null)
+        {
             var type = GetFieldType(field);
 
-            if (type != null && (expectedType == null || type.Type == expectedType)) {
+            if (type != null && (expectedType == null || type.Type == expectedType))
+            {
                 return InitField(scope, Activator.CreateInstance(type.Type));
             }
             return null;
         }
 
-        private object InitField(IServiceScope scope, object field) {
+        private object InitField(IServiceScope scope, object field)
+        {
             var init = field.GetType().GetMethod("Init");
 
-            if (init != null) {
+            if (init != null)
+            {
                 var param = new List<object>();
 
-                foreach (var p in init.GetParameters()) {
+                foreach (var p in init.GetParameters())
+                {
                     param.Add(scope.ServiceProvider.GetService(p.ParameterType));
                 }
                 init.Invoke(field, param.ToArray());

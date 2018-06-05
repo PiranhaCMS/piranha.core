@@ -19,23 +19,26 @@ namespace Piranha.Extend.Fields
         /// Implicit operator for converting a Guid id to a field.
         /// </summary>
         /// <param name="str">The string value</param>
-        public static implicit operator DocumentField(Guid guid) {
-            return new DocumentField() { Id = guid };
+        public static implicit operator DocumentField(Guid guid)
+        {
+            return new DocumentField { Id = guid };
         }
 
         /// <summary>
         /// Implicit operator for converting a media object to a field.
         /// </summary>
         /// <param name="media">The media object</param>
-        public static implicit operator DocumentField(Data.Media media) {
-            return new DocumentField() { Id = media.Id };
+        public static implicit operator DocumentField(Data.Media media)
+        {
+            return new DocumentField { Id = media.Id };
         }
 
         /// <summary>
         /// Impicit operator for converting the field to an url string.
         /// </summary>
         /// <param name="image">The document field</param>
-        public static implicit operator string(DocumentField image) {
+        public static implicit operator string(DocumentField image)
+        {
             if (image.Media != null)
                 return image.Media.PublicUrl;
             return "";

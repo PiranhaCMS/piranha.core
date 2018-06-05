@@ -19,7 +19,8 @@ namespace Piranha.Extend.Fields
         /// Gets the list item title if this field is used in
         /// a collection regions.
         /// </summary>
-        public virtual string GetTitle() {
+        public virtual string GetTitle()
+        {
             if (Media != null)
                 return Media.Filename;
             return null;
@@ -40,19 +41,20 @@ namespace Piranha.Extend.Fields
         /// <summary>
         /// Gets if the field has a media object available.
         /// </summary>
-        public bool HasValue {
-            get { return Media != null; }
-        }
+        public bool HasValue => Media != null;
 
         /// <summary>
         /// Initializes the field for client use.
         /// </summary>
         /// <param name="api">The current api</param>
-        public virtual void Init(IApi api) { 
-            if (Id.HasValue) {
+        public virtual void Init(IApi api)
+        {
+            if (Id.HasValue)
+            {
                 Media = api.Media.GetById(Id.Value);
 
-                if (Media == null) {
+                if (Media == null)
+                {
                     // The image has been removed, remove the
                     // missing id.
                     Id = null;
@@ -63,7 +65,8 @@ namespace Piranha.Extend.Fields
         /// <summary>
         /// Gets the hash code for the field.
         /// </summary>
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return Id.HasValue ? Id.GetHashCode() : 0;
         }
 
@@ -72,7 +75,8 @@ namespace Piranha.Extend.Fields
         /// </summary>
         /// <param name="obj">The object</param>
         /// <returns>True if the fields are equal</returns>
-        public override bool Equals(object obj) {
+        public override bool Equals(object obj)
+        {
             if (obj is T)
                 return Equals((T)obj);
             return false;
@@ -83,7 +87,8 @@ namespace Piranha.Extend.Fields
         /// </summary>
         /// <param name="obj">The field</param>
         /// <returns>True if the fields are equal</returns>
-        public virtual bool Equals(T obj) {
+        public virtual bool Equals(T obj)
+        {
             return Id == obj.Id;
         }
 
@@ -93,7 +98,8 @@ namespace Piranha.Extend.Fields
         /// <param name="field1">The first field</param>
         /// <param name="field2">The second field</param>
         /// <returns>True if the fields are equal</returns>
-        public static bool operator ==(MediaFieldBase<T> field1, MediaFieldBase<T> field2) {
+        public static bool operator ==(MediaFieldBase<T> field1, MediaFieldBase<T> field2)
+        {
             return field1.Equals(field2);
         }
 
@@ -103,7 +109,8 @@ namespace Piranha.Extend.Fields
         /// <param name="field1">The first field</param>
         /// <param name="field2">The second field</param>
         /// <returns>True if the fields are equal</returns>
-        public static bool operator !=(MediaFieldBase<T> field1, MediaFieldBase<T> field2) {
+        public static bool operator !=(MediaFieldBase<T> field1, MediaFieldBase<T> field2)
+        {
             return !field1.Equals(field2);
         }
     }

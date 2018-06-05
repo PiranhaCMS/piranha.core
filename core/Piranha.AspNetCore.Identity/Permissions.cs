@@ -28,7 +28,7 @@ namespace Piranha.AspNetCore.Identity
 
         public static string[] All()
         {
-            return new string[] 
+            return new string[]
             {
                 Roles,
                 RolesAdd,
@@ -41,6 +41,6 @@ namespace Piranha.AspNetCore.Identity
                 UsersEdit,
                 UsersSave
             };
-        }        
+        }
     }
 }

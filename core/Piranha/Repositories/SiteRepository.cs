@@ -8,8 +8,10 @@
  * 
  */
 
+using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
+using Piranha.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,17 +21,22 @@ namespace Piranha.Repositories
     public class SiteRepository : BaseRepositoryWithAll<Site>, ISiteRepository
     {
         private readonly Api api;
+        // This is a hack as we don't really want to transform the models, we only want
+        // to access the create methods.
+        private readonly IContentService<Site, SiteField, Models.SiteContentBase> contentService;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
         /// <param name="db">The current db context</param>
+        /// <param name="factory">The content service factory</param>
         /// <param name="cache">The optional model cache</param>
-        public SiteRepository(Api api, IDb db, ICache cache = null)
+        public SiteRepository(Api api, IDb db, IContentServiceFactory factory, ICache cache = null)
             : base(db, cache) 
         { 
             this.api = api;
+            this.contentService = factory.Create<Site, SiteField, Models.SiteContentBase>();
         }
 
         /// <summary>
@@ -94,6 +101,51 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Gets the site content for given site id.
+        /// </summary>
+        /// <param name="id">Site id</param>
+        /// <returns>The site content model</returns>
+        public Models.DynamicSiteContent GetContentById(Guid id)
+        {
+            return GetContentById<Models.DynamicSiteContent>(id);
+        }
+
+        /// <summary>
+        /// Gets the site content for given site id.
+        /// </summary>
+        /// <param name="id">Site id</param>
+        /// <typeparam name="T">The site model type</typeparam>
+        /// <returns>The site content model</returns>
+        public T GetContentById<T>(Guid id) where T : Models.SiteContent<T> 
+        {
+            var model = cache != null ? cache.Get<T>($"SiteContent_{id}") : null;
+
+            if (model == null)
+            {
+                var site = db.Sites
+                    .Include(s => s.Fields)
+                    .Where(s => s.Id == id)
+                    .FirstOrDefault();
+
+                if (site != null)
+                {
+                    if (string.IsNullOrEmpty(site.SiteTypeId))
+                        return null;
+                    
+                    var type = api.SiteTypes.GetById(site.SiteTypeId);
+                    if (type == null)
+                        return null;
+
+                    model = contentService.Transform<T>(site, type);
+
+                    if (model != null && cache != null)
+                        cache.Set($"SiteContent_{id}", model);
+                }
+            }
+            return model;
+        }
+
+        /// <summary>
         /// Gets the hierachical sitemap structure.
         /// </summary>
         /// <param name="id">The optional site id</param>
@@ -133,6 +185,41 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Saves the given site content to the site with the 
+        /// given id.
+        /// </summary>
+        /// <param name="siteId">The site id</param>
+        /// <param name="content">The site content</param>
+        /// <typeparam name="T">The site content type</typeparam>
+        public void SaveContent<T>(Guid siteId, T content) where T : Models.SiteContent<T>
+        {
+            var site = db.Sites
+                .Include(s => s.Fields)
+                .FirstOrDefault(s => s.Id == siteId);
+
+            if (site != null)
+            {
+                if (string.IsNullOrEmpty(site.SiteTypeId))
+                    throw new MissingFieldException("Can't save content for a site that doesn't have a Site Type Id.");
+
+                var type = api.SiteTypes.GetById(site.SiteTypeId);
+                if (type == null)
+                    throw new MissingFieldException("The specified Site Type is missing. Can't save content.");
+
+                content.Id = siteId;
+                content.TypeId = site.SiteTypeId;
+                content.Title = site.Title;
+
+                contentService.Transform(content, type, site);
+
+                db.SaveChanges();
+
+                if (cache != null)
+                    cache.Remove($"SiteContent_{siteId}");
+            }
+        }
+
+        /// <summary>
         /// Removes the specified public sitemap from
         /// the cache.
         /// </summary>
@@ -142,7 +229,17 @@ namespace Piranha.Repositories
                 cache.Remove($"Sitemap_{id}");
         }
 
-        #region Protected methods
+        /// <summary>
+        /// Creates and initializes a new site content model of the specified type.
+        /// </summary>
+        /// <returns>The created site content</returns>
+        public T CreateContent<T>(string typeId = null) where T : Models.SiteContentBase {
+            if (string.IsNullOrWhiteSpace(typeId))
+                typeId = typeof(T).Name;
+
+            return contentService.Create<T>(api.SiteTypes.GetById(typeId));
+        }        
+
         /// <summary>
         /// Adds a new model to the database.
         /// </summary>
@@ -243,9 +340,7 @@ namespace Piranha.Repositories
 
             base.RemoveFromCache(model);
         }
-        #endregion
 
-        #region Private methods
         /// <summary>
         /// Sorts the items.
         /// </summary>
@@ -266,6 +361,5 @@ namespace Piranha.Repositories
             }
             return result;
         }
-        #endregion
     }
 }

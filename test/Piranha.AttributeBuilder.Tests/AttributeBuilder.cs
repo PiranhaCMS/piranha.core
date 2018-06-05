@@ -22,7 +22,6 @@ namespace Piranha.AttributeBuilder.Tests
     {
         protected IServiceProvider services = new ServiceCollection().BuildServiceProvider();
 
-        #region Inner classes
         [PageType(Id = "Simple", Title = "Simple Page Type")]
         public class SimplePageType
         {
@@ -48,8 +47,32 @@ namespace Piranha.AttributeBuilder.Tests
             [Region(Title = "Main content")]
             public BodyRegion Content { get; set; }
         }
-        #endregion
 
+        [SiteType(Id = "Simple", Title = "Simple Page Type")]
+        public class SimpleSiteType
+        {
+            [Region]
+            public Extend.Fields.TextField Body { get; set; }
+        }
+
+        [SiteType(Id = "Complex", Title = "Complex Page Type")]
+        public class ComplexSiteType
+        {
+            public class BodyRegion
+            {
+                [Field]
+                public Extend.Fields.TextField Title { get; set; }
+                [Field]
+                public Extend.Fields.TextField Body { get; set; }
+            }
+
+            [Region(Title = "Intro")]
+            public IList<Extend.Fields.TextField> Slider { get; set; }
+
+            [Region(Title = "Main content")]
+            public BodyRegion Content { get; set; }
+        }
+        
         public AttributeBuilder() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), null)) {
                 App.Init(api);
@@ -117,12 +140,57 @@ namespace Piranha.AttributeBuilder.Tests
             }
         }
 
+        [Fact]
+        public void AddSimpleSiteType() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null)) {
+                var builder = new SiteTypeBuilder(api)
+                    .AddType(typeof(SimpleSiteType));
+                builder.Build();
+
+                var type = api.SiteTypes.GetById("Simple");
+
+                Assert.NotNull(type);
+                Assert.Equal(1, type.Regions.Count);
+                Assert.Equal("Body", type.Regions[0].Id);
+                Assert.Equal(1, type.Regions[0].Fields.Count);
+            }
+        }
+
+        [Fact]
+        public void AddComplexSiteType() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null)) {
+                var builder = new SiteTypeBuilder(api)
+                    .AddType(typeof(ComplexSiteType));
+                builder.Build();
+
+                var type = api.SiteTypes.GetById("Complex");
+
+                Assert.NotNull(type);
+                Assert.Equal(2, type.Regions.Count);
+
+                Assert.Equal("Slider", type.Regions[0].Id);
+                Assert.Equal("Intro", type.Regions[0].Title);
+                Assert.True(type.Regions[0].Collection);
+                Assert.Equal(1, type.Regions[0].Fields.Count);
+
+                Assert.Equal("Content", type.Regions[1].Id);
+                Assert.Equal("Main content", type.Regions[1].Title);
+                Assert.False(type.Regions[1].Collection);
+                Assert.Equal(2, type.Regions[1].Fields.Count);
+            }
+        }
+
         public void Dispose() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), null)) {
                 var types = api.PageTypes.GetAll();
 
                 foreach (var t in types)
                     api.PageTypes.Delete(t);
+
+                var siteTypes = api.SiteTypes.GetAll();
+
+                foreach (var t in siteTypes)
+                    api.SiteTypes.Delete(t);
             }
         }
 

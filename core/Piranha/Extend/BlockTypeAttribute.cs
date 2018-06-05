@@ -28,10 +28,5 @@ namespace Piranha.Extend
         /// Gets/set the icon css.
         /// </summary>
         public string Icon { get; set; }
-
-        /// <summary>
-        /// Gets/sets the optional shorthand for type declaration.
-        /// </summary>
-        public string Shorthand { get; set; }
     }
 }

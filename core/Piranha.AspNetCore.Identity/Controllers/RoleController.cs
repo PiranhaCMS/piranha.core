@@ -44,7 +44,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
         [Authorize(Policy = Permissions.RolesAdd)]
         public IActionResult Add()
         {
-            return View("Edit", Models.RoleEditModel.Create());            
+            return View("Edit", Models.RoleEditModel.Create());
         }
 
         [HttpPost]

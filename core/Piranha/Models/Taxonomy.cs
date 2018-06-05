@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -33,8 +33,10 @@ namespace Piranha.Models
         /// Operator for type casting a string to a taxonomy.
         /// </summary>
         /// <param name="str">The string</param>
-        public static implicit operator Taxonomy(string str) {
-            return new Taxonomy() {
+        public static implicit operator Taxonomy(string str)
+        {
+            return new Taxonomy
+            {
                 Title = str
             };
         }
@@ -43,9 +45,11 @@ namespace Piranha.Models
         /// Operator for type casting a category to a taxonomy.
         /// </summary>
         /// <param name="category">The category</param>
-        public static implicit operator Taxonomy(Data.Category category) {
+        public static implicit operator Taxonomy(Data.Category category)
+        {
             if (category != null)
-                return new Taxonomy() {
+                return new Taxonomy
+                {
                     Id = category.Id,
                     Title = category.Title,
                     Slug = category.Slug
@@ -57,14 +61,16 @@ namespace Piranha.Models
         /// Operator for type casting a tag to a taxonomy.
         /// </summary>
         /// <param name="tag">The tag</param>
-        public static implicit operator Taxonomy(Data.Tag tag) {
+        public static implicit operator Taxonomy(Data.Tag tag)
+        {
             if (tag != null)
-                return new Taxonomy() {
+                return new Taxonomy
+                {
                     Id = tag.Id,
                     Title = tag.Title,
                     Slug = tag.Slug
                 };
             return null;
-        }   
+        }
     }
 }

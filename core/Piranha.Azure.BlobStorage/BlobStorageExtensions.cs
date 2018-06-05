@@ -20,8 +20,8 @@ public static class BlobStorageExtensions
     /// <param name="services">The current service collection</param>
     /// <param name="scope">The optional service scope</param>
     /// <returns>The service collection</returns>
-    public static IServiceCollection AddPiranhaBlobStorage(this IServiceCollection services, 
-        ServiceLifetime scope = ServiceLifetime.Singleton) 
+    public static IServiceCollection AddPiranhaBlobStorage(this IServiceCollection services,
+        ServiceLifetime scope = ServiceLifetime.Singleton)
     {
         services.Add(new ServiceDescriptor(typeof(IStorage), typeof(BlobStorage), scope));
 

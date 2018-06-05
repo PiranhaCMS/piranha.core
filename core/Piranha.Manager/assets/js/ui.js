@@ -351,7 +351,7 @@ var manager = {
 
         addregion: function (targetId, pageTypeId, regionTypeId, regionIndex, itemIndex, contentType, cb) {
             $.ajax({
-                url: contentType == 'post' ? '/manager/post/region' : '/manager/page/region',
+                url: contentType == 'post' ? '/manager/post/region' : contentType == 'site' ? '/manager/site/region' : '/manager/page/region',
                 method: 'POST',
                 contentType: 'application/json',
                 dataType: 'html',

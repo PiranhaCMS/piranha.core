@@ -16,8 +16,8 @@ namespace Piranha.AttributeBuilder
     /// Attribute for marking a class as a page type.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class PageTypeAttribute : ContentTypeAttribute 
-    { 
+    public class PageTypeAttribute : ContentTypeAttribute
+    {
         /// <summary>
         /// Gets/sets if the page type should use the block editor
         /// for its main content. The default value is True.
@@ -27,7 +27,8 @@ namespace Piranha.AttributeBuilder
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public PageTypeAttribute() : base() {
+        public PageTypeAttribute() : base()
+        {
             UseBlocks = true;
         }
     }

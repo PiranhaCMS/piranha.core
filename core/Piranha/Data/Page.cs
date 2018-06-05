@@ -94,7 +94,8 @@ namespace Piranha.Data
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public Page() : base() {
+        public Page() : base()
+        {
             RedirectType = Models.RedirectType.Temporary;
             Blocks = new List<PageBlock>();
         }

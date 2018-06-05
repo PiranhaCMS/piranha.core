@@ -33,13 +33,16 @@ namespace Piranha.AspNetCore
         /// <param name="context">The current http context</param>
         /// <param name="api">The current api</param>
         /// <returns>An async task</returns>
-        public override async Task Invoke(HttpContext context, IApi api) {
-            if (!context.Request.Path.Value.StartsWith("/manager/")) {
+        public override async Task Invoke(HttpContext context, IApi api)
+        {
+            if (!context.Request.Path.Value.StartsWith("/manager/"))
+            {
                 Data.Site site = null;
 
                 // Try to get the requested site by hostname & prefix
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
-                if (!string.IsNullOrEmpty(url) && url.Length > 1) {
+                if (!string.IsNullOrEmpty(url) && url.Length > 1)
+                {
                     var segments = url.Substring(1).Split(new char[] { '/' });
                     site = api.Sites.GetByHostname($"{context.Request.Host.Host}/{segments[0]}");
 
@@ -60,7 +63,7 @@ namespace Piranha.AspNetCore
                     context.Items[SiteId] = site.Id;
             }
             // Nothing to see here, move along
-            await next.Invoke(context);
+            await _next.Invoke(context);
         }
     }
 }

@@ -5,10 +5,9 @@
     ViewBag.IsStart = true;
 }
 @section meta {
-    @Html.Partial("Partial/_Meta", Model)
+    <partial name="Partial/_Meta" />
 }
-
-@Html.Partial("Partial/Teasers", Model.Teasers)
+<partial name="Partial/Teasers" for="Teasers" />
 
 <div class="container body @(Model.Teasers.Count == 0 ? "arrow" : "")">
     @Html.DisplayFor(m => m.Blocks)

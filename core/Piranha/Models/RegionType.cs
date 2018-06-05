@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2017 Håkan Edling
+ * Copyright (c) 2016-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -30,16 +30,6 @@ namespace Piranha.Models
         public bool Collection { get; set; }
 
         /// <summary>
-        /// Gets/sets the maximum number of items if this is a collection.
-        /// </summary>
-        //public int Max { get; set; }
-
-        /// <summary>
-        /// Gets/sets the minimum number of items if this is a collection.
-        /// </summary>
-        //public int Min { get; set; }
-
-        /// <summary>
         /// Gets/sets the field that should be used to render list item title.
         /// </summary>
         public string ListTitleField { get; set; }
@@ -63,7 +53,8 @@ namespace Piranha.Models
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public RegionType() {
+        public RegionType()
+        {
             Fields = new List<FieldType>();
             ListExpand = true;
         }

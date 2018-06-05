@@ -15,7 +15,7 @@ namespace Piranha.Extend.Fields
     /// <summary>
     /// An available item to choose from for a SelectField.
     /// </summary>
-    public class SelectFieldItem 
+    public class SelectFieldItem
     {
         /// <summary>
         /// Gets/sets the display title.

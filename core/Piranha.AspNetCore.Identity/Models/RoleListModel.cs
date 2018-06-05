@@ -11,8 +11,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Piranha.AspNetCore.Identity.Models
 {
@@ -26,19 +24,19 @@ namespace Piranha.AspNetCore.Identity.Models
         }
 
         public IList<ListItem> Roles { get; set; }
-        
-        public RoleListModel() 
+
+        public RoleListModel()
         {
             Roles = new List<ListItem>();
         }
 
-        public static RoleListModel Get(IDb db) 
+        public static RoleListModel Get(IDb db)
         {
             var model = new RoleListModel();
 
             model.Roles = db.Roles
                 .OrderBy(r => r.Name)
-                .Select(r => new ListItem 
+                .Select(r => new ListItem
                 {
                     Id = r.Id,
                     Name = r.Name

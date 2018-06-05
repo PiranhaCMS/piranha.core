@@ -70,6 +70,11 @@ namespace Piranha
         ISiteRepository Sites { get; }
 
         /// <summary>
+        /// Gets the site type repository.
+        /// </summary>
+        ISiteTypeRepository SiteTypes { get; }
+
+        /// <summary>
         /// Gets the tag repository.
         /// </summary>
         ITagRepository Tags { get; }

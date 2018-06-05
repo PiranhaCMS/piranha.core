@@ -66,14 +66,16 @@ namespace Piranha.Areas.Manager.Controllers
         [HttpPost]
         [Route("manager/login")]
         public async Task<IActionResult> Login(Models.LoginModel model) {
-            var result = await security.SignIn(HttpContext, model.UserName, model.Password);
+            if (!string.IsNullOrWhiteSpace(model.UserName) && !string.IsNullOrWhiteSpace(model.Password))
+            {
+                var result = await security.SignIn(HttpContext, model.UserName, model.Password);
 
-            if (result) {
-                if (!string.IsNullOrWhiteSpace(model.ReturnUrl))
-                    return Redirect(model.ReturnUrl);
-                else return RedirectToAction("List", "Page", new { pageId = "" });
+                if (result) {
+                    if (!string.IsNullOrWhiteSpace(model.ReturnUrl))
+                        return Redirect(model.ReturnUrl);
+                    else return RedirectToAction("List", "Page", new { pageId = "" });
+                }
             }
-
             ViewBag.Message = "You have entered an invalid username or password ";
             return Login(model.ReturnUrl);
         }

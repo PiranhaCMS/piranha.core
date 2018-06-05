@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace Piranha.Data
 {
-    public sealed class Media : IModel, ICreated, IModified 
+    public sealed class Media : IModel, ICreated, IModified
     {
         /// <summary>
         /// Gets/sets the unique id.
@@ -49,7 +49,7 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the public url.
         /// </summary>
-        public string PublicUrl { get; set; }        
+        public string PublicUrl { get; set; }
 
         /// <summary>
         /// Gets/sets the optional width. This only applies
@@ -86,7 +86,8 @@ namespace Piranha.Data
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public Media() {
+        public Media()
+        {
             Versions = new List<MediaVersion>();
         }
     }

@@ -31,15 +31,14 @@ namespace Piranha.Extend.Fields
         /// <summary>
         /// Gets if the field has a page object available.
         /// </summary>
-        public bool HasValue {
-            get { return Page != null; }
-        }
+        public bool HasValue => Page != null;
 
         /// <summary>
         /// Gets the list item title if this field is used in
         /// a collection regions.
         /// </summary>
-        public virtual string GetTitle() {
+        public virtual string GetTitle()
+        {
             if (Page != null)
                 return Page.Title;
             return null;
@@ -49,11 +48,14 @@ namespace Piranha.Extend.Fields
         /// Initializes the field for client use.
         /// </summary>
         /// <param name="api">The current api</param>
-        public virtual void Init(IApi api) { 
-            if (Id.HasValue) {
+        public virtual void Init(IApi api)
+        {
+            if (Id.HasValue)
+            {
                 Page = api.Pages.GetById(Id.Value);
 
-                if (Page == null) {
+                if (Page == null)
+                {
                     // The page has been removed, remove the
                     // missing id.
                     Id = null;
@@ -66,32 +68,36 @@ namespace Piranha.Extend.Fields
         /// </summary>
         /// <param name="api">The current api</param>
         /// <returns>The referenced page</returns>
-        public virtual T GetPage<T>(IApi api) where T : Models.GenericPage<T> {
+        public virtual T GetPage<T>(IApi api) where T : Models.GenericPage<T>
+        {
             if (Id.HasValue)
                 return api.Pages.GetById<T>(Id.Value);
             return null;
-        }        
+        }
 
         /// <summary>
         /// Implicit operator for converting a Guid id to a field.
         /// </summary>
         /// <param name="str">The string value</param>
-        public static implicit operator PageField(Guid guid) {
-            return new PageField() { Id = guid };
+        public static implicit operator PageField(Guid guid)
+        {
+            return new PageField { Id = guid };
         }
 
         /// <summary>
         /// Implicit operator for converting a page object to a field.
         /// </summary>
         /// <param name="page">The page object</param>
-        public static implicit operator PageField(Models.PageBase page) {
-            return new PageField() { Id = page.Id };
+        public static implicit operator PageField(Models.PageBase page)
+        {
+            return new PageField { Id = page.Id };
         }
 
         /// <summary>
         /// Gets the hash code for the field.
         /// </summary>
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return Id.HasValue ? Id.GetHashCode() : 0;
         }
 
@@ -100,7 +106,8 @@ namespace Piranha.Extend.Fields
         /// </summary>
         /// <param name="obj">The object</param>
         /// <returns>True if the fields are equal</returns>
-        public override bool Equals(object obj) {
+        public override bool Equals(object obj)
+        {
             if (obj is PageField)
                 return Equals((PageField)obj);
             return false;
@@ -111,7 +118,8 @@ namespace Piranha.Extend.Fields
         /// </summary>
         /// <param name="obj">The field</param>
         /// <returns>True if the fields are equal</returns>
-        public virtual bool Equals(PageField obj) {
+        public virtual bool Equals(PageField obj)
+        {
             return Id == obj.Id;
         }
 
@@ -121,7 +129,8 @@ namespace Piranha.Extend.Fields
         /// <param name="field1">The first field</param>
         /// <param name="field2">The second field</param>
         /// <returns>True if the fields are equal</returns>
-        public static bool operator ==(PageField field1, PageField field2) {
+        public static bool operator ==(PageField field1, PageField field2)
+        {
             return field1.Equals(field2);
         }
 
@@ -131,8 +140,9 @@ namespace Piranha.Extend.Fields
         /// <param name="field1">The first field</param>
         /// <param name="field2">The second field</param>
         /// <returns>True if the fields are equal</returns>
-        public static bool operator !=(PageField field1, PageField field2) {
+        public static bool operator !=(PageField field1, PageField field2)
+        {
             return !field1.Equals(field2);
-        }        
+        }
     }
 }

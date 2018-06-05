@@ -11,8 +11,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Piranha.AspNetCore.Identity.Models
 {
@@ -32,19 +30,19 @@ namespace Piranha.AspNetCore.Identity.Models
         }
 
         public IList<ListItem> Users { get; set; }
-        
-        public UserListModel() 
+
+        public UserListModel()
         {
             Users = new List<ListItem>();
         }
 
-        public static UserListModel Get(IDb db) 
+        public static UserListModel Get(IDb db)
         {
             var model = new UserListModel();
 
             model.Users = db.Users
                 .OrderBy(u => u.UserName)
-                .Select(u => new ListItem 
+                .Select(u => new ListItem
                 {
                     Id = u.Id,
                     UserName = u.UserName,
@@ -54,12 +52,12 @@ namespace Piranha.AspNetCore.Identity.Models
             var roles = db.Roles
                 .ToList();
 
-            foreach (var user in model.Users) 
+            foreach (var user in model.Users)
             {
                 var userRoles = db.UserRoles
                     .Where(r => r.UserId == user.Id)
                     .ToList();
-                
+
                 foreach (var userRole in userRoles)
                 {
                     var role = roles.FirstOrDefault(r => r.Id == userRole.RoleId);

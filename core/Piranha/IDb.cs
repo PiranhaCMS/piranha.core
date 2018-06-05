@@ -109,6 +109,16 @@ namespace Piranha
         DbSet<Data.Site> Sites { get; set; }
 
         /// <summary>
+        /// Gets/sets the site field set.
+        /// </summary>        
+        DbSet<Data.SiteField> SiteFields { get; set; }
+
+        /// <summary>
+        /// Gets/sets the site type set.
+        /// </summary>
+        DbSet<Data.SiteType> SiteTypes { get; set; }
+
+        /// <summary>
         /// Gets/sets the tag set.
         /// </summary>
         DbSet<Data.Tag> Tags { get; set; }

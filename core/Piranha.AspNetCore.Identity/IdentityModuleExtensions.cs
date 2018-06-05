@@ -9,7 +9,6 @@
  */
 
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
@@ -27,10 +26,10 @@ public static class IdentityModuleExtensions
     /// </summary>
     /// <param name="services">The current service collection</param>
     /// <returns>The services</returns>
-    public static IServiceCollection AddPiranhaIdentity<T>(this IServiceCollection services, 
-        Action<DbContextOptionsBuilder> dbOptions, 
+    public static IServiceCollection AddPiranhaIdentity<T>(this IServiceCollection services,
+        Action<DbContextOptionsBuilder> dbOptions,
         Action<IdentityOptions> identityOptions = null,
-        Action<CookieAuthenticationOptions> cookieOptions = null) 
+        Action<CookieAuthenticationOptions> cookieOptions = null)
         where T : Db<T>
     {
         // Add the identity module
@@ -47,59 +46,70 @@ public static class IdentityModuleExtensions
         });
 
         // Setup authorization policies
-        services.AddAuthorization(o => {
+        services.AddAuthorization(o =>
+        {
             // Role policies
-            o.AddPolicy(Permissions.Roles, policy => {
+            o.AddPolicy(Permissions.Roles, policy =>
+            {
                 policy.RequireClaim(Piranha.Manager.Permission.Admin, Piranha.Manager.Permission.Admin);
                 policy.RequireClaim(Permissions.Roles, Permissions.Roles);
             });
-            o.AddPolicy(Permissions.RolesAdd, policy => {
+            o.AddPolicy(Permissions.RolesAdd, policy =>
+            {
                 policy.RequireClaim(Piranha.Manager.Permission.Admin, Piranha.Manager.Permission.Admin);
                 policy.RequireClaim(Permissions.Roles, Permissions.Roles);
                 policy.RequireClaim(Permissions.RolesAdd, Permissions.RolesAdd);
             });
-            o.AddPolicy(Permissions.RolesDelete, policy => {
+            o.AddPolicy(Permissions.RolesDelete, policy =>
+            {
                 policy.RequireClaim(Piranha.Manager.Permission.Admin, Piranha.Manager.Permission.Admin);
                 policy.RequireClaim(Permissions.Roles, Permissions.Roles);
                 policy.RequireClaim(Permissions.RolesDelete, Permissions.RolesDelete);
             });
-            o.AddPolicy(Permissions.RolesEdit, policy => {
+            o.AddPolicy(Permissions.RolesEdit, policy =>
+            {
                 policy.RequireClaim(Piranha.Manager.Permission.Admin, Piranha.Manager.Permission.Admin);
                 policy.RequireClaim(Permissions.Roles, Permissions.Roles);
                 policy.RequireClaim(Permissions.RolesEdit, Permissions.RolesEdit);
             });
-            o.AddPolicy(Permissions.RolesSave, policy => {
+            o.AddPolicy(Permissions.RolesSave, policy =>
+            {
                 policy.RequireClaim(Piranha.Manager.Permission.Admin, Piranha.Manager.Permission.Admin);
                 policy.RequireClaim(Permissions.Roles, Permissions.Roles);
                 policy.RequireClaim(Permissions.RolesSave, Permissions.RolesSave);
             });
 
             // User policies
-            o.AddPolicy(Permissions.Users, policy => {
+            o.AddPolicy(Permissions.Users, policy =>
+            {
                 policy.RequireClaim(Piranha.Manager.Permission.Admin, Piranha.Manager.Permission.Admin);
                 policy.RequireClaim(Permissions.Users, Permissions.Users);
             });
-            o.AddPolicy(Permissions.UsersAdd, policy => {
+            o.AddPolicy(Permissions.UsersAdd, policy =>
+            {
                 policy.RequireClaim(Piranha.Manager.Permission.Admin, Piranha.Manager.Permission.Admin);
                 policy.RequireClaim(Permissions.Users, Permissions.Users);
                 policy.RequireClaim(Permissions.UsersAdd, Permissions.UsersAdd);
             });
-            o.AddPolicy(Permissions.UsersDelete, policy => {
+            o.AddPolicy(Permissions.UsersDelete, policy =>
+            {
                 policy.RequireClaim(Piranha.Manager.Permission.Admin, Piranha.Manager.Permission.Admin);
                 policy.RequireClaim(Permissions.Users, Permissions.Users);
                 policy.RequireClaim(Permissions.UsersDelete, Permissions.UsersDelete);
             });
-            o.AddPolicy(Permissions.UsersEdit, policy => {
+            o.AddPolicy(Permissions.UsersEdit, policy =>
+            {
                 policy.RequireClaim(Piranha.Manager.Permission.Admin, Piranha.Manager.Permission.Admin);
                 policy.RequireClaim(Permissions.Users, Permissions.Users);
                 policy.RequireClaim(Permissions.UsersEdit, Permissions.UsersEdit);
             });
-            o.AddPolicy(Permissions.UsersSave, policy => {
+            o.AddPolicy(Permissions.UsersSave, policy =>
+            {
                 policy.RequireClaim(Piranha.Manager.Permission.Admin, Piranha.Manager.Permission.Admin);
                 policy.RequireClaim(Permissions.Users, Permissions.Users);
                 policy.RequireClaim(Permissions.UsersSave, Permissions.UsersSave);
             });
-        });        
+        });
 
         services.AddDbContext<T>(dbOptions);
         services.AddScoped<IDb, T>();
@@ -119,10 +129,10 @@ public static class IdentityModuleExtensions
     /// </summary>
     /// <param name="services">The current service collection</param>
     /// <returns>The services</returns>
-    public static IServiceCollection AddPiranhaIdentityWithSeed<T, TSeed>(this IServiceCollection services, 
-        Action<DbContextOptionsBuilder> dbOptions, 
+    public static IServiceCollection AddPiranhaIdentityWithSeed<T, TSeed>(this IServiceCollection services,
+        Action<DbContextOptionsBuilder> dbOptions,
         Action<IdentityOptions> identityOptions = null,
-        Action<CookieAuthenticationOptions> cookieOptions = null) 
+        Action<CookieAuthenticationOptions> cookieOptions = null)
         where T : Db<T>
         where TSeed : class, IIdentitySeed
     {
@@ -137,8 +147,8 @@ public static class IdentityModuleExtensions
     /// </summary>
     /// <param name="services">The current service collection</param>
     /// <returns>The services</returns>
-    public static IServiceCollection AddPiranhaIdentityWithSeed<T>(this IServiceCollection services, 
-        Action<DbContextOptionsBuilder> dbOptions, 
+    public static IServiceCollection AddPiranhaIdentityWithSeed<T>(this IServiceCollection services,
+        Action<DbContextOptionsBuilder> dbOptions,
         Action<IdentityOptions> identityOptions = null,
         Action<CookieAuthenticationOptions> cookieOptions = null)
         where T : Db<T>
@@ -181,6 +191,6 @@ public static class IdentityModuleExtensions
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
         options.LoginPath = "/manager/login";
         options.AccessDeniedPath = "/manager/login";
-        options.SlidingExpiration = true;        
+        options.SlidingExpiration = true;
     }
 }

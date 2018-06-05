@@ -70,7 +70,7 @@ namespace Piranha.Manager
         /// <summary>
         /// Gets the Name
         /// </summary>
-        public string Name => "Piranha Manager";
+        public string Name => "Piranha.Manager";
 
         /// <summary>
         /// Gets the Version
@@ -80,7 +80,7 @@ namespace Piranha.Manager
         /// <summary>
         /// Gets the release date
         /// </summary>
-        public string ReleaseDate => "2018-05-16";
+        public string ReleaseDate => "2018-05-30";
 
         /// <summary>
         /// Gets the description
@@ -144,6 +144,13 @@ namespace Piranha.Manager
                     .ForMember(m => m.TypeId, o => o.Ignore())
                     .ForMember(m => m.Created, o => o.Ignore())
                     .ForMember(m => m.LastModified, o => o.Ignore());
+                cfg.CreateMap<Models.SiteContentBase, Areas.Manager.Models.SiteContentEditModel>()
+                    .ForMember(s => s.SiteType, o => o.Ignore())
+                    .ForMember(s => s.Regions, o => o.Ignore());
+                cfg.CreateMap<Areas.Manager.Models.SiteContentEditModel, Models.SiteContentBase>()
+                    .ForMember(s => s.TypeId, o => o.Ignore())
+                    .ForMember(s => s.Created, o => o.Ignore())
+                    .ForMember(s => s.LastModified, o => o.Ignore());
             });
 
             config.AssertConfigurationIsValid();

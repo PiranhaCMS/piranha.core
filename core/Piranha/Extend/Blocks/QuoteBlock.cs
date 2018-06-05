@@ -13,9 +13,15 @@ using Piranha.Extend.Fields;
 
 namespace Piranha.Extend.Blocks
 {
+    /// <summary>
+    /// Single column quote block.
+    /// </summary>
     [BlockType(Name = "Quote", Category = "Content", Icon = "fas fa-quote-right")]
     public class QuoteBlock : Block
     {
+        /// <summary>
+        /// Gets/sets the text body.
+        /// </summary>
         public TextField Body { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2017 Håkan Edling
+ * Copyright (c) 2016-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -14,7 +14,6 @@ namespace Piranha.Models
 {
     public class SitemapItem : StructureItem<SitemapItem>
     {
-        #region Properties
         /// <summary>
         /// Gets/sets the optional original id.
         /// </summary>
@@ -66,7 +65,7 @@ namespace Piranha.Models
         /// Gets/sets if the item is hidden.
         /// </summary>
         /// <returns></returns>
-        public bool IsHidden { get; set;}
+        public bool IsHidden { get; set; }
 
         /// <summary>
         /// Gets/sets the published date.
@@ -82,12 +81,12 @@ namespace Piranha.Models
         /// Gets/sets the last modification date.
         /// </summary>
         public DateTime LastModified { get; set; }
-        #endregion
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public SitemapItem() {
+        public SitemapItem()
+        {
             Items = new Sitemap();
         }
 
@@ -97,8 +96,10 @@ namespace Piranha.Models
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>If the child was found</returns>
-        public bool HasChild(Guid id) {
-            foreach (var item in Items) {
+        public bool HasChild(Guid id)
+        {
+            foreach (var item in Items)
+            {
                 if (item.Id == id || item.HasChild(id))
                     return true;
             }

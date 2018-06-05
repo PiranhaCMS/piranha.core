@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2017 Håkan Edling
+ * Copyright (c) 2016-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -19,7 +19,8 @@ public static class CoreExtensions
     /// </summary>
     /// <param name="builder">The current application builder</param>
     /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranha(this IApplicationBuilder builder) {
+    public static IApplicationBuilder UsePiranha(this IApplicationBuilder builder)
+    {
         return builder
             .UseMiddleware<Piranha.AspNetCore.SiteMiddleware>()
             .UseMiddleware<Piranha.AspNetCore.AliasMiddleware>()
@@ -35,7 +36,8 @@ public static class CoreExtensions
     /// </summary>
     /// <param name="builder">The current application builder</param>
     /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranhaAliases(this IApplicationBuilder builder) {
+    public static IApplicationBuilder UsePiranhaAliases(this IApplicationBuilder builder)
+    {
         return builder
             .UseMiddleware<Piranha.AspNetCore.AliasMiddleware>();
     }
@@ -45,7 +47,8 @@ public static class CoreExtensions
     /// </summary>
     /// <param name="builder">The current application builder</param>
     /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranhaArchives(this IApplicationBuilder builder) {
+    public static IApplicationBuilder UsePiranhaArchives(this IApplicationBuilder builder)
+    {
         return builder
             .UseMiddleware<Piranha.AspNetCore.ArchiveMiddleware>();
     }
@@ -55,7 +58,8 @@ public static class CoreExtensions
     /// </summary>
     /// <param name="builder">The current application builder</param>
     /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranhaPages(this IApplicationBuilder builder) {
+    public static IApplicationBuilder UsePiranhaPages(this IApplicationBuilder builder)
+    {
         return builder
             .UseMiddleware<Piranha.AspNetCore.PageMiddleware>();
     }
@@ -65,7 +69,8 @@ public static class CoreExtensions
     /// </summary>
     /// <param name="builder">The current application builder</param>
     /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranhaPosts(this IApplicationBuilder builder) {
+    public static IApplicationBuilder UsePiranhaPosts(this IApplicationBuilder builder)
+    {
         return builder
             .UseMiddleware<Piranha.AspNetCore.PostMiddleware>();
     }
@@ -75,7 +80,8 @@ public static class CoreExtensions
     /// </summary>
     /// <param name="builder">The current application builder</param>
     /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranhaStartPage(this IApplicationBuilder builder) {
+    public static IApplicationBuilder UsePiranhaStartPage(this IApplicationBuilder builder)
+    {
         return builder
             .UseMiddleware<Piranha.AspNetCore.StartPageMiddleware>();
     }
@@ -85,9 +91,10 @@ public static class CoreExtensions
     /// </summary>
     /// <param name="builder">The current application builder</param>
     /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranhaSites(this IApplicationBuilder builder) {
+    public static IApplicationBuilder UsePiranhaSites(this IApplicationBuilder builder)
+    {
         return builder
-            .UseMiddleware<Piranha.AspNetCore.SiteMiddleware>();        
+            .UseMiddleware<Piranha.AspNetCore.SiteMiddleware>();
     }
 
     /// <summary>
@@ -95,8 +102,9 @@ public static class CoreExtensions
     /// </summary>
     /// <param name="builder">The current application builder</param>
     /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranhaSitemap(this IApplicationBuilder builder) {
+    public static IApplicationBuilder UsePiranhaSitemap(this IApplicationBuilder builder)
+    {
         return builder
-            .UseMiddleware<Piranha.AspNetCore.SitemapMiddleware>();        
+            .UseMiddleware<Piranha.AspNetCore.SitemapMiddleware>();
     }
 }

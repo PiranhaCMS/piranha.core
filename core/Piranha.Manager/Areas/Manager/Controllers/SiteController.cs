@@ -9,21 +9,28 @@
  */
 
 using Piranha.Areas.Manager.Models;
+using Piranha.Areas.Manager.Services;
 using Piranha.Manager;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Piranha.Areas.Manager.Controllers
 {
     [Area("Manager")]
     public class SiteController : ManagerAreaControllerBase
     {
+        SiteContentEditService service;
+
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public SiteController(IApi api) : base(api) { }
+        public SiteController(IApi api, SiteContentEditService service) : base(api) { 
+            this.service = service;
+        }
         
         /// <summary>
         /// Gets the list view for the current sites.
@@ -37,7 +44,7 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/site/add")]
         [Authorize(Policy = Permission.SitesAdd)]
         public IActionResult Add() {
-            return View("Edit", new SiteEditModel());
+            return View("Edit", SiteEditModel.Create(api));
         }
 
         [Route("manager/site/{id:Guid}")]
@@ -80,5 +87,51 @@ namespace Piranha.Areas.Manager.Controllers
             }
             return RedirectToAction("List");
         }
+
+        [Route("manager/site/content/{id:Guid}")]
+        [Authorize(Policy = Permission.PagesEdit)]
+        public IActionResult EditContent(Guid id) {
+            return View("EditContent", service.GetById(id));
+        }
+
+        [HttpPost]
+        [Route("manager/site/content/save")]
+        [Authorize(Policy = Permission.PagesEdit)]
+        public IActionResult SaveContent(SiteContentEditModel model) {
+            if (service.Save(model)) {
+                SuccessMessage("The site content has been saved.");
+                return RedirectToAction("EditContent", new { id = model.Id });
+            } else {
+                ErrorMessage("The site content could not be saved.", false);
+                return View("EditContent", service.Refresh(model));
+            }
+        }
+
+        /// <summary>
+        /// Adds a new region to a site.
+        /// </summary>
+        /// <param name="model">The model</param>
+        [HttpPost]
+        [Route("manager/site/region")]
+        [Authorize(Policy = Permission.Posts)]
+        public IActionResult AddRegion([FromBody]Models.PageRegionModel model) {
+            var siteType = api.SiteTypes.GetById(model.PageTypeId);
+
+            if (siteType != null) {
+                var regionType = siteType.Regions.SingleOrDefault(r => r.Id == model.RegionTypeId);
+
+                if (regionType != null) {
+                    var region = Piranha.Models.DynamicSiteContent.CreateRegion(api,
+                        model.PageTypeId, model.RegionTypeId);
+
+                    var editModel = (Models.PageEditRegionCollection)service.CreateRegion(regionType, 
+                        new List<object>() { region });
+
+                    ViewData.TemplateInfo.HtmlFieldPrefix = $"Regions[{model.RegionIndex}].FieldSets[{model.ItemIndex}]";
+                    return View("EditorTemplates/PageEditRegionItem", editModel.FieldSets[0]);
+                }
+            }
+            return new NotFoundResult();
+        }        
     }
 }

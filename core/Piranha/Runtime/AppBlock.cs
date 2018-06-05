@@ -26,10 +26,5 @@ namespace Piranha.Runtime
         /// Gets/sets the block icon.
         /// </summary>
         public string Icon { get; set; }
-
-        /// <summary>
-        /// Gets/sets the shorthand name.
-        /// </summary>
-        public string Shorthand { get; set; }
     }
 }

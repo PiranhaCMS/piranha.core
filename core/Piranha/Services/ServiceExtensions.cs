@@ -23,8 +23,8 @@ public static class ServiceExtensions
     /// <param name="services">The current service collection</param>
     /// <param name="scope">The optional lifetime</param>
     /// <returns>The updated service collection</returns>
-    public static IServiceCollection AddPiranhaEF(this IServiceCollection services, 
-        ServiceLifetime scope = ServiceLifetime.Scoped) 
+    public static IServiceCollection AddPiranhaEF(this IServiceCollection services,
+        ServiceLifetime scope = ServiceLifetime.Scoped)
     {
         services.Add(new ServiceDescriptor(typeof(IContentServiceFactory), typeof(ContentServiceFactory), ServiceLifetime.Singleton));
         services.Add(new ServiceDescriptor(typeof(IDb), typeof(Db), scope));
@@ -41,9 +41,9 @@ public static class ServiceExtensions
     /// <param name="dboptions">The DbContext options builder</param>
     /// <param name="scope">The optional lifetime</param>
     /// <returns>The updated service collection</returns>
-    public static IServiceCollection AddPiranhaEF(this IServiceCollection services, 
+    public static IServiceCollection AddPiranhaEF(this IServiceCollection services,
         Action<DbContextOptionsBuilder> dboptions,
-        ServiceLifetime scope = ServiceLifetime.Scoped) 
+        ServiceLifetime scope = ServiceLifetime.Scoped)
     {
         services.AddDbContext<Db>(dboptions);
 

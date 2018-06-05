@@ -200,7 +200,7 @@ namespace Piranha.Repositories
                     if (model.Versions.Count > 0) {
                         foreach (var version in model.Versions) {
                             // Delete version from storage
-                            await session.DeleteAsync(GetResourceName(model, version.Width, version.Height, ".jpg"));
+                            await session.DeleteAsync(GetResourceName(model, version.Width, version.Height, version.FileExtension));
                         }
                         db.MediaVersions.RemoveRange(model.Versions);
                     }
@@ -375,12 +375,15 @@ namespace Piranha.Repositories
                                     version = query.FirstOrDefault();
 
                                     if (version == null) {
+                                        var info = new FileInfo(media.Filename);
+
                                         version = new MediaVersion() {
                                             Id = Guid.NewGuid(),
                                             MediaId = media.Id,
                                             Size = output.Length,
                                             Width = width,
-                                            Height = height
+                                            Height = height,
+                                            FileExtension = info.Extension
                                         };
                                         db.MediaVersions.Add(version);
                                         db.SaveChanges();
@@ -390,7 +393,7 @@ namespace Piranha.Repositories
                                 }
 
                                 if (upload) {
-                                    return await session.PutAsync(GetResourceName(media, width, height, ".jpg"), "image/jpeg", output);
+                                    return await session.PutAsync(GetResourceName(media, width, height), media.ContentType, output);
                                 }
                             }
                         }
@@ -406,7 +409,7 @@ namespace Piranha.Repositories
                     // If the requested size is equal to the original size, return true
                     if (media.Width == width && (!height.HasValue || media.Height == height.Value))
                         return GetPublicUrl(media);
-                    return GetPublicUrl(media, width, height, ".jpg");
+                    return GetPublicUrl(media, width, height, version.FileExtension);
                 }
             }
             return null;
@@ -435,7 +438,7 @@ namespace Piranha.Repositories
                     if (media.Versions.Count > 0) {
                         foreach (var version in media.Versions) {
                             // Delete version from storage
-                            await session.DeleteAsync(GetResourceName(media, version.Width, version.Height, ".jpg"));
+                            await session.DeleteAsync(GetResourceName(media, version.Width, version.Height, version.FileExtension));
                         }
                         db.MediaVersions.RemoveRange(media.Versions);
                     }

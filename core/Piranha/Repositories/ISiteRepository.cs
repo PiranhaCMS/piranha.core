@@ -50,6 +50,21 @@ namespace Piranha.Repositories
         Site GetDefault();
 
         /// <summary>
+        /// Gets the site content for given site id.
+        /// </summary>
+        /// <param name="id">Site id</param>
+        /// <returns>The site content model</returns>
+        Models.DynamicSiteContent GetContentById(Guid id);
+
+        /// <summary>
+        /// Gets the site content for given site id.
+        /// </summary>
+        /// <param name="id">Site id</param>
+        /// <typeparam name="T">The site model type</typeparam>
+        /// <returns>The site content model</returns>
+        T GetContentById<T>(Guid id) where T : Models.SiteContent<T>;
+
+        /// <summary>
         /// Gets the hierachical sitemap structure.
         /// </summary>
         /// <param name="id">The optional site id</param>
@@ -65,6 +80,15 @@ namespace Piranha.Repositories
         void Save(Site model);
 
         /// <summary>
+        /// Saves the given site content to the site with the 
+        /// given id.
+        /// </summary>
+        /// <param name="siteId">The site id</param>
+        /// <param name="content">The site content</param>
+        /// <typeparam name="T">The site content type</typeparam>
+        void SaveContent<T>(Guid siteId, T content) where T : Models.SiteContent<T>;
+
+        /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
@@ -75,5 +99,11 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="model">The model</param>
         void Delete(Site model);
+
+        /// <summary>
+        /// Creates and initializes a new site content model of the specified type.
+        /// </summary>
+        /// <returns>The created site content</returns>
+        T CreateContent<T>(string typeId = null) where T : Models.SiteContentBase;
     }
 }

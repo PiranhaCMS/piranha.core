@@ -41,6 +41,11 @@ namespace Piranha.Data
         public int? Height { get; set; }
 
         /// <summary>
+        /// Gets/sets the file extension of the generated version.
+        /// </summary>
+        public string FileExtension { get; set; }
+
+        /// <summary>
         /// Gets/sets the media this is a version of.
         /// </summary>
         public Media Media { get; set; }
