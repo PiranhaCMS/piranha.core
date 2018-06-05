@@ -21,12 +21,13 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.0.0" />
-    <ProjectReference Include="..\..\core\Piranha.AspNetCore.Identity.SQLServer\Piranha.AspNetCore.Identity.SQLServer.csproj" />
     <ProjectReference Include="..\..\core\Piranha.Manager\Piranha.Manager.csproj" />
     <ProjectReference Include="..\..\core\Piranha\Piranha.csproj" />
     <ProjectReference Include="..\..\core\Piranha.AspNetCore\Piranha.AspNetCore.csproj" />
     <ProjectReference Include="..\..\core\Piranha.AspNetCore.Identity\Piranha.AspNetCore.Identity.csproj" />
     <ProjectReference Include="..\..\core\Piranha.AspNetCore.Identity.SQLite\Piranha.AspNetCore.Identity.SQLite.csproj" />
+    <ProjectReference Include="..\..\core\Piranha.AspNetCore.Identity.SQLServer\Piranha.AspNetCore.Identity.SQLServer.csproj" />
+    <ProjectReference Include="..\..\core\Piranha.AspNetCore.Identity.MySQL\Piranha.AspNetCore.Identity.MySQL.csproj" />
     <ProjectReference Include="..\..\core\Piranha.AttributeBuilder\Piranha.AttributeBuilder.csproj" />
     <ProjectReference Include="..\..\core\Piranha.ImageSharp\Piranha.ImageSharp.csproj" />
     <ProjectReference Include="..\..\core\Piranha.Local.FileStorage\Piranha.Local.FileStorage.csproj" />
