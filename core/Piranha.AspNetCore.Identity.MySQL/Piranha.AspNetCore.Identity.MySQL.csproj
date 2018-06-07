@@ -16,7 +16,4 @@
     <ProjectReference Include="..\Piranha\Piranha.csproj" />
     <ProjectReference Include="..\Piranha.AspNetCore.Identity\Piranha.AspNetCore.Identity.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.1.0" />
-  </ItemGroup>
 </Project>

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 namespace Piranha.AspNetCore.Identity.MySQL.Migrations
 {
+    [NoCoverage]
     public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -10,6 +10,7 @@ using System;
 
 namespace Piranha.AspNetCore.Identity.MySQL.Migrations
 {
+    [NoCoverage]
     [DbContext(typeof(IdentityMySQLDb))]
     partial class IdentityMySQLDbModelSnapshot : ModelSnapshot
     {

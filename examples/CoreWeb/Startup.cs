@@ -15,8 +15,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Piranha;
-//using Piranha.AspNetCore.Identity.SQLite;
-//using Piranha.AspNetCore.Identity.SQLServer;
+using Piranha.AspNetCore.Identity.SQLite;
+using Piranha.AspNetCore.Identity.SQLServer;
 using Piranha.AspNetCore.Identity.MySQL;
 using Piranha.Extend.Blocks;
 using Piranha.ImageSharp;
@@ -52,11 +52,18 @@ namespace CoreWeb
             });
             services.AddPiranhaFileStorage();
             services.AddPiranhaImageSharp();
+            
+            // SQLite
             services.AddPiranhaEF(options => options.UseSqlite("Filename=./piranha.coreweb.db"));
+            services.AddPiranhaIdentityWithSeed<IdentitySQLiteDb>(options => options.UseSqlite("Filename=./piranha.coreweb.db"));
+
+            // SQLServer
             //services.AddPiranhaEF(options => options.UseSqlServer("Data Source=.\\SQLEXPRESS;Initial Catalog=piranha.core;Integrated Security=True;MultipleActiveResultSets=True"));
-            //services.AddPiranhaIdentityWithSeed<IdentitySQLiteDb>(options => options.UseSqlite("Filename=./piranha.coreweb.db"));
-            //services.AddPiranhaIdentityWithSeed<IdentitySQLiteDb>(options => options.UseSqlServer("Data Source=.\\SQLEXPRESS;Initial Catalog=piranha.core;Integrated Security=True;MultipleActiveResultSets=True"));
-            services.AddPiranhaIdentityWithSeed<IdentityMySQLDb>(options => options.UseMySql("server=localhost;port=3306;database=piranha;uid=root;password=password"));
+            //services.AddPiranhaIdentityWithSeed<IdentitySQLServerDb>(options => options.UseSqlServer("Data Source=.\\SQLEXPRESS;Initial Catalog=piranha.core;Integrated Security=True;MultipleActiveResultSets=True"));
+
+            // MySQL
+            //services.AddPiranhaEF(options => options.UseMySql("server=localhost;port=3306;database=piranha;uid=root;password=password"));
+            //services.AddPiranhaIdentityWithSeed<IdentityMySQLDb>(options => options.UseMySql("server=localhost;port=3306;database=piranha;uid=root;password=password"));
             services.AddPiranhaManager();
 
             return services.BuildServiceProvider();
