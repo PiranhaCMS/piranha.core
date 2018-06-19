@@ -34,11 +34,16 @@ namespace Piranha.Runtime
         /// </summary>
         /// <param name="category">The category</param>
         /// <returns>The block types</returns>
-        public IEnumerable<AppBlock> GetByCategory(string category)
+        public IEnumerable<AppBlock> GetByCategory(string category, bool includeGroups = true)
         {
-            return _items
-                .Where(i => i.Category == category)
-                .ToArray();
+            var query = _items
+                .Where(i => i.Category == category);
+
+            if (!includeGroups)
+                query = query
+                    .Where(i => !typeof(Extend.BlockGroup).IsAssignableFrom(i.Type));
+
+            return query.ToArray();
         }
 
         /// <summary>

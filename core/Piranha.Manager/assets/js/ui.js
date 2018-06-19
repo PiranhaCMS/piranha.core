@@ -92,7 +92,17 @@ var sortableBlocks = sortable('.page-blocks-body .sortable', {
     items: ':not(.unsortable)'
 });
 for (var n = 0; n < sortableBlocks.length; n++) {
+    console.log('Adding sortable events');
     sortableBlocks[n].addEventListener('sortupdate', function(e) {
+        manager.tools.recalcblocks();
+    });
+}
+var sortableBlockItems = sortable('.block-group-body', {
+    handle: '.sortable-handle',
+    items: ':not(.unsortable)'
+});
+for (var n = 0; n < sortableBlockItems.length; n++) {
+    sortableBlockItems[n].addEventListener('sortupdate', function(e) {
         manager.tools.recalcblocks();
     });
 }
@@ -134,7 +144,7 @@ $(document).on('click', '.block-add-toggle', function(e) {
 $(document).on('click', '.block-add-dialog a', function (e) {
     e.preventDefault();
 
-    manager.tools.addblock($(this).parent().parent().parent(), $(this).attr('data-typename'), 'page', function() {
+    manager.tools.addblock($(this).parent().parent().parent(), $(this).attr('data-typename'), 'page', $(this).attr('data-includegroups'), function() {
         manager.tools.recalcblocks();
         $('.block-add').removeClass('active');    
     });
@@ -413,7 +423,7 @@ var manager = {
             }
         },
 
-        addblock: function(target, blockType, contentType, cb) {
+        addblock: function(target, blockType, contentType, includeGroups, cb) {
             $.ajax({
                 url: '/manager/block/create',
                 method: 'POST',
@@ -421,13 +431,13 @@ var manager = {
                 dataType: 'html',
                 data: JSON.stringify({
                     TypeName: blockType,
-                    BlockIndex: 0
+                    BlockIndex: 0,
+                    IncludeGroups: includeGroups
                 }),
                 success: function (res) {
                     $('.block-info').remove();
                     $(res).insertAfter(target);
 
-                    console.log('scanning for new editors.');
                     // If the new region contains a html editor, make sure
                     // we initialize it.
                     var editors = $(res).find('.block-editor').each(function () {
@@ -442,13 +452,13 @@ var manager = {
                     if (cb)
                         cb();
 
-                    sortable('.sortable');
+                    manager.tools.setupBlockSortable();
                 }
             });            
         },
         
         recalcblocks: function () {
-            var items = $('.page-blocks-body .sortable-item');
+            var items = $('.page-blocks-body .sortable >.sortable-item');
 
             for (var n = 0; n < items.length; n++) {
                 var inputs = $(items.get(n)).find('input, textarea, select');
@@ -477,7 +487,40 @@ var manager = {
                         return val.replace(/Blocks_\d+__/, 'Blocks_' + n + '__');
                     return val;
                 });
+
+                var subitems = $(items.get(n)).find('.block-group-body .sortable-item');
+
+                for (var s = 0; s < subitems.length; s++) {
+                    console.log('recalcing indexes for subitem ' + s);
+                    var subInputs = $(subitems.get(s)).find('input, textarea, select');
+
+                    subInputs.attr('id', function (i, val) {
+                        if (val)
+                            return val.replace(/Blocks_\d+__Items_\d+__/, 'Blocks_' + n + '__Items_' + s + '__');
+                        return val;
+                    });
+                    subInputs.attr('name', function (i, val) {
+                        if (val)
+                            return val.replace(/Blocks\[\d+\].Items\[\d+\]/, 'Blocks[' + n + '].Items[' + s + ']');
+                        return val;
+                    });
+    
+                    var subContent = $(subitems.get(s)).find('[contenteditable=true]');
+                    subContent.attr('data-id', function (i, val) {
+                        if (val)
+                            return val.replace(/Blocks_\d+__Items_\d+__/, 'Blocks_' + n + '__Items_' + s + '__');
+                        return val;
+                    });
+    
+                    var subContent = $(subitems.get(s)).find('button');
+                    subContent.attr('data-mediaid', function (i, val) {
+                        if (val)
+                            return val.replace(/Blocks_\d+__Items_\d+__/, 'Blocks_' + n + '__Items_' + s + '__');
+                        return val;
+                    });                    
+                }
             }
+            manager.tools.setupBlockSortable();
         },
 
         tablesort: function(table, status, type, category, search) {
@@ -502,6 +545,39 @@ var manager = {
                     else row.hide();
                 }
             });        
+        },
+
+        setupBlockSortable: function() {
+            sortable('.page-blocks-body .sortable');
+            sortable('.block-group-body');
+
+            /*
+            console.log('removing .sortable events');
+            sortable('.page-blocks-body .sortable', 'destroy');
+            var sortableBlocks = sortable('.page-blocks-body .sortable', {
+                handle: '.sortable-handle',
+                items: ':not(.unsortable)'
+            });
+            console.log('Adding .sortable events');
+            for (var n = 0; n < sortableBlocks.length; n++) {
+                sortableBlocks[n].addEventListener('sortupdate', function(e) {
+                    manager.tools.recalcblocks();
+                });
+            }
+
+            console.log('removing .block-group-body events');
+            sortable('.block-group-body', 'destroy');
+            var sortableBlockItems = sortable('.block-group-body', {
+                handle: '.sortable-handle',
+                items: ':not(.unsortable)'
+            });
+            console.log('Adding .block-group-body events');
+            for (var n = 0; n < sortableBlockItems.length; n++) {
+                sortableBlockItems[n].addEventListener('sortupdate', function(e) {
+                    manager.tools.recalcblocks();
+                });
+            }
+            */
         }
     }
 };

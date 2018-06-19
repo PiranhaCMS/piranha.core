@@ -408,6 +408,76 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="blocks">The data</param>
         /// <returns>The transformed blocks</returns>
+        public IList<Extend.Block> TransformBlocks<T>(IEnumerable<T> blocks) where T : IContentBlock
+        {
+            using (var scope = _services.CreateScope())
+            {
+                var models = new List<Extend.Block>();
+
+                foreach (var contentBlock in blocks)
+                {
+                    var block = contentBlock.Block;
+                    var blockType = App.Blocks.GetByType(block.CLRType);
+
+                    if (blockType != null)
+                    {
+                        var model = (Extend.Block)Activator.CreateInstance(blockType.Type);
+                        model.Id = block.Id;
+
+                        foreach (var field in block.Fields)
+                        {
+                            var prop = model.GetType().GetProperty(field.FieldId, App.PropertyBindings);
+
+                            if (prop != null)
+                            {
+                                var type = App.Fields.GetByType(field.CLRType);
+                                var val = (Extend.IField)App.DeserializeObject(field.Value, type.Type);
+
+                                if (val != null)
+                                {
+                                    var init = val.GetType().GetMethod("Init");
+
+                                    if (init != null)
+                                    {
+                                        var param = new List<object>();
+
+                                        foreach (var p in init.GetParameters())
+                                        {
+                                            param.Add(scope.ServiceProvider.GetService(p.ParameterType));
+                                        }
+                                        init.Invoke(val, param.ToArray());
+                                    }
+                                }
+                                prop.SetValue(model, val);
+                            }
+                        }
+
+                        if (contentBlock.ParentId.HasValue)
+                        {
+                            var parent = blocks.FirstOrDefault(m => m.Id == contentBlock.ParentId.Value);
+
+                            if (parent != null)
+                            {
+                                ((Extend.BlockGroup)models.First(m => m.Id == parent.BlockId))
+                                    .Items.Add(model);
+                            }
+                            else throw new Exception("COULDN'T FIND PARENT");
+                        }
+                        else 
+                        {
+                            models.Add(model);
+                        }
+                    }
+                }
+                return models;
+            }
+        }        
+
+        /// <summary>
+        /// Transforms the given block data into block models.
+        /// </summary>
+        /// <param name="blocks">The data</param>
+        /// <returns>The transformed blocks</returns>
         public IList<Extend.Block> TransformBlocks(IEnumerable<Block> blocks)
         {
             using (var scope = _services.CreateScope())
@@ -462,6 +532,74 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="models">The blocks</param>
         /// <returns>The data model</returns>
+        public IList<T> TransformBlocks<T>(IList<Extend.Block> models) where T : IContentBlock
+        {
+            var blocks = new List<T>();
+
+            if (models != null)
+            {
+                for (var n = 0; n < models.Count; n++)
+                {
+                    var type = App.Blocks.GetByType(models[n].GetType().FullName);
+
+                    if (type != null)
+                    {
+                        var contentBlock = Activator.CreateInstance<T>();
+                        contentBlock.Id = Guid.NewGuid();
+                        contentBlock.SortOrder = n;
+
+                        var block = new Block()
+                        {
+                            Id = models[n].Id != Guid.Empty ? models[n].Id : Guid.NewGuid(),
+                            CLRType = models[n].GetType().FullName,
+                            Created = DateTime.Now,
+                            LastModified = DateTime.Now
+                        };
+
+                        foreach (var prop in models[n].GetType().GetProperties(App.PropertyBindings))
+                        {
+                            if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
+                            {
+                                // Only save fields to the database
+                                var field = new BlockField()
+                                {
+                                    Id = Guid.NewGuid(),
+                                    BlockId = block.Id,
+                                    FieldId = prop.Name,
+                                    SortOrder = 0,
+                                    CLRType = prop.PropertyType.FullName,
+                                    Value = App.SerializeObject(prop.GetValue(models[n]), prop.PropertyType)
+                                };
+                                block.Fields.Add(field);
+                            }
+                        }
+                        contentBlock.Block = block;
+                        blocks.Add(contentBlock);
+
+                        if (typeof(Extend.BlockGroup).IsAssignableFrom(models[n].GetType()))
+                        {
+                            var blockItems = TransformBlocks<T>(((Extend.BlockGroup)models[n]).Items);
+
+                            if (blockItems.Count() > 0)
+                            {
+                                foreach (var item in blockItems)
+                                {
+                                    item.ParentId = contentBlock.Id;
+                                }
+                                blocks.AddRange(blockItems);
+                            }
+                        }
+                    }
+                }
+            }
+            return blocks;
+        }
+
+        /// <summary>
+        /// Transforms the given blocks to the internal data model.
+        /// </summary>
+        /// <param name="models">The blocks</param>
+        /// <returns>The data model</returns>
         public IList<Block> TransformBlocks(IList<Extend.Block> models)
         {
             var blocks = new List<Block>();
@@ -500,6 +638,20 @@ namespace Piranha.Services
                             }
                         }
                         blocks.Add(block);
+
+                        if (typeof(Extend.BlockGroup).IsAssignableFrom(models[n].GetType()))
+                        {
+                            var blockItems = TransformBlocks(((Extend.BlockGroup)models[n]).Items);
+
+                            if (blockItems.Count() > 0)
+                            {
+                                foreach (var item in blockItems)
+                                {
+                                    item.ParentId = block.Id;
+                                }
+                                blocks.AddRange(blockItems);
+                            }
+                        }
                     }
                 }
             }

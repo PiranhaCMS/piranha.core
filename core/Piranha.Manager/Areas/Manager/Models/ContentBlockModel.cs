@@ -17,5 +17,10 @@ namespace Piranha.Areas.Manager.Models
         public string TypeName { get; set; }
         public int BlockIndex { get; set; }
         public int ItemIndex { get; set; }
+        public bool IncludeGroups { get; set; }
+
+        public ContentBlockModel() {
+            IncludeGroups = true;
+        }
     }
 }

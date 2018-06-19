@@ -45,10 +45,14 @@ namespace Piranha.Areas.Manager.Controllers
             var block = (Extend.Block)contentService.CreateBlock(model.TypeName);
 
             if (block != null) {
-                ViewData.TemplateInfo.HtmlFieldPrefix = $"Blocks[{model.BlockIndex}]";
+                ViewBag.IsInGroup = !model.IncludeGroups;
+                if (model.IncludeGroups)
+                    ViewData.TemplateInfo.HtmlFieldPrefix = $"Blocks[{model.BlockIndex}]";
+                else ViewData.TemplateInfo.HtmlFieldPrefix = $"Blocks[{model.BlockIndex}].Items[0]";
                 return View("EditorTemplates/ContentEditBlock", new Models.ContentEditBlock() {
                     Id = block.Id,
                     CLRType = block.GetType().FullName,
+                    IsGroup = typeof(Extend.BlockGroup).IsAssignableFrom(block.GetType()),
                     Value = block
                 });
             }

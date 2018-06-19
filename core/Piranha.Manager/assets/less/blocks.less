@@ -58,24 +58,95 @@
 	.block {
 		border: solid 1px #fff;
 		padding: 8px;
-        margin: 10px 0;
+		margin: 20px 0;
 		position: relative;
 		min-height: 48px;
 		position: relative;
 		transition: border-color ease-in-out 0.2s;
 
+		&.block-group {
+			border: solid 1px @border-color;
+			padding: 0;
+
+			.block-group-heading {
+				background: #eef4f8;
+				border-bottom: solid 1px @border-color;
+				padding: 15px;
+
+				i.group-icon {
+					float: left;
+					font-size: 22px;
+					margin-right: 10px;
+					opacity: 0.4;
+				}
+
+				h3.group-title {
+					margin-bottom: 0;
+				}
+
+				.well {
+					background: #fff;
+					border: solid 1px @border-color;
+					border-radius: 0;
+				}
+
+				.form-group:first-of-type {
+					margin-top: 15px;
+				}
+				.form-group:last-of-type {
+					margin-bottom: 0;
+				}
+			}
+
+			.block-group-body {
+				background: #fdfdfd;
+				padding: 15px;
+			}
+
+			>.block-actions {
+				background: #eef4f8;
+
+				.btn.btn-secondary {
+					background: #fff;
+
+					&:hover {
+						background: #fdfdfd;
+					}
+				}
+			}
+
+			.block-add span {
+				width: 26px;
+				height: 26px;
+				font-size: 8px;
+				line-height: 16px;
+				border-radius: 13px;
+				margin-left: -13px;
+				top: 0;
+			}
+		}
+
         .block-actions {
             background: #fff;
-            padding: 8px 8px 6px 6px;
+            padding: 6px 6px 0 6px;
             position: absolute;
-            top: 0;
-            right: 0;
+            top: -37px;
+			right: -1px;
+			left: -1px;
+			text-align: right;
+			border-style: solid;
+			border-color: @border-color;
+			border-width: 1px 1px 0 1px;
             z-index: 2000;
             display: none;
 			transition: display ease-in-out 0.2s;
 			
 			.btn {
-				width: 34px;
+				min-width: 34px;
+
+				&.btn-secondary:hover {
+					background: @border-color;
+				}
 			}
 		}
 		
@@ -87,7 +158,7 @@
 			border-color: @border-color;
             transition: border-color ease-in-out 0.2s;
             
-            .block-actions {
+            >.block-actions {
                 display: block;
                 transition: display ease-in-out 0.2s;                    
             }
@@ -233,19 +304,26 @@
 		display: none;
 		position: absolute;
 		background: #fff;
-		top: 2px;
+		top: -37px;
 		right: 80px;
-		height: 42px;
+		height: 37px;
 		z-index: 2000;
-		padding: 6px 4px 6px 6px;
+		padding: 6px 4px 0 6px;
+		border-style: solid;
+		border-color: @border-color;
+		border-width: 1px 0 0;
 
 		button {
-			width: 34px;
+			min-width: 34px;
+
+			&.btn-secondary:hover {
+				background: @border-color;
+			}
 		}
 	}
 
 	.block:hover {
-		.block-extras {
+		>.block-extras {
 			display: block;
 		}
 	}

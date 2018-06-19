@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace Piranha.Areas.Manager.Models
 {
@@ -32,9 +33,17 @@ namespace Piranha.Areas.Manager.Models
         /// </summary>
         public bool IsReusable { get; set; }
 
+        public bool IsGroup { get; set; }
+
         /// <summary>
         /// Gets/sets the block value.
         /// </summary>
         public Extend.Block Value { get; set; }
+
+        public IList<ContentEditBlock> Items { get; set; }
+
+        public ContentEditBlock() {
+            Items = new List<ContentEditBlock>();
+        }
     }    
 }

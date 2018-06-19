@@ -275,6 +275,7 @@ namespace Piranha.Areas.Manager.Services
                 dest.Blocks.Add(new ContentEditBlock() {
                     Id = srcBlock.Id,
                     CLRType = srcBlock.GetType().FullName,
+                    IsGroup = typeof(Extend.BlockGroup).IsAssignableFrom(srcBlock.GetType()),                    
                     Value = srcBlock
                 });
             }
