@@ -20,11 +20,11 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
       <group targetFramework=".NETStandard2.0">
         <dependency id="Piranha" version="5.1.0-alpha1" />
         <dependency id="Piranha.AspNetCore" version="5.1.0-alpha1" />
-        <dependency id="Microsoft.AspNetCore" version="2.0.1" />
-        <dependency id="Microsoft.AspNetCore.Mvc" version="2.0.1" />
-        <dependency id="Microsoft.AspNetCore.Session" version="2.0.1" />
-        <dependency id="Microsoft.AspNetCore.StaticFiles" version="2.0.1" />
-        <dependency id="Microsoft.Extensions.FileProviders.Embedded" version="2.0.0" />
+        <dependency id="Microsoft.AspNetCore" version="2.1.0" />
+        <dependency id="Microsoft.AspNetCore.Mvc" version="2.1.0" />
+        <dependency id="Microsoft.AspNetCore.Session" version="2.1.0" />
+        <dependency id="Microsoft.AspNetCore.StaticFiles" version="2.1.0" />
+        <dependency id="Microsoft.Extensions.FileProviders.Embedded" version="2.1.0" />
       </group>
     </dependencies>
   </metadata>

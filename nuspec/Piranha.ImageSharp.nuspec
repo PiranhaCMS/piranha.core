@@ -19,7 +19,7 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     <dependencies>
       <group targetFramework=".NETStandard2.0">
         <dependency id="Piranha" version="5.1.0-alpha1" />
-        <dependency id="SixLabors.ImageSharp" version="1.0.0-beta0002" />
+        <dependency id="SixLabors.ImageSharp" version="1.0.0-beta0004" />
       </group>
     </dependencies>
   </metadata>
