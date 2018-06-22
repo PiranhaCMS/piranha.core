@@ -32,7 +32,7 @@ namespace Piranha.AspNetCore.Identity
                 {
                     sb.Append(bytes[n].ToString("X2"));
                 }
-                return "http://www.gravatar.com/avatar/" + sb.ToString().ToLower() +
+                return "https://www.gravatar.com/avatar/" + sb.ToString().ToLower() +
                     (size > 0 ? "?s=" + size : "");
             }
         }
