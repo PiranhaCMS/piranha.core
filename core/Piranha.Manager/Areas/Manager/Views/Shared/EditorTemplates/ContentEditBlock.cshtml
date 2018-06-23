@@ -1,11 +1,18 @@
 @model Piranha.Areas.Manager.Models.ContentEditBlock
 @{
     Layout = null;
+    bool isInGroup = ViewBag.IsInGroup != null ? ViewBag.IsInGroup : false;
+    var blockType = Piranha.App.Blocks.GetByType(Model.CLRType);
 }
 
 <div class="sortable-item">
-    <div class="block">
+    <div class="block @(Model.IsGroup ? "block-group" : "")">
         <div class="block-actions">
+            @if (!Model.IsGroup)
+            {
+                <i class="@blockType.Icon pull-left block-icon"></i>
+                <span class="pull-left block-name">@blockType.Name</span>
+            }
             <div class="btn btn-secondary btn-sm sortable-handle"><span class="fas fa-ellipsis-v"></span></div>
             <button class="btn btn-secondary btn-sm block-settings" style="display:none"><span class="fas fa-cog"></span></button>
             <button class="btn btn-secondary btn-sm block-remove"><span class="fas fa-trash"></span></button>
@@ -13,15 +20,51 @@
         @Html.HiddenFor(m => m.Id)
         @Html.HiddenFor(m => m.CLRType)
         @Html.HiddenFor(m => m.IsReusable)
-        @Html.HiddenFor(m => m.Value.Id )
-        @Html.EditorFor(m => m.Value, Model.Value.GetType().Name)
+        @Html.HiddenFor(m => m.Value.Id)
+        @if (Model.IsGroup)
+        {
+            <div class="block-group-heading">
+                <i class="far fa-newspaper group-icon"></i>
+                <h3 class="group-title">Slider</h3>
+                @Html.EditorFor(m => m.Value, "BlockGroup")
+            </div>
+            <div class="block-group-body">
+                <div class="unsortable">
+                    <div class="block-add">
+                        <div class="block-add-dialog">
+                            @foreach (var category in Piranha.App.Blocks.GetCategories()) {
+                                var items = Piranha.App.Blocks.GetByCategory(category, includeGroups: false);
+                                if (items.Count() > 0) {
+                                    <label>@category</label>
+                                    @foreach (var block in items) {
+                                        <a href="#" data-typename="@block.TypeName" data-includegroups="false"><i class="@block.Icon"></i>@block.Name</a>
+                                    }
+                                }
+                            }
+                        </div>
+                        <a href="#" class="block-add-toggle">
+                            <hr><span class="fas fa-plus"></span>
+                        </a>
+                    </div>
+                </div>
+                @for (var n = 0; n < Model.Items.Count(); n++)
+                {
+                    @Html.EditorFor(m => m.Items[n], "ContentEditBlock", new { IsInGroup = true }) 
+                }
+            </div>
+        } else {
+            @Html.EditorFor(m => m.Value, Model.Value.GetType().Name)
+        }
     </div>
     <div class="block-add">
         <div class="block-add-dialog">
             @foreach (var category in Piranha.App.Blocks.GetCategories()) {
-                <label>@category</label>
-                @foreach (var block in Piranha.App.Blocks.GetByCategory(category)) {
-                    <a href="#" data-typename="@block.TypeName"><i class="@block.Icon"></i>@block.Name</a>
+                var items = Piranha.App.Blocks.GetByCategory(category, includeGroups: !isInGroup);
+                if (items.Count() > 0) {
+                    <label>@category</label>
+                    @foreach (var block in items) {
+                        <a href="#" data-typename="@block.TypeName" data-includegroups="@(!isInGroup)"><i class="@block.Icon"></i>@block.Name</a>
+                    }
                 }
             }
         </div>

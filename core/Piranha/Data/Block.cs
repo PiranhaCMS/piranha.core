@@ -24,6 +24,12 @@ namespace Piranha.Data
         public Guid Id { get; set; }
 
         /// <summary>
+        /// This is not part of the data model. It's only used
+        /// for internal mapping.
+        /// </summary>
+        internal Guid? ParentId { get; set; }
+
+        /// <summary>
         /// Gets/sets the CLR type of the block.
         /// </summary>
         public string CLRType { get; set; }

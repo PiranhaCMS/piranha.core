@@ -15,12 +15,18 @@ namespace Piranha.Data
     /// <summary>
     /// Connection between a page and a block.
     /// </summary>
-    public sealed class PageBlock : IModel
+    public sealed class PageBlock : IModel, IContentBlock
     {
         /// <summary>
         /// Gets/sets the unique id.
         /// </summary>
         public Guid Id { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional parent id if this page block
+        /// is part of a group.
+        /// </summary>
+        public Guid? ParentId { get; set; }
 
         /// <summary>
         /// Gets/sets the page id.

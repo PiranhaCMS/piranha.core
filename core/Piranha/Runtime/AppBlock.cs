@@ -8,6 +8,9 @@
  * 
  */
 
+using System;
+using System.Collections.Generic;
+
 namespace Piranha.Runtime
 {
     public sealed class AppBlock : AppDataItem
@@ -26,5 +29,18 @@ namespace Piranha.Runtime
         /// Gets/sets the block icon.
         /// </summary>
         public string Icon { get; set; }
+
+        /// <summary>
+        /// Gets/sets the specified item types.
+        /// </summary>
+        public IList<Type> ItemTypes { get; set; }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public AppBlock() : base()
+        {
+            ItemTypes = new List<Type>();
+        }
     }
 }

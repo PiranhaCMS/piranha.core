@@ -12,6 +12,7 @@ using System;
 
 namespace Piranha.Extend
 {
+    [AttributeUsage(AttributeTargets.Class)]
     public class FieldTypeAttribute : Attribute
     {
         /// <summary>

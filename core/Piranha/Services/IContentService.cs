@@ -70,6 +70,7 @@ namespace Piranha.Services
         /// <param name="blocks">The data</param>
         /// <returns>The transformed blocks</returns>
         IList<Extend.Block> TransformBlocks(IEnumerable<Data.Block> blocks);
+        IList<Extend.Block> TransformBlocks<T>(IEnumerable<T> blocks) where T : Data.IContentBlock;
 
         /// <summary>
         /// Transforms the given blocks to the internal data model.
@@ -77,5 +78,6 @@ namespace Piranha.Services
         /// <param name="models">The blocks</param>
         /// <returns>The data model</returns>
         IList<Data.Block> TransformBlocks(IList<Extend.Block> models);
+        IList<T> TransformBlocks<T>(IList<Extend.Block> models) where T : Data.IContentBlock;        
     }
 }

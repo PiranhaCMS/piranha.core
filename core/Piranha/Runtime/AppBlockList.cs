@@ -34,11 +34,16 @@ namespace Piranha.Runtime
         /// </summary>
         /// <param name="category">The category</param>
         /// <returns>The block types</returns>
-        public IEnumerable<AppBlock> GetByCategory(string category)
+        public IEnumerable<AppBlock> GetByCategory(string category, bool includeGroups = true)
         {
-            return _items
-                .Where(i => i.Category == category)
-                .ToArray();
+            var query = _items
+                .Where(i => i.Category == category);
+
+            if (!includeGroups)
+                query = query
+                    .Where(i => !typeof(Extend.BlockGroup).IsAssignableFrom(i.Type));
+
+            return query.ToArray();
         }
 
         /// <summary>
@@ -56,6 +61,19 @@ namespace Piranha.Runtime
                 item.Name = attr.Name;
                 item.Category = attr.Category;
                 item.Icon = attr.Icon;
+            }
+
+            var itemAttrs = typeof(TValue).GetTypeInfo().GetCustomAttributes(typeof(BlockItemTypeAttribute));
+            foreach (var itemAttr in itemAttrs)
+            {
+                var itemType = ((BlockItemTypeAttribute)itemAttr).Type;
+
+                // Block groups should not contain items that are
+                // other block groups.
+                if (!typeof(BlockGroup).IsAssignableFrom(itemType))
+                {
+                    item.ItemTypes.Add(itemType);
+                }
             }
             return item;
         }

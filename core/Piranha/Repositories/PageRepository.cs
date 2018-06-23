@@ -522,8 +522,10 @@ namespace Piranha.Repositories
                 var blockModels = model.Blocks;
 
                 if (blockModels != null && blockModels.Count > 0) {
-                    var blocks = contentService.TransformBlocks(blockModels);
-                    var current = blocks.Select(b => b.Id).ToArray();
+                    var pageBlocks = contentService.TransformBlocks<PageBlock>(blockModels);
+                    //var blocks = pageBlocks.Select(p => p.Block).ToList();
+
+                    var current = pageBlocks.Select(b => b.Block.Id).ToArray();
 
                     // Delete removed blocks
                     var removed = page.Blocks
@@ -535,27 +537,27 @@ namespace Piranha.Repositories
                     page.Blocks.Clear();
 
                     // Now map the new block
-                    for (var n = 0; n < blocks.Count; n++) {
+                    for (var n = 0; n < pageBlocks.Count; n++) {
                         var block = db.Blocks
                             .Include(b => b.Fields)
-                            .FirstOrDefault(b => b.Id == blocks[n].Id);
+                            .FirstOrDefault(b => b.Id == pageBlocks[n].Block.Id);
                         if (block == null) {
                             block = new Block() {
-                                Id = blocks[n].Id != Guid.Empty ? blocks[n].Id : Guid.NewGuid(),
+                                Id = pageBlocks[n].Block.Id != Guid.Empty ? pageBlocks[n].Block.Id : Guid.NewGuid(),
                                 Created = DateTime.Now
                             };
                             db.Blocks.Add(block);
                         }
-                        block.CLRType = blocks[n].CLRType;
-                        block.IsReusable = blocks[n].IsReusable;
-                        block.Title = blocks[n].Title;
+                        block.CLRType = pageBlocks[n].Block.CLRType;
+                        block.IsReusable = pageBlocks[n].Block.IsReusable;
+                        block.Title = pageBlocks[n].Block.Title;
                         block.LastModified = DateTime.Now;
 
-                        var currentFields = blocks[n].Fields.Select(f => f.FieldId).Distinct();
+                        var currentFields = pageBlocks[n].Block.Fields.Select(f => f.FieldId).Distinct();
                         var removedFields = block.Fields.Where(f => !currentFields.Contains(f.FieldId));
                         db.BlockFields.RemoveRange(removedFields);
 
-                        foreach (var newField in blocks[n].Fields) {
+                        foreach (var newField in pageBlocks[n].Block.Fields) {
                             var field = block.Fields.FirstOrDefault(f => f.FieldId == newField.FieldId);
                             if (field == null) {
                                 field = new BlockField() {
@@ -573,7 +575,8 @@ namespace Piranha.Repositories
 
                         // Create the page block
                         page.Blocks.Add(new PageBlock() {
-                            Id = Guid.NewGuid(),
+                            Id = pageBlocks[n].Id,
+                            ParentId = pageBlocks[n].ParentId,
                             BlockId = block.Id,
                             Block = block,
                             PageId = page.Id,
@@ -668,12 +671,7 @@ namespace Piranha.Repositories
         private void Process<T>(Data.Page page, T model) where T : Models.PageBase {
             if (!(model is Models.IContentInfo)) {
                 if (page.Blocks.Count > 0) {
-                    var blocks = page.Blocks
-                        .OrderBy(b => b.SortOrder)
-                        .Select(b => b.Block)
-                        .ToList();
-
-                    model.Blocks = contentService.TransformBlocks(blocks);
+                    model.Blocks = contentService.TransformBlocks<PageBlock>(page.Blocks.OrderBy(b => b.SortOrder));
                 }
             }
         }        
