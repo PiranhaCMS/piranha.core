@@ -15,7 +15,7 @@ namespace Piranha.Extend.Blocks
     /// <summary>
     /// Two column HTML block.
     /// </summary>
-    [BlockType(Name = "Two Cols", Category = "Content", Icon = "fab fa-html5")]
+    [BlockType(Name = "Two Cols", Category = "Content", Icon = "fas fa-columns")]
     public class HtmlColumnBlock : Block
     {
         /// <summary>

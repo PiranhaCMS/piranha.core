@@ -13340,9 +13340,9 @@ li.sitemap-item .actions.one {
 }
 #page-blocks .block .block-actions {
   background: #fff;
-  padding: 6px 6px 0 6px;
+  padding: 4px 8px 0;
   position: absolute;
-  top: -37px;
+  top: -35px;
   right: -1px;
   left: -1px;
   text-align: right;
@@ -13358,6 +13358,19 @@ li.sitemap-item .actions.one {
 }
 #page-blocks .block .block-actions .btn.btn-secondary:hover {
   background: #ddd;
+}
+#page-blocks .block .block-actions i.block-icon {
+  color: #ddd;
+  font-size: 22px;
+  padding-left: 2px;
+}
+#page-blocks .block .block-actions span.block-name {
+  color: #ccc;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 12px;
+  line-height: 22px;
+  padding-left: 8px;
 }
 #page-blocks .block div[contenteditable="true"] {
   min-height: 30px;

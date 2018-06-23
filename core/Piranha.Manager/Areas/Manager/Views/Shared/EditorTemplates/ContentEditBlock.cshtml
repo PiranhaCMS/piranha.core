@@ -2,11 +2,17 @@
 @{
     Layout = null;
     bool isInGroup = ViewBag.IsInGroup != null ? ViewBag.IsInGroup : false;
+    var blockType = Piranha.App.Blocks.GetByType(Model.CLRType);
 }
 
 <div class="sortable-item">
     <div class="block @(Model.IsGroup ? "block-group" : "")">
         <div class="block-actions">
+            @if (!Model.IsGroup)
+            {
+                <i class="@blockType.Icon pull-left block-icon"></i>
+                <span class="pull-left block-name">@blockType.Name</span>
+            }
             <div class="btn btn-secondary btn-sm sortable-handle"><span class="fas fa-ellipsis-v"></span></div>
             <button class="btn btn-secondary btn-sm block-settings" style="display:none"><span class="fas fa-cog"></span></button>
             <button class="btn btn-secondary btn-sm block-remove"><span class="fas fa-trash"></span></button>

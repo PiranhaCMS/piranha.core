@@ -62,6 +62,19 @@ namespace Piranha.Runtime
                 item.Category = attr.Category;
                 item.Icon = attr.Icon;
             }
+
+            var itemAttrs = typeof(TValue).GetTypeInfo().GetCustomAttributes(typeof(BlockItemTypeAttribute));
+            foreach (var itemAttr in itemAttrs)
+            {
+                var itemType = ((BlockItemTypeAttribute)itemAttr).Type;
+
+                // Block groups should not contain items that are
+                // other block groups.
+                if (!typeof(BlockGroup).IsAssignableFrom(itemType))
+                {
+                    item.ItemTypes.Add(itemType);
+                }
+            }
             return item;
         }
     }
