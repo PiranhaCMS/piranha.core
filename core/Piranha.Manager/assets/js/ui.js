@@ -161,6 +161,18 @@ $(document).on('click', '.block-html-swap', function (e) {
         $(columns[1]).html(col1);
     }
 });
+$(document).on('focus', '.block .empty', function () {
+    $(this).removeClass('empty');
+    $(this).addClass('check-empty');
+});
+$(document).on('blur','.block .check-empty', function () {
+    console.log('check empty [' + $(this).text() + ']');
+
+    if ($(this).text().replace(/\s/g, '') == '') {
+        $(this).removeClass('check-empty');    
+        $(this).addClass('empty');
+    }
+});
 
 //
 // Panel toggle buttons

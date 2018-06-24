@@ -64,6 +64,16 @@
 		position: relative;
 		transition: border-color ease-in-out 0.2s;
 
+		.empty {
+			background: @bg-color url('../img/empty-twocol.png') 50% 50% no-repeat;
+			border: solid 10px @bg-color;
+			min-height: 66px !important;
+
+			p:first-of-type {
+				min-height: 86px;
+			}
+		}
+
 		&.block-group {
 			border: solid 1px @border-color;
 			padding: 0;

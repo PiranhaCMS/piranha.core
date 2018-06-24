@@ -13287,6 +13287,14 @@ li.sitemap-item .actions.one {
   position: relative;
   transition: border-color ease-in-out 0.2s;
 }
+#page-blocks .block .empty {
+  background: #f2f2f2 url('../img/empty-twocol.png') 50% 50% no-repeat;
+  border: solid 10px #f2f2f2;
+  min-height: 66px !important;
+}
+#page-blocks .block .empty p:first-of-type {
+  min-height: 86px;
+}
 #page-blocks .block.block-group {
   border: solid 1px #ddd;
   padding: 0;
