@@ -197,7 +197,6 @@
 		width: 400px;
 		border-radius: 4px;
 		left: 50%;
-		bottom: 40px;			
 		margin-left: -200px;
 		z-index: 2000;
 		transition: all ease-in-out .2s;
@@ -237,9 +236,25 @@
 				transition: all ease-in-out .2s;
 			}
 		}
+	}
 
-		&::after {
-			.arrow-down(#222, 10px, 0);
+	.block-add-below {
+		.block-add-dialog {
+			top: 42px;
+
+			&::before {
+				.arrow-up(#222, 10px, -20px);
+			}	
+		}
+	}
+
+	.block-add-above {
+		.block-add-dialog {
+			bottom: 40px;
+
+			&::after {
+				.arrow-down(#222, 10px, 0);
+			}	
 		}
 	}
 

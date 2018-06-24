@@ -30,7 +30,7 @@
             </div>
             <div class="block-group-body">
                 <div class="unsortable">
-                    <div class="block-add">
+                    <div class="block-add block-add-above">
                         <div class="block-add-dialog">
                             @foreach (var category in Piranha.App.Blocks.GetCategories()) {
                                 var items = Piranha.App.Blocks.GetByCategory(category, includeGroups: false);
@@ -56,7 +56,7 @@
             @Html.EditorFor(m => m.Value, Model.Value.GetType().Name)
         }
     </div>
-    <div class="block-add">
+    <div class="block-add block-add-above">
         <div class="block-add-dialog">
             @foreach (var category in Piranha.App.Blocks.GetCategories()) {
                 var items = Piranha.App.Blocks.GetByCategory(category, includeGroups: !isInGroup);

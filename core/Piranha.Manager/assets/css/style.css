@@ -13399,7 +13399,6 @@ li.sitemap-item .actions.one {
   width: 400px;
   border-radius: 4px;
   left: 50%;
-  bottom: 40px;
   margin-left: -200px;
   z-index: 2000;
   transition: all ease-in-out 0.2s;
@@ -13436,7 +13435,25 @@ li.sitemap-item .actions.one {
   opacity: 1;
   transition: all ease-in-out 0.2s;
 }
-#page-blocks .block-add-dialog::after {
+#page-blocks .block-add-below .block-add-dialog {
+  top: 42px;
+}
+#page-blocks .block-add-below .block-add-dialog::before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  border: solid 10px transparent;
+  border-bottom-color: #222;
+  position: absolute;
+  margin-top: -20px;
+  left: 50%;
+  margin-left: -10px;
+}
+#page-blocks .block-add-above .block-add-dialog {
+  bottom: 40px;
+}
+#page-blocks .block-add-above .block-add-dialog::after {
   content: "";
   display: block;
   width: 0;

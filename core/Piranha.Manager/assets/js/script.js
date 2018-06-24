@@ -23503,6 +23503,8 @@ $(document).ready(function () {
     $.each($(".markdown-editor"), function (i, e) {
         RegisterMarkdown(e);
     });
+
+    manager.tools.positionblocks();
 });
 
 //
@@ -23600,6 +23602,9 @@ $(document).on('blur','.block .check-empty', function () {
         $(this).removeClass('check-empty');    
         $(this).addClass('empty');
     }
+});
+$(window).scroll(function () {
+    manager.tools.positionblocks();
 });
 
 //
@@ -23787,6 +23792,21 @@ var manager = {
     pageTypes: [],
 
     tools: {
+        positionblocks: function () {
+            var toggles = $('.block-add');
+            var middle = $(window).height() / 2;
+        
+            for (var n = 0; n < toggles.length; n++) {
+                var toggle = toggles.get(n);
+        
+                if (toggle.getBoundingClientRect().y < middle) {
+                    $(toggle).removeClass('block-add-above').addClass('block-add-below');
+                } else {
+                    $(toggle).removeClass('block-add-below').addClass('block-add-above');
+                }
+            }
+        },
+
         markdown: function (str) {
             $.ajax({
                 url: '/manager/markdown',
