@@ -13536,11 +13536,11 @@ li.sitemap-item .actions.one {
   display: none;
   position: absolute;
   background: #fff;
-  top: -37px;
+  top: -35px;
   right: 80px;
   height: 37px;
   z-index: 2000;
-  padding: 6px 4px 0 6px;
+  padding: 4px 4px 0;
   border-style: solid;
   border-color: #ddd;
   border-width: 1px 0 0;
