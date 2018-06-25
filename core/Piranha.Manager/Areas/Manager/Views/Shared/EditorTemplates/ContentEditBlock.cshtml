@@ -2,7 +2,13 @@
 @{
     Layout = null;
     bool isInGroup = ViewBag.IsInGroup != null ? ViewBag.IsInGroup : false;
-    var blockType = ViewBag.GroupType != null ? ViewBag.GroupType : Piranha.App.Blocks.GetByType(Model.CLRType);
+    var blockType = Piranha.App.Blocks.GetByType(Model.CLRType);
+    Piranha.Runtime.AppBlock groupType = blockType;
+
+    if (ViewBag.GroupType != null)
+    {
+        groupType = ViewBag.GroupType;
+    }
 }
 <div class="sortable-item">
     <div class="block @(Model.IsGroup ? "block-group" : "")">
@@ -73,14 +79,14 @@
             @foreach (var category in Piranha.App.Blocks.GetCategories()) {
                 var items = Piranha.App.Blocks.GetByCategory(category, includeGroups: !isInGroup);
 
-                if (isInGroup && blockType.ItemTypes.Count > 0) {
-                    items = items.Where(i => blockType.ItemTypes.Contains(i.Type));
+                if (isInGroup && groupType.ItemTypes.Count > 0) {
+                    items = items.Where(i => groupType.ItemTypes.Contains(i.Type));
                 }
 
                 if (items.Count() > 0) {
                     <label>@category</label>
                     @foreach (var block in items) {
-                        <a href="#" data-typename="@block.TypeName" data-includegroups="@(!isInGroup)" data-grouptype="@(isInGroup ? blockType.TypeName : "")"><i class="@block.Icon"></i>@block.Name</a>
+                        <a href="#" data-typename="@block.TypeName" data-includegroups="@(!isInGroup)" data-grouptype="@(isInGroup ? groupType.TypeName : "")"><i class="@block.Icon"></i>@block.Name</a>
                     }
                 }
             }
