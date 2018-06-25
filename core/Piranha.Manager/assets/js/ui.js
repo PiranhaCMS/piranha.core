@@ -94,7 +94,6 @@ var sortableBlocks = sortable('.page-blocks-body .sortable', {
     items: ':not(.unsortable)'
 });
 for (var n = 0; n < sortableBlocks.length; n++) {
-    console.log('Adding sortable events');
     sortableBlocks[n].addEventListener('sortupdate', function(e) {
         manager.tools.recalcblocks();
     });
@@ -168,9 +167,7 @@ $(document).on('focus', '.block .empty', function () {
     $(this).addClass('check-empty');
 });
 $(document).on('blur','.block .check-empty', function () {
-    console.log('check empty [' + $(this).text() + ']');
-
-    if ($(this).text().replace(/\s/g, '') == '') {
+    if (manager.tools.isempty(this)) {
         $(this).removeClass('check-empty');    
         $(this).addClass('empty');
     }
@@ -364,6 +361,10 @@ var manager = {
     pageTypes: [],
 
     tools: {
+        isempty: function(elm) {
+            return $(elm).text().replace(/\s/g, '') == '' && $(elm).find('img').length == 0;
+        },
+
         positionblocks: function () {
             var toggles = $('.block-add');
             var middle = $(window).height() / 2;
@@ -523,7 +524,6 @@ var manager = {
                 var subitems = $(items.get(n)).find('.block-group-body .sortable-item');
 
                 for (var s = 0; s < subitems.length; s++) {
-                    console.log('recalcing indexes for subitem ' + s);
                     var subInputs = $(subitems.get(s)).find('input, textarea, select');
 
                     subInputs.attr('id', function (i, val) {
