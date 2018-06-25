@@ -61,6 +61,11 @@ namespace Piranha.Runtime
                 item.Name = attr.Name;
                 item.Category = attr.Category;
                 item.Icon = attr.Icon;
+
+                if (attr is BlockGroupTypeAttribute)
+                {
+                    item.UseCustomView = ((BlockGroupTypeAttribute)attr).UseCustomView;
+                }
             }
 
             var itemAttrs = typeof(TValue).GetTypeInfo().GetCustomAttributes(typeof(BlockItemTypeAttribute));

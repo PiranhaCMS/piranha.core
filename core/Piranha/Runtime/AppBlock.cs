@@ -31,6 +31,12 @@ namespace Piranha.Runtime
         public string Icon { get; set; }
 
         /// <summary>
+        /// Gets/sets if the block group should use a 
+        /// custom view.
+        /// </summary>
+        public bool UseCustomView { get; set; }
+
+        /// <summary>
         /// Gets/sets the specified item types.
         /// </summary>
         public IList<Type> ItemTypes { get; set; }

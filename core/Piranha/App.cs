@@ -332,7 +332,6 @@ namespace Piranha
                         _blocks.Register<Extend.Blocks.ImageBlock>();
                         _blocks.Register<Extend.Blocks.QuoteBlock>();
                         _blocks.Register<Extend.Blocks.TextBlock>();
-                        _blocks.Register<Extend.Blocks.SliderGroup>();
 
                         // Compose serializers
                         _serializers.Register<Extend.Fields.CheckBoxField>(new CheckBoxFieldSerializer<Extend.Fields.CheckBoxField>());

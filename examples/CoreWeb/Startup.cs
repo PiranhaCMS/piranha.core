@@ -81,6 +81,9 @@ namespace CoreWeb
             var api = services.GetService<IApi>();
             App.Init(api);
 
+            // Add custom blocks
+            App.Blocks.Register<Models.Blocks.SliderGroup>();
+
             // Build types
             var pageTypeBuilder = new Piranha.AttributeBuilder.PageTypeBuilder(api)
                 .AddType(typeof(Models.BlogArchive))
