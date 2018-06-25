@@ -84,14 +84,18 @@
 				padding: 15px;
 
 				i.group-icon {
+					color: #ccc;
 					float: left;
 					font-size: 22px;
-					margin-right: 10px;
-					opacity: 0.4;
+					margin-right: 8px;
 				}
 
 				h3.group-title {
-					margin-bottom: 0;
+					color: #ccc;
+					font-size: 12px;
+					font-family: Arial, sans-serif;
+					font-weight: bold;
+					line-height: 22px;
 				}
 
 				.well {
@@ -106,6 +110,19 @@
 				.form-group:last-of-type {
 					margin-bottom: 0;
 				}
+
+				.block-extras {
+					top: -1px;
+					background: #eef4f8;
+
+					button {
+						background: #fff;
+
+						&:hover {
+							background: #fff;
+						}
+					}
+				}
 			}
 
 			.block-group-body {
@@ -115,6 +132,9 @@
 
 			>.block-actions {
 				background: #eef4f8;
+				top: -1px;
+				left: initial;
+				border-left: 0 none;
 
 				.btn.btn-secondary {
 					background: #fff;
@@ -362,7 +382,7 @@
 	}
 
 	.block:hover {
-		>.block-extras {
+		>.block-extras, >.block-group-heading >.block-extras {
 			display: block;
 		}
 	}

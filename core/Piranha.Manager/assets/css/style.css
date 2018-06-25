@@ -13305,13 +13305,17 @@ li.sitemap-item .actions.one {
   padding: 15px;
 }
 #page-blocks .block.block-group .block-group-heading i.group-icon {
+  color: #ccc;
   float: left;
   font-size: 22px;
-  margin-right: 10px;
-  opacity: 0.4;
+  margin-right: 8px;
 }
 #page-blocks .block.block-group .block-group-heading h3.group-title {
-  margin-bottom: 0;
+  color: #ccc;
+  font-size: 12px;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  line-height: 22px;
 }
 #page-blocks .block.block-group .block-group-heading .well {
   background: #fff;
@@ -13324,12 +13328,25 @@ li.sitemap-item .actions.one {
 #page-blocks .block.block-group .block-group-heading .form-group:last-of-type {
   margin-bottom: 0;
 }
+#page-blocks .block.block-group .block-group-heading .block-extras {
+  top: -1px;
+  background: #eef4f8;
+}
+#page-blocks .block.block-group .block-group-heading .block-extras button {
+  background: #fff;
+}
+#page-blocks .block.block-group .block-group-heading .block-extras button:hover {
+  background: #fff;
+}
 #page-blocks .block.block-group .block-group-body {
   background: #fdfdfd;
   padding: 15px;
 }
 #page-blocks .block.block-group > .block-actions {
   background: #eef4f8;
+  top: -1px;
+  left: initial;
+  border-left: 0 none;
 }
 #page-blocks .block.block-group > .block-actions .btn.btn-secondary {
   background: #fff;
@@ -13551,7 +13568,8 @@ li.sitemap-item .actions.one {
 #page-blocks .block-extras button.btn-secondary:hover {
   background: #ddd;
 }
-#page-blocks .block:hover > .block-extras {
+#page-blocks .block:hover > .block-extras,
+#page-blocks .block:hover > .block-group-heading > .block-extras {
   display: block;
 }
 #page-blocks .block:hover .block-html-swap {
