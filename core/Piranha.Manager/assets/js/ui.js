@@ -145,7 +145,7 @@ $(document).on('click', '.block-add-toggle', function(e) {
 $(document).on('click', '.block-add-dialog a', function (e) {
     e.preventDefault();
 
-    manager.tools.addblock($(this).parent().parent().parent(), $(this).attr('data-typename'), 'page', $(this).attr('data-includegroups'), function() {
+    manager.tools.addblock($(this).parent().parent().parent(), $(this).attr('data-typename'), 'page', $(this).attr('data-includegroups'), $(this).attr('data-grouptype'), function() {
         manager.tools.recalcblocks();
         $('.block-add').removeClass('active');    
     });
@@ -464,7 +464,7 @@ var manager = {
             }
         },
 
-        addblock: function(target, blockType, contentType, includeGroups, cb) {
+        addblock: function(target, blockType, contentType, includeGroups, groupType, cb) {
             $.ajax({
                 url: '/manager/block/create',
                 method: 'POST',
@@ -473,7 +473,8 @@ var manager = {
                 data: JSON.stringify({
                     TypeName: blockType,
                     BlockIndex: 0,
-                    IncludeGroups: includeGroups
+                    IncludeGroups: includeGroups,
+                    GroupType: groupType
                 }),
                 success: function (res) {
                     $('.page-blocks-body >.block-info').remove();

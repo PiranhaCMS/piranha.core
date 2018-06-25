@@ -46,6 +46,7 @@ namespace Piranha.Areas.Manager.Controllers
 
             if (block != null) {
                 ViewBag.IsInGroup = !model.IncludeGroups;
+                ViewBag.GroupType = !string.IsNullOrEmpty(model.GroupType) ? App.Blocks.GetByType(model.GroupType) : null;
                 if (model.IncludeGroups)
                     ViewData.TemplateInfo.HtmlFieldPrefix = $"Blocks[{model.BlockIndex}]";
                 else ViewData.TemplateInfo.HtmlFieldPrefix = $"Blocks[{model.BlockIndex}].Items[0]";

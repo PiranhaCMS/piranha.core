@@ -14,6 +14,8 @@ namespace Piranha.Extend.Blocks
     /// Simple region for some optional page heading information.
     /// </summary>
     [BlockType(Name = "Slider", Category = "Groups", Icon = "far fa-newspaper")]
+    [BlockItemType(Type = typeof(HtmlBlock))]
+    [BlockItemType(Type = typeof(HtmlColumnBlock))]
 
     public class SliderGroup : BlockGroup
     {

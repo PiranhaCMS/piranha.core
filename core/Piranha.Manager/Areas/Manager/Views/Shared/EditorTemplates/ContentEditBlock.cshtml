@@ -2,9 +2,8 @@
 @{
     Layout = null;
     bool isInGroup = ViewBag.IsInGroup != null ? ViewBag.IsInGroup : false;
-    var blockType = Piranha.App.Blocks.GetByType(Model.CLRType);
+    var blockType = ViewBag.GroupType != null ? ViewBag.GroupType : Piranha.App.Blocks.GetByType(Model.CLRType);
 }
-
 <div class="sortable-item">
     <div class="block @(Model.IsGroup ? "block-group" : "")">
         <div class="block-actions">
@@ -40,10 +39,15 @@
                         <div class="block-add-dialog">
                             @foreach (var category in Piranha.App.Blocks.GetCategories()) {
                                 var items = Piranha.App.Blocks.GetByCategory(category, includeGroups: false);
+
+                                if (blockType.ItemTypes.Count > 0) {
+                                    items = items.Where(i => blockType.ItemTypes.Contains(i.Type));
+                                }
+
                                 if (items.Count() > 0) {
                                     <label>@category</label>
                                     @foreach (var block in items) {
-                                        <a href="#" data-typename="@block.TypeName" data-includegroups="false"><i class="@block.Icon"></i>@block.Name</a>
+                                        <a href="#" data-typename="@block.TypeName" data-includegroups="false" data-grouptype="@blockType.TypeName"><i class="@block.Icon"></i>@block.Name</a>
                                     }
                                 }
                             }
@@ -55,7 +59,7 @@
                 </div>
                 @for (var n = 0; n < Model.Items.Count(); n++)
                 {
-                    @Html.EditorFor(m => m.Items[n], "ContentEditBlock", new { IsInGroup = true }) 
+                    @Html.EditorFor(m => m.Items[n], "ContentEditBlock", new { IsInGroup = true, GroupType = blockType }) 
                 }
             </div>
         } else {
@@ -66,10 +70,15 @@
         <div class="block-add-dialog">
             @foreach (var category in Piranha.App.Blocks.GetCategories()) {
                 var items = Piranha.App.Blocks.GetByCategory(category, includeGroups: !isInGroup);
+
+                if (isInGroup && blockType.ItemTypes.Count > 0) {
+                    items = items.Where(i => blockType.ItemTypes.Contains(i.Type));
+                }
+
                 if (items.Count() > 0) {
                     <label>@category</label>
                     @foreach (var block in items) {
-                        <a href="#" data-typename="@block.TypeName" data-includegroups="@(!isInGroup)"><i class="@block.Icon"></i>@block.Name</a>
+                        <a href="#" data-typename="@block.TypeName" data-includegroups="@(!isInGroup)" data-grouptype="@(isInGroup ? blockType.TypeName : "")"><i class="@block.Icon"></i>@block.Name</a>
                     }
                 }
             }
