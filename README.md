@@ -15,52 +15,16 @@ depenencies, but still provide a flexible & high performance CMS library.
 
 Piranha is currently built for `NetStandard 2.0` and uses the following awesome packages:
 
-* AutoMapper `6.2.1`
-* Markdig `0.14.6`
-* Microsoft.EntityFrameworkCore `2.0.1`
-* Newtonsoft.Json `10.0.3`
-
-## Core Packages
-
-### Piranha
-[`AutoMapper`, `Markdig`, `Microsoft.EntityFrameworkCore`, `Newtonsoft.Json`]
-
-The core library that contains all data management, repositories, client models and extensibility features. In a way, everything you need to integrate Piranha into your existing solution.
-
-### Piranha.AspNetCore
-[`Microsoft.AspNetCore.Http`]
-
-Middleware components and other tools for building a .NET Core web application with Piranha.
-
-### Piranha.AttributeBuilder
-
-Components for automatically build and import page types by adding simple attributes to your models.
-
-### Piranha.Azure.BlobStorage
-
-[`WindowsAzure.Storage`]
-
-Provider for storing uploaded media files on Azure Blob Storage.
-
-### Piranha.Local.FileStorage
-
-Provider for storing uploaded media files on the local filesystem.
-
-### Piranha.Manager
-[`Microsoft.AspNetCore.Mvc`, `Microsoft.AspNetCore.Session`, `Microsoft.AspNetCore.StaticFiles`, `Microsoft.Extensions.FileProviders.Embedded`]
-
-Manager interface for Piranha.
-
-## Licensing
-Piranha CMS is released under the **MIT** license. It is a permissive free software license,
-meaning that it permits reuse within proprietary software provided all copies of the licensed
-software include a copy of the MIT License terms and the copyright notice.
+* AutoMapper `6.2.2`
+* Markdig `0.15.0`
+* Microsoft.EntityFrameworkCore `2.1.0`
+* Newtonsoft.Json `11.0.2`
 
 ## Getting started
 
 #### Prerequisites
 
-* [.NET Core SDK 2.0](https://www.microsoft.com/net/core/)
+* [.NET Core SDK 2.1](https://www.microsoft.com/net/core/)
 * An IDE or Editor of your choice
 
 #### Get the latest source code and get going:
