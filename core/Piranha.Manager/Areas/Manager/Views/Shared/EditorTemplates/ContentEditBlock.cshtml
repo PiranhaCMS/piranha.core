@@ -25,10 +25,12 @@
         @Html.HiddenFor(m => m.Value.Id)
         @if (Model.IsGroup)
         {
-            <div class="block-group-heading">
+            <div class="block-group-heading @(!blockType.UseCustomView ? "default" : "")">
                 <i class="far fa-newspaper group-icon"></i>
                 <h3 class="group-title">Slider</h3>
-                @Html.EditorFor(m => m.Value, "BlockGroup")
+                @if (blockType.UseCustomView) {
+                    @Html.EditorFor(m => m.Value, Model.Value.GetType().Name)
+                }
             </div>
             <div class="block-group-info block-info">
                 <p>Expand the group to add or edit the items</p>
