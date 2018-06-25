@@ -13,8 +13,11 @@
                 <i class="@blockType.Icon pull-left block-icon"></i>
                 <span class="pull-left block-name">@blockType.Name</span>
             }
+            else 
+            {
+                <button class="btn btn-secondary btn-sm block-expand"><span class="fas fa-angle-down"></span></button>
+            }
             <div class="btn btn-secondary btn-sm sortable-handle"><span class="fas fa-ellipsis-v"></span></div>
-            <button class="btn btn-secondary btn-sm block-settings" style="display:none"><span class="fas fa-cog"></span></button>
             <button class="btn btn-secondary btn-sm block-remove"><span class="fas fa-trash"></span></button>
         </div>
         @Html.HiddenFor(m => m.Id)
@@ -27,6 +30,9 @@
                 <i class="far fa-newspaper group-icon"></i>
                 <h3 class="group-title">Slider</h3>
                 @Html.EditorFor(m => m.Value, "BlockGroup")
+            </div>
+            <div class="block-group-info block-info">
+                <p>Expand the group to add or edit the items</p>
             </div>
             <div class="block-group-body">
                 <div class="unsortable">

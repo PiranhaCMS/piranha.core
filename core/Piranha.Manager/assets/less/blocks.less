@@ -15,7 +15,7 @@
 	padding: 0;
 
 	.block-info {
-		color: #999;
+		color: #ccc;
 		padding: 45px 50px 30px;
 		font-size: 20px;
 		text-align: center;
@@ -80,18 +80,15 @@
 
 			.block-group-heading {
 				background: #eef4f8;
-				border-bottom: solid 1px @border-color;
 				padding: 15px;
 
 				i.group-icon {
-					color: #ccc;
 					float: left;
 					font-size: 22px;
 					margin-right: 8px;
 				}
 
 				h3.group-title {
-					color: #ccc;
 					font-size: 12px;
 					font-family: Arial, sans-serif;
 					font-weight: bold;
@@ -113,6 +110,7 @@
 
 				.block-extras {
 					top: -1px;
+					right: 118px;
 					background: #eef4f8;
 
 					button {
@@ -125,9 +123,16 @@
 				}
 			}
 
+			.block-info {
+				border-top: solid 1px #ddd;
+				padding: 25px 50px 10px;
+			}
+
 			.block-group-body {
 				background: #fdfdfd;
 				padding: 15px;
+				border-top: solid 1px #ddd;
+				display: none;
 			}
 
 			>.block-actions {

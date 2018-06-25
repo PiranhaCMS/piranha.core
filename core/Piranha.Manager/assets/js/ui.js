@@ -162,6 +162,14 @@ $(document).on('click', '.block-html-swap', function (e) {
         $(columns[1]).html(col1);
     }
 });
+$(document).on('click', '.block-group .block-expand', function (e) {
+    e.preventDefault();
+
+    $(this).parent().parent().find('.block-info').slideToggle();
+    $(this).parent().parent().find('.block-group-body').slideToggle();
+    $(this).find('span').toggleClass('fa-angle-down');
+    $(this).find('span').toggleClass('fa-angle-up');
+});
 $(document).on('focus', '.block .empty', function () {
     $(this).removeClass('empty');
     $(this).addClass('check-empty');
@@ -468,7 +476,7 @@ var manager = {
                     IncludeGroups: includeGroups
                 }),
                 success: function (res) {
-                    $('.block-info').remove();
+                    $('.page-blocks-body >.block-info').remove();
                     $(res).insertAfter(target);
 
                     // If the new region contains a html editor, make sure

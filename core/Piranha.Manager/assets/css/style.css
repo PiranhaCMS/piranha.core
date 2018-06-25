@@ -13245,7 +13245,7 @@ li.sitemap-item .actions.one {
   padding: 0;
 }
 #page-blocks .block-info {
-  color: #999;
+  color: #ccc;
   padding: 45px 50px 30px;
   font-size: 20px;
   text-align: center;
@@ -13301,17 +13301,14 @@ li.sitemap-item .actions.one {
 }
 #page-blocks .block.block-group .block-group-heading {
   background: #eef4f8;
-  border-bottom: solid 1px #ddd;
   padding: 15px;
 }
 #page-blocks .block.block-group .block-group-heading i.group-icon {
-  color: #ccc;
   float: left;
   font-size: 22px;
   margin-right: 8px;
 }
 #page-blocks .block.block-group .block-group-heading h3.group-title {
-  color: #ccc;
   font-size: 12px;
   font-family: Arial, sans-serif;
   font-weight: bold;
@@ -13330,6 +13327,7 @@ li.sitemap-item .actions.one {
 }
 #page-blocks .block.block-group .block-group-heading .block-extras {
   top: -1px;
+  right: 118px;
   background: #eef4f8;
 }
 #page-blocks .block.block-group .block-group-heading .block-extras button {
@@ -13338,9 +13336,15 @@ li.sitemap-item .actions.one {
 #page-blocks .block.block-group .block-group-heading .block-extras button:hover {
   background: #fff;
 }
+#page-blocks .block.block-group .block-info {
+  border-top: solid 1px #ddd;
+  padding: 25px 50px 10px;
+}
 #page-blocks .block.block-group .block-group-body {
   background: #fdfdfd;
   padding: 15px;
+  border-top: solid 1px #ddd;
+  display: none;
 }
 #page-blocks .block.block-group > .block-actions {
   background: #eef4f8;
