@@ -139,16 +139,26 @@ $(document).on('click', '.block-add-toggle', function(e) {
     var active = $(this).parent().hasClass('active');
     $('.block-add').removeClass('active');
 
-    if (!active)
+    if (!active) {
         $(this).parent().addClass('active');
+        $('.form-dimmer').addClass('active');
+    } else {
+        $('.form-dimmer').removeClass('active');
+    }
 });
 $(document).on('click', '.block-add-dialog a', function (e) {
     e.preventDefault();
 
     manager.tools.addblock($(this).parent().parent().parent(), $(this).attr('data-typename'), 'page', $(this).attr('data-includegroups'), $(this).attr('data-grouptype'), function() {
         manager.tools.recalcblocks();
-        $('.block-add').removeClass('active');    
+        $('.block-add, .form-dimmer').removeClass('active');
     });
+});
+$(document).on('click', '.form-dimmer', function (e) {
+    e.preventDefault();
+
+    $('.block-add.active').removeClass('active');
+    $(this).removeClass('active');
 });
 $(document).on('click', '.block-html-swap', function (e) {
     e.preventDefault();

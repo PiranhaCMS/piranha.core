@@ -570,6 +570,22 @@
 	}
 }
 
+.form-dimmer {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: #000;
+	opacity: 0.5;
+	display: none;
+	z-index: 1900;
+	
+	&.active {
+		display: block;
+	}
+}
+
 @media (min-width: 990px) {
 	.single-region {
 		.tab-content > .tab-pane {
