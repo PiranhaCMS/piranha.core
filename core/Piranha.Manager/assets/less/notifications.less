@@ -1,0 +1,64 @@
+﻿//
+// Copyright (c) 2016 Håkan Edling
+//
+// This software may be modified and distributed under the terms
+// of the MIT license.  See the LICENSE file for details.
+// 
+// http://github.com/piranhacms/piranha.core
+//
+
+@keyframes notify-show-animation {
+    0% {
+        visibility: visible;
+        opacity: 1;
+        max-height: 0;
+        transform: scale(0);
+    }
+
+    100% {
+        visibility: visible;
+        opacity: 1;
+        max-height: 1000px;
+        transform: scale(1);
+    }
+}
+
+@keyframes notify-dismiss-animation {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    100% {
+        margin: 0;
+        padding: 0;
+        opacity: 0;
+        max-height: 0;
+        transform: scale(0);
+    }
+}
+
+.notifications-container {
+    z-index: 1000000;
+    position: fixed;
+    left: 15px;
+    bottom: 0px;
+    max-width: 500px;
+}
+
+.notification-alert {
+    width: 500px;
+    padding-left: 25px;
+    padding-right: 25px;
+    animation: notify-show-animation .3s ease;
+
+    p > i {
+        margin-right: 6px;
+    }
+
+    &.notification-dismiss {
+        overflow: hidden;
+        animation: notify-dismiss-animation .3s ease;
+        animation-fill-mode: forwards;
+    }
+}

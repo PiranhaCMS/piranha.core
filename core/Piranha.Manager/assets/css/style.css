@@ -12267,11 +12267,6 @@ a {
 .alert {
   border-radius: 0;
   border-width: 0;
-  opacity: .7;
-  transition: opacity ease-in-out 0.2s;
-}
-.alert:hover {
-  opacity: 1;
   transition: opacity ease-in-out 0.2s;
 }
 .alert.alert-info {
@@ -12285,6 +12280,17 @@ a {
 .alert.alert-success {
   background-color: #439700;
   color: #fff;
+}
+.alert.alert-danger {
+  background-color: #a94441;
+  color: #fff;
+}
+.alert.alert-warning {
+  background-color: #f1ad4d;
+  color: #222;
+}
+.alert.alert-warning hr {
+  border-color: #222;
 }
 .alert p {
   line-height: 29px;
@@ -12303,6 +12309,19 @@ a {
   text-overflow: ellipsis;
   overflow: hidden;
   top: 8px;
+}
+.dropdown-menu > li > button {
+  clear: both;
+  font-weight: 400;
+  color: #333;
+  display: block;
+  width: 100%;
+  padding: 3px 20px;
+  text-align: left;
+  background: white;
+}
+.dropdown-menu > li > button:hover {
+  background-color: #f5f5f5;
 }
 body.collapsed .navmenu-inverse {
   width: 50px;
@@ -13851,4 +13870,52 @@ li.sitemap-item .actions.one {
   background: url('../img/logo.png') 50% 0 no-repeat;
   height: 155px;
   margin-bottom: 20px;
+}
+@keyframes notify-show-animation {
+  0% {
+    visibility: visible;
+    opacity: 1;
+    max-height: 0;
+    transform: scale(0);
+  }
+  100% {
+    visibility: visible;
+    opacity: 1;
+    max-height: 1000px;
+    transform: scale(1);
+  }
+}
+@keyframes notify-dismiss-animation {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    max-height: 0;
+    transform: scale(0);
+  }
+}
+.notifications-container {
+  z-index: 1000000;
+  position: fixed;
+  left: 15px;
+  bottom: 0px;
+  max-width: 500px;
+}
+.notification-alert {
+  width: 500px;
+  padding-left: 25px;
+  padding-right: 25px;
+  animation: notify-show-animation 0.3s ease;
+}
+.notification-alert p > i {
+  margin-right: 6px;
+}
+.notification-alert.notification-dismiss {
+  overflow: hidden;
+  animation: notify-dismiss-animation 0.3s ease;
+  animation-fill-mode: forwards;
 }

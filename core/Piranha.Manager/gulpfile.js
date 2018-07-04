@@ -30,6 +30,7 @@ var paths = {
         "assets/lib/simplemde/dist/simplemde.min.js",
         "assets/lib/object.assign-polyfill/object.assign.js",
         "assets/js/html5sortable.js",
+        "assets/js/piranha.notifications.js",
         "assets/js/piranha.media.js",
         "assets/js/piranha.page.js",
         "assets/js/piranha.post.js",
