@@ -296,27 +296,6 @@
         </div>
     }
 
-    @*@if (!string.IsNullOrEmpty(alias)) {
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="alert alert-info">
-                    <div class="row">
-                        <div class="col-xs-10">
-                            <p>
-                                <strong>Info</strong>: It seems you have changed the permalink of the post. 
-                                Do you want to create an <strong>Alias</strong> from <code>/@($"{Model.BlogSlug}/{alias}")</code> 
-                                to <code>/@($"{Model.BlogSlug}/{Model.Slug}")</code>
-                            </p>
-                        </div>
-                        <div class="col-xs-2 text-right">
-                            <button id="submit-alias" class="btn btn-default btn-sm">Ok</button>
-                        </div>
-                    </div>                    
-                </div>
-            </div>
-        </div>        
-    }*@
-
     <div class="form-group">
         @Html.TextBoxFor(m => m.Title, new { @class = "form-control title", maxlength = 128, placeholder = "Your post title" })
         @Html.ValidationMessageFor(m => m.Title)
