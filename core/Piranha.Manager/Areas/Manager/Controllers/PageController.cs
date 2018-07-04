@@ -178,8 +178,7 @@ namespace Piranha.Areas.Manager.Controllers
         public IActionResult Save(Models.PageEditModel model) {
             // Validate
             if (string.IsNullOrWhiteSpace(model.Title)) {
-                ErrorMessage("The page could not be saved. Title is mandatory", false);
-                return View("Edit", editService.Refresh(model));                
+                return BadRequest();
             }
 
             var ret = editService.Save(model, out var alias);
@@ -187,13 +186,21 @@ namespace Piranha.Areas.Manager.Controllers
             // Save
             if (ret) {
                 if (!string.IsNullOrWhiteSpace(alias))
-                    TempData["AliasSuggestion"] = alias;
-                    
-                SuccessMessage("The page has been saved.");
-                return RedirectToAction("Edit", new { id = model.Id });
+                    return Json(new
+                    {
+                        Location = Url.Action("Edit", new { id = model.Id }),
+                        AliasSuggestion = new
+                        {
+                            Alias = alias,
+                            Redirect = model.Slug,
+                            SiteId = model.SiteId,
+                            PageId = model.Id
+                        }   
+                    });
+                else
+                    return Json(new { Location = Url.Action("Edit", new { id = model.Id }) });
             } else {
-                ErrorMessage("The page could not be saved.", false);
-                return View("Edit", editService.Refresh(model));
+                return StatusCode(500);
             }
         }
 
@@ -207,17 +214,18 @@ namespace Piranha.Areas.Manager.Controllers
         public IActionResult Publish(Models.PageEditModel model) {
             // Validate
             if (string.IsNullOrWhiteSpace(model.Title)) {
-                ErrorMessage("The page could not be saved. Title is mandatory", false);
-                return View("Edit", editService.Refresh(model));
+                return BadRequest();
             }
 
             // Save
             if (editService.Save(model, out var alias, true)) {
-                SuccessMessage("The page has been published.");
-                return RedirectToAction("Edit", new { id = model.Id });
+                return Json(new
+                {
+                    Published = DateTime.Now.ToString("yyyy-MM-dd HH:mm"),
+                    Location = Url.Action("Edit", new { id = model.Id })
+                });
             } else {
-                ErrorMessage("The page could not be published.", false);
-                return View(model);
+                return StatusCode(500);
             }
         }
 
@@ -230,11 +238,13 @@ namespace Piranha.Areas.Manager.Controllers
         [Authorize(Policy = Permission.PagesPublish)]
         public IActionResult UnPublish(Models.PageEditModel model) {
             if (editService.Save(model, out var alias, false)) {
-                SuccessMessage("The page has been unpublished.");
-                return RedirectToAction("Edit", new { id = model.Id });
+                return Json(new
+                {
+                    Unpublished = true,
+                    Location = Url.Action("Edit", new { id = model.Id })
+                });
             } else {
-                ErrorMessage("The page could not be unpublished.", false);
-                return View(model);
+                return StatusCode(500);
             }
         }
 
@@ -313,8 +323,10 @@ namespace Piranha.Areas.Manager.Controllers
                     Piranha.Manager.Utils.CreateAlias(api, siteId, $"{alias}/{post.Slug}", $"{redirect}/{post.Slug}");
             }
 
-            SuccessMessage("The alias list was updated.");
-            return RedirectToAction("Edit", new { id = pageId });
+            return Json(new
+            {
+                PostAffected = posts.Count()
+            });
         }
 
         /// <summary>
