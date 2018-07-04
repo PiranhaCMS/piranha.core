@@ -31,6 +31,12 @@ namespace Piranha.Runtime
         public string Icon { get; set; }
 
         /// <summary>
+        /// Gets/sets if the block type should only be listed
+        /// where specified explicitly.
+        /// </summary>
+        public bool IsUnlisted { get; set; }
+
+        /// <summary>
         /// Gets/sets if the block group should use a 
         /// custom view.
         /// </summary>
