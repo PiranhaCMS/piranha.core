@@ -13239,6 +13239,20 @@ li.sitemap-item .actions.one {
 .dropzone .dz-message span {
   margin-right: 5px;
 }
+.form-dimmer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: 0.5;
+  display: none;
+  z-index: 1900;
+}
+.form-dimmer.active {
+  display: block;
+}
 @media (min-width: 990px) {
   .single-region .tab-content > .tab-pane {
     display: inline-block !important;
@@ -13304,7 +13318,6 @@ li.sitemap-item .actions.one {
   margin: 20px 0;
   min-height: 48px;
   position: relative;
-  transition: border-color ease-in-out 0.2s;
 }
 #page-blocks .block .empty {
   background: #f2f2f2 url('../img/empty-twocol.png') 50% 50% no-repeat;
@@ -13348,9 +13361,7 @@ li.sitemap-item .actions.one {
   margin-bottom: 0;
 }
 #page-blocks .block.block-group .block-group-heading .block-extras {
-  top: -1px;
-  right: 118px;
-  background: #eef4f8;
+  margin: -52px 103px 0 0;
 }
 #page-blocks .block.block-group .block-group-heading .block-extras button {
   background: #fff;
@@ -13370,9 +13381,10 @@ li.sitemap-item .actions.one {
 }
 #page-blocks .block.block-group > .block-actions {
   background: #eef4f8;
-  top: -1px;
-  left: initial;
-  border-left: 0 none;
+  float: right;
+  padding-bottom: 0;
+  margin: 0;
+  border: none 0;
 }
 #page-blocks .block.block-group > .block-actions .btn.btn-secondary {
   background: #fff;
@@ -13391,18 +13403,13 @@ li.sitemap-item .actions.one {
 }
 #page-blocks .block .block-actions {
   background: #fff;
-  padding: 4px 8px 0;
-  position: absolute;
-  top: -35px;
-  right: -1px;
-  left: -1px;
+  padding: 4px 8px 5px;
+  margin: -40px -9px 0 -9px;
   text-align: right;
   border-style: solid;
   border-color: #ddd;
   border-width: 1px 1px 0 1px;
-  z-index: 2000;
   display: none;
-  transition: display ease-in-out 0.2s;
 }
 #page-blocks .block .block-actions .btn {
   min-width: 34px;
@@ -13428,11 +13435,9 @@ li.sitemap-item .actions.one {
 }
 #page-blocks .block:hover {
   border-color: #ddd;
-  transition: border-color ease-in-out 0.2s;
 }
 #page-blocks .block:hover > .block-actions {
   display: block;
-  transition: display ease-in-out 0.2s;
 }
 #page-blocks .block-add-dialog {
   display: none;
@@ -13513,7 +13518,6 @@ li.sitemap-item .actions.one {
   height: 2px;
   padding: 12px 8px;
   opacity: .05;
-  z-index: 2000;
   transition: opacity ease-in-out 0.2s;
 }
 #page-blocks .block-add hr {
@@ -13539,6 +13543,7 @@ li.sitemap-item .actions.one {
 #page-blocks .block-add.active {
   cursor: pointer;
   opacity: 1;
+  z-index: 2000;
   transition: opacity ease-in-out 0.2s;
 }
 #page-blocks .block-add.active .block-add-dialog {
@@ -13577,16 +13582,9 @@ li.sitemap-item .actions.one {
 }
 #page-blocks .block-extras {
   display: none;
-  position: absolute;
-  background: #fff;
-  top: -35px;
-  right: 80px;
-  height: 37px;
-  z-index: 2000;
+  float: right;
   padding: 4px 4px 0;
-  border-style: solid;
-  border-color: #ddd;
-  border-width: 1px 0 0;
+  margin: -39px 72px 0 0;
 }
 #page-blocks .block-extras button {
   min-width: 34px;

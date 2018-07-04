@@ -11,22 +11,24 @@
                 <tr>
                     <td colspan="4" style="border-top:none">
                         @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PostsAdd)).Succeeded) {
-                            <div class="btn-group pull-right">
-                                <button type="button" class="btn btn-labeled btn-primary btn-sm" data-toggle="dropdown">
-                                    <span class="btn-label">
-                                        <i class="fas fa-plus"></i>
-                                    </span>Add new item
-                                </button>
-                                <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
-                                    <span class="caret"></span>
-                                    <span class="sr-only">Toggle Dropdown</span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                                    @foreach (var type in blogModel.PostTypes) {
-                                        <li><a href="@Url.Action("Add", "Post", new { type = type.Id, blogId = Model.Id })">@type.Title</a></li>
-                                    }
-                                </ul>
-                            </div>
+                            if (Model.Id != Guid.Empty) {
+                                <div class="btn-group pull-right">
+                                    <button type="button" class="btn btn-labeled btn-primary btn-sm" data-toggle="dropdown">
+                                        <span class="btn-label">
+                                            <i class="fas fa-plus"></i>
+                                        </span>Add new item
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                        @foreach (var type in blogModel.PostTypes) {
+                                            <li><a href="@Url.Action("Add", "Post", new { type = type.Id, blogId = Model.Id })">@type.Title</a></li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
                         }
                         <div class="table-filter" data-table="#post-table">
                             <button class="btn btn-sm btn-primary" data-filter="">All</button>
