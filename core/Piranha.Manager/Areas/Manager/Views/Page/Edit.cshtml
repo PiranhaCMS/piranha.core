@@ -111,6 +111,11 @@
             e.preventDefault();
             $form = $(this);
 
+            // Copy content of all editable areas
+            $form.find('.editor-area').each(function () {
+                $('#' + $(this).attr('data-id')).val($(this).html());
+            });
+
             if ($("#Title").val() === "") {
                 piranha.notifications.add(
                     piranha.notifications.create(
