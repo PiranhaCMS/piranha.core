@@ -137,10 +137,10 @@ namespace Piranha.Repositories
             if (type == null)
                 return null;
 
-            cache.Set($"SiteContent_{id}", site);
-            var model = contentService.Transform<T>(site, type);
+            if (cache != null)
+                cache.Set($"SiteContent_{id}", site);
 
-            return model;
+            return contentService.Transform<T>(site, type);
         }
 
         /// <summary>
