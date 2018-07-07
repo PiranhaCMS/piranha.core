@@ -116,33 +116,31 @@ namespace Piranha.Repositories
         /// <param name="id">Site id</param>
         /// <typeparam name="T">The site model type</typeparam>
         /// <returns>The site content model</returns>
-        public T GetContentById<T>(Guid id) where T : Models.SiteContent<T> 
+        public T GetContentById<T>(Guid id) where T : Models.SiteContent<T>
         {
-            var model = cache != null ? cache.Get<T>($"SiteContent_{id}") : null;
-
-            if (model == null)
+            var site = cache != null ? cache.Get<Data.Site>($"SiteContent_{id}") : null;
+            if (site == null)
             {
-                var site = db.Sites
+                site = db.Sites
                     .Include(s => s.Fields)
                     .Where(s => s.Id == id)
                     .FirstOrDefault();
 
-                if (site != null)
-                {
-                    if (string.IsNullOrEmpty(site.SiteTypeId))
-                        return null;
-                    
-                    var type = api.SiteTypes.GetById(site.SiteTypeId);
-                    if (type == null)
-                        return null;
-
-                    model = contentService.Transform<T>(site, type);
-
-                    if (model != null && cache != null)
-                        cache.Set($"SiteContent_{id}", model);
-                }
+                if (site == null)
+                    return null;
             }
-            return model;
+
+            if (string.IsNullOrEmpty(site.SiteTypeId))
+                return null;
+
+            var type = api.SiteTypes.GetById(site.SiteTypeId);
+            if (type == null)
+                return null;
+
+            if (cache != null)
+                cache.Set($"SiteContent_{id}", site);
+
+            return contentService.Transform<T>(site, type);
         }
 
         /// <summary>
