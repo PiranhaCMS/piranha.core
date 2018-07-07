@@ -1,3 +1,4 @@
 {
-  "directory": "assets/lib"
+  "directory": "assets/lib",
+  "registry": "https://registry.bower.io"
 }
