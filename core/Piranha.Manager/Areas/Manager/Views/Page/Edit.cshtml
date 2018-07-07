@@ -356,8 +356,10 @@
                                 <div class="block-add">
                                     <div class="block-add-dialog">
                                         @foreach (var category in Piranha.App.Blocks.GetCategories()) {
+                                            var items = Piranha.App.Blocks.GetByCategory(category).Where(i => !i.IsUnlisted);
+
                                             <label>@category</label>
-                                            @foreach (var block in Piranha.App.Blocks.GetByCategory(category)) {
+                                            @foreach (var block in items) {
                                                 <a href="#" data-typename="@block.TypeName"><i class="@block.Icon"></i>@block.Name</a>
                                             }
                                         }

@@ -29,5 +29,11 @@ namespace Piranha.Extend
         /// Gets/set the icon css.
         /// </summary>
         public string Icon { get; set; }
+
+        /// <summary>
+        /// Gets/sets if the block type should only be listed
+        /// where specified explicitly.
+        /// </summary>
+        public bool IsUnlisted { get; set; }
     }
 }

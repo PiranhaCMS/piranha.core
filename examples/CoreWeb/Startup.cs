@@ -83,6 +83,7 @@ namespace CoreWeb
 
             // Add custom blocks
             App.Blocks.Register<Models.Blocks.SliderGroup>();
+            App.Blocks.Register<Models.Blocks.SliderItem>();
 
             // Build types
             var pageTypeBuilder = new Piranha.AttributeBuilder.PageTypeBuilder(api)

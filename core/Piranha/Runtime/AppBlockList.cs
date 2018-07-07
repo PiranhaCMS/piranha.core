@@ -61,6 +61,7 @@ namespace Piranha.Runtime
                 item.Name = attr.Name;
                 item.Category = attr.Category;
                 item.Icon = attr.Icon;
+                item.IsUnlisted = attr.IsUnlisted;
 
                 if (attr is BlockGroupTypeAttribute)
                 {
