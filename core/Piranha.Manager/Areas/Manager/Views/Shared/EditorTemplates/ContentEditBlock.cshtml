@@ -83,7 +83,7 @@
                 if (isInGroup && groupType.ItemTypes.Count > 0) {
                     items = items.Where(i => groupType.ItemTypes.Contains(i.Type));
                 }
-                items = items.Where(i => !i.IsUnlisted || groupType.ItemTypes.Contains(i.Type));
+                items = items.Where(i => !i.IsUnlisted || (isInGroup && groupType.ItemTypes.Contains(i.Type)));
 
                 if (items.Count() > 0) {
                     <label>@category</label>
