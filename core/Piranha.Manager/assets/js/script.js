@@ -23199,7 +23199,7 @@ piranha.notifications = new function() {
     self.add = function (notification, countDown) {
 
         if (typeof countDown === 'undefined')
-            countDown = 5000;
+            countDown = 3500;
 
         // Remove dismiss class if any.
         // Can be on the element if it already been added once.
