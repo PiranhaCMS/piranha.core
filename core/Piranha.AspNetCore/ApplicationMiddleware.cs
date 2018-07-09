@@ -10,21 +10,23 @@
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Net.Http.Headers;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Piranha.AspNetCore.Services;
 using Piranha.Web;
 
 namespace Piranha.AspNetCore
 {
-    public class AliasMiddleware : MiddlewareBase
+    public class ApplicationMiddleware : MiddlewareBase
     {
         /// <summary>
         /// Creates a new middleware instance.
         /// </summary>
         /// <param name="next">The next middleware in the pipeline</param>
         /// <param name="factory">The logger factory</param>
-        public AliasMiddleware(RequestDelegate next, ILoggerFactory factory = null) : base(next, factory) { }
+        public ApplicationMiddleware(RequestDelegate next, ILoggerFactory factory = null) : base(next, factory) { }
 
         /// <summary>
         /// Invokes the middleware.
@@ -34,20 +36,9 @@ namespace Piranha.AspNetCore
         /// <returns>An async task</returns>
         public override async Task Invoke(HttpContext context, IApi api, IApplicationService service)
         {
-            if (!IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/"))
-            {
-                var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
+            service.Init(context);
 
-                var response = AliasRouter.Invoke(api, url, service.SiteId);
-                if (response != null)
-                {
-                    if (_logger != null)
-                        _logger.LogInformation($"Found alias\n  Alias: {url}\n  Redirect: {response.RedirectUrl}");
-
-                    context.Response.Redirect(response.RedirectUrl, response.RedirectType == Models.RedirectType.Permanent);
-                    return;
-                }
-            }
+            // Nothing to see here, move along
             await _next.Invoke(context);
         }
     }

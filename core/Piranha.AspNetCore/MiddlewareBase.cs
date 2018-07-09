@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using Piranha.AspNetCore.Services;
 
 namespace Piranha.AspNetCore
 {
@@ -33,7 +34,7 @@ namespace Piranha.AspNetCore
         /// <summary>
         /// The item key for accessing the stored site id.
         /// </summary>
-        public const string SiteId = "Piranha_SiteId";
+        //public const string SiteId = "Piranha_SiteId";
 
         /// <summary>
         /// Creates a new middleware instance.
@@ -61,7 +62,7 @@ namespace Piranha.AspNetCore
         /// <param name="context">The current http context</param>
         /// <param name="api">The current api</param>
         /// <returns>An async task</returns>
-        public abstract Task Invoke(HttpContext context, IApi api);
+        public abstract Task Invoke(HttpContext context, IApi api, IApplicationService service);
 
         /// <summary>
         /// Checks if the request has already been handled by another
@@ -82,6 +83,7 @@ namespace Piranha.AspNetCore
         /// </summary>
         /// <param name="context">The current HttpContext</param>
         /// <returns>The requested site id</returns>
+        /*
         protected Guid GetSiteId(HttpContext context)
         {
             object id = null;
@@ -90,5 +92,6 @@ namespace Piranha.AspNetCore
                 return (Guid)id;
             return Guid.Empty;
         }
+        */
     }
 }

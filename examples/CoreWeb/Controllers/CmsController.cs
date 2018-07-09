@@ -49,9 +49,6 @@ namespace CoreWeb.Controllers
             else if (tag.HasValue)
                 model = api.Archives.GetByTagId<Models.BlogArchive>(id, tag.Value, page, year, month);
             else model = api.Archives.GetById<Models.BlogArchive>(id, page, year, month);
-            
-            ViewBag.CurrentPage = model.Id;
-            ViewBag.SiteId = (Guid)HttpContext.Items["Piranha_SiteId"];
 
             return View(model);
         }
@@ -63,8 +60,6 @@ namespace CoreWeb.Controllers
         [Route("page")]
         public IActionResult Page(Guid id) {
             var model = api.Pages.GetById<Models.StandardPage>(id);
-            ViewBag.CurrentPage = model.Id;
-            ViewBag.SiteId = (Guid)HttpContext.Items["Piranha_SiteId"];
 
             return View(model);
         }
@@ -76,8 +71,6 @@ namespace CoreWeb.Controllers
         [Route("post")]
         public IActionResult Post(Guid id) {
             var model = api.Posts.GetById<Models.BlogPost>(id);
-            ViewBag.CurrentPage = model.BlogId;
-            ViewBag.SiteId = (Guid)HttpContext.Items["Piranha_SiteId"];
 
             return View(model);
         }
@@ -90,8 +83,6 @@ namespace CoreWeb.Controllers
         [Route("teaserpage")]
         public IActionResult TeaserPage(Guid id, bool startpage) {
             var model = api.Pages.GetById<Models.TeaserPage>(id);
-            ViewBag.CurrentPage = model.Id;
-            ViewBag.SiteId = (Guid)HttpContext.Items["Piranha_SiteId"];
 
             if (startpage)
                 return View("Start", model);

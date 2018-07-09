@@ -42,6 +42,7 @@ namespace Piranha.Web
 
                         return new RouteResponse
                         {
+                            PageId = post.BlogId,
                             Route = route,
                             QueryString = $"id={post.Id}&piranha_handled=true",
                             IsPublished = post.Published.HasValue && post.Published.Value <= DateTime.Now,
