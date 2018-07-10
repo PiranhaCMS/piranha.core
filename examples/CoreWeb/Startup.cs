@@ -179,10 +179,11 @@ namespace CoreWeb
                     Body =
                         "<p>Piranha is currently built for <code>NetStandard 2.0</code> and uses the following awesome packages:</p>" +
                         "<ul> " +
-                        "<li>AutoMapper <code>6.2.1</code></li>" +
-                        "<li>Markdig <code>0.14.6</code></li>" +
-                        "<li>Microsoft.EntityFrameworkCore <code>2.0.1</code></li>" +
-                        "<li>Newtonsoft.Json <code>10.0.3</code></li>" +
+                        "<li>AutoMapper <code>7.0.1</code></li>" +
+                        "<li>Markdig <code>0.15.0</code></li>" +
+                        "<li>Microsoft.AspNetCore <code>2.1.1</code></li>" +
+                        "<li>Microsoft.EntityFrameworkCore <code>2.1.1</code></li>" +
+                        "<li>Newtonsoft.Json <code>11.0.2</code></li>" +
                         "</ul>"
                 });
                 startPage.Blocks.Add(new HtmlBlock {

@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha</id>
 		<title>Piranha</title>
-    <version>5.1.0-beta1</version>
+    <version>5.1.0</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -18,9 +18,9 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework=".NETStandard2.0">
-        <dependency id="AutoMapper" version="6.2.2" />
+        <dependency id="AutoMapper" version="7.0.1" />
         <dependency id="Markdig" version="0.15.0" />
-        <dependency id="Microsoft.EntityFrameworkCore.Relational" version="2.1.0" />
+        <dependency id="Microsoft.EntityFrameworkCore.Relational" version="2.1.1" />
         <dependency id="Newtonsoft.Json" version="11.0.2" />
       </group>
     </dependencies>
