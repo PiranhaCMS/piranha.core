@@ -1,15 +1,11 @@
-﻿@inject Piranha.IApi Api
-@{
-    var sitemap = Api.Sites.GetSitemap((Guid)ViewBag.SiteId);
-    var currentPage = ViewBag.CurrentPage;
-
+﻿@{
     //
     // Simple helper function for styling menu items
     //
     Func<Piranha.Models.SitemapItem, string> Css = (item) => {
-        if (item.Id == currentPage) {
+        if (item.Id == WebApp.PageId) {
             return "class=active";
-        } else if (item.HasChild(currentPage)) {
+        } else if (item.HasChild(WebApp.PageId)) {
             return "class=active-child";
         }
         return "";
@@ -17,7 +13,7 @@
 }
 
 <ul class="nav nav-pills pull-right">
-    @foreach (var item in sitemap) {
+    @foreach (var item in WebApp.Site.Sitemap) {
         if (!item.IsHidden) {
             <li role="presentation" @Css(item)><a href="@item.Permalink">@item.MenuTitle</a></li>
         }

@@ -10,9 +10,10 @@
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Piranha.Web;
 using System;
 using System.Threading.Tasks;
+using Piranha.AspNetCore.Services;
+using Piranha.Web;
 
 namespace Piranha.AspNetCore
 {
@@ -30,12 +31,12 @@ namespace Piranha.AspNetCore
         /// <param name="context">The current http context</param>
         /// <param name="api">The current api</param>
         /// <returns>An async task</returns>
-        public override async Task Invoke(HttpContext context, IApi api)
+        public override async Task Invoke(HttpContext context, IApi api, IApplicationService service)
         {
             if (!IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/"))
             {
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
-                var siteId = GetSiteId(context);
+                var siteId = service.Site.Id;
 
                 var response = ArchiveRouter.Invoke(api, url, siteId);
                 if (response != null)
@@ -43,6 +44,7 @@ namespace Piranha.AspNetCore
                     if (_logger != null)
                         _logger.LogInformation($"Found archive\n  Route: {response.Route}\n  Params: {response.QueryString}");
 
+                    service.PageId = response.PageId;
                     context.Request.Path = new PathString(response.Route);
 
                     if (context.Request.QueryString.HasValue)

@@ -8,10 +8,17 @@
  * 
  */
 
+using System;
+
 namespace Piranha.Web
 {
     public class RouteResponse : IRouteResponse
     {
+        /// <summary>
+        /// Gets/sets the page id.
+        /// </summary>
+        public Guid PageId { get; set; }
+
         /// <summary>
         /// Gets/sets the route.
         /// </summary>

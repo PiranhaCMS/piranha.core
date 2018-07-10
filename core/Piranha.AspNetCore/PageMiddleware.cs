@@ -14,6 +14,7 @@ using Microsoft.Net.Http.Headers;
 using Piranha.Web;
 using System;
 using System.Threading.Tasks;
+using Piranha.AspNetCore.Services;
 
 namespace Piranha.AspNetCore
 {
@@ -32,12 +33,12 @@ namespace Piranha.AspNetCore
         /// <param name="context">The current http context</param>
         /// <param name="api">The current api</param>
         /// <returns>An async task</returns>
-        public override async Task Invoke(HttpContext context, IApi api)
+        public override async Task Invoke(HttpContext context, IApi api, IApplicationService service)
         {
             if (!IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/"))
             {
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
-                var siteId = GetSiteId(context);
+                var siteId = service.Site.Id;
                 var authorized = true;
 
                 var response = PageRouter.Invoke(api, url, siteId);
@@ -60,6 +61,8 @@ namespace Piranha.AspNetCore
                     {
                         if (string.IsNullOrWhiteSpace(response.RedirectUrl))
                         {
+                            service.PageId = response.PageId;
+
                             using (var config = new Config(api))
                             {
                                 var headers = context.Response.GetTypedHeaders();

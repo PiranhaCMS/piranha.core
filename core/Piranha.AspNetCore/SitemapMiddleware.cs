@@ -11,10 +11,11 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
-using Piranha.Web;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Piranha.AspNetCore.Services;
+using Piranha.Web;
 using X.Web.Sitemap;
 
 namespace Piranha.AspNetCore
@@ -34,7 +35,7 @@ namespace Piranha.AspNetCore
         /// <param name="context">The current http context</param>
         /// <param name="api">The current api</param>
         /// <returns>An async task</returns>
-        public override async Task Invoke(HttpContext context, IApi api)
+        public override async Task Invoke(HttpContext context, IApi api, IApplicationService service)
         {
             if (!IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/"))
             {
@@ -50,7 +51,7 @@ namespace Piranha.AspNetCore
                         _logger.LogInformation($"Sitemap.xml requested, generating");
 
                     // Get the requested site by hostname
-                    var siteId = GetSiteId(context);
+                    var siteId = service.Site.Id;
 
                     // Get the sitemap for the site
                     var pages = api.Sites.GetSitemap(siteId);

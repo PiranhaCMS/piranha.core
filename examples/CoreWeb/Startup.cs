@@ -65,6 +65,7 @@ namespace CoreWeb
             //services.AddPiranhaEF(options => options.UseMySql("server=localhost;port=3306;database=piranha;uid=root;password=password"));
             //services.AddPiranhaIdentityWithSeed<IdentityMySQLDb>(options => options.UseMySql("server=localhost;port=3306;database=piranha;uid=root;password=password"));
             services.AddPiranhaManager();
+            services.AddPiranhaApplication();
 
             return services.BuildServiceProvider();
         }

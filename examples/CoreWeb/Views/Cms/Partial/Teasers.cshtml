@@ -13,7 +13,7 @@
                     <div class="col-sm-@teaserWidth">
                         <h3>@teaser.Title.Value</h3>
                         @if (teaser.Image.HasValue) {
-                            <img src="@Url.Content(teaser.Image.Resize(Api, 256))">
+                            <img src="@Url.Content(WebApp.Media.ResizeImage(teaser.Image, 256))">
                         }
                         @Html.Raw(teaser.Body)
                     </div>

@@ -33,6 +33,7 @@ namespace Piranha.Web
                     {
                         return new RouteResponse
                         {
+                            PageId = page.Id,
                             Route = page.Route ?? "/page",
                             QueryString = "id=" + page.Id + "&startpage=true&piranha_handled=true",
                             IsPublished = page.Published.HasValue && page.Published.Value <= DateTime.Now,

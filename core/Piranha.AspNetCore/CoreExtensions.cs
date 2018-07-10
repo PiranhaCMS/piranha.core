@@ -15,6 +15,16 @@ using System;
 public static class CoreExtensions
 {
     /// <summary>
+    /// Adds the piranha application service.
+    /// </summary>
+    /// <param name="services">The service collection</param>
+    public static IServiceCollection AddPiranhaApplication(this IServiceCollection services)
+    {
+        return services
+            .AddScoped<Piranha.AspNetCore.Services.IApplicationService, Piranha.AspNetCore.Services.ApplicationService>();
+    }
+
+    /// <summary>
     /// Uses the piranha middleware.
     /// </summary>
     /// <param name="builder">The current application builder</param>
@@ -22,7 +32,7 @@ public static class CoreExtensions
     public static IApplicationBuilder UsePiranha(this IApplicationBuilder builder)
     {
         return builder
-            .UseMiddleware<Piranha.AspNetCore.SiteMiddleware>()
+            .UseMiddleware<Piranha.AspNetCore.ApplicationMiddleware>()
             .UseMiddleware<Piranha.AspNetCore.AliasMiddleware>()
             .UseMiddleware<Piranha.AspNetCore.PageMiddleware>()
             .UseMiddleware<Piranha.AspNetCore.PostMiddleware>()
@@ -40,6 +50,17 @@ public static class CoreExtensions
     {
         return builder
             .UseMiddleware<Piranha.AspNetCore.AliasMiddleware>();
+    }
+
+    /// <summary>
+    /// Uses the piranha application middleware.
+    /// </summary>
+    /// <param name="builder">The current application builder</param>
+    /// <returns>The builder</returns>
+    public static IApplicationBuilder UsePiranhaApplication(this IApplicationBuilder builder)
+    {
+        return builder
+            .UseMiddleware<Piranha.AspNetCore.ApplicationMiddleware>();
     }
 
     /// <summary>
@@ -91,11 +112,11 @@ public static class CoreExtensions
     /// </summary>
     /// <param name="builder">The current application builder</param>
     /// <returns>The builder</returns>
+    [Obsolete("Please replace UsePiranhaSites with UsePiranhaApplication.", false)]
     public static IApplicationBuilder UsePiranhaSites(this IApplicationBuilder builder)
     {
-        return builder
-            .UseMiddleware<Piranha.AspNetCore.SiteMiddleware>();
-    }
+        return UsePiranhaApplication(builder);
+    }    
 
     /// <summary>
     /// Uses the piranha sitemap generation middleware.
