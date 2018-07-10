@@ -38,7 +38,7 @@ namespace Piranha.AspNetCore
             if (!IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/"))
             {
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
-                var siteId = service.SiteId;
+                var siteId = service.Site.Id;
                 var authorized = true;
 
                 var response = StartPageRouter.Invoke(api, url, siteId);

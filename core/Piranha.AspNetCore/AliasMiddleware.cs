@@ -38,7 +38,7 @@ namespace Piranha.AspNetCore
             {
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
 
-                var response = AliasRouter.Invoke(api, url, service.SiteId);
+                var response = AliasRouter.Invoke(api, url, service.Site.Id);
                 if (response != null)
                 {
                     if (_logger != null)

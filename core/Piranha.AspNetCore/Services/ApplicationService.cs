@@ -11,12 +11,96 @@
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Linq;
+using Piranha.Data;
+using Piranha.Extend.Fields;
 using Piranha.Models;
 
 namespace Piranha.AspNetCore.Services
 {
     public class ApplicationService : IApplicationService
     {
+        public class SiteHelper : ISiteHelper
+        {
+            private readonly IApi _api;
+
+            /// <summary>
+            /// Gets the id of the currently requested site.
+            /// </summary>
+            public Guid Id { get; set; }
+
+            /// <summary>
+            /// Gets the sitemap of the currently requested site.
+            /// </summary>
+            public Sitemap Sitemap { get; set; }
+
+            /// <summary>
+            /// Default internal constructur.
+            /// </summary>
+            internal SiteHelper(IApi api) 
+            {
+                _api = api;
+            }
+
+            /// <summary>
+            /// Gets the site content for the current site.
+            /// </summary>
+            /// <typeparam name="T">The content type</typeparam>
+            /// <returns>The site content model</returns>
+            public T GetContent<T>() where T : SiteContent<T>
+            {
+                if (Id != Guid.Empty)
+                {
+                    return _api.Sites.GetContentById<T>(Id);
+                }
+                return null;
+            }
+        }
+
+        public class MediaHelper : IMediaHelper
+        {
+            private readonly IApi _api;
+
+            /// <summary>
+            /// Default internal constructur.
+            /// </summary>
+            internal MediaHelper(IApi api) 
+            {
+                _api = api;
+            }
+
+            /// <summary>
+            /// Resizes the given image to the given dimensions.
+            /// </summary>
+            /// <param name="image"></param>
+            /// <param name="width"></param>
+            /// <param name="height"></param>
+            /// <returns></returns>
+            public string ResizeImage(ImageField image, int width, int? height = null)
+            {
+                if (image.Id.HasValue)
+                {
+                    return _api.Media.EnsureVersion(image.Id.Value, width, height);
+                }
+                return null;
+            }
+
+            /// <summary>
+            /// Resizes the given image to the given dimensions.
+            /// </summary>
+            /// <param name="image"></param>
+            /// <param name="width"></param>
+            /// <param name="height"></param>
+            /// <returns></returns>
+            public string ResizeImage(Media image, int width, int? height = null)
+            {
+                if (image.Id != Guid.Empty && image.Type == MediaType.Image)
+                {
+                    return _api.Media.EnsureVersion(image.Id, width, height);
+                }
+                return null;
+            }
+        }
+
         private readonly IApi _api;
 
         /// <summary>
@@ -25,24 +109,24 @@ namespace Piranha.AspNetCore.Services
         public IApi Api { get; private set; }
 
         /// <summary>
+        /// Gets the site helper.
+        /// </summary>
+        public ISiteHelper Site { get; internal set; }
+
+        /// <summary>
+        /// Gets the media helper.
+        /// </summary>
+        public IMediaHelper Media { get; internal set; }
+        
+        /// <summary>
         /// Gets the currently requested URL.
         /// </summary>
         public string Url { get; set; }
 
         /// <summary>
-        /// Gets the id of the currently requested site.
-        /// </summary>
-        public Guid SiteId { get; set; }
-
-        /// <summary>
         /// Gets the id of the currently requested page.
         /// </summary>
         public Guid PageId { get; set; }
-        
-        /// <summary>
-        /// Gets the sitemap of the currently requested site.
-        /// </summary>
-        public Sitemap Sitemap { get; set; }
 
         /// <summary>
         /// Default constructor.
@@ -51,6 +135,9 @@ namespace Piranha.AspNetCore.Services
         public ApplicationService(IApi api)
         {
             _api = api;
+
+            Site = new SiteHelper(api);
+            Media = new MediaHelper(api);
         }
 
         /// <summary>
@@ -82,30 +169,16 @@ namespace Piranha.AspNetCore.Services
                 if (site == null)
                     site = _api.Sites.GetDefault();
 
-                // Store the current site id for the current request
+                // Store the current site id & get the sitemap
                 if (site != null)
                 {
-                    SiteId = site.Id;                    
-                    Sitemap = _api.Sites.GetSitemap(SiteId);
+                    Site.Id = site.Id;                    
+                    Site.Sitemap = _api.Sites.GetSitemap(Site.Id);
                 }
             }
 
             // Get the current url
             Url = context.Request.Path.Value;
-        }
-
-        /// <summary>
-        /// Gets the site content for the current site.
-        /// </summary>
-        /// <typeparam name="T">The content type</typeparam>
-        /// <returns>The site content model</returns>
-        public T GetSiteContent<T>() where T : SiteContent<T>
-        {
-            if (SiteId != Guid.Empty)
-            {
-                return _api.Sites.GetContentById<T>(SiteId);
-            }
-            return null;
         }
     }
 }

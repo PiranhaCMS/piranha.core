@@ -51,7 +51,7 @@ namespace Piranha.AspNetCore
                         _logger.LogInformation($"Sitemap.xml requested, generating");
 
                     // Get the requested site by hostname
-                    var siteId = service.SiteId;
+                    var siteId = service.Site.Id;
 
                     // Get the sitemap for the site
                     var pages = api.Sites.GetSitemap(siteId);

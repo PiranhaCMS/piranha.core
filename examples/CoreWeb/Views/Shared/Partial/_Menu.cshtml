@@ -1,5 +1,4 @@
-﻿@inject Piranha.IApi Api
-@{
+﻿@{
     //
     // Simple helper function for styling menu items
     //
@@ -14,7 +13,7 @@
 }
 
 <ul class="nav nav-pills pull-right">
-    @foreach (var item in WebApp.Sitemap) {
+    @foreach (var item in WebApp.Site.Sitemap) {
         if (!item.IsHidden) {
             <li role="presentation" @Css(item)><a href="@item.Permalink">@item.MenuTitle</a></li>
         }

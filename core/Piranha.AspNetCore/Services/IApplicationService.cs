@@ -22,14 +22,19 @@ namespace Piranha.AspNetCore.Services
         IApi Api { get; }
 
         /// <summary>
+        /// Gets the site helper.
+        /// </summary>
+        ISiteHelper Site { get; }
+
+        /// <summary>
+        /// Gets the media helper.
+        /// </summary>
+        IMediaHelper Media { get; }
+
+        /// <summary>
         /// Gets the currently requested URL.
         /// </summary>
         string Url { get; set; }
-
-        /// <summary>
-        /// Gets the id of the currently requested site.
-        /// </summary>
-        Guid SiteId { get; set; }
 
         /// <summary>
         /// Gets the id of the currently requested page.
@@ -37,20 +42,8 @@ namespace Piranha.AspNetCore.Services
         Guid PageId { get; set; }
 
         /// <summary>
-        /// Gets the sitemap of the currently requested site.
-        /// </summary>
-        Sitemap Sitemap { get; set; }
-
-        /// <summary>
         /// Initializes the service.
         /// </summary>
         void Init(HttpContext context);
-
-        /// <summary>
-        /// Gets the site content for the current site.
-        /// </summary>
-        /// <typeparam name="T">The content type</typeparam>
-        /// <returns>The site content model</returns>
-        T GetSiteContent<T>() where T : SiteContent<T>;
     }
 }

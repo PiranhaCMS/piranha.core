@@ -108,6 +108,17 @@ public static class CoreExtensions
     }
 
     /// <summary>
+    /// Uses the piranha site routing middleware.
+    /// </summary>
+    /// <param name="builder">The current application builder</param>
+    /// <returns>The builder</returns>
+    [Obsolete("Please replace UsePiranhaSites with UsePiranhaApplication.", false)]
+    public static IApplicationBuilder UsePiranhaSites(this IApplicationBuilder builder)
+    {
+        return UsePiranhaApplication(builder);
+    }    
+
+    /// <summary>
     /// Uses the piranha sitemap generation middleware.
     /// </summary>
     /// <param name="builder">The current application builder</param>
