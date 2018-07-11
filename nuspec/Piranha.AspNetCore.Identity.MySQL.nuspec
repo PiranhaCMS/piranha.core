@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Piranha.AspNetCore.Identity.MySQL</id>
+    <title>Piranha AspNetCore Identity MySQL</title>
+    <version>5.1.0</version>
+    <authors>Håkan Edling, Maik Müller</authors>
+    <owners>Håkan Edling</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Piranha CMS AspNetCore Identity provider for MySQL</description>
+    <copyright>Copyright 2018 (c) Håkan Edling</copyright>
+    <tags>cms mvc aspnetcore netstandard</tags>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
+    <iconUrl>http://piranhacms.org/assets/twitter-shield.png</iconUrl>
+    <releaseNotes>See the changelog available at:
+https://github.com/piranhacms/piranha.core/wiki/changelog
+    </releaseNotes>
+    <dependencies>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Piranha" version="5.1.0" />
+        <dependency id="Piranha.AspNetCore.Identity" version="5.1.0" />
+        <dependency id="Microsoft.AspNetCore.Identity.EntityFrameworkCore" version="2.1.1" />
+        <dependency id="Pomelo.EntityFrameworkCore.MySql" version="2.1.1" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\core\Piranha.AspNetCore.Identity.MySQL\bin\Release\netstandard2.0\Piranha.AspNetCore.Identity.MySQL.dll" target="lib\netstandard2.0\Piranha.AspNetCore.Identity.MySQL.dll" />
+  </files>
+</package>
