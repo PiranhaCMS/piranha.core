@@ -322,45 +322,6 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
-        /// Gets the hierachical sitemap structure.
-        /// </summary>
-        /// <param name="id">The optional site id</param>
-        /// <param name="onlyPublished">If only published items should be included</param>
-        /// <returns>The sitemap</returns>
-        public Models.Sitemap GetSitemap(Guid? siteId = null, bool onlyPublished = true) {
-            if (!siteId.HasValue) {
-                var site = api.Sites.GetDefault();
-
-                if (site != null)
-                    siteId = site.Id;
-            }
-
-            if (siteId != null) {
-                var sitemap = onlyPublished && cache != null ? cache.Get<Models.Sitemap>($"Sitemap_{siteId}") : null;
-
-                if (sitemap == null) {
-                    var pages = db.Pages
-                        .AsNoTracking()
-                        .Where(p => p.SiteId == siteId)
-                        .OrderBy(p => p.ParentId)
-                        .ThenBy(p => p.SortOrder)
-                        .ToList();
-
-                    var pageTypes = api.PageTypes.GetAll();
-
-                    if (onlyPublished)
-                        pages = pages.Where(p => p.Published.HasValue).ToList();
-                    sitemap = Sort(pages, pageTypes);
-
-                    if (onlyPublished && cache != null)
-                        cache.Set($"Sitemap_{siteId}", sitemap);
-                }
-                return sitemap;
-            }
-            return null;
-        }
-
-        /// <summary>
         /// Moves the current page in the structure.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
@@ -400,8 +361,8 @@ namespace Piranha.Repositories
                     RemoveFromCache(sibling);
                 foreach (var sibling in newSiblings)
                     RemoveFromCache(sibling);
-                InvalidateSitemap(model.SiteId);
             }
+            api.Sites.InvalidateSitemap(model.SiteId);
         }
 
         /// <summary>
@@ -486,7 +447,7 @@ namespace Piranha.Repositories
                     if (cache != null)
                         RemoveFromCache(page);
 
-                    InvalidateSitemap(model.SiteId);
+                    api.Sites.InvalidateSitemap(model.SiteId);
                     return;
                 }
 
@@ -588,7 +549,7 @@ namespace Piranha.Repositories
 
                 if (cache != null)
                     RemoveFromCache(page);
-                InvalidateSitemap(model.SiteId);
+                api.Sites.InvalidateSitemap(model.SiteId);
             }
         }
 
@@ -627,8 +588,8 @@ namespace Piranha.Repositories
                     var page = cache.Get<Page>(model.Id.ToString());
                     if (page != null)
                         RemoveFromCache(page);
-                    InvalidateSitemap(model.SiteId);
                 }   
+                api.Sites.InvalidateSitemap(model.SiteId);
             }
         }
 
@@ -799,15 +760,5 @@ namespace Piranha.Repositories
             if (!page.ParentId.HasValue && page.SortOrder == 0)
                 cache.Remove($"Page_{page.SiteId}");
         }
-
-        /// <summary>
-        /// Removes the specified public sitemap from
-        /// the cache.
-        /// </summary>
-        /// <param name="id">The site id</param>
-        private void InvalidateSitemap(Guid id) {
-            if (cache != null)
-                cache.Remove($"Sitemap_{id}");
-        }        
     }
 }

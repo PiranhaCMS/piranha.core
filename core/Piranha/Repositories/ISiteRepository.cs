@@ -105,5 +105,12 @@ namespace Piranha.Repositories
         /// </summary>
         /// <returns>The created site content</returns>
         T CreateContent<T>(string typeId = null) where T : Models.SiteContentBase;
+
+        /// <summary>
+        /// Invalidates the cached version of the sitemap with the
+        /// given id, if caching is enabled.
+        /// </summary>
+        /// <param name="id">The site id</param>
+        void InvalidateSitemap(Guid id);
     }
 }

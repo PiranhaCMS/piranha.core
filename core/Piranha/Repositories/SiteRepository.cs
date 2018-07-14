@@ -218,16 +218,6 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
-        /// Removes the specified public sitemap from
-        /// the cache.
-        /// </summary>
-        /// <param name="id">The site id</param>
-        public void InvalidateSitemap(Guid id) {
-            if (cache != null)
-                cache.Remove($"Sitemap_{id}");
-        }
-
-        /// <summary>
         /// Creates and initializes a new site content model of the specified type.
         /// </summary>
         /// <returns>The created site content</returns>
@@ -236,7 +226,17 @@ namespace Piranha.Repositories
                 typeId = typeof(T).Name;
 
             return contentService.Create<T>(api.SiteTypes.GetById(typeId));
-        }        
+        }
+
+        /// <summary>
+        /// Invalidates the cached version of the sitemap with the
+        /// given id, if caching is enabled.
+        /// </summary>
+        /// <param name="id">The site id</param>
+        public void InvalidateSitemap(Guid id)
+        {
+            cache?.Remove($"Sitemap_{id}");
+        }
 
         /// <summary>
         /// Adds a new model to the database.
