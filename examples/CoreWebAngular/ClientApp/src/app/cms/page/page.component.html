@@ -1,0 +1,25 @@
+<div class="container body" *ngIf="!isLoading">
+  <div *ngIf="third" class="row">
+    <div class="col-sm-12">
+      <div class="pagemenu">
+        <ng-container *ngFor="let item of third">
+          <span *ngIf="!item.IsHidden" [ngClass]="{'active': item.Id === model.Id}"><a [routerLink]="item.Permalink">{{item.MenuTitle}}</a></span>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <h1>{{model.Title}}</h1>
+
+  <p class="small">
+    Published:
+    <ng-container *ngIf="model.Published.HasValue">{{model.Published.Value | date: 'dd/MM/yyyy'}} | Last Modified: {{model.LastModified | date: 'dd/MM/yyyy'}}</ng-container>
+    <span class="label label-info" *ngIf="!model.Published.HasValue">Unpublished</span>
+  </p>
+
+  <img *ngIf="model.Heading.PrimaryImage.HasValue" [src]="model.Heading.ImageUrl">
+
+  <p *ngIf="model.Heading.Ingress.Value" class="ingress">{{model.Heading.Ingress.Value}}</p>
+
+  <block *ngFor="let block of model.Blocks" [model]="block"></block>
+</div>

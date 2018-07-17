@@ -1,0 +1,23 @@
+
+<div class="row" *ngIf="model.Type=='ImageBlock' || model.Type=='SizedImageBlock'">
+  <div class="col-sm-12">
+    <img *ngIf="model.Body.HasValue" [src]="model.Body.Url">
+  </div>
+</div>
+
+<div class="row" *ngIf="model.Type=='QuoteBlock'">
+  <div class="col-sm-12">
+    <blockquote [innerHTML]="model.Body.Value">
+    </blockquote>
+  </div>
+</div>
+
+<div class="row" *ngIf="model.Type=='HtmlBlock'">
+  <div class="col-sm-12" [innerHTML]="model.Body.Value">
+  </div>
+</div>
+
+<div class="row" *ngIf="model.Type=='HtmlColumnBlock'">
+  <div class="col-sm-6" [innerHTML]="model.Column1.Value"></div>
+  <div class="col-sm-6" [innerHTML]="model.Column1.Value"></div>
+</div>
