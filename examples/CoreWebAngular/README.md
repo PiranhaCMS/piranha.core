@@ -30,9 +30,7 @@ Piranha Angular 6 is currently built for `NetStandard 2.0` and uses the followin
 
     > cd piranha.core/core/Piranha.Manager
     > npm install
-    > bower install
-    > cd ../../examples/CoreWebAngular/ClientApp
-    > npm install
+    > bower install   
 
 
 #### Visual Studio users
