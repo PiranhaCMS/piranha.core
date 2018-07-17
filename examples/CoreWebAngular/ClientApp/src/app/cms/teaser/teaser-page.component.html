@@ -1,0 +1,17 @@
+<ng-container *ngIf="!isLoading">
+  <teasers [model]="model.Teasers"></teasers>
+  <div class="container body">
+    <h1>{{model.Title}}</h1>
+
+    <p class="small">Published: {{model.Published.Value | date: 'dd/MM/yyyy' }} | Last Modified: {{model.LastModified  | date: 'dd/MM/yyyy'}}</p>
+
+    <img *ngIf="model.Heading.PrimaryImage.HasValue" [src]="model.Heading.ImageUrl.Value">
+
+    <ng-container *ngIf="model.Heading.Ingress.Value">
+      {{model.Heading.Ingress.Value}}
+    </ng-container>
+
+    <block *ngFor="let block of model.Blocks" [model]="block"></block>
+  </div>
+</ng-container>
+

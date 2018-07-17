@@ -1,0 +1,13 @@
+<ng-container *ngIf="hasTeasers">
+  <div class="teasers">
+    <div class="container">
+      <div class="row">
+        <div *ngFor="let teaser of model" class="col-sm-{{teaserWidth}}">
+          <h3>{{teaser.Title.Value}}</h3>
+          <img *ngIf="teaser.Image.HasValue" [src]="teaser.Image.Url">
+          <p [innerHTML]="teaser.Body.Value"></p> 
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
