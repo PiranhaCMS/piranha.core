@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ArchiveComponent } from './archive/archive.component';
 import { CmsService } from './cms.service';
@@ -25,7 +25,7 @@ export class CmsComponent implements OnDestroy {
   currentPage: string;
   currentPageParent: string;
   constructor(private cmsService: CmsService, private router: Router) {
-this.cmsService.loadingChanged
+    this.cmsService.loadingChanged
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((value) => {
         this.isLoading = value;
@@ -57,7 +57,7 @@ this.cmsService.loadingChanged
             }
           } if (route.PageTypeName === "Standard page") {
             siteRoutes.push({ path: link, component: PageComponent });
-          }         
+          }
         }
         siteRoutes.push({ path: "**", component: ErrorComponent });
 
@@ -77,11 +77,14 @@ this.cmsService.loadingChanged
         let parent = `/${this.currentPage.split("/")[1]}`;
         this.currentPageParent = this.currentPage != parent ? parent : "";
       });
+
+    //this.cmsService.int();
   }
 
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+    console.log("dead");
   }
 
   collapse() {

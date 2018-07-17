@@ -1,10 +1,9 @@
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from "@angular/core";
-import { Http } from "@angular/http";
 import { Meta, Title } from "@angular/platform-browser";
 import { NavigationStart, Router } from "@angular/router";
-import { Observable } from "rxjs/Observable";
-import { Subject } from "rxjs/Subject";
-import { catchError, map } from 'rxjs/operators';
+import { Observable, Subject, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class CmsService {
@@ -22,14 +21,9 @@ export class CmsService {
   private model: any;
   private currentPage: string;
 
-  constructor(private http: Http, private router: Router, private meta: Meta, private title: Title) {
+  constructor(private http: HttpClient, private router: Router, private meta: Meta, private title: Title) {
 
-    this.currentPage = router.url;
-
-    this.getSiteMap()
-      .subscribe((result) => this.onSuccessfulGetSiteMap(result),
-        (errors: any) => this.onUnsuccessful(errors)
-      );
+    this.currentPage = router.url;   
 
     router.events.subscribe((val) => {
       if (val instanceof NavigationStart) {
@@ -37,6 +31,15 @@ export class CmsService {
         this.getModel();
       }
     });
+
+    this.int();
+  }
+
+  public int() {
+    this.getSiteMap()
+      .subscribe((result) => this.onSuccessfulGetSiteMap(result),
+        (errors: any) => this.onUnsuccessful(errors)
+      );
   }
 
   private getModel() {
@@ -94,6 +97,7 @@ export class CmsService {
 
   private onSuccessfulGetSiteMap(result): void {
     this.sitemap = result;
+    console.log(this.sitemap);
     this.sitemapChanged.next(this.sitemap);
   }
 
@@ -126,60 +130,46 @@ export class CmsService {
   private getSiteMap(id: string = null): Observable<any> {
     const url: string = `${CmsService.url}/sitemap?id=${id}`;
     return this.http.get(url)
-      .pipe(map(res => res.json()),
-        catchError(this.handleError));
+      .pipe(catchError(this.handleError));
   }
 
   private getArchive(id: string, year: number = null, month: number = null, page: number = null, category: string = null, tag: string = null): Observable<any> {
     const url: string = `${CmsService.url}/archive?id=${id}&year=${year}&month=${month}&page=${page}&category=${category}&tag=${tag}`;
     return this.http.get(url)
-      .pipe(map(res => res.json()),
-        catchError(this.handleError));
+      .pipe(catchError(this.handleError));
   }
 
   private getPage(id: string): Observable<any> {
     const url: string = `${CmsService.url}/page?id=${id}`;
     return this.http.get(url)
-      .pipe(map(res => res.json()),
-        catchError(this.handleError));
+      .pipe(catchError(this.handleError));
   }
 
   private getPost(id: string): Observable<any> {
     const url: string = `${CmsService.url}/post?id=${id}`;
     return this.http.get(url)
-      .pipe(map(res => res.json()),
-        catchError(this.handleError));
+      .pipe(catchError(this.handleError));
   }
 
   private getTeaserPage(id: string): Observable<any> {
     const url: string = `${CmsService.url}/teaserpage?id=${id}`;
     return this.http.get(url)
-      .pipe(map(res => res.json()),
-        catchError(this.handleError));
+      .pipe(catchError(this.handleError));
   }
 
-  private handleError(error: any) {
-    let applicationError = error.headers.get('Application-Error');
-
-    // either applicationError in header or model error in body
-    if (applicationError) {
-      return Observable.throw(applicationError);
+  private handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`);
     }
-
-    let modelStateErrors: string = '';
-    let serverError = error.json();
-
-    if (!serverError.type) {
-      for (let key in serverError) {
-        if (serverError.hasOwnProperty(key)) {
-          if (serverError[key]) {
-            modelStateErrors += serverError[key] + '\n';
-          }
-        }
-      }
-    }
-
-    modelStateErrors = modelStateErrors === '' ? null : modelStateErrors;
-    return Observable.throw(modelStateErrors || 'Server error');
+    // return an observable with a user-facing error message
+    return throwError(
+      'Something bad happened; please try again later.');
   }
 }

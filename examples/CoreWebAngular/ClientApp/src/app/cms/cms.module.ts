@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule } from '@angular/router';
+import { RouterModule, RouteReuseStrategy } from '@angular/router';
 import { ArchiveComponent } from './archive/archive.component';
 import { CmsComponent } from './cms.component';
 import { CmsService } from './cms.service';
@@ -14,6 +14,7 @@ import { FirstParagraphPipe } from './shared/utils';
 import { StartComponent } from './start/start.component';
 import { TeaserPageComponent } from './teaser/teaser-page.component';
 import { WildCardComponent } from './wildcard/wildcard.component';
+import { RouteReusableStrategy } from './route-reusable-strategy';
 
 @NgModule({
   imports: [
@@ -21,7 +22,7 @@ import { WildCardComponent } from './wildcard/wildcard.component';
     BrowserAnimationsModule,
     RouterModule.forRoot([
       {
-        path: '', component: CmsComponent,
+        path: '', component: CmsComponent, data: { reuse: true },
         children: [
           { path: '**', component: WildCardComponent }
         ]
@@ -73,7 +74,13 @@ export class CmsModule {
     CmsService.url = apiUrl;
     return {
       ngModule: CmsModule,
-      providers: [CmsService]
+      providers: [
+        CmsService,
+        {
+          provide: RouteReuseStrategy,
+          useClass: RouteReusableStrategy
+        }
+      ]
     };
   }
 }
