@@ -101,6 +101,7 @@ archive, start, post, teaser-page {
 .submenu {
   ul {
     margin: 10px 0;
+    padding: 15px 15px;
 
     li {
       a {
@@ -108,7 +109,7 @@ archive, start, post, teaser-page {
         font-size: 14px;
         text-transform: uppercase;
 
-        &:hover {
+        &:hover, &:focus {
           background: transparent;
         }
       }
@@ -122,8 +123,8 @@ archive, start, post, teaser-page {
             .arrow(#fff, 10px, 20px)
           }
 
-          &:hover {
-            background: inherit;
+          &:hover, &:focus, &:active {
+            background-color: inherit;
           }
         }
       }

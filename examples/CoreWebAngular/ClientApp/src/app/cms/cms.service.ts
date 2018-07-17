@@ -18,6 +18,7 @@ export class CmsService {
   loadingChanged: Subject<boolean> = new Subject<boolean>();
   private errors: any;
   private sitemap: any;
+  private subSitemap: any;
   private model: any;
   private currentPage: string;
 
@@ -45,6 +46,7 @@ export class CmsService {
     //this.loadingChanged.next(true);
 
     let route = this.getRouteId(this.sitemap, this.currentPage);
+    this.subSitemap = route.Items;
     let model = this.routeCache.find(model => {
       return model.Id === route.Id;
     });
@@ -103,7 +105,7 @@ export class CmsService {
       document.location.replace(result.RedirectUrl);
     } else {
       this.model = result;
-      this.modelChanged.next([this.model, this.currentPage]);
+      this.modelChanged.next([this.model, this.currentPage, this.subSitemap]);
 
       this.title.setTitle(this.model.Title);
 

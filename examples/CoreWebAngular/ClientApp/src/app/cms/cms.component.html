@@ -6,7 +6,17 @@
       {{model.Heading.Ingress.Value}}
     </small>
   </h1>
-  <!--<app-submenu></app-submenu>-->
+  <div class="container" *ngIf="subSitemap && subSitemap.length > 0">
+    <div class="row">
+      <div class="col-sm-12 submenu">
+        <ul class="nav nav-pills pull-right">
+          <li *ngFor="let item of subSitemap" role="presentation">
+            <a [routerLink]="item.Permalink" (click)="collapse()" [ngClass]="{'active': currentPage === item.Permalink || currentPageParent === item.Permalink }">{{item.MenuTitle}}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>
 <nav class="navbar navbar-default">
   <div class="container">
@@ -29,17 +39,4 @@
     </div>
   </div>
 </nav>
-
-<!--<div class="header clearfix">
-  <div class="container">
-    <nav>
-      <ul class="nav nav-pills pull-right">
-        <li *ngFor="let item of sitemap" role="presentation" [ngClass]="{'active': currentPage === item.Permalink, 'active-child': currentPageChild }">
-          <a [routerLink]="item.Permalink">{{item.MenuTitle}}</a>
-        </li>
-      </ul>
-    </nav>
-    <a routerLink="/"><img src="../assets/img/logo.png" alt="Piranha CMS"  role="button"/></a>
-  </div>
-</div>-->
 <router-outlet></router-outlet>

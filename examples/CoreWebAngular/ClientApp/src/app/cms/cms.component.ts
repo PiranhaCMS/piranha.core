@@ -19,6 +19,7 @@ export class CmsComponent implements OnDestroy {
   isExpanded = false;
   private ngUnsubscribe: Subject<void> = new Subject<void>();
   sitemap: any;
+  subSitemap: any;
   model: any;
   isLoading: boolean = true;
   currentPage: string;
@@ -72,6 +73,7 @@ this.cmsService.loadingChanged
       .subscribe((value) => {
         this.model = value[0];
         this.currentPage = value[1];
+        this.subSitemap = value[2];
         let parent = `/${this.currentPage.split("/")[1]}`;
         this.currentPageParent = this.currentPage != parent ? parent : "";
       });
