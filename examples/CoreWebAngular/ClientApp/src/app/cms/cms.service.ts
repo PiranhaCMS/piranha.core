@@ -46,8 +46,6 @@ export class CmsService {
     if (!this.sitemap || !this.currentPage)
       return;
 
-    //this.loadingChanged.next(true);
-
     let route = this.getRouteId(this.sitemap, this.currentPage);
     this.subSitemap = route.Items;
     let model = this.routeCache.find(model => {
@@ -97,7 +95,6 @@ export class CmsService {
 
   private onSuccessfulGetSiteMap(result): void {
     this.sitemap = result;
-    console.log(this.sitemap);
     this.sitemapChanged.next(this.sitemap);
   }
 

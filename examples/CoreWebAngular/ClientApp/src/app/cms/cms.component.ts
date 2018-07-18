@@ -84,7 +84,6 @@ export class CmsComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-    console.log("dead");
   }
 
   collapse() {

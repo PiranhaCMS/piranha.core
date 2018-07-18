@@ -8,7 +8,6 @@ export class FirstParagraphPipe implements PipeTransform {
     if (!value || value.length === 0)
       return "";
     let matches = value.match('<p[^>]*>.*?</p>');
-    console.log(matches[0]);
     return matches ? matches[0] : "";
   }
 }
