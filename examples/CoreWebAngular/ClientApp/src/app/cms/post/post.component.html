@@ -1,0 +1,15 @@
+<div class="container body" *ngIf="!isLoading">
+  <h1>{{model.Title}}</h1>
+
+  <p class="small">
+    Published:
+    <ng-container *ngIf="model.Published.HasValue">{{model.Published.Value | date: 'dd/MM/yyyy'}} | Last Modified: {{model.LastModified | date: 'dd/MM/yyyy'}}</ng-container>
+    <span class="label label-info" *ngIf="!model.Published.HasValue">Unpublished</span>
+  </p>
+
+  <img *ngIf="model.Heading.PrimaryImage.HasValue" [src]="model.Heading.ImageUrl">
+
+  <div *ngIf="model.Heading.Ingress.Value" class="lead" [innerHTML]="model.Heading.Ingress.Value"></div>
+
+  <block *ngFor="let block of model.Blocks" [model]="block"></block>
+</div>

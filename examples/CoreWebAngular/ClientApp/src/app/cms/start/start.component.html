@@ -1,0 +1,8 @@
+<ng-container *ngIf="!isLoading">
+  <teasers [model]="model.Teasers"></teasers>
+
+  <div class="container body" [ngClass]="{'arrow': model.Teasers.length === 0}">
+    <block *ngFor="let block of model.Blocks" [model]="block"></block>
+  </div>
+</ng-container>
+
