@@ -256,6 +256,16 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/pages/move")]
         [Authorize(Policy = Permission.PagesEdit)]
         public IActionResult Move([FromBody]Models.PageStructureModel structure) {
+            Guid? siteId = null;
+
+            if (structure.Items.Count > 0)
+            {
+                var page = api.Pages.GetById(new Guid(structure.Items[0].Id));
+
+                if (page != null)
+                    siteId = page.SiteId;
+            }
+
             for (var n = 0; n < structure.Items.Count; n++) {
                 var moved = MovePage(structure.Items[n], n);
                 if (moved)
@@ -263,7 +273,7 @@ namespace Piranha.Areas.Manager.Controllers
             }
             using (var config = new Config(api)) {
                 return View("Partial/_Sitemap", new Models.SitemapModel() {
-                    Sitemap = api.Sites.GetSitemap(onlyPublished: false),
+                    Sitemap = api.Sites.GetSitemap(siteId, onlyPublished: false),
                     ExpandedLevels = config.ManagerExpandedSitemapLevels
                 });
             }
