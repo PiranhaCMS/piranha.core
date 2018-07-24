@@ -105,12 +105,6 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/page/add/{type}/{sortOrder:int}/{parentId:Guid?}")]
         [Authorize(Policy = Permission.PagesAdd)]
         public IActionResult AddAt(string type, int sortOrder, Guid? parentId = null) {
-            //var model = editService.Create(type, siteId);
-
-            //model.ParentId = parentId;
-            //model.SortOrder = sortOrder;
-
-            //return View("Edit", model);
             return AddAt(Guid.Empty, type, sortOrder, parentId);
         }
 
