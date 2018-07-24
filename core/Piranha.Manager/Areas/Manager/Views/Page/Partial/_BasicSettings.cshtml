@@ -24,7 +24,7 @@
             <div class="form-group">
                 <label>Meta description</label>
                 @Html.TextAreaFor(m => m.MetaDescription, new { @class = "form-control small count-me", rows = 5, maxlength = 256, placeholder = "Meta description", style = "height:82px" })
-                <p>@Model.MetaDescription.Length/255</p>
+                <p>@(Model.MetaDescription != null ? Model.MetaDescription.Length : 0)/255</p>
             </div>
         }
         @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesPublish)).Succeeded) {
