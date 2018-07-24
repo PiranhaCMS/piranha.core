@@ -135,7 +135,8 @@
 <div class="dd">
     <ol class="sitemap dd-list">
         @Html.Partial("Partial/_Sitemap", new Piranha.Areas.Manager.Models.SitemapModel() { 
-            Sitemap = Model.Sitemap, 
+            Sitemap = Model.Sitemap,
+            SiteId = Model.SiteId,
             PageId = Model.PageId, 
             ExpandedLevels = Model.ExpandedLevels 
         })

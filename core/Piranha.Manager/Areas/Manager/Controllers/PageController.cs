@@ -102,16 +102,35 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="sortOrder">The sort order</param>
         /// <param name="parentId">The parent id</param>
         /// <param name="siteId">The optional site id</param>
-        [Route("manager/page/add/{type}/{sortOrder:int}/{parentId:Guid?}/{siteId:Guid?}")]
+        [Route("manager/page/add/{type}/{sortOrder:int}/{parentId:Guid?}")]
         [Authorize(Policy = Permission.PagesAdd)]
-        public IActionResult AddAt(string type, int sortOrder, Guid? parentId = null, Guid? siteId = null) {
-            var model = editService.Create(type, siteId);
+        public IActionResult AddAt(string type, int sortOrder, Guid? parentId = null) {
+            //var model = editService.Create(type, siteId);
+
+            //model.ParentId = parentId;
+            //model.SortOrder = sortOrder;
+
+            //return View("Edit", model);
+            return AddAt(Guid.Empty, type, sortOrder, parentId);
+        }
+
+        /// <summary>
+        /// Adds a new page of the given type at the specified position.
+        /// </summary>
+        /// <param name="type">The page type id</param>
+        /// <param name="sortOrder">The sort order</param>
+        /// <param name="parentId">The parent id</param>
+        /// <param name="siteId">The optional site id</param>
+        [Route("manager/page/add/site/{siteId:Guid}/{type}/{sortOrder:int}/{parentId:Guid?}")]
+        [Authorize(Policy = Permission.PagesAdd)]
+        public IActionResult AddAt(Guid siteId, string type, int sortOrder, Guid? parentId = null) {
+            var model = editService.Create(type, siteId != Guid.Empty ? siteId : (Guid?)null);
 
             model.ParentId = parentId;
             model.SortOrder = sortOrder;
 
             return View("Edit", model);
-        }
+        }        
 
         /// <summary>
         /// Adds a new copy of the specified page.

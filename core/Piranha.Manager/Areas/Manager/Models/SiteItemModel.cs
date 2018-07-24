@@ -23,6 +23,11 @@ namespace Piranha.Areas.Manager.Models
         public SitemapItem Item { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional site id.
+        /// </summary>
+        public string SiteId { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional selected page id.
         /// </summary>
         public string PageId { get; set; }
