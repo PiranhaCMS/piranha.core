@@ -87,6 +87,21 @@ $('body').tooltip({
 });
 
 //
+// Count fields
+//
+$(document).on('keyup', '.count-me', function () {
+    var max = Number($(this).attr('maxlength'));
+    var length = $(this).val().length;
+
+    if (length > max) {
+        $(this).val($(this).val().substring(0, max));
+        length = max;
+    }
+
+    $(this).next().text(length + '/' + max);
+});
+
+//
 // Sortable
 //
 var sortableBlocks = sortable('.page-blocks-body .sortable', {
