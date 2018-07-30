@@ -14,7 +14,7 @@ namespace Piranha.Migrations
                 nullable: true);
 
             // Set the fileextension for all already generation versions.
-            migrationBuilder.Sql("UPDATE Piranha_MediaVersions SET FileExtension='.jpg' WHERE FileExtension IS NULL");
+            migrationBuilder.Sql("UPDATE \"Piranha_MediaVersions\" SET \"FileExtension\"='.jpg' WHERE \"FileExtension\" IS NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
