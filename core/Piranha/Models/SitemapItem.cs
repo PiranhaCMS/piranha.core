@@ -100,7 +100,7 @@ namespace Piranha.Models
         {
             foreach (var item in Items)
             {
-                if (item.Id == id || item.HasChild(id))
+                if (item.ParentId == id || item.HasChild(id))
                     return true;
             }
             return false;
