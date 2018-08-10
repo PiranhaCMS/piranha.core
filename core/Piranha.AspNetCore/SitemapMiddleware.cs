@@ -66,6 +66,7 @@ namespace Piranha.AspNetCore
                         if (urls.Count > 0)
                             sitemap.AddRange(urls);
                     }
+                    context.Response.ContentType = "application/xml";
                     await context.Response.WriteAsync(sitemap.ToXml());
                     return;
                 }
