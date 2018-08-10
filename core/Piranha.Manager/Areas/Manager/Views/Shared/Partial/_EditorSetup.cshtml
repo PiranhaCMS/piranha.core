@@ -13,7 +13,12 @@
             autoresize_min_height: 340,
             content_css: ["//fonts.googleapis.com/css?family=Gentium+Book+Basic:700", "//fonts.googleapis.com/css?family=Open+Sans:300,400,600", "@Url.Content("~/manager/assets/css/editor.min.css")"],
             toolbar: "bold italic | bullist numlist hr | alignleft aligncenter alignright | formatselect | piranhalink piranhaimage",
-            block_formats: 'Paragraph=p;Header 1=h1;Header 2=h2;Header 3=h3;Header 4=h4;Code=pre;Quote=blockquote'
+            block_formats: 'Paragraph=p;Header 1=h1;Header 2=h2;Header 3=h3;Header 4=h4;Code=pre;Quote=blockquote',
+            setup: function (editor) {
+                editor.on('change', function () {
+                    editor.save();
+                });
+            }
         });
     }
 
