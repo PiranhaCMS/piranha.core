@@ -18,11 +18,16 @@ namespace Piranha.AttributeBuilder
 {
     public class SiteTypeBuilder : ContentTypeBuilder<SiteTypeBuilder, SiteType>
     {
+        private readonly IApi _api;
+
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>        
-        public SiteTypeBuilder(IApi api) : base(api) { }
+        public SiteTypeBuilder(IApi api)
+        {
+            _api = api;
+        }
 
         /// <summary>
         /// Builds the site types.

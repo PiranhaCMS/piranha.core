@@ -20,19 +20,7 @@ namespace Piranha.AttributeBuilder
 {
     public abstract class ContentTypeBuilder<T, TType> where T : ContentTypeBuilder<T, TType> where TType : ContentType
     {
-        #region Members
         protected readonly List<Type> _types = new List<Type>();
-        protected readonly IApi _api;
-        #endregion
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="api">The current api</param>
-        public ContentTypeBuilder(IApi api)
-        {
-            _api = api;
-        }
 
         /// <summary>
         /// Adds a new type to build page types from
@@ -51,7 +39,6 @@ namespace Piranha.AttributeBuilder
         /// </summary>
         public abstract T Build();
 
-        #region Private methods
         /// <summary>
         /// Gets the possible content type for the given type.
         /// </summary>
@@ -193,6 +180,5 @@ namespace Piranha.AttributeBuilder
                 }
             }
         }
-        #endregion
     }
 }

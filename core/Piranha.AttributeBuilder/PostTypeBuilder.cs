@@ -18,11 +18,16 @@ namespace Piranha.AttributeBuilder
 {
     public class PostTypeBuilder : ContentTypeBuilder<PostTypeBuilder, PostType>
     {
+        private readonly IApi _api;
+
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>        
-        public PostTypeBuilder(IApi api) : base(api) { }
+        public PostTypeBuilder(IApi api)
+        {
+            _api = api;
+        }
 
         /// <summary>
         /// Builds the page types.
