@@ -35,30 +35,6 @@ namespace Piranha.Models
         public IDynamicModel Model { get; set; }
 
         /// <summary>
-        /// Creates a new item instance
-        /// </summary>
-        /// <param name="api">The current api</param>
-        /// <returns>The new item</returns>
-        public T Create(IApi api)
-        {
-            return (T)Model.CreateRegion(api, RegionId);
-        }
-
-        /// <summary>
-        /// Creates and adds a new item instance to the list.
-        /// </summary>
-        /// <param name="api">The current api</param>
-        /// <returns>The new item</returns>
-        public T CreateAndAdd(IApi api)
-        {
-            var item = Create(api);
-
-            Add(item);
-
-            return item;
-        }
-
-        /// <summary>
         /// Adds a new item to the region list
         /// </summary>
         /// <param name="item">The item</param>

@@ -32,5 +32,11 @@ namespace Piranha.Services
         /// </summary>
         /// <returns>The content service</returns>
         IContentService<Data.Post, Data.PostField, Models.PostBase> CreatePostService();
+
+        /// <summary>
+        /// Creates a new site content service.
+        /// </summary>
+        /// <returns>The content service</returns>
+        IContentService<Data.Site, Data.SiteField, Models.SiteContentBase> CreateSiteService();
     }
 }

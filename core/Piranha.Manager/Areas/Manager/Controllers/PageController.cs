@@ -318,8 +318,7 @@ namespace Piranha.Areas.Manager.Controllers
                 var regionType = pageType.Regions.SingleOrDefault(r => r.Id == model.RegionTypeId);
 
                 if (regionType != null) {
-                    var region = Piranha.Models.DynamicPage.CreateRegion(api,
-                        model.PageTypeId, model.RegionTypeId);
+                    var region = contentService.CreateDynamicRegion(pageType, model.RegionTypeId);
 
                     var editModel = (Models.PageEditRegionCollection)editService.CreateRegion(regionType, 
                         new List<object>() { region});

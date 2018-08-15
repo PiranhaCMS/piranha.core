@@ -26,31 +26,5 @@ namespace Piranha.Models
         {
             return api.Posts.Create<T>(typeId);
         }
-
-        /// <summary>
-        /// Creates a new region.
-        /// </summary>
-        /// <param name="api">The current api</param>
-        /// <param name="typeId">The page type id</param>
-        /// <param name="regionId">The region id</param>
-        /// <returns>The new region value</returns>
-        public static object CreateRegion(IApi api, string typeId, string regionId)
-        {
-            using (var factory = new ContentFactory(api.PostTypes.GetAll()))
-            {
-                return factory.CreateDynamicRegion(typeId, regionId);
-            }
-        }
-
-        /// <summary>
-        /// Creates a new region for the current model.
-        /// </summary>
-        /// <param name="api">The current api</param>
-        /// <param name="regionId">The region id</param>
-        /// <returns>The new region value</returns>
-        public object CreateRegion(IApi api, string regionId)
-        {
-            return CreateRegion(api, TypeId, regionId);
-        }
     }
 }

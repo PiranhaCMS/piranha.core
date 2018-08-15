@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Piranha.Areas.Manager.Models;
 using Piranha.Manager;
+using Piranha.Services;
 
 namespace Piranha.Areas.Manager.Services
 {
@@ -23,9 +24,11 @@ namespace Piranha.Areas.Manager.Services
     public class PageEditService
     {
         private readonly IApi api;
+        private readonly IContentService<Data.Page, Data.PageField, Piranha.Models.PageBase> service;
 
-        public PageEditService(IApi api) {
+        public PageEditService(IApi api, IContentServiceFactory factory) {
             this.api = api;
+            service = factory.CreatePageService();
         }
 
         /// <summary>
@@ -279,11 +282,13 @@ namespace Piranha.Areas.Manager.Services
         /// <param name="src">The source</param>
         /// <param name="dest">The destination</param>
         private void SaveRegions(PageEditModel src, Piranha.Models.DynamicPage dest) {
+            var type = api.PageTypes.GetById(src.TypeId);
             var modelRegions = (IDictionary<string, object>)dest.Regions;
+
             foreach (var region in src.Regions) {
                 if (region is PageEditRegion) {
                     if (!modelRegions.ContainsKey(region.Id))
-                        modelRegions[region.Id] = Piranha.Models.DynamicPage.CreateRegion(api, dest.TypeId, region.Id);
+                        modelRegions[region.Id] = service.CreateDynamicRegion(type, region.Id);
 
                     var reg = (PageEditRegion)region;
 
@@ -308,7 +313,7 @@ namespace Piranha.Areas.Manager.Services
                             if (set.Count == 1) {
                                 list.Add(set[0].Value);
                             } else {
-                                var modelFields = (IDictionary<string, object>)Piranha.Models.DynamicPage.CreateRegion(api, dest.TypeId, region.Id);
+                                var modelFields = (IDictionary<string, object>)service.CreateDynamicRegion(type, region.Id);
 
                                 foreach (var field in set) {
                                     modelFields[field.Id] = field.Value;

@@ -16,13 +16,5 @@ namespace Piranha.Models
         /// Gets/sets the regions.
         /// </summary>
         dynamic Regions { get; set; }
-
-        /// <summary>
-        /// Creates a new region for the current model.
-        /// </summary>
-        /// <param name="api">The current api</param>
-        /// <param name="regionId">The region id</param>
-        /// <returns>The new region value</returns>
-        object CreateRegion(IApi api, string regionId);
     }
 }

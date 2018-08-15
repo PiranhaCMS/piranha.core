@@ -11,6 +11,7 @@
 using Piranha.Areas.Manager.Models;
 using Piranha.Areas.Manager.Services;
 using Piranha.Manager;
+using Piranha.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -23,13 +24,15 @@ namespace Piranha.Areas.Manager.Controllers
     public class SiteController : ManagerAreaControllerBase
     {
         SiteContentEditService service;
+        IContentService<Data.Site, Data.SiteField, Piranha.Models.SiteContentBase> contentService;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public SiteController(IApi api, SiteContentEditService service) : base(api) { 
+        public SiteController(IApi api, SiteContentEditService service, IContentServiceFactory factory) : base(api) { 
             this.service = service;
+            contentService = factory.CreateSiteService();
         }
         
         /// <summary>
@@ -121,8 +124,7 @@ namespace Piranha.Areas.Manager.Controllers
                 var regionType = siteType.Regions.SingleOrDefault(r => r.Id == model.RegionTypeId);
 
                 if (regionType != null) {
-                    var region = Piranha.Models.DynamicSiteContent.CreateRegion(api,
-                        model.PageTypeId, model.RegionTypeId);
+                    var region = contentService.CreateDynamicRegion(siteType, model.RegionTypeId);
 
                     var editModel = (Models.PageEditRegionCollection)service.CreateRegion(regionType, 
                         new List<object>() { region });
