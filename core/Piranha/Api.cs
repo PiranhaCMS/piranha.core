@@ -141,12 +141,12 @@ namespace Piranha
             Categories = new CategoryRepository(this, _db, cacheLevel > 2 ? _cache : null);
             Media = new MediaRepository(this, _db, _storage, cacheLevel > 2 ? _cache : null, imageProcessor);
             Pages = new PageRepository(this, _db, factory, cacheLevel > 2 ? _cache : null);
-            PageTypes = new PageTypeRepository(_db, cacheLevel > 1 ? _cache : null);
+            PageTypes = new PageTypeRepository(_db);
             Params = new ParamRepository(_db, cacheLevel > 0 ? _cache : null);
             Posts = new PostRepository(this, _db, factory, cacheLevel > 2 ? _cache : null);
-            PostTypes = new PostTypeRepository(_db, cacheLevel > 1 ? _cache : null);
+            PostTypes = new PostTypeRepository(_db);
             Sites = new SiteRepository(this, _db, factory, cacheLevel > 0 ? _cache : null);
-            SiteTypes = new SiteTypeRepository(_db, cacheLevel > 0 ? _cache : null);
+            SiteTypes = new SiteTypeRepository(_db);
             Tags = new TagRepository(_db, cacheLevel > 2 ? _cache : null);
         }
         #endregion

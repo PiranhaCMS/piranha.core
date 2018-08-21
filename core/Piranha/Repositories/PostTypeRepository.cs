@@ -14,47 +14,45 @@ using Piranha.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace Piranha.Repositories
 {
     public class PostTypeRepository : IPostTypeRepository
     {
-        #region Members
-        private readonly IDb db;
-        private readonly ICache cache;
-        #endregion
+        private readonly IDb _db;
+        private static readonly Dictionary<string, Models.PostType> _types = new Dictionary<string, Models.PostType>();
+        private static object _typesMutex = new Object();
+        private static bool _isInitialized = false;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db connection</param>
-        /// <param name="cache">The optional model cache</param>
-        public PostTypeRepository(IDb db, ICache cache = null) {
-            this.db = db;
-            this.cache = cache;
+        public PostTypeRepository(IDb db) 
+        {
+            _db = db;
+
+            if (!_isInitialized)
+            {
+                lock (_typesMutex)
+                {
+                    if (!_isInitialized)
+                    {
+                        Load();
+
+                        _isInitialized = true;
+                    }
+                }
+            }
         }
 
         /// <summary>
         /// Gets all available models.
         /// </summary>
         /// <returns>The available models</returns>
-        public IEnumerable<Models.PostType> GetAll() {
-            var types = db.PostTypes
-                .AsNoTracking()
-                .OrderBy(t => t.Id)
-                .ToList();
-            var models = new List<Models.PostType>();
-
-            foreach (var type in types) {
-                var model = JsonConvert.DeserializeObject<Models.PostType>(type.Body);
-
-                if (cache != null && model != null)
-                    cache.Set(model.Id, model);
-
-                models.Add(model);
-            }
-            return models;
+        public IEnumerable<Models.PostType> GetAll() 
+        {
+            return _types.Values.OrderBy(t => t.Id);
         }
 
         /// <summary>
@@ -62,21 +60,11 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns></returns>
-        public Models.PostType GetById(string id) {
-            Models.PostType model = cache != null ? cache.Get<Models.PostType>(id) : null;
-
-            if (model == null) {
-                var type = db.PostTypes
-                    .AsNoTracking()
-                    .FirstOrDefault(t => t.Id == id);
-
-                if (type != null)
-                    model = JsonConvert.DeserializeObject<Models.PostType>(type.Body);
-
-                if (cache != null && model != null)
-                    cache.Set(model.Id, model);
-            }
-            return model;
+        public Models.PostType GetById(string id) 
+        {
+            if (_types.TryGetValue(id, out var type))
+                return type;
+            return null;
         }
 
         /// <summary>
@@ -84,41 +72,50 @@ namespace Piranha.Repositories
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        public void Save(Models.PostType model) {
-            var type = db.PostTypes
+        public void Save(Models.PostType model)
+        {
+            var type = _db.PostTypes
                 .FirstOrDefault(t => t.Id == model.Id);
 
-            if (type == null) {
-                type = new Data.PostType() {
+            if (type == null) 
+            {
+                type = new Data.PostType 
+                {
                     Id = model.Id,
                     Created = DateTime.Now
                 };
-                db.PostTypes.Add(type);
+                _db.PostTypes.Add(type);
             }
             type.CLRType = model.CLRType;
             type.Body = JsonConvert.SerializeObject(model);
             type.LastModified = DateTime.Now;
 
-            db.SaveChanges();
+            _db.SaveChanges();
             
-            if (cache != null)
-                cache.Remove(model.Id.ToString());
+            lock (_typesMutex)
+            {
+                Load();
+            }
         }
 
         /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public void Delete(string id) {
-            var type = db.PostTypes
+        public void Delete(string id) 
+        {
+            var type = _db.PostTypes
                 .FirstOrDefault(t => t.Id == id);
 
-            if (type != null) {
-                db.PostTypes.Remove(type);
-                db.SaveChanges();
+            if (type != null) 
+            {
+                _db.PostTypes.Remove(type);
+                _db.SaveChanges();
 
-                if (cache != null)
-                    cache.Remove(id.ToString());
+                lock (_typesMutex)
+                {
+                    Load();
+                }
             }
         }
 
@@ -126,8 +123,22 @@ namespace Piranha.Repositories
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        public void Delete(Models.PostType model) {
+        public void Delete(Models.PostType model) 
+        {
             Delete(model.Id);
+        }
+
+        /// <summary>
+        /// Reloads the page types from the database.
+        /// </summary>
+        private void Load()
+        {
+            _types.Clear();
+
+            foreach (var postType in _db.PostTypes)
+            {
+                _types[postType.Id] = JsonConvert.DeserializeObject<Models.PostType>(postType.Body);
+            }
         }
     }
 }

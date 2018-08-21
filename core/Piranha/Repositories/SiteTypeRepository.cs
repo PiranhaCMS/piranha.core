@@ -21,17 +21,30 @@ namespace Piranha.Repositories
     public class SiteTypeRepository : ISiteTypeRepository
     {
         private readonly IDb _db;
-        private readonly ICache _cache;
+        private static readonly Dictionary<string, Models.SiteType> _types = new Dictionary<string, Models.SiteType>();
+        private static object _typesMutex = new Object();
+        private static bool _isInitialized = false;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db connection</param>
-        /// <param name="cache">The optional model cache</param>
-        public SiteTypeRepository(IDb db, ICache cache = null) 
+        public SiteTypeRepository(IDb db) 
         {
             _db = db;
-            _cache = cache;
+
+            if (!_isInitialized)
+            {
+                lock (_typesMutex)
+                {
+                    if (!_isInitialized)
+                    {
+                        Load();
+
+                        _isInitialized = true;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -40,22 +53,7 @@ namespace Piranha.Repositories
         /// <returns>The available models</returns>
         public IEnumerable<Models.SiteType> GetAll() 
         {
-            var types = _db.SiteTypes
-                .AsNoTracking()
-                .OrderBy(t => t.Id)
-                .ToList();
-            var models = new List<Models.SiteType>();
-
-            foreach (var type in types) 
-            {
-                var model = JsonConvert.DeserializeObject<Models.SiteType>(type.Body);
-
-                if (_cache != null && model != null)
-                    _cache.Set(model.Id, model);
-
-                models.Add(model);
-            }
-            return models;
+            return _types.Values.OrderBy(t => t.Id);
         }
 
         /// <summary>
@@ -65,21 +63,9 @@ namespace Piranha.Repositories
         /// <returns></returns>
         public Models.SiteType GetById(string id) 
         {
-            Models.SiteType model = _cache != null ? _cache.Get<Models.SiteType>(id) : null;
-
-            if (model == null) 
-            {
-                var type = _db.SiteTypes
-                    .AsNoTracking()
-                    .FirstOrDefault(t => t.Id == id);
-
-                if (type != null)
-                    model = JsonConvert.DeserializeObject<Models.SiteType>(type.Body);
-
-                if (_cache != null && model != null)
-                    _cache.Set(model.Id, model);
-            }
-            return model;
+            if (_types.TryGetValue(id, out var type))
+                return type;
+            return null;
         }
 
         /// <summary>
@@ -106,8 +92,10 @@ namespace Piranha.Repositories
 
             _db.SaveChanges();
             
-            if (_cache != null)
-                _cache.Remove(model.Id.ToString());
+            lock (_typesMutex)
+            {
+                Load();
+            }
         }
 
         /// <summary>
@@ -124,8 +112,10 @@ namespace Piranha.Repositories
                 _db.SiteTypes.Remove(type);
                 _db.SaveChanges();
 
-                if (_cache != null)
-                    _cache.Remove(id.ToString());
+                lock (_typesMutex)
+                {
+                    Load();
+                }
             }
         }
 
@@ -136,6 +126,19 @@ namespace Piranha.Repositories
         public void Delete(Models.SiteType model) 
         {
             Delete(model.Id);
+        }
+
+        /// <summary>
+        /// Reloads the page types from the database.
+        /// </summary>
+        private void Load()
+        {
+            _types.Clear();
+
+            foreach (var siteType in _db.SiteTypes)
+            {
+                _types[siteType.Id] = JsonConvert.DeserializeObject<Models.SiteType>(siteType.Body);
+            }
         }
     }
 }
