@@ -67,20 +67,19 @@ namespace CoreWeb
             services.AddPiranhaManager();
             services.AddPiranhaApplication();
 
+            // Initialize Piranha
+            App.Init();
+
             return services.BuildServiceProvider();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider services) {
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApi api) {
             loggerFactory.AddConsole();
 
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
-
-            // Initialize Piranha
-            var api = services.GetService<IApi>();
-            App.Init(api);
 
             // Add custom blocks
             App.Blocks.Register<Models.Blocks.SliderGroup>();

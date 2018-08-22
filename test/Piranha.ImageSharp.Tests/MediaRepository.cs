@@ -22,7 +22,7 @@ namespace Piranha.ImageSharp.Tests
 
         protected override void Init() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, null, processor)) {
-                App.Init(api);
+                App.Init();
 
                 // Add media
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png")) {

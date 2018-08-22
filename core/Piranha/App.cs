@@ -178,10 +178,9 @@ namespace Piranha
         /// <summary>
         /// Initializes the application object.
         /// </summary>
-        /// <param name="api">The current api</param>
-        public static void Init(IApi api)
+        public static void Init()
         {
-            Instance.Initialize(api);
+            Instance.Initialize();
         }
 
         /// <summary>
@@ -218,7 +217,7 @@ namespace Piranha
         /// Initializes the application object.
         /// </summary>
         /// <param name="api">The current api</param>
-        private void Initialize(IApi api)
+        private void Initialize()
         {
             if (!_isInitialized)
             {

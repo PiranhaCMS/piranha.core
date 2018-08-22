@@ -74,9 +74,7 @@ namespace Piranha.AttributeBuilder.Tests
         }
         
         public AttributeBuilder() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null)) {
-                App.Init(api);
-            }
+            App.Init();
         }
 
         [Fact]

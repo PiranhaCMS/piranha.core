@@ -32,7 +32,7 @@ namespace Piranha.Tests.Hooks
         protected override void Init() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 // Initialize
-                Piranha.App.Init(api);
+                Piranha.App.Init();
 
                 // Create site
                 api.Sites.Save(new Data.Site() {

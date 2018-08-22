@@ -21,9 +21,7 @@ namespace Piranha.Tests
         /// Sets up & initializes the tests.
         /// </summary>
         protected override void Init() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                Piranha.App.Init(api);
-            }
+            Piranha.App.Init();
         }
 
         /// <summary>
@@ -34,12 +32,9 @@ namespace Piranha.Tests
 
         [Fact]
         public void AppInit() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                Piranha.App.Init(api);
-            }
+            Piranha.App.Init();
         }
 
-        [Fact]
         public void Markdown() {
             var str =
                 "# This is the title\n" +

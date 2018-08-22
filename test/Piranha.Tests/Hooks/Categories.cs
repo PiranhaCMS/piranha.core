@@ -35,7 +35,7 @@ namespace Piranha.Tests.Hooks
         protected override void Init() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 // Initialize
-                Piranha.App.Init(api);
+                Piranha.App.Init();
 
                 var pageTypeBuilder = new PageTypeBuilder(api)
                     .AddType(typeof(BlogPage));

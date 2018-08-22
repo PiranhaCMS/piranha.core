@@ -50,7 +50,7 @@ namespace Piranha.Tests.Repositories
 
         protected override void Init() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
-                Piranha.App.Init(api);
+                Piranha.App.Init();
 
                 var pageTypeBuilder = new PageTypeBuilder(api)
                     .AddType(typeof(BlogPage));

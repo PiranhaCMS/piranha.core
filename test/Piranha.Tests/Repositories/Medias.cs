@@ -38,7 +38,7 @@ namespace Piranha.Tests.Repositories
 
         protected override void Init() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
-                Piranha.App.Init(api);
+                Piranha.App.Init();
 
                 // Add media folders
                 var folder1 = new Data.MediaFolder() {

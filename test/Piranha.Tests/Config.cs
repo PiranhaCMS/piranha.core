@@ -23,7 +23,7 @@ namespace Piranha.Tests
         /// </summary>
         protected override void Init() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                Piranha.App.Init(api);
+                Piranha.App.Init();
 
                 using (var config = new Piranha.Config(api)) {
                     config.CacheExpiresPages = 0;

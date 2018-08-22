@@ -13283,6 +13283,9 @@ li.sitemap-item .actions.one {
   font-size: 20px;
   text-align: center;
 }
+#page-blocks .block-info.block-group-info {
+  cursor: pointer;
+}
 #page-blocks .page-blocks-body {
   background: #fff;
   padding: 15px 30px;

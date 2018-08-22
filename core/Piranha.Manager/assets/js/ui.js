@@ -187,6 +187,11 @@ $(document).on('click', '.block-html-swap', function (e) {
         $(columns[1]).html(col1);
     }
 });
+$(document).on('click', '.block-group-info', function (e) {
+    e.preventDefault();
+
+    $(this).parent().find('.block-expand').click();
+});
 $(document).on('click', '.block-group .block-expand', function (e) {
     e.preventDefault();
 

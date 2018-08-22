@@ -35,10 +35,11 @@ namespace Piranha.Tests
                 .AddPiranhaEF()
                 .AddSingleton<IStorage, Local.FileStorage>()
                 .BuildServiceProvider();
-            contentService = new ContentService<Page, PageField, Models.PageBase>(services);
 
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                Piranha.App.Init(api);
+                Piranha.App.Init();
+
+                contentService = new ContentService<Page, PageField, Models.PageBase>(services, Piranha.App.Mapper);
 
                 // Add media
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png")) {

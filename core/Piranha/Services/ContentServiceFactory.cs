@@ -9,6 +9,7 @@
  */
 
 using System;
+using AutoMapper;
 
 namespace Piranha.Services
 {
@@ -28,13 +29,14 @@ namespace Piranha.Services
         /// <summary>
         /// Creates a new content service for the specified types.
         /// </summary>
+        /// <param name="mapper">The AutoMapper instance to use for transformation</param>
         /// <returns>The content service</returns>
-        public IContentService<TContent, TField, TModelBase> Create<TContent, TField, TModelBase>()
+        public IContentService<TContent, TField, TModelBase> Create<TContent, TField, TModelBase>(IMapper mapper)
             where TContent : Data.Content<TField>
             where TField : Data.ContentField
             where TModelBase : Models.Content
         {
-            return new ContentService<TContent, TField, TModelBase>(_services);
+            return new ContentService<TContent, TField, TModelBase>(_services, mapper);
         }
 
         /// <summary>
@@ -43,7 +45,7 @@ namespace Piranha.Services
         /// <returns>The content service</returns>
         public IContentService<Data.Page, Data.PageField, Models.PageBase> CreatePageService()
         {
-            return new ContentService<Data.Page, Data.PageField, Models.PageBase>(_services);
+            return new ContentService<Data.Page, Data.PageField, Models.PageBase>(_services, App.Mapper);
         }
 
         /// <summary>
@@ -52,7 +54,7 @@ namespace Piranha.Services
         /// <returns>The content service</returns>
         public IContentService<Data.Post, Data.PostField, Models.PostBase> CreatePostService()
         {
-            return new ContentService<Data.Post, Data.PostField, Models.PostBase>(_services);
+            return new ContentService<Data.Post, Data.PostField, Models.PostBase>(_services, App.Mapper);
         }
 
         /// <summary>
@@ -61,7 +63,7 @@ namespace Piranha.Services
         /// <returns>The content service</returns>
         public IContentService<Data.Site, Data.SiteField, Models.SiteContentBase> CreateSiteService()
         {
-            return new ContentService<Data.Site, Data.SiteField, Models.SiteContentBase>(_services);
+            return new ContentService<Data.Site, Data.SiteField, Models.SiteContentBase>(_services, App.Mapper);
         }
     }
 }

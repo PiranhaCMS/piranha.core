@@ -8,6 +8,8 @@
  * 
  */
 
+using AutoMapper;
+
 namespace Piranha.Services
 {
     public interface IContentServiceFactory
@@ -15,8 +17,9 @@ namespace Piranha.Services
         /// <summary>
         /// Creates a new content service for the specified types.
         /// </summary>
+        /// <param name="mapper">The AutoMapper instance to use for transformation</param>
         /// <returns>The content service</returns>
-        IContentService<TContent, TField, TModelBase> Create<TContent, TField, TModelBase>() 
+        IContentService<TContent, TField, TModelBase> Create<TContent, TField, TModelBase>(IMapper mapper) 
             where TContent : Data.Content<TField> 
             where TField : Data.ContentField
             where TModelBase : Models.Content;

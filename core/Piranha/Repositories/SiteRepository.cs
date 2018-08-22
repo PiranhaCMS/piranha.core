@@ -36,7 +36,7 @@ namespace Piranha.Repositories
             : base(db, cache) 
         { 
             this.api = api;
-            this.contentService = factory.Create<Site, SiteField, Models.SiteContentBase>();
+            this.contentService = factory.CreateSiteService();
         }
 
         /// <summary>

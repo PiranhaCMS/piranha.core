@@ -31,7 +31,7 @@ namespace Piranha.Tests.Hooks
         protected override void Init() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 // Initialize
-                Piranha.App.Init(api);
+                Piranha.App.Init();
 
                 // Create test param
                 api.Params.Save(new Data.Param() {
