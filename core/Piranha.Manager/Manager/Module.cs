@@ -63,6 +63,11 @@ namespace Piranha.Manager
         public List<string> Styles { get; private set; }
 
         /// <summary>
+        /// The currently registrered partial views.
+        /// </summary>
+        public List<string> Partials { get; private set; }
+
+        /// <summary>
         /// Gets the Author
         /// </summary>
         public string Author => "Piranha";
@@ -111,6 +116,7 @@ namespace Piranha.Manager
         /// Default constructor.
         /// </summary>
         public Module() {
+            Partials = new List<string>();
             Scripts = new List<string>();
             Styles = new List<string>();
         }
