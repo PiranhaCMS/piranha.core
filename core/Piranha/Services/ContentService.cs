@@ -13,6 +13,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
 using Piranha.Data;
@@ -449,7 +450,16 @@ namespace Piranha.Services
                                         {
                                             param.Add(scope.ServiceProvider.GetService(p.ParameterType));
                                         }
-                                        init.Invoke(val, param.ToArray());
+
+                                        // Check for async
+                                        if (typeof(Task).IsAssignableFrom(init.ReturnType))
+                                        {
+                                            Task.Run(async () => await (Task)init.Invoke(val, param.ToArray())).Wait();
+                                        }
+                                        else
+                                        {
+                                            init.Invoke(val, param.ToArray());
+                                        }
                                     }
                                 }
                                 prop.SetValue(model, val);
@@ -518,7 +528,16 @@ namespace Piranha.Services
                                         {
                                             param.Add(scope.ServiceProvider.GetService(p.ParameterType));
                                         }
-                                        init.Invoke(val, param.ToArray());
+
+                                        // Check for async
+                                        if (typeof(Task).IsAssignableFrom(init.ReturnType))
+                                        {
+                                            Task.Run(async () => await (Task)init.Invoke(val, param.ToArray())).Wait();
+                                        }
+                                        else
+                                        {
+                                            init.Invoke(val, param.ToArray());
+                                        }
                                     }
                                 }
                                 prop.SetValue(model, val);
@@ -868,7 +887,16 @@ namespace Piranha.Services
                         {
                             param.Add(scope.ServiceProvider.GetService(p.ParameterType));
                         }
-                        init.Invoke(val, param.ToArray());
+
+                        // Check for async
+                        if (typeof(Task).IsAssignableFrom(init.ReturnType))
+                        {
+                            Task.Run(async () => await (Task)init.Invoke(val, param.ToArray())).Wait();
+                        }
+                        else
+                        {
+                            init.Invoke(val, param.ToArray());
+                        }
                     }
                 }
                 return val;
@@ -1003,7 +1031,16 @@ namespace Piranha.Services
                 {
                     param.Add(scope.ServiceProvider.GetService(p.ParameterType));
                 }
-                init.Invoke(field, param.ToArray());
+
+                // Check for async
+                if (typeof(Task).IsAssignableFrom(init.ReturnType))
+                {
+                    Task.Run(async () => await (Task)init.Invoke(field, param.ToArray())).Wait();
+                }
+                else
+                {
+                    init.Invoke(field, param.ToArray());
+                }
             }
             return field;
         }
