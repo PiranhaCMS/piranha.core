@@ -184,6 +184,15 @@ namespace Piranha
         }
 
         /// <summary>
+        /// Initializes the application object.
+        /// </summary>
+        [Obsolete("Please refer to App.Init()")]
+        public static void Init(IApi api)
+        {
+            Instance.Initialize();
+        }
+
+        /// <summary>
         /// Serializes the given object.
         /// </summary>
         /// <param name="obj">The object to serialize</param>
