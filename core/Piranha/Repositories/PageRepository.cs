@@ -403,7 +403,7 @@ namespace Piranha.Repositories
                 if (model.OriginalPageId.HasValue) {
                     var originalPageIsCopy = db.Pages.FirstOrDefault(p => p.Id == model.OriginalPageId)?.OriginalPageId.HasValue ?? false;
                     if (originalPageIsCopy) {
-                        throw new Exception("Can not set copy of an copy");
+                        throw new Exception("Can not set copy of a copy");
                     }
 
                     var originalPageType = db.Pages.FirstOrDefault(p => p.Id == model.OriginalPageId)?.PageTypeId;
