@@ -876,7 +876,7 @@ namespace Piranha.Tests.Repositories
                     api.Pages.Save(page);
                 });
 
-                Assert.Equal("Can not set copy of an copy", exn.Message);
+                Assert.Equal("Can not set copy of a copy", exn.Message);
             }
         }
 
