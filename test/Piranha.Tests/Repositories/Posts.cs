@@ -280,6 +280,26 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public void GetAll() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var posts = api.Posts.GetAll();
+
+                Assert.NotNull(posts);
+                Assert.NotEmpty(posts);
+            }
+        }
+
+        [Fact]
+        public void GetAllBaseClass() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var posts = api.Posts.GetAll<Models.PostBase>();
+
+                Assert.NotNull(posts);
+                Assert.NotEmpty(posts);
+            }
+        }
+
+        [Fact]
         public void GetAllById() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var posts = api.Posts.GetAll(BLOG_ID);

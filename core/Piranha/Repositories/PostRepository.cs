@@ -49,6 +49,37 @@ namespace Piranha.Repositories
             return contentService.Create<T>(api.PostTypes.GetById(typeId));
         }        
 
+       /// <summary>
+        /// Gets the available posts for the specified blog.
+        /// </summary>
+        /// <returns>The posts</returns>
+        public IEnumerable<Models.DynamicPost> GetAll() {
+            return GetAll<Models.DynamicPost>();
+        }
+
+        /// <summary>
+        /// Gets the available post items.
+        /// </summary>
+        /// <returns>The posts</returns>
+        public IEnumerable<T> GetAll<T>() where T : Models.PostBase {
+            var posts = db.Posts
+                .AsNoTracking()
+                .OrderByDescending(p => p.Published)
+                .ThenByDescending(p => p.LastModified)
+                .ThenBy(p => p.Title)
+                .Select(p => p.Id);
+
+            var models = new List<T>();
+
+            foreach (var post in posts) {
+                var model = GetById<T>(post);
+
+                if (model != null)
+                    models.Add(model);
+            }
+            return models;
+        }
+
         /// <summary>
         /// Gets the available posts for the specified blog.
         /// </summary>

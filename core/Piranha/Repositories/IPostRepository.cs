@@ -24,6 +24,18 @@ namespace Piranha.Repositories
         /// <summary>
         /// Gets the available post items.
         /// </summary>
+        /// <returns>The posts</returns>
+        IEnumerable<Models.DynamicPost> GetAll();
+
+        /// <summary>
+        /// Gets the available post items.
+        /// </summary>
+        /// <returns>The posts</returns>
+        IEnumerable<T> GetAll<T>() where T : Models.PostBase;
+
+        /// <summary>
+        /// Gets the available post items.
+        /// </summary>
         /// <param name="blogId">The unique id</param>
         /// <returns>The posts</returns>
         IEnumerable<Models.DynamicPost> GetAll(Guid blogId);
