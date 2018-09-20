@@ -11,9 +11,9 @@
                     <label>@Model[n].Title</label>
                 }
                 @if (Model[n].Value.GetType().IsGenericType) {
-                    @Html.EditorFor(m => m[n].Value, Model[n].Value.GetType().BaseType.Name)
+                    @Html.EditorFor(m => m[n].Value, Model[n].Value.GetType().BaseType.Name, new { Placeholder = Model[n].Placeholder })
                 } else {
-                    @Html.EditorFor(m => m[n].Value, Model[n].Value.GetType().Name)
+                    @Html.EditorFor(m => m[n].Value, Model[n].Value.GetType().Name, new { Placeholder = Model[n].Placeholder })
                 }
             </div>
         </div>

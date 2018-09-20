@@ -170,6 +170,7 @@ namespace Piranha.Areas.Manager.Services
                             Title = region.Fields[0].Title ?? region.Fields[0].Id,
                             CLRType = item.GetType().FullName,
                             Options = region.Fields[0].Options,
+                            Placeholder = region.Fields[0].Placeholder,
                             Value = (Extend.IField)item
                         }
                     };
@@ -205,6 +206,7 @@ namespace Piranha.Areas.Manager.Services
                                 Title = field.Title ?? field.Id,
                                 CLRType = fieldData[field.Id].GetType().FullName,
                                 Options = field.Options,
+                                Placeholder = field.Placeholder,
                                 Value = (Extend.IField)fieldData[field.Id]
                             });
                         }

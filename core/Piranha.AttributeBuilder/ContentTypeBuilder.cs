@@ -147,7 +147,8 @@ namespace Piranha.AttributeBuilder
                         Id = prop.Name,
                         Title = attr.Title,
                         Type = appFieldType.TypeName,
-                        Options = attr.Options
+                        Options = attr.Options,
+                        Placeholder = attr.Placeholder
                     };
                 }
             }

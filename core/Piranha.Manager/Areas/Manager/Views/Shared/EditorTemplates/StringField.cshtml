@@ -1,3 +1,6 @@
 ﻿@model Piranha.Extend.Fields.StringField
+@{
+    var placeholder = ViewData["Placeholder"];
+}
 
-@Html.TextBoxFor(m => m.Value, new { @class = "form-control small" })
+@Html.TextBoxFor(m => m.Value, new { @class = "form-control small", placeholder = placeholder })

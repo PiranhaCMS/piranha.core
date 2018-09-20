@@ -31,5 +31,11 @@ namespace Piranha.Models
         /// Gets/sets the options.
         /// </summary>
         public FieldOption Options { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional placeholder for
+        /// text based fields.
+        /// </summary>
+        public string Placeholder { get; set; }
     }
 }

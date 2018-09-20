@@ -28,5 +28,11 @@ namespace Piranha.AttributeBuilder
         /// Gets/sets the field options.
         /// </summary>
         public FieldOption Options { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional placeholder for
+        /// text based fields.
+        /// </summary>
+        public string Placeholder { get; set; }
     }
 }

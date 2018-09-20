@@ -22,7 +22,7 @@ namespace CoreWeb.Models.Regions
         /// <summary>
         /// Gets/sets the title.
         /// </summary>
-        [Field(Options = FieldOption.HalfWidth)]
+        [Field(Options = FieldOption.HalfWidth, Placeholder = "Mandatory title")]
         public StringField Title { get; set; }
 
         /// <summary>

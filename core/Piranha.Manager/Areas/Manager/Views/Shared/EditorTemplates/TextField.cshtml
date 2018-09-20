@@ -1,3 +1,6 @@
 ﻿@model Piranha.Extend.Fields.TextField
+@{
+    var placeholder = ViewData["Placeholder"];
+}
 
-@Html.TextAreaFor(m => m.Value, new { @class = "form-control small", rows = 6 })
+@Html.TextAreaFor(m => m.Value, new { @class = "form-control small", rows = 6, placeholder = placeholder })

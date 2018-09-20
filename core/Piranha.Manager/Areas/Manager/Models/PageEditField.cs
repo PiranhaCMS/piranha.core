@@ -37,6 +37,12 @@ namespace Piranha.Areas.Manager.Models
         public Piranha.Models.FieldOption Options { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional placeholder for
+        /// text based fields.
+        /// </summary>
+        public string Placeholder { get; set; }
+
+        /// <summary>
         /// Gets/sets the field value.
         /// </summary>
         public Extend.IField Value { get; set; }

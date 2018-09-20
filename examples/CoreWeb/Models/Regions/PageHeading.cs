@@ -27,7 +27,7 @@ namespace CoreWeb.Models.Regions
         /// <summary>
         /// Gets/sets the optional ingress.
         /// </summary>
-        [Field]
+        [Field(Placeholder = "Optional page ingress")]
         public TextField Ingress { get; set; }
     }
 }
