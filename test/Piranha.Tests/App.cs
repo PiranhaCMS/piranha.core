@@ -35,6 +35,7 @@ namespace Piranha.Tests
             Piranha.App.Init();
         }
 
+        [Fact]
         public void Markdown() {
             var str =
                 "# This is the title\n" +

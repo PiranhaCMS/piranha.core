@@ -351,6 +351,9 @@ namespace Piranha.Repositories
             foreach (var page in pages.Where(p => p.ParentId == parentId).OrderBy(p => p.SortOrder)) {
                 var item = App.Mapper.Map<Page, Models.SitemapItem>(page);
 
+                if (!string.IsNullOrEmpty(page.RedirectUrl))
+                    item.Permalink = page.RedirectUrl;
+
                 item.Level = level;
                 item.PageTypeName = pageTypes.First(t => t.Id == page.PageTypeId).Title;
                 item.Items = Sort(pages, pageTypes, page.Id, level + 1);
