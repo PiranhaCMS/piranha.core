@@ -13991,15 +13991,3 @@ body.live-preview {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   transition: width 0.2s ease-in-out;
 }
-.preview-body iframe.laptop {
-  width: 1200px;
-  transition: width 0.2s ease-in-out;
-}
-.preview-body iframe.tablet {
-  width: 768px;
-  transition: width 0.2s ease-in-out;
-}
-.preview-body iframe.phone {
-  width: 320px;
-  transition: width 0.2s ease-in-out;
-}

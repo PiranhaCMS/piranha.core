@@ -1,6 +1,8 @@
 @model Piranha.Areas.Manager.Models.PreviewModel
 @{
     Layout = "";
+
+    var sizes = Piranha.App.Modules.Get<Piranha.Manager.Module>().PreviewSizes;
 }
 
 <html style="height:100%">
@@ -12,10 +14,10 @@
     <body class="live-preview">
         <div class="preview">
             <div class="preview-header">
-                <a id="desktop" href="#"><i class="fas fa-desktop"></i><span>Desktop</span></a>
-                <a id="laptop" href="#"><i class="fas fa-laptop"></i><span>Laptop</span></a>
-                <a id="tablet" href="#"><i class="fas fa-tablet-alt"></i><span>Tablet</span></a>
-                <a id="phone" href="#"><i class="fas fa-mobile-alt"></i><span>Mobile</span></a>
+                @foreach (var size in sizes)
+                {
+                    <a class="preview-size" href="#" data-width="@size.Width"><i class="@size.IconCss"></i><span>@size.Title</span></a>
+                }
             </div>
             <div class="preview-body">
                 <iframe id="preview" src="@Model.Permalink">
@@ -39,21 +41,8 @@
                 return console.error(err.toString());
             });
 
-            $(document).on('click', '#desktop', function (e) {
-                $('#preview').removeClass('phone').removeClass('tablet').removeClass('laptop');
-                return false;
-            });
-            $(document).on('click', '#laptop', function (e) {
-                $('#preview').removeClass('phone').removeClass('tablet').addClass('laptop');
-                return false;
-            });
-            $(document).on('click', '#tablet', function (e) {
-                $('#preview').removeClass('phone').removeClass('laptop').addClass('tablet');
-                return false;
-            });
-            $(document).on('click', '#phone', function (e) {
-                $('#preview').removeClass('tablet').removeClass('laptop').addClass('phone');
-                return false;
+            $(document).on('click', '.preview-size', function (e) {
+                $('#preview').css({ width: $(this).attr('data-width') });
             });
         </script>
     </body>
