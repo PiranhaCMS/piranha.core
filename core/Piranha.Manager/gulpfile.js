@@ -37,6 +37,10 @@ var paths = {
         "assets/js/ui.js"
     ],
     jsDest: "assets/js/script.js",
+    signalJs: [
+        "node_modules/@aspnet/signalr/dist/browser/signalr.min.js"
+    ],
+    signalDest: "assets/js/script.signalr.js",
     editorLess: "assets/less/editor.less",
     less: "assets/less/style.less",
     css: ["assets/css/*.css", "!assets/css/*.min.css"],
@@ -87,10 +91,24 @@ gulp.task("min:js", function () {
             suffix: ".min"
         }))
         .pipe(gulp.dest("."));
-});  
+});
+
+//
+// Combine & minimze js files
+//
+gulp.task("min:signalr", function () {
+    return gulp.src(paths.signalJs, { base: "." })
+        .pipe(concat(paths.signalDest))
+        .pipe(gulp.dest("."))
+        .pipe(uglify())
+        .pipe(rename({
+            suffix: ".min"
+        }))
+        .pipe(gulp.dest("."));
+});
 
 //
 // Default tasks
 //
-gulp.task("serve", ["min:css", "min:editor", "min:js"]);
+gulp.task("serve", ["min:css", "min:editor", "min:js", "min:signalr"]);
 gulp.task("default", ["serve"]);

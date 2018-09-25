@@ -8,14 +8,15 @@
  * 
  */
 
-using Piranha.Areas.Manager.Services;
-using Piranha.Manager;
-using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Session;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
+using Piranha.Areas.Manager.Hubs;
+using Piranha.Areas.Manager.Services;
+using Piranha.Manager;
 
 public static class ManagerModuleExtensions
 {
@@ -43,6 +44,9 @@ public static class ManagerModuleExtensions
 
         // Add session support
         services.AddSession();
+
+        // Add SignalR
+        services.AddSignalR();
 
         // Setup authorization policies
         services.AddAuthorization(o => {
@@ -211,6 +215,10 @@ public static class ManagerModuleExtensions
     public static IApplicationBuilder UsePiranhaManager(this IApplicationBuilder builder) {
         return builder
             .UseSession()
-            .UseMiddleware<Piranha.Manager.ResourceMiddleware>();
+            .UseMiddleware<Piranha.Manager.ResourceMiddleware>()
+            .UseSignalR(routes => 
+            {
+                routes.MapHub<PagePreviewHub>("/manager/pagepreview");
+            });
     }
 }

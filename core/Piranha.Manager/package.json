@@ -15,7 +15,8 @@
     "gulp-cssmin": "0.2.0",
     "gulp-less": "3.5.0",
     "gulp-uglify": "3.0.0",
-    "rimraf": "2.6.2"
+    "rimraf": "2.6.2",
+    "@aspnet/signalr": "1.0.3"
   },
   "resolutions": {
     "graceful-fs": "4.1.11",
