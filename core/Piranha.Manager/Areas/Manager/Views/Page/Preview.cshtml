@@ -1,11 +1,11 @@
-@model string
+@model Piranha.Areas.Manager.Models.PreviewModel
 @{
     Layout = "";
 }
 
 <html style="height:100%">
     <head>
-        <title>Preview</title>
+        <title>Live Preview</title>
 
         <link href="~/manager/assets/css/style.min.css" rel="stylesheet" type="text/css" />
     </head>
@@ -18,7 +18,7 @@
                 <a id="phone" href="#"><i class="fas fa-mobile-alt"></i><span>Mobile</span></a>
             </div>
             <div class="preview-body">
-                <iframe id="preview" src="@Model">
+                <iframe id="preview" src="@Model.Permalink">
                 </iframe>
             </div>
         </div>
@@ -27,11 +27,12 @@
         <script>
             "use strict";
 
-            //var currentPageId = '';
+            var currentPageId = '@Model.Id';
             var connection = new signalR.HubConnectionBuilder().withUrl('/manager/pagepreview').build();
 
             connection.on('UpdatePage', function (pageId) {
-                document.getElementById('preview').contentWindow.location.reload();
+                if (pageId == currentPageId)
+                    document.getElementById('preview').contentWindow.location.reload();
             });
 
             connection.start().catch(function (err) {

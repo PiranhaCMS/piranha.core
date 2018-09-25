@@ -171,7 +171,7 @@ namespace Piranha.Areas.Manager.Controllers
             var page = api.Pages.GetById<Piranha.Models.PageInfo>(id);
 
             if (page != null)
-                return View("Preview", page.Permalink);
+                return View("Preview", new Models.PreviewModel { Id = id, Permalink = page.Permalink });
             return NotFound();
         }
 
