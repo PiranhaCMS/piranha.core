@@ -218,7 +218,7 @@ public static class ManagerModuleExtensions
             .UseMiddleware<Piranha.Manager.ResourceMiddleware>()
             .UseSignalR(routes => 
             {
-                routes.MapHub<PagePreviewHub>("/manager/pagepreview");
+                routes.MapHub<PreviewHub>("/manager/preview");
             });
     }
 }

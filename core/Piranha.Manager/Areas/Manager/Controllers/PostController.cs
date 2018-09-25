@@ -8,14 +8,16 @@
  * 
  */
 
-using Piranha.Areas.Manager.Services;
-using Piranha.Manager;
-using Piranha.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using Piranha.Areas.Manager.Services;
+using Piranha.Manager;
+using Piranha.Services;
 
 namespace Piranha.Areas.Manager.Controllers
 {
@@ -24,14 +26,16 @@ namespace Piranha.Areas.Manager.Controllers
     {
         private readonly PostEditService editService;
         private readonly IContentService<Data.Post, Data.PostField, Piranha.Models.PostBase> contentService;
+        private readonly IHubContext<Hubs.PreviewHub> _hub;
         
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public PostController(IApi api, PostEditService editService, IContentServiceFactory factory) : base(api) { 
+        public PostController(IApi api, PostEditService editService, IContentServiceFactory factory, IHubContext<Hubs.PreviewHub> hub) : base(api) { 
             this.editService = editService;
             this.contentService = factory.CreatePostService();
+            _hub = hub;
         }
 
         /// <summary>
@@ -57,6 +61,16 @@ namespace Piranha.Areas.Manager.Controllers
             return View("Edit", model);
         }
 
+        [Route("manager/post/preview/{id:Guid}")]
+        [Authorize(Policy = Permission.PagesEdit)]
+        public IActionResult Preview(Guid id) {
+            var post = api.Posts.GetById<Piranha.Models.PostInfo>(id);
+
+            if (post != null)
+                return View("_Preview", new Models.PreviewModel { Id = id, Permalink = post.Permalink });
+            return NotFound();
+        }
+
         /// <summary>
         /// Saves the given post model
         /// </summary>
@@ -64,7 +78,7 @@ namespace Piranha.Areas.Manager.Controllers
         [HttpPost]
         [Route("manager/post/save")]
         [Authorize(Policy = Permission.PostsSave)]
-        public IActionResult Save(Models.PostEditModel model) {
+        public async Task<IActionResult> Save(Models.PostEditModel model) {
             // Validate
             if (string.IsNullOrWhiteSpace(model.Title)) {
                 return BadRequest();
@@ -77,6 +91,9 @@ namespace Piranha.Areas.Manager.Controllers
 
             // Save
             if (ret) {
+                if (_hub != null)
+                    await _hub.Clients.All.SendAsync("Update", model.Id);
+
                 if (!string.IsNullOrWhiteSpace(alias))
                     return Json(new
                     {

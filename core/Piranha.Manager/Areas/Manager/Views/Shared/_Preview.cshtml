@@ -27,11 +27,11 @@
         <script>
             "use strict";
 
-            var currentPageId = '@Model.Id';
-            var connection = new signalR.HubConnectionBuilder().withUrl('/manager/pagepreview').build();
+            var currentId = '@Model.Id';
+            var connection = new signalR.HubConnectionBuilder().withUrl('/manager/preview').build();
 
-            connection.on('UpdatePage', function (pageId) {
-                if (pageId == currentPageId)
+            connection.on('Update', function (id) {
+                if (id == currentId)
                     document.getElementById('preview').contentWindow.location.reload();
             });
 

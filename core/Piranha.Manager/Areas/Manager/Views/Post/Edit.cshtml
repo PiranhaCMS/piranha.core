@@ -272,7 +272,9 @@
                     <span class="sr-only">Toggle Dropdown</span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                    <li><a href="~/@Model.BlogSlug/@Model.Slug" target="_blank">Preview</a></li>
+                    @if (Model.Id != Guid.Empty) {
+                        <li><a href="@Url.Action("Preview", new { id = Model.Id })" target="_preview">Preview</a></li>
+                    }
                     @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PostsPublish)).Succeeded) {
                         if (Model.Published.HasValue) {
                             <li><a id="submit-unpublish" href="#">Unpublish</a></li>

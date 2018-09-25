@@ -27,7 +27,7 @@ namespace Piranha.Areas.Manager.Controllers
         private const string COOKIE_SELECTEDSITE = "PiranhaManager_SelectedSite";
         private readonly PageEditService editService;
         private readonly IContentService<Data.Page, Data.PageField, Piranha.Models.PageBase> contentService;
-        private readonly IHubContext<Hubs.PagePreviewHub> _hub;
+        private readonly IHubContext<Hubs.PreviewHub> _hub;
 
         /// <summary>
         /// Default constructor.
@@ -35,7 +35,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="api">The current api</param>
         /// <param name="editService">The current page edit service</param>
         /// <param name="factory">The content service factory</param>
-        public PageController(IApi api, PageEditService editService, IContentServiceFactory factory, IHubContext<Hubs.PagePreviewHub> hub) : base(api) { 
+        public PageController(IApi api, PageEditService editService, IContentServiceFactory factory, IHubContext<Hubs.PreviewHub> hub) : base(api) { 
             this.editService = editService;
             this.contentService = factory.CreatePageService();
             _hub = hub;
@@ -171,7 +171,7 @@ namespace Piranha.Areas.Manager.Controllers
             var page = api.Pages.GetById<Piranha.Models.PageInfo>(id);
 
             if (page != null)
-                return View("Preview", new Models.PreviewModel { Id = id, Permalink = page.Permalink });
+                return View("_Preview", new Models.PreviewModel { Id = id, Permalink = page.Permalink });
             return NotFound();
         }
 
@@ -213,7 +213,7 @@ namespace Piranha.Areas.Manager.Controllers
             // Save
             if (ret) {
                 if (_hub != null)
-                    await _hub.Clients.All.SendAsync("UpdatePage", model.Id);
+                    await _hub.Clients.All.SendAsync("Update", model.Id);
 
                 if (!string.IsNullOrWhiteSpace(alias))
                     return Json(new
