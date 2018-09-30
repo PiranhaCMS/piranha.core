@@ -8,12 +8,17 @@
  * 
  */
 
+using System;
+
 namespace Piranha.Models
 {
+    [Obsolete("BlogPage has been renamed to ArchivePage, please update your code.", false)]
+    public class BlogPage<T> : ArchivePage<T> where T : BlogPage<T> { }
+
     /// <summary>
-    /// Base class for blog pages.
+    /// Base class for archive pages.
     /// </summary>
-    public class BlogPage<T> : GenericPage<T>, IBlogPage where T : BlogPage<T>
+    public class ArchivePage<T> : GenericPage<T>, IArchivePage where T : ArchivePage<T>
     {
         /// <summary>
         /// Gets/sets the post archive.
@@ -23,15 +28,19 @@ namespace Piranha.Models
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public BlogPage()
+        public ArchivePage()
         {
             Archive = new PostArchive();
         }
     }
 
+
+    [Obsolete]
+    public interface IBlogPage : IArchivePage { }
+    
     /// <summary>
-    /// Interface for registering the basic blog page 
+    /// Interface for registering the basic archive page 
     /// content type.
     /// </summary>
-    public interface IBlogPage { }
+    public interface IArchivePage { }
 }

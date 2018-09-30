@@ -48,7 +48,7 @@ namespace Piranha.Repositories
         /// <param name="month">The optional month</param>
         /// <param name="pageSize">The optional page size</param>
         /// <returns>The archive model</returns>
-        public T GetById<T>(Guid id, int? page = 1, Guid? categoryId = null, int? year = null, int? month = null, int? pageSize = null) where T : Models.BlogPage<T> {
+        public T GetById<T>(Guid id, int? page = 1, Guid? categoryId = null, int? year = null, int? month = null, int? pageSize = null) where T : Models.ArchivePage<T> {
             return Get<T>(id, page, categoryId, null, year, month, pageSize);
         }
 
@@ -61,7 +61,7 @@ namespace Piranha.Repositories
         /// <param name="month">The optional month</param>
         /// <param name="pageSize">The optional page size</param>
         /// <returns>The archive model</returns>
-        public T GetById<T>(Guid id, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : Models.BlogPage<T> {
+        public T GetById<T>(Guid id, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : Models.ArchivePage<T> {
             return Get<T>(id, page, null, null, year, month, pageSize);
         }
 
@@ -75,7 +75,7 @@ namespace Piranha.Repositories
         /// <param name="month">The optional month</param>
         /// <param name="pageSize">The optional page size</param>
         /// <returns>The archive model</returns>
-        public T GetByCategoryId<T>(Guid id, Guid categoryId, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : Models.BlogPage<T> {
+        public T GetByCategoryId<T>(Guid id, Guid categoryId, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : Models.ArchivePage<T> {
             return Get<T>(id, page, categoryId, null, year, month, pageSize);
         }
 
@@ -89,11 +89,11 @@ namespace Piranha.Repositories
         /// <param name="month">The optional month</param>
         /// <param name="pageSize">The optional page size</param>
         /// <returns>The archive model</returns>
-        public T GetByTagId<T>(Guid id, Guid tagId, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : Models.BlogPage<T> {
+        public T GetByTagId<T>(Guid id, Guid tagId, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : Models.ArchivePage<T> {
             return Get<T>(id, page, null, tagId, year, month, pageSize);
         }
 
-        private T Get<T>(Guid id, int? page = 1, Guid? categoryId = null, Guid? tagId = null, int? year = null, int? month = null, int? pageSize = null) where T : Models.BlogPage<T> {
+        private T Get<T>(Guid id, int? page = 1, Guid? categoryId = null, Guid? tagId = null, int? year = null, int? month = null, int? pageSize = null) where T : Models.ArchivePage<T> {
             // Get the requested blog page
             var model = api.Pages.GetById<T>(id);
 

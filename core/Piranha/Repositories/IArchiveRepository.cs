@@ -26,7 +26,7 @@ namespace Piranha.Repositories
         /// <param name="pageSize">The optional page size</param>
         /// <returns>The archive model</returns>
         [Obsolete("Please update your code to use the new GetById, GetByCategoryId & GetByTagId", true)]
-        T GetById<T>(Guid id, int? page = 1, Guid? categoryId = null, int? year = null, int? month = null, int? pageSize = null) where T : BlogPage<T>;
+        T GetById<T>(Guid id, int? page = 1, Guid? categoryId = null, int? year = null, int? month = null, int? pageSize = null) where T : ArchivePage<T>;
 
         /// <summary>
         /// Gets the post archive for the blog with the given id.
@@ -37,7 +37,7 @@ namespace Piranha.Repositories
         /// <param name="month">The optional month</param>
         /// <param name="pageSize">The optional page size</param>
         /// <returns>The archive model</returns>
-        T GetById<T>(Guid id, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : BlogPage<T>;
+        T GetById<T>(Guid id, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : ArchivePage<T>;
 
         /// <summary>
         /// Gets the post archive for the blog with the given id.
@@ -49,7 +49,7 @@ namespace Piranha.Repositories
         /// <param name="month">The optional month</param>
         /// <param name="pageSize">The optional page size</param>
         /// <returns>The archive model</returns>
-        T GetByCategoryId<T>(Guid id, Guid categoryId, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : BlogPage<T>;
+        T GetByCategoryId<T>(Guid id, Guid categoryId, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : ArchivePage<T>;
 
         /// <summary>
         /// Gets the post archive for the blog with the given id.
@@ -61,6 +61,6 @@ namespace Piranha.Repositories
         /// <param name="month">The optional month</param>
         /// <param name="pageSize">The optional page size</param>
         /// <returns>The archive model</returns>
-        T GetByTagId<T>(Guid id, Guid tagId, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : BlogPage<T>;
+        T GetByTagId<T>(Guid id, Guid tagId, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : ArchivePage<T>;
     }
 }

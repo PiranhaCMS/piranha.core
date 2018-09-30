@@ -317,7 +317,7 @@ namespace Piranha
 
                         // Compose content types
                         _contentTypes.Register<Models.IPage>("Page", "Page");
-                        _contentTypes.Register<Models.IBlogPage>("Blog", "Archive", true);
+                        _contentTypes.Register<Models.IArchivePage>("Blog", "Archive", true);
 
                         // Compose field types
                         _fields.Register<Extend.Fields.CheckBoxField>();

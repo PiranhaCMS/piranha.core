@@ -18,7 +18,7 @@ namespace CoreWeb.Models
     /// Basic blog page.
     /// </summary>
     [PageType(Title = "Blog Archive")]
-    public class BlogArchive : BlogPage<BlogArchive>
+    public class BlogArchive : ArchivePage<BlogArchive>
     {
         /// <summary>
         /// Gets/sets the main content.
