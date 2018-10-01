@@ -12523,6 +12523,14 @@ body.collapsed .navmenu-inverse span.title {
 .panel .table > tbody > tr:nth-child(2n+1) {
   background: #fff;
 }
+.table > tbody > tr.dropping,
+.panel .table > tbody > tr.dropping {
+  background: #f2fbff !important;
+}
+.table > tbody > tr.dropping > td:not(.text-limit-cell),
+.panel .table > tbody > tr.dropping > td:not(.text-limit-cell) {
+  background: #f2fbff !important;
+}
 .table > tbody > tr > td,
 .panel .table > tbody > tr > td {
   padding: 10px 20px;
@@ -13177,6 +13185,9 @@ li.sitemap-item .actions.one {
   margin-top: 10px;
   border-radius: 0;
   box-shadow: unset;
+}
+.inline-search.inline-search-light {
+  background: #fff;
 }
 .list-group-header {
   background: #f8f8f8;

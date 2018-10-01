@@ -23997,6 +23997,14 @@ $(document).on('keyup', '.table-filter #blog-search', function (e) {
     manager.tools.tablesort(table, data.filter, $('#blog-type-filter').val(), $('#blog-category-filter').val(), $('#blog-search').val());
 });
 
+$(document).on('keyup', '.table-filter #media-search', function (e) {
+    e.preventDefault();
+
+    var table = $(this).parent().parent().data().table;
+
+    manager.tools.tablesort(table, '', '', '', $(this).val());
+});
+
 //
 // Add page
 //
