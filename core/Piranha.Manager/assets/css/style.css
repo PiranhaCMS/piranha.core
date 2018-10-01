@@ -13281,6 +13281,24 @@ li.sitemap-item .actions.one {
     display: block;
   }
 }
+.region-description {
+  margin: -15px 0 15px;
+  padding: 15px 15px 5px;
+  border-bottom: 1px solid #ddd;
+  background: #eef4f8;
+}
+.region-description.region-list-description {
+  margin: -15px -15px 15px;
+}
+.region-description i {
+  font-size: 20px;
+  float: left;
+  opacity: .25;
+}
+.region-description p {
+  margin-left: 52px;
+  opacity: .5;
+}
 #page-blocks {
   background: url('/manager/assets/img/cream_pixels.png');
   padding: 0;

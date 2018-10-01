@@ -81,7 +81,7 @@ namespace Piranha.Tests.Repositories
         }
 
         [PageType(Title = "My BlogType")]
-        public class MyBlogPage : Models.BlogPage<MyBlogPage>
+        public class MyBlogPage : Models.ArchivePage<MyBlogPage>
         {
             [Region]
             public TextField Ingress { get; set; }

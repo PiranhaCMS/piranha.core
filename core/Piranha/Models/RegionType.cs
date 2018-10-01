@@ -46,6 +46,12 @@ namespace Piranha.Models
         public bool ListExpand { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional description to be shown in
+        /// the manager interface.
+        /// </summary>
+        public string Description { get; set; }
+        
+        /// <summary>
         /// Gets/sets the available fields.
         /// </summary>
         public IList<FieldType> Fields { get; set; }

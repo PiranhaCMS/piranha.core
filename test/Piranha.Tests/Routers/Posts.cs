@@ -33,7 +33,7 @@ namespace Piranha.Tests.Routers
         private Guid TAG2_ID = Guid.NewGuid();
 
         [PageType(Title = "My PageType")]
-        public class MyPage : Models.BlogPage<MyPage>
+        public class MyPage : Models.ArchivePage<MyPage>
         {
         }
 

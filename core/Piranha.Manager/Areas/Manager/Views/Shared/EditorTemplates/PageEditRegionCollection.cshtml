@@ -1,12 +1,19 @@
 ﻿@model Piranha.Areas.Manager.Models.PageEditRegionCollection
 @using Piranha.Models
 
+@if (!string.IsNullOrEmpty(Model.Description)) 
+{
+    <div class="region-description region-list-description">
+        <i class="fas fa-info-circle"></i>
+        <p>@Model.Description</p>
+    </div>
+}
 <div id="@Model.Id" class="region-list sortable" role="tablist">
-    @for (var i = 0; i < Model.FieldSets.Count; i++) {
+    @for (var i = 0; i < Model.FieldSets.Count; i++) 
+    {
         @Html.EditorFor(m => m.FieldSets[i], "PageEditRegionItem.cshtml")
     }
 </div>
-
 <div class="region-list-toolbar">
     <button type="button" class="btn btn-labeled btn-primary pull-right addRegionItem" data-pagetypeid="@ViewData["pageTypeId"]" data-regiontypeid="@ViewData["regionTypeId"]" data-regionindex="@ViewData["regionIndex"]" data-itemindex="@Model.FieldSets.Count" data-targetid="#@Model.Id" data-contenttype="@ViewData["contentType"]">
         <span class="btn-label">

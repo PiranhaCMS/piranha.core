@@ -70,6 +70,13 @@ namespace Piranha.AttributeBuilder
                 };
                 int? sortOrder = attr.SortOrder != Int32.MaxValue ? attr.SortOrder : (int?)null;
 
+                // Get optional description
+                var descAttr = prop.GetCustomAttribute<RegionDescriptionAttribute>();
+                if (descAttr != null)
+                {
+                    regionType.Description = descAttr.Text;
+                }                
+
                 Type type = null;
 
                 if (!isCollection)

@@ -31,6 +31,12 @@ namespace Piranha.Areas.Manager.Models
         public string CLRType { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional description to be shown in
+        /// the manager interface.
+        /// </summary>
+        public string Description { get; set; }        
+
+        /// <summary>
         /// Adds a field set to the region.
         /// </summary>
         /// <param name="fieldSet">The field set</param>
