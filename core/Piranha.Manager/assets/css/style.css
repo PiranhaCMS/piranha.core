@@ -12331,11 +12331,6 @@ body.collapsed .navmenu-inverse .navmenu-brand {
 }
 body.collapsed .navmenu-inverse .navmenu-brand .logo-small {
   display: block;
-  background: url('../img/logo.png') 0 0 no-repeat;
-  background-size: contain;
-  width: 50px;
-  height: 36px;
-  margin-left: 4px;
 }
 body.collapsed .navmenu-inverse .navmenu-brand .logo-main {
   display: none;
@@ -12363,6 +12358,11 @@ body.collapsed .navmenu-inverse span.title {
 }
 .navmenu-inverse .navmenu-brand .logo-small {
   display: none;
+  background: url('../img/logo.png') 0 0 no-repeat;
+  background-size: contain;
+  width: 50px;
+  height: 36px;
+  margin-left: 4px;
 }
 .navmenu-inverse .navmenu-nav > li {
   font-size: 15px;
@@ -12451,8 +12451,7 @@ body.collapsed .navmenu-inverse span.title {
     padding: 10px 0;
   }
   .navmenu-inverse .navmenu-brand .logo-small {
-    display: inline;
-    height: 32px;
+    display: block;
   }
   .navmenu-inverse .navmenu-brand .logo-main {
     display: none;
