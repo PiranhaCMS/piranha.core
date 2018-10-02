@@ -7,6 +7,7 @@ var mdeEditors = new Array();
 function RegisterMarkdown (e) {
     var preview = $(e).parent().parent().find('.content-preview');
     var simplemde = new SimpleMDE({ 
+        forceSync: true,
         element: e,
         status: false,
         spellChecker: false,
