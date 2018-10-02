@@ -23838,7 +23838,7 @@ $(document).on('click', '.form-dimmer', function (e) {
 $(document).on('click', '.block-html-swap', function (e) {
     e.preventDefault();
 
-    var columns = $(this).parent().parent().find('.col-sm-6');
+    var columns = $(this).parent().parent().find('.block-editor');
     if (columns.length == 2) {
         var col1 = $(columns[0]).html();
         var col2 = $(columns[1]).html();
