@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.Manager</id>
     <title>Piranha Manager</title>
-    <version>5.2.0-beta1</version>
+    <version>5.2.0-beta1-1</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -23,6 +23,7 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
         <dependency id="Microsoft.AspNetCore" version="2.1.1" />
         <dependency id="Microsoft.AspNetCore.Mvc" version="2.1.1" />
         <dependency id="Microsoft.AspNetCore.Session" version="2.1.1" />
+        <dependency id="Microsoft.AspNetCore.SignalR" version="1.0.3" />
         <dependency id="Microsoft.AspNetCore.StaticFiles" version="2.1.1" />
         <dependency id="Microsoft.Extensions.FileProviders.Embedded" version="2.1.1" />
       </group>
