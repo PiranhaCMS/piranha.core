@@ -13043,8 +13043,22 @@ li.sitemap-item .actions.one {
   float: right;
   width: auto;
 }
+.col-sm-12.buttons.buttons-fixed {
+  background: #f2f2f2;
+  background: rgba(242, 242, 242, 0.85);
+  position: fixed;
+  right: 0;
+  padding: 15px;
+  margin-top: -65px;
+  z-index: 20000;
+}
 .col-sm-12.buttons .dropdown-menu {
   text-align: left;
+}
+.col-sm-12.buttons .btn-icon {
+  width: 36px;
+  padding-left: 0;
+  padding-right: 0;
 }
 .btn-labeled.btn-block {
   text-indent: -12px;

@@ -286,8 +286,24 @@
 	float: right;
 	width: auto;
 
+	&.buttons-fixed {
+		background: @bg-color;
+		background: rgba(242,242,242,.85);
+		position: fixed;
+		right: 0;
+		padding: 15px;
+		margin-top: -65px;
+		z-index: 20000;		
+	}	
+
 	.dropdown-menu {
 		text-align: left;
+	}
+
+	.btn-icon {
+		width: 36px;
+		padding-left: 0;
+		padding-right: 0;
 	}
 }
 

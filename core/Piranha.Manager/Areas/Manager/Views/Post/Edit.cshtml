@@ -242,14 +242,13 @@
     @Html.HiddenFor(m => m.TypeId)
 
     <div class="row">
-        <div class="col-sm-12 buttons">
+        <div class="col-sm-12 buttons buttons-fixed">
             <!-- Back -->
-            <a href="@Url.Action("Edit", "Page", new { id = Model.BlogId })" class="btn btn-info">
+            <a href="@Url.Action("Edit", "Page", new { id = Model.BlogId })" class="btn btn-info btn-icon">
                 <span class="fas fa-angle-left"></span>
             </a>
-
             <!-- Settings -->
-            <button id="btn-settings" type="button" class="btn btn-primary">
+            <button id="btn-settings" type="button" class="btn btn-primary btn-icon">
                 <span class="fas fa-cog"></span>
             </button>
 
