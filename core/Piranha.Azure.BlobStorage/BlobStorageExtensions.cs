@@ -9,6 +9,7 @@
  */
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.WindowsAzure.Storage.Auth;
 using Piranha;
 using Piranha.Azure;
 
@@ -18,13 +19,12 @@ public static class BlobStorageExtensions
     /// Adds the services for the Azure BlobStorage service.
     /// </summary>
     /// <param name="services">The current service collection</param>
-    /// <param name="scope">The optional service scope</param>
+    /// <param name="credentials">The auth credentials</param>
+    /// <param name="containerName">The optional container name</param>
     /// <returns>The service collection</returns>
     public static IServiceCollection AddPiranhaBlobStorage(this IServiceCollection services,
-        ServiceLifetime scope = ServiceLifetime.Singleton)
+        StorageCredentials credentials, string containerName = "uploads")
     {
-        services.Add(new ServiceDescriptor(typeof(IStorage), typeof(BlobStorage), scope));
-
-        return services;
+        return services.AddSingleton<IStorage>(new BlobStorage(credentials, containerName));
     }
 }

@@ -49,4 +49,14 @@ public static class ServiceExtensions
 
         return AddPiranhaEF(services, scope);
     }
+
+    /// <summary>
+    /// Adds the memory cache service for repository caching.
+    /// </summary>
+    /// <param name="services">The current service collection</param>
+    /// <returns>The updated service collection</returns>
+    public static IServiceCollection AddPiranhaMemCache(this IServiceCollection services)
+    {
+        return services.AddSingleton<Piranha.ICache, Piranha.Cache.MemCache>();
+    }
 }
