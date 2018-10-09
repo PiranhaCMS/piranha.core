@@ -66,7 +66,7 @@ $(document).ready(function () {
     });
 
     $('.datetimepicker').datetimepicker({
-        format: "YYYY-MM-DD hh:mm"
+        format: "YYYY-MM-DD HH:mm"
     });
 
     $('.select2').select2({
