@@ -1,7 +1,9 @@
 ﻿@model Piranha.Extend.Fields.DateField
-
+@{
+    var placeholder = ViewData["Placeholder"];    
+}
 <div class="input-group date datepicker">
-    @Html.TextBoxFor(m => m.Value, new { @class = "form-control small" })
+    @Html.TextBoxFor(m => m.Value, new { @class = "form-control small", placeholder = placeholder })
     <span class="input-group-addon">
         <span class="fas fa-calendar-alt"></span>
     </span>

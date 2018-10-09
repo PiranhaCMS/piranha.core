@@ -1,2 +1,9 @@
 ﻿@model Piranha.Extend.Fields.CheckBoxField
-@Html.CheckBoxFor(m => m.Value, new { @class = "checkbox" })
+@{
+    var placeholder = ViewData["Placeholder"];    
+}
+<div class="checkbox">
+    <label>
+        @Html.CheckBoxFor(m => m.Value, new { @class = "checkbox" }) @placeholder
+    </label>
+</div>
