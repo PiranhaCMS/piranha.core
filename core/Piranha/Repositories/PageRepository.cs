@@ -482,9 +482,8 @@ namespace Piranha.Repositories
                 // Transform blocks
                 var blockModels = model.Blocks;
 
-                if (blockModels != null && blockModels.Count > 0) {
+                if (blockModels != null) {
                     var pageBlocks = contentService.TransformBlocks<PageBlock>(blockModels);
-                    //var blocks = pageBlocks.Select(p => p.Block).ToList();
 
                     var current = pageBlocks.Select(b => b.Block.Id).ToArray();
 
