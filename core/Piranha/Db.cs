@@ -362,6 +362,15 @@ namespace Piranha
                     Created = DateTime.Now,
                     LastModified = DateTime.Now
                 });
+            
+            //
+            // Make sure we don't have NULL values in Piranha_MediaVersions.FileExtension
+            //
+            var versions = MediaVersions
+                .Where(m => m.FileExtension == null)
+                .ToList();
+            foreach (var version in versions)
+                version.FileExtension = ".jpg";
 
             SaveChanges();
         }
