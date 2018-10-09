@@ -290,9 +290,10 @@
 		background: @bg-color;
 		background: rgba(242,242,242,.85);
 		position: fixed;
-		right: 0;
+		left: 1171px;
 		padding: 15px;
 		margin-top: -65px;
+		white-space: nowrap;
 		z-index: 20000;		
 	}	
 
@@ -406,8 +407,15 @@
 }
 
 .markdown {
+	border: solid 1px @border-color;
+
 	.nav-tabs {
-		margin-bottom: 15px;
+		margin: -1px -1px 15px;
+		background: #fff;
+	}
+
+	.content-preview {
+		padding: 5px 15px 15px;		
 	}
 
 	.editor-toolbar {
@@ -481,8 +489,15 @@
 	}
 
 	.markdown {
+		border: 0;
+
+		.content-preview {
+			padding: 0;
+		}
+
 		.nav-tabs {
 			display: none;
+			margin: 0 0 15px;
 		}
 	}
 }

@@ -78,6 +78,7 @@ $(document).ready(function () {
     });
 
     manager.tools.positionblocks();
+    manager.tools.positionButtonsFixed();
 });
 
 //
@@ -214,6 +215,10 @@ $(document).on('blur','.block .check-empty', function () {
 $(window).scroll(function () {
     manager.tools.positionblocks();
 });
+$(window).resize(function () {
+    manager.tools.positionButtonsFixed();
+});
+
 
 //
 // Panel toggle buttons
@@ -630,34 +635,12 @@ var manager = {
         setupBlockSortable: function() {
             sortable('.page-blocks-body .sortable');
             sortable('.block-group-body');
+        },
 
-            /*
-            console.log('removing .sortable events');
-            sortable('.page-blocks-body .sortable', 'destroy');
-            var sortableBlocks = sortable('.page-blocks-body .sortable', {
-                handle: '.sortable-handle',
-                items: ':not(.unsortable)'
-            });
-            console.log('Adding .sortable events');
-            for (var n = 0; n < sortableBlocks.length; n++) {
-                sortableBlocks[n].addEventListener('sortupdate', function(e) {
-                    manager.tools.recalcblocks();
-                });
-            }
+        positionButtonsFixed: function() {
+            var diff = 1420 - $(window).width();
 
-            console.log('removing .block-group-body events');
-            sortable('.block-group-body', 'destroy');
-            var sortableBlockItems = sortable('.block-group-body', {
-                handle: '.sortable-handle',
-                items: ':not(.unsortable)'
-            });
-            console.log('Adding .block-group-body events');
-            for (var n = 0; n < sortableBlockItems.length; n++) {
-                sortableBlockItems[n].addEventListener('sortupdate', function(e) {
-                    manager.tools.recalcblocks();
-                });
-            }
-            */
+            $('.buttons-fixed').css({ left: Math.min(1171, 1171 - diff) });
         }
     }
 };

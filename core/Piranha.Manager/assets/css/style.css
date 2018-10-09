@@ -13047,9 +13047,10 @@ li.sitemap-item .actions.one {
   background: #f2f2f2;
   background: rgba(242, 242, 242, 0.85);
   position: fixed;
-  right: 0;
+  left: 1171px;
   padding: 15px;
   margin-top: -65px;
+  white-space: nowrap;
   z-index: 20000;
 }
 .col-sm-12.buttons .dropdown-menu {
@@ -13137,8 +13138,15 @@ li.sitemap-item .actions.one {
 .region-list-toolbar {
   margin-bottom: 0;
 }
+.markdown {
+  border: solid 1px #ddd;
+}
 .markdown .nav-tabs {
-  margin-bottom: 15px;
+  margin: -1px -1px 15px;
+  background: #fff;
+}
+.markdown .content-preview {
+  padding: 5px 15px 15px;
 }
 .markdown .editor-toolbar {
   border: 0 none;
@@ -13189,8 +13197,15 @@ li.sitemap-item .actions.one {
 .single-region textarea.raw-text {
   border-width: 0;
 }
+.single-region .markdown {
+  border: 0;
+}
+.single-region .markdown .content-preview {
+  padding: 0;
+}
 .single-region .markdown .nav-tabs {
   display: none;
+  margin: 0 0 15px;
 }
 .inline-search {
   border: 0 none;
