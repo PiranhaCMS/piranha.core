@@ -13051,7 +13051,7 @@ li.sitemap-item .actions.one {
   padding: 15px;
   margin-top: -65px;
   white-space: nowrap;
-  z-index: 20000;
+  z-index: 1800;
 }
 .col-sm-12.buttons .dropdown-menu {
   text-align: left;
