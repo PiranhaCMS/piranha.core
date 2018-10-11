@@ -50,7 +50,7 @@ namespace Piranha.Repositories
         }        
 
        /// <summary>
-        /// Gets the available posts for the specified blog.
+        /// Gets all the available posts for the specified blog.
         /// </summary>
         /// <returns>The posts</returns>
         public IEnumerable<Models.DynamicPost> GetAll() {
@@ -58,7 +58,7 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
-        /// Gets the available post items.
+        /// Gets all the available post items.
         /// </summary>
         /// <returns>The posts</returns>
         public IEnumerable<T> GetAll<T>() where T : Models.PostBase {

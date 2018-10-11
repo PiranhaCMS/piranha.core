@@ -11,6 +11,7 @@
 using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Piranha.Repositories
@@ -97,7 +98,96 @@ namespace Piranha.Repositories
             // Get the requested blog page
             var model = api.Pages.GetById<T>(id);
 
-            if (model != null) {
+            if (model == null) {
+                return null;            
+            }
+
+            // Set basic fields
+            model.Archive = new Models.PostArchive();
+
+            model.Route = model.Route ?? "/archive";
+            model.Archive.Year = year;
+            model.Archive.Month = month;
+            model.Archive.CurrentPage = Math.Max(1, page.HasValue ? page.Value : 1);
+
+            // Build the query.
+            var now = DateTime.Now;
+            var query = db.Posts
+                .Where(p => p.BlogId == id && p.Published <= now);
+
+            if (categoryId.HasValue) {
+                model.Archive.Category = api.Categories.GetById(categoryId.Value);
+                
+                query = query.Where(p => p.CategoryId == categoryId.Value);
+            }
+            if (tagId.HasValue) {
+                model.Archive.Tag = api.Tags.GetById(tagId.Value);
+
+                query = query.Where(p => p.Tags.Any(t => t.TagId == tagId.Value));
+            }
+
+            if (year.HasValue) {
+                DateTime from;
+                DateTime to;
+
+                if (month.HasValue) {
+                    from = new DateTime(year.Value, month.Value, 1);
+                    to = from.AddMonths(1);
+                } else {
+                    from = new DateTime(year.Value, 1, 1);
+                    to = from.AddYears(1);
+                }
+                query = query.Where(p => p.Published >= from && p.Published < to);
+            }
+
+            // Get requested page size
+            if (!pageSize.HasValue) {
+                using (var config = new Config(api)) {
+                    pageSize = config.ArchivePageSize;
+
+                    if (!pageSize.HasValue || pageSize == 0)
+                        pageSize = 5;
+                }
+            }
+
+            // Get the total page count for the archive
+            model.Archive.TotalPosts = query.Count();
+            model.Archive.TotalPages = Math.Max(Convert.ToInt32(Math.Ceiling((double)model.Archive.TotalPosts / pageSize.Value)), 1);
+            model.Archive.CurrentPage = Math.Min(model.Archive.CurrentPage, model.Archive.TotalPages);
+
+            // Get the posts
+            var posts = query
+                .OrderByDescending(p => p.Published)
+                .Skip((model.Archive.CurrentPage - 1) * pageSize.Value)
+                .Take(pageSize.Value)
+                .Select(p => p.Id);
+
+            // Map & add the posts within the requested page
+            foreach (var post in posts) {
+                model.Archive.Posts.Add(api.Posts.GetById(post));
+            }
+            return model;
+        }
+
+        /// <summary>
+        /// Gets all the post archives for the specified type, blog and tag.
+        /// </summary>
+        /// <param name="tagId">The unique tag id</param>
+        /// <param name="page">The optional page</param>
+        /// <param name="year">The optional year</param>
+        /// <param name="month">The optional month</param>
+        /// <param name="pageSize">The optional page size</param>
+        /// <returns>The archive models</returns>
+        public IEnumerable<T> GetAll<T>(int? page = 1, Guid? categoryId = null, Guid? tagId = null, int? year = null, int? month = null, int? pageSize = null) where T : Models.ArchivePage<T> {
+            // Get the requested blog pages
+            var models = api.Pages.GetAll<T>();
+
+            if (models == null) {
+                return null;            
+            }
+
+            foreach(var model in models) {
+            
                 // Set basic fields
                 model.Archive = new Models.PostArchive();
 
@@ -108,8 +198,7 @@ namespace Piranha.Repositories
 
                 // Build the query.
                 var now = DateTime.Now;
-                var query = db.Posts
-                    .Where(p => p.BlogId == id && p.Published <= now);
+                var query = db.Posts.Where(p => p.Published <= now);
 
                 if (categoryId.HasValue) {
                     model.Archive.Category = api.Categories.GetById(categoryId.Value);
@@ -162,9 +251,9 @@ namespace Piranha.Repositories
                 foreach (var post in posts) {
                     model.Archive.Posts.Add(api.Posts.GetById(post));
                 }
-                return model;
             }
-            return null;            
+            return models;
         }
+
     }
 }

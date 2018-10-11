@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using Piranha.Models;
 
 namespace Piranha.Repositories
@@ -62,5 +63,16 @@ namespace Piranha.Repositories
         /// <param name="pageSize">The optional page size</param>
         /// <returns>The archive model</returns>
         T GetByTagId<T>(Guid id, Guid tagId, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : ArchivePage<T>;
+
+        /// <summary>
+        /// Gets all the post archives for the specified type, blog and tag.
+        /// </summary>
+        /// <param name="tagId">The unique tag id</param>
+        /// <param name="page">The optional page</param>
+        /// <param name="year">The optional year</param>
+        /// <param name="month">The optional month</param>
+        /// <param name="pageSize">The optional page size</param>
+        /// <returns>The archive models</returns>
+        IEnumerable<T> GetAll<T>(int? page = 1, Guid? categoryId = null, Guid? tagId = null, int? year = null, int? month = null, int? pageSize = null) where T : ArchivePage<T>;
     }
 }
