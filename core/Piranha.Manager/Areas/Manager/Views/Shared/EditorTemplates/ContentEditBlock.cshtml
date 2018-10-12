@@ -32,7 +32,7 @@
         @if (Model.IsGroup)
         {
             <div class="block-group-heading @(!blockType.UseCustomView ? "default" : "")">
-                <i class="far fa-newspaper group-icon"></i>
+                <i class="@blockType.Icon group-icon"></i>
                 <h3 class="group-title">@blockType.Name</h3>
                 @if (blockType.UseCustomView) {
                     @Html.EditorFor(m => m.Value, Model.Value.GetType().Name)
