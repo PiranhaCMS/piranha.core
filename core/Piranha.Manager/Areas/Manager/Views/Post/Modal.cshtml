@@ -5,26 +5,47 @@
     Layout = null;
 }
 
-@if (Model.Blogs.Count() > 1) {
+@if (Model.Sites.Count() > 1 || Model.Blogs.Count() > 1)
+{
     <div class="row">
         <div class="col-sm-12" style="margin-bottom:15px">
             <div class="form-group">
-                <div id="btn-postmodal-blogpicker" class="btn-group pull-right">
-                    <button type="button" class="btn btn-labeled btn-default" data-toggle="dropdown">
-                        <span class="btn-label">
-                            <i class="fas fa-font"></i>
-                        </span>@Model.BlogTitle
-                    </button>
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                        @foreach (var blog in Model.Blogs) {
-                            <li><a data-type="reload" data-siteid="@Model.SiteId" data-blogid="@blog.Id" href="@Url.Action("Modal", new { siteId = Model.SiteId, blogId = blog.Id })">@blog.Title</a></li>
-                        }
-                    </ul>
-                </div>
+                @if (Model.Blogs.Count() > 1) {
+                    <div id="btn-postmodal-blogpicker" class="btn-group pull-right" style="margin-left: 15px">
+                        <button type="button" class="btn btn-labeled btn-default" data-toggle="dropdown">
+                            <span class="btn-label">
+                                <i class="fas fa-font"></i>
+                            </span>@Model.BlogTitle
+                        </button>
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            @foreach (var blog in Model.Blogs) {
+                                <li><a data-type="reload" data-siteid="@Model.SiteId" data-blogid="@blog.Id" href="@Url.Action("Modal", new { siteId = Model.SiteId, blogId = blog.Id })">@blog.Title</a></li>
+                            }
+                        </ul>
+                    </div>
+                }
+                @if (Model.Sites.Count() > 1) {
+                    <div id="btn-pagemodal-sitepicker" class="btn-group pull-right">
+                        <button type="button" class="btn btn-labeled btn-default" data-toggle="dropdown">
+                            <span class="btn-label">
+                                <i class="fas fa-font"></i>
+                            </span>@Model.SiteTitle
+                        </button>
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            @foreach (var site in Model.Sites) {
+                                <li><a data-type="reload" data-siteid="@site.Id" href="@Url.Action("Modal", new { siteId = site.Id })">@site.Title</a></li>
+                            }
+                        </ul>
+                    </div>
+                }
             </div>
         </div>
     </div>

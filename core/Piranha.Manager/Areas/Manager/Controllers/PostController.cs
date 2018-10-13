@@ -24,6 +24,7 @@ namespace Piranha.Areas.Manager.Controllers
     [Area("Manager")]
     public class PostController : ManagerAreaControllerBase
     {
+        private const string COOKIE_SELECTEDSITE = "PiranhaManager_SelectedSite";
         private readonly PostEditService editService;
         private readonly IContentService<Data.Post, Data.PostField, Piranha.Models.PostBase> contentService;
         private readonly IHubContext<Hubs.PreviewHub> _hub;
@@ -234,6 +235,12 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/post/modal/{siteId:Guid?}/{blogId:Guid?}")]
         [Authorize(Policy = Permission.Posts)]
         public IActionResult Modal(Guid? siteId = null, Guid? blogId = null) {
+            if (!siteId.HasValue)
+            {
+                var site = Request.Cookies[COOKIE_SELECTEDSITE];
+                if (!string.IsNullOrEmpty(site))
+                    siteId = new Guid(site);
+            }
             return View(Models.PostModalModel.GetByBlogId(api, siteId, blogId));
         }  
     }

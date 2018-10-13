@@ -21,6 +21,8 @@ namespace Piranha.Areas.Manager.Controllers
     [Area("Manager")]
     public class AliasController : ManagerAreaControllerBase 
     {
+        private const string COOKIE_SELECTEDSITE = "PiranhaManager_SelectedSite";
+
         /// <summary>
         /// Default constructor.
         /// </summary>
@@ -33,6 +35,16 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/aliases/{siteId:Guid?}")]
         [Authorize(Policy = Permission.Aliases)]
         public IActionResult List(Guid? siteId = null) {
+            if (!siteId.HasValue)
+            {
+                var site = Request.Cookies[COOKIE_SELECTEDSITE];
+                if (!string.IsNullOrEmpty(site))
+                    siteId = new Guid(site);
+            }
+            else
+            {
+                Response.Cookies.Append(COOKIE_SELECTEDSITE, siteId.ToString());
+            }
             return View("List", Models.AliasListModel.Get(api, siteId));
         }
 

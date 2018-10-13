@@ -30,6 +30,12 @@ namespace Piranha.Areas.Manager.Models
             public DateTime? Published { get; set; }
         }
 
+        public class SiteItem
+        {
+            public Guid Id { get; set; }
+            public string Title { get; set; }
+        }
+
         public class BlogItem
         {
             public Guid Id { get; set; }
@@ -38,14 +44,17 @@ namespace Piranha.Areas.Manager.Models
         }
 
         public IEnumerable<PostModalItem> Posts { get; set; }
+        public IEnumerable<SiteItem> Sites { get; set; }
         public IEnumerable<BlogItem> Blogs { get; set; }
         public Guid SiteId { get; set; }
         public Guid BlogId { get; set; }
+        public string SiteTitle { get; set; }
         public string BlogTitle { get; set; }
         public string BlogSlug { get; set; }
 
         public PostModalModel() {
             Posts = new List<PostModalItem>();
+            Sites = new List<SiteItem>();
             Blogs = new List<BlogItem>();
         }
 
@@ -60,6 +69,18 @@ namespace Piranha.Areas.Manager.Models
                     siteId = site.Id;
             }
             model.SiteId = siteId.Value;
+
+            // Get the sites available
+            model.Sites = api.Sites.GetAll()
+                .Select(s => new SiteItem() {
+                    Id = s.Id,
+                    Title = s.Title
+                }).OrderBy(s => s.Title).ToList();
+
+            // Get the current site title
+            var currentSite = model.Sites.FirstOrDefault(s => s.Id == siteId.Value);
+            if (currentSite != null)
+                model.SiteTitle = currentSite.Title;
 
             // Get the blogs available
             model.Blogs = api.Pages.GetAllBlogs(siteId.Value)

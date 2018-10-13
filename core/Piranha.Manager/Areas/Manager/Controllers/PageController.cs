@@ -375,6 +375,12 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/page/modal/{siteId:Guid?}")]
         [Authorize(Policy = Permission.Pages)]
         public IActionResult Modal(Guid? siteId = null) {
+            if (!siteId.HasValue)
+            {
+                var site = Request.Cookies[COOKIE_SELECTEDSITE];
+                if (!string.IsNullOrEmpty(site))
+                    siteId = new Guid(site);
+            }
             return View(Models.PageModalModel.GetBySiteId(api, siteId));
         }  
         

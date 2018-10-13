@@ -13047,11 +13047,15 @@ li.sitemap-item .actions.one {
   background: #f2f2f2;
   background: rgba(242, 242, 242, 0.85);
   position: fixed;
-  left: 1171px;
+  left: 1152px;
   padding: 15px;
   margin-top: -65px;
   white-space: nowrap;
   z-index: 1800;
+}
+.col-sm-12.buttons.buttons-fixed #main-submit .btn-text {
+  display: inline-block;
+  width: 64px;
 }
 .col-sm-12.buttons .dropdown-menu {
   text-align: left;
