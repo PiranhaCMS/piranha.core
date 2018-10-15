@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.Manager</id>
     <title>Piranha Manager</title>
-    <version>5.2.0-beta2</version>
+    <version>5.2.0</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -18,8 +18,8 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework=".NETStandard2.0">
-        <dependency id="Piranha" version="5.2.0-beta2" />
-        <dependency id="Piranha.AspNetCore" version="5.2.0-beta2" />
+        <dependency id="Piranha" version="5.2.0" />
+        <dependency id="Piranha.AspNetCore" version="5.2.0" />
         <dependency id="Microsoft.AspNetCore" version="2.1.1" />
         <dependency id="Microsoft.AspNetCore.Mvc" version="2.1.1" />
         <dependency id="Microsoft.AspNetCore.Session" version="2.1.1" />
