@@ -300,7 +300,8 @@ namespace Piranha
                                 .ForMember(s => s.IsDefault, o => o.Ignore())
                                 .ForMember(s => s.Fields, o => o.Ignore())
                                 .ForMember(s => s.Created, o => o.Ignore())
-                                .ForMember(s => s.LastModified, o => o.Ignore());
+                                .ForMember(s => s.LastModified, o => o.Ignore())
+                                .ForMember(s => s.ContentLastModified, o => o.Ignore());
                             cfg.CreateMap<Data.Tag, Data.Tag>()
                                 .ForMember(t => t.Id, o => o.Ignore())
                                 .ForMember(t => t.Created, o => o.Ignore());

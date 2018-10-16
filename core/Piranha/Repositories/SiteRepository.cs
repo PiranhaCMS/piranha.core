@@ -210,6 +210,10 @@ namespace Piranha.Repositories
 
                 contentService.Transform(content, type, site);
 
+                // Since we've updated global site content, update the
+                // global last modified date for the site.
+                site.ContentLastModified = DateTime.Now;
+
                 db.SaveChanges();
 
                 if (cache != null)
