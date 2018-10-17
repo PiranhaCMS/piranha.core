@@ -17,15 +17,15 @@ Piranha is currently built for `NetStandard 2.0` and uses the following awesome 
 
 * AutoMapper `7.0.1`
 * Markdig `0.15.0`
-* Microsoft.AspNetCore `2.1.1`
-* Microsoft.EntityFrameworkCore `2.1.1`
+* Microsoft.AspNetCore.App `2.1.5`
+* Microsoft.EntityFrameworkCore `2.1.4`
 * Newtonsoft.Json `11.0.2`
 
 ## Getting started
 
 #### Prerequisites
 
-* [.NET Core SDK 2.1.1](https://www.microsoft.com/net/core/)
+* [.NET Core SDK 2.1.5](https://www.microsoft.com/net/core/)
 * An IDE or Editor of your choice
 
 #### Get the latest source code and get going:
