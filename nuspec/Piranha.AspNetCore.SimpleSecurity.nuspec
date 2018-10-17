@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.AspNetCore.SimpleSecurity</id>
     <title>Piranha AspNetCore SimpleSecurity</title>
-    <version>5.2.0</version>
+    <version>5.2.1</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -18,9 +18,9 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework=".NETStandard2.0">
-        <dependency id="Piranha" version="5.2.0" />
-        <dependency id="Microsoft.AspNetCore.Authorization" version="2.1.1" />
-        <dependency id="Microsoft.AspNetCore.Authentication.Cookies" version="2.1.1" />
+        <dependency id="Piranha" version="5.2.1" />
+        <dependency id="Microsoft.AspNetCore.Authorization" version="2.1.2" />
+        <dependency id="Microsoft.AspNetCore.Authentication.Cookies" version="2.1.2" />
       </group>
     </dependencies>
   </metadata>
