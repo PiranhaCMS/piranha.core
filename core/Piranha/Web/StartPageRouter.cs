@@ -31,6 +31,10 @@ namespace Piranha.Web
                 {
                     if (page.ContentType == "Page")
                     {
+                        var site = api.Sites.GetById(siteId);
+                        var lastModified = !site.ContentLastModified.HasValue || page.LastModified > site.ContentLastModified 
+                            ? page.LastModified : site.ContentLastModified.Value;
+
                         return new RouteResponse
                         {
                             PageId = page.Id,
@@ -39,8 +43,8 @@ namespace Piranha.Web
                             IsPublished = page.Published.HasValue && page.Published.Value <= DateTime.Now,
                             CacheInfo = new HttpCacheInfo
                             {
-                                EntityTag = Utils.GenerateETag(page.Id.ToString(), page.LastModified),
-                                LastModified = page.LastModified
+                                EntityTag = Utils.GenerateETag(page.Id.ToString(), lastModified),
+                                LastModified = lastModified
                             }
                         };
                     }

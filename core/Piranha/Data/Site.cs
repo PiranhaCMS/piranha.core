@@ -38,5 +38,11 @@ namespace Piranha.Data
         /// Gets/sets if this is the default site.
         /// </summary>
         public bool IsDefault { get; set; }
+
+        /// <summary>
+        /// Gets/sets the global last modification date
+        /// of the site's content.
+        /// </summary>
+        public DateTime? ContentLastModified { get; set; }
     }
 }

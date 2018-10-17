@@ -39,7 +39,10 @@ namespace Piranha.Web
                     {
                         if (string.IsNullOrWhiteSpace(page.RedirectUrl))
                         {
+                            var site = api.Sites.GetById(siteId);
                             var route = page.Route ?? "/page";
+                            var lastModified = !site.ContentLastModified.HasValue || page.LastModified > site.ContentLastModified 
+                                ? page.LastModified : site.ContentLastModified.Value;
 
                             if (n < include)
                             {
@@ -56,8 +59,8 @@ namespace Piranha.Web
                                 IsPublished = page.Published.HasValue && page.Published.Value <= DateTime.Now,
                                 CacheInfo = new HttpCacheInfo
                                 {
-                                    EntityTag = Utils.GenerateETag(page.Id.ToString(), page.LastModified),
-                                    LastModified = page.LastModified
+                                    EntityTag = Utils.GenerateETag(page.Id.ToString(), lastModified),
+                                    LastModified = lastModified
                                 }
                             };
                         }

@@ -350,8 +350,11 @@ namespace Piranha.Repositories
             // Update the position of the current page
             var page = db.Pages
                 .FirstOrDefault(p => p.Id == model.Id);
+            var site = db.Sites
+                .FirstOrDefault(s => s.Id == page.SiteId);
             page.ParentId = parentId;
             page.SortOrder = sortOrder;
+            site.ContentLastModified = DateTime.Now;
 
             db.SaveChanges();
 
@@ -371,6 +374,7 @@ namespace Piranha.Repositories
         /// <param name="model">The page model</param>
         public void Save<T>(T model) where T : Models.PageBase {
             var type = api.PageTypes.GetById(model.TypeId);
+            var shouldUpdateSiteDate = false;
 
             if (type != null) {
                 // Ensure that we have a slug
@@ -399,6 +403,8 @@ namespace Piranha.Repositories
                     .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                     .Include(p => p.Fields)
                     .FirstOrDefault(p => p.Id == model.Id);
+                var site = db.Sites
+                    .FirstOrDefault(s => s.Id == model.SiteId);
 
                 if (model.OriginalPageId.HasValue) {
                     var originalPageIsCopy = db.Pages.FirstOrDefault(p => p.Id == model.OriginalPageId)?.OriginalPageId.HasValue ?? false;
@@ -421,6 +427,10 @@ namespace Piranha.Repositories
 
                         // Make room for the new page
                         MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true);
+
+                        // We're adding a page to the site structure, update
+                        // the global last modified date
+                        shouldUpdateSiteDate = true;
                     } else {
                         // Check if the page has been moved
                         if (page.ParentId != model.ParentId || page.SortOrder != model.SortOrder) {
@@ -428,7 +438,18 @@ namespace Piranha.Repositories
                             MovePages(page.Id, page.SiteId, page.ParentId, page.SortOrder + 1, false);
                             // Add room for the new position of the page
                             MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true);
+
+                            // We've moved pages, update the global last
+                            // modified date
+                            shouldUpdateSiteDate = true;
                         }
+                    }
+
+                    if (page.Title != model.Title || page.NavigationTitle != model.NavigationTitle)
+                    {
+                        // We've changed the title which is reflected in the
+                        // sitemap, update the global last modified date.
+                        shouldUpdateSiteDate = true;
                     }
 
                     page.PageTypeId = model.TypeId;
@@ -442,6 +463,9 @@ namespace Piranha.Repositories
                     page.IsHidden = model.IsHidden;
                     page.Route = model.Route;
                     page.Published = model.Published;
+
+                    if (shouldUpdateSiteDate)
+                        site.ContentLastModified = DateTime.Now;
 
                     db.SaveChanges();
                     if (cache != null)
@@ -465,7 +489,11 @@ namespace Piranha.Repositories
                     model.Id = page.Id;
 
                     // Make room for the new page
-                    MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true);                    
+                    MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true);     
+
+                    // We're adding a page to the site structure, update
+                    // the global last modified date
+                    shouldUpdateSiteDate = true;
                 } else {
                     // Check if the page has been moved
                     if (page.ParentId != model.ParentId || page.SortOrder != model.SortOrder) {
@@ -473,8 +501,19 @@ namespace Piranha.Repositories
                         MovePages(page.Id, page.SiteId, page.ParentId, page.SortOrder + 1, false);
                         // Add room for the new position of the page
                         MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true);
+
+                        // We've moved pages, update the global last
+                        // modified date
+                        shouldUpdateSiteDate = true;
                     }                    
                     page.LastModified = DateTime.Now;
+                }
+
+                if (page.Title != model.Title || page.NavigationTitle != model.NavigationTitle)
+                {
+                    // We've changed the title which is reflected in the
+                    // sitemap, update the global last modified date.
+                    shouldUpdateSiteDate = true;
                 }
 
                 page = contentService.Transform<T>(model, type, page);
@@ -544,6 +583,9 @@ namespace Piranha.Repositories
                         });
                     }
                 }
+                if (shouldUpdateSiteDate)
+                    site.ContentLastModified = DateTime.Now;
+
                 db.SaveChanges();
 
                 if (cache != null)
@@ -567,6 +609,9 @@ namespace Piranha.Repositories
                 var copyCount = db.Pages.Count(p => p.OriginalPageId == model.Id);
                 if (copyCount > 0)
                     throw new Exception("Can not delete page because it has copies");
+
+                // Get the site
+                var site = db.Sites.FirstOrDefault(s => s.Id == model.SiteId);
                 
                 // Remove all blocks that are not reusable
                 foreach (var pageBlock in model.Blocks) {
@@ -579,6 +624,10 @@ namespace Piranha.Repositories
 
                 // Move all remaining pages after this page in the site structure.
                 MovePages(id, model.SiteId, model.ParentId, model.SortOrder + 1, false);
+
+                // We've removed a page from the site structure, we have to
+                // update the global last modified date for the site.
+                site.ContentLastModified = DateTime.Now;
 
                 db.SaveChanges();
 
