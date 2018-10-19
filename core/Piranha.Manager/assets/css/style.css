@@ -13909,6 +13909,7 @@ li.sitemap-item .actions.one {
 #login .container input {
   padding: 10px 12px;
   border: 0 none;
+  text-align: center;
 }
 #login .container .btn {
   width: 100%;
@@ -13922,7 +13923,7 @@ li.sitemap-item .actions.one {
   padding: 35px;
 }
 #login .container .panel.panel-white .panel-body:first-child {
-  background: #116d9a;
+  background: #116d9a url("../img/seigaiha-overlay.png");
   padding-bottom: 10px;
 }
 #login .container .panel.panel-white .account-banner {
