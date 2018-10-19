@@ -49,7 +49,7 @@ namespace Piranha.Web
                             PageId = post.BlogId,
                             Route = route,
                             QueryString = $"id={post.Id}&piranha_handled=true",
-                            IsPublished = post.Published.HasValue && post.Published.Value <= DateTime.Now,
+                            IsPublished = post.Published.HasValue && page.Published.HasValue && post.Published.Value <= DateTime.Now && page.Published.Value <= DateTime.Now,
                             CacheInfo = new HttpCacheInfo
                             {
                                 EntityTag = Utils.GenerateETag(post.Id.ToString(), lastModified),
