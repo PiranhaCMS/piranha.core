@@ -52,7 +52,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Email address</label>
-                        @Html.TextBoxFor(m => m.User.Email, new { @class = "form-control small", maxlength = 128, placeholder = "The password" })
+                        @Html.TextBoxFor(m => m.User.Email, new { @class = "form-control small", type = "email", maxlength = 128, placeholder = "The email address for the user" })
                     </div>                
                 </div>
             </div>
