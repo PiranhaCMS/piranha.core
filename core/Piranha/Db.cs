@@ -256,6 +256,7 @@ namespace Piranha
             mb.Entity<Data.Site>().Property(s => s.Title).HasMaxLength(128);
             mb.Entity<Data.Site>().Property(s => s.Description).HasMaxLength(256);
             mb.Entity<Data.Site>().Property(s => s.Hostnames).HasMaxLength(256);
+            mb.Entity<Data.Site>().Property(s => s.Culture).HasMaxLength(6);
             mb.Entity<Data.Site>().HasIndex(s => s.InternalId).IsUnique();
 
             mb.Entity<Data.SiteField>().ToTable("Piranha_SiteFields");

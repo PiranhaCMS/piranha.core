@@ -298,6 +298,7 @@ namespace Piranha
                                 .ForMember(s => s.Description, o => o.Ignore())
                                 .ForMember(s => s.Hostnames, o => o.Ignore())
                                 .ForMember(s => s.IsDefault, o => o.Ignore())
+                                .ForMember(s => s.Culture, o => o.Ignore())
                                 .ForMember(s => s.Fields, o => o.Ignore())
                                 .ForMember(s => s.Created, o => o.Ignore())
                                 .ForMember(s => s.LastModified, o => o.Ignore())

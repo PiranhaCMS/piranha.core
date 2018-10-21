@@ -40,6 +40,11 @@ namespace Piranha.Data
         public bool IsDefault { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional culture for the site.
+        /// </summary>
+        public string Culture { get; set; }
+
+        /// <summary>
         /// Gets/sets the global last modification date
         /// of the site's content.
         /// </summary>

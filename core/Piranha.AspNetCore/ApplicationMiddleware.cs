@@ -16,6 +16,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Piranha.AspNetCore.Services;
 using Piranha.Web;
+using System.Globalization;
 
 namespace Piranha.AspNetCore
 {
@@ -37,6 +38,13 @@ namespace Piranha.AspNetCore
         public override async Task Invoke(HttpContext context, IApi api, IApplicationService service)
         {
             service.Init(context);
+
+            // Set culture if applicable
+            if (!string.IsNullOrEmpty(service.Site.Culture))
+            {
+                var cultureInfo = new CultureInfo(service.Site.Culture);
+                CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = cultureInfo;
+            }
 
             // Nothing to see here, move along
             await _next.Invoke(context);

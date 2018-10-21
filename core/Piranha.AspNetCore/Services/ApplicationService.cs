@@ -29,6 +29,11 @@ namespace Piranha.AspNetCore.Services
             public Guid Id { get; set; }
 
             /// <summary>
+            /// Gets/sets the optional culture of the requested site.
+            /// </summary>
+            public string Culture { get; set; }
+
+            /// <summary>
             /// Gets the sitemap of the currently requested site.
             /// </summary>
             public Sitemap Sitemap { get; set; }
@@ -172,7 +177,8 @@ namespace Piranha.AspNetCore.Services
                 // Store the current site id & get the sitemap
                 if (site != null)
                 {
-                    Site.Id = site.Id;                    
+                    Site.Id = site.Id;
+                    Site.Culture = site.Culture;
                     Site.Sitemap = _api.Sites.GetSitemap(Site.Id);
                 }
             }

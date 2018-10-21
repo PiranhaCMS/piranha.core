@@ -16,12 +16,17 @@ namespace Piranha.AspNetCore.Services
     public interface ISiteHelper
     {
         /// <summary>
-        /// Gets the id of the currently requested site.
+        /// Gets/sets the id of the currently requested site.
         /// </summary>
         Guid Id { get; set; }
 
         /// <summary>
-        /// Gets the sitemap of the currently requested site.
+        /// Gets/sets the optional culture of the requested site.
+        /// </summary>
+        string Culture { get; set; }
+
+        /// <summary>
+        /// Gets/sets the sitemap of the currently requested site.
         /// </summary>
         Sitemap Sitemap { get; set; }
 
