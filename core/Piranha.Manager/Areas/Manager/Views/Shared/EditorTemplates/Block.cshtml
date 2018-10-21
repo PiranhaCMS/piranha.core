@@ -1,0 +1,11 @@
+@using Piranha.Extend;
+@using Piranha.Manager.Manager;
+@model Block
+
+@foreach(var name in Model.GetFieldNames())
+{
+    <div class="form-group">
+        <label>@name</label>
+        @Html.Editor(name)
+    </div>
+}
