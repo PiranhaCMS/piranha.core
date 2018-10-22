@@ -5,7 +5,7 @@
 {
     <div class="region-description region-list-description">
         <i class="fas fa-info-circle"></i>
-        <p>@Model.Description</p>
+        <p>@Html.Raw(Model.Description)</p>
     </div>
 }
 <div id="@Model.Id" class="region-list sortable" role="tablist">

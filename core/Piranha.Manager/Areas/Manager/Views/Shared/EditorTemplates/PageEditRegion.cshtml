@@ -6,7 +6,7 @@
     {
         <div class="region-description">
             <i class="fas fa-info-circle"></i>
-            <p>@Model.Description</p>
+            <p>@Html.Raw(Model.Description)</p>
         </div>
     }
     @for (var n = 0; n < Model.FieldSet.Count; n++) 
