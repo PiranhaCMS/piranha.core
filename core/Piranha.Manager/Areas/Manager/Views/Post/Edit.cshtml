@@ -119,6 +119,10 @@
                 return;
             }
 
+            // Show a loading spinner during the ajax call
+            var icon = document.querySelector("#main-submit i");
+            icon.className = "fa fa-spinner fa-spin";
+
             $.ajax({
                 url: $form.attr('action'),
                 type: $form.attr('method'),
@@ -182,6 +186,7 @@
                 } 
             }).always(function () {
                 $("form#main-form").trigger("reset-action");
+                 icon.className = "fas fa-check";
             });
         });
 
