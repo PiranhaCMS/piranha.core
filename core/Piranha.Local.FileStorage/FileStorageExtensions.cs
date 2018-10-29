@@ -21,9 +21,9 @@ public static class FileStorageExtensions
     /// <param name="scope">The optional service scope</param>
     /// <returns>The service collection</returns>
     public static IServiceCollection AddPiranhaFileStorage(this IServiceCollection services,
-        ServiceLifetime scope = ServiceLifetime.Singleton)
+        ServiceLifetime scope = ServiceLifetime.Singleton, string basePath = null, string baseUrl = null)
     {
-        services.Add(new ServiceDescriptor(typeof(IStorage), typeof(FileStorage), scope));
+        services.Add(new ServiceDescriptor(typeof(IStorage), sp => new FileStorage(basePath, baseUrl), scope));
 
         return services;
     }
