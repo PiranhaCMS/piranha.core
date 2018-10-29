@@ -73,6 +73,6 @@ namespace Piranha.Repositories
         /// <param name="month">The optional month</param>
         /// <param name="pageSize">The optional page size</param>
         /// <returns>The archive models</returns>
-        IEnumerable<T> GetAll<T>(int? page = 1, Guid? categoryId = null, Guid? tagId = null, int? year = null, int? month = null, int? pageSize = null) where T : ArchivePage<T>;
+        IEnumerable<T> GetAll<T>(Guid? siteId = null, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : ArchivePage<T>;
     }
 }

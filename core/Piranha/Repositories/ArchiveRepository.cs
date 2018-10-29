@@ -178,9 +178,9 @@ namespace Piranha.Repositories
         /// <param name="month">The optional month</param>
         /// <param name="pageSize">The optional page size</param>
         /// <returns>The archive models</returns>
-        public IEnumerable<T> GetAll<T>(int? page = 1, Guid? categoryId = null, Guid? tagId = null, int? year = null, int? month = null, int? pageSize = null) where T : Models.ArchivePage<T> {
+        public IEnumerable<T> GetAll<T>(Guid? siteId = null, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : Models.ArchivePage<T> {
             // Get the requested blog pages
-            var models = api.Pages.GetAll<T>();
+            var models = api.Pages.GetAll<T>(siteId);
 
             if (models == null) {
                 return null;            
@@ -200,15 +200,8 @@ namespace Piranha.Repositories
                 var now = DateTime.Now;
                 var query = db.Posts.Where(p => p.Published <= now);
 
-                if (categoryId.HasValue) {
-                    model.Archive.Category = api.Categories.GetById(categoryId.Value);
-                    
-                    query = query.Where(p => p.CategoryId == categoryId.Value);
-                }
-                if (tagId.HasValue) {
-                    model.Archive.Tag = api.Tags.GetById(tagId.Value);
-
-                    query = query.Where(p => p.Tags.Any(t => t.TagId == tagId.Value));
+                if (siteId.HasValue) {
+                    model.SiteId = siteId.Value;
                 }
 
                 if (year.HasValue) {

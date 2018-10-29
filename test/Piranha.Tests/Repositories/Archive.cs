@@ -115,5 +115,17 @@ namespace Piranha.Tests.Repositories
             }
         }
 
+        [Fact]
+        public void GetAllBaseClassById()
+        {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache))
+            {
+                var posts = api.Archives.GetAll<BlogArchive>(SITE_ID);
+
+                Assert.NotNull(posts);
+                Assert.NotEmpty(posts);
+            }
+        }
+
     }
 }
