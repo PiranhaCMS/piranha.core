@@ -18,10 +18,12 @@ public static class FileStorageExtensions
     /// Adds the services for the local FileStorage service.
     /// </summary>
     /// <param name="services">The current service collection</param>
-    /// <param name="scope">The optional service scope</param>
+    /// <param name="basePath">The optional base path for where uploaded media is stored.null Default is wwwroot/uploads/</param>
+    /// <param name="baseUrl">The optional base url for accessing uploaded media. Default is ~/uploads/</params>
+    /// <param name="scope">The optional service scope. Default is singleton</param>
     /// <returns>The service collection</returns>
     public static IServiceCollection AddPiranhaFileStorage(this IServiceCollection services,
-        ServiceLifetime scope = ServiceLifetime.Singleton, string basePath = null, string baseUrl = null)
+        string basePath = null, string baseUrl = null, ServiceLifetime scope = ServiceLifetime.Singleton)
     {
         services.Add(new ServiceDescriptor(typeof(IStorage), sp => new FileStorage(basePath, baseUrl), scope));
 
