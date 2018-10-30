@@ -170,7 +170,7 @@ $('#modalImgPreview').on('show.bs.modal', function (event) {
     var parentid = link.data('parentid');
 
     var modal = $(this);
-    modal.find('.modal-title').text(filename)
+    modal.find('.modal-title').text(filename);
     modal.find('#btnDownload').attr('href', url);
     modal.find('#previewContentType').text(contenttype);
     modal.find('#previewFilesize').text(filesize);
@@ -185,15 +185,23 @@ $('#modalImgPreview').on('show.bs.modal', function (event) {
     if (contenttype.startsWith("image")) {
         modal.find('#previewImage').show();
         modal.find('#previewVideo').hide();
+        modal.find('#previewDocument').hide();
 
         modal.find('#imgPreview').attr('alt', filename);
         modal.find('#imgPreview').attr('src', url);
     } else if (contenttype.startsWith("video")) {
         modal.find('#previewImage').hide();
         modal.find('#previewVideo').show();
+        modal.find('#previewDocument').hide();
 
         modal.find('video').attr('src', url);
         modal.find('video').attr('type', contenttype);
+    } else if (contenttype === "application/pdf") {
+        modal.find('#previewImage').hide();
+        modal.find('#previewVideo').hide();
+        modal.find('#previewDocument').show();
+
+        modal.find('#previewDocument iframe').attr('src', url);
     }
 });
 
