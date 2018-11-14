@@ -1,0 +1,38 @@
+@import "colors";
+
+.teasers {
+    .container {
+        background: #fff;
+
+        .row {
+            background: $color_teasers_bg;
+            border-bottom: solid 4px $color_bg;
+            padding: 1.5rem 15px;
+            text-align: center;    
+        }
+
+        h3 {
+            font-family: "Open Sans", sans-serif;
+            font-weight: 400;
+        }
+
+        img {
+            max-width: 50%;
+            max-height: 120px;
+            margin: .5rem 0 1.5rem;
+            opacity: .7;
+            transition: all .2s ease-in-out;
+
+            &:hover {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        }
+
+        p {
+            width: 80%;
+            margin: 0 auto 1rem;
+            font-weight: 300;
+        }
+    }
+}

@@ -1,0 +1,43 @@
+@model MvcWeb.Models.BlogPost
+@{
+    ViewBag.Title = Model.Title;
+}
+
+<div class="container body-container body-top">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-xs-12">
+            <h1>@Model.Title</h1>
+
+            <p class="small">Published:
+                @if (Model.Published.HasValue) 
+                {
+                    <text>@Model.Published.Value.ToString("yyyy-MM-dd") in <a href="~/blog/category/@Model.Category.Slug">@Model.Category.Title</a> by <a href="https://twitter.com/tidyui" target="_blank">Håkan Edling</a></text>
+                } 
+                else 
+                {
+                    <span class="label label-info">Unpublished</span>
+                }
+            </p>
+        </div>
+    </div>
+
+    @if (Model.Hero.PrimaryImage.HasValue)
+    {
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-12">
+                <img class="primary-image" src="@Url.Content(Model.Hero.PrimaryImage)">
+            </div>
+        </div>
+    }
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-xs-12">
+            @if (!string.IsNullOrEmpty(Model.Hero.Ingress.Value))
+            {
+                <p class="lead">@Model.Hero.Ingress.Value</p>
+            }
+
+            @Html.DisplayFor(m => m.Blocks)
+        </div>
+    </div>
+</div>

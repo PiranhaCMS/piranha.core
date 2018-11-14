@@ -1,0 +1,33 @@
+@model IList<MvcWeb.Models.Regions.Teaser>
+@{
+}
+
+@if (Model.Count > 0) 
+{
+    <div class="quotes">
+        <div class="container">
+            @foreach (var teaser in Model) 
+            {
+                <div class="row justify-content-center">
+                    <div class="col-md-10 col-xs-12">
+                        <div class="quote">
+                            <div class="row">
+                                <div class="col-lg-3 col-xl-2">
+                                    <img src="@Url.Content(teaser.Image)">
+                                </div>
+                                <div class="col-lg-9 col-xl-10">
+                                    <div class="quote-body">
+                                        @Html.Raw(teaser.Body)
+                                    </div>
+                                    <div class="quote-name">
+                                        @teaser.Title.Value
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}

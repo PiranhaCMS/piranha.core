@@ -1,0 +1,14 @@
+@model MvcWeb.Models.StandardPage
+@{
+    ViewBag.Title = Model.Title;
+}
+
+@Html.DisplayFor(m => m.Hero)
+
+<div class="container body-container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-xs-12">
+            @Html.DisplayFor(m => m.Blocks)
+        </div>
+    </div>
+</div>
