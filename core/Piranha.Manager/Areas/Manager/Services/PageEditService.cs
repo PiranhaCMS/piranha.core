@@ -162,7 +162,8 @@ namespace Piranha.Areas.Manager.Services
                             itemTitle = ((Extend.IField)item).GetTitle();
                         if (string.IsNullOrWhiteSpace(itemTitle) && !string.IsNullOrWhiteSpace(region.ListTitlePlaceholder))
                             itemTitle = region.ListTitlePlaceholder;
-                        else itemTitle = "Item";
+                        else if (string.IsNullOrWhiteSpace(itemTitle))
+                            itemTitle = "Item";
                     }
 
                     var set = new PageEditFieldSet() {
