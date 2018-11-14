@@ -15,8 +15,8 @@ core/Piranha.Manager/assets/lib/
 examples/CoreWeb/assets/lib
 
 # Runtime test files
-examples/CoreWeb/wwwroot/uploads
-examples/CoreWeb/**/*.db
+[Uu]ploads
+*.db
 
 templates/**/wwwroot/uploads
 templates/**/*.db

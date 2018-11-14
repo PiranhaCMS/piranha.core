@@ -13712,13 +13712,6 @@ li.sitemap-item .actions.one {
 .panel > .panel-heading .btn {
   margin: -2px 0 0 4px;
 }
-.panel .panel-body h3 {
-  font-family: "Open Sans", serif;
-  font-size: 18px;
-  font-weight: normal;
-  margin: 0 0 15px;
-  text-transform: uppercase;
-}
 .panel .panel-body.media-images {
   padding-bottom: 0;
 }
