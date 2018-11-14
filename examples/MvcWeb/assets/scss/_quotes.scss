@@ -1,0 +1,41 @@
+@import "colors";
+
+.quotes {
+    .quote {
+        background: $color_teasers_bg;
+        color: darken($color_teasers_bg, 70%);
+        padding: 2rem 3rem;
+        border-radius: .5rem;
+        margin-bottom: 3rem;
+        
+        img {
+            width: 100%;
+            max-width: 150px;
+            display: block;
+            margin: 0 auto 1rem auto;
+            border-radius: 50%;
+        }
+
+        .quote-body {
+            font-weight: 300;
+        }
+
+        .quote-name {
+            text-align: right;
+        }
+
+        &:after {
+            content: "";
+            display: block;
+            width: 0;
+            height: 0;
+            border: 20px solid transparent;
+            border-top-color: transparent;
+            border-top-color: $color_teasers_bg;;
+            position: absolute;
+            margin-top: 30px;
+            margin-right: 60px;
+            right: 0;            
+        }
+    }
+}

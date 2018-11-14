@@ -1,0 +1,25 @@
+@media (min-width: 768px) {
+    header[role="banner"] {
+        .social {
+            position: relative;
+            float: right;
+            margin-top: -3rem;
+            top: initial;
+            right: initial;
+        }
+    }
+    
+    .hero {
+        h2 {
+            font-size: 2.7rem;
+        }
+
+        p {
+            font-size: 1.35rem;
+            
+            small {
+                font-size: 60%;
+            }
+        }
+    }
+}

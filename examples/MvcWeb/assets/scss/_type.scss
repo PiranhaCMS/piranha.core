@@ -1,0 +1,51 @@
+@import "colors";
+
+@import "colors";
+
+body {
+    font-family: "Open Sans", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Bitter", serif;
+    font-weight: bold;
+}
+
+h1 {
+    margin-bottom: 1.5rem;
+}
+
+h2 {
+    border-bottom: solid 1px $color_border;;
+    padding-bottom: 1rem;
+    margin: .5rem 0 1.5rem;
+}
+
+h3 {
+    margin: .5rem 0 1rem;
+}
+
+.wide {
+    h2 {
+        font-family: "Open Sans", sans-serif;
+        font-weight: 300;
+        text-align: center;
+        text-transform: uppercase;
+    }
+}
+
+pre {
+    background: #f4f4f4;
+    padding: 1.5rem;
+}
+
+blockquote {
+    color: #999;
+    border: 1px solid #ddd;
+    border-radius: .25rem;   
+    padding: 1.5rem 1.5rem .5rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 300;
+    box-shadow: 0 4px 0 #f2f2f4;
+}

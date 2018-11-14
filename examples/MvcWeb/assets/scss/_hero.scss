@@ -1,0 +1,38 @@
+.hero {
+    color: #fff;
+    border-top: solid 6px #00a3d8;
+    padding: 5rem 15px;
+
+    h2 {
+        font-family: "Open Sans", sans-serif;
+        font-weight: 300;
+        font-size: 1.8rem;
+        text-transform: uppercase;
+        border: 0;
+    }
+
+    img {
+        margin-bottom: 2.5rem;
+    }
+
+    p {
+        font-weight: 300;
+        text-transform: uppercase;
+        opacity: .7;
+
+        small {
+            background: rgba(0,0,0,.2);
+            font-weight: 300;
+            font-size: 80%;
+            padding: .25rem .5rem;
+
+            strong {
+                font-weight: 800;
+            }
+        }
+    }
+
+    a {
+        color: #f0ad4e;
+    }
+}

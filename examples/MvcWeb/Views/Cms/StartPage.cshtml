@@ -1,0 +1,32 @@
+@model MvcWeb.Models.TeaserPage
+@{
+    ViewBag.Title = Model.Title;
+}
+
+@Html.DisplayFor(m => m.Hero)
+
+@if (Model.LatestPost != null)
+{
+    <div class="container latest-post">
+        <div class="row">
+            <div class="col text-center">
+                Latest news: 
+                <strong>@Model.LatestPost.Published.Value.ToString("yyyy-MM-dd")</strong>
+                -
+                <a href="@Model.LatestPost.Permalink">@Model.LatestPost.Title</a>
+            </div>
+        </div>
+    </div>
+}
+
+<partial name="Partial/Teasers" for="Teasers" />
+
+<div class="container body-container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-xs-12">
+            @Html.DisplayFor(m => m.Blocks)
+        </div>
+    </div>
+</div>
+
+<partial name="Partial/Quotes" for="Quotes" />
