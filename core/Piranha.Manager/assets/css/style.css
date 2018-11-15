@@ -13420,6 +13420,8 @@ li.sitemap-item .actions.one {
   font-family: Arial, sans-serif;
   font-weight: bold;
   line-height: 22px;
+  margin: 0 0 15px;
+  text-transform: uppercase;
 }
 #page-blocks .block.block-group .block-group-heading .well {
   background: #fff;
