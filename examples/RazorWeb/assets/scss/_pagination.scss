@@ -1,0 +1,22 @@
+@import "colors";
+
+.pagination {
+    .page-item {
+        width: 38px;
+        margin: 0 3px;
+        text-align: center;
+
+        .page-link {
+            color: lighten($color_link, 20%);
+            border-radius: 2px;
+        }
+
+        &.active {
+            .page-link {
+                color: #fff;
+                background: $color_link;
+                border-color: $color_link;
+            }
+        }
+    }
+}

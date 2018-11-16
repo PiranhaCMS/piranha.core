@@ -1,0 +1,123 @@
+.navbar {
+    .nav {
+        .nav-item {
+            a {
+                color: #fff;
+                padding: 1rem;
+                text-transform: uppercase;
+                opacity: .6;
+                transition: opacity .1s ease-in-out;
+
+                &:hover {
+                    opacity: 1;
+                    text-decoration: none;
+                    transition: opacity .1s ease-in-out;
+                }
+            }
+
+            &.active {
+                a {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+    &.navbar-mobile {
+        padding: 1rem 0;
+
+        .navbar-toggler {
+            border-color: #333;
+
+            .navbar-toggler-icon {
+                color: #fff;
+            }
+        }
+
+        .navbar-nav {
+            border-top: solid 1px #333;
+            margin-top: 1rem;
+        }
+
+        .nav-item {
+            color: #fff;
+            text-align: center;
+            text-transform: uppercase;
+            opacity: .6;
+
+            &.active {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+.docs-navigation {
+    background: #282828;
+    padding: 3rem 0 2.5rem;
+    position: absolute;
+    width: 100%;
+    bottom: 100%;
+    z-index: 1900;
+    transition: all .2s ease-in-out;
+
+    &.active {
+        transform: translateY(100%);
+    }
+
+    .navigation-open {
+        position: absolute;
+        background: #282828;
+        color: #bbb;
+        width: 100px;        
+        left: 50%;
+        bottom: -2rem;
+        padding: 1.5rem 2rem .5rem;
+        margin-left: -50px;
+        font-size: 0.75rem;
+        border-radius: 1rem;
+        text-align: center;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+
+    ul {
+        padding-left: 1rem;
+
+        ul {
+            padding-left: 1.2rem;
+
+            ul {
+                padding-left: 1.7rem;   
+            }
+        }
+    }
+
+    li {
+        list-style-type: none;
+    }
+
+    a {
+        color: #bbb;
+        display: inline-block;
+        padding: 2px 0;
+        font-size: .9rem;
+        font-weight: 300;
+
+        &.lvl1 {
+            font-family: "Bitter", serif;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        &.active {
+            color: #fff;
+            font-weight: 400;
+        }
+
+        .index {
+            color: #f0ad4e;
+            opacity: .4;
+        }
+    }
+}

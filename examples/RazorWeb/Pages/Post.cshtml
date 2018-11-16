@@ -1,0 +1,44 @@
+@page
+@model PostModel
+@{
+    ViewData["Title"] = Model.Data.Title;
+}
+
+<div class="container body-container body-top">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-xs-12">
+            <h1>@Model.Data.Title</h1>
+
+            <p class="small">Published:
+                @if (Model.Data.Published.HasValue) 
+                {
+                    <text>@Model.Data.Published.Value.ToString("yyyy-MM-dd") in <a href="~/blog/category/@Model.Data.Category.Slug">@Model.Data.Category.Title</a> by <a href="https://twitter.com/tidyui" target="_blank">Håkan Edling</a></text>
+                } 
+                else 
+                {
+                    <span class="label label-info">Unpublished</span>
+                }
+            </p>
+        </div>
+    </div>
+
+    @if (Model.Data.Hero.PrimaryImage.HasValue)
+    {
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-12">
+                <img class="primary-image" src="@Url.Content(Model.Data.Hero.PrimaryImage)">
+            </div>
+        </div>
+    }
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-xs-12">
+            @if (!string.IsNullOrEmpty(Model.Data.Hero.Ingress.Value))
+            {
+                <p class="lead">@Model.Data.Hero.Ingress.Value</p>
+            }
+
+            @Html.DisplayFor(m => m.Data.Blocks)
+        </div>
+    </div>
+</div>

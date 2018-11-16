@@ -1,0 +1,15 @@
+@page
+@model PageModel
+@{
+    ViewData["Title"] = Model.Data.Title;
+}
+
+@Html.DisplayFor(m => m.Data.Hero)
+
+<div class="container body-container wide">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-xs-12">
+            @Html.DisplayFor(m => m.Data.Blocks)
+        </div>
+    </div>
+</div>

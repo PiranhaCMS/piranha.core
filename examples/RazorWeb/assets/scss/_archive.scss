@@ -1,0 +1,31 @@
+.archive-item {
+    padding-bottom: 1rem;
+
+    h2 {
+        a {
+            color: #212529;
+            transition: color .1s ease-in-out;
+
+            &:hover {
+                color: #23527c;
+                text-decoration: none;
+                transition: color .1s ease-in-out;
+            }
+        }
+    }
+
+    p.lead {
+        font-size: 1rem;
+        font-weight: 400;
+    }
+
+    img {
+        margin-bottom: 1rem;
+    }
+
+    .small {
+        a {
+            color: #999;
+        }
+    }
+}

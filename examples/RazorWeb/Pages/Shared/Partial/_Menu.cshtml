@@ -1,0 +1,25 @@
+<!-- Mobile menu -->
+<nav class="navbar navbar-mobile navbar-toggleable-sm d-sm-block d-md-none">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#mobileNavbar" aria-controls="mobileNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon">&#9776;</span>
+    </button>
+    <div class="collapse navbar-collapse" id="mobileNavbar">
+        <div class="navbar-nav">
+            @foreach (var item in WebApp.Site.Sitemap)
+            {
+                <a class="nav-item nav-link @(item.Id == WebApp.PageId ? "active" : "")" href="@item.Permalink">@item.MenuTitle</a>
+            }
+        </div>
+    </div>
+</nav>
+<!-- Desktop menu -->
+<nav class="navbar d-none d-md-block">
+    <ul class="justify-content-center nav">
+        @foreach (var item in WebApp.Site.Sitemap)
+        {
+            <li class="nav-item @(item.Id == WebApp.PageId || item.HasChild(WebApp.PageId) ? "active" : "")">
+                <a class="nav-link" href="@item.Permalink">@item.MenuTitle</a>
+            </li>
+        }
+    </ul>
+</nav>
