@@ -106,12 +106,10 @@ namespace Piranha.AspNetCore.Services
             }
         }
 
-        private readonly IApi _api;
-
         /// <summary>
         /// Gets the current api.
         /// </summary>
-        public IApi Api { get; private set; }
+        public IApi Api { get; }
 
         /// <summary>
         /// Gets the site helper.
@@ -139,7 +137,7 @@ namespace Piranha.AspNetCore.Services
         /// <param name="api">The current api</param>
         public ApplicationService(IApi api)
         {
-            _api = api;
+            Api = api;
 
             Site = new SiteHelper(api);
             Media = new MediaHelper(api);
@@ -160,7 +158,7 @@ namespace Piranha.AspNetCore.Services
                 if (!string.IsNullOrEmpty(url) && url.Length > 1)
                 {
                     var segments = url.Substring(1).Split(new char[] { '/' });
-                    site = _api.Sites.GetByHostname($"{context.Request.Host.Host}/{segments[0]}");
+                    site = Api.Sites.GetByHostname($"{context.Request.Host.Host}/{segments[0]}");
 
                     if (site != null)
                         context.Request.Path = "/" + string.Join("/", segments.Skip(1));
@@ -168,18 +166,18 @@ namespace Piranha.AspNetCore.Services
 
                 // Try to get the requested site by hostname
                 if (site == null)
-                    site = _api.Sites.GetByHostname(context.Request.Host.Host);
+                    site = Api.Sites.GetByHostname(context.Request.Host.Host);
 
                 // If we didn't find the site, get the default site
                 if (site == null)
-                    site = _api.Sites.GetDefault();
+                    site = Api.Sites.GetDefault();
 
                 // Store the current site id & get the sitemap
                 if (site != null)
                 {
                     Site.Id = site.Id;
                     Site.Culture = site.Culture;
-                    Site.Sitemap = _api.Sites.GetSitemap(Site.Id);
+                    Site.Sitemap = Api.Sites.GetSitemap(Site.Id);
                 }
             }
 
