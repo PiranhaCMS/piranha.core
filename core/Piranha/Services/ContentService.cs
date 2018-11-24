@@ -768,8 +768,12 @@ namespace Piranha.Services
             }
             else
             {
-                model.GetType().GetProperty(regionId, App.PropertyBindings).SetValue(model,
-                    DeserializeValue(scope, field));
+                var regionProp = model.GetType().GetProperty(regionId, App.PropertyBindings);
+
+                if (regionProp != null)
+                {
+                    regionProp.SetValue(model, DeserializeValue(scope, field));
+                }
             }
         }
 
@@ -789,8 +793,12 @@ namespace Piranha.Services
             }
             else
             {
-                ((IList)model.GetType().GetProperty(regionId, App.PropertyBindings).GetValue(model)).Add(
-                    DeserializeValue(scope, field));
+                var regionProp = model.GetType().GetProperty(regionId, App.PropertyBindings);
+
+                if (regionProp != null)
+                {
+                    ((IList)regionProp.GetValue(model)).Add(DeserializeValue(scope, field));
+                }
             }
         }
 
@@ -811,10 +819,21 @@ namespace Piranha.Services
             }
             else
             {
-                var obj = model.GetType().GetProperty(regionId, App.PropertyBindings).GetValue(model);
-                if (obj != null)
-                    obj.GetType().GetProperty(fieldId, App.PropertyBindings).SetValue(obj,
-                        DeserializeValue(scope, field));
+                var regionProp = model.GetType().GetProperty(regionId, App.PropertyBindings);
+
+                if (regionProp != null)
+                {
+                    var obj = regionProp.GetValue(model);
+                    if (obj != null)
+                    {
+                        var fieldProp = obj.GetType().GetProperty(fieldId, App.PropertyBindings);
+
+                        if (fieldProp != null)
+                        {
+                            fieldProp.SetValue(obj, DeserializeValue(scope, field));
+                        }
+                    }
+                }
             }
         }
 
@@ -847,18 +866,23 @@ namespace Piranha.Services
                 }
                 else
                 {
-                    var list = (IList)model.GetType().GetProperty(regionId, App.PropertyBindings).GetValue(model);
-                    var obj = Activator.CreateInstance(list.GetType().GenericTypeArguments.First());
+                    var regionProp = model.GetType().GetProperty(regionId, App.PropertyBindings);
 
-                    foreach (var field in fields)
+                    if (regionProp != null)
                     {
-                        var prop = obj.GetType().GetProperty(field.FieldId, App.PropertyBindings);
-                        if (prop != null)
+                        var list = (IList)regionProp.GetValue(model);
+                        var obj = Activator.CreateInstance(list.GetType().GenericTypeArguments.First());
+
+                        foreach (var field in fields)
                         {
-                            prop.SetValue(obj, DeserializeValue(scope, field));
+                            var fieldProp = obj.GetType().GetProperty(field.FieldId, App.PropertyBindings);
+                            if (fieldProp != null)
+                            {
+                                fieldProp.SetValue(obj, DeserializeValue(scope, field));
+                            }
                         }
+                        list.Add(obj);
                     }
-                    list.Add(obj);
                 }
             }
         }
@@ -918,7 +942,14 @@ namespace Piranha.Services
             }
             else
             {
-                return region.GetType().GetProperty(fieldId, App.PropertyBindings).GetValue(region);
+                var fieldProp = region.GetType().GetProperty(fieldId, App.PropertyBindings);
+
+                if (fieldProp != null)
+                {
+                    return fieldProp.GetValue(region);
+
+                }
+                return null;
             }
         }
 
