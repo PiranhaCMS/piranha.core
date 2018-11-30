@@ -64,7 +64,7 @@ namespace Piranha.Data
         /// Gets/sets the redirect type.
         /// </summary>
         /// <returns></returns>
-        public Models.RedirectType RedirectType { get; set; }
+        public Models.RedirectType RedirectType { get; set; } = Models.RedirectType.Temporary;
 
         /// <summary>
         /// Gets/sets the site.
@@ -84,20 +84,11 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the available page blocks.
         /// </summary>
-        public IList<PageBlock> Blocks { get; set; }
+        public IList<PageBlock> Blocks { get; set; } = new List<PageBlock>();
 
         /// <summary>
         /// Gets/sets the optional page this page is a copy of
         /// </summary>
         public Guid? OriginalPageId { get; set; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public Page() : base()
-        {
-            RedirectType = Models.RedirectType.Temporary;
-            Blocks = new List<PageBlock>();
-        }
     }
 }

@@ -81,14 +81,6 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the available versions.
         /// </summary>
-        public IList<MediaVersion> Versions { get; set; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public Media()
-        {
-            Versions = new List<MediaVersion>();
-        }
+        public IList<MediaVersion> Versions { get; set; } = new List<MediaVersion>();
     }
 }

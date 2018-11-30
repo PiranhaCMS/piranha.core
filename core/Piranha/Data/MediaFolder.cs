@@ -38,14 +38,6 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the available media.
         /// </summary>
-        public IList<Media> Media { get; set; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public MediaFolder()
-        {
-            Media = new List<Media>();
-        }
+        public IList<Media> Media { get; set; } = new List<Media>();
     }
 }

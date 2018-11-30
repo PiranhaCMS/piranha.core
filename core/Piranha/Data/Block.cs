@@ -59,20 +59,11 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the available fields.
         /// </summary>
-        public IList<BlockField> Fields { get; set; }
+        public IList<BlockField> Fields { get; set; } = new List<BlockField>();
 
         /// <summary>
         /// Gets/sets the available page connections.
         /// </summary>
-        public IList<PageBlock> PageBlocks { get; set; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public Block()
-        {
-            Fields = new List<BlockField>();
-            PageBlocks = new List<PageBlock>();
-        }
+        public IList<PageBlock> PageBlocks { get; set; } = new List<PageBlock>();
     }
 }

@@ -38,14 +38,6 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the available fields.
         /// </summary>
-        public IList<T> Fields { get; set; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        protected Content()
-        {
-            Fields = new List<T>();
-        }
+        public IList<T> Fields { get; set; } = new List<T>();
     }
 }

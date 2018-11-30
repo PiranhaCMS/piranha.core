@@ -38,7 +38,7 @@ namespace Piranha.Data
         /// Gets/sets if this is a permanent or temporary
         /// redirect.
         /// </summary>
-        public Models.RedirectType Type { get; set; }
+        public Models.RedirectType Type { get; set; } = Models.RedirectType.Temporary;
 
         /// <summary>
         /// Gets/sets the created date.
@@ -55,13 +55,5 @@ namespace Piranha.Data
         /// </summary>
         /// <returns></returns>
         public Site Site { get; set; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public Alias()
-        {
-            Type = Models.RedirectType.Temporary;
-        }
     }
 }
