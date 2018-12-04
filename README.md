@@ -1,4 +1,4 @@
-# Welcome to Piranha.Core [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/gitterHQ/gitter)
+# Welcome to Piranha.Core [![Gitter chat](https://badges.gitter.im/PiranhaCMS/Piranha.png)](https://gitter.im/PiransCMS/Pirana)
 
 | Build server | Platform     | Build status |
 |--------------|--------------|--------------|
