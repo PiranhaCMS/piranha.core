@@ -3,7 +3,7 @@
     var placeholder = ViewData["Placeholder"];    
 }
 <div class="input-group date datepicker">
-    @Html.TextBoxFor(m => m.Value, new { @class = "form-control small", placeholder = placeholder })
+    @Html.TextBoxFor(m => m.Value, "{0:yyyy-MM-dd}", new { @class = "form-control small", placeholder = placeholder })
     <span class="input-group-addon">
         <span class="fas fa-calendar-alt"></span>
     </span>
