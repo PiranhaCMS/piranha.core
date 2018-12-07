@@ -20,10 +20,17 @@ namespace Piranha.Repositories
 {
     public class SiteRepository : BaseRepositoryWithAll<Site>, ISiteRepository
     {
+        public class SiteMapping
+        {
+            public Guid Id { get; set; }
+            public string Hostnames { get; set; }
+        }
+
         private readonly Api api;
         // This is a hack as we don't really want to transform the models, we only want
         // to access the create methods.
         private readonly IContentService<Site, SiteField, Models.SiteContentBase> contentService;
+        private const string SITE_MAPPINGS = "Site_Mappings";
 
         /// <summary>
         /// Default constructor.
@@ -69,14 +76,47 @@ namespace Piranha.Repositories
         /// <param name="hostname">The hostname</param>
         /// <returns>The model</returns>
         public Site GetByHostname(string hostname) {
-            var id = db.Sites
-                .AsNoTracking()
-                .Where(s => s.Hostnames.Contains(hostname))
-                .Select(s => s.Id)
-                .FirstOrDefault();
+            IList<SiteMapping> mappings;
 
-            if (id != Guid.Empty)
-                return GetById(id);
+            if (cache != null)
+            {
+                mappings = cache.Get<IList<SiteMapping>>(SITE_MAPPINGS);
+
+                if (mappings == null)
+                {
+                    mappings = db.Sites
+                        .AsNoTracking()
+                        .Where(s => s.Hostnames != null)
+                        .Select(s => new SiteMapping
+                        {
+                            Id = s.Id,
+                            Hostnames = s.Hostnames
+                        })
+                        .ToList();
+                    cache.Set(SITE_MAPPINGS, mappings);
+                }
+            }
+            else
+            {
+                mappings = db.Sites
+                    .AsNoTracking()
+                    .Where(s => s.Hostnames.Contains(hostname))
+                    .Select(s => new SiteMapping
+                    {
+                        Id = s.Id,
+                        Hostnames = s.Hostnames
+                    })
+                    .ToList();
+            }
+            
+            foreach (var mapping in mappings)
+            {
+                foreach (var host in mapping.Hostnames.Split(new char[] { ',' }))
+                {
+                    if (host.Trim().ToLower() == hostname)
+                        return GetById(mapping.Id);
+                }
+            }
             return null;
         }        
 
@@ -339,6 +379,7 @@ namespace Piranha.Repositories
             cache.Remove($"SiteId_{model.InternalId}");
             if (model.IsDefault)
                 cache.Remove($"Site_{Guid.Empty}");
+            cache.Remove(SITE_MAPPINGS);
 
             base.RemoveFromCache(model);
         }

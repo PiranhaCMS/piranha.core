@@ -92,6 +92,26 @@ namespace Piranha.Tests.Repositories
                     Title = SITE_6
                 });
 
+                // Sites for testing hostname routing
+                api.Sites.Save(new Data.Site
+                {
+                    InternalId = "RoutingTest1",
+                    Title = "RoutingTest1",
+                    Hostnames = "mydomain.com,localhost"
+                });
+                api.Sites.Save(new Data.Site
+                {
+                    InternalId = "RoutingTest2",
+                    Title = "RoutingTest2",
+                    Hostnames = " mydomain.com/en"
+                });
+                api.Sites.Save(new Data.Site
+                {
+                    InternalId = "RoutingTest3",
+                    Title = "RoutingTest3",
+                    Hostnames = "sub.mydomain.com , sub2.localhost"
+                });
+
                 var content = MySiteContent.Create(api);
                 content.Header = "<p>Lorem ipsum</p>";
                 content.Footer = "<p>Tellus Ligula</p>";
@@ -439,6 +459,71 @@ namespace Piranha.Tests.Repositories
                 Assert.NotNull(model);
                 Assert.Equal("<p>Purus Sit</p>", model.Regions.Footer.Value);                
             }            
+        }
+
+        [Fact]
+        public void GetByHostname()
+        {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var model = api.Sites.GetByHostname("mydomain.com");
+
+                Assert.NotNull(model);
+                Assert.Equal("RoutingTest1", model.InternalId);
+            }
+        }
+
+        [Fact]
+        public void GetByHostnameSecond()
+        {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var model = api.Sites.GetByHostname("localhost");
+
+                Assert.NotNull(model);
+                Assert.Equal("RoutingTest1", model.InternalId);
+            }
+        }
+
+        [Fact]
+        public void GetByHostnameSuffix()
+        {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var model = api.Sites.GetByHostname("mydomain.com/en");
+
+                Assert.NotNull(model);
+                Assert.Equal("RoutingTest2", model.InternalId);
+            }
+        }
+
+        [Fact]
+        public void GetByHostnameSubdomain()
+        {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var model = api.Sites.GetByHostname("sub.mydomain.com");
+
+                Assert.NotNull(model);
+                Assert.Equal("RoutingTest3", model.InternalId);
+            }
+        }
+
+        [Fact]
+        public void GetByHostnameSubdomainSecond()
+        {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var model = api.Sites.GetByHostname("sub2.localhost");
+
+                Assert.NotNull(model);
+                Assert.Equal("RoutingTest3", model.InternalId);
+            }
+        }
+
+        [Fact]
+        public void GetByHostnameMissing()
+        {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var model = api.Sites.GetByHostname("nosite.com");
+
+                Assert.Null(model);
+            }
         }
     }
 }
