@@ -36,6 +36,8 @@ namespace Piranha.Tests.Repositories
         private const string TAG_3 = "My Third Tag";
         private const string TAG_4 = "My Fourth Tag";
         private const string TAG_5 = "My Fifth Tag";
+        private const string TAG_6 = "My Sixth Tag";
+        private const string TAG_6_SLUG = "my-sixth-tag";
 
         private Guid SITE_ID = Guid.NewGuid();
         private Guid BLOG_ID = Guid.NewGuid();
@@ -121,6 +123,20 @@ namespace Piranha.Tests.Repositories
                     BlogId = BLOG_ID,
                     Title = TAG_2
                 });
+            }
+        }
+
+        [Fact]
+        public void AddWithSlug() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var model = new Data.Tag() {
+                    BlogId = BLOG_ID,
+                    Title = TAG_6,
+                    Slug = TAG_6_SLUG
+                };
+                api.Tags.Save(model);
+
+                Assert.Equal(TAG_6_SLUG, model.Slug);
             }
         }
 
@@ -231,6 +247,30 @@ namespace Piranha.Tests.Repositories
                 model.Title = "Updated";
 
                 api.Tags.Save(model);
+            }
+        }
+
+        [Fact]
+        public void UpdateNoTitle() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var model = api.Tags.GetById(TAG_1_ID);
+
+                model.Title = null;
+
+                Assert.ThrowsAny<Exception>(() => api.Tags.Save(model));
+            }
+        }
+
+        [Fact]
+        public void UpdateNoSlug() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                var model = api.Tags.GetById(TAG_1_ID);
+
+                model.Slug = null;
+
+                api.Tags.Save(model);
+
+                Assert.NotNull(model.Slug);
             }
         }
 
