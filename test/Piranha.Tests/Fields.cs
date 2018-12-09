@@ -54,6 +54,13 @@ namespace Piranha.Tests
         protected override void Cleanup() { }
 
         [Fact]
+        public void RegisterSelect()
+        {
+            Piranha.App.Fields.RegisterSelect<MyEnum>();
+            fields.RegisterSelect<MyEnum>();
+        }
+
+        [Fact]
         public void GetByType() {
             var field = Piranha.App.Fields.GetByType(typeof(Extend.Fields.HtmlField));
 

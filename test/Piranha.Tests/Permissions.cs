@@ -69,6 +69,7 @@ namespace Piranha.Tests
         public void GetPermissionManagerCount() {
             Assert.Equal(2, mgr.GetPermissions("Module1").Count);
             Assert.Equal(3, mgr.GetPermissions("Module2").Count);
+            Assert.Equal(5, mgr.GetPermissions().Count);
         }
     }
 }
