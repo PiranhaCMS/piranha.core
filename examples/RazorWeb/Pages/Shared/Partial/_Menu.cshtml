@@ -7,7 +7,10 @@
         <div class="navbar-nav">
             @foreach (var item in WebApp.Site.Sitemap)
             {
-                <a class="nav-item nav-link @(item.Id == WebApp.PageId ? "active" : "")" href="@item.Permalink">@item.MenuTitle</a>
+                if (!item.IsHidden)
+                {
+                    <a class="nav-item nav-link @(item.Id == WebApp.PageId ? "active" : "")" href="@item.Permalink">@item.MenuTitle</a>
+                }
             }
         </div>
     </div>
@@ -17,9 +20,12 @@
     <ul class="justify-content-center nav">
         @foreach (var item in WebApp.Site.Sitemap)
         {
-            <li class="nav-item @(item.Id == WebApp.PageId || item.HasChild(WebApp.PageId) ? "active" : "")">
-                <a class="nav-link" href="@item.Permalink">@item.MenuTitle</a>
-            </li>
+            if (!item.IsHidden)
+            {
+                <li class="nav-item @(item.Id == WebApp.PageId || item.HasChild(WebApp.PageId) ? "active" : "")">
+                    <a class="nav-link" href="@item.Permalink">@item.MenuTitle</a>
+                </li>
+            }
         }
     </ul>
 </nav>
