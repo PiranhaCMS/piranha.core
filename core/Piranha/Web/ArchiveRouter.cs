@@ -88,9 +88,6 @@ namespace Piranha.Web
                                     if (!categoryId.HasValue)
                                         categoryId = Guid.Empty;
                                 }
-                                catch
-                                {
-                                }
                                 finally
                                 {
                                     foundCategory = false;
@@ -106,9 +103,6 @@ namespace Piranha.Web
                                     if (!tagId.HasValue)
                                         tagId = Guid.Empty;
                                 }
-                                catch
-                                {
-                                }
                                 finally
                                 {
                                     foundTag = false;
@@ -121,7 +115,11 @@ namespace Piranha.Web
                                 {
                                     page = Convert.ToInt32(segments[n]);
                                 }
-                                catch { }
+                                catch 
+                                {
+                                    // We don't care about the exception, we just
+                                    // discard malformed input
+                                }
                                 break;
                             }
 
@@ -134,7 +132,11 @@ namespace Piranha.Web
                                     if (year.Value > DateTime.Now.Year)
                                         year = DateTime.Now.Year;
                                 }
-                                catch { }
+                                catch 
+                                {
+                                    // We don't care about the exception, we just
+                                    // discard malformed input
+                                }
                             }
                             else
                             {
@@ -142,7 +144,11 @@ namespace Piranha.Web
                                 {
                                     month = Math.Max(Math.Min(Convert.ToInt32(segments[n]), 12), 1);
                                 }
-                                catch { }
+                                catch 
+                                { 
+                                    // We don't care about the exception, we just
+                                    // discard malformed input
+                                }
                             }
                         }
 

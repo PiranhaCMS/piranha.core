@@ -32,17 +32,15 @@ namespace Piranha.Tests.Repositories
     [Collection("Integration tests")]
     public class Pages : BaseTests
     {
-        #region Members
-        public static readonly Guid SITE_ID = Guid.NewGuid();
-        public static readonly Guid SITE_EMPTY_ID = Guid.NewGuid();
-        public static readonly Guid PAGE_1_ID = Guid.NewGuid();
-        public static readonly Guid PAGE_2_ID = Guid.NewGuid();
-        public static readonly Guid PAGE_3_ID = Guid.NewGuid();
-        public static readonly Guid PAGE_7_ID = Guid.NewGuid();
-        public static readonly Guid PAGE_8_ID = Guid.NewGuid();
-        public static readonly Guid PAGE_DI_ID = Guid.NewGuid();
+        public readonly Guid SITE_ID = Guid.NewGuid();
+        public readonly Guid SITE_EMPTY_ID = Guid.NewGuid();
+        public readonly Guid PAGE_1_ID = Guid.NewGuid();
+        public readonly Guid PAGE_2_ID = Guid.NewGuid();
+        public readonly Guid PAGE_3_ID = Guid.NewGuid();
+        public readonly Guid PAGE_7_ID = Guid.NewGuid();
+        public readonly Guid PAGE_8_ID = Guid.NewGuid();
+        public readonly Guid PAGE_DI_ID = Guid.NewGuid();
         protected ICache cache;
-        #endregion
 
         public interface IMyService {
             string Value { get; }
@@ -138,13 +136,13 @@ namespace Piranha.Tests.Repositories
                     .AddType(typeof(MyDIPage));
                 builder.Build();
                 
-                var site = new Data.Site() {
+                var site = new Data.Site {
                     Id = SITE_ID,
                     Title = "Default Site",
                     InternalId = "DefaultSite",
                     IsDefault = true
                 };
-                var emptysite = new Data.Site() {
+                var emptysite = new Data.Site {
                     Id = SITE_ID,
                     Title = "Empty Site",
                     InternalId = "EmptySite",
@@ -187,13 +185,13 @@ namespace Piranha.Tests.Repositories
                 page4.SiteId = SITE_ID;
                 page4.Title = "My collection page";
                 page4.SortOrder = 1;
-                page4.Texts.Add(new TextField() {
+                page4.Texts.Add(new TextField {
                     Value = "First text"
                 });
-                page4.Texts.Add(new TextField() {
+                page4.Texts.Add(new TextField {
                     Value = "Second text"
                 });
-                page4.Texts.Add(new TextField() {
+                page4.Texts.Add(new TextField {
                     Value = "Third text"
                 });
                 api.Pages.Save(page4);

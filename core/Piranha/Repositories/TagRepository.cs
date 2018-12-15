@@ -8,12 +8,11 @@
  * 
  */
 
-using Microsoft.EntityFrameworkCore;
-using Piranha.Data;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Piranha.Data;
 
 namespace Piranha.Repositories
 {
@@ -24,7 +23,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="db">The current db context</param>
         /// <param name="cache">The optional model cache</param>
-        public TagRepository(IDb db, ICache cache = null) 
+        public TagRepository(IDb db, ICache cache = null)
             : base(db, cache) { }
 
         /// <summary>
@@ -32,14 +31,16 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The blog id</param>
         /// <returns>The available models</returns>
-        public IEnumerable<Tag> GetAll(Guid blogId) {
+        public IEnumerable<Tag> GetAll(Guid blogId)
+        {
             var models = new List<Tag>();
             var tags = db.Tags
                 .AsNoTracking()
                 .Where(t => t.BlogId == blogId)
                 .Select(t => t.Id);
 
-            foreach (var t in tags) {
+            foreach (var t in tags)
+            {
                 var model = GetById(t);
                 if (model != null)
                     models.Add(model);
@@ -52,7 +53,8 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="postId">The post id</param>
         /// <returns>The model</returns>
-        public IEnumerable<Tag> GetByPostId(Guid postId) {
+        public IEnumerable<Tag> GetByPostId(Guid postId)
+        {
             var tags = db.PostTags
                 .AsNoTracking()
                 .Where(t => t.PostId == postId)
@@ -60,7 +62,8 @@ namespace Piranha.Repositories
 
             var models = new List<Tag>();
 
-            foreach (var tag in tags) {
+            foreach (var tag in tags)
+            {
                 var model = GetById(tag);
 
                 if (model != null)
@@ -75,13 +78,17 @@ namespace Piranha.Repositories
         /// <param name="blogId">The blog id</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The model</returns>
-        public Tag GetBySlug(Guid blogId, string slug) {
+        public Tag GetBySlug(Guid blogId, string slug)
+        {
             var id = cache != null ? cache.Get<Guid?>($"Tag_{blogId}_{slug}") : null;
             Tag model = null;
 
-            if (id.HasValue) {
+            if (id.HasValue)
+            {
                 model = GetById(id.Value);
-            } else {
+            }
+            else
+            {
                 id = db.Tags
                     .AsNoTracking()
                     .Where(t => t.BlogId == blogId && t.Slug == slug)
@@ -100,7 +107,8 @@ namespace Piranha.Repositories
         /// <param name="blogId">The blog id</param>
         /// <param name="title">The unique title</param>
         /// <returns>The model</returns>
-        public Tag GetByTitle(Guid blogId, string title) {
+        public Tag GetByTitle(Guid blogId, string title)
+        {
             var id = db.Tags
                 .AsNoTracking()
                 .Where(t => t.BlogId == blogId && t.Title == title)
@@ -116,7 +124,8 @@ namespace Piranha.Repositories
         /// Deletes all unused tags for the specified blog.
         /// </summary>
         /// <param name="blogId">The blog id</param>
-        public void DeleteUnused(Guid blogId) {
+        public void DeleteUnused(Guid blogId)
+        {
             var used = db.PostTags
                 .Where(t => t.Post.BlogId == blogId)
                 .Select(t => t.TagId)
@@ -127,18 +136,20 @@ namespace Piranha.Repositories
                 .Where(t => t.BlogId == blogId && !used.Contains(t.Id))
                 .ToList();
 
-            if (unused.Count > 0) {
+            if (unused.Count > 0)
+            {
                 db.Tags.RemoveRange(unused);
                 db.SaveChanges();
             }
-        }        
+        }
 
         #region Protected methods
         /// <summary>
         /// Adds a new model to the database.
         /// </summary>
         /// <param name="model">The model</param>
-        protected override void Add(Tag model) {
+        protected override void Add(Tag model)
+        {
             PrepareInsert(model);
 
             // Check required
@@ -157,7 +168,8 @@ namespace Piranha.Repositories
         /// Updates the given model in the database.
         /// </summary>
         /// <param name="model">The model</param>
-        protected override void Update(Tag model) {
+        protected override void Update(Tag model)
+        {
             PrepareUpdate(model);
 
             // Check required
@@ -170,7 +182,8 @@ namespace Piranha.Repositories
             else model.Slug = Utils.GenerateSlug(model.Slug);
 
             var tag = db.Tags.FirstOrDefault(t => t.Id == model.Id);
-            if (tag != null) {
+            if (tag != null)
+            {
                 App.Mapper.Map<Tag, Tag>(model, tag);
             }
         }
@@ -179,7 +192,8 @@ namespace Piranha.Repositories
         /// Adds the given model to cache.
         /// </summary>
         /// <param name="model">The model</param>
-        protected override void AddToCache(Tag model) {
+        protected override void AddToCache(Tag model)
+        {
             cache.Set(model.Id.ToString(), model);
             cache.Set($"Tag_{model.BlogId}_{model.Slug}", model.Id);
         }
@@ -188,10 +202,11 @@ namespace Piranha.Repositories
         /// Removes the given model from cache.
         /// </summary>
         /// <param name="model">The model</param>
-        protected override void RemoveFromCache(Tag model) {
+        protected override void RemoveFromCache(Tag model)
+        {
             cache.Remove(model.Id.ToString());
             cache.Remove($"Tag_{model.BlogId}_{model.Slug}");
-        }        
+        }
         #endregion
     }
 }

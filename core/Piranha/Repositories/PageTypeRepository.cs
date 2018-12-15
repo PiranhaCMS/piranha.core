@@ -8,12 +8,10 @@
  * 
  */
 
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using Piranha.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace Piranha.Repositories
 {
@@ -28,7 +26,7 @@ namespace Piranha.Repositories
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db connection</param>
-        public PageTypeRepository(IDb db) 
+        public PageTypeRepository(IDb db)
         {
             _db = db;
 
@@ -50,7 +48,7 @@ namespace Piranha.Repositories
         /// Gets all available models.
         /// </summary>
         /// <returns>The available models</returns>
-        public IEnumerable<Models.PageType> GetAll() 
+        public IEnumerable<Models.PageType> GetAll()
         {
             return _types.Values.OrderBy(t => t.Id);
         }
@@ -72,12 +70,12 @@ namespace Piranha.Repositories
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        public void Save(Models.PageType model) 
+        public void Save(Models.PageType model)
         {
             var type = _db.PageTypes
                 .FirstOrDefault(t => t.Id == model.Id);
 
-            if (type == null) 
+            if (type == null)
             {
                 type = new Data.PageType
                 {
@@ -91,7 +89,7 @@ namespace Piranha.Repositories
             type.LastModified = DateTime.Now;
 
             _db.SaveChanges();
-            
+
             lock (_typesMutex)
             {
                 Load();
@@ -102,12 +100,12 @@ namespace Piranha.Repositories
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public void Delete(string id) 
+        public void Delete(string id)
         {
             var type = _db.PageTypes
                 .FirstOrDefault(t => t.Id == id);
 
-            if (type != null) 
+            if (type != null)
             {
                 _db.PageTypes.Remove(type);
                 _db.SaveChanges();
@@ -123,7 +121,7 @@ namespace Piranha.Repositories
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        public void Delete(Models.PageType model) 
+        public void Delete(Models.PageType model)
         {
             Delete(model.Id);
         }

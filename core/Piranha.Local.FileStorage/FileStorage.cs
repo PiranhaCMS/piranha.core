@@ -26,12 +26,18 @@ namespace Piranha.Local
         public FileStorage(string basePath = null, string baseUrl = null)
         {
             if (!string.IsNullOrEmpty(basePath))
+            {
                 _basePath = basePath;
+            }
             if (!string.IsNullOrEmpty(baseUrl))
+            {
                 _baseUrl = baseUrl;
+            }
 
             if (!Directory.Exists(_basePath))
+            {
                 Directory.CreateDirectory(_basePath);
+            }
         }
 
         /// <summary>
@@ -54,7 +60,9 @@ namespace Piranha.Local
         public string GetPublicUrl(string id)
         {
             if (!string.IsNullOrWhiteSpace(id))
+            {
                 return _baseUrl + id;
+            }
             return null;
         }
     }

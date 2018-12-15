@@ -8,12 +8,10 @@
  * 
  */
 
-using Piranha.Data;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
+using Microsoft.EntityFrameworkCore;
+using Piranha.Data;
 
 namespace Piranha.Repositories
 {
@@ -34,13 +32,15 @@ namespace Piranha.Repositories
         /// Gets all available models.
         /// </summary>
         /// <returns>The available models</returns>
-        public virtual IEnumerable<T> GetAll() {
+        public virtual IEnumerable<T> GetAll()
+        {
             var models = new List<T>();
             var ids = db.Set<T>()
                 .AsNoTracking()
                 .Select(m => m.Id);
 
-            foreach (var id in ids) {
+            foreach (var id in ids)
+            {
                 var model = GetById(id);
                 if (model != null)
                     models.Add(model);

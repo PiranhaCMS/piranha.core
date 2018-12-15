@@ -8,10 +8,10 @@
  * 
  */
 
-using Piranha.Data;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Piranha.Data;
 
 namespace Piranha.Repositories
 {

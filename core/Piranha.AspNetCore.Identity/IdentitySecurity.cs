@@ -45,7 +45,9 @@ namespace Piranha.AspNetCore.Identity
         public async Task<bool> SignIn(object context, string username, string password)
         {
             if (_seed != null)
+            {
                 await _seed.CreateAsync();
+            }
 
             var result = await _signInManager.PasswordSignInAsync(username, password, false, lockoutOnFailure: false);
             return result.Succeeded;

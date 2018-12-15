@@ -8,17 +8,17 @@
  * 
  */
 
-using Microsoft.EntityFrameworkCore;
-using Piranha.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Piranha.Data;
 
 namespace Piranha.Repositories
 {
     public class AliasRepository : BaseRepository<Alias>, IAliasRepository
     {
-        private readonly Api api;
+        private readonly Api _api;
 
         /// <summary>
         /// Default constructor.
@@ -26,25 +26,27 @@ namespace Piranha.Repositories
         /// <param name="db">The current db context</param>
         /// <param name="cache">The optional model cache</param>
         public AliasRepository(Api api, IDb db, ICache cache = null)
-            : base(db, cache) 
-            { 
-                this.api = api;
-            }
+            : base(db, cache)
+        {
+            _api = api;
+        }
 
         /// <summary>
         /// Gets all available models for the specified site.
         /// </summary>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The available models</returns>
-        public IEnumerable<Alias> GetAll(Guid? siteId) {
+        public IEnumerable<Alias> GetAll(Guid? siteId)
+        {
             var models = new List<Alias>();
 
-            if (!siteId.HasValue) {
-                var site = api.Sites.GetDefault();
+            if (!siteId.HasValue)
+            {
+                var site = _api.Sites.GetDefault();
                 if (site != null)
                     siteId = site.Id;
             }
-            
+
             var aliases = db.Aliases
                 .AsNoTracking()
                 .Where(a => a.SiteId == siteId)
@@ -52,7 +54,8 @@ namespace Piranha.Repositories
                 .ThenBy(a => a.RedirectUrl)
                 .Select(a => a.Id);
 
-            foreach (var a in aliases) {
+            foreach (var a in aliases)
+            {
                 var model = GetById(a);
                 if (model != null)
                     models.Add(model);
@@ -66,19 +69,24 @@ namespace Piranha.Repositories
         /// <param name="url">The unique url</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The model</returns>
-        public Alias GetByAliasUrl(string url, Guid? siteId = null) {
-            if (!siteId.HasValue) {
-                var site = api.Sites.GetDefault();
+        public Alias GetByAliasUrl(string url, Guid? siteId = null)
+        {
+            if (!siteId.HasValue)
+            {
+                var site = _api.Sites.GetDefault();
                 if (site != null)
                     siteId = site.Id;
             }
 
-            var id = cache != null ? cache.Get<Guid?>($"AliasId_{siteId}_{url}") : null;
+            var id = cache?.Get<Guid?>($"AliasId_{siteId}_{url}");
             Alias model = null;
 
-            if (id.HasValue) {
+            if (id.HasValue)
+            {
                 model = GetById(id.Value);
-            } else {
+            }
+            else
+            {
                 id = db.Aliases
                     .AsNoTracking()
                     .Where(a => a.SiteId == siteId && a.AliasUrl == url)
@@ -97,9 +105,11 @@ namespace Piranha.Repositories
         /// <param name="url">The unique url</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The model</returns>
-        public IEnumerable<Alias> GetByRedirectUrl(string url, Guid? siteId = null) {
-            if (!siteId.HasValue) {
-                var site = api.Sites.GetDefault();
+        public IEnumerable<Alias> GetByRedirectUrl(string url, Guid? siteId = null)
+        {
+            if (!siteId.HasValue)
+            {
+                var site = _api.Sites.GetDefault();
                 if (site != null)
                     siteId = site.Id;
             }
@@ -112,7 +122,8 @@ namespace Piranha.Repositories
                 .Select(a => a.Id)
                 .ToList();
 
-            foreach (var id in aliases) {
+            foreach (var id in aliases)
+            {
                 models.Add(GetById(id));
             }
             return models;
@@ -122,7 +133,8 @@ namespace Piranha.Repositories
         /// Adds a new model to the database.
         /// </summary>
         /// <param name="model">The model</param>
-        protected override void Add(Alias model) {
+        protected override void Add(Alias model)
+        {
             PrepareInsert(model);
 
             // Check for alias url
@@ -135,9 +147,13 @@ namespace Piranha.Repositories
 
             // Fix urls
             if (!model.AliasUrl.StartsWith("/"))
+            {
                 model.AliasUrl = "/" + model.AliasUrl;
+            }
             if (!model.RedirectUrl.StartsWith("/") && !model.RedirectUrl.StartsWith("http://") && !model.RedirectUrl.StartsWith("https://"))
+            {
                 model.RedirectUrl = "/" + model.RedirectUrl;
+            }
 
             db.Aliases.Add(model);
         }
@@ -146,7 +162,8 @@ namespace Piranha.Repositories
         /// Updates the given model in the database.
         /// </summary>
         /// <param name="model">The model</param>
-        protected override void Update(Alias model) {
+        protected override void Update(Alias model)
+        {
             PrepareUpdate(model);
 
             // Check for alias url
@@ -159,21 +176,27 @@ namespace Piranha.Repositories
 
             // Fix urls
             if (!model.AliasUrl.StartsWith("/"))
+            {
                 model.AliasUrl = "/" + model.AliasUrl;
+            }
             if (!model.RedirectUrl.StartsWith("/") && !model.RedirectUrl.StartsWith("http://") && !model.RedirectUrl.StartsWith("https://"))
+            {
                 model.RedirectUrl = "/" + model.RedirectUrl;
+            }
 
             var alias = db.Aliases.FirstOrDefault(s => s.Id == model.Id);
-            if (alias != null) {
+            if (alias != null)
+            {
                 App.Mapper.Map<Alias, Alias>(model, alias);
             }
-        }        
+        }
 
         /// <summary>
         /// Adds the given model to cache.
         /// </summary>
         /// <param name="model">The model</param>
-        protected override void AddToCache(Alias model) {
+        protected override void AddToCache(Alias model)
+        {
             cache.Set(model.Id.ToString(), model);
             cache.Set($"AliasId_{model.SiteId}_{model.AliasUrl}", model.Id);
         }
@@ -182,7 +205,8 @@ namespace Piranha.Repositories
         /// Removes the given model from cache.
         /// </summary>
         /// <param name="model">The model</param>
-        protected override void RemoveFromCache(Alias model) {
+        protected override void RemoveFromCache(Alias model)
+        {
             cache.Remove($"AliasId_{model.SiteId}_{model.AliasUrl}");
 
             base.RemoveFromCache(model);

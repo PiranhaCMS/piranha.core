@@ -8,12 +8,11 @@
  * 
  */
 
-using Microsoft.EntityFrameworkCore;
-using Piranha.Data;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Piranha.Data;
 
 namespace Piranha.Repositories
 {
@@ -27,9 +26,9 @@ namespace Piranha.Repositories
         /// <param name="api">The current api</param>
         /// <param name="db">The current db context</param>
         /// <param name="cache">The optional model cache</param>
-        public CategoryRepository(Api api, IDb db, ICache cache = null) 
-            : base(db, cache) 
-        { 
+        public CategoryRepository(Api api, IDb db, ICache cache = null)
+            : base(db, cache)
+        {
             this.api = api;
         }
 
@@ -38,14 +37,16 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The blog id</param>
         /// <returns>The available models</returns>
-        public IEnumerable<Category> GetAll(Guid blogId) {
+        public IEnumerable<Category> GetAll(Guid blogId)
+        {
             var models = new List<Category>();
             var categories = db.Categories
                 .AsNoTracking()
                 .Where(c => c.BlogId == blogId)
                 .Select(c => c.Id);
 
-            foreach (var c in categories) {
+            foreach (var c in categories)
+            {
                 var model = GetById(c);
                 if (model != null)
                     models.Add(model);
@@ -59,13 +60,17 @@ namespace Piranha.Repositories
         /// <param name="blogId">The blog id</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The model</returns>
-        public Category GetBySlug(Guid blogId, string slug) {
+        public Category GetBySlug(Guid blogId, string slug)
+        {
             var id = cache != null ? cache.Get<Guid?>($"Category_{blogId}_{slug}") : null;
             Category model = null;
 
-            if (id.HasValue) {
+            if (id.HasValue)
+            {
                 model = GetById(id.Value);
-            } else {
+            }
+            else
+            {
                 id = db.Categories
                     .AsNoTracking()
                     .Where(c => c.BlogId == blogId && c.Slug == slug)
@@ -84,7 +89,8 @@ namespace Piranha.Repositories
         /// <param name="blogId">The blog id</param>
         /// <param name="title">The unique title</param>
         /// <returns>The model</returns>
-        public Category GetByTitle(Guid blogId, string title) {
+        public Category GetByTitle(Guid blogId, string title)
+        {
             var id = db.Categories
                 .AsNoTracking()
                 .Where(c => c.BlogId == blogId && c.Title == title)
@@ -100,7 +106,8 @@ namespace Piranha.Repositories
         /// Deletes all unused categories for the specified blog.
         /// </summary>
         /// <param name="blogId">The blog id</param>
-        public void DeleteUnused(Guid blogId) {
+        public void DeleteUnused(Guid blogId)
+        {
             var used = db.Posts
                 .Where(p => p.BlogId == blogId)
                 .Select(p => p.CategoryId)
@@ -111,18 +118,20 @@ namespace Piranha.Repositories
                 .Where(c => c.BlogId == blogId && !used.Contains(c.Id))
                 .ToList();
 
-            if (unused.Count > 0) {
+            if (unused.Count > 0)
+            {
                 db.Categories.RemoveRange(unused);
                 db.SaveChanges();
             }
         }
-        
+
         #region Protected methods
         /// <summary>
         /// Adds a new model to the database.
         /// </summary>
         /// <param name="model">The model</param>
-        protected override void Add(Category model) {
+        protected override void Add(Category model)
+        {
             PrepareInsert(model);
 
             // Check required
@@ -141,7 +150,8 @@ namespace Piranha.Repositories
         /// Updates the given model in the database.
         /// </summary>
         /// <param name="model">The model</param>
-        protected override void Update(Category model) {
+        protected override void Update(Category model)
+        {
             PrepareUpdate(model);
 
             // Check required
@@ -154,7 +164,8 @@ namespace Piranha.Repositories
             else model.Slug = Utils.GenerateSlug(model.Slug);
 
             var category = db.Categories.FirstOrDefault(c => c.Id == model.Id);
-            if (category != null) {
+            if (category != null)
+            {
                 App.Mapper.Map<Category, Category>(model, category);
             }
         }
@@ -163,7 +174,8 @@ namespace Piranha.Repositories
         /// Adds the given model to cache.
         /// </summary>
         /// <param name="model">The model</param>
-        protected override void AddToCache(Category model) {
+        protected override void AddToCache(Category model)
+        {
             cache.Set(model.Id.ToString(), model);
             cache.Set($"Category_{model.BlogId}_{model.Slug}", model.Id);
         }
@@ -172,10 +184,11 @@ namespace Piranha.Repositories
         /// Removes the given model from cache.
         /// </summary>
         /// <param name="model">The model</param>
-        protected override void RemoveFromCache(Category model) {
+        protected override void RemoveFromCache(Category model)
+        {
             cache.Remove(model.Id.ToString());
             cache.Remove($"Category_{model.BlogId}_{model.Slug}");
-        }        
+        }
         #endregion
     }
 }

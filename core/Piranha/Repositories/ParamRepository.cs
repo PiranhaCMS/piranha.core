@@ -8,11 +8,10 @@
  * 
  */
 
+using System;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
-using System;
-using System.Data;
-using System.Linq;
 
 namespace Piranha.Repositories
 {

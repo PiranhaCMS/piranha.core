@@ -8,25 +8,25 @@
  * 
  */
 
-using Microsoft.EntityFrameworkCore;
-using Piranha.Data;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Piranha.Data;
 
 namespace Piranha.Repositories
 {
     public class MediaRepository : IMediaRepository
     {
-        private readonly IDb db;
-        private readonly Api api;
-        private readonly IStorage storage;
-        private readonly ICache cache;   
-        private readonly IImageProcessor processor;
-        private static object scalemutex = new object();     
+        private readonly IDb _db;
+        private readonly Api _api;
+        private readonly IStorage _storage;
+        private readonly ICache _cache;
+        private readonly IImageProcessor _processor;
+        private static object ScaleMutex = new object();
         private const string MEDIA_STRUCTURE = "MediaStructure";
 
         /// <summary>
@@ -35,12 +35,13 @@ namespace Piranha.Repositories
         /// <param name="db">The current db context</param>
         /// <param name="storage">The current storage manager</param>
         /// <param name="cache">The optional model cache</param>
-        public MediaRepository(Api api, IDb db, IStorage storage, ICache cache = null, IImageProcessor processor = null) {
-            this.api = api;
-            this.db = db;
-            this.storage = storage;
-            this.cache = cache;
-            this.processor = processor;
+        public MediaRepository(Api api, IDb db, IStorage storage, ICache cache = null, IImageProcessor processor = null)
+        {
+            _api = api;
+            _db = db;
+            _storage = storage;
+            _cache = cache;
+            _processor = processor;
         }
 
         /// <summary>
@@ -48,18 +49,20 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="folderId">The optional folder id</param>
         /// <returns>The available media</returns>
-        public IEnumerable<Media> GetAll(Guid? folderId = null) {
+        public IEnumerable<Media> GetAll(Guid? folderId = null)
+        {
             List<Media> models = new List<Media>();
 
-            var media = db.Media
+            var media = _db.Media
                 .AsNoTracking()
                 .Where(m => m.FolderId == folderId)
                 .OrderBy(m => m.Filename)
                 .Select(m => m.Id);
 
-            foreach (var id in media) {
+            foreach (var id in media)
+            {
                 var model = GetById(id);
-                if (model != null) 
+                if (model != null)
                     models.Add(model);
             }
             return models;
@@ -71,18 +74,20 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="folderId">The optional folder id</param>
         /// <returns>The available media folders</returns>
-        public IEnumerable<MediaFolder> GetAllFolders(Guid? folderId = null) {
+        public IEnumerable<MediaFolder> GetAllFolders(Guid? folderId = null)
+        {
             List<MediaFolder> models = new List<MediaFolder>();
 
-            var folders = db.MediaFolders
+            var folders = _db.MediaFolders
                 .AsNoTracking()
                 .Where(f => f.ParentId == folderId)
                 .OrderBy(f => f.Name)
                 .Select(f => f.Id);
 
-            foreach (var id in folders) {
+            foreach (var id in folders)
+            {
                 var model = GetFolderById(id);
-                if (model != null) 
+                if (model != null)
                     models.Add(model);
             }
             return models;
@@ -93,21 +98,24 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The media</returns>
-        public Media GetById(Guid id) {
-            Media model = cache != null ? cache.Get<Media>(id.ToString()) : null;
+        public Media GetById(Guid id)
+        {
+            Media model = _cache != null ? _cache.Get<Media>(id.ToString()) : null;
 
-            if (model == null) {
-                model = db.Media
+            if (model == null)
+            {
+                model = _db.Media
                     .AsNoTracking()
                     .FirstOrDefault(m => m.Id == id);
 
-                if (model != null) {
+                if (model != null)
+                {
                     model.PublicUrl = GetPublicUrl(model);
                     App.Hooks.OnLoad<Media>(model);
                 }
 
-                if (cache != null && model != null)
-                    cache.Set(model.Id.ToString(), model);
+                if (_cache != null && model != null)
+                    _cache.Set(model.Id.ToString(), model);
             }
             return model;
         }
@@ -117,19 +125,21 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The media folder</returns>
-        public MediaFolder GetFolderById(Guid id) {
-            MediaFolder model = cache != null ? cache.Get<MediaFolder>(id.ToString()) : null;
+        public MediaFolder GetFolderById(Guid id)
+        {
+            MediaFolder model = _cache != null ? _cache.Get<MediaFolder>(id.ToString()) : null;
 
-            if (model == null) {
-                model = db.MediaFolders
+            if (model == null)
+            {
+                model = _db.MediaFolders
                     .AsNoTracking()
                     .FirstOrDefault(f => f.Id == id);
 
                 if (model != null)
                     App.Hooks.OnLoad<MediaFolder>(model);
 
-                if (cache != null && model != null)
-                    cache.Set(model.Id.ToString(), model);
+                if (_cache != null && model != null)
+                    _cache.Set(model.Id.ToString(), model);
             }
             return model;
         }
@@ -138,28 +148,31 @@ namespace Piranha.Repositories
         /// Gets the hierachical media structure.
         /// </summary>
         /// <returns>The media structure</returns>
-        public Models.MediaStructure GetStructure() {
-            Models.MediaStructure model = cache != null ? cache.Get<Models.MediaStructure>(MEDIA_STRUCTURE) : null;
+        public Models.MediaStructure GetStructure()
+        {
+            Models.MediaStructure model = _cache != null ? _cache.Get<Models.MediaStructure>(MEDIA_STRUCTURE) : null;
 
-            if (model == null) {
+            if (model == null)
+            {
                 var folders = new List<MediaFolder>();
-                var ids = db.MediaFolders
+                var ids = _db.MediaFolders
                     .AsNoTracking()
                     .OrderBy(f => f.ParentId)
                     .ThenBy(f => f.Name)
                     .Select(f => f.Id)
                     .ToList();
-                
-                foreach (var id in ids) {
+
+                foreach (var id in ids)
+                {
                     var folder = GetFolderById(id);
-                    if (folder != null) 
+                    if (folder != null)
                         folders.Add(folder);
                 }
 
                 model = Sort(folders);
 
-                if (cache != null && model != null)
-                    cache.Set(MEDIA_STRUCTURE, model);  
+                if (_cache != null && model != null)
+                    _cache.Set(MEDIA_STRUCTURE, model);
             }
             return model;
         }
@@ -170,7 +183,8 @@ namespace Piranha.Repositories
         /// wrapper for the async version.
         /// </summary>
         /// <param name="content">The content to save</param>
-        public void Save(Models.MediaContent content) {
+        public void Save(Models.MediaContent content)
+        {
             Task.Run(() => SaveAsync(content)).Wait();
         }
 
@@ -179,30 +193,38 @@ namespace Piranha.Repositories
         /// depending on its state.
         /// </summary>
         /// <param name="content">The content to save</param>
-        public async Task SaveAsync(Models.MediaContent content) {
+        public async Task SaveAsync(Models.MediaContent content)
+        {
             if (!App.MediaTypes.IsSupported(content.Filename))
                 throw new NotSupportedException("Filetype not supported.");
 
-            var model = db.Media
+            var model = _db.Media
                 .Include(m => m.Versions)
                 .FirstOrDefault(m => m.Id == content.Id);
 
-            if (model == null) {
-                model = new Media() {
+            if (model == null)
+            {
+                model = new Media()
+                {
                     Id = model != null || content.Id.HasValue ? content.Id.Value : Guid.NewGuid(),
                     Created = DateTime.Now
                 };
                 content.Id = model.Id;
-                db.Media.Add(model);
-            } else {
-                using (var session = await storage.OpenAsync()) {
+                _db.Media.Add(model);
+            }
+            else
+            {
+                using (var session = await _storage.OpenAsync())
+                {
                     // Delete all versions as we're updating the image
-                    if (model.Versions.Count > 0) {
-                        foreach (var version in model.Versions) {
+                    if (model.Versions.Count > 0)
+                    {
+                        foreach (var version in model.Versions)
+                        {
                             // Delete version from storage
                             await session.DeleteAsync(GetResourceName(model, version.Width, version.Height, version.FileExtension));
                         }
-                        db.MediaVersions.RemoveRange(model.Versions);
+                        _db.MediaVersions.RemoveRange(model.Versions);
                     }
 
                     // Delete the old file because we might have a different filename
@@ -217,44 +239,52 @@ namespace Piranha.Repositories
             model.LastModified = DateTime.Now;
 
             // Pre-process if this is an image
-            if (processor != null && model.Type == Models.MediaType.Image) {
+            if (_processor != null && model.Type == Models.MediaType.Image)
+            {
                 byte[] bytes;
 
-                if (content is Models.BinaryMediaContent) {
+                if (content is Models.BinaryMediaContent)
+                {
                     bytes = ((Models.BinaryMediaContent)content).Data;
-                } else {
+                }
+                else
+                {
                     var reader = new BinaryReader(((Models.StreamMediaContent)content).Data);
                     bytes = reader.ReadBytes((int)reader.BaseStream.Length);
                     ((Models.StreamMediaContent)content).Data.Position = 0;
                 }
 
                 int width, height;
-                
-                processor.GetSize(bytes, out width, out height);
+
+                _processor.GetSize(bytes, out width, out height);
                 model.Width = width;
                 model.Height = height;
             }
 
             // Upload to storage
-            using (var session = await storage.OpenAsync()) {
-                if (content is Models.BinaryMediaContent) {
+            using (var session = await _storage.OpenAsync())
+            {
+                if (content is Models.BinaryMediaContent)
+                {
                     var bc = (Models.BinaryMediaContent)content;
 
                     model.Size = bc.Data.Length;
-                    await session.PutAsync(model.Id + "-" + model.Filename, 
+                    await session.PutAsync(model.Id + "-" + model.Filename,
                         model.ContentType, bc.Data);
-                } else if (content is Models.StreamMediaContent) {
+                }
+                else if (content is Models.StreamMediaContent)
+                {
                     var sc = (Models.StreamMediaContent)content;
                     var stream = sc.Data;
 
                     model.Size = sc.Data.Length;
-                    await session.PutAsync(model.Id + "-" + model.Filename, 
+                    await session.PutAsync(model.Id + "-" + model.Filename,
                         model.ContentType, stream);
                 }
             }
 
             App.Hooks.OnBeforeSave<Media>(model);
-            db.SaveChanges();
+            _db.SaveChanges();
             App.Hooks.OnAfterSave<Media>(model);
 
             RemoveFromCache(model);
@@ -265,24 +295,27 @@ namespace Piranha.Repositories
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        public void SaveFolder(Data.MediaFolder model) {
+        public void SaveFolder(Data.MediaFolder model)
+        {
             App.Hooks.OnBeforeSave<MediaFolder>(model);
 
-            var folder = db.MediaFolders
+            var folder = _db.MediaFolders
                 .FirstOrDefault(f => f.Id == model.Id);
 
-            if (folder == null) {
-                folder = new Data.MediaFolder() {
+            if (folder == null)
+            {
+                folder = new Data.MediaFolder()
+                {
                     Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
                     Created = DateTime.Now
                 };
                 model.Id = folder.Id;
-                db.MediaFolders.Add(folder);
+                _db.MediaFolders.Add(folder);
             }
 
             App.Mapper.Map<Data.MediaFolder, Data.MediaFolder>(model, folder);
 
-            db.SaveChanges();
+            _db.SaveChanges();
 
             App.Hooks.OnAfterSave<MediaFolder>(model);
 
@@ -295,11 +328,13 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="media">The media</param>
         /// <param name="folderId">The folder id</param>
-        public void Move(Media model, Guid? folderId) {
-            var media = db.Media.FirstOrDefault(m => m.Id == model.Id);
-            if (media != null) {
+        public void Move(Media model, Guid? folderId)
+        {
+            var media = _db.Media.FirstOrDefault(m => m.Id == model.Id);
+            if (media != null)
+            {
                 media.FolderId = folderId;
-                db.SaveChanges();
+                _db.SaveChanges();
 
                 RemoveFromCache(media);
             }
@@ -314,7 +349,8 @@ namespace Piranha.Repositories
         /// <param name="width">The requested width</param>
         /// <param name="height">The optionally requested height</param>
         /// <returns>The public URL</returns>
-        public string EnsureVersion(Guid id, int width, int? height = null) {
+        public string EnsureVersion(Guid id, int width, int? height = null)
+        {
             var task = Task.Run(() => EnsureVersionAsync(id, width, height));
             task.Wait();
             return task.Result;
@@ -328,9 +364,11 @@ namespace Piranha.Repositories
         /// <param name="width">The requested width</param>
         /// <param name="height">The optionally requested height</param>
         /// <returns>The public URL</returns>
-        public async Task<string> EnsureVersionAsync(Guid id, int width, int? height = null) {
-            if (processor != null) {
-                var query = db.MediaVersions
+        public async Task<string> EnsureVersionAsync(Guid id, int width, int? height = null)
+        {
+            if (_processor != null)
+            {
+                var query = _db.MediaVersions
                     .Where(v => v.MediaId == id && v.Width == width);
 
                 if (height.HasValue)
@@ -339,8 +377,9 @@ namespace Piranha.Repositories
 
                 var version = query.FirstOrDefault();
 
-                if (version == null) {
-                    var media = db.Media
+                if (version == null)
+                {
+                    var media = _db.Media
                         .FirstOrDefault(m => m.Id == id);
 
                     // If the media is missing return false
@@ -352,32 +391,41 @@ namespace Piranha.Repositories
                         return GetPublicUrl(media);
 
                     // Get the image file
-                    using (var stream = new MemoryStream()) {
-                        using (var session = await storage.OpenAsync()) {
+                    using (var stream = new MemoryStream())
+                    {
+                        using (var session = await _storage.OpenAsync())
+                        {
                             if (!await session.GetAsync(media.Id + "-" + media.Filename, stream))
                                 return null;
 
                             // Reset strem position    
                             stream.Position = 0;
 
-                            using (var output = new MemoryStream()) {
-                                if (height.HasValue) {
-                                    processor.CropScale(stream, output, width, height.Value);
-                                } else {
-                                    processor.Scale(stream, output, width);
+                            using (var output = new MemoryStream())
+                            {
+                                if (height.HasValue)
+                                {
+                                    _processor.CropScale(stream, output, width, height.Value);
+                                }
+                                else
+                                {
+                                    _processor.Scale(stream, output, width);
                                 }
                                 output.Position = 0;
                                 bool upload = false;
 
-                                lock (scalemutex) {
+                                lock (ScaleMutex)
+                                {
                                     // We have to make sure we don't scale multiple files
                                     // at the same time as it can create index violations.
                                     version = query.FirstOrDefault();
 
-                                    if (version == null) {
+                                    if (version == null)
+                                    {
                                         var info = new FileInfo(media.Filename);
 
-                                        version = new MediaVersion {
+                                        version = new MediaVersion
+                                        {
                                             Id = Guid.NewGuid(),
                                             MediaId = media.Id,
                                             Size = output.Length,
@@ -385,21 +433,24 @@ namespace Piranha.Repositories
                                             Height = height,
                                             FileExtension = info.Extension
                                         };
-                                        db.MediaVersions.Add(version);
-                                        db.SaveChanges();
+                                        _db.MediaVersions.Add(version);
+                                        _db.SaveChanges();
 
                                         upload = true;
                                     }
                                 }
 
-                                if (upload) {
+                                if (upload)
+                                {
                                     return await session.PutAsync(GetResourceName(media, width, height), media.ContentType, output);
                                 }
                             }
                         }
                     }
-                } else {
-                    var media = db.Media
+                }
+                else
+                {
+                    var media = _db.Media
                         .FirstOrDefault(m => m.Id == id);
 
                     // If the media is missing return false
@@ -420,7 +471,8 @@ namespace Piranha.Repositories
         /// is not really synchronous, it's just a wrapper for the async version.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public void Delete(Guid id) {
+        public void Delete(Guid id)
+        {
             Task.Run(() => DeleteAsync(id)).Wait();
         }
 
@@ -428,24 +480,29 @@ namespace Piranha.Repositories
         /// Deletes the media with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public async Task DeleteAsync(Guid id) {
-            var media = db.Media
+        public async Task DeleteAsync(Guid id)
+        {
+            var media = _db.Media
                 .Include(m => m.Versions)
                 .FirstOrDefault(m => m.Id == id);
 
-            if (media != null) {
-                using (var session = await storage.OpenAsync()) {
-                    if (media.Versions.Count > 0) {
-                        foreach (var version in media.Versions) {
+            if (media != null)
+            {
+                using (var session = await _storage.OpenAsync())
+                {
+                    if (media.Versions.Count > 0)
+                    {
+                        foreach (var version in media.Versions)
+                        {
                             // Delete version from storage
                             await session.DeleteAsync(GetResourceName(media, version.Width, version.Height, version.FileExtension));
                         }
-                        db.MediaVersions.RemoveRange(media.Versions);
+                        _db.MediaVersions.RemoveRange(media.Versions);
                     }
                     App.Hooks.OnBeforeDelete<Media>(media);
 
-                    db.Media.Remove(media);
-                    db.SaveChanges();
+                    _db.Media.Remove(media);
+                    _db.SaveChanges();
 
                     // Delete from storage
                     await session.DeleteAsync(media.Id + "-" + media.Filename);
@@ -461,7 +518,8 @@ namespace Piranha.Repositories
         /// is not really synchronous, it's just a wrapper for the async version.
         /// </summary>
         /// <param name="model">The media</param>
-        public void Delete(Media model) {
+        public void Delete(Media model)
+        {
             Delete(model.Id);
         }
 
@@ -469,7 +527,8 @@ namespace Piranha.Repositories
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The media</param>
-        public async Task DeleteAsync(Media model) {
+        public async Task DeleteAsync(Media model)
+        {
             await DeleteAsync(model.Id);
         }
 
@@ -477,20 +536,23 @@ namespace Piranha.Repositories
         /// Deletes the media folder with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public void DeleteFolder(Guid id) {
-            var folder = db.MediaFolders
+        public void DeleteFolder(Guid id)
+        {
+            var folder = _db.MediaFolders
                 .FirstOrDefault(f => f.Id == id);
 
-            if (folder != null) {
-                var folderCount = db.MediaFolders.Count(f => f.ParentId == id);
-                var mediaCount = db.Media.Count(m => m.FolderId == id);
+            if (folder != null)
+            {
+                var folderCount = _db.MediaFolders.Count(f => f.ParentId == id);
+                var mediaCount = _db.Media.Count(m => m.FolderId == id);
 
-                if (folderCount == 0 && mediaCount == 0) {
+                if (folderCount == 0 && mediaCount == 0)
+                {
                     App.Hooks.OnBeforeDelete<MediaFolder>(folder);
 
-                    db.MediaFolders.Remove(folder);
-                    db.SaveChanges();
-                    
+                    _db.MediaFolders.Remove(folder);
+                    _db.SaveChanges();
+
                     App.Hooks.OnAfterDelete<MediaFolder>(folder);
 
                     RemoveFromCache(folder);
@@ -502,7 +564,8 @@ namespace Piranha.Repositories
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The media</param>
-        public void DeleteFolder(Data.MediaFolder model) {
+        public void DeleteFolder(Data.MediaFolder model)
+        {
             DeleteFolder(model.Id);
         }
 
@@ -512,10 +575,12 @@ namespace Piranha.Repositories
         /// <param name="folders">The full folder list</param>
         /// <param name="parentId">The current parent id</param>
         /// <returns>The structure</returns>
-        private Models.MediaStructure Sort(IEnumerable<MediaFolder> folders, Guid? parentId = null, int level = 0) {
+        private Models.MediaStructure Sort(IEnumerable<MediaFolder> folders, Guid? parentId = null, int level = 0)
+        {
             var result = new Models.MediaStructure();
 
-            foreach (var folder in folders.Where(f => f.ParentId == parentId).OrderBy(f => f.Name)) {
+            foreach (var folder in folders.Where(f => f.ParentId == parentId).OrderBy(f => f.Name))
+            {
                 var item = App.Mapper.Map<MediaFolder, Models.MediaStructureItem>(folder);
 
                 item.Level = level;
@@ -530,18 +595,21 @@ namespace Piranha.Repositories
         /// Removes the given model from cache.
         /// </summary>
         /// <param name="model">The model</param>
-        private void RemoveFromCache(Data.Media model) {
-            if (cache != null)
-                cache.Remove(model.Id.ToString());
+        private void RemoveFromCache(Data.Media model)
+        {
+            if (_cache != null)
+                _cache.Remove(model.Id.ToString());
         }
 
         /// <summary>
         /// Removes the given model from cache.
         /// </summary>
         /// <param name="model">The model</param>
-        private void RemoveFromCache(MediaFolder model) {
-            if (cache != null) {
-                cache.Remove(model.Id.ToString());
+        private void RemoveFromCache(MediaFolder model)
+        {
+            if (_cache != null)
+            {
+                _cache.Remove(model.Id.ToString());
                 RemoveStructureFromCache();
             }
         }
@@ -550,9 +618,10 @@ namespace Piranha.Repositories
         /// Removes the given model from cache.
         /// </summary>
         /// <param name="model">The model</param>
-        private void RemoveStructureFromCache() {
-            if (cache != null)
-                cache.Remove(MEDIA_STRUCTURE);
+        private void RemoveStructureFromCache()
+        {
+            if (_cache != null)
+                _cache.Remove(MEDIA_STRUCTURE);
         }
 
         /// <summary>
@@ -563,22 +632,27 @@ namespace Piranha.Repositories
         /// <param name="height">Optional requested height</param>
         /// <param name="extension">Optional requested extension</param>
         /// <returns>The name</returns>
-        private string GetResourceName(Media media, int? width = null, int? height = null, string extension = null) {
+        private string GetResourceName(Media media, int? width = null, int? height = null, string extension = null)
+        {
             var filename = new FileInfo(media.Filename);
             var sb = new StringBuilder();
 
             sb.Append(media.Id);
             sb.Append("-");
 
-            if (width.HasValue) {
+            if (width.HasValue)
+            {
                 sb.Append(filename.Name.Replace(filename.Extension, "_"));
                 sb.Append(width);
 
-                if (height.HasValue) {
+                if (height.HasValue)
+                {
                     sb.Append("x");
                     sb.Append(height.Value);
                 }
-            } else {
+            }
+            else
+            {
                 sb.Append(filename.Name.Replace(filename.Extension, ""));
             }
 
@@ -597,15 +671,17 @@ namespace Piranha.Repositories
         /// <param name="height">Optional requested height</param>
         /// <param name="extension">Optional requested extension</param>
         /// <returns>The name</returns>
-        private string GetPublicUrl(Media media, int? width = null, int? height = null, string extension = null) {
+        private string GetPublicUrl(Media media, int? width = null, int? height = null, string extension = null)
+        {
             var name = GetResourceName(media, width, height, extension);
 
-            using (var config = new Config(api)) {
+            using (var config = new Config(_api))
+            {
                 var cdn = config.MediaCDN;
 
                 if (!string.IsNullOrWhiteSpace(cdn))
                     return cdn + name;
-                return storage.GetPublicUrl(name);
+                return _storage.GetPublicUrl(name);
             }
         }
     }
