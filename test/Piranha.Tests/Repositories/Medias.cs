@@ -214,8 +214,6 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void DeleteById() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
-                var media = api.Media.GetById(image4Id);
-
                 api.Media.Delete(image4Id);
             }
         }

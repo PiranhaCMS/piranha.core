@@ -32,16 +32,11 @@ namespace Piranha.Tests.Repositories
         #region Members
         private const string PARAM_1 = "MyFirstParam";
         private const string PARAM_2 = "MySecondParam";
-        private const string PARAM_3 = "MyThirdParam";
         private const string PARAM_4 = "MyFourthParam";
         private const string PARAM_5 = "MyFifthParam";
 
         private Guid PARAM_1_ID = Guid.NewGuid();
         private string PARAM_1_VALUE = "My first value";
-
-        private const string CUSTOM_STRING_PARAM = "CustomStringParam";
-        private const string CUSTOM_BOOL_PARAM = "CustomBoolParam";
-        private const string CUSTOM_OBJECT_PARAM = "CustomObjectParam";
         protected ICache cache;
         #endregion
 

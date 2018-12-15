@@ -64,7 +64,6 @@ namespace Piranha.Areas.Manager.Controllers
         [Authorize(Policy = Permission.Pages)]
         public ViewResult ListSite(Guid? siteId, string pageId = null) {
             var model = Models.PageListModel.Get(api, siteId, pageId);
-            var defaultSite = api.Sites.GetDefault();
 
             // Store a cookie on our currently selected site
             if (siteId.HasValue)

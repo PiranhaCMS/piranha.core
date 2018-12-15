@@ -231,7 +231,6 @@ namespace Piranha.Areas.Manager.Services
                 if (region is PageEditRegion) {
                     if (!modelRegions.ContainsKey(region.Id))
                         modelRegions[region.Id] = service.CreateDynamicRegion(type, region.Id);
-                        //modelRegions[region.Id] = Piranha.Models.DynamicSiteContent.CreateRegion(api, dest.TypeId, region.Id);
 
                     var reg = (PageEditRegion)region;
 

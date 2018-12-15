@@ -33,7 +33,6 @@ namespace Piranha.Tests.Repositories
         #region Members
         private const string TAG_1 = "My First Tag";
         private const string TAG_2 = "My Second Tag";
-        private const string TAG_3 = "My Third Tag";
         private const string TAG_4 = "My Fourth Tag";
         private const string TAG_5 = "My Fifth Tag";
         private const string TAG_6 = "My Sixth Tag";

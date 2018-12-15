@@ -32,7 +32,6 @@ namespace Piranha.Tests.Repositories
     {
         private const string SITE_1 = "MyFirstSite";
         private const string SITE_2 = "MySecondSite";
-        private const string SITE_3 = "MyThirdSite";
         private const string SITE_4 = "MyFourthSite";
         private const string SITE_5 = "MyFifthSite";
         private const string SITE_6 = "MySixthSite";
