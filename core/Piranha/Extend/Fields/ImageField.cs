@@ -40,7 +40,9 @@ namespace Piranha.Extend.Fields
         public static implicit operator string(ImageField image)
         {
             if (image.Media != null)
+            {
                 return image.Media.PublicUrl;
+            }
             return "";
         }
 
@@ -54,7 +56,9 @@ namespace Piranha.Extend.Fields
         public string Resize(IApi api, int width, int? height = null)
         {
             if (Id.HasValue)
+            {
                 return api.Media.EnsureVersion(Id.Value, width, height);
+            }
             return null;
         }
     }

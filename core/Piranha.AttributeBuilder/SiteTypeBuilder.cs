@@ -121,11 +121,14 @@ namespace Piranha.AttributeBuilder
 
                     // First add sorted regions
                     foreach (var regionType in regionTypes.Where(t => t.Item1.HasValue))
+                    {
                         siteType.Regions.Add(regionType.Item2);
+                    }
                     // Then add the unsorted regions
                     foreach (var regionType in regionTypes.Where(t => !t.Item1.HasValue))
+                    {
                         siteType.Regions.Add(regionType.Item2);
-
+                    }
                     return siteType;
                 }
             }

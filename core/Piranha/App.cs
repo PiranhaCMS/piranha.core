@@ -42,22 +42,22 @@ namespace Piranha
         /// <summary>
         /// The currently registered blocks.
         /// </summary>
-        private AppBlockList _blocks;
+        private readonly AppBlockList _blocks;
 
         /// <summary>
         /// The currently registered fields.
         /// </summary>
-        private AppFieldList _fields;
+        private readonly AppFieldList _fields;
 
         /// <summary>
         /// The currently registered modules.
         /// </summary>
-        private AppModuleList _modules;
+        private readonly AppModuleList _modules;
 
         /// <summary>
         /// The currently registered media types.
         /// </summary>
-        private MediaManager _mediaTypes;
+        private readonly MediaManager _mediaTypes;
 
         /// <summary>
         /// The application object mapper.
@@ -72,22 +72,22 @@ namespace Piranha
         /// <summary>
         /// The currently registered serializers.
         /// </summary>
-        private SerializerManager _serializers;
+        private readonly SerializerManager _serializers;
 
         /// <summary>
         /// The currently registered content types.
         /// </summary>
-        private ContentTypeManager _contentTypes;
+        private readonly ContentTypeManager _contentTypes;
 
         /// <summary>
         /// The currently registered hooks.
         /// </summary>
-        private HookManager _hooks;
+        private readonly HookManager _hooks;
 
         /// <summary>
         /// The currently registered permissions;
         /// </summary>
-        private PermissionManager _permissions;
+        private readonly PermissionManager _permissions;
 
         /// <summary>
         /// The current cache level.

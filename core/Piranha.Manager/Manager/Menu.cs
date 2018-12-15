@@ -18,13 +18,11 @@ namespace Piranha.Manager
     /// </summary>
     public static class Menu
     {
-        #region Inner classes
         /// <summary>
         /// An item in the manager menu.
         /// </summary>
         public class MenuItem
         {
-            #region Properties
             /// <summary>
             /// Gets/sets the internal id.
             /// </summary>
@@ -63,15 +61,7 @@ namespace Piranha.Manager
             /// <summary>
             /// Gets/sets the available items.
             /// </summary>
-            public MenuItemList Items { get; set; }
-            #endregion
-
-            /// <summary>
-            /// Default constructor.
-            /// </summary>
-            public MenuItem() {
-                Items = new MenuItemList();
-            }
+            public MenuItemList Items { get; set; } = new MenuItemList();
         }
 
         public class MenuItemList : List<MenuItem>
@@ -80,43 +70,56 @@ namespace Piranha.Manager
             /// Gets the menu item with the given internal id.
             /// </summary>
             public MenuItem this[string internalId] {
-                get {
+                get 
+                {
                     return this.FirstOrDefault(i => i.InternalId == internalId);
                 }
             }
         }
-        #endregion
 
         /// <summary>
         /// The basic manager menu.
         /// </summary>
-        public static MenuItemList Items = new MenuItemList() {
-            new MenuItem() {
-                InternalId = "Content", Name = "Content", Css = "fas fa-pencil-alt", Items = new MenuItemList() {
-                    new MenuItem() {
+        public static MenuItemList Items = new MenuItemList 
+        {
+            new MenuItem
+            {
+                InternalId = "Content", Name = "Content", Css = "fas fa-pencil-alt", Items = new MenuItemList
+                {
+                    new MenuItem
+                    {
                         InternalId = "Pages", Name = "Pages", Controller = "Page", Action = "List", Policy = Permission.Pages, Css = "fas fa-copy"
                     },
-                    new MenuItem() {
+                    new MenuItem
+                    {
                         InternalId = "Media", Name = "Media", Controller = "Media", Action = "List", Policy = Permission.Media, Css = "fas fa-images"
                     }
                 }
             },
-            new MenuItem() {
-                InternalId = "Settings", Name = "Settings", Css = "fas fa-wrench", Items = new MenuItemList {
-                    new MenuItem() {
+            new MenuItem
+            {
+                InternalId = "Settings", Name = "Settings", Css = "fas fa-wrench", Items = new MenuItemList
+                {
+                    new MenuItem
+                    {
                         InternalId = "Aliases", Name = "Aliases", Controller = "Alias", Action = "List", Policy = Permission.Aliases, Css = "fas fa-random"
                     },
-                    new MenuItem() {
+                    new MenuItem
+                    {
                         InternalId = "Sites", Name = "Sites", Controller = "Site", Action = "List", Policy = Permission.Sites, Css = "fas fa-globe"
                     }
                 }
             },
-            new MenuItem() {
-                InternalId = "System", Name = "System", Css = "fas fa-cog", Items = new MenuItemList()  {
-                    new MenuItem() {
+            new MenuItem
+            {
+                InternalId = "System", Name = "System", Css = "fas fa-cog", Items = new MenuItemList
+                {
+                    new MenuItem
+                    {
                         InternalId = "Config", Name = "Config", Controller = "Config", Action = "Edit", Policy = Permission.Config, Css = "fas fa-cogs"
                     },
-                    new MenuItem() {
+                    new MenuItem
+                    {
                         InternalId = "Modules", Name = "Modules", Controller = "Module", Action = "List", Policy = Permission.Config, Css = "fas fa-code-branch"
                     }
                 }

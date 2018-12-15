@@ -85,12 +85,14 @@ namespace Piranha.AspNetCore.Identity.Models
             foreach (var selected in SelectedClaims)
             {
                 if (!claims.Any(c => c.ClaimType == selected))
+                {
                     add.Add(new IdentityRoleClaim<Guid>()
                     {
                         RoleId = role.Id,
                         ClaimType = selected,
                         ClaimValue = selected
                     });
+                }
             }
 
             db.RoleClaims.RemoveRange(delete);

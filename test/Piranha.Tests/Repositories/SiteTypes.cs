@@ -19,7 +19,8 @@ namespace Piranha.Tests.Repositories
     [Collection("Integration tests")]
     public class SiteTypesCached : SiteTypes
     {
-        protected override void Init() {
+        protected override void Init() 
+        {
             cache = new Cache.MemCache();
 
             base.Init();
@@ -29,16 +30,20 @@ namespace Piranha.Tests.Repositories
     [Collection("Integration tests")]
     public class SiteTypes : BaseTests
     {
-        #region Members
         protected ICache cache;
-        private List<SiteType> siteTypes = new List<SiteType>() {
-            new SiteType() {
+        private readonly List<SiteType> siteTypes = new List<SiteType> 
+        {
+            new SiteType
+            {
                 Id = "MyFirstType",
-                Regions = new List<RegionType>() {
-                    new RegionType() {
+                Regions = new List<RegionType> 
+                {
+                    new RegionType
+                    {
                         Id = "Body",
-                        Fields = new List<FieldType>() {
-                            new FieldType() {
+                        Fields = new List<FieldType> 
+                        {
+                            new FieldType {
                                 Id = "Default",
                                 Type = "Html"
                             }
@@ -46,13 +51,18 @@ namespace Piranha.Tests.Repositories
                     }
                 }
             },
-            new SiteType() {
+            new SiteType
+            {
                 Id = "MySecondType",
-                Regions = new List<RegionType>() {
-                    new RegionType() {
+                Regions = new List<RegionType>
+                {
+                    new RegionType
+                    {
                         Id = "Body",
-                        Fields = new List<FieldType>() {
-                            new FieldType() {
+                        Fields = new List<FieldType>
+                        {
+                            new FieldType
+                            {
                                 Id = "Default",
                                 Type = "Text"
                             }
@@ -60,13 +70,18 @@ namespace Piranha.Tests.Repositories
                     }
                 }
             },
-            new SiteType() {
+            new SiteType
+            {
                 Id = "MyThirdType",
-                Regions = new List<RegionType>() {
-                    new RegionType() {
+                Regions = new List<RegionType>
+                {
+                    new RegionType
+                    {
                         Id = "Body",
-                        Fields = new List<FieldType>() {
-                            new FieldType() {
+                        Fields = new List<FieldType>
+                        {
+                            new FieldType
+                            {
                                 Id = "Default",
                                 Type = "Image"
                             }
@@ -74,13 +89,18 @@ namespace Piranha.Tests.Repositories
                     }
                 }
             },
-            new SiteType() {
+            new SiteType
+            {
                 Id = "MyFourthType",
-                Regions = new List<RegionType>() {
-                    new RegionType() {
+                Regions = new List<RegionType>
+                {
+                    new RegionType
+                    {
                         Id = "Body",
-                        Fields = new List<FieldType>() {
-                            new FieldType() {
+                        Fields = new List<FieldType>
+                        {
+                            new FieldType
+                            {
                                 Id = "Default",
                                 Type = "String"
                             }
@@ -88,13 +108,18 @@ namespace Piranha.Tests.Repositories
                     }
                 }
             },
-            new SiteType() {
+            new SiteType
+            {
                 Id = "MyFifthType",
-                Regions = new List<RegionType>() {
-                    new RegionType() {
+                Regions = new List<RegionType>
+                {
+                    new RegionType
+                    {
                         Id = "Body",
-                        Fields = new List<FieldType>() {
-                            new FieldType() {
+                        Fields = new List<FieldType>
+                        {
+                            new FieldType
+                            {
                                 Id = "Default",
                                 Type = "Text"
                             }
@@ -103,42 +128,53 @@ namespace Piranha.Tests.Repositories
                 }
             }
         };
-        #endregion
 
-        protected override void Init() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+        protected override void Init() 
+        {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache))
+            {
                 api.SiteTypes.Save(siteTypes[0]);
                 api.SiteTypes.Save(siteTypes[3]);
                 api.SiteTypes.Save(siteTypes[4]);
             }
         }
 
-        protected override void Cleanup() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+        protected override void Cleanup()
+        {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache))
+            {
                 var siteTypes = api.SiteTypes.GetAll();
 
                 foreach (var p in siteTypes)
+                {
                     api.SiteTypes.Delete(p);
+                }
             }
         }
 
         [Fact]
-        public void IsCached() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+        public void IsCached()
+        {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache))
+            {
                 Assert.Equal(this.GetType() == typeof(SiteTypesCached), api.IsCached);
             }
         }        
 
         [Fact]
-        public void Add() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+        public void Add()
+        {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache))
+            {
                 api.SiteTypes.Save(siteTypes[1]);
             }
         }
 
         [Fact]
-        public void GetAll() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+        public void GetAll()
+        {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache))
+            {
                 var models = api.SiteTypes.GetAll();
 
                 Assert.NotNull(models);
@@ -147,8 +183,10 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetNoneById() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+        public void GetNoneById()
+        {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache))
+            {
                 var none = api.SiteTypes.GetById("none-existing-type");
 
                 Assert.Null(none);
@@ -157,8 +195,10 @@ namespace Piranha.Tests.Repositories
 
 
         [Fact]
-        public void GetById() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+        public void GetById()
+        {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache))
+            {
                 var model = api.SiteTypes.GetById(siteTypes[0].Id);
 
                 Assert.NotNull(model);
@@ -167,8 +207,10 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void Update() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+        public void Update()
+        {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache))
+            {
                 var model = api.SiteTypes.GetById(siteTypes[0].Id);
 
                 Assert.Null(model.Title);
@@ -180,8 +222,10 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void Delete() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+        public void Delete()
+        {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache))
+            {
                 var model = api.SiteTypes.GetById(siteTypes[3].Id);
 
                 Assert.NotNull(model);
@@ -191,8 +235,10 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void DeleteById() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+        public void DeleteById()
+        {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache))
+            {
                 var model = api.SiteTypes.GetById(siteTypes[4].Id);
 
                 Assert.NotNull(model);

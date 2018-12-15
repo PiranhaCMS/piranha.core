@@ -377,7 +377,7 @@ namespace Piranha.Repositories
                                     if (version == null) {
                                         var info = new FileInfo(media.Filename);
 
-                                        version = new MediaVersion() {
+                                        version = new MediaVersion {
                                             Id = Guid.NewGuid(),
                                             MediaId = media.Id,
                                             Size = output.Length,

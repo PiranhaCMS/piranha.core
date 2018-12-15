@@ -120,7 +120,9 @@ namespace Piranha.AttributeBuilder
                     }
                     // Skip regions without fields.
                     if (regionType.Fields.Count == 0)
+                    {
                         return null;
+                    }
                 }
                 return new Tuple<int?, RegionType>(sortOrder, regionType);
             }
