@@ -41,8 +41,7 @@ namespace Piranha.AspNetCore
                 var response = ArchiveRouter.Invoke(api, url, siteId);
                 if (response != null)
                 {
-                    if (_logger != null)
-                        _logger.LogInformation($"Found archive\n  Route: {response.Route}\n  Params: {response.QueryString}");
+                    _logger?.LogInformation($"Found archive\n  Route: {response.Route}\n  Params: {response.QueryString}");
 
                     service.PageId = response.PageId;
                     context.Request.Path = new PathString(response.Route);

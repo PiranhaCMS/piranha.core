@@ -20,7 +20,8 @@ namespace Piranha.Areas.Manager.Controllers
         /// manager area.
         /// </summary>
         [Route("manager")]
-        public IActionResult Index() {
+        public IActionResult Index()
+        {
             return RedirectToAction("List", "Page");
         }
     }

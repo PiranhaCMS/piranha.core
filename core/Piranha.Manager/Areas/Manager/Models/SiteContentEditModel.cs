@@ -8,9 +8,7 @@
  * 
  */
 
-using System;
 using System.Collections.Generic;
-using Piranha.Manager;
 
 namespace Piranha.Areas.Manager.Models
 {
@@ -27,13 +25,6 @@ namespace Piranha.Areas.Manager.Models
         /// <summary>
         /// Gets/sets the available regions.
         /// </summary>
-        public IList<PageEditRegionBase> Regions { get; set; }
-
-         /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public SiteContentEditModel() {
-            Regions = new List<PageEditRegionBase>();
-        }  
+        public IList<PageEditRegionBase> Regions { get; set; } = new List<PageEditRegionBase>();
     }
 }

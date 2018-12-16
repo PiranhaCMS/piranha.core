@@ -48,7 +48,9 @@ namespace Piranha.AspNetCore
         public MiddlewareBase(RequestDelegate next, ILoggerFactory factory) : this(next)
         {
             if (factory != null)
+            {
                 _logger = factory.CreateLogger(this.GetType().FullName);
+            }
         }
 
         /// <summary>
@@ -69,7 +71,9 @@ namespace Piranha.AspNetCore
         {
             var values = context.Request.Query["piranha_handled"];
             if (values.Count > 0)
+            {
                 return values[0] == "true";
+            }
             return false;
         }
     }

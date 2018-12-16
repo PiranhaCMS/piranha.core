@@ -8,9 +8,9 @@
  * 
  */
 
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 
 namespace Piranha.Areas.Manager.Models
 {
@@ -33,13 +33,6 @@ namespace Piranha.Areas.Manager.Models
         /// Gets/sets the uploaded file.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IFormFile> Uploads { get; set; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public MediaUploadModel() {
-            Uploads = new List<IFormFile>();
-        }
+        public IEnumerable<IFormFile> Uploads { get; set; } = new List<IFormFile>();
     }
 }

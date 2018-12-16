@@ -20,20 +20,14 @@ namespace Piranha.Areas.Manager.Models
         /// <summary>
         /// Gets/sets the available fieldsets.
         /// </summary>
-        public IList<PageEditFieldSet> FieldSets { get; set; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public PageEditRegionCollection() {
-            FieldSets = new List<PageEditFieldSet>();
-        }
+        public IList<PageEditFieldSet> FieldSets { get; set; } = new List<PageEditFieldSet>();
 
         /// <summary>
         /// Adds a field set to the region.
         /// </summary>
         /// <param name="fieldSet">The field set</param>
-        public override void Add(PageEditFieldSet fieldSet) {
+        public override void Add(PageEditFieldSet fieldSet)
+        {
             FieldSets.Add(fieldSet);
         }
     }

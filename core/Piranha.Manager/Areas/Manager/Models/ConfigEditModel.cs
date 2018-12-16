@@ -57,30 +57,24 @@ namespace Piranha.Areas.Manager.Models
         /// <summary>
         /// Gets/sets the cache config.
         /// </summary>
-        public CacheConfig Cache { get; set; }
+        public CacheConfig Cache { get; set; } = new CacheConfig();
 
         /// <summary>
         /// Gets/sets the general config.
         /// </summary>
-        public GeneralConfig General { get; set; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public ConfigEditModel() {
-            Cache = new CacheConfig();
-            General = new GeneralConfig();
-        }
+        public GeneralConfig General { get; set; } = new GeneralConfig();
 
         /// <summary>
         /// Gets the cache edit model.
         /// </summary>
         /// <param name="api">The current api</param>
         /// <returns>The model</returns>
-        public static ConfigEditModel Get(IApi api) {
+        public static ConfigEditModel Get(IApi api)
+        {
             var model = new ConfigEditModel();
 
-            using (var config = new Config(api)) {
+            using (var config = new Config(api))
+            {
                 model.Cache.PagesExpires = config.CacheExpiresPages;
                 model.Cache.PostsExpires = config.CacheExpiresPosts;
                 model.Cache.MediaCDN = config.MediaCDN;
@@ -96,8 +90,10 @@ namespace Piranha.Areas.Manager.Models
         /// Saves the current config model.
         /// </summary>
         /// <param name="api">The current api</param>
-        public void Save(IApi api) {
-            using (var config = new Config(api)) {
+        public void Save(IApi api)
+        {
+            using (var config = new Config(api))
+            {
                 config.CacheExpiresPages = Cache.PagesExpires;
                 config.CacheExpiresPosts = Cache.PostsExpires;
                 config.MediaCDN = Cache.MediaCDN;

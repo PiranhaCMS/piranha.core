@@ -25,17 +25,18 @@ namespace Piranha.Areas.Manager.Controllers
     public class PostController : ManagerAreaControllerBase
     {
         private const string COOKIE_SELECTEDSITE = "PiranhaManager_SelectedSite";
-        private readonly PostEditService editService;
-        private readonly IContentService<Data.Post, Data.PostField, Piranha.Models.PostBase> contentService;
+        private readonly PostEditService _editService;
+        private readonly IContentService<Data.Post, Data.PostField, Piranha.Models.PostBase> _contentService;
         private readonly IHubContext<Hubs.PreviewHub> _hub;
-        
+
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public PostController(IApi api, PostEditService editService, IContentServiceFactory factory, IHubContext<Hubs.PreviewHub> hub) : base(api) { 
-            this.editService = editService;
-            this.contentService = factory.CreatePostService();
+        public PostController(IApi api, PostEditService editService, IContentServiceFactory factory, IHubContext<Hubs.PreviewHub> hub) : base(api)
+        {
+            _editService = editService;
+            _contentService = factory.CreatePostService();
             _hub = hub;
         }
 
@@ -45,8 +46,9 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="id">The post id</param>
         [Route("manager/post/{id:Guid}")]
         [Authorize(Policy = Permission.PostsEdit)]
-        public IActionResult Edit(Guid id) {
-            return View(editService.GetById(id));
+        public IActionResult Edit(Guid id)
+        {
+            return View(_editService.GetById(id));
         }
 
         /// <summary>
@@ -56,19 +58,23 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="blogId">The blog id</param>
         [Route("manager/post/add/{type}/{blogId:Guid}")]
         [Authorize(Policy = Permission.PostsEdit)]
-        public IActionResult Add(string type, Guid blogId) {
-            var model = editService.Create(type, blogId);
+        public IActionResult Add(string type, Guid blogId)
+        {
+            var model = _editService.Create(type, blogId);
 
             return View("Edit", model);
         }
 
         [Route("manager/post/preview/{id:Guid}")]
         [Authorize(Policy = Permission.PagesEdit)]
-        public IActionResult Preview(Guid id) {
-            var post = api.Posts.GetById<Piranha.Models.PostInfo>(id);
+        public IActionResult Preview(Guid id)
+        {
+            var post = _api.Posts.GetById<Piranha.Models.PostInfo>(id);
 
             if (post != null)
+            {
                 return View("_Preview", new Models.PreviewModel { Id = id, Permalink = post.Permalink });
+            }
             return NotFound();
         }
 
@@ -79,23 +85,27 @@ namespace Piranha.Areas.Manager.Controllers
         [HttpPost]
         [Route("manager/post/save")]
         [Authorize(Policy = Permission.PostsSave)]
-        public async Task<IActionResult> Save(Models.PostEditModel model) {
+        public async Task<IActionResult> Save(Models.PostEditModel model)
+        {
             // Validate
-            if (string.IsNullOrWhiteSpace(model.Title)) {
+            if (string.IsNullOrWhiteSpace(model.Title))
+            {
                 return BadRequest();
             }
-            if (string.IsNullOrWhiteSpace(model.SelectedCategory)) {
+            if (string.IsNullOrWhiteSpace(model.SelectedCategory))
+            {
                 return BadRequest();
             }
 
-            var ret = editService.Save(model, out var alias);
+            var ret = _editService.Save(model, out var alias);
 
             // Save
-            if (ret) {
-                if (_hub != null)
-                    await _hub.Clients.All.SendAsync("Update", model.Id);
+            if (ret)
+            {
+                await _hub?.Clients.All.SendAsync("Update", model.Id);
 
                 if (!string.IsNullOrWhiteSpace(alias))
+                {
                     return Json(new
                     {
                         Location = Url.Action("Edit", new { id = model.Id }),
@@ -107,9 +117,14 @@ namespace Piranha.Areas.Manager.Controllers
                             PostId = model.Id
                         }
                     });
+                }
                 else
+                {
                     return Json(new { Location = Url.Action("Edit", new { id = model.Id }) });
-            } else {
+                }
+            }
+            else
+            {
                 return StatusCode(500);
             }
         }
@@ -121,7 +136,8 @@ namespace Piranha.Areas.Manager.Controllers
         [HttpPost]
         [Route("manager/post/publish")]
         [Authorize(Policy = Permission.PostsPublish)]
-        public IActionResult Publish(Models.PostEditModel model) {
+        public IActionResult Publish(Models.PostEditModel model)
+        {
             // Validate
             if (string.IsNullOrWhiteSpace(model.Title))
             {
@@ -133,13 +149,16 @@ namespace Piranha.Areas.Manager.Controllers
             }
 
             // Save
-            if (editService.Save(model, out var alias, true)) {
+            if (_editService.Save(model, out var alias, true))
+            {
                 return Json(new
                 {
                     Published = DateTime.Now.ToString("yyyy-MM-dd HH:mm"),
                     Location = Url.Action("Edit", new { id = model.Id })
                 });
-            } else {
+            }
+            else
+            {
                 return StatusCode(500);
             }
         }
@@ -151,17 +170,21 @@ namespace Piranha.Areas.Manager.Controllers
         [HttpPost]
         [Route("manager/post/unpublish")]
         [Authorize(Policy = Permission.PostsPublish)]
-        public IActionResult UnPublish(Models.PostEditModel model) {
-            if (editService.Save(model, out var alias, false)) {
+        public IActionResult UnPublish(Models.PostEditModel model)
+        {
+            if (_editService.Save(model, out var alias, false))
+            {
                 return Json(new
                 {
                     Unpublished = true,
                     Location = Url.Action("Edit", new { id = model.Id })
                 });
-            } else {
+            }
+            else
+            {
                 return StatusCode(500);
             }
-        }        
+        }
 
         /// <summary>
         /// Deletes the post with the given id.
@@ -169,18 +192,22 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="id">The unique id</param>
         [Route("manager/post/delete/{id:Guid}")]
         [Authorize(Policy = Permission.PostsDelete)]
-        public IActionResult Delete(Guid id) {
-            var post = api.Posts.GetById(id);
+        public IActionResult Delete(Guid id)
+        {
+            var post = _api.Posts.GetById(id);
 
-            if (post != null) {
-                api.Posts.Delete(post);
+            if (post != null)
+            {
+                _api.Posts.Delete(post);
 
                 SuccessMessage("The post has been deleted");
 
                 return RedirectToAction("Edit", "Page", new { id = post.BlogId });
-            } else {
+            }
+            else
+            {
                 ErrorMessage("The post could not be deleted");
-                return RedirectToAction("List", "Page", new { id = "" });                
+                return RedirectToAction("List", "Page", new { id = "" });
             }
         }
 
@@ -191,17 +218,20 @@ namespace Piranha.Areas.Manager.Controllers
         [HttpPost]
         [Route("manager/post/region")]
         [Authorize(Policy = Permission.Posts)]
-        public IActionResult AddRegion([FromBody]Models.PageRegionModel model) {
-            var postType = api.PostTypes.GetById(model.PageTypeId);
+        public IActionResult AddRegion([FromBody]Models.PageRegionModel model)
+        {
+            var postType = _api.PostTypes.GetById(model.PageTypeId);
 
-            if (postType != null) {
+            if (postType != null)
+            {
                 var regionType = postType.Regions.SingleOrDefault(r => r.Id == model.RegionTypeId);
 
-                if (regionType != null) {
-                    var region = contentService.CreateDynamicRegion(postType, model.RegionTypeId);
+                if (regionType != null)
+                {
+                    var region = _contentService.CreateDynamicRegion(postType, model.RegionTypeId);
 
-                    var editModel = (Models.PageEditRegionCollection)editService.CreateRegion(regionType, 
-                        new List<object>() { region });
+                    var editModel = (Models.PageEditRegionCollection)_editService.CreateRegion(regionType,
+                        new List<object> { region });
 
                     ViewData.TemplateInfo.HtmlFieldPrefix = $"Regions[{model.RegionIndex}].FieldSets[{model.ItemIndex}]";
                     return View("EditorTemplates/PageEditRegionItem", editModel.FieldSets[0]);
@@ -214,13 +244,15 @@ namespace Piranha.Areas.Manager.Controllers
         [HttpPost]
         [Route("manager/post/alias")]
         [Authorize(Policy = Permission.PostsEdit)]
-        public IActionResult AddAlias(Guid blogId, Guid postId, string alias, string redirect) {
+        public IActionResult AddAlias(Guid blogId, Guid postId, string alias, string redirect)
+        {
             // Get the blog page
-            var page = api.Pages.GetById(blogId);
+            var page = _api.Pages.GetById(blogId);
 
-            if (page != null) {
+            if (page != null)
+            {
                 // Create alias
-                Piranha.Manager.Utils.CreateAlias(api, page.SiteId, alias, redirect);
+                Piranha.Manager.Utils.CreateAlias(_api, page.SiteId, alias, redirect);
 
                 return Json("Ok");
             }
@@ -234,14 +266,17 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="blogId">The blog id</param>
         [Route("manager/post/modal/{siteId:Guid?}/{blogId:Guid?}")]
         [Authorize(Policy = Permission.Posts)]
-        public IActionResult Modal(Guid? siteId = null, Guid? blogId = null) {
+        public IActionResult Modal(Guid? siteId = null, Guid? blogId = null)
+        {
             if (!siteId.HasValue)
             {
                 var site = Request.Cookies[COOKIE_SELECTEDSITE];
                 if (!string.IsNullOrEmpty(site))
+                {
                     siteId = new Guid(site);
+                }
             }
-            return View(Models.PostModalModel.GetByBlogId(api, siteId, blogId));
-        }  
+            return View(Models.PostModalModel.GetByBlogId(_api, siteId, blogId));
+        }
     }
 }

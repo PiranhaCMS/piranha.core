@@ -8,12 +8,9 @@
  * 
  */
 
-using Piranha.Manager;
-using Piranha.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.IO;
-using System.Linq;
+using Piranha.Manager;
 
 namespace Piranha.Areas.Manager.Controllers
 {
@@ -31,8 +28,9 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         [Route("manager/config")]
         [Authorize(Policy = Permission.Config)]
-        public IActionResult Edit() {
-            return View(Models.ConfigEditModel.Get(api));
+        public IActionResult Edit()
+        {
+            return View(Models.ConfigEditModel.Get(_api));
         }
 
         /// <summary>
@@ -41,8 +39,9 @@ namespace Piranha.Areas.Manager.Controllers
         [HttpPost]
         [Route("manager/config/save")]
         [Authorize(Policy = Permission.ConfigEdit)]
-        public IActionResult Save(Models.ConfigEditModel model) {
-            model.Save(api);
+        public IActionResult Save(Models.ConfigEditModel model)
+        {
+            model.Save(_api);
 
             SuccessMessage("Updated the configuration.");
 

@@ -8,12 +8,9 @@
  * 
  */
 
-using Piranha.Manager;
-using Piranha.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.IO;
-using System.Linq;
+using Piranha.Manager;
 
 namespace Piranha.Areas.Manager.Controllers
 {
@@ -31,7 +28,8 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         [Route("manager/modules")]
         [Authorize(Policy = Permission.Config)]
-        public IActionResult List() {
+        public IActionResult List()
+        {
             return View("List", Models.ModuleListModel.Get());
         }
     }

@@ -9,10 +9,8 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Piranha.Manager;
 using Piranha.Models;
 
 namespace Piranha.Areas.Manager.Models
@@ -29,20 +27,18 @@ namespace Piranha.Areas.Manager.Models
         }
 
         public Sitemap Sitemap { get; set; }
-        public IEnumerable<SiteItem> Sites { get; set; }
+        public IEnumerable<SiteItem> Sites { get; set; } = new List<SiteItem>();
         public Guid SiteId { get; set; }
         public string SiteTitle { get; set; }
         public int ExpandedLevels { get; set; }
 
-        public PageModalModel() {
-            Sites = new List<SiteItem>();
-        }
-
-        public static PageModalModel GetBySiteId(IApi api, Guid? siteId = null) {
+        public static PageModalModel GetBySiteId(IApi api, Guid? siteId = null)
+        {
             var model = new PageModalModel();
 
             // Get default site if none is selected
-            if (!siteId.HasValue) {
+            if (!siteId.HasValue)
+            {
                 var site = api.Sites.GetDefault();
 
                 if (site != null)
@@ -52,7 +48,8 @@ namespace Piranha.Areas.Manager.Models
 
             // Get the sites available
             model.Sites = api.Sites.GetAll()
-                .Select(s => new SiteItem() {
+                .Select(s => new SiteItem
+                {
                     Id = s.Id,
                     Title = s.Title
                 }).OrderBy(s => s.Title).ToList();
@@ -60,16 +57,18 @@ namespace Piranha.Areas.Manager.Models
             // Get the current site title
             var currentSite = model.Sites.FirstOrDefault(s => s.Id == siteId.Value);
             if (currentSite != null)
+            {
                 model.SiteTitle = currentSite.Title;
+            }
 
             // Get the sitemap
             model.Sitemap = api.Sites.GetSitemap(siteId, true);
 
             // Gets the expanded levels from config
-            using (var config = new Config(api)) {
+            using (var config = new Config(api))
+            {
                 model.ExpandedLevels = config.ManagerExpandedSitemapLevels;
             }
-
             return model;
         }
     }

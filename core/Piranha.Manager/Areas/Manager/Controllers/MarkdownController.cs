@@ -22,8 +22,10 @@ namespace Piranha.Areas.Manager.Controllers
         /// <returns>The HTML value</returns>
         [HttpPost]
         [Route("manager/markdown")]
-        public IActionResult Transform([FromBody]string str) {
-            return Json(new {
+        public IActionResult Transform([FromBody]string str)
+        {
+            return Json(new
+            {
                 Body = App.Markdown.Transform(str)
             });
         }

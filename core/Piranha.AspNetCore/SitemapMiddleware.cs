@@ -47,8 +47,7 @@ namespace Piranha.AspNetCore
 
                 if (url.ToLower() == "/sitemap.xml")
                 {
-                    if (_logger != null)
-                        _logger.LogInformation($"Sitemap.xml requested, generating");
+                    _logger?.LogInformation($"Sitemap.xml requested, generating");
 
                     // Get the requested site by hostname
                     var siteId = service.Site.Id;
@@ -109,7 +108,9 @@ namespace Piranha.AspNetCore
                     var childUrls = GetPageUrls(api, child, baseUrl);
 
                     if (childUrls.Count > 0)
+                    {
                         urls.AddRange(childUrls);
+                    }
                 }
             }
             return urls;

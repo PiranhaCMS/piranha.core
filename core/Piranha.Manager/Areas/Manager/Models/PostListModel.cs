@@ -9,10 +9,8 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Piranha.Manager;
 using Piranha.Models;
 
 namespace Piranha.Areas.Manager.Models
@@ -33,31 +31,27 @@ namespace Piranha.Areas.Manager.Models
             public DateTime? Published { get; set; }
         }
 
-        public IEnumerable<PostListItem> Posts { get; set; }
-        public IEnumerable<PostType> PostTypes { get; set; }
-        public IEnumerable<PostType> CurrentPostTypes { get; set; }
-        public IEnumerable<Taxonomy> CurrentCategories { get; set; }
+        public IEnumerable<PostListItem> Posts { get; set; } = new List<PostListItem>();
+        public IEnumerable<PostType> PostTypes { get; set; } = new List<PostType>();
+        public IEnumerable<PostType> CurrentPostTypes { get; set; } = new List<PostType>();
+        public IEnumerable<Taxonomy> CurrentCategories { get; set; } = new List<Taxonomy>();
 
-        public PostListModel() {
-            Posts = new List<PostListItem>();
-            PostTypes = new List<PostType>();
-            CurrentPostTypes = new List<PostType>();
-            CurrentCategories = new List<Taxonomy>();
-        }
-
-        public static PostListModel GetByBlogId(IApi api, Guid blogId) {
-            var model = new PostListModel();
-
-            model.Posts = api.Posts.GetAll<PostInfo>(blogId)
-                .Select(p => new PostListItem() {
-                    Id = p.Id,
-                    TypeId = p.TypeId,
-                    Title = p.Title,
-                    CategoryId = p.Category.Id,
-                    Category = p.Category.Title,
-                    Published = p.Published
-                }).ToList();
-            model.PostTypes = api.PostTypes.GetAll();
+        public static PostListModel GetByBlogId(IApi api, Guid blogId)
+        {
+            var model = new PostListModel
+            {
+                Posts = api.Posts.GetAll<PostInfo>(blogId)
+                    .Select(p => new PostListItem
+                    {
+                        Id = p.Id,
+                        TypeId = p.TypeId,
+                        Title = p.Title,
+                        CategoryId = p.Category.Id,
+                        Category = p.Category.Title,
+                        Published = p.Published
+                    }).ToList(),
+                PostTypes = api.PostTypes.GetAll()
+            };
 
             // Filter out the currently used post types
             var typesId = model.Posts.Select(p => p.TypeId).Distinct();
@@ -67,7 +61,8 @@ namespace Piranha.Areas.Manager.Models
             var categoriesId = model.Posts.Select(p => p.CategoryId).Distinct();
             model.CurrentCategories = api.Categories.GetAll(blogId)
                 .Where(c => categoriesId.Contains(c.Id))
-                .Select(c => new Taxonomy() {
+                .Select(c => new Taxonomy
+                {
                     Id = c.Id,
                     Title = c.Title
                 });
@@ -76,10 +71,13 @@ namespace Piranha.Areas.Manager.Models
             model.Posts = model.Posts.Where(p => !p.Published.HasValue)
                 .Concat(model.Posts.Where(p => p.Published.HasValue));
 
-            foreach (var post in model.Posts) {
+            foreach (var post in model.Posts)
+            {
                 var type = api.PostTypes.GetById(post.TypeId);
                 if (type != null)
+                {
                     post.TypeName = type.Title;
+                }
             }
             return model;
         }

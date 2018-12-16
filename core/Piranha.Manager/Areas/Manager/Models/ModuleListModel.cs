@@ -15,8 +15,10 @@ namespace Piranha.Areas.Manager.Models
         /// Get the model with all the modules loaded into it
         /// </summary>
         /// <returns></returns>
-        public static ModuleListModel Get() {
-            return new ModuleListModel() {
+        public static ModuleListModel Get()
+        {
+            return new ModuleListModel
+            {
                 Modules = App.Modules
                     .Select(m => m.Instance)
                     .GroupBy(m => m.Author)

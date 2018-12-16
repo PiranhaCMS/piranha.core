@@ -8,18 +8,16 @@
  * 
  */
 
-using Piranha.Manager;
-using Piranha.Models;
+using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.IO;
-using System.Linq;
+using Piranha.Manager;
+using Piranha.Models;
 
 namespace Piranha.Areas.Manager.Controllers
 {
     [Area("Manager")]
-    public class AliasController : ManagerAreaControllerBase 
+    public class AliasController : ManagerAreaControllerBase
     {
         private const string COOKIE_SELECTEDSITE = "PiranhaManager_SelectedSite";
 
@@ -34,18 +32,21 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         [Route("manager/aliases/{siteId:Guid?}")]
         [Authorize(Policy = Permission.Aliases)]
-        public IActionResult List(Guid? siteId = null) {
+        public IActionResult List(Guid? siteId = null)
+        {
             if (!siteId.HasValue)
             {
                 var site = Request.Cookies[COOKIE_SELECTEDSITE];
                 if (!string.IsNullOrEmpty(site))
+                {
                     siteId = new Guid(site);
+                }
             }
             else
             {
                 Response.Cookies.Append(COOKIE_SELECTEDSITE, siteId.ToString());
             }
-            return View("List", Models.AliasListModel.Get(api, siteId));
+            return View("List", Models.AliasListModel.Get(_api, siteId));
         }
 
         /// <summary>
@@ -54,18 +55,25 @@ namespace Piranha.Areas.Manager.Controllers
         [Route("manager/alias/add")]
         [HttpPost]
         [Authorize(Policy = Permission.AliasesEdit)]
-        public IActionResult Add(Models.AliasEditModel model) {
-            try {
-                api.Aliases.Save(new Data.Alias() {
+        public IActionResult Add(Models.AliasEditModel model)
+        {
+            try
+            {
+                _api.Aliases.Save(new Data.Alias()
+                {
                     SiteId = model.SiteId,
                     AliasUrl = model.AliasUrl,
                     RedirectUrl = model.RedirectUrl,
                     Type = model.IsPermanent ? RedirectType.Permanent : RedirectType.Temporary
                 });
                 SuccessMessage("The new alias has been added");
-            } catch (ArgumentException) {
+            }
+            catch (ArgumentException)
+            {
                 ErrorMessage("Both AliasUrl and RedirectUrl are mandatory");
-            } catch {
+            }
+            catch
+            {
                 ErrorMessage("There already exists an alias with the given url");
             }
             return RedirectToAction("List", new { siteId = model.SiteId });
@@ -76,11 +84,13 @@ namespace Piranha.Areas.Manager.Controllers
         /// </summary>
         [Route("manager/alias/delete/{id:Guid}")]
         [Authorize(Policy = Permission.AliasesDelete)]
-        public IActionResult Delete(Guid id) {
-            var alias = api.Aliases.GetById(id);
+        public IActionResult Delete(Guid id)
+        {
+            var alias = _api.Aliases.GetById(id);
 
-            if (alias != null) {
-                api.Aliases.Delete(alias.Id);
+            if (alias != null)
+            {
+                _api.Aliases.Delete(alias.Id);
                 SuccessMessage("The alias has been deleted");
                 return RedirectToAction("List", new { siteId = alias.SiteId });
             }
@@ -89,4 +99,3 @@ namespace Piranha.Areas.Manager.Controllers
         }
     }
 }
- 

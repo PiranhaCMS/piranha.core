@@ -29,7 +29,8 @@ namespace Piranha.Areas.Manager.Models
             /// <summary>
             /// Default constructor.
             /// </summary>
-            public PageStructureItem() {
+            public PageStructureItem()
+            {
                 Children = new List<PageStructureItem>();
             }
         }
@@ -37,13 +38,6 @@ namespace Piranha.Areas.Manager.Models
         /// <summary>
         /// Gets/sets the structure items.
         /// </summary>
-        public IList<PageStructureItem> Items { get; set; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public PageStructureModel() {
-            Items = new List<PageStructureItem>();
-        }
+        public IList<PageStructureItem> Items { get; set; } = new List<PageStructureItem>();
     }
 }

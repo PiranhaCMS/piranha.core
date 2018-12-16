@@ -8,8 +8,6 @@
  * 
  */
 
-using System.Collections.Generic;
-
 namespace Piranha.Areas.Manager.Models
 {
     public class ContentBlockModel
@@ -20,7 +18,8 @@ namespace Piranha.Areas.Manager.Models
         public bool IncludeGroups { get; set; }
         public string GroupType { get; set; }
 
-        public ContentBlockModel() {
+        public ContentBlockModel()
+        {
             IncludeGroups = true;
         }
     }

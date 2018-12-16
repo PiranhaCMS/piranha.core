@@ -8,9 +8,6 @@
  * 
  */
 
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-
 namespace Piranha.Areas.Manager.Controllers
 {
     public abstract class ManagerAreaControllerBase : MessageControllerBase
@@ -18,14 +15,15 @@ namespace Piranha.Areas.Manager.Controllers
         /// <summary>
         /// The current api
         /// </summary>
-        protected readonly IApi api;
+        protected readonly IApi _api;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public ManagerAreaControllerBase(IApi api) {
-            this.api = api;
+        public ManagerAreaControllerBase(IApi api)
+        {
+            _api = api;
         }
     }
 }

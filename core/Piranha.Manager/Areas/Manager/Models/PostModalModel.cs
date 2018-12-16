@@ -43,36 +43,35 @@ namespace Piranha.Areas.Manager.Models
             public string Slug { get; set; }
         }
 
-        public IEnumerable<PostModalItem> Posts { get; set; }
-        public IEnumerable<SiteItem> Sites { get; set; }
-        public IEnumerable<BlogItem> Blogs { get; set; }
+        public IEnumerable<PostModalItem> Posts { get; set; } = new List<PostModalItem>();
+        public IEnumerable<SiteItem> Sites { get; set; } = new List<SiteItem>();
+        public IEnumerable<BlogItem> Blogs { get; set; } = new List<BlogItem>();
         public Guid SiteId { get; set; }
         public Guid BlogId { get; set; }
         public string SiteTitle { get; set; }
         public string BlogTitle { get; set; }
         public string BlogSlug { get; set; }
 
-        public PostModalModel() {
-            Posts = new List<PostModalItem>();
-            Sites = new List<SiteItem>();
-            Blogs = new List<BlogItem>();
-        }
-
-        public static PostModalModel GetByBlogId(IApi api, Guid? siteId = null, Guid? blogId = null) {
+        public static PostModalModel GetByBlogId(IApi api, Guid? siteId = null, Guid? blogId = null)
+        {
             var model = new PostModalModel();
 
             // Get default site if none is selected
-            if (!siteId.HasValue) {
+            if (!siteId.HasValue)
+            {
                 var site = api.Sites.GetDefault();
 
                 if (site != null)
+                {
                     siteId = site.Id;
+                }
             }
             model.SiteId = siteId.Value;
 
             // Get the sites available
             model.Sites = api.Sites.GetAll()
-                .Select(s => new SiteItem() {
+                .Select(s => new SiteItem
+                {
                     Id = s.Id,
                     Title = s.Title
                 }).OrderBy(s => s.Title).ToList();
@@ -80,24 +79,30 @@ namespace Piranha.Areas.Manager.Models
             // Get the current site title
             var currentSite = model.Sites.FirstOrDefault(s => s.Id == siteId.Value);
             if (currentSite != null)
+            {
                 model.SiteTitle = currentSite.Title;
+            }
 
             // Get the blogs available
             model.Blogs = api.Pages.GetAllBlogs(siteId.Value)
-                .Select(p => new BlogItem() {
+                .Select(p => new BlogItem
+                {
                     Id = p.Id,
                     Title = p.Title,
                     Slug = p.Slug
                 }).OrderBy(p => p.Title).ToList();
 
-            if (model.Blogs.Count() > 0) {
-                if (!blogId.HasValue) {
+            if (model.Blogs.Count() > 0)
+            {
+                if (!blogId.HasValue)
+                {
                     // Select the first blog
                     blogId = model.Blogs.First().Id;
                 }
 
                 var blog = model.Blogs.FirstOrDefault(b => b.Id == blogId.Value);
-                if (blog != null) {
+                if (blog != null)
+                {
                     model.BlogId = blog.Id;
                     model.BlogTitle = blog.Title;
                     model.BlogSlug = blog.Slug;
@@ -105,7 +110,8 @@ namespace Piranha.Areas.Manager.Models
 
                 // Get the available posts
                 model.Posts = api.Posts.GetAll(blogId.Value)
-                    .Select(p => new PostModalItem() {
+                    .Select(p => new PostModalItem
+                    {
                         Id = p.Id,
                         Title = p.Title,
                         Permalink = "/" + model.BlogSlug + "/" + p.Slug,

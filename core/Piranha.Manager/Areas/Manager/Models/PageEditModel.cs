@@ -8,11 +8,7 @@
  * 
  */
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Piranha.Manager;
 
 namespace Piranha.Areas.Manager.Models
 {
@@ -29,24 +25,16 @@ namespace Piranha.Areas.Manager.Models
         /// <summary>
         /// Gets/sets the available blocks.
         /// </summary>
-        public new IList<ContentEditBlock> Blocks { get; set; }
+        public new IList<ContentEditBlock> Blocks { get; set; } = new List<ContentEditBlock>();
 
         /// <summary>
         /// Gets/sets the available regions.
         /// </summary>
-        public IList<PageEditRegionBase> Regions { get; set; }
+        public IList<PageEditRegionBase> Regions { get; set; } = new List<PageEditRegionBase>();
 
         /// <summary>
         /// Gets/sets the page content type.
         /// </summary>
         public Runtime.AppContentType PageContentType { get; set; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public PageEditModel() {
-            Blocks = new List<ContentEditBlock>();
-            Regions = new List<PageEditRegionBase>();
-        }
     }
 }

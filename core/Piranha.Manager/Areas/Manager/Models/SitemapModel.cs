@@ -21,7 +21,7 @@ namespace Piranha.Areas.Manager.Models
         /// <summary>
         /// Gets/sets the sitemap.
         /// </summary>
-        public IList<Piranha.Models.SitemapItem> Sitemap { get; set; }
+        public IList<SitemapItem> Sitemap { get; set; }
 
         /// <summary>
         /// Gets/sets the optional site id.

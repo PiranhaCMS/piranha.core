@@ -16,17 +16,8 @@ namespace Piranha.Areas.Manager.Models
 {
     public class SiteEditModel
     {
-        public Data.Site Site { get; set; }
-        public IEnumerable<SiteType> SiteTypes { get; set; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public SiteEditModel() 
-        {
-            Site = new Data.Site();
-            SiteTypes = new List<SiteType>();
-        }
+        public Data.Site Site { get; set; } = new Data.Site();
+        public IEnumerable<SiteType> SiteTypes { get; set; } = new List<SiteType>();
 
         public static SiteEditModel Create(IApi api)
         {
@@ -36,7 +27,7 @@ namespace Piranha.Areas.Manager.Models
             };
         }
 
-        public static SiteEditModel GetById(IApi api, Guid id) 
+        public static SiteEditModel GetById(IApi api, Guid id)
         {
             var model = new SiteEditModel
             {
@@ -46,9 +37,9 @@ namespace Piranha.Areas.Manager.Models
             return model;
         }
 
-        public bool Save(IApi api) 
+        public bool Save(IApi api)
         {
-            api.Sites.Save(this.Site);
+            api.Sites.Save(Site);
 
             return true;
         }

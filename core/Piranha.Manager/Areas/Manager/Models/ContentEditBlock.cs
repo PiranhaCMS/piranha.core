@@ -40,10 +40,6 @@ namespace Piranha.Areas.Manager.Models
         /// </summary>
         public Extend.Block Value { get; set; }
 
-        public IList<ContentEditBlock> Items { get; set; }
-
-        public ContentEditBlock() {
-            Items = new List<ContentEditBlock>();
-        }
-    }    
+        public IList<ContentEditBlock> Items { get; set; } = new List<ContentEditBlock>();
+    }
 }

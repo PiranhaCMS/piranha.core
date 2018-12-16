@@ -41,8 +41,7 @@ namespace Piranha.AspNetCore
                 var response = AliasRouter.Invoke(api, url, service.Site.Id);
                 if (response != null)
                 {
-                    if (_logger != null)
-                        _logger.LogInformation($"Found alias\n  Alias: {url}\n  Redirect: {response.RedirectUrl}");
+                    _logger?.LogInformation($"Found alias\n  Alias: {url}\n  Redirect: {response.RedirectUrl}");
 
                     context.Response.Redirect(response.RedirectUrl, response.RedirectType == Models.RedirectType.Permanent);
                     return;

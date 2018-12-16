@@ -44,15 +44,13 @@ namespace Piranha.AspNetCore
                 var response = PageRouter.Invoke(api, url, siteId);
                 if (response != null)
                 {
-                    if (_logger != null)
-                        _logger.LogInformation($"Found page\n  Route: {response.Route}\n  Params: {response.QueryString}");
+                    _logger?.LogInformation($"Found page\n  Route: {response.Route}\n  Params: {response.QueryString}");
 
                     if (!response.IsPublished)
                     {
                         if (!context.User.HasClaim(Security.Permission.PagePreview, Security.Permission.PagePreview))
                         {
-                            if (_logger != null)
-                                _logger.LogInformation($"User not authorized to preview unpublished page");
+                            _logger?.LogInformation($"User not authorized to preview unpublished page");
                             authorized = false;
                         }
                     }
@@ -71,8 +69,7 @@ namespace Piranha.AspNetCore
                                 // Only use caching for published pages
                                 if (response.IsPublished && expires > 0)
                                 {
-                                    if (_logger != null)
-                                        _logger.LogInformation("Caching enabled. Setting MaxAge, LastModified & ETag");
+                                    _logger?.LogInformation("Caching enabled. Setting MaxAge, LastModified & ETag");
 
                                     headers.CacheControl = new CacheControlHeaderValue
                                     {
@@ -94,8 +91,7 @@ namespace Piranha.AspNetCore
 
                             if (HttpCaching.IsCached(context, response.CacheInfo))
                             {
-                                if (_logger != null)
-                                    _logger.LogInformation("Client has current version. Returning NotModified");
+                                _logger?.LogInformation("Client has current version. Returning NotModified");
 
                                 context.Response.StatusCode = 304;
                                 return;
@@ -113,8 +109,7 @@ namespace Piranha.AspNetCore
                         }
                         else
                         {
-                            if (_logger != null)
-                                _logger.LogInformation($"Redirecting to url: {response.RedirectUrl}");
+                            _logger?.LogInformation($"Redirecting to url: {response.RedirectUrl}");
 
                             context.Response.Redirect(response.RedirectUrl, response.RedirectType == Models.RedirectType.Permanent);
                             return;
