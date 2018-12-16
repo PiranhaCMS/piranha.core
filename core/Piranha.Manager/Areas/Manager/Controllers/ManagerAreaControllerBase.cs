@@ -21,7 +21,7 @@ namespace Piranha.Areas.Manager.Controllers
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public ManagerAreaControllerBase(IApi api)
+        protected ManagerAreaControllerBase(IApi api)
         {
             _api = api;
         }

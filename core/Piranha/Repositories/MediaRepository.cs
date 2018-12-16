@@ -100,7 +100,7 @@ namespace Piranha.Repositories
         /// <returns>The media</returns>
         public Media GetById(Guid id)
         {
-            Media model = _cache != null ? _cache.Get<Media>(id.ToString()) : null;
+            Media model = _cache?.Get<Media>(id.ToString());
 
             if (model == null)
             {
@@ -127,7 +127,7 @@ namespace Piranha.Repositories
         /// <returns>The media folder</returns>
         public MediaFolder GetFolderById(Guid id)
         {
-            MediaFolder model = _cache != null ? _cache.Get<MediaFolder>(id.ToString()) : null;
+            MediaFolder model = _cache?.Get<MediaFolder>(id.ToString());
 
             if (model == null)
             {
@@ -150,7 +150,7 @@ namespace Piranha.Repositories
         /// <returns>The media structure</returns>
         public Models.MediaStructure GetStructure()
         {
-            Models.MediaStructure model = _cache != null ? _cache.Get<Models.MediaStructure>(MEDIA_STRUCTURE) : null;
+            Models.MediaStructure model = _cache?.Get<Models.MediaStructure>(MEDIA_STRUCTURE);
 
             if (model == null)
             {
@@ -166,7 +166,9 @@ namespace Piranha.Repositories
                 {
                     var folder = GetFolderById(id);
                     if (folder != null)
+                    {
                         folders.Add(folder);
+                    }
                 }
 
                 model = Sort(folders);
@@ -372,8 +374,13 @@ namespace Piranha.Repositories
                     .Where(v => v.MediaId == id && v.Width == width);
 
                 if (height.HasValue)
+                {
                     query = query.Where(v => v.Height == height);
-                else query = query.Where(v => !v.Height.HasValue);
+                }
+                else
+                {
+                    query = query.Where(v => !v.Height.HasValue);
+                }
 
                 var version = query.FirstOrDefault();
 
@@ -595,10 +602,9 @@ namespace Piranha.Repositories
         /// Removes the given model from cache.
         /// </summary>
         /// <param name="model">The model</param>
-        private void RemoveFromCache(Data.Media model)
+        private void RemoveFromCache(Media model)
         {
-            if (_cache != null)
-                _cache.Remove(model.Id.ToString());
+            _cache?.Remove(model.Id.ToString());
         }
 
         /// <summary>
@@ -620,8 +626,7 @@ namespace Piranha.Repositories
         /// <param name="model">The model</param>
         private void RemoveStructureFromCache()
         {
-            if (_cache != null)
-                _cache.Remove(MEDIA_STRUCTURE);
+            _cache?.Remove(MEDIA_STRUCTURE);
         }
 
         /// <summary>
@@ -657,9 +662,13 @@ namespace Piranha.Repositories
             }
 
             if (string.IsNullOrEmpty(extension))
+            {
                 sb.Append(filename.Extension);
-            else sb.Append(extension);
-
+            }
+            else
+            {
+                sb.Append(extension);
+            }
             return sb.ToString();
         }
 
@@ -680,7 +689,9 @@ namespace Piranha.Repositories
                 var cdn = config.MediaCDN;
 
                 if (!string.IsNullOrWhiteSpace(cdn))
+                {
                     return cdn + name;
+                }
                 return _storage.GetPublicUrl(name);
             }
         }

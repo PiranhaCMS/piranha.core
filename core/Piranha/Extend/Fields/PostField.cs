@@ -39,9 +39,7 @@ namespace Piranha.Extend.Fields
         /// </summary>
         public virtual string GetTitle()
         {
-            if (Post != null)
-                return Post.Title;
-            return null;
+            return Post?.Title;
         }
 
         /// <summary>
@@ -71,7 +69,9 @@ namespace Piranha.Extend.Fields
         public virtual T GetPost<T>(IApi api) where T : Models.Post<T>
         {
             if (Id.HasValue)
+            {
                 return api.Posts.GetById<T>(Id.Value);
+            }
             return null;
         }
 
@@ -81,7 +81,10 @@ namespace Piranha.Extend.Fields
         /// <param name="str">The string value</param>
         public static implicit operator PostField(Guid guid)
         {
-            return new PostField() { Id = guid };
+            return new PostField 
+            { 
+                Id = guid 
+            };
         }
 
         /// <summary>
@@ -90,7 +93,10 @@ namespace Piranha.Extend.Fields
         /// <param name="post">The post object</param>
         public static implicit operator PostField(Models.PostBase post)
         {
-            return new PostField() { Id = post.Id };
+            return new PostField 
+            { 
+                Id = post.Id 
+            };
         }
 
         /// <summary>
@@ -109,7 +115,9 @@ namespace Piranha.Extend.Fields
         public override bool Equals(object obj)
         {
             if (obj is PostField)
+            {
                 return Equals((PostField)obj);
+            }
             return false;
         }
 

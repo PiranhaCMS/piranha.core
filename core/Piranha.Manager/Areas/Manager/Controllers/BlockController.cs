@@ -47,7 +47,7 @@ namespace Piranha.Areas.Manager.Controllers
                 if (model.IncludeGroups)
                     ViewData.TemplateInfo.HtmlFieldPrefix = $"Blocks[{model.BlockIndex}]";
                 else ViewData.TemplateInfo.HtmlFieldPrefix = $"Blocks[{model.BlockIndex}].Items[0]";
-                return View("EditorTemplates/ContentEditBlock", new Models.ContentEditBlock()
+                return View("EditorTemplates/ContentEditBlock", new Models.ContentEditBlock
                 {
                     Id = block.Id,
                     CLRType = block.GetType().FullName,

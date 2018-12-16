@@ -308,10 +308,14 @@ namespace Piranha.Repositories
                 if (page != null)
                 {
                     if (_cache != null && fullQuery)
+                    {
                         AddToCache(page);
+                    }
 
                     if (page.OriginalPageId.HasValue)
+                    {
                         return MapOriginalPage<T>(page);
+                    }
 
                     return _contentService.Transform<T>(page, _api.PageTypes.GetById(page.PageTypeId), Process);
                 }
@@ -621,7 +625,7 @@ namespace Piranha.Repositories
                             var field = block.Fields.FirstOrDefault(f => f.FieldId == newField.FieldId);
                             if (field == null)
                             {
-                                field = new BlockField()
+                                field = new BlockField
                                 {
                                     Id = newField.Id != Guid.Empty ? newField.Id : Guid.NewGuid(),
                                     BlockId = block.Id,
@@ -636,7 +640,7 @@ namespace Piranha.Repositories
                         }
 
                         // Create the page block
-                        page.Blocks.Add(new PageBlock()
+                        page.Blocks.Add(new PageBlock
                         {
                             Id = pageBlocks[n].Id,
                             ParentId = pageBlocks[n].ParentId,
@@ -647,13 +651,18 @@ namespace Piranha.Repositories
                         });
                     }
                 }
+
                 if (shouldUpdateSiteDate)
+                {
                     site.ContentLastModified = DateTime.Now;
+                }
 
                 _db.SaveChanges();
 
                 if (_cache != null)
+                {
                     RemoveFromCache(page);
+                }
                 _api.Sites.InvalidateSitemap(model.SiteId);
             }
         }
@@ -683,7 +692,9 @@ namespace Piranha.Repositories
                 foreach (var pageBlock in model.Blocks)
                 {
                     if (!pageBlock.Block.IsReusable)
+                    {
                         _db.Blocks.Remove(pageBlock.Block);
+                    }
                 }
 
                 // Remove the main page.
@@ -882,7 +893,9 @@ namespace Piranha.Repositories
             _cache.Set(page.Id.ToString(), page);
             _cache.Set($"PageId_{page.SiteId}_{page.Slug}", page.Id);
             if (!page.ParentId.HasValue && page.SortOrder == 0)
+            {
                 _cache.Set($"Page_{page.SiteId}", page);
+            }
         }
 
         /// <summary>
@@ -894,7 +907,9 @@ namespace Piranha.Repositories
             _cache.Remove(page.Id.ToString());
             _cache.Remove($"PageId_{page.SiteId}_{page.Slug}");
             if (!page.ParentId.HasValue && page.SortOrder == 0)
+            {
                 _cache.Remove($"Page_{page.SiteId}");
+            }
         }
     }
 }
