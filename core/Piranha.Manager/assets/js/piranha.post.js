@@ -95,9 +95,9 @@ $(document).on("submit", "#modalPost form", function (e) {
             $("#modalPost .modal-body").html(data);
         },
         error: function (a, b, c) {
-            console.log(a)
-            console.log(b)
-            console.log(c)
+            console.log(a);
+            console.log(b);
+            console.log(c);
         }
     }); 
 });

@@ -23381,9 +23381,9 @@ $(document).on("submit", "#modalMedia form", function (e) {
             $("#modalMedia .modal-body").html(data);
         },
         error: function (a, b, c) {
-            console.log(a)
-            console.log(b)
-            console.log(c)
+            console.log(a);
+            console.log(b);
+            console.log(c);
         }
     }); 
 });
@@ -23403,7 +23403,7 @@ $("#modalMedia").on("show.bs.modal", function (event) {
         piranha.media.initCallback();
         piranha.media.initCallback = null;
     }
-    piranha.media.load($(event.relatedTarget), '');
+    piranha.media.load($(event.relatedTarget), "");
 });
 
 $("#modalImgPreview").on("show.bs.modal", function (event) {
@@ -23508,8 +23508,9 @@ piranha.page = new function() {
             if (self.pageUrlId) {
                 $("#" + self.pageUrlId).val(e.data("url"));
             } else {
-                if (self.pageId)
+                if (self.pageId) {
                     $("#" + self.pageId).val(e.data("id"));
+                }
                 $("#" + self.pageTitle).text(e.data("title"));
             }
         } else {
@@ -23557,9 +23558,9 @@ $(document).on("submit", "#modalPage form", function (e) {
             $("#modalPage .modal-body").html(data);
         },
         error: function (a, b, c) {
-            console.log(a)
-            console.log(b)
-            console.log(c)
+            console.log(a);
+            console.log(b);
+            console.log(c);
         }
     }); 
 });
@@ -23671,9 +23672,9 @@ $(document).on("submit", "#modalPost form", function (e) {
             $("#modalPost .modal-body").html(data);
         },
         error: function (a, b, c) {
-            console.log(a)
-            console.log(b)
-            console.log(c)
+            console.log(a);
+            console.log(b);
+            console.log(c);
         }
     }); 
 });

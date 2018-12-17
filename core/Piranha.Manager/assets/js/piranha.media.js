@@ -140,9 +140,9 @@ $(document).on("submit", "#modalMedia form", function (e) {
             $("#modalMedia .modal-body").html(data);
         },
         error: function (a, b, c) {
-            console.log(a)
-            console.log(b)
-            console.log(c)
+            console.log(a);
+            console.log(b);
+            console.log(c);
         }
     }); 
 });
@@ -162,7 +162,7 @@ $("#modalMedia").on("show.bs.modal", function (event) {
         piranha.media.initCallback();
         piranha.media.initCallback = null;
     }
-    piranha.media.load($(event.relatedTarget), '');
+    piranha.media.load($(event.relatedTarget), "");
 });
 
 $("#modalImgPreview").on("show.bs.modal", function (event) {

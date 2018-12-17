@@ -50,8 +50,9 @@ piranha.page = new function() {
             if (self.pageUrlId) {
                 $("#" + self.pageUrlId).val(e.data("url"));
             } else {
-                if (self.pageId)
+                if (self.pageId) {
                     $("#" + self.pageId).val(e.data("id"));
+                }
                 $("#" + self.pageTitle).text(e.data("title"));
             }
         } else {
@@ -99,9 +100,9 @@ $(document).on("submit", "#modalPage form", function (e) {
             $("#modalPage .modal-body").html(data);
         },
         error: function (a, b, c) {
-            console.log(a)
-            console.log(b)
-            console.log(c)
+            console.log(a);
+            console.log(b);
+            console.log(c);
         }
     }); 
 });
