@@ -56,8 +56,11 @@ namespace Piranha.Extend.Fields
         /// <returns>True if the fields are equal</returns>
         public override bool Equals(object obj)
         {
-            if (obj is SimpleField<T>)
+            var field = obj as SimpleField<T>;
+            if (field != null)
+            {
                 return Equals((SimpleField<T>)obj);
+            }
             return false;
         }
 

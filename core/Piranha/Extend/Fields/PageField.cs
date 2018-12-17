@@ -108,8 +108,11 @@ namespace Piranha.Extend.Fields
         /// <returns>True if the fields are equal</returns>
         public override bool Equals(object obj)
         {
-            if (obj is PageField)
+            var field = obj as PageField;
+            if (field != null)
+            {
                 return Equals((PageField)obj);
+            }
             return false;
         }
 

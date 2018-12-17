@@ -52,10 +52,10 @@ namespace Piranha.Repositories
         /// <returns>The model</returns>
         public Site GetByInternalId(string internalId)
         {
-            var id = cache != null ? cache.Get<Guid?>($"SiteId_{internalId}") : null;
+            var id = cache?.Get<Guid?>($"SiteId_{internalId}");
             Site model = null;
 
-            if (id.HasValue)
+            if (id != null)
             {
                 model = GetById(id.Value);
             }
@@ -115,10 +115,12 @@ namespace Piranha.Repositories
 
             foreach (var mapping in mappings)
             {
-                foreach (var host in mapping.Hostnames.Split(new char[] { ',' }))
+                foreach (var host in mapping.Hostnames.Split(new [] { ',' }))
                 {
                     if (host.Trim().ToLower() == hostname)
+                    {
                         return GetById(mapping.Id);
+                    }
                 }
             }
             return null;
@@ -141,7 +143,9 @@ namespace Piranha.Repositories
                     .FirstOrDefault();
 
                 if (id != Guid.Empty)
+                {
                     model = GetById(id);
+                }
             }
             return model;
         }
@@ -173,7 +177,9 @@ namespace Piranha.Repositories
                     .FirstOrDefault();
 
                 if (site == null)
+                {
                     return null;
+                }
             }
 
             if (string.IsNullOrEmpty(site.SiteTypeId))
@@ -202,7 +208,9 @@ namespace Piranha.Repositories
                 var site = GetDefault();
 
                 if (site != null)
+                {
                     id = site.Id;
+                }
             }
 
             if (id != null)
@@ -221,11 +229,15 @@ namespace Piranha.Repositories
                     var pageTypes = api.PageTypes.GetAll();
 
                     if (onlyPublished)
+                    {
                         pages = pages.Where(p => p.Published.HasValue).ToList();
+                    }
                     sitemap = Sort(pages, pageTypes);
 
                     if (onlyPublished && cache != null)
+                    {
                         cache.Set($"Sitemap_{id}", sitemap);
+                    }
                 }
                 return sitemap;
             }
@@ -248,11 +260,15 @@ namespace Piranha.Repositories
             if (site != null)
             {
                 if (string.IsNullOrEmpty(site.SiteTypeId))
+                {
                     throw new MissingFieldException("Can't save content for a site that doesn't have a Site Type Id.");
+                }
 
                 var type = api.SiteTypes.GetById(site.SiteTypeId);
                 if (type == null)
+                {
                     throw new MissingFieldException("The specified Site Type is missing. Can't save content.");
+                }
 
                 content.Id = siteId;
                 content.TypeId = site.SiteTypeId;
@@ -266,8 +282,7 @@ namespace Piranha.Repositories
 
                 db.SaveChanges();
 
-                if (cache != null)
-                    cache.Remove($"SiteContent_{siteId}");
+                cache?.Remove($"SiteContent_{siteId}");
             }
         }
 
@@ -344,17 +359,21 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="model">The model</param>
         /// <param name="checkDefault">If default site integrity should be validated</param>
-        protected void Update(Site model, bool checkDefault = true)
+        protected void Update(Site model, bool checkDefault)
         {
             PrepareUpdate(model);
 
             // Check for title
             if (string.IsNullOrWhiteSpace(model.Title))
+            {
                 throw new ArgumentException("Title cannot be empty");
+            }
 
             // Ensure InternalId
             if (string.IsNullOrWhiteSpace(model.InternalId))
+            {
                 model.InternalId = Utils.GenerateInteralId(model.Title);
+            }
 
             if (checkDefault)
             {
@@ -374,7 +393,9 @@ namespace Piranha.Repositories
                     // Make sure we have a default site
                     var count = db.Sites.Count(s => s.IsDefault && s.Id != model.Id);
                     if (count == 0)
+                    {
                         model.IsDefault = true;
+                    }
                 }
             }
             var site = db.Sites.FirstOrDefault(s => s.Id == model.Id);
@@ -393,7 +414,9 @@ namespace Piranha.Repositories
             cache.Set(model.Id.ToString(), model);
             cache.Set($"SiteId_{model.InternalId}", model.Id);
             if (model.IsDefault)
+            {
                 cache.Set($"Site_{Guid.Empty}", model);
+            }
         }
 
         /// <summary>
@@ -404,7 +427,9 @@ namespace Piranha.Repositories
         {
             cache.Remove($"SiteId_{model.InternalId}");
             if (model.IsDefault)
+            {
                 cache.Remove($"Site_{Guid.Empty}");
+            }
             cache.Remove(SITE_MAPPINGS);
 
             base.RemoveFromCache(model);
@@ -425,7 +450,9 @@ namespace Piranha.Repositories
                 var item = App.Mapper.Map<Page, Models.SitemapItem>(page);
 
                 if (!string.IsNullOrEmpty(page.RedirectUrl))
+                {
                     item.Permalink = page.RedirectUrl;
+                }
 
                 item.Level = level;
                 item.PageTypeName = pageTypes.First(t => t.Id == page.PageTypeId).Title;
