@@ -47,7 +47,7 @@ namespace Piranha.Manager
         public const string SitesSave = "PiranhaSitesSave";
 
         public static string[] All() {
-            return new string[] {
+            return new [] {
                 Admin,
                 Aliases,
                 AliasesDelete,

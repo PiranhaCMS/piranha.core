@@ -46,8 +46,9 @@ namespace Piranha.Repositories
         public T Create<T>(string typeId = null) where T : Models.PageBase
         {
             if (string.IsNullOrWhiteSpace(typeId))
+            {
                 typeId = typeof(T).Name;
-
+            }
             return _contentService.Create<T>(_api.PageTypes.GetById(typeId));
         }
 
@@ -107,7 +108,9 @@ namespace Piranha.Repositories
                 var site = _api.Sites.GetDefault();
 
                 if (site != null)
+                {
                     siteId = site.Id;
+                }
             }
 
             var pages = _db.Pages
@@ -124,7 +127,9 @@ namespace Piranha.Repositories
                 var model = GetById<T>(page);
 
                 if (model != null)
+                {
                     models.Add(model);
+                }
             }
             return models;
         }
@@ -151,7 +156,9 @@ namespace Piranha.Repositories
                 var site = _api.Sites.GetDefault();
 
                 if (site != null)
+                {
                     siteId = site.Id;
+                }
             }
 
             var pages = _db.Pages
@@ -168,7 +175,9 @@ namespace Piranha.Repositories
                 var model = GetById<T>(page);
 
                 if (model != null)
+                {
                     models.Add(model);
+                }
             }
             return models;
         }
@@ -195,10 +204,12 @@ namespace Piranha.Repositories
             {
                 var site = _api.Sites.GetDefault();
                 if (site != null)
+                {
                     siteId = site.Id;
+                }
             }
 
-            var page = _cache != null ? _cache.Get<Page>($"Page_{siteId}") : null;
+            var page = _cache?.Get<Page>($"Page_{siteId}");
 
             if (page == null)
             {
@@ -208,15 +219,19 @@ namespace Piranha.Repositories
                 if (page != null)
                 {
                     if (_cache != null && fullQuery)
+                    {
                         AddToCache(page);
+                    }
                 }
             }
 
             if (page != null)
             {
                 if (page.OriginalPageId.HasValue)
+                {
                     return MapOriginalPage<T>(page);
 
+                }
                 return _contentService.Transform<T>(page, _api.PageTypes.GetById(page.PageTypeId), Process);
             }
             return null;
@@ -240,7 +255,7 @@ namespace Piranha.Repositories
         /// <returns>The page model</returns>
         public T GetById<T>(Guid id) where T : Models.PageBase
         {
-            var page = _cache != null ? _cache.Get<Page>(id.ToString()) : null;
+            var page = _cache?.Get<Page>(id.ToString());
 
             if (page == null)
             {
@@ -250,15 +265,18 @@ namespace Piranha.Repositories
                 if (page != null)
                 {
                     if (_cache != null && fullQuery)
+                    {
                         AddToCache(page);
+                    }
                 }
             }
 
             if (page != null)
             {
                 if (page.OriginalPageId.HasValue)
+                {
                     return MapOriginalPage<T>(page);
-
+                }
                 return _contentService.Transform<T>(page, _api.PageTypes.GetById(page.PageTypeId), Process);
             }
             return null;
@@ -288,11 +306,13 @@ namespace Piranha.Repositories
             {
                 var site = _api.Sites.GetDefault();
                 if (site != null)
+                {
                     siteId = site.Id;
+                }
             }
 
             // See if we can get the page id for the slug from cache.
-            var pageId = _cache != null ? _cache.Get<Guid?>($"PageId_{siteId}_{slug}") : (Guid?)null;
+            var pageId = _cache?.Get<Guid?>($"PageId_{siteId}_{slug}");
 
             if (pageId.HasValue)
             {
@@ -335,7 +355,9 @@ namespace Piranha.Repositories
             {
                 var site = _api.Sites.GetDefault();
                 if (site != null)
+                {
                     siteId = site.Id;
+                }
             }
 
             // See if we can get the page id for the slug from cache.
@@ -353,7 +375,9 @@ namespace Piranha.Repositories
                     .FirstOrDefault(p => p.SiteId == siteId && p.Slug == slug);
 
                 if (page != null)
+                {
                     return page.Id;
+                }
                 return null;
             }
         }
@@ -401,9 +425,14 @@ namespace Piranha.Repositories
             if (_cache != null)
             {
                 foreach (var sibling in oldSiblings)
+                {
                     RemoveFromCache(sibling);
+                }
+
                 foreach (var sibling in newSiblings)
+                {
                     RemoveFromCache(sibling);
+                }
             }
             _api.Sites.InvalidateSitemap(model.SiteId);
         }
@@ -441,7 +470,10 @@ namespace Piranha.Repositories
                         model.Slug = prefix + Utils.GenerateSlug(model.NavigationTitle != null ? model.NavigationTitle : model.Title);
                     }
                 }
-                else model.Slug = Utils.GenerateSlug(model.Slug);
+                else
+                {
+                    model.Slug = Utils.GenerateSlug(model.Slug);
+                }
 
                 // Set content type
                 model.ContentType = type.ContentTypeId;
@@ -520,11 +552,16 @@ namespace Piranha.Repositories
                     page.Published = model.Published;
 
                     if (shouldUpdateSiteDate)
+                    {
                         site.ContentLastModified = DateTime.Now;
+                    }
 
                     _db.SaveChanges();
+
                     if (_cache != null)
+                    {
                         RemoveFromCache(page);
+                    }
 
                     _api.Sites.InvalidateSitemap(model.SiteId);
                     return;
@@ -533,7 +570,7 @@ namespace Piranha.Repositories
                 // Transform the model
                 if (page == null)
                 {
-                    page = new Page()
+                    page = new Page
                     {
                         Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
                         ParentId = model.ParentId,
@@ -604,7 +641,7 @@ namespace Piranha.Repositories
                             .FirstOrDefault(b => b.Id == pageBlocks[n].Block.Id);
                         if (block == null)
                         {
-                            block = new Block()
+                            block = new Block
                             {
                                 Id = pageBlocks[n].Block.Id != Guid.Empty ? pageBlocks[n].Block.Id : Guid.NewGuid(),
                                 Created = DateTime.Now
@@ -683,7 +720,9 @@ namespace Piranha.Repositories
                 // Make sure this page isn't copied
                 var copyCount = _db.Pages.Count(p => p.OriginalPageId == model.Id);
                 if (copyCount > 0)
+                {
                     throw new Exception("Can not delete page because it has copies");
+                }
 
                 // Get the site
                 var site = _db.Sites.FirstOrDefault(s => s.Id == model.SiteId);
@@ -714,7 +753,9 @@ namespace Piranha.Repositories
                 {
                     var page = _cache.Get<Page>(model.Id.ToString());
                     if (page != null)
+                    {
                         RemoveFromCache(page);
+                    }
                 }
                 _api.Sites.InvalidateSitemap(model.SiteId);
             }
@@ -787,7 +828,9 @@ namespace Piranha.Repositories
                 .ToList();
 
             foreach (var page in pages)
+            {
                 page.SortOrder = increase ? page.SortOrder + 1 : page.SortOrder - 1;
+            }
         }
 
         /// <summary>
@@ -829,7 +872,9 @@ namespace Piranha.Repositories
                 if (page != null)
                 {
                     if (_cache != null)
+                    {
                         AddToCache(page);
+                    }
                 }
             }
             return page;
@@ -839,7 +884,10 @@ namespace Piranha.Repositories
         {
             var originalPage = GetById<T>(page.OriginalPageId.Value);
             if (originalPage == null)
+            {
                 return null;
+
+            }
             return SetOriginalPageProperties(originalPage, page);
         }
 

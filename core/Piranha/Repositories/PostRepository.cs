@@ -46,8 +46,9 @@ namespace Piranha.Repositories
         public T Create<T>(string typeId = null) where T : Models.PostBase
         {
             if (string.IsNullOrWhiteSpace(typeId))
+            {
                 typeId = typeof(T).Name;
-
+            }
             return _contentService.Create<T>(_api.PostTypes.GetById(typeId));
         }
 
@@ -80,7 +81,9 @@ namespace Piranha.Repositories
                 var model = GetById<T>(post);
 
                 if (model != null)
+                {
                     models.Add(model);
+                }
             }
             return models;
         }
@@ -117,7 +120,9 @@ namespace Piranha.Repositories
                 var model = GetById<T>(post);
 
                 if (model != null)
+                {
                     models.Add(model);
+                }
             }
             return models;
         }
@@ -145,13 +150,17 @@ namespace Piranha.Repositories
             {
                 var site = _api.Sites.GetDefault();
                 if (site != null)
+                {
                     siteId = site.Id;
+                }
             }
 
             var blogId = _api.Pages.GetIdBySlug(slug, siteId);
 
             if (blogId.HasValue)
+            {
                 return GetAll<T>(blogId.Value);
+            }
             return new List<T>();
         }
 
@@ -173,7 +182,7 @@ namespace Piranha.Repositories
         /// <returns>The post model</returns>
         public T GetById<T>(Guid id) where T : Models.PostBase
         {
-            var post = _cache != null ? _cache.Get<Post>(id.ToString()) : null;
+            var post = _cache?.Get<Post>(id.ToString());
 
             if (post == null)
             {
@@ -183,17 +192,21 @@ namespace Piranha.Repositories
                 if (post != null)
                 {
                     if (_cache != null && fullQuery)
+                    {
                         AddToCache(post);
+                    }
                     post.Category = _api.Categories.GetById(post.CategoryId);
                     //
                     // TODO: Ugly hardcoded reference!!!!
                     //
-                    post.Blog = ((Repositories.PageRepository)_api.Pages).GetPageById(post.BlogId);
+                    post.Blog = ((PageRepository)_api.Pages).GetPageById(post.BlogId);
                 }
             }
 
             if (post != null)
+            {
                 return _contentService.Transform<T>(post, _api.PostTypes.GetById(post.PostTypeId), Process);
+            }
             return null;
         }
 
@@ -223,13 +236,17 @@ namespace Piranha.Repositories
             {
                 var site = _api.Sites.GetDefault();
                 if (site != null)
+                {
                     siteId = site.Id;
+                }
             }
 
             var blogId = _api.Pages.GetIdBySlug(blog, siteId);
 
             if (blogId.HasValue)
+            {
                 return GetBySlug<T>(blogId.Value, slug);
+            }
             return null;
         }
 
@@ -253,7 +270,7 @@ namespace Piranha.Repositories
         /// <returns>The post model</returns>
         public T GetBySlug<T>(Guid blogId, string slug) where T : Models.PostBase
         {
-            var postId = _cache != null ? _cache.Get<Guid?>($"PostId_{blogId}_{slug}") : (Guid?)null;
+            var postId = _cache?.Get<Guid?>($"PostId_{blogId}_{slug}");
 
             if (postId.HasValue)
             {
@@ -269,9 +286,11 @@ namespace Piranha.Repositories
                 if (post != null)
                 {
                     if (_cache != null && fullQuery)
+                    {
                         AddToCache(post);
+                    }
                     post.Category = _api.Categories.GetById(post.CategoryId);
-                    post.Blog = ((Repositories.PageRepository)_api.Pages).GetPageById(post.BlogId);
+                    post.Blog = ((PageRepository)_api.Pages).GetPageById(post.BlogId);
 
                     return _contentService.Transform<T>(post, _api.PostTypes.GetById(post.PostTypeId), Process);
                 }
@@ -292,16 +311,20 @@ namespace Piranha.Repositories
                 // Ensure category
                 if (model.Category.Id == Guid.Empty)
                 {
-                    Data.Category category = null;
+                    Category category = null;
 
                     if (!string.IsNullOrWhiteSpace(model.Category.Slug))
+                    {
                         category = _api.Categories.GetBySlug(model.BlogId, model.Category.Slug);
+                    }
                     if (category == null && !string.IsNullOrWhiteSpace(model.Category.Title))
+                    {
                         category = _api.Categories.GetByTitle(model.BlogId, model.Category.Title);
+                    }
 
                     if (category == null)
                     {
-                        category = new Data.Category()
+                        category = new Category
                         {
                             Id = Guid.NewGuid(),
                             BlogId = model.BlogId,
@@ -317,17 +340,21 @@ namespace Piranha.Repositories
                 {
                     if (t.Id == Guid.Empty)
                     {
-                        Data.Tag tag = null;
+                        Tag tag = null;
 
                         if (!string.IsNullOrWhiteSpace(t.Slug))
+                        {
                             tag = _api.Tags.GetBySlug(model.BlogId, t.Slug);
 
+                        }
                         if (tag == null && !string.IsNullOrWhiteSpace(t.Title))
+                        {
                             tag = _api.Tags.GetByTitle(model.BlogId, t.Title);
+                        }
 
                         if (tag == null)
                         {
-                            tag = new Data.Tag()
+                            tag = new Tag
                             {
                                 Id = Guid.NewGuid(),
                                 BlogId = model.BlogId,
@@ -341,8 +368,13 @@ namespace Piranha.Repositories
 
                 // Ensure that we have a slug
                 if (string.IsNullOrWhiteSpace(model.Slug))
+                {
                     model.Slug = Utils.GenerateSlug(model.Title, false);
-                else model.Slug = Utils.GenerateSlug(model.Slug, false);
+                }
+                else
+                {
+                    model.Slug = Utils.GenerateSlug(model.Slug, false);
+                }
 
                 var post = _db.Posts
                     .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
@@ -353,7 +385,7 @@ namespace Piranha.Repositories
                 // If not, create a new post
                 if (post == null)
                 {
-                    post = new Post()
+                    post = new Post
                     {
                         Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
                         Created = DateTime.Now,
@@ -393,7 +425,7 @@ namespace Piranha.Repositories
                             .FirstOrDefault(b => b.Id == blocks[n].Id);
                         if (block == null)
                         {
-                            block = new Block()
+                            block = new Block
                             {
                                 Id = blocks[n].Id != Guid.Empty ? blocks[n].Id : Guid.NewGuid(),
                                 Created = DateTime.Now
@@ -414,7 +446,7 @@ namespace Piranha.Repositories
                             var field = block.Fields.FirstOrDefault(f => f.FieldId == newField.FieldId);
                             if (field == null)
                             {
-                                field = new BlockField()
+                                field = new BlockField
                                 {
                                     Id = newField.Id != Guid.Empty ? newField.Id : Guid.NewGuid(),
                                     BlockId = block.Id,
@@ -429,7 +461,7 @@ namespace Piranha.Repositories
                         }
 
                         // Create the page block
-                        post.Blocks.Add(new PostBlock()
+                        post.Blocks.Add(new PostBlock
                         {
                             Id = Guid.NewGuid(),
                             BlockId = block.Id,
@@ -445,16 +477,20 @@ namespace Piranha.Repositories
                 foreach (var tag in post.Tags)
                 {
                     if (!model.Tags.Any(t => t.Id == tag.TagId))
+                    {
                         removedTags.Add(tag);
+                    }
                 }
                 foreach (var removed in removedTags)
+                {
                     post.Tags.Remove(removed);
+                }
 
                 // Add tags
                 foreach (var tag in model.Tags)
                 {
                     if (!post.Tags.Any(t => t.PostId == post.Id && t.TagId == tag.Id))
-                        post.Tags.Add(new PostTag()
+                        post.Tags.Add(new PostTag
                         {
                             PostId = post.Id,
                             TagId = tag.Id
@@ -464,7 +500,9 @@ namespace Piranha.Repositories
                 _db.SaveChanges();
 
                 if (_cache != null)
+                {
                     RemoveFromCache(post);
+                }
             }
         }
 
@@ -485,7 +523,9 @@ namespace Piranha.Repositories
                 foreach (var postBlock in model.Blocks)
                 {
                     if (!postBlock.Block.IsReusable)
+                    {
                         _db.Blocks.Remove(postBlock.Block);
+                    }
                 }
 
                 _db.Posts.Remove(model);
@@ -506,7 +546,9 @@ namespace Piranha.Repositories
                 {
                     var post = _cache.Get<Post>(model.Id.ToString());
                     if (post != null)
+                    {
                         RemoveFromCache(post);
+                    }
                 }
             }
         }
@@ -569,7 +611,7 @@ namespace Piranha.Repositories
 
             foreach (var tag in _api.Tags.GetByPostId(post.Id).OrderBy(t => t.Title))
             {
-                model.Tags.Add((Models.Taxonomy)tag);
+                model.Tags.Add(tag);
             }
         }
 
