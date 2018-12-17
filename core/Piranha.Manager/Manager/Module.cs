@@ -19,7 +19,7 @@ namespace Piranha.Manager
 {
     public sealed class Module : Extend.IModule
     {
-        private readonly List<PermissionItem> _permissions = new List<PermissionItem>() {
+        private readonly List<PermissionItem> _permissions = new List<PermissionItem> {
             new PermissionItem { Name = Permission.Admin, Title = "Admin"},
             new PermissionItem { Name = Permission.Aliases, Title = "List Aliases", Category = "Aliases" },
             new PermissionItem { Name = Permission.AliasesDelete, Title = "Delete Aliases", Category = "Aliases" },
