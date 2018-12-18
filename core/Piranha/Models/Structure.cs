@@ -19,11 +19,6 @@ namespace Piranha.Models
     public abstract class Structure<TThis, T> : List<T> where T : StructureItem<T> where TThis : Structure<TThis, T>
     {
         /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public Structure() : base() { }
-
-        /// <summary>
         /// Gets the partial structure with the items positioned
         /// below the item with the given id.
         /// </summary>
@@ -32,7 +27,9 @@ namespace Piranha.Models
         public TThis GetPartial(Guid? id)
         {
             if (id.HasValue)
+            {
                 return GetPartialRecursive(this, id.Value);
+            }
             return (TThis)this;
         }
 
@@ -44,7 +41,9 @@ namespace Piranha.Models
         public IList<T> GetBreadcrumb(Guid? id)
         {
             if (id.HasValue)
+            {
                 return GetBreadcrumbRecursive(this, id.Value);
+            }
             return new List<T>();
         }
 
@@ -68,7 +67,9 @@ namespace Piranha.Models
                     var partial = GetPartialRecursive(item.Items, id);
 
                     if (partial != null)
+                    {
                         return (TThis)partial;
+                    }
                 }
             }
             return null;
@@ -87,7 +88,7 @@ namespace Piranha.Models
             {
                 if (item.Id == id)
                 {
-                    return new List<T>() {
+                    return new List<T> {
                         item
                     };
                 }

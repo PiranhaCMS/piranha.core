@@ -21,9 +21,9 @@ namespace Piranha.Extend.Serializers
         /// <returns>The serialized value</returns>
         public string Serialize(object obj)
         {
-            if (obj is T)
+            if (obj is T field)
             {
-                return ((T)obj).Value;
+                return field.Value;
             }
             throw new ArgumentException("The given object doesn't match the serialization type");
         }

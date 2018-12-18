@@ -17,19 +17,9 @@ namespace Piranha.Models
     /// </summary>
     public class DynamicPost : Post<DynamicPost>, IDynamicModel
     {
-        #region Properties
         /// <summary>
         /// Gets/sets the regions.
         /// </summary>
-        public dynamic Regions { get; set; }
-        #endregion
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public DynamicPost() : base()
-        {
-            Regions = new ExpandoObject();
-        }
+        public dynamic Regions { get; set; } = new ExpandoObject();
     }
 }

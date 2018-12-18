@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -9,6 +9,7 @@
  */
 
 using System;
+using Piranha.Extend.Fields;
 
 namespace Piranha.Extend.Serializers
 {
@@ -21,12 +22,12 @@ namespace Piranha.Extend.Serializers
         /// <returns>The serialized value</returns>
         public string Serialize(object obj)
         {
-            if (obj is Fields.DateField)
+            if (obj is DateField field)
             {
-                var field = (Fields.DateField)obj;
-
                 if (field.Value.HasValue)
-                    return ((Fields.DateField)obj).Value.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                {
+                    return field.Value.Value.ToString("yyyy-MM-dd HH:mm:ss");
+                }
                 return null;
             }
             throw new ArgumentException("The given object doesn't match the serialization type");
@@ -39,7 +40,7 @@ namespace Piranha.Extend.Serializers
         /// <returns>The object</returns>
         public object Deserialize(string str)
         {
-            var field = new Fields.DateField();
+            var field = new DateField();
 
             if (!string.IsNullOrWhiteSpace(str))
             {
@@ -47,7 +48,11 @@ namespace Piranha.Extend.Serializers
                 {
                     field.Value = DateTime.Parse(str);
                 }
-                catch { }
+                catch 
+                { 
+                    // Let's not throw an exception, let's just
+                    // return a new empty date field.
+                }
             }
             return field;
         }

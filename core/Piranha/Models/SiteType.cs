@@ -18,16 +18,24 @@ namespace Piranha.Models
         /// <summary>
         /// Validates that the site type is correctly defined.
         /// </summary>
-        public void Ensure() {
+        public void Ensure() 
+        {
             if (Regions.Select(r => r.Id).Distinct().Count() != Regions.Count)
+            {
                 throw new Exception($"Region Id not unique for site type {Id}");
+            }
 
-            foreach (var region in Regions) {
+            foreach (var region in Regions) 
+            {
                 region.Title = region.Title ?? region.Id;
 
                 if (region.Fields.Select(f => f.Id).Distinct().Count() != region.Fields.Count)
+                {
                     throw new Exception($"Field Id not unique for site type {Id}");
-                foreach (var field in region.Fields) {
+                }
+
+                foreach (var field in region.Fields) 
+                {
                     field.Id = field.Id ?? "Default";
                     field.Title = field.Title ?? field.Id;
                 }

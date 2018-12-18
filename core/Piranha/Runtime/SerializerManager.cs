@@ -19,17 +19,21 @@ namespace Piranha.Runtime
         /// <summary>
         /// The currently available serializers.
         /// </summary>
-        private readonly Dictionary<Type, ISerializer> serializers;
+        private readonly Dictionary<Type, ISerializer> _serializers;
 
         /// <summary>
         /// Gets the serializer for the specified type.
         /// </summary>
-        public ISerializer this[Type type] {
-            get {
+        public ISerializer this[Type type] 
+        {
+            get 
+            {
                 ISerializer serializer = null;
 
-                if (serializers.TryGetValue(type, out serializer))
+                if (_serializers.TryGetValue(type, out serializer))
+                {
                     return serializer;
+                }
                 return null;
             }
         }
@@ -39,7 +43,7 @@ namespace Piranha.Runtime
         /// </summary>
         public SerializerManager()
         {
-            serializers = new Dictionary<Type, ISerializer>();
+            _serializers = new Dictionary<Type, ISerializer>();
         }
 
         /// <summary>
@@ -48,7 +52,7 @@ namespace Piranha.Runtime
         /// <param name="serializer">The serializer</param>
         public void Register<T>(ISerializer serializer)
         {
-            serializers[typeof(T)] = serializer;
+            _serializers[typeof(T)] = serializer;
         }
 
         /// <summary>
@@ -56,7 +60,7 @@ namespace Piranha.Runtime
         /// </summary>
         public void UnRegister<T>()
         {
-            serializers.Remove(typeof(T));
+            _serializers.Remove(typeof(T));
         }
     }
 }

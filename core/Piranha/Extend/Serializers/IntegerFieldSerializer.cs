@@ -21,10 +21,12 @@ namespace Piranha.Extend.Serializers
         /// <returns>The serialized value</returns>
         public string Serialize(object obj)
         {
-            if (obj is T)
+            if (obj is T field)
             {
-                if (((T)obj).Value.HasValue)
-                    return ((T)obj).Value.Value.ToString();
+                if (field.Value.HasValue)
+                {
+                    return field.Value.Value.ToString();
+                }
                 return null;
             }
             throw new ArgumentException("The given object doesn't match the serialization type");
@@ -45,7 +47,11 @@ namespace Piranha.Extend.Serializers
                 {
                     field.Value = int.Parse(str);
                 }
-                catch { }
+                catch 
+                { 
+                    // Let's not throw an exception, let's just
+                    // return a new empty integer field.
+                }
             }
             return field;
         }

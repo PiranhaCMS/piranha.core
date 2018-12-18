@@ -20,14 +20,6 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the regions.
         /// </summary>
-        public dynamic Regions { get; set; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public DynamicPage() : base()
-        {
-            Regions = new ExpandoObject();
-        }
+        public dynamic Regions { get; set; } = new ExpandoObject();
     }
 }

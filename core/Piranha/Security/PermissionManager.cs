@@ -18,28 +18,21 @@ namespace Piranha.Security
     /// </summary>
     public class PermissionManager
     {
-        private readonly Dictionary<string, IList<PermissionItem>> _modules;
+        private readonly Dictionary<string, IList<PermissionItem>> _modules = new Dictionary<string, IList<PermissionItem>>();
 
         /// <summary>
         /// Gets the permission items for the given module.
         /// </summary>
-        public IList<PermissionItem> this[string module] {
-            get {
-                if (_modules.TryGetValue(module, out var items))
-                    return items;
-
-                _modules[module] = items = new List<PermissionItem>();
-
+        public IList<PermissionItem> this[string module] 
+        {
+            get 
+            {
+                if (!_modules.TryGetValue(module, out var items))
+                {
+                    _modules[module] = items = new List<PermissionItem>();
+                }
                 return items;
             }
-        }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public PermissionManager()
-        {
-            _modules = new Dictionary<string, IList<PermissionItem>>();
         }
 
         /// <summary>

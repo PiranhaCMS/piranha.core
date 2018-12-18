@@ -35,7 +35,9 @@ namespace Piranha.Extend.Fields
                 var title = Value.ToString();
 
                 if (title.Length > 40)
+                {
                     title = title.Substring(0, 40) + "...";
+                }
                 return title;
             }
             return null;

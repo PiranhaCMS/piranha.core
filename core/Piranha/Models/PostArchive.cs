@@ -15,7 +15,6 @@ namespace Piranha.Models
 {
     public class PostArchive
     {
-        #region Properties
         /// <summary>
         /// Gets/sets the optionally requested year.
         /// </summary>
@@ -54,15 +53,6 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the available posts.
         /// </summary>
-        public IList<DynamicPost> Posts { get; set; }
-        #endregion
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public PostArchive()
-        {
-            Posts = new List<DynamicPost>();
-        }
+        public IList<DynamicPost> Posts { get; set; } = new List<DynamicPost>();
     }
 }

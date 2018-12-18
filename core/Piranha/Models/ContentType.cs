@@ -40,20 +40,11 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the available regions.
         /// </summary>
-        public IList<RegionType> Regions { get; set; }
+        public IList<RegionType> Regions { get; set; } = new List<RegionType>();
 
         /// <summary>
         /// Gets/sets the optional routes.
         /// </summary>
-        public IList<ContentTypeRoute> Routes { get; set; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        protected ContentType()
-        {
-            Regions = new List<RegionType>();
-            Routes = new List<ContentTypeRoute>();
-        }
+        public IList<ContentTypeRoute> Routes { get; set; } = new List<ContentTypeRoute>();
     }
 }

@@ -22,14 +22,6 @@ namespace Piranha.Extend
         /// Gets/sets the available blocks in this group.
         /// </summary>
         [JsonIgnore]
-        public IList<Block> Items { get; set; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public BlockGroup()
-        {
-            Items = new List<Block>();
-        }
+        public IList<Block> Items { get; set; } = new List<Block>();
     }
 }

@@ -84,11 +84,11 @@ namespace Piranha.Runtime
         //
         // Private hook collections.
         //
-        private readonly Dictionary<Type, object> _onLoad;
-        private readonly Dictionary<Type, object> _onBeforeSave;
-        private readonly Dictionary<Type, object> _onAfterSave;
-        private readonly Dictionary<Type, object> _onBeforeDelete;
-        private readonly Dictionary<Type, object> _onAfterDelete;
+        private readonly Dictionary<Type, object> _onLoad = new Dictionary<Type, object>();
+        private readonly Dictionary<Type, object> _onBeforeSave = new Dictionary<Type, object>();
+        private readonly Dictionary<Type, object> _onAfterSave = new Dictionary<Type, object>();
+        private readonly Dictionary<Type, object> _onBeforeDelete = new Dictionary<Type, object>();
+        private readonly Dictionary<Type, object> _onAfterDelete = new Dictionary<Type, object>();
 
         /// <summary>
         /// Delegate for repository events.
@@ -105,37 +105,37 @@ namespace Piranha.Runtime
         /// <summary>
         /// Gets the hooks available for aliases.
         /// </summary>
-        public RepositoryHooks<Data.Alias> Alias { get; private set; }
+        public RepositoryHooks<Data.Alias> Alias { get; private set; } = new RepositoryHooks<Data.Alias>();
 
         /// <summary>
         /// Gets the hooks available for categories.
         /// </summary>
-        public RepositoryHooks<Data.Category> Category { get; private set; }
+        public RepositoryHooks<Data.Category> Category { get; private set; } = new RepositoryHooks<Data.Category>();
 
         /// <summary>
         /// Gets the hooks available for media.
         /// </summary>
-        public RepositoryHooks<Data.Media> Media { get; private set; }
+        public RepositoryHooks<Data.Media> Media { get; private set; } = new RepositoryHooks<Data.Media>();
 
         /// <summary>
         /// Gets the hooks available for media folders.
         /// </summary>
-        public RepositoryHooks<Data.MediaFolder> MediaFolder { get; private set; }
+        public RepositoryHooks<Data.MediaFolder> MediaFolder { get; private set; } = new RepositoryHooks<Data.MediaFolder>();
 
         /// <summary>
         /// Gets the hooks available for params.
         /// </summary>
-        public RepositoryHooks<Data.Param> Param { get; private set; }
+        public RepositoryHooks<Data.Param> Param { get; private set; } = new RepositoryHooks<Data.Param>();
 
         /// <summary>
         /// Gets the hooks available for sites.
         /// </summary>
-        public RepositoryHooks<Data.Site> Site { get; private set; }
+        public RepositoryHooks<Data.Site> Site { get; private set; } = new RepositoryHooks<Data.Site>();
 
         /// <summary>
         /// Gets the hooks available for tags.
         /// </summary>
-        public RepositoryHooks<Data.Tag> Tag { get; private set; }
+        public RepositoryHooks<Data.Tag> Tag { get; private set; } = new RepositoryHooks<Data.Tag>();
 
         /// <summary>
         /// Gets the hook for slug generation.
@@ -143,40 +143,30 @@ namespace Piranha.Runtime
         public SlugDelegate OnGenerateSlug;
 
         /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public HookManager()
-        {
-            _onLoad = new Dictionary<Type, object>();
-            _onBeforeSave = new Dictionary<Type, object>();
-            _onAfterSave = new Dictionary<Type, object>();
-            _onBeforeDelete = new Dictionary<Type, object>();
-            _onAfterDelete = new Dictionary<Type, object>();
-
-            Alias = new RepositoryHooks<Data.Alias>();
-            Category = new RepositoryHooks<Data.Category>();
-            Media = new RepositoryHooks<Data.Media>();
-            MediaFolder = new RepositoryHooks<Data.MediaFolder>();
-            Param = new RepositoryHooks<Data.Param>();
-            Site = new RepositoryHooks<Data.Site>();
-            Tag = new RepositoryHooks<Data.Tag>();
-        }
-
-        /// <summary>
         /// Removes all hooks for the specified model type.
         /// </summary>
         internal void Clear<T>()
         {
             if (_onLoad.ContainsKey(typeof(T)))
+            {
                 _onLoad.Remove(typeof(T));
+            }
             if (_onBeforeSave.ContainsKey(typeof(T)))
+            {
                 _onBeforeSave.Remove(typeof(T));
+            }
             if (_onAfterSave.ContainsKey(typeof(T)))
+            {
                 _onAfterSave.Remove(typeof(T));
+            }
             if (_onBeforeDelete.ContainsKey(typeof(T)))
+            {
                 _onBeforeDelete.Remove(typeof(T));
+            }
             if (_onAfterDelete.ContainsKey(typeof(T)))
+            {
                 _onAfterDelete.Remove(typeof(T));
+            }
         }
 
         /// <summary>
@@ -188,7 +178,9 @@ namespace Piranha.Runtime
         internal void RegisterOnLoad<T>(ModelDelegate<T> hook)
         {
             if (!_onLoad.ContainsKey(typeof(T)))
+            {
                 _onLoad[typeof(T)] = new List<ModelDelegate<T>>();
+            }
             ((List<ModelDelegate<T>>)_onLoad[typeof(T)]).Add(hook);
         }
 
@@ -200,7 +192,9 @@ namespace Piranha.Runtime
         internal void RegisterOnBeforeSave<T>(ModelDelegate<T> hook)
         {
             if (!_onBeforeSave.ContainsKey(typeof(T)))
+            {
                 _onBeforeSave[typeof(T)] = new List<ModelDelegate<T>>();
+            }
             ((List<ModelDelegate<T>>)_onBeforeSave[typeof(T)]).Add(hook);
         }
 
@@ -212,7 +206,9 @@ namespace Piranha.Runtime
         internal void RegisterOnAfterSave<T>(ModelDelegate<T> hook)
         {
             if (!_onAfterSave.ContainsKey(typeof(T)))
+            {
                 _onAfterSave[typeof(T)] = new List<ModelDelegate<T>>();
+            }
             ((List<ModelDelegate<T>>)_onAfterSave[typeof(T)]).Add(hook);
         }
 
@@ -224,7 +220,9 @@ namespace Piranha.Runtime
         internal void RegisterOnBeforeDelete<T>(ModelDelegate<T> hook)
         {
             if (!_onBeforeDelete.ContainsKey(typeof(T)))
+            {
                 _onBeforeDelete[typeof(T)] = new List<ModelDelegate<T>>();
+            }
             ((List<ModelDelegate<T>>)_onBeforeDelete[typeof(T)]).Add(hook);
         }
 
@@ -236,7 +234,9 @@ namespace Piranha.Runtime
         internal void RegisterOnAfterDelete<T>(ModelDelegate<T> hook)
         {
             if (!_onAfterDelete.ContainsKey(typeof(T)))
+            {
                 _onAfterDelete[typeof(T)] = new List<ModelDelegate<T>>();
+            }
             ((List<ModelDelegate<T>>)_onAfterDelete[typeof(T)]).Add(hook);
         }
 
@@ -251,7 +251,9 @@ namespace Piranha.Runtime
                 var hooks = (List<ModelDelegate<T>>)_onLoad[typeof(T)];
 
                 foreach (var hook in hooks)
+                {
                     hook.Invoke(model);
+                }
             }
         }
 
@@ -266,7 +268,9 @@ namespace Piranha.Runtime
                 var hooks = (List<ModelDelegate<T>>)_onBeforeSave[typeof(T)];
 
                 foreach (var hook in hooks)
+                {
                     hook.Invoke(model);
+                }
             }
         }
 
@@ -281,7 +285,9 @@ namespace Piranha.Runtime
                 var hooks = (List<ModelDelegate<T>>)_onAfterSave[typeof(T)];
 
                 foreach (var hook in hooks)
+                {
                     hook.Invoke(model);
+                }
             }
         }
 
@@ -296,7 +302,9 @@ namespace Piranha.Runtime
                 var hooks = (List<ModelDelegate<T>>)_onBeforeDelete[typeof(T)];
 
                 foreach (var hook in hooks)
+                {
                     hook.Invoke(model);
+                }
             }
         }
 
@@ -312,7 +320,9 @@ namespace Piranha.Runtime
 
                 // Execute all of the available hooks.
                 foreach (var hook in hooks)
+                {
                     hook.Invoke(model);
+                }
             }
         }
     }

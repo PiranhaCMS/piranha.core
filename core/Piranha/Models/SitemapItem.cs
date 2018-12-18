@@ -43,10 +43,14 @@ namespace Piranha.Models
         /// Gets the menu title for the item. The menu title returns
         /// the navigation title if set, otherwise the main title.
         /// </summary>
-        public string MenuTitle {
-            get {
+        public string MenuTitle 
+        {
+            get 
+            {
                 if (!string.IsNullOrWhiteSpace(NavigationTitle))
+                {
                     return NavigationTitle;
+                }
                 return Title;
             }
         }
@@ -101,7 +105,9 @@ namespace Piranha.Models
             foreach (var item in Items)
             {
                 if (item.Id == id || item.HasChild(id))
+                {
                     return true;
+                }
             }
             return false;
         }

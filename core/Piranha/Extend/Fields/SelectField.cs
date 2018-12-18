@@ -180,7 +180,7 @@ namespace Piranha.Extend.Fields
 
                 foreach (var val in Enum.GetValues(typeof(T)))
                 {
-                    _items.Add(new SelectFieldItem()
+                    _items.Add(new SelectFieldItem
                     {
                         Title = GetEnumTitle((Enum)val),
                         Value = (Enum)val

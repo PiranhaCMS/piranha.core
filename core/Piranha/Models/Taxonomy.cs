@@ -48,12 +48,14 @@ namespace Piranha.Models
         public static implicit operator Taxonomy(Data.Category category)
         {
             if (category != null)
+            {
                 return new Taxonomy
                 {
                     Id = category.Id,
                     Title = category.Title,
                     Slug = category.Slug
                 };
+            }
             return null;
         }
 

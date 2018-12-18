@@ -9,6 +9,7 @@
  */
 
 using System;
+using Piranha.Extend.Fields;
 
 namespace Piranha.Extend.Serializers
 {
@@ -21,9 +22,9 @@ namespace Piranha.Extend.Serializers
         /// <returns>The serialized value</returns>
         public string Serialize(object obj)
         {
-            if (obj is Fields.SelectFieldBase)
+            if (obj is SelectFieldBase field)
             {
-                return ((Fields.SelectFieldBase)obj).EnumValue;
+                return field.EnumValue;
             }
             throw new ArgumentException("The given object doesn't match the serialization type");
         }

@@ -31,14 +31,6 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the child items.
         /// </summary>
-        public IList<T> Items { get; set; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public StructureItem()
-        {
-            Items = new List<T>();
-        }
+        public IList<T> Items { get; set; } = new List<T>();
     }
 }

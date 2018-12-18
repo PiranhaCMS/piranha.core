@@ -33,7 +33,9 @@ namespace Piranha.Cache
             object value;
 
             if (_cache.TryGetValue(key, out value))
+            {
                 return (T)value;
+            }
             return default(T);
         }
 

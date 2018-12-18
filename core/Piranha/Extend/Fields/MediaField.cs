@@ -40,7 +40,9 @@ namespace Piranha.Extend.Fields
         public static implicit operator string(MediaField image)
         {
             if (image.Media != null)
+            {
                 return image.Media.PublicUrl;
+            }
             return "";
         }
     }

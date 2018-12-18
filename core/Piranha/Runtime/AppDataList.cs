@@ -52,7 +52,9 @@ namespace Piranha.Runtime
         {
             var item = _items.SingleOrDefault(i => i.Type == typeof(TValue));
             if (item != null)
+            {
                 _items.Remove(item);
+            }
         }
 
         /// <summary>

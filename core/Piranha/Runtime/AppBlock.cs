@@ -45,14 +45,6 @@ namespace Piranha.Runtime
         /// <summary>
         /// Gets/sets the specified item types.
         /// </summary>
-        public IList<Type> ItemTypes { get; set; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public AppBlock() : base()
-        {
-            ItemTypes = new List<Type>();
-        }
+        public IList<Type> ItemTypes { get; set; } = new List<Type>();
     }
 }

@@ -40,9 +40,10 @@ namespace Piranha.Runtime
                 .Where(i => i.Category == category);
 
             if (!includeGroups)
+            {
                 query = query
                     .Where(i => !typeof(Extend.BlockGroup).IsAssignableFrom(i.Type));
-
+            }
             return query.ToArray();
         }
 

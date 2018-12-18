@@ -24,11 +24,6 @@ namespace Piranha.Models
         }
 
         /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public GenericPage() : base() { }
-
-        /// <summary>
         /// Creates a new page model using the given page type id.
         /// </summary>
         /// <param name="api">The current api</param>

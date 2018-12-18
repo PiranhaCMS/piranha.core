@@ -35,7 +35,9 @@ namespace Piranha.Runtime
         internal void Register<T>(string id, string title, bool customEditor = false)
         {
             if (_contentTypes.Exists(t => t.Type == typeof(T)))
+            {
                 throw new ArgumentException($"Given type {typeof(T).FullName} is already registered as a content type.");
+            }
 
             _contentTypes.Add(new AppContentType
             {
@@ -51,7 +53,9 @@ namespace Piranha.Runtime
             foreach (var type in _contentTypes)
             {
                 if (type.Type.IsAssignableFrom(t))
+                {
                     return type.Id;
+                }
             }
             return null;
         }
@@ -66,7 +70,9 @@ namespace Piranha.Runtime
             foreach (var type in _contentTypes)
             {
                 if (type.Id == id)
+                {
                     return type;
+                }
             }
             return null;
         }

@@ -66,27 +66,17 @@ namespace Piranha.Runtime
         /// <summary>
         /// Gets/sets the currently accepted document extensions.
         /// </summary>
-        public MediaTypeList Documents { get; set; }
+        public MediaTypeList Documents { get; set; } = new MediaTypeList();
 
         /// <summary>
         /// Gets/sets the currently accepted image extensions.
         /// </summary>
-        public MediaTypeList Images { get; set; }
+        public MediaTypeList Images { get; set; } = new MediaTypeList();
 
         /// <summary>
         /// Gets/sets the currently accepted video extensions.
         /// </summary>
-        public MediaTypeList Videos { get; set; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public MediaManager()
-        {
-            Documents = new MediaTypeList();
-            Images = new MediaTypeList();
-            Videos = new MediaTypeList();
-        }
+        public MediaTypeList Videos { get; set; } = new MediaTypeList();
 
         /// <summary>
         /// Checks if the given filename has a supported extension.
@@ -113,11 +103,17 @@ namespace Piranha.Runtime
             var extension = Path.GetExtension(filename);
 
             if (Documents.ContainsExtension(extension))
+            {
                 return MediaType.Document;
+            }
             else if (Images.ContainsExtension(extension))
+            {
                 return MediaType.Image;
+            }
             else if (Videos.ContainsExtension(extension))
+            {
                 return MediaType.Video;
+            }
             return MediaType.Unknown;
         }
 
@@ -133,11 +129,17 @@ namespace Piranha.Runtime
             MediaTypeItem item = null;
 
             if ((item = Documents.SingleOrDefault(t => t.Extension == extension)) != null)
+            {
                 return item.ContentType;
+            }
             else if ((item = Images.SingleOrDefault(t => t.Extension == extension)) != null)
+            {
                 return item.ContentType;
+            }
             else if ((item = Videos.SingleOrDefault(t => t.Extension == extension)) != null)
+            {
                 return item.ContentType;
+            }
             return "application/octet-stream";
         }
     }

@@ -41,8 +41,10 @@ namespace Piranha.Models
         public void Add(object item)
         {
             if (item.GetType() == typeof(T))
+            {
                 base.Add((T)item);
-            else throw new ArgumentException();
+            }
+            else throw new ArgumentException("Item type does not match the list");
         }
     }
 }

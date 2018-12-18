@@ -20,7 +20,8 @@ namespace Piranha.Security
 
         public static string[] All()
         {
-            return new string[] {
+            return new [] 
+            {
                 PagePreview,
                 PostPreview
             };
