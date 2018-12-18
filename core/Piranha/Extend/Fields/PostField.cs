@@ -114,10 +114,9 @@ namespace Piranha.Extend.Fields
         /// <returns>True if the fields are equal</returns>
         public override bool Equals(object obj)
         {
-            var field = obj as PostField;
-            if (field != null)
+            if (obj is PostField field)
             {
-                return Equals(obj);
+                return Equals(field);
             }
             return false;
         }

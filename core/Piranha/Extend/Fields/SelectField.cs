@@ -100,8 +100,7 @@ namespace Piranha.Extend.Fields
         /// <returns>True if the fields are equal</returns>
         public override bool Equals(object obj)
         {
-            var field = obj as SelectField<T>;
-            if (field != null)
+            if (obj is SelectField<T> field)
             {
                 return Equals(field);
             }
