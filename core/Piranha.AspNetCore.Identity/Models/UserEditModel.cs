@@ -8,33 +8,28 @@
  * 
  */
 
-using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Piranha.AspNetCore.Identity.Data;
 
 namespace Piranha.AspNetCore.Identity.Models
 {
     public class UserEditModel
     {
-        public Data.User User { get; set; }
-        public IList<Data.Role> Roles { get; set; }
-        public IList<string> SelectedRoles { get; set; }
+        public User User { get; set; }
+        public IList<Role> Roles { get; set; } = new List<Role>();
+        public IList<string> SelectedRoles { get; set; } = new List<string>();
         public string Password { get; set; }
         public string PasswordConfirm { get; set; }
-
-        public UserEditModel()
-        {
-            Roles = new List<Data.Role>();
-            SelectedRoles = new List<string>();
-        }
 
         public static UserEditModel Create(IDb db)
         {
             return new UserEditModel
             {
-                User = new Data.User(),
+                User = new User(),
                 Roles = db.Roles.OrderBy(r => r.Name).ToList()
             };
         }
@@ -58,16 +53,17 @@ namespace Piranha.AspNetCore.Identity.Models
                 }
                 return model;
             }
+
             return null;
         }
 
-        public async Task<bool> Save(UserManager<Data.User> userManager)
+        public async Task<bool> Save(UserManager<User> userManager)
         {
             var user = await userManager.FindByIdAsync(User.Id.ToString());
 
             if (user == null)
             {
-                user = new Data.User
+                user = new User
                 {
                     Id = User.Id != Guid.Empty ? User.Id : Guid.NewGuid(),
                     UserName = User.UserName,
@@ -95,6 +91,7 @@ namespace Piranha.AspNetCore.Identity.Models
                 await userManager.RemovePasswordAsync(user);
                 await userManager.AddPasswordAsync(user, Password);
             }
+
             return true;
         }
     }

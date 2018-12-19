@@ -1,5 +1,5 @@
-@model Piranha.AspNetCore.Identity.Models.UserListModel
 @using Piranha.AspNetCore.Identity
+@model Piranha.AspNetCore.Identity.Models.UserListModel
 @{
     ViewBag.Title = "Users";
     ViewBag.Controller = "User";
@@ -15,7 +15,8 @@
     </div>
 </div>
 
-@if (!string.IsNullOrWhiteSpace(ViewBag.Message)) {
+@if (!string.IsNullOrWhiteSpace(ViewBag.Message))
+{
     <div class="row">
         <div class="col-sm-12">
             <div class="@ViewBag.MessageCss">
@@ -27,32 +28,33 @@
 
 <table class="table table-striped table-main">
     <thead>
-        <tr>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Roles</th>
-            <th class="actions one"></th>
-        </tr>
+    <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Roles</th>
+        <th class="actions one"></th>
+    </tr>
     </thead>
     <tbody>
-        @foreach (var user in Model.Users) {
-            <tr>
-                <td class="text-limit-cell">
-                    <span class="text-limit">
-                        <img src="@Utils.GetGravatarUrl(user.Email, 25)" alt="Gravatar for @user.Email" style="padding-right:10px">
-                        <a href="@Url.Action("Edit", new { id = user.Id})">@user.UserName</a>
-                    </span>
-                </td>
-                <td>@user.Email</td>
-                <td>
-                    @string.Join(", ", user.Roles)
-                </td>
-                <td class="actions one">
-                    <a class="remove" href="@Url.Action("Delete", new { id = user.Id })">
-                        <span class="fas fa-trash text-danger"></span>
-                    </a>
-                </td>
-            </tr>
-        }
+    @foreach (var user in Model.Users)
+    {
+        <tr>
+            <td class="text-limit-cell">
+                <span class="text-limit">
+                    <img src="@Utils.GetGravatarUrl(user.Email, 25)" alt="Gravatar for @user.Email" style="padding-right: 10px">
+                    <a href="@Url.Action("Edit", new {id = user.Id})">@user.UserName</a>
+                </span>
+            </td>
+            <td>@user.Email</td>
+            <td>
+                @string.Join(", ", user.Roles)
+            </td>
+            <td class="actions one">
+                <a class="remove" href="@Url.Action("Delete", new {id = user.Id})">
+                    <span class="fas fa-trash text-danger"></span>
+                </a>
+            </td>
+        </tr>
+    }
     </tbody>
 </table>

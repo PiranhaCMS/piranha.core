@@ -8,10 +8,11 @@
  * 
  */
 
-using Microsoft.AspNetCore.Identity;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Piranha.AspNetCore.Identity.Data;
 
 namespace Piranha.AspNetCore.Identity
 {
@@ -28,14 +29,14 @@ namespace Piranha.AspNetCore.Identity
         /// <summary>
         /// The private user manager.
         /// </summary>
-        private readonly UserManager<Data.User> _userManager;
+        private readonly UserManager<User> _userManager;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current DbContext</param>
         /// <param name="userManager">The current UserManager</param>
-        public DefaultIdentitySeed(IDb db, UserManager<Data.User> userManager)
+        public DefaultIdentitySeed(IDb db, UserManager<User> userManager)
         {
             _db = db;
             _userManager = userManager;
@@ -44,11 +45,11 @@ namespace Piranha.AspNetCore.Identity
         /// <summary>
         /// Create the seed data.
         /// </summary>
-        public async Task CreateAsync() 
+        public async Task CreateAsync()
         {
-            if (_db.Users.Count() == 0)
+            if (_db.Users.Any())
             {
-                var user = new Data.User 
+                var user = new User
                 {
                     UserName = "admin",
                     Email = "admin@piranhacms.org",

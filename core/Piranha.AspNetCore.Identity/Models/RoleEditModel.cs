@@ -8,22 +8,23 @@
  * 
  */
 
-using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Identity;
+using Piranha.AspNetCore.Identity.Data;
 
 namespace Piranha.AspNetCore.Identity.Models
 {
     public class RoleEditModel
     {
-        public Data.Role Role { get; set; }
-        public IList<string> SelectedClaims { get; set; }
-
         public RoleEditModel()
         {
             SelectedClaims = new List<string>();
         }
+
+        public Role Role { get; set; }
+        public IList<string> SelectedClaims { get; set; }
 
         public static RoleEditModel GetById(IDb db, Guid id)
         {
@@ -37,12 +38,10 @@ namespace Piranha.AspNetCore.Identity.Models
                 };
 
                 var roleClaims = db.RoleClaims.Where(r => r.RoleId == id).ToList();
-                foreach (var claim in roleClaims)
-                {
-                    model.SelectedClaims.Add(claim.ClaimType);
-                }
+                foreach (var claim in roleClaims) model.SelectedClaims.Add(claim.ClaimType);
                 return model;
             }
+
             return null;
         }
 
@@ -50,7 +49,7 @@ namespace Piranha.AspNetCore.Identity.Models
         {
             return new RoleEditModel
             {
-                Role = new Data.Role()
+                Role = new Role()
             };
         }
 
@@ -61,14 +60,17 @@ namespace Piranha.AspNetCore.Identity.Models
             if (role == null)
             {
                 Role.Id = Role.Id != Guid.Empty ? Role.Id : Guid.NewGuid();
-                Role.NormalizedName = !string.IsNullOrEmpty(Role.NormalizedName) ? Role.NormalizedName.ToUpper() : Role.Name.ToUpper();
+                Role.NormalizedName = !string.IsNullOrEmpty(Role.NormalizedName)
+                    ? Role.NormalizedName.ToUpper()
+                    : Role.Name.ToUpper();
 
-                role = new Data.Role
+                role = new Role
                 {
                     Id = Role.Id
                 };
                 db.Roles.Add(role);
             }
+
             role.Name = Role.Name;
             role.NormalizedName = Role.NormalizedName;
 
@@ -79,14 +81,16 @@ namespace Piranha.AspNetCore.Identity.Models
             foreach (var old in claims)
             {
                 if (!SelectedClaims.Contains(old.ClaimType))
+                {
                     delete.Add(old);
+                }
             }
 
             foreach (var selected in SelectedClaims)
             {
                 if (!claims.Any(c => c.ClaimType == selected))
                 {
-                    add.Add(new IdentityRoleClaim<Guid>()
+                    add.Add(new IdentityRoleClaim<Guid>
                     {
                         RoleId = role.Id,
                         ClaimType = selected,

@@ -8,27 +8,30 @@
  * 
  */
 
-using Piranha.Security;
 using System.Collections.Generic;
+using Piranha.Extend;
+using Piranha.Manager;
+using Piranha.Security;
 
 namespace Piranha.AspNetCore.Identity
 {
     /// <summary>
     /// The identity module.
     /// </summary>
-    public class Module : Extend.IModule
+    public class Module : IModule
     {
-        private readonly List<PermissionItem> _permissions = new List<PermissionItem>() {
-            new PermissionItem { Name = Permissions.Roles, Title = "List Roles", Category = "Roles"},
-            new PermissionItem { Name = Permissions.RolesAdd, Title = "Add Roles", Category = "Roles" },
-            new PermissionItem { Name = Permissions.RolesDelete, Title = "Delete Roles", Category = "Roles" },
-            new PermissionItem { Name = Permissions.RolesEdit, Title = "Edit Roles", Category = "Roles" },
-            new PermissionItem { Name = Permissions.RolesSave, Title = "Save Roles", Category = "Roles" },
-            new PermissionItem { Name = Permissions.Users, Title = "List Users", Category = "Users" },
-            new PermissionItem { Name = Permissions.UsersAdd, Title = "Add Users", Category = "Users" },
-            new PermissionItem { Name = Permissions.UsersDelete, Title = "Delete Users", Category = "Users" },
-            new PermissionItem { Name = Permissions.UsersEdit, Title = "Edit Users", Category = "Users" },
-            new PermissionItem { Name = Permissions.UsersSave, Title = "Save Users", Category = "Users" }
+        private readonly List<PermissionItem> _permissions = new List<PermissionItem>
+        {
+            new PermissionItem {Name = Permissions.Roles, Title = "List Roles", Category = "Roles"},
+            new PermissionItem {Name = Permissions.RolesAdd, Title = "Add Roles", Category = "Roles"},
+            new PermissionItem {Name = Permissions.RolesDelete, Title = "Delete Roles", Category = "Roles"},
+            new PermissionItem {Name = Permissions.RolesEdit, Title = "Edit Roles", Category = "Roles"},
+            new PermissionItem {Name = Permissions.RolesSave, Title = "Save Roles", Category = "Roles"},
+            new PermissionItem {Name = Permissions.Users, Title = "List Users", Category = "Users"},
+            new PermissionItem {Name = Permissions.UsersAdd, Title = "Add Users", Category = "Users"},
+            new PermissionItem {Name = Permissions.UsersDelete, Title = "Delete Users", Category = "Users"},
+            new PermissionItem {Name = Permissions.UsersEdit, Title = "Edit Users", Category = "Users"},
+            new PermissionItem {Name = Permissions.UsersSave, Title = "Save Users", Category = "Users"}
         };
 
         /// <summary>
@@ -44,7 +47,7 @@ namespace Piranha.AspNetCore.Identity
         /// <summary>
         /// Gets the Version
         /// </summary>
-        public string Version => Piranha.Utils.GetAssemblyVersion(this.GetType().Assembly);
+        public string Version => Piranha.Utils.GetAssemblyVersion(GetType().Assembly);
 
         /// <summary>
         /// Gets the release date
@@ -73,7 +76,7 @@ namespace Piranha.AspNetCore.Identity
             }
 
             // Add manager menu items
-            Manager.Menu.Items["System"].Items.Insert(0, new Manager.Menu.MenuItem()
+            Menu.Items["System"].Items.Insert(0, new Menu.MenuItem
             {
                 InternalId = "Users",
                 Name = "Users",
@@ -82,7 +85,7 @@ namespace Piranha.AspNetCore.Identity
                 Policy = Permissions.Users,
                 Css = "fas fa-users"
             });
-            Manager.Menu.Items["System"].Items.Insert(1, new Manager.Menu.MenuItem()
+            Menu.Items["System"].Items.Insert(1, new Menu.MenuItem
             {
                 InternalId = "Roles",
                 Name = "Roles",

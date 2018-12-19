@@ -1,14 +1,18 @@
 @model Piranha.AspNetCore.Identity.Models.UserEditModel
 @{
-    if (Model.User.Id != Guid.Empty) {
+    if (Model.User.Id != Guid.Empty)
+    {
         ViewBag.Title = "Edit user";
-    } else {
+    }
+    else
+    {
         ViewBag.Title = "Add user";
     }
     ViewBag.Controller = "User";
 }
 
-@using (var form = Html.BeginForm("Save", "User", FormMethod.Post, new { @class = "form", role = "form", autocomplete = "off" })) {
+@using (var form = Html.BeginForm("Save", "User", FormMethod.Post, new {@class = "form", role = "form", autocomplete = "off"}))
+{
     @Html.HiddenFor(m => m.User.Id)
 
     <div class="row">
@@ -18,24 +22,28 @@
                 <span class="btn-label">
                     <i class="fas fa-check"></i>
                 </span>
-                @if (Model.User.Id != Guid.Empty) {
+                @if (Model.User.Id != Guid.Empty)
+                {
                     <text>Update</text>
-                } else {
+                }
+                else
+                {
                     <text>Save</text>
                 }
             </button>
         </div>
     </div>
 
-    @if (!string.IsNullOrWhiteSpace(ViewBag.Message)) {
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="@ViewBag.MessageCss">
-                    @Html.Raw(ViewBag.Message)
-                </div>
-            </div>
-        </div>
-    }
+    @if (!string.IsNullOrWhiteSpace(ViewBag.Message))
+     {
+         <div class="row">
+             <div class="col-sm-12">
+                 <div class="@ViewBag.MessageCss">
+                     @Html.Raw(ViewBag.Message)
+                 </div>
+             </div>
+         </div>
+     }
 
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -46,27 +54,27 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Username</label>
-                        @Html.TextBoxFor(m => m.User.UserName, new { @class = "form-control small", maxlength = 128, placeholder = "The user name used to log in" })
+                        @Html.TextBoxFor(m => m.User.UserName, new {@class = "form-control small", maxlength = 128, placeholder = "The user name used to log in"})
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Email address</label>
-                        @Html.TextBoxFor(m => m.User.Email, new { @class = "form-control small", type = "email", maxlength = 128, placeholder = "The email address for the user" })
-                    </div>                
+                        @Html.TextBoxFor(m => m.User.Email, new {@class = "form-control small", type = "email", maxlength = 128, placeholder = "The email address for the user"})
+                    </div>
                 </div>
             </div>
             <div class="form-group">
                 <label>Roles</label>
                 <ul class="list-group">
-                    @for (var n = 0; n < Model.Roles.Count(); n+=3)
+                    @for (var n = 0; n < Model.Roles.Count(); n += 3)
                     {
                         <li class="list-group-item">
                             <div class="row">
                                 <div class="col-xs-4">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="SelectedRoles[]" value="@Model.Roles[n].Name" @(Model.SelectedRoles.Contains(@Model.Roles[n].Name) ? "checked=checked" : "")> @Model.Roles[n].Name
+                                            <input type="checkbox" name="SelectedRoles[]" value="@Model.Roles[n].Name" @(Model.SelectedRoles.Contains(Model.Roles[n].Name) ? "checked=checked" : "")> @Model.Roles[n].Name
                                         </label>
                                     </div>
                                 </div>
@@ -75,20 +83,20 @@
                                     <div class="col-xs-4">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" name="SelectedRoles[]" value="@Model.Roles[n + 1].Name" @(Model.SelectedRoles.Contains(@Model.Roles[n + 1].Name) ? "checked=checked" : "")> @Model.Roles[n + 1].Name
+                                                <input type="checkbox" name="SelectedRoles[]" value="@Model.Roles[n + 1].Name" @(Model.SelectedRoles.Contains(Model.Roles[n + 1].Name) ? "checked=checked" : "")> @Model.Roles[n + 1].Name
                                             </label>
                                         </div>
-                                    </div>                                        
+                                    </div>
                                 }
-                                @if (n + 2 < @Model.Roles.Count())
+                                @if (n + 2 < Model.Roles.Count())
                                 {
                                     <div class="col-xs-4">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" name="SelectedClaims[]" value="@Model.Roles[n + 2].Name" @(Model.SelectedRoles.Contains(@Model.Roles[n + 2].Name) ? "checked=checked" : "")> @Model.Roles[n + 2].Name
+                                                <input type="checkbox" name="SelectedClaims[]" value="@Model.Roles[n + 2].Name" @(Model.SelectedRoles.Contains(Model.Roles[n + 2].Name) ? "checked=checked" : "")> @Model.Roles[n + 2].Name
                                             </label>
                                         </div>
-                                    </div>                                        
+                                    </div>
                                 }
                             </div>
                         </li>
@@ -107,16 +115,16 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Password</label>
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control small", maxlength = 128, placeholder = "Add new password" })
+                        @Html.PasswordFor(m => m.Password, new {@class = "form-control small", maxlength = 128, placeholder = "Add new password"})
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>&nbsp;</label>
-                        @Html.PasswordFor(m => m.PasswordConfirm, new { @class = "form-control small", maxlength = 128, placeholder = "Confirm new password" })
+                        @Html.PasswordFor(m => m.PasswordConfirm, new {@class = "form-control small", maxlength = 128, placeholder = "Confirm new password"})
                     </div>
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
 }

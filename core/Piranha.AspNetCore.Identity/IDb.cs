@@ -8,10 +8,10 @@
  * 
  */
 
+using System;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Piranha.AspNetCore.Identity.Data;
-using System;
 
 namespace Piranha.AspNetCore.Identity
 {

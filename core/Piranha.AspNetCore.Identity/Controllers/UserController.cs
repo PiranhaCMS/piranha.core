@@ -8,13 +8,15 @@
  * 
  */
 
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Piranha.Areas.Manager.Controllers;
+using Piranha.AspNetCore.Identity.Data;
+using Piranha.AspNetCore.Identity.Models;
 
 namespace Piranha.AspNetCore.Identity.Controllers
 {
@@ -22,17 +24,17 @@ namespace Piranha.AspNetCore.Identity.Controllers
     /// Manager controller for managing users accounts.
     /// </summary>
     [Area("Manager")]
-    public class UserController : Areas.Manager.Controllers.MessageControllerBase
+    public class UserController : MessageControllerBase
     {
         private readonly IDb _db;
-        private UserManager<Data.User> _userManager;
+        private readonly UserManager<User> _userManager;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
         /// <param name="userManager">The current user manager</param>
-        public UserController(IDb db, UserManager<Data.User> userManager)
+        public UserController(IDb db, UserManager<User> userManager)
         {
             _db = db;
             _userManager = userManager;
@@ -45,7 +47,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
         [Authorize(Policy = Permissions.Users)]
         public IActionResult List()
         {
-            return View(Models.UserListModel.Get(_db));
+            return View(UserListModel.Get(_db));
         }
 
         /// <summary>
@@ -56,7 +58,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
         [Authorize(Policy = Permissions.UsersEdit)]
         public IActionResult Edit(Guid id)
         {
-            return View(Models.UserEditModel.GetById(_db, id));
+            return View(UserEditModel.GetById(_db, id));
         }
 
         /// <summary>
@@ -66,7 +68,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
         [Authorize(Policy = Permissions.UsersEdit)]
         public IActionResult Add()
         {
-            return View("Edit", Models.UserEditModel.Create(_db));
+            return View("Edit", UserEditModel.Create(_db));
         }
 
         /// <summary>
@@ -76,7 +78,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
         [HttpPost]
         [Route("/manager/user/save")]
         [Authorize(Policy = Permissions.UsersSave)]
-        public async Task<IActionResult> Save(Models.UserEditModel model)
+        public async Task<IActionResult> Save(UserEditModel model)
         {
             if (string.IsNullOrWhiteSpace(model.User.UserName))
             {
@@ -105,8 +107,9 @@ namespace Piranha.AspNetCore.Identity.Controllers
             if (await model.Save(_userManager))
             {
                 SuccessMessage("The user has been saved.");
-                return RedirectToAction("Edit", new { id = model.User.Id });
+                return RedirectToAction("Edit", new {id = model.User.Id});
             }
+
             ErrorMessage("The user could not be saved.", false);
             return View("Edit", model);
         }
@@ -129,6 +132,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
                 SuccessMessage("The user has been deleted.");
                 return RedirectToAction("List");
             }
+
             ErrorMessage("Could not find the user to delete.");
             return RedirectToAction("List");
         }

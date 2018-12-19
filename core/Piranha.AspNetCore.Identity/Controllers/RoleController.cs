@@ -8,16 +8,16 @@
  * 
  */
 
+using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
+using Piranha.Areas.Manager.Controllers;
+using Piranha.AspNetCore.Identity.Models;
 
 namespace Piranha.AspNetCore.Identity.Controllers
 {
     [Area("Manager")]
-    public class RoleController : Areas.Manager.Controllers.MessageControllerBase
+    public class RoleController : MessageControllerBase
     {
         private readonly IDb _db;
 
@@ -30,33 +30,34 @@ namespace Piranha.AspNetCore.Identity.Controllers
         [Authorize(Policy = Permissions.Roles)]
         public IActionResult List()
         {
-            return View(Models.RoleListModel.Get(_db));
+            return View(RoleListModel.Get(_db));
         }
 
         [Route("/manager/role/{id:Guid}")]
         [Authorize(Policy = Permissions.RolesEdit)]
         public IActionResult Edit(Guid id)
         {
-            return View("Edit", Models.RoleEditModel.GetById(_db, id));
+            return View("Edit", RoleEditModel.GetById(_db, id));
         }
 
         [Route("/manager/role")]
         [Authorize(Policy = Permissions.RolesAdd)]
         public IActionResult Add()
         {
-            return View("Edit", Models.RoleEditModel.Create());
+            return View("Edit", RoleEditModel.Create());
         }
 
         [HttpPost]
         [Route("/manager/role/save")]
         [Authorize(Policy = Permissions.RolesSave)]
-        public IActionResult Save(Models.RoleEditModel model)
+        public IActionResult Save(RoleEditModel model)
         {
             if (model.Save(_db))
             {
                 SuccessMessage("The role has been saved.");
-                return RedirectToAction("Edit", new { id = model.Role.Id });
+                return RedirectToAction("Edit", new {id = model.Role.Id});
             }
+
             ErrorMessage("The role could not be saved.", false);
             return View("Edit", model);
         }

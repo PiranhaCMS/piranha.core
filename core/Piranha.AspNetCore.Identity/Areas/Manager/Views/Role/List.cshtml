@@ -14,7 +14,8 @@
     </div>
 </div>
 
-@if (!string.IsNullOrWhiteSpace(ViewBag.Message)) {
+@if (!string.IsNullOrWhiteSpace(ViewBag.Message))
+{
     <div class="row">
         <div class="col-sm-12">
             <div class="@ViewBag.MessageCss">
@@ -26,27 +27,28 @@
 
 <table class="table table-striped table-main">
     <thead>
-        <tr>
-            <th>Name</th>
-            <th class="text-center"># of Users</th>
-            <th class="actions one"></th>
-        </tr>
+    <tr>
+        <th>Name</th>
+        <th class="text-center"># of Users</th>
+        <th class="actions one"></th>
+    </tr>
     </thead>
     <tbody>
-        @foreach (var role in Model.Roles) {
-            <tr>
-                <td class="text-limit-cell">
-                    <span class="text-limit">
-                        <a href="@Url.Action("Edit", new { id = role.Id})">@role.Name</a>
-                    </span>
-                </td>
-                <td class="text-center">@role.UserCount</td>
-                <td class="actions one">
-                    <a class="remove" href="@Url.Action("Delete", new { id = role.Id })">
-                        <span class="fas fa-trash text-danger"></span>
-                    </a>
-                </td>
-            </tr>
-        }
+    @foreach (var role in Model.Roles)
+    {
+        <tr>
+            <td class="text-limit-cell">
+                <span class="text-limit">
+                    <a href="@Url.Action("Edit", new {id = role.Id})">@role.Name</a>
+                </span>
+            </td>
+            <td class="text-center">@role.UserCount</td>
+            <td class="actions one">
+                <a class="remove" href="@Url.Action("Delete", new {id = role.Id})">
+                    <span class="fas fa-trash text-danger"></span>
+                </a>
+            </td>
+        </tr>
+    }
     </tbody>
 </table>

@@ -8,49 +8,53 @@
  * 
  */
 
+using System;
+using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Piranha.AspNetCore.Identity.Data;
-using System;
-using System.Linq;
 
 namespace Piranha.AspNetCore.Identity
 {
     public abstract class Db<T> :
         IdentityDbContext<User, Role, Guid,
-        IdentityUserClaim<Guid>,
-        IdentityUserRole<Guid>,
-        IdentityUserLogin<Guid>,
-        IdentityRoleClaim<Guid>,
-        IdentityUserToken<Guid>>,
+            IdentityUserClaim<Guid>,
+            IdentityUserRole<Guid>,
+            IdentityUserLogin<Guid>,
+            IdentityRoleClaim<Guid>,
+            IdentityUserToken<Guid>>,
         IDb
         where T : Db<T>
     {
         /// <summary>
-        /// Gets/sets whether the db context as been initialized. This
-        /// is only performed once in the application lifecycle.
+        ///     Gets/sets whether the db context as been initialized. This
+        ///     is only performed once in the application lifecycle.
         /// </summary>
-        private static bool IsInitialized = false;
+        private static volatile bool IsInitialized;
 
         /// <summary>
-        /// The object mutext used for initializing the context.
+        ///     The object mutext used for initializing the context.
         /// </summary>
-        private static object Mutex = new object();
+        private static readonly object Mutex = new object();
 
         /// <summary>
-        /// Default constructor.
+        ///     Default constructor.
         /// </summary>
         /// <param name="options">Configuration options</param>
-        public Db(DbContextOptions<T> options) : base(options)
+        protected Db(DbContextOptions<T> options) : base(options)
         {
             if (IsInitialized)
+            {
                 return;
+            }
 
             lock (Mutex)
             {
                 if (IsInitialized)
+                {
                     return;
+                }
 
                 // Migrate database
                 Database.Migrate();
@@ -62,7 +66,7 @@ namespace Piranha.AspNetCore.Identity
         }
 
         /// <summary>
-        /// Creates and configures the data model.
+        ///     Creates and configures the data model.
         /// </summary>
         /// <param name="mb">The current model builder</param>
         protected override void OnModelCreating(ModelBuilder mb)
@@ -79,7 +83,7 @@ namespace Piranha.AspNetCore.Identity
         }
 
         /// <summary>
-        /// Seeds the default data.
+        ///     Seeds the default data.
         /// </summary>
         private void Seed()
         {
@@ -102,7 +106,8 @@ namespace Piranha.AspNetCore.Identity
             //foreach (var claim in Piranha.Security.Permission.All()) 
             foreach (var permission in App.Permissions.GetPermissions())
             {
-                var roleClaim = RoleClaims.FirstOrDefault(c => c.RoleId == role.Id && c.ClaimType == permission.Name && c.ClaimValue == permission.Name);
+                var roleClaim = RoleClaims.FirstOrDefault(c =>
+                    c.RoleId == role.Id && c.ClaimType == permission.Name && c.ClaimValue == permission.Name);
                 if (roleClaim == null)
                 {
                     RoleClaims.Add(new IdentityRoleClaim<Guid>
@@ -113,6 +118,7 @@ namespace Piranha.AspNetCore.Identity
                     });
                 }
             }
+
             SaveChanges();
         }
     }

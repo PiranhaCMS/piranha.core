@@ -28,7 +28,7 @@ namespace Piranha.AspNetCore.Identity
 
         public static string[] All()
         {
-            return new string[]
+            return new[]
             {
                 Roles,
                 RolesAdd,

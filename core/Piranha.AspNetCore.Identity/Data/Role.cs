@@ -16,5 +16,7 @@ namespace Piranha.AspNetCore.Identity.Data
     /// <summary>
     /// Application role.
     /// </summary>
-    public sealed class Role : IdentityRole<Guid> { }
+    public sealed class Role : IdentityRole<Guid>
+    {
+    }
 }

@@ -16,38 +16,21 @@ namespace Piranha.AspNetCore.Identity.Models
 {
     public class UserListModel
     {
-        public class ListItem
-        {
-            public Guid Id { get; set; }
-            public string UserName { get; set; }
-            public string Email { get; set; }
-            public IList<string> Roles { get; set; }
-
-            public ListItem()
-            {
-                Roles = new List<string>();
-            }
-        }
-
-        public IList<ListItem> Users { get; set; }
-
-        public UserListModel()
-        {
-            Users = new List<ListItem>();
-        }
+        public IList<ListItem> Users { get; set; } = new List<ListItem>();
 
         public static UserListModel Get(IDb db)
         {
-            var model = new UserListModel();
-
-            model.Users = db.Users
-                .OrderBy(u => u.UserName)
-                .Select(u => new ListItem
-                {
-                    Id = u.Id,
-                    UserName = u.UserName,
-                    Email = u.Email
-                }).ToList();
+            var model = new UserListModel
+            {
+                Users = db.Users
+                    .OrderBy(u => u.UserName)
+                    .Select(u => new ListItem
+                    {
+                        Id = u.Id,
+                        UserName = u.UserName,
+                        Email = u.Email
+                    }).ToList()
+            };
 
             var roles = db.Roles
                 .ToList();
@@ -62,10 +45,21 @@ namespace Piranha.AspNetCore.Identity.Models
                 {
                     var role = roles.FirstOrDefault(r => r.Id == userRole.RoleId);
                     if (role != null)
+                    {
                         user.Roles.Add(role.Name);
+                    }
                 }
             }
+
             return model;
+        }
+
+        public class ListItem
+        {
+            public Guid Id { get; set; }
+            public string UserName { get; set; }
+            public string Email { get; set; }
+            public IList<string> Roles { get; set; } = new List<string>();
         }
     }
 }

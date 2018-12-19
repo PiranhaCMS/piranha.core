@@ -8,27 +8,28 @@
  * 
  */
 
-using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Piranha.AspNetCore.Identity.Data;
 
 namespace Piranha.AspNetCore.Identity
 {
     public class IdentitySecurity : ISecurity
     {
         /// <summary>
-        /// The sign in manager.
-        /// </summary>
-        private readonly SignInManager<Data.User> _signInManager;
-
-        /// <summary>
         /// The optional identity seed.
         /// </summary>
         private readonly IIdentitySeed _seed;
 
         /// <summary>
-        /// Default constructor.
+        /// The sign in manager.
         /// </summary>
-        public IdentitySecurity(SignInManager<Data.User> signInManager, IIdentitySeed seed = null)
+        private readonly SignInManager<User> _signInManager;
+
+        /// <summary>
+        ///     Default constructor.
+        /// </summary>
+        public IdentitySecurity(SignInManager<User> signInManager, IIdentitySeed seed = null)
         {
             _signInManager = signInManager;
             _seed = seed;
@@ -49,7 +50,7 @@ namespace Piranha.AspNetCore.Identity
                 await _seed.CreateAsync();
             }
 
-            var result = await _signInManager.PasswordSignInAsync(username, password, false, lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(username, password, false, false);
             return result.Succeeded;
         }
 
