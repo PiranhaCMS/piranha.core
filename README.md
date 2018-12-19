@@ -1,5 +1,6 @@
 # Welcome to Piranha.Core
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ba7cbafe380b4c2796b731562c5166e0)](https://www.codacy.com/app/tidyui/piranha.core?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=PiranhaCMS/piranha.core&amp;utm_campaign=Badge_Grade)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/PiranhaCMS/piranha.core.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/PiranhaCMS/piranha.core/alerts/)
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/PiranhaCMS/piranha.core.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/PiranhaCMS/piranha.core/context:javascript)
 [![Gitter chat](https://badges.gitter.im/PiranhaCMS/Piranha.png)](https://gitter.im/PiranhaCMS/Piranha)
@@ -29,7 +30,7 @@ Piranha is currently built for `NetStandard 2.0` and uses the following awesome 
 
 #### Prerequisites
 
-* [.NET Core SDK 2.1.5](https://www.microsoft.com/net/core/)
+* [.NET Core SDK 2.1.5](https://www.microsoft.com/net/core/) or later
 * An IDE or Editor of your choice
 
 #### Get the latest source code and get going:
