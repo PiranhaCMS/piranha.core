@@ -51,7 +51,8 @@ namespace Piranha.Extend.Serializers
                 catch 
                 { 
                     // Let's not throw an exception, let's just
-                    // return a new empty date field.
+                    // return a new empty field.
+                    field.Value = null;
                 }
             }
             return field;

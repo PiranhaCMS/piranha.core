@@ -20,7 +20,7 @@ namespace Piranha.Repositories
         private readonly IDb _db;
         private static readonly Dictionary<string, Models.PageType> _types = new Dictionary<string, Models.PageType>();
         private static object _typesMutex = new Object();
-        private static bool _isInitialized = false;
+        private static volatile bool _isInitialized = false;
 
         /// <summary>
         /// Default constructor.

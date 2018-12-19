@@ -18,7 +18,6 @@ namespace Piranha.Manager.Binders
 {
     internal sealed class AbstractModelBinder : IModelBinder
     {
-        #region Members
         /// <summary>
         /// The meta data provider from the current binding context.
         /// </summary>
@@ -28,7 +27,6 @@ namespace Piranha.Manager.Binders
         /// The available binders.
         /// </summary>
         private readonly Dictionary<string, AbstractBinderType> binders;
-        #endregion
 
         /// <summary>
         /// Default constructor.

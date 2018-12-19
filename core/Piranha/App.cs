@@ -32,12 +32,12 @@ namespace Piranha
         /// <summary>
         /// Mutex for thread safe initialization.
         /// </summary>
-        private readonly object _mutex = new object();
+        private static readonly object _mutex = new object();
 
         /// <summary>
         /// The current state of the app.
         /// </summary>
-        private bool _isInitialized = false;
+        private static volatile bool _isInitialized = false;
 
         /// <summary>
         /// The currently registered blocks.

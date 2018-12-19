@@ -30,10 +30,15 @@ namespace Piranha.AspNetCore
             var clientInfo = Get(context);
 
             if (clientInfo.EntityTag == serverInfo.EntityTag)
+            {
                 return true;
+            }
 
             if (clientInfo.LastModified.HasValue)
+            {
                 return clientInfo.LastModified.Value >= serverInfo.LastModified.Value;
+
+            }
 
             return false;
         }
@@ -62,7 +67,6 @@ namespace Piranha.AspNetCore
             var info = new HttpCacheInfo
             {
                 EntityTag = context.Request.Headers["If-None-Match"]
-
             };
 
             string lastMod = context.Request.Headers["If-Modified-Since"];
@@ -72,7 +76,10 @@ namespace Piranha.AspNetCore
                 {
                     info.LastModified = DateTime.Parse(lastMod);
                 }
-                catch { }
+                catch 
+                { 
+                    info.LastModified = null;
+                }
             }
             return info;
         }

@@ -19,30 +19,30 @@ namespace Piranha.Manager
 {
     public class ResourceMiddleware
     {
-        #region Members
         /// <summary>
         /// The next middleware in the pipeline.
         /// </summary>
-        private readonly RequestDelegate next;
+        private readonly RequestDelegate _next;
 
         /// <summary>
         /// The currently embedded asset types.
         /// </summary>
-        private readonly Dictionary<string, string> contentTypes = new Dictionary<string, string>() {
+        private readonly Dictionary<string, string> contentTypes = new Dictionary<string, string> 
+        {
             { ".ico", "image/x-icon" },
             { ".png", "image/png" },
             { ".gif", "image/gif" },
             { ".css", "text/css" },
             { ".js", "text/javascript" }
         };
-        #endregion
 
         /// <summary>
         /// Creates a new middleware instance.
         /// </summary>
         /// <param name="next">The next middleware in the pipeline</param>
-        public ResourceMiddleware(RequestDelegate next) {
-            this.next = next;
+        public ResourceMiddleware(RequestDelegate next) 
+        {
+            _next = next;
         }
 
         /// <summary>
@@ -50,9 +50,11 @@ namespace Piranha.Manager
         /// </summary>
         /// <param name="context">The current http context</param>
         /// <returns>An async task</returns>
-        public async Task Invoke(HttpContext context) {
+        public async Task Invoke(HttpContext context) 
+        {
             var path = context.Request.Path.Value;
-            if (path.StartsWith("/manager/assets/")) {
+            if (path.StartsWith("/manager/assets/")) 
+            {
                 var provider = new EmbeddedFileProvider(Module.Assembly, "Piranha");
 
                 var folders = path.Substring(0, path.LastIndexOf("/"));
@@ -62,41 +64,47 @@ namespace Piranha.Manager
 
                 var fileInfo = provider.GetFileInfo(path);
 
-                if (fileInfo.Exists) {
+                if (fileInfo.Exists) 
+                {
                     var headers = context.Response.GetTypedHeaders();
                     var etag = Piranha.Utils.GenerateETag(path, Module.LastModified);
 
                     var etagHeader = context.Request.Headers["If-None-Match"];
-                    if (etagHeader.Count == 0 || etagHeader[0] != etag) {
+                    if (etagHeader.Count == 0 || etagHeader[0] != etag) 
+                    {
                         context.Response.ContentType = GetContentType(Path.GetExtension(path));
                         context.Response.ContentLength = fileInfo.Length;
                         context.Response.Headers["ETag"] = etag;
                         headers.LastModified = fileInfo.LastModified.ToUniversalTime();
 
                         await context.Response.SendFileAsync(fileInfo);
-                    } else {
+                    } 
+                    else 
+                    {
                         context.Response.StatusCode = 304;
                     }
                 } else {
                     context.Response.StatusCode = 404;
                 }
             } else {
-                await next.Invoke(context);
+                await _next.Invoke(context);
             }
         }
 
-        #region Private methods
         /// <summary>
         /// Gets the content type for the asset.
         /// </summary>
         /// <param name="path">The asset path</param>
         /// <returns>The content type</returns>
         private string GetContentType(string path) {
-            try {
+            try 
+            {
                 return contentTypes[Path.GetExtension(path)];
-            } catch { }
-            return "text/plain";
+            } 
+            catch 
+            { 
+                return "text/plain";
+            }
         }
-        #endregion
     }
 }

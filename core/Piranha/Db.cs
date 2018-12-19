@@ -21,12 +21,12 @@ namespace Piranha
         /// Gets/sets whether the db context as been initialized. This
         /// is only performed once in the application lifecycle.
         /// </summary>
-        static bool IsInitialized = false;
+        private static volatile bool IsInitialized = false;
 
         /// <summary>
         /// The object mutext used for initializing the context.
         /// </summary>
-        static object Mutex = new object();
+        private static object Mutex = new object();
 
         /// <summary>
         /// Gets/sets the alias set.

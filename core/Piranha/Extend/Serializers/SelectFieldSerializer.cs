@@ -44,7 +44,12 @@ namespace Piranha.Extend.Serializers
                 {
                     field.EnumValue = str;
                 }
-                catch { }
+                catch 
+                { 
+                    // Let's not throw an exception, let's just
+                    // return a new empty field.
+                    field.EnumValue = null;
+                }
             }
             return field;
         }
