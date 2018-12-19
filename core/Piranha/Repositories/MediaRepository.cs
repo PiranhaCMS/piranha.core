@@ -251,11 +251,9 @@ namespace Piranha.Repositories
                 }
                 else
                 {
-                    using (var reader = new BinaryReader(((Models.StreamMediaContent)content).Data))
-                    {
-                        bytes = reader.ReadBytes((int)reader.BaseStream.Length);
-                        ((Models.StreamMediaContent)content).Data.Position = 0;
-                    }
+                    var reader = new BinaryReader(((Models.StreamMediaContent)content).Data);
+                    bytes = reader.ReadBytes((int)reader.BaseStream.Length);
+                    ((Models.StreamMediaContent)content).Data.Position = 0;
                 }
 
                 int width, height;
