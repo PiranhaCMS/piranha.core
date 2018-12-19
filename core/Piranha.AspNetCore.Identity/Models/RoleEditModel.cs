@@ -38,7 +38,10 @@ namespace Piranha.AspNetCore.Identity.Models
                 };
 
                 var roleClaims = db.RoleClaims.Where(r => r.RoleId == id).ToList();
-                foreach (var claim in roleClaims) model.SelectedClaims.Add(claim.ClaimType);
+                foreach (var claim in roleClaims)
+                {
+                    model.SelectedClaims.Add(claim.ClaimType);
+                }
                 return model;
             }
 

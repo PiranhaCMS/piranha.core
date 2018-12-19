@@ -36,11 +36,11 @@
 //      ]
 //  }
 
-if (typeof(piranha)  == 'undefined')
+if (typeof(piranha) == "undefined")
     piranha = {};
 
 piranha.notifications = new function() {
-    'use strict';
+    "use strict";
 
     var self = this;
 
@@ -54,7 +54,7 @@ piranha.notifications = new function() {
      * @param {string} msg
      * @param {string} icon
      */
-    self.createSuccess = function (msg, icon) {
+    self.createSuccess = function(msg, icon) {
         var n = self.create({
             class: "alert-success",
             icon: icon || "fas fa-check",
@@ -62,14 +62,14 @@ piranha.notifications = new function() {
         });
 
         self.add(n);
-    }
+    };
 
     /**
      * Shortcut for creating a info notification
      * @param {string} msg
      * @param {string} icon
      */
-    self.createInfo = function (msg, icon) {
+    self.createInfo = function(msg, icon) {
         var n = self.create({
             class: "alert-info",
             icon: icon || "fas fa-info-circle",
@@ -77,14 +77,14 @@ piranha.notifications = new function() {
         });
 
         self.add(n);
-    }
+    };
 
     /**
      * Shortcut for creating a warning notification
      * @param {string} msg
      * @param {string} icon
      */
-    self.createWarning = function (msg, icon) {
+    self.createWarning = function(msg, icon) {
         var n = self.create({
             class: "alert-warning",
             icon: icon || "fas fa-exclamation-triangle",
@@ -92,14 +92,14 @@ piranha.notifications = new function() {
         });
 
         self.add(n);
-    }
+    };
 
     /**
      * Shortcut for creating a danger notification
      * @param {string} msg
      * @param {string} icon
      */
-    self.createDanger = function (msg, icon) {
+    self.createDanger = function(msg, icon) {
         var n = self.create({
             class: "alert-danger",
             icon: icon || "fas fa-exclamation-triangle",
@@ -107,13 +107,13 @@ piranha.notifications = new function() {
         });
 
         self.add(n);
-    }
+    };
 
     /**
      * Create a new notification
      * @param {object} model
      */
-    self.create = function (model) {
+    self.create = function(model) {
 
         // Create the element with basic styling
         var notification = document.createElement("div");
@@ -145,15 +145,15 @@ piranha.notifications = new function() {
             var group = document.createElement("div");
             group.classList.add("text-right");
 
-            model.buttons.forEach(function (button) {
+            model.buttons.forEach(function(button) {
                 var btn = document.createElement("button");
-                
+
                 // Default classes
                 btn.classList.add("btn");
                 btn.classList.add("btn-sm");
 
                 btn.innerText = button.text;
-                
+
                 // Use custom class or default
                 if (button.class) {
                     btn.classList.add(button.class);
@@ -166,10 +166,11 @@ piranha.notifications = new function() {
                 if (button.handler) {
                     btn.addEventListener("click", button.handler);
                 } else {
-                    btn.addEventListener("click", function () {
-                        var n = piranha.notifications.findNotification(this);
-                        piranha.notifications.dismiss(n);
-                    });
+                    btn.addEventListener("click",
+                        function() {
+                            var n = piranha.notifications.findNotification(this);
+                            piranha.notifications.dismiss(n);
+                        });
                 }
 
                 group.appendChild(btn);
@@ -179,16 +180,16 @@ piranha.notifications = new function() {
         };
 
         return notification;
-    }
+    };
 
     /**
      * Add the notification to the DOM
      * @param {element} notification
      * @param {number} countDown time (ms) before dismiss. 
      */
-    self.add = function (notification, countDown) {
+    self.add = function(notification, countDown) {
 
-        if (typeof countDown === 'undefined')
+        if (typeof countDown === "undefined")
             countDown = 3500;
 
         // Remove dismiss class if any.
@@ -198,9 +199,10 @@ piranha.notifications = new function() {
         self.container.appendChild(notification);
 
         if (countDown > 0) {
-            setTimeout(function () {
-                self.dismiss(notification);
-            }, countDown)
+            setTimeout(function() {
+                    self.dismiss(notification);
+                },
+                countDown);
         }
     };
 
@@ -209,23 +211,24 @@ piranha.notifications = new function() {
      * from a child element
      * @param {element} child
      */
-    self.findNotification = function (child) {
+    self.findNotification = function(child) {
         if (child) {
             while ((child = child.parentElement) && !child.classList.contains("notification-alert"));
             return child;
         }
         return;
-    }
+    };
 
     /**
      * Run the dismiss sequence
      * and remove the notification
      * @param {element} notification
      */
-    self.dismiss = function (notification) {
+    self.dismiss = function(notification) {
         notification.classList.add("notification-dismiss");
-        setTimeout(function () {
-            notification.remove();
-        }, 400);
-    }
+        setTimeout(function() {
+                notification.remove();
+            },
+            400);
+    };
 };
