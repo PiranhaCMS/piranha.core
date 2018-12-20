@@ -475,7 +475,10 @@ namespace Piranha.Services
                                 ((Extend.BlockGroup)models.First(m => m.Id == parent.BlockId))
                                     .Items.Add(model);
                             }
-                            else throw new Exception("COULDN'T FIND PARENT");
+                            else 
+                            {
+                                throw new InvalidOperationException("Block parent is missing");
+                            }
                         }
                         else 
                         {

@@ -870,7 +870,7 @@ namespace Piranha.Tests.Repositories
                 page.Title = "New title";
                 page.OriginalPageId = PAGE_8_ID; // PAGE_8 is an copy of PAGE_7
 
-                var exn = Assert.Throws<Exception>(() => {
+                var exn = Assert.Throws<InvalidOperationException>(() => {
                     api.Pages.Save(page);
                 });
 
@@ -885,7 +885,7 @@ namespace Piranha.Tests.Repositories
                 page.Title = "New title";
                 page.OriginalPageId = PAGE_7_ID;
 
-                var exn = Assert.Throws<Exception>(() => {
+                var exn = Assert.Throws<InvalidOperationException>(() => {
                     api.Pages.Save(page);
                 });
 
@@ -942,7 +942,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void DeleteShouldThrowWhenPageHasCopies() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
-                var exn = Assert.Throws<Exception>(() => {
+                var exn = Assert.Throws<InvalidOperationException>(() => {
                     api.Pages.Delete(PAGE_7_ID);
                 });
                 Assert.Equal("Can not delete page because it has copies", exn.Message);

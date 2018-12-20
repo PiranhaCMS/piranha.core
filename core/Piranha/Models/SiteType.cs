@@ -22,7 +22,7 @@ namespace Piranha.Models
         {
             if (Regions.Select(r => r.Id).Distinct().Count() != Regions.Count)
             {
-                throw new Exception($"Region Id not unique for site type {Id}");
+                throw new InvalidOperationException($"Region Id not unique for site type {Id}");
             }
 
             foreach (var region in Regions) 
@@ -31,7 +31,7 @@ namespace Piranha.Models
 
                 if (region.Fields.Select(f => f.Id).Distinct().Count() != region.Fields.Count)
                 {
-                    throw new Exception($"Field Id not unique for site type {Id}");
+                    throw new InvalidOperationException($"Field Id not unique for site type {Id}");
                 }
 
                 foreach (var field in region.Fields) 

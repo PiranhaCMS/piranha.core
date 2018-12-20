@@ -72,7 +72,7 @@ namespace Piranha.Repositories
         {
             if (!page.OriginalPageId.HasValue)
             {
-                throw new Exception("Page is not an copy");
+                throw new InvalidOperationException("Page is not an copy");
             }
 
             var model = GetById<T>(page.Id);
@@ -490,13 +490,13 @@ namespace Piranha.Repositories
                     var originalPageIsCopy = _db.Pages.FirstOrDefault(p => p.Id == model.OriginalPageId)?.OriginalPageId.HasValue ?? false;
                     if (originalPageIsCopy)
                     {
-                        throw new Exception("Can not set copy of a copy");
+                        throw new InvalidOperationException("Can not set copy of a copy");
                     }
 
                     var originalPageType = _db.Pages.FirstOrDefault(p => p.Id == model.OriginalPageId)?.PageTypeId;
                     if (originalPageType != model.TypeId)
                     {
-                        throw new Exception("Copy can not have a different content type");
+                        throw new InvalidOperationException("Copy can not have a different content type");
                     }
 
                     // Transform the model
@@ -721,7 +721,7 @@ namespace Piranha.Repositories
                 var copyCount = _db.Pages.Count(p => p.OriginalPageId == model.Id);
                 if (copyCount > 0)
                 {
-                    throw new Exception("Can not delete page because it has copies");
+                    throw new InvalidOperationException("Can not delete page because it has copies");
                 }
 
                 // Get the site

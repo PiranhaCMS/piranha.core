@@ -27,14 +27,19 @@ namespace Piranha.Models
         public void Ensure()
         {
             if (Regions.Select(r => r.Id).Distinct().Count() != Regions.Count)
-                throw new Exception($"Region Id not unique for page type {Id}");
+            {
+                throw new InvalidOperationException($"Region Id not unique for page type {Id}");
+            }
 
             foreach (var region in Regions)
             {
                 region.Title = region.Title ?? region.Id;
 
                 if (region.Fields.Select(f => f.Id).Distinct().Count() != region.Fields.Count)
-                    throw new Exception($"Field Id not unique for page type {Id}");
+                {
+                    throw new InvalidOperationException($"Field Id not unique for page type {Id}");
+                }
+                
                 foreach (var field in region.Fields)
                 {
                     field.Id = field.Id ?? "Default";
