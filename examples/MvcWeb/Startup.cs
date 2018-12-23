@@ -29,11 +29,8 @@ namespace MvcWeb
                 options.UseSqlite("Filename=./piranha.mvcweb.db"));
             services.AddPiranhaManager();
 
-            services.AddDistributedMemoryCache();
-            services.AddPiranhaDistributedCache();
-
-            //services.AddMemoryCache();
-            //services.AddPiranhaMemoryCache();
+            services.AddMemoryCache();
+            services.AddPiranhaMemoryCache();
 
             App.Init();
         }
