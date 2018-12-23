@@ -13,6 +13,7 @@ using System.Collections.Generic;
 
 namespace Piranha.Data
 {
+    [Serializable]
     public sealed class Page : RoutedContent<PageField>, IModel, ICreated, IModified
     {
         /// <summary>

@@ -8,10 +8,12 @@
  * 
  */
 
+using System;
 using System.Collections.Generic;
 
 namespace Piranha.Models
 {
+    [Serializable]
     public sealed class RegionType
     {
         /// <summary>

@@ -19,6 +19,7 @@ namespace Piranha.Repositories
 {
     public class SiteRepository : BaseRepositoryWithAll<Site>, ISiteRepository
     {
+        [Serializable]
         public class SiteMapping
         {
             public Guid Id { get; set; }

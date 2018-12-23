@@ -8,7 +8,10 @@
  * 
  */
 
+using System;
+
 namespace Piranha.Models
 {
+    [Serializable]
     public class MediaStructure : Structure<MediaStructure, MediaStructureItem> { }
 }

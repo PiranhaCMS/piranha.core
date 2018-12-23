@@ -22,7 +22,7 @@ namespace Piranha.Tests.Repositories
     public class CategoriesCached : Categories
     {
         protected override void Init() {
-            cache = new Cache.MemCache();
+            cache = new Cache.SimpleCache();
 
             base.Init();
         }

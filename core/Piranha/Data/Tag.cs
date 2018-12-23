@@ -12,6 +12,7 @@ using System;
 
 namespace Piranha.Data
 {
+    [Serializable]
     public sealed class Tag : Taxonomy, IModel, ICreated, IModified 
     { 
         /// <summary>

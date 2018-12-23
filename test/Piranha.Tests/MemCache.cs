@@ -15,7 +15,7 @@ namespace Piranha.Tests
 {
     public class MemCache
     {
-        private Piranha.Cache.MemCache cache;
+        private Piranha.Cache.SimpleCache cache;
         private string id1 = Guid.NewGuid().ToString();
         private string id2 = Guid.NewGuid().ToString();
         private string id3 = Guid.NewGuid().ToString();
@@ -28,7 +28,7 @@ namespace Piranha.Tests
         /// Initializes the test class.
         /// </summary>
         public MemCache() {
-            cache = new Piranha.Cache.MemCache();
+            cache = new Piranha.Cache.SimpleCache();
 
             cache.Set(id1, val1);
             cache.Set(id2, val2);

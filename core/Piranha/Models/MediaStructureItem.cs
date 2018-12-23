@@ -12,6 +12,7 @@ using System;
 
 namespace Piranha.Models
 {
+    [Serializable]
     public class MediaStructureItem : StructureItem<MediaStructureItem>
     {
         /// <summary>

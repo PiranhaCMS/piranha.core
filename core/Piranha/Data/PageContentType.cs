@@ -10,6 +10,7 @@
 
 namespace Piranha.Data
 {
+
     public enum PageContentType
     {
         Page,

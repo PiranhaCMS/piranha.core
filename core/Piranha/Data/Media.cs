@@ -13,6 +13,7 @@ using System.Collections.Generic;
 
 namespace Piranha.Data
 {
+    [Serializable]
     public sealed class Media : IModel, ICreated, IModified
     {
         /// <summary>

@@ -12,6 +12,7 @@ using System;
 
 namespace Piranha.Models
 {
+    [Serializable]
     public class SitemapItem : StructureItem<SitemapItem>
     {
         /// <summary>

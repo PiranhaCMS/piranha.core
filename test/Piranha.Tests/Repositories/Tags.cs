@@ -21,7 +21,7 @@ namespace Piranha.Tests.Repositories
     public class TagsCached : Tags
     {
         protected override void Init() {
-            cache = new Cache.MemCache();
+            cache = new Cache.SimpleCache();
 
             base.Init();
         }

@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;
 using Piranha.AspNetCore.Identity.SQLite;
@@ -26,7 +28,12 @@ namespace MvcWeb
             services.AddPiranhaIdentityWithSeed<IdentitySQLiteDb>(options => 
                 options.UseSqlite("Filename=./piranha.mvcweb.db"));
             services.AddPiranhaManager();
-            services.AddPiranhaMemCache();
+
+            services.AddDistributedMemoryCache();
+            services.AddPiranhaDistributedCache();
+
+            //services.AddMemoryCache();
+            //services.AddPiranhaMemoryCache();
 
             App.Init();
         }
@@ -40,7 +47,8 @@ namespace MvcWeb
             }
 
             // Configure cache level
-            App.CacheLevel = Piranha.Cache.CacheLevel.Basic;
+            // App.CacheLevel = Piranha.Cache.CacheLevel.Basic;
+            App.CacheLevel = Piranha.Cache.CacheLevel.Full;
 
             // Custom components
             App.Blocks.Register<Models.Blocks.SeparatorBlock>();

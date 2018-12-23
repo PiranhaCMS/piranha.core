@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;
 using Piranha.AspNetCore.Identity.SQLite;
@@ -26,7 +27,8 @@ namespace RazorWeb
             services.AddPiranhaIdentityWithSeed<IdentitySQLiteDb>(options => 
                 options.UseSqlite("Filename=./piranha.razorweb.db"));
             services.AddPiranhaManager();
-            services.AddPiranhaMemCache();
+            services.AddMemoryCache();
+            services.AddPiranhaMemoryCache();
 
             App.Init();
         }

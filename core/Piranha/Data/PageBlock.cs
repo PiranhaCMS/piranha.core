@@ -12,6 +12,7 @@ using System;
 
 namespace Piranha.Data
 {
+    [Serializable]
     /// <summary>
     /// Connection between a page and a block.
     /// </summary>

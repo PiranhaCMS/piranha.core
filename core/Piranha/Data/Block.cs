@@ -13,6 +13,7 @@ using System.Collections.Generic;
 
 namespace Piranha.Data
 {
+    [Serializable]
     /// <summary>
     /// Reusable content block.
     /// </summary>

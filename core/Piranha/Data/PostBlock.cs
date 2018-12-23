@@ -12,6 +12,7 @@ using System;
 
 namespace Piranha.Data
 {
+    [Serializable]
     /// <summary>
     /// Connection between a post and a block.
     /// </summary>

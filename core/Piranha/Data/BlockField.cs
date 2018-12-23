@@ -12,6 +12,7 @@ using System;
 
 namespace Piranha.Data
 {
+    [Serializable]
     /// <summary>
     /// Content field for a block.
     /// </summary>

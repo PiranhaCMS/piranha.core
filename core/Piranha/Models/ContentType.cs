@@ -8,6 +8,7 @@
  * 
  */
 
+using System;
 using System.Collections.Generic;
 
 namespace Piranha.Models
@@ -15,6 +16,7 @@ namespace Piranha.Models
     /// <summary>
     /// Base class for templated content types.
     /// </summary>
+    [Serializable]
     public abstract class ContentType
     {
         /// <summary>

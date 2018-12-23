@@ -55,8 +55,39 @@ public static class ServiceExtensions
     /// </summary>
     /// <param name="services">The current service collection</param>
     /// <returns>The updated service collection</returns>
+    [Obsolete("Please use AddPiranhaSimpleCache instead", true)]
     public static IServiceCollection AddPiranhaMemCache(this IServiceCollection services)
     {
-        return services.AddSingleton<Piranha.ICache, Piranha.Cache.MemCache>();
+        return services;
+    }
+
+    /// <summary>
+    /// Adds the distributed cache service for repository caching.
+    /// </summary>
+    /// <param name="services">The current service collection</param>
+    /// <returns>The updated service collection</returns>
+    public static IServiceCollection AddPiranhaDistributedCache(this IServiceCollection services)
+    {
+        return services.AddSingleton<Piranha.ICache, Piranha.Cache.DistributedCache>();
+    }
+
+    /// <summary>
+    /// Adds the memory cache service for repository caching.
+    /// </summary>
+    /// <param name="services">The current service collection</param>
+    /// <returns>The updated service collection</returns>
+    public static IServiceCollection AddPiranhaMemoryCache(this IServiceCollection services)
+    {
+        return services.AddSingleton<Piranha.ICache, Piranha.Cache.MemoryCache>();
+    }
+
+    /// <summary>
+    /// Adds the simple cache service for repository caching.
+    /// </summary>
+    /// <param name="services">The current service collection</param>
+    /// <returns>The updated service collection</returns>
+    public static IServiceCollection AddPiranhaSimpleCache(this IServiceCollection services)
+    {
+        return services.AddSingleton<Piranha.ICache, Piranha.Cache.SimpleCache>();
     }
 }

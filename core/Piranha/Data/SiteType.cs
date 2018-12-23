@@ -8,7 +8,10 @@
  * 
  */
 
+using System;
+
 namespace Piranha.Data
 {
+    [Serializable]
     public sealed class SiteType : ContentType, ICreated, IModified { }
 }

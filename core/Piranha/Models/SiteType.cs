@@ -13,6 +13,7 @@ using System.Linq;
 
 namespace Piranha.Models
 {
+    [Serializable]
     public sealed class SiteType : ContentType
     {
         /// <summary>

@@ -12,5 +12,6 @@ using System;
 
 namespace Piranha.Data
 {
+    [Serializable]
     public sealed class PostType : ContentType, ICreated, IModified { }
 }

@@ -19,7 +19,7 @@ namespace Piranha.Tests.Repositories
     public class AliasesCached : Aliases
     {
         protected override void Init() {
-            cache = new Cache.MemCache();
+            cache = new Cache.SimpleCache();
 
             base.Init();
         }

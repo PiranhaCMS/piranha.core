@@ -20,7 +20,7 @@ namespace Piranha.Tests.Repositories
     public class PageTypesCached : PageTypes
     {
         protected override void Init() {
-            cache = new Cache.MemCache();
+            cache = new Cache.SimpleCache();
 
             base.Init();
         }

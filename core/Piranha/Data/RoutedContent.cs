@@ -12,6 +12,7 @@ using System;
 
 namespace Piranha.Data
 {
+    [Serializable]
     public abstract class RoutedContent<T> : Content<T> where T : ContentField
     {
         /// <summary>

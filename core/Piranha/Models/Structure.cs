@@ -16,6 +16,7 @@ namespace Piranha.Models
     /// <summary>
     /// Abstract class for building a hierarchical structure.
     /// </summary>
+    [Serializable] 
     public abstract class Structure<TThis, T> : List<T> where T : StructureItem<T> where TThis : Structure<TThis, T>
     {
         /// <summary>

@@ -8,8 +8,11 @@
  * 
  */
 
+using System;
+
 namespace Piranha.Models
 {
+    [Serializable]
     public sealed class ContentTypeRoute
     {
         /// <summary>

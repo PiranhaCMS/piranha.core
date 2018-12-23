@@ -8,14 +8,18 @@
  * 
  */
 
+using System;
 using System.Collections.Generic;
 
 namespace Piranha.Cache
 {
+    [Obsolete("Piranha.Cache.MemCache has been renamed to Piranha.Cache.SimpleCache", true)]
+    public class MemCache { }
+
     /// <summary>
     /// Simple in memory cache.
     /// </summary>
-    public class MemCache : ICache
+    public class SimpleCache : ICache
     {
         /// <summary>
         /// The private cache collection.

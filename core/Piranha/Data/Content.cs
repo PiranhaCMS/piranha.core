@@ -13,6 +13,7 @@ using System.Collections.Generic;
 
 namespace Piranha.Data
 {
+    [Serializable]
     public abstract class Content<T> where T : ContentField
     {
         /// <summary>

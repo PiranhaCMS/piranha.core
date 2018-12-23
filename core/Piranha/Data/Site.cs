@@ -12,6 +12,7 @@ using System;
 
 namespace Piranha.Data
 {
+    [Serializable]
     public sealed class Site : Content<SiteField>, IModel, ICreated, IModified
     {
         /// <summary>

@@ -23,7 +23,7 @@ namespace Piranha.Tests.Repositories
     public class PostsCached : Posts
     {
         protected override void Init() {
-            cache = new Cache.MemCache();
+            cache = new Cache.SimpleCache();
 
             base.Init();
         }
