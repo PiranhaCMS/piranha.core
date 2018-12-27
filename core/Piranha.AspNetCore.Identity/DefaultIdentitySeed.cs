@@ -47,7 +47,7 @@ namespace Piranha.AspNetCore.Identity
         /// </summary>
         public async Task CreateAsync()
         {
-            if (_db.Users.Any())
+            if (!_db.Users.Any())
             {
                 var user = new User
                 {
