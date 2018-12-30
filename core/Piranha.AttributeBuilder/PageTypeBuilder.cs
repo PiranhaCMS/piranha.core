@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Piranha.Models;
+using Piranha.Services;
 
 namespace Piranha.AttributeBuilder
 {

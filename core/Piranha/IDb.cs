@@ -10,6 +10,8 @@
 
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Piranha
 {
@@ -132,5 +134,10 @@ namespace Piranha
         /// Saves the changes made to the context.
         /// </summary>
         int SaveChanges();
+
+        /// <summary>
+        /// Saves the changes made to the context.
+        /// </summary>
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

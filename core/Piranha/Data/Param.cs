@@ -12,7 +12,6 @@ using System;
 
 namespace Piranha.Data
 {
-    [Serializable]
     /// <summary>
     /// String parameter.
     /// </summary>

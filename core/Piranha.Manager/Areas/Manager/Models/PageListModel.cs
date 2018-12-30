@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Piranha.Services;
 
 namespace Piranha.Areas.Manager.Models
 {

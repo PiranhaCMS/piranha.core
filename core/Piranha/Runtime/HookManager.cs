@@ -125,7 +125,7 @@ namespace Piranha.Runtime
         /// <summary>
         /// Gets the hooks available for params.
         /// </summary>
-        public RepositoryHooks<Data.Param> Param { get; private set; } = new RepositoryHooks<Data.Param>();
+        public RepositoryHooks<Models.Param> Param { get; private set; } = new RepositoryHooks<Models.Param>();
 
         /// <summary>
         /// Gets the hooks available for sites.

@@ -9,87 +9,130 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Piranha.Data;
+using Piranha.Models;
 
 namespace Piranha.Repositories
 {
-    public class ParamRepository : BaseRepositoryWithAll<Param>, IParamRepository
+    public class ParamRepository : IParamRepository
     {
+        private readonly IDb _db;
+
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
-        /// <param name="cache">The optional model cache</param>
-        public ParamRepository(IDb db, ICache cache = null) 
-            : base(db, cache) { }
+        public ParamRepository(IDb db)
+        {
+            _db = db;
+        }
+
+        /// <summary>
+        /// Gets all available models.
+        /// </summary>
+        /// <returns>The available models</returns>
+        public async Task<IEnumerable<Param>> GetAll()
+        {
+            return await _db.Params
+                .AsNoTracking()
+                .OrderBy(p => p.Key)
+                .Select(p => new Param
+                {
+                    Id = p.Id,
+                    Key = p.Key,
+                    Description = p.Description,
+                    Value = p.Value,
+                    Created = p.Created,
+                    LastModified = p.LastModified
+                })
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Gets the model with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The model, or NULL if it doesn't exist</returns>
+        public Task<Param> GetById(Guid id)
+        {
+            return _db.Params
+                .AsNoTracking()
+                .Select(p => new Param
+                {
+                    Id = p.Id,
+                    Key = p.Key,
+                    Description = p.Description,
+                    Value = p.Value,
+                    Created = p.Created,
+                    LastModified = p.LastModified
+                })
+                .FirstOrDefaultAsync(p => p.Id == id);
+        }
 
         /// <summary>
         /// Gets the model with the given key.
         /// </summary>
         /// <param name="key">The unique key</param>
         /// <returns>The model</returns>
-        public Param GetByKey(string key) {
-            var id = cache != null ? cache.Get<Guid?>($"ParamKey_{key}") : null;
-            Param model = null;
+        public Task<Param> GetByKey(string key) {
+            return _db.Params
+                .AsNoTracking()
+                .Select(p => new Param
+                {
+                    Id = p.Id,
+                    Key = p.Key,
+                    Description = p.Description,
+                    Value = p.Value,
+                    Created = p.Created,
+                    LastModified = p.LastModified
+                })
+                .FirstOrDefaultAsync(p => p.Key == key);
+        }
 
-            if (id.HasValue) {
-                model = GetById(id.Value);
-            } else {
-                id = db.Params
-                    .AsNoTracking()
-                    .Where(p => p.Key == key)
-                    .Select(p => p.Id)
-                    .FirstOrDefault();
+        /// <summary>
+        /// Adds or updates the given model in the database
+        /// depending on its state.
+        /// </summary>
+        /// <param name="model">The model</param>
+        public async Task Save(Param model)
+        {
+            var param = await _db.Params
+                .FirstOrDefaultAsync(p => p.Id == model.Id);
 
-                if (id != Guid.Empty)
-                    model = GetById(id.Value);
+            if (param == null)
+            {
+                param = new Data.Param
+                {
+                    Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
+                    Created = DateTime.Now
+                };
+                await _db.Params.AddAsync(param);
             }
-            return model;
-        }
+            param.Key = model.Key;
+            param.Description = model.Description;
+            param.Value = model.Value;
+            param.LastModified = DateTime.Now;
 
-        #region Protected methods
-        /// <summary>
-        /// Adds a new model to the database.
-        /// </summary>
-        /// <param name="model">The model</param>
-        protected override void Add(Param model) {
-            PrepareInsert(model);
-
-            db.Params.Add(model);
+            await _db.SaveChangesAsync();
         }
 
         /// <summary>
-        /// Updates the given model in the database.
+        /// Deletes the model with the specified id.
         /// </summary>
-        /// <param name="model">The model</param>
-        protected override void Update(Param model) {
-            PrepareUpdate(model);
+        /// <param name="id">The unique id</param>
+        public async Task Delete(Guid id)
+        {
+            var param = await _db.Params
+                .FirstOrDefaultAsync(p => p.Id == id);
 
-            var param = db.Params.FirstOrDefault(p => p.Id == model.Id);
-            if (param != null) {
-                App.Mapper.Map<Param, Param>(model, param);
+            if (param != null)
+            {
+                _db.Params.Remove(param);
+                await _db.SaveChangesAsync();
             }
         }
-
-        /// <summary>
-        /// Adds the given model to cache.
-        /// </summary>
-        /// <param name="model">The model</param>
-        protected override void AddToCache(Param model) {
-            cache.Set(model.Id.ToString(), model);
-            cache.Set($"ParamKey_{model.Key}", model.Id);
-        }
-
-        /// <summary>
-        /// Removes the given model from cache.
-        /// </summary>
-        /// <param name="model">The model</param>
-        protected override void RemoveFromCache(Param model) {
-            cache.Remove(model.Id.ToString());
-            cache.Remove($"ParamKey_{model.Key}");
-        }        
-        #endregion
     }
 }

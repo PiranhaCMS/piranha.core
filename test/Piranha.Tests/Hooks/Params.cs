@@ -8,10 +8,11 @@
  * 
  */
 
-using Piranha.Services;
 using System;
 using System.Data.SqlClient;
 using System.Linq;
+using Piranha.Models;
+using Piranha.Services;
 using Xunit;
 
 namespace Piranha.Tests.Hooks
@@ -34,7 +35,7 @@ namespace Piranha.Tests.Hooks
                 Piranha.App.Init();
 
                 // Create test param
-                api.Params.Save(new Data.Param() {
+                api.Params.Save(new Param() {
                     Id = ID,
                     Key = KEY
                 });
@@ -68,7 +69,7 @@ namespace Piranha.Tests.Hooks
             Piranha.App.Hooks.Param.RegisterOnBeforeSave(m => throw new ParamOnBeforeSaveException());
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 Assert.Throws<ParamOnBeforeSaveException>(() => {
-                    api.Params.Save(new Data.Param() {
+                    api.Params.Save(new Param() {
                         Key = "MyFirstHookKey"
                     });
                 });
@@ -81,7 +82,7 @@ namespace Piranha.Tests.Hooks
             Piranha.App.Hooks.Param.RegisterOnAfterSave(m => throw new ParamOnAfterSaveException());
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 Assert.Throws<ParamOnAfterSaveException>(() => {
-                    api.Params.Save(new Data.Param() {
+                    api.Params.Save(new Param() {
                         Key = "MySecondHookKey"
                     });
                 });

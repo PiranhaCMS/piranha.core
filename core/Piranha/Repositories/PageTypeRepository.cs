@@ -11,16 +11,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Piranha.Models;
 
 namespace Piranha.Repositories
 {
     public class PageTypeRepository : IPageTypeRepository
     {
         private readonly IDb _db;
-        private static readonly Dictionary<string, Models.PageType> _types = new Dictionary<string, Models.PageType>();
-        private static object _typesMutex = new Object();
-        private static volatile bool _isInitialized = false;
 
         /// <summary>
         /// Default constructor.
@@ -29,28 +29,21 @@ namespace Piranha.Repositories
         public PageTypeRepository(IDb db)
         {
             _db = db;
-
-            if (!_isInitialized)
-            {
-                lock (_typesMutex)
-                {
-                    if (!_isInitialized)
-                    {
-                        Load();
-
-                        _isInitialized = true;
-                    }
-                }
-            }
         }
 
         /// <summary>
         /// Gets all available models.
         /// </summary>
         /// <returns>The available models</returns>
-        public IEnumerable<Models.PageType> GetAll()
+        public async Task<IEnumerable<PageType>> GetAll() 
         {
-            return _types.Values.OrderBy(t => t.Id);
+            var models = new List<PageType>();
+
+            foreach (var type in (await _db.PageTypes.OrderBy(t => t.Id).ToListAsync()))
+            {
+                models.Add(JsonConvert.DeserializeObject<PageType>(type.Body));
+            }
+            return models;
         }
 
         /// <summary>
@@ -58,10 +51,15 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique i</param>
         /// <returns></returns>
-        public Models.PageType GetById(string id)
+        public async Task<PageType> GetById(string id) 
         {
-            if (_types.TryGetValue(id, out var type))
-                return type;
+            var type = await _db.PageTypes
+                .FirstOrDefaultAsync(t => t.Id == id);
+            
+            if (type != null)
+            {
+                return JsonConvert.DeserializeObject<PageType>(type.Body);
+            }
             return null;
         }
 
@@ -70,72 +68,39 @@ namespace Piranha.Repositories
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        public void Save(Models.PageType model)
+        public async Task Save(PageType model) 
         {
-            var type = _db.PageTypes
-                .FirstOrDefault(t => t.Id == model.Id);
+            var type = await _db.PageTypes
+                .FirstOrDefaultAsync(t => t.Id == model.Id);
 
-            if (type == null)
-            {
-                type = new Data.PageType
+            if (type == null) {
+                type = new Data.PageType 
                 {
                     Id = model.Id,
                     Created = DateTime.Now
                 };
-                _db.PageTypes.Add(type);
+                await _db.PageTypes.AddAsync(type);
             }
             type.CLRType = model.CLRType;
             type.Body = JsonConvert.SerializeObject(model);
             type.LastModified = DateTime.Now;
 
-            _db.SaveChanges();
-
-            lock (_typesMutex)
-            {
-                Load();
-            }
+            await _db.SaveChangesAsync();
         }
 
         /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public void Delete(string id)
+        public async Task Delete(string id) 
         {
-            var type = _db.PageTypes
-                .FirstOrDefault(t => t.Id == id);
+            var type = await _db.PageTypes
+                .FirstOrDefaultAsync(t => t.Id == id);
 
-            if (type != null)
+            if (type != null) 
             {
                 _db.PageTypes.Remove(type);
-                _db.SaveChanges();
-
-                lock (_typesMutex)
-                {
-                    Load();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Deletes the given model.
-        /// </summary>
-        /// <param name="model">The model</param>
-        public void Delete(Models.PageType model)
-        {
-            Delete(model.Id);
-        }
-
-        /// <summary>
-        /// Reloads the page types from the database.
-        /// </summary>
-        private void Load()
-        {
-            _types.Clear();
-
-            foreach (var pageType in _db.PageTypes)
-            {
-                _types[pageType.Id] = JsonConvert.DeserializeObject<Models.PageType>(pageType.Body);
+                await _db.SaveChangesAsync();
             }
         }
     }

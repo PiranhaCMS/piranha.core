@@ -8,9 +8,10 @@
  * 
  */
 
+using System;
 using Piranha.Data;
 using Piranha.Repositories;
-using System;
+using Piranha.Services;
 
 namespace Piranha
 {
@@ -45,14 +46,14 @@ namespace Piranha
         IPageRepository Pages { get; }
 
         /// <summary>
-        /// Gets the page type repository.
+        /// Gets the page type service.
         /// </summary>
-        IPageTypeRepository PageTypes { get; }
+        PageTypeService PageTypes { get; }
 
         /// <summary>
-        /// Gets the param repository.
+        /// Gets the param service.
         /// </summary>
-        IParamRepository Params { get; }
+        ParamService Params { get; }
 
         /// <summary>
         /// Gets the post repository.
@@ -70,9 +71,9 @@ namespace Piranha
         ISiteRepository Sites { get; }
 
         /// <summary>
-        /// Gets the site type repository.
+        /// Gets the site type service.
         /// </summary>
-        ISiteTypeRepository SiteTypes { get; }
+        SiteTypeService SiteTypes { get; }
 
         /// <summary>
         /// Gets the tag repository.

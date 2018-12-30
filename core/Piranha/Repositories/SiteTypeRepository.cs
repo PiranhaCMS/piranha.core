@@ -11,16 +11,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Piranha.Models;
 
 namespace Piranha.Repositories
 {
     public class SiteTypeRepository : ISiteTypeRepository
     {
         private readonly IDb _db;
-        private static readonly Dictionary<string, Models.SiteType> _types = new Dictionary<string, Models.SiteType>();
-        private static object _typesMutex = new Object();
-        private static volatile bool _isInitialized = false;
 
         /// <summary>
         /// Default constructor.
@@ -29,28 +29,21 @@ namespace Piranha.Repositories
         public SiteTypeRepository(IDb db) 
         {
             _db = db;
-
-            if (!_isInitialized)
-            {
-                lock (_typesMutex)
-                {
-                    if (!_isInitialized)
-                    {
-                        Load();
-
-                        _isInitialized = true;
-                    }
-                }
-            }
         }
 
         /// <summary>
         /// Gets all available models.
         /// </summary>
         /// <returns>The available models</returns>
-        public IEnumerable<Models.SiteType> GetAll() 
+        public async Task<IEnumerable<SiteType>> GetAll() 
         {
-            return _types.Values.OrderBy(t => t.Id);
+            var models = new List<SiteType>();
+
+            foreach (var type in (await _db.SiteTypes.OrderBy(t => t.Id).ToListAsync()))
+            {
+                models.Add(JsonConvert.DeserializeObject<SiteType>(type.Body));
+            }
+            return models;
         }
 
         /// <summary>
@@ -58,10 +51,15 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique i</param>
         /// <returns></returns>
-        public Models.SiteType GetById(string id) 
+        public async Task<SiteType> GetById(string id) 
         {
-            if (_types.TryGetValue(id, out var type))
-                return type;
+            var type = await _db.SiteTypes
+                .FirstOrDefaultAsync(t => t.Id == id);
+            
+            if (type != null)
+            {
+                return JsonConvert.DeserializeObject<SiteType>(type.Body);
+            }
             return null;
         }
 
@@ -70,10 +68,10 @@ namespace Piranha.Repositories
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        public void Save(Models.SiteType model) 
+        public async Task Save(SiteType model) 
         {
-            var type = _db.SiteTypes
-                .FirstOrDefault(t => t.Id == model.Id);
+            var type = await _db.SiteTypes
+                .FirstOrDefaultAsync(t => t.Id == model.Id);
 
             if (type == null) {
                 type = new Data.SiteType 
@@ -81,60 +79,28 @@ namespace Piranha.Repositories
                     Id = model.Id,
                     Created = DateTime.Now
                 };
-                _db.SiteTypes.Add(type);
+                await _db.SiteTypes.AddAsync(type);
             }
             type.CLRType = model.CLRType;
             type.Body = JsonConvert.SerializeObject(model);
             type.LastModified = DateTime.Now;
 
-            _db.SaveChanges();
-            
-            lock (_typesMutex)
-            {
-                Load();
-            }
+            await _db.SaveChangesAsync();
         }
 
         /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public void Delete(string id) 
+        public async Task Delete(string id) 
         {
-            var type = _db.SiteTypes
-                .FirstOrDefault(t => t.Id == id);
+            var type = await _db.SiteTypes
+                .FirstOrDefaultAsync(t => t.Id == id);
 
             if (type != null) 
             {
                 _db.SiteTypes.Remove(type);
-                _db.SaveChanges();
-
-                lock (_typesMutex)
-                {
-                    Load();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Deletes the given model.
-        /// </summary>
-        /// <param name="model">The model</param>
-        public void Delete(Models.SiteType model) 
-        {
-            Delete(model.Id);
-        }
-
-        /// <summary>
-        /// Reloads the page types from the database.
-        /// </summary>
-        private void Load()
-        {
-            _types.Clear();
-
-            foreach (var siteType in _db.SiteTypes)
-            {
-                _types[siteType.Id] = JsonConvert.DeserializeObject<Models.SiteType>(siteType.Body);
+                await _db.SaveChangesAsync();
             }
         }
     }

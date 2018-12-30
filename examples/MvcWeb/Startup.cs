@@ -44,8 +44,7 @@ namespace MvcWeb
             }
 
             // Configure cache level
-            // App.CacheLevel = Piranha.Cache.CacheLevel.Basic;
-            App.CacheLevel = Piranha.Cache.CacheLevel.Full;
+            App.CacheLevel = Piranha.Cache.CacheLevel.Basic;
 
             // Custom components
             App.Blocks.Register<Models.Blocks.SeparatorBlock>();

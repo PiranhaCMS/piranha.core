@@ -8,10 +8,12 @@
  * 
  */
 
-using Piranha.Services;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
 using System.Linq;
+using Piranha.Models;
+using Piranha.Services;
 using Xunit;
 
 namespace Piranha.Tests.Repositories
@@ -42,16 +44,16 @@ namespace Piranha.Tests.Repositories
 
         protected override void Init() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
-                api.Params.Save(new Data.Param() {
+                api.Params.Save(new Param() {
                     Id = PARAM_1_ID,
                     Key = PARAM_1,
                     Value = PARAM_1_VALUE
                 });
 
-                api.Params.Save(new Data.Param() {
+                api.Params.Save(new Param() {
                     Key = PARAM_4,
                 });
-                api.Params.Save(new Data.Param() {
+                api.Params.Save(new Param() {
                     Key = PARAM_5,
                 });
             }
@@ -76,7 +78,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void Add() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
-                api.Params.Save(new Data.Param() {
+                api.Params.Save(new Param() {
                     Key = PARAM_2,
                     Value = "My second value"
                 });
@@ -86,10 +88,29 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void AddDuplicateKey() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
-                Assert.ThrowsAny<Exception>(() =>
-                    api.Params.Save(new Data.Param() {
+                Assert.Throws<ValidationException>(() =>
+                    api.Params.Save(new Param() {
                         Key = PARAM_1,
                         Value = "My duplicate value"
+                    }));
+            }
+        }
+
+        [Fact]
+        public void AddEmptyKey()
+        {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                Assert.Throws<ValidationException>(() => api.Params.Save(new Param()));
+            }
+        }
+
+        [Fact]
+        public void AddTooLongKey() {
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+                Assert.Throws<ValidationException>(() =>
+                    api.Params.Save(new Param
+                    {
+                        Key = "IntegerPosuereEratAnteVenenatisDapibusPosuereVelitAliquetNullamQuisRisusEgetUrnaMollisOrnareVelEuLeo",
                     }));
             }
         }

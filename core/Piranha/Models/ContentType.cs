@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Piranha.Models
 {
@@ -22,11 +23,14 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the unique id.
         /// </summary>
+        [Required]
+        [StringLength(64)]
         public string Id { get; set; }
 
         /// <summary>
         /// Gets/sets the CLR type of the content model.
         /// </summary>
+        [StringLength(255)]
         public string CLRType { get; set; }
 
         /// <summary>
