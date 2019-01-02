@@ -12339,7 +12339,7 @@ body.collapsed .navmenu-inverse span.title {
 }
 .navmenu-inverse {
   width: 220px;
-  border: none 0px;
+  border: none 0;
 }
 .navmenu-inverse .navmenu-brand {
   text-align: center;
@@ -13227,7 +13227,7 @@ li.sitemap-item .actions.one {
   margin: 0;
 }
 .custom-editor {
-  padding: 0px 15px;
+  padding: 0 15px;
 }
 .custom-editor .custom-editor-list {
   background: #f8f8f8;
@@ -13374,7 +13374,7 @@ li.sitemap-item .actions.one {
   font-weight: 300;
 }
 #page-blocks [contenteditable]:focus {
-  outline: 0px solid transparent;
+  outline: 0 solid transparent;
 }
 #page-blocks .sortable-placeholder {
   padding: 0;
@@ -13969,7 +13969,7 @@ li.sitemap-item .actions.one {
   z-index: 1000000;
   position: fixed;
   left: 15px;
-  bottom: 0px;
+  bottom: 0;
   max-width: 500px;
 }
 .notification-alert {

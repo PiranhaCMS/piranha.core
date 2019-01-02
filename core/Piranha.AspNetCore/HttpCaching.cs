@@ -37,7 +37,6 @@ namespace Piranha.AspNetCore
             if (clientInfo.LastModified.HasValue)
             {
                 return clientInfo.LastModified.Value >= serverInfo.LastModified.Value;
-
             }
             return false;
         }
