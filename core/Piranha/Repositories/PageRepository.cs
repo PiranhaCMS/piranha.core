@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -230,7 +230,6 @@ namespace Piranha.Repositories
                 if (page.OriginalPageId.HasValue)
                 {
                     return MapOriginalPage<T>(page);
-
                 }
                 return _contentService.Transform<T>(page, _api.PageTypes.GetById(page.PageTypeId), Process);
             }
@@ -886,7 +885,6 @@ namespace Piranha.Repositories
             if (originalPage == null)
             {
                 return null;
-
             }
             return SetOriginalPageProperties(originalPage, page);
         }

@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using Piranha.Services;
@@ -67,7 +67,7 @@ namespace Piranha.Tests.Repositories
                     api.Media.Save(image2);
 
                     image2Id = image2.Id.Value;
-                }                
+                }
 
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_robot_1080.png")) {
                     var image3 = new Models.StreamMediaContent() {
@@ -77,7 +77,7 @@ namespace Piranha.Tests.Repositories
                     api.Media.Save(image3);
 
                     image3Id = image3.Id.Value;
-                }                
+                }
             }
         }
 
@@ -97,7 +97,7 @@ namespace Piranha.Tests.Repositories
                     foreach (var item in media) {
                         api.Media.Delete(item);
                     }
-                    api.Media.DeleteFolder(folder);                    
+                    api.Media.DeleteFolder(folder);
                 }
             }
         }
@@ -108,7 +108,6 @@ namespace Piranha.Tests.Repositories
                 Assert.Equal(this.GetType() == typeof(MediasCached), api.IsCached);
             }
         }
-        
 
         [Fact]
         public void GetAll() {
@@ -154,7 +153,7 @@ namespace Piranha.Tests.Repositories
                 Assert.Equal(folder1Id, media.FolderId.Value);
 
                 api.Media.Move(media, null);
-            }            
+            }
         }
 
         [Fact]
@@ -171,7 +170,7 @@ namespace Piranha.Tests.Repositories
 
                     image4Id = image.Id.Value;
                 }
-            }            
+            }
         }
 
         [Fact]
@@ -186,7 +185,7 @@ namespace Piranha.Tests.Repositories
                 Assert.NotNull(media);
                 Assert.Equal($"~/uploads/{image1Id}-HLD_Screenshot_01_mech_1080.png", media.PublicUrl);
             }
-        }        
+        }
 
         [Fact]
         public void PublicUrlCDN() {

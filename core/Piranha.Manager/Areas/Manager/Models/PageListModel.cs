@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -44,14 +44,13 @@ namespace Piranha.Areas.Manager.Models
         /// </summary>
         public string SiteId { get; set; }
 
-
         /// <summary>
         /// Gets/sets the current site title.
         /// </summary>
         public string SiteTitle { get; set; }
 
         /// <summary>
-        /// Gets/sets if the user should be able 
+        /// Gets/sets if the user should be able
         /// to edit the site content.
         /// </summary>
         public bool HasSiteContent { get; set; }

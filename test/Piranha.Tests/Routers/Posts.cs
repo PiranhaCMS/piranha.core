@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using Piranha.AttributeBuilder;
@@ -43,7 +43,6 @@ namespace Piranha.Tests.Routers
             [Region]
             public TextField Body { get; set; }
         }
-        
 
         protected override void Init() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
@@ -97,7 +96,7 @@ namespace Piranha.Tests.Routers
                     Title = "Default category"
                 };
                 api.Categories.Save(category1);
-                
+
                 var category2 = new Data.Category() {
                     Id = CATEGORY2_ID,
                     BlogId = PAGE2_ID,
@@ -204,7 +203,7 @@ namespace Piranha.Tests.Routers
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
                 Assert.Equal($"id={PAGE1_ID}&year=&month=&page=&pagenum=&category=&tag=&piranha_handled=true", response.QueryString);
-            }            
+            }
         }
 
         [Fact]
@@ -215,7 +214,7 @@ namespace Piranha.Tests.Routers
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
                 Assert.Equal($"id={PAGE1_ID}&year=2018&month=&page=&pagenum=&category=&tag=&piranha_handled=true", response.QueryString);
-            }            
+            }
         }
 
         [Fact]
@@ -226,7 +225,7 @@ namespace Piranha.Tests.Routers
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
                 Assert.Equal($"id={PAGE1_ID}&year=2018&month=2&page=&pagenum=&category=&tag=&piranha_handled=true", response.QueryString);
-            }            
+            }
         }
 
         [Fact]
@@ -237,7 +236,7 @@ namespace Piranha.Tests.Routers
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
                 Assert.Equal($"id={PAGE1_ID}&year=2018&month=2&page=1&pagenum=1&category=&tag=&piranha_handled=true", response.QueryString);
-            }            
+            }
         }
 
         [Fact]
@@ -248,7 +247,7 @@ namespace Piranha.Tests.Routers
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
                 Assert.Equal($"id={PAGE1_ID}&year=2018&month=2&page=1&pagenum=1&category={CATEGORY1_ID}&tag=&piranha_handled=true", response.QueryString);
-            }            
+            }
         }
 
         [Fact]
@@ -259,7 +258,7 @@ namespace Piranha.Tests.Routers
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
                 Assert.Equal($"id={PAGE1_ID}&year=&month=&page=&pagenum=&category={CATEGORY1_ID}&tag=&piranha_handled=true", response.QueryString);
-            }            
+            }
         }
 
         [Fact]
@@ -270,7 +269,7 @@ namespace Piranha.Tests.Routers
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
                 Assert.Equal($"id={PAGE1_ID}&year=&month=&page=&pagenum=&category={Guid.Empty}&tag=&piranha_handled=true", response.QueryString);
-            }            
+            }
         }
 
         [Fact]
@@ -281,7 +280,7 @@ namespace Piranha.Tests.Routers
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
                 Assert.Equal($"id={PAGE1_ID}&year=&month=&page=&pagenum=&category=&tag={TAG1_ID}&piranha_handled=true", response.QueryString);
-            }            
+            }
         }
 
         [Fact]
@@ -292,7 +291,7 @@ namespace Piranha.Tests.Routers
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
                 Assert.Equal($"id={PAGE1_ID}&year=&month=&page=&pagenum=&category=&tag={Guid.Empty}&piranha_handled=true", response.QueryString);
-            }            
+            }
         }
 
         [Fact]
@@ -303,7 +302,7 @@ namespace Piranha.Tests.Routers
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
                 Assert.Equal($"id={PAGE1_ID}&year=&month=&page=1&pagenum=1&category=&tag=&piranha_handled=true", response.QueryString);
-            }            
+            }
         }
 
         [Fact]
@@ -312,7 +311,7 @@ namespace Piranha.Tests.Routers
                 var response = Piranha.Web.ArchiveRouter.Invoke(api, "/news", SITE1_ID);
 
                 Assert.Null(response);
-            }            
+            }
         }
 
         [Fact]
@@ -356,7 +355,7 @@ namespace Piranha.Tests.Routers
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
                 Assert.Equal($"id={PAGE2_ID}&year=&month=&page=&pagenum=&category=&tag=&piranha_handled=true", response.QueryString);
-            }            
+            }
         }
 
         [Fact]
@@ -365,7 +364,7 @@ namespace Piranha.Tests.Routers
                 var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog", SITE2_ID);
 
                 Assert.Null(response);
-            }            
+            }
         }
     }
 }
