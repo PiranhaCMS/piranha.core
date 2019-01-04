@@ -355,6 +355,10 @@
                         <label>Meta Keywords</label>
                         @Html.TextBoxFor(m => m.MetaKeywords, new { @class = "form-control small", maxlength = 128, placeholder = "Meta keywords" })
                     </div>
+                    <div class="form-group">
+                        <label>Meta Robots</label>
+                        @Html.TextBoxFor(m => m.MetaRobots, new { @class = "form-control small", maxlength = 128, placeholder = "Meta robots" })
+                    </div>
                     @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PostsPublish)).Succeeded) {
                         <div class="form-group">
                             <label>Publish date</label>

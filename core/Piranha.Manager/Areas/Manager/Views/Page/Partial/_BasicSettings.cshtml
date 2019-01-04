@@ -26,6 +26,10 @@
                 @Html.TextAreaFor(m => m.MetaDescription, new { @class = "form-control small count-me", rows = 5, maxlength = 256, placeholder = "Meta description", style = "height:82px" })
                 <p>@(Model.MetaDescription != null ? Model.MetaDescription.Length : 0)/255</p>
             </div>
+            <div class="form-group">
+                <label>Meta Robots</label>
+                @Html.TextBoxFor(m => m.MetaRobots, new { @class = "form-control small", maxlength = 32, placeholder = "Meta robots" })
+            </div>
         }
         @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesPublish)).Succeeded) {
             <div class="form-group">

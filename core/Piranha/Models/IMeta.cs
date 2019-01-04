@@ -26,5 +26,10 @@ namespace Piranha.Models
         /// Gets/sets the optional meta description.
         /// </summary>
         string MetaDescription { get; set; }
-    }
+
+        /// <summary>
+        /// Gets/sets the optional robots information
+        /// </summary>
+        string MetaRobots { get; set; }
+	}
 }

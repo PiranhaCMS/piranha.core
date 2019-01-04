@@ -38,6 +38,11 @@ namespace Piranha.Models
         public string MetaDescription { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional robots.
+        /// </summary>
+        public string MetaRobots { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional route used by the middleware.
         /// </summary>
         public string Route { get; set; }
