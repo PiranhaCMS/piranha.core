@@ -142,7 +142,7 @@ namespace Piranha.Tests.Repositories
                     IsDefault = true
                 };
                 var emptysite = new Data.Site {
-                    Id = SITE_ID,
+                    Id = SITE_EMPTY_ID,
                     Title = "Empty Site",
                     InternalId = "EmptySite",
                     IsDefault = false

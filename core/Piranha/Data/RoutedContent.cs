@@ -31,6 +31,11 @@ namespace Piranha.Data
 	    public string MetaDescription { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional meta robots.
+        /// </summary>
+        public string MetaRobots { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional route.
         /// </summary>
 	    public string Route { get; set; }

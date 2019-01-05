@@ -44,6 +44,7 @@ namespace MvcWeb
                 startpage.NavigationTitle = "Home";
                 startpage.MetaKeywords = "Piranha, Piranha CMS, CMS, AspNetCore, DotNetCore, MVC, .NET, .NET Core";
                 startpage.MetaDescription = "Piranha is the fun, fast and lightweight framework for developing cms-based web applications with AspNetCore.";
+                startpage.MetaRobots = "index,follow";
 
                 // Start page hero
                 startpage.Hero.Subtitle = "By developers - for developers";
@@ -162,6 +163,7 @@ namespace MvcWeb
                 blogpage.SortOrder = 2;
                 blogpage.MetaKeywords = "Piranha, Piranha CMS, CMS, AspNetCore, DotNetCore, MVC, Blog, News";
                 blogpage.MetaDescription = "Read the latest blog posts about Piranha, fast and lightweight framework for developing cms-based web applications with AspNetCore.";
+                blogpage.MetaRobots = "index,follow";
 
                 // Blog Hero
                 blogpage.Hero.Subtitle = "Blog Archive";

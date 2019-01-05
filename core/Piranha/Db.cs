@@ -200,6 +200,7 @@ namespace Piranha
             mb.Entity<Data.Page>().Property(p => p.Slug).HasMaxLength(128).IsRequired();
             mb.Entity<Data.Page>().Property(p => p.MetaKeywords).HasMaxLength(128);
             mb.Entity<Data.Page>().Property(p => p.MetaDescription).HasMaxLength(256);
+            mb.Entity<Data.Page>().Property(p => p.MetaRobots).HasMaxLength(32);
             mb.Entity<Data.Page>().Property(p => p.Route).HasMaxLength(256);
             mb.Entity<Data.Page>().Property(p => p.RedirectUrl).HasMaxLength(256);
             mb.Entity<Data.Page>().HasIndex(p => new { p.SiteId, p.Slug }).IsUnique();
@@ -228,6 +229,7 @@ namespace Piranha
             mb.Entity<Data.Post>().Property(p => p.Slug).HasMaxLength(128).IsRequired();
             mb.Entity<Data.Post>().Property(p => p.MetaKeywords).HasMaxLength(128);
             mb.Entity<Data.Post>().Property(p => p.MetaDescription).HasMaxLength(256);
+            mb.Entity<Data.Post>().Property(p => p.MetaRobots).HasMaxLength(32);
             mb.Entity<Data.Post>().Property(p => p.Route).HasMaxLength(256);
             mb.Entity<Data.Post>().Property(p => p.RedirectUrl).HasMaxLength(256);
             mb.Entity<Data.Post>().HasOne(p => p.Category).WithMany().IsRequired().OnDelete(DeleteBehavior.Restrict);
