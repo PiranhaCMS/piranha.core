@@ -2,6 +2,7 @@
 
 namespace Piranha.Migrations
 {
+    [NoCoverage]
     public partial class AddMetaRobots : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
