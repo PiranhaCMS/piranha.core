@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System.Collections.Generic;
@@ -47,7 +47,7 @@ namespace Piranha.Runtime
             {
                 Add(new MediaTypeItem
                 {
-                    Extension = extension,
+                    Extension = extension.ToLower(),
                     ContentType = contentType
                 });
             }
@@ -125,7 +125,7 @@ namespace Piranha.Runtime
         /// <returns>The media type</returns>
         public string GetContentType(string filename)
         {
-            var extension = Path.GetExtension(filename);
+            var extension = Path.GetExtension(filename).ToLower();
             MediaTypeItem item = null;
 
             if ((item = Documents.SingleOrDefault(t => t.Extension == extension)) != null)
