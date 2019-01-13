@@ -10,6 +10,6 @@
     <ProjectReference Include="..\Piranha\Piranha.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="WindowsAzure.Storage" Version="9.3.2" />
+    <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="9.4.2" />
   </ItemGroup>
 </Project>
