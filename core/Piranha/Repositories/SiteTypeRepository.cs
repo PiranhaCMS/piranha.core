@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using System;
@@ -26,7 +26,7 @@ namespace Piranha.Repositories
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db connection</param>
-        public SiteTypeRepository(IDb db) 
+        public SiteTypeRepository(IDb db)
         {
             _db = db;
         }
@@ -35,11 +35,15 @@ namespace Piranha.Repositories
         /// Gets all available models.
         /// </summary>
         /// <returns>The available models</returns>
-        public async Task<IEnumerable<SiteType>> GetAll() 
+        public async Task<IEnumerable<SiteType>> GetAll()
         {
             var models = new List<SiteType>();
+            var types = await _db.SiteTypes
+                .AsNoTracking()
+                .OrderBy(t => t.Id)
+                .ToListAsync();
 
-            foreach (var type in (await _db.SiteTypes.OrderBy(t => t.Id).ToListAsync()))
+            foreach (var type in types)
             {
                 models.Add(JsonConvert.DeserializeObject<SiteType>(type.Body));
             }
@@ -51,11 +55,12 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique i</param>
         /// <returns></returns>
-        public async Task<SiteType> GetById(string id) 
+        public async Task<SiteType> GetById(string id)
         {
             var type = await _db.SiteTypes
+                .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.Id == id);
-            
+
             if (type != null)
             {
                 return JsonConvert.DeserializeObject<SiteType>(type.Body);
@@ -68,13 +73,13 @@ namespace Piranha.Repositories
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        public async Task Save(SiteType model) 
+        public async Task Save(SiteType model)
         {
             var type = await _db.SiteTypes
                 .FirstOrDefaultAsync(t => t.Id == model.Id);
 
             if (type == null) {
-                type = new Data.SiteType 
+                type = new Data.SiteType
                 {
                     Id = model.Id,
                     Created = DateTime.Now
@@ -92,12 +97,12 @@ namespace Piranha.Repositories
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public async Task Delete(string id) 
+        public async Task Delete(string id)
         {
             var type = await _db.SiteTypes
                 .FirstOrDefaultAsync(t => t.Id == id);
 
-            if (type != null) 
+            if (type != null)
             {
                 _db.SiteTypes.Remove(type);
                 await _db.SaveChangesAsync();
