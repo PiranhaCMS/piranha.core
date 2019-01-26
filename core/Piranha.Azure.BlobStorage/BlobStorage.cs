@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using Microsoft.WindowsAzure.Storage;
@@ -34,11 +34,20 @@ namespace Piranha.Azure
         private string _containerUrl;
 
         /// <summary>
-        /// Default constructor.
+        /// Creates a new Blog Storage service from the given credentials.
         /// </summary>
         public BlobStorage(StorageCredentials credentials, string containerName = "uploads")
         {
             _storage = new CloudStorageAccount(credentials, true);
+            _containerName = containerName;
+        }
+
+        /// <summary>
+        /// Creates a new Blob Storage service from the given connection string.
+        /// </summary>
+        public BlobStorage(string connectionString, string containerName = "uploads")
+        {
+            _storage = CloudStorageAccount.Parse(connectionString);
             _containerName = containerName;
         }
 
