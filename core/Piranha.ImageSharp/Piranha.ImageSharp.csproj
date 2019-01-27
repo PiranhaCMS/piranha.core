@@ -7,7 +7,7 @@
     <AssemblyTitle>Piranha.ImageSharp</AssemblyTitle>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0005" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0006" />
     <ProjectReference Include="..\Piranha\Piranha.csproj" />
   </ItemGroup>
 
