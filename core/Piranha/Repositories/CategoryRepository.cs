@@ -1,35 +1,34 @@
 ﻿/*
- * Copyright (c) 2017-2018 Håkan Edling
+ * Copyright (c) 2017-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
 
 namespace Piranha.Repositories
 {
-    public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
+    public class CategoryRepository : ICategoryRepository
     {
-        private readonly Api api;
+        private readonly IDb _db;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="api">The current api</param>
         /// <param name="db">The current db context</param>
         /// <param name="cache">The optional model cache</param>
-        public CategoryRepository(Api api, IDb db, ICache cache = null)
-            : base(db, cache)
+        public CategoryRepository(IDb db)
         {
-            this.api = api;
+            _db = db;
         }
 
         /// <summary>
@@ -37,21 +36,25 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The blog id</param>
         /// <returns>The available models</returns>
-        public IEnumerable<Category> GetAll(Guid blogId)
+        public async Task<IEnumerable<Category>> GetAll(Guid blogId)
         {
-            var models = new List<Category>();
-            var categories = db.Categories
+            return await _db.Categories
                 .AsNoTracking()
                 .Where(c => c.BlogId == blogId)
-                .Select(c => c.Id);
+                .OrderBy(c => c.Title)
+                .ToListAsync();
+        }
 
-            foreach (var c in categories)
-            {
-                var model = GetById(c);
-                if (model != null)
-                    models.Add(model);
-            }
-            return models;
+        /// <summary>
+        /// Gets the model with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The model, or NULL if it doesn't exist</returns>
+        public Task<Category> GetById(Guid id)
+        {
+            return _db.Categories
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.Id == id);
         }
 
         /// <summary>
@@ -60,27 +63,11 @@ namespace Piranha.Repositories
         /// <param name="blogId">The blog id</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The model</returns>
-        public Category GetBySlug(Guid blogId, string slug)
+        public Task<Category> GetBySlug(Guid blogId, string slug)
         {
-            var id = cache != null ? cache.Get<Guid?>($"Category_{blogId}_{slug}") : null;
-            Category model = null;
-
-            if (id.HasValue)
-            {
-                model = GetById(id.Value);
-            }
-            else
-            {
-                id = db.Categories
-                    .AsNoTracking()
-                    .Where(c => c.BlogId == blogId && c.Slug == slug)
-                    .Select(c => c.Id)
-                    .FirstOrDefault();
-
-                if (id.HasValue && id != Guid.Empty)
-                    model = GetById(id.Value);
-            }
-            return model;
+            return _db.Categories
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.BlogId == blogId && c.Slug == slug);
         }
 
         /// <summary>
@@ -89,106 +76,77 @@ namespace Piranha.Repositories
         /// <param name="blogId">The blog id</param>
         /// <param name="title">The unique title</param>
         /// <returns>The model</returns>
-        public Category GetByTitle(Guid blogId, string title)
+        public Task<Category> GetByTitle(Guid blogId, string title)
         {
-            var id = db.Categories
+            return _db.Categories
                 .AsNoTracking()
-                .Where(c => c.BlogId == blogId && c.Title == title)
-                .Select(c => c.Id)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync(c => c.BlogId == blogId && c.Title == title);
+        }
 
-            if (id != Guid.Empty)
-                return GetById(id);
-            return null;
+        /// <summary>
+        /// Adds or updates the given model in the database
+        /// depending on its state.
+        /// </summary>
+        /// <param name="model">The model</param>
+        public async Task Save(Category model)
+        {
+            var category = await _db.Categories
+                .FirstOrDefaultAsync(c => c.Id == model.Id);
+
+            if (category == null)
+            {
+                category = new Data.Category
+                {
+                    Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
+                    Created = DateTime.Now
+                };
+                await _db.Categories.AddAsync(category);
+            }
+            category.BlogId = model.BlogId;
+            category.Title = model.Title;
+            category.Slug = model.Slug;
+            category.LastModified = model.LastModified;
+
+            await _db.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Deletes the model with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        public async Task Delete(Guid id)
+        {
+            var category = await _db.Categories
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (category != null)
+            {
+                _db.Categories.Remove(category);
+                await _db.SaveChangesAsync();
+            }
         }
 
         /// <summary>
         /// Deletes all unused categories for the specified blog.
         /// </summary>
         /// <param name="blogId">The blog id</param>
-        public void DeleteUnused(Guid blogId)
+        public async Task DeleteUnused(Guid blogId)
         {
-            var used = db.Posts
+            var used = await _db.Posts
                 .Where(p => p.BlogId == blogId)
                 .Select(p => p.CategoryId)
                 .Distinct()
-                .ToArray();
+                .ToArrayAsync();
 
-            var unused = db.Categories
+            var unused = await _db.Categories
                 .Where(c => c.BlogId == blogId && !used.Contains(c.Id))
-                .ToList();
+                .ToListAsync();
 
             if (unused.Count > 0)
             {
-                db.Categories.RemoveRange(unused);
-                db.SaveChanges();
+                _db.Categories.RemoveRange(unused);
+                await _db.SaveChangesAsync();
             }
         }
-
-        #region Protected methods
-        /// <summary>
-        /// Adds a new model to the database.
-        /// </summary>
-        /// <param name="model">The model</param>
-        protected override void Add(Category model)
-        {
-            PrepareInsert(model);
-
-            // Check required
-            if (string.IsNullOrWhiteSpace(model.Title))
-                throw new ArgumentException("Title is required for Category");
-
-            // Ensure slug
-            if (string.IsNullOrWhiteSpace(model.Slug))
-                model.Slug = Utils.GenerateSlug(model.Title, false);
-            else model.Slug = Utils.GenerateSlug(model.Slug, false);
-
-            db.Categories.Add(model);
-        }
-
-        /// <summary>
-        /// Updates the given model in the database.
-        /// </summary>
-        /// <param name="model">The model</param>
-        protected override void Update(Category model)
-        {
-            PrepareUpdate(model);
-
-            // Check required
-            if (string.IsNullOrWhiteSpace(model.Title))
-                throw new ArgumentException("Title is required for Category");
-
-            // Ensure slug
-            if (string.IsNullOrWhiteSpace(model.Slug))
-                model.Slug = Utils.GenerateSlug(model.Title);
-            else model.Slug = Utils.GenerateSlug(model.Slug);
-
-            var category = db.Categories.FirstOrDefault(c => c.Id == model.Id);
-            if (category != null)
-            {
-                App.Mapper.Map<Category, Category>(model, category);
-            }
-        }
-
-        /// <summary>
-        /// Adds the given model to cache.
-        /// </summary>
-        /// <param name="model">The model</param>
-        protected override void AddToCache(Category model)
-        {
-            cache.Set(model.Id.ToString(), model);
-            cache.Set($"Category_{model.BlogId}_{model.Slug}", model.Id);
-        }
-
-        /// <summary>
-        /// Removes the given model from cache.
-        /// </summary>
-        /// <param name="model">The model</param>
-        protected override void RemoveFromCache(Category model)
-        {
-            cache.Remove(model.Id.ToString());
-            cache.Remove($"Category_{model.BlogId}_{model.Slug}");
-        }
-        #endregion
     }
 }

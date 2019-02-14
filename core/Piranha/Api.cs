@@ -45,9 +45,9 @@ namespace Piranha
         public IArchiveRepository Archives { get; private set; }
 
         /// <summary>
-        /// Gets the category repository.
+        /// Gets the category service.
         /// </summary>
-        public ICategoryRepository Categories { get; private set; }
+        public CategoryService Categories { get; private set; }
 
         /// <summary>
         /// Gets the media repository.
@@ -138,7 +138,7 @@ namespace Piranha
 
             Aliases = new AliasRepository(this, _db, cacheLevel > 2 ? _cache : null);
             Archives = new ArchiveRepository(this, _db);
-            Categories = new CategoryRepository(this, _db, cacheLevel > 2 ? _cache : null);
+            Categories = new CategoryService(new CategoryRepository(_db), cacheLevel > 2 ? _cache : null);
             Media = new MediaRepository(this, _db, _storage, cacheLevel > 2 ? _cache : null, imageProcessor);
             Pages = new PageRepository(this, _db, factory, cacheLevel > 2 ? _cache : null);
             PageTypes = new PageTypeService(new PageTypeRepository(_db), cacheLevel > 0 ? _cache : null);

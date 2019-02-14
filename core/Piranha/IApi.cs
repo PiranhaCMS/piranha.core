@@ -31,9 +31,9 @@ namespace Piranha
         IArchiveRepository Archives { get; }
 
         /// <summary>
-        /// Gets the category repository.
+        /// Gets the category service.
         /// </summary>
-        ICategoryRepository Categories { get; }
+        CategoryService Categories { get; }
 
         /// <summary>
         /// Gets the media repository.

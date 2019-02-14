@@ -3,12 +3,13 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
+using Piranha.Services;
 
 namespace Piranha.Web
 {
@@ -115,7 +116,7 @@ namespace Piranha.Web
                                 {
                                     page = Convert.ToInt32(segments[n]);
                                 }
-                                catch 
+                                catch
                                 {
                                     // We don't care about the exception, we just
                                     // discard malformed input
@@ -132,7 +133,7 @@ namespace Piranha.Web
                                     if (year.Value > DateTime.Now.Year)
                                         year = DateTime.Now.Year;
                                 }
-                                catch 
+                                catch
                                 {
                                     // We don't care about the exception, we just
                                     // discard malformed input
@@ -144,8 +145,8 @@ namespace Piranha.Web
                                 {
                                     month = Math.Max(Math.Min(Convert.ToInt32(segments[n]), 12), 1);
                                 }
-                                catch 
-                                { 
+                                catch
+                                {
                                     // We don't care about the exception, we just
                                     // discard malformed input
                                 }
