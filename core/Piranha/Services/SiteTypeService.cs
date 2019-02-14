@@ -1,11 +1,11 @@
 ﻿/*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2018 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using System;
@@ -26,8 +26,9 @@ namespace Piranha.Services
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="db">The current db connection</param>
-        public SiteTypeService(ISiteTypeRepository repo, ICache cache) 
+        /// <param name="repo">The main repository</param>
+        /// <param name="cache">The optional model cache</param>
+        public SiteTypeService(ISiteTypeRepository repo, ICache cache)
         {
             _repo = repo;
             _cache = cache;
@@ -37,7 +38,7 @@ namespace Piranha.Services
         /// Gets all available models.
         /// </summary>
         /// <returns>The available models</returns>
-        public Task<IEnumerable<SiteType>> GetAllAsync() 
+        public Task<IEnumerable<SiteType>> GetAllAsync()
         {
             return GetTypes();
         }
@@ -47,7 +48,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="id">The unique i</param>
         /// <returns></returns>
-        public async Task<SiteType> GetByIdAsync(string id) 
+        public async Task<SiteType> GetByIdAsync(string id)
         {
             var types = await GetTypes();
 
@@ -59,7 +60,7 @@ namespace Piranha.Services
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        public async Task SaveAsync(SiteType model) 
+        public async Task SaveAsync(SiteType model)
         {
             // Validate model
             var context = new ValidationContext(model);
@@ -78,7 +79,7 @@ namespace Piranha.Services
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public async Task DeleteAsync(string id) 
+        public async Task DeleteAsync(string id)
         {
             var model = await _repo.GetById(id);
 
@@ -92,7 +93,7 @@ namespace Piranha.Services
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        public async Task DeleteAsync(SiteType model) 
+        public async Task DeleteAsync(SiteType model)
         {
             // Call hooks & delete
             App.Hooks.OnBeforeDelete<SiteType>(model);

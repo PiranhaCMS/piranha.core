@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Piranha.Models;
+using Piranha.Services;
 
 namespace Piranha.AttributeBuilder
 {
@@ -23,7 +24,7 @@ namespace Piranha.AttributeBuilder
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="api">The current api</param>        
+        /// <param name="api">The current api</param>
         public PostTypeBuilder(IApi api)
         {
             _api = api;

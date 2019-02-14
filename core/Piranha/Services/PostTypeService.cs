@@ -18,9 +18,9 @@ using Piranha.Repositories;
 
 namespace Piranha.Services
 {
-    public class PageTypeService
+    public class PostTypeService
     {
-        private readonly IPageTypeRepository _repo;
+        private readonly IPostTypeRepository _repo;
         private readonly ICache _cache;
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="repo">The main repository</param>
         /// <param name="cache">The optional model cache</param>
-        public PageTypeService(IPageTypeRepository repo, ICache cache)
+        public PostTypeService(IPostTypeRepository repo, ICache cache)
         {
             _repo = repo;
             _cache = cache;
@@ -38,7 +38,7 @@ namespace Piranha.Services
         /// Gets all available models.
         /// </summary>
         /// <returns>The available models</returns>
-        public Task<IEnumerable<PageType>> GetAllAsync()
+        public Task<IEnumerable<PostType>> GetAllAsync()
         {
             return GetTypes();
         }
@@ -46,9 +46,9 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the model with the specified id.
         /// </summary>
-        /// <param name="id">The unique id</param>
-        /// <returns>The model</returns>
-        public async Task<PageType> GetByIdAsync(string id)
+        /// <param name="id">The unique i</param>
+        /// <returns></returns>
+        public async Task<PostType> GetByIdAsync(string id)
         {
             var types = await GetTypes();
 
@@ -60,19 +60,19 @@ namespace Piranha.Services
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        public async Task SaveAsync(PageType model)
+        public async Task SaveAsync(PostType model)
         {
             // Validate model
             var context = new ValidationContext(model);
             Validator.ValidateObject(model, context, true);
 
             // Call hooks & save
-            App.Hooks.OnBeforeSave<PageType>(model);
+            App.Hooks.OnBeforeSave<PostType>(model);
             await _repo.Save(model);
-            App.Hooks.OnAfterSave<PageType>(model);
+            App.Hooks.OnAfterSave<PostType>(model);
 
             // Clear cache
-            _cache?.Remove("Piranha_PageTypes");
+            _cache?.Remove("Piranha_PostTypes");
         }
 
         /// <summary>
@@ -93,29 +93,29 @@ namespace Piranha.Services
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        public async Task DeleteAsync(PageType model)
+        public async Task DeleteAsync(PostType model)
         {
             // Call hooks & delete
-            App.Hooks.OnBeforeDelete<PageType>(model);
+            App.Hooks.OnBeforeDelete<PostType>(model);
             await _repo.Delete(model.Id);
-            App.Hooks.OnAfterDelete<PageType>(model);
+            App.Hooks.OnAfterDelete<PostType>(model);
 
             // Clear cache
-            _cache?.Remove("Piranha_PageTypes");
+            _cache?.Remove("Piranha_PostTypes");
         }
 
         /// <summary>
         /// Reloads the page types from the database.
         /// </summary>
-        private async Task<IEnumerable<PageType>> GetTypes()
+        private async Task<IEnumerable<PostType>> GetTypes()
         {
-            var types = _cache?.Get<IEnumerable<PageType>>("Piranha_PageTypes");
+            var types = _cache?.Get<IEnumerable<PostType>>("Piranha_PostTypes");
 
             if (types == null)
             {
                 types = await _repo.GetAll();
 
-                _cache?.Set("Piranha_PageTypes", types);
+                _cache?.Set("Piranha_PostTypes", types);
             }
             return types;
         }

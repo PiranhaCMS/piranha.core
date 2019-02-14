@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using Piranha.Services;
@@ -76,9 +76,9 @@ namespace Piranha
         public IPostRepository Posts { get; private set; }
 
         /// <summary>
-        /// Gets the post type repository.
+        /// Gets the post type service.
         /// </summary>
-        public IPostTypeRepository PostTypes { get; private set; }
+        public PostTypeService PostTypes { get; private set; }
 
         /// <summary>
         /// Gets the site repository.
@@ -144,7 +144,7 @@ namespace Piranha
             PageTypes = new PageTypeService(new PageTypeRepository(_db), cacheLevel > 0 ? _cache : null);
             Params = new ParamService(new ParamRepository(_db), cacheLevel > 0 ? _cache : null);
             Posts = new PostRepository(this, _db, factory, cacheLevel > 2 ? _cache : null);
-            PostTypes = new PostTypeRepository(_db);
+            PostTypes = new PostTypeService(new PostTypeRepository(_db), cacheLevel > 0 ? _cache : null);
             Sites = new SiteRepository(this, _db, factory, cacheLevel > 0 ? _cache : null);
             SiteTypes = new SiteTypeService(new SiteTypeRepository(_db), cacheLevel > 0 ? _cache : null);
             Tags = new TagRepository(_db, cacheLevel > 2 ? _cache : null);

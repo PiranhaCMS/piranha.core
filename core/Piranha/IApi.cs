@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using System;
@@ -61,9 +61,9 @@ namespace Piranha
         IPostRepository Posts { get; }
 
         /// <summary>
-        /// Gets the post type repository.
+        /// Gets the post type service.
         /// </summary>
-        IPostTypeRepository PostTypes { get; }
+        PostTypeService PostTypes { get; }
 
         /// <summary>
         /// Gets the site repository.
