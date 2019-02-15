@@ -3,14 +3,15 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using Piranha.AttributeBuilder;
 using Piranha.Services;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
 using System.Linq;
 using Xunit;
@@ -47,7 +48,7 @@ namespace Piranha.Tests.Repositories
         #endregion
 
         [PageType(Title = "Blog page")]
-        public class BlogPage : Models.Page<BlogPage> { }        
+        public class BlogPage : Models.Page<BlogPage> { }
 
         protected override void Init() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
@@ -104,7 +105,7 @@ namespace Piranha.Tests.Repositories
                 foreach (var t in types)
                     api.PageTypes.Delete(t);
 
-                api.Sites.Delete(SITE_ID);                    
+                api.Sites.Delete(SITE_ID);
             }
         }
 
@@ -113,7 +114,7 @@ namespace Piranha.Tests.Repositories
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 Assert.Equal(this.GetType() == typeof(TagsCached), api.IsCached);
             }
-        }        
+        }
 
         [Fact]
         public void Add() {
@@ -142,7 +143,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void AddDuplicateSlug() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
-                Assert.ThrowsAny<Exception>(() =>
+                Assert.ThrowsAny<ValidationException>(() =>
                     api.Tags.Save(new Data.Tag() {
                         BlogId = BLOG_ID,
                         Title = TAG_1
@@ -153,7 +154,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void AddNoTitle() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
-                Assert.ThrowsAny<ArgumentException>(() =>
+                Assert.ThrowsAny<ValidationException>(() =>
                     api.Tags.Save(new Data.Tag() {
                         BlogId = BLOG_ID
                     }));

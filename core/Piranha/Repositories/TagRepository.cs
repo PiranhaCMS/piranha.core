@@ -1,51 +1,48 @@
 ﻿/*
- * Copyright (c) 2017-2018 Håkan Edling
+ * Copyright (c) 2017-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
 
 namespace Piranha.Repositories
 {
-    public class TagRepository : BaseRepository<Tag>, ITagRepository
+    public class TagRepository : ITagRepository
     {
+        private readonly IDb _db;
+
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
         /// <param name="cache">The optional model cache</param>
-        public TagRepository(IDb db, ICache cache = null)
-            : base(db, cache) { }
+        public TagRepository(IDb db)
+        {
+            _db = db;
+        }
 
         /// <summary>
         /// Gets all available models for the specified blog.
         /// </summary>
         /// <param name="id">The blog id</param>
         /// <returns>The available models</returns>
-        public IEnumerable<Tag> GetAll(Guid blogId)
+        public async Task<IEnumerable<Tag>> GetAll(Guid blogId)
         {
-            var models = new List<Tag>();
-            var tags = db.Tags
+            return await _db.Tags
                 .AsNoTracking()
                 .Where(t => t.BlogId == blogId)
-                .Select(t => t.Id);
-
-            foreach (var t in tags)
-            {
-                var model = GetById(t);
-                if (model != null)
-                    models.Add(model);
-            }
-            return models;
+                .OrderBy(t => t.Title)
+                .ToListAsync();
         }
 
         /// <summary>
@@ -53,23 +50,26 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="postId">The post id</param>
         /// <returns>The model</returns>
-        public IEnumerable<Tag> GetByPostId(Guid postId)
+        public async Task<IEnumerable<Tag>> GetByPostId(Guid postId)
         {
-            var tags = db.PostTags
+            return await _db.PostTags
                 .AsNoTracking()
                 .Where(t => t.PostId == postId)
-                .Select(t => t.TagId);
+                .Select(t => t.Tag)
+                .OrderBy(t => t.Title)
+                .ToListAsync();
+        }
 
-            var models = new List<Tag>();
-
-            foreach (var tag in tags)
-            {
-                var model = GetById(tag);
-
-                if (model != null)
-                    models.Add(model);
-            }
-            return models;
+        /// <summary>
+        /// Gets the model with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The model, or NULL if it doesn't exist</returns>
+        public Task<Tag> GetById(Guid id)
+        {
+            return _db.Tags
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.Id == id);
         }
 
         /// <summary>
@@ -78,27 +78,11 @@ namespace Piranha.Repositories
         /// <param name="blogId">The blog id</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The model</returns>
-        public Tag GetBySlug(Guid blogId, string slug)
+        public Task<Tag> GetBySlug(Guid blogId, string slug)
         {
-            var id = cache != null ? cache.Get<Guid?>($"Tag_{blogId}_{slug}") : null;
-            Tag model = null;
-
-            if (id.HasValue)
-            {
-                model = GetById(id.Value);
-            }
-            else
-            {
-                id = db.Tags
-                    .AsNoTracking()
-                    .Where(t => t.BlogId == blogId && t.Slug == slug)
-                    .Select(t => t.Id)
-                    .FirstOrDefault();
-
-                if (id != Guid.Empty)
-                    model = GetById(id.Value);
-            }
-            return model;
+            return _db.Tags
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.BlogId == blogId && t.Slug == slug);
         }
 
         /// <summary>
@@ -107,106 +91,77 @@ namespace Piranha.Repositories
         /// <param name="blogId">The blog id</param>
         /// <param name="title">The unique title</param>
         /// <returns>The model</returns>
-        public Tag GetByTitle(Guid blogId, string title)
+        public Task<Tag> GetByTitle(Guid blogId, string title)
         {
-            var id = db.Tags
+            return _db.Tags
                 .AsNoTracking()
-                .Where(t => t.BlogId == blogId && t.Title == title)
-                .Select(t => t.Id)
-                .FirstOrDefault();
-
-            if (id != Guid.Empty)
-                return GetById(id);
-            return null;
+                .FirstOrDefaultAsync(t => t.BlogId == blogId && t.Title == title);
         }
 
         /// <summary>
-        /// Deletes all unused tags for the specified blog.
+        /// Adds or updates the given model in the database
+        /// depending on its state.
+        /// </summary>
+        /// <param name="model">The model</param>
+        public async Task Save(Tag model)
+        {
+            var tag = await _db.Tags
+                .FirstOrDefaultAsync(t => t.Id == model.Id);
+
+            if (tag == null)
+            {
+                tag = new Data.Tag
+                {
+                    Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
+                    Created = DateTime.Now
+                };
+                await _db.Tags.AddAsync(tag);
+            }
+            tag.BlogId = model.BlogId;
+            tag.Title = model.Title;
+            tag.Slug = model.Slug;
+            tag.LastModified = model.LastModified;
+
+            await _db.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Deletes the model with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        public async Task Delete(Guid id)
+        {
+            var tag = await _db.Tags
+                .FirstOrDefaultAsync(t => t.Id == id);
+
+            if (tag != null)
+            {
+                _db.Tags.Remove(tag);
+                await _db.SaveChangesAsync();
+            }
+        }
+
+        /// <summary>
+        /// Deletes all unused categories for the specified blog.
         /// </summary>
         /// <param name="blogId">The blog id</param>
-        public void DeleteUnused(Guid blogId)
+        public async Task DeleteUnused(Guid blogId)
         {
-            var used = db.PostTags
+            var used = await _db.PostTags
                 .Where(t => t.Post.BlogId == blogId)
                 .Select(t => t.TagId)
                 .Distinct()
-                .ToArray();
+                .ToArrayAsync();
 
-            var unused = db.Tags
+            var unused = await _db.Tags
                 .Where(t => t.BlogId == blogId && !used.Contains(t.Id))
-                .ToList();
+                .ToListAsync();
 
             if (unused.Count > 0)
             {
-                db.Tags.RemoveRange(unused);
-                db.SaveChanges();
+                _db.Tags.RemoveRange(unused);
+                await _db.SaveChangesAsync();
             }
         }
-
-        #region Protected methods
-        /// <summary>
-        /// Adds a new model to the database.
-        /// </summary>
-        /// <param name="model">The model</param>
-        protected override void Add(Tag model)
-        {
-            PrepareInsert(model);
-
-            // Check required
-            if (string.IsNullOrWhiteSpace(model.Title))
-                throw new ArgumentException("Title is required for Tag");
-
-            // Ensure slug
-            if (string.IsNullOrWhiteSpace(model.Slug))
-                model.Slug = Utils.GenerateSlug(model.Title, false);
-            else model.Slug = Utils.GenerateSlug(model.Slug, false);
-
-            db.Tags.Add(model);
-        }
-
-        /// <summary>
-        /// Updates the given model in the database.
-        /// </summary>
-        /// <param name="model">The model</param>
-        protected override void Update(Tag model)
-        {
-            PrepareUpdate(model);
-
-            // Check required
-            if (string.IsNullOrWhiteSpace(model.Title))
-                throw new ArgumentException("Title is required for Tag");
-
-            // Ensure slug
-            if (string.IsNullOrWhiteSpace(model.Slug))
-                model.Slug = Utils.GenerateSlug(model.Title);
-            else model.Slug = Utils.GenerateSlug(model.Slug);
-
-            var tag = db.Tags.FirstOrDefault(t => t.Id == model.Id);
-            if (tag != null)
-            {
-                App.Mapper.Map<Tag, Tag>(model, tag);
-            }
-        }
-
-        /// <summary>
-        /// Adds the given model to cache.
-        /// </summary>
-        /// <param name="model">The model</param>
-        protected override void AddToCache(Tag model)
-        {
-            cache.Set(model.Id.ToString(), model);
-            cache.Set($"Tag_{model.BlogId}_{model.Slug}", model.Id);
-        }
-
-        /// <summary>
-        /// Removes the given model from cache.
-        /// </summary>
-        /// <param name="model">The model</param>
-        protected override void RemoveFromCache(Tag model)
-        {
-            cache.Remove(model.Id.ToString());
-            cache.Remove($"Tag_{model.BlogId}_{model.Slug}");
-        }
-        #endregion
     }
 }

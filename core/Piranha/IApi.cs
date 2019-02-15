@@ -76,8 +76,8 @@ namespace Piranha
         SiteTypeService SiteTypes { get; }
 
         /// <summary>
-        /// Gets the tag repository.
+        /// Gets the tag service.
         /// </summary>
-        ITagRepository Tags { get; }
+        TagService Tags { get; }
     }
 }

@@ -91,9 +91,9 @@ namespace Piranha
         public SiteTypeService SiteTypes { get; private set; }
 
         /// <summary>
-        /// Gets the tag repository.
+        /// Gets the tag service.
         /// </summary>
-        public ITagRepository Tags { get; private set; }
+        public TagService Tags { get; private set; }
 
         /// <summary>
         /// Gets if the current repository has caching enabled or not.
@@ -147,7 +147,7 @@ namespace Piranha
             PostTypes = new PostTypeService(new PostTypeRepository(_db), cacheLevel > 0 ? _cache : null);
             Sites = new SiteRepository(this, _db, factory, cacheLevel > 0 ? _cache : null);
             SiteTypes = new SiteTypeService(new SiteTypeRepository(_db), cacheLevel > 0 ? _cache : null);
-            Tags = new TagRepository(_db, cacheLevel > 2 ? _cache : null);
+            Tags = new TagService(new TagRepository(_db), cacheLevel > 2 ? _cache : null);
         }
         #endregion
     }
