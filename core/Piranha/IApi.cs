@@ -66,9 +66,9 @@ namespace Piranha
         PostTypeService PostTypes { get; }
 
         /// <summary>
-        /// Gets the site repository.
+        /// Gets the site service.
         /// </summary>
-        ISiteRepository Sites { get; }
+        SiteService Sites { get; }
 
         /// <summary>
         /// Gets the site type service.

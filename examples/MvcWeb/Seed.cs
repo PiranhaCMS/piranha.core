@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Piranha;
 using Piranha.Extend.Blocks;
+using Piranha.Services;
 
 namespace MvcWeb
 {
@@ -28,7 +29,7 @@ namespace MvcWeb
                 {
                     using (var stream = File.OpenRead("seed/" + image.filename))
                     {
-                        api.Media.Save(new Piranha.Models.StreamMediaContent() 
+                        api.Media.Save(new Piranha.Models.StreamMediaContent()
                         {
                             Id = image.id,
                             Filename = image.filename,
@@ -48,7 +49,7 @@ namespace MvcWeb
                 // Start page hero
                 startpage.Hero.Subtitle = "By developers - for developers";
                 startpage.Hero.PrimaryImage = images[1].id;
-                startpage.Hero.Ingress = 
+                startpage.Hero.Ingress =
                     "<p>A lightweight & unobtrusive CMS for ASP.NET Core.</p>" +
                     "<p><small>Stable version 5.2.1 - 2018-10-17 - <a href=\"https://github.com/piranhacms/piranha.core/wiki/changelog\" target=\"_blank\">Changelog</a></small></p>";
 
@@ -106,7 +107,7 @@ namespace MvcWeb
                 featurespage.Title = "Features";
                 featurespage.Route = "/pagewide";
                 featurespage.SortOrder = 1;
-                
+
                 // Features hero
                 featurespage.Hero.Subtitle = "Features";
                 featurespage.Hero.Ingress = "<p>It's all about who has the sharpest teeth in the pond.</p>";
@@ -117,7 +118,7 @@ namespace MvcWeb
                     using (var reader = new StreamReader(stream))
                     {
                         var body = reader.ReadToEnd();
-                        
+
                         foreach (var section in body.Split("%"))
                         {
                             var blocks = section.Split("@");
@@ -140,7 +141,7 @@ namespace MvcWeb
                                         Column1 = App.Markdown.Transform(cols[0].Trim()),
                                         Column2 = App.Markdown.Transform(cols[1].Trim())
                                     });
-                                    
+
                                     if (n < blocks.Length - 1)
                                     {
                                         featurespage.Blocks.Add(new Models.Blocks.SeparatorBlock());

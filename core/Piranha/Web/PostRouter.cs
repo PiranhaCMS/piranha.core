@@ -3,12 +3,13 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
+using Piranha.Services;
 
 namespace Piranha.Web
 {
@@ -36,7 +37,7 @@ namespace Piranha.Web
                         var page = api.Pages.GetById<Models.PageInfo>(post.BlogId);
                         var site = api.Sites.GetById(page.SiteId);
                         var route = post.Route ?? "/post";
-                        var lastModified = !site.ContentLastModified.HasValue || post.LastModified > site.ContentLastModified 
+                        var lastModified = !site.ContentLastModified.HasValue || post.LastModified > site.ContentLastModified
                             ? post.LastModified : site.ContentLastModified.Value;
 
                         if (segments.Length > 2)

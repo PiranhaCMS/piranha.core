@@ -81,9 +81,9 @@ namespace Piranha
         public PostTypeService PostTypes { get; private set; }
 
         /// <summary>
-        /// Gets the site repository.
+        /// Gets the site service.
         /// </summary>
-        public ISiteRepository Sites { get; private set; }
+        public SiteService Sites { get; private set; }
 
         /// <summary>
         /// Gets the site type service.
@@ -145,7 +145,7 @@ namespace Piranha
             Params = new ParamService(new ParamRepository(_db), cacheLevel > 0 ? _cache : null);
             Posts = new PostRepository(this, _db, factory, cacheLevel > 2 ? _cache : null);
             PostTypes = new PostTypeService(new PostTypeRepository(_db), cacheLevel > 0 ? _cache : null);
-            Sites = new SiteRepository(this, _db, factory, cacheLevel > 0 ? _cache : null);
+            Sites = new SiteService(new SiteRepository(this, _db, factory), cacheLevel > 0 ? _cache : null);
             SiteTypes = new SiteTypeService(new SiteTypeRepository(_db), cacheLevel > 0 ? _cache : null);
             Tags = new TagService(new TagRepository(_db), cacheLevel > 2 ? _cache : null);
         }

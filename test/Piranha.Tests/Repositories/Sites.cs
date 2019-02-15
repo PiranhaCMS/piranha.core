@@ -3,15 +3,16 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using Piranha.AttributeBuilder;
 using Piranha.Extend.Fields;
 using Piranha.Services;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Xunit;
 
@@ -55,7 +56,7 @@ namespace Piranha.Tests.Repositories
 
             [Region]
             public HtmlField Footer { get; set; }
-        }        
+        }
 
         protected override void Init() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
@@ -168,7 +169,7 @@ namespace Piranha.Tests.Repositories
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 Assert.Equal(this.GetType() == typeof(SitesCached), api.IsCached);
             }
-        }        
+        }
 
         [Fact]
         public void Add() {
@@ -183,7 +184,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void AddDuplicateKey() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
-                Assert.ThrowsAny<Exception>(() =>
+                Assert.ThrowsAny<ValidationException>(() =>
                     api.Sites.Save(new Data.Site() {
                         InternalId = SITE_1,
                         Title = SITE_1
@@ -194,9 +195,9 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void AddEmptyFailure() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
-                Assert.ThrowsAny<ArgumentException>(() =>
+                Assert.ThrowsAny<ValidationException>(() =>
                     api.Sites.Save(new Data.Site()));
-            }            
+            }
         }
 
         [Fact]
@@ -306,7 +307,7 @@ namespace Piranha.Tests.Repositories
                     Assert.StartsWith("/", item.Permalink);
                 }
             }
-        }        
+        }
 
         [Fact]
         public void GetUnpublishedSitemap() {
@@ -327,7 +328,7 @@ namespace Piranha.Tests.Repositories
                 var sitemap = api.Sites.GetSitemap();
 
                 Assert.Equal(1, sitemap.Count(s => s.IsHidden));
-            }            
+            }
         }
 
         [Fact]
@@ -344,7 +345,7 @@ namespace Piranha.Tests.Repositories
                 Assert.False(site1.IsDefault);
                 site1.IsDefault = true;
                 api.Sites.Save(site1);
-            }            
+            }
         }
 
         [Fact]
@@ -359,7 +360,7 @@ namespace Piranha.Tests.Repositories
                 site1 = api.Sites.GetById(SITE_1_ID);
 
                 Assert.True(site1.IsDefault);
-            }            
+            }
         }
 
         [Fact]
@@ -417,7 +418,7 @@ namespace Piranha.Tests.Repositories
 
                 Assert.NotNull(model);
                 Assert.Equal("<p>Lorem ipsum</p>", model.Header.Value);
-            }            
+            }
         }
 
         [Fact]
@@ -431,8 +432,8 @@ namespace Piranha.Tests.Repositories
 
                 model = api.Sites.GetContentById<MySiteContent>(SITE_1_ID);
                 Assert.NotNull(model);
-                Assert.Equal("<p>Fusce Parturient</p>", model.Footer.Value);                
-            }            
+                Assert.Equal("<p>Fusce Parturient</p>", model.Footer.Value);
+            }
         }
 
         [Fact]
@@ -442,7 +443,7 @@ namespace Piranha.Tests.Repositories
 
                 Assert.NotNull(model);
                 Assert.Equal("<p>Lorem ipsum</p>", model.Regions.Header.Value);
-            }            
+            }
         }
 
         [Fact]
@@ -456,8 +457,8 @@ namespace Piranha.Tests.Repositories
 
                 model = api.Sites.GetContentById(SITE_1_ID);
                 Assert.NotNull(model);
-                Assert.Equal("<p>Purus Sit</p>", model.Regions.Footer.Value);                
-            }            
+                Assert.Equal("<p>Purus Sit</p>", model.Regions.Footer.Value);
+            }
         }
 
         [Fact]

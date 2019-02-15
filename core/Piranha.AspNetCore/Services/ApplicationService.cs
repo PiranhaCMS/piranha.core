@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using Microsoft.AspNetCore.Http;
@@ -14,6 +14,7 @@ using System.Linq;
 using Piranha.Data;
 using Piranha.Extend.Fields;
 using Piranha.Models;
+using Piranha.Services;
 
 namespace Piranha.AspNetCore.Services
 {
@@ -41,7 +42,7 @@ namespace Piranha.AspNetCore.Services
             /// <summary>
             /// Default internal constructur.
             /// </summary>
-            internal SiteHelper(IApi api) 
+            internal SiteHelper(IApi api)
             {
                 _api = api;
             }
@@ -68,7 +69,7 @@ namespace Piranha.AspNetCore.Services
             /// <summary>
             /// Default internal constructur.
             /// </summary>
-            internal MediaHelper(IApi api) 
+            internal MediaHelper(IApi api)
             {
                 _api = api;
             }
@@ -120,7 +121,7 @@ namespace Piranha.AspNetCore.Services
         /// Gets the media helper.
         /// </summary>
         public IMediaHelper Media { get; internal set; }
-        
+
         /// <summary>
         /// Gets the currently requested URL.
         /// </summary>
