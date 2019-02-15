@@ -23,7 +23,7 @@ namespace Piranha
         /// <summary>
         /// Gets/sets the alias repository.
         /// </summary>
-        IAliasRepository Aliases { get; }
+        AliasService Aliases { get; }
 
         /// <summary>
         /// Gets/sets the archive repository.

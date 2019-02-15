@@ -37,7 +37,7 @@ namespace Piranha
         /// <summary>
         /// Gets/sets the alias repository.
         /// </summary>
-        public IAliasRepository Aliases { get; private set; }
+        public AliasService Aliases { get; private set; }
 
         /// <summary>
         /// Gets/sets the archive repository.
@@ -136,18 +136,23 @@ namespace Piranha
 
             var cacheLevel = (int)App.CacheLevel;
 
-            Aliases = new AliasRepository(this, _db, cacheLevel > 2 ? _cache : null);
+            // Old repositories
             Archives = new ArchiveRepository(this, _db);
-            Categories = new CategoryService(new CategoryRepository(_db), cacheLevel > 2 ? _cache : null);
             Media = new MediaRepository(this, _db, _storage, cacheLevel > 2 ? _cache : null, imageProcessor);
             Pages = new PageRepository(this, _db, factory, cacheLevel > 2 ? _cache : null);
+            Posts = new PostRepository(this, _db, factory, cacheLevel > 2 ? _cache : null);
+
+            // Create services without dependecies
+            Categories = new CategoryService(new CategoryRepository(_db), cacheLevel > 2 ? _cache : null);
             PageTypes = new PageTypeService(new PageTypeRepository(_db), cacheLevel > 0 ? _cache : null);
             Params = new ParamService(new ParamRepository(_db), cacheLevel > 0 ? _cache : null);
-            Posts = new PostRepository(this, _db, factory, cacheLevel > 2 ? _cache : null);
             PostTypes = new PostTypeService(new PostTypeRepository(_db), cacheLevel > 0 ? _cache : null);
             Sites = new SiteService(new SiteRepository(this, _db, factory), cacheLevel > 0 ? _cache : null);
             SiteTypes = new SiteTypeService(new SiteTypeRepository(_db), cacheLevel > 0 ? _cache : null);
             Tags = new TagService(new TagRepository(_db), cacheLevel > 2 ? _cache : null);
+
+            // Create services with dependencies
+            Aliases = new AliasService(new AliasRepository(_db), Sites, cacheLevel > 2 ? _cache : null);
         }
         #endregion
     }

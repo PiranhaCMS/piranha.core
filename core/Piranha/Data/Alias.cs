@@ -3,12 +3,13 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Piranha.Data
 {
@@ -28,11 +29,15 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the alias url.
         /// </summary>
+        [Required]
+        [StringLength(256)]
         public string AliasUrl { get; set; }
 
         /// <summary>
         /// Gets/sets the url of the redirect.
         /// </summary>
+        [Required]
+        [StringLength(256)]
         public string RedirectUrl { get; set; }
 
         /// <summary>

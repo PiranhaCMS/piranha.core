@@ -11,206 +11,124 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
 using Piranha.Services;
 
 namespace Piranha.Repositories
 {
-    public class AliasRepository : BaseRepository<Alias>, IAliasRepository
+    public class AliasRepository : IAliasRepository
     {
-        private readonly Api _api;
+        private readonly IDb _db;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
-        /// <param name="cache">The optional model cache</param>
-        public AliasRepository(Api api, IDb db, ICache cache = null)
-            : base(db, cache)
+        public AliasRepository(IDb db)
         {
-            _api = api;
+            _db = db;
         }
 
         /// <summary>
         /// Gets all available models for the specified site.
         /// </summary>
-        /// <param name="siteId">The optional site id</param>
+        /// <param name="siteId">The site id</param>
         /// <returns>The available models</returns>
-        public IEnumerable<Alias> GetAll(Guid? siteId)
+        public async Task<IEnumerable<Alias>> GetAll(Guid siteId)
         {
-            var models = new List<Alias>();
-
-            if (!siteId.HasValue)
-            {
-                var site = _api.Sites.GetDefault();
-                if (site != null)
-                    siteId = site.Id;
-            }
-
-            var aliases = db.Aliases
+            return await _db.Aliases
                 .AsNoTracking()
                 .Where(a => a.SiteId == siteId)
                 .OrderBy(a => a.AliasUrl)
                 .ThenBy(a => a.RedirectUrl)
-                .Select(a => a.Id);
+                .ToListAsync();
+        }
 
-            foreach (var a in aliases)
-            {
-                var model = GetById(a);
-                if (model != null)
-                    models.Add(model);
-            }
-            return models;
+        /// <summary>
+        /// Gets the model with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The model, or NULL if it doesn't exist</returns>
+        public Task<Alias> GetById(Guid id)
+        {
+            return _db.Aliases
+                .AsNoTracking()
+                .Where(a => a.Id == id)
+                .FirstOrDefaultAsync();
         }
 
         /// <summary>
         /// Gets the model with the given alias url.
         /// </summary>
         /// <param name="url">The unique url</param>
-        /// <param name="siteId">The optional site id</param>
+        /// <param name="siteId">The site id</param>
         /// <returns>The model</returns>
-        public Alias GetByAliasUrl(string url, Guid? siteId = null)
+        public Task<Alias> GetByAliasUrl(string url, Guid siteId)
         {
-            if (!siteId.HasValue)
-            {
-                var site = _api.Sites.GetDefault();
-                if (site != null)
-                    siteId = site.Id;
-            }
-
-            var id = cache?.Get<Guid?>($"AliasId_{siteId}_{url}");
-            Alias model = null;
-
-            if (id.HasValue)
-            {
-                model = GetById(id.Value);
-            }
-            else
-            {
-                id = db.Aliases
-                    .AsNoTracking()
-                    .Where(a => a.SiteId == siteId && a.AliasUrl == url)
-                    .Select(a => a.Id)
-                    .FirstOrDefault();
-
-                if (id != Guid.Empty)
-                    model = GetById(id.Value);
-            }
-            return model;
+            return _db.Aliases
+                .AsNoTracking()
+                .Where(a => a.SiteId == siteId && a.AliasUrl == url)
+                .FirstOrDefaultAsync();
         }
 
         /// <summary>
         /// Gets the model with the given redirect url.
         /// </summary>
         /// <param name="url">The unique url</param>
-        /// <param name="siteId">The optional site id</param>
+        /// <param name="siteId">The site id</param>
         /// <returns>The model</returns>
-        public IEnumerable<Alias> GetByRedirectUrl(string url, Guid? siteId = null)
+        public async Task<IEnumerable<Alias>> GetByRedirectUrl(string url, Guid siteId)
         {
-            if (!siteId.HasValue)
-            {
-                var site = _api.Sites.GetDefault();
-                if (site != null)
-                    siteId = site.Id;
-            }
-
-            var models = new List<Alias>();
-
-            var aliases = db.Aliases
+            return await _db.Aliases
                 .AsNoTracking()
                 .Where(a => a.SiteId == siteId && a.RedirectUrl == url)
-                .Select(a => a.Id)
-                .ToList();
-
-            foreach (var id in aliases)
-            {
-                models.Add(GetById(id));
-            }
-            return models;
+                .ToListAsync();
         }
 
         /// <summary>
-        /// Adds a new model to the database.
+        /// Adds or updates the given model in the database
+        /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        protected override void Add(Alias model)
+        public async Task Save(Alias model)
         {
-            PrepareInsert(model);
+            var alias = await _db.Aliases
+                .FirstOrDefaultAsync(p => p.Id == model.Id);
 
-            // Check for alias url
-            if (string.IsNullOrWhiteSpace(model.AliasUrl))
-                throw new ArgumentException("Alias Url cannot be empty");
-
-            // Check for redirect url
-            if (string.IsNullOrWhiteSpace(model.RedirectUrl))
-                throw new ArgumentException("Redirect Url cannot be empty");
-
-            // Fix urls
-            if (!model.AliasUrl.StartsWith("/"))
+            if (alias == null)
             {
-                model.AliasUrl = "/" + model.AliasUrl;
+                alias = new Data.Alias
+                {
+                    Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
+                    Created = DateTime.Now
+                };
+                await _db.Aliases.AddAsync(alias);
             }
-            if (!model.RedirectUrl.StartsWith("/") && !model.RedirectUrl.StartsWith("http://") && !model.RedirectUrl.StartsWith("https://"))
-            {
-                model.RedirectUrl = "/" + model.RedirectUrl;
-            }
+            alias.SiteId = model.SiteId;
+            alias.AliasUrl = model.AliasUrl;
+            alias.RedirectUrl = model.RedirectUrl;
+            alias.Type = model.Type;
+            alias.LastModified = DateTime.Now;
 
-            db.Aliases.Add(model);
+            await _db.SaveChangesAsync();
         }
 
         /// <summary>
-        /// Updates the given model in the database.
+        /// Deletes the model with the specified id.
         /// </summary>
-        /// <param name="model">The model</param>
-        protected override void Update(Alias model)
+        /// <param name="id">The unique id</param>
+        public async Task Delete(Guid id)
         {
-            PrepareUpdate(model);
+            var alias = await _db.Aliases
+                .FirstOrDefaultAsync(a => a.Id == id);
 
-            // Check for alias url
-            if (string.IsNullOrWhiteSpace(model.AliasUrl))
-                throw new ArgumentException("Alias Url cannot be empty");
-
-            // Check for redirect url
-            if (string.IsNullOrWhiteSpace(model.RedirectUrl))
-                throw new ArgumentException("Redirect Url cannot be empty");
-
-            // Fix urls
-            if (!model.AliasUrl.StartsWith("/"))
-            {
-                model.AliasUrl = "/" + model.AliasUrl;
-            }
-            if (!model.RedirectUrl.StartsWith("/") && !model.RedirectUrl.StartsWith("http://") && !model.RedirectUrl.StartsWith("https://"))
-            {
-                model.RedirectUrl = "/" + model.RedirectUrl;
-            }
-
-            var alias = db.Aliases.FirstOrDefault(s => s.Id == model.Id);
             if (alias != null)
             {
-                App.Mapper.Map<Alias, Alias>(model, alias);
+                _db.Aliases.Remove(alias);
+                await _db.SaveChangesAsync();
             }
-        }
-
-        /// <summary>
-        /// Adds the given model to cache.
-        /// </summary>
-        /// <param name="model">The model</param>
-        protected override void AddToCache(Alias model)
-        {
-            cache.Set(model.Id.ToString(), model);
-            cache.Set($"AliasId_{model.SiteId}_{model.AliasUrl}", model.Id);
-        }
-
-        /// <summary>
-        /// Removes the given model from cache.
-        /// </summary>
-        /// <param name="model">The model</param>
-        protected override void RemoveFromCache(Alias model)
-        {
-            cache.Remove($"AliasId_{model.SiteId}_{model.AliasUrl}");
-
-            base.RemoveFromCache(model);
         }
     }
 }
