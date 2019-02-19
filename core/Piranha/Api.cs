@@ -56,9 +56,9 @@ namespace Piranha
         public IMediaRepository Media { get; private set; }
 
         /// <summary>
-        /// Gets the page repository.
+        /// Gets the page service.
         /// </summary>
-        public IPageRepository Pages { get; private set; }
+        public PageService Pages { get; private set; }
 
         /// <summary>
         /// Gets the page type service.
@@ -139,7 +139,6 @@ namespace Piranha
             // Old repositories
             Archives = new ArchiveRepository(this, _db);
             Media = new MediaRepository(this, _db, _storage, cacheLevel > 2 ? _cache : null, imageProcessor);
-            Pages = new PageRepository(this, _db, factory, cacheLevel > 2 ? _cache : null);
             Posts = new PostRepository(this, _db, factory, cacheLevel > 2 ? _cache : null);
 
             // Create services without dependecies
@@ -153,6 +152,7 @@ namespace Piranha
 
             // Create services with dependencies
             Aliases = new AliasService(new AliasRepository(_db), Sites, cacheLevel > 2 ? _cache : null);
+            Pages = new PageService(new PageRepository(this, _db, factory), Sites, Params, cacheLevel > 2 ? _cache : null);
         }
         #endregion
     }

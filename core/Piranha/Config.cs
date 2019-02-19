@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -20,9 +20,9 @@ namespace Piranha
     public sealed class Config : IDisposable
     {
         /// <summary>
-        /// The private api.
+        /// The private param service.
         /// </summary>
-        private readonly IApi _api;
+        private readonly ParamService _service;
 
         /// <summary>
         /// The system config keys.
@@ -39,13 +39,13 @@ namespace Piranha
         /// </summary>
         public int ArchivePageSize {
             get {
-                var param = _api.Params.GetByKey(ARCHIVE_PAGE_SIZE);
+                var param = _service.GetByKey(ARCHIVE_PAGE_SIZE);
                 if (param != null)
                     return Convert.ToInt32(param.Value);
                 return 0;
             }
             set {
-                var param = _api.Params.GetByKey(ARCHIVE_PAGE_SIZE);
+                var param = _service.GetByKey(ARCHIVE_PAGE_SIZE);
                 if (param == null)
                 {
                     param = new Param
@@ -54,7 +54,7 @@ namespace Piranha
                     };
                 }
                 param.Value = value.ToString();
-                _api.Params.Save(param);
+                _service.Save(param);
             }
         }
 
@@ -64,13 +64,13 @@ namespace Piranha
         /// </summary>
         public int CacheExpiresPages {
             get {
-                var param = _api.Params.GetByKey(CACHE_EXPIRES_PAGES);
+                var param = _service.GetByKey(CACHE_EXPIRES_PAGES);
                 if (param != null)
                     return Convert.ToInt32(param.Value);
                 return 0;
             }
             set {
-                var param = _api.Params.GetByKey(CACHE_EXPIRES_PAGES);
+                var param = _service.GetByKey(CACHE_EXPIRES_PAGES);
                 if (param == null)
                 {
                     param = new Param
@@ -79,7 +79,7 @@ namespace Piranha
                     };
                 }
                 param.Value = value.ToString();
-                _api.Params.Save(param);
+                _service.Save(param);
             }
         }
 
@@ -89,13 +89,13 @@ namespace Piranha
         /// </summary>
         public int CacheExpiresPosts {
             get {
-                var param = _api.Params.GetByKey(CACHE_EXPIRES_POSTS);
+                var param = _service.GetByKey(CACHE_EXPIRES_POSTS);
                 if (param != null)
                     return Convert.ToInt32(param.Value);
                 return 0;
             }
             set {
-                var param = _api.Params.GetByKey(CACHE_EXPIRES_POSTS);
+                var param = _service.GetByKey(CACHE_EXPIRES_POSTS);
                 if (param == null)
                 {
                     param = new Param
@@ -104,7 +104,7 @@ namespace Piranha
                     };
                 }
                 param.Value = value.ToString();
-                _api.Params.Save(param);
+                _service.Save(param);
             }
         }
 
@@ -114,13 +114,13 @@ namespace Piranha
         /// </summary>
         public bool HierarchicalPageSlugs {
             get {
-                var param = _api.Params.GetByKey(PAGES_HIERARCHICAL_SLUGS);
+                var param = _service.GetByKey(PAGES_HIERARCHICAL_SLUGS);
                 if (param != null)
                     return Convert.ToBoolean(param.Value);
                 return true;
             }
             set {
-                var param = _api.Params.GetByKey(PAGES_HIERARCHICAL_SLUGS);
+                var param = _service.GetByKey(PAGES_HIERARCHICAL_SLUGS);
                 if (param == null)
                 {
                     param = new Param
@@ -129,7 +129,7 @@ namespace Piranha
                     };
                 }
                 param.Value = value.ToString();
-                _api.Params.Save(param);
+                _service.Save(param);
             }
         }
 
@@ -139,13 +139,13 @@ namespace Piranha
         /// </summary>
         public int ManagerExpandedSitemapLevels {
             get {
-                var param = _api.Params.GetByKey(MANAGER_EXPANDED_SITEMAP_LEVELS);
+                var param = _service.GetByKey(MANAGER_EXPANDED_SITEMAP_LEVELS);
                 if (param != null)
                     return Convert.ToInt32(param.Value);
                 return 0;
             }
             set {
-                var param = _api.Params.GetByKey(MANAGER_EXPANDED_SITEMAP_LEVELS);
+                var param = _service.GetByKey(MANAGER_EXPANDED_SITEMAP_LEVELS);
                 if (param == null)
                 {
                     param = new Param
@@ -154,7 +154,7 @@ namespace Piranha
                     };
                 }
                 param.Value = value.ToString();
-                _api.Params.Save(param);
+                _service.Save(param);
             }
         }
 
@@ -164,13 +164,13 @@ namespace Piranha
         /// </summary>
         public string MediaCDN {
             get {
-                var param = _api.Params.GetByKey(MEDIA_CDN_URL);
+                var param = _service.GetByKey(MEDIA_CDN_URL);
                 if (param != null)
                     return param.Value;
                 return null;
             }
             set {
-                var param = _api.Params.GetByKey(MEDIA_CDN_URL);
+                var param = _service.GetByKey(MEDIA_CDN_URL);
                 if (param == null)
                 {
                     param = new Param
@@ -184,8 +184,17 @@ namespace Piranha
                     value = value + "/";
 
                 param.Value = value;
-                _api.Params.Save(param);
+                _service.Save(param);
             }
+        }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        /// <param name="paramService">The current param service</param>
+        public Config(ParamService paramService)
+        {
+            _service = paramService;
         }
 
         /// <summary>
@@ -194,7 +203,7 @@ namespace Piranha
         /// <param name="api">The current api</param>
         public Config(IApi api)
         {
-            _api = api;
+            _service = api.Params;
         }
 
         /// <summary>

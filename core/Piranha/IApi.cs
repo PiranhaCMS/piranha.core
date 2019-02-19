@@ -43,7 +43,7 @@ namespace Piranha
         /// <summary>
         /// Gets the page repository.
         /// </summary>
-        IPageRepository Pages { get; }
+        PageService Pages { get; }
 
         /// <summary>
         /// Gets the page type service.

@@ -334,8 +334,13 @@ namespace Piranha.Services
         /// given id, if caching is enabled.
         /// </summary>
         /// <param name="id">The site id</param>
-        public void InvalidateSitemap(Guid id)
+        /// <param name="updateLastModified">If the global last modified date should be updated</param>
+        public void InvalidateSitemap(Guid id, bool updateLastModified = true)
         {
+            if (updateLastModified)
+            {
+                // TODO: Update Site.ContentLastModified
+            }
             _cache?.Remove($"Sitemap_{id}");
         }
 

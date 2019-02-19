@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using System;
@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
 namespace Piranha
 {
@@ -129,7 +130,7 @@ namespace Piranha
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="bytes"></param>
         /// <returns></returns>
@@ -199,6 +200,22 @@ namespace Piranha
             var version = assembly.GetName().Version;
 
             return $"{version.Major}.{version.Minor}.{version.Build}";
+        }
+
+        /// <summary>
+        /// Clones the entire given object into a new instance.
+        /// </summary>
+        /// <param name="obj">The object to clone</param>
+        /// <typeparam name="T">The object type</typeparam>
+        /// <returns>The cloned instance</returns>
+        public static T DeepClone<T>(T obj)
+        {
+            var settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All
+            };
+            var json = JsonConvert.SerializeObject(obj, settings);
+            return JsonConvert.DeserializeObject<T>(json, settings);
         }
     }
 }

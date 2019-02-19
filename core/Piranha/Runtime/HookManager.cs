@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -121,6 +121,11 @@ namespace Piranha.Runtime
         /// Gets the hooks available for media folders.
         /// </summary>
         public RepositoryHooks<Data.MediaFolder> MediaFolder { get; private set; } = new RepositoryHooks<Data.MediaFolder>();
+
+        /// <summary>
+        /// Gets the hooks available for pages.
+        /// </summary>
+        public RepositoryHooks<Models.PageBase> Pages { get; private set; } = new RepositoryHooks<Models.PageBase>();
 
         /// <summary>
         /// Gets the hooks available for params.

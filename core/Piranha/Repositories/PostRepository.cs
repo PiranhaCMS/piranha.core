@@ -196,10 +196,16 @@ namespace Piranha.Repositories
                         AddToCache(post);
                     }
                     post.Category = _api.Categories.GetById(post.CategoryId);
-                    //
-                    // TODO: Ugly hardcoded reference!!!!
-                    //
-                    post.Blog = ((PageRepository)_api.Pages).GetPageById(post.BlogId);
+
+                    var blogPage = _api.Pages.GetById<Models.PageInfo>(post.BlogId);
+                    if (blogPage != null)
+                    {
+                        post.Blog = new Page
+                        {
+                            Id = blogPage.Id,
+                            Slug = blogPage.Slug
+                        };
+                    }
                 }
             }
 
@@ -290,7 +296,16 @@ namespace Piranha.Repositories
                         AddToCache(post);
                     }
                     post.Category = _api.Categories.GetById(post.CategoryId);
-                    post.Blog = ((PageRepository)_api.Pages).GetPageById(post.BlogId);
+
+                    var blogPage = _api.Pages.GetById<Models.PageInfo>(post.BlogId);
+                    if (blogPage != null)
+                    {
+                        post.Blog = new Page
+                        {
+                            Id = blogPage.Id,
+                            Slug = blogPage.Slug
+                        };
+                    }
 
                     return _contentService.Transform<T>(post, _api.PostTypes.GetById(post.PostTypeId), Process);
                 }

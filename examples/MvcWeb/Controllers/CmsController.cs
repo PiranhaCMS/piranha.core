@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using Piranha;
 using Piranha.Models;
-using System;
-using System.Linq;
+using Piranha.Services;
 
 namespace MvcWeb.Controllers
 {
@@ -15,8 +16,8 @@ namespace MvcWeb.Controllers
         /// Default constructor.
         /// </summary>
         /// <param name="app">The current app</param>
-        public CmsController(IApi api, IDb db) 
-        {            
+        public CmsController(IApi api, IDb db)
+        {
             _api = api;
             _db = db;
         }
@@ -31,8 +32,8 @@ namespace MvcWeb.Controllers
         /// <param name="category">The optional category</param>
         /// <param name="tag">The optional tag</param>
         [Route("archive")]
-        public IActionResult Archive(Guid id, int? year = null, int? month = null, int? page = null, 
-            Guid? category = null, Guid? tag = null) 
+        public IActionResult Archive(Guid id, int? year = null, int? month = null, int? page = null,
+            Guid? category = null, Guid? tag = null)
         {
             Models.BlogArchive model;
 
@@ -41,7 +42,7 @@ namespace MvcWeb.Controllers
             else if (tag.HasValue)
                 model = _api.Archives.GetByTagId<Models.BlogArchive>(id, tag.Value, page, year, month);
             else model = _api.Archives.GetById<Models.BlogArchive>(id, page, year, month);
-            
+
             return View(model);
         }
 
@@ -50,7 +51,7 @@ namespace MvcWeb.Controllers
         /// </summary>
         /// <param name="id">The unique page id</param>
         [Route("page")]
-        public IActionResult Page(Guid id) 
+        public IActionResult Page(Guid id)
         {
             var model = _api.Pages.GetById<Models.StandardPage>(id);
 
@@ -62,7 +63,7 @@ namespace MvcWeb.Controllers
         /// </summary>
         /// <param name="id">The unique page id</param>
         [Route("pagewide")]
-        public IActionResult PageWide(Guid id) 
+        public IActionResult PageWide(Guid id)
         {
             var model = _api.Pages.GetById<Models.StandardPage>(id);
 
@@ -73,9 +74,9 @@ namespace MvcWeb.Controllers
         /// Gets the post with the given id.
         /// </summary>
         /// <param name="id">The unique post id</param>
-        /// 
+        ///
         [Route("post")]
-        public IActionResult Post(Guid id) 
+        public IActionResult Post(Guid id)
         {
             var model = _api.Posts.GetById<Models.BlogPost>(id);
 
