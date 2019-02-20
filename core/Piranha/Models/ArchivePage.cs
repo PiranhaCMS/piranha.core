@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -34,12 +34,11 @@ namespace Piranha.Models
         }
     }
 
-
     [Obsolete]
     public interface IBlogPage : IArchivePage { }
-    
+
     /// <summary>
-    /// Interface for registering the basic archive page 
+    /// Interface for registering the basic archive page
     /// content type.
     /// </summary>
     public interface IArchivePage { }

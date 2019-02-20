@@ -110,7 +110,6 @@ namespace Piranha
             return ti.ToTitleCase(GenerateSlug(str).Replace('-', ' ')).Replace(" ", "");
         }
 
-
         /// <summary>
         /// Generates a ETag from the given name and date.
         /// </summary>

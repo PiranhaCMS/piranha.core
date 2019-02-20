@@ -39,7 +39,7 @@ img {
     img {
         border-left: solid 4px #f0ad4e;
         padding: .5rem 0 .5rem 1rem;
-        margin-bottom: 1rem;        
+        margin-bottom: 1rem;
     }
 
     .construction {
@@ -51,7 +51,7 @@ img {
             text-align: center;
             font-weight: 300;
             font-size: 1.2rem;
-            opacity: .6;            
+            opacity: .6;
         }
     }
 
@@ -110,18 +110,18 @@ header[role="banner"] {
             border-top: solid 6px #00a3d8;
             padding-top: 4rem;
             position: relative;
-            
+
             &:before {
                 content: " ";
                 background: #00a3d8;
-                position: absolute;                
+                position: absolute;
                 height: 6px;
                 width: 100%;
                 top: -6px;
-                left: 0;                
+                left: 0;
                 display: block;
-                z-index: 2000;            
-            }                    
+                z-index: 2000;
+            }
         }
 
         &.hero {
@@ -133,13 +133,13 @@ header[role="banner"] {
             color: #fff;
             padding: 1rem 0;
             font-weight: 300;
-            font-size: .9rem;    
+            font-size: .9rem;
             text-transform: uppercase;
-        
+
             a {
                 color: #fff;
             }
-        }        
+        }
     }
 }
 

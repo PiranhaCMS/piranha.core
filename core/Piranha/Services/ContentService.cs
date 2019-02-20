@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -182,7 +182,6 @@ namespace Piranha.Services
                 return default(TValue);
             }
         }
-
 
         /// <summary>
         /// Gets the enumerator for the given region collection.
@@ -475,12 +474,12 @@ namespace Piranha.Services
                                 ((Extend.BlockGroup)models.First(m => m.Id == parent.BlockId))
                                     .Items.Add(model);
                             }
-                            else 
+                            else
                             {
                                 throw new InvalidOperationException("Block parent is missing");
                             }
                         }
-                        else 
+                        else
                         {
                             models.Add(model);
                         }
@@ -488,7 +487,7 @@ namespace Piranha.Services
                 }
                 return models;
             }
-        }        
+        }
 
         /// <summary>
         /// Transforms the given block data into block models.
@@ -865,7 +864,6 @@ namespace Piranha.Services
                         }
                     }
                     list.Add(obj);
-
                 }
                 else
                 {
@@ -950,7 +948,6 @@ namespace Piranha.Services
                 if (fieldProp != null)
                 {
                     return fieldProp.GetValue(region);
-
                 }
                 return null;
             }

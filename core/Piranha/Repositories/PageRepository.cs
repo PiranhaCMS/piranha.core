@@ -518,7 +518,136 @@ namespace Piranha.Repositories
             {
                 page.SortOrder = increase ? page.SortOrder + 1 : page.SortOrder - 1;
             }
+<<<<<<< HEAD
             return pages.Select(p => p.Id).ToList();
+=======
+        }
+
+        /// <summary>
+        /// Updates the LastModified date of the pages and
+        /// removes it from the cache.
+        /// </summary>
+        /// <param name="pages">The id of the pages</param>
+        internal void Touch(params Guid[] pages)
+        {
+            var models = _db.Pages
+                .Where(p => pages.Contains(p.Id))
+                .ToArray();
+
+            foreach (var page in models)
+            {
+                page.LastModified = DateTime.Now;
+                _db.SaveChanges();
+                RemoveFromCache(page);
+            }
+        }
+
+        /// <summary>
+        /// Internal method for getting the data page by id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The page</returns>
+        internal Page GetPageById(Guid id)
+        {
+            var page = _cache != null ? _cache.Get<Page>(id.ToString()) : null;
+
+            if (page == null)
+            {
+                page = _db.Pages
+                    .AsNoTracking()
+                    .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
+                    .Include(p => p.Fields)
+                    .FirstOrDefault(p => p.Id == id);
+
+                if (page != null)
+                {
+                    if (_cache != null)
+                    {
+                        AddToCache(page);
+                    }
+                }
+            }
+            return page;
+        }
+
+        private T MapOriginalPage<T>(Page page) where T : Models.PageBase
+        {
+            var originalPage = GetById<T>(page.OriginalPageId.Value);
+            if (originalPage == null)
+            {
+                return null;
+            }
+            return SetOriginalPageProperties(originalPage, page);
+        }
+
+        private T SetOriginalPageProperties<T>(T originalPage, Page page) where T : Models.PageBase
+        {
+            originalPage.Id = page.Id;
+            originalPage.SiteId = page.SiteId;
+            originalPage.Title = page.Title;
+            originalPage.NavigationTitle = page.NavigationTitle;
+            originalPage.Slug = page.Slug;
+            originalPage.ParentId = page.ParentId;
+            originalPage.SortOrder = page.SortOrder;
+            originalPage.IsHidden = page.IsHidden;
+            originalPage.Route = page.Route;
+            originalPage.OriginalPageId = page.OriginalPageId;
+            originalPage.Published = page.Published;
+            originalPage.Created = page.Created;
+            originalPage.LastModified = page.LastModified;
+            return originalPage;
+        }
+
+        /// <summary>
+        /// Sorts the items.
+        /// </summary>
+        /// <param name="pages">The full page list</param>
+        /// <param name="parentId">The current parent id</param>
+        /// <returns>The sitemap</returns>
+        private Models.Sitemap Sort(IEnumerable<Page> pages, IEnumerable<Models.PageType> pageTypes, Guid? parentId = null, int level = 0)
+        {
+            var result = new Models.Sitemap();
+
+            foreach (var page in pages.Where(p => p.ParentId == parentId).OrderBy(p => p.SortOrder))
+            {
+                var item = App.Mapper.Map<Page, Models.SitemapItem>(page);
+
+                item.Level = level;
+                item.PageTypeName = pageTypes.First(t => t.Id == page.PageTypeId).Title;
+                item.Items = Sort(pages, pageTypes, page.Id, level + 1);
+
+                result.Add(item);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Adds the given model to cache.
+        /// </summary>
+        /// <param name="page">The page</param>
+        private void AddToCache(Page page)
+        {
+            _cache.Set(page.Id.ToString(), page);
+            _cache.Set($"PageId_{page.SiteId}_{page.Slug}", page.Id);
+            if (!page.ParentId.HasValue && page.SortOrder == 0)
+            {
+                _cache.Set($"Page_{page.SiteId}", page);
+            }
+        }
+
+        /// <summary>
+        /// Removes the given model from cache.
+        /// </summary>
+        /// <param name="page">The page</param>
+        private void RemoveFromCache(Page page)
+        {
+            _cache.Remove(page.Id.ToString());
+            _cache.Remove($"PageId_{page.SiteId}_{page.Slug}");
+            if (!page.ParentId.HasValue && page.SortOrder == 0)
+            {
+                _cache.Remove($"Page_{page.SiteId}");
+            }
+>>>>>>> 4ba37b7b4f4b5e502d361597ca44d3c4065fcce7
         }
     }
 }
