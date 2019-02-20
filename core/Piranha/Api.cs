@@ -152,7 +152,7 @@ namespace Piranha
 
             // Create services with dependencies
             Aliases = new AliasService(new AliasRepository(_db), Sites, cacheLevel > 2 ? _cache : null);
-            Pages = new PageService(new PageRepository(this, _db, factory), Sites, Params, cacheLevel > 2 ? _cache : null);
+            Pages = new PageService(new PageRepository(_db, factory), Sites, Params, cacheLevel > 2 ? _cache : null);
         }
         #endregion
     }

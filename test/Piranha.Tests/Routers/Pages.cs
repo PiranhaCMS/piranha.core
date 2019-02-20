@@ -36,7 +36,7 @@ namespace Piranha.Tests.Routers
 
         protected override void Init() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                Piranha.App.Init();
+                Piranha.App.Init(api);
 
                 var builder = new PageTypeBuilder(api)
                     .AddType(typeof(MyPage));

@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using Piranha.Services;
@@ -20,7 +20,10 @@ namespace Piranha.Tests.Utils
         /// Sets up & initializes the tests.
         /// </summary>
         protected override void Init() {
-            Piranha.App.Init();
+            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null))
+            {
+                Piranha.App.Init(api);
+            }
         }
 
         /// <summary>

@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using Piranha.AttributeBuilder;
@@ -25,7 +25,7 @@ namespace Piranha.Tests.Hooks
         private Guid ID = Guid.NewGuid();
 
         [PageType(Title = "Blog page")]
-        public class BlogPage : Models.Page<BlogPage> { }        
+        public class BlogPage : Models.Page<BlogPage> { }
         class TagOnLoadException : Exception {}
         class TagOnBeforeSaveException : Exception {}
         class TagOnAfterSaveException : Exception {}
@@ -35,7 +35,7 @@ namespace Piranha.Tests.Hooks
         protected override void Init() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
                 // Initialize
-                Piranha.App.Init();
+                Piranha.App.Init(api);
 
                 var pageTypeBuilder = new PageTypeBuilder(api)
                     .AddType(typeof(BlogPage));
@@ -135,7 +135,7 @@ namespace Piranha.Tests.Hooks
                 });
             }
             Piranha.App.Hooks.Tag.Clear();
-        }        
+        }
 
         [Fact]
         public void OnAfterDelete() {
@@ -145,7 +145,7 @@ namespace Piranha.Tests.Hooks
                     api.Tags.Delete(ID);
                 });
             }
-            Piranha.App.Hooks.Tag.Clear();            
-        }        
+            Piranha.App.Hooks.Tag.Clear();
+        }
     }
 }

@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +37,7 @@ namespace Piranha.Tests
                 .BuildServiceProvider();
 
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                Piranha.App.Init();
+                Piranha.App.Init(api);
 
                 contentService = new ContentService<Page, PageField, Models.PageBase>(services, Piranha.App.Mapper);
 
@@ -50,7 +50,7 @@ namespace Piranha.Tests
                     api.Media.Save(image1);
 
                     image1Id = image1.Id.Value;
-                }                
+                }
             }
         }
 
@@ -83,7 +83,7 @@ namespace Piranha.Tests
                 Created = DateTime.Now,
                 LastModified = DateTime.Now
             });
-                
+
             var models = contentService.TransformBlocks(blocks);
 
             Assert.NotNull(models);
@@ -101,7 +101,7 @@ namespace Piranha.Tests
                     Value = "<p>Lorem ipsum</p>"
                 }
             });
-            
+
             var blocks = contentService.TransformBlocks(models);
 
             Assert.NotNull(blocks);
@@ -154,7 +154,7 @@ namespace Piranha.Tests
                     Value = "<p>Column 2</p>"
                 },
             });
-            
+
             var blocks = contentService.TransformBlocks(models);
 
             Assert.NotNull(blocks);
@@ -190,7 +190,7 @@ namespace Piranha.Tests
             Assert.Single(models);
 
             Assert.Equal(typeof(Extend.Blocks.ImageBlock), models.First().GetType());
-            Assert.NotNull(((Extend.Blocks.ImageBlock)models[0]).Body.Media);            
+            Assert.NotNull(((Extend.Blocks.ImageBlock)models[0]).Body.Media);
             Assert.Equal("HLD_Screenshot_01_mech_1080.png", ((Extend.Blocks.ImageBlock)models[0]).Body.Media.Filename);
         }
 
@@ -202,7 +202,7 @@ namespace Piranha.Tests
                     Id = image1Id
                 }
             });
-            
+
             var blocks = contentService.TransformBlocks(models);
 
             Assert.NotNull(blocks);
@@ -246,7 +246,7 @@ namespace Piranha.Tests
                     Value = "Lorem ipsum"
                 }
             });
-            
+
             var blocks = contentService.TransformBlocks(models);
 
             Assert.NotNull(blocks);
@@ -290,7 +290,7 @@ namespace Piranha.Tests
                     Value = "Lorem ipsum"
                 }
             });
-            
+
             var blocks = contentService.TransformBlocks(models);
 
             Assert.NotNull(blocks);

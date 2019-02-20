@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using Piranha.Extend;
@@ -23,7 +23,7 @@ namespace Piranha.Tests
         /// </summary>
         protected override void Init() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                Piranha.App.Init();
+                Piranha.App.Init(api);
 
                 using (var config = new Piranha.Config(api)) {
                     config.CacheExpiresPages = 0;
@@ -100,7 +100,7 @@ namespace Piranha.Tests
 
                     Assert.Equal("https://mycdn.org/uploads/", config.MediaCDN);
                 }
-            }            
+            }
         }
 
         [Fact]
@@ -111,7 +111,7 @@ namespace Piranha.Tests
 
                     Assert.Equal("https://mycdn.org/uploads/", config.MediaCDN);
                 }
-            }            
+            }
         }
     }
 }

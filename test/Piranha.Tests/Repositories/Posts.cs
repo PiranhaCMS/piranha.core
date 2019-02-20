@@ -105,7 +105,7 @@ namespace Piranha.Tests.Repositories
                 .BuildServiceProvider();
 
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
-                Piranha.App.Init();
+                Piranha.App.Init(api);
 
                 Piranha.App.Fields.Register<MyFourthField>();
 

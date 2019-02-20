@@ -21,18 +21,15 @@ namespace Piranha.Repositories
     public class PageRepository : IPageRepository
     {
         private readonly IDb _db;
-        private readonly IApi _api;
         private readonly IContentService<Page, PageField, Models.PageBase> _contentService;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="api">The current api</param>
         /// <param name="db">The current db context</param>
         /// <param name="factory">The content service factory</param>
-        public PageRepository(IApi api, IDb db, IContentServiceFactory factory)
+        public PageRepository(IDb db, IContentServiceFactory factory)
         {
-            _api = api;
             _db = db;
             _contentService = factory.CreatePageService();
         }
@@ -41,25 +38,31 @@ namespace Piranha.Repositories
         /// Creates and initializes a new page of the specified type.
         /// </summary>
         /// <returns>The created page</returns>
-        public async Task<T> Create<T>(string typeId = null) where T : Models.PageBase
+        public Task<T> Create<T>(string typeId = null) where T : Models.PageBase
         {
-            if (string.IsNullOrWhiteSpace(typeId))
+            return Task.Run(() =>
             {
-                typeId = typeof(T).Name;
-            }
-            return _contentService.Create<T>(await _api.PageTypes.GetByIdAsync(typeId));
+                if (string.IsNullOrWhiteSpace(typeId))
+                {
+                    typeId = typeof(T).Name;
+                }
+                return _contentService.Create<T>(App.PageTypes.GetById(typeId));
+            });
         }
 
         /// <summary>
         /// Creates and initializes a copy of the given page.
         /// </summary>
         /// <returns>The created copy</returns>
-        public async Task<T> Copy<T>(T originalPage) where T : Models.PageBase
+        public Task<T> Copy<T>(T originalPage) where T : Models.PageBase
         {
-            var model = _contentService.Create<T>(await _api.PageTypes.GetByIdAsync(originalPage.TypeId));
-            model.OriginalPageId = originalPage.Id;
-            model.Slug = null;
-            return model;
+            return Task.Run(() =>
+            {
+                var model = _contentService.Create<T>(App.PageTypes.GetById(originalPage.TypeId));
+                model.OriginalPageId = originalPage.Id;
+                model.Slug = null;
+                return model;
+            });
         }
 
         /// <summary>
@@ -133,7 +136,7 @@ namespace Piranha.Repositories
 
             if (page != null)
             {
-                return _contentService.Transform<T>(page, await _api.PageTypes.GetByIdAsync(page.PageTypeId), Process);
+                return _contentService.Transform<T>(page, App.PageTypes.GetById(page.PageTypeId), Process);
             }
             return null;
         }
@@ -151,7 +154,7 @@ namespace Piranha.Repositories
 
             if (page != null)
             {
-                return _contentService.Transform<T>(page, await _api.PageTypes.GetByIdAsync(page.PageTypeId), Process);
+                return _contentService.Transform<T>(page, App.PageTypes.GetById(page.PageTypeId), Process);
             }
             return null;
         }
@@ -170,7 +173,7 @@ namespace Piranha.Repositories
 
             if (page != null)
             {
-                return _contentService.Transform<T>(page, await _api.PageTypes.GetByIdAsync(page.PageTypeId), Process);
+                return _contentService.Transform<T>(page, App.PageTypes.GetById(page.PageTypeId), Process);
             }
             return null;
         }
@@ -209,7 +212,7 @@ namespace Piranha.Repositories
         /// <param name="model">The page model</param>
         public async Task<IEnumerable<Guid>> Save<T>(T model) where T : Models.PageBase
         {
-            var type = await _api.PageTypes.GetByIdAsync(model.TypeId);
+            var type = App.PageTypes.GetById(model.TypeId);
             var affected = new List<Guid>();
             var isNew = false;
 
