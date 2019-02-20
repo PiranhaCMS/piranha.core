@@ -345,7 +345,6 @@ namespace Piranha.Repositories
                         if (!string.IsNullOrWhiteSpace(t.Slug))
                         {
                             tag = _api.Tags.GetBySlug(model.BlogId, t.Slug);
-
                         }
                         if (tag == null && !string.IsNullOrWhiteSpace(t.Title))
                         {

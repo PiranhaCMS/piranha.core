@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using Microsoft.Extensions.DependencyInjection;
@@ -52,14 +52,14 @@ namespace Piranha.Tests.Repositories
             public MyService() {
                 Value = "My service value";
             }
-        }        
+        }
 
         [Piranha.Extend.FieldType(Name = "Fourth")]
         public class MyFourthField : Extend.Fields.SimpleField<string> {
             public void Init(IMyService myService) {
                 Value = myService.Value;
             }
-        }        
+        }
 
         public class ComplexRegion
         {
@@ -116,7 +116,6 @@ namespace Piranha.Tests.Repositories
             [Region]
             public MyFourthField Body { get; set; }
         }
-        
 
         protected override void Init() {
             services = new ServiceCollection()
@@ -135,7 +134,7 @@ namespace Piranha.Tests.Repositories
                     .AddType(typeof(MyCollectionPage))
                     .AddType(typeof(MyDIPage));
                 builder.Build();
-                
+
                 var site = new Data.Site {
                     Id = SITE_ID,
                     Title = "Default Site",
@@ -355,7 +354,7 @@ namespace Piranha.Tests.Repositories
 
                 Assert.NotNull(pages);
                 Assert.NotEmpty(pages);
-            }            
+            }
         }
 
         [Fact]
@@ -365,7 +364,7 @@ namespace Piranha.Tests.Repositories
 
                 Assert.NotNull(pages);
                 Assert.NotEmpty(pages);
-            }            
+            }
         }
 
         [Fact]
@@ -376,7 +375,7 @@ namespace Piranha.Tests.Repositories
                 Assert.NotNull(pages);
                 Assert.Empty(pages);
             }
-        }        
+        }
 
         [Fact]
         public void GetGenericById() {
@@ -410,7 +409,7 @@ namespace Piranha.Tests.Repositories
                 Assert.Equal(2, model.Blocks.Count);
                 Assert.IsType<Extend.Blocks.TextBlock>(model.Blocks[0]);
                 Assert.IsType<Extend.Blocks.TextBlock>(model.Blocks[1]);
-            }            
+            }
         }
 
         [Fact]
@@ -430,7 +429,7 @@ namespace Piranha.Tests.Repositories
                 Assert.NotNull(model);
                 Assert.Equal("my-first-page", model.Slug);
                 Assert.Empty(model.Blocks);
-            }            
+            }
         }
 
         [Fact]
@@ -474,7 +473,7 @@ namespace Piranha.Tests.Repositories
                 Assert.Equal("my-first-page", model.Slug);
                 Assert.Empty(model.Blocks);
             }
-        }        
+        }
 
         [Fact]
         public void GetDynamicById() {
@@ -647,7 +646,7 @@ namespace Piranha.Tests.Repositories
                 page.Body = "My subpage body";
 
                 api.Pages.Save(page);
-                
+
                 page = api.Pages.GetById<MyPage>(page.Id);
 
                 Assert.NotNull(page);
@@ -655,7 +654,7 @@ namespace Piranha.Tests.Repositories
 
                 var param = api.Params.GetByKey(Piranha.Config.PAGES_HIERARCHICAL_SLUGS);
                 api.Params.Delete(param);
-            }            
+            }
         }
 
         [Fact]
@@ -674,7 +673,7 @@ namespace Piranha.Tests.Repositories
                 page.Body = "My subpage body";
 
                 api.Pages.Save(page);
-                
+
                 page = api.Pages.GetById<MyPage>(page.Id);
 
                 Assert.NotNull(page);
@@ -682,7 +681,7 @@ namespace Piranha.Tests.Repositories
 
                 var param = api.Params.GetByKey(Piranha.Config.PAGES_HIERARCHICAL_SLUGS);
                 api.Params.Delete(param);
-            }            
+            }
         }
 
         [Fact]
@@ -719,7 +718,7 @@ namespace Piranha.Tests.Repositories
                 api.Pages.Save(page);
 
                 page = api.Pages.GetBySlug<MyCollectionPage>("my-collection-page", SITE_ID);
-                
+
                 Assert.NotNull(page);
                 Assert.Equal(2, page.Texts.Count);
                 Assert.Equal("Updated text", page.Texts[0].Value);
@@ -776,7 +775,7 @@ namespace Piranha.Tests.Repositories
 
                 Assert.NotNull(page);
                 Assert.Equal("My service value", page.Body.Value);
-            }            
+            }
         }
 
         [Fact]
@@ -786,7 +785,7 @@ namespace Piranha.Tests.Repositories
 
                 Assert.NotNull(page);
                 Assert.Equal("My service value", page.Regions.Body.Value);
-            }            
+            }
         }
 
         [Fact]
@@ -796,7 +795,7 @@ namespace Piranha.Tests.Repositories
 
                 Assert.NotNull(page);
                 Assert.Equal("My service value", page.Body.Value);
-            }            
+            }
         }
 
         [Fact]
@@ -806,7 +805,7 @@ namespace Piranha.Tests.Repositories
 
                 Assert.NotNull(page);
                 Assert.Equal("My service value", page.Regions.Body.Value);
-            }            
+            }
         }
 
         [Fact]
@@ -843,7 +842,6 @@ namespace Piranha.Tests.Repositories
                 Assert.Equal(PAGE_7_ID, model.OriginalPageId);
                 Assert.Equal("My base body", model.Body.Value);
             }
-            
         }
 
         [Fact]

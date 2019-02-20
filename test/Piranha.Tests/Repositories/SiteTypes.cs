@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using Piranha.Models;
@@ -19,7 +19,7 @@ namespace Piranha.Tests.Repositories
     [Collection("Integration tests")]
     public class SiteTypesCached : SiteTypes
     {
-        protected override void Init() 
+        protected override void Init()
         {
             cache = new Cache.SimpleCache();
 
@@ -31,17 +31,17 @@ namespace Piranha.Tests.Repositories
     public class SiteTypes : BaseTests
     {
         protected ICache cache;
-        private readonly List<SiteType> siteTypes = new List<SiteType> 
+        private readonly List<SiteType> siteTypes = new List<SiteType>
         {
             new SiteType
             {
                 Id = "MyFirstType",
-                Regions = new List<RegionType> 
+                Regions = new List<RegionType>
                 {
                     new RegionType
                     {
                         Id = "Body",
-                        Fields = new List<FieldType> 
+                        Fields = new List<FieldType>
                         {
                             new FieldType {
                                 Id = "Default",
@@ -129,7 +129,7 @@ namespace Piranha.Tests.Repositories
             }
         };
 
-        protected override void Init() 
+        protected override void Init()
         {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache))
             {
@@ -159,7 +159,7 @@ namespace Piranha.Tests.Repositories
             {
                 Assert.Equal(this.GetType() == typeof(SiteTypesCached), api.IsCached);
             }
-        }        
+        }
 
         [Fact]
         public void Add()
@@ -192,7 +192,6 @@ namespace Piranha.Tests.Repositories
                 Assert.Null(none);
             }
         }
-
 
         [Fact]
         public void GetById()

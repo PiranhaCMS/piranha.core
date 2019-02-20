@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using System;
@@ -73,7 +73,7 @@ namespace Piranha.Tests.Repositories
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 Assert.Equal(this.GetType() == typeof(ParamsCached), api.IsCached);
             }
-        }        
+        }
 
         [Fact]
         public void Add() {
@@ -132,7 +132,6 @@ namespace Piranha.Tests.Repositories
                 Assert.Null(none);
             }
         }
-
 
         [Fact]
         public void GetAll() {

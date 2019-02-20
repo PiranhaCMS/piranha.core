@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using Piranha.AttributeBuilder;
@@ -33,7 +33,6 @@ namespace Piranha.Tests.Routers
             [Region]
             public TextField Body { get; set; }
         }
-        
 
         protected override void Init() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {

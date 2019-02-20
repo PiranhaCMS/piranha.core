@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using Microsoft.Extensions.DependencyInjection;
@@ -51,17 +51,17 @@ namespace Piranha.Tests.Repositories
             public MyService() {
                 Value = "My service value";
             }
-        }        
+        }
 
         [Piranha.Extend.FieldType(Name = "Fourth")]
         public class MyFourthField : Extend.Fields.SimpleField<string> {
             public void Init(IMyService myService) {
                 Value = myService.Value;
             }
-        }        
+        }
 
         [PageType(Title = "Blog page")]
-        public class BlogPage : Models.Page<BlogPage> { }        
+        public class BlogPage : Models.Page<BlogPage> { }
 
         [PostType(Title = "My PostType")]
         public class MyPost : Models.Post<MyPost>
@@ -97,7 +97,7 @@ namespace Piranha.Tests.Repositories
         {
             [Region]
             public MyFourthField Body { get; set; }
-        }        
+        }
 
         protected override void Init() {
             services = new ServiceCollection()
@@ -107,7 +107,7 @@ namespace Piranha.Tests.Repositories
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 Piranha.App.Init();
 
-                Piranha.App.Fields.Register<MyFourthField>();                
+                Piranha.App.Fields.Register<MyFourthField>();
 
                 var pageTypeBuilder = new PageTypeBuilder(api)
                     .AddType(typeof(BlogPage));
@@ -195,7 +195,7 @@ namespace Piranha.Tests.Repositories
                 post6.BlogId = BLOG_ID;
                 post6.Category = category;
                 post6.Title = "My Injection Post";
-                api.Posts.Save(post6);                
+                api.Posts.Save(post6);
             }
         }
 
@@ -226,14 +226,14 @@ namespace Piranha.Tests.Repositories
                 api.Sites.Delete(SITE_ID);
             }
         }
-        
+
         [Fact]
         public void IsCached() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 Assert.Equal(this.GetType() == typeof(PostsCached), api.IsCached);
             }
         }
-        
+
         [Fact]
         public void GetNoneById() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
@@ -424,7 +424,6 @@ namespace Piranha.Tests.Repositories
             }
         }
 
-
         [Fact]
         public void GetBlocksById() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
@@ -434,8 +433,8 @@ namespace Piranha.Tests.Repositories
                 Assert.Equal(2, model.Blocks.Count);
                 Assert.IsType<Extend.Blocks.TextBlock>(model.Blocks[0]);
                 Assert.IsType<Extend.Blocks.TextBlock>(model.Blocks[1]);
-            }            
-        }        
+            }
+        }
 
         [Fact]
         public void GetMissingById() {
@@ -455,8 +454,8 @@ namespace Piranha.Tests.Repositories
                 Assert.Equal("my-first-post", model.Slug);
                 Assert.Equal("/blog/my-first-post", model.Permalink);
                 Assert.Empty(model.Blocks);
-            }            
-        }        
+            }
+        }
 
         [Fact]
         public void GetGenericBySlug() {
@@ -502,7 +501,7 @@ namespace Piranha.Tests.Repositories
                 Assert.Equal("/blog/my-first-post", model.Permalink);
                 Assert.Empty(model.Blocks);
             }
-        }        
+        }
 
         [Fact]
         public void GetDynamicById() {
@@ -660,7 +659,7 @@ namespace Piranha.Tests.Repositories
                 api.Posts.Save(post);
 
                 post = api.Posts.GetBySlug<MyCollectionPost>("blog", "my-collection-post");
-                
+
                 Assert.NotNull(post);
                 Assert.Equal(2, post.Texts.Count);
                 Assert.Equal("Updated text", post.Texts[0].Value);
@@ -699,7 +698,7 @@ namespace Piranha.Tests.Repositories
 
                 Assert.NotNull(post);
                 Assert.Equal("My service value", post.Body.Value);
-            }            
+            }
         }
 
         [Fact]
@@ -709,7 +708,7 @@ namespace Piranha.Tests.Repositories
 
                 Assert.NotNull(post);
                 Assert.Equal("My service value", post.Regions.Body.Value);
-            }            
+            }
         }
     }
 }

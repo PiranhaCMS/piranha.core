@@ -3,9 +3,9 @@
 //
 // This software may be modified and distributed under the terms
 // of the MIT license.  See the LICENSE file for details.
-// 
+//
 // http://github.com/piranhacms/piranha.core
-// 
+//
 
 @import "colors.less";
 @import "mixins.less";
@@ -29,15 +29,15 @@
 		background: #fff;
 		padding: 15px 30px;
 		max-width: 920px;
-		margin: 0 auto;	
+		margin: 0 auto;
 		border-left: solid 1px @list-color-head;
 		border-right: solid 1px @list-color-head;
-	}	
+	}
 
 	img {
 		max-width: 100%;
 	}
-	
+
 	blockquote {
 		color: #666;
 		width: 90%;
@@ -48,15 +48,15 @@
 	}
 
     [contenteditable]:focus {
-        outline: 0px solid transparent;
-    }    
-    
+        outline: 0 solid transparent;
+    }
+
 	.sortable-placeholder {
-		padding: 0; 
-		min-height: 100px; 
-		background: #f2fbff; 
-		border: 1px dashed #b6bcbf; 
-		box-sizing: border-box; 		
+		padding: 0;
+		min-height: 100px;
+		background: #f2fbff;
+		border: 1px dashed #b6bcbf;
+		box-sizing: border-box;
 	}
 
 	.block {
@@ -180,7 +180,7 @@
 			border-color: @border-color;
 			border-width: 1px 1px 0 1px;
             display: none;
-			
+
 			.btn {
 				min-width: 34px;
 
@@ -200,17 +200,17 @@
 				text-transform: uppercase;
 				font-size: 12px;
 				line-height: 22px;
-				padding-left: 8px;				
+				padding-left: 8px;
 			}
 		}
-		
+
 		div[contenteditable="true"] {
 			min-height: 30px;
 		}
 
 		&:hover {
 			border-color: @border-color;
-            
+
             >.block-actions {
                 display: block;
             }
@@ -236,7 +236,7 @@
 			text-transform: uppercase;
 			font-size: 11px;
 			padding: 8px 15px;
-			border-bottom: solid 1px #444;				
+			border-bottom: solid 1px #444;
 		}
 
 		a {
@@ -249,7 +249,7 @@
 			font-size: 13px;
 			border-radius: 4px;
 			transition: all ease-in-out .2s;
-			
+
 			i {
 				display: block;
 				margin-bottom: 5px;
@@ -272,7 +272,7 @@
 
 			&::before {
 				.arrow-up(#222, 10px, -20px);
-			}	
+			}
 		}
 	}
 
@@ -282,7 +282,7 @@
 
 			&::after {
 				.arrow-down(#222, 10px, 0);
-			}	
+			}
 		}
 	}
 
@@ -308,12 +308,12 @@
 			position: absolute;
 			left: 50%;
 			top: -4px;
-			text-align: center;			
-			line-height: 24px;			
+			text-align: center;
+			line-height: 24px;
 			font-size: 11px;
 			margin-left: -17px;
 		}
-		
+
 		&:hover, &.active {
 			cursor: pointer;
 			opacity: 1;
@@ -391,6 +391,6 @@
 	.block:hover {
 		.block-html-swap {
 			display: inline-block;
-		}		
+		}
 	}
 }
