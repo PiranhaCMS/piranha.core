@@ -141,14 +141,7 @@ namespace Piranha.Tests.Repositories
                     InternalId = "DefaultSite",
                     IsDefault = true
                 };
-                var emptysite = new Data.Site {
-                    Id = SITE_ID,
-                    Title = "Empty Site",
-                    InternalId = "EmptySite",
-                    IsDefault = false
-                };
                 api.Sites.Save(site);
-                api.Sites.Save(emptysite);
 
                 var page1 = MyPage.Create(api);
                 page1.Id = PAGE_1_ID;

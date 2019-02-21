@@ -70,28 +70,15 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="siteId">The site id</param>
         /// <returns>The pages</returns>
-        public async Task<IEnumerable<T>> GetAll<T>(Guid siteId) where T : Models.PageBase
+        public async Task<IEnumerable<Guid>> GetAll(Guid siteId)
         {
-            var pages = await _db.Pages
+            return await _db.Pages
                 .AsNoTracking()
                 .Where(p => p.SiteId == siteId)
                 .OrderBy(p => p.ParentId)
                 .ThenBy(p => p.SortOrder)
                 .Select(p => p.Id)
                 .ToListAsync();
-
-            var models = new List<T>();
-
-            foreach (var page in pages)
-            {
-                var model = await GetById<T>(page);
-
-                if (model != null)
-                {
-                    models.Add(model);
-                }
-            }
-            return models;
         }
 
         /// <summary>
@@ -99,28 +86,15 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="siteId">The site id</param>
         /// <returns>The pages</returns>
-        public async Task<IEnumerable<T>> GetAllBlogs<T>(Guid siteId) where T : Models.PageBase
+        public async Task<IEnumerable<Guid>> GetAllBlogs(Guid siteId)
         {
-            var pages = await _db.Pages
+            return await _db.Pages
                 .AsNoTracking()
                 .Where(p => p.SiteId == siteId && p.ContentType == "Blog")
                 .OrderBy(p => p.ParentId)
                 .ThenBy(p => p.SortOrder)
                 .Select(p => p.Id)
                 .ToListAsync();
-
-            var models = new List<T>();
-
-            foreach (var page in pages)
-            {
-                var model = await GetById<T>(page);
-
-                if (model != null)
-                {
-                    models.Add(model);
-                }
-            }
-            return models;
         }
 
         /// <summary>

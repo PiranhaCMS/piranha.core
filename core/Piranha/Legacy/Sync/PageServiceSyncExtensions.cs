@@ -50,7 +50,7 @@ namespace Piranha.Services
         /// <returns>The available models</returns>
         public static IEnumerable<DynamicPage> GetAll(this PageService service, Guid? siteId = null)
         {
-            return service.GetAllAsync<DynamicPage>(siteId).GetAwaiter().GetResult();
+            return service.GetAllAsync(siteId).GetAwaiter().GetResult();
         }
 
         /// <summary>

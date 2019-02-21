@@ -33,14 +33,14 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="siteId">The site id</param>
         /// <returns>The pages</returns>
-        Task<IEnumerable<T>> GetAll<T>(Guid siteId) where T : Models.PageBase;
+        Task<IEnumerable<Guid>> GetAll(Guid siteId);
 
         /// <summary>
         /// Gets the available blog pages for the current site.
         /// </summary>
         /// <param name="siteId">The site id</param>
         /// <returns>The pages</returns>
-        Task<IEnumerable<T>> GetAllBlogs<T>(Guid siteId) where T : Models.PageBase;
+        Task<IEnumerable<Guid>> GetAllBlogs(Guid siteId);
 
         /// <summary>
         /// Gets the site startpage.

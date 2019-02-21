@@ -97,7 +97,19 @@ namespace Piranha.Services
         /// <returns>The available models</returns>
         public async Task<IEnumerable<T>> GetAllAsync<T>(Guid? siteId = null) where T : PageBase
         {
-            return await _repo.GetAll<T>((await EnsureSiteIdAsync(siteId)).Value);
+            var models = new List<T>();
+            var pages = await _repo.GetAll((await EnsureSiteIdAsync(siteId)).Value);
+
+            foreach (var pageId in pages)
+            {
+                var page = await GetByIdAsync<T>(pageId);
+
+                if (page != null)
+                {
+                    models.Add(page);
+                }
+            }
+            return models;
         }
 
         /// <summary>
@@ -117,7 +129,19 @@ namespace Piranha.Services
         /// <returns>The pages</returns>
         public async Task<IEnumerable<T>> GetAllBlogsAsync<T>(Guid? siteId = null) where T : Models.PageBase
         {
-            return await _repo.GetAllBlogs<T>((await EnsureSiteIdAsync(siteId)).Value);
+            var models = new List<T>();
+            var pages = await _repo.GetAllBlogs((await EnsureSiteIdAsync(siteId)).Value);
+
+            foreach (var pageId in pages)
+            {
+                var page = await GetByIdAsync<T>(pageId);
+
+                if (page != null)
+                {
+                    models.Add(page);
+                }
+            }
+            return models;
         }
 
         /// <summary>
@@ -157,11 +181,9 @@ namespace Piranha.Services
                 OnLoad(model);
             }
 
-            model = await MapOriginalAsync(model);
-
             if (model != null && model is T)
             {
-                return (T)model;
+                return await MapOriginalAsync<T>((T)model);
             }
             return null;
         }
@@ -201,11 +223,9 @@ namespace Piranha.Services
                 OnLoad(model);
             }
 
-            model = await MapOriginalAsync(model);
-
             if (model != null && model is T)
             {
-                return (T)model;
+                return await MapOriginalAsync<T>((T)model);
             }
             return null;
         }
@@ -255,11 +275,9 @@ namespace Piranha.Services
                 OnLoad(model);
             }
 
-            model = await MapOriginalAsync(model);
-
             if (model != null && model is T)
             {
-                return (T)model;
+                return await MapOriginalAsync<T>((T)model);
             }
             return null;
         }
