@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2017-2018 Håkan Edling
+ * Copyright (c) 2017-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -20,20 +20,17 @@ namespace Piranha.Repositories
 {
     public class SiteRepository : ISiteRepository
     {
-        private readonly Api _api;
         private readonly IDb _db;
         private readonly IContentService<Site, SiteField, Models.SiteContentBase> _contentService;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="api">The current api</param>
         /// <param name="db">The current db context</param>
         /// <param name="factory">The content service factory</param>
-        public SiteRepository(Api api, IDb db, IContentServiceFactory factory)
+        public SiteRepository(IDb db, IContentServiceFactory factory)
         {
             _db = db;
-            _api = api;
             _contentService = factory.CreateSiteService();
         }
 
@@ -115,7 +112,7 @@ namespace Piranha.Repositories
             if (string.IsNullOrEmpty(site.SiteTypeId))
                 return null;
 
-            var type = await _api.SiteTypes.GetByIdAsync(site.SiteTypeId);
+            var type = App.SiteTypes.GetById(site.SiteTypeId);
             if (type == null)
                 return null;
 
@@ -137,13 +134,11 @@ namespace Piranha.Repositories
                 .ThenBy(p => p.SortOrder)
                 .ToListAsync();
 
-            var pageTypes = await _api.PageTypes.GetAllAsync();
-
             if (onlyPublished)
             {
                 pages = pages.Where(p => p.Published.HasValue).ToList();
             }
-            return Sort(pages, pageTypes);
+            return Sort(pages);
         }
 
         /// <summary>
@@ -197,7 +192,7 @@ namespace Piranha.Repositories
                     throw new MissingFieldException("Can't save content for a site that doesn't have a Site Type Id.");
                 }
 
-                var type = await _api.SiteTypes.GetByIdAsync(site.SiteTypeId);
+                var type = App.SiteTypes.GetById(site.SiteTypeId);
                 if (type == null)
                 {
                     throw new MissingFieldException("The specified Site Type is missing. Can't save content.");
@@ -242,7 +237,7 @@ namespace Piranha.Repositories
             if (string.IsNullOrWhiteSpace(typeId))
                 typeId = typeof(T).Name;
 
-            return _contentService.Create<T>(_api.SiteTypes.GetById(typeId));
+            return _contentService.Create<T>(App.SiteTypes.GetById(typeId));
         }
 
         /// <summary>
@@ -251,7 +246,7 @@ namespace Piranha.Repositories
         /// <param name="pages">The full page list</param>
         /// <param name="parentId">The current parent id</param>
         /// <returns>The sitemap</returns>
-        private Models.Sitemap Sort(IEnumerable<Page> pages, IEnumerable<Models.PageType> pageTypes, Guid? parentId = null, int level = 0)
+        private Models.Sitemap Sort(IEnumerable<Page> pages, Guid? parentId = null, int level = 0)
         {
             var result = new Models.Sitemap();
 
@@ -265,8 +260,8 @@ namespace Piranha.Repositories
                 }
 
                 item.Level = level;
-                item.PageTypeName = pageTypes.First(t => t.Id == page.PageTypeId).Title;
-                item.Items = Sort(pages, pageTypes, page.Id, level + 1);
+                item.PageTypeName = App.PageTypes.First(t => t.Id == page.PageTypeId).Title;
+                item.Items = Sort(pages, page.Id, level + 1);
 
                 result.Add(item);
             }

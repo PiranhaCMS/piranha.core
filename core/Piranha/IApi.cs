@@ -26,9 +26,9 @@ namespace Piranha
         AliasService Aliases { get; }
 
         /// <summary>
-        /// Gets/sets the archive repository.
+        /// Gets/sets the archive service.
         /// </summary>
-        IArchiveRepository Archives { get; }
+        ArchiveService Archives { get; }
 
         /// <summary>
         /// Gets the category service.

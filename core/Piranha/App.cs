@@ -108,6 +108,12 @@ namespace Piranha
         private ContentTypeList<Models.PostType> _postTypes;
 
         /// <summary>
+        /// The currently available post types.
+        /// </summary>
+
+        private ContentTypeList<Models.SiteType> _siteTypes;
+
+        /// <summary>
         /// Gets the currently registered block types.
         /// </summary>
         public static AppBlockList Blocks => Instance._blocks;
@@ -182,6 +188,11 @@ namespace Piranha
         /// Gets the currently available page types.
         /// </summary>
         public static ContentTypeList<Models.PostType> PostTypes => Instance._postTypes;
+
+        /// <summary>
+        /// Gets the currently available page types.
+        /// </summary>
+        public static ContentTypeList<Models.SiteType> SiteTypes => Instance._siteTypes;
 
         /// <summary>
         /// Static constructor. Called once every application
@@ -346,6 +357,7 @@ namespace Piranha
             _permissions = new PermissionManager();
             _pageTypes = new ContentTypeList<Models.PageType>();
             _postTypes = new ContentTypeList<Models.PostType>();
+            _siteTypes = new ContentTypeList<Models.SiteType>();
         }
 
         /// <summary>
@@ -401,6 +413,7 @@ namespace Piranha
                         // Initialize content types
                         _pageTypes.Init(api.PageTypes.GetAll());
                         _postTypes.Init(api.PostTypes.GetAll());
+                        _siteTypes.Init(api.SiteTypes.GetAll());
 
                         // Initialize all modules
                         foreach (var module in _modules)

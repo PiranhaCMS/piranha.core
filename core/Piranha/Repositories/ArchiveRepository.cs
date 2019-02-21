@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Håkan Edling
+ * Copyright (c) 2016-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -9,18 +9,15 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using Piranha.Services;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Piranha.Repositories
 {
     public class ArchiveRepository : IArchiveRepository
     {
-        /// <summary>
-        /// The current api.
-        /// </summary>
-        private readonly Api _api;
-
         /// <summary>
         /// The current db context.
         /// </summary>
@@ -30,154 +27,61 @@ namespace Piranha.Repositories
         /// Default internal constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
-        internal ArchiveRepository(Api api, IDb db)
+        internal ArchiveRepository(IDb db)
         {
-            _api = api;
             _db = db;
         }
 
-        /// <summary>
-        /// Gets the post archive for the blog with the given id.
-        /// </summary>
-        /// <param name="id">The unique blog id</param>
-        /// <param name="page">The optional page</param>
-        /// <param name="categoryId">The optional category id</param>
-        /// <param name="year">The optional year</param>
-        /// <param name="month">The optional month</param>
-        /// <param name="pageSize">The optional page size</param>
-        /// <returns>The archive model</returns>
-        public T GetById<T>(Guid id, int? page = 1, Guid? categoryId = null, int? year = null, int? month = null, int? pageSize = null) where T : Models.ArchivePage<T>
+        public Task<int> GetPostCount(Guid archiveId, Guid? categoryId = null, Guid? tagId = null, int? year = null, int? month = null)
         {
-            return Get<T>(id, page, categoryId, null, year, month, pageSize);
+            return GetQuery(archiveId, categoryId, tagId, year, month)
+                .CountAsync();
         }
 
-        /// <summary>
-        /// Gets the post archive for the specified blog and tag.
-        /// </summary>
-        /// <param name="id">The unique blog id</param>
-        /// <param name="page">The optional page</param>
-        /// <param name="year">The optional year</param>
-        /// <param name="month">The optional month</param>
-        /// <param name="pageSize">The optional page size</param>
-        /// <returns>The archive model</returns>
-        public T GetById<T>(Guid id, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : Models.ArchivePage<T>
+        public async Task<IEnumerable<Guid>> GetPosts(Guid archiveId, int pageSize, int currentPage, Guid? categoryId = null, Guid? tagId = null, int? year = null, int? month = null)
         {
-            return Get<T>(id, page, null, null, year, month, pageSize);
+            return await GetQuery(archiveId, categoryId, tagId, year, month)
+                .OrderByDescending(p => p.Published)
+                .Skip((currentPage - 1) * pageSize)
+                .Take(pageSize)
+                .Select(p => p.Id)
+                .ToListAsync();
         }
 
-        /// <summary>
-        /// Gets the post archive for the specified blog and tag.
-        /// </summary>
-        /// <param name="id">The unique blog id</param>
-        /// <param name="categoryId">The unique category id</param>
-        /// <param name="page">The optional page</param>
-        /// <param name="year">The optional year</param>
-        /// <param name="month">The optional month</param>
-        /// <param name="pageSize">The optional page size</param>
-        /// <returns>The archive model</returns>
-        public T GetByCategoryId<T>(Guid id, Guid categoryId, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : Models.ArchivePage<T>
+        private IQueryable<Data.Post> GetQuery(Guid archiveId, Guid? categoryId = null, Guid? tagId = null, int? year = null, int? month = null)
         {
-            return Get<T>(id, page, categoryId, null, year, month, pageSize);
-        }
+            // Build the query.
+            var now = DateTime.Now;
+            var query = _db.Posts
+                .Where(p => p.BlogId == archiveId && p.Published <= now);
 
-        /// <summary>
-        /// Gets the post archive for the specified blog and tag.
-        /// </summary>
-        /// <param name="id">The unique blog id</param>
-        /// <param name="tagId">The unique tag id</param>
-        /// <param name="page">The optional page</param>
-        /// <param name="year">The optional year</param>
-        /// <param name="month">The optional month</param>
-        /// <param name="pageSize">The optional page size</param>
-        /// <returns>The archive model</returns>
-        public T GetByTagId<T>(Guid id, Guid tagId, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : Models.ArchivePage<T>
-        {
-            return Get<T>(id, page, null, tagId, year, month, pageSize);
-        }
-
-        private T Get<T>(Guid id, int? page = 1, Guid? categoryId = null, Guid? tagId = null, int? year = null, int? month = null, int? pageSize = null) where T : Models.ArchivePage<T>
-        {
-            // Get the requested blog page
-            var model = _api.Pages.GetById<T>(id);
-
-            if (model != null)
+            if (categoryId.HasValue)
             {
-                // Set basic fields
-                model.Archive = new Models.PostArchive();
-
-                model.Route = model.Route ?? "/archive";
-                model.Archive.Year = year;
-                model.Archive.Month = month;
-                model.Archive.CurrentPage = Math.Max(1, page.HasValue ? page.Value : 1);
-
-                // Build the query.
-                var now = DateTime.Now;
-                var query = _db.Posts
-                    .Where(p => p.BlogId == id && p.Published <= now);
-
-                if (categoryId.HasValue)
-                {
-                    model.Archive.Category = _api.Categories.GetById(categoryId.Value);
-
-                    query = query.Where(p => p.CategoryId == categoryId.Value);
-                }
-                if (tagId.HasValue)
-                {
-                    model.Archive.Tag = _api.Tags.GetById(tagId.Value);
-
-                    query = query.Where(p => p.Tags.Any(t => t.TagId == tagId.Value));
-                }
-
-                if (year.HasValue)
-                {
-                    DateTime from;
-                    DateTime to;
-
-                    if (month.HasValue)
-                    {
-                        from = new DateTime(year.Value, month.Value, 1);
-                        to = from.AddMonths(1);
-                    }
-                    else
-                    {
-                        from = new DateTime(year.Value, 1, 1);
-                        to = from.AddYears(1);
-                    }
-                    query = query.Where(p => p.Published >= from && p.Published < to);
-                }
-
-                // Get requested page size
-                if (!pageSize.HasValue)
-                {
-                    using (var config = new Config(_api))
-                    {
-                        pageSize = config.ArchivePageSize;
-
-                        if (!pageSize.HasValue || pageSize == 0)
-                            pageSize = 5;
-                    }
-                }
-
-                // Get the total page count for the archive
-                model.Archive.TotalPosts = query.Count();
-                model.Archive.TotalPages = Math.Max(Convert.ToInt32(Math.Ceiling((double)model.Archive.TotalPosts / pageSize.Value)), 1);
-                model.Archive.CurrentPage = Math.Min(model.Archive.CurrentPage, model.Archive.TotalPages);
-
-                // Get the posts
-                var posts = query
-                    .OrderByDescending(p => p.Published)
-                    .Skip((model.Archive.CurrentPage - 1) * pageSize.Value)
-                    .Take(pageSize.Value)
-                    .Select(p => p.Id);
-
-                // Map & add the posts within the requested page
-                foreach (var post in posts)
-                {
-                    model.Archive.Posts.Add(_api.Posts.GetById(post));
-                }
-                return model;
+                query = query.Where(p => p.CategoryId == categoryId.Value);
             }
-            return null;
+            if (tagId.HasValue)
+            {
+                query = query.Where(p => p.Tags.Any(t => t.TagId == tagId.Value));
+            }
+
+            if (year.HasValue)
+            {
+                DateTime from;
+                DateTime to;
+
+                if (month.HasValue)
+                {
+                    from = new DateTime(year.Value, month.Value, 1);
+                    to = from.AddMonths(1);
+                }
+                else
+                {
+                    from = new DateTime(year.Value, 1, 1);
+                    to = from.AddYears(1);
+                }
+                query = query.Where(p => p.Published >= from && p.Published < to);
+            }
+            return query;
         }
     }
 }

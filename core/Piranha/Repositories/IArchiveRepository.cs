@@ -1,14 +1,16 @@
 /*
- * Copyright (c) 2016-2017 Håkan Edling
+ * Copyright (c) 2016-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Piranha.Models;
 
 namespace Piranha.Repositories
@@ -16,51 +18,29 @@ namespace Piranha.Repositories
     public interface IArchiveRepository
     {
         /// <summary>
-        /// Gets the post archive for the blog with the given id.
+        /// Gets the total post count for the specified archive
+        /// and filter.
         /// </summary>
-        /// <param name="id">The unique blog id</param>
-        /// <param name="page">The optional page</param>
+        /// <param name="archiveId">The archive id</param>
         /// <param name="categoryId">The optional category id</param>
+        /// <param name="tagId">The optional tag id</param>
         /// <param name="year">The optional year</param>
         /// <param name="month">The optional month</param>
-        /// <param name="pageSize">The optional page size</param>
-        /// <returns>The archive model</returns>
-        [Obsolete("Please update your code to use the new GetById, GetByCategoryId & GetByTagId", true)]
-        T GetById<T>(Guid id, int? page = 1, Guid? categoryId = null, int? year = null, int? month = null, int? pageSize = null) where T : ArchivePage<T>;
+        /// <returns>The total post count</returns>
+        Task<int> GetPostCount(Guid archiveId, Guid? categoryId = null, Guid? tagId = null, int? year = null, int? month = null);
 
         /// <summary>
-        /// Gets the post archive for the blog with the given id.
+        /// Gets the id of the posts in the current archive
+        /// matching the specified filter.
         /// </summary>
-        /// <param name="id">The unique blog id</param>
-        /// <param name="page">The optional page</param>
+        /// <param name="archiveId">The archive id</param>
+        /// <param name="pageSize">The page size</param>
+        /// <param name="currentPage">The current page</param>
+        /// <param name="categoryId">The optional category id</param>
+        /// <param name="tagId">The optional tag id</param>
         /// <param name="year">The optional year</param>
         /// <param name="month">The optional month</param>
-        /// <param name="pageSize">The optional page size</param>
-        /// <returns>The archive model</returns>
-        T GetById<T>(Guid id, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : ArchivePage<T>;
-
-        /// <summary>
-        /// Gets the post archive for the blog with the given id.
-        /// </summary>
-        /// <param name="id">The unique blog id</param>
-        /// <param name="categoryId">The unique category id</param>
-        /// <param name="page">The optional page</param>
-        /// <param name="year">The optional year</param>
-        /// <param name="month">The optional month</param>
-        /// <param name="pageSize">The optional page size</param>
-        /// <returns>The archive model</returns>
-        T GetByCategoryId<T>(Guid id, Guid categoryId, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : ArchivePage<T>;
-
-        /// <summary>
-        /// Gets the post archive for the blog with the given id.
-        /// </summary>
-        /// <param name="id">The unique blog id</param>
-        /// <param name="tagId">The unique tag id</param>
-        /// <param name="page">The optional page</param>
-        /// <param name="year">The optional year</param>
-        /// <param name="month">The optional month</param>
-        /// <param name="pageSize">The optional page size</param>
-        /// <returns>The archive model</returns>
-        T GetByTagId<T>(Guid id, Guid tagId, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : ArchivePage<T>;
+        /// <returns>The matching posts</returns>
+        Task<IEnumerable<Guid>> GetPosts(Guid archiveId, int pageSize, int currentPage, Guid? categoryId = null, Guid? tagId = null, int? year = null, int? month = null);
     }
 }
