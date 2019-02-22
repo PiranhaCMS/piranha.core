@@ -45,11 +45,6 @@ namespace Piranha
         public ArchiveService Archives { get; private set; }
 
         /// <summary>
-        /// Gets the category service.
-        /// </summary>
-        public CategoryService Categories { get; private set; }
-
-        /// <summary>
         /// Gets the media repository.
         /// </summary>
         /// <returns></returns>
@@ -71,9 +66,9 @@ namespace Piranha
         public ParamService Params { get; private set; }
 
         /// <summary>
-        /// Gets the post repository.
+        /// Gets the post service.
         /// </summary>
-        public IPostRepository Posts { get; private set; }
+        public PostService Posts { get; private set; }
 
         /// <summary>
         /// Gets the post type service.
@@ -91,11 +86,6 @@ namespace Piranha
         public SiteTypeService SiteTypes { get; private set; }
 
         /// <summary>
-        /// Gets the tag service.
-        /// </summary>
-        public TagService Tags { get; private set; }
-
-        /// <summary>
         /// Gets if the current repository has caching enabled or not.
         /// </summary>
         public bool IsCached => _cache != null;
@@ -107,7 +97,6 @@ namespace Piranha
         public Api(
             IAliasRepository aliasRepository,
             IArchiveRepository archiveRepository,
-            ICategoryRepository categoryRepository,
             IMediaRepository mediaRepository,
             IPageRepository pageRepository,
             IPageTypeRepository pageTypeRepository,
@@ -116,27 +105,24 @@ namespace Piranha
             IPostTypeRepository postTypeRepository,
             ISiteRepository siteRepository,
             ISiteTypeRepository siteTypeRepository,
-            ITagRepository tagRepository,
             ICache cache = null)
         {
             var cacheLevel = (int)App.CacheLevel;
 
             // Old repositories
             Media = mediaRepository;
-            Posts = postRepository;
 
             // Create services without dependecies
-            Categories = new CategoryService(categoryRepository, cacheLevel > 2 ? _cache : null);
             PageTypes = new PageTypeService(pageTypeRepository, cacheLevel > 0 ? _cache : null);
             Params = new ParamService(paramRepository, cacheLevel > 0 ? _cache : null);
             PostTypes = new PostTypeService(postTypeRepository, cacheLevel > 0 ? _cache : null);
             Sites = new SiteService(siteRepository, cacheLevel > 0 ? _cache : null);
             SiteTypes = new SiteTypeService(siteTypeRepository, cacheLevel > 0 ? _cache : null);
-            Tags = new TagService(tagRepository, cacheLevel > 2 ? _cache : null);
 
             // Create services with dependencies
             Aliases = new AliasService(aliasRepository, Sites, cacheLevel > 2 ? _cache : null);
             Pages = new PageService(pageRepository, Sites, Params, cacheLevel > 2 ? _cache : null);
+            Posts = new PostService(postRepository, Sites, Pages, cacheLevel > 2 ? _cache : null);
             Archives = new ArchiveService(archiveRepository, Pages, Params, Posts);
         }
 
@@ -178,20 +164,18 @@ namespace Piranha
 
             // Old repositories
             Media = new MediaRepository(this, _db, _storage, cacheLevel > 2 ? _cache : null, imageProcessor);
-            Posts = new PostRepository(this, _db, factory, cacheLevel > 2 ? _cache : null);
 
             // Create services without dependecies
-            Categories = new CategoryService(new CategoryRepository(_db), cacheLevel > 2 ? _cache : null);
             PageTypes = new PageTypeService(new PageTypeRepository(_db), cacheLevel > 0 ? _cache : null);
             Params = new ParamService(new ParamRepository(_db), cacheLevel > 0 ? _cache : null);
             PostTypes = new PostTypeService(new PostTypeRepository(_db), cacheLevel > 0 ? _cache : null);
             Sites = new SiteService(new SiteRepository(_db, factory), cacheLevel > 0 ? _cache : null);
             SiteTypes = new SiteTypeService(new SiteTypeRepository(_db), cacheLevel > 0 ? _cache : null);
-            Tags = new TagService(new TagRepository(_db), cacheLevel > 2 ? _cache : null);
 
             // Create services with dependencies
             Aliases = new AliasService(new AliasRepository(_db), Sites, cacheLevel > 2 ? _cache : null);
             Pages = new PageService(new PageRepository(_db, factory), Sites, Params, cacheLevel > 2 ? _cache : null);
+            Posts = new PostService(new PostRepository(_db, factory), Sites, Pages, cacheLevel > 2 ? _cache : null);
             Archives = new ArchiveService(new ArchiveRepository(_db), Pages, Params, Posts);
         }
         #endregion

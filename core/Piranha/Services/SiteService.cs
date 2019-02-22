@@ -335,11 +335,17 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="id">The site id</param>
         /// <param name="updateLastModified">If the global last modified date should be updated</param>
-        public void InvalidateSitemap(Guid id, bool updateLastModified = true)
+        public async Task InvalidateSitemapAsync(Guid id, bool updateLastModified = true)
         {
             if (updateLastModified)
             {
-                // TODO: Update Site.ContentLastModified
+                var site = await GetByIdAsync(id);
+
+                if (site != null)
+                {
+                    site.ContentLastModified = DateTime.Now;
+                    await SaveAsync(site);
+                }
             }
             _cache?.Remove($"Sitemap_{id}");
         }

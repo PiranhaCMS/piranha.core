@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2018 Håkan Edling
+ * Copyright (c) 2016-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
 using Piranha.Services;
@@ -20,23 +21,17 @@ namespace Piranha.Repositories
     public class PostRepository : IPostRepository
     {
         private readonly IDb _db;
-        private readonly IApi _api;
         private readonly IContentService<Post, PostField, Models.PostBase> _contentService;
-        private readonly ICache _cache;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="api">The current api</param>
         /// <param name="db">The current db connection</param>
         /// <param name="factory">The current content service factory</param>
-        /// <param name="cache">The optional model cache</param>
-        public PostRepository(IApi api, IDb db, IContentServiceFactory factory, ICache cache = null)
+        public PostRepository(IDb db, IContentServiceFactory factory)
         {
             _db = db;
-            _api = api;
             _contentService = factory.CreatePostService();
-            _cache = cache;
         }
 
         /// <summary>
@@ -49,129 +44,81 @@ namespace Piranha.Repositories
             {
                 typeId = typeof(T).Name;
             }
-            return _contentService.Create<T>(_api.PostTypes.GetById(typeId));
+            return _contentService.Create<T>(App.PostTypes.GetById(typeId));
         }
 
         /// <summary>
-        /// Gets the available posts for the specified blog.
+        /// Gets the available posts for the specified archive.
         /// </summary>
+        /// <param name="blogId">The blog id</param>
         /// <returns>The posts</returns>
-        public IEnumerable<Models.DynamicPost> GetAll()
+        public async Task<IEnumerable<Guid>> GetAll(Guid blogId)
         {
-            return GetAll<Models.DynamicPost>();
-        }
-
-        /// <summary>
-        /// Gets the available post items.
-        /// </summary>
-        /// <returns>The posts</returns>
-        public IEnumerable<T> GetAll<T>() where T : Models.PostBase
-        {
-            var posts = _db.Posts
-                .AsNoTracking()
-                .OrderByDescending(p => p.Published)
-                .ThenByDescending(p => p.LastModified)
-                .ThenBy(p => p.Title)
-                .Select(p => p.Id);
-
-            var models = new List<T>();
-
-            foreach (var post in posts)
-            {
-                var model = GetById<T>(post);
-
-                if (model != null)
-                {
-                    models.Add(model);
-                }
-            }
-            return models;
-        }
-
-        /// <summary>
-        /// Gets the available posts for the specified blog.
-        /// </summary>
-        /// <param name="blogId">The unique blog id</param>
-        /// <returns>The posts</returns>
-        public IEnumerable<Models.DynamicPost> GetAll(Guid blogId)
-        {
-            return GetAll<Models.DynamicPost>(blogId);
-        }
-
-        /// <summary>
-        /// Gets the available post items.
-        /// </summary>
-        /// <param name="blogId">The unique id</param>
-        /// <returns>The posts</returns>
-        public IEnumerable<T> GetAll<T>(Guid blogId) where T : Models.PostBase
-        {
-            var posts = _db.Posts
+            return await _db.Posts
                 .AsNoTracking()
                 .Where(p => p.BlogId == blogId)
                 .OrderByDescending(p => p.Published)
                 .ThenByDescending(p => p.LastModified)
                 .ThenBy(p => p.Title)
-                .Select(p => p.Id);
-
-            var models = new List<T>();
-
-            foreach (var post in posts)
-            {
-                var model = GetById<T>(post);
-
-                if (model != null)
-                {
-                    models.Add(model);
-                }
-            }
-            return models;
+                .Select(p => p.Id)
+                .ToListAsync();
         }
 
         /// <summary>
-        /// Gets the available posts for the specified blog.
+        /// Gets the available post items for the given site.
         /// </summary>
-        /// <param name="slug">The blog slug</param>
-        /// <param name="siteId">The optional site id</param>
+        /// <param name="siteId">The site id</param>
         /// <returns>The posts</returns>
-        public IEnumerable<Models.DynamicPost> GetAll(string slug, Guid? siteId = null)
+        public async Task<IEnumerable<Guid>> GetAllBySiteId(Guid siteId)
         {
-            return GetAll<Models.DynamicPost>(slug, siteId);
+            return await _db.Posts
+                .AsNoTracking()
+                .Where(p => p.Blog.SiteId == siteId)
+                .OrderByDescending(p => p.Published)
+                .ThenByDescending(p => p.LastModified)
+                .ThenBy(p => p.Title)
+                .Select(p => p.Id)
+                .ToListAsync();
         }
 
         /// <summary>
-        /// Gets the available posts for the specified blog.
+        /// Gets all available categories for the specified blog.
         /// </summary>
-        /// <param name="slug">The blog slug</param>
-        /// <param name="siteId">The optional site id</param>
-        /// <returns>The posts</returns>
-        public IEnumerable<T> GetAll<T>(string slug, Guid? siteId = null) where T : Models.PostBase
+        /// <param name="id">The blog id</param>
+        /// <returns>The available categories</returns>
+        public async Task<IEnumerable<Models.Taxonomy>> GetAllCategories(Guid blogId)
         {
-            if (!siteId.HasValue)
-            {
-                var site = _api.Sites.GetDefault();
-                if (site != null)
+            return await _db.Categories
+                .AsNoTracking()
+                .Where(c => c.BlogId == blogId)
+                .OrderBy(c => c.Title)
+                .Select(c => new Models.Taxonomy
                 {
-                    siteId = site.Id;
-                }
-            }
-
-            var blogId = _api.Pages.GetIdBySlug(slug, siteId);
-
-            if (blogId.HasValue)
-            {
-                return GetAll<T>(blogId.Value);
-            }
-            return new List<T>();
+                    Id = c.Id,
+                    Title = c.Title,
+                    Slug = c.Slug
+                })
+                .ToListAsync();
         }
 
         /// <summary>
-        /// Gets the post model with the specified id.
+        /// Gets all available tags for the specified blog.
         /// </summary>
-        /// <param name="id">The unique id</param>
-        /// <returns>The post model</returns>
-        public Models.DynamicPost GetById(Guid id)
+        /// <param name="id">The blog id</param>
+        /// <returns>The available tags</returns>
+        public async Task<IEnumerable<Models.Taxonomy>> GetAllTags(Guid blogId)
         {
-            return GetById<Models.DynamicPost>(id);
+            return await _db.Tags
+                .AsNoTracking()
+                .Where(c => c.BlogId == blogId)
+                .OrderBy(c => c.Title)
+                .Select(c => new Models.Taxonomy
+                {
+                    Id = c.Id,
+                    Title = c.Title,
+                    Slug = c.Slug
+                })
+                .ToListAsync();
         }
 
         /// <summary>
@@ -180,38 +127,26 @@ namespace Piranha.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
         /// <returns>The post model</returns>
-        public T GetById<T>(Guid id) where T : Models.PostBase
+        public async Task<T> GetById<T>(Guid id) where T : Models.PostBase
         {
-            var post = _cache?.Get<Post>(id.ToString());
-
-            if (post == null)
-            {
-                post = GetQuery<T>(out var fullQuery)
-                    .FirstOrDefault(p => p.Id == id);
-
-                if (post != null)
-                {
-                    if (_cache != null && fullQuery)
-                    {
-                        AddToCache(post);
-                    }
-                    post.Category = _api.Categories.GetById(post.CategoryId);
-
-                    var blogPage = _api.Pages.GetById<Models.PageInfo>(post.BlogId);
-                    if (blogPage != null)
-                    {
-                        post.Blog = new Page
-                        {
-                            Id = blogPage.Id,
-                            Slug = blogPage.Slug
-                        };
-                    }
-                }
-            }
+            var post = await GetQuery<T>()
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (post != null)
             {
-                return _contentService.Transform<T>(post, _api.PostTypes.GetById(post.PostTypeId), Process);
+                /*
+                var blogPage = await _api.Pages.GetByIdAsync<Models.PageInfo>(post.BlogId);
+
+                if (blogPage != null)
+                {
+                    post.Blog = new Page
+                    {
+                        Id = blogPage.Id,
+                        Slug = blogPage.Slug
+                    };
+                }
+                */
+                return _contentService.Transform<T>(post, App.PostTypes.GetById(post.PostTypeId), Process);
             }
             return null;
         }
@@ -219,133 +154,110 @@ namespace Piranha.Repositories
         /// <summary>
         /// Gets the post model with the specified slug.
         /// </summary>
-        /// <param name="blog">The unique blog slug</param>
-        /// <param name="slug">The unique slug</param>
-        /// <param name="siteId">The optional site id</param>
-        /// <returns>The post model</returns>
-        public Models.DynamicPost GetBySlug(string blog, string slug, Guid? siteId = null)
-        {
-            return GetBySlug<Models.DynamicPost>(blog, slug, siteId);
-        }
-
-        /// <summary>
-        /// Gets the post model with the specified slug.
-        /// </summary>
         /// <typeparam name="T">The model type</typeparam>
-        /// <param name="blog">The unique blog slug</param>
+        /// <param name="blogId">The blog id</param>
         /// <param name="slug">The unique slug</param>
-        /// <param name="siteId">The optional site id</param>
         /// <returns>The post model</returns>
-        public T GetBySlug<T>(string blog, string slug, Guid? siteId = null) where T : Models.PostBase
+        public async Task<T> GetBySlug<T>(Guid blogId, string slug) where T : Models.PostBase
         {
-            if (!siteId.HasValue)
+            // No cache found, load from database
+            var post = await GetQuery<T>()
+                .FirstOrDefaultAsync(p => p.BlogId == blogId && p.Slug == slug);
+
+            if (post != null)
             {
-                var site = _api.Sites.GetDefault();
-                if (site != null)
+                /*
+                var blogPage = await _api.Pages.GetByIdAsync<Models.PageInfo>(post.BlogId);
+
+                if (blogPage != null)
                 {
-                    siteId = site.Id;
+                    post.Blog = new Page
+                    {
+                        Id = blogPage.Id,
+                        Slug = blogPage.Slug
+                    };
                 }
-            }
+                */
 
-            var blogId = _api.Pages.GetIdBySlug(blog, siteId);
-
-            if (blogId.HasValue)
-            {
-                return GetBySlug<T>(blogId.Value, slug);
+                return _contentService.Transform<T>(post, App.PostTypes.GetById(post.PostTypeId), Process);
             }
             return null;
         }
 
         /// <summary>
-        /// Gets the post model with the specified slug.
+        /// Gets the category with the given slug.
         /// </summary>
-        /// <param name="blog">The unique blog slug</param>
+        /// <param name="blogId">The blog id</param>
         /// <param name="slug">The unique slug</param>
-        /// <returns>The post model</returns>
-        public Models.DynamicPost GetBySlug(Guid blogId, string slug)
+        /// <returns>The category</returns>
+        public Task<Models.Taxonomy> GetCategoryBySlug(Guid blogId, string slug)
         {
-            return GetBySlug<Models.DynamicPost>(blogId, slug);
+            return _db.Categories
+                .Where(c => c.BlogId == blogId && c.Slug == slug)
+                .Select(c => new Models.Taxonomy
+                {
+                    Id = c.Id,
+                    Title = c.Title,
+                    Slug = c.Slug
+                }).FirstOrDefaultAsync();
         }
 
         /// <summary>
-        /// Gets the post model with the specified slug.
+        /// Gets the tag with the given slug.
         /// </summary>
-        /// <typeparam name="T">The model type</typeparam>
-        /// <param name="blog">The unique blog slug</param>
+        /// <param name="blogId">The blog id</param>
         /// <param name="slug">The unique slug</param>
-        /// <returns>The post model</returns>
-        public T GetBySlug<T>(Guid blogId, string slug) where T : Models.PostBase
+        /// <returns>The tag</returns>
+        public Task<Models.Taxonomy> GetTagBySlug(Guid blogId, string slug)
         {
-            var postId = _cache?.Get<Guid?>($"PostId_{blogId}_{slug}");
-
-            if (postId.HasValue)
-            {
-                // Load the post by id instead
-                return GetById<T>(postId.Value);
-            }
-            else
-            {
-                // No cache found, load from database
-                var post = GetQuery<T>(out var fullQuery)
-                    .FirstOrDefault(p => p.BlogId == blogId && p.Slug == slug);
-
-                if (post != null)
+            return _db.Tags
+                .Where(c => c.BlogId == blogId && c.Slug == slug)
+                .Select(c => new Models.Taxonomy
                 {
-                    if (_cache != null && fullQuery)
-                    {
-                        AddToCache(post);
-                    }
-                    post.Category = _api.Categories.GetById(post.CategoryId);
-
-                    var blogPage = _api.Pages.GetById<Models.PageInfo>(post.BlogId);
-                    if (blogPage != null)
-                    {
-                        post.Blog = new Page
-                        {
-                            Id = blogPage.Id,
-                            Slug = blogPage.Slug
-                        };
-                    }
-
-                    return _contentService.Transform<T>(post, _api.PostTypes.GetById(post.PostTypeId), Process);
-                }
-                return null;
-            }
+                    Id = c.Id,
+                    Title = c.Title,
+                    Slug = c.Slug
+                }).FirstOrDefaultAsync();
         }
 
         /// <summary>
         /// Saves the given post model
         /// </summary>
         /// <param name="model">The post model</param>
-        public void Save<T>(T model) where T : Models.PostBase
+        public async Task Save<T>(T model) where T : Models.PostBase
         {
-            var type = _api.PostTypes.GetById(model.TypeId);
+            var type = App.PostTypes.GetById(model.TypeId);
 
             if (type != null)
             {
                 // Ensure category
-                if (model.Category.Id == Guid.Empty)
-                {
-                    Category category = null;
+                var category = await _db.Categories.FirstOrDefaultAsync(c => c.Id == model.Category.Id);
 
+                if (category == null)
+                {
                     if (!string.IsNullOrWhiteSpace(model.Category.Slug))
                     {
-                        category = _api.Categories.GetBySlug(model.BlogId, model.Category.Slug);
+                        category = await _db.Categories
+                            .FirstOrDefaultAsync(c => c.BlogId == model.BlogId && c.Slug == model.Category.Slug);
                     }
                     if (category == null && !string.IsNullOrWhiteSpace(model.Category.Title))
                     {
-                        category = _api.Categories.GetByTitle(model.BlogId, model.Category.Title);
+                        category = await _db.Categories
+                            .FirstOrDefaultAsync(c => c.BlogId == model.BlogId && c.Title == model.Category.Title);
                     }
 
                     if (category == null)
                     {
                         category = new Category
                         {
-                            Id = Guid.NewGuid(),
+                            Id = model.Category.Id != Guid.Empty ? model.Category.Id : Guid.NewGuid(),
                             BlogId = model.BlogId,
-                            Title = model.Category.Title
+                            Title = model.Category.Title,
+                            Slug = Utils.GenerateSlug(model.Category.Title),
+                            Created = DateTime.Now,
+                            LastModified = DateTime.Now
                         };
-                        _api.Categories.Save(category);
+                        await _db.Categories.AddAsync(category);
                     }
                     model.Category.Id = category.Id;
                 }
@@ -353,28 +265,33 @@ namespace Piranha.Repositories
                 // Ensure tags
                 foreach (var t in model.Tags)
                 {
-                    if (t.Id == Guid.Empty)
-                    {
-                        Tag tag = null;
+                    var tag = await _db.Tags.FirstOrDefaultAsync(tg => tg.Id == t.Id);
 
+                    if (tag == null)
+                    {
                         if (!string.IsNullOrWhiteSpace(t.Slug))
                         {
-                            tag = _api.Tags.GetBySlug(model.BlogId, t.Slug);
+                            tag = await _db.Tags
+                                .FirstOrDefaultAsync(tg => tg.BlogId == model.BlogId && tg.Slug == t.Slug);
                         }
                         if (tag == null && !string.IsNullOrWhiteSpace(t.Title))
                         {
-                            tag = _api.Tags.GetByTitle(model.BlogId, t.Title);
+                            tag = await _db.Tags
+                                .FirstOrDefaultAsync(tg => tg.BlogId == model.BlogId && tg.Title == t.Title);
                         }
 
                         if (tag == null)
                         {
                             tag = new Tag
                             {
-                                Id = Guid.NewGuid(),
+                                Id = t.Id != Guid.Empty ? t.Id : Guid.NewGuid(),
                                 BlogId = model.BlogId,
-                                Title = t.Title
+                                Title = t.Title,
+                                Slug = Utils.GenerateSlug(t.Title),
+                                Created = DateTime.Now,
+                                LastModified = DateTime.Now
                             };
-                            _api.Tags.Save(tag);
+                            await _db.Tags.AddAsync(tag);
                         }
                         t.Id = tag.Id;
                     }
@@ -390,11 +307,11 @@ namespace Piranha.Repositories
                     model.Slug = Utils.GenerateSlug(model.Slug, false);
                 }
 
-                var post = _db.Posts
+                var post = await _db.Posts
                     .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                     .Include(p => p.Fields)
                     .Include(p => p.Tags)
-                    .FirstOrDefault(p => p.Id == model.Id);
+                    .FirstOrDefaultAsync(p => p.Id == model.Id);
 
                 // If not, create a new post
                 if (post == null)
@@ -405,7 +322,7 @@ namespace Piranha.Repositories
                         Created = DateTime.Now,
                         LastModified = DateTime.Now
                     };
-                    _db.Posts.Add(post);
+                    await _db.Posts.AddAsync(post);
                     model.Id = post.Id;
                 }
                 else
@@ -444,7 +361,7 @@ namespace Piranha.Repositories
                                 Id = blocks[n].Id != Guid.Empty ? blocks[n].Id : Guid.NewGuid(),
                                 Created = DateTime.Now
                             };
-                            _db.Blocks.Add(block);
+                            await _db.Blocks.AddAsync(block);
                         }
                         block.CLRType = blocks[n].CLRType;
                         block.IsReusable = blocks[n].IsReusable;
@@ -466,7 +383,7 @@ namespace Piranha.Repositories
                                     BlockId = block.Id,
                                     FieldId = newField.FieldId
                                 };
-                                _db.BlockFields.Add(field);
+                                await _db.BlockFields.AddAsync(field);
                                 block.Fields.Add(field);
                             }
                             field.SortOrder = newField.SortOrder;
@@ -511,12 +428,10 @@ namespace Piranha.Repositories
                         });
                 }
 
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
 
-                if (_cache != null)
-                {
-                    RemoveFromCache(post);
-                }
+                await DeleteUnusedCategories(model.BlogId);
+                await DeleteUnusedTags(model.BlogId);
             }
         }
 
@@ -524,12 +439,12 @@ namespace Piranha.Repositories
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public void Delete(Guid id)
+        public async Task Delete(Guid id)
         {
-            var model = _db.Posts
+            var model = await _db.Posts
                 .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                 .Include(p => p.Fields)
-                .FirstOrDefault(p => p.Id == id);
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (model != null)
             {
@@ -544,61 +459,90 @@ namespace Piranha.Repositories
 
                 _db.Posts.Remove(model);
 
+                //
+                // TODO
+                //
                 // If this is a published post, update last modified for the
                 // blog page for caching purposes.
                 if (model.Published.HasValue)
                 {
-                    var page = _db.Pages
-                        .FirstOrDefault(p => p.Id == model.BlogId);
+                    var page = await _db.Pages
+                        .FirstOrDefaultAsync(p => p.Id == model.BlogId);
                     page.LastModified = DateTime.Now;
                 }
 
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
 
-                // Check if we have the post in cache, and if so remove it
-                if (_cache != null)
-                {
-                    var post = _cache.Get<Post>(model.Id.ToString());
-                    if (post != null)
-                    {
-                        RemoveFromCache(post);
-                    }
-                }
+                await DeleteUnusedCategories(model.BlogId);
+                await DeleteUnusedTags(model.BlogId);
             }
         }
 
         /// <summary>
-        /// Deletes the given model.
+        /// Deletes all unused categories for the specified blog.
         /// </summary>
-        /// <param name="model">The model</param>
-        public void Delete<T>(T model) where T : Models.PostBase
+        /// <param name="blogId">The blog id</param>
+        private async Task DeleteUnusedCategories(Guid blogId)
         {
-            Delete(model.Id);
+            var used = await _db.Posts
+                .Where(p => p.BlogId == blogId)
+                .Select(p => p.CategoryId)
+                .Distinct()
+                .ToArrayAsync();
+
+            var unused = await _db.Categories
+                .Where(c => c.BlogId == blogId && !used.Contains(c.Id))
+                .ToListAsync();
+
+            if (unused.Count > 0)
+            {
+                _db.Categories.RemoveRange(unused);
+                await _db.SaveChangesAsync();
+            }
+        }
+
+        /// <summary>
+        /// Deletes all unused tags for the specified blog.
+        /// </summary>
+        /// <param name="blogId">The blog id</param>
+        private async Task DeleteUnusedTags(Guid blogId)
+        {
+            var used = await _db.PostTags
+                .Where(t => t.Post.BlogId == blogId)
+                .Select(t => t.TagId)
+                .Distinct()
+                .ToArrayAsync();
+
+            var unused = await _db.Tags
+                .Where(t => t.BlogId == blogId && !used.Contains(t.Id))
+                .ToListAsync();
+
+            if (unused.Count > 0)
+            {
+                _db.Tags.RemoveRange(unused);
+                await _db.SaveChangesAsync();
+            }
         }
 
         /// <summary>
         /// Gets the base query for loading posts.
         /// </summary>
-        /// <param name="fullModel">If this is a full load or not</param>
         /// <typeparam name="T">The requested model type</typeparam>
         /// <returns>The queryable</returns>
-        private IQueryable<Post> GetQuery<T>(out bool fullModel)
+        private IQueryable<Post> GetQuery<T>()
         {
             var loadRelated = !typeof(Models.IContentInfo).IsAssignableFrom(typeof(T));
 
-            var query = _db.Posts
-                .AsNoTracking();
+            IQueryable<Post> query = _db.Posts
+                .AsNoTracking()
+                .Include(p => p.Category)
+                .Include(p => p.Tags).ThenInclude(t => t.Tag);
 
             if (loadRelated)
             {
                 query = query
                     .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                     .Include(p => p.Fields);
-                fullModel = true;
-            }
-            else
-            {
-                fullModel = false;
             }
             return query;
         }
@@ -621,32 +565,6 @@ namespace Piranha.Repositories
                     model.Blocks = _contentService.TransformBlocks(blocks);
                 }
             }
-            model.Category = _api.Categories.GetById(post.CategoryId);
-
-            foreach (var tag in _api.Tags.GetByPostId(post.Id).OrderBy(t => t.Title))
-            {
-                model.Tags.Add(tag);
-            }
-        }
-
-        /// <summary>
-        /// Adds the given model to cache.
-        /// </summary>
-        /// <param name="post">The post</param>
-        private void AddToCache(Post post)
-        {
-            _cache.Set(post.Id.ToString(), post);
-            _cache.Set($"PostId_{post.CategoryId}_{post.Slug}", post.Id);
-        }
-
-        /// <summary>
-        /// Removes the given model from cache.
-        /// </summary>
-        /// <param name="post">The post</param>
-        private void RemoveFromCache(Post post)
-        {
-            _cache.Remove(post.Id.ToString());
-            _cache.Remove($"PostId_{post.CategoryId}_{post.Slug}");
         }
     }
 }

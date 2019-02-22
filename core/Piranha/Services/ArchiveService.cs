@@ -20,7 +20,7 @@ namespace Piranha.Services
         private readonly IArchiveRepository _repo;
         private readonly PageService _pageService;
         private readonly ParamService _paramService;
-        private readonly IPostRepository _postService;
+        private readonly PostService _postService;
 
         /// <summary>
         /// Default constructor.
@@ -29,7 +29,7 @@ namespace Piranha.Services
         /// <param name="pageService">The page service</param>
         /// <param name="paramService">The param service</param>
         /// <param name="postService">The post service</param>
-        public ArchiveService(IArchiveRepository repo, PageService pageService, ParamService paramService, IPostRepository postService)
+        public ArchiveService(IArchiveRepository repo, PageService pageService, ParamService paramService, PostService postService)
         {
             _repo = repo;
             _pageService = pageService;
@@ -111,7 +111,7 @@ namespace Piranha.Services
                 // Get the posts
                 foreach (var postId in posts)
                 {
-                    var post = _postService.GetById(postId);
+                    var post = await _postService.GetByIdAsync(postId);
 
                     if (post != null)
                     {

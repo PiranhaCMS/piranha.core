@@ -108,11 +108,6 @@ namespace Piranha.Runtime
         public RepositoryHooks<Data.Alias> Alias { get; private set; } = new RepositoryHooks<Data.Alias>();
 
         /// <summary>
-        /// Gets the hooks available for categories.
-        /// </summary>
-        public RepositoryHooks<Data.Category> Category { get; private set; } = new RepositoryHooks<Data.Category>();
-
-        /// <summary>
         /// Gets the hooks available for media.
         /// </summary>
         public RepositoryHooks<Data.Media> Media { get; private set; } = new RepositoryHooks<Data.Media>();
@@ -136,11 +131,6 @@ namespace Piranha.Runtime
         /// Gets the hooks available for sites.
         /// </summary>
         public RepositoryHooks<Data.Site> Site { get; private set; } = new RepositoryHooks<Data.Site>();
-
-        /// <summary>
-        /// Gets the hooks available for tags.
-        /// </summary>
-        public RepositoryHooks<Data.Tag> Tag { get; private set; } = new RepositoryHooks<Data.Tag>();
 
         /// <summary>
         /// Gets the hook for slug generation.

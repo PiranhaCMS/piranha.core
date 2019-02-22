@@ -1,15 +1,16 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
-using Newtonsoft.Json;
 using System;
+using Newtonsoft.Json;
+using Piranha.Services;
 
 namespace Piranha.Extend.Fields
 {
@@ -81,9 +82,9 @@ namespace Piranha.Extend.Fields
         /// <param name="str">The string value</param>
         public static implicit operator PostField(Guid guid)
         {
-            return new PostField 
-            { 
-                Id = guid 
+            return new PostField
+            {
+                Id = guid
             };
         }
 
@@ -93,9 +94,9 @@ namespace Piranha.Extend.Fields
         /// <param name="post">The post object</param>
         public static implicit operator PostField(Models.PostBase post)
         {
-            return new PostField 
-            { 
-                Id = post.Id 
+            return new PostField
+            {
+                Id = post.Id
             };
         }
 

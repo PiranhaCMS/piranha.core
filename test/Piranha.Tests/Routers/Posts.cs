@@ -95,15 +95,14 @@ namespace Piranha.Tests.Routers
                     BlogId = PAGE1_ID,
                     Title = "Default category"
                 };
-                api.Categories.Save(category1);
 
                 var category2 = new Data.Category() {
                     Id = CATEGORY2_ID,
                     BlogId = PAGE2_ID,
                     Title = "Default category"
                 };
-                api.Categories.Save(category2);
 
+                /*
                 // Add tags
                 var tag = new Data.Tag() {
                     Id = TAG1_ID,
@@ -118,6 +117,7 @@ namespace Piranha.Tests.Routers
                     Title = "My other tag"
                 };
                 api.Tags.Save(tag);
+                */
 
                 // Add posts
                 var post1 = MyPost.Create(api);
@@ -126,7 +126,11 @@ namespace Piranha.Tests.Routers
                 post1.Category = category1;
                 post1.Title = "My first post";
                 post1.Body = "My first body";
-                post1.Tags.Add("My tag");
+                post1.Tags.Add(new Models.Taxonomy
+                {
+                    Id = TAG1_ID,
+                    Title = "My tag"
+                });
                 post1.Published = DateTime.Now;
                 api.Posts.Save(post1);
 
@@ -136,7 +140,11 @@ namespace Piranha.Tests.Routers
                 post2.Category = category2;
                 post2.Title = "My second post";
                 post2.Body = "My second body";
-                post2.Tags.Add("My other tag");
+                post2.Tags.Add(new Models.Taxonomy
+                {
+                    Id = TAG2_ID,
+                    Title = "My other tag"
+                });
                 post2.Published = DateTime.Now;
                 api.Posts.Save(post2);
             }

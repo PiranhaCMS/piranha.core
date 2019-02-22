@@ -140,7 +140,6 @@ namespace Piranha.Tests.Repositories
                     BlogId = BLOG_ID,
                     Title = "My category"
                 };
-                api.Categories.Save(category);
 
                 var post1 = MyPost.Create(api);
                 post1.Id = POST_1_ID;
@@ -209,13 +208,9 @@ namespace Piranha.Tests.Repositories
                 foreach (var t in types)
                     api.PostTypes.Delete(t);
 
-                var category = api.Categories.GetById(CAT_1_ID);
-                if (category != null)
-                    api.Categories.Delete(category);
-
-                var tags = api.Tags.GetAll(BLOG_ID);
-                foreach (var tag in tags)
-                    api.Tags.Delete(tag);
+                //var tags = api.Tags.GetAll(BLOG_ID);
+                //foreach (var tag in tags)
+                //    api.Tags.Delete(tag);
 
                 api.Pages.Delete(BLOG_ID);
 
@@ -282,7 +277,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void GetAll() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
-                var posts = api.Posts.GetAll();
+                var posts = api.Posts.GetAllBySiteId();
 
                 Assert.NotNull(posts);
                 Assert.NotEmpty(posts);
@@ -292,7 +287,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void GetAllBaseClass() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
-                var posts = api.Posts.GetAll<Models.PostBase>();
+                var posts = api.Posts.GetAllBySiteId<Models.PostBase>();
 
                 Assert.NotNull(posts);
                 Assert.NotEmpty(posts);
@@ -574,7 +569,7 @@ namespace Piranha.Tests.Repositories
         public void Add() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var count = api.Posts.GetAll(BLOG_ID).Count();
-                var catCount = api.Categories.GetAll(BLOG_ID).Count();
+                var catCount = api.Posts.GetAllCategories(BLOG_ID).Count();
                 var post = MyPost.Create(api, "MyPost");
                 post.BlogId = BLOG_ID;
                 post.Category = "My category";
@@ -585,7 +580,7 @@ namespace Piranha.Tests.Repositories
                 api.Posts.Save(post);
 
                 Assert.Equal(count + 1, api.Posts.GetAll(BLOG_ID).Count());
-                Assert.Equal(catCount, api.Categories.GetAll(BLOG_ID).Count());
+                Assert.Equal(catCount, api.Posts.GetAllCategories(BLOG_ID).Count());
             }
         }
 
@@ -593,8 +588,8 @@ namespace Piranha.Tests.Repositories
         public void AddWithTags() {
             using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
                 var count = api.Posts.GetAll(BLOG_ID).Count();
-                var catCount = api.Categories.GetAll(BLOG_ID).Count();
-                var tagCount = api.Tags.GetAll(BLOG_ID).Count();
+                var catCount = api.Posts.GetAllCategories(BLOG_ID).Count();
+                var tagCount = api.Posts.GetAllTags(BLOG_ID).Count();
 
                 var post = MyPost.Create(api, "MyPost");
                 post.BlogId = BLOG_ID;
@@ -607,8 +602,8 @@ namespace Piranha.Tests.Repositories
                 api.Posts.Save(post);
 
                 Assert.Equal(count + 1, api.Posts.GetAll(BLOG_ID).Count());
-                Assert.Equal(catCount, api.Categories.GetAll(BLOG_ID).Count());
-                Assert.Equal(tagCount + 3, api.Tags.GetAll(BLOG_ID).Count());
+                Assert.Equal(catCount, api.Posts.GetAllCategories(BLOG_ID).Count());
+                Assert.Equal(tagCount + 3, api.Posts.GetAllTags(BLOG_ID).Count());
 
                 post = api.Posts.GetBySlug<MyPost>(BLOG_ID, Piranha.Utils.GenerateSlug("My fifth post"));
 
@@ -618,7 +613,7 @@ namespace Piranha.Tests.Repositories
 
                 api.Posts.Save(post);
 
-                Assert.Equal(tagCount + 4, api.Tags.GetAll(BLOG_ID).Count());
+                Assert.Equal(tagCount + 4, api.Posts.GetAllTags(BLOG_ID).Count());
 
                 post = api.Posts.GetBySlug<MyPost>(BLOG_ID, Piranha.Utils.GenerateSlug("My fifth post"));
 

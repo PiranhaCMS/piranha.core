@@ -60,7 +60,7 @@ namespace Piranha.Areas.Manager.Models
 
             // Get the currently used categories
             var categoriesId = model.Posts.Select(p => p.CategoryId).Distinct();
-            model.CurrentCategories = api.Categories.GetAll(blogId)
+            model.CurrentCategories = api.Posts.GetAllCategories(blogId)
                 .Where(c => categoriesId.Contains(c.Id))
                 .Select(c => new Taxonomy
                 {

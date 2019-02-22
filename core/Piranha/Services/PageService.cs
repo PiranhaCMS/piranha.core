@@ -336,7 +336,7 @@ namespace Piranha.Services
                     }
                 }
             }
-            _siteService.InvalidateSitemap(model.SiteId);
+            await _siteService.InvalidateSitemapAsync(model.SiteId);
         }
 
         /// <summary>
@@ -418,7 +418,7 @@ namespace Piranha.Services
             // Invalidate sitemap if any other pages were affected
             if (affected.Count() > 0)
             {
-                _siteService.InvalidateSitemap(model.SiteId);
+                await _siteService.InvalidateSitemapAsync(model.SiteId);
             }
         }
 
@@ -449,7 +449,8 @@ namespace Piranha.Services
 
             // Remove from cache & invalidate sitemap
             RemoveFromCache(model);
-            _siteService.InvalidateSitemap(model.SiteId);
+
+            await _siteService.InvalidateSitemapAsync(model.SiteId);
         }
 
         /// <summary>

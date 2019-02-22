@@ -84,7 +84,7 @@ namespace Piranha.Web
                             {
                                 try
                                 {
-                                    categoryId = api.Categories.GetBySlug(blog.Id, segments[n])?.Id;
+                                    categoryId = api.Posts.GetCategoryBySlug(blog.Id, segments[n])?.Id;
 
                                     if (!categoryId.HasValue)
                                         categoryId = Guid.Empty;
@@ -99,7 +99,7 @@ namespace Piranha.Web
                             {
                                 try
                                 {
-                                    tagId = api.Tags.GetBySlug(blog.Id, segments[n])?.Id;
+                                    tagId = api.Posts.GetTagBySlug(blog.Id, segments[n])?.Id;
 
                                     if (!tagId.HasValue)
                                         tagId = Guid.Empty;

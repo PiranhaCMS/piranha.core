@@ -69,9 +69,9 @@ namespace MvcWeb.Controllers
         /// <param name="id">The unique post id</param>
         ///
         [Route("post")]
-        public IActionResult Post(Guid id)
+        public async Task<IActionResult> Post(Guid id)
         {
-            var model = _api.Posts.GetById<Models.BlogPost>(id);
+            var model = await _api.Posts.GetByIdAsync<Models.BlogPost>(id);
 
             return View(model);
         }
@@ -95,8 +95,8 @@ namespace MvcWeb.Controllers
                     .Select(p => p.Id);
                 if (latest.Count() > 0)
                 {
-                    model.LatestPost = _api.Posts
-                        .GetById<PostInfo>(latest.First());
+                    model.LatestPost = await _api.Posts
+                        .GetByIdAsync<PostInfo>(latest.First());
                 }
                 return View("startpage", model);
             }

@@ -12,7 +12,7 @@ using System;
 
 namespace Piranha.Models
 {
-    [Obsolete("BlogPage has been renamed to ArchivePage, please update your code.", false)]
+    [Obsolete("BlogPage has been renamed to ArchivePage, please update your code.", true)]
     public class BlogPage<T> : ArchivePage<T> where T : BlogPage<T> { }
 
     /// <summary>

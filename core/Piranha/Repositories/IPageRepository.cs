@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Piranha.Models;
 
 namespace Piranha.Repositories
 {
@@ -20,13 +21,13 @@ namespace Piranha.Repositories
         /// Creates and initializes a new page of the specified type.
         /// </summary>
         /// <returns>The created page</returns>
-        Task<T> Create<T>(string typeId = null) where T : Models.PageBase;
+        Task<T> Create<T>(string typeId = null) where T : PageBase;
 
         /// <summary>
         /// Creates and initializes a copy of the given page.
         /// </summary>
         /// <returns>The created copy</returns>
-        Task<T> Copy<T>(T originalPage) where T : Models.PageBase;
+        Task<T> Copy<T>(T originalPage) where T : PageBase;
 
         /// <summary>
         /// Gets all of the available pages for the current site.
@@ -48,7 +49,7 @@ namespace Piranha.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="siteId">The site id</param>
         /// <returns>The page model</returns>
-        Task<T> GetStartpage<T>(Guid siteId) where T : Models.PageBase;
+        Task<T> GetStartpage<T>(Guid siteId) where T : PageBase;
 
         /// <summary>
         /// Gets the page model with the specified id.
@@ -56,7 +57,7 @@ namespace Piranha.Repositories
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
         /// <returns>The page model</returns>
-        Task<T> GetById<T>(Guid id) where T : Models.PageBase;
+        Task<T> GetById<T>(Guid id) where T : PageBase;
 
         /// <summary>
         /// Gets the page model with the specified slug.
@@ -65,7 +66,7 @@ namespace Piranha.Repositories
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The site id</param>
         /// <returns>The page model</returns>
-        Task<T> GetBySlug<T>(string slug, Guid siteId) where T : Models.PageBase;
+        Task<T> GetBySlug<T>(string slug, Guid siteId) where T : PageBase;
 
         /// <summary>
         /// Moves the current page in the structure.
@@ -75,14 +76,14 @@ namespace Piranha.Repositories
         /// <param name="parentId">The new parent id</param>
         /// <param name="sortOrder">The new sort order</param>
         /// <returns>The other pages that were affected by the move</returns>
-        Task<IEnumerable<Guid>> Move<T>(T model, Guid? parentId, int sortOrder) where T : Models.PageBase;
+        Task<IEnumerable<Guid>> Move<T>(T model, Guid? parentId, int sortOrder) where T : PageBase;
 
         /// <summary>
         /// Saves the given page model
         /// </summary>
         /// <param name="model">The page model</param>
         /// <returns>The other pages that were affected by the move</returns>
-        Task<IEnumerable<Guid>> Save<T>(T model) where T : Models.PageBase;
+        Task<IEnumerable<Guid>> Save<T>(T model) where T : PageBase;
 
         /// <summary>
         /// Deletes the model with the specified id.

@@ -31,11 +31,6 @@ namespace Piranha
         ArchiveService Archives { get; }
 
         /// <summary>
-        /// Gets the category service.
-        /// </summary>
-        CategoryService Categories { get; }
-
-        /// <summary>
         /// Gets the media repository.
         /// </summary>
         IMediaRepository Media { get; }
@@ -56,9 +51,9 @@ namespace Piranha
         ParamService Params { get; }
 
         /// <summary>
-        /// Gets the post repository.
+        /// Gets the post service.
         /// </summary>
-        IPostRepository Posts { get; }
+        PostService Posts { get; }
 
         /// <summary>
         /// Gets the post type service.
@@ -74,10 +69,5 @@ namespace Piranha
         /// Gets the site type service.
         /// </summary>
         SiteTypeService SiteTypes { get; }
-
-        /// <summary>
-        /// Gets the tag service.
-        /// </summary>
-        TagService Tags { get; }
     }
 }

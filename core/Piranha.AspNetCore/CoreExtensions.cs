@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using Microsoft.AspNetCore.Builder;
@@ -112,11 +112,11 @@ public static class CoreExtensions
     /// </summary>
     /// <param name="builder">The current application builder</param>
     /// <returns>The builder</returns>
-    [Obsolete("Please replace UsePiranhaSites with UsePiranhaApplication.", false)]
+    [Obsolete("Please replace UsePiranhaSites with UsePiranhaApplication.", true)]
     public static IApplicationBuilder UsePiranhaSites(this IApplicationBuilder builder)
     {
         return UsePiranhaApplication(builder);
-    }    
+    }
 
     /// <summary>
     /// Uses the piranha sitemap generation middleware.
