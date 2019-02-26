@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -23,12 +23,12 @@ namespace Piranha.Areas.Manager.Services
     /// </summary>
     public class SiteContentEditService
     {
-        private readonly IApi api;
-        private readonly IContentService<Data.Site, Data.SiteField, Piranha.Models.SiteContentBase> service;
+        private readonly IApi _api;
+        private readonly IContentFactory _factory;
 
-        public SiteContentEditService(IApi api, IContentServiceFactory factory) {
-            this.api = api;
-            service = factory.CreateSiteService();
+        public SiteContentEditService(IApi api, IContentFactory factory) {
+            _api = api;
+            _factory = factory;
         }
 
         /// <summary>
@@ -37,16 +37,16 @@ namespace Piranha.Areas.Manager.Services
         /// <param name="model">The site content edit model</param>
         /// <returns>If the model was successfully saved</returns>
         public bool Save(SiteContentEditModel model) {
-            var site = api.Sites.GetContentById(model.Id);
+            var site = _api.Sites.GetContentById(model.Id);
 
             if (site == null) {
-                site = Piranha.Models.DynamicSiteContent.Create(api, model.TypeId);
+                site = Piranha.Models.DynamicSiteContent.Create(_api, model.TypeId);
             }
 
             Module.Mapper.Map<SiteContentEditModel, Piranha.Models.SiteContentBase>(model, site);
             SaveRegions(model, site);
 
-            api.Sites.SaveContent(model.Id, site);
+            _api.Sites.SaveContent(model.Id, site);
             model.Id = site.Id;
 
             return true;
@@ -59,11 +59,11 @@ namespace Piranha.Areas.Manager.Services
         /// <param name="id">The post id</param>
         /// <returns>The post model</returns>
         public SiteContentEditModel GetById(Guid id) {
-            var site = api.Sites.GetContentById(id);
+            var site = _api.Sites.GetContentById(id);
 
             if (site == null) {
-                var siteInfo = api.Sites.GetById(id);
-                site = Piranha.Models.DynamicSiteContent.Create(api, siteInfo.SiteTypeId);
+                var siteInfo = _api.Sites.GetById(id);
+                site = Piranha.Models.DynamicSiteContent.Create(_api, siteInfo.SiteTypeId);
 
                 site.Id = siteInfo.Id;
                 site.TypeId = siteInfo.SiteTypeId;
@@ -72,7 +72,7 @@ namespace Piranha.Areas.Manager.Services
 
             if (site != null) {
                 var model = Module.Mapper.Map<Piranha.Models.SiteContentBase, SiteContentEditModel>(site);
-                model.SiteType = api.SiteTypes.GetById(model.TypeId);
+                model.SiteType = _api.SiteTypes.GetById(model.TypeId);
 
                 LoadRegions(site, model);
 
@@ -86,7 +86,7 @@ namespace Piranha.Areas.Manager.Services
         /// </summary>
         public SiteContentEditModel Refresh(SiteContentEditModel model) {
             if (!string.IsNullOrWhiteSpace(model.TypeId)) {
-                model.SiteType = api.SiteTypes.GetById(model.TypeId);
+                model.SiteType = _api.SiteTypes.GetById(model.TypeId);
             }
             return model;
         }
@@ -95,12 +95,12 @@ namespace Piranha.Areas.Manager.Services
         /// Creates a new edit model with the given site typeparamref.
         /// </summary>
         /// <param name="siteTypeId">The site type id</param>
-        /// <returns>The site content edit model</returns>        
+        /// <returns>The site content edit model</returns>
         public SiteContentEditModel Create(string siteTypeId) {
-            var type = api.SiteTypes.GetById(siteTypeId);
+            var type = _api.SiteTypes.GetById(siteTypeId);
 
             if (type != null) {
-                var site = Piranha.Models.DynamicSiteContent.Create(api, siteTypeId);
+                var site = Piranha.Models.DynamicSiteContent.Create(_api, siteTypeId);
                 var model = Module.Mapper.Map<Piranha.Models.SiteContentBase, SiteContentEditModel>(site);
                 model.SiteType = type;
 
@@ -177,7 +177,7 @@ namespace Piranha.Areas.Manager.Services
                                         itemTitle = ((Extend.IField)fieldData[field.Id]).GetTitle();
                                     if (string.IsNullOrWhiteSpace(itemTitle) && !string.IsNullOrWhiteSpace(region.ListTitlePlaceholder))
                                         itemTitle = region.ListTitlePlaceholder;
-                                    else if (string.IsNullOrWhiteSpace(itemTitle)) 
+                                    else if (string.IsNullOrWhiteSpace(itemTitle))
                                         itemTitle = "Item";
 
                                     fieldSet.ListTitle = itemTitle;
@@ -224,13 +224,13 @@ namespace Piranha.Areas.Manager.Services
         /// <param name="src">The source</param>
         /// <param name="dest">The destination</param>
         private void SaveRegions(SiteContentEditModel src, Piranha.Models.DynamicSiteContent dest) {
-            var type = api.SiteTypes.GetById(src.TypeId);
+            var type = _api.SiteTypes.GetById(src.TypeId);
             var modelRegions = (IDictionary<string, object>)dest.Regions;
-            
+
             foreach (var region in src.Regions) {
                 if (region is PageEditRegion) {
                     if (!modelRegions.ContainsKey(region.Id))
-                        modelRegions[region.Id] = service.CreateDynamicRegion(type, region.Id);
+                        modelRegions[region.Id] = _factory.CreateDynamicRegion(type, region.Id);
 
                     var reg = (PageEditRegion)region;
 
@@ -255,7 +255,7 @@ namespace Piranha.Areas.Manager.Services
                             if (set.Count == 1) {
                                 list.Add(set[0].Value);
                             } else {
-                                var modelFields = (IDictionary<string, object>)service.CreateDynamicRegion(type, region.Id);
+                                var modelFields = (IDictionary<string, object>)_factory.CreateDynamicRegion(type, region.Id);
 
                                 foreach (var field in set) {
                                     modelFields[field.Id] = field.Value;

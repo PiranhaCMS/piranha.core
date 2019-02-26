@@ -1,11 +1,11 @@
 ﻿/*
- * Copyright (c) 2016-2018 Håkan Edling
+ * Copyright (c) 2016-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using Piranha.Extend;
@@ -15,6 +15,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Piranha.AttributeBuilder
 {
@@ -37,7 +38,15 @@ namespace Piranha.AttributeBuilder
         /// <summary>
         /// Builds the page types.
         /// </summary>
-        public abstract T Build();
+        public virtual T Build()
+        {
+            return BuildAsync().GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Builds the page types.
+        /// </summary>
+        public abstract Task<T> BuildAsync();
 
         /// <summary>
         /// Gets the possible content type for the given type.
@@ -75,7 +84,7 @@ namespace Piranha.AttributeBuilder
                 if (descAttr != null)
                 {
                     regionType.Description = descAttr.Text;
-                }                
+                }
 
                 Type type = null;
 

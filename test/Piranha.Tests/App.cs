@@ -21,7 +21,7 @@ namespace Piranha.Tests
         /// Sets up & initializes the tests.
         /// </summary>
         protected override void Init() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null))
+            using (var api = CreateApi())
             {
                 Piranha.App.Init(api);
             }
@@ -35,7 +35,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void AppInit() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null))
+            using (var api = CreateApi())
             {
                 Piranha.App.Init(api);
             }
@@ -84,6 +84,13 @@ namespace Piranha.Tests
             Assert.True(Piranha.App.PropertyBindings.HasFlag(System.Reflection.BindingFlags.IgnoreCase));
             Assert.True(Piranha.App.PropertyBindings.HasFlag(System.Reflection.BindingFlags.Public));
             Assert.True(Piranha.App.PropertyBindings.HasFlag(System.Reflection.BindingFlags.Instance));
+        }
+
+        private IApi CreateApi()
+        {
+            var factory = new ContentFactory(services);
+
+            return new Api(GetDb(), factory, new ContentServiceFactory(factory));
         }
     }
 }

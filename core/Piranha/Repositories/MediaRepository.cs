@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -106,6 +106,7 @@ namespace Piranha.Repositories
             {
                 model = _db.Media
                     .AsNoTracking()
+                    .Include(m => m.Versions)
                     .FirstOrDefault(m => m.Id == id);
 
                 if (model != null)
@@ -181,7 +182,7 @@ namespace Piranha.Repositories
 
         /// <summary>
         /// Adds or updates the given model in the database depending on its state.
-        /// Please note that this method is not really synchronous, it's just a 
+        /// Please note that this method is not really synchronous, it's just a
         /// wrapper for the async version.
         /// </summary>
         /// <param name="content">The content to save</param>
@@ -344,7 +345,7 @@ namespace Piranha.Repositories
 
         /// <summary>
         /// Ensures that the image version with the given size exsists
-        /// and returns its public URL. Please note that this method is 
+        /// and returns its public URL. Please note that this method is
         /// not really synchronous, it's just a wrapper for the async version.
         /// </summary>
         /// <param name="id">The unique id</param>
@@ -370,104 +371,102 @@ namespace Piranha.Repositories
         {
             if (_processor != null)
             {
-                var query = _db.MediaVersions
-                    .Where(v => v.MediaId == id && v.Width == width);
+                var media = _cache?.Get<Media>(id.ToString());
 
-                if (height.HasValue)
+                if (media == null)
                 {
-                    query = query.Where(v => v.Height == height);
-                }
-                else
-                {
-                    query = query.Where(v => !v.Height.HasValue);
+                    media = GetById(id);
                 }
 
-                var version = query.FirstOrDefault();
-
-                if (version == null)
+                if (media != null)
                 {
-                    var media = _db.Media
-                        .FirstOrDefault(m => m.Id == id);
+                    var query = media.Versions
+                        .Where(v => v.MediaId == id && v.Width == width);
 
-                    // If the media is missing return false
-                    if (media == null)
-                        return null;
-
-                    // If the requested size is equal to the original size, return true
-                    if (media.Width == width && (!height.HasValue || media.Height == height.Value))
-                        return GetPublicUrl(media);
-
-                    // Get the image file
-                    using (var stream = new MemoryStream())
+                    if (height.HasValue)
                     {
-                        using (var session = await _storage.OpenAsync())
+                        query = query.Where(v => v.Height == height);
+                    }
+                    else
+                    {
+                        query = query.Where(v => !v.Height.HasValue);
+                    }
+
+                    var version = query.FirstOrDefault();
+
+                    if (version == null)
+                    {
+                        // If the requested size is equal to the original size, return true
+                        if (media.Width == width && (!height.HasValue || media.Height == height.Value))
+                            return GetPublicUrl(media);
+
+                        // Get the image file
+                        using (var stream = new MemoryStream())
                         {
-                            if (!await session.GetAsync(media.Id + "-" + media.Filename, stream))
-                                return null;
-
-                            // Reset strem position    
-                            stream.Position = 0;
-
-                            using (var output = new MemoryStream())
+                            using (var session = await _storage.OpenAsync())
                             {
-                                if (height.HasValue)
-                                {
-                                    _processor.CropScale(stream, output, width, height.Value);
-                                }
-                                else
-                                {
-                                    _processor.Scale(stream, output, width);
-                                }
-                                output.Position = 0;
-                                bool upload = false;
+                                if (!await session.GetAsync(media.Id + "-" + media.Filename, stream))
+                                    return null;
 
-                                lock (ScaleMutex)
-                                {
-                                    // We have to make sure we don't scale multiple files
-                                    // at the same time as it can create index violations.
-                                    version = query.FirstOrDefault();
+                                // Reset strem position
+                                stream.Position = 0;
 
-                                    if (version == null)
+                                using (var output = new MemoryStream())
+                                {
+                                    if (height.HasValue)
                                     {
-                                        var info = new FileInfo(media.Filename);
-
-                                        version = new MediaVersion
-                                        {
-                                            Id = Guid.NewGuid(),
-                                            MediaId = media.Id,
-                                            Size = output.Length,
-                                            Width = width,
-                                            Height = height,
-                                            FileExtension = info.Extension
-                                        };
-                                        _db.MediaVersions.Add(version);
-                                        _db.SaveChanges();
-
-                                        upload = true;
+                                        _processor.CropScale(stream, output, width, height.Value);
                                     }
-                                }
+                                    else
+                                    {
+                                        _processor.Scale(stream, output, width);
+                                    }
+                                    output.Position = 0;
+                                    bool upload = false;
 
-                                if (upload)
-                                {
-                                    return await session.PutAsync(GetResourceName(media, width, height), media.ContentType, output);
+                                    lock (ScaleMutex)
+                                    {
+                                        // We have to make sure we don't scale multiple files
+                                        // at the same time as it can create index violations.
+                                        version = query.FirstOrDefault();
+
+                                        if (version == null)
+                                        {
+                                            var info = new FileInfo(media.Filename);
+
+                                            version = new MediaVersion
+                                            {
+                                                Id = Guid.NewGuid(),
+                                                MediaId = media.Id,
+                                                Size = output.Length,
+                                                Width = width,
+                                                Height = height,
+                                                FileExtension = info.Extension
+                                            };
+                                            _db.MediaVersions.Add(version);
+                                            _db.SaveChanges();
+
+                                            RemoveFromCache(media);
+
+                                            upload = true;
+                                        }
+                                    }
+
+                                    if (upload)
+                                    {
+                                        return await session.PutAsync(GetResourceName(media, width, height), media.ContentType, output);
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                else
-                {
-                    var media = _db.Media
-                        .FirstOrDefault(m => m.Id == id);
-
-                    // If the media is missing return false
-                    if (media == null)
-                        return null;
-
-                    // If the requested size is equal to the original size, return true
-                    if (media.Width == width && (!height.HasValue || media.Height == height.Value))
-                        return GetPublicUrl(media);
-                    return GetPublicUrl(media, width, height, version.FileExtension);
+                    else
+                    {
+                        // If the requested size is equal to the original size, return true
+                        if (media.Width == width && (!height.HasValue || media.Height == height.Value))
+                            return GetPublicUrl(media);
+                        return GetPublicUrl(media, width, height, version.FileExtension);
+                    }
                 }
             }
             return null;

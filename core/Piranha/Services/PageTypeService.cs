@@ -31,7 +31,11 @@ namespace Piranha.Services
         public PageTypeService(IPageTypeRepository repo, ICache cache)
         {
             _repo = repo;
-            _cache = cache;
+
+            if ((int)App.CacheLevel > 1)
+            {
+                _cache = cache;
+            }
         }
 
         /// <summary>

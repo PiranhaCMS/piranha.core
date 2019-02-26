@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Piranha;
 using Piranha.Extend.Blocks;
 using Piranha.Services;
@@ -8,9 +9,9 @@ namespace MvcWeb
 {
     public static class Seed
     {
-        public static void Run(IApi api)
+        public static async Task RunAsync(IApi api)
         {
-            if (api.Pages.GetStartpage() == null)
+            if ((await api.Pages.GetStartpageAsync()) == null)
             {
                 var images = new dynamic []
                 {
@@ -22,7 +23,7 @@ namespace MvcWeb
                 };
 
                 // Get the default site id
-                var siteId = api.Sites.GetDefault().Id;
+                var siteId = (await api.Sites.GetDefaultAsync()).Id;
 
                 // Upload images
                 foreach (var image in images)
@@ -99,7 +100,7 @@ namespace MvcWeb
                     }
                 }
                 startpage.Published = DateTime.Now;
-                api.Pages.Save(startpage);
+                await api.Pages.SaveAsync(startpage);
 
                 // Features page
                 var featurespage = Models.StandardPage.Create(api);
@@ -152,7 +153,7 @@ namespace MvcWeb
                     }
                 }
                 featurespage.Published = DateTime.Now;
-                api.Pages.Save(featurespage);
+                await api.Pages.SaveAsync(featurespage);
 
                 // Blog Archive
                 var blogpage = Models.BlogArchive.Create(api);
@@ -169,7 +170,7 @@ namespace MvcWeb
                 blogpage.Hero.Ingress = "<p>Welcome to the blog, the best place to stay up to date with what's happening in the Piranha infested waters.</p>";
 
                 blogpage.Published = DateTime.Now;
-                api.Pages.Save(blogpage);
+                await api.Pages.SaveAsync(blogpage);
 
                 // Blog Post
                 var blogpost = Models.BlogPost.Create(api);
@@ -194,7 +195,7 @@ namespace MvcWeb
                     }
                 }
                 blogpost.Published = DateTime.Now;
-                api.Posts.Save(blogpost);
+                await api.Posts.SaveAsync(blogpost);
             }
         }
     }

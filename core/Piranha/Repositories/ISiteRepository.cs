@@ -87,11 +87,5 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique id</param>
         Task Delete(Guid id);
-
-        /// <summary>
-        /// Creates and initializes a new site content model of the specified type.
-        /// </summary>
-        /// <returns>The created site content</returns>
-        T CreateContent<T>(string typeId = null) where T : Models.SiteContentBase;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -53,12 +54,12 @@ namespace MvcWeb
             var pageTypeBuilder = new Piranha.AttributeBuilder.PageTypeBuilder(api)
                 .AddType(typeof(Models.BlogArchive))
                 .AddType(typeof(Models.StandardPage))
-                .AddType(typeof(Models.TeaserPage));
-            pageTypeBuilder.Build()
+                .AddType(typeof(Models.TeaserPage))
+                .Build()
                 .DeleteOrphans();
             var postTypeBuilder = new Piranha.AttributeBuilder.PostTypeBuilder(api)
-                .AddType(typeof(Models.BlogPost));
-            postTypeBuilder.Build()
+                .AddType(typeof(Models.BlogPost))
+                .Build()
                 .DeleteOrphans();
 
             // Register middleware
@@ -77,7 +78,7 @@ namespace MvcWeb
                     template: "{controller=home}/{action=index}/{id?}");
             });
 
-            Seed.Run(api);
+            Seed.RunAsync(api).GetAwaiter().GetResult();
         }
     }
 }

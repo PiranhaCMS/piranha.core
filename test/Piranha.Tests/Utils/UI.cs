@@ -20,7 +20,7 @@ namespace Piranha.Tests.Utils
         /// Sets up & initializes the tests.
         /// </summary>
         protected override void Init() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null))
+            using (var api = CreateApi())
             {
                 Piranha.App.Init(api);
             }
@@ -72,6 +72,13 @@ namespace Piranha.Tests.Utils
             Extend.Fields.HtmlField field = "First,Second,Third";
 
             Assert.Equal("", Piranha.Utils.FirstParagraph(field));
+        }
+
+        private IApi CreateApi()
+        {
+            var factory = new ContentFactory(services);
+
+            return new Api(GetDb(), factory, new ContentServiceFactory(factory));
         }
     }
 }

@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using System;
@@ -15,15 +15,15 @@ namespace Piranha.Services
 {
     public class ContentServiceFactory : IContentServiceFactory
     {
-        private readonly IServiceProvider _services;
+        private readonly IContentFactory _factory;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="services">The service provider</param>
-        public ContentServiceFactory(IServiceProvider services)
+        public ContentServiceFactory(IContentFactory factory)
         {
-            _services = services;
+            _factory = factory;
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Piranha.Services
             where TField : Data.ContentField
             where TModelBase : Models.Content
         {
-            return new ContentService<TContent, TField, TModelBase>(_services, mapper);
+            return new ContentService<TContent, TField, TModelBase>(_factory, mapper);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Piranha.Services
         /// <returns>The content service</returns>
         public IContentService<Data.Page, Data.PageField, Models.PageBase> CreatePageService()
         {
-            return new ContentService<Data.Page, Data.PageField, Models.PageBase>(_services, App.Mapper);
+            return new ContentService<Data.Page, Data.PageField, Models.PageBase>(_factory, App.Mapper);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Piranha.Services
         /// <returns>The content service</returns>
         public IContentService<Data.Post, Data.PostField, Models.PostBase> CreatePostService()
         {
-            return new ContentService<Data.Post, Data.PostField, Models.PostBase>(_services, App.Mapper);
+            return new ContentService<Data.Post, Data.PostField, Models.PostBase>(_factory, App.Mapper);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Piranha.Services
         /// <returns>The content service</returns>
         public IContentService<Data.Site, Data.SiteField, Models.SiteContentBase> CreateSiteService()
         {
-            return new ContentService<Data.Site, Data.SiteField, Models.SiteContentBase>(_services, App.Mapper);
+            return new ContentService<Data.Site, Data.SiteField, Models.SiteContentBase>(_factory, App.Mapper);
         }
     }
 }

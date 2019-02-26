@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -8,13 +8,14 @@
  *
  */
 
-using Piranha.AttributeBuilder;
-using Piranha.Extend.Fields;
-using Piranha.Services;
 using System;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
+using Piranha.AttributeBuilder;
+using Piranha.Extend.Fields;
+using Piranha.Services;
 
 namespace Piranha.Tests.Routers
 {
@@ -45,7 +46,7 @@ namespace Piranha.Tests.Routers
         }
 
         protected override void Init() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+            using (var api = CreateApi()) {
                 Piranha.App.Init(api);
 
                 var pageBuilder = new PageTypeBuilder(api)
@@ -102,23 +103,6 @@ namespace Piranha.Tests.Routers
                     Title = "Default category"
                 };
 
-                /*
-                // Add tags
-                var tag = new Data.Tag() {
-                    Id = TAG1_ID,
-                    BlogId = PAGE1_ID,
-                    Title = "My tag"
-                };
-                api.Tags.Save(tag);
-
-                tag = new Data.Tag() {
-                    Id = TAG2_ID,
-                    BlogId = PAGE2_ID,
-                    Title = "My other tag"
-                };
-                api.Tags.Save(tag);
-                */
-
                 // Add posts
                 var post1 = MyPost.Create(api);
                 post1.Id = POST1_ID;
@@ -151,7 +135,7 @@ namespace Piranha.Tests.Routers
         }
 
         protected override void Cleanup() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+            using (var api = CreateApi()) {
                 var pages = api.Pages.GetAll();
                 foreach (var p in pages)
                     api.Pages.Delete(p);
@@ -171,9 +155,9 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public void GetPostByUrlDefaultSite() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                var response = Piranha.Web.PostRouter.Invoke(api, "/blog/my-first-post", SITE1_ID);
+        public async Task GetPostByUrlDefaultSite() {
+            using (var api = CreateApi()) {
+                var response = await Piranha.Web.PostRouter.InvokeAsync(api, "/blog/my-first-post", SITE1_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/post", response.Route);
@@ -183,9 +167,9 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public void GetPostByUrlDefaultSiteWithAction() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                var response = Piranha.Web.PostRouter.Invoke(api, "/blog/my-first-post/action", SITE1_ID);
+        public async Task GetPostByUrlDefaultSiteWithAction() {
+            using (var api = CreateApi()) {
+                var response = await Piranha.Web.PostRouter.InvokeAsync(api, "/blog/my-first-post/action", SITE1_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/post/action", response.Route);
@@ -195,18 +179,18 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public void GetPostByUrlNoneDefaultSite() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                var response = Piranha.Web.PostRouter.Invoke(api, "/news/my-second-page", SITE1_ID);
+        public async Task GetPostByUrlNoneDefaultSite() {
+            using (var api = CreateApi()) {
+                var response = await Piranha.Web.PostRouter.InvokeAsync(api, "/news/my-second-page", SITE1_ID);
 
                 Assert.Null(response);
             }
         }
 
         [Fact]
-        public void GetArchiveDefaultSite() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog", SITE1_ID);
+        public async Task GetArchiveDefaultSite() {
+            using (var api = CreateApi()) {
+                var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/blog", SITE1_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
@@ -215,9 +199,9 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public void GetArchiveYearDefaultSite() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog/2018", SITE1_ID);
+        public async Task GetArchiveYearDefaultSite() {
+            using (var api = CreateApi()) {
+                var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/blog/2018", SITE1_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
@@ -226,9 +210,9 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public void GetArchiveYearMonthDefaultSite() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog/2018/2", SITE1_ID);
+        public async Task GetArchiveYearMonthDefaultSite() {
+            using (var api = CreateApi()) {
+                var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/blog/2018/2", SITE1_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
@@ -237,9 +221,9 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public void GetArchiveYearMonthPageDefaultSite() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog/2018/2/page/1", SITE1_ID);
+        public async Task GetArchiveYearMonthPageDefaultSite() {
+            using (var api = CreateApi()) {
+                var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/blog/2018/2/page/1", SITE1_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
@@ -248,9 +232,9 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public void GetArchiveYearMonthPageCategoryDefaultSite() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog/category/default-category/2018/2/page/1", SITE1_ID);
+        public async Task GetArchiveYearMonthPageCategoryDefaultSite() {
+            using (var api = CreateApi()) {
+                var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/blog/category/default-category/2018/2/page/1", SITE1_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
@@ -259,9 +243,9 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public void GetArchiveCategoryDefaultSite() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog/category/default-category", SITE1_ID);
+        public async Task GetArchiveCategoryDefaultSite() {
+            using (var api = CreateApi()) {
+                var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/blog/category/default-category", SITE1_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
@@ -270,9 +254,9 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public void GetArchiveMissingCategoryDefaultSite() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog/category/missing-category", SITE1_ID);
+        public async Task GetArchiveMissingCategoryDefaultSite() {
+            using (var api = CreateApi()) {
+                var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/blog/category/missing-category", SITE1_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
@@ -281,9 +265,9 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public void GetArchiveTagDefaultSite() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog/tag/my-tag", SITE1_ID);
+        public async Task GetArchiveTagDefaultSite() {
+            using (var api = CreateApi()) {
+                var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/blog/tag/my-tag", SITE1_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
@@ -292,9 +276,9 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public void GetArchiveMissingTagDefaultSite() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog/tag/my-other-tag", SITE1_ID);
+        public async Task GetArchiveMissingTagDefaultSite() {
+            using (var api = CreateApi()) {
+                var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/blog/tag/my-other-tag", SITE1_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
@@ -303,9 +287,9 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public void GetArchivePageDefaultSite() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog/page/1", SITE1_ID);
+        public async Task GetArchivePageDefaultSite() {
+            using (var api = CreateApi()) {
+                var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/blog/page/1", SITE1_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
@@ -314,18 +298,18 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public void GetArchiveNoneDefaultSite() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/news", SITE1_ID);
+        public async Task GetArchiveNoneDefaultSite() {
+            using (var api = CreateApi()) {
+                var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/news", SITE1_ID);
 
                 Assert.Null(response);
             }
         }
 
         [Fact]
-        public void GetPostByUrlOtherSite() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                var response = Piranha.Web.PostRouter.Invoke(api, "/news/my-second-post", SITE2_ID);
+        public async Task GetPostByUrlOtherSite() {
+            using (var api = CreateApi()) {
+                var response = await Piranha.Web.PostRouter.InvokeAsync(api, "/news/my-second-post", SITE2_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/post", response.Route);
@@ -335,9 +319,9 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public void GetPostByUrlOtherSiteAction() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                var response = Piranha.Web.PostRouter.Invoke(api, "/news/my-second-post/action", SITE2_ID);
+        public async Task GetPostByUrlOtherSiteAction() {
+            using (var api = CreateApi()) {
+                var response = await Piranha.Web.PostRouter.InvokeAsync(api, "/news/my-second-post/action", SITE2_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/post/action", response.Route);
@@ -347,18 +331,18 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public void GetPostByUrlNoneOtherSite() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                var response = Piranha.Web.PostRouter.Invoke(api, "/blog/my-first-post", SITE2_ID);
+        public async Task GetPostByUrlNoneOtherSite() {
+            using (var api = CreateApi()) {
+                var response = await Piranha.Web.PostRouter.InvokeAsync(api, "/blog/my-first-post", SITE2_ID);
 
                 Assert.Null(response);
             }
         }
 
         [Fact]
-        public void GetArchiveOtherSite() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/news", SITE2_ID);
+        public async Task GetArchiveOtherSite() {
+            using (var api = CreateApi()) {
+                var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/news", SITE2_ID);
 
                 Assert.NotNull(response);
                 Assert.Equal("/archive", response.Route);
@@ -367,12 +351,19 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public void GetArchiveNoneOtherSite() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                var response = Piranha.Web.ArchiveRouter.Invoke(api, "/blog", SITE2_ID);
+        public async Task GetArchiveNoneOtherSite() {
+            using (var api = CreateApi()) {
+                var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/blog", SITE2_ID);
 
                 Assert.Null(response);
             }
+        }
+
+        private IApi CreateApi()
+        {
+            var factory = new ContentFactory(services);
+
+            return new Api(GetDb(), factory, new ContentServiceFactory(factory), storage);
         }
     }
 }

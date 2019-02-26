@@ -21,6 +21,7 @@ namespace Piranha.Services
     public class PageService
     {
         private readonly IPageRepository _repo;
+        private readonly IContentFactory _factory;
         private readonly SiteService _siteService;
         private readonly ParamService _paramService;
         private readonly ICache _cache;
@@ -30,32 +31,51 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="repo">The main repository</param>
         /// <param name="cache">The optional model cache</param>
-        public PageService(IPageRepository repo, SiteService siteService, ParamService paramService, ICache cache = null)
+        public PageService(IPageRepository repo, IContentFactory factory, SiteService siteService, ParamService paramService, ICache cache = null)
         {
             _repo = repo;
+            _factory = factory;
             _siteService = siteService;
             _paramService = paramService;
-            _cache = cache;
+
+            if ((int)App.CacheLevel > 2)
+            {
+                _cache = cache;
+            }
         }
 
         /// <summary>
         /// Creates and initializes a new page of the specified type.
         /// </summary>
         /// <returns>The created page</returns>
-        public Task<T> CreateAsync<T>(string typeId = null) where T : Models.PageBase
+        public T Create<T>(string typeId = null) where T : Models.PageBase
         {
-            // TODO
-            return _repo.Create<T>(typeId);
+            if (string.IsNullOrEmpty(typeId))
+            {
+                typeId = typeof(T).Name;
+            }
+
+            var type = App.PageTypes.GetById(typeId);
+
+            if (type != null)
+            {
+                return _factory.Create<T>(type);
+            }
+            return null;
         }
 
         /// <summary>
         /// Creates and initializes a copy of the given page.
         /// </summary>
+        /// <param name="originalPage">The orginal page</param>
         /// <returns>The created copy</returns>
-        public Task<T> CopyAsync<T>(T originalPage) where T : Models.PageBase
+        public T Copy<T>(T originalPage) where T : Models.PageBase
         {
-            // TODO
-            return _repo.Copy<T>(originalPage);
+            var model = Create<T>(originalPage.TypeId);
+            model.OriginalPageId = originalPage.Id;
+            model.Slug = null;
+
+            return model;
         }
 
         /// <summary>
@@ -172,6 +192,11 @@ namespace Piranha.Services
             else if (!typeof(DynamicPage).IsAssignableFrom(typeof(T)))
             {
                 model = _cache?.Get<PageBase>($"Page_{siteId.Value}");
+
+                if (model != null)
+                {
+                    _factory.Init(model, App.PageTypes.GetById(model.TypeId));
+                }
             }
 
             if (model == null)
@@ -214,6 +239,11 @@ namespace Piranha.Services
             else if (!typeof(DynamicPage).IsAssignableFrom(typeof(T)))
             {
                 model = _cache?.Get<PageBase>(id.ToString());
+
+                if (model != null)
+                {
+                    _factory.Init(model, App.PageTypes.GetById(model.TypeId));
+                }
             }
 
             if (model == null)
@@ -265,6 +295,11 @@ namespace Piranha.Services
                 else if (!typeof(DynamicPage).IsAssignableFrom(typeof(T)))
                 {
                     model = _cache?.Get<PageBase>(pageId.ToString());
+
+                    if (model != null)
+                    {
+                        _factory.Init(model, App.PageTypes.GetById(model.TypeId));
+                    }
                 }
             }
 
@@ -524,6 +559,16 @@ namespace Piranha.Services
         {
             if (model != null)
             {
+                // Initialize model
+                if (typeof(IDynamicModel).IsAssignableFrom(model.GetType()))
+                {
+                    _factory.InitDynamic((DynamicPage)model, App.PageTypes.GetById(model.TypeId));
+                }
+                else
+                {
+                    _factory.Init(model, App.PageTypes.GetById(model.TypeId));
+                }
+
                 App.Hooks.OnLoad<PageBase>(model);
 
                 // Never cache dynamic or simple instances

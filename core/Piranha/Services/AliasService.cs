@@ -32,7 +32,11 @@ namespace Piranha.Services
         {
             _repo = repo;
             _siteService = siteService;
-            _cache = cache;
+
+            if ((int)App.CacheLevel > 1)
+            {
+                _cache = cache;
+            }
         }
 
         /// <summary>

@@ -22,6 +22,7 @@ namespace Piranha.Services
     public class PostService
     {
         private readonly IPostRepository _repo;
+        private readonly IContentFactory _factory;
         private readonly SiteService _siteService;
         private readonly PageService _pageService;
         private readonly ICache _cache;
@@ -33,12 +34,17 @@ namespace Piranha.Services
         /// <param name="siteService">The site service</param>
         /// <param name="pageService">The site service</param>
         /// <param name="cache">The optional model cache</param>
-        public PostService(IPostRepository repo, SiteService siteService, PageService pageService, ICache cache = null)
+        public PostService(IPostRepository repo, IContentFactory factory, SiteService siteService, PageService pageService, ICache cache = null)
         {
             _repo = repo;
+            _factory = factory;
             _siteService = siteService;
             _pageService = pageService;
-            _cache = cache;
+
+            if ((int)App.CacheLevel > 2)
+            {
+                _cache = cache;
+            }
         }
 
         /// <summary>
@@ -47,8 +53,18 @@ namespace Piranha.Services
         /// <returns>The created post</returns>
         public T Create<T>(string typeId = null) where T : PostBase
         {
-            // TODO
-            return _repo.Create<T>(typeId);
+            if (string.IsNullOrEmpty(typeId))
+            {
+                typeId = typeof(T).Name;
+            }
+
+            var type = App.PostTypes.GetById(typeId);
+
+            if (type != null)
+            {
+                return _factory.Create<T>(type);
+            }
+            return null;
         }
 
         /// <summary>
@@ -526,6 +542,16 @@ namespace Piranha.Services
             {
                 // Format permalink
                 model.Permalink = $"/{blog.Slug}/{model.Slug}";
+
+                // Initialize model
+                if (typeof(IDynamicModel).IsAssignableFrom(model.GetType()))
+                {
+                    _factory.InitDynamic((DynamicPost)model, App.PostTypes.GetById(model.TypeId));
+                }
+                else
+                {
+                    _factory.Init(model, App.PostTypes.GetById(model.TypeId));
+                }
 
                 App.Hooks.OnLoad<PostBase>(model);
 

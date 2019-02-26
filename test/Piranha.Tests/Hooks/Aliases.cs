@@ -30,7 +30,7 @@ namespace Piranha.Tests.Hooks
         class AliasOnAfterDeleteException : Exception {}
 
         protected override void Init() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+            using (var api = CreateApi()) {
                 // Initialize
                 Piranha.App.Init(api);
 
@@ -51,7 +51,7 @@ namespace Piranha.Tests.Hooks
         }
 
         protected override void Cleanup() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+            using (var api = CreateApi()) {
                 // Remove test data
                 var aliases = api.Aliases.GetAll();
 
@@ -65,8 +65,7 @@ namespace Piranha.Tests.Hooks
         [Fact]
         public void OnLoad() {
             Piranha.App.Hooks.Alias.RegisterOnLoad(m => throw new AliasOnLoadException());
-
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+            using (var api = CreateApi()) {
                 Assert.Throws<AliasOnLoadException>(() => {
                     api.Aliases.GetById(ID);
                 });
@@ -77,7 +76,7 @@ namespace Piranha.Tests.Hooks
         [Fact]
         public void OnBeforeSave() {
             Piranha.App.Hooks.Alias.RegisterOnBeforeSave(m => throw new AliasOnBeforeSaveException());
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+            using (var api = CreateApi()) {
                 Assert.Throws<AliasOnBeforeSaveException>(() => {
                     api.Aliases.Save(new Data.Alias() {
                         SiteId = SITE_ID,
@@ -92,7 +91,7 @@ namespace Piranha.Tests.Hooks
         [Fact]
         public void OnAfterSave() {
             Piranha.App.Hooks.Alias.RegisterOnAfterSave(m => throw new AliasOnAfterSaveException());
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+            using (var api = CreateApi()) {
                 Assert.Throws<AliasOnAfterSaveException>(() => {
                     api.Aliases.Save(new Data.Alias() {
                         SiteId = SITE_ID,
@@ -107,7 +106,7 @@ namespace Piranha.Tests.Hooks
         [Fact]
         public void OnBeforeDelete() {
             Piranha.App.Hooks.Alias.RegisterOnBeforeDelete(m => throw new AliasOnBeforeDeleteException());
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+            using (var api = CreateApi()) {
                 Assert.Throws<AliasOnBeforeDeleteException>(() => {
                     api.Aliases.Delete(ID);
                 });
@@ -118,12 +117,19 @@ namespace Piranha.Tests.Hooks
         [Fact]
         public void OnAfterDelete() {
             Piranha.App.Hooks.Alias.RegisterOnAfterDelete(m => throw new AliasOnAfterDeleteException());
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+            using (var api = CreateApi()) {
                 Assert.Throws<AliasOnAfterDeleteException>(() => {
                     api.Aliases.Delete(ID);
                 });
             }
             Piranha.App.Hooks.Alias.Clear();
+        }
+
+        private IApi CreateApi()
+        {
+            var factory = new ContentFactory(services);
+
+            return new Api(GetDb(), factory, new ContentServiceFactory(factory), storage);
         }
     }
 }

@@ -26,17 +26,17 @@ namespace Piranha.Areas.Manager.Controllers
     {
         private const string COOKIE_SELECTEDSITE = "PiranhaManager_SelectedSite";
         private readonly PostEditService _editService;
-        private readonly IContentService<Data.Post, Data.PostField, Piranha.Models.PostBase> _contentService;
+        private readonly IContentFactory _factory;
         private readonly IHubContext<Hubs.PreviewHub> _hub;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public PostController(IApi api, PostEditService editService, IContentServiceFactory factory, IHubContext<Hubs.PreviewHub> hub) : base(api)
+        public PostController(IApi api, PostEditService editService, IContentFactory factory, IHubContext<Hubs.PreviewHub> hub) : base(api)
         {
             _editService = editService;
-            _contentService = factory.CreatePostService();
+            _factory = factory;
             _hub = hub;
         }
 
@@ -228,7 +228,7 @@ namespace Piranha.Areas.Manager.Controllers
 
                 if (regionType != null)
                 {
-                    var region = _contentService.CreateDynamicRegion(postType, model.RegionTypeId);
+                    var region = _factory.CreateDynamicRegion(postType, model.RegionTypeId);
 
                     var editModel = (Models.PageEditRegionCollection)_editService.CreateRegion(regionType,
                         new List<object> { region });

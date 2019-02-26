@@ -18,18 +18,6 @@ namespace Piranha.Repositories
     public interface IPageRepository
     {
         /// <summary>
-        /// Creates and initializes a new page of the specified type.
-        /// </summary>
-        /// <returns>The created page</returns>
-        Task<T> Create<T>(string typeId = null) where T : PageBase;
-
-        /// <summary>
-        /// Creates and initializes a copy of the given page.
-        /// </summary>
-        /// <returns>The created copy</returns>
-        Task<T> Copy<T>(T originalPage) where T : PageBase;
-
-        /// <summary>
         /// Gets all of the available pages for the current site.
         /// </summary>
         /// <param name="siteId">The site id</param>

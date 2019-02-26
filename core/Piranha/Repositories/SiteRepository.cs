@@ -229,18 +229,6 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
-        /// Creates and initializes a new site content model of the specified type.
-        /// </summary>
-        /// <returns>The created site content</returns>
-        public T CreateContent<T>(string typeId = null) where T : Models.SiteContentBase
-        {
-            if (string.IsNullOrWhiteSpace(typeId))
-                typeId = typeof(T).Name;
-
-            return _contentService.Create<T>(App.SiteTypes.GetById(typeId));
-        }
-
-        /// <summary>
         /// Sorts the items.
         /// </summary>
         /// <param name="pages">The full page list</param>

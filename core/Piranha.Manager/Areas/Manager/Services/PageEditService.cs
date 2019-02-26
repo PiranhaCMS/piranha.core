@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -24,12 +24,12 @@ namespace Piranha.Areas.Manager.Services
     public class PageEditService
     {
         private readonly IApi _api;
-        private readonly IContentService<Data.Page, Data.PageField, Piranha.Models.PageBase> _service;
+        private readonly IContentFactory _factory;
 
-        public PageEditService(IApi api, IContentServiceFactory factory)
+        public PageEditService(IApi api, IContentFactory factory)
         {
             _api = api;
-            _service = factory.CreatePageService();
+            _factory = factory;
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace Piranha.Areas.Manager.Services
         /// </summary>
         /// <param name="pageTypeId">The page type id</param>
         /// <param name="siteId">The optional site id</param>
-        /// <returns>The page model</returns>        
+        /// <returns>The page model</returns>
         public PageEditModel Create(string pageTypeId, Guid? siteId = null)
         {
             var type = _api.PageTypes.GetById(pageTypeId);
@@ -210,9 +210,9 @@ namespace Piranha.Areas.Manager.Services
                         }
                     }
 
-                    var set = new PageEditFieldSet 
+                    var set = new PageEditFieldSet
                     {
-                        new PageEditField 
+                        new PageEditField
                         {
                             Id = region.Fields[0].Id,
                             Title = region.Fields[0].Title ?? region.Fields[0].Id,
@@ -371,7 +371,7 @@ namespace Piranha.Areas.Manager.Services
                 {
                     if (!modelRegions.ContainsKey(region.Id))
                     {
-                        modelRegions[region.Id] = _service.CreateDynamicRegion(type, region.Id);
+                        modelRegions[region.Id] = _factory.CreateDynamicRegion(type, region.Id);
                     }
 
                     var reg = (PageEditRegion)region;
@@ -408,7 +408,7 @@ namespace Piranha.Areas.Manager.Services
                             }
                             else
                             {
-                                var modelFields = (IDictionary<string, object>)_service.CreateDynamicRegion(type, region.Id);
+                                var modelFields = (IDictionary<string, object>)_factory.CreateDynamicRegion(type, region.Id);
 
                                 foreach (var field in set)
                                 {

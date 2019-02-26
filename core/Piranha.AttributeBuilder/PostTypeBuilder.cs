@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Piranha.Models;
 using Piranha.Services;
 
@@ -33,7 +34,7 @@ namespace Piranha.AttributeBuilder
         /// <summary>
         /// Builds the page types.
         /// </summary>
-        public override PostTypeBuilder Build()
+        public override async Task<PostTypeBuilder> BuildAsync()
         {
             foreach (var type in _types)
             {
@@ -42,18 +43,28 @@ namespace Piranha.AttributeBuilder
                 if (postType != null)
                 {
                     postType.Ensure();
-                    _api.PostTypes.Save(postType);
+                    await _api.PostTypes.SaveAsync(postType);
                 }
             }
             return this;
         }
 
         /// <summary>
-        /// Deletes all page types in the database that doesn't
-        ///  exist in the database,
+        /// Deletes all post types in the database that doesn't
+        /// exist in the database,
         /// </summary>
         /// <returns>The builder</returns>
         public PostTypeBuilder DeleteOrphans()
+        {
+            return DeleteOrphansAsync().GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Deletes all page types in the database that doesn't
+        /// exist in the database,
+        /// </summary>
+        /// <returns>The builder</returns>
+        public async Task<PostTypeBuilder> DeleteOrphansAsync()
         {
             var orphans = new List<PostType>();
             var importTypes = new List<PostType>();
@@ -68,7 +79,7 @@ namespace Piranha.AttributeBuilder
             }
 
             // Get all previously imported page types.
-            foreach (var postType in _api.PostTypes.GetAll())
+            foreach (var postType in await _api.PostTypes.GetAllAsync())
             {
                 if (!importTypes.Any(t => t.Id == postType.Id))
                     orphans.Add(postType);
@@ -77,7 +88,7 @@ namespace Piranha.AttributeBuilder
             // Delete all orphans.
             foreach (var postType in orphans)
             {
-                _api.PostTypes.Delete(postType);
+                await _api.PostTypes.DeleteAsync(postType);
             }
             return this;
         }

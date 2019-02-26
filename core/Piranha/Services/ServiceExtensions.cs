@@ -26,6 +26,7 @@ public static class ServiceExtensions
     public static IServiceCollection AddPiranhaEF(this IServiceCollection services,
         ServiceLifetime scope = ServiceLifetime.Scoped)
     {
+        services.Add(new ServiceDescriptor(typeof(IContentFactory), typeof(ContentFactory), scope));
         services.Add(new ServiceDescriptor(typeof(IContentServiceFactory), typeof(ContentServiceFactory), ServiceLifetime.Singleton));
         services.Add(new ServiceDescriptor(typeof(IDb), typeof(Db), scope));
         services.Add(new ServiceDescriptor(typeof(IApi), typeof(Api), scope));

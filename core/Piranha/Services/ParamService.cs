@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using System;
@@ -30,7 +30,11 @@ namespace Piranha.Services
         public ParamService(IParamRepository repo, ICache cache = null)
         {
             _repo = repo;
-            _cache = cache;
+
+            if ((int)App.CacheLevel > 0)
+            {
+                _cache = cache;
+            }
         }
 
         /// <summary>
@@ -69,11 +73,11 @@ namespace Piranha.Services
             var id = _cache?.Get<Guid?>($"ParamKey_{key}");
             Param model = null;
 
-            if (id.HasValue) 
+            if (id.HasValue)
             {
                 model = await GetByIdAsync(id.Value);
-            } 
-            else 
+            }
+            else
             {
                 model = await _repo.GetByKey(key);
 
@@ -159,7 +163,7 @@ namespace Piranha.Services
                     _cache.Set(model.Id.ToString(), model);
                     _cache.Set($"ParamKey_{model.Key}", model.Id);
                 }
-            }            
+            }
         }
 
         /// <summary>

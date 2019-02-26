@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2017-2018 Håkan Edling
+ * Copyright (c) 2017-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -95,6 +95,7 @@ namespace Piranha
         /// repositories.
         /// </summary>
         public Api(
+            IContentFactory contentFactory,
             IAliasRepository aliasRepository,
             IArchiveRepository archiveRepository,
             IMediaRepository mediaRepository,
@@ -116,13 +117,13 @@ namespace Piranha
             PageTypes = new PageTypeService(pageTypeRepository, cacheLevel > 0 ? _cache : null);
             Params = new ParamService(paramRepository, cacheLevel > 0 ? _cache : null);
             PostTypes = new PostTypeService(postTypeRepository, cacheLevel > 0 ? _cache : null);
-            Sites = new SiteService(siteRepository, cacheLevel > 0 ? _cache : null);
+            Sites = new SiteService(siteRepository, contentFactory, cacheLevel > 0 ? _cache : null);
             SiteTypes = new SiteTypeService(siteTypeRepository, cacheLevel > 0 ? _cache : null);
 
             // Create services with dependencies
             Aliases = new AliasService(aliasRepository, Sites, cacheLevel > 2 ? _cache : null);
-            Pages = new PageService(pageRepository, Sites, Params, cacheLevel > 2 ? _cache : null);
-            Posts = new PostService(postRepository, Sites, Pages, cacheLevel > 2 ? _cache : null);
+            Pages = new PageService(pageRepository, contentFactory, Sites, Params, cacheLevel > 2 ? _cache : null);
+            Posts = new PostService(postRepository, contentFactory, Sites, Pages, cacheLevel > 2 ? _cache : null);
             Archives = new ArchiveService(archiveRepository, Pages, Params, Posts);
         }
 
@@ -134,12 +135,12 @@ namespace Piranha
         /// <param name="storage">The current storage</param>
         /// <param name="modelCache">The optional model cache</param>
         /// <param name="imageProcessor">The optional image processor</param>
-        public Api(IDb db, IContentServiceFactory factory, IStorage storage = null, ICache modelCache = null, IImageProcessor imageProcessor = null)
+        public Api(IDb db, IContentFactory contentFactory, IContentServiceFactory factory, IStorage storage = null, ICache modelCache = null, IImageProcessor imageProcessor = null)
         {
             _db = db;
             _storage = storage;
 
-            Setup(factory, modelCache, imageProcessor);
+            Setup(contentFactory, factory, modelCache, imageProcessor);
         }
 
         /// <summary>
@@ -150,13 +151,12 @@ namespace Piranha
             _db.Dispose();
         }
 
-        #region Private methods
         /// <summary>
         /// Configures the api.
         /// </summary>
         /// <param name="modelCache">The optional model cache</param>
         /// <param name="imageProcessor">The optional image processor</param>
-        private void Setup(IContentServiceFactory factory, ICache modelCache = null, IImageProcessor imageProcessor = null)
+        private void Setup(IContentFactory contentFactory, IContentServiceFactory factory, ICache modelCache = null, IImageProcessor imageProcessor = null)
         {
             _cache = modelCache;
 
@@ -166,18 +166,17 @@ namespace Piranha
             Media = new MediaRepository(this, _db, _storage, cacheLevel > 2 ? _cache : null, imageProcessor);
 
             // Create services without dependecies
-            PageTypes = new PageTypeService(new PageTypeRepository(_db), cacheLevel > 0 ? _cache : null);
-            Params = new ParamService(new ParamRepository(_db), cacheLevel > 0 ? _cache : null);
-            PostTypes = new PostTypeService(new PostTypeRepository(_db), cacheLevel > 0 ? _cache : null);
-            Sites = new SiteService(new SiteRepository(_db, factory), cacheLevel > 0 ? _cache : null);
-            SiteTypes = new SiteTypeService(new SiteTypeRepository(_db), cacheLevel > 0 ? _cache : null);
+            PageTypes = new PageTypeService(new PageTypeRepository(_db), _cache);
+            Params = new ParamService(new ParamRepository(_db), _cache);
+            PostTypes = new PostTypeService(new PostTypeRepository(_db), _cache);
+            Sites = new SiteService(new SiteRepository(_db, factory), contentFactory, _cache);
+            SiteTypes = new SiteTypeService(new SiteTypeRepository(_db), _cache);
 
             // Create services with dependencies
-            Aliases = new AliasService(new AliasRepository(_db), Sites, cacheLevel > 2 ? _cache : null);
-            Pages = new PageService(new PageRepository(_db, factory), Sites, Params, cacheLevel > 2 ? _cache : null);
-            Posts = new PostService(new PostRepository(_db, factory), Sites, Pages, cacheLevel > 2 ? _cache : null);
+            Aliases = new AliasService(new AliasRepository(_db), Sites, _cache);
+            Pages = new PageService(new PageRepository(_db, factory), contentFactory, Sites, Params, _cache);
+            Posts = new PostService(new PostRepository(_db, factory), contentFactory, Sites, Pages, _cache);
             Archives = new ArchiveService(new ArchiveRepository(_db), Pages, Params, Posts);
         }
-        #endregion
     }
 }

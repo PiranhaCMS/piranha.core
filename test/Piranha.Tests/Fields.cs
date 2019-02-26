@@ -40,7 +40,7 @@ namespace Piranha.Tests
         /// Sets up & initializes the tests.
         /// </summary>
         protected override void Init() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null))
+            using (var api = CreateApi())
             {
                 Piranha.App.Init(api);
                 Piranha.App.Fields.Register<MyFirstField>();
@@ -285,7 +285,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void ImageFieldInitMissing() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+            using (var api = CreateApi()) {
                 var field = new Piranha.Extend.Fields.ImageField {
                     Id = Guid.NewGuid()
                 };
@@ -336,7 +336,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void DocumentFieldInitMissing() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+            using (var api = CreateApi()) {
                 var field = new Piranha.Extend.Fields.DocumentField {
                     Id = Guid.NewGuid()
                 };
@@ -387,7 +387,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void VideoFieldInitMissing() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+            using (var api = CreateApi()) {
                 var field = new Piranha.Extend.Fields.VideoField {
                     Id = Guid.NewGuid()
                 };
@@ -438,7 +438,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void MediaFieldInitMissing() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+            using (var api = CreateApi()) {
                 var field = new Piranha.Extend.Fields.MediaField {
                     Id = Guid.NewGuid()
                 };
@@ -783,6 +783,13 @@ namespace Piranha.Tests
             Piranha.Extend.Fields.TextField field = sb.ToString();
 
             Assert.Equal(43, field.GetTitle().Length);
+        }
+
+        private IApi CreateApi()
+        {
+            var factory = new ContentFactory(services);
+
+            return new Api(GetDb(), factory, new ContentServiceFactory(factory));
         }
     }
 }

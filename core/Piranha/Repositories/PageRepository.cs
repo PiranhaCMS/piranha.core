@@ -35,37 +35,6 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
-        /// Creates and initializes a new page of the specified type.
-        /// </summary>
-        /// <returns>The created page</returns>
-        public Task<T> Create<T>(string typeId = null) where T : Models.PageBase
-        {
-            return Task.Run(() =>
-            {
-                if (string.IsNullOrWhiteSpace(typeId))
-                {
-                    typeId = typeof(T).Name;
-                }
-                return _contentService.Create<T>(App.PageTypes.GetById(typeId));
-            });
-        }
-
-        /// <summary>
-        /// Creates and initializes a copy of the given page.
-        /// </summary>
-        /// <returns>The created copy</returns>
-        public Task<T> Copy<T>(T originalPage) where T : Models.PageBase
-        {
-            return Task.Run(() =>
-            {
-                var model = _contentService.Create<T>(App.PageTypes.GetById(originalPage.TypeId));
-                model.OriginalPageId = originalPage.Id;
-                model.Slug = null;
-                return model;
-            });
-        }
-
-        /// <summary>
         /// Gets all of the available pages for the current site.
         /// </summary>
         /// <param name="siteId">The site id</param>
@@ -313,9 +282,8 @@ namespace Piranha.Repositories
 
                 if (blockModels != null)
                 {
-                    var pageBlocks = _contentService.TransformBlocks<PageBlock>(blockModels);
-
-                    var current = pageBlocks.Select(b => b.Block.Id).ToArray();
+                    var blocks = _contentService.TransformBlocks(blockModels);
+                    var current = blocks.Select(b => b.Id).ToArray();
 
                     // Delete removed blocks
                     var removed = page.Blocks
@@ -327,30 +295,30 @@ namespace Piranha.Repositories
                     page.Blocks.Clear();
 
                     // Now map the new block
-                    for (var n = 0; n < pageBlocks.Count; n++)
+                    for (var n = 0; n < blocks.Count; n++)
                     {
                         var block = await _db.Blocks
                             .Include(b => b.Fields)
-                            .FirstOrDefaultAsync(b => b.Id == pageBlocks[n].Block.Id);
+                            .FirstOrDefaultAsync(b => b.Id == blocks[n].Id);
                         if (block == null)
                         {
                             block = new Block
                             {
-                                Id = pageBlocks[n].Block.Id != Guid.Empty ? pageBlocks[n].Block.Id : Guid.NewGuid(),
+                                Id = blocks[n].Id != Guid.Empty ? blocks[n].Id : Guid.NewGuid(),
                                 Created = DateTime.Now
                             };
                             await _db.Blocks.AddAsync(block);
                         }
-                        block.CLRType = pageBlocks[n].Block.CLRType;
-                        block.IsReusable = pageBlocks[n].Block.IsReusable;
-                        block.Title = pageBlocks[n].Block.Title;
+                        block.CLRType = blocks[n].CLRType;
+                        block.IsReusable = blocks[n].IsReusable;
+                        block.Title = blocks[n].Title;
                         block.LastModified = DateTime.Now;
 
-                        var currentFields = pageBlocks[n].Block.Fields.Select(f => f.FieldId).Distinct();
+                        var currentFields = blocks[n].Fields.Select(f => f.FieldId).Distinct();
                         var removedFields = block.Fields.Where(f => !currentFields.Contains(f.FieldId));
                         _db.BlockFields.RemoveRange(removedFields);
 
-                        foreach (var newField in pageBlocks[n].Block.Fields)
+                        foreach (var newField in blocks[n].Fields)
                         {
                             var field = block.Fields.FirstOrDefault(f => f.FieldId == newField.FieldId);
                             if (field == null)
@@ -372,8 +340,8 @@ namespace Piranha.Repositories
                         // Create the page block
                         page.Blocks.Add(new PageBlock
                         {
-                            Id = pageBlocks[n].Id,
-                            ParentId = pageBlocks[n].ParentId,
+                            Id = Guid.NewGuid(),
+                            ParentId = blocks[n].ParentId,
                             BlockId = block.Id,
                             Block = block,
                             PageId = page.Id,
@@ -472,7 +440,8 @@ namespace Piranha.Repositories
             {
                 if (page.Blocks.Count > 0)
                 {
-                    model.Blocks = _contentService.TransformBlocks<PageBlock>(page.Blocks.OrderBy(b => b.SortOrder));
+                    //model.Blocks = _contentService.TransformBlocks<PageBlock>(page.Blocks.OrderBy(b => b.SortOrder));
+                    model.Blocks = _contentService.TransformBlocks(page.Blocks.OrderBy(b => b.SortOrder).Select(b => b.Block));
                 }
             }
         }

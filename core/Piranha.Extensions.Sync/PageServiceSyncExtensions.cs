@@ -18,24 +18,6 @@ namespace Piranha.Services
     public static class PageServiceSyncExtensions
     {
         /// <summary>
-        /// Creates and initializes a new page of the specified type.
-        /// </summary>
-        /// <returns>The created page</returns>
-        public static T Create<T>(this PageService service, string typeId = null) where T : PageBase
-        {
-            return service.CreateAsync<T>(typeId).GetAwaiter().GetResult();
-        }
-
-        /// <summary>
-        /// Creates and initializes a copy of the given page.
-        /// </summary>
-        /// <returns>The created copy</returns>
-        public static T Copy<T>(this PageService service, T originalPage) where T : PageBase
-        {
-            return service.CopyAsync<T>(originalPage).GetAwaiter().GetResult();
-        }
-
-        /// <summary>
         /// Detaches a copy and initializes it as a standalone page
         /// </summary>
         /// <returns>The standalone page</returns>

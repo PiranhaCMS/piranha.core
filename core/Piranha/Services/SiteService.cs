@@ -28,6 +28,7 @@ namespace Piranha.Services
         }
 
         private readonly ISiteRepository _repo;
+        private readonly IContentFactory _factory;
         private readonly ICache _cache;
         private const string SITE_MAPPINGS = "Site_Mappings";
 
@@ -36,10 +37,15 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="repo">The main repository</param>
         /// <param name="cache">The optional model cache</param>
-        public SiteService(ISiteRepository repo, ICache cache = null)
+        public SiteService(ISiteRepository repo, IContentFactory factory, ICache cache = null)
         {
             _repo = repo;
-            _cache = cache;
+            _factory = factory;
+
+            if ((int)App.CacheLevel > 0)
+            {
+                _cache = cache;
+            }
         }
 
         /// <summary>
@@ -323,10 +329,18 @@ namespace Piranha.Services
         /// <returns>The created site content</returns>
         public T CreateContent<T>(string typeId = null) where T : Models.SiteContentBase
         {
-            if (string.IsNullOrWhiteSpace(typeId))
+            if (string.IsNullOrEmpty(typeId))
+            {
                 typeId = typeof(T).Name;
+            }
 
-            return _repo.CreateContent<T>(typeId);
+            var type = App.SiteTypes.GetById(typeId);
+
+            if (type != null)
+            {
+                return _factory.Create<T>(type);
+            }
+            return null;
         }
 
         /// <summary>
@@ -405,10 +419,20 @@ namespace Piranha.Services
         /// Processes the model on load.
         /// </summary>
         /// <param name="model">The model</param>
-        private void OnLoadContent<T>(T model) where T : Models.SiteContent<T>
+        private void OnLoadContent(Models.SiteContentBase model)
         {
             if (model != null)
             {
+                // Initialize model
+                if (typeof(Models.IDynamicModel).IsAssignableFrom(model.GetType()))
+                {
+                    _factory.InitDynamic((Models.DynamicSiteContent)model, App.SiteTypes.GetById(model.TypeId));
+                }
+                else
+                {
+                    _factory.Init(model, App.SiteTypes.GetById(model.TypeId));
+                }
+
                 App.Hooks.OnLoad<Models.SiteContentBase>(model);
 
                 if (_cache != null)

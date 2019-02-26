@@ -24,6 +24,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Piranha.AspNetCore\Piranha.AspNetCore.csproj" />
+    <ProjectReference Include="..\Piranha.Extensions.Sync\Piranha.Extensions.Sync.csproj" />
     <ProjectReference Include="..\Piranha\Piranha.csproj" />
   </ItemGroup>
   <ItemGroup>

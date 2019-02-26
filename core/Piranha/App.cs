@@ -8,6 +8,9 @@
  *
  */
 
+using System;
+using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
 using Newtonsoft.Json;
 using Piranha.Extend;
@@ -15,8 +18,6 @@ using Piranha.Extend.Serializers;
 using Piranha.Runtime;
 using Piranha.Security;
 using Piranha.Services;
-using System;
-using System.Reflection;
 
 namespace Piranha
 {
@@ -28,7 +29,7 @@ namespace Piranha
         /// <summary>
         /// The singleton app instance.
         /// </summary>
-        private static readonly App Instance; // = new App();
+        private static readonly App Instance;
 
         /// <summary>
         /// Mutex for thread safe initialization.
@@ -415,9 +416,9 @@ namespace Piranha
                     if (!_isInitialized)
                     {
                         // Initialize content types
-                        _pageTypes.Init(api.PageTypes.GetAll());
-                        _postTypes.Init(api.PostTypes.GetAll());
-                        _siteTypes.Init(api.SiteTypes.GetAll());
+                        _pageTypes.Init(api.PageTypes.GetAllAsync().GetAwaiter().GetResult());
+                        _postTypes.Init(api.PostTypes.GetAllAsync().GetAwaiter().GetResult());
+                        _siteTypes.Init(api.SiteTypes.GetAllAsync().GetAwaiter().GetResult());
 
                         // Initialize all modules
                         foreach (var module in _modules)

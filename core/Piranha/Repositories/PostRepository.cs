@@ -35,19 +35,6 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
-        /// Creates and initializes a new post of the specified type.
-        /// </summary>
-        /// <returns>The created post</returns>
-        public T Create<T>(string typeId = null) where T : Models.PostBase
-        {
-            if (string.IsNullOrWhiteSpace(typeId))
-            {
-                typeId = typeof(T).Name;
-            }
-            return _contentService.Create<T>(App.PostTypes.GetById(typeId));
-        }
-
-        /// <summary>
         /// Gets the available posts for the specified archive.
         /// </summary>
         /// <param name="blogId">The blog id</param>
@@ -134,18 +121,6 @@ namespace Piranha.Repositories
 
             if (post != null)
             {
-                /*
-                var blogPage = await _api.Pages.GetByIdAsync<Models.PageInfo>(post.BlogId);
-
-                if (blogPage != null)
-                {
-                    post.Blog = new Page
-                    {
-                        Id = blogPage.Id,
-                        Slug = blogPage.Slug
-                    };
-                }
-                */
                 return _contentService.Transform<T>(post, App.PostTypes.GetById(post.PostTypeId), Process);
             }
             return null;
@@ -166,19 +141,6 @@ namespace Piranha.Repositories
 
             if (post != null)
             {
-                /*
-                var blogPage = await _api.Pages.GetByIdAsync<Models.PageInfo>(post.BlogId);
-
-                if (blogPage != null)
-                {
-                    post.Blog = new Page
-                    {
-                        Id = blogPage.Id,
-                        Slug = blogPage.Slug
-                    };
-                }
-                */
-
                 return _contentService.Transform<T>(post, App.PostTypes.GetById(post.PostTypeId), Process);
             }
             return null;
@@ -396,6 +358,7 @@ namespace Piranha.Repositories
                         {
                             Id = Guid.NewGuid(),
                             BlockId = block.Id,
+                            ParentId = blocks[n].ParentId,
                             Block = block,
                             PostId = post.Id,
                             SortOrder = n

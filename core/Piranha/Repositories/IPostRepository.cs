@@ -18,12 +18,6 @@ namespace Piranha.Repositories
     public interface IPostRepository
     {
         /// <summary>
-        /// Creates and initializes a new post of the specified type.
-        /// </summary>
-        /// <returns>The created post</returns>
-        T Create<T>(string typeId = null) where T : PostBase;
-
-        /// <summary>
         /// Gets the available posts for the specified blog.
         /// </summary>
         /// <param name="blogId">The unique id</param>

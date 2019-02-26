@@ -74,7 +74,7 @@ namespace Piranha.AttributeBuilder.Tests
         }
 
         public AttributeBuilder() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null))
+            using (var api = CreateApi())
             {
                 App.Init(api);
             }
@@ -82,7 +82,7 @@ namespace Piranha.AttributeBuilder.Tests
 
         [Fact]
         public void AddSimple() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null)) {
+            using (var api = CreateApi()) {
                 var builder = new PageTypeBuilder(api)
                     .AddType(typeof(SimplePageType));
                 builder.Build();
@@ -98,7 +98,7 @@ namespace Piranha.AttributeBuilder.Tests
 
         [Fact]
         public void AddComplex() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null)) {
+            using (var api = CreateApi()) {
                 var builder = new PageTypeBuilder(api)
                     .AddType(typeof(ComplexPageType));
                 builder.Build();
@@ -125,7 +125,7 @@ namespace Piranha.AttributeBuilder.Tests
 
         [Fact]
         public void DeleteOrphans() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null)) {
+            using (var api = CreateApi()) {
                 var builder = new PageTypeBuilder(api)
                     .AddType(typeof(SimplePageType))
                     .AddType(typeof(ComplexPageType));
@@ -143,7 +143,7 @@ namespace Piranha.AttributeBuilder.Tests
 
         [Fact]
         public void AddSimpleSiteType() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null)) {
+            using (var api = CreateApi()) {
                 var builder = new SiteTypeBuilder(api)
                     .AddType(typeof(SimpleSiteType));
                 builder.Build();
@@ -159,7 +159,7 @@ namespace Piranha.AttributeBuilder.Tests
 
         [Fact]
         public void AddComplexSiteType() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null)) {
+            using (var api = CreateApi()) {
                 var builder = new SiteTypeBuilder(api)
                     .AddType(typeof(ComplexSiteType));
                 builder.Build();
@@ -182,7 +182,7 @@ namespace Piranha.AttributeBuilder.Tests
         }
 
         public void Dispose() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null)) {
+            using (var api = CreateApi()) {
                 var types = api.PageTypes.GetAll();
 
                 foreach (var t in types)
@@ -204,6 +204,13 @@ namespace Piranha.AttributeBuilder.Tests
             builder.UseSqlite("Filename=./piranha.tests.db");
 
             return new Db(builder.Options);
+        }
+
+        private IApi CreateApi()
+        {
+            var factory = new ContentFactory(services);
+
+            return new Api(GetDb(), factory, new ContentServiceFactory(factory), null);
         }
     }
 }

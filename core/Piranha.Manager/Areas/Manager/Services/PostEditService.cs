@@ -24,12 +24,12 @@ namespace Piranha.Areas.Manager.Services
     public class PostEditService
     {
         private readonly IApi _api;
-        private readonly IContentService<Data.Post, Data.PostField, Piranha.Models.PostBase> _service;
+        private readonly IContentFactory _factory;
 
-        public PostEditService(IApi api, IContentServiceFactory factory)
+        public PostEditService(IApi api, IContentFactory factory)
         {
             _api = api;
-            _service = factory.CreatePostService();
+            _factory = factory;
         }
 
         /// <summary>
@@ -383,7 +383,7 @@ namespace Piranha.Areas.Manager.Services
                 {
                     if (!modelRegions.ContainsKey(region.Id))
                     {
-                        modelRegions[region.Id] = _service.CreateDynamicRegion(type, region.Id);
+                        modelRegions[region.Id] = _factory.CreateDynamicRegion(type, region.Id);
                     }
 
                     var reg = (PageEditRegion)region;
@@ -420,7 +420,7 @@ namespace Piranha.Areas.Manager.Services
                             }
                             else
                             {
-                                var modelFields = (IDictionary<string, object>)_service.CreateDynamicRegion(type, region.Id);
+                                var modelFields = (IDictionary<string, object>)_factory.CreateDynamicRegion(type, region.Id);
 
                                 foreach (var field in set)
                                 {

@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -23,17 +23,17 @@ namespace Piranha.Areas.Manager.Controllers
     [Area("Manager")]
     public class SiteController : ManagerAreaControllerBase
     {
-        SiteContentEditService _service;
-        IContentService<Data.Site, Data.SiteField, Piranha.Models.SiteContentBase> _contentService;
+        private readonly SiteContentEditService _service;
+        private readonly IContentFactory _factory;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public SiteController(IApi api, SiteContentEditService service, IContentServiceFactory factory) : base(api)
+        public SiteController(IApi api, SiteContentEditService service, IContentFactory factory) : base(api)
         {
             _service = service;
-            _contentService = factory.CreateSiteService();
+            _factory = factory;
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace Piranha.Areas.Manager.Controllers
 
                 if (regionType != null)
                 {
-                    var region = _contentService.CreateDynamicRegion(siteType, model.RegionTypeId);
+                    var region = _factory.CreateDynamicRegion(siteType, model.RegionTypeId);
 
                     var editModel = (PageEditRegionCollection)_service.CreateRegion(regionType,
                         new List<object> { region });

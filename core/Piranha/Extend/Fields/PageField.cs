@@ -10,6 +10,7 @@
 
 using Newtonsoft.Json;
 using System;
+using System.Threading.Tasks;
 using Piranha.Services;
 
 namespace Piranha.Extend.Fields
@@ -49,11 +50,11 @@ namespace Piranha.Extend.Fields
         /// Initializes the field for client use.
         /// </summary>
         /// <param name="api">The current api</param>
-        public virtual void Init(IApi api)
+        public virtual async Task Init(IApi api)
         {
             if (Id.HasValue)
             {
-                Page = api.Pages.GetById(Id.Value);
+                Page = await api.Pages.GetByIdAsync(Id.Value);
 
                 if (Page == null)
                 {
@@ -69,10 +70,10 @@ namespace Piranha.Extend.Fields
         /// </summary>
         /// <param name="api">The current api</param>
         /// <returns>The referenced page</returns>
-        public virtual T GetPage<T>(IApi api) where T : Models.GenericPage<T>
+        public virtual Task<T> GetPageAsync<T>(IApi api) where T : Models.GenericPage<T>
         {
             if (Id.HasValue)
-                return api.Pages.GetById<T>(Id.Value);
+                return api.Pages.GetByIdAsync<T>(Id.Value);
             return null;
         }
 
