@@ -8,10 +8,10 @@
  *
  */
 
-using Piranha.Services;
 using System;
 using System.IO;
 using Xunit;
+using Piranha.Services;
 
 namespace Piranha.ImageSharp.Tests
 {

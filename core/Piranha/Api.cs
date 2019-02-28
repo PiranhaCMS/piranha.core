@@ -45,10 +45,10 @@ namespace Piranha
         public ArchiveService Archives { get; private set; }
 
         /// <summary>
-        /// Gets the media repository.
+        /// Gets the media service.
         /// </summary>
         /// <returns></returns>
-        public IMediaRepository Media { get; private set; }
+        public MediaService Media { get; private set; }
 
         /// <summary>
         /// Gets the page service.
@@ -106,24 +106,26 @@ namespace Piranha
             IPostTypeRepository postTypeRepository,
             ISiteRepository siteRepository,
             ISiteTypeRepository siteTypeRepository,
-            ICache cache = null)
+            ICache cache = null,
+            IStorage storage = null,
+            IImageProcessor processor = null)
         {
             var cacheLevel = (int)App.CacheLevel;
 
             // Old repositories
-            Media = mediaRepository;
 
             // Create services without dependecies
-            PageTypes = new PageTypeService(pageTypeRepository, cacheLevel > 0 ? _cache : null);
-            Params = new ParamService(paramRepository, cacheLevel > 0 ? _cache : null);
-            PostTypes = new PostTypeService(postTypeRepository, cacheLevel > 0 ? _cache : null);
-            Sites = new SiteService(siteRepository, contentFactory, cacheLevel > 0 ? _cache : null);
-            SiteTypes = new SiteTypeService(siteTypeRepository, cacheLevel > 0 ? _cache : null);
+            PageTypes = new PageTypeService(pageTypeRepository, cache);
+            Params = new ParamService(paramRepository, cache);
+            PostTypes = new PostTypeService(postTypeRepository, cache);
+            Sites = new SiteService(siteRepository, contentFactory, cache);
+            SiteTypes = new SiteTypeService(siteTypeRepository, cache);
 
             // Create services with dependencies
-            Aliases = new AliasService(aliasRepository, Sites, cacheLevel > 2 ? _cache : null);
-            Pages = new PageService(pageRepository, contentFactory, Sites, Params, cacheLevel > 2 ? _cache : null);
-            Posts = new PostService(postRepository, contentFactory, Sites, Pages, cacheLevel > 2 ? _cache : null);
+            Aliases = new AliasService(aliasRepository, Sites, cache);
+            Media = new MediaService(mediaRepository, Params, storage, processor, cache);
+            Pages = new PageService(pageRepository, contentFactory, Sites, Params, cache);
+            Posts = new PostService(postRepository, contentFactory, Sites, Pages, cache);
             Archives = new ArchiveService(archiveRepository, Pages, Params, Posts);
         }
 
@@ -162,9 +164,6 @@ namespace Piranha
 
             var cacheLevel = (int)App.CacheLevel;
 
-            // Old repositories
-            Media = new MediaRepository(this, _db, _storage, cacheLevel > 2 ? _cache : null, imageProcessor);
-
             // Create services without dependecies
             PageTypes = new PageTypeService(new PageTypeRepository(_db), _cache);
             Params = new ParamService(new ParamRepository(_db), _cache);
@@ -174,6 +173,7 @@ namespace Piranha
 
             // Create services with dependencies
             Aliases = new AliasService(new AliasRepository(_db), Sites, _cache);
+            Media = new MediaService(new MediaRepository(_db), Params, _storage, imageProcessor, _cache);
             Pages = new PageService(new PageRepository(_db, factory), contentFactory, Sites, Params, _cache);
             Posts = new PostService(new PostRepository(_db, factory), contentFactory, Sites, Pages, _cache);
             Archives = new ArchiveService(new ArchiveRepository(_db), Pages, Params, Posts);

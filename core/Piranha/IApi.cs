@@ -31,9 +31,9 @@ namespace Piranha
         ArchiveService Archives { get; }
 
         /// <summary>
-        /// Gets the media repository.
+        /// Gets the media service.
         /// </summary>
-        IMediaRepository Media { get; }
+        MediaService Media { get; }
 
         /// <summary>
         /// Gets the page repository.

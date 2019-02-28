@@ -8,15 +8,15 @@
  *
  */
 
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Piranha.Data;
-using Piranha.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
+using Piranha.Data;
+using Piranha.Services;
 
 namespace Piranha.Tests
 {

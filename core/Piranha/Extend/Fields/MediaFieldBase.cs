@@ -8,8 +8,9 @@
  *
  */
 
-using Newtonsoft.Json;
 using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Piranha.Extend.Fields
 {
@@ -49,11 +50,11 @@ namespace Piranha.Extend.Fields
         /// Initializes the field for client use.
         /// </summary>
         /// <param name="api">The current api</param>
-        public virtual void Init(IApi api)
+        public virtual async Task Init(IApi api)
         {
             if (Id.HasValue)
             {
-                Media = api.Media.GetById(Id.Value);
+                Media = await api.Media.GetByIdAsync(Id.Value);
 
                 if (Media == null)
                 {

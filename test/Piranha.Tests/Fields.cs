@@ -14,6 +14,7 @@ using Piranha.Services;
 using System;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Piranha.Tests
@@ -284,13 +285,13 @@ namespace Piranha.Tests
         }
 
         [Fact]
-        public void ImageFieldInitMissing() {
+        public async Task ImageFieldInitMissing() {
             using (var api = CreateApi()) {
                 var field = new Piranha.Extend.Fields.ImageField {
                     Id = Guid.NewGuid()
                 };
 
-                field.Init(api);
+                await field.Init(api);
 
                 Assert.Null(field.Id);
             }
@@ -335,13 +336,13 @@ namespace Piranha.Tests
         }
 
         [Fact]
-        public void DocumentFieldInitMissing() {
+        public async Task DocumentFieldInitMissing() {
             using (var api = CreateApi()) {
                 var field = new Piranha.Extend.Fields.DocumentField {
                     Id = Guid.NewGuid()
                 };
 
-                field.Init(api);
+                await field.Init(api);
 
                 Assert.Null(field.Id);
             }
@@ -386,13 +387,13 @@ namespace Piranha.Tests
         }
 
         [Fact]
-        public void VideoFieldInitMissing() {
+        public async Task VideoFieldInitMissing() {
             using (var api = CreateApi()) {
                 var field = new Piranha.Extend.Fields.VideoField {
                     Id = Guid.NewGuid()
                 };
 
-                field.Init(api);
+                await field.Init(api);
 
                 Assert.Null(field.Id);
             }
@@ -437,13 +438,13 @@ namespace Piranha.Tests
         }
 
         [Fact]
-        public void MediaFieldInitMissing() {
+        public async Task MediaFieldInitMissing() {
             using (var api = CreateApi()) {
                 var field = new Piranha.Extend.Fields.MediaField {
                     Id = Guid.NewGuid()
                 };
 
-                field.Init(api);
+                await field.Init(api);
 
                 Assert.Null(field.Id);
             }
