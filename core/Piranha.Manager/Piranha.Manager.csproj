@@ -1,12 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Version>5.3.1</Version>
     <Company>Piranha CMS</Company>
-    <AssemblyTitle>Piranha.Manager</AssemblyTitle>
     <RootNamespace>Piranha</RootNamespace>
-    <OutputType>Library</OutputType>
-    <MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,14 +24,13 @@
     <ProjectReference Include="..\Piranha\Piranha.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Areas\Manager\Views\**\*.cshtml" />
     <EmbeddedResource Include="assets\css\*.min.css" />
+    <EmbeddedResource Include="assets\fontawesome\webfonts\*" />
     <EmbeddedResource Include="assets\img\*.gif" />
     <EmbeddedResource Include="assets\img\*.ico" />
     <EmbeddedResource Include="assets\img\*.png" />
     <EmbeddedResource Include="assets\js\*.min.js" />
     <EmbeddedResource Include="assets\lib\bootstrap\fonts\*" />
-    <EmbeddedResource Include="assets\lib\components-font-awesome\webfonts\*" />
     <EmbeddedResource Include="assets\tinymce\**\*.*" />
   </ItemGroup>
 </Project>
