@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using AutoMapper;
@@ -94,7 +94,7 @@ namespace Piranha.Manager
         /// <summary>
         /// Gets the release date
         /// </summary>
-        public string ReleaseDate => "2018-05-30";
+        public string ReleaseDate => "2019-03-01";
 
         /// <summary>
         /// Gets the description

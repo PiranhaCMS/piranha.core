@@ -3,13 +3,14 @@
   <metadata>
     <id>Piranha.Manager</id>
     <title>Piranha Manager</title>
-    <version>5.3.1</version>
+    <version>5.4.0</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Manager panel for Piranha CMS for AspNetCore.</description>
-    <copyright>Copyright 2017-2018 (c) Håkan Edling</copyright>
+    <copyright>Copyright 2017-2019 (c) Håkan Edling</copyright>
     <tags>cms mvc aspnetcore netstandard</tags>
+    <license type="expression">MIT</license>
     <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
     <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
     <iconUrl>http://piranhacms.org/assets/twitter-shield.png</iconUrl>
@@ -18,8 +19,8 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework=".NETStandard2.0">
-        <dependency id="Piranha" version="[5.3.1,6.0.0)" />
-        <dependency id="Piranha.AspNetCore" version="[5.3.1,6.0.0)" />
+        <dependency id="Piranha" version="[5.4.0,6.0.0)" />
+        <dependency id="Piranha.AspNetCore" version="[5.4.0,6.0.0)" />
         <dependency id="Microsoft.AspNetCore" version="2.1.4" />
         <dependency id="Microsoft.AspNetCore.Mvc" version="2.1.3" />
         <dependency id="Microsoft.AspNetCore.Session" version="2.1.1" />
@@ -31,5 +32,6 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
   </metadata>
   <files>
     <file src="..\core\Piranha.Manager\bin\Release\netstandard2.0\Piranha.Manager.dll" target="lib\netstandard2.0\Piranha.Manager.dll" />
+    <file src="..\core\Piranha.Manager\bin\Release\netstandard2.0\Piranha.Manager.views.dll" target="lib\netstandard2.0\Piranha.Manager.views.dll" />
   </files>
 </package>
