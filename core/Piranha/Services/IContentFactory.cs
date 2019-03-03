@@ -30,7 +30,6 @@ namespace Piranha.Services
         /// <returns>The new region value</returns>
         object CreateDynamicRegion(ContentType type, string regionId);
 
-
         /// <summary>
         /// Creates and initializes a new block of the specified type.
         /// </summary>

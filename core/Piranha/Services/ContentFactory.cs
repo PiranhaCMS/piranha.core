@@ -67,7 +67,9 @@ namespace Piranha.Services
                 var region = type.Regions.FirstOrDefault(r => r.Id == regionId);
 
                 if (region != null)
+                {
                     return CreateDynamicRegion(scope, region);
+                }
                 return null;
             }
         }

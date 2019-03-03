@@ -46,8 +46,6 @@ namespace Piranha.Services
         /// <returns>The available models</returns>
         public async Task<IEnumerable<Alias>> GetAllAsync(Guid? siteId = null)
         {
-            var models = new List<Alias>();
-
             if (!siteId.HasValue)
             {
                 var site = await _siteService.GetDefaultAsync();
@@ -56,7 +54,12 @@ namespace Piranha.Services
                     siteId = site.Id;
                 }
             }
-            return await _repo.GetAll(siteId.Value);
+
+            if (siteId.HasValue)
+            {
+                return await _repo.GetAll(siteId.Value);
+            }
+            return null;
         }
 
         /// <summary>
@@ -122,7 +125,9 @@ namespace Piranha.Services
             {
                 var site = await _siteService.GetDefaultAsync();
                 if (site != null)
+                {
                     siteId = site.Id;
+                }
             }
             return await _repo.GetByRedirectUrl(url, siteId.Value);
         }

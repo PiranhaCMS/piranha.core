@@ -86,11 +86,6 @@ namespace Piranha
         private Cache.CacheLevel _cacheLevel = Cache.CacheLevel.Full;
 
         /// <summary>
-        /// The application object mapper.
-        /// </summary>
-        //private IMapper _mapper;
-
-        /// <summary>
         /// The application markdown converter.
         /// </summary>
         private IMarkdown _markdown;
@@ -98,20 +93,17 @@ namespace Piranha
         /// <summary>
         /// The currently available page types.
         /// </summary>
-
-        private ContentTypeList<Models.PageType> _pageTypes;
-
-        /// <summary>
-        /// The currently available post types.
-        /// </summary>
-
-        private ContentTypeList<Models.PostType> _postTypes;
+        private readonly ContentTypeList<Models.PageType> _pageTypes;
 
         /// <summary>
         /// The currently available post types.
         /// </summary>
+        private readonly ContentTypeList<Models.PostType> _postTypes;
 
-        private ContentTypeList<Models.SiteType> _siteTypes;
+        /// <summary>
+        /// The currently available post types.
+        /// </summary>
+        private readonly ContentTypeList<Models.SiteType> _siteTypes;
 
         /// <summary>
         /// Gets the currently registered block types.
@@ -132,11 +124,6 @@ namespace Piranha
         /// Gets the currently registered media types.
         /// </summary>
         public static MediaManager MediaTypes => Instance._mediaTypes;
-
-        /// <summary>
-        /// Gets the application object mapper.
-        /// </summary>
-        //public static IMapper Mapper => Instance._mapper;
 
         /// <summary>
         /// Gets the markdown converter.

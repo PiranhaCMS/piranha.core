@@ -126,7 +126,6 @@ namespace Piranha.Services
                 OnFolderLoad(model);
             }
             return model;
-
         }
 
         /// <summary>
