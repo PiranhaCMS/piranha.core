@@ -22,42 +22,52 @@ namespace Piranha.Tests.Hooks
     public class Sites : BaseTests
     {
         private const string TITLE = "My Hook Site";
-        private Guid ID = Guid.NewGuid();
+        private readonly Guid ID = Guid.NewGuid();
 
-        class SiteOnLoadException : Exception {}
-        class SiteOnBeforeSaveException : Exception {}
-        class SiteOnAfterSaveException : Exception {}
-        class SiteOnBeforeDeleteException : Exception {}
-        class SiteOnAfterDeleteException : Exception {}
+        public class SiteOnLoadException : Exception {}
+        public class SiteOnBeforeSaveException : Exception {}
+        public class SiteOnAfterSaveException : Exception {}
+        public class SiteOnBeforeDeleteException : Exception {}
+        public class SiteOnAfterDeleteException : Exception {}
 
-        protected override void Init() {
-            using (var api = CreateApi()) {
+        protected override void Init()
+        {
+            using (var api = CreateApi())
+            {
                 // Initialize
                 Piranha.App.Init(api);
 
                 // Create test param
-                api.Sites.Save(new Site() {
+                api.Sites.Save(new Site()
+                {
                     Id = ID,
                     Title = TITLE
                 });
             }
         }
 
-        protected override void Cleanup() {
-            using (var api = CreateApi()) {
+        protected override void Cleanup()
+        {
+            using (var api = CreateApi())
+            {
                 // Remove test data
                 var sites = api.Sites.GetAll();
 
                 foreach (var s in sites)
+                {
                     api.Sites.Delete(s);
+                }
             }
         }
 
         [Fact]
-        public void OnLoad() {
+        public void OnLoad()
+        {
             Piranha.App.Hooks.Site.RegisterOnLoad(m => throw new SiteOnLoadException());
-            using (var api = CreateApi()) {
-                Assert.Throws<SiteOnLoadException>(() => {
+            using (var api = CreateApi())
+            {
+                Assert.Throws<SiteOnLoadException>(() =>
+                {
                     api.Sites.GetById(ID);
                 });
             }
@@ -65,11 +75,14 @@ namespace Piranha.Tests.Hooks
         }
 
         [Fact]
-        public void OnBeforeSave() {
+        public void OnBeforeSave()
+        {
             Piranha.App.Hooks.Site.RegisterOnBeforeSave(m => throw new SiteOnBeforeSaveException());
-            using (var api = CreateApi()) {
-                Assert.Throws<SiteOnBeforeSaveException>(() => {
-                    api.Sites.Save(new Site() {
+            using (var api = CreateApi())
+            {
+                Assert.Throws<SiteOnBeforeSaveException>(() =>
+                {
+                    api.Sites.Save(new Site {
                         Title = "My First Hook Site"
                     });
                 });
@@ -78,11 +91,14 @@ namespace Piranha.Tests.Hooks
         }
 
         [Fact]
-        public void OnAfterSave() {
+        public void OnAfterSave()
+        {
             Piranha.App.Hooks.Site.RegisterOnAfterSave(m => throw new SiteOnAfterSaveException());
-            using (var api = CreateApi()) {
-                Assert.Throws<SiteOnAfterSaveException>(() => {
-                    api.Sites.Save(new Site() {
+            using (var api = CreateApi())
+            {
+                Assert.Throws<SiteOnAfterSaveException>(() =>
+                {
+                    api.Sites.Save(new Site {
                         Title = "My Second Hook Site"
                     });
                 });
@@ -91,10 +107,13 @@ namespace Piranha.Tests.Hooks
         }
 
         [Fact]
-        public void OnBeforeDelete() {
+        public void OnBeforeDelete()
+        {
             Piranha.App.Hooks.Site.RegisterOnBeforeDelete(m => throw new SiteOnBeforeDeleteException());
-            using (var api = CreateApi()) {
-                Assert.Throws<SiteOnBeforeDeleteException>(() => {
+            using (var api = CreateApi())
+            {
+                Assert.Throws<SiteOnBeforeDeleteException>(() =>
+                {
                     api.Sites.Delete(ID);
                 });
             }
@@ -102,10 +121,13 @@ namespace Piranha.Tests.Hooks
         }
 
         [Fact]
-        public void OnAfterDelete() {
+        public void OnAfterDelete()
+        {
             Piranha.App.Hooks.Site.RegisterOnAfterDelete(m => throw new SiteOnAfterDeleteException());
-            using (var api = CreateApi()) {
-                Assert.Throws<SiteOnAfterDeleteException>(() => {
+            using (var api = CreateApi())
+            {
+                Assert.Throws<SiteOnAfterDeleteException>(() =>
+                {
                     api.Sites.Delete(ID);
                 });
             }

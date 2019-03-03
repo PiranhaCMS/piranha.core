@@ -22,28 +22,32 @@ namespace Piranha.Tests.Hooks
     public class Aliases : BaseTests
     {
         private const string ALIAS = "/alias-url";
-        private Guid SITE_ID = Guid.NewGuid();
-        private Guid ID = Guid.NewGuid();
+        private readonly Guid SITE_ID = Guid.NewGuid();
+        private readonly Guid ID = Guid.NewGuid();
 
-        class AliasOnLoadException : Exception {}
-        class AliasOnBeforeSaveException : Exception {}
-        class AliasOnAfterSaveException : Exception {}
-        class AliasOnBeforeDeleteException : Exception {}
-        class AliasOnAfterDeleteException : Exception {}
+        public class AliasOnLoadException : Exception {}
+        public class AliasOnBeforeSaveException : Exception {}
+        public class AliasOnAfterSaveException : Exception {}
+        public class AliasOnBeforeDeleteException : Exception {}
+        public class AliasOnAfterDeleteException : Exception {}
 
-        protected override void Init() {
-            using (var api = CreateApi()) {
+        protected override void Init()
+        {
+            using (var api = CreateApi())
+            {
                 // Initialize
                 Piranha.App.Init(api);
 
                 // Create site
-                api.Sites.Save(new Site() {
+                api.Sites.Save(new Site
+                {
                     Id = SITE_ID,
                     Title = "Alias Hook Site"
                 });
 
                 // Create test alias
-                api.Aliases.Save(new Alias() {
+                api.Aliases.Save(new Alias
+                {
                     Id = ID,
                     SiteId = SITE_ID,
                     AliasUrl = ALIAS,
@@ -52,23 +56,29 @@ namespace Piranha.Tests.Hooks
             }
         }
 
-        protected override void Cleanup() {
-            using (var api = CreateApi()) {
+        protected override void Cleanup()
+        {
+            using (var api = CreateApi())
+            {
                 // Remove test data
                 var aliases = api.Aliases.GetAll();
 
                 foreach (var a in aliases)
+                {
                     api.Aliases.Delete(a);
-
+                }
                 api.Sites.Delete(SITE_ID);
             }
         }
 
         [Fact]
-        public void OnLoad() {
+        public void OnLoad()
+        {
             Piranha.App.Hooks.Alias.RegisterOnLoad(m => throw new AliasOnLoadException());
-            using (var api = CreateApi()) {
-                Assert.Throws<AliasOnLoadException>(() => {
+            using (var api = CreateApi())
+            {
+                Assert.Throws<AliasOnLoadException>(() =>
+                {
                     api.Aliases.GetById(ID);
                 });
             }
@@ -76,11 +86,15 @@ namespace Piranha.Tests.Hooks
         }
 
         [Fact]
-        public void OnBeforeSave() {
+        public void OnBeforeSave()
+        {
             Piranha.App.Hooks.Alias.RegisterOnBeforeSave(m => throw new AliasOnBeforeSaveException());
-            using (var api = CreateApi()) {
-                Assert.Throws<AliasOnBeforeSaveException>(() => {
-                    api.Aliases.Save(new Alias() {
+            using (var api = CreateApi())
+            {
+                Assert.Throws<AliasOnBeforeSaveException>(() =>
+                {
+                    api.Aliases.Save(new Alias
+                    {
                         SiteId = SITE_ID,
                         AliasUrl = "/my-first-alias",
                         RedirectUrl = "/my-first-redirect"
@@ -91,11 +105,15 @@ namespace Piranha.Tests.Hooks
         }
 
         [Fact]
-        public void OnAfterSave() {
+        public void OnAfterSave()
+        {
             Piranha.App.Hooks.Alias.RegisterOnAfterSave(m => throw new AliasOnAfterSaveException());
-            using (var api = CreateApi()) {
-                Assert.Throws<AliasOnAfterSaveException>(() => {
-                    api.Aliases.Save(new Alias() {
+            using (var api = CreateApi())
+            {
+                Assert.Throws<AliasOnAfterSaveException>(() =>
+                {
+                    api.Aliases.Save(new Alias
+                    {
                         SiteId = SITE_ID,
                         AliasUrl = "/my-second-alias",
                         RedirectUrl = "/my-seconf-redirect"
@@ -106,10 +124,13 @@ namespace Piranha.Tests.Hooks
         }
 
         [Fact]
-        public void OnBeforeDelete() {
+        public void OnBeforeDelete()
+        {
             Piranha.App.Hooks.Alias.RegisterOnBeforeDelete(m => throw new AliasOnBeforeDeleteException());
-            using (var api = CreateApi()) {
-                Assert.Throws<AliasOnBeforeDeleteException>(() => {
+            using (var api = CreateApi())
+            {
+                Assert.Throws<AliasOnBeforeDeleteException>(() =>
+                {
                     api.Aliases.Delete(ID);
                 });
             }
@@ -117,10 +138,13 @@ namespace Piranha.Tests.Hooks
         }
 
         [Fact]
-        public void OnAfterDelete() {
+        public void OnAfterDelete()
+        {
             Piranha.App.Hooks.Alias.RegisterOnAfterDelete(m => throw new AliasOnAfterDeleteException());
-            using (var api = CreateApi()) {
-                Assert.Throws<AliasOnAfterDeleteException>(() => {
+            using (var api = CreateApi())
+            {
+                Assert.Throws<AliasOnAfterDeleteException>(() =>
+                {
                     api.Aliases.Delete(ID);
                 });
             }

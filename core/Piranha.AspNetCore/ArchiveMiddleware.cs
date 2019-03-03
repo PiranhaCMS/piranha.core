@@ -50,7 +50,10 @@ namespace Piranha.AspNetCore
                     {
                         context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&" + response.QueryString);
                     }
-                    else context.Request.QueryString = new QueryString("?" + response.QueryString);
+                    else
+                    {
+                        context.Request.QueryString = new QueryString("?" + response.QueryString);
+                    }
                 }
             }
             await _next.Invoke(context);
