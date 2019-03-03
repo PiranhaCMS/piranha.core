@@ -12,6 +12,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using Piranha.Models;
+using Piranha.Repositories;
 using Piranha.Services;
 
 namespace Piranha.Tests.Routers
@@ -25,7 +27,7 @@ namespace Piranha.Tests.Routers
         protected override void Init() {
             using (var api = CreateApi()) {
                 // Add site
-                var site1 = new Data.Site() {
+                var site1 = new Site() {
                     Id = SITE1_ID,
                     Title = "Alias Site",
                     InternalId = "AliasSite",
@@ -33,7 +35,7 @@ namespace Piranha.Tests.Routers
                 };
                 api.Sites.Save(site1);
 
-                var site2 = new Data.Site() {
+                var site2 = new Site() {
                     Id = SITE2_ID,
                     Title = "Alias Site 2",
                     InternalId = "AliasSite2",
@@ -43,13 +45,13 @@ namespace Piranha.Tests.Routers
                 api.Sites.Save(site2);
 
                 // Add aliases
-                api.Aliases.Save(new Data.Alias() {
+                api.Aliases.Save(new Alias() {
                     Id = Guid.NewGuid(),
                     SiteId = SITE1_ID,
                     AliasUrl = "/old-url",
                     RedirectUrl = "/new-url"
                 });
-                api.Aliases.Save(new Data.Alias() {
+                api.Aliases.Save(new Alias() {
                     Id = Guid.NewGuid(),
                     SiteId = SITE2_ID,
                     AliasUrl = "/old-url",
@@ -111,8 +113,24 @@ namespace Piranha.Tests.Routers
         private IApi CreateApi()
         {
             var factory = new ContentFactory(services);
+            var serviceFactory = new ContentServiceFactory(factory);
 
-            return new Api(GetDb(), factory, new ContentServiceFactory(factory), storage);
+            var db = GetDb();
+
+            return new Api(
+                factory,
+                new AliasRepository(db),
+                new ArchiveRepository(db),
+                new Piranha.Repositories.MediaRepository(db),
+                new PageRepository(db, serviceFactory),
+                new PageTypeRepository(db),
+                new ParamRepository(db),
+                new PostRepository(db, serviceFactory),
+                new PostTypeRepository(db),
+                new SiteRepository(db, serviceFactory),
+                new SiteTypeRepository(db),
+                storage: storage
+            );
         }
     }
 }

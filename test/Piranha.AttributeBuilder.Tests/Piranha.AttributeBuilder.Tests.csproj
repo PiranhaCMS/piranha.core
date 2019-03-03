@@ -9,8 +9,12 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\core\Piranha.AttributeBuilder\Piranha.AttributeBuilder.csproj" />
     <ProjectReference Include="..\..\core\Piranha.Extensions.Sync\Piranha.Extensions.Sync.csproj" />
+    <ProjectReference Include="..\..\data\Piranha.Data.EF\Piranha.Data.EF.csproj" />
   </ItemGroup>
 
   <ItemGroup>

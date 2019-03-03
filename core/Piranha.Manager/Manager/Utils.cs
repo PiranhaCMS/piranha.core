@@ -47,7 +47,7 @@ namespace Piranha.Manager
                 api.Aliases.Save(aliasModel);
             } else {
                 // Let's create a new alias
-                api.Aliases.Save(new Data.Alias() {
+                api.Aliases.Save(new Models.Alias() {
                     SiteId = siteId,
                     AliasUrl = alias,
                     RedirectUrl = redirect,

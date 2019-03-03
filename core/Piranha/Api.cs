@@ -20,19 +20,9 @@ namespace Piranha
     public sealed class Api : IApi, IDisposable
     {
         /// <summary>
-        /// The private db context.
-        /// </summary>
-        private readonly IDb _db;
-
-        /// <summary>
-        /// The private storage provider.
-        /// </summary>
-        private readonly IStorage _storage;
-
-        /// <summary>
         /// The private model cache.
         /// </summary>
-        private ICache _cache;
+        private readonly ICache _cache;
 
         /// <summary>
         /// Gets/sets the alias service.
@@ -110,9 +100,8 @@ namespace Piranha
             IStorage storage = null,
             IImageProcessor processor = null)
         {
-            var cacheLevel = (int)App.CacheLevel;
-
-            // Old repositories
+            // Store the cache
+            _cache = cache;
 
             // Create services without dependecies
             PageTypes = new PageTypeService(pageTypeRepository, cache);
@@ -130,53 +119,10 @@ namespace Piranha
         }
 
         /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="db">The current db context</param>
-        /// <param name="factory">The content service factory</param>
-        /// <param name="storage">The current storage</param>
-        /// <param name="modelCache">The optional model cache</param>
-        /// <param name="imageProcessor">The optional image processor</param>
-        public Api(IDb db, IContentFactory contentFactory, IContentServiceFactory factory, IStorage storage = null, ICache modelCache = null, IImageProcessor imageProcessor = null)
-        {
-            _db = db;
-            _storage = storage;
-
-            Setup(contentFactory, factory, modelCache, imageProcessor);
-        }
-
-        /// <summary>
         /// Disposes the current api.
         /// </summary>
         public void Dispose()
         {
-            _db.Dispose();
-        }
-
-        /// <summary>
-        /// Configures the api.
-        /// </summary>
-        /// <param name="modelCache">The optional model cache</param>
-        /// <param name="imageProcessor">The optional image processor</param>
-        private void Setup(IContentFactory contentFactory, IContentServiceFactory factory, ICache modelCache = null, IImageProcessor imageProcessor = null)
-        {
-            _cache = modelCache;
-
-            var cacheLevel = (int)App.CacheLevel;
-
-            // Create services without dependecies
-            PageTypes = new PageTypeService(new PageTypeRepository(_db), _cache);
-            Params = new ParamService(new ParamRepository(_db), _cache);
-            PostTypes = new PostTypeService(new PostTypeRepository(_db), _cache);
-            Sites = new SiteService(new SiteRepository(_db, factory), contentFactory, _cache);
-            SiteTypes = new SiteTypeService(new SiteTypeRepository(_db), _cache);
-
-            // Create services with dependencies
-            Aliases = new AliasService(new AliasRepository(_db), Sites, _cache);
-            Media = new MediaService(new MediaRepository(_db), Params, _storage, imageProcessor, _cache);
-            Pages = new PageService(new PageRepository(_db, factory), contentFactory, Sites, Params, _cache);
-            Posts = new PostService(new PostRepository(_db, factory), contentFactory, Sites, Pages, _cache);
-            Archives = new ArchiveService(new ArchiveRepository(_db), Pages, Params, Posts);
         }
     }
 }

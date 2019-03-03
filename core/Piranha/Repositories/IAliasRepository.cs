@@ -11,7 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Piranha.Data;
+using Piranha.Models;
 
 namespace Piranha.Repositories
 {

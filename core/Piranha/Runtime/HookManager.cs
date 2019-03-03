@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -11,6 +11,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Piranha.Models;
 
 namespace Piranha.Runtime
 {
@@ -105,32 +106,42 @@ namespace Piranha.Runtime
         /// <summary>
         /// Gets the hooks available for aliases.
         /// </summary>
-        public RepositoryHooks<Data.Alias> Alias { get; private set; } = new RepositoryHooks<Data.Alias>();
+        public RepositoryHooks<Alias> Alias { get; private set; } = new RepositoryHooks<Alias>();
 
         /// <summary>
         /// Gets the hooks available for media.
         /// </summary>
-        public RepositoryHooks<Data.Media> Media { get; private set; } = new RepositoryHooks<Data.Media>();
+        public RepositoryHooks<Media> Media { get; private set; } = new RepositoryHooks<Media>();
 
         /// <summary>
         /// Gets the hooks available for media folders.
         /// </summary>
-        public RepositoryHooks<Data.MediaFolder> MediaFolder { get; private set; } = new RepositoryHooks<Data.MediaFolder>();
+        public RepositoryHooks<MediaFolder> MediaFolder { get; private set; } = new RepositoryHooks<MediaFolder>();
 
         /// <summary>
         /// Gets the hooks available for pages.
         /// </summary>
-        public RepositoryHooks<Models.PageBase> Pages { get; private set; } = new RepositoryHooks<Models.PageBase>();
+        public RepositoryHooks<PageBase> Pages { get; private set; } = new RepositoryHooks<PageBase>();
 
         /// <summary>
         /// Gets the hooks available for params.
         /// </summary>
-        public RepositoryHooks<Models.Param> Param { get; private set; } = new RepositoryHooks<Models.Param>();
+        public RepositoryHooks<Param> Param { get; private set; } = new RepositoryHooks<Param>();
+
+        /// <summary>
+        /// Gets the hooks available for posts.
+        /// </summary>
+        public RepositoryHooks<PostBase> Posts { get; private set; } = new RepositoryHooks<PostBase>();
 
         /// <summary>
         /// Gets the hooks available for sites.
         /// </summary>
-        public RepositoryHooks<Data.Site> Site { get; private set; } = new RepositoryHooks<Data.Site>();
+        public RepositoryHooks<Site> Site { get; private set; } = new RepositoryHooks<Site>();
+
+        /// <summary>
+        /// Gets the hooks available for sites.
+        /// </summary>
+        public RepositoryHooks<SiteContentBase> SiteContent { get; private set; } = new RepositoryHooks<SiteContentBase>();
 
         /// <summary>
         /// Gets the hook for slug generation.
@@ -239,7 +250,7 @@ namespace Piranha.Runtime
         /// Executes the registered hooks on the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        internal void OnLoad<T>(T model)
+        public void OnLoad<T>(T model)
         {
             if (_onLoad.ContainsKey(typeof(T)))
             {
@@ -256,7 +267,7 @@ namespace Piranha.Runtime
         /// Executes the registered hooks on the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        internal void OnBeforeSave<T>(T model)
+        public void OnBeforeSave<T>(T model)
         {
             if (_onBeforeSave.ContainsKey(typeof(T)))
             {
@@ -273,7 +284,7 @@ namespace Piranha.Runtime
         /// Executes the registered hooks on the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        internal void OnAfterSave<T>(T model)
+        public void OnAfterSave<T>(T model)
         {
             if (_onAfterSave.ContainsKey(typeof(T)))
             {
@@ -290,7 +301,7 @@ namespace Piranha.Runtime
         /// Executes the registered hooks on the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        internal void OnBeforeDelete<T>(T model)
+        public void OnBeforeDelete<T>(T model)
         {
             if (_onBeforeDelete.ContainsKey(typeof(T)))
             {
@@ -307,7 +318,7 @@ namespace Piranha.Runtime
         /// Executes the registered hooks on the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        internal void OnAfterDelete<T>(T model)
+        public void OnAfterDelete<T>(T model)
         {
             if (_onAfterDelete.ContainsKey(typeof(T)))
             {

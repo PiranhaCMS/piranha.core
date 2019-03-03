@@ -1,14 +1,15 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
+using Piranha.Models;
 
 namespace Piranha.Extend.Fields
 {
@@ -28,7 +29,7 @@ namespace Piranha.Extend.Fields
         /// Implicit operator for converting a media object to a field.
         /// </summary>
         /// <param name="media">The media object</param>
-        public static implicit operator VideoField(Data.Media media)
+        public static implicit operator VideoField(Media media)
         {
             return new VideoField { Id = media.Id };
         }

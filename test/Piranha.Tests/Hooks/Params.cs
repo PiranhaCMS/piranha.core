@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -11,9 +11,10 @@
 using System;
 using System.Data.SqlClient;
 using System.Linq;
-using Piranha.Models;
-using Piranha.Services;
 using Xunit;
+using Piranha.Models;
+using Piranha.Repositories;
+using Piranha.Services;
 
 namespace Piranha.Tests.Hooks
 {
@@ -114,8 +115,24 @@ namespace Piranha.Tests.Hooks
         private IApi CreateApi()
         {
             var factory = new ContentFactory(services);
+            var serviceFactory = new ContentServiceFactory(factory);
 
-            return new Api(GetDb(), factory, new ContentServiceFactory(factory), storage);
+            var db = GetDb();
+
+            return new Api(
+                factory,
+                new AliasRepository(db),
+                new ArchiveRepository(db),
+                new Piranha.Repositories.MediaRepository(db),
+                new PageRepository(db, serviceFactory),
+                new PageTypeRepository(db),
+                new ParamRepository(db),
+                new PostRepository(db, serviceFactory),
+                new PostTypeRepository(db),
+                new SiteRepository(db, serviceFactory),
+                new SiteTypeRepository(db),
+                storage: storage
+            );
         }
     }
 }

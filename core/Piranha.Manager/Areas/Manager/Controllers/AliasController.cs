@@ -60,7 +60,7 @@ namespace Piranha.Areas.Manager.Controllers
         {
             try
             {
-                _api.Aliases.Save(new Data.Alias
+                _api.Aliases.Save(new Alias
                 {
                     SiteId = model.SiteId,
                     AliasUrl = model.AliasUrl,

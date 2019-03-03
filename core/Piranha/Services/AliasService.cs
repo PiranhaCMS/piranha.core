@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Piranha.Data;
+using Piranha.Models;
 using Piranha.Repositories;
 
 namespace Piranha.Services

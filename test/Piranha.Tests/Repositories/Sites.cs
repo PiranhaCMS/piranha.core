@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -8,13 +8,15 @@
  *
  */
 
-using Piranha.AttributeBuilder;
-using Piranha.Extend.Fields;
-using Piranha.Services;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Xunit;
+using Piranha.AttributeBuilder;
+using Piranha.Extend.Fields;
+using Piranha.Models;
+using Piranha.Repositories;
+using Piranha.Services;
 
 namespace Piranha.Tests.Repositories
 {
@@ -70,7 +72,7 @@ namespace Piranha.Tests.Repositories
                     .AddType(typeof(MySiteContent));
                 siteBuilder.Build();
 
-                api.Sites.Save(new Data.Site() {
+                api.Sites.Save(new Site() {
                     Id = SITE_1_ID,
                     SiteTypeId = "MySiteContent",
                     InternalId = SITE_1,
@@ -79,33 +81,33 @@ namespace Piranha.Tests.Repositories
                     IsDefault = true
                 });
 
-                api.Sites.Save(new Data.Site() {
+                api.Sites.Save(new Site() {
                     InternalId = SITE_4,
                     Title = SITE_4
                 });
-                api.Sites.Save(new Data.Site() {
+                api.Sites.Save(new Site() {
                     InternalId = SITE_5,
                     Title = SITE_5
                 });
-                api.Sites.Save(new Data.Site() {
+                api.Sites.Save(new Site() {
                     InternalId = SITE_6,
                     Title = SITE_6
                 });
 
                 // Sites for testing hostname routing
-                api.Sites.Save(new Data.Site
+                api.Sites.Save(new Site
                 {
                     InternalId = "RoutingTest1",
                     Title = "RoutingTest1",
                     Hostnames = "mydomain.com,localhost"
                 });
-                api.Sites.Save(new Data.Site
+                api.Sites.Save(new Site
                 {
                     InternalId = "RoutingTest2",
                     Title = "RoutingTest2",
                     Hostnames = " mydomain.com/en"
                 });
-                api.Sites.Save(new Data.Site
+                api.Sites.Save(new Site
                 {
                     InternalId = "RoutingTest3",
                     Title = "RoutingTest3",
@@ -174,7 +176,7 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void Add() {
             using (var api = CreateApi()) {
-                api.Sites.Save(new Data.Site() {
+                api.Sites.Save(new Site() {
                     InternalId = SITE_2,
                     Title = SITE_2
                 });
@@ -185,7 +187,7 @@ namespace Piranha.Tests.Repositories
         public void AddDuplicateKey() {
             using (var api = CreateApi()) {
                 Assert.ThrowsAny<ValidationException>(() =>
-                    api.Sites.Save(new Data.Site() {
+                    api.Sites.Save(new Site() {
                         InternalId = SITE_1,
                         Title = SITE_1
                     }));
@@ -196,7 +198,7 @@ namespace Piranha.Tests.Repositories
         public void AddEmptyFailure() {
             using (var api = CreateApi()) {
                 Assert.ThrowsAny<ValidationException>(() =>
-                    api.Sites.Save(new Data.Site()));
+                    api.Sites.Save(new Site()));
             }
         }
 
@@ -205,7 +207,7 @@ namespace Piranha.Tests.Repositories
             var id = Guid.NewGuid();
 
             using (var api = CreateApi()) {
-                api.Sites.Save(new Data.Site() {
+                api.Sites.Save(new Site() {
                     Id = id,
                     Title = "Generate internal id"
                 });
@@ -529,8 +531,25 @@ namespace Piranha.Tests.Repositories
         private IApi CreateApi()
         {
             var factory = new ContentFactory(services);
+            var serviceFactory = new ContentServiceFactory(factory);
 
-            return new Api(GetDb(), factory, new ContentServiceFactory(factory), storage, cache);
+            var db = GetDb();
+
+            return new Api(
+                factory,
+                new AliasRepository(db),
+                new ArchiveRepository(db),
+                new Piranha.Repositories.MediaRepository(db),
+                new PageRepository(db, serviceFactory),
+                new PageTypeRepository(db),
+                new ParamRepository(db),
+                new PostRepository(db, serviceFactory),
+                new PostTypeRepository(db),
+                new SiteRepository(db, serviceFactory),
+                new SiteTypeRepository(db),
+                cache: cache,
+                storage: storage
+            );
         }
     }
 }

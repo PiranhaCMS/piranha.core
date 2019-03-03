@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using Piranha.Data;
+using Piranha.Models;
 using Piranha.Repositories;
 
 namespace Piranha.Services
@@ -173,7 +173,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="id">Site id</param>
         /// <returns>The site content model</returns>
-        public Task<Models.DynamicSiteContent> GetContentByIdAsync(Guid id)
+        public Task<DynamicSiteContent> GetContentByIdAsync(Guid id)
         {
             return _repo.GetContentById(id);
         }
@@ -184,7 +184,7 @@ namespace Piranha.Services
         /// <param name="id">Site id</param>
         /// <typeparam name="T">The site model type</typeparam>
         /// <returns>The site content model</returns>
-        public async Task<T> GetContentByIdAsync<T>(Guid id) where T : Models.SiteContent<T>
+        public async Task<T> GetContentByIdAsync<T>(Guid id) where T : SiteContent<T>
         {
             var model = _cache?.Get<T>($"SiteContent_{id}");
 
@@ -203,7 +203,7 @@ namespace Piranha.Services
         /// <param name="id">The optional site id</param>
         /// <param name="onlyPublished">If only published items should be included</param>
         /// <returns>The sitemap</returns>
-        public async Task<Models.Sitemap> GetSitemapAsync(Guid? id = null, bool onlyPublished = true)
+        public async Task<Sitemap> GetSitemapAsync(Guid? id = null, bool onlyPublished = true)
         {
             if (!id.HasValue)
             {
@@ -298,7 +298,7 @@ namespace Piranha.Services
         /// <param name="siteId">The site id</param>
         /// <param name="model">The site content model</param>
         /// <typeparam name="T">The site content type</typeparam>
-        public async Task SaveContentAsync<T>(Guid siteId, T model) where T : Models.SiteContent<T>
+        public async Task SaveContentAsync<T>(Guid siteId, T model) where T : SiteContent<T>
         {
             // Ensure id
             if (model.Id != siteId)

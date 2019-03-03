@@ -11,7 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Piranha.Data;
+using Piranha.Models;
 
 namespace Piranha.Repositories
 {
@@ -50,7 +50,7 @@ namespace Piranha.Repositories
         /// Gets the hierachical media structure.
         /// </summary>
         /// <returns>The media structure</returns>
-        Task<Models.MediaStructure> GetStructure();
+        Task<MediaStructure> GetStructure();
 
         /// <summary>
         /// Adds or updates the given model in the database.

@@ -11,7 +11,6 @@
 using System;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using AutoMapper;
 using Newtonsoft.Json;
 using Piranha.Extend;
 using Piranha.Extend.Serializers;
@@ -37,7 +36,7 @@ namespace Piranha
         private static readonly object _mutex = new object();
 
         /// <summary>
-        /// The current state of the app.
+        /// If the app has been initialized.
         /// </summary>
         private static volatile bool _isInitialized = false;
 
@@ -89,7 +88,7 @@ namespace Piranha
         /// <summary>
         /// The application object mapper.
         /// </summary>
-        private IMapper _mapper;
+        //private IMapper _mapper;
 
         /// <summary>
         /// The application markdown converter.
@@ -137,7 +136,7 @@ namespace Piranha
         /// <summary>
         /// Gets the application object mapper.
         /// </summary>
-        public static IMapper Mapper => Instance._mapper;
+        //public static IMapper Mapper => Instance._mapper;
 
         /// <summary>
         /// Gets the markdown converter.
@@ -202,86 +201,6 @@ namespace Piranha
         static App()
         {
             Instance = new App();
-
-            // Configure object mapper
-            var mapperConfig = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Data.Alias, Data.Alias>()
-                    .ForMember(a => a.Id, o => o.Ignore())
-                    .ForMember(a => a.Created, o => o.Ignore());
-                cfg.CreateMap<Data.Category, Data.Category>()
-                    .ForMember(c => c.Id, o => o.Ignore())
-                    .ForMember(c => c.Created, o => o.Ignore());
-                cfg.CreateMap<Data.MediaFolder, Data.MediaFolder>()
-                    .ForMember(f => f.Id, o => o.Ignore())
-                    .ForMember(f => f.Created, o => o.Ignore())
-                    .ForMember(f => f.Media, o => o.Ignore());
-                cfg.CreateMap<Data.MediaFolder, Models.MediaStructureItem>()
-                    .ForMember(f => f.Level, o => o.Ignore())
-                    .ForMember(f => f.Items, o => o.Ignore());
-                cfg.CreateMap<Data.Page, Models.PageBase>()
-                    .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PageTypeId))
-                    .ForMember(p => p.Permalink, o => o.MapFrom(m => "/" + m.Slug))
-                    .ForMember(p => p.Blocks, o => o.Ignore());
-                cfg.CreateMap<Models.PageBase, Data.Page>()
-                    .ForMember(p => p.PageTypeId, o => o.MapFrom(m => m.TypeId))
-                    .ForMember(p => p.Blocks, o => o.Ignore())
-                    .ForMember(p => p.Fields, o => o.Ignore())
-                    .ForMember(p => p.Created, o => o.Ignore())
-                    .ForMember(p => p.LastModified, o => o.Ignore())
-                    .ForMember(p => p.PageType, o => o.Ignore())
-                    .ForMember(p => p.Site, o => o.Ignore())
-                    .ForMember(p => p.Parent, o => o.Ignore());
-                cfg.CreateMap<Data.Page, Models.SitemapItem>()
-                    .ForMember(p => p.MenuTitle, o => o.Ignore())
-                    .ForMember(p => p.Level, o => o.Ignore())
-                    .ForMember(p => p.Items, o => o.Ignore())
-                    .ForMember(p => p.PageTypeName, o => o.Ignore())
-                    .ForMember(p => p.Permalink, o => o.MapFrom(d => !d.ParentId.HasValue && d.SortOrder == 0 ? "/" : "/" + d.Slug));
-                cfg.CreateMap<Data.Param, Data.Param>()
-                    .ForMember(p => p.Id, o => o.Ignore())
-                    .ForMember(p => p.Created, o => o.Ignore());
-                cfg.CreateMap<Data.Post, Models.PostBase>()
-                    .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PostTypeId))
-                    .ForMember(p => p.Permalink, o => o.Ignore())
-                    .ForMember(p => p.Blocks, o => o.Ignore());
-                cfg.CreateMap<Data.PostTag, Models.Taxonomy>()
-                    .ForMember(p => p.Id, o => o.MapFrom(m => m.TagId))
-                    .ForMember(p => p.Title, o => o.MapFrom(m => m.Tag.Title))
-                    .ForMember(p => p.Slug, o => o.MapFrom(m => m.Tag.Slug));
-                cfg.CreateMap<Models.PostBase, Data.Post>()
-                    .ForMember(p => p.PostTypeId, o => o.MapFrom(m => m.TypeId))
-                    .ForMember(p => p.CategoryId, o => o.MapFrom(m => m.Category.Id))
-                    .ForMember(p => p.Blocks, o => o.Ignore())
-                    .ForMember(p => p.Fields, o => o.Ignore())
-                    .ForMember(p => p.Created, o => o.Ignore())
-                    .ForMember(p => p.LastModified, o => o.Ignore())
-                    .ForMember(p => p.PostType, o => o.Ignore())
-                    .ForMember(p => p.Blog, o => o.Ignore())
-                    .ForMember(p => p.Category, o => o.Ignore())
-                    .ForMember(p => p.Tags, o => o.Ignore());
-                cfg.CreateMap<Data.Site, Data.Site>()
-                    .ForMember(s => s.Id, o => o.Ignore())
-                    .ForMember(s => s.Created, o => o.Ignore());
-                cfg.CreateMap<Data.Site, Models.SiteContentBase>()
-                    .ForMember(s => s.TypeId, o => o.MapFrom(m => m.SiteTypeId));
-                cfg.CreateMap<Models.SiteContentBase, Data.Site>()
-                    .ForMember(s => s.SiteTypeId, o => o.Ignore())
-                    .ForMember(s => s.InternalId, o => o.Ignore())
-                    .ForMember(s => s.Description, o => o.Ignore())
-                    .ForMember(s => s.Hostnames, o => o.Ignore())
-                    .ForMember(s => s.IsDefault, o => o.Ignore())
-                    .ForMember(s => s.Culture, o => o.Ignore())
-                    .ForMember(s => s.Fields, o => o.Ignore())
-                    .ForMember(s => s.Created, o => o.Ignore())
-                    .ForMember(s => s.LastModified, o => o.Ignore())
-                    .ForMember(s => s.ContentLastModified, o => o.Ignore());
-                cfg.CreateMap<Data.Tag, Data.Tag>()
-                    .ForMember(t => t.Id, o => o.Ignore())
-                    .ForMember(t => t.Created, o => o.Ignore());
-            });
-            mapperConfig.AssertConfigurationIsValid();
-            Instance._mapper = mapperConfig.CreateMapper();
 
             // Setup media types
             Instance._mediaTypes.Documents.Add(".pdf", "application/pdf");
@@ -370,7 +289,7 @@ namespace Piranha
         /// </summary>
         public static void Init(IApi api)
         {
-            Instance.Initialize(api);
+            Instance.InitApp(api);
         }
 
         /// <summary>
@@ -407,7 +326,7 @@ namespace Piranha
         /// Initializes the application object.
         /// </summary>
         /// <param name="api">The current api</param>
-        private void Initialize(IApi api)
+        private void InitApp(IApi api)
         {
             if (!_isInitialized)
             {

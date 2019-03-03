@@ -15,7 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Piranha.Data;
+using Piranha.Models;
 using Piranha.Repositories;
 
 namespace Piranha.Services
@@ -133,9 +133,9 @@ namespace Piranha.Services
         /// Gets the hierachical media structure.
         /// </summary>
         /// <returns>The media structure</returns>
-        public async Task<Models.MediaStructure> GetStructureAsync()
+        public async Task<MediaStructure> GetStructureAsync()
         {
-            var structure = _cache?.Get<Models.MediaStructure>(MEDIA_STRUCTURE);
+            var structure = _cache?.Get<MediaStructure>(MEDIA_STRUCTURE);
 
             if (structure == null)
             {
@@ -154,7 +154,7 @@ namespace Piranha.Services
         /// depending on its state.
         /// </summary>
         /// <param name="content">The content to save</param>
-        public async Task SaveAsync(Models.MediaContent content)
+        public async Task SaveAsync(MediaContent content)
         {
             if (!App.MediaTypes.IsSupported(content.Filename))
             {
@@ -204,19 +204,19 @@ namespace Piranha.Services
             model.LastModified = DateTime.Now;
 
             // Pre-process if this is an image
-            if (_processor != null && model.Type == Models.MediaType.Image)
+            if (_processor != null && model.Type == MediaType.Image)
             {
                 byte[] bytes;
 
-                if (content is Models.BinaryMediaContent)
+                if (content is BinaryMediaContent)
                 {
-                    bytes = ((Models.BinaryMediaContent)content).Data;
+                    bytes = ((BinaryMediaContent)content).Data;
                 }
                 else
                 {
-                    var reader = new BinaryReader(((Models.StreamMediaContent)content).Data);
+                    var reader = new BinaryReader(((StreamMediaContent)content).Data);
                     bytes = reader.ReadBytes((int)reader.BaseStream.Length);
-                    ((Models.StreamMediaContent)content).Data.Position = 0;
+                    ((StreamMediaContent)content).Data.Position = 0;
                 }
 
                 int width, height;
@@ -229,17 +229,17 @@ namespace Piranha.Services
             // Upload to storage
             using (var session = await _storage.OpenAsync())
             {
-                if (content is Models.BinaryMediaContent)
+                if (content is BinaryMediaContent)
                 {
-                    var bc = (Models.BinaryMediaContent)content;
+                    var bc = (BinaryMediaContent)content;
 
                     model.Size = bc.Data.Length;
                     await session.PutAsync(model.Id + "-" + model.Filename,
                         model.ContentType, bc.Data);
                 }
-                else if (content is Models.StreamMediaContent)
+                else if (content is StreamMediaContent)
                 {
-                    var sc = (Models.StreamMediaContent)content;
+                    var sc = (StreamMediaContent)content;
                     var stream = sc.Data;
 
                     model.Size = sc.Data.Length;
@@ -260,7 +260,7 @@ namespace Piranha.Services
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        public async Task SaveFolderAsync(Data.MediaFolder model)
+        public async Task SaveFolderAsync(MediaFolder model)
         {
             // Ensure id
             if (model.Id == Guid.Empty)
@@ -322,7 +322,7 @@ namespace Piranha.Services
                 if (media != null)
                 {
                     var query = media.Versions
-                        .Where(v => v.MediaId == id && v.Width == width);
+                        .Where(v => v.Width == width);
 
                     if (height.HasValue)
                     {
@@ -378,7 +378,6 @@ namespace Piranha.Services
                                             version = new MediaVersion
                                             {
                                                 Id = Guid.NewGuid(),
-                                                MediaId = media.Id,
                                                 Size = output.Length,
                                                 Width = width,
                                                 Height = height,
@@ -487,7 +486,7 @@ namespace Piranha.Services
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The media</param>
-        public async Task DeleteFolderAsync(Data.MediaFolder model)
+        public async Task DeleteFolderAsync(MediaFolder model)
         {
             await DeleteFolderAsync(model.Id);
         }

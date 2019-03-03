@@ -11,7 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Piranha.Data;
+using Piranha.Models;
 
 namespace Piranha.Repositories
 {
@@ -48,7 +48,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">Site id</param>
         /// <returns>The site content model</returns>
-        Task<Models.DynamicSiteContent> GetContentById(Guid id);
+        Task<DynamicSiteContent> GetContentById(Guid id);
 
         /// <summary>
         /// Gets the site content for given site id.
@@ -56,7 +56,7 @@ namespace Piranha.Repositories
         /// <param name="id">Site id</param>
         /// <typeparam name="T">The site model type</typeparam>
         /// <returns>The site content model</returns>
-        Task<T> GetContentById<T>(Guid id) where T : Models.SiteContent<T>;
+        Task<T> GetContentById<T>(Guid id) where T : SiteContent<T>;
 
         /// <summary>
         /// Gets the hierachical sitemap structure.
@@ -64,7 +64,7 @@ namespace Piranha.Repositories
         /// <param name="id">The site id</param>
         /// <param name="onlyPublished">If only published items should be included</param>
         /// <returns>The sitemap</returns>
-        Task<Models.Sitemap> GetSitemap(Guid id, bool onlyPublished = true);
+        Task<Sitemap> GetSitemap(Guid id, bool onlyPublished = true);
 
         /// <summary>
         /// Adds or updates the given model in the database
@@ -80,7 +80,7 @@ namespace Piranha.Repositories
         /// <param name="siteId">The site id</param>
         /// <param name="content">The site content</param>
         /// <typeparam name="T">The site content type</typeparam>
-        Task SaveContent<T>(Guid siteId, T content) where T : Models.SiteContent<T>;
+        Task SaveContent<T>(Guid siteId, T content) where T : SiteContent<T>;
 
         /// <summary>
         /// Deletes the model with the specified id.

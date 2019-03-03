@@ -11,7 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Piranha.Data;
+using Piranha.Models;
 
 namespace Piranha.Services
 {
@@ -82,7 +82,7 @@ namespace Piranha.Services
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        public static void SaveFolder(this MediaService service, Data.MediaFolder model)
+        public static void SaveFolder(this MediaService service, MediaFolder model)
         {
             service.SaveFolderAsync(model).GetAwaiter().GetResult();
         }
@@ -128,7 +128,7 @@ namespace Piranha.Services
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The media</param>
-        public static void DeleteFolder(this MediaService service, Data.MediaFolder model)
+        public static void DeleteFolder(this MediaService service, MediaFolder model)
         {
             service.DeleteFolderAsync(model).GetAwaiter().GetResult();
         }

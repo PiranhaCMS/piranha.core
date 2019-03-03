@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2017-2018 Håkan Edling
+ * Copyright (c) 2017-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -16,8 +16,8 @@ namespace Piranha.Models
     /// <summary>
     /// Abstract class for building a hierarchical structure.
     /// </summary>
-    [Serializable] 
-    public abstract class Structure<TThis, T> : List<T> where T : StructureItem<T> where TThis : Structure<TThis, T>
+    [Serializable]
+    public abstract class Structure<TThis, T> : List<T> where T : StructureItem<TThis, T> where TThis : Structure<TThis, T>
     {
         /// <summary>
         /// Gets the partial structure with the items positioned

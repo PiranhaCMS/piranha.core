@@ -11,7 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Piranha.Data;
+using Piranha.Models;
 
 namespace Piranha.Services
 {
@@ -70,7 +70,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="id">Site id</param>
         /// <returns>The site content model</returns>
-        public static Models.DynamicSiteContent GetContentById(this SiteService service, Guid id)
+        public static DynamicSiteContent GetContentById(this SiteService service, Guid id)
         {
             return service.GetContentByIdAsync(id).GetAwaiter().GetResult();
         }
@@ -81,7 +81,7 @@ namespace Piranha.Services
         /// <param name="id">Site id</param>
         /// <typeparam name="T">The site model type</typeparam>
         /// <returns>The site content model</returns>
-        public static T GetContentById<T>(this SiteService service, Guid id) where T : Models.SiteContent<T>
+        public static T GetContentById<T>(this SiteService service, Guid id) where T : SiteContent<T>
         {
             return service.GetContentByIdAsync<T>(id).GetAwaiter().GetResult();
         }
@@ -92,7 +92,7 @@ namespace Piranha.Services
         /// <param name="id">The optional site id</param>
         /// <param name="onlyPublished">If only published items should be included</param>
         /// <returns>The sitemap</returns>
-        public static Models.Sitemap GetSitemap(this SiteService service, Guid? id = null, bool onlyPublished = true)
+        public static Sitemap GetSitemap(this SiteService service, Guid? id = null, bool onlyPublished = true)
         {
             return service.GetSitemapAsync(id, onlyPublished).GetAwaiter().GetResult();
         }
@@ -114,7 +114,7 @@ namespace Piranha.Services
         /// <param name="siteId">The site id</param>
         /// <param name="model">The site content model</param>
         /// <typeparam name="T">The site content type</typeparam>
-        public static void SaveContent<T>(this SiteService service, Guid siteId, T model) where T : Models.SiteContent<T>
+        public static void SaveContent<T>(this SiteService service, Guid siteId, T model) where T : SiteContent<T>
         {
             service.SaveContentAsync(siteId, model).GetAwaiter().GetResult();
         }

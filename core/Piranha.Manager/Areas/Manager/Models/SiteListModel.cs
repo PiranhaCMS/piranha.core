@@ -10,13 +10,14 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Piranha.Models;
 using Piranha.Services;
 
 namespace Piranha.Areas.Manager.Models
 {
     public class SiteListModel
     {
-        public IList<Data.Site> Sites { get; set; } = new List<Data.Site>();
+        public IList<Site> Sites { get; set; } = new List<Site>();
 
         public static SiteListModel Get(IApi api)
         {

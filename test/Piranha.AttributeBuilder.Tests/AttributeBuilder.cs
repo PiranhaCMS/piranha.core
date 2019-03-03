@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -8,13 +8,14 @@
  *
  */
 
-using Piranha.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
+using Piranha.Repositories;
+using Piranha.Services;
 
 namespace Piranha.AttributeBuilder.Tests
 {
@@ -209,8 +210,23 @@ namespace Piranha.AttributeBuilder.Tests
         private IApi CreateApi()
         {
             var factory = new ContentFactory(services);
+            var serviceFactory = new ContentServiceFactory(factory);
 
-            return new Api(GetDb(), factory, new ContentServiceFactory(factory), null);
+            var db = GetDb();
+
+            return new Api(
+                factory,
+                new AliasRepository(db),
+                new ArchiveRepository(db),
+                new MediaRepository(db),
+                new PageRepository(db, serviceFactory),
+                new PageTypeRepository(db),
+                new ParamRepository(db),
+                new PostRepository(db, serviceFactory),
+                new PostTypeRepository(db),
+                new SiteRepository(db, serviceFactory),
+                new SiteTypeRepository(db)
+            );
         }
     }
 }

@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using Xunit;
 using Piranha.AttributeBuilder;
 using Piranha.Extend.Fields;
+using Piranha.Models;
+using Piranha.Repositories;
 using Piranha.Services;
 
 namespace Piranha.Tests.Routers
@@ -43,7 +45,7 @@ namespace Piranha.Tests.Routers
                 builder.Build();
 
                 // Add site
-                var site1 = new Data.Site() {
+                var site1 = new Site() {
                     Id = SITE1_ID,
                     Title = "Page Site",
                     InternalId = "PageSite",
@@ -51,7 +53,7 @@ namespace Piranha.Tests.Routers
                 };
                 api.Sites.Save(site1);
 
-                var site2 = new Data.Site() {
+                var site2 = new Site() {
                     Id = SITE2_ID,
                     Title = "Page Site 2",
                     InternalId = "PageSite2",
@@ -227,8 +229,24 @@ namespace Piranha.Tests.Routers
         private IApi CreateApi()
         {
             var factory = new ContentFactory(services);
+            var serviceFactory = new ContentServiceFactory(factory);
 
-            return new Api(GetDb(), factory, new ContentServiceFactory(factory), storage);
+            var db = GetDb();
+
+            return new Api(
+                factory,
+                new AliasRepository(db),
+                new ArchiveRepository(db),
+                new Piranha.Repositories.MediaRepository(db),
+                new PageRepository(db, serviceFactory),
+                new PageTypeRepository(db),
+                new ParamRepository(db),
+                new PostRepository(db, serviceFactory),
+                new PostTypeRepository(db),
+                new SiteRepository(db, serviceFactory),
+                new SiteTypeRepository(db),
+                storage: storage
+            );
         }
     }
 }

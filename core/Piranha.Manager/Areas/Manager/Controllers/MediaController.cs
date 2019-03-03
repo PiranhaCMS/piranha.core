@@ -159,7 +159,7 @@ namespace Piranha.Areas.Manager.Controllers
         {
             if (!string.IsNullOrWhiteSpace(model.Name))
             {
-                _api.Media.SaveFolder(new Data.MediaFolder
+                _api.Media.SaveFolder(new MediaFolder
                 {
                     ParentId = model.ParentId,
                     Name = model.Name

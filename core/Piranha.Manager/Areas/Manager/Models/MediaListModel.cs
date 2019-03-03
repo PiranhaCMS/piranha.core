@@ -18,7 +18,7 @@ namespace Piranha.Areas.Manager.Models
 {
     public class MediaListModel
     {
-        public IList<Data.Media> Media { get; set; } = new List<Data.Media>();
+        public IList<Media> Media { get; set; } = new List<Media>();
         public MediaStructure Folders { get; set; } = new MediaStructure();
         public IList<MediaStructureItem> Breadcrumb { get; set; }
         public Guid? CurrentFolderId { get; set; }
