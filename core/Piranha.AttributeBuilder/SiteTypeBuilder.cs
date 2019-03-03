@@ -3,16 +3,18 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Piranha.Models;
+using Piranha.Services;
 
 namespace Piranha.AttributeBuilder
 {
@@ -23,7 +25,7 @@ namespace Piranha.AttributeBuilder
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="api">The current api</param>        
+        /// <param name="api">The current api</param>
         public SiteTypeBuilder(IApi api)
         {
             _api = api;
@@ -32,7 +34,7 @@ namespace Piranha.AttributeBuilder
         /// <summary>
         /// Builds the site types.
         /// </summary>
-        public override SiteTypeBuilder Build()
+        public override async Task<SiteTypeBuilder> BuildAsync()
         {
             foreach (var type in _types)
             {
@@ -41,7 +43,7 @@ namespace Piranha.AttributeBuilder
                 if (siteType != null)
                 {
                     siteType.Ensure();
-                    _api.SiteTypes.Save(siteType);
+                    await _api.SiteTypes.SaveAsync(siteType);
                 }
             }
             return this;
@@ -49,10 +51,20 @@ namespace Piranha.AttributeBuilder
 
         /// <summary>
         /// Deletes all site types in the database that doesn't
-        ///  exist in the import,
+        /// exist in the database,
         /// </summary>
         /// <returns>The builder</returns>
         public SiteTypeBuilder DeleteOrphans()
+        {
+            return DeleteOrphansAsync().GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Deletes all site types in the database that doesn't
+        /// exist in the import,
+        /// </summary>
+        /// <returns>The builder</returns>
+        public async Task<SiteTypeBuilder> DeleteOrphansAsync()
         {
             var orphans = new List<SiteType>();
             var importTypes = new List<SiteType>();
@@ -67,7 +79,7 @@ namespace Piranha.AttributeBuilder
             }
 
             // Get all previously imported page types.
-            foreach (var siteType in _api.SiteTypes.GetAll())
+            foreach (var siteType in await _api.SiteTypes.GetAllAsync())
             {
                 if (!importTypes.Any(t => t.Id == siteType.Id))
                     orphans.Add(siteType);
@@ -76,7 +88,7 @@ namespace Piranha.AttributeBuilder
             // Delete all orphans.
             foreach (var siteType in orphans)
             {
-                _api.SiteTypes.Delete(siteType);
+                await _api.SiteTypes.DeleteAsync(siteType);
             }
             return this;
         }

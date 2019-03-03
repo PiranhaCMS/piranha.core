@@ -1,16 +1,16 @@
 /*
- * Copyright (c) 2017-2018 Håkan Edling
+ * Copyright (c) 2017-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
-using Piranha.Data;
-using Piranha.Repositories;
 using System;
+using Piranha.Repositories;
+using Piranha.Services;
 
 namespace Piranha
 {
@@ -22,61 +22,51 @@ namespace Piranha
         /// <summary>
         /// Gets/sets the alias repository.
         /// </summary>
-        IAliasRepository Aliases { get; }
+        AliasService Aliases { get; }
 
         /// <summary>
-        /// Gets/sets the archive repository.
+        /// Gets/sets the archive service.
         /// </summary>
-        IArchiveRepository Archives { get; }
+        ArchiveService Archives { get; }
 
         /// <summary>
-        /// Gets the category repository.
+        /// Gets the media service.
         /// </summary>
-        ICategoryRepository Categories { get; }
-
-        /// <summary>
-        /// Gets the media repository.
-        /// </summary>
-        IMediaRepository Media { get; }
+        MediaService Media { get; }
 
         /// <summary>
         /// Gets the page repository.
         /// </summary>
-        IPageRepository Pages { get; }
+        PageService Pages { get; }
 
         /// <summary>
-        /// Gets the page type repository.
+        /// Gets the page type service.
         /// </summary>
-        IPageTypeRepository PageTypes { get; }
+        PageTypeService PageTypes { get; }
 
         /// <summary>
-        /// Gets the param repository.
+        /// Gets the param service.
         /// </summary>
-        IParamRepository Params { get; }
+        ParamService Params { get; }
 
         /// <summary>
-        /// Gets the post repository.
+        /// Gets the post service.
         /// </summary>
-        IPostRepository Posts { get; }
+        PostService Posts { get; }
 
         /// <summary>
-        /// Gets the post type repository.
+        /// Gets the post type service.
         /// </summary>
-        IPostTypeRepository PostTypes { get; }
+        PostTypeService PostTypes { get; }
 
         /// <summary>
-        /// Gets the site repository.
+        /// Gets the site service.
         /// </summary>
-        ISiteRepository Sites { get; }
+        SiteService Sites { get; }
 
         /// <summary>
-        /// Gets the site type repository.
+        /// Gets the site type service.
         /// </summary>
-        ISiteTypeRepository SiteTypes { get; }
-
-        /// <summary>
-        /// Gets the tag repository.
-        /// </summary>
-        ITagRepository Tags { get; }
+        SiteTypeService SiteTypes { get; }
     }
 }

@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -26,7 +26,7 @@ namespace Piranha.Areas.Manager.Controllers
     {
         private const string COOKIE_SELECTEDSITE = "PiranhaManager_SelectedSite";
         private readonly PageEditService _editService;
-        private readonly IContentService<Data.Page, Data.PageField, Piranha.Models.PageBase> _contentService;
+        private readonly IContentFactory _factory;
         private readonly IHubContext<Hubs.PreviewHub> _hub;
 
         /// <summary>
@@ -35,10 +35,10 @@ namespace Piranha.Areas.Manager.Controllers
         /// <param name="api">The current api</param>
         /// <param name="editService">The current page edit service</param>
         /// <param name="factory">The content service factory</param>
-        public PageController(IApi api, PageEditService editService, IContentServiceFactory factory, IHubContext<Hubs.PreviewHub> hub) : base(api)
+        public PageController(IApi api, PageEditService editService, IContentFactory factory, IHubContext<Hubs.PreviewHub> hub) : base(api)
         {
             _editService = editService;
-            _contentService = factory.CreatePageService();
+            _factory = factory;
             _hub = hub;
         }
 
@@ -385,7 +385,7 @@ namespace Piranha.Areas.Manager.Controllers
 
                 if (regionType != null)
                 {
-                    var region = _contentService.CreateDynamicRegion(pageType, model.RegionTypeId);
+                    var region = _factory.CreateDynamicRegion(pageType, model.RegionTypeId);
 
                     var editModel = (Models.PageEditRegionCollection)_editService.CreateRegion(regionType,
                         new List<object> { region });

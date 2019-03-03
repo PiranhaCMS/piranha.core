@@ -3,13 +3,15 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
 using System.Collections.Generic;
+using Piranha.Models;
+using Piranha.Services;
 
 namespace Piranha.Areas.Manager.Models
 {
@@ -18,12 +20,12 @@ namespace Piranha.Areas.Manager.Models
         /// <summary>
         /// Gets/sets the available items.
         /// </summary>
-        public IEnumerable<Data.Alias> Items { get; set; } = new List<Data.Alias>();
+        public IEnumerable<Alias> Items { get; set; } = new List<Alias>();
 
         /// <summary>
         /// Gets/sets the available sites.
         /// </summary>
-        public IEnumerable<Data.Site> Sites { get; set; } = new List<Data.Site>();
+        public IEnumerable<Site> Sites { get; set; } = new List<Site>();
 
         /// <summary>
         /// Gets/sets the id of the currently selected site.
@@ -43,7 +45,7 @@ namespace Piranha.Areas.Manager.Models
         /// <returns>The model</returns>
         public static AliasListModel Get(IApi api, Guid? siteId = null)
         {
-            Data.Site site;
+            Site site;
 
             if (!siteId.HasValue)
             {

@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Piranha;
 using Piranha.Models;
-using System;
-using System.Linq;
+using Piranha.Services;
 
 namespace MvcWeb.Controllers
 {
@@ -15,8 +17,8 @@ namespace MvcWeb.Controllers
         /// Default constructor.
         /// </summary>
         /// <param name="app">The current app</param>
-        public CmsController(IApi api, IDb db) 
-        {            
+        public CmsController(IApi api, IDb db)
+        {
             _api = api;
             _db = db;
         }
@@ -31,18 +33,10 @@ namespace MvcWeb.Controllers
         /// <param name="category">The optional category</param>
         /// <param name="tag">The optional tag</param>
         [Route("archive")]
-        public IActionResult Archive(Guid id, int? year = null, int? month = null, int? page = null, 
-            Guid? category = null, Guid? tag = null) 
+        public async Task<IActionResult> Archive(Guid id, int? year = null, int? month = null, int? page = null,
+            Guid? category = null, Guid? tag = null)
         {
-            Models.BlogArchive model;
-
-            if (category.HasValue)
-                model = _api.Archives.GetByCategoryId<Models.BlogArchive>(id, category.Value, page, year, month);
-            else if (tag.HasValue)
-                model = _api.Archives.GetByTagId<Models.BlogArchive>(id, tag.Value, page, year, month);
-            else model = _api.Archives.GetById<Models.BlogArchive>(id, page, year, month);
-            
-            return View(model);
+            return View(await _api.Archives.GetByIdAsync<Models.BlogArchive>(id, page, category, tag, year, month));
         }
 
         /// <summary>
@@ -50,9 +44,9 @@ namespace MvcWeb.Controllers
         /// </summary>
         /// <param name="id">The unique page id</param>
         [Route("page")]
-        public IActionResult Page(Guid id) 
+        public async Task<IActionResult> Page(Guid id)
         {
-            var model = _api.Pages.GetById<Models.StandardPage>(id);
+            var model = await _api.Pages.GetByIdAsync<Models.StandardPage>(id);
 
             return View(model);
         }
@@ -62,9 +56,9 @@ namespace MvcWeb.Controllers
         /// </summary>
         /// <param name="id">The unique page id</param>
         [Route("pagewide")]
-        public IActionResult PageWide(Guid id) 
+        public async Task<IActionResult> PageWide(Guid id)
         {
-            var model = _api.Pages.GetById<Models.StandardPage>(id);
+            var model = await _api.Pages.GetByIdAsync<Models.StandardPage>(id);
 
             return View(model);
         }
@@ -73,11 +67,11 @@ namespace MvcWeb.Controllers
         /// Gets the post with the given id.
         /// </summary>
         /// <param name="id">The unique post id</param>
-        /// 
+        ///
         [Route("post")]
-        public IActionResult Post(Guid id) 
+        public async Task<IActionResult> Post(Guid id)
         {
-            var model = _api.Posts.GetById<Models.BlogPost>(id);
+            var model = await _api.Posts.GetByIdAsync<Models.BlogPost>(id);
 
             return View(model);
         }
@@ -88,9 +82,9 @@ namespace MvcWeb.Controllers
         /// <param name="id">The page id</param>
         /// <param name="startpage">If this is the startpage of the site</param>
         [Route("teaserpage")]
-        public IActionResult TeaserPage(Guid id, bool startpage = false)
+        public async Task<IActionResult> TeaserPage(Guid id, bool startpage = false)
         {
-            var model = _api.Pages.GetById<Models.TeaserPage>(id);
+            var model = await _api.Pages.GetByIdAsync<Models.TeaserPage>(id);
 
             if (startpage)
             {
@@ -101,8 +95,8 @@ namespace MvcWeb.Controllers
                     .Select(p => p.Id);
                 if (latest.Count() > 0)
                 {
-                    model.LatestPost = _api.Posts
-                        .GetById<PostInfo>(latest.First());
+                    model.LatestPost = await _api.Posts
+                        .GetByIdAsync<PostInfo>(latest.First());
                 }
                 return View("startpage", model);
             }

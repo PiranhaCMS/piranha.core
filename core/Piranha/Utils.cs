@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
 namespace Piranha
 {
@@ -198,6 +199,61 @@ namespace Piranha
             var version = assembly.GetName().Version;
 
             return $"{version.Major}.{version.Minor}.{version.Build}";
+        }
+
+        /// <summary>
+        /// Clones the entire given object into a new instance.
+        /// </summary>
+        /// <param name="obj">The object to clone</param>
+        /// <typeparam name="T">The object type</typeparam>
+        /// <returns>The cloned instance</returns>
+        public static T DeepClone<T>(T obj)
+        {
+            if (obj == null)
+                return obj;
+
+            var settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All
+            };
+            var json = JsonConvert.SerializeObject(obj, settings);
+
+            return JsonConvert.DeserializeObject<T>(json, settings);
+        }
+
+        /// <summary>
+        /// Gets the value of the property with the given name for the
+        /// given instance.
+        /// </summary>
+        /// <param name="propertyName">The property name</param>
+        /// <param name="instance">The object instance</param>
+        /// <returns>The property value</returns>
+        public static object GetPropertyValue(this Type type, string propertyName, object instance)
+        {
+            var property = type.GetProperty(propertyName, App.PropertyBindings);
+
+            if (property != null)
+            {
+                return property.GetValue(instance);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Sets the value of the property with the given name for the
+        /// given instance.
+        /// </summary>
+        /// <param name="propertyName">The property name</param>
+        /// <param name="instance">The object instance</param>
+        /// <param name="value">The value to set</param>
+        public static void SetPropertyValue(this Type type, string propertyName, object instance, object value)
+        {
+            var property = type.GetProperty(propertyName, App.PropertyBindings);
+
+            if (property != null)
+            {
+                property.SetValue(instance, value);
+            }
         }
     }
 }

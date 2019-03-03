@@ -1,14 +1,16 @@
 ﻿/*
- * Copyright (c) 2017-2018 Håkan Edling
+ * Copyright (c) 2017-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
+using System.Threading.Tasks;
+using Piranha.Services;
 
 namespace Piranha.Web
 {
@@ -21,7 +23,7 @@ namespace Piranha.Web
         /// <param name="url">The requested url</param>
         /// <param name="siteId">The requested site id</param>
         /// <returns>The piranha response, null if no matching page was found</returns>
-        public static IRouteResponse Invoke(IApi api, string url, Guid siteId)
+        public static async Task<IRouteResponse> InvokeAsync(IApi api, string url, Guid siteId)
         {
             if (!String.IsNullOrWhiteSpace(url) && url.Length > 1)
             {
@@ -29,7 +31,7 @@ namespace Piranha.Web
 
                 if (segments.Length >= 1)
                 {
-                    var blog = api.Pages.GetBySlug(segments[0], siteId);
+                    var blog = await api.Pages.GetBySlugAsync(segments[0], siteId);
 
                     if (blog != null && blog.ContentType == "Blog")
                     {
@@ -83,7 +85,7 @@ namespace Piranha.Web
                             {
                                 try
                                 {
-                                    categoryId = api.Categories.GetBySlug(blog.Id, segments[n])?.Id;
+                                    categoryId = (await api.Posts.GetCategoryBySlugAsync(blog.Id, segments[n]))?.Id;
 
                                     if (!categoryId.HasValue)
                                         categoryId = Guid.Empty;
@@ -98,7 +100,7 @@ namespace Piranha.Web
                             {
                                 try
                                 {
-                                    tagId = api.Tags.GetBySlug(blog.Id, segments[n])?.Id;
+                                    tagId = (await api.Posts.GetTagBySlugAsync(blog.Id, segments[n]))?.Id;
 
                                     if (!tagId.HasValue)
                                         tagId = Guid.Empty;
@@ -115,7 +117,7 @@ namespace Piranha.Web
                                 {
                                     page = Convert.ToInt32(segments[n]);
                                 }
-                                catch 
+                                catch
                                 {
                                     // We don't care about the exception, we just
                                     // discard malformed input
@@ -132,7 +134,7 @@ namespace Piranha.Web
                                     if (year.Value > DateTime.Now.Year)
                                         year = DateTime.Now.Year;
                                 }
-                                catch 
+                                catch
                                 {
                                     // We don't care about the exception, we just
                                     // discard malformed input
@@ -144,8 +146,8 @@ namespace Piranha.Web
                                 {
                                     month = Math.Max(Math.Min(Convert.ToInt32(segments[n]), 12), 1);
                                 }
-                                catch 
-                                { 
+                                catch
+                                {
                                     // We don't care about the exception, we just
                                     // discard malformed input
                                 }

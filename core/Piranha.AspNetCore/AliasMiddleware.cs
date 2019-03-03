@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using Microsoft.AspNetCore.Http;
@@ -38,7 +38,7 @@ namespace Piranha.AspNetCore
             {
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
 
-                var response = AliasRouter.Invoke(api, url, service.Site.Id);
+                var response = await AliasRouter.InvokeAsync(api, url, service.Site.Id);
                 if (response != null)
                 {
                     _logger?.LogInformation($"Found alias\n  Alias: {url}\n  Redirect: {response.RedirectUrl}");

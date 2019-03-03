@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using Microsoft.Extensions.Caching.Memory;
@@ -39,7 +39,7 @@ namespace Piranha.Cache
         /// <returns>The cached model, null it wasn't found</returns>
         public T Get<T>(string key)
         {
-            return _cache.Get<T>(key);
+            return Utils.DeepClone<T>(_cache.Get<T>(key));
         }
 
         /// <summary>

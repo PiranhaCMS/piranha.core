@@ -1,11 +1,11 @@
 ﻿/*
- * Copyright (c) 2017-2018 Håkan Edling
+ * Copyright (c) 2017-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using Piranha.Services;
@@ -20,80 +20,60 @@ namespace Piranha
     public sealed class Api : IApi, IDisposable
     {
         /// <summary>
-        /// The private db context.
-        /// </summary>
-        private readonly IDb _db;
-
-        /// <summary>
-        /// The private storage provider.
-        /// </summary>
-        private readonly IStorage _storage;
-
-        /// <summary>
         /// The private model cache.
         /// </summary>
-        private ICache _cache;
+        private readonly ICache _cache;
 
         /// <summary>
-        /// Gets/sets the alias repository.
+        /// Gets/sets the alias service.
         /// </summary>
-        public IAliasRepository Aliases { get; private set; }
+        public AliasService Aliases { get; private set; }
 
         /// <summary>
-        /// Gets/sets the archive repository.
+        /// Gets/sets the archive service.
         /// </summary>
-        public IArchiveRepository Archives { get; private set; }
+        public ArchiveService Archives { get; private set; }
 
         /// <summary>
-        /// Gets the category repository.
-        /// </summary>
-        public ICategoryRepository Categories { get; private set; }
-
-        /// <summary>
-        /// Gets the media repository.
+        /// Gets the media service.
         /// </summary>
         /// <returns></returns>
-        public IMediaRepository Media { get; private set; }
+        public MediaService Media { get; private set; }
 
         /// <summary>
-        /// Gets the page repository.
+        /// Gets the page service.
         /// </summary>
-        public IPageRepository Pages { get; private set; }
+        public PageService Pages { get; private set; }
 
         /// <summary>
-        /// Gets the page type repository.
+        /// Gets the page type service.
         /// </summary>
-        public IPageTypeRepository PageTypes { get; private set; }
+        public PageTypeService PageTypes { get; private set; }
 
         /// <summary>
-        /// Gets the param repository.
+        /// Gets the param service.
         /// </summary>
-        public IParamRepository Params { get; private set; }
+        public ParamService Params { get; private set; }
 
         /// <summary>
-        /// Gets the post repository.
+        /// Gets the post service.
         /// </summary>
-        public IPostRepository Posts { get; private set; }
+        public PostService Posts { get; private set; }
 
         /// <summary>
-        /// Gets the post type repository.
+        /// Gets the post type service.
         /// </summary>
-        public IPostTypeRepository PostTypes { get; private set; }
+        public PostTypeService PostTypes { get; private set; }
 
         /// <summary>
-        /// Gets the site repository.
+        /// Gets the site service.
         /// </summary>
-        public ISiteRepository Sites { get; private set; }
+        public SiteService Sites { get; private set; }
 
         /// <summary>
-        /// Gets the site type repository.
+        /// Gets the site type service.
         /// </summary>
-        public ISiteTypeRepository SiteTypes { get; private set; }
-
-        /// <summary>
-        /// Gets the tag repository.
-        /// </summary>
-        public ITagRepository Tags { get; private set; }
+        public SiteTypeService SiteTypes { get; private set; }
 
         /// <summary>
         /// Gets if the current repository has caching enabled or not.
@@ -101,19 +81,41 @@ namespace Piranha
         public bool IsCached => _cache != null;
 
         /// <summary>
-        /// Default constructor.
+        /// Creates a new api from the currently registered
+        /// repositories.
         /// </summary>
-        /// <param name="db">The current db context</param>
-        /// <param name="factory">The content service factory</param>
-        /// <param name="storage">The current storage</param>
-        /// <param name="modelCache">The optional model cache</param>
-        /// <param name="imageProcessor">The optional image processor</param>
-        public Api(IDb db, IContentServiceFactory factory, IStorage storage = null, ICache modelCache = null, IImageProcessor imageProcessor = null)
+        public Api(
+            IContentFactory contentFactory,
+            IAliasRepository aliasRepository,
+            IArchiveRepository archiveRepository,
+            IMediaRepository mediaRepository,
+            IPageRepository pageRepository,
+            IPageTypeRepository pageTypeRepository,
+            IParamRepository paramRepository,
+            IPostRepository postRepository,
+            IPostTypeRepository postTypeRepository,
+            ISiteRepository siteRepository,
+            ISiteTypeRepository siteTypeRepository,
+            ICache cache = null,
+            IStorage storage = null,
+            IImageProcessor processor = null)
         {
-            _db = db;
-            _storage = storage;
+            // Store the cache
+            _cache = cache;
 
-            Setup(factory, modelCache, imageProcessor);
+            // Create services without dependecies
+            PageTypes = new PageTypeService(pageTypeRepository, cache);
+            Params = new ParamService(paramRepository, cache);
+            PostTypes = new PostTypeService(postTypeRepository, cache);
+            Sites = new SiteService(siteRepository, contentFactory, cache);
+            SiteTypes = new SiteTypeService(siteTypeRepository, cache);
+
+            // Create services with dependencies
+            Aliases = new AliasService(aliasRepository, Sites, cache);
+            Media = new MediaService(mediaRepository, Params, storage, processor, cache);
+            Pages = new PageService(pageRepository, contentFactory, Sites, Params, cache);
+            Posts = new PostService(postRepository, contentFactory, Sites, Pages, cache);
+            Archives = new ArchiveService(archiveRepository, Pages, Params, Posts);
         }
 
         /// <summary>
@@ -121,34 +123,6 @@ namespace Piranha
         /// </summary>
         public void Dispose()
         {
-            _db.Dispose();
         }
-
-        #region Private methods
-        /// <summary>
-        /// Configures the api.
-        /// </summary>
-        /// <param name="modelCache">The optional model cache</param>
-        /// <param name="imageProcessor">The optional image processor</param>
-        private void Setup(IContentServiceFactory factory, ICache modelCache = null, IImageProcessor imageProcessor = null)
-        {
-            _cache = modelCache;
-
-            var cacheLevel = (int)App.CacheLevel;
-
-            Aliases = new AliasRepository(this, _db, cacheLevel > 2 ? _cache : null);
-            Archives = new ArchiveRepository(this, _db);
-            Categories = new CategoryRepository(this, _db, cacheLevel > 2 ? _cache : null);
-            Media = new MediaRepository(this, _db, _storage, cacheLevel > 2 ? _cache : null, imageProcessor);
-            Pages = new PageRepository(this, _db, factory, cacheLevel > 2 ? _cache : null);
-            PageTypes = new PageTypeRepository(_db);
-            Params = new ParamRepository(_db, cacheLevel > 0 ? _cache : null);
-            Posts = new PostRepository(this, _db, factory, cacheLevel > 2 ? _cache : null);
-            PostTypes = new PostTypeRepository(_db);
-            Sites = new SiteRepository(this, _db, factory, cacheLevel > 0 ? _cache : null);
-            SiteTypes = new SiteTypeRepository(_db);
-            Tags = new TagRepository(_db, cacheLevel > 2 ? _cache : null);
-        }
-        #endregion
     }
 }

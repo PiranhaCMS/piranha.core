@@ -3,12 +3,13 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System.Collections.Generic;
+using Piranha.Models;
 
 namespace Piranha.Areas.Manager.Models
 {
@@ -35,12 +36,12 @@ namespace Piranha.Areas.Manager.Models
         /// <summary>
         /// Gets/sets the available categories.
         /// </summary>
-        public IEnumerable<Data.Category> AllCategories { get; set; } = new List<Data.Category>();
+        public IEnumerable<Taxonomy> AllCategories { get; set; } = new List<Taxonomy>();
 
         /// <summary>
         /// Gets/sets the available tags.
         /// </summary>
-        public IEnumerable<Data.Tag> AllTags { get; set; } = new List<Data.Tag>();
+        public IEnumerable<Taxonomy> AllTags { get; set; } = new List<Taxonomy>();
 
         /// <summary>
         /// Gets/sets the currently selected category.

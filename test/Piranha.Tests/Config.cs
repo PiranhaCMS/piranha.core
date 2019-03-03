@@ -1,17 +1,18 @@
 /*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
-using Piranha.Extend;
-using Piranha.Services;
 using System.Linq;
 using Xunit;
+using Piranha.Extend;
+using Piranha.Repositories;
+using Piranha.Services;
 
 namespace Piranha.Tests
 {
@@ -22,8 +23,8 @@ namespace Piranha.Tests
         /// Sets up & initializes the tests.
         /// </summary>
         protected override void Init() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                Piranha.App.Init();
+            using (var api = CreateApi()) {
+                Piranha.App.Init(api);
 
                 using (var config = new Piranha.Config(api)) {
                     config.CacheExpiresPages = 0;
@@ -42,7 +43,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void CacheExpiresPages() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+            using (var api = CreateApi()) {
                 using (var config = new Piranha.Config(api)) {
                     Assert.Equal(0, config.CacheExpiresPages);
 
@@ -55,7 +56,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void CacheExpiresPosts() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+            using (var api = CreateApi()) {
                 using (var config = new Piranha.Config(api)) {
                     Assert.Equal(0, config.CacheExpiresPosts);
 
@@ -68,7 +69,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void HierarchicalPageSlugs() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+            using (var api = CreateApi()) {
                 using (var config = new Piranha.Config(api)) {
                     Assert.True(config.HierarchicalPageSlugs);
 
@@ -81,7 +82,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void ManagerExpandedSitemapLevels() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+            using (var api = CreateApi()) {
                 using (var config = new Piranha.Config(api)) {
                     Assert.Equal(0, config.ManagerExpandedSitemapLevels);
 
@@ -94,24 +95,47 @@ namespace Piranha.Tests
 
         [Fact]
         public void MediaCDN() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+            using (var api = CreateApi()) {
                 using (var config = new Piranha.Config(api)) {
                     config.MediaCDN = "https://mycdn.org/uploads/";
 
                     Assert.Equal("https://mycdn.org/uploads/", config.MediaCDN);
                 }
-            }            
+            }
         }
 
         [Fact]
         public void MediaCDNTrailingSlash() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+            using (var api = CreateApi()) {
                 using (var config = new Piranha.Config(api)) {
                     config.MediaCDN = "https://mycdn.org/uploads";
 
                     Assert.Equal("https://mycdn.org/uploads/", config.MediaCDN);
                 }
-            }            
+            }
+        }
+
+        private IApi CreateApi()
+        {
+            var factory = new ContentFactory(services);
+            var serviceFactory = new ContentServiceFactory(factory);
+
+            var db = GetDb();
+
+            return new Api(
+                factory,
+                new AliasRepository(db),
+                new ArchiveRepository(db),
+                new Piranha.Repositories.MediaRepository(db),
+                new PageRepository(db, serviceFactory),
+                new PageTypeRepository(db),
+                new ParamRepository(db),
+                new PostRepository(db, serviceFactory),
+                new PostTypeRepository(db),
+                new SiteRepository(db, serviceFactory),
+                new SiteTypeRepository(db),
+                storage: storage
+            );
         }
     }
 }

@@ -1,14 +1,15 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
+using System.Threading.Tasks;
 using Piranha.Models;
 
 namespace Piranha.AspNetCore.Services
@@ -35,6 +36,6 @@ namespace Piranha.AspNetCore.Services
         /// </summary>
         /// <typeparam name="T">The content type</typeparam>
         /// <returns>The site content model</returns>
-        T GetContent<T>() where T : SiteContent<T>;
+        Task<T> GetContentAsync<T>() where T : SiteContent<T>;
     }
 }

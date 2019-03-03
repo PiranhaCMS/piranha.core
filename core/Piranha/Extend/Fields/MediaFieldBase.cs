@@ -3,13 +3,14 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
-using Newtonsoft.Json;
 using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Piranha.Extend.Fields
 {
@@ -38,7 +39,7 @@ namespace Piranha.Extend.Fields
         /// Gets/sets the related media object.
         /// </summary>
         [JsonIgnore]
-        public Data.Media Media { get; private set; }
+        public Models.Media Media { get; private set; }
 
         /// <summary>
         /// Gets if the field has a media object available.
@@ -49,11 +50,11 @@ namespace Piranha.Extend.Fields
         /// Initializes the field for client use.
         /// </summary>
         /// <param name="api">The current api</param>
-        public virtual void Init(IApi api)
+        public virtual async Task Init(IApi api)
         {
             if (Id.HasValue)
             {
-                Media = api.Media.GetById(Id.Value);
+                Media = await api.Media.GetByIdAsync(Id.Value);
 
                 if (Media == null)
                 {

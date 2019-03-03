@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2017-2018 Håkan Edling
+ * Copyright (c) 2017-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -17,7 +17,9 @@ namespace Piranha.Models
     /// Abstract class for an hierarchical item in a structure.
     /// </summary>
     [Serializable]
-    public abstract class StructureItem<T> where T : StructureItem<T>
+    public abstract class StructureItem<TStructure, T>
+        where T : StructureItem<TStructure, T>
+        where TStructure : Structure<TStructure, T>
     {
         /// <summary>
         /// Gets/sets the unique id.
@@ -32,6 +34,6 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the child items.
         /// </summary>
-        public IList<T> Items { get; set; } = new List<T>();
+        public TStructure Items { get; set; }
     }
 }

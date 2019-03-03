@@ -3,20 +3,21 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
-using Piranha.Models;
 using System;
 using System.Collections.Generic;
+using Piranha.Models;
+using Piranha.Services;
 
 namespace Piranha.Areas.Manager.Models
 {
     public class SiteEditModel
     {
-        public Data.Site Site { get; set; } = new Data.Site();
+        public Site Site { get; set; } = new Site();
         public IEnumerable<SiteType> SiteTypes { get; set; } = new List<SiteType>();
 
         public static SiteEditModel Create(IApi api)

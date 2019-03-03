@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using Microsoft.AspNetCore.Http;
@@ -37,7 +37,7 @@ namespace Piranha.AspNetCore
         /// <returns>An async task</returns>
         public override async Task Invoke(HttpContext context, IApi api, IApplicationService service)
         {
-            service.Init(context);
+            await service.InitAsync(context);
 
             // Set culture if applicable
             if (!string.IsNullOrEmpty(service.Site.Culture))

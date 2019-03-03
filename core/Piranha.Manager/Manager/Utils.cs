@@ -3,13 +3,14 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
 using System.Linq;
+using Piranha.Services;
 
 namespace Piranha.Manager
 {
@@ -37,8 +38,8 @@ namespace Piranha.Manager
                         api.Aliases.Save(model);
                     }
                 }
-            } 
-            
+            }
+
             // Check for an existing alias
             var aliasModel = api.Aliases.GetByAliasUrl($"/{alias}", siteId);
             if (aliasModel != null) {
@@ -46,13 +47,13 @@ namespace Piranha.Manager
                 api.Aliases.Save(aliasModel);
             } else {
                 // Let's create a new alias
-                api.Aliases.Save(new Data.Alias() {
+                api.Aliases.Save(new Models.Alias {
                     SiteId = siteId,
                     AliasUrl = alias,
                     RedirectUrl = redirect,
                     Type = Piranha.Models.RedirectType.Permanent
                 });
             }
-        }        
+        }
     }
 }

@@ -1,20 +1,21 @@
 ﻿/*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
-using Piranha.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
+using Piranha.Repositories;
+using Piranha.Services;
 
 namespace Piranha.AttributeBuilder.Tests
 {
@@ -72,14 +73,17 @@ namespace Piranha.AttributeBuilder.Tests
             [Region(Title = "Main content")]
             public BodyRegion Content { get; set; }
         }
-        
+
         public AttributeBuilder() {
-            App.Init();
+            using (var api = CreateApi())
+            {
+                App.Init(api);
+            }
         }
 
         [Fact]
         public void AddSimple() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null)) {
+            using (var api = CreateApi()) {
                 var builder = new PageTypeBuilder(api)
                     .AddType(typeof(SimplePageType));
                 builder.Build();
@@ -95,7 +99,7 @@ namespace Piranha.AttributeBuilder.Tests
 
         [Fact]
         public void AddComplex() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null)) {
+            using (var api = CreateApi()) {
                 var builder = new PageTypeBuilder(api)
                     .AddType(typeof(ComplexPageType));
                 builder.Build();
@@ -122,7 +126,7 @@ namespace Piranha.AttributeBuilder.Tests
 
         [Fact]
         public void DeleteOrphans() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null)) {
+            using (var api = CreateApi()) {
                 var builder = new PageTypeBuilder(api)
                     .AddType(typeof(SimplePageType))
                     .AddType(typeof(ComplexPageType));
@@ -140,7 +144,7 @@ namespace Piranha.AttributeBuilder.Tests
 
         [Fact]
         public void AddSimpleSiteType() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null)) {
+            using (var api = CreateApi()) {
                 var builder = new SiteTypeBuilder(api)
                     .AddType(typeof(SimpleSiteType));
                 builder.Build();
@@ -156,7 +160,7 @@ namespace Piranha.AttributeBuilder.Tests
 
         [Fact]
         public void AddComplexSiteType() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null)) {
+            using (var api = CreateApi()) {
                 var builder = new SiteTypeBuilder(api)
                     .AddType(typeof(ComplexSiteType));
                 builder.Build();
@@ -179,7 +183,7 @@ namespace Piranha.AttributeBuilder.Tests
         }
 
         public void Dispose() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), null)) {
+            using (var api = CreateApi()) {
                 var types = api.PageTypes.GetAll();
 
                 foreach (var t in types)
@@ -201,6 +205,28 @@ namespace Piranha.AttributeBuilder.Tests
             builder.UseSqlite("Filename=./piranha.tests.db");
 
             return new Db(builder.Options);
+        }
+
+        private IApi CreateApi()
+        {
+            var factory = new ContentFactory(services);
+            var serviceFactory = new ContentServiceFactory(factory);
+
+            var db = GetDb();
+
+            return new Api(
+                factory,
+                new AliasRepository(db),
+                new ArchiveRepository(db),
+                new MediaRepository(db),
+                new PageRepository(db, serviceFactory),
+                new PageTypeRepository(db),
+                new ParamRepository(db),
+                new PostRepository(db, serviceFactory),
+                new PostTypeRepository(db),
+                new SiteRepository(db, serviceFactory),
+                new SiteTypeRepository(db)
+            );
         }
     }
 }

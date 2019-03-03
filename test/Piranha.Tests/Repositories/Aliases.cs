@@ -1,17 +1,19 @@
 ﻿/*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
-using Piranha.Services;
 using System;
 using System.Linq;
 using Xunit;
+using Piranha.Models;
+using Piranha.Repositories;
+using Piranha.Services;
 
 namespace Piranha.Tests.Repositories
 {
@@ -41,9 +43,9 @@ namespace Piranha.Tests.Repositories
         #endregion
 
         protected override void Init() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+            using (var api = CreateApi()) {
                 // Add site
-                var site = new Data.Site() {
+                var site = new Site() {
                     Id = SITE_ID,
                     Title = "Alias Site",
                     InternalId = "AliasSite",
@@ -52,19 +54,19 @@ namespace Piranha.Tests.Repositories
                 api.Sites.Save(site);
 
                 // Add aliases
-                api.Aliases.Save(new Data.Alias() {
+                api.Aliases.Save(new Alias() {
                     Id = ALIAS_1_ID,
                     SiteId = SITE_ID,
                     AliasUrl = ALIAS_1,
                     RedirectUrl = "/redirect-1"
                 });
 
-                api.Aliases.Save(new Data.Alias() {
+                api.Aliases.Save(new Alias() {
                     SiteId = SITE_ID,
                     AliasUrl = ALIAS_4,
                     RedirectUrl = "/redirect-4"
                 });
-                api.Aliases.Save(new Data.Alias() {
+                api.Aliases.Save(new Alias() {
                     SiteId = SITE_ID,
                     AliasUrl = ALIAS_5,
                     RedirectUrl = "/redirect-5"
@@ -73,7 +75,7 @@ namespace Piranha.Tests.Repositories
         }
 
         protected override void Cleanup() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+            using (var api = CreateApi()) {
                 var aliases = api.Aliases.GetAll();
                 foreach (var a in aliases)
                     api.Aliases.Delete(a);
@@ -86,15 +88,15 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void IsCached() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
-                Assert.Equal(this.GetType() == typeof(AliasesCached), api.IsCached);
+            using (var api = CreateApi()) {
+                Assert.Equal(this.GetType() == typeof(AliasesCached), ((Api)api).IsCached);
             }
-        }        
+        }
 
         [Fact]
         public void Add() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
-                api.Aliases.Save(new Data.Alias() {
+            using (var api = CreateApi()) {
+                api.Aliases.Save(new Alias() {
                     SiteId = SITE_ID,
                     AliasUrl = ALIAS_2,
                     RedirectUrl = "/redirect-2"
@@ -104,9 +106,9 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void AddDuplicateKey() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+            using (var api = CreateApi()) {
                 Assert.ThrowsAny<Exception>(() =>
-                    api.Aliases.Save(new Data.Alias() {
+                    api.Aliases.Save(new Alias() {
                         SiteId = SITE_ID,
                         AliasUrl = ALIAS_1,
                         RedirectUrl = "/duplicate-alias"
@@ -116,7 +118,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetNoneById() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+            using (var api = CreateApi()) {
                 var none = api.Aliases.GetById(Guid.NewGuid());
 
                 Assert.Null(none);
@@ -125,7 +127,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetNoneByAliasUrl() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+            using (var api = CreateApi()) {
                 var none = api.Aliases.GetByAliasUrl("/none-existing-alias");
 
                 Assert.Null(none);
@@ -134,16 +136,16 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetNoneByRedirectUrl() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+            using (var api = CreateApi()) {
                 var none = api.Aliases.GetByRedirectUrl("/none-existing-alias");
 
                 Assert.Empty(none);
-            }            
+            }
         }
 
         [Fact]
         public void GetAll() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+            using (var api = CreateApi()) {
                 var models = api.Aliases.GetAll();
 
                 Assert.NotNull(models);
@@ -153,7 +155,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetById() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+            using (var api = CreateApi()) {
                 var model = api.Aliases.GetById(ALIAS_1_ID);
 
                 Assert.NotNull(model);
@@ -163,7 +165,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetByAliasUrl() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+            using (var api = CreateApi()) {
                 var model = api.Aliases.GetByAliasUrl(ALIAS_1);
 
                 Assert.NotNull(model);
@@ -173,7 +175,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void GetByRedirectUrl() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+            using (var api = CreateApi()) {
                 var models = api.Aliases.GetByRedirectUrl("/redirect-1");
 
                 Assert.Single(models);
@@ -183,7 +185,7 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void Update() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+            using (var api = CreateApi()) {
                 var model = api.Aliases.GetById(ALIAS_1_ID);
 
                 Assert.Equal("/redirect-1", model.RedirectUrl);
@@ -196,8 +198,8 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void FixAliasUrl() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
-                var model = new Data.Alias() {
+            using (var api = CreateApi()) {
+                var model = new Alias() {
                     SiteId = SITE_ID,
                     AliasUrl = "the-alias-url-1",
                     RedirectUrl = "/the-redirect-1"
@@ -206,13 +208,13 @@ namespace Piranha.Tests.Repositories
                 api.Aliases.Save(model);
 
                 Assert.Equal("/the-alias-url-1", model.AliasUrl);
-            }            
+            }
         }
 
         [Fact]
         public void FixRedirectUrl() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
-                var model = new Data.Alias() {
+            using (var api = CreateApi()) {
+                var model = new Alias() {
                     SiteId = SITE_ID,
                     AliasUrl = "/the-alias-url-2",
                     RedirectUrl = "the-redirect-2"
@@ -221,13 +223,13 @@ namespace Piranha.Tests.Repositories
                 api.Aliases.Save(model);
 
                 Assert.Equal("/the-redirect-2", model.RedirectUrl);
-            }            
+            }
         }
 
         [Fact]
         public void AllowHttpUrl() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
-                var model = new Data.Alias() {
+            using (var api = CreateApi()) {
+                var model = new Alias() {
                     SiteId = SITE_ID,
                     AliasUrl = "/the-alias-url-3",
                     RedirectUrl = "http://redirect.com"
@@ -236,13 +238,13 @@ namespace Piranha.Tests.Repositories
                 api.Aliases.Save(model);
 
                 Assert.Equal("http://redirect.com", model.RedirectUrl);
-            }                        
+            }
         }
 
         [Fact]
         public void AllowHttpsUrl() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
-                var model = new Data.Alias() {
+            using (var api = CreateApi()) {
+                var model = new Alias() {
                     SiteId = SITE_ID,
                     AliasUrl = "/the-alias-url-4",
                     RedirectUrl = "https://redirect.com"
@@ -251,12 +253,12 @@ namespace Piranha.Tests.Repositories
                 api.Aliases.Save(model);
 
                 Assert.Equal("https://redirect.com", model.RedirectUrl);
-            }                        
+            }
         }
 
         [Fact]
         public void Delete() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+            using (var api = CreateApi()) {
                 var model = api.Aliases.GetByAliasUrl(ALIAS_4);
 
                 Assert.NotNull(model);
@@ -267,13 +269,37 @@ namespace Piranha.Tests.Repositories
 
         [Fact]
         public void DeleteById() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, cache)) {
+            using (var api = CreateApi()) {
                 var model = api.Aliases.GetByAliasUrl(ALIAS_5);
 
                 Assert.NotNull(model);
 
                 api.Aliases.Delete(model.Id);
             }
+        }
+
+        private IApi CreateApi()
+        {
+            var factory = new ContentFactory(services);
+            var serviceFactory = new ContentServiceFactory(factory);
+
+            var db = GetDb();
+
+            return new Api(
+                factory,
+                new AliasRepository(db),
+                new ArchiveRepository(db),
+                new Piranha.Repositories.MediaRepository(db),
+                new PageRepository(db, serviceFactory),
+                new PageTypeRepository(db),
+                new ParamRepository(db),
+                new PostRepository(db, serviceFactory),
+                new PostTypeRepository(db),
+                new SiteRepository(db, serviceFactory),
+                new SiteTypeRepository(db),
+                cache: cache,
+                storage: storage
+            );
         }
     }
 }

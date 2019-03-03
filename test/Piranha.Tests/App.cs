@@ -1,17 +1,18 @@
 ﻿/*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
-using Piranha.Extend;
-using Piranha.Services;
 using System.Linq;
 using Xunit;
+using Piranha.Extend;
+using Piranha.Repositories;
+using Piranha.Services;
 
 namespace Piranha.Tests
 {
@@ -21,7 +22,10 @@ namespace Piranha.Tests
         /// Sets up & initializes the tests.
         /// </summary>
         protected override void Init() {
-            Piranha.App.Init();
+            using (var api = CreateApi())
+            {
+                Piranha.App.Init(api);
+            }
         }
 
         /// <summary>
@@ -32,7 +36,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void AppInit() {
-            Piranha.App.Init();
+            using (var api = CreateApi())
+            {
+                Piranha.App.Init(api);
+            }
         }
 
         [Fact]
@@ -64,11 +71,6 @@ namespace Piranha.Tests
         }
 
         [Fact]
-        public void Mapper() {
-            Assert.NotNull(Piranha.App.Mapper);
-        }
-
-        [Fact]
         public void Modules() {
             Assert.NotNull(Piranha.App.Modules);
         }
@@ -78,6 +80,28 @@ namespace Piranha.Tests
             Assert.True(Piranha.App.PropertyBindings.HasFlag(System.Reflection.BindingFlags.IgnoreCase));
             Assert.True(Piranha.App.PropertyBindings.HasFlag(System.Reflection.BindingFlags.Public));
             Assert.True(Piranha.App.PropertyBindings.HasFlag(System.Reflection.BindingFlags.Instance));
+        }
+
+        private IApi CreateApi()
+        {
+            var factory = new ContentFactory(services);
+            var serviceFactory = new ContentServiceFactory(factory);
+
+            var db = GetDb();
+
+            return new Api(
+                factory,
+                new AliasRepository(db),
+                new ArchiveRepository(db),
+                new Piranha.Repositories.MediaRepository(db),
+                new PageRepository(db, serviceFactory),
+                new PageTypeRepository(db),
+                new ParamRepository(db),
+                new PostRepository(db, serviceFactory),
+                new PostTypeRepository(db),
+                new SiteRepository(db, serviceFactory),
+                new SiteTypeRepository(db)
+            );
         }
     }
 }

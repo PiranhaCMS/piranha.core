@@ -1,14 +1,16 @@
 ﻿/*
- * Copyright (c) 2017-2018 Håkan Edling
+ * Copyright (c) 2017-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
+using System.Threading.Tasks;
+using Piranha.Services;
 
 namespace Piranha.Web
 {
@@ -21,7 +23,7 @@ namespace Piranha.Web
         /// <param name="url">The requested url</param>
         /// <param name="siteId">The requested site id</param>
         /// <returns>The piranha response, null if no matching post was found</returns>
-        public static IRouteResponse Invoke(IApi api, string url, Guid siteId)
+        public static async Task<IRouteResponse> InvokeAsync(IApi api, string url, Guid siteId)
         {
             if (!String.IsNullOrWhiteSpace(url) && url.Length > 1)
             {
@@ -29,14 +31,14 @@ namespace Piranha.Web
 
                 if (segments.Length >= 2)
                 {
-                    var post = api.Posts.GetBySlug<Models.PostInfo>(segments[0], segments[1], siteId);
+                    var post = await api.Posts.GetBySlugAsync<Models.PostInfo>(segments[0], segments[1], siteId);
 
                     if (post != null)
                     {
-                        var page = api.Pages.GetById<Models.PageInfo>(post.BlogId);
-                        var site = api.Sites.GetById(page.SiteId);
+                        var page = await api.Pages.GetByIdAsync<Models.PageInfo>(post.BlogId);
+                        var site = await api.Sites.GetByIdAsync(page.SiteId);
                         var route = post.Route ?? "/post";
-                        var lastModified = !site.ContentLastModified.HasValue || post.LastModified > site.ContentLastModified 
+                        var lastModified = !site.ContentLastModified.HasValue || post.LastModified > site.ContentLastModified
                             ? post.LastModified : site.ContentLastModified.Value;
 
                         if (segments.Length > 2)

@@ -1,18 +1,20 @@
 ﻿/*
- * Copyright (c) 2016-2018 Håkan Edling
+ * Copyright (c) 2016-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Piranha.Models;
+using Piranha.Services;
 
 namespace Piranha.AttributeBuilder
 {
@@ -23,7 +25,7 @@ namespace Piranha.AttributeBuilder
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="api">The current api</param>        
+        /// <param name="api">The current api</param>
         public PageTypeBuilder(IApi api)
         {
             _api = api;
@@ -32,7 +34,7 @@ namespace Piranha.AttributeBuilder
         /// <summary>
         /// Builds the page types.
         /// </summary>
-        public override PageTypeBuilder Build()
+        public override async Task<PageTypeBuilder> BuildAsync()
         {
             foreach (var type in _types)
             {
@@ -41,7 +43,7 @@ namespace Piranha.AttributeBuilder
                 if (pageType != null)
                 {
                     pageType.Ensure();
-                    _api.PageTypes.Save(pageType);
+                    await _api.PageTypes.SaveAsync(pageType);
                 }
             }
             return this;
@@ -49,10 +51,20 @@ namespace Piranha.AttributeBuilder
 
         /// <summary>
         /// Deletes all page types in the database that doesn't
-        ///  exist in the database,
+        /// exist in the database,
         /// </summary>
         /// <returns>The builder</returns>
         public PageTypeBuilder DeleteOrphans()
+        {
+            return DeleteOrphansAsync().GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Deletes all page types in the database that doesn't
+        /// exist in the database,
+        /// </summary>
+        /// <returns>The builder</returns>
+        public async Task<PageTypeBuilder> DeleteOrphansAsync()
         {
             var orphans = new List<PageType>();
             var importTypes = new List<PageType>();
@@ -67,7 +79,7 @@ namespace Piranha.AttributeBuilder
             }
 
             // Get all previously imported page types.
-            foreach (var pageType in _api.PageTypes.GetAll())
+            foreach (var pageType in await _api.PageTypes.GetAllAsync())
             {
                 if (!importTypes.Any(t => t.Id == pageType.Id))
                     orphans.Add(pageType);
@@ -76,7 +88,7 @@ namespace Piranha.AttributeBuilder
             // Delete all orphans.
             foreach (var pageType in orphans)
             {
-                _api.PageTypes.Delete(pageType);
+                await _api.PageTypes.DeleteAsync(pageType);
             }
             return this;
         }

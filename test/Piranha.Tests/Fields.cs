@@ -1,20 +1,23 @@
 ﻿/*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
-using Piranha.Extend;
-using Piranha.Runtime;
-using Piranha.Services;
 using System;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
+using Piranha.Extend;
+using Piranha.Models;
+using Piranha.Repositories;
+using Piranha.Runtime;
+using Piranha.Services;
 
 namespace Piranha.Tests
 {
@@ -40,11 +43,14 @@ namespace Piranha.Tests
         /// Sets up & initializes the tests.
         /// </summary>
         protected override void Init() {
-            Piranha.App.Init();
-            Piranha.App.Fields.Register<MyFirstField>();
+            using (var api = CreateApi())
+            {
+                Piranha.App.Init(api);
+                Piranha.App.Fields.Register<MyFirstField>();
 
-            fields.Register<MyFirstField>();
-            fields.Register<MyThirdField>();
+                fields.Register<MyFirstField>();
+                fields.Register<MyThirdField>();
+            }
         }
 
         /// <summary>
@@ -169,10 +175,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void CheckBoxFieldEquals() {
-            var field1 = new Piranha.Extend.Fields.CheckBoxField { 
+            var field1 = new Piranha.Extend.Fields.CheckBoxField {
                 Value = true
             };
-            var field2 = new Piranha.Extend.Fields.CheckBoxField { 
+            var field2 = new Piranha.Extend.Fields.CheckBoxField {
                 Value = true
             };
 
@@ -183,17 +189,17 @@ namespace Piranha.Tests
 
         [Fact]
         public void CheckBoxFieldNotEquals() {
-            var field1 = new Piranha.Extend.Fields.CheckBoxField { 
+            var field1 = new Piranha.Extend.Fields.CheckBoxField {
                 Value = true
             };
-            var field2 = new Piranha.Extend.Fields.CheckBoxField { 
+            var field2 = new Piranha.Extend.Fields.CheckBoxField {
                 Value = false
             };
 
             Assert.True(field1 != field2);
             Assert.True(!field1.Equals(field2));
             Assert.True(!field1.Equals((object)field2));
-        }        
+        }
 
         [Fact]
         public void DateFieldConversions() {
@@ -205,10 +211,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void DateFieldEquals() {
-            var field1 = new Piranha.Extend.Fields.DateField { 
+            var field1 = new Piranha.Extend.Fields.DateField {
                 Value = new DateTime(2018, 1, 1)
             };
-            var field2 = new Piranha.Extend.Fields.DateField { 
+            var field2 = new Piranha.Extend.Fields.DateField {
                 Value = new DateTime(2018, 1, 1)
             };
 
@@ -219,17 +225,17 @@ namespace Piranha.Tests
 
         [Fact]
         public void DateFieldNotEquals() {
-            var field1 = new Piranha.Extend.Fields.DateField { 
+            var field1 = new Piranha.Extend.Fields.DateField {
                 Value = new DateTime(2018, 1, 1)
             };
-            var field2 = new Piranha.Extend.Fields.DateField { 
+            var field2 = new Piranha.Extend.Fields.DateField {
                 Value = new DateTime(2017, 1, 1)
             };
 
             Assert.True(field1 != field2);
             Assert.True(!field1.Equals(field2));
             Assert.True(!field1.Equals((object)field2));
-        }        
+        }
 
         [Fact]
         public void HtmlFieldConversions() {
@@ -244,10 +250,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void HtmlFieldEquals() {
-            var field1 = new Piranha.Extend.Fields.HtmlField { 
+            var field1 = new Piranha.Extend.Fields.HtmlField {
                 Value = "Sollicitudin Justo Tristique"
             };
-            var field2 = new Piranha.Extend.Fields.HtmlField { 
+            var field2 = new Piranha.Extend.Fields.HtmlField {
                 Value = "Sollicitudin Justo Tristique"
             };
 
@@ -258,10 +264,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void HtmlFieldNotEquals() {
-            var field1 = new Piranha.Extend.Fields.HtmlField { 
+            var field1 = new Piranha.Extend.Fields.HtmlField {
                 Value = "Sollicitudin Justo Tristique"
             };
-            var field2 = new Piranha.Extend.Fields.HtmlField { 
+            var field2 = new Piranha.Extend.Fields.HtmlField {
                 Value = "Sollicitudin Tristique"
             };
 
@@ -272,7 +278,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void ImageFieldConversions() {
-            var media = new Data.Media() {
+            var media = new Media() {
                 Id = Guid.NewGuid()
             };
 
@@ -281,13 +287,13 @@ namespace Piranha.Tests
         }
 
         [Fact]
-        public void ImageFieldInitMissing() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+        public async Task ImageFieldInitMissing() {
+            using (var api = CreateApi()) {
                 var field = new Piranha.Extend.Fields.ImageField {
                     Id = Guid.NewGuid()
                 };
 
-                field.Init(api);
+                await field.Init(api);
 
                 Assert.Null(field.Id);
             }
@@ -295,10 +301,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void ImageFieldEquals() {
-            var field1 = new Piranha.Extend.Fields.ImageField { 
+            var field1 = new Piranha.Extend.Fields.ImageField {
                 Id = Guid.NewGuid()
             };
-            var field2 = new Piranha.Extend.Fields.ImageField { 
+            var field2 = new Piranha.Extend.Fields.ImageField {
                 Id = field1.Id
             };
 
@@ -309,10 +315,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void ImageFieldNotEquals() {
-            var field1 = new Piranha.Extend.Fields.ImageField { 
+            var field1 = new Piranha.Extend.Fields.ImageField {
                 Id = Guid.NewGuid()
             };
-            var field2 = new Piranha.Extend.Fields.ImageField { 
+            var field2 = new Piranha.Extend.Fields.ImageField {
                 Id = null
             };
 
@@ -323,7 +329,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void DocumentFieldConversions() {
-            var media = new Data.Media() {
+            var media = new Media() {
                 Id = Guid.NewGuid()
             };
 
@@ -332,13 +338,13 @@ namespace Piranha.Tests
         }
 
         [Fact]
-        public void DocumentFieldInitMissing() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+        public async Task DocumentFieldInitMissing() {
+            using (var api = CreateApi()) {
                 var field = new Piranha.Extend.Fields.DocumentField {
                     Id = Guid.NewGuid()
                 };
 
-                field.Init(api);
+                await field.Init(api);
 
                 Assert.Null(field.Id);
             }
@@ -346,10 +352,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void DocumentFieldEquals() {
-            var field1 = new Piranha.Extend.Fields.DocumentField { 
+            var field1 = new Piranha.Extend.Fields.DocumentField {
                 Id = Guid.NewGuid()
             };
-            var field2 = new Piranha.Extend.Fields.DocumentField { 
+            var field2 = new Piranha.Extend.Fields.DocumentField {
                 Id = field1.Id
             };
 
@@ -360,10 +366,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void DocumentFieldNotEquals() {
-            var field1 = new Piranha.Extend.Fields.DocumentField { 
+            var field1 = new Piranha.Extend.Fields.DocumentField {
                 Id = Guid.NewGuid()
             };
-            var field2 = new Piranha.Extend.Fields.DocumentField { 
+            var field2 = new Piranha.Extend.Fields.DocumentField {
                 Id = null
             };
 
@@ -374,7 +380,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void VideoFieldConversions() {
-            var media = new Data.Media() {
+            var media = new Media() {
                 Id = Guid.NewGuid()
             };
 
@@ -383,13 +389,13 @@ namespace Piranha.Tests
         }
 
         [Fact]
-        public void VideoFieldInitMissing() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+        public async Task VideoFieldInitMissing() {
+            using (var api = CreateApi()) {
                 var field = new Piranha.Extend.Fields.VideoField {
                     Id = Guid.NewGuid()
                 };
 
-                field.Init(api);
+                await field.Init(api);
 
                 Assert.Null(field.Id);
             }
@@ -397,10 +403,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void VideoFieldEquals() {
-            var field1 = new Piranha.Extend.Fields.VideoField { 
+            var field1 = new Piranha.Extend.Fields.VideoField {
                 Id = Guid.NewGuid()
             };
-            var field2 = new Piranha.Extend.Fields.VideoField { 
+            var field2 = new Piranha.Extend.Fields.VideoField {
                 Id = field1.Id
             };
 
@@ -411,10 +417,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void VideoFieldNotEquals() {
-            var field1 = new Piranha.Extend.Fields.VideoField { 
+            var field1 = new Piranha.Extend.Fields.VideoField {
                 Id = Guid.NewGuid()
             };
-            var field2 = new Piranha.Extend.Fields.VideoField { 
+            var field2 = new Piranha.Extend.Fields.VideoField {
                 Id = null
             };
 
@@ -425,7 +431,7 @@ namespace Piranha.Tests
 
         [Fact]
         public void MediaFieldConversions() {
-            var media = new Data.Media() {
+            var media = new Media() {
                 Id = Guid.NewGuid()
             };
 
@@ -434,13 +440,13 @@ namespace Piranha.Tests
         }
 
         [Fact]
-        public void MediaFieldInitMissing() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+        public async Task MediaFieldInitMissing() {
+            using (var api = CreateApi()) {
                 var field = new Piranha.Extend.Fields.MediaField {
                     Id = Guid.NewGuid()
                 };
 
-                field.Init(api);
+                await field.Init(api);
 
                 Assert.Null(field.Id);
             }
@@ -448,10 +454,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void MediaFieldEquals() {
-            var field1 = new Piranha.Extend.Fields.MediaField { 
+            var field1 = new Piranha.Extend.Fields.MediaField {
                 Id = Guid.NewGuid()
             };
-            var field2 = new Piranha.Extend.Fields.MediaField { 
+            var field2 = new Piranha.Extend.Fields.MediaField {
                 Id = field1.Id
             };
 
@@ -462,10 +468,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void MediaFieldNotEquals() {
-            var field1 = new Piranha.Extend.Fields.MediaField { 
+            var field1 = new Piranha.Extend.Fields.MediaField {
                 Id = Guid.NewGuid()
             };
-            var field2 = new Piranha.Extend.Fields.MediaField { 
+            var field2 = new Piranha.Extend.Fields.MediaField {
                 Id = null
             };
 
@@ -532,10 +538,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void MarkdownFieldEquals() {
-            var field1 = new Piranha.Extend.Fields.MarkdownField { 
+            var field1 = new Piranha.Extend.Fields.MarkdownField {
                 Value = "Sollicitudin Justo Tristique"
             };
-            var field2 = new Piranha.Extend.Fields.MarkdownField { 
+            var field2 = new Piranha.Extend.Fields.MarkdownField {
                 Value = "Sollicitudin Justo Tristique"
             };
 
@@ -546,10 +552,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void MarkdownFieldNotEquals() {
-            var field1 = new Piranha.Extend.Fields.MarkdownField { 
+            var field1 = new Piranha.Extend.Fields.MarkdownField {
                 Value = "Sollicitudin Justo Tristique"
             };
-            var field2 = new Piranha.Extend.Fields.MarkdownField { 
+            var field2 = new Piranha.Extend.Fields.MarkdownField {
                 Value = "Sollicitudin Tristique"
             };
 
@@ -568,10 +574,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void NumberFieldEquals() {
-            var field1 = new Piranha.Extend.Fields.NumberField { 
+            var field1 = new Piranha.Extend.Fields.NumberField {
                 Value = 23
             };
-            var field2 = new Piranha.Extend.Fields.NumberField { 
+            var field2 = new Piranha.Extend.Fields.NumberField {
                 Value = 23
             };
 
@@ -582,10 +588,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void NumberFieldNotEquals() {
-            var field1 = new Piranha.Extend.Fields.NumberField { 
+            var field1 = new Piranha.Extend.Fields.NumberField {
                 Value = 23
             };
-            var field2 = new Piranha.Extend.Fields.NumberField { 
+            var field2 = new Piranha.Extend.Fields.NumberField {
                 Value = null
             };
 
@@ -596,10 +602,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void PageFieldEquals() {
-            var field1 = new Piranha.Extend.Fields.PageField { 
+            var field1 = new Piranha.Extend.Fields.PageField {
                 Id = Guid.NewGuid()
             };
-            var field2 = new Piranha.Extend.Fields.PageField { 
+            var field2 = new Piranha.Extend.Fields.PageField {
                 Id = field1.Id
             };
 
@@ -610,24 +616,24 @@ namespace Piranha.Tests
 
         [Fact]
         public void PageFieldNotEquals() {
-            var field1 = new Piranha.Extend.Fields.PageField { 
+            var field1 = new Piranha.Extend.Fields.PageField {
                 Id = Guid.NewGuid()
             };
-            var field2 = new Piranha.Extend.Fields.PageField { 
+            var field2 = new Piranha.Extend.Fields.PageField {
                 Id = null
             };
 
             Assert.True(field1 != field2);
             Assert.True(!field1.Equals(field2));
             Assert.True(!field1.Equals((object)field2));
-        }        
+        }
 
         [Fact]
         public void PostFieldEquals() {
-            var field1 = new Piranha.Extend.Fields.PostField { 
+            var field1 = new Piranha.Extend.Fields.PostField {
                 Id = Guid.NewGuid()
             };
-            var field2 = new Piranha.Extend.Fields.PostField { 
+            var field2 = new Piranha.Extend.Fields.PostField {
                 Id = field1.Id
             };
 
@@ -638,24 +644,24 @@ namespace Piranha.Tests
 
         [Fact]
         public void PostFieldNotEquals() {
-            var field1 = new Piranha.Extend.Fields.PostField { 
+            var field1 = new Piranha.Extend.Fields.PostField {
                 Id = Guid.NewGuid()
             };
-            var field2 = new Piranha.Extend.Fields.PostField { 
+            var field2 = new Piranha.Extend.Fields.PostField {
                 Id = null
             };
 
             Assert.True(field1 != field2);
             Assert.True(!field1.Equals(field2));
             Assert.True(!field1.Equals((object)field2));
-        }        
+        }
 
         [Fact]
         public void SelectFieldEquals() {
-            var field1 = new Piranha.Extend.Fields.SelectField<MyEnum> { 
+            var field1 = new Piranha.Extend.Fields.SelectField<MyEnum> {
                 Value = MyEnum.Value1
             };
-            var field2 = new Piranha.Extend.Fields.SelectField<MyEnum> { 
+            var field2 = new Piranha.Extend.Fields.SelectField<MyEnum> {
                 Value = MyEnum.Value1
             };
 
@@ -666,10 +672,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void SelectFieldNotEquals() {
-            var field1 = new Piranha.Extend.Fields.SelectField<MyEnum> { 
+            var field1 = new Piranha.Extend.Fields.SelectField<MyEnum> {
                 Value = MyEnum.Value1
             };
-            var field2 = new Piranha.Extend.Fields.SelectField<MyEnum> { 
+            var field2 = new Piranha.Extend.Fields.SelectField<MyEnum> {
                 Value = MyEnum.Value2
             };
 
@@ -686,15 +692,15 @@ namespace Piranha.Tests
             Assert.Equal(inStr, field.Value);
 
             string outStr = field;
-            Assert.Equal(inStr, outStr); 
+            Assert.Equal(inStr, outStr);
         }
 
         [Fact]
         public void StringFieldEquals() {
-            var field1 = new Piranha.Extend.Fields.StringField { 
+            var field1 = new Piranha.Extend.Fields.StringField {
                 Value = "Sollicitudin Justo Tristique"
             };
-            var field2 = new Piranha.Extend.Fields.StringField { 
+            var field2 = new Piranha.Extend.Fields.StringField {
                 Value = "Sollicitudin Justo Tristique"
             };
 
@@ -705,10 +711,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void StringFieldNotEquals() {
-            var field1 = new Piranha.Extend.Fields.StringField { 
+            var field1 = new Piranha.Extend.Fields.StringField {
                 Value = "Sollicitudin Justo Tristique"
             };
-            var field2 = new Piranha.Extend.Fields.StringField { 
+            var field2 = new Piranha.Extend.Fields.StringField {
                 Value = "Sollicitudin Tristique"
             };
 
@@ -725,15 +731,15 @@ namespace Piranha.Tests
             Assert.Equal(inStr, field.Value);
 
             string outStr = field;
-            Assert.Equal(inStr, outStr); 
+            Assert.Equal(inStr, outStr);
         }
 
         [Fact]
         public void TextFieldEquals() {
-            var field1 = new Piranha.Extend.Fields.TextField { 
+            var field1 = new Piranha.Extend.Fields.TextField {
                 Value = "Sollicitudin Justo Tristique"
             };
-            var field2 = new Piranha.Extend.Fields.TextField { 
+            var field2 = new Piranha.Extend.Fields.TextField {
                 Value = "Sollicitudin Justo Tristique"
             };
 
@@ -744,10 +750,10 @@ namespace Piranha.Tests
 
         [Fact]
         public void TextFieldNotEquals() {
-            var field1 = new Piranha.Extend.Fields.TextField { 
+            var field1 = new Piranha.Extend.Fields.TextField {
                 Value = "Sollicitudin Justo Tristique"
             };
-            var field2 = new Piranha.Extend.Fields.TextField { 
+            var field2 = new Piranha.Extend.Fields.TextField {
                 Value = "Sollicitudin Tristique"
             };
 
@@ -778,8 +784,30 @@ namespace Piranha.Tests
             }
 
             Piranha.Extend.Fields.TextField field = sb.ToString();
-            
+
             Assert.Equal(43, field.GetTitle().Length);
+        }
+
+        private IApi CreateApi()
+        {
+            var factory = new ContentFactory(services);
+            var serviceFactory = new ContentServiceFactory(factory);
+
+            var db = GetDb();
+
+            return new Api(
+                factory,
+                new AliasRepository(db),
+                new ArchiveRepository(db),
+                new Piranha.Repositories.MediaRepository(db),
+                new PageRepository(db, serviceFactory),
+                new PageTypeRepository(db),
+                new ParamRepository(db),
+                new PostRepository(db, serviceFactory),
+                new PostTypeRepository(db),
+                new SiteRepository(db, serviceFactory),
+                new SiteTypeRepository(db)
+            );
         }
     }
 }

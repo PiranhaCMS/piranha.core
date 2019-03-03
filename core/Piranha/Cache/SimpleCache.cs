@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using System;
@@ -38,7 +38,7 @@ namespace Piranha.Cache
 
             if (_cache.TryGetValue(key, out value))
             {
-                return (T)value;
+                return Utils.DeepClone<T>((T)value);
             }
             return default(T);
         }

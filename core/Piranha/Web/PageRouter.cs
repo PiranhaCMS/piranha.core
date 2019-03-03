@@ -1,14 +1,16 @@
 ﻿/*
- * Copyright (c) 2017-2018 Håkan Edling
+ * Copyright (c) 2017-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
+using System.Threading.Tasks;
+using Piranha.Services;
 
 namespace Piranha.Web
 {
@@ -21,7 +23,7 @@ namespace Piranha.Web
         /// <param name="url">The requested url</param>
         /// <param name="siteId">The requested site id</param>
         /// <returns>The piranha response, null if no matching page was found</returns>
-        public static IRouteResponse Invoke(IApi api, string url, Guid siteId)
+        public static async Task <IRouteResponse> InvokeAsync(IApi api, string url, Guid siteId)
         {
             if (!String.IsNullOrWhiteSpace(url) && url.Length > 1)
             {
@@ -33,15 +35,15 @@ namespace Piranha.Web
                 for (var n = include; n > 0; n--)
                 {
                     var slug = string.Join("/", segments.Subset(0, n));
-                    var page = api.Pages.GetBySlug<Models.PageInfo>(slug, siteId);
+                    var page = await api.Pages.GetBySlugAsync<Models.PageInfo>(slug, siteId);
 
                     if (page != null && page.ContentType == "Page")
                     {
                         if (string.IsNullOrWhiteSpace(page.RedirectUrl))
                         {
-                            var site = api.Sites.GetById(siteId);
+                            var site = await api.Sites.GetByIdAsync(siteId);
                             var route = page.Route ?? "/page";
-                            var lastModified = !site.ContentLastModified.HasValue || page.LastModified > site.ContentLastModified 
+                            var lastModified = !site.ContentLastModified.HasValue || page.LastModified > site.ContentLastModified
                                 ? page.LastModified : site.ContentLastModified.Value;
 
                             if (n < include)

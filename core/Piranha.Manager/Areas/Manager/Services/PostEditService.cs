@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -24,12 +24,12 @@ namespace Piranha.Areas.Manager.Services
     public class PostEditService
     {
         private readonly IApi _api;
-        private readonly IContentService<Data.Post, Data.PostField, Piranha.Models.PostBase> _service;
+        private readonly IContentFactory _factory;
 
-        public PostEditService(IApi api, IContentServiceFactory factory)
+        public PostEditService(IApi api, IContentFactory factory)
         {
             _api = api;
-            _service = factory.CreatePostService();
+            _factory = factory;
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Piranha.Areas.Manager.Services
             SaveBlocks(model, post);
 
             // Update category
-            var category = _api.Categories.GetBySlug(model.BlogId, model.SelectedCategory);
+            var category = _api.Posts.GetCategoryBySlug(model.BlogId, model.SelectedCategory);
             if (category != null)
             {
                 post.Category = category;
@@ -81,7 +81,7 @@ namespace Piranha.Areas.Manager.Services
             {
                 if (!post.Tags.Any(t => t.Slug == selectedTag))
                 {
-                    var tag = _api.Tags.GetBySlug(model.BlogId, selectedTag);
+                    var tag = _api.Posts.GetTagBySlug(model.BlogId, selectedTag);
 
                     if (tag != null)
                     {
@@ -116,10 +116,6 @@ namespace Piranha.Areas.Manager.Services
             _api.Posts.Save(post);
             model.Id = post.Id;
 
-            // Now tidy up the categories & tags for the blog
-            _api.Categories.DeleteUnused(post.BlogId);
-            _api.Tags.DeleteUnused(post.BlogId);
-
             return true;
         }
 
@@ -137,8 +133,8 @@ namespace Piranha.Areas.Manager.Services
                 var page = _api.Pages.GetById(post.BlogId);
                 var model = Module.Mapper.Map<Piranha.Models.PostBase, PostEditModel>(post);
                 model.PostType = _api.PostTypes.GetById(model.TypeId);
-                model.AllCategories = _api.Categories.GetAll(post.BlogId);
-                model.AllTags = _api.Tags.GetAll(post.BlogId);
+                model.AllCategories = _api.Posts.GetAllCategories(post.BlogId);
+                model.AllTags = _api.Posts.GetAllTags(post.BlogId);
                 model.SelectedCategory = post.Category.Slug;
                 model.SelectedTags = post.Tags.Select(t => t.Slug).ToList();
                 model.BlogSlug = page.Slug;
@@ -159,8 +155,8 @@ namespace Piranha.Areas.Manager.Services
             if (!string.IsNullOrWhiteSpace(model.TypeId))
             {
                 model.PostType = _api.PostTypes.GetById(model.TypeId);
-                model.AllCategories = _api.Categories.GetAll(model.BlogId);
-                model.AllTags = _api.Tags.GetAll(model.BlogId);
+                model.AllCategories = _api.Posts.GetAllCategories(model.BlogId);
+                model.AllTags = _api.Posts.GetAllTags(model.BlogId);
             }
             return model;
         }
@@ -170,7 +166,7 @@ namespace Piranha.Areas.Manager.Services
         /// </summary>
         /// <param name="postTypeId">The post type id</param>
         /// <param name="blogId">The blog id</param>
-        /// <returns>The post edit model</returns>        
+        /// <returns>The post edit model</returns>
         public PostEditModel Create(string postTypeId, Guid blogId)
         {
             var type = _api.PostTypes.GetById(postTypeId);
@@ -182,8 +178,8 @@ namespace Piranha.Areas.Manager.Services
                 var model = Module.Mapper.Map<Piranha.Models.PostBase, PostEditModel>(post);
                 model.BlogId = blogId;
                 model.PostType = type;
-                model.AllCategories = _api.Categories.GetAll(blogId);
-                model.AllTags = _api.Tags.GetAll(blogId);
+                model.AllCategories = _api.Posts.GetAllCategories(blogId);
+                model.AllTags = _api.Posts.GetAllTags(blogId);
                 model.BlogSlug = page.Slug;
 
                 LoadRegions(post, model);
@@ -251,9 +247,9 @@ namespace Piranha.Areas.Manager.Services
                         }
                     }
 
-                    var set = new PageEditFieldSet 
+                    var set = new PageEditFieldSet
                     {
-                        new PageEditField 
+                        new PageEditField
                         {
                             Id = region.Fields[0].Id,
                             Title = region.Fields[0].Title ?? region.Fields[0].Id,
@@ -387,7 +383,7 @@ namespace Piranha.Areas.Manager.Services
                 {
                     if (!modelRegions.ContainsKey(region.Id))
                     {
-                        modelRegions[region.Id] = _service.CreateDynamicRegion(type, region.Id);
+                        modelRegions[region.Id] = _factory.CreateDynamicRegion(type, region.Id);
                     }
 
                     var reg = (PageEditRegion)region;
@@ -424,7 +420,7 @@ namespace Piranha.Areas.Manager.Services
                             }
                             else
                             {
-                                var modelFields = (IDictionary<string, object>)_service.CreateDynamicRegion(type, region.Id);
+                                var modelFields = (IDictionary<string, object>)_factory.CreateDynamicRegion(type, region.Id);
 
                                 foreach (var field in set)
                                 {

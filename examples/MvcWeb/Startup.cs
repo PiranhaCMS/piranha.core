@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -16,23 +17,22 @@ namespace MvcWeb
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(config => 
+            services.AddMvc(config =>
             {
                 config.ModelBinderProviders.Insert(0, new Piranha.Manager.Binders.AbstractModelBinderProvider());
             });
+            services.AddPiranha();
             services.AddPiranhaApplication();
             services.AddPiranhaFileStorage();
             services.AddPiranhaImageSharp();
-            services.AddPiranhaEF(options => 
+            services.AddPiranhaEF(options =>
                 options.UseSqlite("Filename=./piranha.mvcweb.db"));
-            services.AddPiranhaIdentityWithSeed<IdentitySQLiteDb>(options => 
+            services.AddPiranhaIdentityWithSeed<IdentitySQLiteDb>(options =>
                 options.UseSqlite("Filename=./piranha.mvcweb.db"));
             services.AddPiranhaManager();
 
             services.AddMemoryCache();
             services.AddPiranhaMemoryCache();
-
-            App.Init();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,8 +43,9 @@ namespace MvcWeb
                 app.UseDeveloperExceptionPage();
             }
 
+            App.Init(api);
+
             // Configure cache level
-            // App.CacheLevel = Piranha.Cache.CacheLevel.Basic;
             App.CacheLevel = Piranha.Cache.CacheLevel.Full;
 
             // Custom components
@@ -54,12 +55,12 @@ namespace MvcWeb
             var pageTypeBuilder = new Piranha.AttributeBuilder.PageTypeBuilder(api)
                 .AddType(typeof(Models.BlogArchive))
                 .AddType(typeof(Models.StandardPage))
-                .AddType(typeof(Models.TeaserPage));
-            pageTypeBuilder.Build()
+                .AddType(typeof(Models.TeaserPage))
+                .Build()
                 .DeleteOrphans();
             var postTypeBuilder = new Piranha.AttributeBuilder.PostTypeBuilder(api)
-                .AddType(typeof(Models.BlogPost));
-            postTypeBuilder.Build()
+                .AddType(typeof(Models.BlogPost))
+                .Build()
                 .DeleteOrphans();
 
             // Register middleware
@@ -67,7 +68,7 @@ namespace MvcWeb
             app.UseAuthentication();
             app.UsePiranha();
             app.UsePiranhaManager();
-            app.UseMvc(routes => 
+            app.UseMvc(routes =>
             {
                 routes.MapRoute(name: "areaRoute",
                     template: "{area:exists}/{controller}/{action}/{id?}",
@@ -78,7 +79,7 @@ namespace MvcWeb
                     template: "{controller=home}/{action=index}/{id?}");
             });
 
-            Seed.Run(api);
+            Seed.RunAsync(api).GetAwaiter().GetResult();
         }
     }
 }

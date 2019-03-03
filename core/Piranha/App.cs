@@ -1,21 +1,22 @@
 ﻿/*
- * Copyright (c) 2016-2018 Håkan Edling
+ * Copyright (c) 2016-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
-using AutoMapper;
+using System;
+using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Piranha.Extend;
 using Piranha.Extend.Serializers;
 using Piranha.Runtime;
 using Piranha.Security;
-using System;
-using System.Reflection;
+using Piranha.Services;
 
 namespace Piranha
 {
@@ -27,7 +28,7 @@ namespace Piranha
         /// <summary>
         /// The singleton app instance.
         /// </summary>
-        private static readonly App Instance = new App();
+        private static readonly App Instance;
 
         /// <summary>
         /// Mutex for thread safe initialization.
@@ -35,7 +36,7 @@ namespace Piranha
         private static readonly object _mutex = new object();
 
         /// <summary>
-        /// The current state of the app.
+        /// If the app has been initialized.
         /// </summary>
         private static volatile bool _isInitialized = false;
 
@@ -58,16 +59,6 @@ namespace Piranha
         /// The currently registered media types.
         /// </summary>
         private readonly MediaManager _mediaTypes;
-
-        /// <summary>
-        /// The application object mapper.
-        /// </summary>
-        private IMapper _mapper;
-
-        /// <summary>
-        /// The application markdown converter.
-        /// </summary>
-        private IMarkdown _markdown;
 
         /// <summary>
         /// The currently registered serializers.
@@ -95,6 +86,26 @@ namespace Piranha
         private Cache.CacheLevel _cacheLevel = Cache.CacheLevel.Full;
 
         /// <summary>
+        /// The application markdown converter.
+        /// </summary>
+        private IMarkdown _markdown;
+
+        /// <summary>
+        /// The currently available page types.
+        /// </summary>
+        private readonly ContentTypeList<Models.PageType> _pageTypes;
+
+        /// <summary>
+        /// The currently available post types.
+        /// </summary>
+        private readonly ContentTypeList<Models.PostType> _postTypes;
+
+        /// <summary>
+        /// The currently available post types.
+        /// </summary>
+        private readonly ContentTypeList<Models.SiteType> _siteTypes;
+
+        /// <summary>
         /// Gets the currently registered block types.
         /// </summary>
         public static AppBlockList Blocks => Instance._blocks;
@@ -113,11 +124,6 @@ namespace Piranha
         /// Gets the currently registered media types.
         /// </summary>
         public static MediaManager MediaTypes => Instance._mediaTypes;
-
-        /// <summary>
-        /// Gets the application object mapper.
-        /// </summary>
-        public static IMapper Mapper => Instance._mapper;
 
         /// <summary>
         /// Gets the markdown converter.
@@ -161,6 +167,93 @@ namespace Piranha
         }
 
         /// <summary>
+        /// Gets the currently available page types.
+        /// </summary>
+        public static ContentTypeList<Models.PageType> PageTypes => Instance._pageTypes;
+
+        /// <summary>
+        /// Gets the currently available page types.
+        /// </summary>
+        public static ContentTypeList<Models.PostType> PostTypes => Instance._postTypes;
+
+        /// <summary>
+        /// Gets the currently available page types.
+        /// </summary>
+        public static ContentTypeList<Models.SiteType> SiteTypes => Instance._siteTypes;
+
+        /// <summary>
+        /// Static constructor. Called once every application
+        /// lifecycle.
+        /// </summary>
+        static App()
+        {
+            Instance = new App();
+
+            // Setup media types
+            Instance._mediaTypes.Documents.Add(".pdf", "application/pdf");
+            Instance._mediaTypes.Images.Add(".jpg", "image/jpeg");
+            Instance._mediaTypes.Images.Add(".jpeg", "image/jpeg");
+            Instance._mediaTypes.Images.Add(".png", "image/png");
+            Instance._mediaTypes.Videos.Add(".mp4", "video/mp4");
+
+            // Compose content types
+            Instance._contentTypes.Register<Models.IPage>("Page", "Page");
+            Instance._contentTypes.Register<Models.IArchivePage>("Blog", "Archive", true);
+
+            // Compose field types
+            Instance._fields.Register<Extend.Fields.CheckBoxField>();
+            Instance._fields.Register<Extend.Fields.DateField>();
+            Instance._fields.Register<Extend.Fields.DocumentField>();
+            Instance._fields.Register<Extend.Fields.HtmlField>();
+            Instance._fields.Register<Extend.Fields.ImageField>();
+            Instance._fields.Register<Extend.Fields.MarkdownField>();
+            Instance._fields.Register<Extend.Fields.MediaField>();
+            Instance._fields.Register<Extend.Fields.NumberField>();
+            Instance._fields.Register<Extend.Fields.PageField>();
+            Instance._fields.Register<Extend.Fields.PostField>();
+            Instance._fields.Register<Extend.Fields.StringField>();
+            Instance._fields.Register<Extend.Fields.TextField>();
+            Instance._fields.Register<Extend.Fields.VideoField>();
+
+            // Compose block types
+            Instance._blocks.Register<Extend.Blocks.HtmlBlock>();
+            Instance._blocks.Register<Extend.Blocks.HtmlColumnBlock>();
+            Instance._blocks.Register<Extend.Blocks.ImageBlock>();
+            Instance._blocks.Register<Extend.Blocks.QuoteBlock>();
+            Instance._blocks.Register<Extend.Blocks.TextBlock>();
+
+            // Compose serializers
+            Instance._serializers.Register<Extend.Fields.CheckBoxField>(new CheckBoxFieldSerializer<Extend.Fields.CheckBoxField>());
+            Instance._serializers.Register<Extend.Fields.DateField>(new DateFieldSerializer());
+            Instance._serializers.Register<Extend.Fields.DocumentField>(new DocumentFieldSerializer());
+            Instance._serializers.Register<Extend.Fields.HtmlField>(new StringFieldSerializer<Extend.Fields.HtmlField>());
+            Instance._serializers.Register<Extend.Fields.MarkdownField>(new StringFieldSerializer<Extend.Fields.MarkdownField>());
+            Instance._serializers.Register<Extend.Fields.MediaField>(new MediaFieldSerializer());
+            Instance._serializers.Register<Extend.Fields.NumberField>(new IntegerFieldSerializer<Extend.Fields.NumberField>());
+            Instance._serializers.Register<Extend.Fields.PageField>(new PageFieldSerializer());
+            Instance._serializers.Register<Extend.Fields.PostField>(new PostFieldSerializer());
+            Instance._serializers.Register<Extend.Fields.StringField>(new StringFieldSerializer<Extend.Fields.StringField>());
+            Instance._serializers.Register<Extend.Fields.TextField>(new StringFieldSerializer<Extend.Fields.TextField>());
+            Instance._serializers.Register<Extend.Fields.ImageField>(new ImageFieldSerializer());
+            Instance._serializers.Register<Extend.Fields.VideoField>(new VideoFieldSerializer());
+
+            // Create markdown converter
+            Instance._markdown = new DefaultMarkdown();
+
+            // Register permissions
+            Instance._permissions["Core"].Add(new PermissionItem
+            {
+                Name = Permission.PagePreview,
+                Title = "Page Preview"
+            });
+            Instance._permissions["Core"].Add(new PermissionItem
+            {
+                Name = Permission.PostPreview,
+                Title = "Post Preview"
+            });
+        }
+
+        /// <summary>
         /// Default private constructor.
         /// </summary>
         private App()
@@ -173,23 +266,17 @@ namespace Piranha
             _contentTypes = new ContentTypeManager();
             _hooks = new HookManager();
             _permissions = new PermissionManager();
+            _pageTypes = new ContentTypeList<Models.PageType>();
+            _postTypes = new ContentTypeList<Models.PostType>();
+            _siteTypes = new ContentTypeList<Models.SiteType>();
         }
 
         /// <summary>
-        /// Initializes the application object.
+        /// Initializes the application.
         /// </summary>
-        public static void Init()
-        {
-            Instance.Initialize();
-        }
-
-        /// <summary>
-        /// Initializes the application object.
-        /// </summary>
-        [Obsolete("Please refer to App.Init()")]
         public static void Init(IApi api)
         {
-            Instance.Initialize();
+            Instance.InitApp(api);
         }
 
         /// <summary>
@@ -226,7 +313,7 @@ namespace Piranha
         /// Initializes the application object.
         /// </summary>
         /// <param name="api">The current api</param>
-        private void Initialize()
+        private void InitApp(IApi api)
         {
             if (!_isInitialized)
             {
@@ -234,144 +321,10 @@ namespace Piranha
                 {
                     if (!_isInitialized)
                     {
-                        // Configure object mapper
-                        var mapperConfig = new MapperConfiguration(cfg =>
-                        {
-                            cfg.CreateMap<Data.Alias, Data.Alias>()
-                                .ForMember(a => a.Id, o => o.Ignore())
-                                .ForMember(a => a.Created, o => o.Ignore());
-                            cfg.CreateMap<Data.Category, Data.Category>()
-                                .ForMember(c => c.Id, o => o.Ignore())
-                                .ForMember(c => c.Created, o => o.Ignore());
-                            cfg.CreateMap<Data.MediaFolder, Data.MediaFolder>()
-                                .ForMember(f => f.Id, o => o.Ignore())
-                                .ForMember(f => f.Created, o => o.Ignore())
-                                .ForMember(f => f.Media, o => o.Ignore());
-                            cfg.CreateMap<Data.MediaFolder, Models.MediaStructureItem>()
-                                .ForMember(f => f.Level, o => o.Ignore())
-                                .ForMember(f => f.Items, o => o.Ignore());
-                            cfg.CreateMap<Data.Page, Models.PageBase>()
-                                .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PageTypeId))
-                                .ForMember(p => p.Permalink, o => o.MapFrom(m => "/" + m.Slug))
-                                .ForMember(p => p.Blocks, o => o.Ignore());
-                            cfg.CreateMap<Models.PageBase, Data.Page>()
-                                .ForMember(p => p.PageTypeId, o => o.MapFrom(m => m.TypeId))
-                                .ForMember(p => p.Blocks, o => o.Ignore())
-                                .ForMember(p => p.Fields, o => o.Ignore())
-                                .ForMember(p => p.Created, o => o.Ignore())
-                                .ForMember(p => p.LastModified, o => o.Ignore())
-                                .ForMember(p => p.PageType, o => o.Ignore())
-                                .ForMember(p => p.Site, o => o.Ignore())
-                                .ForMember(p => p.Parent, o => o.Ignore());
-                            cfg.CreateMap<Data.Page, Models.SitemapItem>()
-                                .ForMember(p => p.MenuTitle, o => o.Ignore())
-                                .ForMember(p => p.Level, o => o.Ignore())
-                                .ForMember(p => p.Items, o => o.Ignore())
-                                .ForMember(p => p.PageTypeName, o => o.Ignore())
-                                .ForMember(p => p.Permalink, o => o.MapFrom(d => !d.ParentId.HasValue && d.SortOrder == 0 ? "/" : "/" + d.Slug));
-                            cfg.CreateMap<Data.Param, Data.Param>()
-                                .ForMember(p => p.Id, o => o.Ignore())
-                                .ForMember(p => p.Created, o => o.Ignore());
-                            cfg.CreateMap<Data.Post, Models.PostBase>()
-                                .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PostTypeId))
-                                .ForMember(p => p.Permalink, o => o.MapFrom(m => "/" + m.Blog.Slug + "/" + m.Slug))
-                                .ForMember(p => p.Blocks, o => o.Ignore());
-                            cfg.CreateMap<Models.PostBase, Data.Post>()
-                                .ForMember(p => p.PostTypeId, o => o.MapFrom(m => m.TypeId))
-                                .ForMember(p => p.CategoryId, o => o.MapFrom(m => m.Category.Id))
-                                .ForMember(p => p.Blocks, o => o.Ignore())
-                                .ForMember(p => p.Fields, o => o.Ignore())
-                                .ForMember(p => p.Created, o => o.Ignore())
-                                .ForMember(p => p.LastModified, o => o.Ignore())
-                                .ForMember(p => p.PostType, o => o.Ignore())
-                                .ForMember(p => p.Blog, o => o.Ignore())
-                                .ForMember(p => p.Category, o => o.Ignore())
-                                .ForMember(p => p.Tags, o => o.Ignore());
-                            cfg.CreateMap<Data.Site, Data.Site>()
-                                .ForMember(s => s.Id, o => o.Ignore())
-                                .ForMember(s => s.Created, o => o.Ignore());
-                            cfg.CreateMap<Data.Site, Models.SiteContentBase>()
-                                .ForMember(s => s.TypeId, o => o.MapFrom(m => m.SiteTypeId));
-                            cfg.CreateMap<Models.SiteContentBase, Data.Site>()
-                                .ForMember(s => s.SiteTypeId, o => o.Ignore())
-                                .ForMember(s => s.InternalId, o => o.Ignore())
-                                .ForMember(s => s.Description, o => o.Ignore())
-                                .ForMember(s => s.Hostnames, o => o.Ignore())
-                                .ForMember(s => s.IsDefault, o => o.Ignore())
-                                .ForMember(s => s.Culture, o => o.Ignore())
-                                .ForMember(s => s.Fields, o => o.Ignore())
-                                .ForMember(s => s.Created, o => o.Ignore())
-                                .ForMember(s => s.LastModified, o => o.Ignore())
-                                .ForMember(s => s.ContentLastModified, o => o.Ignore());
-                            cfg.CreateMap<Data.Tag, Data.Tag>()
-                                .ForMember(t => t.Id, o => o.Ignore())
-                                .ForMember(t => t.Created, o => o.Ignore());
-                        });
-                        mapperConfig.AssertConfigurationIsValid();
-                        _mapper = mapperConfig.CreateMapper();
-
-                        // Setup media types
-                        _mediaTypes.Documents.Add(".pdf", "application/pdf");
-                        _mediaTypes.Images.Add(".jpg", "image/jpeg");
-                        _mediaTypes.Images.Add(".jpeg", "image/jpeg");
-                        _mediaTypes.Images.Add(".png", "image/png");
-                        _mediaTypes.Videos.Add(".mp4", "video/mp4");
-
-                        // Compose content types
-                        _contentTypes.Register<Models.IPage>("Page", "Page");
-                        _contentTypes.Register<Models.IArchivePage>("Blog", "Archive", true);
-
-                        // Compose field types
-                        _fields.Register<Extend.Fields.CheckBoxField>();
-                        _fields.Register<Extend.Fields.DateField>();
-                        _fields.Register<Extend.Fields.DocumentField>();
-                        _fields.Register<Extend.Fields.HtmlField>();
-                        _fields.Register<Extend.Fields.ImageField>();
-                        _fields.Register<Extend.Fields.MarkdownField>();
-                        _fields.Register<Extend.Fields.MediaField>();
-                        _fields.Register<Extend.Fields.NumberField>();
-                        _fields.Register<Extend.Fields.PageField>();
-                        _fields.Register<Extend.Fields.PostField>();
-                        _fields.Register<Extend.Fields.StringField>();
-                        _fields.Register<Extend.Fields.TextField>();
-                        _fields.Register<Extend.Fields.VideoField>();
-
-                        // Compose block types
-                        _blocks.Register<Extend.Blocks.HtmlBlock>();
-                        _blocks.Register<Extend.Blocks.HtmlColumnBlock>();
-                        _blocks.Register<Extend.Blocks.ImageBlock>();
-                        _blocks.Register<Extend.Blocks.QuoteBlock>();
-                        _blocks.Register<Extend.Blocks.TextBlock>();
-
-                        // Compose serializers
-                        _serializers.Register<Extend.Fields.CheckBoxField>(new CheckBoxFieldSerializer<Extend.Fields.CheckBoxField>());
-                        _serializers.Register<Extend.Fields.DateField>(new DateFieldSerializer());
-                        _serializers.Register<Extend.Fields.DocumentField>(new DocumentFieldSerializer());
-                        _serializers.Register<Extend.Fields.HtmlField>(new StringFieldSerializer<Extend.Fields.HtmlField>());
-                        _serializers.Register<Extend.Fields.MarkdownField>(new StringFieldSerializer<Extend.Fields.MarkdownField>());
-                        _serializers.Register<Extend.Fields.MediaField>(new MediaFieldSerializer());
-                        _serializers.Register<Extend.Fields.NumberField>(new IntegerFieldSerializer<Extend.Fields.NumberField>());
-                        _serializers.Register<Extend.Fields.PageField>(new PageFieldSerializer());
-                        _serializers.Register<Extend.Fields.PostField>(new PostFieldSerializer());
-                        _serializers.Register<Extend.Fields.StringField>(new StringFieldSerializer<Extend.Fields.StringField>());
-                        _serializers.Register<Extend.Fields.TextField>(new StringFieldSerializer<Extend.Fields.TextField>());
-                        _serializers.Register<Extend.Fields.ImageField>(new ImageFieldSerializer());
-                        _serializers.Register<Extend.Fields.VideoField>(new VideoFieldSerializer());
-
-                        // Create markdown converter
-                        _markdown = new DefaultMarkdown();
-
-                        // Register permissions
-                        _permissions["Core"].Add(new PermissionItem
-                        {
-                            Name = Permission.PagePreview,
-                            Title = "Page Preview"
-                        });
-                        _permissions["Core"].Add(new PermissionItem
-                        {
-                            Name = Permission.PostPreview,
-                            Title = "Post Preview"
-                        });
+                        // Initialize content types
+                        _pageTypes.Init(api.PageTypes.GetAllAsync().GetAwaiter().GetResult());
+                        _postTypes.Init(api.PostTypes.GetAllAsync().GetAwaiter().GetResult());
+                        _siteTypes.Init(api.SiteTypes.GetAllAsync().GetAwaiter().GetResult());
 
                         // Initialize all modules
                         foreach (var module in _modules)
