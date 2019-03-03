@@ -319,7 +319,7 @@ namespace Piranha.Tests.Repositories
                 Assert.NotNull(sitemap);
                 Assert.Equal(2, sitemap.Count);
                 Assert.Equal("Startpage", sitemap[0].Title);
-                Assert.Equal(1, sitemap[1].Items.Count);
+                Assert.Single(sitemap[1].Items);
                 Assert.Equal("Subpage", sitemap[1].Items[0].Title);
             }
         }
@@ -373,7 +373,7 @@ namespace Piranha.Tests.Repositories
                 Assert.NotNull(sitemap);
                 Assert.Equal(2, sitemap.Count);
                 Assert.Equal("Startpage", sitemap[0].Title);
-                Assert.Equal(1, sitemap[1].Items.Count);
+                Assert.Single(sitemap[1].Items);
                 Assert.Equal("Subpage", sitemap[1].Items[0].Title);
             }
         }
