@@ -68,7 +68,7 @@ namespace Piranha.Services
 
             if (model == null)
             {
-                model = await _repo.GetById(id);
+                model = await _repo.GetById(id).ConfigureAwait(false);
 
                 OnLoad(model);
             }
@@ -87,11 +87,11 @@ namespace Piranha.Services
 
             if (id != null)
             {
-                model = await GetByIdAsync(id.Value);
+                model = await GetByIdAsync(id.Value).ConfigureAwait(false);
             }
             else
             {
-                model = await _repo.GetByInternalId(internalId);
+                model = await _repo.GetByInternalId(internalId).ConfigureAwait(false);
 
                 OnLoad(model);
             }
@@ -113,7 +113,7 @@ namespace Piranha.Services
 
                 if (mappings == null)
                 {
-                    var sites = await GetAllAsync();
+                    var sites = await GetAllAsync().ConfigureAwait(false);
                     mappings = sites
                         .Where(s => s.Hostnames != null)
                         .Select(s => new SiteMapping
@@ -127,7 +127,7 @@ namespace Piranha.Services
             }
             else
             {
-                var sites = await GetAllAsync();
+                var sites = await GetAllAsync().ConfigureAwait(false);
                 mappings = sites
                     .Where(s => s.Hostnames != null)
                     .Select(s => new SiteMapping
@@ -144,7 +144,7 @@ namespace Piranha.Services
                 {
                     if (host.Trim().ToLower() == hostname)
                     {
-                        return await GetByIdAsync(mapping.Id);
+                        return await GetByIdAsync(mapping.Id).ConfigureAwait(false);
                     }
                 }
             }
@@ -161,7 +161,7 @@ namespace Piranha.Services
 
             if (model == null)
             {
-                model = await _repo.GetDefault();
+                model = await _repo.GetDefault().ConfigureAwait(false);
 
                 OnLoad(model);
             }
@@ -190,7 +190,7 @@ namespace Piranha.Services
 
             if (model == null)
             {
-                model = await _repo.GetContentById<T>(id);
+                model = await _repo.GetContentById<T>(id).ConfigureAwait(false);
 
                 OnLoadContent(model);
             }
@@ -207,7 +207,7 @@ namespace Piranha.Services
         {
             if (!id.HasValue)
             {
-                var site = await GetDefaultAsync();
+                var site = await GetDefaultAsync().ConfigureAwait(false);
 
                 if (site != null)
                 {
@@ -221,7 +221,7 @@ namespace Piranha.Services
 
                 if (sitemap == null)
                 {
-                    sitemap = await _repo.GetSitemap(id.Value, onlyPublished);
+                    sitemap = await _repo.GetSitemap(id.Value, onlyPublished).ConfigureAwait(false);
 
                     if (onlyPublished && _cache != null)
                     {
@@ -257,7 +257,7 @@ namespace Piranha.Services
             }
 
             // Ensure InternalId uniqueness
-            var site = await _repo.GetByInternalId(model.InternalId);
+            var site = await _repo.GetByInternalId(model.InternalId).ConfigureAwait(false);
             if (site != null && site.Id != model.Id)
             {
                 throw new ValidationException($"The InternalId field must be unique");
@@ -267,24 +267,24 @@ namespace Piranha.Services
             if (model.IsDefault)
             {
                 // Make sure no other site is default first
-                var def = await GetDefaultAsync();
+                var def = await GetDefaultAsync().ConfigureAwait(false);
 
                 if (def != null && def.Id != model.Id)
                 {
                     def.IsDefault = false;
-                    await _repo.Save(def);
+                    await _repo.Save(def).ConfigureAwait(false);
                 }
             }
             else
             {
                 // Make sure we have a default site
-                var def = await _repo.GetDefault();
+                var def = await _repo.GetDefault().ConfigureAwait(false);
                 if (def == null || def.Id == model.Id)
                     model.IsDefault = true;
             }
             // Call hooks & save
             App.Hooks.OnBeforeSave<Site>(model);
-            await _repo.Save(model);
+            await _repo.Save(model).ConfigureAwait(false);
             App.Hooks.OnAfterSave<Site>(model);
 
             // Remove from cache
@@ -316,7 +316,7 @@ namespace Piranha.Services
 
             // Call hooks & save
             App.Hooks.OnBeforeSave<Models.SiteContentBase>(model);
-            await _repo.SaveContent(siteId, model);
+            await _repo.SaveContent(siteId, model).ConfigureAwait(false);
             App.Hooks.OnAfterSave<Models.SiteContentBase>(model);
 
             // Remove from cache
@@ -353,12 +353,12 @@ namespace Piranha.Services
         {
             if (updateLastModified)
             {
-                var site = await GetByIdAsync(id);
+                var site = await GetByIdAsync(id).ConfigureAwait(false);
 
                 if (site != null)
                 {
                     site.ContentLastModified = DateTime.Now;
-                    await SaveAsync(site);
+                    await SaveAsync(site).ConfigureAwait(false);
                 }
             }
             _cache?.Remove($"Sitemap_{id}");
@@ -370,11 +370,11 @@ namespace Piranha.Services
         /// <param name="id">The unique id</param>
         public async Task DeleteAsync(Guid id)
         {
-            var model = await GetByIdAsync(id);
+            var model = await GetByIdAsync(id).ConfigureAwait(false);
 
             if (model != null)
             {
-                await DeleteAsync(model);
+                await DeleteAsync(model).ConfigureAwait(false);
             }
         }
 
@@ -386,7 +386,7 @@ namespace Piranha.Services
         {
             // Call hooks & delete
             App.Hooks.OnBeforeDelete<Site>(model);
-            await _repo.Delete(model.Id);
+            await _repo.Delete(model.Id).ConfigureAwait(false);
             App.Hooks.OnAfterDelete<Site>(model);
 
             // Remove from cache

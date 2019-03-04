@@ -90,7 +90,7 @@ namespace Piranha.Services
             }
 
             // Get the page and remove the original id
-            var page = await GetByIdAsync<T>(model.Id);
+            var page = await GetByIdAsync<T>(model.Id).ConfigureAwait(false);
             page.OriginalPageId = null;
 
             // Reset blocks so they are recreated
@@ -99,7 +99,7 @@ namespace Piranha.Services
                 pageBlock.Id = Guid.Empty;
             }
 
-            await SaveAsync(page);
+            await SaveAsync(page).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -118,11 +118,12 @@ namespace Piranha.Services
         public async Task<IEnumerable<T>> GetAllAsync<T>(Guid? siteId = null) where T : PageBase
         {
             var models = new List<T>();
-            var pages = await _repo.GetAll((await EnsureSiteIdAsync(siteId)).Value);
+            var pages = await _repo.GetAll((await EnsureSiteIdAsync(siteId).ConfigureAwait(false)).Value)
+                .ConfigureAwait(false);
 
             foreach (var pageId in pages)
             {
-                var page = await GetByIdAsync<T>(pageId);
+                var page = await GetByIdAsync<T>(pageId).ConfigureAwait(false);
 
                 if (page != null)
                 {
@@ -150,11 +151,12 @@ namespace Piranha.Services
         public async Task<IEnumerable<T>> GetAllBlogsAsync<T>(Guid? siteId = null) where T : Models.PageBase
         {
             var models = new List<T>();
-            var pages = await _repo.GetAllBlogs((await EnsureSiteIdAsync(siteId)).Value);
+            var pages = await _repo.GetAllBlogs((await EnsureSiteIdAsync(siteId).ConfigureAwait(false)).Value)
+                .ConfigureAwait(false);
 
             foreach (var pageId in pages)
             {
-                var page = await GetByIdAsync<T>(pageId);
+                var page = await GetByIdAsync<T>(pageId).ConfigureAwait(false);
 
                 if (page != null)
                 {
@@ -182,7 +184,7 @@ namespace Piranha.Services
         /// <returns>The page model</returns>
         public async Task<T> GetStartpageAsync<T>(Guid? siteId = null) where T : Models.PageBase
         {
-            siteId = await EnsureSiteIdAsync(siteId);
+            siteId = await EnsureSiteIdAsync(siteId).ConfigureAwait(false);
             PageBase model = null;
 
             if (typeof(T) == typeof(Models.PageInfo))
@@ -201,14 +203,14 @@ namespace Piranha.Services
 
             if (model == null)
             {
-                model = await _repo.GetStartpage<T>(siteId.Value);
+                model = await _repo.GetStartpage<T>(siteId.Value).ConfigureAwait(false);
 
                 OnLoad(model);
             }
 
             if (model != null && model is T)
             {
-                return await MapOriginalAsync<T>((T)model);
+                return await MapOriginalAsync<T>((T)model).ConfigureAwait(false);
             }
             return null;
         }
@@ -248,14 +250,14 @@ namespace Piranha.Services
 
             if (model == null)
             {
-                model = await _repo.GetById<T>(id);
+                model = await _repo.GetById<T>(id).ConfigureAwait(false);
 
                 OnLoad(model);
             }
 
             if (model != null && model is T)
             {
-                return await MapOriginalAsync<T>((T)model);
+                return await MapOriginalAsync<T>((T)model).ConfigureAwait(false);
             }
             return null;
         }
@@ -280,7 +282,7 @@ namespace Piranha.Services
         /// <returns>The page model</returns>
         public async Task<T> GetBySlugAsync<T>(string slug, Guid? siteId = null) where T : Models.PageBase
         {
-            siteId = await EnsureSiteIdAsync(siteId);
+            siteId = await EnsureSiteIdAsync(siteId).ConfigureAwait(false);
             PageBase model = null;
 
             // Lets see if we can resolve the slug from cache
@@ -305,14 +307,14 @@ namespace Piranha.Services
 
             if (model == null)
             {
-                model = await _repo.GetBySlug<T>(slug, siteId.Value);
+                model = await _repo.GetBySlug<T>(slug, siteId.Value).ConfigureAwait(false);
 
                 OnLoad(model);
             }
 
             if (model != null && model is T)
             {
-                return await MapOriginalAsync<T>((T)model);
+                return await MapOriginalAsync<T>((T)model).ConfigureAwait(false);
             }
             return null;
         }
@@ -325,14 +327,14 @@ namespace Piranha.Services
         /// <returns>The id</returns>
         public async Task<Guid?> GetIdBySlugAsync(string slug, Guid? siteId = null)
         {
-            siteId = await EnsureSiteIdAsync(siteId);
+            siteId = await EnsureSiteIdAsync(siteId).ConfigureAwait(false);
 
             // Lets see if we can resolve the slug from cache
             var pageId = _cache?.Get<Guid?>($"PageId_{siteId}_{slug}");
 
             if (!pageId.HasValue)
             {
-                var info = await _repo.GetBySlug<PageInfo>(slug, siteId.Value);
+                var info = await _repo.GetBySlug<PageInfo>(slug, siteId.Value).ConfigureAwait(false);
 
                 if (info != null)
                 {
@@ -353,7 +355,7 @@ namespace Piranha.Services
         {
             // Call hooks & save
             App.Hooks.OnBeforeSave<PageBase>(model);
-            var affected = await _repo.Move(model, parentId, sortOrder);
+            var affected = await _repo.Move(model, parentId, sortOrder).ConfigureAwait(false);
             App.Hooks.OnAfterSave<PageBase>(model);
 
             // Remove the moved page from cache
@@ -364,14 +366,14 @@ namespace Piranha.Services
             {
                 foreach (var id in affected)
                 {
-                    var page = await GetByIdAsync<PageInfo>(id);
+                    var page = await GetByIdAsync<PageInfo>(id).ConfigureAwait(false);
                     if (page != null)
                     {
                         RemoveFromCache(model);
                     }
                 }
             }
-            await _siteService.InvalidateSitemapAsync(model.SiteId);
+            await _siteService.InvalidateSitemapAsync(model.SiteId).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -414,7 +416,7 @@ namespace Piranha.Services
                 {
                     if (config.HierarchicalPageSlugs && model.ParentId.HasValue)
                     {
-                        var parentSlug = (await GetByIdAsync<PageInfo>(model.ParentId.Value))?.Slug;
+                        var parentSlug = (await GetByIdAsync<PageInfo>(model.ParentId.Value).ConfigureAwait(false))?.Slug;
 
                         if (!string.IsNullOrWhiteSpace(parentSlug))
                         {
@@ -431,7 +433,7 @@ namespace Piranha.Services
 
             // Call hooks & save
             App.Hooks.OnBeforeSave<PageBase>(model);
-            var affected = await _repo.Save(model);
+            var affected = await _repo.Save(model).ConfigureAwait(false);
             App.Hooks.OnAfterSave<PageBase>(model);
 
             // Remove from cache
@@ -442,7 +444,7 @@ namespace Piranha.Services
             {
                 foreach (var id in affected)
                 {
-                    var page = await GetByIdAsync<PageInfo>(id);
+                    var page = await GetByIdAsync<PageInfo>(id).ConfigureAwait(false);
                     if (page != null)
                     {
                         RemoveFromCache(model);
@@ -453,7 +455,7 @@ namespace Piranha.Services
             // Invalidate sitemap if any other pages were affected
             if (affected.Count() > 0)
             {
-                await _siteService.InvalidateSitemapAsync(model.SiteId);
+                await _siteService.InvalidateSitemapAsync(model.SiteId).ConfigureAwait(false);
             }
         }
 
@@ -463,11 +465,11 @@ namespace Piranha.Services
         /// <param name="id">The unique id</param>
         public async Task DeleteAsync(Guid id)
         {
-            var model = await GetByIdAsync<PageInfo>(id);
+            var model = await GetByIdAsync<PageInfo>(id).ConfigureAwait(false);
 
             if (model != null)
             {
-                await DeleteAsync(model);
+                await DeleteAsync(model).ConfigureAwait(false);
             }
         }
 
@@ -479,13 +481,13 @@ namespace Piranha.Services
         {
             // Call hooks & save
             App.Hooks.OnBeforeDelete<PageBase>(model);
-            await _repo.Delete(model.Id);
+            await _repo.Delete(model.Id).ConfigureAwait(false);
             App.Hooks.OnAfterDelete<PageBase>(model);
 
             // Remove from cache & invalidate sitemap
             RemoveFromCache(model);
 
-            await _siteService.InvalidateSitemapAsync(model.SiteId);
+            await _siteService.InvalidateSitemapAsync(model.SiteId).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -502,7 +504,7 @@ namespace Piranha.Services
                 return model;
             }
 
-            var original = await GetByIdAsync<T>(model.OriginalPageId.Value);
+            var original = await GetByIdAsync<T>(model.OriginalPageId.Value).ConfigureAwait(false);
 
             if (original != null)
             {
@@ -541,7 +543,7 @@ namespace Piranha.Services
         {
             if (!siteId.HasValue)
             {
-                var site = await _siteService.GetDefaultAsync();
+                var site = await _siteService.GetDefaultAsync().ConfigureAwait(false);
 
                 if (site != null)
                 {

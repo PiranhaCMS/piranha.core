@@ -76,7 +76,9 @@ namespace Piranha.Services
         public async Task<T> GetByIdAsync<T>(Guid archiveId, int? currentPage = 1, Guid? categoryId = null, Guid? tagId = null, int? year = null, int? month = null, int? pageSize = null) where T : Models.ArchivePage<T>
         {
             // Get the requested blog page
-            var model = await _pageService.GetByIdAsync<T>(archiveId);
+            var model = await _pageService
+                .GetByIdAsync<T>(archiveId)
+                .ConfigureAwait(false);
 
             if (model != null)
             {
@@ -101,17 +103,17 @@ namespace Piranha.Services
                 model.Archive.Month = month;
 
                 // Get paging info
-                model.Archive.TotalPosts = await _repo.GetPostCount(archiveId, categoryId, tagId, year, month);
+                model.Archive.TotalPosts = await _repo.GetPostCount(archiveId, categoryId, tagId, year, month).ConfigureAwait(false);
                 model.Archive.TotalPages = Math.Max(Convert.ToInt32(Math.Ceiling((double)model.Archive.TotalPosts / pageSize.Value)), 1);
                 model.Archive.CurrentPage = Math.Min(Math.Max(1, currentPage.HasValue ? currentPage.Value : 1), model.Archive.TotalPages);
 
                 // Get the id of the current posts
-                var posts = await _repo.GetPosts(archiveId, pageSize.Value, model.Archive.CurrentPage, categoryId, tagId, year, month);
+                var posts = await _repo.GetPosts(archiveId, pageSize.Value, model.Archive.CurrentPage, categoryId, tagId, year, month).ConfigureAwait(false);
 
                 // Get the posts
                 foreach (var postId in posts)
                 {
-                    var post = await _postService.GetByIdAsync(postId);
+                    var post = await _postService.GetByIdAsync(postId).ConfigureAwait(false);
 
                     if (post != null)
                     {

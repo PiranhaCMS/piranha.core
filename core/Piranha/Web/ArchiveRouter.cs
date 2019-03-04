@@ -31,7 +31,8 @@ namespace Piranha.Web
 
                 if (segments.Length >= 1)
                 {
-                    var blog = await api.Pages.GetBySlugAsync(segments[0], siteId);
+                    var blog = await api.Pages.GetBySlugAsync(segments[0], siteId)
+                        .ConfigureAwait(false);
 
                     if (blog != null && blog.ContentType == "Blog")
                     {
@@ -85,7 +86,7 @@ namespace Piranha.Web
                             {
                                 try
                                 {
-                                    categoryId = (await api.Posts.GetCategoryBySlugAsync(blog.Id, segments[n]))?.Id;
+                                    categoryId = (await api.Posts.GetCategoryBySlugAsync(blog.Id, segments[n]).ConfigureAwait(false))?.Id;
 
                                     if (!categoryId.HasValue)
                                         categoryId = Guid.Empty;
@@ -100,7 +101,7 @@ namespace Piranha.Web
                             {
                                 try
                                 {
-                                    tagId = (await api.Posts.GetTagBySlugAsync(blog.Id, segments[n]))?.Id;
+                                    tagId = (await api.Posts.GetTagBySlugAsync(blog.Id, segments[n]).ConfigureAwait(false))?.Id;
 
                                     if (!tagId.HasValue)
                                         tagId = Guid.Empty;

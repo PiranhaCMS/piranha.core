@@ -54,7 +54,7 @@ namespace Piranha.Services
         /// <returns></returns>
         public async Task<PostType> GetByIdAsync(string id)
         {
-            var types = await GetTypes();
+            var types = await GetTypes().ConfigureAwait(false);
 
             return types.FirstOrDefault(t => t.Id == id);
         }
@@ -72,7 +72,7 @@ namespace Piranha.Services
 
             // Call hooks & save
             App.Hooks.OnBeforeSave<PostType>(model);
-            await _repo.Save(model);
+            await _repo.Save(model).ConfigureAwait(false);
             App.Hooks.OnAfterSave<PostType>(model);
 
             // Clear cache
@@ -85,11 +85,11 @@ namespace Piranha.Services
         /// <param name="id">The unique id</param>
         public async Task DeleteAsync(string id)
         {
-            var model = await _repo.GetById(id);
+            var model = await _repo.GetById(id).ConfigureAwait(false);
 
             if (model != null)
             {
-                await DeleteAsync(model);
+                await DeleteAsync(model).ConfigureAwait(false);
             }
         }
 
@@ -101,7 +101,7 @@ namespace Piranha.Services
         {
             // Call hooks & delete
             App.Hooks.OnBeforeDelete<PostType>(model);
-            await _repo.Delete(model.Id);
+            await _repo.Delete(model.Id).ConfigureAwait(false);
             App.Hooks.OnAfterDelete<PostType>(model);
 
             // Clear cache
@@ -117,7 +117,7 @@ namespace Piranha.Services
 
             if (types == null)
             {
-                types = await _repo.GetAll();
+                types = await _repo.GetAll().ConfigureAwait(false);
 
                 _cache?.Set("Piranha_PostTypes", types);
             }

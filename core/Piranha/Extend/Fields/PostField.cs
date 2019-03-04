@@ -52,7 +52,9 @@ namespace Piranha.Extend.Fields
         {
             if (Id.HasValue)
             {
-                Post = await api.Posts.GetByIdAsync(Id.Value);
+                Post = await api.Posts
+                    .GetByIdAsync(Id.Value)
+                    .ConfigureAwait(false);
 
                 if (Post == null)
                 {

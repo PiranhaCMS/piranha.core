@@ -27,13 +27,14 @@ namespace Piranha.Web
         {
             if (string.IsNullOrWhiteSpace(url) || url == "/")
             {
-                var page = await api.Pages.GetStartpageAsync<Models.PageInfo>(siteId);
+                var page = await api.Pages.GetStartpageAsync<Models.PageInfo>(siteId)
+                    .ConfigureAwait(false);
 
                 if (page != null)
                 {
                     if (page.ContentType == "Page")
                     {
-                        var site = await api.Sites.GetByIdAsync(siteId);
+                        var site = await api.Sites.GetByIdAsync(siteId).ConfigureAwait(false);
                         var lastModified = !site.ContentLastModified.HasValue || page.LastModified > site.ContentLastModified
                             ? page.LastModified : site.ContentLastModified.Value;
 
@@ -52,7 +53,7 @@ namespace Piranha.Web
                     }
                     else if (page.ContentType == "Blog")
                     {
-                        return await ArchiveRouter.InvokeAsync(api, $"/{page.Slug}", siteId);
+                        return await ArchiveRouter.InvokeAsync(api, $"/{page.Slug}", siteId).ConfigureAwait(false);
                     }
                 }
             }

@@ -47,7 +47,8 @@ namespace Piranha.Repositories
                 .OrderBy(p => p.ParentId)
                 .ThenBy(p => p.SortOrder)
                 .Select(p => p.Id)
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -63,7 +64,8 @@ namespace Piranha.Repositories
                 .OrderBy(p => p.ParentId)
                 .ThenBy(p => p.SortOrder)
                 .Select(p => p.Id)
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -75,7 +77,8 @@ namespace Piranha.Repositories
         public async Task<T> GetStartpage<T>(Guid siteId) where T : Models.PageBase
         {
             var page = await GetQuery<T>(out var fullQuery)
-                .FirstOrDefaultAsync(p => p.SiteId == siteId && p.ParentId == null && p.SortOrder == 0);
+                .FirstOrDefaultAsync(p => p.SiteId == siteId && p.ParentId == null && p.SortOrder == 0)
+                .ConfigureAwait(false);
 
             if (page != null)
             {
@@ -93,7 +96,8 @@ namespace Piranha.Repositories
         public async Task<T> GetById<T>(Guid id) where T : Models.PageBase
         {
             var page = await GetQuery<T>(out var fullQuery)
-                .FirstOrDefaultAsync(p => p.Id == id);
+                .FirstOrDefaultAsync(p => p.Id == id)
+                .ConfigureAwait(false);
 
             if (page != null)
             {
@@ -112,7 +116,8 @@ namespace Piranha.Repositories
         public async Task<T> GetBySlug<T>(string slug, Guid siteId) where T : Models.PageBase
         {
             var page = await GetQuery<T>(out var fullQuery)
-                .FirstOrDefaultAsync(p => p.SiteId == siteId && p.Slug == slug);
+                .FirstOrDefaultAsync(p => p.SiteId == siteId && p.Slug == slug)
+                .ConfigureAwait(false);
 
             if (page != null)
             {
@@ -134,17 +139,18 @@ namespace Piranha.Repositories
             var affected = new List<Guid>();
 
             // Remove the old position for the page
-            affected.AddRange(await MovePages(model.Id, model.SiteId, model.ParentId, model.SortOrder + 1, false));
+            affected.AddRange(await MovePages(model.Id, model.SiteId, model.ParentId, model.SortOrder + 1, false).ConfigureAwait(false));
             // Add room for the new position of the page
-            affected.AddRange(await MovePages(model.Id, model.SiteId, parentId, sortOrder, true));
+            affected.AddRange(await MovePages(model.Id, model.SiteId, parentId, sortOrder, true).ConfigureAwait(false));
 
             // Update the position of the current page
             var page = await _db.Pages
-                .FirstOrDefaultAsync(p => p.Id == model.Id);
+                .FirstOrDefaultAsync(p => p.Id == model.Id)
+                .ConfigureAwait(false);
             page.ParentId = parentId;
             page.SortOrder = sortOrder;
 
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync().ConfigureAwait(false);
 
             return affected;
         }
@@ -167,7 +173,8 @@ namespace Piranha.Repositories
                 var page = await _db.Pages
                     .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                     .Include(p => p.Fields)
-                    .FirstOrDefaultAsync(p => p.Id == model.Id);
+                    .FirstOrDefaultAsync(p => p.Id == model.Id)
+                    .ConfigureAwait(false);
 
                 if (page == null)
                 {
@@ -176,13 +183,13 @@ namespace Piranha.Repositories
 
                 if (model.OriginalPageId.HasValue)
                 {
-                    var originalPageIsCopy = (await _db.Pages.FirstOrDefaultAsync(p => p.Id == model.OriginalPageId))?.OriginalPageId.HasValue ?? false;
+                    var originalPageIsCopy = (await _db.Pages.FirstOrDefaultAsync(p => p.Id == model.OriginalPageId).ConfigureAwait(false))?.OriginalPageId.HasValue ?? false;
                     if (originalPageIsCopy)
                     {
                         throw new InvalidOperationException("Can not set copy of a copy");
                     }
 
-                    var originalPageType = (await _db.Pages.FirstOrDefaultAsync(p => p.Id == model.OriginalPageId))?.PageTypeId;
+                    var originalPageType = (await _db.Pages.FirstOrDefaultAsync(p => p.Id == model.OriginalPageId).ConfigureAwait(false))?.PageTypeId;
                     if (originalPageType != model.TypeId)
                     {
                         throw new InvalidOperationException("Copy can not have a different content type");
@@ -207,9 +214,9 @@ namespace Piranha.Repositories
                         if (page.ParentId != model.ParentId || page.SortOrder != model.SortOrder)
                         {
                             // Remove the old position for the page
-                            affected.AddRange(await MovePages(page.Id, page.SiteId, page.ParentId, page.SortOrder + 1, false));
+                            affected.AddRange(await MovePages(page.Id, page.SiteId, page.ParentId, page.SortOrder + 1, false).ConfigureAwait(false));
                             // Add room for the new position of the page
-                            affected.AddRange(await MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true));
+                            affected.AddRange(await MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true).ConfigureAwait(false));
                         }
                     }
 
@@ -232,7 +239,7 @@ namespace Piranha.Repositories
                     page.Route = model.Route;
                     page.Published = model.Published;
 
-                    await _db.SaveChangesAsync();
+                    await _db.SaveChangesAsync().ConfigureAwait(false);
 
                     return affected;
                 }
@@ -253,7 +260,7 @@ namespace Piranha.Repositories
                     model.Id = page.Id;
 
                     // Make room for the new page
-                    affected.AddRange(await MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true));
+                    affected.AddRange(await MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true).ConfigureAwait(false));
                 }
                 else
                 {
@@ -261,9 +268,9 @@ namespace Piranha.Repositories
                     if (page.ParentId != model.ParentId || page.SortOrder != model.SortOrder)
                     {
                         // Remove the old position for the page
-                        affected.AddRange(await MovePages(page.Id, page.SiteId, page.ParentId, page.SortOrder + 1, false));
+                        affected.AddRange(await MovePages(page.Id, page.SiteId, page.ParentId, page.SortOrder + 1, false).ConfigureAwait(false));
                         // Add room for the new position of the page
-                        affected.AddRange(await MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true));
+                        affected.AddRange(await MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true).ConfigureAwait(false));
                     }
                     page.LastModified = DateTime.Now;
                 }
@@ -299,7 +306,8 @@ namespace Piranha.Repositories
                     {
                         var block = await _db.Blocks
                             .Include(b => b.Fields)
-                            .FirstOrDefaultAsync(b => b.Id == blocks[n].Id);
+                            .FirstOrDefaultAsync(b => b.Id == blocks[n].Id)
+                            .ConfigureAwait(false);
                         if (block == null)
                         {
                             block = new Block
@@ -307,7 +315,7 @@ namespace Piranha.Repositories
                                 Id = blocks[n].Id != Guid.Empty ? blocks[n].Id : Guid.NewGuid(),
                                 Created = DateTime.Now
                             };
-                            await _db.Blocks.AddAsync(block);
+                            await _db.Blocks.AddAsync(block).ConfigureAwait(false);
                         }
                         block.CLRType = blocks[n].CLRType;
                         block.IsReusable = blocks[n].IsReusable;
@@ -329,7 +337,7 @@ namespace Piranha.Repositories
                                     BlockId = block.Id,
                                     FieldId = newField.FieldId
                                 };
-                                await _db.BlockFields.AddAsync(field);
+                                await _db.BlockFields.AddAsync(field).ConfigureAwait(false);
                                 block.Fields.Add(field);
                             }
                             field.SortOrder = newField.SortOrder;
@@ -349,7 +357,7 @@ namespace Piranha.Repositories
                         });
                     }
                 }
-                await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync().ConfigureAwait(false);
             }
             return affected;
         }
@@ -363,20 +371,21 @@ namespace Piranha.Repositories
             var model = await _db.Pages
                 .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                 .Include(p => p.Fields)
-                .FirstOrDefaultAsync(p => p.Id == id);
+                .FirstOrDefaultAsync(p => p.Id == id)
+                .ConfigureAwait(false);
             var affected = new List<Guid>();
 
             if (model != null)
             {
                 // Make sure this page isn't copied
-                var copyCount = await _db.Pages.CountAsync(p => p.OriginalPageId == model.Id);
+                var copyCount = await _db.Pages.CountAsync(p => p.OriginalPageId == model.Id).ConfigureAwait(false);
                 if (copyCount > 0)
                 {
                     throw new InvalidOperationException("Can not delete page because it has copies");
                 }
 
                 // Make sure this page doesn't have child pages
-                var childCount = await _db.Pages.CountAsync(p => p.ParentId == model.Id);
+                var childCount = await _db.Pages.CountAsync(p => p.ParentId == model.Id).ConfigureAwait(false);
                 if (childCount > 0)
                 {
                     throw new InvalidOperationException("Can not delete page because it has children");
@@ -395,9 +404,9 @@ namespace Piranha.Repositories
                 _db.Pages.Remove(model);
 
                 // Move all remaining pages after this page in the site structure.
-                affected.AddRange(await MovePages(id, model.SiteId, model.ParentId, model.SortOrder + 1, false));
+                affected.AddRange(await MovePages(id, model.SiteId, model.ParentId, model.SortOrder + 1, false).ConfigureAwait(false));
 
-                await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync().ConfigureAwait(false);
             }
             return affected;
         }
@@ -458,7 +467,8 @@ namespace Piranha.Repositories
         {
             var pages = await _db.Pages
                 .Where(p => p.SiteId == siteId && p.ParentId == parentId && p.SortOrder >= sortOrder && p.Id != pageId)
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             foreach (var page in pages)
             {

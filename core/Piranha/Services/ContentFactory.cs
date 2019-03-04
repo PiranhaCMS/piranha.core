@@ -519,7 +519,7 @@ namespace Piranha.Services
                 // Check for async
                 if (typeof(Task).IsAssignableFrom(init.ReturnType))
                 {
-                    Task.Run(async () => await (Task)init.Invoke(field, param.ToArray())).Wait();
+                    Task.Run(async () => await ((Task)init.Invoke(field, param.ToArray())).ConfigureAwait(false)).Wait();
                 }
                 else
                 {

@@ -58,7 +58,8 @@ namespace Piranha.Repositories
                     Created = s.Created,
                     LastModified = s.LastModified
                 })
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -159,7 +160,8 @@ namespace Piranha.Repositories
             var site = await _db.Sites
                 .Include(s => s.Fields)
                 .Where(s => s.Id == id)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync()
+                .ConfigureAwait(false);
 
             if (site == null)
             {
@@ -189,7 +191,8 @@ namespace Piranha.Repositories
                 .Where(p => p.SiteId == id)
                 .OrderBy(p => p.ParentId)
                 .ThenBy(p => p.SortOrder)
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             if (onlyPublished)
             {
@@ -206,7 +209,8 @@ namespace Piranha.Repositories
         public async Task Save(Models.Site model)
         {
             var site = await _db.Sites
-                .FirstOrDefaultAsync(s => s.Id == model.Id);
+                .FirstOrDefaultAsync(s => s.Id == model.Id)
+                .ConfigureAwait(false);
 
             if (site == null)
             {
@@ -215,7 +219,7 @@ namespace Piranha.Repositories
                     Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
                     Created = DateTime.Now
                 };
-                await _db.Sites.AddAsync(site);
+                await _db.Sites.AddAsync(site).ConfigureAwait(false);
             }
             site.SiteTypeId = model.SiteTypeId;
             site.Title = model.Title;
@@ -226,7 +230,7 @@ namespace Piranha.Repositories
             site.IsDefault = model.IsDefault;
             site.LastModified = DateTime.Now;
 
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -240,7 +244,8 @@ namespace Piranha.Repositories
         {
             var site = await _db.Sites
                 .Include(s => s.Fields)
-                .FirstOrDefaultAsync(s => s.Id == siteId);
+                .FirstOrDefaultAsync(s => s.Id == siteId)
+                .ConfigureAwait(false);
 
             if (site != null)
             {
@@ -265,7 +270,7 @@ namespace Piranha.Repositories
                 // global last modified date for the site.
                 site.ContentLastModified = DateTime.Now;
 
-                await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync().ConfigureAwait(false);
             }
         }
 
@@ -276,12 +281,13 @@ namespace Piranha.Repositories
         public async Task Delete(Guid id)
         {
             var site = await _db.Sites
-                .FirstOrDefaultAsync(s => s.Id == id);
+                .FirstOrDefaultAsync(s => s.Id == id)
+                .ConfigureAwait(false);
 
             if (site != null)
             {
                 _db.Sites.Remove(site);
-                await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync().ConfigureAwait(false);
             }
         }
 

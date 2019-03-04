@@ -48,7 +48,7 @@ namespace Piranha.Services
         {
             if (!siteId.HasValue)
             {
-                var site = await _siteService.GetDefaultAsync();
+                var site = await _siteService.GetDefaultAsync().ConfigureAwait(false);
                 if (site != null)
                 {
                     siteId = site.Id;
@@ -57,7 +57,7 @@ namespace Piranha.Services
 
             if (siteId.HasValue)
             {
-                return await _repo.GetAll(siteId.Value);
+                return await _repo.GetAll(siteId.Value).ConfigureAwait(false);
             }
             return null;
         }
@@ -73,7 +73,7 @@ namespace Piranha.Services
 
             if (model == null)
             {
-                model = await _repo.GetById(id);
+                model = await _repo.GetById(id).ConfigureAwait(false);
 
                 OnLoad(model);
             }
@@ -90,7 +90,7 @@ namespace Piranha.Services
         {
             if (!siteId.HasValue)
             {
-                var site = await _siteService.GetDefaultAsync();
+                var site = await _siteService.GetDefaultAsync().ConfigureAwait(false);
                 if (site != null)
                 {
                     siteId = site.Id;
@@ -102,11 +102,11 @@ namespace Piranha.Services
 
             if (id.HasValue)
             {
-                model = await GetByIdAsync(id.Value);
+                model = await GetByIdAsync(id.Value).ConfigureAwait(false);
             }
             else
             {
-                model = await _repo.GetByAliasUrl(url, siteId.Value);
+                model = await _repo.GetByAliasUrl(url, siteId.Value).ConfigureAwait(false);
 
                 OnLoad(model);
             }
@@ -123,13 +123,13 @@ namespace Piranha.Services
         {
             if (!siteId.HasValue)
             {
-                var site = await _siteService.GetDefaultAsync();
+                var site = await _siteService.GetDefaultAsync().ConfigureAwait(false);
                 if (site != null)
                 {
                     siteId = site.Id;
                 }
             }
-            return await _repo.GetByRedirectUrl(url, siteId.Value);
+            return await _repo.GetByRedirectUrl(url, siteId.Value).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace Piranha.Services
             }
 
             // Ensure url uniqueness
-            var alias = await _repo.GetByAliasUrl(model.AliasUrl, model.SiteId);
+            var alias = await _repo.GetByAliasUrl(model.AliasUrl, model.SiteId).ConfigureAwait(false);
             if (alias != null && alias.Id != model.Id)
             {
                 throw new ValidationException($"The AliasUrl field must be unique");
@@ -168,7 +168,7 @@ namespace Piranha.Services
 
             // Call hooks & save
             App.Hooks.OnBeforeSave<Alias>(model);
-            await _repo.Save(model);
+            await _repo.Save(model).ConfigureAwait(false);
             App.Hooks.OnAfterSave<Alias>(model);
 
             // Remove from cache
@@ -181,11 +181,11 @@ namespace Piranha.Services
         /// <param name="id">The unique id</param>
         public async Task DeleteAsync(Guid id)
         {
-            var model = await GetByIdAsync(id);
+            var model = await GetByIdAsync(id).ConfigureAwait(false);
 
             if (model != null)
             {
-                await DeleteAsync(model);
+                await DeleteAsync(model).ConfigureAwait(false);
             }
         }
 
@@ -197,7 +197,7 @@ namespace Piranha.Services
         {
             // Call hooks & delete
             App.Hooks.OnBeforeDelete<Alias>(model);
-            await _repo.Delete(model.Id);
+            await _repo.Delete(model.Id).ConfigureAwait(false);
             App.Hooks.OnAfterDelete<Alias>(model);
 
             // Remove from cache

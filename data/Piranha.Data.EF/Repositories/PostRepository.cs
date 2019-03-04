@@ -48,7 +48,8 @@ namespace Piranha.Repositories
                 .ThenByDescending(p => p.LastModified)
                 .ThenBy(p => p.Title)
                 .Select(p => p.Id)
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -65,7 +66,8 @@ namespace Piranha.Repositories
                 .ThenByDescending(p => p.LastModified)
                 .ThenBy(p => p.Title)
                 .Select(p => p.Id)
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -85,7 +87,8 @@ namespace Piranha.Repositories
                     Title = c.Title,
                     Slug = c.Slug
                 })
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -105,7 +108,8 @@ namespace Piranha.Repositories
                     Title = c.Title,
                     Slug = c.Slug
                 })
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -117,7 +121,8 @@ namespace Piranha.Repositories
         public async Task<T> GetById<T>(Guid id) where T : Models.PostBase
         {
             var post = await GetQuery<T>()
-                .FirstOrDefaultAsync(p => p.Id == id);
+                .FirstOrDefaultAsync(p => p.Id == id)
+                .ConfigureAwait(false);
 
             if (post != null)
             {
@@ -137,7 +142,8 @@ namespace Piranha.Repositories
         {
             // No cache found, load from database
             var post = await GetQuery<T>()
-                .FirstOrDefaultAsync(p => p.BlogId == blogId && p.Slug == slug);
+                .FirstOrDefaultAsync(p => p.BlogId == blogId && p.Slug == slug)
+                .ConfigureAwait(false);
 
             if (post != null)
             {
@@ -193,19 +199,23 @@ namespace Piranha.Repositories
             if (type != null)
             {
                 // Ensure category
-                var category = await _db.Categories.FirstOrDefaultAsync(c => c.Id == model.Category.Id);
+                var category = await _db.Categories
+                    .FirstOrDefaultAsync(c => c.Id == model.Category.Id)
+                    .ConfigureAwait(false);
 
                 if (category == null)
                 {
                     if (!string.IsNullOrWhiteSpace(model.Category.Slug))
                     {
                         category = await _db.Categories
-                            .FirstOrDefaultAsync(c => c.BlogId == model.BlogId && c.Slug == model.Category.Slug);
+                            .FirstOrDefaultAsync(c => c.BlogId == model.BlogId && c.Slug == model.Category.Slug)
+                            .ConfigureAwait(false);
                     }
                     if (category == null && !string.IsNullOrWhiteSpace(model.Category.Title))
                     {
                         category = await _db.Categories
-                            .FirstOrDefaultAsync(c => c.BlogId == model.BlogId && c.Title == model.Category.Title);
+                            .FirstOrDefaultAsync(c => c.BlogId == model.BlogId && c.Title == model.Category.Title)
+                            .ConfigureAwait(false);
                     }
 
                     if (category == null)
@@ -219,7 +229,7 @@ namespace Piranha.Repositories
                             Created = DateTime.Now,
                             LastModified = DateTime.Now
                         };
-                        await _db.Categories.AddAsync(category);
+                        await _db.Categories.AddAsync(category).ConfigureAwait(false);
                     }
                     model.Category.Id = category.Id;
                 }
@@ -227,19 +237,23 @@ namespace Piranha.Repositories
                 // Ensure tags
                 foreach (var t in model.Tags)
                 {
-                    var tag = await _db.Tags.FirstOrDefaultAsync(tg => tg.Id == t.Id);
+                    var tag = await _db.Tags
+                        .FirstOrDefaultAsync(tg => tg.Id == t.Id)
+                        .ConfigureAwait(false);
 
                     if (tag == null)
                     {
                         if (!string.IsNullOrWhiteSpace(t.Slug))
                         {
                             tag = await _db.Tags
-                                .FirstOrDefaultAsync(tg => tg.BlogId == model.BlogId && tg.Slug == t.Slug);
+                                .FirstOrDefaultAsync(tg => tg.BlogId == model.BlogId && tg.Slug == t.Slug)
+                                .ConfigureAwait(false);
                         }
                         if (tag == null && !string.IsNullOrWhiteSpace(t.Title))
                         {
                             tag = await _db.Tags
-                                .FirstOrDefaultAsync(tg => tg.BlogId == model.BlogId && tg.Title == t.Title);
+                                .FirstOrDefaultAsync(tg => tg.BlogId == model.BlogId && tg.Title == t.Title)
+                                .ConfigureAwait(false);
                         }
 
                         if (tag == null)
@@ -253,7 +267,7 @@ namespace Piranha.Repositories
                                 Created = DateTime.Now,
                                 LastModified = DateTime.Now
                             };
-                            await _db.Tags.AddAsync(tag);
+                            await _db.Tags.AddAsync(tag).ConfigureAwait(false);
                         }
                         t.Id = tag.Id;
                     }
@@ -273,7 +287,8 @@ namespace Piranha.Repositories
                     .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                     .Include(p => p.Fields)
                     .Include(p => p.Tags)
-                    .FirstOrDefaultAsync(p => p.Id == model.Id);
+                    .FirstOrDefaultAsync(p => p.Id == model.Id)
+                    .ConfigureAwait(false);
 
                 // If not, create a new post
                 if (post == null)
@@ -284,7 +299,7 @@ namespace Piranha.Repositories
                         Created = DateTime.Now,
                         LastModified = DateTime.Now
                     };
-                    await _db.Posts.AddAsync(post);
+                    await _db.Posts.AddAsync(post).ConfigureAwait(false);
                     model.Id = post.Id;
                 }
                 else
@@ -323,7 +338,7 @@ namespace Piranha.Repositories
                                 Id = blocks[n].Id != Guid.Empty ? blocks[n].Id : Guid.NewGuid(),
                                 Created = DateTime.Now
                             };
-                            await _db.Blocks.AddAsync(block);
+                            await _db.Blocks.AddAsync(block).ConfigureAwait(false);
                         }
                         block.CLRType = blocks[n].CLRType;
                         block.IsReusable = blocks[n].IsReusable;
@@ -345,7 +360,7 @@ namespace Piranha.Repositories
                                     BlockId = block.Id,
                                     FieldId = newField.FieldId
                                 };
-                                await _db.BlockFields.AddAsync(field);
+                                await _db.BlockFields.AddAsync(field).ConfigureAwait(false);
                                 block.Fields.Add(field);
                             }
                             field.SortOrder = newField.SortOrder;
@@ -391,10 +406,9 @@ namespace Piranha.Repositories
                         });
                 }
 
-                await _db.SaveChangesAsync();
-
-                await DeleteUnusedCategories(model.BlogId);
-                await DeleteUnusedTags(model.BlogId);
+                await _db.SaveChangesAsync().ConfigureAwait(false);
+                await DeleteUnusedCategories(model.BlogId).ConfigureAwait(false);
+                await DeleteUnusedTags(model.BlogId).ConfigureAwait(false);
             }
         }
 
@@ -407,7 +421,8 @@ namespace Piranha.Repositories
             var model = await _db.Posts
                 .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                 .Include(p => p.Fields)
-                .FirstOrDefaultAsync(p => p.Id == id);
+                .FirstOrDefaultAsync(p => p.Id == id)
+                .ConfigureAwait(false);
 
             if (model != null)
             {
@@ -430,14 +445,14 @@ namespace Piranha.Repositories
                 if (model.Published.HasValue)
                 {
                     var page = await _db.Pages
-                        .FirstOrDefaultAsync(p => p.Id == model.BlogId);
+                        .FirstOrDefaultAsync(p => p.Id == model.BlogId)
+                        .ConfigureAwait(false);
                     page.LastModified = DateTime.Now;
                 }
 
-                await _db.SaveChangesAsync();
-
-                await DeleteUnusedCategories(model.BlogId);
-                await DeleteUnusedTags(model.BlogId);
+                await _db.SaveChangesAsync().ConfigureAwait(false);
+                await DeleteUnusedCategories(model.BlogId).ConfigureAwait(false);
+                await DeleteUnusedTags(model.BlogId).ConfigureAwait(false);
             }
         }
 
@@ -451,16 +466,18 @@ namespace Piranha.Repositories
                 .Where(p => p.BlogId == blogId)
                 .Select(p => p.CategoryId)
                 .Distinct()
-                .ToArrayAsync();
+                .ToArrayAsync()
+                .ConfigureAwait(false);
 
             var unused = await _db.Categories
                 .Where(c => c.BlogId == blogId && !used.Contains(c.Id))
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             if (unused.Count > 0)
             {
                 _db.Categories.RemoveRange(unused);
-                await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync().ConfigureAwait(false);
             }
         }
 
@@ -474,16 +491,18 @@ namespace Piranha.Repositories
                 .Where(t => t.Post.BlogId == blogId)
                 .Select(t => t.TagId)
                 .Distinct()
-                .ToArrayAsync();
+                .ToArrayAsync()
+                .ConfigureAwait(false);
 
             var unused = await _db.Tags
                 .Where(t => t.BlogId == blogId && !used.Contains(t.Id))
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             if (unused.Count > 0)
             {
                 _db.Tags.RemoveRange(unused);
-                await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync().ConfigureAwait(false);
             }
         }
 

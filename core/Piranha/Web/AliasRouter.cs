@@ -28,7 +28,8 @@ namespace Piranha.Web
             if (!String.IsNullOrWhiteSpace(url) && url.Length > 1)
             {
                 // Check if we can find an alias with the requested url
-                var alias = await api.Aliases.GetByAliasUrlAsync(url, siteId);
+                var alias = await api.Aliases.GetByAliasUrlAsync(url, siteId)
+                    .ConfigureAwait(false);
 
                 if (alias != null)
                 {

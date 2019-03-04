@@ -54,7 +54,9 @@ namespace Piranha.Extend.Fields
         {
             if (Id.HasValue)
             {
-                Media = await api.Media.GetByIdAsync(Id.Value);
+                Media = await api.Media
+                    .GetByIdAsync(Id.Value)
+                    .ConfigureAwait(false);
 
                 if (Media == null)
                 {

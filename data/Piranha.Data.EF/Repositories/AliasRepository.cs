@@ -53,7 +53,8 @@ namespace Piranha.Repositories
                     Created = a.Created,
                     LastModified = a.LastModified
                 })
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -124,7 +125,8 @@ namespace Piranha.Repositories
                     Created = a.Created,
                     LastModified = a.LastModified
                 })
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -144,7 +146,7 @@ namespace Piranha.Repositories
                     Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
                     Created = DateTime.Now
                 };
-                await _db.Aliases.AddAsync(alias);
+                await _db.Aliases.AddAsync(alias).ConfigureAwait(false);
             }
             alias.SiteId = model.SiteId;
             alias.AliasUrl = model.AliasUrl;
@@ -152,7 +154,7 @@ namespace Piranha.Repositories
             alias.Type = model.Type;
             alias.LastModified = DateTime.Now;
 
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -162,12 +164,13 @@ namespace Piranha.Repositories
         public async Task Delete(Guid id)
         {
             var alias = await _db.Aliases
-                .FirstOrDefaultAsync(a => a.Id == id);
+                .FirstOrDefaultAsync(a => a.Id == id)
+                .ConfigureAwait(false);
 
             if (alias != null)
             {
                 _db.Aliases.Remove(alias);
-                await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync().ConfigureAwait(false);
             }
         }
     }

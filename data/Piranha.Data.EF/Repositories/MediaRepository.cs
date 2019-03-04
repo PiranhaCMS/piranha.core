@@ -45,7 +45,8 @@ namespace Piranha.Repositories
                 .Where(m => m.FolderId == folderId)
                 .OrderBy(m => m.Filename)
                 .Select(m => m.Id)
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -61,7 +62,8 @@ namespace Piranha.Repositories
                 .Where(f => f.ParentId == folderId)
                 .OrderBy(f => f.Name)
                 .Select(f => f.Id)
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -127,7 +129,8 @@ namespace Piranha.Repositories
                 .AsNoTracking()
                 .OrderBy(f => f.ParentId)
                 .ThenBy(f => f.Name)
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             return Sort(folders);
         }
@@ -141,7 +144,8 @@ namespace Piranha.Repositories
         {
             var media = await _db.Media
                 .Include(m => m.Versions)
-                .FirstOrDefaultAsync(m => m.Id == model.Id);
+                .FirstOrDefaultAsync(m => m.Id == model.Id)
+                .ConfigureAwait(false);
 
             if (media == null)
             {
@@ -150,7 +154,7 @@ namespace Piranha.Repositories
                     Id = model.Id,
                     Created = DateTime.Now
                 };
-                await _db.Media.AddAsync(media);
+                await _db.Media.AddAsync(media).ConfigureAwait(false);
             }
 
             media.Filename = model.Filename;
@@ -188,7 +192,7 @@ namespace Piranha.Repositories
             }
 
             // Save all changes
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -199,7 +203,8 @@ namespace Piranha.Repositories
         public async Task SaveFolder(Models.MediaFolder model)
         {
             var folder = await _db.MediaFolders
-                .FirstOrDefaultAsync(f => f.Id == model.Id);
+                .FirstOrDefaultAsync(f => f.Id == model.Id)
+                .ConfigureAwait(false);
 
             if (folder == null)
             {
@@ -209,12 +214,12 @@ namespace Piranha.Repositories
                     Created = DateTime.Now
                 };
                 model.Id = folder.Id;
-                await _db.MediaFolders.AddAsync(folder);
+                await _db.MediaFolders.AddAsync(folder).ConfigureAwait(false);
             }
             folder.ParentId = model.ParentId;
             folder.Name = model.Name;
 
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -224,11 +229,14 @@ namespace Piranha.Repositories
         /// <param name="folderId">The folder id</param>
         public async Task Move(Models.Media model, Guid? folderId)
         {
-            var media = await _db.Media.FirstOrDefaultAsync(m => m.Id == model.Id);
+            var media = await _db.Media
+                .FirstOrDefaultAsync(m => m.Id == model.Id)
+                .ConfigureAwait(false);
+
             if (media != null)
             {
                 media.FolderId = folderId;
-                await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync().ConfigureAwait(false);
             }
         }
 
@@ -240,12 +248,13 @@ namespace Piranha.Repositories
         {
             var media = await _db.Media
                 .Include(m => m.Versions)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id)
+                .ConfigureAwait(false);
 
             if (media != null)
             {
                 _db.Media.Remove(media);
-                await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync().ConfigureAwait(false);
             }
         }
 
@@ -256,12 +265,13 @@ namespace Piranha.Repositories
         public async Task DeleteFolder(Guid id)
         {
             var folder = await _db.MediaFolders
-                .FirstOrDefaultAsync(f => f.Id == id);
+                .FirstOrDefaultAsync(f => f.Id == id)
+                .ConfigureAwait(false);
 
             if (folder != null)
             {
                 _db.MediaFolders.Remove(folder);
-                await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync().ConfigureAwait(false);
             }
         }
 

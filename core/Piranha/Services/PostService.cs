@@ -104,12 +104,12 @@ namespace Piranha.Services
         public async Task<IEnumerable<T>> GetAllAsync<T>(Guid blogId) where T : PostBase
         {
             var models = new List<T>();
-            var posts = await _repo.GetAll(blogId);
+            var posts = await _repo.GetAll(blogId).ConfigureAwait(false);
             var pages = new List<PageInfo>();
 
             foreach (var postId in posts)
             {
-                var post = await GetByIdAsync<T>(postId, pages);
+                var post = await GetByIdAsync<T>(postId, pages).ConfigureAwait(false);
 
                 if (post != null)
                 {
@@ -137,12 +137,13 @@ namespace Piranha.Services
         public async Task<IEnumerable<T>> GetAllBySiteIdAsync<T>(Guid? siteId = null) where T : PostBase
         {
             var models = new List<T>();
-            var posts = await _repo.GetAllBySiteId((await EnsureSiteIdAsync(siteId)).Value);
+            var posts = await _repo.GetAllBySiteId((await EnsureSiteIdAsync(siteId).ConfigureAwait(false)).Value)
+                .ConfigureAwait(false);
             var pages = new List<PageInfo>();
 
             foreach (var postId in posts)
             {
-                var post = await GetByIdAsync<T>(postId, pages);
+                var post = await GetByIdAsync<T>(postId, pages).ConfigureAwait(false);
 
                 if (post != null)
                 {
@@ -171,12 +172,12 @@ namespace Piranha.Services
         /// <returns>The posts</returns>
         public async Task<IEnumerable<T>> GetAllAsync<T>(string slug, Guid? siteId = null) where T : PostBase
         {
-            siteId = await EnsureSiteIdAsync(siteId);
-            var blogId = await _pageService.GetIdBySlugAsync(slug, siteId);
+            siteId = await EnsureSiteIdAsync(siteId).ConfigureAwait(false);
+            var blogId = await _pageService.GetIdBySlugAsync(slug, siteId).ConfigureAwait(false);
 
             if (blogId.HasValue)
             {
-                return await GetAllAsync<T>(blogId.Value);
+                return await GetAllAsync<T>(blogId.Value).ConfigureAwait(false);
             }
             return new List<T>();
         }
@@ -244,13 +245,13 @@ namespace Piranha.Services
         /// <returns>The post model</returns>
         public async Task<T> GetBySlugAsync<T>(string blog, string slug, Guid? siteId = null) where T : PostBase
         {
-            siteId = await EnsureSiteIdAsync(siteId);
+            siteId = await EnsureSiteIdAsync(siteId).ConfigureAwait(false);
 
-            var blogId = await _pageService.GetIdBySlugAsync(blog, siteId);
+            var blogId = await _pageService.GetIdBySlugAsync(blog, siteId).ConfigureAwait(false);
 
             if (blogId.HasValue)
             {
-                return await GetBySlugAsync<T>(blogId.Value, slug);
+                return await GetBySlugAsync<T>(blogId.Value, slug).ConfigureAwait(false);
             }
             return null;
         }
@@ -294,11 +295,11 @@ namespace Piranha.Services
 
             if (model == null)
             {
-                model = await _repo.GetBySlug<T>(blogId, slug);
+                model = await _repo.GetBySlug<T>(blogId, slug).ConfigureAwait(false);
 
                 if (model != null)
                 {
-                    var blog = await _pageService.GetByIdAsync<PageInfo>(model.BlogId);
+                    var blog = await _pageService.GetByIdAsync<PageInfo>(model.BlogId).ConfigureAwait(false);
 
                     OnLoad(model, blog);
                 }
@@ -329,7 +330,7 @@ namespace Piranha.Services
 
             if (model == null)
             {
-                model = await _repo.GetCategoryBySlug(blogId, slug);
+                model = await _repo.GetCategoryBySlug(blogId, slug).ConfigureAwait(false);
 
                 if (model != null && _cache != null)
                 {
@@ -358,7 +359,7 @@ namespace Piranha.Services
 
             if (model == null)
             {
-                model = await _repo.GetTagBySlug(blogId, slug);
+                model = await _repo.GetTagBySlug(blogId, slug).ConfigureAwait(false);
 
                 if (model != null && _cache != null)
                 {
@@ -411,14 +412,14 @@ namespace Piranha.Services
 
             // Call hooks & save
             App.Hooks.OnBeforeSave<PostBase>(model);
-            await _repo.Save(model);
+            await _repo.Save(model).ConfigureAwait(false);
             App.Hooks.OnAfterSave<PostBase>(model);
 
             if (_cache != null)
             {
                 // Clear all categories from cache in case some
                 // unused where deleted.
-                var categories = await _repo.GetAllCategories(model.BlogId);
+                var categories = await _repo.GetAllCategories(model.BlogId).ConfigureAwait(false);
                 foreach (var category in categories)
                 {
                     _cache.Remove(category.Id.ToString());
@@ -427,7 +428,7 @@ namespace Piranha.Services
 
                 // Clear all tags from cache in case some
                 // unused where deleted.
-                var tags = await _repo.GetAllTags(model.BlogId);
+                var tags = await _repo.GetAllTags(model.BlogId).ConfigureAwait(false);
                 foreach (var tag in tags)
                 {
                     _cache.Remove(tag.Id.ToString());
@@ -442,11 +443,11 @@ namespace Piranha.Services
         /// <param name="id">The unique id</param>
         public async Task DeleteAsync(Guid id)
         {
-            var model = await GetByIdAsync<PostInfo>(id);
+            var model = await GetByIdAsync<PostInfo>(id).ConfigureAwait(false);
 
             if (model != null)
             {
-                await DeleteAsync(model);
+                await DeleteAsync(model).ConfigureAwait(false);
             }
         }
 
@@ -458,7 +459,7 @@ namespace Piranha.Services
         {
             // Call hooks & save
             App.Hooks.OnBeforeDelete<PostBase>(model);
-            await _repo.Delete(model.Id);
+            await _repo.Delete(model.Id).ConfigureAwait(false);
             App.Hooks.OnAfterDelete<PostBase>(model);
 
             // Remove from cache & invalidate sitemap
@@ -487,7 +488,7 @@ namespace Piranha.Services
 
             if (model == null)
             {
-                model = await _repo.GetById<T>(id);
+                model = await _repo.GetById<T>(id).ConfigureAwait(false);
 
                 if (model != null)
                 {
@@ -495,7 +496,7 @@ namespace Piranha.Services
 
                     if (blog == null)
                     {
-                        blog = await _pageService.GetByIdAsync<PageInfo>(model.BlogId);
+                        blog = await _pageService.GetByIdAsync<PageInfo>(model.BlogId).ConfigureAwait(false);
                         blogPages.Add(blog);
                     }
 
@@ -520,7 +521,7 @@ namespace Piranha.Services
         {
             if (!siteId.HasValue)
             {
-                var site = await _siteService.GetDefaultAsync();
+                var site = await _siteService.GetDefaultAsync().ConfigureAwait(false);
 
                 if (site != null)
                 {

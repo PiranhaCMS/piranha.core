@@ -41,7 +41,8 @@ namespace Piranha.Repositories
             var types = await _db.PageTypes
                 .AsNoTracking()
                 .OrderBy(t => t.Id)
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             foreach (var type in types)
             {
@@ -59,7 +60,8 @@ namespace Piranha.Repositories
         {
             var type = await _db.PageTypes
                 .AsNoTracking()
-                .FirstOrDefaultAsync(t => t.Id == id);
+                .FirstOrDefaultAsync(t => t.Id == id)
+                .ConfigureAwait(false);
 
             if (type != null)
             {
@@ -76,7 +78,8 @@ namespace Piranha.Repositories
         public async Task Save(PageType model)
         {
             var type = await _db.PageTypes
-                .FirstOrDefaultAsync(t => t.Id == model.Id);
+                .FirstOrDefaultAsync(t => t.Id == model.Id)
+                .ConfigureAwait(false);
 
             if (type == null) {
                 type = new Data.PageType
@@ -84,13 +87,13 @@ namespace Piranha.Repositories
                     Id = model.Id,
                     Created = DateTime.Now
                 };
-                await _db.PageTypes.AddAsync(type);
+                await _db.PageTypes.AddAsync(type).ConfigureAwait(false);
             }
             type.CLRType = model.CLRType;
             type.Body = JsonConvert.SerializeObject(model);
             type.LastModified = DateTime.Now;
 
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -100,12 +103,13 @@ namespace Piranha.Repositories
         public async Task Delete(string id)
         {
             var type = await _db.PageTypes
-                .FirstOrDefaultAsync(t => t.Id == id);
+                .FirstOrDefaultAsync(t => t.Id == id)
+                .ConfigureAwait(false);
 
             if (type != null)
             {
                 _db.PageTypes.Remove(type);
-                await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync().ConfigureAwait(false);
             }
         }
     }

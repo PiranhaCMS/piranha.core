@@ -48,7 +48,8 @@ namespace Piranha.Repositories
                     Created = p.Created,
                     LastModified = p.LastModified
                 })
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -100,7 +101,8 @@ namespace Piranha.Repositories
         public async Task Save(Param model)
         {
             var param = await _db.Params
-                .FirstOrDefaultAsync(p => p.Id == model.Id);
+                .FirstOrDefaultAsync(p => p.Id == model.Id)
+                .ConfigureAwait(false);
 
             if (param == null)
             {
@@ -109,14 +111,14 @@ namespace Piranha.Repositories
                     Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
                     Created = DateTime.Now
                 };
-                await _db.Params.AddAsync(param);
+                await _db.Params.AddAsync(param).ConfigureAwait(false);
             }
             param.Key = model.Key;
             param.Description = model.Description;
             param.Value = model.Value;
             param.LastModified = DateTime.Now;
 
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -126,12 +128,13 @@ namespace Piranha.Repositories
         public async Task Delete(Guid id)
         {
             var param = await _db.Params
-                .FirstOrDefaultAsync(p => p.Id == id);
+                .FirstOrDefaultAsync(p => p.Id == id)
+                .ConfigureAwait(false);
 
             if (param != null)
             {
                 _db.Params.Remove(param);
-                await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync().ConfigureAwait(false);
             }
         }
     }

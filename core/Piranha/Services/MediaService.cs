@@ -55,11 +55,11 @@ namespace Piranha.Services
         public async Task<IEnumerable<Media>> GetAllAsync(Guid? folderId = null)
         {
             var models = new List<Media>();
-            var items = await _repo.GetAll(folderId);
+            var items = await _repo.GetAll(folderId).ConfigureAwait(false);
 
             foreach (var item in items)
             {
-                var media = await GetByIdAsync(item);
+                var media = await GetByIdAsync(item).ConfigureAwait(false);
 
                 if (media != null)
                 {
@@ -78,11 +78,11 @@ namespace Piranha.Services
         public async Task<IEnumerable<MediaFolder>> GetAllFoldersAsync(Guid? folderId = null)
         {
             var models = new List<MediaFolder>();
-            var items = await _repo.GetAllFolders(folderId);
+            var items = await _repo.GetAllFolders(folderId).ConfigureAwait(false);
 
             foreach (var item in items)
             {
-                var folder = await GetFolderByIdAsync(item);
+                var folder = await GetFolderByIdAsync(item).ConfigureAwait(false);
 
                 if (folder != null)
                 {
@@ -103,7 +103,7 @@ namespace Piranha.Services
 
             if (model == null)
             {
-                model = await _repo.GetById(id);
+                model = await _repo.GetById(id).ConfigureAwait(false);
 
                 OnLoad(model);
             }
@@ -121,7 +121,7 @@ namespace Piranha.Services
 
             if (model == null)
             {
-                model = await _repo.GetFolderById(id);
+                model = await _repo.GetFolderById(id).ConfigureAwait(false);
 
                 OnFolderLoad(model);
             }
@@ -138,7 +138,7 @@ namespace Piranha.Services
 
             if (structure == null)
             {
-                structure = await _repo.GetStructure();
+                structure = await _repo.GetStructure().ConfigureAwait(false);
 
                 if (structure != null)
                 {
@@ -164,7 +164,7 @@ namespace Piranha.Services
 
             if (content.Id.HasValue)
             {
-                model = await GetByIdAsync(content.Id.Value);
+                model = await GetByIdAsync(content.Id.Value).ConfigureAwait(false);
             }
 
             if (model == null)
@@ -178,7 +178,7 @@ namespace Piranha.Services
             }
             else
             {
-                using (var session = await _storage.OpenAsync())
+                using (var session = await _storage.OpenAsync().ConfigureAwait(false))
                 {
                     // Delete all versions as we're updating the image
                     if (model.Versions.Count > 0)
@@ -186,13 +186,13 @@ namespace Piranha.Services
                         foreach (var version in model.Versions)
                         {
                             // Delete version from storage
-                            await session.DeleteAsync(GetResourceName(model, version.Width, version.Height, version.FileExtension));
+                            await session.DeleteAsync(GetResourceName(model, version.Width, version.Height, version.FileExtension)).ConfigureAwait(false);
                         }
                         model.Versions.Clear();
                     }
 
                     // Delete the old file because we might have a different filename
-                    await session.DeleteAsync(GetResourceName(model));
+                    await session.DeleteAsync(GetResourceName(model)).ConfigureAwait(false);
                 }
             }
 
@@ -226,7 +226,7 @@ namespace Piranha.Services
             }
 
             // Upload to storage
-            using (var session = await _storage.OpenAsync())
+            using (var session = await _storage.OpenAsync().ConfigureAwait(false))
             {
                 if (content is BinaryMediaContent)
                 {
@@ -234,7 +234,7 @@ namespace Piranha.Services
 
                     model.Size = bc.Data.Length;
                     await session.PutAsync(model.Id + "-" + model.Filename,
-                        model.ContentType, bc.Data);
+                        model.ContentType, bc.Data).ConfigureAwait(false);
                 }
                 else if (content is StreamMediaContent)
                 {
@@ -243,12 +243,12 @@ namespace Piranha.Services
 
                     model.Size = sc.Data.Length;
                     await session.PutAsync(model.Id + "-" + model.Filename,
-                        model.ContentType, stream);
+                        model.ContentType, stream).ConfigureAwait(false);
                 }
             }
 
             App.Hooks.OnBeforeSave<Media>(model);
-            await _repo.Save(model);
+            await _repo.Save(model).ConfigureAwait(false);
             App.Hooks.OnAfterSave<Media>(model);
 
             RemoveFromCache(model);
@@ -273,7 +273,7 @@ namespace Piranha.Services
 
             // Call hooks & save
             App.Hooks.OnBeforeSave<MediaFolder>(model);
-            await _repo.SaveFolder(model);
+            await _repo.SaveFolder(model).ConfigureAwait(false);
             App.Hooks.OnAfterSave<MediaFolder>(model);
 
             RemoveFromCache(model);
@@ -287,7 +287,7 @@ namespace Piranha.Services
         /// <param name="folderId">The folder id</param>
         public async Task MoveAsync(Media model, Guid? folderId)
         {
-            await _repo.Move(model, folderId);
+            await _repo.Move(model, folderId).ConfigureAwait(false);
             RemoveFromCache(model);
         }
 
@@ -316,7 +316,7 @@ namespace Piranha.Services
         {
             if (_processor != null)
             {
-                var media = await GetByIdAsync(id);
+                var media = await GetByIdAsync(id).ConfigureAwait(false);
 
                 if (media != null)
                 {
@@ -343,10 +343,12 @@ namespace Piranha.Services
                         // Get the image file
                         using (var stream = new MemoryStream())
                         {
-                            using (var session = await _storage.OpenAsync())
+                            using (var session = await _storage.OpenAsync().ConfigureAwait(false))
                             {
-                                if (!await session.GetAsync(media.Id + "-" + media.Filename, stream))
+                                if (!await session.GetAsync(media.Id + "-" + media.Filename, stream).ConfigureAwait(false))
+                                {
                                     return null;
+                                }
 
                                 // Reset strem position
                                 stream.Position = 0;
@@ -393,7 +395,8 @@ namespace Piranha.Services
 
                                     if (upload)
                                     {
-                                        return await session.PutAsync(GetResourceName(media, width, height), media.ContentType, output);
+                                        return await session.PutAsync(GetResourceName(media, width, height), media.ContentType, output)
+                                            .ConfigureAwait(false);
                                     }
                                 }
                             }
@@ -417,11 +420,11 @@ namespace Piranha.Services
         /// <param name="id">The unique id</param>
         public async Task DeleteAsync(Guid id)
         {
-            var media = await GetByIdAsync(id);
+            var media = await GetByIdAsync(id).ConfigureAwait(false);
 
             if (media != null)
             {
-                using (var session = await _storage.OpenAsync())
+                using (var session = await _storage.OpenAsync().ConfigureAwait(false))
                 {
                     // Delete all versions
                     if (media.Versions.Count > 0)
@@ -429,14 +432,15 @@ namespace Piranha.Services
                         foreach (var version in media.Versions)
                         {
                             // Delete version from storage
-                            await session.DeleteAsync(GetResourceName(media, version.Width, version.Height, version.FileExtension));
+                            await session.DeleteAsync(GetResourceName(media, version.Width, version.Height, version.FileExtension))
+                                .ConfigureAwait(false);
                         }
                     }
 
                     // Call hooks & save
                     App.Hooks.OnBeforeDelete<Media>(media);
-                    await _repo.Delete(id);
-                    await session.DeleteAsync(media.Id + "-" + media.Filename);
+                    await _repo.Delete(id).ConfigureAwait(false);
+                    await session.DeleteAsync(media.Id + "-" + media.Filename).ConfigureAwait(false);
                     App.Hooks.OnAfterDelete<Media>(media);
                 }
                 RemoveFromCache(media);
@@ -447,9 +451,9 @@ namespace Piranha.Services
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The media</param>
-        public async Task DeleteAsync(Media model)
+        public Task DeleteAsync(Media model)
         {
-            await DeleteAsync(model.Id);
+            return DeleteAsync(model.Id);
         }
 
         /// <summary>
@@ -458,7 +462,7 @@ namespace Piranha.Services
         /// <param name="id">The unique id</param>
         public async Task DeleteFolderAsync(Guid id)
         {
-            var folder = await GetFolderByIdAsync(id);
+            var folder = await GetFolderByIdAsync(id).ConfigureAwait(false);
 
             if (folder != null)
             {
@@ -473,7 +477,7 @@ namespace Piranha.Services
 
                 // Call hooks & delete
                 App.Hooks.OnBeforeDelete<MediaFolder>(folder);
-                await _repo.DeleteFolder(id);
+                await _repo.DeleteFolder(id).ConfigureAwait(false);
                 App.Hooks.OnAfterDelete<MediaFolder>(folder);
 
                 RemoveFromCache(folder);
@@ -485,9 +489,9 @@ namespace Piranha.Services
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The media</param>
-        public async Task DeleteFolderAsync(MediaFolder model)
+        public Task DeleteFolderAsync(MediaFolder model)
         {
-            await DeleteFolderAsync(model.Id);
+            return DeleteFolderAsync(model.Id);
         }
 
         /// <summary>

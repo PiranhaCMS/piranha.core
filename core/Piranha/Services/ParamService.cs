@@ -57,7 +57,7 @@ namespace Piranha.Services
 
             if (model == null)
             {
-                model = await _repo.GetById(id);
+                model = await _repo.GetById(id).ConfigureAwait(false);
 
                 OnLoad(model);
             }
@@ -75,11 +75,11 @@ namespace Piranha.Services
 
             if (id.HasValue)
             {
-                model = await GetByIdAsync(id.Value);
+                model = await GetByIdAsync(id.Value).ConfigureAwait(false);
             }
             else
             {
-                model = await _repo.GetByKey(key);
+                model = await _repo.GetByKey(key).ConfigureAwait(false);
 
                 OnLoad(model);
             }
@@ -104,7 +104,7 @@ namespace Piranha.Services
             Validator.ValidateObject(model, context, true);
 
             // Ensure key uniqueness
-            var param = await _repo.GetByKey(model.Key);
+            var param = await _repo.GetByKey(model.Key).ConfigureAwait(false);
             if (param != null && param.Id != model.Id)
             {
                 throw new ValidationException($"The Key field must be unique");
@@ -112,7 +112,7 @@ namespace Piranha.Services
 
             // Call hooks & save
             App.Hooks.OnBeforeSave<Param>(model);
-            await _repo.Save(model);
+            await _repo.Save(model).ConfigureAwait(false);
             App.Hooks.OnAfterSave<Param>(model);
 
             // Remove from cache
@@ -125,11 +125,11 @@ namespace Piranha.Services
         /// <param name="id">The unique id</param>
         public async Task DeleteAsync(Guid id)
         {
-            var model = await GetByIdAsync(id);
+            var model = await GetByIdAsync(id).ConfigureAwait(false);
 
             if (model != null)
             {
-                await DeleteAsync(model);
+                await DeleteAsync(model).ConfigureAwait(false);
             }
         }
 
@@ -141,7 +141,7 @@ namespace Piranha.Services
         {
             // Call hooks & delete
             App.Hooks.OnBeforeDelete<Param>(model);
-            await _repo.Delete(model.Id);
+            await _repo.Delete(model.Id).ConfigureAwait(false);
             App.Hooks.OnAfterDelete<Param>(model);
 
             // Remove from cache

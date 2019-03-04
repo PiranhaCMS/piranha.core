@@ -45,7 +45,8 @@ namespace Piranha.Repositories
                 .Skip((currentPage - 1) * pageSize)
                 .Take(pageSize)
                 .Select(p => p.Id)
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
         }
 
         private IQueryable<Data.Post> GetQuery(Guid archiveId, Guid? categoryId = null, Guid? tagId = null, int? year = null, int? month = null)

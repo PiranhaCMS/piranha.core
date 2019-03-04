@@ -54,7 +54,9 @@ namespace Piranha.Extend.Fields
         {
             if (Id.HasValue)
             {
-                Page = await api.Pages.GetByIdAsync(Id.Value);
+                Page = await api.Pages
+                    .GetByIdAsync(Id.Value)
+                    .ConfigureAwait(false);
 
                 if (Page == null)
                 {
