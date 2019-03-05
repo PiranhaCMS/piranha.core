@@ -83,15 +83,11 @@ namespace Piranha.Cache
             {
                 if (IsSerializable(obj.GetType()))
                 {
-                    Console.WriteLine("BINARY CACHE");
-
                     formatter.Serialize(stream, obj);
                     return stream.ToArray();
                 }
                 else
                 {
-                    Console.WriteLine("JSON CACHE");
-
                     // First, serialize the object to JSON.
                     var settings = new JsonSerializerSettings
                     {
