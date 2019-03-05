@@ -215,6 +215,7 @@ namespace Piranha.Services
                 {
                     var model = (Extend.Block)Activator.CreateInstance(blockType.Type);
                     model.Id = block.Id;
+                    model.Type = block.CLRType;
 
                     foreach (var field in block.Fields)
                     {
