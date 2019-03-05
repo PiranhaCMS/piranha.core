@@ -12,8 +12,10 @@ using System;
 
 namespace Piranha.Models
 {
+    [Serializable]
     public sealed class MediaVersion : MediaVersion<Guid> { }
 
+    [Serializable]
     public abstract class MediaVersion<TKey>
     {
         /// <summary>

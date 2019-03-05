@@ -13,6 +13,7 @@ using System.Collections.Generic;
 
 namespace Piranha.Models
 {
+    [Serializable]
     public sealed class Media : Media<Guid>
     {
         /// <summary>
@@ -26,6 +27,7 @@ namespace Piranha.Models
         public IList<MediaVersion> Versions { get; set; } = new List<MediaVersion>();
     }
 
+    [Serializable]
     public abstract class Media<TKey>
     {
         /// <summary>

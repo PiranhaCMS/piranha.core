@@ -13,6 +13,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Piranha.Models
 {
+    [Serializable]
     public sealed class MediaFolder : MediaFolder<Guid>
     {
         /// <summary>
@@ -21,6 +22,7 @@ namespace Piranha.Models
         public Guid? ParentId { get; set; }
     }
 
+    [Serializable]
     public abstract class MediaFolder<TKey>
     {
         /// <summary>

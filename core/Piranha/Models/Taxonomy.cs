@@ -13,6 +13,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Piranha.Models
 {
+    [Serializable]
     public class Taxonomy
     {
         /// <summary>
