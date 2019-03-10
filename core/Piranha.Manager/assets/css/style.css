@@ -12638,8 +12638,8 @@ body.collapsed .navmenu-inverse span.title {
 .panel .table.table-main tr:hover td {
   background: #fafafa;
 }
-.table.table-main a,
-.panel .table.table-main a {
+.table.table-main a:not(.btn),
+.panel .table.table-main a:not(.btn) {
   font-family: "Open Sans", Arial;
   font-size: 16px;
 }

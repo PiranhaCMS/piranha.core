@@ -119,6 +119,7 @@ namespace Piranha.AttributeBuilder
                         UseBlocks = attr.UseBlocks
                     };
 
+                    // Get all page routes
                     var routes = type.GetTypeInfo().GetCustomAttributes(typeof(PageTypeRouteAttribute));
                     foreach (PageTypeRouteAttribute route in routes)
                     {
@@ -128,6 +129,25 @@ namespace Piranha.AttributeBuilder
                                 Title = route.Title,
                                 Route = route.Route
                             });
+                    }
+
+                    // Get all allowed archive items, if this is an archive page
+                    if (typeof(IArchivePage).IsAssignableFrom(type))
+                    {
+                        var itemTypes = type.GetCustomAttributes(typeof(PageTypeArchiveItemAttribute));
+                        foreach (PageTypeArchiveItemAttribute itemType in itemTypes)
+                        {
+                            var postAttr = itemType.PostType.GetCustomAttribute<PostTypeAttribute>();
+                            if (postAttr != null)
+                            {
+                                var typeId = postAttr.Id;
+                                if (string.IsNullOrWhiteSpace(typeId))
+                                {
+                                    typeId = itemType.PostType.Name;
+                                }
+                                pageType.ArchiveItemTypes.Add(typeId);
+                            }
+                        }
                     }
 
                     var regionTypes = new List<Tuple<int?, RegionType>>();

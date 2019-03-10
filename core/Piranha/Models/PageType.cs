@@ -3,12 +3,13 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Piranha.Models
@@ -23,6 +24,13 @@ namespace Piranha.Models
         public bool UseBlocks { get; set; } = true;
 
         /// <summary>
+        /// Gets/sets the allowed items types if this is an Archive
+        /// Page. If the collection is empty all Post Types should
+        /// be considered to be allowed.
+        /// </summary>
+        public IList<string> ArchiveItemTypes { get; set; } = new List<string>();
+
+        /// <summary>
         /// Validates that the page type is correctly defined.
         /// </summary>
         public void Ensure() {
@@ -31,7 +39,7 @@ namespace Piranha.Models
                 throw new InvalidOperationException($"Region Id not unique for page type {Id}");
             }
 
-            foreach (var region in Regions) 
+            foreach (var region in Regions)
             {
                 region.Title = region.Title ?? region.Id;
 
@@ -40,7 +48,7 @@ namespace Piranha.Models
                     throw new InvalidOperationException($"Field Id not unique for page type {Id}");
                 }
 
-                foreach (var field in region.Fields) 
+                foreach (var field in region.Fields)
                 {
                     field.Id = field.Id ?? "Default";
                     field.Title = field.Title ?? field.Id;
