@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -13,7 +13,9 @@ using System.Collections.Generic;
 
 namespace Piranha.Models
 {
-    public class PostArchive
+    public class PostArchive : PostArchive<DynamicPost> { }
+
+    public class PostArchive<T> where T : PostBase
     {
         /// <summary>
         /// Gets/sets the optionally requested year.
@@ -53,6 +55,6 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the available posts.
         /// </summary>
-        public IList<DynamicPost> Posts { get; set; } = new List<DynamicPost>();
+        public IList<T> Posts { get; set; } = new List<T>();
     }
 }

@@ -36,7 +36,10 @@ namespace MvcWeb.Controllers
         public async Task<IActionResult> Archive(Guid id, int? year = null, int? month = null, int? page = null,
             Guid? category = null, Guid? tag = null)
         {
-            return View(await _api.Archives.GetByIdAsync<Models.BlogArchive>(id, page, category, tag, year, month));
+            var model = await _api.Pages.GetByIdAsync<Models.BlogArchive>(id);
+            model.Archive = await _api.Archives.GetByIdAsync(id, page, category, tag, year, month);
+
+            return View(model);
         }
 
         /// <summary>
