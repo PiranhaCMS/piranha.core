@@ -4,6 +4,11 @@
       "sv-SE": "Lägg till"
     }
   },
+  "Content": {
+    "Values": {
+      "sv-SE": "Innehåll"
+    }
+  },
   "Save": {
     "Values": {
       "sv-SE": "Spara"
