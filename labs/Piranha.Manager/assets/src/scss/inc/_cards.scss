@@ -1,0 +1,18 @@
+@import "variables";
+
+.card {
+    background: none;
+    border: 0;
+    border-radius: 0;
+
+    .card-header {
+        background: none;
+        border-bottom: 0;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .card-body {
+        background: $white;
+    }
+}

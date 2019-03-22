@@ -1,0 +1,77 @@
+/*
+ * Copyright (c) 2019 Håkan Edling
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ *
+ * https://github.com/piranhacms/piranha.core
+ *
+ */
+
+var gulp = require("gulp"),
+    sass = require('gulp-sass'),
+    concat = require("gulp-concat"),
+    cssmin = require("gulp-cssmin"),
+    rename = require("gulp-rename"),
+    uglify = require("gulp-uglify");
+
+//var output = "assets/dist/";
+var output = "wwwroot/assets/";
+
+var css = [
+    "assets/src/scss/slim.scss"
+];
+
+var js = [
+    {
+        name: "piranha.js",
+        items: [
+            "assets/src/js/piranha.notifications.js"
+        ]
+    },
+    {
+        name: "piranha.alias.js",
+        items: [
+            "assets/src/js/piranha.alias.js"
+        ]
+    }
+];
+
+//
+// Compile & minimize less files
+//
+gulp.task("min:css", function () {
+    for (var n = 0; n < css.length; n++)
+    {
+        gulp.src(css[n])
+            .pipe(sass().on("error", sass.logError))
+            .pipe(cssmin())
+            .pipe(rename({
+                suffix: ".min"
+            }))
+            .pipe(gulp.dest(output + "css"));
+    }
+});
+
+//
+// Compile & minimize less files
+//
+gulp.task("min:js", function () {
+    for (var n = 0; n < js.length; n++)
+    {
+        gulp.src(js[n].items, { base: "." })
+            .pipe(concat(output + "js/" + js[n].name))
+            .pipe(gulp.dest("."))
+            .pipe(uglify())
+            .pipe(rename({
+                suffix: ".min"
+            }))
+            .pipe(gulp.dest("."));
+    }
+});
+
+//
+// Default tasks
+//
+gulp.task("serve", ["min:css", "min:js"]);
+gulp.task("default", ["serve"]);

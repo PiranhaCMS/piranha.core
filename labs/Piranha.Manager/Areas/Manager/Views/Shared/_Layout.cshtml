@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="~/assets/css/slim.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+</head>
+<body>
+    <nav class="navbar navbar-left fixed-top navbar-dark bg-dark">
+        <!--a class="navbar-brand" href="#">Fixed top</a-->
+        <ul class="navbar-nav">
+            <li class="nav-item"><span class="navbar-text"><i class="fas fa-pencil-alt"></i>Content</span></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-copy"></i>Pages</a></li>
+            <li class="nav-item active"><a href="#" class="nav-link"><i class="fas fa-images"></i>Media</a></li>
+            <li class="nav-item"><span class="navbar-text"><i class="fas fa-wrench"></i>Settings</span></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-random"></i>Aliases</a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-globe"></i>Sites</a></li>
+        </ul>
+    </nav>
+
+    @RenderBody()
+
+    <partial name="Partial/_Notifications" />
+
+    <script>
+        var piranha = {};
+
+        piranha.baseUrl = "@Url.Content("~/")";
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="~/assets/js/piranha.min.js"></script>
+
+    @RenderSection("script", required: false)
+</body>
+</html>

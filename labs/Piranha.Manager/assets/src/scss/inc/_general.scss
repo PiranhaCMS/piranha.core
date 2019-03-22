@@ -1,0 +1,17 @@
+@import "variables";
+
+body {
+    background: $bg;
+    margin-top: 4rem;
+    margin-left: 3rem;
+}
+
+a {
+    transition: text-decoration ease-in-out .15s, color ease-in-out .15s;
+}
+
+.container-fluid
+{
+    margin-left: 0;
+    max-width: 1370px;
+}

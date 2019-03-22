@@ -1,0 +1,67 @@
+@import "mixins";
+@import "variables";
+
+.navbar {
+    &.navbar-left {
+        display: block;
+        width: 3rem;
+        height: 100%;
+        padding: .5rem 0;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        transition: width ease-in-out .2s;
+
+        &.active, &:hover {
+            width: 200px;
+        }
+
+        .nav-item {
+            position: relative;
+            white-space: nowrap;
+
+            i {
+                width: 1rem;
+                font-size: 1rem;
+                margin: 0 1rem;
+                text-align: center;
+            }
+
+            a {
+                color: $blue;
+
+                &:hover {
+                    background: lighten($gray-800, 5%);
+                    color: $blue;
+                }
+
+                i {
+                    color: $gray-500;
+                }
+            }
+
+            span {
+                color: $white;
+                font-size: 1rem;
+
+                i {
+                    color: $yellow;
+                }
+            }
+
+            &.active {
+                a {
+                    background: lighten($gray-800, 5%);
+                    color: $blue;
+
+                    &:after {
+                        @include arrow-left($bg, .4rem, -.4rem);
+                    }
+
+                    i {
+                        color: $white;
+                    }
+                }
+            }
+        }
+    }
+}

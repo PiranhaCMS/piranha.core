@@ -1,0 +1,11 @@
+@import "variables";
+
+.form-control {
+    border-radius: 0;
+}
+
+.form-group {
+    >label {
+        font-weight: bold;
+    }
+}

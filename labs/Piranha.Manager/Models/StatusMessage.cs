@@ -1,0 +1,41 @@
+/*
+ * Copyright (c) 2019 Håkan Edling
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ *
+ * https://github.com/piranhacms/piranha.core
+ *
+ */
+
+using System;
+using System.Collections.Generic;
+
+namespace Piranha.Manager.Models
+{
+    /// <summary>
+    /// Status message to pass from an api to the manager interface.
+    /// </summary>
+    public class StatusMessage
+    {
+        public static readonly string Error = "error";
+        public static readonly string Success = "success";
+
+        /// <summary>
+        /// Gets/sets the message type.
+        /// </summary>
+        public string Type { get; set; }
+
+        /// <summary>
+        /// Gets/sets the message body.
+        /// </summary>
+        public string Body { get; set; }
+
+        /// <summary>
+        /// Gets/sets if the status message should be hidden
+        /// automatically from the notification hub after a
+        /// period of time.
+        /// </summary>
+        public bool Hide { get; set; } = true;
+    }
+}

@@ -1,0 +1,55 @@
+@import "variables";
+
+#notification-hub {
+    position: fixed;
+    left: 4rem;
+    bottom: 0;
+    z-index: 2000; // TODO: verify z-index later
+
+    .notification {
+        width: 300px;
+        padding: 1.5rem 1rem .5rem;
+        margin-bottom: 1rem;
+        border-radius: .25rem;
+        transform: translateX(-130%);
+        transition: transform ease-in-out .2s;
+
+        &::before {
+            content: "";
+            display: block;
+            width: 0;
+            height: 0;
+            border: solid .5rem transparent;
+            position: absolute;
+            margin-top: -.5rem;
+            top: 50%;
+            left: -1rem;
+        }
+
+        code {
+            background: rgba(255,255,255,.5);
+        }
+
+        &.danger {
+            background: $danger;
+            color: $white;
+
+            &::before {
+                border-right-color: $danger;
+            }
+        }
+
+        &.success {
+            background: $success;
+            color: $white;
+
+            &::before {
+                border-right-color: $success;
+            }
+        }
+
+        &.visible {
+            transform: translateX(0);
+        }
+    }
+}

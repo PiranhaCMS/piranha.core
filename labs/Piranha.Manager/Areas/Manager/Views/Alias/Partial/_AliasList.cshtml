@@ -1,0 +1,26 @@
+@inject IViewLocalizer Localizer
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+                        <th>@Localizer["Alias URL"]</th>
+                        <th>@Localizer["Redirect URL"]</th>
+                        <th class="text-center">@Localizer["Permanent"]</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in items">
+                        <td><code>{{ item.aliasUrl }}</code></td>
+                        <td><code>{{ item.redirectUrl }}</code></td>
+                        <td class="text-center"><i v-if="item.isPermanent" class="fas fa-check"></i></td>
+                        <td class="actions one"><a href="#" class="txt-danger" v-on:click.prevent="remove(item.id)"><i class="fas fa-trash"></i></a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

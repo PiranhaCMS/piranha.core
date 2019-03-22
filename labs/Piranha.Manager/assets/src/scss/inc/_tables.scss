@@ -1,0 +1,43 @@
+@import "variables";
+
+.table {
+    tr {
+        td, th {
+            &.actions {
+                text-align: right;
+
+                &.one {
+                    width: 2rem;
+                }
+            }
+
+            &:first-child {
+                padding-left: 1.25rem;
+            }
+            &:last-child {
+                padding-right: 1.25rem;
+            }
+        }
+    }
+
+    thead {
+        th {
+            text-transform: uppercase;
+        }
+    }
+
+    tbody {
+        tr {
+            background: $white;
+            border-top: solid 2px $bg;
+
+            td {
+                &:first-child {
+                    a {
+                        font-size: 1rem;
+                    }
+                }
+            }
+        }
+    }
+}

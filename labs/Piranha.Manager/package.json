@@ -1,0 +1,23 @@
+{
+  "name": "piranha.manager",
+  "version": "6.0.0",
+  "description": "Manager interface for Piranha CMS",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/piranhacms/piranha.core.git"
+  },
+  "main": "index.js",
+  "author": "Håkan Edling",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "3.9.1",
+    "gulp-concat": "2.6.1",
+    "gulp-cssmin": "0.2.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-uglify": "3.0.2",
+    "@aspnet/signalr": "1.1.0",
+    "bootstrap": "4.3.0",
+    "jquery": "3.3.1",
+    "popper.js": "1.14.7"
+  }
+}
