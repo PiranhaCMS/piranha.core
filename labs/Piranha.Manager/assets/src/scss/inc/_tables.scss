@@ -11,6 +11,18 @@
                 }
             }
 
+            &.small {
+                width: 110px;
+
+                .img-thumbnail {
+                    width: 78px;
+                    height: 78px;
+                }
+            }
+            &.medium {
+                width: 160px;
+            }
+
             &:first-child {
                 padding-left: 1.25rem;
             }

@@ -62,7 +62,12 @@ namespace Piranha.AspNetCore.Identity
         /// <summary>
         /// Gets the package url.
         /// </summary>
-        public string PackageURL => "https://www.nuget.org/packages/Piranha.AspNetCore.Identity";
+        public string PackageUrl => "https://www.nuget.org/packages/Piranha.AspNetCore.Identity";
+
+        /// <summary>
+        /// Gets the icon url.
+        /// </summary>
+        public string IconUrl => "http://piranhacms.org/assets/twitter-shield.png";
 
         /// <summary>
         /// Initializes the module.

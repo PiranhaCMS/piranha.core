@@ -34,6 +34,7 @@ namespace Piranha.Manager
                 options.UseSqlite("Filename=./piranha.mvcweb.db"));
 
             services.AddScoped<Services.AliasService>();
+            services.AddScoped<Services.ModuleService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

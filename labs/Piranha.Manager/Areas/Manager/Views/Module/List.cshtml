@@ -1,0 +1,48 @@
+@inject IViewLocalizer Localizer
+@section script
+{
+    <script src="~/assets/js/piranha.module.min.js"></script>
+}
+
+<div id="module">
+    <div class="top">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">@Localizer["Settings"]</li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer["Modules"]</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <th class="small"></th>
+                            <th>@Localizer["Name"]</th>
+                            <th>@Localizer["Package URL"]</th>
+                            <th class="date text-center">@Localizer["Version"]</th>
+                        </tr>
+                        <tbody>
+                            <tr v-for="item in items">
+                                <td class="small">
+                                    <img class="img-thumbnail img-thumbnail-sm" src="~/assets/img/empty-image.png" v-bind:src="item.iconUrl">
+                                </td>
+                                <td class="align-middle">
+                                    <h5>{{ item.name }}</h5>
+                                    <span class="text-nooverflow">{{ item.description }}</span>
+                                </td>
+                                <td class="align-middle">
+                                    <a class="text-nooverflow" href="{{ item.packageUrl }}" target="_blank">{{ item.packageUrl }}</a>
+                                </td>
+                                <td class="align-middle text-center">{{ item.version }}</td>
+                            </tr>
+                        </tbody>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
