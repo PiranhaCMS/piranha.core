@@ -8,7 +8,7 @@
         height: 100%;
         padding: .5rem 0;
         overflow-x: hidden;
-        overflow-y: scroll;
+        overflow-y: auto;
         transition: width ease-in-out .2s;
 
         &.active, &:hover {
@@ -54,7 +54,7 @@
                     color: $blue;
 
                     &:after {
-                        @include arrow-left($bg, .4rem, -.4rem);
+                        @include arrow-left($body-bg, .4rem, -.4rem);
                     }
 
                     i {
