@@ -9,6 +9,16 @@
       "sv-SE": "Innehåll"
     }
   },
+  "Logout": {
+    "Values": {
+      "sv-SE": "Logga ut"
+    }
+  },
+  "Name": {
+    "Values": {
+      "sv-SE": "Namn"
+    }
+  },
   "Save": {
     "Values": {
       "sv-SE": "Spara"
@@ -17,6 +27,16 @@
   "Settings": {
     "Values": {
       "sv-SE": "Inställningar"
+    }
+  },
+  "System": {
+    "Values": {
+      "sv-SE": "System"
+    }
+  },
+  "Version": {
+    "Values": {
+      "sv-SE": "Version"
     }
   }
 }

@@ -104,7 +104,12 @@ namespace Piranha.Manager
         /// <summary>
         /// Gets the package url.
         /// </summary>
-        public string PackageURL => "https://www.nuget.org/packages/Piranha.Manager";
+        public string PackageUrl => "https://www.nuget.org/packages/Piranha.Manager";
+
+        /// <summary>
+        /// Gets the icon url.
+        /// </summary>
+        public string IconUrl => "http://piranhacms.org/assets/twitter-shield.png";
 
         /// <summary>
         /// Gets the mapper.

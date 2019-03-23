@@ -34,6 +34,12 @@ var js = [
         items: [
             "assets/src/js/piranha.alias.js"
         ]
+    },
+    {
+        name: "piranha.module.js",
+        items: [
+            "assets/src/js/piranha.module.js"
+        ]
     }
 ];
 

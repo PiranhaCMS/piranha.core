@@ -18,11 +18,8 @@ namespace Piranha.Manager.Models
     /// </summary>
     public class StatusMessage
     {
-        public static readonly string Error = "danger";
-        public static readonly string Info = "info";
+        public static readonly string Error = "error";
         public static readonly string Success = "success";
-        public static readonly string Warning = "warning";
-
 
         /// <summary>
         /// Gets/sets the message type.
