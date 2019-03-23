@@ -39,12 +39,19 @@
                 }
             }
 
-            span {
-                color: $white;
+            &.nav-header {
+                display: block;
+                font-family: "Open Sans", sans-serif;
                 font-size: 1rem;
+                font-weight: 300;
+                border-top: solid 1px rgba(255,255,255,.2);
 
                 i {
                     color: $yellow;
+                }
+
+                span, a {
+                    color: $white;
                 }
             }
 

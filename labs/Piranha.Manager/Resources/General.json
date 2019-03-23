@@ -9,6 +9,11 @@
       "sv-SE": "Innehåll"
     }
   },
+  "Logout": {
+    "Values": {
+      "sv-SE": "Logga ut"
+    }
+  },
   "Save": {
     "Values": {
       "sv-SE": "Spara"

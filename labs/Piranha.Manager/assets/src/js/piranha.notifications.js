@@ -15,11 +15,7 @@ piranha.notifications = new Vue({
                 if (notification.hide)
                 {
                     setTimeout(function () {
-                        notification.isVisible = false;
-
-                        setTimeout(function () {
-                            piranha.notifications.items.shift();
-                        }, 200);
+                        piranha.notifications.items.shift();
                     }, 5000);
                 }
             }, 200);

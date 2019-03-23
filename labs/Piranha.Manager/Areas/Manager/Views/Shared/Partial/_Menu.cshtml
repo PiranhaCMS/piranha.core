@@ -1,13 +1,14 @@
 @inject IViewLocalizer Localizer
 
 <nav class="navbar navbar-left fixed-top navbar-dark bg-dark">
-    <!--a class="navbar-brand" href="#">Fixed top</a-->
+    <a class="navbar-brand" href="#"></a>
     <ul class="navbar-nav">
-        <li class="nav-item"><span class="navbar-text"><i class="fas fa-pencil-alt"></i>@Localizer["Content"]</span></li>
+        <li class="nav-item nav-header"><span class="navbar-text"><i class="fas fa-pencil-alt"></i>@Localizer["Content"]</span></li>
         <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-copy"></i>@Localizer["Pages"]</a></li>
         <li class="nav-item active"><a href="#" class="nav-link"><i class="fas fa-images"></i>@Localizer["Media"]</a></li>
-        <li class="nav-item"><span class="navbar-text"><i class="fas fa-wrench"></i>@Localizer["Settings"]</span></li>
+        <li class="nav-item nav-header"><span class="navbar-text"><i class="fas fa-wrench"></i>@Localizer["Settings"]</span></li>
         <li class="nav-item"><a href="~/manager/aliases" class="nav-link"><i class="fas fa-random"></i>@Localizer["Aliases"]</a></li>
         <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-globe"></i>@Localizer["Sites"]</a></li>
+        <li class="nav-item nav-header"><span class="navbar-text"><i class="fas fa-power-off"></i><a href="#">@Localizer["Logout"]</a></span></li>
     </ul>
 </nav>
