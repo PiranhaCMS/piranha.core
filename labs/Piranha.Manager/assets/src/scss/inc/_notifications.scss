@@ -30,21 +30,14 @@
             background: rgba(255,255,255,.5);
         }
 
-        &.danger {
-            background: $danger;
-            color: $white;
+        @each $color, $value in $theme-colors {
+            &.notification-#{$color} {
+                background: $value;
+                color: color-yiq($value);
 
-            &::before {
-                border-right-color: $danger;
-            }
-        }
-
-        &.success {
-            background: $success;
-            color: $white;
-
-            &::before {
-                border-right-color: $success;
+                &::before {
+                    border-right-color: $value;
+                }
             }
         }
 
