@@ -1,7 +1,7 @@
 Vue.component("sitemap-item", {
     props: ["item"],
     template:
-        "<li class='dd-item'>" +
+        "<li class='dd-item' :data-id='item.id'>" +
         "  <div class='sitemap-item'>" +
         "    <div class='handle dd-handle'><i class='fas fa-ellipsis-v'></i></div>" +
         "    <div class='link'><a href='{{ item.id }}'>{{ item.title }}</a></div>" +
@@ -33,9 +33,11 @@ piranha.pagelist = new Vue({
                 .then(function (result) {
                     piranha.pagelist.sites = result.sites;
 
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $(".sitemap-container").nestable({
                             group: 1
+                        }).on('change', function (e) {
+                            console.log("changed: ", $(e.target).nestable("serialize"));
                         });
                     }, 200);
                 })
