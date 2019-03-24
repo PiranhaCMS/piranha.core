@@ -32,14 +32,6 @@ piranha.pagelist = new Vue({
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     piranha.pagelist.sites = result.sites;
-
-                    setTimeout(function () {
-                        $(".sitemap-container").nestable({
-                            group: 1
-                        }).on('change', function (e) {
-                            console.log("changed: ", $(e.target).nestable("serialize"));
-                        });
-                    }, 200);
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },
@@ -49,5 +41,12 @@ piranha.pagelist = new Vue({
     },
     created: function () {
         this.load();
+    },
+    updated: function () {
+        $(".sitemap-container").nestable({
+            group: 1
+        }).on('change', function (e) {
+            console.log("changed: ", $(e.target).nestable("serialize"));
+        });
     }
 });
