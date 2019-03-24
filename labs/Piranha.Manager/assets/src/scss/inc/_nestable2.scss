@@ -19,7 +19,7 @@
 }
 
 .dd-item,
-.dd-empty,
+//.dd-empty,
 .dd-placeholder {
     display: block;
     position: relative;
@@ -51,7 +51,7 @@
     }
 }
 
-.dd-empty,
+//.dd-empty,
 .dd-placeholder {
     margin: 0 0 2px;
     padding: 0;
@@ -62,11 +62,11 @@
     -moz-box-sizing: border-box;
 }
 
-.dd-empty {
-    border: 1px dashed #bbb;
-    min-height: 100px;
-    background-color: #e5e5e5;
-}
+//.dd-empty {
+//    border: 1px dashed #bbb;
+//    min-height: 100px;
+//    background-color: #e5e5e5;
+//}
 
 .dd-dragel {
     position: absolute;

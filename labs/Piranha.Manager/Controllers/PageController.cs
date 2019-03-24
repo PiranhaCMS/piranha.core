@@ -13,16 +13,16 @@ using Microsoft.AspNetCore.Mvc;
 namespace Piranha.Manager.Controllers
 {
     /// <summary>
-    /// Mvc controller for alias management.
+    /// Mvc controller for page management.
     /// </summary>
     [Area("Manager")]
     [Route("manager")]
-    public class AliasController : Controller
+    public class PageController : Controller
     {
         /// <summary>
         /// Gets the list view.
         /// </summary>
-        [Route("aliases")]
+        [Route("pages")]
         public IActionResult List()
         {
             return View();

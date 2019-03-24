@@ -1,0 +1,33 @@
+@inject IViewLocalizer Localizer
+@section script
+{
+    <script src="~/assets/js/piranha.pagelist.min.js"></script>
+    <script>
+        $(".sitemap").nestable({
+            group: 1
+        });
+    </script>
+}
+
+<div id="pagelist">
+    <div class="top">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">@Localizer["Content"]</li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer["Pages"]</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="sitemap dd">
+                    <ol class="dd-list">
+                        <sitemap-item v-for="item in items" v-bind:key="item.id" v-bind:item="item"></sitemap-item>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -35,6 +35,7 @@ namespace Piranha.Manager
 
             services.AddScoped<Services.AliasService>();
             services.AddScoped<Services.ModuleService>();
+            services.AddScoped<Services.PageService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
