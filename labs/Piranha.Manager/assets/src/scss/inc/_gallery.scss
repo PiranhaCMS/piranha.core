@@ -1,0 +1,144 @@
+@import "variables";
+
+.gallery {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -$gallery-gutter / 2;
+    margin-right: -$gallery-gutter / 2;
+
+    &.gallery-xs {
+        .thumbnail {
+            min-height: $gallery-xs-min-height;
+
+            @include media-breakpoint-up(xs) {
+                @include make-col($gallery-xs-xs, $gallery-columns);
+            }
+
+            @include media-breakpoint-up(sm) {
+                @include make-col($gallery-xs-sm, $gallery-columns);
+            }
+
+            @include media-breakpoint-up(md) {
+                @include make-col($gallery-xs-md, $gallery-columns);
+            }
+
+            @include media-breakpoint-up(lg) {
+                @include make-col($gallery-xs-lg, $gallery-columns);
+            }
+        }
+    }
+
+    &.gallery-sm {
+        .thumbnail {
+            min-height: $gallery-sm-min-height;
+
+            @include media-breakpoint-up(xs) {
+                @include make-col($gallery-sm-xs, $gallery-columns);
+            }
+
+            @include media-breakpoint-up(sm) {
+                @include make-col($gallery-sm-sm, $gallery-columns);
+            }
+
+            @include media-breakpoint-up(md) {
+                @include make-col($gallery-sm-md, $gallery-columns);
+            }
+
+            @include media-breakpoint-up(lg) {
+                @include make-col($gallery-sm-lg, $gallery-columns);
+            }
+        }
+    }
+
+    &.gallery-md {
+        .thumbnail {
+            min-height: $gallery-md-min-height;
+
+            @include media-breakpoint-up(xs) {
+                @include make-col($gallery-md-xs, $gallery-columns);
+            }
+
+            @include media-breakpoint-up(sm) {
+                @include make-col($gallery-md-sm, $gallery-columns);
+            }
+
+            @include media-breakpoint-up(md) {
+                @include make-col($gallery-md-md, $gallery-columns);
+            }
+
+            @include media-breakpoint-up(lg) {
+                @include make-col($gallery-md-lg, $gallery-columns);
+            }
+        }
+    }
+
+    &.gallery-lg {
+        .thumbnail {
+            min-height: 200px;
+
+            @include media-breakpoint-up(xs) {
+                @include make-col($gallery-lg-xs, $gallery-columns);
+            }
+
+            @include media-breakpoint-up(sm) {
+                @include make-col($gallery-lg-sm, $gallery-columns);
+            }
+
+            @include media-breakpoint-up(md) {
+                @include make-col($gallery-lg-md, $gallery-columns);
+            }
+
+            @include media-breakpoint-up(lg) {
+                @include make-col($gallery-lg-lg, $gallery-columns);
+            }
+        }
+    }
+}
+
+.gallery-header {
+    @extend .card-header;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.thumbnail {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding-left: $gallery-gutter / 2;
+    padding-right: $gallery-gutter / 2;
+    margin-bottom: $thumbnail-margin-bottom;
+
+    .thumbnail-icon {
+        flex-grow: 1;
+        position: relative;
+        background: $thumbnail-bg;
+
+        > * {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+        }
+    }
+
+    .thumbnail-image {
+        max-width: 100%;
+        object-fit: cover;
+        border: $thumbnail-border-width solid $thumbnail-border-color;
+        border-bottom: none;
+        background: $thumbnail-bg;
+    }
+
+    .thumbnail-text {
+        margin: 0;
+        padding: .25rem 1rem;
+        text-align: center;
+        background: $thumbnail-bg;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+}

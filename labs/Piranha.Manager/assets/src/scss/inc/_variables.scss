@@ -41,3 +41,40 @@ $card-bg: none;
 $card-cap-bg: none;
 $card-body-bg: $white;
 $card-border-width: 0;
+
+// Gallery
+
+$gallery-gutter: 1rem;
+
+$gallery-columns: 24;
+
+$gallery-xs-xs: 8;
+$gallery-xs-sm: 4;
+$gallery-xs-md: 3;
+$gallery-xs-lg: 2;
+$gallery-xs-min-height: 85px;
+
+$gallery-sm-xs: 12;
+$gallery-sm-sm: 8;
+$gallery-sm-md: 6;
+$gallery-sm-lg: 4;
+$gallery-sm-min-height: 100px;
+
+$gallery-md-xs: 12;
+$gallery-md-sm: 12;
+$gallery-md-md: 8;
+$gallery-md-lg: 6;
+$gallery-md-min-height: 100px;
+
+$gallery-lg-xs: 24;
+$gallery-lg-sm: 24;
+$gallery-lg-md: 12;
+$gallery-lg-lg: 12;
+$gallery-lg-min-height: 200px;
+
+// Thumbnails
+
+$thumbnail-bg: $white;
+$thumbnail-margin-bottom: 1rem;
+$thumbnail-border-color: $white;
+$thumbnail-border-width: 2px;
