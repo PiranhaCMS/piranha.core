@@ -9,31 +9,31 @@
         list-style-type: none;
 
         ol {
-            margin-left: 2.4rem;
+            padding-left: 2.4rem;
         }
     }
+}
 
-    .sitemap-item {
-        background: $white;
-        display: flex;
-        margin-bottom: 2px;
+.sitemap-item {
+    background: $white;
+    display: flex;
+    margin-bottom: 2px;
 
-        >div {
-            padding: .75rem 1rem;
-        }
+    >div {
+        padding: .75rem 1rem;
+    }
 
-        .handle {
-            border-right: solid 2px $gray-100;
-        }
+    .handle {
+        border-right: solid 2px $gray-100;
+    }
 
-        .link {
-            flex-grow: 1;
+    .link {
+        flex-grow: 1;
 
-            a {
-                display: block;
-                font-family: "Open Sans", sans-serif;
-                font-size: 1rem;
-            }
+        a {
+            display: block;
+            font-family: "Open Sans", sans-serif;
+            font-size: 1rem;
         }
     }
 }

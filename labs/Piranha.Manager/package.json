@@ -18,6 +18,7 @@
     "@aspnet/signalr": "1.1.0",
     "bootstrap": "4.3.0",
     "jquery": "3.3.1",
-    "popper.js": "1.14.7"
+    "popper.js": "1.14.7",
+    "nestable2": "1.6.0"
   }
 }

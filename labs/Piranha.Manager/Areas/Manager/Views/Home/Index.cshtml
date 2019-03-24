@@ -1,4 +1,12 @@
 @inject IViewLocalizer Localizer
+@section script
+{
+    <script>
+        $(".sitemap").nestable({
+            group: 1
+        });
+    </script>
+}
 
 <div class="top">
     <nav aria-label="breadcrumb">
@@ -65,38 +73,38 @@
 
     <div class="row">
         <div class="col">
-            <div class="sitemap">
-                <ol>
-                    <li>
+            <div class="sitemap dd">
+                <ol class="dd-list">
+                    <li class="dd-item">
                         <div class="sitemap-item">
-                            <div class="handle"><i class="fas fa-ellipsis-v"></i></div>
+                            <div class="handle dd-handle"><i class="fas fa-ellipsis-v"></i></div>
                             <div class="link"><a href="#">Page link</a></div>
                             <div class="type">Standard page</div>
                             <div class="date">2019-03-23</div>
                             <div class="actions"></div>
                         </div>
-                        <ol>
-                            <li>
+                        <ol class="dd-list">
+                            <li class="dd-item">
                                 <div class="sitemap-item">
-                                    <div class="handle"><i class="fas fa-ellipsis-v"></i></div>
+                                    <div class="handle dd-handle"><i class="fas fa-ellipsis-v"></i></div>
                                     <div class="link"><a href="#">Page link</a></div>
                                     <div class="type">Standard page</div>
                                     <div class="date">2019-03-23</div>
                                     <div class="actions"></div>
                                 </div>
-                                <ol>
-                                    <li>
+                                <ol class="dd-list">
+                                    <li class="dd-item">
                                         <div class="sitemap-item">
-                                            <div class="handle"><i class="fas fa-ellipsis-v"></i></div>
+                                            <div class="handle dd-handle"><i class="fas fa-ellipsis-v"></i></div>
                                             <div class="link"><a href="#">Page link</a></div>
                                             <div class="type">Standard page</div>
                                             <div class="date">2019-03-23</div>
                                             <div class="actions"></div>
                                         </div>
                                     </li>
-                                    <li>
+                                    <li class="dd-item">
                                         <div class="sitemap-item">
-                                            <div class="handle"><i class="fas fa-ellipsis-v"></i></div>
+                                            <div class="handle dd-handle"><i class="fas fa-ellipsis-v"></i></div>
                                             <div class="link"><a href="#">Page link</a></div>
                                             <div class="type">Standard page</div>
                                             <div class="date">2019-03-23</div>
@@ -105,9 +113,9 @@
                                     </li>
                                 </ol>
                             </li>
-                            <li>
+                            <li class="dd-item">
                                 <div class="sitemap-item">
-                                    <div class="handle"><i class="fas fa-ellipsis-v"></i></div>
+                                    <div class="handle dd-handle"><i class="fas fa-ellipsis-v"></i></div>
                                     <div class="link"><a href="#">Page link</a></div>
                                     <div class="type">Standard page</div>
                                     <div class="date">2019-03-23</div>
@@ -116,9 +124,9 @@
                             </li>
                         </ol>
                     </li>
-                    <li>
+                    <li class="dd-item">
                         <div class="sitemap-item">
-                            <div class="handle"><i class="fas fa-ellipsis-v"></i></div>
+                            <div class="handle dd-handle"><i class="fas fa-ellipsis-v"></i></div>
                             <div class="link"><a href="#">Page link</a></div>
                             <div class="type">Standard page</div>
                             <div class="date">2019-03-23</div>
