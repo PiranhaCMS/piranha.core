@@ -12,6 +12,7 @@
         position: fixed;
         top: 0;
         left: 3rem;
+        width: calc(100% - 3rem);
         z-index: 1000; // TODO: Set later
     }
 
