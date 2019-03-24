@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Piranha.Models;
 using Piranha.Manager.Models;
 
@@ -33,50 +34,56 @@ namespace Piranha.Manager.Services
         /// Gets the list model.
         /// </summary>
         /// <returns>The list model</returns>
-        public PageListModel GetList()
+        public async Task<PageListModel> GetList()
         {
             return new PageListModel {
-                Items = new List<PageListModel.ListItem>
+                Sites = (await _api.Sites.GetAllAsync()).Select(s => new PageListModel.SiteItem
                 {
-                    new PageListModel.ListItem
+                    Id = s.Id,
+                    Title = s.Title,
+                    Slug = "/",
+                    Pages = new List<PageListModel.PageItem>
                     {
-                        Id = Guid.NewGuid(),
-                        Title = "Cras Lorem Amet",
-                        TypeName = "Standard page",
-                        Published = DateTime.Now.ToString("yyyy-MM-dd")
-                    },
-                    new PageListModel.ListItem
-                    {
-                        Id = Guid.NewGuid(),
-                        Title = "Nullam Sit",
-                        TypeName = "Standard page",
-                        Published = DateTime.Now.ToString("yyyy-MM-dd"),
-                        Items = new List<PageListModel.ListItem>
+                        new PageListModel.PageItem
                         {
-                            new PageListModel.ListItem
+                            Id = Guid.NewGuid(),
+                            Title = "Cras Lorem Amet",
+                            TypeName = "Standard page",
+                            Published = DateTime.Now.ToString("yyyy-MM-dd")
+                        },
+                        new PageListModel.PageItem
+                        {
+                            Id = Guid.NewGuid(),
+                            Title = "Nullam Sit",
+                            TypeName = "Standard page",
+                            Published = DateTime.Now.ToString("yyyy-MM-dd"),
+                            Items = new List<PageListModel.PageItem>
                             {
-                                Id = Guid.NewGuid(),
-                                Title = "Egestas Cras",
-                                TypeName = "Standard page",
-                                Published = DateTime.Now.ToString("yyyy-MM-dd")
-                            },
-                            new PageListModel.ListItem
-                            {
-                                Id = Guid.NewGuid(),
-                                Title = "Fusce Ornare",
-                                TypeName = "Standard page",
-                                Published = DateTime.Now.ToString("yyyy-MM-dd")
+                                new PageListModel.PageItem
+                                {
+                                    Id = Guid.NewGuid(),
+                                    Title = "Egestas Cras",
+                                    TypeName = "Standard page",
+                                    Published = DateTime.Now.ToString("yyyy-MM-dd")
+                                },
+                                new PageListModel.PageItem
+                                {
+                                    Id = Guid.NewGuid(),
+                                    Title = "Fusce Ornare",
+                                    TypeName = "Standard page",
+                                    Published = DateTime.Now.ToString("yyyy-MM-dd")
+                                }
                             }
+                        },
+                        new PageListModel.PageItem
+                        {
+                            Id = Guid.NewGuid(),
+                            Title = "Bibendum Mattis Vehicula",
+                            TypeName = "Standard page",
+                            Published = DateTime.Now.ToString("yyyy-MM-dd")
                         }
-                    },
-                    new PageListModel.ListItem
-                    {
-                        Id = Guid.NewGuid(),
-                        Title = "Bibendum Mattis Vehicula",
-                        TypeName = "Standard page",
-                        Published = DateTime.Now.ToString("yyyy-MM-dd")
                     }
-                }
+                }).ToList()
             };
         }
     }

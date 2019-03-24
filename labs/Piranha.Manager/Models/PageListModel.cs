@@ -18,18 +18,23 @@ namespace Piranha.Manager.Models
     /// </summary>
     public class PageListModel
     {
-        public class ListItem
+        public class SiteItem
+        {
+            public Guid Id { get; set; }
+            public string Title { get; set; }
+            public string Slug { get; set; }
+            public IList<PageItem> Pages { get; set; } = new List<PageItem>();
+        }
+
+        public class PageItem
         {
             public Guid Id { get; set; }
             public string Title { get; set; }
             public string TypeName { get; set; }
             public string Published { get; set; }
-            public List<ListItem> Items { get; set; } = new List<ListItem>();
+            public List<PageItem> Items { get; set; } = new List<PageItem>();
         }
 
-        /// <summary>
-        /// Gets/set the available items.
-        /// </summary>
-        public IList<ListItem> Items { get; set; } = new List<ListItem>();
+        public IList<SiteItem> Sites { get; set; } = new List<SiteItem>();
     }
 }

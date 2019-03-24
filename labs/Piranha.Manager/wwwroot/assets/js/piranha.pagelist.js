@@ -23,14 +23,21 @@ Vue.component("sitemap-item", {
 piranha.pagelist = new Vue({
     el: "#pagelist",
     data: {
-        items: []
+        items: [],
+        sites: []
     },
     methods: {
         load: function () {
             fetch(piranha.baseUrl + "manager/api/page/list")
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    piranha.pagelist.items = result.items;
+                    piranha.pagelist.sites = result.sites;
+
+                    setTimeout(function() {
+                        $(".sitemap-container").nestable({
+                            group: 1
+                        });
+                    }, 200);
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },

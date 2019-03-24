@@ -42,9 +42,9 @@ namespace Piranha.Manager.Controllers
         /// <returns>The list model</returns>
         [Route("list")]
         [HttpGet]
-        public PageListModel List()
+        public async Task<PageListModel> List()
         {
-            return _service.GetList();
+            return await _service.GetList();
         }
     }
 }
