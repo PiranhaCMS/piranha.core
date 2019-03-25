@@ -9,6 +9,31 @@
       "sv-SE": "Innehåll"
     }
   },
+  "Content type": {
+    "Values": {
+      "sv-SE": "Innehållstyp"
+    }
+  },
+  "Details": {
+    "Values": {
+      "sv-SE": "Detaljer"
+    }
+  },
+  "Filename": {
+    "Values": {
+      "sv-SE": "Filnamn"
+    }
+  },
+  "Height": {
+    "Values": {
+      "sv-SE": "Höjd"
+    }
+  },
+  "Last modified": {
+    "Values": {
+      "sv-SE": "Senast ändrad"
+    }
+  },
   "Logout": {
     "Values": {
       "sv-SE": "Logga ut"
@@ -17,6 +42,11 @@
   "Name": {
     "Values": {
       "sv-SE": "Namn"
+    }
+  },
+  "Preview": {
+    "Values": {
+      "sv-SE": "Förhandsvisning"
     }
   },
   "Save": {
@@ -29,14 +59,29 @@
       "sv-SE": "Inställningar"
     }
   },
+  "Size": {
+    "Values": {
+      "sv-SE": "Storlek"
+    }
+  },
   "System": {
     "Values": {
       "sv-SE": "System"
     }
   },
+  "Update": {
+    "Values": {
+      "sv-SE": "Uppdatera"
+    }
+  },
   "Version": {
     "Values": {
       "sv-SE": "Version"
+    }
+  },
+  "Width": {
+    "Values": {
+      "sv-SE": "Bredd"
     }
   }
 }

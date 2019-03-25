@@ -1,3 +1,5 @@
+@inject IViewLocalizer Localizer
+
 <!-- The Modal -->
 <div class="modal fade" id="previewModal">
     <div class="modal-dialog modal-lg">
@@ -5,20 +7,20 @@
 
             <!-- Modal Header -->
             <div class="modal-header border-bottom-0">
-                <h5 class="modal-title">DC658464_BBQ.jpg</h5>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h5 class="modal-title">{{ media.filename }}</h5>
+                <button type="button" class="close" v-on:click.prevent="closeModal">&times;</button>
             </div>
 
             <!-- Tabs -->
             <ul class="nav nav-tabs nav-fill">
                 <li class="nav-item">
-                    <a class="nav-link active" data-toggle="pill" href="#pills-preview">Preview</a>
+                    <a class="nav-link active" data-toggle="pill" href="#pills-preview">@Localizer["Preview"]</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="pill" href="#pills-details">Details</a>
+                    <a class="nav-link" data-toggle="pill" href="#pills-details">>@Localizer["Details"]</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="pill" href="#pills-update">Update</a>
+                    <a class="nav-link" data-toggle="pill" href="#pills-update">>@Localizer["Update"]</a>
                 </li>
             </ul>
 
@@ -26,41 +28,40 @@
             <div class="modal-body bg-light">
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-preview">
-                        <img class="d-block mx-auto mw-100" src="https://picsum.photos/800/500" />
+                        <img class="d-block mx-auto mw-100" v-bind:src="media.publicUrl" />
                     </div>
                     <div class="tab-pane fade" id="pills-details">
                         <table class="table table-borderless m-0">
                             <tbody>
                                 <tr>
-                                    <th>Filename</th>
-                                    <td>DC658464_BBQ.jpg</td>
+                                    <th>@Localizer["Filename"]</th>
+                                    <td>{{ media.filename }}</td>
                                 </tr>
                                 <tr>
-                                    <th>Content type</th>
-                                    <td>Image</td>
+                                    <th>@Localizer["Content type"]</th>
+                                    <td>{{ media.contentType }}</td>
                                 </tr>
                                 <tr>
-                                    <th>Image size</th>
-                                    <td>1.23 MB</td>
+                                    <th>@Localizer["Size"]</th>
+                                    <td>{{ size }}</td>
                                 </tr>
                                 <tr>
-                                    <th>Image width</th>
-                                    <td>800 px</td>
+                                    <th>@Localizer["Width"]</th>
+                                    <td>{{ media.width }}</td>
                                 </tr>
                                 <tr>
-                                    <th>Image height</th>
-                                    <td>655 px</td>
+                                    <th>@Localizer["Height"]</th>
+                                    <td>{{ media.height }}</td>
                                 </tr>
                                 <tr>
-                                    <th>Last modified</th>
-                                    <td>2019-01-25</td>
-
+                                    <th>@Localizer["Last modified"]</th>
+                                    <td>{{ media.lastModified }}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                     <div class="tab-pane fade" id="pills-update">
-                        update
+                        Update
                     </div>
                 </div>
             </div>

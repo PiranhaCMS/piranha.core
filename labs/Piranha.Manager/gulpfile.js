@@ -27,7 +27,8 @@ var js = [
         name: "piranha.js",
         items: [
             "node_modules/nestable2/dist/jquery.nestable.min.js",
-            "assets/src/js/piranha.notifications.js"
+            "assets/src/js/piranha.notifications.js",
+            "assets/src/js/piranha.preview.js"
         ]
     },
     {
