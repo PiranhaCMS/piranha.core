@@ -26,12 +26,10 @@ namespace Piranha.Manager.Controllers
     [ApiController]
     public class MediaApiController : Controller
     {
-        private readonly IApi _api;
         private readonly MediaService _service;
 
-        public MediaApiController(MediaService service, IApi api)
+        public MediaApiController(MediaService service)
         {
-            _api = api;
             _service = service;
         }
 
@@ -43,15 +41,13 @@ namespace Piranha.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> Get(Guid id)
         {
-            var media = await _api.Media.GetByIdAsync(id);
-
-            if (media != null)
+            var media = await _service.GetById(id);
+            if (media == null)
             {
-                media.PublicUrl = media.PublicUrl.Replace("~", "");
-
-                return Ok(media);
+                return NotFound();
             }
-            return NotFound();
+
+            return Ok(media);
         }
 
         /// <summary>

@@ -31,12 +31,35 @@ namespace Piranha.Manager.Services
         }
 
         /// <summary>
+        /// Get media model by media id
+        /// </summary>
+        /// <param name="id">Media IDidparam>
+        /// <returns>Model</returns>
+        public async Task<MediaListModel.MediaItem> GetById(Guid id)
+        {
+            var media = await _api.Media.GetByIdAsync(id);
+            if (media == null)
+                return null;
+
+            return new MediaListModel.MediaItem
+            {
+                Id = media.Id,
+                Type = media.Type.ToString(),
+                Filename = media.Filename,
+                PublicUrl = media.PublicUrl.Replace("~", ""),
+                ContentType = media.ContentType,
+                Size = Utils.FormatByteSize(media.Size),
+                LastModified = media.LastModified.ToString("yyyy-MM-dd")
+            };
+        }
+
+        /// <summary>
         /// Gets the list model for the specified folder, or the root
         /// folder if to folder id is given.
         /// </summary>
         /// <param name="folderId">The optional folder id</param>
         /// <returns>The list model</returns>
-        public async Task<MediaListModel> GetList(Guid? folderId = null)
+            public async Task<MediaListModel> GetList(Guid? folderId = null)
         {
             var model = new MediaListModel
             {
