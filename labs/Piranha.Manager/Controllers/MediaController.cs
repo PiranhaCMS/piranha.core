@@ -8,31 +8,24 @@
  *
  */
 
-using System;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Piranha.Manager.Controllers
 {
     /// <summary>
-    /// Mvc controller for page management.
+    /// Mvc controller for media management.
     /// </summary>
     [Area("Manager")]
     [Route("manager")]
-    public class PageController : Controller
+    public class MediaController : Controller
     {
         /// <summary>
         /// Gets the list view.
         /// </summary>
-        [Route("pages")]
+        [Route("media")]
         public IActionResult List()
         {
             return View();
-        }
-
-        [Route("page/{id:Guid}")]
-        public IActionResult Edit(Guid id)
-        {
-            return View(id);
         }
     }
 }

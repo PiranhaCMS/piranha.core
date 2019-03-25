@@ -10,11 +10,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Piranha.Manager.Models;
 using Piranha.Manager.Services;
-using Piranha.Services;
-
 
 namespace Piranha.Manager.Controllers
 {
@@ -27,13 +27,12 @@ namespace Piranha.Manager.Controllers
     public class MediaApiController : Controller
     {
         private readonly IApi _api;
+        private readonly MediaService _service;
 
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public MediaApiController(IApi api)
+        public MediaApiController(MediaService service, IApi api)
         {
             _api = api;
+            _service = service;
         }
 
         /// <summary>
@@ -42,40 +41,58 @@ namespace Piranha.Manager.Controllers
         /// <returns>The list model</returns>
         [Route("{id}")]
         [HttpGet]
-        public object Get(Guid id)
+        public async Task<IActionResult> Get(Guid id)
         {
-            var media = _api.Media.GetById(id);
+            var media = await _api.Media.GetByIdAsync(id);
+
             if (media != null)
-                return media;
-
-            media = new Piranha.Models.Media
             {
-                Id = Guid.NewGuid(),
-                Filename = "DCS9783_BBQ.jpg",
-                ContentType = "image/jpeg",
-                Type = Piranha.Models.MediaType.Image,
-                Size = 54790,
-                Height = 470,
-                Width = 1600,
-                Created = DateTime.Now,
-                LastModified = DateTime.Now,
-                PublicUrl = "https://picsum.photos/1000/700"
-            };
+                media.PublicUrl = media.PublicUrl.Replace("~", "");
 
-            return media;
-
-            //return NotFound();
+                return Ok(media);
+            }
+            return NotFound();
         }
 
         /// <summary>
-        /// Gets a list of media.
+        /// Gets the list model.
         /// </summary>
         /// <returns>The list model</returns>
-        [Route("list/{folderId?}")]
+        [Route("list/{folderId:Guid?}")]
         [HttpGet]
-        public IEnumerable<Piranha.Models.Media> List(Guid? folderId)
+        public async Task<MediaListModel> List(Guid? folderId = null)
         {
-            return _api.Media.GetAll(folderId);
+            return await _service.GetList(folderId);
+        }
+
+        [Route("savefolder")]
+        [HttpPost]
+        public async Task<IActionResult> SaveFolder(MediaFolderModel model)
+        {
+            try
+            {
+                await _service.SaveFolder(model);
+
+                var result = await _service.GetList();
+
+                result.Status = new StatusMessage
+                {
+                    Type = StatusMessage.Success,
+                    Body = $"The folder <code>{ model.Name }</code> was saved"
+                };
+
+                return Ok(result);
+            }
+            catch (ValidationException e)
+            {
+                var result = new AliasListModel();
+                result.Status = new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = e.Message
+                };
+                return BadRequest(result);
+            }
         }
     }
 }

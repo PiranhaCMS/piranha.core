@@ -7,11 +7,11 @@
                 text-align: right;
 
                 &.one {
-                    width: 2rem;
+                    width: 3.5rem;
                 }
             }
 
-            &.small {
+            &.td-small {
                 width: 110px;
 
                 .img-thumbnail {
@@ -19,8 +19,8 @@
                     height: 78px;
                 }
             }
-            &.medium {
-                width: 160px;
+            &.td-medium {
+                width: 180px;
             }
 
             &:first-child {
@@ -48,6 +48,12 @@
                     a {
                         font-family: "Open Sans", sans-serif;
                         font-size: 1rem;
+
+                        i {
+                            color: $gray-500;
+                            font-size: .875rem;
+                            padding-right: .5rem;
+                        }
                     }
                 }
             }

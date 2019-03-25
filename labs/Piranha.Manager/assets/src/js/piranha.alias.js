@@ -58,7 +58,6 @@ piranha.alias = new Vue({
                 });
         },
         remove: function (id) {
-            console.log("Delete");
             fetch(piranha.baseUrl + "manager/api/alias/delete/" + id)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {

@@ -8,7 +8,7 @@
             <!-- Modal Header -->
             <div class="modal-header border-bottom-0">
                 <h5 class="modal-title">{{ media.filename }}</h5>
-                <button type="button" class="close" v-on:click.prevent="closeModal">&times;</button>
+                <button type="button" class="close" v-on:click.prevent="close">&times;</button>
             </div>
 
             <!-- Tabs -->
@@ -17,18 +17,18 @@
                     <a class="nav-link active" data-toggle="pill" href="#pills-preview">@Localizer["Preview"]</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="pill" href="#pills-details">>@Localizer["Details"]</a>
+                    <a class="nav-link" data-toggle="pill" href="#pills-details">@Localizer["Details"]</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="pill" href="#pills-update">>@Localizer["Update"]</a>
+                    <a class="nav-link" data-toggle="pill" href="#pills-update">@Localizer["Update"]</a>
                 </li>
             </ul>
 
             <!-- Modal Body -->
             <div class="modal-body bg-light">
                 <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="pills-preview">
-                        <img class="d-block mx-auto mw-100" v-bind:src="media.publicUrl" />
+                    <div class="tab-pane fade show active " id="pills-preview">
+                        <img class="d-block mx-auto mw-100" :src="media.publicUrl" />
                     </div>
                     <div class="tab-pane fade" id="pills-details">
                         <table class="table table-borderless m-0">
@@ -54,7 +54,7 @@
                                     <td>{{ media.height }}</td>
                                 </tr>
                                 <tr>
-                                    <th>@Localizer["Last modified"]</th>
+                                    <th>@Localizer["Modified"]</th>
                                     <td>{{ media.lastModified }}</td>
                                 </tr>
                             </tbody>

@@ -22,7 +22,7 @@
                         <li v-for="site in sites">
                             <div class="sitemap-item">
                                 <div class="handle"><i class="fas fa-globe"></i></div>
-                                <div class="link"><a href="#">{{ site.title }} <small>(<code>{{ site.slug }}</code>)</small></a></div>
+                                <div class="link"><a :href="piranha.baseUrl + site.editUrl + site.id">{{ site.title }} <small>(<code>{{ site.slug }}</code>)</small></a></div>
                             </div>
                             <div class="sitemap sitemap-container dd">
                                 <ol class="dd-list">

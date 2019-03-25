@@ -29,14 +29,19 @@
       "sv-SE": "Höjd"
     }
   },
-  "Last modified": {
+  "Edit": {
     "Values": {
-      "sv-SE": "Senast ändrad"
+      "sv-SE": "Redigera"
     }
   },
   "Logout": {
     "Values": {
       "sv-SE": "Logga ut"
+    }
+  },
+  "Modified": {
+    "Values": {
+      "sv-SE": "Ändrad"
     }
   },
   "Name": {
@@ -72,6 +77,11 @@
   "Update": {
     "Values": {
       "sv-SE": "Uppdatera"
+    }
+  },
+  "Type": {
+    "Values": {
+      "sv-SE": "Typ"
     }
   },
   "Version": {

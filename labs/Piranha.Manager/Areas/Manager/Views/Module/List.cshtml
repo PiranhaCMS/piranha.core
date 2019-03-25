@@ -20,14 +20,14 @@
                 <table class="table table-borderless">
                     <thead>
                         <tr>
-                            <th class="small"></th>
+                            <th class="td-small"></th>
                             <th>@Localizer["Name"]</th>
                             <th>@Localizer["Package URL"]</th>
                             <th class="date text-center">@Localizer["Version"]</th>
                         </tr>
                         <tbody>
                             <tr v-for="item in items">
-                                <td class="small">
+                                <td>
                                     <img class="img-thumbnail img-thumbnail-sm" src="~/assets/img/empty-image.png" v-bind:src="item.iconUrl">
                                 </td>
                                 <td class="align-middle">

@@ -1,0 +1,47 @@
+@inject IViewLocalizer Localizer
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+                        <th>@Localizer["Name"]</th>
+                        <th class="td-medium">@Localizer["Type"]</th>
+                        <th class="td-medium">@Localizer["Size"]</th>
+                        <th class="td-small">@Localizer["Modified"]</th>
+                        <th class="actions one"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-if="currentFolderId != null">
+                        <td><a href="#" v-on:click.prevent="load(parentFolderId)"><i class="fas fa-folder-open"></i>...</a></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="actions one"></td>
+                    </tr>
+                    <tr v-for="folder in folders">
+                        <td><a href="#" v-on:click.prevent="load(folder.id)"><i class="fas fa-folder-open"></i>{{ folder.name }}</a></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="actions one"></td>
+                    </tr>
+                    <tr v-for="item in items">
+                        <td><a href="#" v-on:click.prevent="piranha.preview.open(item.id)">
+                            <i v-if="item.type === 'Image'" class="fas fa-image"></i>
+                            <i v-if="item.type === 'Video'" class="fas fa-video"></i>
+                            {{ item.filename }}</a></td>
+                        <td>{{ item.contentType }}</td>
+                        <td>{{ item.size }}</td>
+                        <td>{{ item.lastModified }}</td>
+                        <td class="actions one">
+                            <a href="#" class="danger" v-on:click.prevent="remove(item.id)"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
