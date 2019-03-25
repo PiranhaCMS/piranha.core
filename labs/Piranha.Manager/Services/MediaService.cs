@@ -49,6 +49,8 @@ namespace Piranha.Manager.Services
                 PublicUrl = media.PublicUrl.Replace("~", ""),
                 ContentType = media.ContentType,
                 Size = Utils.FormatByteSize(media.Size),
+                Width = media.Width,
+                Height = media.Height,
                 LastModified = media.LastModified.ToString("yyyy-MM-dd")
             };
         }
@@ -84,6 +86,8 @@ namespace Piranha.Manager.Services
                     PublicUrl = m.PublicUrl.Replace("~", ""),
                     ContentType = m.ContentType,
                     Size = Utils.FormatByteSize(m.Size),
+                    Width = m.Width,
+                    Height = m.Height,
                     LastModified = m.LastModified.ToString("yyyy-MM-dd")
                 }).ToList();
 

@@ -64,7 +64,7 @@
                                 </tr>
                                 <tr>
                                     <th>@Localizer["Size"]</th>
-                                    <td>{{ size }}</td>
+                                    <td>{{ media.size }}</td>
                                 </tr>
                                 <tr>
                                     <th>@Localizer["Width"]</th>
@@ -77,6 +77,14 @@
                                 <tr>
                                     <th>@Localizer["Modified"]</th>
                                     <td>{{ media.lastModified }}</td>
+                                </tr>
+                                <tr>
+                                    <th>@Localizer["Download"]</th>
+                                    <td><a :href="media.publicUrl" download>Download media</a></td>
+                                </tr>
+                                <tr>
+                                    <th>@Localizer["URL"]</th>
+                                    <td><a :href="media.publicUrl" target="_blank">Open public URL in new tab</a></td>
                                 </tr>
                             </tbody>
                         </table>

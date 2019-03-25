@@ -30,6 +30,8 @@ namespace Piranha.Manager.Models
             public string ContentType { get; set; }
             public string PublicUrl { get; set; }
             public string Size { get; set; }
+            public int? Width { get; set; }
+            public int? Height { get; set; }
             public string LastModified { get; set; }
         }
 
