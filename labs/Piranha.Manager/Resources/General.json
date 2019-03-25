@@ -9,9 +9,19 @@
       "sv-SE": "Innehåll"
     }
   },
+  "Edit": {
+    "Values": {
+      "sv-SE": "Redigera"
+    }
+  },
   "Logout": {
     "Values": {
       "sv-SE": "Logga ut"
+    }
+  },
+  "Modified": {
+    "Values": {
+      "sv-SE": "Ändrad"
     }
   },
   "Name": {
@@ -29,9 +39,19 @@
       "sv-SE": "Inställningar"
     }
   },
+  "Size": {
+    "Values": {
+      "sv-SE": "Storlek"
+    }
+  },
   "System": {
     "Values": {
       "sv-SE": "System"
+    }
+  },
+  "Type": {
+    "Values": {
+      "sv-SE": "Typ"
     }
   },
   "Version": {

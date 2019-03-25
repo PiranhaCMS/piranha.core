@@ -1,0 +1,37 @@
+@model Guid
+@inject IViewLocalizer Localizer
+
+<div id="pagelist">
+    <div class="top">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">@Localizer["Content"]</li>
+                <li class="breadcrumb-item"><a href="~/manager/pages">@Localizer["Pages"]</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer["Edit"]</li>
+            </ol>
+        </nav>
+
+        <div class="container-fluid">
+            <div class="top-nav">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-success btn-labeled dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-check"></i>
+                        @Localizer["Save"]
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                        <a class="dropdown-item" href="#">Preview</a>
+                        <a class="dropdown-item" href="#">Publish</a>
+                        <a class="dropdown-item text-danger" href="#">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+            </div>
+        </div>
+    </div>
+</div>

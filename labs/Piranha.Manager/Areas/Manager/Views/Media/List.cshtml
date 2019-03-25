@@ -1,0 +1,26 @@
+@inject IViewLocalizer Localizer
+@section script
+{
+    <script src="~/assets/js/piranha.media.min.js"></script>
+}
+<div id="media">
+    <div class="top">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">@Localizer["Content"]</li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer["Media"]</li>
+            </ol>
+        </nav>
+
+        <div class="container-fluid">
+            <div class="top-nav">
+                <button class="btn btn-secondary"><i class="fas fa-table"></i></button>
+                <button class="btn btn-primary btn-labeled" data-toggle="modal" data-target="#aliasModal">
+                    <i class="fas fa-plus"></i>@Localizer["Add"]
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <partial name="Partial/_MediaList" />
+</div>

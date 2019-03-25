@@ -36,55 +36,46 @@ namespace Piranha.Manager.Services
         /// <returns>The list model</returns>
         public async Task<PageListModel> GetList()
         {
-            return new PageListModel {
+            var model = new PageListModel
+            {
                 Sites = (await _api.Sites.GetAllAsync()).Select(s => new PageListModel.SiteItem
                 {
                     Id = s.Id,
                     Title = s.Title,
                     Slug = "/",
-                    Pages = new List<PageListModel.PageItem>
-                    {
-                        new PageListModel.PageItem
-                        {
-                            Id = Guid.NewGuid(),
-                            Title = "Cras Lorem Amet",
-                            TypeName = "Standard page",
-                            Published = DateTime.Now.ToString("yyyy-MM-dd")
-                        },
-                        new PageListModel.PageItem
-                        {
-                            Id = Guid.NewGuid(),
-                            Title = "Nullam Sit",
-                            TypeName = "Standard page",
-                            Published = DateTime.Now.ToString("yyyy-MM-dd"),
-                            Items = new List<PageListModel.PageItem>
-                            {
-                                new PageListModel.PageItem
-                                {
-                                    Id = Guid.NewGuid(),
-                                    Title = "Egestas Cras",
-                                    TypeName = "Standard page",
-                                    Published = DateTime.Now.ToString("yyyy-MM-dd")
-                                },
-                                new PageListModel.PageItem
-                                {
-                                    Id = Guid.NewGuid(),
-                                    Title = "Fusce Ornare",
-                                    TypeName = "Standard page",
-                                    Published = DateTime.Now.ToString("yyyy-MM-dd")
-                                }
-                            }
-                        },
-                        new PageListModel.PageItem
-                        {
-                            Id = Guid.NewGuid(),
-                            Title = "Bibendum Mattis Vehicula",
-                            TypeName = "Standard page",
-                            Published = DateTime.Now.ToString("yyyy-MM-dd")
-                        }
-                    }
+                    EditUrl = "manager/site/"
                 }).ToList()
             };
+
+            foreach (var site in model.Sites)
+            {
+                var sitemap = await _api.Sites.GetSitemapAsync(site.Id);
+
+                foreach (var item in sitemap)
+                {
+                    site.Pages.Add(MapRecursive(item));
+                }
+            }
+
+            return model;
+        }
+
+        private PageListModel.PageItem MapRecursive(SitemapItem item)
+        {
+            var model = new PageListModel.PageItem
+            {
+                Id = item.Id,
+                Title = item.MenuTitle,
+                TypeName = item.PageTypeName,
+                Published = item.Published.HasValue ? item.Published.Value.ToString("yyyy-MM-dd") : null,
+                EditUrl = "manager/page/"
+            };
+
+            foreach (var child in item.Items)
+            {
+                model.Items.Add(MapRecursive(child));
+            }
+            return model;
         }
     }
 }

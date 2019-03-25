@@ -34,6 +34,7 @@ namespace Piranha.Manager
                 options.UseSqlite("Filename=./piranha.mvcweb.db"));
 
             services.AddScoped<Services.AliasService>();
+            services.AddScoped<Services.MediaService>();
             services.AddScoped<Services.ModuleService>();
             services.AddScoped<Services.PageService>();
         }
@@ -61,6 +62,22 @@ namespace Piranha.Manager
                     name: "default",
                     template: "{controller=home}/{action=index}/{id?}");
             });
+
+            // Seed test data
+            App.Blocks.Register<MvcWeb.Models.Blocks.SeparatorBlock>();
+            App.Blocks.Register<MvcWeb.Models.Blocks.GalleryBlock>();
+
+            // Build content types
+            var pageTypeBuilder = new Piranha.AttributeBuilder.PageTypeBuilder(api)
+                .AddType(typeof(MvcWeb.Models.BlogArchive))
+                .AddType(typeof(MvcWeb.Models.StandardPage))
+                .AddType(typeof(MvcWeb.Models.TeaserPage))
+                .Build()
+                .DeleteOrphans();
+            var postTypeBuilder = new Piranha.AttributeBuilder.PostTypeBuilder(api)
+                .AddType(typeof(MvcWeb.Models.BlogPost))
+                .Build()
+                .DeleteOrphans();
 
             if (api.Aliases.GetAll().Count() == 0)
             {
@@ -95,6 +112,8 @@ namespace Piranha.Manager
                     Type = RedirectType.Permanent
                 });
             }
+
+            MvcWeb.Seed.RunAsync(api).GetAwaiter().GetResult();
         }
     }
 }

@@ -37,6 +37,12 @@ var js = [
         ]
     },
     {
+        name: "piranha.media.js",
+        items: [
+            "assets/src/js/piranha.media.js"
+        ]
+    },
+    {
         name: "piranha.module.js",
         items: [
             "assets/src/js/piranha.module.js"
@@ -45,6 +51,7 @@ var js = [
     {
         name: "piranha.pagelist.js",
         items: [
+            "assets/src/js/components/sitemap-item.js",
             "assets/src/js/piranha.pagelist.js"
         ]
     }

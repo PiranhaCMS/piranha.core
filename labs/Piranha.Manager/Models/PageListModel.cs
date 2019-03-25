@@ -23,6 +23,7 @@ namespace Piranha.Manager.Models
             public Guid Id { get; set; }
             public string Title { get; set; }
             public string Slug { get; set; }
+            public string EditUrl { get; set; }
             public IList<PageItem> Pages { get; set; } = new List<PageItem>();
         }
 
@@ -32,6 +33,7 @@ namespace Piranha.Manager.Models
             public string Title { get; set; }
             public string TypeName { get; set; }
             public string Published { get; set; }
+            public string EditUrl { get; set; }
             public List<PageItem> Items { get; set; } = new List<PageItem>();
         }
 
