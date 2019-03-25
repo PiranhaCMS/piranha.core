@@ -28,7 +28,28 @@
             <div class="modal-body bg-light">
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active " id="pills-preview">
-                        <img class="d-block mx-auto mw-100" :src="media.publicUrl" />
+                        <template v-if="media.type === 'Image'">
+                            <img class="d-block mx-auto mw-100" :src="media.publicUrl" />
+                        </template>
+                        <template v-else-if="media.type === 'Video'">
+                            <video class="d-block mx-auto mw-100" controls>
+                                <source :src="media.publicUrl" type="">
+                                Your browser does not support the video tag.
+                            </video>>
+                        </template>
+                        <template v-else-if="media.type === 'Document'">
+                            <div class="embed-responsive embed-responsive-4by3">
+                                <iframe class="embed-responsive-item" :src="media.publicUrl"></iframe>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div class="py-5 text-center">
+                                <h4 class="my-4">Media preview is not available</h4>
+                                <a :href="media.publicUrl" class="btn btn-primary btn-labeled" target="_blank"><i class="fas fa-external-link-alt"></i>Open media in new tab</a>
+                                <a :href="media.publicUrl" class="btn btn-primary btn-labeled" download><i class="fas fa-file-download"></i>Downlaod media</a>
+                            </div>
+                        </template>
+                        
                     </div>
                     <div class="tab-pane fade" id="pills-details">
                         <table class="table table-borderless m-0">

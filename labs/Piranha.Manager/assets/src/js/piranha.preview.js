@@ -3,6 +3,7 @@ piranha.preview = new Vue({
     data: {
         empty: {
             filename:     null,
+            type:         null,
             contentType:  null,
             publicUrl:    null,
             size:         null,
