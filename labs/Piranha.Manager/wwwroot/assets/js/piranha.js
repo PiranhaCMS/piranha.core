@@ -80,9 +80,9 @@ piranha.preview = new Vue({
 });
 
 piranha.editor = {
-    inline: function (selector) {
+    addInline: function (id) {
         tinymce.init({
-            selector: selector,
+            selector: "#" + id,
             menubar: false,
             branding: false,
             statusbar: false,
@@ -96,5 +96,8 @@ piranha.editor = {
             toolbar: "bold italic | bullist numlist hr | alignleft aligncenter alignright | formatselect", // TODO: | piranhalink piranhaimage",
             block_formats: 'Paragraph=p;Header 1=h1;Header 2=h2;Header 3=h3;Header 4=h4;Code=pre;Quote=blockquote'
         });
+    },
+    remove: function (id) {
+        tinymce.remove(tinymce.get(id));
     }
 };

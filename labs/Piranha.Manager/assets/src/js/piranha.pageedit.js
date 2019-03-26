@@ -38,7 +38,6 @@ piranha.pageedit = new Vue({
             fetch(piranha.baseUrl + "manager/api/content/block/" + type)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    console.log("result: ", result);
                     if (pos) {
                         piranha.pageedit.blocks.splice(pos, 0, result);
                     } else {

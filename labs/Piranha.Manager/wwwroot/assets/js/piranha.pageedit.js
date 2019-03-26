@@ -6,7 +6,10 @@ Vue.component("html-block", {
         }
     },
     mounted: function () {
-        piranha.editor.inline("#" + this.gid);
+        piranha.editor.addInline(this.gid);
+    },
+    beforeDestroy: function () {
+        piranha.editor.remove(this.gid);
     },
     template:
         "<div contenteditable='true' :id='gid' spellcheck='false' v-html='block.body.value' v-on:blur='onBlur'></div>"
@@ -23,8 +26,12 @@ Vue.component("html-column-block", {
         }
     },
     mounted: function () {
-        piranha.editor.inline("#" + this.gid + 1);
-        piranha.editor.inline("#" + this.gid + 2);
+        piranha.editor.addInline(this.gid + 1);
+        piranha.editor.addInline(this.gid + 2);
+    },
+    beforeDestroy: function () {
+        piranha.editor.remove(this.gid + 1);
+        piranha.editor.remove(this.gid + 2);
     },
     template:
         "<div class='row'>" +
@@ -117,7 +124,6 @@ piranha.pageedit = new Vue({
             fetch(piranha.baseUrl + "manager/api/content/block/" + type)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    console.log("result: ", result);
                     if (pos) {
                         piranha.pageedit.blocks.splice(pos, 0, result);
                     } else {

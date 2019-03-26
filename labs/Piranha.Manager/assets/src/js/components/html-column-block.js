@@ -9,8 +9,12 @@ Vue.component("html-column-block", {
         }
     },
     mounted: function () {
-        piranha.editor.inline("#" + this.gid + 1);
-        piranha.editor.inline("#" + this.gid + 2);
+        piranha.editor.addInline(this.gid + 1);
+        piranha.editor.addInline(this.gid + 2);
+    },
+    beforeDestroy: function () {
+        piranha.editor.remove(this.gid + 1);
+        piranha.editor.remove(this.gid + 2);
     },
     template:
         "<div class='row'>" +

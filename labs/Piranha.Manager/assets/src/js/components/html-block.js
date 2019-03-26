@@ -6,7 +6,10 @@ Vue.component("html-block", {
         }
     },
     mounted: function () {
-        piranha.editor.inline("#" + this.gid);
+        piranha.editor.addInline(this.gid);
+    },
+    beforeDestroy: function () {
+        piranha.editor.remove(this.gid);
     },
     template:
         "<div contenteditable='true' :id='gid' spellcheck='false' v-html='block.body.value' v-on:blur='onBlur'></div>"

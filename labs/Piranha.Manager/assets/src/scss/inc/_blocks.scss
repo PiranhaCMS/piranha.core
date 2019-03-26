@@ -8,6 +8,10 @@
     border: solid 1px transparent;
     transition: border-color .2s ease-in-out;
 
+    h1, h2, h3, h4, h5 {
+        font-family: Bitter, serif;
+    }
+
     .block-header {
         color: $gray-500;
         position: absolute;
