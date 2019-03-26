@@ -6,8 +6,9 @@
     margin: 0 auto 1rem;
     border: solid 1px $gray-400;
 
-    &.html-block {
+    &.html-block, &.html-column-block {
         padding-bottom: 0;
+        font-size: 1rem;
     }
 
     &.image-block {

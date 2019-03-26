@@ -23,6 +23,7 @@ namespace Piranha.Manager.Services
         private List<Tuple<string, string>> _map = new List<Tuple<string, string>>
         {
             new Tuple<string, string>("Piranha.Extend.Blocks.HtmlBlock", "html-block"),
+            new Tuple<string, string>("Piranha.Extend.Blocks.HtmlColumnBlock", "html-column-block"),
             new Tuple<string, string>("Piranha.Extend.Blocks.ImageBlock", "image-block")
         };
 
