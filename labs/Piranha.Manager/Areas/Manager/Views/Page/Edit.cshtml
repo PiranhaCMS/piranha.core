@@ -1,7 +1,14 @@
 @model Guid
 @inject IViewLocalizer Localizer
+@section script
+{
+    <script src="~/assets/js/piranha.pageedit.min.js"></script>
+    <script>
+        piranha.pageedit.load("@Model");
+    </script>
+}
 
-<div id="pagelist">
+<div id="pageedit">
     <div class="top">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -29,8 +36,23 @@
     </div>
 
     <div class="container-fluid">
-        <div class="row">
-            <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <input v-model="title" type="text" class="form-control form-control-lg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body blocks">
+                <div v-for="block in blocks" :class="'block ' + block.type">
+                    <component v-bind:is="block.type" v-bind:block="block"></component>
+                </div>
             </div>
         </div>
     </div>

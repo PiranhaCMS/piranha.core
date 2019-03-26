@@ -1,0 +1,45 @@
+@import "variables";
+
+.block {
+    max-width: 960px;
+    padding: 1rem;
+    margin: 0 auto 1rem;
+    border: solid 1px $gray-400;
+
+    &.html-block {
+        padding-bottom: 0;
+    }
+
+    &.image-block {
+        position: relative;
+        text-align: center;
+
+        .media-picker {
+            background: rgba(0,0,0,.4);
+            position: absolute;
+            width: 90%;
+            top: 50%;
+            left: 5%;
+            padding: 1.5rem;
+            margin-top: -2.5rem;
+            opacity: 0;
+            transition: opacity ease-in-out .15s;
+
+            .card-body {
+                padding: .4rem 1rem;
+                margin-right: 1rem;
+            }
+        }
+
+        &:hover {
+            .media-picker {
+                opacity: 1;
+            }
+        }
+    }
+
+    &.missing-block {
+        border: 0;
+        padding: 0;
+    }
+}

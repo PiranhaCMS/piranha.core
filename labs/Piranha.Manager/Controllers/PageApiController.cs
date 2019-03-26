@@ -46,5 +46,12 @@ namespace Piranha.Manager.Controllers
         {
             return await _service.GetList();
         }
+
+        [Route("{id:Guid}")]
+        [HttpGet]
+        public async Task<PageEditModel> Get(Guid id)
+        {
+            return await _service.GetById(id);
+        }
     }
 }

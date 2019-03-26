@@ -5,3 +5,7 @@
         font-weight: bold;
     }
 }
+
+[contenteditable]:focus {
+    outline: 0px solid transparent;
+}

@@ -50,6 +50,15 @@ var js = [
         ]
     },
     {
+        name: "piranha.pageedit.js",
+        items: [
+            "assets/src/js/components/html-block.js",
+            "assets/src/js/components/image-block.js",
+            "assets/src/js/components/missing-block.js",
+            "assets/src/js/piranha.pageedit.js"
+        ]
+    },
+    {
         name: "piranha.pagelist.js",
         items: [
             "assets/src/js/components/sitemap-item.js",

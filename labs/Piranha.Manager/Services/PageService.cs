@@ -20,6 +20,11 @@ namespace Piranha.Manager.Services
     public class PageService
     {
         private readonly IApi _api;
+        private List<Tuple<string, string>> _map = new List<Tuple<string, string>>
+        {
+            new Tuple<string, string>("Piranha.Extend.Blocks.HtmlBlock", "html-block"),
+            new Tuple<string, string>("Piranha.Extend.Blocks.ImageBlock", "image-block")
+        };
 
         /// <summary>
         /// Default constructor.
@@ -58,6 +63,41 @@ namespace Piranha.Manager.Services
             }
 
             return model;
+        }
+
+        public async Task<PageEditModel> GetById(Guid id)
+        {
+            var page = await _api.Pages.GetByIdAsync(id);
+
+            if (page != null)
+            {
+                var model = new PageEditModel
+                {
+                    Id = page.Id,
+                    SiteId = page.SiteId,
+                    ParentId = page.ParentId,
+                    TypeId = page.TypeId,
+                    Title = page.Title,
+                    NavigationTitle = page.NavigationTitle,
+                    Slug = page.Slug,
+                    MetaKeywords = page.MetaKeywords,
+                    MetaDescription = page.MetaDescription
+                };
+                model.Blocks = page.Blocks;
+
+                //
+                // TODO: Test code
+                //
+                foreach (var block in model.Blocks)
+                {
+                    block.Type = _map.FirstOrDefault(t => t.Item1 == block.Type)?.Item2;
+
+                    if (string.IsNullOrEmpty(block.Type))
+                        block.Type = "missing-block";
+                }
+                return model;
+            }
+            return null;
         }
 
         private PageListModel.PageItem MapRecursive(SitemapItem item)
