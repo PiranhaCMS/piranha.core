@@ -28,10 +28,25 @@ piranha.pageedit = new Vue({
                     piranha.pageedit.metaDescription = result.metaDescription;
                     piranha.pageedit.blocks = result.blocks;
                 })
-                .catch(function (error) { console.log("error:", error ); });
+                .catch(function (error) { console.log("error:", error );
+            });
         },
         remove: function (id) {
             console.log("Remove page: ", id);
+        },
+        addBlock: function (type, pos) {
+            fetch(piranha.baseUrl + "manager/api/content/block/" + type)
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    console.log("result: ", result);
+                    if (pos) {
+                        piranha.pageedit.blocks.splice(pos, 0, result);
+                    } else {
+                        piranha.pageedit.blocks.push(result);
+                    }
+                })
+                .catch(function (error) { console.log("error:", error );
+            });
         }
     },
     created: function () {

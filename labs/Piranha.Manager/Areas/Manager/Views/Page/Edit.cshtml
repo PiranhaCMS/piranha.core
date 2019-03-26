@@ -2,10 +2,12 @@
 @inject IViewLocalizer Localizer
 @section script
 {
+    <script src="~/assets/tinymce/tinymce.min.js"></script>
     <script src="~/assets/js/piranha.pageedit.min.js"></script>
     <script>
         piranha.pageedit.load("@Model");
     </script>
+
 }
 
 <div id="pageedit">
@@ -54,7 +56,7 @@
                     <div class="block-header">
                         <i :class="block.icon"></i><strong>{{ block.name }}</strong>
                     </div>
-                    <component v-bind:is="block.component" v-bind:block="block.item"></component>
+                    <component v-bind:is="block.component" v-bind:key="block.gid" v-bind:gid="block.gid" v-bind:block="block.item"></component>
                 </div>
             </div>
         </div>

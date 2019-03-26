@@ -28,7 +28,8 @@ var js = [
         items: [
             "node_modules/nestable2/dist/jquery.nestable.min.js",
             "assets/src/js/piranha.notifications.js",
-            "assets/src/js/piranha.preview.js"
+            "assets/src/js/piranha.preview.js",
+            "assets/src/js/piranha.editor.js"
         ]
     },
     {
@@ -55,6 +56,7 @@ var js = [
             "assets/src/js/components/html-block.js",
             "assets/src/js/components/html-column-block.js",
             "assets/src/js/components/image-block.js",
+            "assets/src/js/components/text-block.js",
             "assets/src/js/components/missing-block.js",
             "assets/src/js/piranha.pageedit.js"
         ]

@@ -1,16 +1,19 @@
 Vue.component("html-block", {
-    props: ["block"],
+    props: ["gid", "block"],
     methods: {
         onBlur: function (e) {
             this.block.body.value = e.target.innerHTML;
         }
     },
+    mounted: function () {
+        piranha.editor.inline("#" + this.gid);
+    },
     template:
-        "<div contenteditable='true' v-html='block.body.value' v-on:blur='onBlur'></div>"
+        "<div contenteditable='true' :id='gid' spellcheck='false' v-html='block.body.value' v-on:blur='onBlur'></div>"
 });
 
 Vue.component("html-column-block", {
-    props: ["block"],
+    props: ["gid", "block"],
     methods: {
         onBlurCol1: function (e) {
             this.block.column1.value = e.target.innerHTML;
@@ -19,13 +22,17 @@ Vue.component("html-column-block", {
             this.block.column2.value = e.target.innerHTML;
         }
     },
+    mounted: function () {
+        piranha.editor.inline("#" + this.gid + 1);
+        piranha.editor.inline("#" + this.gid + 2);
+    },
     template:
         "<div class='row'>" +
-        "  <div class='col-md-6'>" +
-        "    <div contenteditable='true' v-html='block.column1.value' v-on:blur='onBlurCol1'></div>" +
+        "  <div :id='gid + 1' class='col-md-6'>" +
+        "    <div contenteditable='true' spellcheck='false' v-html='block.column1.value' v-on:blur='onBlurCol1'></div>" +
         "  </div>" +
-        "  <div class='col-md-6'>" +
-        "    <div contenteditable='true' v-html='block.column2.value' v-on:blur='onBlurCol2'></div>" +
+        "  <div :id='gid + 2' class='col-md-6'>" +
+        "    <div contenteditable='true' spellcheck='false' v-html='block.column2.value' v-on:blur='onBlurCol2'></div>" +
         "  </div>" +
         "</div>"
 });
@@ -51,6 +58,17 @@ Vue.component("image-block", {
         "    </div>" +
         "  </div>" +
         "</div>"
+});
+
+Vue.component("text-block", {
+    props: ["block"],
+    methods: {
+        onBlur: function (e) {
+            this.block.body.value = e.target.innerHTML;
+        }
+    },
+    template:
+        "<pre contenteditable='true' spellcheck='false' v-html='block.body.value' v-on:blur='onBlur'></pre>"
 });
 
 Vue.component("missing-block", {
@@ -89,10 +107,25 @@ piranha.pageedit = new Vue({
                     piranha.pageedit.metaDescription = result.metaDescription;
                     piranha.pageedit.blocks = result.blocks;
                 })
-                .catch(function (error) { console.log("error:", error ); });
+                .catch(function (error) { console.log("error:", error );
+            });
         },
         remove: function (id) {
             console.log("Remove page: ", id);
+        },
+        addBlock: function (type, pos) {
+            fetch(piranha.baseUrl + "manager/api/content/block/" + type)
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    console.log("result: ", result);
+                    if (pos) {
+                        piranha.pageedit.blocks.splice(pos, 0, result);
+                    } else {
+                        piranha.pageedit.blocks.push(result);
+                    }
+                })
+                .catch(function (error) { console.log("error:", error );
+            });
         }
     },
     created: function () {

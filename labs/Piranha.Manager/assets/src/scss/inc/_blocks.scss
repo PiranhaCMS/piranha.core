@@ -68,6 +68,15 @@
         }
     }
 
+    &.text-block {
+        pre {
+            min-height: 1.3rem;
+            font-size: .875rem;
+            margin-bottom: 0;
+            white-space: normal;
+        }
+    }
+
     &.missing-block {
         border: 0;
         padding: 0;

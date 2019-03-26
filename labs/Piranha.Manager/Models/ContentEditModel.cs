@@ -21,6 +21,7 @@ namespace Piranha.Manager.Models
     {
         public class BlockItem
         {
+            public string Gid { get; set; } = "block-" + Math.Abs(Guid.NewGuid().GetHashCode()).ToString();
             public string Name { get; set; }
             public string Icon { get; set; }
             public string Component { get; set; }

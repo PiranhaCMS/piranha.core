@@ -24,7 +24,8 @@ namespace Piranha.Manager.Services
         {
             new Tuple<string, string>("Piranha.Extend.Blocks.HtmlBlock", "html-block"),
             new Tuple<string, string>("Piranha.Extend.Blocks.HtmlColumnBlock", "html-column-block"),
-            new Tuple<string, string>("Piranha.Extend.Blocks.ImageBlock", "image-block")
+            new Tuple<string, string>("Piranha.Extend.Blocks.ImageBlock", "image-block"),
+            new Tuple<string, string>("Piranha.Extend.Blocks.TextBlock", "text-block")
         };
 
         /// <summary>

@@ -87,7 +87,8 @@ namespace Piranha.Services
             {
                 using (var scope = _services.CreateScope())
                 {
-                    var block = Activator.CreateInstance(blockType.Type);
+                    var block = (Extend.Block)Activator.CreateInstance(blockType.Type);
+                    block.Type = typeName;
 
                     foreach (var prop in blockType.Type.GetProperties(App.PropertyBindings))
                     {
