@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using Newtonsoft.Json;
@@ -21,7 +21,6 @@ namespace Piranha.Extend
         /// <summary>
         /// Gets/sets the available blocks in this group.
         /// </summary>
-        [JsonIgnore]
         public IList<Block> Items { get; set; } = new List<Block>();
     }
 }
