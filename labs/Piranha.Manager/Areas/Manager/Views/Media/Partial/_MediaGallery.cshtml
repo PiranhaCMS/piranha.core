@@ -5,7 +5,7 @@
         <div class="col">
             <div class="gallery gallery-sm">
                 <div class="gallery-header">
-                    Gallery
+                    @Localizer["Gallery"]
                 </div>
 
                 <a href="#" class="thumbnail" v-if="currentFolderId != null" v-on:click.prevent="load(parentFolderId)">
@@ -46,11 +46,11 @@
                                 <i class="fas fa-file"></i>
                                 <i class="fas fa-file fa-3x"></i>
                             </div>
-                        </template>  
-                        
+                        </template>
+
                         <p class="thumbnail-text">{{ item.filename }}</p>
                     </a>
-                </template>                
+                </template>
             </div>
         </div>
     </div>

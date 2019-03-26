@@ -1,4 +1,9 @@
 {
+  "Gallery": {
+    "Values": {
+      "sv-SE": "Galleri"
+    }
+  },
   "Media": {
     "Values": {
       "sv-SE": "Media"
