@@ -84,17 +84,22 @@ namespace Piranha.Manager.Services
                     MetaKeywords = page.MetaKeywords,
                     MetaDescription = page.MetaDescription
                 };
-                model.Blocks = page.Blocks;
 
                 //
                 // TODO: Test code
                 //
-                foreach (var block in model.Blocks)
+                foreach (var block in page.Blocks)
                 {
-                    block.Type = _map.FirstOrDefault(t => t.Item1 == block.Type)?.Item2;
+                    var blockType = App.Blocks.GetByType(block.Type);
+                    var componentType = _map.FirstOrDefault(t => t.Item1 == block.Type)?.Item2;
 
-                    if (string.IsNullOrEmpty(block.Type))
-                        block.Type = "missing-block";
+                    model.Blocks.Add(new PageEditModel.BlockItem
+                    {
+                        Name = blockType.Name,
+                        Icon = blockType.Icon,
+                        Component = !string.IsNullOrEmpty(componentType) ? componentType : "missing-block",
+                        Item = block
+                    });
                 }
                 return model;
             }

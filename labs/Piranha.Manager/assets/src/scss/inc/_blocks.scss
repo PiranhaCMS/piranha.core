@@ -1,10 +1,39 @@
 @import "variables";
 
 .block {
+    position: relative;
     max-width: 960px;
-    padding: 1rem;
-    margin: 0 auto 1rem;
-    border: solid 1px $gray-400;
+    padding: 2rem 1rem 1rem;
+    margin: 0 auto;
+    border: solid 1px transparent;
+    transition: border-color .2s ease-in-out;
+
+    .block-header {
+        color: $gray-500;
+        position: absolute;
+        top: .25rem;
+        left: 1rem;
+        font-size: .8rem;
+        opacity: 0;
+        transition: opacity ease-in-out .2s;
+
+        i {
+            font-size: .875rem;
+            padding-right: .5rem;
+        }
+
+        strong {
+            text-transform: uppercase;
+        }
+    }
+
+    &:hover, &:focus-within {
+        border-color: $gray-400;
+
+        .block-header {
+            opacity: 1;
+        }
+    }
 
     &.html-block, &.html-column-block {
         padding-bottom: 0;
@@ -24,7 +53,7 @@
             padding: 1.5rem;
             margin-top: -2.5rem;
             opacity: 0;
-            transition: opacity ease-in-out .15s;
+            transition: opacity ease-in-out .2s;
 
             .card-body {
                 padding: .4rem 1rem;
@@ -32,7 +61,7 @@
             }
         }
 
-        &:hover {
+        &:hover, &:focus-within {
             .media-picker {
                 opacity: 1;
             }
@@ -42,5 +71,9 @@
     &.missing-block {
         border: 0;
         padding: 0;
+
+        .alert {
+            margin: .5rem 0;
+        }
     }
 }

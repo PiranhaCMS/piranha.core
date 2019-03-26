@@ -46,7 +46,7 @@ Vue.component("image-block", {
         "    </div>" +
         "    <div class='card text-left'>" +
         "      <div class='card-body'>" +
-        "        <a href='#' v-on:click.prevent='piranha.preview.open(block.body.id)'>{{ block.body.media.filename }}</a>" +
+        "        {{ block.body.media.filename }}" +
         "      </div>" +
         "    </div>" +
         "  </div>" +

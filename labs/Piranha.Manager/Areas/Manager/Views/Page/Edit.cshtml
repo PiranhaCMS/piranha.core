@@ -50,8 +50,11 @@
 
         <div class="card">
             <div class="card-body blocks">
-                <div v-for="block in blocks" :class="'block ' + block.type">
-                    <component v-bind:is="block.type" v-bind:block="block"></component>
+                <div v-for="block in blocks" :class="'block ' + block.component">
+                    <div class="block-header">
+                        <i :class="block.icon"></i><strong>{{ block.name }}</strong>
+                    </div>
+                    <component v-bind:is="block.component" v-bind:block="block.item"></component>
                 </div>
             </div>
         </div>
