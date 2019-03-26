@@ -1,6 +1,7 @@
 piranha.media = new Vue({
     el: "#media",
     data: {
+        listView: true,
         currentFolderId: null,
         parentFolderId: null,
         folders: [],
@@ -10,6 +11,9 @@ piranha.media = new Vue({
         }
     },
     methods: {
+        toggle: function () {
+            this.listView = !this.listView;
+        },
         load: function (id) {
             fetch(piranha.baseUrl + "manager/api/media/list" + (id ? "/" + id : ""))
                 .then(function (response) { return response.json(); })

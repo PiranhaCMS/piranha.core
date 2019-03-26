@@ -85,6 +85,7 @@
     }
 
     .thumbnail-image {
+        flex-grow: 1;
         max-width: 100%;
         object-fit: cover;
         border: $thumbnail-border-width solid $thumbnail-border-color;

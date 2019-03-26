@@ -14,7 +14,8 @@
 
         <div class="container-fluid">
             <div class="top-nav">
-                <button class="btn btn-secondary"><i class="fas fa-table"></i></button>
+                <button v-if="listView" v-on:click.prevent="toggle" class="btn btn-secondary"><i class="fas fa-list"></i></button>
+                <button v-if="!listView" v-on:click.prevent="toggle" class="btn btn-secondary"><i class="fas fa-table"></i></button>
                 <button class="btn btn-primary btn-labeled" data-toggle="modal" data-target="#aliasModal">
                     <i class="fas fa-plus"></i>@Localizer["Add"]
                 </button>
@@ -22,5 +23,11 @@
         </div>
     </div>
 
-    <partial name="Partial/_MediaList" />
+    <template v-if="listView">        
+        <partial name="Partial/_MediaList" />
+    </template>
+
+    <template v-else>
+        <partial name="Partial/_Gallery" />
+    </template>     
 </div>
