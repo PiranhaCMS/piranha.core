@@ -54,7 +54,17 @@
             <div class="card-body blocks">
                 <div v-for="block in blocks" :class="'block ' + block.component">
                     <div class="block-header">
-                        <i :class="block.icon"></i><strong>{{ block.name }}</strong>
+                        <div class="title">
+                            <i :class="block.icon"></i><strong>{{ block.name }}</strong>
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-sm">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <button v-on:click.prevent="removeBlock(block)" class="btn btn-sm">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
                     </div>
                     <component v-bind:is="block.component" v-bind:key="block.gid" v-bind:gid="block.gid" v-bind:block="block.item"></component>
                 </div>

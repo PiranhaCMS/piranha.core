@@ -3,7 +3,7 @@
 .block {
     position: relative;
     max-width: 960px;
-    padding: 2rem 1rem 1rem;
+    padding: 2.25rem 1rem 1rem;
     margin: 0 auto;
     border: solid 1px transparent;
     transition: border-color .2s ease-in-out;
@@ -15,19 +15,35 @@
     .block-header {
         color: $gray-500;
         position: absolute;
-        top: .25rem;
-        left: 1rem;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: .25rem 1rem;
         font-size: .8rem;
         opacity: 0;
         transition: opacity ease-in-out .2s;
 
-        i {
-            font-size: .875rem;
-            padding-right: .5rem;
+        .title {
+            float: left;
+
+            i {
+                font-size: .875rem;
+                padding-right: .5rem;
+            }
+
+            strong {
+                text-transform: uppercase;
+            }
         }
 
-        strong {
-            text-transform: uppercase;
+        .actions {
+            float: right;
+
+            .btn {
+                background: $gray-200;
+                width: 1.75rem;
+                height: 1.75rem;
+            }
         }
     }
 

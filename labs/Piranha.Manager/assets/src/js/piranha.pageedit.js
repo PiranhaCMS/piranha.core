@@ -46,6 +46,13 @@ piranha.pageedit = new Vue({
                 })
                 .catch(function (error) { console.log("error:", error );
             });
+        },
+        removeBlock: function (block) {
+            var index = this.blocks.indexOf(block);
+
+            if (index !== -1) {
+                this.blocks.splice(index, 1);
+            }
         }
     },
     created: function () {
