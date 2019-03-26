@@ -1,0 +1,57 @@
+@inject IViewLocalizer Localizer
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <div class="gallery gallery-sm">
+                <div class="gallery-header">
+                    Gallery
+                </div>
+
+                <a href="#" class="thumbnail" v-if="currentFolderId != null" v-on:click.prevent="load(parentFolderId)">
+                    <div class="thumbnail-icon">
+                        <i class="fas fa-folder-open fa-3x"></i>
+                    </div>
+                    <p class="thumbnail-text">...</p>
+                </a>
+
+                <a href="#" class="thumbnail" v-for="folder in folders" v-on:click.prevent="load(folder.id)">
+                    <div class="thumbnail-icon">
+                        <i class="fas fa-folder fa-3x"></i>
+                    </div>
+                    <p class="thumbnail-text">{{ folder.name }}</p>
+                </a>
+
+                <template v-for="item in items">
+                    <a href="#" class="thumbnail" v-on:click.prevent="piranha.preview.open(item.id)">
+
+                        <template v-if="item.type === 'Image'">
+                            <img class="thumbnail-image" :src="item.publicUrl">
+                        </template>
+
+                        <template v-else-if="item.type === 'Document'">
+                            <div class="thumbnail-icon">
+                                <i class="fas fa-file-alt fa-3x"></i>
+                            </div>
+                        </template>
+
+                        <template v-else-if="item.type === 'Video'">
+                            <div class="thumbnail-icon">
+                                <i class="fas fa-film fa-3x"></i>
+                            </div>
+                        </template>
+
+                        <template v-else>
+                            <div class="thumbnail-icon">
+                                <i class="fas fa-file"></i>
+                                <i class="fas fa-file fa-3x"></i>
+                            </div>
+                        </template>  
+                        
+                        <p class="thumbnail-text">{{ item.filename }}</p>
+                    </a>
+                </template>                
+            </div>
+        </div>
+    </div>
+</div>
