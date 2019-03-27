@@ -450,6 +450,18 @@ namespace Piranha.Repositories
                 if (page.Blocks.Count > 0)
                 {
                     //model.Blocks = _contentService.TransformBlocks<PageBlock>(page.Blocks.OrderBy(b => b.SortOrder));
+
+                    foreach (var pageBlock in page.Blocks.OrderBy(b => b.SortOrder))
+                    {
+                        if (pageBlock.ParentId.HasValue)
+                        {
+                            var parent = page.Blocks.FirstOrDefault(b => b.BlockId == pageBlock.ParentId.Value);
+                            if (parent != null)
+                            {
+                                pageBlock.Block.ParentId = parent.Block.Id;
+                            }
+                        }
+                    }
                     model.Blocks = _contentService.TransformBlocks(page.Blocks.OrderBy(b => b.SortOrder).Select(b => b.Block));
                 }
             }
