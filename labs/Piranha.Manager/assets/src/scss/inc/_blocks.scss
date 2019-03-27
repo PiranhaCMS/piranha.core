@@ -1,10 +1,13 @@
 @import "variables";
 
+.blocks {
+    max-width: $block-width;
+    margin: 0 auto;
+}
+
 .block {
     position: relative;
-    max-width: $block-width;
     padding: 2.25rem 1rem 1rem;
-    margin: 0 auto;
     border: solid 1px transparent;
     transition: border-color .2s ease-in-out;
 

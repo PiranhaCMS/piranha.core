@@ -6,6 +6,8 @@
     <script src="~/assets/js/piranha.pageedit.min.js"></script>
     <script>
         piranha.pageedit.load("@Model");
+
+        $(".title input").focus();
     </script>
 }
 
@@ -50,28 +52,30 @@
         </div>
 
         <div class="card">
-            <div class="card-body blocks">
-                <div v-for="(block, index) in blocks" v-bind:key="block.uid">
-                    <div :class="'block ' + block.component">
-                        <div class="block-header">
-                            <div class="title">
-                                <i :class="block.icon"></i><strong>{{ block.name }}</strong>
+            <div class="card-body">
+                <div class="blocks">
+                    <div v-for="(block, index) in blocks" v-bind:key="block.uid">
+                        <div :class="'block ' + block.component">
+                            <div class="block-header">
+                                <div class="title">
+                                    <i :class="block.icon"></i><strong>{{ block.name }}</strong>
+                                </div>
+                                <div class="actions">
+                                    <span class="btn btn-sm handle">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </span>
+                                    <button v-on:click.prevent="removeBlock(block)" class="btn btn-sm" tabindex="-1">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="actions">
-                                <span class="btn btn-sm handle">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </span>
-                                <button v-on:click.prevent="removeBlock(block)" class="btn btn-sm" tabindex="-1">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
+                            <component v-bind:is="block.component" v-bind:uid="block.uid" v-bind:index="index" v-bind:block="block.item"></component>
                         </div>
-                        <component v-bind:is="block.component" v-bind:uid="block.uid" v-bind:index="index" v-bind:block="block.item"></component>
+                        <a href="#" class="block-add" v-on:click.prevent="piranha.blockpicker.open(index + 1, piranha.pageedit.addBlock)">
+                            <hr>
+                            <i class="fas fa-plus-circle"></i>
+                        </a>
                     </div>
-                    <a href="#" class="block-add" v-on:click.prevent="piranha.blockpicker.open(index + 1, piranha.pageedit.addBlock)">
-                        <hr>
-                        <i class="fas fa-plus-circle"></i>
-                    </a>
                 </div>
             </div>
         </div>
