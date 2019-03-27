@@ -7,6 +7,9 @@ Vue.component("image-block", {
         select: function () {
             piranha.mediapicker.open(this.update);
         },
+        remove: function () {
+            this.block.body.media = null;
+        },
         update: function (media) {
             if (media.type === "Image") {
                 console.log(this)
@@ -18,28 +21,34 @@ Vue.component("image-block", {
         }
     },
     computed: {
+        isEmpty: function () {
+            return this.block.body.media == null;
+        },
         mediaUrl: function () {
-            if (this.block.body.media.publicUrl.startsWith("~")) {
-                return this.block.body.media.publicUrl.substring(1)
+            if (this.block.body.media != null) {
+                return this.block.body.media.publicUrl.replace("~/", piranha.baseUrl);
             } else {
-                return this.block.body.media.publicUrl;
+                return piranha.baseUrl + "assets/img/empty-image.png";
             }
         }
     },
     template:
-        "<div>" +
+        "<div :class='{ empty: isEmpty }'>" +
         "  <img :src='mediaUrl'>" +
         "  <div class='media-picker'>" +
         "    <div class='btn-group float-right'>" +
         "      <button v-on:click.prevent='select' class='btn btn-primary text-center'>" +
         "        <i class='fas fa-plus'></i>" +
         "      </button>" +
-        "      <button class='btn btn-danger text-center'>" +
+        "      <button v-on:click.prevent='remove' class='btn btn-danger text-center'>" +
         "        <i class='fas fa-times'></i>" +
         "      </button>" +
         "    </div>" +
         "    <div class='card text-left'>" +
-        "      <div class='card-body'>" +
+        "      <div class='card-body' v-if='isEmpty'>" +
+        "        &nbsp;" +
+        "      </div>" +
+        "      <div class='card-body' v-else>" +
         "        {{ block.body.media.filename }}" +
         "      </div>" +
         "    </div>" +

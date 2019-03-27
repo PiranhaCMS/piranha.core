@@ -64,6 +64,10 @@
         position: relative;
         text-align: center;
 
+        .empty {
+            background: $gray-100;
+        }
+
         .media-picker {
             background: rgba(0,0,0,.4);
             position: absolute;

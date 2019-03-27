@@ -51,7 +51,7 @@
 
         <div class="card">
             <div class="card-body blocks">
-                <div v-for="(block, index) in blocks" v-bind:key="block.gid">
+                <div v-for="(block, index) in blocks" v-bind:key="block.uid">
                     <div :class="'block ' + block.component">
                         <div class="block-header">
                             <div class="title">
@@ -66,7 +66,7 @@
                                 </button>
                             </div>
                         </div>
-                        <component v-bind:is="block.component" v-bind:gid="block.gid" v-bind:block="block.item"></component>
+                        <component v-bind:is="block.component" v-bind:uid="block.uid" v-bind:block="block.item"></component>
                     </div>
                     <a href="#" class="block-add" v-on:click.prevent="piranha.blockpicker.open(index + 1, piranha.pageedit.addBlock)">
                         <hr>

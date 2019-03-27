@@ -1,6 +1,7 @@
 piranha.alias = new Vue({
     el: "#alias",
     data: {
+        loading: true,
         siteId: null,
         items: [],
         model: {
@@ -71,6 +72,9 @@ piranha.alias = new Vue({
     },
     created: function () {
         this.load();
+    },
+    updated: function () {
+        this.loading = false;
     }
 });
 

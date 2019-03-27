@@ -22,6 +22,8 @@
         </div>
     </div>
 
-    <partial name="Partial/_AliasList" />
-    <partial name="Partial/_AliasForm" />
+    <div class="app" :class="{ ready: !loading }">
+        <partial name="Partial/_AliasList" />
+        <partial name="Partial/_AliasForm" />
+    </div>
 </div>

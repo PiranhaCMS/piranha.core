@@ -1,0 +1,62 @@
+@import "variables";
+
+.block {
+    &.block-group {
+        background: $gray-200;
+        padding-top: 2.5rem;
+
+        .block-group-header {
+            border-bottom: solid 1px $gray-400;
+            padding-bottom: .5rem;
+            margin-bottom: 1rem;
+        }
+
+        .block-header {
+            padding-top: .5rem;
+            opacity: 1;
+            transition: none;
+        }
+
+        .block {
+            background: $white;
+            border: solid 1px $gray-400;
+            padding: .5rem;
+        }
+
+        .list-group {
+            border-bottom: solid 1px $gray-400;
+        }
+
+        .list-group-item {
+            background: $gray-200;
+            padding-left: 2.5rem;
+
+            .handle {
+                color: $gray-600;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 2rem;
+                height: 100%;
+                border-right: solid 1px $gray-400;
+                text-align: center;
+
+                i {
+                    font-size: 1rem;
+                    margin-top: 50%;
+                }
+            }
+
+            &.active {
+                background: $gray-400;
+                border-color: $gray-200;
+                color: $gray-800;
+                font-weight: bold;
+
+                .handle {
+                    border-color: $gray-200;
+                }
+            }
+        }
+    }
+}

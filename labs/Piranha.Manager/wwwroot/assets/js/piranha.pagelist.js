@@ -23,6 +23,7 @@ Vue.component("sitemap-item", {
 piranha.pagelist = new Vue({
     el: "#pagelist",
     data: {
+        loading: true,
         items: [],
         sites: []
     },
@@ -48,5 +49,7 @@ piranha.pagelist = new Vue({
         }).on('change', function (e) {
             console.log("changed: ", $(e.target).nestable("serialize"));
         });
+
+        this.loading = false;
     }
 });

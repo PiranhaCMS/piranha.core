@@ -21,11 +21,17 @@ namespace Piranha.Manager.Models
     {
         public class BlockItem
         {
-            public string Gid { get; set; } = "block-" + Math.Abs(Guid.NewGuid().GetHashCode()).ToString();
+            public string Uid { get; set; } = "block-" + Math.Abs(Guid.NewGuid().GetHashCode()).ToString();
             public string Name { get; set; }
             public string Icon { get; set; }
             public string Component { get; set; }
+            public bool IsActive { get; set; }
             public Block Item { get; set; }
+        }
+
+        public class BlockGroupItem : Block
+        {
+            public IList<BlockItem> Items { get; set; } = new List<BlockItem>();
         }
 
         public Guid Id { get; set; }

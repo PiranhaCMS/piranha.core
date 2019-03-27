@@ -11,6 +11,38 @@ piranha.media = new Vue({
         }
     },
     methods: {
+        drag: function (event, item) {
+            event.dataTransfer.setData("mediaId", item.id);
+        },
+        dragover: function (event) {
+            event.preventDefault();
+
+            var target = event.target.closest(".droppable");
+            if (!target.classList.contains("actice")) {
+                target.classList.add("active");
+            }
+        },                
+        dragleave: function (event) {
+            event.preventDefault();
+
+            var target = event.target.closest(".droppable");
+            if (!target.classList.contains("actice")) {
+                target.classList.remove("active");
+            }
+        },
+        drop: function (event, folder) {
+            event.preventDefault();
+
+            var target = event.target.closest(".droppable");
+            if (!target.classList.contains("actice")) {
+                target.classList.remove("active");
+            }
+
+            var mediaId = event.dataTransfer.getData("mediaId");
+
+            console.log("Media ID", mediaId);
+            console.log("Folder ID", folder.id);            
+        },
         toggle: function () {
             this.listView = !this.listView;
         },

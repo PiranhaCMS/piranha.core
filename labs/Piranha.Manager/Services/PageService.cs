@@ -86,21 +86,54 @@ namespace Piranha.Manager.Services
                     MetaDescription = page.MetaDescription
                 };
 
-                //
-                // TODO: Test code
-                //
                 foreach (var block in page.Blocks)
                 {
                     var blockType = App.Blocks.GetByType(block.Type);
                     var componentType = _map.FirstOrDefault(t => t.Item1 == block.Type)?.Item2;
 
-                    model.Blocks.Add(new PageEditModel.BlockItem
+                    if (block is Extend.BlockGroup)
                     {
-                        Name = blockType.Name,
-                        Icon = blockType.Icon,
-                        Component = !string.IsNullOrEmpty(componentType) ? componentType : "missing-block",
-                        Item = block
-                    });
+                        var group = new ContentEditModel.BlockItem
+                        {
+                            Name = blockType.Name,
+                            Icon = blockType.Icon,
+                            Component = "block-group"
+                        };
+
+                        var groupItem = new ContentEditModel.BlockGroupItem
+                        {
+                            Type = block.Type
+                        };
+
+                        bool firstChild = true;
+                        foreach (var child in ((Extend.BlockGroup)block).Items)
+                        {
+                            blockType = App.Blocks.GetByType(child.Type);
+                            componentType = _map.FirstOrDefault(t => t.Item1 == child.Type)?.Item2;
+
+                            groupItem.Items.Add(new ContentEditModel.BlockItem
+                            {
+                                Name = blockType.Name,
+                                Icon = blockType.Icon,
+                                Component = !string.IsNullOrEmpty(componentType) ? componentType : "missing-block",
+                                IsActive = firstChild,
+                                Item = child
+                            });
+                            firstChild = false;
+                        }
+                        group.Item = groupItem;
+                        model.Blocks.Add(group);
+                    }
+                    else
+                    {
+                        model.Blocks.Add(new ContentEditModel.BlockItem
+                        {
+                            Name = blockType.Name,
+                            Icon = blockType.Icon,
+                            Component = !string.IsNullOrEmpty(componentType) ? componentType : "missing-block",
+                            Item = block
+                        });
+                    }
                 }
                 return model;
             }
