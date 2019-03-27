@@ -9,6 +9,9 @@ Vue.component("block-group", {
                     this.block.items[n].isActive = false;
                 }
             }
+        },
+        removeItem: function (item) {
+            this.block.items.splice(this.block.items.indexOf(item), 1);
         }
     },
     mounted: function () {
@@ -28,6 +31,9 @@ Vue.component("block-group", {
         "            <i class='fas fa-ellipsis-v'></i>" +
         "          </span>" +
         "          List item" +
+        "          <span class='actions float-right'>" +
+        "            <a v-on:click.prevent='removeItem(child)' href='#' class='danger'><i class='fas fa-trash'></i></a>" +
+        "          </span>" +
         "        </a>" +
         "      </div>" +
         "      <button v-on:click.prevent='piranha.blockpicker.open(index, piranha.pageedit.addGroupBlock)' class='btn btn-sm btn-primary btn-labeled mt-3'><i class='fas fa-plus'></i>Add item</button>" +
