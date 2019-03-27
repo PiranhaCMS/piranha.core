@@ -1,6 +1,7 @@
 piranha.module = new Vue({
     el: "#module",
     data: {
+        loading: true,
         items: []
     },
     methods: {
@@ -15,5 +16,8 @@ piranha.module = new Vue({
     },
     created: function () {
         this.load();
+    },
+    updated: function () {
+        this.loading = false;
     }
 });
