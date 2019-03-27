@@ -255,11 +255,7 @@ piranha.pageedit = new Vue({
             fetch(piranha.baseUrl + "manager/api/content/block/" + type)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    if (pos) {
-                        piranha.pageedit.blocks.splice(pos, 0, result);
-                    } else {
-                        piranha.pageedit.blocks.push(result);
-                    }
+                    piranha.pageedit.blocks.splice(pos, 0, result);
                 })
                 .catch(function (error) { console.log("error:", error );
             });
