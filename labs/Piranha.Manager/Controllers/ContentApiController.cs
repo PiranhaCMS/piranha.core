@@ -64,5 +64,33 @@ namespace Piranha.Manager.Controllers
             }
             return NotFound();
         }
+
+        [Route("blocktypes")]
+        [HttpGet]
+        public BlockListModel GetBlockTypes()
+        {
+            var model = new BlockListModel();
+
+            foreach (var category in App.Blocks.GetCategories())
+            {
+                var listCategory = new BlockListModel.ListCategory
+                {
+                    Name = category
+                };
+
+                var items = App.Blocks.GetByCategory(category).Where(i => !i.IsUnlisted);
+
+                foreach (var block in items) {
+                    listCategory.Items.Add(new BlockListModel.ListItem
+                    {
+                        Name = block.Name,
+                        Icon = block.Icon,
+                        Type = block.TypeName
+                    });
+                }
+                model.Categories.Add(listCategory);
+            }
+            return model;
+        }
     }
 }

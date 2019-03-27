@@ -20,9 +20,10 @@ img {
 }
 
 .app {
+    opacity: 0;
     transition: opacity ease-in-out .2s;
 
-    &.loading {
-        opacity: 0;
+    &.ready {
+        opacity: 1;
     }
 }

@@ -1,0 +1,24 @@
+@import "variables";
+
+.blocktype-list {
+    margin: 0 -.25rem;
+}
+
+.blocktype {
+    display: inline-block;
+    width: 25%;
+    padding: .25rem;
+
+    .btn {
+        background: $gray-300;
+        padding: .75rem 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    i {
+        display: block;
+        font-size: 1.5rem;
+        margin-bottom: .5rem;
+    }
+}

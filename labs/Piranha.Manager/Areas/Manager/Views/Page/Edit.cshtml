@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <div class="container-fluid app" :class="{ loading: loading }">
+    <div class="container-fluid app" :class="{ ready: !loading }">
         <div class="card">
             <div class="card-body">
                 <div class="row">
@@ -51,21 +51,27 @@
 
         <div class="card">
             <div class="card-body blocks">
-                <div v-for="block in blocks" :class="'block ' + block.component" v-bind:key="block.gid">
-                    <div class="block-header">
-                        <div class="title">
-                            <i :class="block.icon"></i><strong>{{ block.name }}</strong>
+                <div v-for="(block, index) in blocks" v-bind:key="block.gid">
+                    <div :class="'block ' + block.component">
+                        <div class="block-header">
+                            <div class="title">
+                                <i :class="block.icon"></i><strong>{{ block.name }}</strong>
+                            </div>
+                            <div class="actions">
+                                <span class="btn btn-sm handle">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </span>
+                                <button v-on:click.prevent="removeBlock(block)" class="btn btn-sm" tabindex="-1">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
                         </div>
-                        <div class="actions">
-                            <span class="btn btn-sm handle">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </span>
-                            <button v-on:click.prevent="removeBlock(block)" class="btn btn-sm">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
+                        <component v-bind:is="block.component" v-bind:gid="block.gid" v-bind:block="block.item"></component>
                     </div>
-                    <component v-bind:is="block.component" v-bind:gid="block.gid" v-bind:block="block.item"></component>
+                    <a href="#" class="block-add" v-on:click.prevent="piranha.blockpicker.open(index + 1, piranha.pageedit.addBlock)">
+                        <hr>
+                        <i class="fas fa-plus-circle"></i>
+                    </a>
                 </div>
             </div>
         </div>
