@@ -30,6 +30,7 @@ var js = [
             "node_modules/nestable2/dist/jquery.nestable.min.js",
             "assets/src/js/piranha.blockpicker.js",
             "assets/src/js/piranha.notifications.js",
+            "assets/src/js/piranha.mediapicker.js",
             "assets/src/js/piranha.preview.js",
             "assets/src/js/piranha.editor.js"
         ]
