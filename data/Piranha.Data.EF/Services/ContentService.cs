@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -229,7 +229,24 @@ namespace Piranha.Services
                             prop.SetValue(model, val);
                         }
                     }
-                    models.Add(model);
+
+                    if (block.ParentId.HasValue)
+                    {
+                        var parent = models.FirstOrDefault(m => m.Id == block.ParentId.Value);
+
+                        if (parent != null && typeof(Extend.BlockGroup).IsAssignableFrom(parent.GetType()))
+                        {
+                            ((Extend.BlockGroup)parent).Items.Add(model);
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("Block parent is missing");
+                        }
+                    }
+                    else
+                    {
+                        models.Add(model);
+                    }
                 }
             }
             return models;

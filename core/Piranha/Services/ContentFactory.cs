@@ -245,6 +245,15 @@ namespace Piranha.Services
                     foreach (var block in ((IBlockModel)model).Blocks)
                     {
                         InitBlock(scope, block);
+
+
+                        if (block is Extend.BlockGroup)
+                        {
+                            foreach (var child in ((Extend.BlockGroup)block).Items)
+                            {
+                                InitBlock(scope, child);
+                            }
+                        }
                     }
                 }
             }
@@ -295,6 +304,14 @@ namespace Piranha.Services
                     foreach (var block in ((IBlockModel)model).Blocks)
                     {
                         InitBlock(scope, block);
+
+                        if (block is Extend.BlockGroup)
+                        {
+                            foreach (var child in ((Extend.BlockGroup)block).Items)
+                            {
+                                InitBlock(scope, child);
+                            }
+                        }
                     }
                 }
             }
