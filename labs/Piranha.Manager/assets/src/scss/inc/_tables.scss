@@ -2,6 +2,13 @@
 
 .table {
     tr {
+
+        &.droppable {
+            &.active {
+                background: $table-active-bg;
+            }
+        }
+
         td, th {
             &.actions {
                 text-align: right;
@@ -19,6 +26,7 @@
                     height: 78px;
                 }
             }
+
             &.td-medium {
                 width: 180px;
             }
@@ -26,6 +34,7 @@
             &:first-child {
                 padding-left: 1.25rem;
             }
+
             &:last-child {
                 padding-right: 1.25rem;
             }

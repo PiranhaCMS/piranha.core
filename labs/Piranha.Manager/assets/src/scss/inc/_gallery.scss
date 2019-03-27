@@ -71,6 +71,12 @@
     padding-right: $gallery-gutter / 2;
     margin-bottom: $thumbnail-margin-bottom;
 
+    &.droppable {
+        &.active > * {
+            background: $thumbnail-active-bg;
+        }
+    }
+
     .thumbnail-icon {
         flex-grow: 1;
         position: relative;
