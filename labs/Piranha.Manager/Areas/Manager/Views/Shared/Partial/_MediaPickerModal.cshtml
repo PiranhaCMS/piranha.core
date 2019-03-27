@@ -7,15 +7,19 @@
 
             <!-- Modal Header -->
             <div class="modal-header border-bottom-0">
-                @*<h5 class="modal-title">Select media</h5>*@
-
-                <div class="btn-group ml-auto">
-                    <button v-on:click.prevent="toggle" class="btn btn-secondary" :class="{active: listView}"><i class="fas fa-list"></i></button>
-                    <button v-on:click.prevent="toggle" class="btn btn-secondary" :class="{active: !listView}"><i class="fas fa-table"></i></button>
-                </div>
-
+                <h5 class="modal-title">Select media</h5>
                 <button type="button" class="close" v-on:click.prevent="close">&times;</button>
             </div>
+
+            <!-- Tabs -->
+            <ul class="nav nav-tabs nav-fill">
+                <li class="nav-item">
+                    <a class="nav-link" :class="{active: listView}" v-on:click.prevent="toggle"><i class="fas fa-list"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" :class="{active: !listView}" v-on:click.prevent="toggle"><i class="fas fa-table"></i></a>
+                </li>
+            </ul>
 
             <!-- Modal Body -->
             <div class="modal-body bg-light">
@@ -23,7 +27,7 @@
                     <table class="table table-borderless">
                         <thead>
                             <tr>
-                                <th>@Localizer["Select media"]</th>
+                                <th>@Localizer["Name"]</th>
                                 <th class="td-medium">@Localizer["Type"]</th>
                                 <th class="td-small">@Localizer["Size"]</th>
                                 <th class="td-small">@Localizer["Modified"]</th>
@@ -43,7 +47,7 @@
                                 <td></td>
                             </tr>
                             <tr v-for="item in items">
-                                <td><a href="#" v-on:click.prevent="piranha.preview.open(item.id)">
+                                <td><a href="#" v-on:click.prevent="select(item)">
                                     <i v-if="item.type === 'Image'" class="fas fa-image"></i>
                                     <i v-if="item.type === 'Video'" class="fas fa-video"></i>
                                     {{ item.filename }}</a></td>
@@ -57,7 +61,7 @@
                 <template v-if="!listView">
                     <div class="gallery gallery-sm">
                         <div class="gallery-header">
-                            @Localizer["Select media"]
+                            @Localizer["Gallery"]
                         </div>
 
                         <a href="#" class="thumbnail" v-if="currentFolderId != null" v-on:click.prevent="load(parentFolderId)">
