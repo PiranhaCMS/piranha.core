@@ -52,6 +52,16 @@ piranha.pageedit = new Vue({
                 .catch(function (error) { console.log("error:", error );
             });
         },
+        addGroupBlock: function (type, pos) {
+            console.log("addGroupBlock:", pos);
+            fetch(piranha.baseUrl + "manager/api/content/block/" + type)
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    piranha.pageedit.blocks[pos].item.items.push(result);
+                })
+                .catch(function (error) { console.log("error:", error );
+            });
+        },
         moveBlock: function (from, to) {
             this.blocks.splice(to, 0, this.blocks.splice(from, 1)[0])
         },

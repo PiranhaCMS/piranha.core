@@ -1,5 +1,5 @@
 Vue.component("block-group", {
-    props: ["uid", "block"],
+    props: ["uid", "block", "index"],
     methods: {
         selectItem: function (item) {
             for (var n = 0; n < this.block.items.length; n++) {
@@ -27,9 +27,10 @@ Vue.component("block-group", {
         "          <span class='handle sortable-handle'>" +
         "            <i class='fas fa-ellipsis-v'></i>" +
         "          </span>" +
-        "          {{ child.item.body.media.filename }}" +
+        "          List item" +
         "        </a>" +
         "      </div>" +
+        "      <button v-on:click.prevent='piranha.blockpicker.open(index, piranha.pageedit.addGroupBlock)' class='btn btn-sm btn-primary btn-labeled mt-3'><i class='fas fa-plus'></i>Add item</button>" +
         "    </div>" +
         "    <div class='col-md-8'>" +
         "      <div v-for='child in block.items' v-if='child.isActive' :class='\"block \" + child.component'>" +
