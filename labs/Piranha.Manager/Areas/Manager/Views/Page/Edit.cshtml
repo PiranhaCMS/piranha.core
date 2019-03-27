@@ -7,7 +7,6 @@
     <script>
         piranha.pageedit.load("@Model");
     </script>
-
 }
 
 <div id="pageedit">
@@ -37,7 +36,7 @@
         </div>
     </div>
 
-    <div class="container-fluid">
+    <div class="container-fluid app" :class="{ loading: loading }">
         <div class="card">
             <div class="card-body">
                 <div class="row">
@@ -52,21 +51,21 @@
 
         <div class="card">
             <div class="card-body blocks">
-                <div v-for="block in blocks" :class="'block ' + block.component">
+                <div v-for="block in blocks" :class="'block ' + block.component" v-bind:key="block.gid">
                     <div class="block-header">
                         <div class="title">
                             <i :class="block.icon"></i><strong>{{ block.name }}</strong>
                         </div>
                         <div class="actions">
-                            <button class="btn btn-sm">
+                            <span class="btn btn-sm handle">
                                 <i class="fas fa-ellipsis-v"></i>
-                            </button>
+                            </span>
                             <button v-on:click.prevent="removeBlock(block)" class="btn btn-sm">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
                     </div>
-                    <component v-bind:is="block.component" v-bind:key="block.gid" v-bind:gid="block.gid" v-bind:block="block.item"></component>
+                    <component v-bind:is="block.component" v-bind:gid="block.gid" v-bind:block="block.item"></component>
                 </div>
             </div>
         </div>

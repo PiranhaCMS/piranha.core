@@ -87,6 +87,7 @@ Vue.component("missing-block", {
 piranha.pageedit = new Vue({
     el: "#pageedit",
     data: {
+        loading: true,
         id: null,
         siteId: null,
         parentId: null,
@@ -133,6 +134,9 @@ piranha.pageedit = new Vue({
                 .catch(function (error) { console.log("error:", error );
             });
         },
+        moveBlock: function (from, to) {
+            this.blocks.splice(to, 0, this.blocks.splice(from, 1)[0])
+        },
         removeBlock: function (block) {
             var index = this.blocks.indexOf(block);
 
@@ -144,5 +148,13 @@ piranha.pageedit = new Vue({
     created: function () {
     },
     updated: function () {
+        sortable(".blocks", {
+            handle: ".handle",
+            items: ":not(.unsortable)"
+        })[0].addEventListener("sortupdate", function (e) {
+            piranha.pageedit.moveBlock(e.detail.origin.index, e.detail.destination.index);
+        });
+
+        this.loading = false;
     }
 });

@@ -19,7 +19,6 @@
 }
 
 .dd-item,
-//.dd-empty,
 .dd-placeholder {
     display: block;
     position: relative;
@@ -51,7 +50,6 @@
     }
 }
 
-//.dd-empty,
 .dd-placeholder {
     margin: 0 0 2px;
     padding: 0;
@@ -61,12 +59,6 @@
     box-sizing: border-box;
     -moz-box-sizing: border-box;
 }
-
-//.dd-empty {
-//    border: 1px dashed #bbb;
-//    min-height: 100px;
-//    background-color: #e5e5e5;
-//}
 
 .dd-dragel {
     position: absolute;

@@ -2,7 +2,7 @@
 
 .block {
     position: relative;
-    max-width: 960px;
+    max-width: $block-width;
     padding: 2.25rem 1rem 1rem;
     margin: 0 auto;
     border: solid 1px transparent;

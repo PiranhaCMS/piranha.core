@@ -18,3 +18,11 @@ img {
     margin-left: 0;
     max-width: 1370px;
 }
+
+.app {
+    transition: opacity ease-in-out .2s;
+
+    &.loading {
+        opacity: 0;
+    }
+}
