@@ -1,3 +1,7 @@
+/*global
+    piranha
+*/
+
 piranha.editor = {
     addInline: function (id) {
         tinymce.init({

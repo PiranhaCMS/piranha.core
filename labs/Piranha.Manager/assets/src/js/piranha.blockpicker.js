@@ -1,3 +1,7 @@
+/*global
+    piranha
+*/
+
 piranha.blockpicker = new Vue({
     el: "#blockpicker",
     data: {

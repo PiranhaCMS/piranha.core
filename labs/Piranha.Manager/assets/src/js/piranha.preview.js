@@ -1,3 +1,7 @@
+/*global
+    piranha
+*/
+
 piranha.preview = new Vue({
     el: "#previewModal",
     data: {
@@ -25,7 +29,7 @@ piranha.preview = new Vue({
                     piranha.preview.media = result;
                 })
                 .catch(function (error) { console.log("error:", error ); });
-        },        
+        },
         show: function () {
             $("#previewModal").modal("show");
         },

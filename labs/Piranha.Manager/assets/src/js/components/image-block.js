@@ -1,3 +1,7 @@
+/*global
+    piranha
+*/
+
 Vue.component("image-block", {
     props: ["block"],
     methods: {

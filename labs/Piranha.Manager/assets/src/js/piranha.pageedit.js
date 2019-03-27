@@ -1,3 +1,7 @@
+/*global
+    piranha
+*/
+
 piranha.pageedit = new Vue({
     el: "#pageedit",
     data: {

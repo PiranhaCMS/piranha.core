@@ -1,3 +1,7 @@
+/*global
+    piranha
+*/
+
 piranha.mediapicker = new Vue({
     el: "#mediapicker",
     data: {

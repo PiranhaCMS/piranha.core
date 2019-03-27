@@ -1,3 +1,7 @@
+/*global
+    piranha
+*/
+
 piranha.notifications = new Vue({
     el: "#notification-hub",
     data: {

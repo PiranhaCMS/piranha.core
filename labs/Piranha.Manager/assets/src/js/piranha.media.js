@@ -1,3 +1,7 @@
+/*global
+    piranha
+*/
+
 piranha.media = new Vue({
     el: "#media",
     data: {
@@ -21,7 +25,7 @@ piranha.media = new Vue({
             if (!target.classList.contains("actice")) {
                 target.classList.add("active");
             }
-        },                
+        },
         dragleave: function (event) {
             event.preventDefault();
 
@@ -41,7 +45,7 @@ piranha.media = new Vue({
             var mediaId = event.dataTransfer.getData("mediaId");
 
             console.log("Media ID", mediaId);
-            console.log("Folder ID", folder.id);            
+            console.log("Folder ID", folder.id);
         },
         toggle: function () {
             this.listView = !this.listView;

@@ -2,3 +2,9 @@
     width: auto !important;
     margin-top: -.5rem !important;
 }
+
+.html-block, .html-column-block {
+    .mce-content-body {
+        height: 100%;
+    }
+}

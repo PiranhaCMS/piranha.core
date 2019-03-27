@@ -1,3 +1,7 @@
+/*global
+    piranha
+*/
+
 Vue.component("html-column-block", {
     props: ["uid", "block"],
     methods: {
@@ -6,6 +10,14 @@ Vue.component("html-column-block", {
         },
         onBlurCol2: function (e) {
             this.block.column2.value = e.target.innerHTML;
+        }
+    },
+    computed: {
+        isEmpty1: function () {
+            return piranha.utils.isEmptyHtml(this.block.column1.value);
+        },
+        isEmpty2: function () {
+            return piranha.utils.isEmptyHtml(this.block.column2.value);
         }
     },
     mounted: function () {
@@ -18,11 +30,15 @@ Vue.component("html-column-block", {
     },
     template:
         "<div class='row'>" +
-        "  <div :id='uid + 1' class='col-md-6'>" +
-        "    <div contenteditable='true' spellcheck='false' v-html='block.column1.value' v-on:blur='onBlurCol1'></div>" +
+        "  <div class='col-md-6'>" +
+        "    <div :class='{ empty: isEmpty1 }'>" +
+        "      <div :id='uid + 1' contenteditable='true' spellcheck='false' v-html='block.column1.value' v-on:blur='onBlurCol1'></div>" +
+        "    </div>" +
         "  </div>" +
-        "  <div :id='uid + 2' class='col-md-6'>" +
-        "    <div contenteditable='true' spellcheck='false' v-html='block.column2.value' v-on:blur='onBlurCol2'></div>" +
+        "  <div class='col-md-6'>" +
+        "    <div :class='{ empty: isEmpty2 }'>" +
+        "      <div :id='uid + 2' contenteditable='true' spellcheck='false' v-html='block.column2.value' v-on:blur='onBlurCol2'></div>" +
+        "    </div>" +
         "  </div>" +
         "</div>"
 });

@@ -1,3 +1,7 @@
+/*global
+    piranha
+*/
+
 piranha.module = new Vue({
     el: "#module",
     data: {

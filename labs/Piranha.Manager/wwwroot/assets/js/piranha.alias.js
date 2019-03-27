@@ -1,4 +1,8 @@
-piranha.alias = new Vue({
+/*global
+    piranha
+*/
+
+ piranha.alias = new Vue({
     el: "#alias",
     data: {
         loading: true,

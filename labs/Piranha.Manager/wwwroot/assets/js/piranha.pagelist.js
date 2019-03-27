@@ -20,6 +20,10 @@ Vue.component("sitemap-item", {
         "</li>"
 });
 
+/*global
+    piranha
+*/
+
 piranha.pagelist = new Vue({
     el: "#pagelist",
     data: {

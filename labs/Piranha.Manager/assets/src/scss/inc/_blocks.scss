@@ -56,8 +56,13 @@
     }
 
     &.html-block, &.html-column-block {
-        padding-bottom: 0;
         font-size: 1rem;
+
+        .empty:not(:focus-within)
+        {
+            background: $gray-100 url("../img/empty-text.png") no-repeat 50% 50%;
+            height: 8rem;
+        }
     }
 
     &.image-block {
@@ -93,8 +98,15 @@
     }
 
     &.text-block {
+        .empty:not(:focus-within)
+        {
+            background: $gray-100 url("../img/empty-text.png") no-repeat 50% 50%;
+            height: 8rem;
+        }
+
         pre {
             min-height: 1.3rem;
+            height: 100%;
             font-size: .875rem;
             margin-bottom: 0;
             white-space: normal;
