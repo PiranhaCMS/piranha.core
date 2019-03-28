@@ -261,7 +261,6 @@ piranha.pageedit = new Vue({
             });
         },
         addGroupBlock: function (type, pos) {
-            console.log("addGroupBlock:", pos);
             fetch(piranha.baseUrl + "manager/api/content/block/" + type)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
@@ -284,12 +283,19 @@ piranha.pageedit = new Vue({
     created: function () {
     },
     updated: function () {
-        sortable(".blocks", {
-            handle: ".handle",
-            items: ":not(.unsortable)"
-        })[0].addEventListener("sortupdate", function (e) {
-            piranha.pageedit.moveBlock(e.detail.origin.index, e.detail.destination.index);
-        });
+        if (this.loading)
+        {
+            sortable(".blocks", {
+                handle: ".handle",
+                items: ":not(.unsortable)"
+            })[0].addEventListener("sortupdate", function (e) {
+                piranha.pageedit.moveBlock(e.detail.origin.index, e.detail.destination.index);
+            });
+        }
+        else {
+            sortable(".blocks", "disable");
+            sortable(".blocks", "enable");
+        }
 
         this.loading = false;
     }
