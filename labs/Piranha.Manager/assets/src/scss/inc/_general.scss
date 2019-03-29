@@ -27,3 +27,16 @@ img {
         opacity: 1;
     }
 }
+
+.empty-info {
+    color: $gray-500;
+    padding: 4rem 3rem 3rem;
+    margin-top: 1rem;
+    font-family: "Open Sans", serif;
+    font-weight: 300;
+    font-size: 1.4rem;
+    line-height: 2.4rem;
+    text-align: center;
+    border: dashed 1px $gray-400;
+    border-radius: .25rem;
+}

@@ -1,4 +1,34 @@
 {
+  "Edit page": {
+    "Values": {
+      "sv-SE": "Redigera sida"
+    }
+  },
+  "Hidden": {
+    "Values": {
+      "sv-SE": "Dold"
+    }
+  },
+  "If the page should be hidden in the sitemap": {
+    "Values": {
+      "sv-SE": "Om sidan ska vara dold i sitemap"
+    }
+  },
+  "Meta keywords": {
+    "Values": {
+      "sv-SE": "Nyckelord"
+    }
+  },
+  "Meta description": {
+    "Values": {
+      "sv-SE": "Beskrivning"
+    }
+  },
+  "Navigation title": {
+    "Values": {
+      "sv-SE": "Navigeringstitel"
+    }
+  },
   "Pages": {
     "Values": {
       "sv-SE": "Sidor"

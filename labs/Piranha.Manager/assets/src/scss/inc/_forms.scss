@@ -1,6 +1,6 @@
 @import "variables";
 
-.form-group {
+.form-group:not(.form-check) {
     &.title {
         max-width: 960px;
         margin: 0 auto;

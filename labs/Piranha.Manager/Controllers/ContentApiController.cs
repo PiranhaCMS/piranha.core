@@ -65,11 +65,13 @@ namespace Piranha.Manager.Controllers
             return NotFound();
         }
 
-        [Route("blocktypes")]
+        [Route("blocktypes/{parentType?}")]
         [HttpGet]
-        public BlockListModel GetBlockTypes()
+        public BlockListModel GetBlockTypes(string parentType = null)
         {
             var model = new BlockListModel();
+            var parent = App.Blocks.GetByType(parentType);
+            var exludeGroups = parent != null && typeof(Piranha.Extend.BlockGroup).IsAssignableFrom(parent.Type);
 
             foreach (var category in App.Blocks.GetCategories())
             {
@@ -79,6 +81,20 @@ namespace Piranha.Manager.Controllers
                 };
 
                 var items = App.Blocks.GetByCategory(category).Where(i => !i.IsUnlisted);
+
+                // If we have a parent, filter on allowed types
+                if (parent != null)
+                {
+                    if (parent.ItemTypes.Count > 0)
+                    {
+                        items = items.Where(i => parent.ItemTypes.Contains(i.Type));
+                    }
+
+                    if (exludeGroups)
+                    {
+                        items = items.Where(i => !typeof(Piranha.Extend.BlockGroup).IsAssignableFrom(i.Type));
+                    }
+                }
 
                 foreach (var block in items) {
                     listCategory.Items.Add(new BlockListModel.ListItem
@@ -90,6 +106,17 @@ namespace Piranha.Manager.Controllers
                 }
                 model.Categories.Add(listCategory);
             }
+
+            // Remove empty categories
+            var empty = model.Categories.Where(c =>  c.Items.Count() == 0).ToList();
+            foreach (var remove in empty)
+            {
+                model.Categories.Remove(remove);
+            }
+
+            // Calculate type count
+            model.TypeCount = model.Categories.Sum(c => c.Items.Count());
+
             return model;
         }
     }

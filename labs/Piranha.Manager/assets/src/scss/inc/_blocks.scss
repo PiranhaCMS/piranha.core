@@ -3,6 +3,11 @@
 .blocks {
     max-width: $block-width;
     margin: 0 auto;
+
+    .empty-info {
+        width: 80%;
+        margin: 2rem auto;
+    }
 }
 
 .block {

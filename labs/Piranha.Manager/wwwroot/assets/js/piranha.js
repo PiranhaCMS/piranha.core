@@ -1125,6 +1125,9 @@ var sortable = (function () {
 */
 
 piranha.utils = {
+    formatUrl: function (str) {
+        return str.replace("~/", piranha.baseUrl);
+    },
     isEmptyHtml: function (str) {
         return str == null || str.replace(/(<([^>]+)>)/ig,"").replace(/\s/g, "") == "" && str.indexOf("<img") === -1;
     },
@@ -1144,22 +1147,27 @@ piranha.blockpicker = new Vue({
         callback: null
     },
     methods: {
-        load: function (id) {
-            fetch(piranha.baseUrl + "manager/api/content/blocktypes")
+        open: function (callback, index, parentType) {
+            fetch(piranha.baseUrl + "manager/api/content/blocktypes" + (parentType != null ? "/" + parentType : ""))
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    piranha.blockpicker.categories = result.categories;
-                })
-                .catch(function (error) { console.log("error:", error ); });
-        },
-        open: function (index, callback) {
-            this.index = index;
-            this.callback = callback;
+                    if (result.typeCount > 1) {
+                        // Several applicable block types, open modal
+                        piranha.blockpicker.index = index;
+                        piranha.blockpicker.callback = callback;
+                        piranha.blockpicker.categories = result.categories;
 
-            $("#blockpicker").modal("show");
+                        $("#blockpicker").modal("show");
+                    } else {
+                        // There's only one valid block type, select it
+                        callback(result.categories[0].items[0].type, index);
+                    }
+                })
+                .catch(function (error) { console.log("error:", error );
+            });
         },
         select: function (item) {
-            this.callback (item.type, this.index);
+            this.callback(item.type, this.index);
 
             this.index = 0;
             this.callback = null;
@@ -1168,7 +1176,6 @@ piranha.blockpicker = new Vue({
         }
     },
     created: function () {
-        this.load();
     }
 });
 

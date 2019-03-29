@@ -60,6 +60,26 @@ namespace Piranha.Manager.Controllers
         {
             return await _service.GetList(folderId);
         }
+/*
+        [Route("list/media/{mediaId:Guid?}")]
+        [HttpGet]
+        public async Task<MediaListModel> ListByMediaId(Guid? mediaId = null)
+        {
+            Guid? folderId = null;
+
+            if (mediaId.HasValue)
+            {
+                var media = await _service.GetById(mediaId.Value);
+
+                if (media != null)
+                {
+                    folderId = media.folderId;
+                }
+            }
+
+            return await _service.List(folderId);
+        }
+        */
 
         [Route("savefolder")]
         [HttpPost]

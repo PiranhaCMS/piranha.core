@@ -8,5 +8,10 @@
     "Values": {
       "sv-SE": "Media"
     }
+  },
+  "Select media": {
+    "Values": {
+      "sv-SE": "Välj media"
+    }
   }
 }

@@ -16,7 +16,6 @@ Vue.component("image-block", {
         },
         update: function (media) {
             if (media.type === "Image") {
-                console.log(this)
                 this.block.body.id = media.id;
                 this.block.body.media = media;
             } else {
@@ -30,11 +29,20 @@ Vue.component("image-block", {
         },
         mediaUrl: function () {
             if (this.block.body.media != null) {
-                return this.block.body.media.publicUrl.replace("~/", piranha.baseUrl);
+                return piranha.utils.formatUrl(this.block.body.media.publicUrl);
             } else {
-                return piranha.baseUrl + "assets/img/empty-image.png";
+                return piranha.utils.formatUrl("~/assets/img/empty-image.png");
             }
         }
+    },
+    mounted: function() {
+        this.block.getTitle = function () {
+            if (this.block.media != null) {
+                return this.block.media.filename;
+            } else {
+                return "No image selected";
+            }
+        };
     },
     template:
         "<div :class='{ empty: isEmpty }'>" +

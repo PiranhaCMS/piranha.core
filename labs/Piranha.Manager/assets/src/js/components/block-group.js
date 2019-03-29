@@ -1,5 +1,5 @@
 Vue.component("block-group", {
-    props: ["uid", "block", "index"],
+    props: ["uid", "block"],
     methods: {
         selectItem: function (item) {
             for (var n = 0; n < this.block.items.length; n++) {
@@ -11,8 +11,27 @@ Vue.component("block-group", {
             }
         },
         removeItem: function (item) {
-            this.block.items.splice(this.block.items.indexOf(item), 1);
-        }
+            var itemActive = item.isActive;
+            var itemIndex = this.block.items.indexOf(item);
+
+            this.block.items.splice(itemIndex, 1);
+
+            if (itemActive) {
+                this.selectItem(this.block.items[Math.min(itemIndex, this.block.items.length - 1)]);
+            }
+        },
+        addGroupBlock: function (type, pos) {
+            var self = this;
+
+            fetch(piranha.baseUrl + "manager/api/content/block/" + type)
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    self.block.items.push(result);
+                    self.selectItem(result);
+                })
+                .catch(function (error) { console.log("error:", error );
+            });
+        },
     },
     mounted: function () {
     },
@@ -26,17 +45,19 @@ Vue.component("block-group", {
         "  <div class='row'>" +
         "    <div class='col-md-4'>" +
         "      <div class='list-group list-group-flush'>" +
-        "        <a href='#' v-on:click.prevent='selectItem(child)' class='list-group-item' :class='{ active: child.isActive }' v-for='child in block.items'>" +
-        "          <span class='handle sortable-handle'>" +
-        "            <i class='fas fa-ellipsis-v'></i>" +
-        "          </span>" +
-        "          List item" +
+        "        <div class='list-group-item' :class='{ active: child.isActive }' v-for='child in block.items' v-bind:key='child.uid'>" +
+        "          <a href='#' v-on:click.prevent='selectItem(child)'>" +
+        "            <span class='handle sortable-handle'>" +
+        "              <i class='fas fa-ellipsis-v'></i>" +
+        "            </span>" +
+        "            List item" +
+        "          </a>" +
         "          <span class='actions float-right'>" +
         "            <a v-on:click.prevent='removeItem(child)' href='#' class='danger'><i class='fas fa-trash'></i></a>" +
         "          </span>" +
-        "        </a>" +
+        "        </div>" +
         "      </div>" +
-        "      <button v-on:click.prevent='piranha.blockpicker.open(index, piranha.pageedit.addGroupBlock)' class='btn btn-sm btn-primary btn-labeled mt-3'><i class='fas fa-plus'></i>Add item</button>" +
+        "      <button v-on:click.prevent='piranha.blockpicker.open(addGroupBlock, 0, block.type)' class='btn btn-sm btn-primary btn-labeled mt-3'><i class='fas fa-plus'></i>Add item</button>" +
         "    </div>" +
         "    <div class='col-md-8'>" +
         "      <div v-for='child in block.items' v-if='child.isActive' :class='\"block \" + child.component'>" +

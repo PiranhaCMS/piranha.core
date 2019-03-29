@@ -54,9 +54,19 @@
       "sv-SE": "Förhandsvisning"
     }
   },
+  "Publish date": {
+    "Values": {
+      "sv-SE": "Publiceringsdatum"
+    }
+  },
   "Save": {
     "Values": {
       "sv-SE": "Spara"
+    }
+  },
+  "Select block": {
+    "Values": {
+      "sv-SE": "Välj block"
     }
   },
   "Settings": {
@@ -67,6 +77,11 @@
   "Size": {
     "Values": {
       "sv-SE": "Storlek"
+    }
+  },
+  "Slug": {
+    "Values": {
+      "sv-SE": "URL-segment"
     }
   },
   "System": {

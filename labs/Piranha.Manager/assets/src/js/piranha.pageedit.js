@@ -9,12 +9,14 @@ piranha.pageedit = new Vue({
         id: null,
         siteId: null,
         parentId: null,
+        sortOrder: 0,
         typeId: null,
         title: null,
         navigationTitle: null,
         slug: null,
         metaKeywords: null,
         metaDescription: null,
+        published: null,
         blocks: []
     },
     methods: {
@@ -25,12 +27,14 @@ piranha.pageedit = new Vue({
                     piranha.pageedit.id = result.id;
                     piranha.pageedit.siteId = result.siteId;
                     piranha.pageedit.parentId = result.parentId;
+                    piranha.pageedit.sortOrder = result.sortOrder;
                     piranha.pageedit.typeId = result.typeId;
                     piranha.pageedit.title = result.title;
                     piranha.pageedit.navigationTitle = result.navigationTitle;
                     piranha.pageedit.slug = result.slug;
                     piranha.pageedit.metaKeywords = result.metaKeywords;
                     piranha.pageedit.metaDescription = result.metaDescription;
+                    piranha.pageedit.published = result.published;
                     piranha.pageedit.blocks = result.blocks;
                 })
                 .catch(function (error) { console.log("error:", error );
@@ -44,15 +48,6 @@ piranha.pageedit = new Vue({
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     piranha.pageedit.blocks.splice(pos, 0, result);
-                })
-                .catch(function (error) { console.log("error:", error );
-            });
-        },
-        addGroupBlock: function (type, pos) {
-            fetch(piranha.baseUrl + "manager/api/content/block/" + type)
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    piranha.pageedit.blocks[pos].item.items.push(result);
                 })
                 .catch(function (error) { console.log("error:", error );
             });

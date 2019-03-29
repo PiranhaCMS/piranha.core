@@ -7,14 +7,14 @@
 
             <!-- Modal Header -->
             <div class="modal-header border-bottom-0">
-                <h5 class="modal-title">@Localizer["Select media"]</h5>
+                <h5 class="modal-title"><i class="fas fa-images"></i> @Localizer["Select media"]</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
 
             <!-- Tabs -->
-            <ul class="nav nav-tabs nav-fill">
+            <ul class="nav nav-tabs">
                 <li class="nav-item">
                     <a class="nav-link" :class="{active: listView}" v-on:click.prevent="toggle"><i class="fas fa-list"></i></a>
                 </li>
@@ -30,22 +30,22 @@
                         <thead>
                             <tr>
                                 <th>@Localizer["Name"]</th>
-                                <th class="td-medium">@Localizer["Type"]</th>
-                                <th class="td-small">@Localizer["Size"]</th>
+                                <th class="td-medium d-none">@Localizer["Type"]</th>
+                                <th class="td-small d-none">@Localizer["Size"]</th>
                                 <th class="td-small">@Localizer["Modified"]</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-if="currentFolderId != null">
                                 <td><a href="#" v-on:click.prevent="load(parentFolderId)"><i class="fas fa-folder-open"></i>...</a></td>
-                                <td></td>
-                                <td></td>
+                                <td class="d-none"></td>
+                                <td class="d-none"></td>
                                 <td></td>
                             </tr>
                             <tr v-for="folder in folders">
                                 <td><a href="#" v-on:click.prevent="load(folder.id)"><i class="fas fa-folder-open"></i>{{ folder.name }}</a></td>
-                                <td></td>
-                                <td></td>
+                                <td class="d-none"></td>
+                                <td class="d-none"></td>
                                 <td></td>
                             </tr>
                             <tr v-for="item in items">
@@ -53,8 +53,8 @@
                                     <i v-if="item.type === 'Image'" class="fas fa-image"></i>
                                     <i v-if="item.type === 'Video'" class="fas fa-video"></i>
                                     {{ item.filename }}</a></td>
-                                <td>{{ item.contentType }}</td>
-                                <td>{{ item.size }}</td>
+                                <td class="d-none">{{ item.contentType }}</td>
+                                <td class="d-none">{{ item.size }}</td>
                                 <td>{{ item.lastModified }}</td>
                             </tr>
                         </tbody>

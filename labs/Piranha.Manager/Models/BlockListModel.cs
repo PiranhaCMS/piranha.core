@@ -32,5 +32,6 @@ namespace Piranha.Manager.Models
         }
 
         public IList<ListCategory> Categories { get; set; } = new List<ListCategory>();
+        public int TypeCount { get; set; }
     }
 }

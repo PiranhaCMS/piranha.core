@@ -12,6 +12,7 @@
         }
 
         .block-header {
+            color: $gray-600;
             padding-top: .5rem;
             opacity: 1;
             transition: none;
@@ -21,6 +22,12 @@
             background: $white;
             border: solid 1px $gray-400;
             padding: .5rem;
+        }
+
+        .actions {
+            .btn {
+                background: $gray-400;
+            }
         }
 
         .list-group {

@@ -78,12 +78,14 @@ namespace Piranha.Manager.Services
                     Id = page.Id,
                     SiteId = page.SiteId,
                     ParentId = page.ParentId,
+                    SortOrder = page.SortOrder,
                     TypeId = page.TypeId,
                     Title = page.Title,
                     NavigationTitle = page.NavigationTitle,
                     Slug = page.Slug,
                     MetaKeywords = page.MetaKeywords,
-                    MetaDescription = page.MetaDescription
+                    MetaDescription = page.MetaDescription,
+                    Published = page.Published.HasValue ? page.Published.Value.ToString("yyyy-MM-dd HH:mm") : null
                 };
 
                 foreach (var block in page.Blocks)

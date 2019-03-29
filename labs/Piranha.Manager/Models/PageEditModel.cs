@@ -21,9 +21,11 @@ namespace Piranha.Manager.Models
     {
         public Guid SiteId { get; set; }
         public Guid? ParentId { get; set; }
+        public int SortOrder { get; set; }
         public string NavigationTitle { get; set; }
         public string Slug { get; set; }
         public string MetaKeywords { get; set; }
         public string MetaDescription { get; set; }
+        public string Published { get; set; }
     }
 }
