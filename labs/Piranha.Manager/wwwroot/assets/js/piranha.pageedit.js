@@ -32,13 +32,31 @@ Vue.component("block-group", {
                 .catch(function (error) { console.log("error:", error );
             });
         },
+        updateTitle: function (e) {
+            for (var n = 0; n < this.model.items.length; n++) {
+                if (this.model.items[n].uid === e.uid) {
+                    this.model.items[n].title = e.title;
+                    break;
+                }
+            }
+        },
+        moveItem: function (from, to) {
+            this.model.items.splice(to, 0, this.model.items.splice(from, 1)[0])
+        }
     },
     mounted: function () {
+        var self = this;
+
+        sortable("#" + this.uid + " .list-group", {
+            items: ":not(.unsortable)"
+        })[0].addEventListener("sortupdate", function (e) {
+            self.moveItem(e.detail.origin.index, e.detail.destination.index);
+        });
     },
     beforeDestroy: function () {
     },
     template:
-        "<div class='block-group'>" +
+        "<div :id='uid' class='block-group'>" +
         "  <div class='block-group-header'>" +
         "    TODO: Global group fields" +
         "  </div>" +
@@ -47,12 +65,12 @@ Vue.component("block-group", {
         "      <div class='list-group list-group-flush'>" +
         "        <div class='list-group-item' :class='{ active: child.isActive }' v-for='child in model.items' v-bind:key='child.uid'>" +
         "          <a href='#' v-on:click.prevent='selectItem(child)'>" +
-        "            <span class='handle sortable-handle'>" +
+        "            <div class='handle'>" +
         "              <i class='fas fa-ellipsis-v'></i>" +
-        "            </span>" +
-        "            List item" +
+        "            </div>" +
+        "            {{ child.title }}" +
         "          </a>" +
-        "          <span class='actions float-right'>" +
+        "          <span class='actions'>" +
         "            <a v-on:click.prevent='removeItem(child)' href='#' class='danger'><i class='fas fa-trash'></i></a>" +
         "          </span>" +
         "        </div>" +
@@ -61,7 +79,7 @@ Vue.component("block-group", {
         "    </div>" +
         "    <div class='col-md-8'>" +
         "      <div v-for='child in model.items' v-if='child.isActive' :class='\"block \" + child.component'>" +
-        "        <component v-bind:is='child.component' v-bind:uid='child.uid' v-bind:model='child.model'></component>" +
+        "        <component v-bind:is='child.component' v-bind:uid='child.uid' v-bind:model='child.model' v-on:update-title='updateTitle($event)'></component>" +
         "      </div>" +
         "    </div>" +
         "  </div>" +
@@ -146,7 +164,7 @@ Vue.component("html-column-block", {
 */
 
 Vue.component("image-block", {
-    props: ["model"],
+    props: ["uid", "model"],
     methods: {
         clear: function () {
             // clear media from block
@@ -161,6 +179,12 @@ Vue.component("image-block", {
             if (media.type === "Image") {
                 this.model.body.id = media.id;
                 this.model.body.media = media;
+
+                // Tell parent that title has been updated
+                this.$emit('update-title', {
+                    uid: this.uid,
+                    title: this.model.body.media.filename
+                });
             } else {
                 console.log("No image was selected");
             }

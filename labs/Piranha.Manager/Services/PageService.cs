@@ -119,6 +119,7 @@ namespace Piranha.Manager.Services
                                 Icon = blockType.Icon,
                                 Component = !string.IsNullOrEmpty(componentType) ? componentType : "missing-block",
                                 IsActive = firstChild,
+                                Title = child.GetTitle(),
                                 Model = child
                             });
                             firstChild = false;
@@ -133,6 +134,7 @@ namespace Piranha.Manager.Services
                             Name = blockType.Name,
                             Icon = blockType.Icon,
                             Component = !string.IsNullOrEmpty(componentType) ? componentType : "missing-block",
+                            Title = block.GetTitle(),
                             Model = block
                         });
                     }

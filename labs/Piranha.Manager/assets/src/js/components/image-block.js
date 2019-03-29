@@ -3,7 +3,7 @@
 */
 
 Vue.component("image-block", {
-    props: ["model"],
+    props: ["uid", "model"],
     methods: {
         clear: function () {
             // clear media from block
@@ -18,6 +18,12 @@ Vue.component("image-block", {
             if (media.type === "Image") {
                 this.model.body.id = media.id;
                 this.model.body.media = media;
+
+                // Tell parent that title has been updated
+                this.$emit('update-title', {
+                    uid: this.uid,
+                    title: this.model.body.media.filename
+                });
             } else {
                 console.log("No image was selected");
             }

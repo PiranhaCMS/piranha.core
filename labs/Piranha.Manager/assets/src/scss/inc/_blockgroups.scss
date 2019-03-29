@@ -37,6 +37,14 @@
         .list-group-item {
             background: $gray-200;
             padding-left: 2.5rem;
+            height: 3rem;
+
+            .actions {
+                position: absolute;
+                top: 50%;
+                right: 0;
+                margin-top: -.7rem;
+            }
 
             .handle {
                 color: $gray-600;
@@ -52,6 +60,14 @@
                     font-size: 1rem;
                     margin-top: 50%;
                 }
+            }
+
+            a {
+                display: block;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                margin-right: 1rem;
             }
 
             &.active {

@@ -52,15 +52,17 @@ namespace Piranha.Manager.Controllers
 
             if (blockType != null)
             {
-                var block = new ContentEditModel.BlockItem
+                var block = (Extend.Block)_factory.CreateBlock(type);
+                var item = new ContentEditModel.BlockItem
                 {
                     Name = blockType.Name,
                     Icon = blockType.Icon,
                     Component = !string.IsNullOrEmpty(componentType) ? componentType : "missing-block",
-                    Model = (Extend.Block)_factory.CreateBlock(type)
+                    Title = block.GetTitle(),
+                    Model = block
                 };
 
-                return Ok(block);
+                return Ok(item);
             }
             return NotFound();
         }
