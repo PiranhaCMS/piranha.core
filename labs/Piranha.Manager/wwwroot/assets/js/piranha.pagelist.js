@@ -1,3 +1,7 @@
+/*global
+    piranha
+*/
+
 Vue.component("sitemap-item", {
     props: ["item"],
     template:

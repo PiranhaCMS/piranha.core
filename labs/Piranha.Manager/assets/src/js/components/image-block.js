@@ -3,7 +3,7 @@
 */
 
 Vue.component("image-block", {
-    props: ["block"],
+    props: ["model"],
     methods: {
         clear: function () {
             // clear media from block
@@ -12,12 +12,12 @@ Vue.component("image-block", {
             piranha.mediapicker.open(this.update);
         },
         remove: function () {
-            this.block.body.media = null;
+            this.model.body.media = null;
         },
         update: function (media) {
             if (media.type === "Image") {
-                this.block.body.id = media.id;
-                this.block.body.media = media;
+                this.model.body.id = media.id;
+                this.model.body.media = media;
             } else {
                 console.log("No image was selected");
             }
@@ -25,20 +25,20 @@ Vue.component("image-block", {
     },
     computed: {
         isEmpty: function () {
-            return this.block.body.media == null;
+            return this.model.body.media == null;
         },
         mediaUrl: function () {
-            if (this.block.body.media != null) {
-                return piranha.utils.formatUrl(this.block.body.media.publicUrl);
+            if (this.model.body.media != null) {
+                return piranha.utils.formatUrl(this.model.body.media.publicUrl);
             } else {
                 return piranha.utils.formatUrl("~/assets/img/empty-image.png");
             }
         }
     },
     mounted: function() {
-        this.block.getTitle = function () {
-            if (this.block.media != null) {
-                return this.block.media.filename;
+        this.model.getTitle = function () {
+            if (this.model.media != null) {
+                return this.model.media.filename;
             } else {
                 return "No image selected";
             }
@@ -61,7 +61,7 @@ Vue.component("image-block", {
         "        &nbsp;" +
         "      </div>" +
         "      <div class='card-body' v-else>" +
-        "        {{ block.body.media.filename }}" +
+        "        {{ model.body.media.filename }}" +
         "      </div>" +
         "    </div>" +
         "  </div>" +

@@ -3,19 +3,19 @@
 */
 
 Vue.component("text-block", {
-    props: ["block"],
+    props: ["model"],
     methods: {
         onBlur: function (e) {
-            this.block.body.value = e.target.innerHTML;
+            this.model.body.value = e.target.innerHTML;
         }
     },
     computed: {
         isEmpty: function () {
-            return piranha.utils.isEmptyText(this.block.body.value);
+            return piranha.utils.isEmptyText(this.model.body.value);
         }
     },
     template:
         "<div :class='{ empty: isEmpty }'>" +
-        "  <pre contenteditable='true' spellcheck='false' v-html='block.body.value' v-on:blur='onBlur'></pre>" +
+        "  <pre contenteditable='true' spellcheck='false' v-html='model.body.value' v-on:blur='onBlur'></pre>" +
         "</div>"
 });

@@ -57,7 +57,7 @@ namespace Piranha.Manager.Controllers
                     Name = blockType.Name,
                     Icon = blockType.Icon,
                     Component = !string.IsNullOrEmpty(componentType) ? componentType : "missing-block",
-                    Item = (Extend.Block)_factory.CreateBlock(type)
+                    Model = (Extend.Block)_factory.CreateBlock(type)
                 };
 
                 return Ok(block);

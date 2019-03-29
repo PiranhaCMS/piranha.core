@@ -119,11 +119,11 @@ namespace Piranha.Manager.Services
                                 Icon = blockType.Icon,
                                 Component = !string.IsNullOrEmpty(componentType) ? componentType : "missing-block",
                                 IsActive = firstChild,
-                                Item = child
+                                Model = child
                             });
                             firstChild = false;
                         }
-                        group.Item = groupItem;
+                        group.Model = groupItem;
                         model.Blocks.Add(group);
                     }
                     else
@@ -133,7 +133,7 @@ namespace Piranha.Manager.Services
                             Name = blockType.Name,
                             Icon = blockType.Icon,
                             Component = !string.IsNullOrEmpty(componentType) ? componentType : "missing-block",
-                            Item = block
+                            Model = block
                         });
                     }
                 }

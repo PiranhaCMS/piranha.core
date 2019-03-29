@@ -1,23 +1,23 @@
 Vue.component("block-group", {
-    props: ["uid", "block"],
+    props: ["uid", "model"],
     methods: {
         selectItem: function (item) {
-            for (var n = 0; n < this.block.items.length; n++) {
-                if (this.block.items[n] == item) {
-                    this.block.items[n].isActive = true;
+            for (var n = 0; n < this.model.items.length; n++) {
+                if (this.model.items[n] == item) {
+                    this.model.items[n].isActive = true;
                 } else {
-                    this.block.items[n].isActive = false;
+                    this.model.items[n].isActive = false;
                 }
             }
         },
         removeItem: function (item) {
             var itemActive = item.isActive;
-            var itemIndex = this.block.items.indexOf(item);
+            var itemIndex = this.model.items.indexOf(item);
 
-            this.block.items.splice(itemIndex, 1);
+            this.model.items.splice(itemIndex, 1);
 
             if (itemActive) {
-                this.selectItem(this.block.items[Math.min(itemIndex, this.block.items.length - 1)]);
+                this.selectItem(this.model.items[Math.min(itemIndex, this.model.items.length - 1)]);
             }
         },
         addGroupBlock: function (type, pos) {
@@ -26,7 +26,7 @@ Vue.component("block-group", {
             fetch(piranha.baseUrl + "manager/api/content/block/" + type)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    self.block.items.push(result);
+                    self.model.items.push(result);
                     self.selectItem(result);
                 })
                 .catch(function (error) { console.log("error:", error );
@@ -45,7 +45,7 @@ Vue.component("block-group", {
         "  <div class='row'>" +
         "    <div class='col-md-4'>" +
         "      <div class='list-group list-group-flush'>" +
-        "        <div class='list-group-item' :class='{ active: child.isActive }' v-for='child in block.items' v-bind:key='child.uid'>" +
+        "        <div class='list-group-item' :class='{ active: child.isActive }' v-for='child in model.items' v-bind:key='child.uid'>" +
         "          <a href='#' v-on:click.prevent='selectItem(child)'>" +
         "            <span class='handle sortable-handle'>" +
         "              <i class='fas fa-ellipsis-v'></i>" +
@@ -57,11 +57,11 @@ Vue.component("block-group", {
         "          </span>" +
         "        </div>" +
         "      </div>" +
-        "      <button v-on:click.prevent='piranha.blockpicker.open(addGroupBlock, 0, block.type)' class='btn btn-sm btn-primary btn-labeled mt-3'><i class='fas fa-plus'></i>Add item</button>" +
+        "      <button v-on:click.prevent='piranha.blockpicker.open(addGroupBlock, 0, model.type)' class='btn btn-sm btn-primary btn-labeled mt-3'><i class='fas fa-plus'></i>Add item</button>" +
         "    </div>" +
         "    <div class='col-md-8'>" +
-        "      <div v-for='child in block.items' v-if='child.isActive' :class='\"block \" + child.component'>" +
-        "        <component v-bind:is='child.component' v-bind:uid='child.uid' v-bind:block='child.item'></component>" +
+        "      <div v-for='child in model.items' v-if='child.isActive' :class='\"block \" + child.component'>" +
+        "        <component v-bind:is='child.component' v-bind:uid='child.uid' v-bind:model='child.model'></component>" +
         "      </div>" +
         "    </div>" +
         "  </div>" +
@@ -73,15 +73,15 @@ Vue.component("block-group", {
 */
 
 Vue.component("html-block", {
-    props: ["uid", "block"],
+    props: ["uid", "model"],
     methods: {
         onBlur: function (e) {
-            this.block.body.value = e.target.innerHTML;
+            this.model.body.value = e.target.innerHTML;
         }
     },
     computed: {
         isEmpty: function () {
-            return piranha.utils.isEmptyHtml(this.block.body.value);
+            return piranha.utils.isEmptyHtml(this.model.body.value);
         }
     },
     mounted: function () {
@@ -92,7 +92,7 @@ Vue.component("html-block", {
     },
     template:
         "<div :class='{ empty: isEmpty }'>" +
-        "  <div contenteditable='true' :id='uid' spellcheck='false' v-html='block.body.value' v-on:blur='onBlur'></div>" +
+        "  <div contenteditable='true' :id='uid' spellcheck='false' v-html='model.body.value' v-on:blur='onBlur'></div>" +
         "</div>"
 });
 
@@ -101,21 +101,21 @@ Vue.component("html-block", {
 */
 
 Vue.component("html-column-block", {
-    props: ["uid", "block"],
+    props: ["uid", "model"],
     methods: {
         onBlurCol1: function (e) {
-            this.block.column1.value = e.target.innerHTML;
+            this.model.column1.value = e.target.innerHTML;
         },
         onBlurCol2: function (e) {
-            this.block.column2.value = e.target.innerHTML;
+            this.model.column2.value = e.target.innerHTML;
         }
     },
     computed: {
         isEmpty1: function () {
-            return piranha.utils.isEmptyHtml(this.block.column1.value);
+            return piranha.utils.isEmptyHtml(this.model.column1.value);
         },
         isEmpty2: function () {
-            return piranha.utils.isEmptyHtml(this.block.column2.value);
+            return piranha.utils.isEmptyHtml(this.model.column2.value);
         }
     },
     mounted: function () {
@@ -130,12 +130,12 @@ Vue.component("html-column-block", {
         "<div class='row'>" +
         "  <div class='col-md-6'>" +
         "    <div :class='{ empty: isEmpty1 }'>" +
-        "      <div :id='uid + 1' contenteditable='true' spellcheck='false' v-html='block.column1.value' v-on:blur='onBlurCol1'></div>" +
+        "      <div :id='uid + 1' contenteditable='true' spellcheck='false' v-html='model.column1.value' v-on:blur='onBlurCol1'></div>" +
         "    </div>" +
         "  </div>" +
         "  <div class='col-md-6'>" +
         "    <div :class='{ empty: isEmpty2 }'>" +
-        "      <div :id='uid + 2' contenteditable='true' spellcheck='false' v-html='block.column2.value' v-on:blur='onBlurCol2'></div>" +
+        "      <div :id='uid + 2' contenteditable='true' spellcheck='false' v-html='model.column2.value' v-on:blur='onBlurCol2'></div>" +
         "    </div>" +
         "  </div>" +
         "</div>"
@@ -146,7 +146,7 @@ Vue.component("html-column-block", {
 */
 
 Vue.component("image-block", {
-    props: ["block"],
+    props: ["model"],
     methods: {
         clear: function () {
             // clear media from block
@@ -155,12 +155,12 @@ Vue.component("image-block", {
             piranha.mediapicker.open(this.update);
         },
         remove: function () {
-            this.block.body.media = null;
+            this.model.body.media = null;
         },
         update: function (media) {
             if (media.type === "Image") {
-                this.block.body.id = media.id;
-                this.block.body.media = media;
+                this.model.body.id = media.id;
+                this.model.body.media = media;
             } else {
                 console.log("No image was selected");
             }
@@ -168,20 +168,20 @@ Vue.component("image-block", {
     },
     computed: {
         isEmpty: function () {
-            return this.block.body.media == null;
+            return this.model.body.media == null;
         },
         mediaUrl: function () {
-            if (this.block.body.media != null) {
-                return piranha.utils.formatUrl(this.block.body.media.publicUrl);
+            if (this.model.body.media != null) {
+                return piranha.utils.formatUrl(this.model.body.media.publicUrl);
             } else {
                 return piranha.utils.formatUrl("~/assets/img/empty-image.png");
             }
         }
     },
     mounted: function() {
-        this.block.getTitle = function () {
-            if (this.block.media != null) {
-                return this.block.media.filename;
+        this.model.getTitle = function () {
+            if (this.model.media != null) {
+                return this.model.media.filename;
             } else {
                 return "No image selected";
             }
@@ -204,7 +204,7 @@ Vue.component("image-block", {
         "        &nbsp;" +
         "      </div>" +
         "      <div class='card-body' v-else>" +
-        "        {{ block.body.media.filename }}" +
+        "        {{ model.body.media.filename }}" +
         "      </div>" +
         "    </div>" +
         "  </div>" +
@@ -216,25 +216,25 @@ Vue.component("image-block", {
 */
 
 Vue.component("text-block", {
-    props: ["block"],
+    props: ["model"],
     methods: {
         onBlur: function (e) {
-            this.block.body.value = e.target.innerHTML;
+            this.model.body.value = e.target.innerHTML;
         }
     },
     computed: {
         isEmpty: function () {
-            return piranha.utils.isEmptyText(this.block.body.value);
+            return piranha.utils.isEmptyText(this.model.body.value);
         }
     },
     template:
         "<div :class='{ empty: isEmpty }'>" +
-        "  <pre contenteditable='true' spellcheck='false' v-html='block.body.value' v-on:blur='onBlur'></pre>" +
+        "  <pre contenteditable='true' spellcheck='false' v-html='model.body.value' v-on:blur='onBlur'></pre>" +
         "</div>"
 });
 
 Vue.component("missing-block", {
-    props: ["block"],
+    props: ["model"],
     template:
         "<div class='alert alert-danger' role='alert'>Missing Component</div>"
 });

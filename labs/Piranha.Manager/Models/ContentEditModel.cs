@@ -26,7 +26,7 @@ namespace Piranha.Manager.Models
             public string Icon { get; set; }
             public string Component { get; set; }
             public bool IsActive { get; set; }
-            public Block Item { get; set; }
+            public Block Model { get; set; }
         }
 
         public class BlockGroupItem : Block
