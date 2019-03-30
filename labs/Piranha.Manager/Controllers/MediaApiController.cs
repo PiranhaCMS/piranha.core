@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Piranha.Manager.Models;
 using Piranha.Manager.Services;
+using Piranha.Models;
 
 namespace Piranha.Manager.Controllers
 {
@@ -56,27 +57,28 @@ namespace Piranha.Manager.Controllers
         /// <returns>The list model</returns>
         [Route("list/{folderId:Guid?}")]
         [HttpGet]
-        public async Task<MediaListModel> List(Guid? folderId = null)
+        public async Task<MediaListModel> List(Guid? folderId = null, MediaType? filter = null)
         {
-            return await _service.GetList(folderId);
+            return await _service.GetList(folderId, filter);
         }
-/*
+
+        /*
         [Route("list/media/{mediaId:Guid?}")]
         [HttpGet]
         public async Task<MediaListModel> ListByMediaId(Guid? mediaId = null)
         {
             Guid? folderId = null;
-
+        
             if (mediaId.HasValue)
             {
                 var media = await _service.GetById(mediaId.Value);
-
+        
                 if (media != null)
                 {
                     folderId = media.folderId;
                 }
             }
-
+        
             return await _service.List(folderId);
         }
         */

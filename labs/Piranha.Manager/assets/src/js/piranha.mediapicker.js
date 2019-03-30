@@ -13,6 +13,7 @@ piranha.mediapicker = new Vue({
         folder: {
             name: null
         },
+        filter: null,
         callback: null
     },
     methods: {
@@ -20,7 +21,12 @@ piranha.mediapicker = new Vue({
             this.listView = !this.listView;
         },
         load: function (id) {
-            fetch(piranha.baseUrl + "manager/api/media/list" + (id ? "/" + id : ""))
+            var url = piranha.baseUrl + "manager/api/media/list" + (id ? "/" + id : "");
+            if (this.filter) {
+                url += "?filter=" + this.filter;
+            }
+
+            fetch(url)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     piranha.mediapicker.currentFolderId = result.currentFolderId;
@@ -30,8 +36,11 @@ piranha.mediapicker = new Vue({
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },
-        open: function (callback) {
+        open: function (callback, filter) {
             this.callback = callback;
+            this.filter = filter;
+
+            this.load();
 
             $("#mediapicker").modal("show");
         },
@@ -41,8 +50,5 @@ piranha.mediapicker = new Vue({
 
             $("#mediapicker").modal("hide");
         }
-    },
-    created: function () {
-        this.load();
     }
 });

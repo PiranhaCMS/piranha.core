@@ -61,7 +61,7 @@ namespace Piranha.Manager.Services
         /// </summary>
         /// <param name="folderId">The optional folder id</param>
         /// <returns>The list model</returns>
-            public async Task<MediaListModel> GetList(Guid? folderId = null)
+        public async Task<MediaListModel> GetList(Guid? folderId = null, MediaType? filter = null)
         {
             var model = new MediaListModel
             {
@@ -77,6 +77,7 @@ namespace Piranha.Manager.Services
                     model.ParentFolderId = folder.ParentId;
                 }
             }
+
             model.Media = (await _api.Media.GetAllAsync(folderId))
                 .Select(m => new MediaListModel.MediaItem
                 {
@@ -90,6 +91,13 @@ namespace Piranha.Manager.Services
                     Height = m.Height,
                     LastModified = m.LastModified.ToString("yyyy-MM-dd")
                 }).ToList();
+
+            if (filter.HasValue)
+            {
+                model.Media = model.Media
+                    .Where(m => m.Type == filter.Value.ToString())
+                    .ToList();
+            }
 
             var structure = await _api.Media.GetStructureAsync();
             model.Folders = structure.GetPartial(folderId)
