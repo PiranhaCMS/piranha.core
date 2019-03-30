@@ -9,7 +9,7 @@ Vue.component("image-block", {
             // clear media from block
         },
         select: function () {
-            piranha.mediapicker.open(this.update);
+            piranha.mediapicker.open(this.update, "Image");
         },
         remove: function () {
             this.model.body.media = null;
