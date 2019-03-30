@@ -58,7 +58,10 @@ Vue.component("block-group", {
     template:
         "<div :id='uid' class='block-group'>" +
         "  <div class='block-group-header'>" +
-        "    TODO: Global group fields" +
+        "    <div class='form-group' v-for='field in model.fields'>" +
+        "      <label>{{ field.name }}</label>" +
+        "      <component v-bind:is='field.component' v-bind:uid='field.uid' v-bind:model='field.model'></component>" +
+        "    </div>" +
         "  </div>" +
         "  <div class='row'>" +
         "    <div class='col-md-4'>" +

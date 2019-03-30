@@ -27,13 +27,6 @@ namespace Piranha.Manager.Controllers
     public class ContentApiController : Controller
     {
         private readonly IContentFactory _factory;
-        private List<Tuple<string, string>> _map = new List<Tuple<string, string>>
-        {
-            new Tuple<string, string>("Piranha.Extend.Blocks.HtmlBlock", "html-block"),
-            new Tuple<string, string>("Piranha.Extend.Blocks.HtmlColumnBlock", "html-column-block"),
-            new Tuple<string, string>("Piranha.Extend.Blocks.ImageBlock", "image-block"),
-            new Tuple<string, string>("Piranha.Extend.Blocks.TextBlock", "text-block")
-        };
 
         /// <summary>
         /// Default constructor.
@@ -48,21 +41,56 @@ namespace Piranha.Manager.Controllers
         public IActionResult CreateBlock(string type)
         {
             var blockType = App.Blocks.GetByType(type);
-            var componentType = _map.FirstOrDefault(t => t.Item1 == type)?.Item2;
 
             if (blockType != null)
             {
                 var block = (Extend.Block)_factory.CreateBlock(type);
-                var item = new ContentEditModel.BlockItem
-                {
-                    Name = blockType.Name,
-                    Icon = blockType.Icon,
-                    Component = !string.IsNullOrEmpty(componentType) ? componentType : "missing-block",
-                    Title = block.GetTitle(),
-                    Model = block
-                };
 
-                return Ok(item);
+                if (block is Extend.BlockGroup)
+                {
+                    var item = new ContentEditModel.BlockItem
+                    {
+                        Name = blockType.Name,
+                        Icon = blockType.Icon,
+                        Component = "block-group",
+                        Title = block.GetTitle(),
+                    };
+
+                    var groupItem = new ContentEditModel.BlockGroupItem
+                    {
+                        Type = block.Type
+                    };
+
+                    foreach (var prop in block.GetType().GetProperties(App.PropertyBindings))
+                    {
+                        if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
+                        {
+                            var fieldType = App.Fields.GetByType(prop.PropertyType);
+
+                            groupItem.Fields.Add(new ContentEditModel.FieldItem
+                            {
+                                Name = prop.Name,
+                                Type = fieldType.TypeName,
+                                Component = fieldType.Component,
+                                Model = (Extend.IField)prop.GetValue(block)
+                            });
+                        }
+                    }
+                    item.Model = groupItem;
+
+                    return Ok(item);
+                }
+                else
+                {
+                    return Ok(new ContentEditModel.BlockItem
+                    {
+                        Name = blockType.Name,
+                        Icon = blockType.Icon,
+                        Component = blockType.Component,
+                        Title = block.GetTitle(),
+                        Model = block
+                    });
+                }
             }
             return NotFound();
         }

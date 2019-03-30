@@ -1,0 +1,13 @@
+@import "variables";
+
+.html-field {
+    background: $white;
+    border: solid 1px $gray-400;
+    padding: .75rem;
+
+    &.empty:not(:focus-within)
+    {
+        background: $white url("../img/empty-text.png") no-repeat 50% 50%;
+        height: 8rem;
+    }
+}

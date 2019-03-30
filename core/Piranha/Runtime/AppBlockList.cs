@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using Piranha.Extend;
@@ -63,6 +63,7 @@ namespace Piranha.Runtime
                 item.Category = attr.Category;
                 item.Icon = attr.Icon;
                 item.IsUnlisted = attr.IsUnlisted;
+                item.Component = !string.IsNullOrWhiteSpace(attr.Component) ? attr.Component : "missing-block";
 
                 if (attr is BlockGroupTypeAttribute)
                 {

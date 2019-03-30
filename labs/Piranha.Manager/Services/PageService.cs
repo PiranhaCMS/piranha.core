@@ -20,13 +20,6 @@ namespace Piranha.Manager.Services
     public class PageService
     {
         private readonly IApi _api;
-        private List<Tuple<string, string>> _map = new List<Tuple<string, string>>
-        {
-            new Tuple<string, string>("Piranha.Extend.Blocks.HtmlBlock", "html-block"),
-            new Tuple<string, string>("Piranha.Extend.Blocks.HtmlColumnBlock", "html-column-block"),
-            new Tuple<string, string>("Piranha.Extend.Blocks.ImageBlock", "image-block"),
-            new Tuple<string, string>("Piranha.Extend.Blocks.TextBlock", "text-block")
-        };
 
         /// <summary>
         /// Default constructor.
@@ -91,7 +84,6 @@ namespace Piranha.Manager.Services
                 foreach (var block in page.Blocks)
                 {
                     var blockType = App.Blocks.GetByType(block.Type);
-                    var componentType = _map.FirstOrDefault(t => t.Item1 == block.Type)?.Item2;
 
                     if (block is Extend.BlockGroup)
                     {
@@ -107,17 +99,32 @@ namespace Piranha.Manager.Services
                             Type = block.Type
                         };
 
+                        foreach (var prop in block.GetType().GetProperties(App.PropertyBindings))
+                        {
+                            if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
+                            {
+                                var fieldType = App.Fields.GetByType(prop.PropertyType);
+
+                                groupItem.Fields.Add(new ContentEditModel.FieldItem
+                                {
+                                    Name = prop.Name,
+                                    Type = fieldType.TypeName,
+                                    Component = fieldType.Component,
+                                    Model = (Extend.IField)prop.GetValue(block)
+                                });
+                            }
+                        }
+
                         bool firstChild = true;
                         foreach (var child in ((Extend.BlockGroup)block).Items)
                         {
                             blockType = App.Blocks.GetByType(child.Type);
-                            componentType = _map.FirstOrDefault(t => t.Item1 == child.Type)?.Item2;
 
                             groupItem.Items.Add(new ContentEditModel.BlockItem
                             {
                                 Name = blockType.Name,
                                 Icon = blockType.Icon,
-                                Component = !string.IsNullOrEmpty(componentType) ? componentType : "missing-block",
+                                Component = blockType.Component,
                                 IsActive = firstChild,
                                 Title = child.GetTitle(),
                                 Model = child
@@ -133,7 +140,7 @@ namespace Piranha.Manager.Services
                         {
                             Name = blockType.Name,
                             Icon = blockType.Icon,
-                            Component = !string.IsNullOrEmpty(componentType) ? componentType : "missing-block",
+                            Component = blockType.Component,
                             Title = block.GetTitle(),
                             Model = block
                         });

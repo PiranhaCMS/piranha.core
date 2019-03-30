@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/tidyui/coreweb
- * 
+ *
  */
 
 using Piranha.AttributeBuilder;
@@ -36,5 +36,10 @@ namespace MvcWeb.Models.Regions
         /// </summary>
         [Field]
         public HtmlField Ingress { get; set; }
+
+        [Field(Options = FieldOption.HalfWidth, Placeholder = "Maecenas sed diam eget risus varius." )]
+        public CheckBoxField Box1 { get; set; }
+        [Field(Options = FieldOption.HalfWidth, Placeholder = "Maecenas sed diam eget risus varius." )]
+        public CheckBoxField Box2 { get; set; }
     }
 }

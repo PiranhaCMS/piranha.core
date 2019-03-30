@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using Piranha.Extend.Fields;
@@ -15,7 +15,7 @@ namespace Piranha.Extend.Blocks
     /// <summary>
     /// Two column HTML block.
     /// </summary>
-    [BlockType(Name = "Two Cols", Category = "Content", Icon = "fas fa-columns")]
+    [BlockType(Name = "Two Cols", Category = "Content", Icon = "fas fa-columns", Component = "html-column-block")]
     public class HtmlColumnBlock : Block
     {
         /// <summary>

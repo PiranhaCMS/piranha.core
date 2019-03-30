@@ -1,3 +1,33 @@
+Vue.component("html-field", {
+    props: ["uid", "model"],
+    methods: {
+        onBlur: function (e) {
+            this.model.value = e.target.innerHTML;
+        }
+    },
+    computed: {
+        isEmpty: function () {
+            return piranha.utils.isEmptyHtml(this.model.value);
+        }
+    },
+    mounted: function () {
+        piranha.editor.addInline(this.uid);
+    },
+    beforeDestroy: function () {
+        piranha.editor.remove(this.uid);
+    },
+    template:
+        "<div class='html-field' :class='{ empty: isEmpty }'>" +
+        "  <div contenteditable='true' :id='uid' spellcheck='false' v-html='model.value' v-on:blur='onBlur'></div>" +
+        "</div>"
+});
+
+Vue.component("string-field", {
+    props: ["uid", "model"],
+    template:
+        "<input class='form-control' type='text' v-model='model.value'>"
+});
+
 Vue.component("block-group", {
     props: ["uid", "model"],
     methods: {
@@ -58,7 +88,10 @@ Vue.component("block-group", {
     template:
         "<div :id='uid' class='block-group'>" +
         "  <div class='block-group-header'>" +
-        "    TODO: Global group fields" +
+        "    <div class='form-group' v-for='field in model.fields'>" +
+        "      <label>{{ field.name }}</label>" +
+        "      <component v-bind:is='field.component' v-bind:uid='field.uid' v-bind:model='field.model'></component>" +
+        "    </div>" +
         "  </div>" +
         "  <div class='row'>" +
         "    <div class='col-md-4'>" +
@@ -260,7 +293,13 @@ Vue.component("text-block", {
 Vue.component("missing-block", {
     props: ["model"],
     template:
-        "<div class='alert alert-danger' role='alert'>Missing Component</div>"
+        "<div class='alert alert-danger text-center' role='alert'>No component registered for <code>{{ model.type }}</code></div>"
+});
+
+Vue.component("missing-field", {
+    props: ["model"],
+    template:
+        "<div class='alert alert-danger text-center' role='alert'>No component registered for <code>{{ model.type }}</code></div>"
 });
 
 /*global

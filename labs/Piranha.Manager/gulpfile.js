@@ -57,12 +57,15 @@ var js = [
     {
         name: "piranha.pageedit.js",
         items: [
+            "assets/src/js/components/html-field.js",
+            "assets/src/js/components/string-field.js",
             "assets/src/js/components/block-group.js",
             "assets/src/js/components/html-block.js",
             "assets/src/js/components/html-column-block.js",
             "assets/src/js/components/image-block.js",
             "assets/src/js/components/text-block.js",
             "assets/src/js/components/missing-block.js",
+            "assets/src/js/components/missing-field.js",
             "assets/src/js/piranha.pageedit.js"
         ]
     },
