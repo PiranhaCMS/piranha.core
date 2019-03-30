@@ -11,9 +11,11 @@ Vue.component("html-field", {
         }
     },
     mounted: function () {
+        console.log("html-field: mounted");
         piranha.editor.addInline(this.uid);
     },
     beforeDestroy: function () {
+        console.log("html-field: beforeDestroy");
         piranha.editor.remove(this.uid);
     },
     template:
