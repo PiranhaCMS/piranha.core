@@ -77,6 +77,38 @@
         }
     }
 
+    &.quote-block {
+        .empty:not(:focus-within)
+        {
+            background: $gray-100 url("../img/empty-text.png") no-repeat 50% 50%;
+            height: 8rem;
+        }
+
+        p {
+            color: $gray-500;
+            height: 100%;
+            min-height: 2rem;
+            font-family: "Open Sans", serif;
+            font-size: 1.4rem;
+            margin-left: 4.5rem;
+        }
+
+        .quote {
+            display: none;
+            color: $gray-400;
+            float: left;
+            font-size: 2rem;
+            padding: .25rem 1rem;
+        }
+
+        :not(.empty), :focus-within {
+            .quote {
+                display: inline;
+            }
+        }
+
+    }
+
     &.image-block {
         position: relative;
         text-align: center;

@@ -205,7 +205,7 @@ Vue.component("image-block", {
             // clear media from block
         },
         select: function () {
-            piranha.mediapicker.open(this.update);
+            piranha.mediapicker.open(this.update, "Image");
         },
         remove: function () {
             this.model.body.media = null;
@@ -267,6 +267,29 @@ Vue.component("image-block", {
         "      </div>" +
         "    </div>" +
         "  </div>" +
+        "</div>"
+});
+
+/*global
+    piranha
+*/
+
+Vue.component("quote-block", {
+    props: ["model"],
+    methods: {
+        onBlur: function (e) {
+            this.model.body.value = e.target.innerText;
+        }
+    },
+    computed: {
+        isEmpty: function () {
+            return piranha.utils.isEmptyText(this.model.body.value);
+        }
+    },
+    template:
+        "<div :class='{ empty: isEmpty }'>" +
+        "  <i class='fas fa-quote-right quote'></i>" +
+        "  <p class='lead' contenteditable='true' spellcheck='false' v-model='model.body.value' v-on:blur='onBlur'></pre>" +
         "</div>"
 });
 
