@@ -162,6 +162,7 @@ namespace Piranha.Repositories
             media.Type = model.Type;
             media.ContentType = model.ContentType;
             media.LastModified = DateTime.Now;
+            media.Size = model.Size;
             media.Width = model.Width;
             media.Height = model.Height;
 

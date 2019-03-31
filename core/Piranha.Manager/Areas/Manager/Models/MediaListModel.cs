@@ -23,6 +23,7 @@ namespace Piranha.Areas.Manager.Models
         public IList<MediaStructureItem> Breadcrumb { get; set; }
         public Guid? CurrentFolderId { get; set; }
         public Guid? ParentFolderId { get; set; }
+        public IDictionary<Guid, int> FilesInFolder { get; set; } = new Dictionary<Guid, int>();
         public MediaType? Filter { get; set; }
 
         /// <summary>
@@ -60,6 +61,10 @@ namespace Piranha.Areas.Manager.Models
             model.Folders = structure.GetPartial(folderId);
             model.Breadcrumb = structure.GetBreadcrumb(folderId);
 
+            foreach (var folder in model.Folders)
+            {
+                model.FilesInFolder[folder.Id] = api.Media.GetAll(folder.Id).Count();
+            }
             return model;
         }
     }
