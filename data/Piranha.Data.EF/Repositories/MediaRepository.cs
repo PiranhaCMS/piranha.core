@@ -165,8 +165,6 @@ namespace Piranha.Repositories
             media.Height = model.Height;
             media.ContentType = model.ContentType;
             media.LastModified = DateTime.Now;
-            media.Width = model.Width;
-            media.Height = model.Height;
 
             // Delete removed versions
             var current = model.Versions.Select(v => v.Id).ToArray();
