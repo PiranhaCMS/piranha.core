@@ -484,6 +484,11 @@ namespace Piranha.Services
             else if (!typeof(DynamicPost).IsAssignableFrom(typeof(T)))
             {
                 model = _cache?.Get<PostBase>(id.ToString());
+
+                if (model != null)
+                {
+                    _factory.Init(model, App.PostTypes.GetById(model.TypeId));
+                }
             }
 
             if (model == null)

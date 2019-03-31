@@ -59,7 +59,7 @@ piranha.media = new function() {
             if (self.mediaUrlId) {
                 var mediaUrlCtrl = $("#" + self.mediaUrlId);
 
-                if (mediaUrlCtrl.prop("tagName") == "IMG") {
+                if (mediaUrlCtrl.prop("tagName") == "IMG" || mediaUrlCtrl.prop("tagName") == "VIDEO") {
                     mediaUrlCtrl.attr("src", e.data("url"));
                 } else {
                     mediaUrlCtrl.val(e.data("url"));
@@ -93,6 +93,8 @@ piranha.media = new function() {
 
             if (mediaUrlCtrl.prop("tagName") == "IMG") {
                 mediaUrlCtrl.attr("src", "/manager/assets/img/block-img-placeholder.png");
+            } else if (mediaUrlCtrl.prop("tagName") == "VIDEO") {
+                mediaUrlCtrl.attr("src", "");
             }
         }
     };

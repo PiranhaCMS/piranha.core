@@ -175,7 +175,7 @@ namespace Piranha.Services
         /// <returns>The site content model</returns>
         public Task<DynamicSiteContent> GetContentByIdAsync(Guid id)
         {
-            return _repo.GetContentById(id);
+            return GetContentByIdAsync<DynamicSiteContent>(id);
         }
 
         /// <summary>
@@ -186,7 +186,17 @@ namespace Piranha.Services
         /// <returns>The site content model</returns>
         public async Task<T> GetContentByIdAsync<T>(Guid id) where T : SiteContent<T>
         {
-            var model = _cache?.Get<T>($"SiteContent_{id}");
+            SiteContentBase model = null;
+
+            if (!typeof(DynamicSiteContent).IsAssignableFrom(typeof(T)))
+            {
+                model = _cache?.Get<SiteContentBase>($"SiteContent_{id}");
+
+                if (model != null)
+                {
+                    _factory.Init(model, App.SiteTypes.GetById(model.TypeId));
+                }
+            }
 
             if (model == null)
             {
@@ -194,7 +204,12 @@ namespace Piranha.Services
 
                 OnLoadContent(model);
             }
-            return model;
+
+            if (model != null && model is T)
+            {
+                return (T)model;
+            }
+            return null;
         }
 
         /// <summary>
@@ -435,7 +450,7 @@ namespace Piranha.Services
 
                 App.Hooks.OnLoad<Models.SiteContentBase>(model);
 
-                if (_cache != null)
+                if (_cache != null && !(model is DynamicSiteContent))
                 {
                     _cache.Set($"SiteContent_{model.Id}", model);
                 }

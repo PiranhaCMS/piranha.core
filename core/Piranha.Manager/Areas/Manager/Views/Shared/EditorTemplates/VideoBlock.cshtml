@@ -1,12 +1,13 @@
-@model Piranha.Extend.Blocks.ImageBlock
+@model Piranha.Extend.Blocks.VideoBlock
 @{
     var prefix = Html.ViewData.TemplateInfo.HtmlFieldPrefix
         .Replace("[", "_").Replace("]", "_").Replace(".", "_");
-    var unique = "Image_" + Guid.NewGuid().ToString();
+    var unique = "Video_" + Guid.NewGuid().ToString();
 }
 
-<div class="block-image">
-    <img id="@(unique)_Preview" src="@(Model.Body.Media != null ? Url.Content(Model.Body.Media.PublicUrl) : "/manager/assets/img/block-img-placeholder.png")">
+<div class="block-video">
+    <video id="@(unique)_Preview" src="@(Model.Body.Media != null ? Url.Content(Model.Body.Media.PublicUrl) : "")" controls></video>
+    <span class="video-placeholder fas fa-film" ></span>
     <div class="block-media-picker">
         <div class="row">
             <div class="col-xs-9">
@@ -24,7 +25,7 @@
             <div class="col-xs-3">
                 <div class="btn-group btn-group-justified" role="group">
                     <div class="btn-group" role="group" style="padding-right:5px">
-                        <button class="btn btn-primary text-center" type="button" data-toggle="modal" data-target="#modalMedia" data-filter="image" data-mediaid="@(prefix)_Body_Id" data-medianame="@(unique)_Filename" data-mediaurlid="@(unique)_Preview">
+                        <button class="btn btn-primary text-center" type="button" data-toggle="modal" data-target="#modalMedia" data-filter="video" data-mediaid="@(prefix)_Body_Id" data-medianame="@(unique)_Filename" data-mediaurlid="@(unique)_Preview">
                             <span class="fas fa-plus"></span>
                         </button>
                     </div>

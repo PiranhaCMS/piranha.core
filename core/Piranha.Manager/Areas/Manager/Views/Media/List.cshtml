@@ -48,7 +48,7 @@
             if (!targetId)
                 target = target.closest('tr');
             target.removeClass('dropping');
-        }        
+        }
 
         function drag (e) {
             e.dataTransfer.setData("text", $(e.target).attr('data-id'));
@@ -60,12 +60,12 @@
             var targetId = $(e.target).attr('data-id');
             if (!targetId)
                 targetId = $(e.target).closest('tr').attr('data-id');
-        
+
             $('#mediaId').val(e.dataTransfer.getData("text"));
             $('#targetId').val(targetId);
             $('#move-form').submit();
-        }        
-    </script>    
+        }
+    </script>
 }
 
 @using (var form = Html.BeginForm("Move", "Media", FormMethod.Post, new { id="move-form", @class = "form", role = "form" })) {
@@ -146,10 +146,12 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td class="actions one"></td>                        
+                        <td class="actions one"></td>
                     </tr>
                 }
                 @foreach (var folder in Model.Folders) {
+                    var filesInFolder = Model.FilesInFolder[folder.Id];
+
                     <tr ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dropLeave(event)" data-id="@folder.Id">
                         <td class="text-limit-cell">
                             <span class="text-limit">
@@ -158,12 +160,14 @@
                             </span>
                         </td>
                         <td></td>
-                        <td></td>
+                        <td>@filesInFolder @(filesInFolder == 1 ? "item" : "items")</td>
                         <td>@folder.Created.ToString("yyyy-MM-dd")</td>
                         <td class="actions one">
-                            <a href="@Url.Action("DeleteFolder", new { id = folder.Id})" data-toggle="tooltip" data-original-title="Delete folder" data-placement="top">
-                                <span class="fas fa-trash text-danger"></span>
-                            </a>
+                            @if (filesInFolder == 0) {
+                                <a href="@Url.Action("DeleteFolder", new { id = folder.Id})" data-toggle="tooltip" data-original-title="Delete folder" data-placement="top">
+                                    <span class="fas fa-trash text-danger"></span>
+                                </a>
+                            }
                         </td>
                     </tr>
                 }
@@ -181,7 +185,7 @@
                                 } else if (item.Type == MediaType.Document) {
                                     <span class="fas fa-book media-icon"></span>
                                 } else {
-                                    <span class="fas fa-exclamation-triangle media-icon"></span>                                
+                                    <span class="fas fa-exclamation-triangle media-icon"></span>
                                 }
                                 <a href="#" target="_blank" data-toggle="modal" data-target="#modalImgPreview" data-filename="@item.Filename" data-url="@Url.Content(item.PublicUrl)" data-contenttype="@item.ContentType" data-filesize="@Piranha.Utils.FormatByteSize(item.Size)" data-modified="@item.LastModified.ToString("yyyy-MM-dd")" data-id="@item.Id" data-parentid="@item.FolderId">@item.Filename</a>
                             </span>

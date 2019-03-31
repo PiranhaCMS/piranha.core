@@ -160,11 +160,11 @@ namespace Piranha.Repositories
             media.Filename = model.Filename;
             media.FolderId = model.FolderId;
             media.Type = model.Type;
-            media.ContentType = model.ContentType;
-            media.LastModified = DateTime.Now;
+            media.Size = model.Size;
             media.Width = model.Width;
             media.Height = model.Height;
-            media.Size = model.Size;
+            media.ContentType = model.ContentType;
+            media.LastModified = DateTime.Now;
 
             // Delete removed versions
             var current = model.Versions.Select(v => v.Id).ToArray();
