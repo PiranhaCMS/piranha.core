@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.Manager</id>
     <title>Piranha Manager</title>
-    <version>6.0.0</version>
+    <version>6.0.1</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -19,7 +19,7 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework=".NETStandard2.0">
-        <dependency id="Piranha" version="[6.0.0,7.0.0)" />
+        <dependency id="Piranha" version="[6.0.1,7.0.0)" />
         <dependency id="Piranha.AspNetCore" version="[6.0.0,7.0.0)" />
         <dependency id="Piranha.Extensions.Sync" version="[6.0.0,7.0.0)" />
         <dependency id="Microsoft.AspNetCore" version="2.1.4" />
