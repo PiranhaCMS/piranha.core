@@ -44,6 +44,11 @@
       "sv-SE": "Logga ut"
     }
   },
+  "Main content": {
+    "Values": {
+      "sv-SE": "Primärt innehåll"
+    }
+  },
   "Modified": {
     "Values": {
       "sv-SE": "Ändrad"

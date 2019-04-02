@@ -25,12 +25,14 @@ namespace MvcWeb.Models
         /// Gets/sets the page header.
         /// </summary>
         [Region(Display = RegionDisplayMode.Setting)]
+        [RegionDescription("Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.")]
         public Regions.Hero Hero { get; set; }
 
         /// <summary>
         /// Gets/sets the available teasers.
         /// </summary>
         [Region(ListTitle = "Title", ListPlaceholder = "New Teaser")]
+        [RegionDescription("Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.")]
         public IList<Regions.Teaser> Teasers { get; set; } = new List<Regions.Teaser>();
 
         /// <summary>
