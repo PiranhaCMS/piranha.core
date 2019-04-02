@@ -335,7 +335,7 @@ namespace Piranha.Services
                 if (model != null && _cache != null)
                 {
                     _cache.Set(model.Id.ToString(), model);
-                    _cache.Set($"Category_{blogId}_{slug}", model);
+                    _cache.Set($"Category_{blogId}_{slug}", model.Id);
                 }
             }
             return model;
@@ -364,7 +364,7 @@ namespace Piranha.Services
                 if (model != null && _cache != null)
                 {
                     _cache.Set(model.Id.ToString(), model);
-                    _cache.Set($"Tag_{blogId}_{slug}", model);
+                    _cache.Set($"Tag_{blogId}_{slug}", model.Id);
                 }
             }
             return model;
