@@ -48,15 +48,18 @@ namespace Piranha.Manager.Controllers
 
                 if (block is Extend.BlockGroup)
                 {
-                    var item = new ContentEditModel.BlockItem
+                    var item = new BlockEditModel
                     {
-                        Name = blockType.Name,
-                        Icon = blockType.Icon,
-                        Component = "block-group",
-                        Title = block.GetTitle(),
+                        Meta = new ContentMeta
+                        {
+                            Name = blockType.Name,
+                            Title = block.GetTitle(),
+                            Icon = blockType.Icon,
+                            Component = "block-group"
+                        }
                     };
 
-                    var groupItem = new ContentEditModel.BlockGroupItem
+                    var groupItem = new BlockGroupEditModel
                     {
                         Type = block.Type
                     };
@@ -67,12 +70,15 @@ namespace Piranha.Manager.Controllers
                         {
                             var fieldType = App.Fields.GetByType(prop.PropertyType);
 
-                            groupItem.Fields.Add(new ContentEditModel.FieldItem
+                            groupItem.Fields.Add(new FieldEditModel
                             {
-                                Name = prop.Name,
                                 Type = fieldType.TypeName,
-                                Component = fieldType.Component,
-                                Model = (Extend.IField)prop.GetValue(block)
+                                Model = (Extend.IField)prop.GetValue(block),
+                                Meta = new ContentMeta
+                                {
+                                    Name = prop.Name,
+                                    Component = fieldType.Component,
+                                }
                             });
                         }
                     }
@@ -82,13 +88,16 @@ namespace Piranha.Manager.Controllers
                 }
                 else
                 {
-                    return Ok(new ContentEditModel.BlockItem
+                    return Ok(new BlockEditModel
                     {
-                        Name = blockType.Name,
-                        Icon = blockType.Icon,
-                        Component = blockType.Component,
-                        Title = block.GetTitle(),
-                        Model = block
+                        Model = block,
+                        Meta = new ContentMeta
+                        {
+                            Name = blockType.Name,
+                            Title = block.GetTitle(),
+                            Icon = blockType.Icon,
+                            Component = blockType.Component
+                        }
                     });
                 }
             }

@@ -6,7 +6,7 @@ piranha.editor = {
     addInline: function (id) {
         tinymce.init({
             selector: "#" + id,
-            fixed_toolbar_container: "#" + id,
+            //fixed_toolbar_container: "#" + id,
             menubar: false,
             branding: false,
             statusbar: false,
@@ -25,3 +25,9 @@ piranha.editor = {
         tinymce.remove(tinymce.get(id));
     }
 };
+
+$(document).on('focusin', function (e) {
+    if ($(e.target).closest(".tox-tinymce-inline").length) {
+        e.stopImmediatePropagation();
+    }
+});

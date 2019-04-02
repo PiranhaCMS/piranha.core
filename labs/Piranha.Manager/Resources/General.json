@@ -14,6 +14,11 @@
       "sv-SE": "Innehållstyp"
     }
   },
+  "Delete": {
+    "Values": {
+      "sv-SE": "Radera"
+    }
+  },
   "Details": {
     "Values": {
       "sv-SE": "Detaljer"
@@ -52,6 +57,11 @@
   "Preview": {
     "Values": {
       "sv-SE": "Förhandsvisning"
+    }
+  },
+  "Publish": {
+    "Values": {
+      "sv-SE": "Publicera"
     }
   },
   "Publish date": {

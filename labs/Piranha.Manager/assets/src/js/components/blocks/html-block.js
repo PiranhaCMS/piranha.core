@@ -4,6 +4,11 @@
 
 Vue.component("html-block", {
     props: ["uid", "model"],
+    data: function () {
+        return {
+            body: this.model.body.value
+        };
+    },
     methods: {
         onBlur: function (e) {
             this.model.body.value = e.target.innerHTML;
@@ -22,6 +27,6 @@ Vue.component("html-block", {
     },
     template:
         "<div :class='{ empty: isEmpty }'>" +
-        "  <div contenteditable='true' :id='uid' spellcheck='false' v-html='model.body.value' v-on:blur='onBlur'></div>" +
+        "  <div contenteditable='true' :id='uid' spellcheck='false' v-html='body' v-on:blur='onBlur'></div>" +
         "</div>"
 });

@@ -1,5 +1,11 @@
 @import "variables";
 
+.region-center {
+    max-width: $block-width;
+    padding: 0 1rem;
+    margin: 0 auto;
+}
+
 .html-field {
     background: $white;
     border: solid 1px $gray-400;
@@ -9,5 +15,15 @@
     {
         background: $white url("../img/empty-text.png") no-repeat 50% 50%;
         height: 8rem;
+    }
+}
+
+.image-field {
+    .media-picker {
+        .card-body {
+            padding: .4rem 1rem;
+            margin-right: 1rem;
+            border: solid 1px $gray-400;
+        }
     }
 }

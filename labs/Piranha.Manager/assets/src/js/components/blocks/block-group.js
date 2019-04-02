@@ -34,8 +34,8 @@ Vue.component("block-group", {
         },
         updateTitle: function (e) {
             for (var n = 0; n < this.model.items.length; n++) {
-                if (this.model.items[n].uid === e.uid) {
-                    this.model.items[n].title = e.title;
+                if (this.model.items[n].meta.uid === e.uid) {
+                    this.model.items[n].meta.title = e.title;
                     break;
                 }
             }
@@ -59,19 +59,19 @@ Vue.component("block-group", {
         "<div :id='uid' class='block-group'>" +
         "  <div class='block-group-header'>" +
         "    <div class='form-group' v-for='field in model.fields'>" +
-        "      <label>{{ field.name }}</label>" +
-        "      <component v-bind:is='field.component' v-bind:uid='field.uid' v-bind:model='field.model'></component>" +
+        "      <label>{{ field.meta.name }}</label>" +
+        "      <component v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:model='field.model'></component>" +
         "    </div>" +
         "  </div>" +
         "  <div class='row'>" +
         "    <div class='col-md-4'>" +
         "      <div class='list-group list-group-flush'>" +
-        "        <div class='list-group-item' :class='{ active: child.isActive }' v-for='child in model.items' v-bind:key='child.uid'>" +
+        "        <div class='list-group-item' :class='{ active: child.isActive }' v-for='child in model.items' v-bind:key='child.meta.uid'>" +
         "          <a href='#' v-on:click.prevent='selectItem(child)'>" +
         "            <div class='handle'>" +
         "              <i class='fas fa-ellipsis-v'></i>" +
         "            </div>" +
-        "            {{ child.title }}" +
+        "            {{ child.meta.title }}" +
         "          </a>" +
         "          <span class='actions'>" +
         "            <a v-on:click.prevent='removeItem(child)' href='#' class='danger'><i class='fas fa-trash'></i></a>" +
@@ -81,8 +81,8 @@ Vue.component("block-group", {
         "      <button v-on:click.prevent='piranha.blockpicker.open(addGroupBlock, 0, model.type)' class='btn btn-sm btn-primary btn-labeled mt-3'><i class='fas fa-plus'></i>Add item</button>" +
         "    </div>" +
         "    <div class='col-md-8'>" +
-        "      <div v-for='child in model.items' v-if='child.isActive' :class='\"block \" + child.component'>" +
-        "        <component v-bind:is='child.component' v-bind:uid='child.uid' v-bind:model='child.model' v-on:update-title='updateTitle($event)'></component>" +
+        "      <div v-for='child in model.items' v-if='child.isActive' :class='\"block \" + child.meta.component'>" +
+        "        <component v-bind:is='child.meta.component' v-bind:uid='child.meta.uid' v-bind:model='child.model' v-on:update-title='updateTitle($event)'></component>" +
         "      </div>" +
         "    </div>" +
         "  </div>" +

@@ -1,23 +1,11 @@
 .tox-tinymce-inline {
     width: auto !important;
     margin-top: -.5rem !important;
+    z-index: 2000;
 }
 
 .html-block, .html-column-block, .html-field {
     .mce-content-body {
         height: 100%;
-    }
-
-    .tox-tinymce-inline {
-        display: none !important;
-        position: absolute;
-        top: -2.5rem;
-        left: 0;
-    }
-
-    &:focus-within {
-        .tox-tinymce-inline {
-            display: flex !important;
-        }
     }
 }

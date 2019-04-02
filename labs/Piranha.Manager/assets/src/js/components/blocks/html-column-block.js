@@ -4,6 +4,12 @@
 
 Vue.component("html-column-block", {
     props: ["uid", "model"],
+    data: function () {
+        return {
+            column1: this.model.column1.value,
+            column2: this.model.column2.value,
+        };
+    },
     methods: {
         onBlurCol1: function (e) {
             this.model.column1.value = e.target.innerHTML;
@@ -32,12 +38,12 @@ Vue.component("html-column-block", {
         "<div class='row'>" +
         "  <div class='col-md-6'>" +
         "    <div :class='{ empty: isEmpty1 }'>" +
-        "      <div :id='uid + 1' contenteditable='true' spellcheck='false' v-html='model.column1.value' v-on:blur='onBlurCol1'></div>" +
+        "      <div :id='uid + 1' contenteditable='true' spellcheck='false' v-html='column1' v-on:blur='onBlurCol1'></div>" +
         "    </div>" +
         "  </div>" +
         "  <div class='col-md-6'>" +
         "    <div :class='{ empty: isEmpty2 }'>" +
-        "      <div :id='uid + 2' contenteditable='true' spellcheck='false' v-html='model.column2.value' v-on:blur='onBlurCol2'></div>" +
+        "      <div :id='uid + 2' contenteditable='true' spellcheck='false' v-html='column2' v-on:blur='onBlurCol2'></div>" +
         "    </div>" +
         "  </div>" +
         "</div>"

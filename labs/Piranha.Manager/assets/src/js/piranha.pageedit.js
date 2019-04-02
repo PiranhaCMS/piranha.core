@@ -17,7 +17,22 @@ piranha.pageedit = new Vue({
         metaKeywords: null,
         metaDescription: null,
         published: null,
-        blocks: []
+        blocks: [],
+        regions: [],
+        selectedRegion: "uid-blocks",
+        selectedSetting: "uid-settings"
+    },
+    computed: {
+        contentRegions: function () {
+            return this.regions.filter(function (item) {
+                return item.meta.display != "setting";
+            });
+        },
+        settingRegions: function () {
+            return this.regions.filter(function (item) {
+                return item.meta.display === "setting";
+            });
+        },
     },
     methods: {
         load: function (id) {
@@ -36,6 +51,7 @@ piranha.pageedit = new Vue({
                     piranha.pageedit.metaDescription = result.metaDescription;
                     piranha.pageedit.published = result.published;
                     piranha.pageedit.blocks = result.blocks;
+                    piranha.pageedit.regions = result.regions;
                 })
                 .catch(function (error) { console.log("error:", error );
             });
@@ -61,6 +77,12 @@ piranha.pageedit = new Vue({
             if (index !== -1) {
                 this.blocks.splice(index, 1);
             }
+        },
+        selectRegion: function (uid) {
+            this.selectedRegion = uid;
+        },
+        selectSetting: function (uid) {
+            this.selectedSetting = uid;
         }
     },
     created: function () {

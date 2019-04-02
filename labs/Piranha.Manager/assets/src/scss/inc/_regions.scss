@@ -1,0 +1,11 @@
+@import "variables";
+
+.region-list {
+    .region-list-item {
+        .region-list-item-title {
+            background: $gray-100;
+            padding: .75rem 1rem;
+            margin: -.75rem -1.25rem .75rem;
+        }
+    }
+}

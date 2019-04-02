@@ -57,16 +57,21 @@ var js = [
     {
         name: "piranha.pageedit.js",
         items: [
-            "assets/src/js/components/html-field.js",
-            "assets/src/js/components/string-field.js",
-            "assets/src/js/components/block-group.js",
-            "assets/src/js/components/html-block.js",
-            "assets/src/js/components/html-column-block.js",
-            "assets/src/js/components/image-block.js",
-            "assets/src/js/components/quote-block.js",
-            "assets/src/js/components/text-block.js",
-            "assets/src/js/components/missing-block.js",
-            "assets/src/js/components/missing-field.js",
+            "assets/src/js/components/region.js",
+
+            "assets/src/js/components/blocks/block-group.js",
+            "assets/src/js/components/blocks/html-block.js",
+            "assets/src/js/components/blocks/html-column-block.js",
+            "assets/src/js/components/blocks/image-block.js",
+            "assets/src/js/components/blocks/quote-block.js",
+            "assets/src/js/components/blocks/text-block.js",
+            "assets/src/js/components/blocks/missing-block.js",
+
+            "assets/src/js/components/fields/string-field.js",
+            "assets/src/js/components/fields/html-field.js",
+            "assets/src/js/components/fields/image-field.js",
+            "assets/src/js/components/fields/missing-field.js",
+
             "assets/src/js/piranha.pageedit.js"
         ]
     },

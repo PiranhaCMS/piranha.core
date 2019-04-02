@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -66,6 +67,8 @@ namespace Piranha.Manager.Services
 
             if (page != null)
             {
+                var type = App.PageTypes.GetById(page.TypeId);
+
                 var model = new PageEditModel
                 {
                     Id = page.Id,
@@ -81,20 +84,79 @@ namespace Piranha.Manager.Services
                     Published = page.Published.HasValue ? page.Published.Value.ToString("yyyy-MM-dd HH:mm") : null
                 };
 
+                foreach (var regionType in type.Regions)
+                {
+                    var region = new RegionEditModel
+                    {
+                        Meta = new ContentRegionMeta
+                        {
+                            Name = regionType.Title,
+                            Description = regionType.Description,
+                            Placeholder = regionType.ListTitlePlaceholder,
+                            IsCollection = regionType.Collection,
+                            Display = regionType.Display.ToString().ToLower()
+                        }
+                    };
+                    var regionListModel = ((IDictionary<string, object>)page.Regions)[regionType.Id];
+
+                    if (!regionType.Collection)
+                    {
+                        var regionModel = (IRegionList)Activator.CreateInstance(typeof(RegionList<>).MakeGenericType(regionListModel.GetType()));
+                        regionModel.Add(regionListModel);
+                        regionListModel = regionModel;
+                    }
+
+                    foreach (var regionModel in (IEnumerable)regionListModel)
+                    {
+                        var regionItem = new RegionItemEditModel();
+
+                        foreach (var fieldType in regionType.Fields)
+                        {
+                            var appFieldType = App.Fields.GetByType(fieldType.Type);
+
+                            var field = new FieldEditModel
+                            {
+                                Type = appFieldType.TypeName,
+                                Meta = new ContentMeta
+                                {
+                                    Name = fieldType.Title,
+                                    Component = appFieldType.Component,
+                                    Placeholder = fieldType.Placeholder
+                                }
+                            };
+
+                            if (regionType.Fields.Count > 1)
+                            {
+                                field.Model = (Extend.IField)((IDictionary<string, object>)regionModel)[fieldType.Id];
+                            }
+                            else
+                            {
+                                field.Model = (Extend.IField)regionModel;
+                            }
+                            regionItem.Fields.Add(field);
+                        }
+                        region.Items.Add(regionItem);
+                    }
+                    model.Regions.Add(region);
+                }
+
                 foreach (var block in page.Blocks)
                 {
                     var blockType = App.Blocks.GetByType(block.Type);
 
                     if (block is Extend.BlockGroup)
                     {
-                        var group = new ContentEditModel.BlockItem
+                        var group = new BlockEditModel
                         {
-                            Name = blockType.Name,
-                            Icon = blockType.Icon,
-                            Component = "block-group"
+                            Meta = new ContentMeta
+                            {
+                                Name = blockType.Name,
+                                Icon = blockType.Icon,
+                                Component = "block-group"
+                            }
                         };
 
-                        var groupItem = new ContentEditModel.BlockGroupItem
+                        var groupItem = new BlockGroupEditModel
                         {
                             Type = block.Type
                         };
@@ -105,12 +167,15 @@ namespace Piranha.Manager.Services
                             {
                                 var fieldType = App.Fields.GetByType(prop.PropertyType);
 
-                                groupItem.Fields.Add(new ContentEditModel.FieldItem
+                                groupItem.Fields.Add(new FieldEditModel
                                 {
-                                    Name = prop.Name,
                                     Type = fieldType.TypeName,
-                                    Component = fieldType.Component,
-                                    Model = (Extend.IField)prop.GetValue(block)
+                                    Model = (Extend.IField)prop.GetValue(block),
+                                    Meta = new ContentMeta
+                                    {
+                                        Name = prop.Name,
+                                        Component = fieldType.Component,
+                                    }
                                 });
                             }
                         }
@@ -120,14 +185,17 @@ namespace Piranha.Manager.Services
                         {
                             blockType = App.Blocks.GetByType(child.Type);
 
-                            groupItem.Items.Add(new ContentEditModel.BlockItem
+                            groupItem.Items.Add(new BlockEditModel
                             {
-                                Name = blockType.Name,
-                                Icon = blockType.Icon,
-                                Component = blockType.Component,
                                 IsActive = firstChild,
-                                Title = child.GetTitle(),
-                                Model = child
+                                Model = child,
+                                Meta = new ContentMeta
+                                {
+                                    Name = blockType.Name,
+                                    Title = child.GetTitle(),
+                                    Icon = blockType.Icon,
+                                    Component = blockType.Component
+                                }
                             });
                             firstChild = false;
                         }
@@ -136,13 +204,16 @@ namespace Piranha.Manager.Services
                     }
                     else
                     {
-                        model.Blocks.Add(new ContentEditModel.BlockItem
+                        model.Blocks.Add(new BlockEditModel
                         {
-                            Name = blockType.Name,
-                            Icon = blockType.Icon,
-                            Component = blockType.Component,
-                            Title = block.GetTitle(),
-                            Model = block
+                            Model = block,
+                            Meta = new ContentMeta
+                            {
+                                Name = blockType.Name,
+                                Title = block.GetTitle(),
+                                Icon = blockType.Icon,
+                                Component = blockType.Component
+                            }
                         });
                     }
                 }

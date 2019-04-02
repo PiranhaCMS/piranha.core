@@ -1,5 +1,10 @@
 Vue.component("html-field", {
     props: ["uid", "model"],
+    data: function () {
+        return {
+            body: this.model.value
+        };
+    },
     methods: {
         onBlur: function (e) {
             this.model.value = e.target.innerHTML;
@@ -20,6 +25,6 @@ Vue.component("html-field", {
     },
     template:
         "<div class='html-field' :class='{ empty: isEmpty }'>" +
-        "  <div contenteditable='true' :id='uid' spellcheck='false' v-html='model.value' v-on:blur='onBlur'></div>" +
+        "  <div contenteditable='true' :id='uid' spellcheck='false' v-html='body' v-on:blur='onBlur'></div>" +
         "</div>"
 });

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
@@ -25,7 +26,10 @@ namespace Piranha.Manager
             {
                 options.ResourcesPath = "../../../Resources";
             });
-            services.AddMvc().AddViewLocalization().AddDataAnnotationsLocalization();
+            services.AddMvc()
+                .AddViewLocalization()
+                .AddDataAnnotationsLocalization()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddPiranha();
             services.AddPiranhaApplication();
             services.AddPiranhaFileStorage();

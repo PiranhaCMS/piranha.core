@@ -24,7 +24,7 @@ namespace MvcWeb.Models
         /// <summary>
         /// Gets/sets the page header.
         /// </summary>
-        [Region]
+        [Region(Display = RegionDisplayMode.Setting)]
         public Regions.Hero Hero { get; set; }
 
         /// <summary>

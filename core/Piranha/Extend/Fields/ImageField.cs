@@ -13,7 +13,7 @@ using Piranha.Models;
 
 namespace Piranha.Extend.Fields
 {
-    [FieldType(Name = "Image", Shorthand = "Image")]
+    [FieldType(Name = "Image", Shorthand = "Image", Component = "image-field")]
     public class ImageField : MediaFieldBase<ImageField>
     {
         /// <summary>

@@ -1,0 +1,191 @@
+@page "~/manager/page/{id:Guid}"
+@inject IViewLocalizer Localizer
+@{
+    ViewBag.Title = Localizer["Edit page"];
+}
+@section script
+{
+    <script src="~/assets/tinymce/tinymce.min.js"></script>
+    <script src="~/assets/js/piranha.pageedit.min.js"></script>
+    <script>
+        piranha.pageedit.load("@RouteData.Values["id"]");
+
+        $(".title input").focus();
+    </script>
+}
+
+<div id="pageedit">
+    <div class="top">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">@Localizer["Content"]</li>
+                <li class="breadcrumb-item"><a href="~/manager/pages">@Localizer["Pages"]</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer["Edit"]</li>
+            </ol>
+        </nav>
+
+        <div class="container-fluid">
+            <div class="top-nav">
+                <div class="btn-group" role="group" v-if="regions.length > 0">
+                    <button type="button" class="btn btn-primary btn-labeled dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-table"></i>
+                        @Localizer["Main content"]
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                        <a class="dropdown-item" href="#" v-on:click.prevent="selectRegion(region.meta.uid)" v-for="region in regions" v-if="region.meta.display != 'setting'">{{ region.meta.name }}</a>
+                    </div>
+                </div>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#pageSettings">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-success btn-labeled dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-check"></i>
+                        @Localizer["Save"]
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                        <a class="dropdown-item" href="#">@Localizer["Preview"]</a>
+                        <a class="dropdown-item" href="#">@Localizer["Publish"]</a>
+                        <a class="dropdown-item text-danger" href="#">@Localizer["Delete"]</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid app" :class="{ ready: !loading }">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group title">
+                            <input v-model="title" type="text" class="form-control form-control-lg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" :class="{ 'd-none': selectedRegion != 'uid-blocks' }">
+            <div class="card-body">
+                <div class="blocks">
+                    <a href="#" class="block-add unsortable" v-on:click.prevent="piranha.blockpicker.open(piranha.pageedit.addBlock, 0)">
+                        <hr>
+                        <i class="fas fa-plus-circle"></i>
+                    </a>
+                    <div v-for="(block, index) in blocks" v-bind:key="block.meta.uid">
+                        <div :class="'block ' + block.meta.component">
+                            <div class="block-header">
+                                <div class="title">
+                                    <i :class="block.meta.icon"></i><strong>{{ block.meta.name }}</strong>
+                                </div>
+                                <div class="actions">
+                                    <span class="btn btn-sm handle">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </span>
+                                    <button v-on:click.prevent="removeBlock(block)" class="btn btn-sm" tabindex="-1">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <component v-bind:is="block.meta.component" v-bind:uid="block.meta.uid" v-bind:model="block.model"></component>
+                        </div>
+                        <a href="#" class="block-add" v-on:click.prevent="piranha.blockpicker.open(piranha.pageedit.addBlock, index + 1)">
+                            <hr>
+                            <i class="fas fa-plus-circle"></i>
+                        </a>
+                    </div>
+                    <div v-if="blocks.length == 0" class="empty-info">
+                        <p>Welcome to your new page. Click on the button above to add your first block of content!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" :class="{ 'd-none': selectedRegion != region.meta.uid }" v-for="region in contentRegions">
+            <div class="card-body">
+                <div class="region-center">
+                    <h2>{{ region.meta.name }}</h2>
+                    <region v-bind:model="region"></region>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="pageSettings" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <!-- Header -->
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title"><i class="fas fa-cog"></i> @Localizer["Settings"]</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <!-- Tabs -->
+                <ul class="nav nav-tabs" v-if="settingRegions.length > 0" role="tablist">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" :class="{ active: selectedSetting === 'uid-settings' }" v-on:click.prevent="selectSetting('uid-settings')">@Localizer["General"]</a>
+                    </li>
+                    <li class="nav-item" v-for="region in settingRegions">
+                        <a href="#" class="nav-link" :class="{ active: selectedSetting === region.meta.uid }" v-on:click.prevent="selectSetting(region.meta.uid)">{{ region.meta.name }}</a>
+                    </li>
+                </ul>
+
+                <!-- Body -->
+                <div class="modal-body bg-light">
+                    <div :class="{ 'd-none': selectedSetting != 'uid-settings' }">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>@Localizer["Navigation title"]</label>
+                                    <input v-model="navigationTitle" type="text" maxlength="128" class="form-control form-control-lg">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>@Localizer["Slug"]</label>
+                                    <input v-model="slug" type="text" maxlength="128" class="form-control form-control-lg">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>@Localizer["Meta keywords"]</label>
+                                    <input v-model="metaKeywords" type="text" maxlength="128" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>@Localizer["Meta description"]</label>
+                                    <textarea v-model="metaDescription" rows="5" maxlength="256" class="form-control"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>@Localizer["Hidden"]</label>
+                                    <div class="form-group form-check">
+                                        <input id="isHidden" v-model="isHidden" type="checkbox" class="form-check-input">
+                                        <label for="isHidden" class="form-check-label">@Localizer["If the page should be hidden in the sitemap"]</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>@Localizer["Publish date"]</label>
+                                    <input v-model="published" type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div :class="{ 'd-none': selectedSetting != region.meta.uid }" v-for="region in settingRegions">
+                        <region v-bind:model="region"></region>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

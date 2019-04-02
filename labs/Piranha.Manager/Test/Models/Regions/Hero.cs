@@ -22,19 +22,19 @@ namespace MvcWeb.Models.Regions
         /// <summary>
         /// Gets/sets the optional subtitle.
         /// </summary>
-        [Field(Options = FieldOption.HalfWidth)]
+        [Field(Options = FieldOption.HalfWidth, Placeholder = "Optional subtitle")]
         public StringField Subtitle { get; set; }
 
         /// <summary>
         /// Gets/sets the optional primary image.
         /// </summary>
-        [Field(Title = "Primary Image", Options = FieldOption.HalfWidth)]
+        [Field(Title = "Primary Image", Options = FieldOption.HalfWidth, Placeholder = "Optional hero background image")]
         public ImageField PrimaryImage { get; set; }
 
         /// <summary>
         /// Gets/sets the optional ingress.
         /// </summary>
-        [Field]
+        [Field(Placeholder = "Main hero body")]
         public HtmlField Ingress { get; set; }
     }
 }

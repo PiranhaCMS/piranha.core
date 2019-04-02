@@ -14,40 +14,46 @@ using Piranha.Extend;
 
 namespace Piranha.Manager.Models
 {
+    public class BlockEditModel
+    {
+        public bool IsActive { get; set; }
+        public Block Model { get; set; }
+        public ContentMeta Meta { get; set; }
+    }
+
+    public class BlockGroupEditModel : Block
+    {
+        public IList<BlockEditModel> Items { get; set; } = new List<BlockEditModel>();
+        public IList<FieldEditModel> Fields { get; set; } = new List<FieldEditModel>();
+    }
+
+    public class RegionEditModel
+    {
+        public IList<RegionItemEditModel> Items { get; set; } = new List<RegionItemEditModel>();
+        public ContentRegionMeta Meta { get; set; }
+    }
+
+    public class RegionItemEditModel
+    {
+        public IList<FieldEditModel> Fields { get; set; } = new List<FieldEditModel>();
+    }
+
+    public class FieldEditModel
+    {
+        public string Type { get; set; }
+        public IField Model { get; set; }
+        public ContentMeta Meta { get; set; }
+    }
+
     /// <summary>
     /// Content edit model.
     /// </summary>
     public abstract class ContentEditModel
     {
-        public class BlockItem
-        {
-            public string Uid { get; set; } = "block-" + Math.Abs(Guid.NewGuid().GetHashCode()).ToString();
-            public string Name { get; set; }
-            public string Title { get; set; }
-            public string Icon { get; set; }
-            public string Component { get; set; }
-            public bool IsActive { get; set; }
-            public Block Model { get; set; }
-        }
-
-        public class BlockGroupItem : Block
-        {
-            public IList<BlockItem> Items { get; set; } = new List<BlockItem>();
-            public IList<FieldItem> Fields { get; set; } = new List<FieldItem>();
-        }
-
-        public class FieldItem
-        {
-            public string Uid { get; set; } = "field-" + Math.Abs(Guid.NewGuid().GetHashCode()).ToString();
-            public string Name { get; set; }
-            public string Component { get; set; }
-            public string Type { get; set; }
-            public IField Model { get; set; }
-        }
-
         public Guid Id { get; set; }
         public string TypeId { get; set; }
         public string Title { get; set; }
-        public IList<BlockItem> Blocks { get; set; } = new List<BlockItem>();
+        public IList<BlockEditModel> Blocks { get; set; } = new List<BlockEditModel>();
+        public IList<RegionEditModel> Regions { get; set; } = new List<RegionEditModel>();
     }
 }
