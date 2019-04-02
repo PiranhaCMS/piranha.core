@@ -85,7 +85,7 @@
                 success: function (data) {
                     piranha.notifications.add(
                             piranha.notifications.create(
-                                notificationTemplates.aliasSuggestionSuccess));                   
+                                notificationTemplates.aliasSuggestionSuccess));
                 },
                 error: function () {
                     piranha.notifications.add(
@@ -173,7 +173,7 @@
                         piranha.notifications.add(
                             piranha.notifications.create(
                                 notificationTemplates.postUnpublishedSuccessfully));
-                    } else {                        
+                    } else {
                         piranha.notifications.add(
                             piranha.notifications.create(
                                 notificationTemplates.postSavedSuccessfully));
@@ -183,7 +183,7 @@
                     piranha.notifications.add(
                         piranha.notifications.create(
                             notificationTemplates.error));
-                } 
+                }
             }).always(function () {
                 $("form#main-form").trigger("reset-action");
                  icon.className = "fas fa-check";
@@ -269,7 +269,7 @@
                         } else {
                             <text>Save</text>
                         }
-                    </span>                    
+                    </span>
                 </button>
                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
                     <span class="caret"></span>
@@ -409,8 +409,10 @@
                             <div class="block-add">
                                 <div class="block-add-dialog">
                                     @foreach (var category in Piranha.App.Blocks.GetCategories()) {
+                                        var items = Piranha.App.Blocks.GetByCategory(category).Where(i => !i.IsUnlisted);
+
                                         <label>@category</label>
-                                        @foreach (var block in Piranha.App.Blocks.GetByCategory(category)) {
+                                        @foreach (var block in items) {
                                             <a href="#" data-typename="@block.TypeName"><i class="@block.Icon"></i>@block.Name</a>
                                         }
                                     }
@@ -439,7 +441,7 @@
                 @Html.HiddenFor(m => m.Regions[n].Id)
                 @Html.HiddenFor(m => m.Regions[n].Title)
                 @Html.HiddenFor(m => m.Regions[n].CLRType)
-                @Html.EditorFor(m => m.Regions[n], Model.Regions[n].GetType().Name, new { 
+                @Html.EditorFor(m => m.Regions[n], Model.Regions[n].GetType().Name, new {
                     pageTypeId = Model.PostType.Id,
                     regionTypeId = Model.Regions[n].Id,
                     regionIndex = n,
