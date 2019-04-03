@@ -31,10 +31,19 @@ namespace MvcWeb.Models.Regions
         [Field(Title = "Primary Image", Options = FieldOption.HalfWidth, Placeholder = "Optional hero background image")]
         public ImageField PrimaryImage { get; set; }
 
+        [Field(Title = "Text value", Placeholder = "This is a text value")]
+        public TextField TextValue { get; set; }
+
+        [Field(Title = "Checkbox value", Placeholder = "Click me to make me happy!!!")]
+        public CheckBoxField CheckBoxValue { get; set; }
+
+        [Field(Title = "Number value", Placeholder = "Just give me a random number")]
+        public NumberField NumberValue { get; set; }
+
         /// <summary>
         /// Gets/sets the optional ingress.
         /// </summary>
-        [Field(Placeholder = "Main hero body")]
+        [Field()]
         public HtmlField Ingress { get; set; }
     }
 }

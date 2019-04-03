@@ -1,5 +1,5 @@
 Vue.component("string-field", {
-    props: ["uid", "model"],
+    props: ["uid", "model", "meta"],
     template:
-        "<input class='form-control' type='text' v-model='model.value'>"
+        "<input class='form-control' type='text' :placeholder='meta.placeholder' v-model='model.value'>"
 });

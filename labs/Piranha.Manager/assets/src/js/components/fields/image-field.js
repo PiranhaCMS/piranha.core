@@ -3,7 +3,7 @@
 */
 
 Vue.component("image-field", {
-    props: ["uid", "model"],
+    props: ["uid", "model", "meta"],
     methods: {
         clear: function () {
             // clear media from block
@@ -56,7 +56,7 @@ Vue.component("image-field", {
         "    </div>" +
         "    <div class='card text-left'>" +
         "      <div class='card-body' v-if='isEmpty'>" +
-        "        &nbsp;" +
+        "        <span class='text-secondary'>{{ meta.placeholder }}</span>" +
         "      </div>" +
         "      <div class='card-body' v-else>" +
         "        <a href='#' v-on:click.prevent='piranha.preview.open(model.id)'>{{ model.media.filename }}</a>" +

@@ -88,7 +88,7 @@ Vue.component("block-group", {
         "  <div class='block-group-header'>" +
         "    <div class='form-group' v-for='field in model.fields'>" +
         "      <label>{{ field.meta.name }}</label>" +
-        "      <component v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:model='field.model'></component>" +
+        "      <component v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:meta='field.meta' v-bind:model='field.model'></component>" +
         "    </div>" +
         "  </div>" +
         "  <div class='row'>" +
@@ -328,10 +328,19 @@ Vue.component("missing-block", {
         "<div class='alert alert-danger text-center' role='alert'>No component registered for <code>{{ model.type }}</code></div>"
 });
 
-Vue.component("string-field", {
-    props: ["uid", "model"],
+Vue.component("checkbox-field", {
+    props: ["uid", "model", "meta"],
     template:
-        "<input class='form-control' type='text' v-model='model.value'>"
+        "<div class='form-group form-check'>" +
+        "  <input type='checkbox' class='form-check-input' :id='meta.uid' v-model='model.value'>" +
+        "  <label class='form-check-label' :for='meta.uid'>{{ meta.placeholder}}</label>" +
+        "</div>"
+});
+
+Vue.component("string-field", {
+    props: ["uid", "model", "meta"],
+    template:
+        "<input class='form-control' type='text' :placeholder='meta.placeholder' v-model='model.value'>"
 });
 
 Vue.component("html-field", {
@@ -370,7 +379,7 @@ Vue.component("html-field", {
 */
 
 Vue.component("image-field", {
-    props: ["uid", "model"],
+    props: ["uid", "model", "meta"],
     methods: {
         clear: function () {
             // clear media from block
@@ -423,7 +432,7 @@ Vue.component("image-field", {
         "    </div>" +
         "    <div class='card text-left'>" +
         "      <div class='card-body' v-if='isEmpty'>" +
-        "        &nbsp;" +
+        "        <span class='text-secondary'>{{ meta.placeholder }}</span>" +
         "      </div>" +
         "      <div class='card-body' v-else>" +
         "        <a href='#' v-on:click.prevent='piranha.preview.open(model.id)'>{{ model.media.filename }}</a>" +
@@ -431,6 +440,18 @@ Vue.component("image-field", {
         "    </div>" +
         "  </div>" +
         "</div>"
+});
+
+Vue.component("number-field", {
+    props: ["uid", "model", "meta"],
+    template:
+        "<input class='form-control' type='number' :placeholder='meta.placeholder' v-model='model.value'>"
+});
+
+Vue.component("text-field", {
+    props: ["uid", "model", "meta"],
+    template:
+        "<textarea class='form-control' rows='4' :placeholder='meta.placeholder' v-model='model.value'></textarea>"
 });
 
 Vue.component("missing-field", {

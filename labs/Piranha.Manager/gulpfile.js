@@ -67,9 +67,12 @@ var js = [
             "assets/src/js/components/blocks/text-block.js",
             "assets/src/js/components/blocks/missing-block.js",
 
+            "assets/src/js/components/fields/checkbox-field.js",
             "assets/src/js/components/fields/string-field.js",
             "assets/src/js/components/fields/html-field.js",
             "assets/src/js/components/fields/image-field.js",
+            "assets/src/js/components/fields/number-field.js",
+            "assets/src/js/components/fields/text-field.js",
             "assets/src/js/components/fields/missing-field.js",
 
             "assets/src/js/piranha.pageedit.js"
