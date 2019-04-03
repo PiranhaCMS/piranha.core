@@ -28,7 +28,7 @@ namespace MvcWeb.Models.Regions
         /// <summary>
         /// Gets/sets the subtitle.
         /// </summary>
-        [Field(Options = FieldOption.HalfWidth)]
+        [Field(Options = FieldOption.HalfWidth, Placeholder = "Optional subtitle")]
         public StringField SubTitle { get; set; }
 
         /// <summary>

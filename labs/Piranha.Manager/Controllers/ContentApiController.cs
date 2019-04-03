@@ -74,7 +74,7 @@ namespace Piranha.Manager.Controllers
                             {
                                 Type = fieldType.TypeName,
                                 Model = (Extend.IField)prop.GetValue(block),
-                                Meta = new ContentMeta
+                                Meta = new ContentFieldMeta
                                 {
                                     Name = prop.Name,
                                     Component = fieldType.Component,

@@ -42,7 +42,7 @@ namespace Piranha.Manager.Models
     {
         public string Type { get; set; }
         public IField Model { get; set; }
-        public ContentMeta Meta { get; set; }
+        public ContentFieldMeta Meta { get; set; }
     }
 
     /// <summary>

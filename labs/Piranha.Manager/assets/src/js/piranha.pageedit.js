@@ -19,8 +19,11 @@ piranha.pageedit = new Vue({
         published: null,
         blocks: [],
         regions: [],
-        selectedRegion: "uid-blocks",
-        selectedRegionTitle: "",
+        selectedRegion: {
+            uid: "uid-blocks",
+            name: null,
+            icon: null,
+        },
         selectedSetting: "uid-settings"
     },
     computed: {
@@ -80,8 +83,7 @@ piranha.pageedit = new Vue({
             }
         },
         selectRegion: function (region) {
-            this.selectedRegion = region.uid;
-            this.selectedRegionTitle = region.title;
+            this.selectedRegion = region;
         },
         selectSetting: function (uid) {
             this.selectedSetting = uid;

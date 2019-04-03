@@ -37,8 +37,11 @@ namespace MvcWeb.Models.Regions
         [Field(Title = "Checkbox value", Placeholder = "Click me to make me happy!!!")]
         public CheckBoxField CheckBoxValue { get; set; }
 
-        [Field(Title = "Number value", Placeholder = "Just give me a random number")]
+        [Field(Title = "Number value", Options = FieldOption.HalfWidth, Placeholder = "Just give me a random number")]
         public NumberField NumberValue { get; set; }
+
+        [Field(Title = "Date value", Options = FieldOption.HalfWidth, Placeholder = "Please enter your birthdate")]
+        public DateField DateValue { get; set; }
 
         /// <summary>
         /// Gets/sets the optional ingress.

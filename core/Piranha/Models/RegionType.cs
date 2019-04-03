@@ -54,6 +54,11 @@ namespace Piranha.Models
         public string Description { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional icon css.
+        /// </summary>
+        public string Icon { get; set; }
+
+        /// <summary>
         /// Gets/sets how the region should be displayed in
         /// the manager interface.
         /// </summary>

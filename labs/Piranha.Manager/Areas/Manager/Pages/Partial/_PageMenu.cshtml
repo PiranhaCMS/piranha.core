@@ -4,13 +4,12 @@
     <div class="top-nav">
         <div class="btn-group" role="group" v-if="regions.length > 0">
             <button type="button" class="btn btn-primary btn-labeled dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-table"></i>
-                <span v-if="selectedRegion === 'uid-blocks'">@Localizer["Main content"]</span>
-                <span v-else>{{ selectedRegionTitle }}</span>
+                <span v-if="selectedRegion.uid === 'uid-blocks'"><i class="fas fa-pen-alt"></i>@Localizer["Main content"]</span>
+                <span v-else><i :class="selectedRegion.icon"></i>{{ selectedRegion.name }}</span>
             </button>
             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                <a href="#" class="dropdown-item" v-if="selectedRegion != 'uid-blocks'" v-on:click.prevent="selectRegion({ uid: 'uid-blocks' })">@Localizer["Main content"]</a>
-                <a href="#" class="dropdown-item" v-if="selectedRegion != region.meta.uid" v-on:click.prevent="selectRegion({ uid: region.meta.uid, title: region.meta.name })" v-for="region in contentRegions">{{ region.meta.name }}</a>
+                <a href="#" class="dropdown-item" v-if="selectedRegion.uid != 'uid-blocks'" v-on:click.prevent="selectRegion({ uid: 'uid-blocks' })">@Localizer["Main content"]</a>
+                <a href="#" class="dropdown-item" v-if="selectedRegion.name != region.meta.uid" v-on:click.prevent="selectRegion(region.meta)" v-for="region in contentRegions">{{ region.meta.name }}</a>
             </div>
         </div>
         <button class="btn btn-primary" data-toggle="modal" data-target="#pageSettings">
