@@ -12,9 +12,20 @@ using System.Collections.Generic;
 
 namespace Piranha.Manager.Models.Content
 {
+    /// <summary>
+    /// Edit model for a region.
+    /// </summary>
     public class RegionEditModel
     {
+        /// <summary>
+        /// Gets/sets the available items. A region collection can have several items,
+        /// a regular region will only have one item in the collection.
+        /// </summary>
         public IList<RegionItemEditModel> Items { get; set; } = new List<RegionItemEditModel>();
+
+        /// <summary>
+        /// Gets/sets the meta information.
+        /// </summary>
         public RegionMeta Meta { get; set; }
     }
 }

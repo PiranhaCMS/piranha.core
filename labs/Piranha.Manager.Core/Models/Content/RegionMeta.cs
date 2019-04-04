@@ -12,9 +12,19 @@ using System;
 
 namespace Piranha.Manager.Models.Content
 {
+    /// <summary>
+    /// Meta information for regions.
+    /// </summary>
     public class RegionMeta : ContentMeta
     {
+        /// <summary>
+        /// Gets/sets if  this is a collection region.
+        /// </summary>
         public bool IsCollection { get; set; }
+
+        /// <summary>
+        /// Gets/sets how the region should be display (content/full/setting)
+        /// </summary>
         public string Display { get; set; }
     }
 }

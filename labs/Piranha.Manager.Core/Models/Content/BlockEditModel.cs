@@ -12,10 +12,25 @@ using Piranha.Extend;
 
 namespace Piranha.Manager.Models.Content
 {
+    /// <summary>
+    /// Edit model for blocks.
+    /// </summary>
     public class BlockEditModel
     {
+        /// <summary>
+        /// Gets/sets if the block should be active.
+        /// </summary>
         public bool IsActive { get; set; }
+
+        /// <summary>
+        /// Gets/sets the block model.
+        /// </summary>
+        /// <value></value>
         public Block Model { get; set; }
+
+        /// <summary>
+        /// Gets/sets the meta information.
+        /// </summary>
         public ContentMeta Meta { get; set; }
     }
 }

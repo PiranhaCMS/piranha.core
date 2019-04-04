@@ -12,8 +12,14 @@ using System.Collections.Generic;
 
 namespace Piranha.Manager.Models.Content
 {
+    /// <summary>
+    /// Edit model for a region item.
+    /// </summary>
     public class RegionItemEditModel
     {
+        /// <summary>
+        /// Gets/sets the available fields.
+        /// </summary>
         public IList<FieldEditModel> Fields { get; set; } = new List<FieldEditModel>();
     }
 }

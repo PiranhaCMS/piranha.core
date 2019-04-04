@@ -12,6 +12,9 @@ using System;
 
 namespace Piranha.Manager.Models.Content
 {
+    /// <summary>
+    /// Meta information for content.
+    /// </summary>
     public class ContentMeta
     {
         /// <summary>

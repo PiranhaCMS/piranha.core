@@ -12,8 +12,14 @@ using System;
 
 namespace Piranha.Manager.Models.Content
 {
+    /// <summary>
+    /// Meta information for fields.
+    /// </summary>
     public class FieldMeta : ContentMeta
     {
+        /// <summary>
+        /// Gets/sets if the field should be displayed half width.
+        /// </summary>
         public bool IsHalfWidth { get; set; }
     }
 }
