@@ -23,11 +23,13 @@ Vue.component("region", {
         "      <div class='card-header'>" +
         "        <a href='#' data-toggle='collapse' :data-target='\"#body\" + item.uid'>List Item Title</a>" +
         "      </div>" +
-        "      <div :id='\"body\" + item.uid' class='card-body collapse' :data-parent='\"#\" + model.meta.uid'>" +
-        "        <div class='row'>" +
-        "          <div class='form-group' :class='{ \"col-sm-6\": field.meta.isHalfWidth, \"col-sm-12\": !field.meta.isHalfWidth }' v-for='field in item.fields'>" +
-        "            <label>{{ field.meta.name }}</label>" +
-        "            <component v-if='field.model != null' v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:meta='field.meta' v-bind:model='field.model'></component>" +
+        "      <div :id='\"body\" + item.uid' class='collapse' :data-parent='\"#\" + model.meta.uid'>" +
+        "        <div class='card-body'>" +
+        "          <div class='row'>" +
+        "            <div class='form-group' :class='{ \"col-sm-6\": field.meta.isHalfWidth, \"col-sm-12\": !field.meta.isHalfWidth }' v-for='field in item.fields'>" +
+        "              <label>{{ field.meta.name }}</label>" +
+        "              <component v-if='field.model != null' v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:meta='field.meta' v-bind:model='field.model'></component>" +
+        "            </div>" +
         "          </div>" +
         "        </div>" +
         "      </div>" +
