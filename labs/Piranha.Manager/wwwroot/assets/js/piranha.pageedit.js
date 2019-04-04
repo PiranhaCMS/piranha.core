@@ -18,12 +18,12 @@ Vue.component("region", {
         "      {{ model.meta.description }}" +
         "    </div>" +
         "  </div>" +
-        "  <div class='accordion'>" +
+        "  <div :id='model.meta.uid' class='accordion'>" +
         "    <div class='card' v-for='item in model.items'>" +
         "      <div class='card-header'>" +
-        "        <a data-toggle='collapse'>List Item Title</a>" +
+        "        <a href='#' data-toggle='collapse' :data-target='\"#body\" + item.uid'>List Item Title</a>" +
         "      </div>" +
-        "      <div class='card-body'>" +
+        "      <div :id='\"body\" + item.uid' class='card-body collapse' :data-parent='\"#\" + model.meta.uid'>" +
         "        <div class='row'>" +
         "          <div class='form-group' :class='{ \"col-sm-6\": field.meta.isHalfWidth, \"col-sm-12\": !field.meta.isHalfWidth }' v-for='field in item.fields'>" +
         "            <label>{{ field.meta.name }}</label>" +

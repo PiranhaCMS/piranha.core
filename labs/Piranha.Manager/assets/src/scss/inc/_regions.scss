@@ -5,6 +5,7 @@
         border: solid 1px $gray-300;
 
         .card-body {
+            border-top: solid 1px $gray-300;
             background: $gray-100;
         }
     }

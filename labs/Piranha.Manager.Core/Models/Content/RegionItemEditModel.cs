@@ -8,6 +8,7 @@
  *
  */
 
+using System;
 using System.Collections.Generic;
 
 namespace Piranha.Manager.Models.Content
@@ -17,6 +18,11 @@ namespace Piranha.Manager.Models.Content
     /// </summary>
     public class RegionItemEditModel
     {
+        /// <summary>
+        /// Gets/sets the unique client id.
+        /// </summary>
+        public string Uid { get; set; } = "uid-" + Math.Abs(Guid.NewGuid().GetHashCode()).ToString();
+
         /// <summary>
         /// Gets/sets the available fields.
         /// </summary>
