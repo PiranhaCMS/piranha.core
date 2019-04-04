@@ -5,3 +5,28 @@
         color: $primary;
     }
 }
+
+.modal {
+    &.show {
+        //background: rgba(0,0,0,.5);
+        display: block;
+
+        .modal-dialog {
+            height: 100%;
+            margin: 0;
+            float: right;
+
+            &.modal-lg {
+                width: 800px;
+            }
+
+            .modal-content {
+                height: 100%;
+            }
+        }
+    }
+}
+
+.modal-backdrop + .modal-backdrop {
+    opacity: 0;
+}
