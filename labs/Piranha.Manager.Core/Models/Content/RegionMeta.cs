@@ -10,10 +10,11 @@
 
 using System;
 
-namespace Piranha.Manager.Models
+namespace Piranha.Manager.Models.Content
 {
-    public class ContentFieldMeta : ContentMeta
+    public class RegionMeta : ContentMeta
     {
-        public bool IsHalfWidth { get; set; }
+        public bool IsCollection { get; set; }
+        public string Display { get; set; }
     }
 }

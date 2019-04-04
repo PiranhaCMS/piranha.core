@@ -17,7 +17,7 @@ namespace Piranha.Manager.Models
     /// <summary>
     /// Page edit model.
     /// </summary>
-    public class PageEditModel : ContentEditModel
+    public class PageEditModel : Content.ContentEditModel
     {
         public Guid SiteId { get; set; }
         public Guid? ParentId { get; set; }

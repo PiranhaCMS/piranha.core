@@ -10,7 +10,7 @@
 
 using System;
 
-namespace Piranha.Manager.Models
+namespace Piranha.Manager.Models.Content
 {
     public class ContentMeta
     {

@@ -14,7 +14,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Piranha.Manager.Models;
-using Piranha.Services;
+using Piranha.Manager.Models.Content;
+using Piranha.Manager.Services;
 
 namespace Piranha.Manager.Controllers
 {
@@ -26,137 +27,44 @@ namespace Piranha.Manager.Controllers
     [ApiController]
     public class ContentApiController : Controller
     {
-        private readonly IContentFactory _factory;
+        private readonly ContentTypeService _service;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public ContentApiController(IContentFactory factory)
+        public ContentApiController(ContentTypeService service)
         {
-            _factory = factory;
+            _service = service;
         }
 
-        [Route("block/{type}")]
-        [HttpGet]
-        public IActionResult CreateBlock(string type)
-        {
-            var blockType = App.Blocks.GetByType(type);
-
-            if (blockType != null)
-            {
-                var block = (Extend.Block)_factory.CreateBlock(type);
-
-                if (block is Extend.BlockGroup)
-                {
-                    var item = new BlockEditModel
-                    {
-                        Meta = new ContentMeta
-                        {
-                            Name = blockType.Name,
-                            Title = block.GetTitle(),
-                            Icon = blockType.Icon,
-                            Component = "block-group"
-                        }
-                    };
-
-                    var groupItem = new BlockGroupEditModel
-                    {
-                        Type = block.Type
-                    };
-
-                    foreach (var prop in block.GetType().GetProperties(App.PropertyBindings))
-                    {
-                        if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
-                        {
-                            var fieldType = App.Fields.GetByType(prop.PropertyType);
-
-                            groupItem.Fields.Add(new FieldEditModel
-                            {
-                                Type = fieldType.TypeName,
-                                Model = (Extend.IField)prop.GetValue(block),
-                                Meta = new ContentFieldMeta
-                                {
-                                    Name = prop.Name,
-                                    Component = fieldType.Component,
-                                }
-                            });
-                        }
-                    }
-                    item.Model = groupItem;
-
-                    return Ok(item);
-                }
-                else
-                {
-                    return Ok(new BlockEditModel
-                    {
-                        Model = block,
-                        Meta = new ContentMeta
-                        {
-                            Name = blockType.Name,
-                            Title = block.GetTitle(),
-                            Icon = blockType.Icon,
-                            Component = blockType.Component
-                        }
-                    });
-                }
-            }
-            return NotFound();
-        }
-
+        /// <summary>
+        /// Gets the currently available block types.
+        /// </summary>
+        /// <param name="parentType">The optional parent group type</param>
+        /// <returns>The block list model</returns>
         [Route("blocktypes/{parentType?}")]
         [HttpGet]
         public BlockListModel GetBlockTypes(string parentType = null)
         {
-            var model = new BlockListModel();
-            var parent = App.Blocks.GetByType(parentType);
-            var exludeGroups = parent != null && typeof(Piranha.Extend.BlockGroup).IsAssignableFrom(parent.Type);
+            return _service.GetBlockTypes(parentType);
+        }
 
-            foreach (var category in App.Blocks.GetCategories())
+        /// <summary>
+        /// Creates a new block of the specified type.
+        /// </summary>
+        /// <param name="type">The block type</param>
+        /// <returns>The new block</returns>
+        [Route("block/{type}")]
+        [HttpGet]
+        public IActionResult CreateBlock(string type)
+        {
+            var block = _service.CreateBlock(type);
+
+            if (block != null)
             {
-                var listCategory = new BlockListModel.ListCategory
-                {
-                    Name = category
-                };
-
-                var items = App.Blocks.GetByCategory(category).Where(i => !i.IsUnlisted);
-
-                // If we have a parent, filter on allowed types
-                if (parent != null)
-                {
-                    if (parent.ItemTypes.Count > 0)
-                    {
-                        items = items.Where(i => parent.ItemTypes.Contains(i.Type));
-                    }
-
-                    if (exludeGroups)
-                    {
-                        items = items.Where(i => !typeof(Piranha.Extend.BlockGroup).IsAssignableFrom(i.Type));
-                    }
-                }
-
-                foreach (var block in items) {
-                    listCategory.Items.Add(new BlockListModel.ListItem
-                    {
-                        Name = block.Name,
-                        Icon = block.Icon,
-                        Type = block.TypeName
-                    });
-                }
-                model.Categories.Add(listCategory);
+                return Ok(block);
             }
-
-            // Remove empty categories
-            var empty = model.Categories.Where(c =>  c.Items.Count() == 0).ToList();
-            foreach (var remove in empty)
-            {
-                model.Categories.Remove(remove);
-            }
-
-            // Calculate type count
-            model.TypeCount = model.Categories.Sum(c => c.Items.Count());
-
-            return model;
+            return NotFound();
         }
     }
 }

@@ -8,13 +8,14 @@
  *
  */
 
-using System;
+using Piranha.Extend;
 
-namespace Piranha.Manager.Models
+namespace Piranha.Manager.Models.Content
 {
-    public class ContentRegionMeta : ContentMeta
+    public class BlockEditModel
     {
-        public bool IsCollection { get; set; }
-        public string Display { get; set; }
+        public bool IsActive { get; set; }
+        public Block Model { get; set; }
+        public ContentMeta Meta { get; set; }
     }
 }

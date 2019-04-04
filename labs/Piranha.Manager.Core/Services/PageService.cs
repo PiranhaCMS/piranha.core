@@ -15,6 +15,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Piranha.Models;
 using Piranha.Manager.Models;
+using Piranha.Manager.Models.Content;
 
 namespace Piranha.Manager.Services
 {
@@ -88,7 +89,7 @@ namespace Piranha.Manager.Services
                 {
                     var region = new RegionEditModel
                     {
-                        Meta = new ContentRegionMeta
+                        Meta = new RegionMeta
                         {
                             Name = regionType.Title,
                             Description = regionType.Description,
@@ -118,7 +119,7 @@ namespace Piranha.Manager.Services
                             var field = new FieldEditModel
                             {
                                 Type = appFieldType.TypeName,
-                                Meta = new ContentFieldMeta
+                                Meta = new FieldMeta
                                 {
                                     Name = fieldType.Title,
                                     Component = appFieldType.Component,
@@ -173,7 +174,7 @@ namespace Piranha.Manager.Services
                                 {
                                     Type = fieldType.TypeName,
                                     Model = (Extend.IField)prop.GetValue(block),
-                                    Meta = new ContentFieldMeta
+                                    Meta = new FieldMeta
                                     {
                                         Name = prop.Name,
                                         Component = fieldType.Component,

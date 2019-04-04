@@ -38,6 +38,7 @@ namespace Piranha.Manager
                 options.UseSqlite("Filename=./piranha.mvcweb.db"));
 
             services.AddScoped<Services.AliasService>();
+            services.AddScoped<Services.ContentTypeService>();
             services.AddScoped<Services.MediaService>();
             services.AddScoped<Services.ModuleService>();
             services.AddScoped<Services.PageService>();
