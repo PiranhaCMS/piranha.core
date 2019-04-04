@@ -26,7 +26,7 @@ Vue.component("html-block", {
         piranha.editor.remove(this.uid);
     },
     template:
-        "<div :class='{ empty: isEmpty }'>" +
+        "<div class='block-body' :class='{ empty: isEmpty }'>" +
         "  <div contenteditable='true' :id='uid' spellcheck='false' v-html='body' v-on:blur='onBlur'></div>" +
         "</div>"
 });

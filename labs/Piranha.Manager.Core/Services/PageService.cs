@@ -131,13 +131,27 @@ namespace Piranha.Manager.Services
                             if (regionType.Fields.Count > 1)
                             {
                                 field.Model = (Extend.IField)((IDictionary<string, object>)regionModel)[fieldType.Id];
+
+                                if (regionType.ListTitleField == fieldType.Id)
+                                {
+                                    regionItem.Title = field.Model.GetTitle();
+                                    field.Meta.NotifyChange = true;
+                                }
                             }
                             else
                             {
                                 field.Model = (Extend.IField)regionModel;
+                                field.Meta.NotifyChange = true;
+                                regionItem.Title = field.Model.GetTitle();
                             }
                             regionItem.Fields.Add(field);
                         }
+
+                        if (string.IsNullOrWhiteSpace(regionItem.Title))
+                        {
+                            regionItem.Title = "...";
+                        }
+
                         region.Items.Add(regionItem);
                     }
                     model.Regions.Add(region);

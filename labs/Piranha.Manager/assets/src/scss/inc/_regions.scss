@@ -1,12 +1,41 @@
 @import "variables";
 
 .accordion {
-    .card {
+    >.card {
         border: solid 1px $gray-300;
 
         .card-body {
             border-top: solid 1px $gray-300;
             background: $gray-100;
+        }
+
+        &:first-of-type {
+            &:last-of-type {
+                border-bottom: solid 1px $gray-300;
+            }
+        }
+    }
+
+    &.sortable {
+        .card-header {
+            position: relative;
+            padding-left: 3rem;
+
+            .handle {
+                color: $gray-600;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 2rem;
+                height: 100%;
+                border-right: solid 1px $gray-400;
+                text-align: center;
+
+                i {
+                    font-size: 1rem;
+                    margin-top: 50%;
+                }
+            }
         }
     }
 }

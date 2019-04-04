@@ -141,6 +141,15 @@
         }
     }
 
+    &.separator-block {
+        padding: .75rem 1rem;
+
+        hr {
+            width: 80%;
+            border-color: $gray-400;
+        }
+    }
+
     &.text-block {
         .empty:not(:focus-within)
         {

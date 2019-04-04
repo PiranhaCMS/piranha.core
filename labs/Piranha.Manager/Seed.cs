@@ -174,7 +174,7 @@ namespace MvcWeb
 
                                     if (n < blocks.Length - 1)
                                     {
-                                        featurespage.Blocks.Add(new Models.Blocks.SeparatorBlock());
+                                        featurespage.Blocks.Add(new SeparatorBlock());
                                     }
                                 }
                             }

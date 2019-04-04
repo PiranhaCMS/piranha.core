@@ -64,6 +64,7 @@ var js = [
             "assets/src/js/components/blocks/html-column-block.js",
             "assets/src/js/components/blocks/image-block.js",
             "assets/src/js/components/blocks/quote-block.js",
+            "assets/src/js/components/blocks/separator-block.js",
             "assets/src/js/components/blocks/text-block.js",
             "assets/src/js/components/blocks/missing-block.js",
 

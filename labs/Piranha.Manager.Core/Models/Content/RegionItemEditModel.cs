@@ -24,6 +24,11 @@ namespace Piranha.Manager.Models.Content
         public string Uid { get; set; } = "uid-" + Math.Abs(Guid.NewGuid().GetHashCode()).ToString();
 
         /// <summary>
+        /// Gets/sets the title if used in a list.
+        /// </summary>
+        public string Title { get; set; } = "...";
+
+        /// <summary>
         /// Gets/sets the available fields.
         /// </summary>
         public IList<FieldEditModel> Fields { get; set; } = new List<FieldEditModel>();

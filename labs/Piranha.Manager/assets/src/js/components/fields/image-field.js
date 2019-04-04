@@ -56,7 +56,8 @@ Vue.component("image-field", {
         "    </div>" +
         "    <div class='card text-left'>" +
         "      <div class='card-body' v-if='isEmpty'>" +
-        "        <span class='text-secondary'>{{ meta.placeholder }}</span>" +
+        "        <span v-if='meta.placeholder != null' class='text-secondary'>{{ meta.placeholder }}</span>" +
+        "        <span v-if='meta.placeholder == null' class='text-secondary'>&nbsp;</span>" +
         "      </div>" +
         "      <div class='card-body' v-else>" +
         "        <a href='#' v-on:click.prevent='piranha.preview.open(model.id)'>{{ model.media.filename }}</a>" +

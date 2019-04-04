@@ -35,7 +35,7 @@ Vue.component("html-column-block", {
         piranha.editor.remove(this.uid + 2);
     },
     template:
-        "<div class='row'>" +
+        "<div class='block-body' class='row'>" +
         "  <div class='col-md-6'>" +
         "    <div :class='{ empty: isEmpty1 }'>" +
         "      <div :id='uid + 1' contenteditable='true' spellcheck='false' v-html='column1' v-on:blur='onBlurCol1'></div>" +

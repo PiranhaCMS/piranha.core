@@ -66,5 +66,12 @@ namespace Piranha.Manager.Controllers
             }
             return NotFound();
         }
+
+        [Route("page/region/{type}/{region}")]
+        [HttpGet]
+        public IActionResult CreatePageRegion(string type, string region)
+        {
+            return Ok(_service.CreatePageRegion(type, region));
+        }
     }
 }

@@ -15,7 +15,7 @@ Vue.component("text-block", {
         }
     },
     template:
-        "<div :class='{ empty: isEmpty }'>" +
+        "<div class='block-body' :class='{ empty: isEmpty }'>" +
         "  <pre contenteditable='true' spellcheck='false' v-html='model.body.value' v-on:blur='onBlur'></pre>" +
         "</div>"
 });

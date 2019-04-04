@@ -8,15 +8,15 @@
  *
  */
 
+using Piranha.Extend.Fields;
 using System;
-using Piranha.Extend;
 
-namespace MvcWeb.Models.Blocks
+namespace Piranha.Extend.Blocks
 {
     /// <summary>
-    /// Single column quote block.
+    /// Separator
     /// </summary>
-    [BlockType(Name = "Separator", Category = "Content", Icon = "fas fa-pause")]
+    [BlockType(Name = "Separator", Category = "Content", Icon = "fas fa-divide", Component = "separator-block")]
     public class SeparatorBlock : Block
     {
     }

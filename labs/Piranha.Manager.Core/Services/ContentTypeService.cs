@@ -94,6 +94,49 @@ namespace Piranha.Manager.Services
             return model;
         }
 
+        public RegionItemEditModel CreatePageRegion(string type, string region)
+        {
+            var pageType = App.PageTypes.GetById(type);
+
+            if (pageType != null)
+            {
+                var regionType = pageType.Regions.First(r => r.Id == region);
+                var regionModel = _factory.CreateDynamicRegion(pageType, region);
+                var regionItem = new RegionItemEditModel();
+
+                foreach (var fieldType in regionType.Fields)
+                {
+                    var appFieldType = App.Fields.GetByType(fieldType.Type);
+
+                    var field = new FieldEditModel
+                    {
+                        Type = appFieldType.TypeName,
+                        Meta = new FieldMeta
+                        {
+                            Name = fieldType.Title,
+                            Component = appFieldType.Component,
+                            Placeholder = fieldType.Placeholder,
+                            IsHalfWidth = fieldType.Options.HasFlag(FieldOption.HalfWidth)
+                        }
+                    };
+
+                    if (regionType.Fields.Count > 1)
+                    {
+                        field.Model = (Extend.IField)((IDictionary<string, object>)regionModel)[fieldType.Id];
+                        field.Meta.NotifyChange = regionType.ListTitleField == fieldType.Id;
+                    }
+                    else
+                    {
+                        field.Model = (Extend.IField)regionModel;
+                        field.Meta.NotifyChange = true;
+                    }
+                    regionItem.Fields.Add(field);
+                }
+                return regionItem;
+            }
+            return null;
+        }
+
         /// <summary>
         /// Creates a new block of the specified type.
         /// </summary>

@@ -21,5 +21,10 @@ namespace Piranha.Manager.Models.Content
         /// Gets/sets if the field should be displayed half width.
         /// </summary>
         public bool IsHalfWidth { get; set; }
+
+        /// <summary>
+        /// Gets/sets if this field should notify parent on change.
+        /// </summary>
+        public bool NotifyChange { get; set; }
     }
 }

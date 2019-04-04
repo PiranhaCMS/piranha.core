@@ -51,7 +51,7 @@ Vue.component("image-block", {
         };
     },
     template:
-        "<div :class='{ empty: isEmpty }'>" +
+        "<div class='block-body' :class='{ empty: isEmpty }'>" +
         "  <img :src='mediaUrl'>" +
         "  <div class='media-picker'>" +
         "    <div class='btn-group float-right'>" +
