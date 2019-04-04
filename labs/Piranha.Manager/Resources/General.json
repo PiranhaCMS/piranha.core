@@ -9,6 +9,11 @@
       "sv-SE": "Innehåll"
     }
   },
+  "Choose existing": {
+    "Values": {
+      "sv-SE": "Välj befintligt"
+    }
+  },
   "Content type": {
     "Values": {
       "sv-SE": "Innehållstyp"
