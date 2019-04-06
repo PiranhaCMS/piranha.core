@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Piranha;
 using Piranha.Models;
 using RazorWeb.Models;
@@ -18,24 +20,25 @@ namespace RazorWeb.Pages
             _db = db;
         }
 
-        public void OnGet(Guid id, bool startpage = false)
+        public async Task OnGet(Guid id, bool startpage = false)
         {
-            Data = _api.Pages.GetById<TeaserPage>(id);
+            Data = await _api.Pages.GetByIdAsync<TeaserPage>(id);
 
             if (startpage)
             {
-                var latest = _db.Posts
+                var latest = await _db.Posts
                     .Where(p => p.Published <= DateTime.Now)
                     .OrderByDescending(p => p.Published)
                     .Take(1)
-                    .Select(p => p.Id);
+                    .Select(p => p.Id)
+                    .ToListAsync();
 
                 if (latest.Count() > 0)
                 {
-                    Data.LatestPost = _api.Posts
-                        .GetById<PostInfo>(latest.First());
+                    Data.LatestPost = await _api.Posts
+                        .GetByIdAsync<PostInfo>(latest.First());
                 }
-            }            
+            }
         }
     }
 }

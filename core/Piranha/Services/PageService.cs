@@ -431,6 +431,10 @@ namespace Piranha.Services
                 model.Slug = Utils.GenerateSlug(model.Slug);
             }
 
+            // Check if we're changing the state
+            var current = await _repo.GetById<PageInfo>(model.Id);
+            var changeState = IsPublished(current) != IsPublished(model);
+
             // Call hooks & save
             App.Hooks.OnBeforeSave<PageBase>(model);
             var affected = await _repo.Save(model).ConfigureAwait(false);
@@ -453,7 +457,7 @@ namespace Piranha.Services
             }
 
             // Invalidate sitemap if any other pages were affected
-            if (model.Published.HasValue || affected.Count() > 0)
+            if (changeState || affected.Count() > 0)
             {
                 await _siteService.InvalidateSitemapAsync(model.SiteId).ConfigureAwait(false);
             }
@@ -617,6 +621,16 @@ namespace Piranha.Services
                     _cache.Remove($"PageInfo_{model.SiteId}");
                 }
             }
+        }
+
+        /// <summary>
+        /// Checks if the given page is published
+        /// </summary>
+        /// <param name="model">The page model</param>
+        /// <returns>If the page is published</returns>
+        private bool IsPublished (PageBase model)
+        {
+            return model != null && model.Published.HasValue && model.Published.Value <= DateTime.Now;
         }
     }
 }
