@@ -630,7 +630,7 @@ namespace Piranha.Services
         /// <returns>If the page is published</returns>
         private bool IsPublished (PageBase model)
         {
-            return model.Published.HasValue && model.Published.Value <= DateTime.Now;
+            return model != null && model.Published.HasValue && model.Published.Value <= DateTime.Now;
         }
     }
 }
