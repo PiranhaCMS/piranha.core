@@ -68,17 +68,17 @@ namespace Piranha.Manager.Controllers
         public async Task<MediaListModel> ListByMediaId(Guid? mediaId = null)
         {
             Guid? folderId = null;
-        
+
             if (mediaId.HasValue)
             {
                 var media = await _service.GetById(mediaId.Value);
-        
+
                 if (media != null)
                 {
                     folderId = media.folderId;
                 }
             }
-        
+
             return await _service.List(folderId);
         }
         */
@@ -91,7 +91,7 @@ namespace Piranha.Manager.Controllers
             {
                 await _service.SaveFolder(model);
 
-                var result = await _service.GetList();
+                var result = await _service.GetList(model.ParentId);
 
                 result.Status = new StatusMessage
                 {

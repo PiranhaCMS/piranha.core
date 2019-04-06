@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Piranha;
 using Piranha.Extend.Blocks;
 
@@ -7,9 +8,9 @@ namespace RazorWeb
 {
     public static class Seed
     {
-        public static void Run(IApi api)
+        public static async Task RunAsync(IApi api)
         {
-            if (api.Pages.GetStartpage() == null)
+            if ((await api.Pages.GetStartpageAsync()) == null)
             {
                 var images = new dynamic []
                 {
@@ -21,14 +22,14 @@ namespace RazorWeb
                 };
 
                 // Get the default site id
-                var siteId = api.Sites.GetDefault().Id;
+                var siteId = (await api.Sites.GetDefaultAsync()).Id;
 
                 // Upload images
                 foreach (var image in images)
                 {
                     using (var stream = File.OpenRead("seed/" + image.filename))
                     {
-                        api.Media.Save(new Piranha.Models.StreamMediaContent() 
+                        await api.Media.SaveAsync(new Piranha.Models.StreamMediaContent()
                         {
                             Id = image.id,
                             Filename = image.filename,
@@ -48,7 +49,7 @@ namespace RazorWeb
                 // Start page hero
                 startpage.Hero.Subtitle = "By developers - for developers";
                 startpage.Hero.PrimaryImage = images[1].id;
-                startpage.Hero.Ingress = 
+                startpage.Hero.Ingress =
                     "<p>A lightweight & unobtrusive CMS for ASP.NET Core.</p>" +
                     "<p><small>Stable version 5.2.1 - 2018-10-17 - <a href=\"https://github.com/piranhacms/piranha.core/wiki/changelog\" target=\"_blank\">Changelog</a></small></p>";
 
@@ -98,7 +99,7 @@ namespace RazorWeb
                     }
                 }
                 startpage.Published = DateTime.Now;
-                api.Pages.Save(startpage);
+                await api.Pages.SaveAsync(startpage);
 
                 // Features page
                 var featurespage = Models.StandardPage.Create(api);
@@ -106,7 +107,7 @@ namespace RazorWeb
                 featurespage.Title = "Features";
                 featurespage.Route = "/pagewide";
                 featurespage.SortOrder = 1;
-                
+
                 // Features hero
                 featurespage.Hero.Subtitle = "Features";
                 featurespage.Hero.Ingress = "<p>It's all about who has the sharpest teeth in the pond.</p>";
@@ -117,7 +118,7 @@ namespace RazorWeb
                     using (var reader = new StreamReader(stream))
                     {
                         var body = reader.ReadToEnd();
-                        
+
                         foreach (var section in body.Split("%"))
                         {
                             var blocks = section.Split("@");
@@ -140,7 +141,7 @@ namespace RazorWeb
                                         Column1 = App.Markdown.Transform(cols[0].Trim()),
                                         Column2 = App.Markdown.Transform(cols[1].Trim())
                                     });
-                                    
+
                                     if (n < blocks.Length - 1)
                                     {
                                         featurespage.Blocks.Add(new Models.Blocks.SeparatorBlock());
@@ -151,7 +152,7 @@ namespace RazorWeb
                     }
                 }
                 featurespage.Published = DateTime.Now;
-                api.Pages.Save(featurespage);
+                await api.Pages.SaveAsync(featurespage);
 
                 // Blog Archive
                 var blogpage = Models.BlogArchive.Create(api);
@@ -168,7 +169,7 @@ namespace RazorWeb
                 blogpage.Hero.Ingress = "<p>Welcome to the blog, the best place to stay up to date with what's happening in the Piranha infested waters.</p>";
 
                 blogpage.Published = DateTime.Now;
-                api.Pages.Save(blogpage);
+                await api.Pages.SaveAsync(blogpage);
 
                 // Blog Post
                 var blogpost = Models.BlogPost.Create(api);
@@ -193,7 +194,7 @@ namespace RazorWeb
                     }
                 }
                 blogpost.Published = DateTime.Now;
-                api.Posts.Save(blogpost);
+                await api.Posts.SaveAsync(blogpost);
             }
         }
     }

@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Piranha;
 using RazorWeb.Models;
 
@@ -14,9 +15,9 @@ namespace RazorWeb.Pages
             _api = api;
         }
 
-        public void OnGet(Guid id)
+        public async Task OnGet(Guid id)
         {
-            Data = _api.Pages.GetById<StandardPage>(id);
+            Data = await _api.Pages.GetByIdAsync<StandardPage>(id);
         }
     }
 }

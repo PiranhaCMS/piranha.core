@@ -29,8 +29,10 @@
                         </td>
                         <td></td>
                         <td></td>
-                        <td></td>
-                        <td class="actions one"></td>
+                        <td>{{ folder.itemCount + (folder.itemCount == 1 ? " @Localizer["item"]" : " @Localizer["items"]") }}</td>
+                        <td class="actions one">
+                            <a href="#" class="danger" v-if="folder.itemCount === 0" v-on:click.prevent="removeFolder(folder.id)"><i class="fas fa-trash"></i></a>
+                        </td>
                     </tr>
                     <tr v-for="item in items" draggable="true" v-on:dragstart="drag($event, item)">
                         <td>

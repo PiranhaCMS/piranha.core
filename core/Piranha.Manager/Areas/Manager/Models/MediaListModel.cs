@@ -63,7 +63,8 @@ namespace Piranha.Areas.Manager.Models
 
             foreach (var folder in model.Folders)
             {
-                model.FilesInFolder[folder.Id] = api.Media.GetAll(folder.Id).Count();
+                model.FilesInFolder[folder.Id] = api.Media.GetAll(folder.Id).Count() +
+                    structure.GetPartial(folder.Id).Count();
             }
             return model;
         }

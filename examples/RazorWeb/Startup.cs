@@ -15,22 +15,20 @@ namespace RazorWeb
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(config => 
+            services.AddMvc(config =>
             {
                 config.ModelBinderProviders.Insert(0, new Piranha.Manager.Binders.AbstractModelBinderProvider());
             });
             services.AddPiranhaApplication();
             services.AddPiranhaFileStorage();
             services.AddPiranhaImageSharp();
-            services.AddPiranhaEF(options => 
+            services.AddPiranhaEF(options =>
                 options.UseSqlite("Filename=./piranha.razorweb.db"));
-            services.AddPiranhaIdentityWithSeed<IdentitySQLiteDb>(options => 
+            services.AddPiranhaIdentityWithSeed<IdentitySQLiteDb>(options =>
                 options.UseSqlite("Filename=./piranha.razorweb.db"));
             services.AddPiranhaManager();
             services.AddMemoryCache();
             services.AddPiranhaMemoryCache();
-
-            App.Init();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,6 +38,8 @@ namespace RazorWeb
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            App.Init(api);
 
             // Configure cache level
             App.CacheLevel = Piranha.Cache.CacheLevel.Basic;
@@ -64,14 +64,14 @@ namespace RazorWeb
             app.UseAuthentication();
             app.UsePiranha();
             app.UsePiranhaManager();
-            app.UseMvc(routes => 
+            app.UseMvc(routes =>
             {
                 routes.MapRoute(name: "areaRoute",
                     template: "{area:exists}/{controller}/{action}/{id?}",
                     defaults: new { controller = "Home", action = "Index" });
             });
 
-            Seed.Run(api);
+            Seed.RunAsync(api).GetAwaiter().GetResult();
         }
     }
 }

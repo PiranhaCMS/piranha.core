@@ -112,7 +112,7 @@ namespace Piranha.Manager.Services
                 //
                 // TODO: Optimize, we don't need all this data
                 //
-                folder.ItemCount = (await _api.Media.GetAllAsync(folder.Id)).Count();
+                folder.ItemCount = (await _api.Media.GetAllAsync(folder.Id)).Count() + structure.GetPartial(folder.Id).Count();
             }
             return model;
         }

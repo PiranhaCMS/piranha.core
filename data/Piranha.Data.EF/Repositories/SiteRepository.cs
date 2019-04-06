@@ -196,7 +196,7 @@ namespace Piranha.Repositories
 
             if (onlyPublished)
             {
-                pages = pages.Where(p => p.Published.HasValue).ToList();
+                pages = pages.Where(p => p.Published.HasValue && p.Published.Value <= DateTime.Now).ToList();
             }
             return Sort(pages);
         }
