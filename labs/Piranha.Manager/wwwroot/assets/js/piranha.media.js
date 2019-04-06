@@ -95,6 +95,9 @@ piranha.media = new Vue({
         },
         remove: function (id) {
             console.log("Remove media: ", id);
+        },
+        removeFolder: function (id) {
+            console.log("Remove folder: ", id);
         }
     },
     created: function () {
