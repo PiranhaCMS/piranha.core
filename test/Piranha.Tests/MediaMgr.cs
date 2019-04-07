@@ -31,7 +31,7 @@ namespace Piranha.Tests
             mgr.Images.Add(".jpeg", "image/jpeg");
             mgr.Images.Add(".png", "image/png");
             mgr.Videos.Add(".mp4", "video/mp4");
-            mgr.Audios.Add(".mp3", "audio/mp3");
+            mgr.Audios.Add(".mp3", "audio/mpeg");
             mgr.Audios.Add(".wav", "audio/wav");
         }
 
