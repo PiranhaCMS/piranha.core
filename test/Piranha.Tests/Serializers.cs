@@ -258,7 +258,7 @@ namespace Piranha.Tests
             var serializer = new AudioFieldSerializer();
             var id = Guid.NewGuid();
 
-            var str = serializer.Serialize(new AudioField()
+            var str = serializer.Serialize(new AudioField
             {
                 Id = id
             });

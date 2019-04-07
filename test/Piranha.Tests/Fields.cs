@@ -432,7 +432,7 @@ namespace Piranha.Tests
         [Fact]
         public void AudioFieldConversions()
         {
-            var media = new Media()
+            var media = new Media
             {
                 Id = Guid.NewGuid()
             };
