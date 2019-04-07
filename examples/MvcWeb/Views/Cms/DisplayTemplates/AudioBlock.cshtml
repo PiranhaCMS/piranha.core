@@ -1,0 +1,10 @@
+@model Piranha.Extend.Blocks.AudioBlock
+
+<div class="row justify-content-center">
+    <div class="col">
+        <audio width="100%" controls>
+            <source src="@Url.Content(Model.Body)" type="">
+            Your browser does not support the audio tag.
+        </audio>
+    </div>
+</div>

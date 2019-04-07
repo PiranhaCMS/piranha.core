@@ -31,6 +31,8 @@ namespace Piranha.Tests
             mgr.Images.Add(".jpeg", "image/jpeg");
             mgr.Images.Add(".png", "image/png");
             mgr.Videos.Add(".mp4", "video/mp4");
+            mgr.Audios.Add(".mp3", "audio/mp3");
+            mgr.Audios.Add(".wav", "audio/wav");
         }
 
         /// <summary>
@@ -65,6 +67,20 @@ namespace Piranha.Tests
         {
             var type = mgr.GetMediaType("myvideo.mp4");
             Assert.Equal(Models.MediaType.Video, type);
+        }
+
+        [Fact]
+        public void GetAudioMediaType()
+        {
+            var type = mgr.GetMediaType("myaudio.mp3");
+            Assert.Equal(Models.MediaType.Audio, type);
+        }
+
+        [Fact]
+        public void GetAudioContentType()
+        {
+            var type = mgr.GetContentType("myaudio.wav");
+            Assert.Equal("audio/wav", type);
         }
     }
 }

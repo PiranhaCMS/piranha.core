@@ -79,6 +79,11 @@ namespace Piranha.Runtime
         public MediaTypeList Videos { get; set; } = new MediaTypeList();
 
         /// <summary>
+        /// Gets/sets the currently accepted audio extensions.
+        /// </summary>
+        public MediaTypeList Audios { get; set; } = new MediaTypeList();
+
+        /// <summary>
         /// Checks if the given filename has a supported extension.
         /// </summary>
         /// <param name="filename">The path or filename</param>
@@ -89,7 +94,8 @@ namespace Piranha.Runtime
 
             return Documents.ContainsExtension(extension) ||
                 Images.ContainsExtension(extension) ||
-                Videos.ContainsExtension(extension);
+                Videos.ContainsExtension(extension) ||
+                Audios.ContainsExtension(extension);
         }
 
         /// <summary>
@@ -113,6 +119,10 @@ namespace Piranha.Runtime
             else if (Videos.ContainsExtension(extension))
             {
                 return MediaType.Video;
+            }
+            else if (Audios.ContainsExtension(extension))
+            {
+                return MediaType.Audio;
             }
             return MediaType.Unknown;
         }
@@ -140,6 +150,11 @@ namespace Piranha.Runtime
             {
                 return item.ContentType;
             }
+            else if ((item = Audios.SingleOrDefault(t => t.Extension == extension)) != null)
+            {
+                return item.ContentType;
+            }
+
             return "application/octet-stream";
         }
     }

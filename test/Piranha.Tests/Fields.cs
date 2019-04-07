@@ -430,6 +430,68 @@ namespace Piranha.Tests
         }
 
         [Fact]
+        public void AudioFieldConversions()
+        {
+            var media = new Media()
+            {
+                Id = Guid.NewGuid()
+            };
+
+            Piranha.Extend.Fields.AudioField field = media;
+            Assert.Equal(media.Id, field.Id.Value);
+        }
+
+        [Fact]
+        public async Task AudioFieldInitMissing()
+        {
+            using (var api = CreateApi())
+            {
+                var field = new Piranha.Extend.Fields.AudioField
+                {
+                    Id = Guid.NewGuid()
+                };
+
+                await field.Init(api);
+
+                Assert.Null(field.Id);
+            }
+        }
+
+        [Fact]
+        public void AudioFieldEquals()
+        {
+            var field1 = new Piranha.Extend.Fields.AudioField
+            {
+                Id = Guid.NewGuid()
+            };
+            var field2 = new Piranha.Extend.Fields.AudioField
+            {
+                Id = field1.Id
+            };
+
+            Assert.True(field1 == field2);
+            Assert.True(field1.Equals(field2));
+            Assert.True(field1.Equals((object)field2));
+        }
+
+        [Fact]
+        public void AudioFieldNotEquals()
+        {
+            var field1 = new Piranha.Extend.Fields.AudioField
+            {
+                Id = Guid.NewGuid()
+            };
+            var field2 = new Piranha.Extend.Fields.AudioField
+            {
+                Id = null
+            };
+
+            Assert.True(field1 != field2);
+            Assert.True(!field1.Equals(field2));
+            Assert.True(!field1.Equals((object)field2));
+        }
+
+        [Fact]
         public void MediaFieldConversions() {
             var media = new Media() {
                 Id = Guid.NewGuid()
@@ -507,6 +569,18 @@ namespace Piranha.Tests
             var id = Guid.NewGuid();
 
             Piranha.Extend.Fields.VideoField field = id;
+            Assert.Equal(id, field.Id.Value);
+
+            string url = field;
+            Assert.Equal("", url);
+        }
+
+        [Fact]
+        public void AudioFieldConversionsNullAudio()
+        {
+            var id = Guid.NewGuid();
+
+            Piranha.Extend.Fields.AudioField field = id;
             Assert.Equal(id, field.Id.Value);
 
             string url = field;
