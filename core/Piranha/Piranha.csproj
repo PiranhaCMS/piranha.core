@@ -12,5 +12,6 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.1" />
     <PackageReference Include="Markdig" Version="0.15.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Unidecode.NET" Version="1.4.0" />
   </ItemGroup>
 </Project>

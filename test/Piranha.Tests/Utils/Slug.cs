@@ -42,7 +42,16 @@ namespace Piranha.Tests.Utils
 
         [Fact]
         public void RemoveSwedishCharacters() {
-            Assert.Equal("aaoaao", Piranha.Utils.GenerateSlug("åäöÅÄÖ"));
+            Assert.Equal("aaeoeaaeoe", Piranha.Utils.GenerateSlug("åäöÅÄÖ"));
+        }
+
+        [Fact]
+        public void TranslateUnicodeCharacters()
+        {
+            Assert.Equal("bei-jing", Piranha.Utils.GenerateSlug("北亰"));
+            Assert.Equal("bu-hao", Piranha.Utils.GenerateSlug("不好"));
+            Assert.Equal("kak-dela", Piranha.Utils.GenerateSlug("Как дела"));
+            Assert.Equal("ya-khotela-by-piva", Piranha.Utils.GenerateSlug("Я хотел(а) бы пива."));
         }
 
         [Fact]

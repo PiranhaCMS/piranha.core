@@ -8,6 +8,7 @@
  *
  */
 
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -15,7 +16,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
+using Unidecode.NET;
 
 namespace Piranha
 {
@@ -60,22 +61,14 @@ namespace Piranha
             }
             else
             {
-                // Trim & make lower case
-                var slug = str.Trim().ToLower();
+                // Trim
+                var slug = str.Trim();
 
-                // Convert culture specific characters
-                slug = slug
-                    .Replace("å", "a")
-                    .Replace("ä", "a")
-                    .Replace("á", "a")
-                    .Replace("à", "a")
-                    .Replace("ö", "o")
-                    .Replace("ó", "o")
-                    .Replace("ò", "o")
-                    .Replace("é", "e")
-                    .Replace("è", "e")
-                    .Replace("í", "i")
-                    .Replace("ì", "i");
+                // Convert culture specific characters using transliteration library
+                slug = slug.Unidecode();
+
+                // To lowercase after transliteration
+                slug = slug.ToLower();
 
                 // Remove special characters
                 slug = Regex.Replace(slug, @"[^a-z0-9-/ ]", "").Replace("--", "-");
