@@ -11,6 +11,7 @@
 using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Piranha.Models;
 using Piranha.Services;
 
 namespace Piranha.Extend.Fields
@@ -28,7 +29,7 @@ namespace Piranha.Extend.Fields
         /// Gets/sets the related post object.
         /// </summary>
         [JsonIgnore]
-        public Models.DynamicPost Post { get; private set; }
+        public Models.PostBase Post { get; private set; }
 
         /// <summary>
         /// Gets if the field has a post object available.
@@ -53,7 +54,7 @@ namespace Piranha.Extend.Fields
             if (Id.HasValue)
             {
                 Post = await api.Posts
-                    .GetByIdAsync(Id.Value)
+                    .GetByIdAsync<PostBase>(Id.Value)
                     .ConfigureAwait(false);
 
                 if (Post == null)
@@ -72,11 +73,7 @@ namespace Piranha.Extend.Fields
         /// <returns>The referenced post</returns>
         public virtual Task<T> GetPostAsync<T>(IApi api) where T : Models.Post<T>
         {
-            if (Id.HasValue)
-            {
-                return api.Posts.GetByIdAsync<T>(Id.Value);
-            }
-            return null;
+            return Task.FromResult(Post as T);
         }
 
         /// <summary>
