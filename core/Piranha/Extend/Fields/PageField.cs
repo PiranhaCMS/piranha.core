@@ -11,7 +11,6 @@
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
-using Piranha.Models;
 using Piranha.Services;
 
 namespace Piranha.Extend.Fields
@@ -29,7 +28,7 @@ namespace Piranha.Extend.Fields
         /// Gets/sets the related page object.
         /// </summary>
         [JsonIgnore]
-        public Models.PageBase Page { get; private set; }
+        public Models.DynamicPage Page { get; private set; }
 
         /// <summary>
         /// Gets if the field has a page object available.
@@ -54,7 +53,7 @@ namespace Piranha.Extend.Fields
             if (Id.HasValue)
             {
                 Page = await api.Pages
-                    .GetByIdAsync<PageBase>(Id.Value)
+                    .GetByIdAsync(Id.Value)
                     .ConfigureAwait(false);
 
                 if (Page == null)
@@ -73,7 +72,9 @@ namespace Piranha.Extend.Fields
         /// <returns>The referenced page</returns>
         public virtual Task<T> GetPageAsync<T>(IApi api) where T : Models.GenericPage<T>
         {
-            return Task.FromResult(Page as T);
+            if (Id.HasValue)
+                return api.Pages.GetByIdAsync<T>(Id.Value);
+            return null;
         }
 
         /// <summary>
