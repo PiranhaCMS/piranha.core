@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Piranha.Manager.Models;
@@ -110,6 +111,60 @@ namespace Piranha.Manager.Controllers
                     Body = e.Message
                 };
                 return BadRequest(result);
+            }
+        }
+
+        /// <summary>
+        /// Adds a new media upload.
+        /// </summary>
+        /// <param name="model">The upload model</param>
+        [HttpPost]
+        [Route("upload")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Upload([FromForm] MediaUploadModel model)
+        {
+            // Allow for dropzone uploads
+            if (!model.Uploads.Any())
+            {
+                model.Uploads = HttpContext.Request.Form.Files;
+            }
+
+            try
+            {
+                var uploaded = await _service.SaveMedia(model);
+
+                if (uploaded == model.Uploads.Count())
+                {
+                    return Ok(new StatusMessage
+                    {
+                        Type = StatusMessage.Success,
+                        Body = $"Uploaded all media assets"
+                    });
+                }
+                else if (uploaded == 0)
+                {
+                    return Ok(new StatusMessage
+                    {
+                        Type = StatusMessage.Error,
+                        Body = $"Could not upload the media assets."
+                    });
+                }
+                else
+                {
+                    return Ok(new StatusMessage
+                    {
+                        Type = StatusMessage.Information,
+                        Body = $"Uploaded {uploaded} of {model.Uploads.Count()} media assets."
+                    });
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = e.Message
+                });
             }
         }
     }

@@ -1,9 +1,27 @@
-@page "~/manager/media"
+﻿@page "~/manager/media"
 @inject IViewLocalizer Localizer
 @section script
 {
     <script src="~/assets/js/piranha.media.min.js"></script>
 }
+
+<script id="tpl" type="text/template">
+    <div class="file-upload">
+        <div class="file-details">
+            <img data-dz-thumbnail />
+            <div class="file-filename" data-dz-name></div>
+            <div class="file-size" data-dz-size></div>
+        </div>
+        <div class="file-error">
+            <i class="text-danger fas fa-exclamation-triangle"></i>
+            <span data-dz-errormessage></span>
+        </div>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" data-dz-uploadprogress></div>
+        </div>
+    </div>
+</script>
+
 <div id="media">
     <div class="top">
         <nav aria-label="breadcrumb">
@@ -22,6 +40,17 @@
                 </button>
             </div>
         </div>
+    </div>
+
+    <div class="container-fluid">
+        <form action="@Url.Action("Upload", "MediaApi")" class="dropzone needsclick dz-clickable" id="dropzone" enctype="multipart/form-data">
+            <input type="hidden" name="Model.ParentId" v-model="currentFolderId" />
+            <div class="dz-message needsclick">
+                <span class="fas fa-cloud-upload-alt"></span>
+                Drop files here or click to upload.
+            </div>
+            <div class="file-container"></div>
+        </form>
     </div>
 
     <template v-if="listView">

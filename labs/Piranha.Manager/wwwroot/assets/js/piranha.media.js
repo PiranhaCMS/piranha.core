@@ -12,7 +12,8 @@ piranha.media = new Vue({
         items: [],
         folder: {
             name: null
-        }
+        },
+        dropzone: null
     },
     methods: {
         drag: function (event, item) {
@@ -61,6 +62,9 @@ piranha.media = new Vue({
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },
+        refresh: function () {
+            piranha.media.load(piranha.media.currentFolderId);
+        },
         savefolder: function () {
             fetch(piranha.baseUrl + "manager/api/media/savefolder", {
                 method: "post",
@@ -102,5 +106,29 @@ piranha.media = new Vue({
     },
     created: function () {
         this.load();
+    },
+    mounted: function () {
+        var options = {
+            init: function () {
+                this.on("complete", function (file) {
+                    console.log("media complete", file)
+                    if (file.status === "success") {
+                        file.previewElement.classList.add("dz-remove");
+                        setTimeout(function () {
+                            piranha.media.dropzone.removeFile(file);
+                        }, 1000);
+                    } else {
+                        var response = JSON.parse(file.xhr.responseText);
+                        file.previewElement.querySelector(".file-error span").innerText = response.body; 
+                    }
+                });
+                this.on("queuecomplete", function (file) {
+                    console.log("media queuecomplete", file)
+                    piranha.media.refresh();            
+                });
+            }
+        };
+
+        this.dropzone = piranha.dropzone.init("#dropzone", options);
     }
 });

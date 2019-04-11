@@ -14,6 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Piranha.Models;
 using Piranha.Manager.Models;
+using System.IO;
 
 namespace Piranha.Manager.Services
 {
@@ -124,6 +125,37 @@ namespace Piranha.Manager.Services
                 ParentId = model.ParentId,
                 Name = model.Name
             });
+        }
+
+        /// <summary>
+        /// Save or update media assets to storage
+        /// </summary>
+        /// <param name="model">Upload model</param>
+        /// <returns>The number of upload managed to be saved or updated</returns>
+        public async Task<int> SaveMedia(MediaUploadModel model)
+        {
+            var uploaded = 0;
+
+            // Go through all of the uploaded files
+            foreach (var upload in model.Uploads)
+            {
+                if (upload.Length > 0 && !string.IsNullOrWhiteSpace(upload.ContentType))
+                {
+                    using (var stream = upload.OpenReadStream())
+                    {
+                        await _api.Media.SaveAsync(new StreamMediaContent
+                        {
+                            Id = model.Uploads.Count() == 1 ? model.Id : null,
+                            FolderId = model.ParentId,
+                            Filename = Path.GetFileName(upload.FileName),
+                            Data = stream
+                        });
+                        uploaded++;
+                    }
+                }
+            }
+
+            return uploaded;
         }
     }
 }
