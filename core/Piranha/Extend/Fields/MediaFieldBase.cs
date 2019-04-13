@@ -22,11 +22,7 @@ namespace Piranha.Extend.Fields
         /// </summary>
         public virtual string GetTitle()
         {
-            if (Media != null)
-            {
-                return Media.Filename;
-            }
-            return null;
+            return Media?.Filename;
         }
 
         /// <summary>
@@ -96,6 +92,10 @@ namespace Piranha.Extend.Fields
         /// <returns>True if the fields are equal</returns>
         public virtual bool Equals(T obj)
         {
+            if (obj == null)
+            {
+                return false;
+            }
             return Id == obj.Id;
         }
 
@@ -107,7 +107,11 @@ namespace Piranha.Extend.Fields
         /// <returns>True if the fields are equal</returns>
         public static bool operator ==(MediaFieldBase<T> field1, MediaFieldBase<T> field2)
         {
-            return field1.Equals(field2);
+            if ((object)field1 != null && (object)field2 != null)
+            {
+                return field1.Equals(field2);
+            }
+            return false;
         }
 
         /// <summary>
@@ -118,7 +122,7 @@ namespace Piranha.Extend.Fields
         /// <returns>True if the fields are equal</returns>
         public static bool operator !=(MediaFieldBase<T> field1, MediaFieldBase<T> field2)
         {
-            return !field1.Equals(field2);
+            return !(field1 == field2);
         }
     }
 }
