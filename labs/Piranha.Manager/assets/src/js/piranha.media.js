@@ -62,7 +62,7 @@ piranha.media = new Vue({
                 .catch(function (error) { console.log("error:", error ); });
         },
         savefolder: function () {
-            fetch(piranha.baseUrl + "manager/api/media/savefolder", {
+            fetch(piranha.baseUrl + "manager/api/media/folder/save", {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",
@@ -97,7 +97,15 @@ piranha.media = new Vue({
             console.log("Remove media: ", id);
         },
         removeFolder: function (id) {
-            console.log("Remove folder: ", id);
+            fetch(piranha.baseUrl + "manager/api/media/folder/delete/" + id)
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    piranha.media.folders = result.folders;
+
+                    // Push status to notification hub
+                    piranha.notifications.push(result.status);
+                })
+                .catch(function (error) { console.log("error:", error ); });
         }
     },
     created: function () {

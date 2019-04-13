@@ -83,7 +83,7 @@ namespace Piranha.Manager.Controllers
         }
         */
 
-        [Route("savefolder")]
+        [Route("folder/save")]
         [HttpPost]
         public async Task<IActionResult> SaveFolder(MediaFolderModel model)
         {
@@ -104,6 +104,35 @@ namespace Piranha.Manager.Controllers
             catch (ValidationException e)
             {
                 var result = new AliasListModel();
+                result.Status = new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = e.Message
+                };
+                return BadRequest(result);
+            }
+        }
+
+        [Route("folder/delete/{id:Guid}")]
+        public async Task<IActionResult> DeleteFolder(Guid id)
+        {
+            try
+            {
+                var folderId = await _service.DeleteFolder(id);
+
+                var result = await _service.GetList(folderId);
+
+                result.Status = new StatusMessage
+                {
+                    Type = StatusMessage.Success,
+                    Body = $"The folder was successfully deleted"
+                };
+
+                return Ok(result);
+            }
+            catch (ValidationException e)
+            {
+                var result = new MediaListModel();
                 result.Status = new StatusMessage
                 {
                     Type = StatusMessage.Error,

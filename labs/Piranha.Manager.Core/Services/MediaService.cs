@@ -125,5 +125,17 @@ namespace Piranha.Manager.Services
                 Name = model.Name
             });
         }
+
+        public async Task<Guid?> DeleteFolder(Guid id)
+        {
+            var folder = await _api.Media.GetFolderByIdAsync(id);
+
+            if (folder != null)
+            {
+                await _api.Media.DeleteFolderAsync(folder);
+                return folder.ParentId;
+            }
+            return null;
+        }
     }
 }
