@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -56,7 +56,7 @@ namespace Piranha.Extend.Fields
         }
 
         /// <summary>
-        /// Gets the available items to choose from. Primarily used 
+        /// Gets the available items to choose from. Primarily used
         /// from the manager interface.
         /// </summary>
         public override List<SelectFieldItem> Items {
@@ -144,11 +144,7 @@ namespace Piranha.Extend.Fields
         /// <returns>True if the fields are equal</returns>
         public static bool operator !=(SelectField<T> field1, SelectField<T> field2)
         {
-            if ((object)field1 != null && (object)field2 != null)
-            {
-                return field1.Equals(field2);
-            }
-            return false;
+            return !(field1 == field2);
         }
 
         /// <summary>
