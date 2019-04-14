@@ -26,6 +26,10 @@ var js = [
     {
         name: "piranha.js",
         items: [
+            "node_modules/jquery/dist/jquery.slim.js",
+            "node_modules/popper.js/dist/umd/popper.js",
+            "node_modules/bootstrap/dist/js/bootstrap.js",
+            "node_modules/vue/dist/vue.min.js",
             "node_modules/html5sortable/dist/html5sortable.js",
             "node_modules/nestable2/dist/jquery.nestable.min.js",
             "assets/src/js/piranha.utils.js",
