@@ -2,8 +2,16 @@
 @{
     var placeholder = ViewData["Placeholder"];    
 }
+
 <div class="checkbox">
-    <label>
-        @Html.CheckBoxFor(m => m.Value, new { @class = "checkbox" }) @placeholder
-    </label>
+	<label>
+		<input 
+			   id="@Html.IdFor(m => m.Value)"
+			   name="@Html.NameFor(m => m.Value)"
+			   type="checkbox"
+			   @(Model.Value ? "checked=\"checked\"" : "")
+			   value="true"> @placeholder
+	</label>
+
+	<input name="@Html.NameFor(m => m.Value)" type="hidden" value="false">
 </div>
