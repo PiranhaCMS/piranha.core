@@ -59,7 +59,7 @@ piranha.media = new function() {
             if (self.mediaUrlId) {
                 var mediaUrlCtrl = $("#" + self.mediaUrlId);
 
-                if (mediaUrlCtrl.prop("tagName") == "IMG" || mediaUrlCtrl.prop("tagName") == "VIDEO") {
+                if (mediaUrlCtrl.prop("tagName") == "IMG" || mediaUrlCtrl.prop("tagName") == "VIDEO" || mediaUrlCtrl.prop("tagname") == "AUDIO") {
                     mediaUrlCtrl.attr("src", e.data("url"));
                 } else {
                     mediaUrlCtrl.val(e.data("url"));
@@ -93,7 +93,7 @@ piranha.media = new function() {
 
             if (mediaUrlCtrl.prop("tagName") == "IMG") {
                 mediaUrlCtrl.attr("src", "/manager/assets/img/block-img-placeholder.png");
-            } else if (mediaUrlCtrl.prop("tagName") == "VIDEO") {
+            } else if (mediaUrlCtrl.prop("tagName") == "VIDEO" || mediaUrlCtrl.prop("tagName") == "AUDIO") {
                 mediaUrlCtrl.attr("src", "");
             }
         }
@@ -205,19 +205,30 @@ $("#modalImgPreview").on("show.bs.modal",
         if (contenttype.startsWith("image")) {
             modal.find("#previewImage").show();
             modal.find("#previewVideo").hide();
+            modal.find("#previewAudio").hide();
             modal.find("#previewDocument").hide();
 
             modal.find("#imgPreview").attr("alt", filename);
             modal.find("#imgPreview").attr("src", url);
         } else if (contenttype.startsWith("video")) {
             modal.find("#previewImage").hide();
+            modal.find("#previewAudio").hide();
             modal.find("#previewVideo").show();
             modal.find("#previewDocument").hide();
 
             modal.find("video").attr("src", url);
             modal.find("video").attr("type", contenttype);
+        } else if (contenttype.startsWith("audio")) {
+            modal.find("#previewImage").hide();
+            modal.find("#previewAudio").show();
+            modal.find("#previewVideo").hide();
+            modal.find("#previewDocument").hide();
+
+            modal.find("audio").attr("src", url);
+            modal.find("audio").attr("type", contenttype);
         } else if (contenttype === "application/pdf") {
             modal.find("#previewImage").hide();
+            modal.find("#previewAudio").hide();
             modal.find("#previewVideo").hide();
             modal.find("#previewDocument").show();
 
