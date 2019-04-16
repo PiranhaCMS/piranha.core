@@ -108,27 +108,9 @@ piranha.media = new Vue({
         this.load();
     },
     mounted: function () {
-        var options = {
-            init: function () {
-                this.on("complete", function (file) {
-                    console.log("media complete", file)
-                    if (file.status === "success") {
-                        file.previewElement.classList.add("dz-remove");
-                        setTimeout(function () {
-                            piranha.media.dropzone.removeFile(file);
-                        }, 1000);
-                    } else {
-                        var response = JSON.parse(file.xhr.responseText);
-                        file.previewElement.querySelector(".file-error span").innerText = response.body; 
-                    }
-                });
-                this.on("queuecomplete", function (file) {
-                    console.log("media queuecomplete", file)
-                    piranha.media.refresh();            
-                });
-            }
-        };
-
-        this.dropzone = piranha.dropzone.init("#dropzone", options);
+        this.dropzone = piranha.dropzone.initList("#media-upload-container");
+        this.dropzone.on("queuecomplete", function () {
+            piranha.media.refresh();
+        })
     }
 });
