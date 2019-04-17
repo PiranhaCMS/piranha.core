@@ -10,7 +10,6 @@
 
 using System;
 using System.Threading.Tasks;
-using Piranha.Services;
 
 namespace Piranha.Web
 {
@@ -25,23 +24,25 @@ namespace Piranha.Web
         /// <returns>The piranha response, null if no matching page was found</returns>
         public static async Task<IRouteResponse> InvokeAsync(IApi api, string url, Guid siteId)
         {
-            if (!String.IsNullOrWhiteSpace(url) && url.Length > 1)
+            if (string.IsNullOrWhiteSpace(url) || url.Length <= 1)
             {
-                // Check if we can find an alias with the requested url
-                var alias = await api.Aliases.GetByAliasUrlAsync(url, siteId)
-                    .ConfigureAwait(false);
-
-                if (alias != null)
-                {
-                    return new RouteResponse
-                    {
-                        IsPublished = true,
-                        RedirectUrl = alias.RedirectUrl,
-                        RedirectType = alias.Type
-                    };
-                }
+                return null;
             }
-            return null;
+
+            // Check if we can find an alias with the requested url
+            var alias = await api.Aliases.GetByAliasUrlAsync(url, siteId)
+                .ConfigureAwait(false);
+            if (alias == null)
+            {
+                return null;
+            }
+
+            return new RouteResponse
+            {
+                IsPublished = true,
+                RedirectUrl = alias.RedirectUrl,
+                RedirectType = alias.Type
+            };
         }
     }
 }

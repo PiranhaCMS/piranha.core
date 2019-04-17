@@ -10,7 +10,6 @@
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Threading.Tasks;
 using Piranha.AspNetCore.Services;
 using Piranha.Web;
@@ -34,20 +33,26 @@ namespace Piranha.AspNetCore
         /// <returns>An async task</returns>
         public override async Task Invoke(HttpContext context, IApi api, IApplicationService service)
         {
-            if (!IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/"))
+            if (IsHandled(context) || context.Request.Path.Value.StartsWith("/manager/assets/"))
             {
-                var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
-
-                var response = await AliasRouter.InvokeAsync(api, url, service.Site.Id);
-                if (response != null)
-                {
-                    _logger?.LogInformation($"Found alias\n  Alias: {url}\n  Redirect: {response.RedirectUrl}");
-
-                    context.Response.Redirect(response.RedirectUrl, response.RedirectType == Models.RedirectType.Permanent);
-                    return;
-                }
+                await _next.Invoke(context);
+                return;
             }
-            await _next.Invoke(context);
+
+            var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
+
+            var response = await AliasRouter.InvokeAsync(api, url, service.Site.Id);
+            if (response == null)
+            {
+                _logger.LogTrace("No alias was found. URL: {0}.", url);
+
+                await _next.Invoke(context);
+                return;
+            }
+
+            _logger?.LogInformation("Found alias\n  Alias: {0}\n  Redirect: {1}", url, response.RedirectUrl);
+
+            context.Response.Redirect(response.RedirectUrl, response.RedirectType == Models.RedirectType.Permanent);
         }
     }
 }

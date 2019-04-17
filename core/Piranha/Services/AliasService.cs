@@ -97,16 +97,26 @@ namespace Piranha.Services
                 }
             }
 
+            Alias model;
             var id = _cache?.Get<Guid?>($"AliasId_{siteId}_{url}");
-            Alias model = null;
-
-            if (id.HasValue)
+            if (id.HasValue && id != default(Guid))
             {
                 model = await GetByIdAsync(id.Value).ConfigureAwait(false);
+            }
+            else if (id == default(Guid))
+            {
+                // If id was present in cache, but it has a zero Guid value, assume that the alias does not exist.
+                return null;
             }
             else
             {
                 model = await _repo.GetByAliasUrl(url, siteId.Value).ConfigureAwait(false);
+                if (model == null)
+                {
+                    // If no alias was found, cache a zero Guid value.
+                    _cache?.Set($"AliasId_{siteId}_{url}", Guid.Empty);
+                    return null;
+                }
 
                 OnLoad(model);
             }
