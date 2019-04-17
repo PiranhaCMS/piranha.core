@@ -210,7 +210,16 @@ namespace Piranha
         public static T DeepClone<T>(T obj)
         {
             if (obj == null)
+            {
+                // Null value does not need to be cloned.
+                return default(T);
+            }
+
+            if (obj is ValueType)
+            {
+                // Value types do not need to be cloned.
                 return obj;
+            }
 
             var settings = new JsonSerializerSettings
             {
