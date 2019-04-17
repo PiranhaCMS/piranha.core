@@ -44,7 +44,7 @@ namespace Piranha.AspNetCore
             var response = await AliasRouter.InvokeAsync(api, url, service.Site.Id);
             if (response == null)
             {
-                _logger.LogTrace("No alias was found. URL: {0}.", url);
+                _logger?.LogTrace("No alias was found. URL: {0}.", url);
 
                 await _next.Invoke(context);
                 return;
