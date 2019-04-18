@@ -195,6 +195,8 @@ namespace Piranha
             Instance._mediaTypes.Images.Add(".jpeg", "image/jpeg");
             Instance._mediaTypes.Images.Add(".png", "image/png");
             Instance._mediaTypes.Videos.Add(".mp4", "video/mp4");
+            Instance._mediaTypes.Audios.Add(".mp3", "audio/mpeg");
+            Instance._mediaTypes.Audios.Add(".wav", "audio/wav");
 
             // Compose content types
             Instance._contentTypes.Register<Models.IPage>("Page", "Page");
@@ -214,6 +216,7 @@ namespace Piranha
             Instance._fields.Register<Extend.Fields.StringField>();
             Instance._fields.Register<Extend.Fields.TextField>();
             Instance._fields.Register<Extend.Fields.VideoField>();
+            Instance._fields.Register<Extend.Fields.AudioField>();
 
             // Compose block types
             Instance._blocks.Register<Extend.Blocks.HtmlBlock>();
@@ -222,6 +225,7 @@ namespace Piranha
             Instance._blocks.Register<Extend.Blocks.QuoteBlock>();
             Instance._blocks.Register<Extend.Blocks.TextBlock>();
             Instance._blocks.Register<Extend.Blocks.VideoBlock>();
+            Instance._blocks.Register<Extend.Blocks.AudioBlock>();
 
             // Compose serializers
             Instance._serializers.Register<Extend.Fields.CheckBoxField>(new CheckBoxFieldSerializer<Extend.Fields.CheckBoxField>());
@@ -237,6 +241,7 @@ namespace Piranha
             Instance._serializers.Register<Extend.Fields.TextField>(new StringFieldSerializer<Extend.Fields.TextField>());
             Instance._serializers.Register<Extend.Fields.ImageField>(new ImageFieldSerializer());
             Instance._serializers.Register<Extend.Fields.VideoField>(new VideoFieldSerializer());
+            Instance._serializers.Register<Extend.Fields.AudioField>(new AudioFieldSerializer());
 
             // Create markdown converter
             Instance._markdown = new DefaultMarkdown();
