@@ -22,6 +22,11 @@ var css = [
     "assets/src/scss/slim.scss"
 ];
 
+var fonts = [
+    "node_modules/@fortawesome/fontawesome-free/webfonts/*.*",
+    "assets/src/fonts/*.*"
+];
+
 var js = [
     {
         name: "piranha.js",
@@ -97,6 +102,7 @@ var js = [
 // Compile & minimize less files
 //
 gulp.task("min:css", function () {
+    // Minimize and combine styles
     for (var n = 0; n < css.length; n++)
     {
         gulp.src(css[n])
@@ -106,6 +112,13 @@ gulp.task("min:css", function () {
                 suffix: ".min"
             }))
             .pipe(gulp.dest(output + "css"));
+    }
+
+    // Copy fonts
+    for (var n = 0; n < fonts.length; n++)
+    {
+        gulp.src(fonts[n])
+            .pipe(gulp.dest(output + "webfonts"));
     }
 });
 
