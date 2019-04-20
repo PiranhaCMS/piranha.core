@@ -1,0 +1,109 @@
+@import "variables";
+
+.media-upload {
+    position: relative;
+    transition: all .3s ease;
+    border-bottom: 1px solid $gray-400;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    .media-thumbnail {
+        margin-right: 1rem;
+        position: relative;
+        height: 70px;
+        width: 70px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        > i {
+            font-size: 3rem;
+            color: $gray-400;
+        }
+
+        > img {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    }
+
+    img {
+        width: 70px;
+        height: 70px;
+        background-color: $body-bg;
+        transition: opacity .3s ease;
+        transition-delay: .3s;
+
+        &:not([src]) {
+            opacity: 0;
+        }
+    }
+
+    .progress {
+        height: .5rem;
+
+        .progress-bar {
+            transition: all .6s ease;
+        }
+    }
+
+    .status {
+        color: $gray-500;
+
+        &:before {
+            content: attr(data-queue);
+        }
+    }
+
+    &.dz-processing {
+        .progress-bar {
+            background-color: $info;
+        }
+
+        .status {
+            color: $info;
+            &:before {
+                content: attr(data-uploading);
+            }
+        }
+    }
+
+    &.dz-success {
+        .progress-bar {
+            background-color: $success;
+        }
+
+        .status {
+            color: $success;
+
+            &:before {
+                content: attr(data-success);
+            }
+        }
+    }
+
+    &.dz-error {
+        .progress-bar {
+            background-color: $danger;
+        }
+
+        .status {
+            color: $danger;
+
+            &:before {
+                content: attr(data-error);
+            }
+        }
+    }
+
+    &.dz-complete {
+    }
+
+    &.dz-remove {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}

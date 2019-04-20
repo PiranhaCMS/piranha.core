@@ -22,6 +22,7 @@
     "popper.js": "1.14.7",
     "nestable2": "1.6.0",
     "html5sortable": "0.9.10",
-    "vue": "2.6.10"
+    "vue": "2.6.10",
+    "dropzone": "5.5.1"
   }
 }

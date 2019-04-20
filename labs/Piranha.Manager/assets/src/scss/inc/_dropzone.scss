@@ -1,0 +1,218 @@
+@import "variables";
+
+.dropzone-container {
+    display: flex;
+    flex-direction: row;
+
+    .media {
+        position: relative;
+        transition: all .3s ease;
+
+        img {
+            width: 70px;
+            height: 70px;
+
+            &:not([src]) {
+                opacity: 0;
+            }
+        }
+
+        .progress {
+            height: .5rem;
+
+            .progress-bar {
+                transition: all .6s ease;
+            }
+        }
+
+        &.dz-processing {
+            .progress-bar {
+                background-color: $info;
+            }
+        }
+
+        &.dz-success {
+            .progress-bar {
+                background-color: $success;
+            }
+        }
+
+        &.dz-error {
+            .progress-bar {
+                background-color: $danger;
+            }
+        }
+
+        &.dz-complete {
+        }
+
+        &.dz-remove {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+    }
+}
+
+.media-list {
+    width: 50%;
+    margin: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 50%;
+    margin-left: 1rem;
+
+    transition: all .3s ease;
+
+    &:empty {
+        width: 0;
+        margin-left: 0;
+    }
+}
+
+.file-upload {
+    width: 186px;
+    position: relative;
+    display: inline-block;
+    margin: 1rem;
+    color: $gray-600;
+    border: 1px solid $gray-400;
+    transition: all .3s ease;
+
+    .file-details {
+        overflow: hidden;
+        position: relative;
+
+        &:hover {
+            .file-size,
+            .file-filename {
+                transform: translateY(0);
+            }
+        }
+
+        img {
+            width: 184px;
+            height: 130px;
+
+            &:not([src]) {
+                opacity: 0;
+            }
+        }
+    }
+
+    .file-size,
+    .file-filename {
+        font-size: 1rem;
+        background-color: rgba(255, 255, 255, 0.7);
+        position: absolute;
+        left: 0;
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        transition: all .3s ease;
+    }
+
+    .file-filename {
+        top: 0;
+        transform: translateY(-100%)
+    }
+
+    .file-size {
+        bottom: 0;
+        transform: translateY(100%)
+    }
+
+    .file-error {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: $gray-100;
+        padding: 1rem;
+
+        i {
+            display: block;
+        }
+    }
+
+    .progress {
+        height: .5rem;
+
+        .progress-bar {
+            transition: all .6s ease;
+        }
+    }
+
+    &.dz-processing {
+        border-color: $info;
+
+        .progress-bar {
+            background-color: $info;
+        }
+    }
+
+    &.dz-success {
+        border-color: $success;
+
+        .progress-bar {
+            background-color: $success;
+        }
+    }
+
+    &.dz-error {
+        border-color: $danger;
+
+        .progress-bar {
+            background-color: $danger;
+        }
+
+        .file-error {
+            display: block;
+        }
+    }
+
+    &.dz-complete {
+    }
+
+    &.dz-remove {
+        opacity: 0;
+        transform: scale(.5);
+    }
+}
+
+
+.dropzone {
+    flex-grow: 1;
+    color: $gray-600;
+    font-size: 18px;
+    background-color: white;
+    border: dashed 2px $gray-400;
+    border-radius: .5rem;
+    position: relative;
+    min-height: 200px;
+
+    .dz-message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+
+        span {
+            margin-right: 5px;
+        }
+    }
+
+    .file-list {
+        margin-top: 2rem;
+        position: relative;
+        transition: all .3s ease;
+
+        &:empty {
+            opacity: 0;
+            margin-top: 0;
+            transform: scale(.5);
+        }
+    }
+}

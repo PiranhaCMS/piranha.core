@@ -1,14 +1,60 @@
-@page "~/manager/media"
+﻿@page "~/manager/media"
 @inject IViewLocalizer Localizer
 @section script
 {
     <script src="~/assets/js/piranha.media.min.js"></script>
 }
+
+<script id="media-upload-template" type="text/template">    
+    <li class="media media-upload mb-2 pb-2">
+        <div class="media-thumbnail">
+            <i class="fas fa-file-upload"></i>
+            <img data-dz-thumbnail />
+        </div>
+        <div class="media-body">
+            <div class="d-flex">
+                <p class="m-0" data-dz-name></p>
+                <a href="#" class="close ml-auto" data-dz-remove>×</a>
+            </div>
+            
+            <p class="text-muted m-0" data-dz-size></p>
+            <p class="status m-0"
+               dz-error-message
+               data-queue="@Localizer["In queue"]"
+               data-uploading="@Localizer["Uploading..."]"
+               data-success="@Localizer["Upload was successful"]"
+               data-error="@Localizer["Failed to upload media. "]">
+               <span data-dz-errormessage></span>
+            </p>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" data-dz-uploadprogress></div>
+            </div>
+        </div>
+    </li>
+</script>
+
+<script id="file-upload-template" type="text/template">    
+    <div class="file-upload">
+        <div class="file-details">
+            <img data-dz-thumbnail />
+            <div class="file-filename" data-dz-name></div>
+            <div class="file-size" data-dz-size></div>
+        </div>
+        <div class="file-error">
+            <i class="text-danger fas fa-exclamation-triangle"></i>
+            <span data-dz-errormessage></span>
+        </div>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" data-dz-uploadprogress></div>
+        </div>
+    </div>
+</script>
+
 <div id="media">
     <div class="top">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item">@Localizer["Content"]</li>
+                <li class="breadcrumb-item"></li>
                 <li class="breadcrumb-item active" aria-current="page">@Localizer["Media"]</li>
             </ol>
         </nav>
@@ -21,6 +67,20 @@
                     <i class="fas fa-plus"></i>@Localizer["Add"]
                 </button>
             </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div id="media-upload-container" class="dropzone-container">        
+            <form action="@Url.Action("Upload", "MediaApi")" class="dropzone needsclick dz-clickable" enctype="multipart/form-data">
+                <input type="hidden" name="Model.ParentId" v-model="currentFolderId" />
+                <div class="dz-message needsclick text-center">
+                    <span class="fas fa-cloud-upload-alt"></span>
+                    Drop files here or click to upload.
+                </div>
+                <div class="file-list"></div>
+            </form>
+            <ul class="media-list list-unstyled"></ul>
         </div>
     </div>
 
