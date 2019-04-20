@@ -19,9 +19,11 @@
 </head>
 <body id="login">
 	<div class="container">
-        @using (var form = Html.BeginForm("Login", "Account", FormMethod.Post, new { @id = "main-form", @class = "form", @role = "form" })) {
+        @using (var form = Html.BeginForm("Login", "Account", FormMethod.Post, new { @id = "main-form", @class = "form", @role = "form" }))
+		{
+			@Html.AntiForgeryToken()
+			@Html.Hidden("ReturnUrl", Model)
 			<div class="panel panel-white">
-				@Html.AntiForgeryToken()
 				<div class="panel-body">
 					<div class="account-logo"></div>
 					<p class="account-banner">
