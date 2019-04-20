@@ -102,13 +102,23 @@ namespace Piranha.Services
 
             if (id.HasValue)
             {
-                model = await GetByIdAsync(id.Value).ConfigureAwait(false);
+                if (id.Value != Guid.Empty)
+                {
+                    model = await GetByIdAsync(id.Value).ConfigureAwait(false);
+                }
             }
             else
             {
                 model = await _repo.GetByAliasUrl(url, siteId.Value).ConfigureAwait(false);
 
-                OnLoad(model);
+                if (model != null)
+                {
+                    OnLoad(model);
+                }
+                else
+                {
+                    _cache?.Set($"AliasId_{siteId}_{url}", Guid.Empty);
+                }
             }
             return model;
         }
