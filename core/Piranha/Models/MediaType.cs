@@ -17,6 +17,7 @@ namespace Piranha.Models
         Unknown,
         Document,
         Image,
-        Video
+        Video,
+        Audio
     }
 }

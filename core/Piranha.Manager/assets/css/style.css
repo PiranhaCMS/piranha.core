@@ -13629,6 +13629,7 @@ li.sitemap-item .actions.one {
 #page-blocks .block-editor p:last-child {
   margin-bottom: 0;
 }
+#page-blocks .block-audio,
 #page-blocks .block-image,
 #page-blocks .block-video {
   background: #f2f2f2;
@@ -13637,6 +13638,7 @@ li.sitemap-item .actions.one {
   overflow: hidden;
   text-align: center;
 }
+#page-blocks .block-audio:hover .block-media-picker,
 #page-blocks .block-image:hover .block-media-picker,
 #page-blocks .block-video:hover .block-media-picker {
   opacity: 1;
@@ -13661,6 +13663,24 @@ li.sitemap-item .actions.one {
   display: none;
 }
 #page-blocks .block-video video[src=""] ~ .video-placeholder {
+  display: block !important;
+}
+#page-blocks .block-audio audio {
+  max-width: 100%;
+}
+#page-blocks .block-audio audio ~ .audio-placeholder {
+  display: none;
+  font-size: 70px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  color: #b5b5b5;
+}
+#page-blocks .block-audio audio[src=""] {
+  display: none;
+}
+#page-blocks .block-audio audio[src=""] ~ .audio-placeholder {
   display: block !important;
 }
 #page-blocks .block-media-picker {

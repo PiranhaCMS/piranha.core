@@ -27,11 +27,11 @@ namespace Piranha.Web
         {
             if (!String.IsNullOrWhiteSpace(url) && url.Length > 1)
             {
-                var segments = url.Substring(1).Split(new char[] { '/' });
+                var segments = url.Substring(1).Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
                 if (segments.Length >= 1)
                 {
-                    var blog = await api.Pages.GetBySlugAsync(segments[0], siteId)
+                    var blog = await api.Pages.GetBySlugAsync<Models.PageInfo>(segments[0], siteId)
                         .ConfigureAwait(false);
 
                     if (blog != null && blog.ContentType == "Blog")

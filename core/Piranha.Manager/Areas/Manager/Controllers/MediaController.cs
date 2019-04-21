@@ -259,6 +259,10 @@ namespace Piranha.Areas.Manager.Controllers
             {
                 type = MediaType.Video;
             }
+            else if (filter == "audio")
+            {
+                type = MediaType.Audio;
+            }
             return View("Modal", Models.MediaListModel.Get(_api, folderId, type));
         }
     }

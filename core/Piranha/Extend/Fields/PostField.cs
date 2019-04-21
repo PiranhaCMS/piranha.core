@@ -132,6 +132,10 @@ namespace Piranha.Extend.Fields
         /// <returns>True if the fields are equal</returns>
         public virtual bool Equals(PostField obj)
         {
+            if (obj == null)
+            {
+                return false;
+            }
             return Id == obj.Id;
         }
 
@@ -143,7 +147,11 @@ namespace Piranha.Extend.Fields
         /// <returns>True if the fields are equal</returns>
         public static bool operator ==(PostField field1, PostField field2)
         {
-            return field1.Equals(field2);
+            if ((object)field1 != null && (object)field2 != null)
+            {
+                return field1.Equals(field2);
+            }
+            return false;
         }
 
         /// <summary>
@@ -154,7 +162,7 @@ namespace Piranha.Extend.Fields
         /// <returns>True if the fields are equal</returns>
         public static bool operator !=(PostField field1, PostField field2)
         {
-            return !field1.Equals(field2);
+            return !(field1 == field2);
         }
     }
 }

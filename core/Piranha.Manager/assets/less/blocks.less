@@ -341,6 +341,7 @@
         }
     }
 
+    .block-audio,
     .block-image,
     .block-video {
         background: @bg-color;
@@ -380,6 +381,30 @@
             display: none;
 
             & ~ .video-placeholder {
+                display: block !important;
+            }
+        }
+    }
+
+    .block-audio {
+        audio {
+            max-width: 100%;
+        }
+
+        audio ~ .audio-placeholder {
+            display: none;
+            font-size: 70px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            color: #b5b5b5;
+        }
+
+        audio[src=""] {
+            display: none;
+
+            & ~ .audio-placeholder {
                 display: block !important;
             }
         }
