@@ -22,7 +22,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The available models</returns>
-        public static IEnumerable<Alias> GetAll(this AliasService service, Guid? siteId = null)
+        public static IEnumerable<Alias> GetAll(this IAliasService service, Guid? siteId = null)
         {
             return service.GetAllAsync().GetAwaiter().GetResult();
         }
@@ -32,7 +32,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The model, or null if it doesn't exist</returns>
-        public static Alias GetById(this AliasService service, Guid id)
+        public static Alias GetById(this IAliasService service, Guid id)
         {
             return service.GetByIdAsync(id).GetAwaiter().GetResult();
         }
@@ -43,7 +43,7 @@ namespace Piranha.Services
         /// <param name="url">The unique url</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The model</returns>
-        public static Alias GetByAliasUrl(this AliasService service, string url, Guid? siteId = null)
+        public static Alias GetByAliasUrl(this IAliasService service, string url, Guid? siteId = null)
         {
             return service.GetByAliasUrlAsync(url, siteId).GetAwaiter().GetResult();
         }
@@ -54,7 +54,7 @@ namespace Piranha.Services
         /// <param name="url">The unique url</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The model</returns>
-        public static IEnumerable<Alias> GetByRedirectUrl(this AliasService service, string url, Guid? siteId = null)
+        public static IEnumerable<Alias> GetByRedirectUrl(this IAliasService service, string url, Guid? siteId = null)
         {
             return service.GetByRedirectUrlAsync(url, siteId).GetAwaiter().GetResult();
         }
@@ -64,7 +64,7 @@ namespace Piranha.Services
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        public static void Save(this AliasService service, Alias model)
+        public static void Save(this IAliasService service, Alias model)
         {
             service.SaveAsync(model).GetAwaiter().GetResult();
         }
@@ -73,7 +73,7 @@ namespace Piranha.Services
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public static void Delete(this AliasService service, Guid id)
+        public static void Delete(this IAliasService service, Guid id)
         {
             service.DeleteAsync(id).GetAwaiter().GetResult();
         }
@@ -82,7 +82,7 @@ namespace Piranha.Services
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        public static void Delete(this AliasService service, Alias model)
+        public static void Delete(this IAliasService service, Alias model)
         {
             service.DeleteAsync(model).GetAwaiter().GetResult();
         }

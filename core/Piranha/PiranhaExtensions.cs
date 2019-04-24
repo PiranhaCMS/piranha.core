@@ -16,9 +16,13 @@ using Piranha.Services;
 
 public static class PiranhaExtensions
 {
-    public static IServiceCollection AddPiranha(this IServiceCollection services)
+    public static IServiceCollection AddPiranha(this IServiceCollection services,
+        ServiceLifetime scope = ServiceLifetime.Scoped)
     {
-        return services.AddSingleton<IContentFactory, ContentFactory>();
+        services.Add(new ServiceDescriptor(typeof(IContentFactory), typeof(ContentFactory), ServiceLifetime.Singleton));
+        services.Add(new ServiceDescriptor(typeof(IApi), typeof(Api), scope));
+
+        return services;
     }
 
     /// <summary>

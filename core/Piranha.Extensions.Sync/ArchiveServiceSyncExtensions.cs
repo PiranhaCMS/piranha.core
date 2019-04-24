@@ -29,7 +29,7 @@ namespace Piranha.Services
         /// <param name="pageSize">The optional page size</param>
         /// <typeparam name="T">The post model type</typeparam>
         /// <returns>The archive model</returns>
-        public static PostArchive<T> GetById<T>(this ArchiveService service, Guid archiveId, int? currentPage = 1, Guid? categoryId = null,
+        public static PostArchive<T> GetById<T>(this IArchiveService service, Guid archiveId, int? currentPage = 1, Guid? categoryId = null,
             Guid? tagId = null, int? year = null, int? month = null, int? pageSize = null) where T : PostBase
         {
             return service.GetByIdAsync<T>(archiveId, currentPage, categoryId, tagId, year, month, pageSize)

@@ -21,7 +21,7 @@ namespace Piranha.Services
         /// Gets all available models.
         /// </summary>
         /// <returns>The available models</returns>
-        public static IEnumerable<PostType> GetAll(this PostTypeService service)
+        public static IEnumerable<PostType> GetAll(this IPostTypeService service)
         {
             return service.GetAllAsync().GetAwaiter().GetResult();
         }
@@ -31,7 +31,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="id">The unique i</param>
         /// <returns></returns>
-        public static PostType GetById(this PostTypeService service, string id)
+        public static PostType GetById(this IPostTypeService service, string id)
         {
             return service.GetByIdAsync(id).GetAwaiter().GetResult();
         }
@@ -41,7 +41,7 @@ namespace Piranha.Services
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        public static void Save(this PostTypeService service, PostType model)
+        public static void Save(this IPostTypeService service, PostType model)
         {
             service.SaveAsync(model).GetAwaiter().GetResult();
         }
@@ -50,7 +50,7 @@ namespace Piranha.Services
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public static void Delete(this PostTypeService service, string id)
+        public static void Delete(this IPostTypeService service, string id)
         {
             service.DeleteAsync(id).GetAwaiter().GetResult();
         }
@@ -59,7 +59,7 @@ namespace Piranha.Services
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        public static void Delete(this PostTypeService service, PostType model)
+        public static void Delete(this IPostTypeService service, PostType model)
         {
             service.DeleteAsync(model).GetAwaiter().GetResult();
         }

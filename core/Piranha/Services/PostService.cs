@@ -18,12 +18,12 @@ using Piranha.Repositories;
 
 namespace Piranha.Services
 {
-    public class PostService
+    public class PostService : IPostService
     {
         private readonly IPostRepository _repo;
         private readonly IContentFactory _factory;
-        private readonly SiteService _siteService;
-        private readonly PageService _pageService;
+        private readonly ISiteService _siteService;
+        private readonly IPageService _pageService;
         private readonly ICache _cache;
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Piranha.Services
         /// <param name="siteService">The site service</param>
         /// <param name="pageService">The site service</param>
         /// <param name="cache">The optional model cache</param>
-        public PostService(IPostRepository repo, IContentFactory factory, SiteService siteService, PageService pageService, ICache cache = null)
+        public PostService(IPostRepository repo, IContentFactory factory, ISiteService siteService, IPageService pageService, ICache cache = null)
         {
             _repo = repo;
             _factory = factory;

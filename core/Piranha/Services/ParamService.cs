@@ -17,7 +17,7 @@ using Piranha.Repositories;
 
 namespace Piranha.Services
 {
-    public class ParamService
+    public class ParamService : IParamService
     {
         private readonly IParamRepository _repo;
         private readonly ICache _cache;

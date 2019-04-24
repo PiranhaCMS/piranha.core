@@ -18,7 +18,7 @@ using Piranha.Repositories;
 
 namespace Piranha.Services
 {
-    public class PostTypeService
+    public class PostTypeService : IPostTypeService
     {
         private readonly IPostTypeRepository _repo;
         private readonly ICache _cache;

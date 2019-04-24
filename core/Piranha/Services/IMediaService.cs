@@ -4,7 +4,7 @@
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
  *
- * http://github.com/piranhacms/piranha
+ * https://github.com/piranhacms/piranha.core
  *
  */
 
@@ -15,17 +15,14 @@ using Piranha.Models;
 
 namespace Piranha.Services
 {
-    public static class MediaServiceSyncExtensions
+    public interface IMediaService
     {
         /// <summary>
         /// Gets all media available in the specified folder.
         /// </summary>
         /// <param name="folderId">The optional folder id</param>
         /// <returns>The available media</returns>
-        public static IEnumerable<Media> GetAll(this IMediaService service, Guid? folderId = null)
-        {
-            return service.GetAllAsync(folderId).GetAwaiter().GetResult();
-        }
+        Task<IEnumerable<Media>> GetAllAsync(Guid? folderId = null);
 
         /// <summary>
         /// Gets all media folders available in the specified
@@ -33,104 +30,91 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="folderId">The optional folder id</param>
         /// <returns>The available media folders</returns>
-        public static IEnumerable<MediaFolder> GetAllFolders(this IMediaService service, Guid? folderId = null)
-        {
-            return service.GetAllFoldersAsync(folderId).GetAwaiter().GetResult();
-        }
+        Task<IEnumerable<MediaFolder>> GetAllFoldersAsync(Guid? folderId = null);
 
         /// <summary>
         /// Gets the media with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The media</returns>
-        public static Media GetById(this IMediaService service, Guid id)
-        {
-            return service.GetByIdAsync(id).GetAwaiter().GetResult();
-        }
+        Task<Media> GetByIdAsync(Guid id);
 
         /// <summary>
         /// Gets the media folder with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The media folder</returns>
-        public static MediaFolder GetFolderById(this IMediaService service, Guid id)
-        {
-            return service.GetFolderByIdAsync(id).GetAwaiter().GetResult();
-        }
+        Task<MediaFolder> GetFolderByIdAsync(Guid id);
 
         /// <summary>
         /// Gets the hierachical media structure.
         /// </summary>
         /// <returns>The media structure</returns>
-        public static Models.MediaStructure GetStructure(this IMediaService service)
-        {
-            return service.GetStructureAsync().GetAwaiter().GetResult();
-        }
+        Task<MediaStructure> GetStructureAsync();
 
         /// <summary>
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>
         /// <param name="content">The content to save</param>
-        public static void Save(this IMediaService service, Models.MediaContent content)
-        {
-            service.SaveAsync(content).GetAwaiter().GetResult();
-        }
+        Task SaveAsync(MediaContent content);
 
         /// <summary>
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        public static void SaveFolder(this IMediaService service, MediaFolder model)
-        {
-            service.SaveFolderAsync(model).GetAwaiter().GetResult();
-        }
+        Task SaveFolderAsync(MediaFolder model);
 
         /// <summary>
         /// Moves the media to the folder with the specified id.
         /// </summary>
         /// <param name="media">The media</param>
         /// <param name="folderId">The folder id</param>
-        public static void Move(this IMediaService service, Media model, Guid? folderId)
-        {
-            service.MoveAsync(model, folderId).GetAwaiter().GetResult();
-        }
+        Task MoveAsync(Media model, Guid? folderId);
+
+        /// <summary>
+        /// Ensures that the image version with the given size exsists
+        /// and returns its public URL.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <param name="width">The requested width</param>
+        /// <param name="height">The optionally requested height</param>
+        /// <returns>The public URL</returns>
+        string EnsureVersion(Guid id, int width, int? height = null);
+
+        /// <summary>
+        /// Ensures that the image version with the given size exsists
+        /// and returns its public URL.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <param name="width">The requested width</param>
+        /// <param name="height">The optionally requested height</param>
+        /// <returns>The public URL</returns>
+        Task<string> EnsureVersionAsync(Guid id, int width, int? height = null);
 
         /// <summary>
         /// Deletes the media with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public static void Delete(this IMediaService service, Guid id)
-        {
-            service.DeleteAsync(id).GetAwaiter().GetResult();
-        }
+        Task DeleteAsync(Guid id);
 
         /// <summary>
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The media</param>
-        public static void Delete(this IMediaService service, Media model)
-        {
-            service.DeleteAsync(model).GetAwaiter().GetResult();
-        }
+        Task DeleteAsync(Media model);
 
         /// <summary>
         /// Deletes the media folder with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public static void DeleteFolder(this IMediaService service, Guid id)
-        {
-            service.DeleteFolderAsync(id).GetAwaiter().GetResult();
-        }
+        Task DeleteFolderAsync(Guid id);
 
         /// <summary>
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The media</param>
-        public static void DeleteFolder(this IMediaService service, MediaFolder model)
-        {
-            service.DeleteFolderAsync(model).GetAwaiter().GetResult();
-        }
+        Task DeleteFolderAsync(MediaFolder model);
     }
 }
