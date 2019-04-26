@@ -3,7 +3,7 @@
 //
 // This software may be modified and distributed under the terms
 // of the MIT license.  See the LICENSE file for details.
-// 
+//
 // http://github.com/piranhacms/piranha.core
 //
 
@@ -92,7 +92,7 @@ piranha.media = new function() {
             var mediaUrlCtrl = $("#" + self.mediaUrlId);
 
             if (mediaUrlCtrl.prop("tagName") == "IMG") {
-                mediaUrlCtrl.attr("src", "/manager/assets/img/block-img-placeholder.png");
+                mediaUrlCtrl.attr("src", baseUrl + "manager/assets/img/block-img-placeholder.png");
             } else if (mediaUrlCtrl.prop("tagName") == "VIDEO" || mediaUrlCtrl.prop("tagName") == "AUDIO") {
                 mediaUrlCtrl.attr("src", "");
             }
@@ -102,7 +102,7 @@ piranha.media = new function() {
     self.bindDropzone = function() {
         $("#dropzonemodal").dropzone({
             paramName: "Uploads",
-            url: "/manager/media/modal/add",
+            url: baseUrl + "manager/media/modal/add",
             uploadMultiple: true,
             init: function() {
                 this.on("queuecomplete",
