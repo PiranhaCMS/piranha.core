@@ -38,11 +38,6 @@ namespace Piranha.Data.EF
         public string Version => Piranha.Utils.GetAssemblyVersion(GetType().Assembly);
 
         /// <summary>
-        /// Gets the release date
-        /// </summary>
-        public string ReleaseDate => "2019-03-03";
-
-        /// <summary>
         /// Gets the description
         /// </summary>
         public string Description => "Data implementation for Entity Framework Core.";

@@ -92,11 +92,6 @@ namespace Piranha.Manager
         public string Version => Piranha.Utils.GetAssemblyVersion(this.GetType().Assembly);
 
         /// <summary>
-        /// Gets the release date
-        /// </summary>
-        public string ReleaseDate => "2019-03-01";
-
-        /// <summary>
         /// Gets the description
         /// </summary>
         public string Description => "Manager panel for Piranha CMS for AspNetCore.";
