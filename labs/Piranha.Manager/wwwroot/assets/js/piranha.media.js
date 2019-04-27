@@ -116,7 +116,16 @@ piranha.media = new Vue({
         this.load();
     },
     mounted: function () {
-        this.dropzone = piranha.dropzone.initList("#media-upload-container");
+        this.dropzone = piranha.dropzone.init("#media-upload-container", {
+            uploadMultiple: false
+        }); 
+        this.dropzone.on("complete", function (file) {
+            if (file.status === "success") {
+                setTimeout(function () {
+                    piranha.media.dropzone.removeFile(file);
+                }, 3000)
+            }            
+        })
         this.dropzone.on("queuecomplete", function () {
             piranha.media.refresh();
         })

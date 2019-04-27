@@ -35,7 +35,7 @@
                             <video class="d-block mx-auto mw-100" controls>
                                 <source :src="media.publicUrl" type="">
                                 Your browser does not support the video tag.
-                            </video>>
+                            </video>
                         </template>
                         <template v-else-if="media.type === 'Document'">
                             <div class="embed-responsive embed-responsive-4by3">
@@ -49,7 +49,6 @@
                                 <a :href="media.publicUrl" class="btn btn-primary btn-labeled" download><i class="fas fa-file-download"></i>Downlaod media</a>
                             </div>
                         </template>
-
                     </div>
                     <div class="tab-pane fade" id="pills-details">
                         <table class="table table-borderless m-0">
@@ -90,7 +89,17 @@
                         </table>
                     </div>
                     <div class="tab-pane fade" id="pills-update">
-                        Update
+                        <div id="media-update-container" class="dropzone-container">        
+                            <form action="@Url.Action("Upload", "MediaApi")" class="dropzone needsclick dz-clickable" enctype="multipart/form-data">
+                                <input type="hidden" name="Model.Id" v-model="media.id" />
+                                <div class="dz-message needsclick text-center">
+                                    <span class="fas fa-cloud-upload-alt"></span>
+                                    Drop a file here or click to update.
+                                </div>
+                                <div class="file-list"></div>
+                            </form>
+                            <ul class="media-list list-unstyled"></ul>
+                        </div>
                     </div>
                 </div>
             </div>

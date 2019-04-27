@@ -8,12 +8,16 @@ Dropzone.autoDiscover = false;
 piranha.dropzone = new function () {
     var self = this;
 
-    self.mergeBaseOptions = function (options) {
+    self.init = function (selector, options) {
         if (!options) options = {};
-        
-        var config = {
+
+        var defaultOptions = {
             paramName: 'Uploads',
             url: piranha.baseUrl + "manager/api/media/upload",
+            thumbnailWidth: 70,
+            thumbnailHeight: 70,
+            previewsContainer: selector + " .media-list",
+            previewTemplate: document.querySelector( "#media-upload-template").innerHTML,
             uploadMultiple: true,
             init: function () {
                 var self = this;
@@ -56,36 +60,9 @@ piranha.dropzone = new function () {
             }
         };
 
-        return Object.assign(config, options);
-    }
-
-    self.initList = function (selector, options) {
-        if (!options) options = {};
-
-        var config = {
-            thumbnailWidth: 70,
-            thumbnailHeight: 70,
-            previewsContainer: selector + " .media-list",
-            previewTemplate: document.querySelector( "#media-upload-template").innerHTML
-        };
-
-        var listOptions = self.mergeBaseOptions(config);
+        var config = Object.assign(defaultOptions, options);
+        console.log(selector, config);
         
-        return new Dropzone(selector + " form", Object.assign(listOptions, options));
-    }
-    
-    self.initThumbnail = function (selector, options) {
-        if (!options) options = {};
-
-        var config = {
-            thumbnailWidth: 184,
-            thumbnailHeight: 130,
-            previewsContainer: selector + " .file-list",
-            previewTemplate: document.querySelector( "#file-upload-template").innerHTML
-        };    
-
-        var thumbOptions = self.mergeBaseOptions(config);
-        
-        return new Dropzone(selector + " form", Object.assign(thumbOptions, options));
-    }   
+        return new Dropzone(selector + " form", config);
+    }  
 };

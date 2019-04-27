@@ -19816,12 +19816,16 @@ Dropzone.autoDiscover = false;
 piranha.dropzone = new function () {
     var self = this;
 
-    self.mergeBaseOptions = function (options) {
+    self.init = function (selector, options) {
         if (!options) options = {};
-        
-        var config = {
+
+        var defaultOptions = {
             paramName: 'Uploads',
             url: piranha.baseUrl + "manager/api/media/upload",
+            thumbnailWidth: 70,
+            thumbnailHeight: 70,
+            previewsContainer: selector + " .media-list",
+            previewTemplate: document.querySelector( "#media-upload-template").innerHTML,
             uploadMultiple: true,
             init: function () {
                 var self = this;
@@ -19864,38 +19868,11 @@ piranha.dropzone = new function () {
             }
         };
 
-        return Object.assign(config, options);
-    }
-
-    self.initList = function (selector, options) {
-        if (!options) options = {};
-
-        var config = {
-            thumbnailWidth: 70,
-            thumbnailHeight: 70,
-            previewsContainer: selector + " .media-list",
-            previewTemplate: document.querySelector( "#media-upload-template").innerHTML
-        };
-
-        var listOptions = self.mergeBaseOptions(config);
+        var config = Object.assign(defaultOptions, options);
+        console.log(selector, config);
         
-        return new Dropzone(selector + " form", Object.assign(listOptions, options));
-    }
-    
-    self.initThumbnail = function (selector, options) {
-        if (!options) options = {};
-
-        var config = {
-            thumbnailWidth: 184,
-            thumbnailHeight: 130,
-            previewsContainer: selector + " .file-list",
-            previewTemplate: document.querySelector( "#file-upload-template").innerHTML
-        };    
-
-        var thumbOptions = self.mergeBaseOptions(config);
-        
-        return new Dropzone(selector + " form", Object.assign(thumbOptions, options));
-    }   
+        return new Dropzone(selector + " form", config);
+    }  
 };
 /*global
     piranha
@@ -20067,7 +20044,8 @@ piranha.preview = new Vue({
             height:       null,
             lastModified: null
         },
-        media: null
+        media: null,
+        dropzone: null
     },
     methods: {
         open: function (mediaId) {
@@ -20086,9 +20064,10 @@ piranha.preview = new Vue({
             $("#previewModal").modal("show");
         },
         close: function () {
-            console.log("click");
             $("#previewModal").modal("hide");
-            piranha.preview.clear();
+            setTimeout(function () {
+                piranha.preview.clear();            
+            }, 300)
         },
         clear: function () {
             this.media = this.empty;
@@ -20096,6 +20075,20 @@ piranha.preview = new Vue({
     },
     created: function () {
         this.clear();
+    },
+    mounted: function () {
+        this.dropzone = piranha.dropzone.init("#media-update-container", {
+            uploadMultiple: false
+        }); 
+        this.dropzone.on("complete", function (file) {
+            setTimeout(function () {
+                piranha.preview.dropzone.removeFile(file);
+            }, 3000)
+        })
+        this.dropzone.on("queuecomplete", function () {
+            piranha.preview.load(piranha.preview.media.id);
+            piranha.media.refresh();
+        })     
     }
 });
 
