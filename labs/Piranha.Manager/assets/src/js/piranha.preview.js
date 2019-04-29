@@ -15,7 +15,8 @@ piranha.preview = new Vue({
             height:       null,
             lastModified: null
         },
-        media: null
+        media: null,
+        dropzone: null
     },
     methods: {
         open: function (mediaId) {
@@ -34,9 +35,10 @@ piranha.preview = new Vue({
             $("#previewModal").modal("show");
         },
         close: function () {
-            console.log("click");
             $("#previewModal").modal("hide");
-            piranha.preview.clear();
+            setTimeout(function () {
+                piranha.preview.clear();            
+            }, 300)
         },
         clear: function () {
             this.media = this.empty;
@@ -44,5 +46,19 @@ piranha.preview = new Vue({
     },
     created: function () {
         this.clear();
+    },
+    mounted: function () {
+        this.dropzone = piranha.dropzone.init("#media-update-container", {
+            uploadMultiple: false
+        }); 
+        this.dropzone.on("complete", function (file) {
+            setTimeout(function () {
+                piranha.preview.dropzone.removeFile(file);
+            }, 3000)
+        })
+        this.dropzone.on("queuecomplete", function () {
+            piranha.preview.load(piranha.preview.media.id);
+            piranha.media.refresh();
+        })     
     }
 });
