@@ -118,6 +118,15 @@ namespace MvcWeb
                         new ImageBlock { Body = images[6].id }
                     }
                 });
+                startpage.Blocks.Add(new Models.Blocks.ColumnBlock
+                {
+                    Items =
+                    {
+                        new ImageBlock { Body = images[5].id },
+                        new HtmlBlock { Body = "<p>Curabitur blandit tempus porttitor. Nullam id dolor id nibh ultricies vehicula ut id elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Cras mattis consectetur purus sit amet fermentum.</p>" },
+                        new HtmlBlock { Body = "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>" }
+                    }
+                });
                 using (var stream = File.OpenRead("seed/startpage2.md"))
                 {
                     using (var reader = new StreamReader(stream))

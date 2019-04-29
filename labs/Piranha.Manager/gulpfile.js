@@ -69,8 +69,9 @@ var js = [
         name: "piranha.pageedit.js",
         items: [
             "assets/src/js/components/region.js",
+            "assets/src/js/components/block-group.js",
+            "assets/src/js/components/block-group-horizontal.js",
 
-            "assets/src/js/components/blocks/block-group.js",
             "assets/src/js/components/blocks/html-block.js",
             "assets/src/js/components/blocks/html-column-block.js",
             "assets/src/js/components/blocks/image-block.js",

@@ -81,6 +81,9 @@ Vue.component("block-group", {
         "      <button v-on:click.prevent='piranha.blockpicker.open(addGroupBlock, 0, model.type)' class='btn btn-sm btn-primary btn-labeled mt-3'><i class='fas fa-plus'></i>Add item</button>" +
         "    </div>" +
         "    <div class='col-md-8'>" +
+        "      <div v-if='model.items.length === 0' class='empty-info unsortable'>" +
+        "        <p>Looks like there's no items here. Click on the button below to get started!</p>" +
+        "      </div>" +
         "      <div v-for='child in model.items' v-if='child.isActive' :class='\"block \" + child.meta.component'>" +
         "        <component v-bind:is='child.meta.component' v-bind:uid='child.meta.uid' v-bind:model='child.model' v-on:update-title='updateTitle($event)'></component>" +
         "      </div>" +

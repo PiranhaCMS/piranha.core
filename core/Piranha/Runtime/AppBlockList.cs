@@ -65,9 +65,10 @@ namespace Piranha.Runtime
                 item.IsUnlisted = attr.IsUnlisted;
                 item.Component = !string.IsNullOrWhiteSpace(attr.Component) ? attr.Component : "missing-block";
 
-                if (attr is BlockGroupTypeAttribute)
+                if (attr is BlockGroupTypeAttribute groupAttr)
                 {
-                    item.UseCustomView = ((BlockGroupTypeAttribute)attr).UseCustomView;
+                    item.UseCustomView = groupAttr.UseCustomView;
+                    item.Display = groupAttr.Display;
                 }
             }
 

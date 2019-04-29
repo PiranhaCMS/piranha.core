@@ -69,6 +69,7 @@ namespace Piranha.Manager
             });
 
             // Seed test data
+            App.Blocks.Register<MvcWeb.Models.Blocks.ColumnBlock>();
             App.Blocks.Register<MvcWeb.Models.Blocks.GalleryBlock>();
 
             // Build content types

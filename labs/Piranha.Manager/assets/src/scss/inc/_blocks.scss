@@ -8,6 +8,16 @@
         width: 80%;
         margin: 2rem auto;
     }
+
+    .block-group, .block-group-horizontal {
+        .empty-info {
+            background: #fff;
+            color: $gray-600;
+            border-color: $gray-400;
+            width: auto;
+            margin: 0;
+        }
+    }
 }
 
 .block {
@@ -131,6 +141,9 @@
             .card-body {
                 padding: .4rem 1rem;
                 margin-right: 1rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
         }
 
