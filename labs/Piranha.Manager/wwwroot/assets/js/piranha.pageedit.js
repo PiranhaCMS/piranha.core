@@ -245,7 +245,7 @@ Vue.component("block-group-horizontal", {
         "            <span class='btn btn-sm handle'>" +
         "              <i class='fas fa-ellipsis-v'></i>" +
         "            </span>" +
-        "            <button v-on:click.prevent='removeItem(child)' class='btn btn-sm' tabindex='-1'>" +
+        "            <button v-on:click.prevent='removeItem(child)' class='btn btn-sm danger' tabindex='-1'>" +
         "              <i class='fas fa-trash'></i>" +
         "            </button>" +
         "          </div>" +

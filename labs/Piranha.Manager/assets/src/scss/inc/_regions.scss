@@ -2,16 +2,16 @@
 
 .accordion {
     >.card {
-        border: solid 1px $gray-300;
+        border: solid 2px $gray-100;
 
         .card-body {
-            border-top: solid 1px $gray-300;
+            border-top: solid 2px $gray-100;
             background: $gray-100;
         }
 
         &:first-of-type {
             &:last-of-type {
-                border-bottom: solid 1px $gray-300;
+                border-bottom: solid 2px $gray-100;
             }
         }
     }
@@ -28,7 +28,7 @@
                 left: 0;
                 width: 2rem;
                 height: 100%;
-                border-right: solid 1px $gray-400;
+                border-right: solid 2px $gray-100;
                 text-align: center;
 
                 i {
