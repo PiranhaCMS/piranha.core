@@ -118,6 +118,13 @@
                 }
             }
 
+            &.html-block, &.html-column-block, &.quote-block, &.text-block {
+                .empty:not(:focus-within)
+                {
+                    height: 100%;
+                }
+            }
+
             &.image-block {
                 .block-body {
                     height: 100%;
