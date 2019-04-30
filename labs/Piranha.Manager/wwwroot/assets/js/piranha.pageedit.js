@@ -213,6 +213,7 @@ Vue.component("block-group-horizontal", {
         var self = this;
 
         sortable("#" + this.uid + " .block-group-items", {
+            handle: '.handle',
             items: ":not(.unsortable)",
             placeholderClass: "col sortable-placeholder"
         })[0].addEventListener("sortupdate", function (e) {
