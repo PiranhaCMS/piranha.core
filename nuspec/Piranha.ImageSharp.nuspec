@@ -11,7 +11,6 @@
     <copyright>Copyright 2018-2019 (c) Håkan Edling</copyright>
     <tags>cms mvc aspnetcore netstandard</tags>
     <license type="expression">MIT</license>
-    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
     <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
     <iconUrl>http://piranhacms.org/assets/twitter-shield.png</iconUrl>
     <releaseNotes>See the changelog available at:
