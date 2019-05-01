@@ -4,6 +4,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/piranhacms/piranha.core/badge)](https://www.codefactor.io/repository/github/piranhacms/piranha.core)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/PiranhaCMS/piranha.core.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/PiranhaCMS/piranha.core/alerts/)
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/PiranhaCMS/piranha.core.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/PiranhaCMS/piranha.core/context:javascript)
+[![Sponsors](https://opencollective.com/piranhacms/tiers/sponsor/badge.svg?label=sponsor&color=brightgreen)](Sponsors)
 [![Backers](https://opencollective.com/piranhacms/tiers/backer/badge.svg?label=backer&color=brightgreen)](Backers)
 [![Gitter chat](https://badges.gitter.im/PiranhaCMS/Piranha.png)](https://gitter.im/PiranhaCMS/Piranha)
 
@@ -61,4 +62,5 @@ For people running Visual Studio 2017 almost all of the above steps will be hand
 
 Support Piranha CMS with a monthly donation and help us focus on giving you even more features and better support. [Piranha CMS @ Open Collective](https://opencollective.com/piranhacms)
 
+<img src="https://opencollective.com/piranhacms/tiers/sponsor.svg?avatarHeight=36" />
 <img src="https://opencollective.com/piranhacms/tiers/backer.svg?avatarHeight=36&width=600" />
