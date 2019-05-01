@@ -3,27 +3,26 @@
 @inject IAuthorizationService AuthorizationService
 @{
     var controller = ViewBag.Controller?.ToLower();
+
+    var menu = await Piranha.Manager.Menu.GetForUser(User, AuthorizationService);
 }
 <ul class="nav navmenu-nav">
-    @foreach (var group in Piranha.Manager.Menu.Items) {
-        if (group.Items.Count > 0) {
-            <li>
-                <a href="#"><i class="@group.Css"></i><span class="title">@group.Name</span></a>
-                <ul>
-                    @foreach (var item in group.Items) {
-                        if (string.IsNullOrWhiteSpace(item.Policy) || (await AuthorizationService.AuthorizeAsync(User, item.Policy)).Succeeded) {
-                            <li @(item.Controller.ToLower() == controller ? "class=active" : "")>
-                                <a href="@Url.Action(item.Action, item.Controller, item.Params)">
-                                    @if (!string.IsNullOrEmpty(item.Css)) {
-                                        <i class="@item.Css"></i>
-                                    }
-                                    <span class="title">@item.Name</span>
-                                </a>
-                            </li>
-                        }
-                    }
-                </ul>
-            </li> }
+    @foreach (var group in menu) {
+        <li>
+            <a href="#"><i class="@group.Css"></i><span class="title">@group.Name</span></a>
+            <ul>
+                @foreach (var item in group.Items) {
+                    <li @(item.Controller.ToLower() == controller ? "class=active" : "")>
+                        <a href="@Url.Action(item.Action, item.Controller, item.Params)">
+                            @if (!string.IsNullOrEmpty(item.Css)) {
+                                <i class="@item.Css"></i>
+                            }
+                            <span class="title">@item.Name</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </li>
     }
     <li>
         <a href="@Url.Action("Logout", "Account")"><i class="fas fa-power-off"></i><span class="title">Logout</span></a>

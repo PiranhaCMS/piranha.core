@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.ImageSharp</id>
     <title>Piranha ImageSharp</title>
-    <version>6.0.0-rc1</version>
+    <version>6.1.0-rc1</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -11,7 +11,6 @@
     <copyright>Copyright 2018-2019 (c) Håkan Edling</copyright>
     <tags>cms mvc aspnetcore netstandard</tags>
     <license type="expression">MIT</license>
-    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
     <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
     <iconUrl>http://piranhacms.org/assets/twitter-shield.png</iconUrl>
     <releaseNotes>See the changelog available at:
@@ -19,7 +18,7 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework=".NETStandard2.0">
-        <dependency id="Piranha" version="[6.0.0,7.0.0)" />
+        <dependency id="Piranha" version="[6.1.0,7.0.0)" />
         <dependency id="SixLabors.ImageSharp" version="1.0.0-beta0006" />
       </group>
     </dependencies>

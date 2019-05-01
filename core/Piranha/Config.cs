@@ -22,7 +22,7 @@ namespace Piranha
         /// <summary>
         /// The private param service.
         /// </summary>
-        private readonly ParamService _service;
+        private readonly IParamService _service;
 
         /// <summary>
         /// The system config keys.
@@ -192,7 +192,7 @@ namespace Piranha
         /// Default constructor.
         /// </summary>
         /// <param name="paramService">The current param service</param>
-        public Config(ParamService paramService)
+        public Config(IParamService paramService)
         {
             _service = paramService;
         }

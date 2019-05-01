@@ -15,53 +15,45 @@ using Piranha.Models;
 
 namespace Piranha.Services
 {
-    public static class SiteTypeServiceSyncExtensions
+    public interface IParamService
     {
         /// <summary>
         /// Gets all available models.
         /// </summary>
         /// <returns>The available models</returns>
-        public static IEnumerable<SiteType> GetAll(this ISiteTypeService service)
-        {
-            return service.GetAllAsync().GetAwaiter().GetResult();
-        }
+        Task<IEnumerable<Param>> GetAllAsync();
 
         /// <summary>
         /// Gets the model with the specified id.
         /// </summary>
-        /// <param name="id">The unique i</param>
-        /// <returns></returns>
-        public static Models.SiteType GetById(this ISiteTypeService service, string id)
-        {
-            return service.GetByIdAsync(id).GetAwaiter().GetResult();
-        }
+        /// <param name="id">The unique id</param>
+        /// <returns>The model, or null if it doesn't exist</returns>
+        Task<Param> GetByIdAsync(Guid id);
+
+        /// <summary>
+        /// Gets the model with the given key.
+        /// </summary>
+        /// <param name="key">The unique key</param>
+        /// <returns>The model</returns>
+        Task<Param> GetByKeyAsync(string key);
 
         /// <summary>
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        public static void Save(this ISiteTypeService service, SiteType model)
-        {
-            service.SaveAsync(model).GetAwaiter().GetResult();
-        }
+        Task SaveAsync(Param model);
 
         /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public static void Delete(this ISiteTypeService service, string id)
-        {
-            service.DeleteAsync(id).GetAwaiter().GetResult();
-        }
+        Task DeleteAsync(Guid id);
 
         /// <summary>
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        public static void Delete(this ISiteTypeService service, SiteType model)
-        {
-            service.DeleteAsync(model).GetAwaiter().GetResult();
-        }
+        Task DeleteAsync(Param model);
     }
 }

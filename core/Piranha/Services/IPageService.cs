@@ -15,64 +15,59 @@ using Piranha.Models;
 
 namespace Piranha.Services
 {
-    public static class PageServiceSyncExtensions
+    public interface IPageService
     {
+        /// <summary>
+        /// Creates and initializes a new page of the specified type.
+        /// </summary>
+        /// <returns>The created page</returns>
+        T Create<T>(string typeId = null) where T : Models.PageBase;
+
+        /// <summary>
+        /// Creates and initializes a copy of the given page.
+        /// </summary>
+        /// <param name="originalPage">The orginal page</param>
+        /// <returns>The created copy</returns>
+        T Copy<T>(T originalPage) where T : Models.PageBase;
+
         /// <summary>
         /// Detaches a copy and initializes it as a standalone page
         /// </summary>
         /// <returns>The standalone page</returns>
-        public static void Detach<T>(this IPageService service, T model) where T : PageBase
-        {
-            service.DetachAsync<T>(model).GetAwaiter().GetResult();
-        }
+        Task DetachAsync<T>(T model) where T : Models.PageBase;
 
         /// <summary>
         /// Gets all available models.
         /// </summary>
         /// <returns>The available models</returns>
-        public static IEnumerable<DynamicPage> GetAll(this IPageService service, Guid? siteId = null)
-        {
-            return service.GetAllAsync(siteId).GetAwaiter().GetResult();
-        }
+        Task<IEnumerable<DynamicPage>> GetAllAsync(Guid? siteId = null);
 
         /// <summary>
         /// Gets all available models.
         /// </summary>
         /// <returns>The available models</returns>
-        public static IEnumerable<T> GetAll<T>(this IPageService service, Guid? siteId = null) where T : PageBase
-        {
-            return service.GetAllAsync<T>(siteId).GetAwaiter().GetResult();
-        }
+        Task<IEnumerable<T>> GetAllAsync<T>(Guid? siteId = null) where T : PageBase;
 
         /// <summary>
         /// Gets the available blog pages for the current site.
         /// </summary>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The pages</returns>
-        public static IEnumerable<DynamicPage> GetAllBlogs(this IPageService service, Guid? siteId = null)
-        {
-            return service.GetAllBlogsAsync(siteId).GetAwaiter().GetResult();
-        }
+        Task<IEnumerable<DynamicPage>> GetAllBlogsAsync(Guid? siteId = null);
 
         /// <summary>
         /// Gets the available blog pages for the current site.
         /// </summary>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The pages</returns>
-        public static IEnumerable<T> GetAllBlogs<T>(this IPageService service, Guid? siteId = null) where T : PageBase
-        {
-            return service.GetAllBlogsAsync<T>(siteId).GetAwaiter().GetResult();
-        }
+        Task<IEnumerable<T>> GetAllBlogsAsync<T>(Guid? siteId = null) where T : Models.PageBase;
 
         /// <summary>
         /// Gets the site startpage.
         /// </summary>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>
-        public static DynamicPage GetStartpage(this IPageService service, Guid? siteId = null)
-        {
-            return service.GetStartpageAsync(siteId).GetAwaiter().GetResult();
-        }
+        Task<DynamicPage> GetStartpageAsync(Guid? siteId = null);
 
         /// <summary>
         /// Gets the site startpage.
@@ -80,30 +75,21 @@ namespace Piranha.Services
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>
-        public static T GetStartpage<T>(this IPageService service, Guid? siteId = null) where T : PageBase
-        {
-            return service.GetStartpageAsync<T>(siteId).GetAwaiter().GetResult();
-        }
+        Task<T> GetStartpageAsync<T>(Guid? siteId = null) where T : Models.PageBase;
 
         /// <summary>
         /// Gets the page model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The page model</returns>
-        public static DynamicPage GetById(this IPageService service, Guid id)
-        {
-            return service.GetByIdAsync(id).GetAwaiter().GetResult();
-        }
+        Task<DynamicPage> GetByIdAsync(Guid id);
 
         /// <summary>
         /// Gets the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The model, or null if it doesn't exist</returns>
-        public static T GetById<T>(this IPageService service, Guid id) where T : PageBase
-        {
-            return service.GetByIdAsync<T>(id).GetAwaiter().GetResult();
-        }
+        Task<T> GetByIdAsync<T>(Guid id) where T : PageBase;
 
         /// <summary>
         /// Gets the page model with the specified slug.
@@ -111,10 +97,7 @@ namespace Piranha.Services
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>
-        public static DynamicPage GetBySlug(this IPageService service, string slug, Guid? siteId = null)
-        {
-            return service.GetBySlugAsync(slug, siteId).GetAwaiter().GetResult();
-        }
+        Task<DynamicPage> GetBySlugAsync(string slug, Guid? siteId = null);
 
         /// <summary>
         /// Gets the page model with the specified slug.
@@ -123,10 +106,7 @@ namespace Piranha.Services
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>
-        public static T GetBySlug<T>(this IPageService service, string slug, Guid? siteId = null) where T : PageBase
-        {
-            return service.GetBySlugAsync<T>(slug, siteId).GetAwaiter().GetResult();
-        }
+        Task<T> GetBySlugAsync<T>(string slug, Guid? siteId = null) where T : Models.PageBase;
 
         /// <summary>
         /// Gets the id for the page with the given slug.
@@ -134,10 +114,7 @@ namespace Piranha.Services
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The optional page id</param>
         /// <returns>The id</returns>
-        public static Guid? GetIdBySlug(this IPageService service, string slug, Guid? siteId = null)
-        {
-            return service.GetIdBySlugAsync(slug, siteId).GetAwaiter().GetResult();
-        }
+        Task<Guid?> GetIdBySlugAsync(string slug, Guid? siteId = null);
 
         /// <summary>
         /// Moves the current page in the structure.
@@ -146,36 +123,24 @@ namespace Piranha.Services
         /// <param name="model">The page to move</param>
         /// <param name="parentId">The new parent id</param>
         /// <param name="sortOrder">The new sort order</param>
-        public static void Move<T>(this IPageService service, T model, Guid? parentId, int sortOrder) where T : PageBase
-        {
-            service.MoveAsync(model, parentId, sortOrder).GetAwaiter().GetResult();
-        }
+        Task MoveAsync<T>(T model, Guid? parentId, int sortOrder) where T : Models.PageBase;
 
         /// <summary>
         /// Saves the given page model
         /// </summary>
         /// <param name="model">The page model</param>
-        public static void Save<T>(this IPageService service, T model) where T : PageBase
-        {
-            service.SaveAsync(model).GetAwaiter().GetResult();
-        }
+        Task SaveAsync<T>(T model) where T : PageBase;
 
         /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public static void Delete(this IPageService service, Guid id)
-        {
-            service.DeleteAsync(id).GetAwaiter().GetResult();
-        }
+        Task DeleteAsync(Guid id);
 
         /// <summary>
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        public static void Delete<T>(this IPageService service, T model) where T : PageBase
-        {
-            service.DeleteAsync(model).GetAwaiter().GetResult();
-        }
+        Task DeleteAsync<T>(T model) where T : Models.PageBase;
     }
 }

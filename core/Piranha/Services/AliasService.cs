@@ -17,10 +17,10 @@ using Piranha.Repositories;
 
 namespace Piranha.Services
 {
-    public class AliasService
+    public class AliasService : IAliasService
     {
         private readonly IAliasRepository _repo;
-        private readonly SiteService _siteService;
+        private readonly ISiteService _siteService;
         private readonly ICache _cache;
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="db">The current db context</param>
         /// <param name="cache">The optional model cache</param>
-        public AliasService(IAliasRepository repo, SiteService siteService, ICache cache = null)
+        public AliasService(IAliasRepository repo, ISiteService siteService, ICache cache = null)
         {
             _repo = repo;
             _siteService = siteService;

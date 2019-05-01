@@ -20,10 +20,10 @@ using Piranha.Repositories;
 
 namespace Piranha.Services
 {
-    public class MediaService
+    public class MediaService : IMediaService
     {
         private readonly IMediaRepository _repo;
-        private readonly ParamService _paramService;
+        private readonly IParamService _paramService;
         private readonly IStorage _storage;
         private readonly IImageProcessor _processor;
         private readonly ICache _cache;
@@ -38,7 +38,7 @@ namespace Piranha.Services
         /// <param name="storage">The current storage manager</param>
         /// <param name="cache">The optional model cache</param>
         /// <param name="processor">The optional image processor</param>
-        public MediaService(IMediaRepository repo, ParamService paramService, IStorage storage, IImageProcessor processor = null, ICache cache = null)
+        public MediaService(IMediaRepository repo, IParamService paramService, IStorage storage, IImageProcessor processor = null, ICache cache = null)
         {
             _repo = repo;
             _paramService = paramService;

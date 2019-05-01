@@ -21,7 +21,7 @@ namespace Piranha.Services
         /// Gets all available models.
         /// </summary>
         /// <returns>The available models</returns>
-        public static IEnumerable<PageType> GetAll(this PageTypeService service)
+        public static IEnumerable<PageType> GetAll(this IPageTypeService service)
         {
             return service.GetAllAsync().GetAwaiter().GetResult();
         }
@@ -31,7 +31,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="id">The unique i</param>
         /// <returns></returns>
-        public static Models.PageType GetById(this PageTypeService service, string id)
+        public static Models.PageType GetById(this IPageTypeService service, string id)
         {
             return service.GetByIdAsync(id).GetAwaiter().GetResult();
         }
@@ -41,7 +41,7 @@ namespace Piranha.Services
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        public static void Save(this PageTypeService service, PageType model)
+        public static void Save(this IPageTypeService service, PageType model)
         {
             service.SaveAsync(model).GetAwaiter().GetResult();
         }
@@ -50,7 +50,7 @@ namespace Piranha.Services
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public static void Delete(this PageTypeService service, string id)
+        public static void Delete(this IPageTypeService service, string id)
         {
             service.DeleteAsync(id).GetAwaiter().GetResult();
         }
@@ -59,7 +59,7 @@ namespace Piranha.Services
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        public static void Delete(this PageTypeService service, PageType model)
+        public static void Delete(this IPageTypeService service, PageType model)
         {
             service.DeleteAsync(model).GetAwaiter().GetResult();
         }

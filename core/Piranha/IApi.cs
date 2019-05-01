@@ -22,51 +22,51 @@ namespace Piranha
         /// <summary>
         /// Gets/sets the alias repository.
         /// </summary>
-        AliasService Aliases { get; }
+        IAliasService Aliases { get; }
 
         /// <summary>
         /// Gets/sets the archive service.
         /// </summary>
-        ArchiveService Archives { get; }
+        IArchiveService Archives { get; }
 
         /// <summary>
         /// Gets the media service.
         /// </summary>
-        MediaService Media { get; }
+        IMediaService Media { get; }
 
         /// <summary>
         /// Gets the page repository.
         /// </summary>
-        PageService Pages { get; }
+        IPageService Pages { get; }
 
         /// <summary>
         /// Gets the page type service.
         /// </summary>
-        PageTypeService PageTypes { get; }
+        IPageTypeService PageTypes { get; }
 
         /// <summary>
         /// Gets the param service.
         /// </summary>
-        ParamService Params { get; }
+        IParamService Params { get; }
 
         /// <summary>
         /// Gets the post service.
         /// </summary>
-        PostService Posts { get; }
+        IPostService Posts { get; }
 
         /// <summary>
         /// Gets the post type service.
         /// </summary>
-        PostTypeService PostTypes { get; }
+        IPostTypeService PostTypes { get; }
 
         /// <summary>
         /// Gets the site service.
         /// </summary>
-        SiteService Sites { get; }
+        ISiteService Sites { get; }
 
         /// <summary>
         /// Gets the site type service.
         /// </summary>
-        SiteTypeService SiteTypes { get; }
+        ISiteTypeService SiteTypes { get; }
     }
 }

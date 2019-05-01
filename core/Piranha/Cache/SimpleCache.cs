@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace Piranha.Cache
@@ -24,7 +25,7 @@ namespace Piranha.Cache
         /// <summary>
         /// The private cache collection.
         /// </summary>
-        private readonly IDictionary<string, object> _cache = new Dictionary<string, object>();
+        private readonly IDictionary<string, object> _cache = new ConcurrentDictionary<string, object>();
 
         /// <summary>
         /// Gets the model with the specified key from cache.

@@ -16,11 +16,11 @@ using Piranha.Repositories;
 
 namespace Piranha.Services
 {
-    public class ArchiveService
+    public class ArchiveService : IArchiveService
     {
         private readonly IArchiveRepository _repo;
-        private readonly ParamService _paramService;
-        private readonly PostService _postService;
+        private readonly IParamService _paramService;
+        private readonly IPostService _postService;
 
         /// <summary>
         /// Default constructor.
@@ -28,7 +28,7 @@ namespace Piranha.Services
         /// <param name="repo">The main repository</param>
         /// <param name="paramService">The param service</param>
         /// <param name="postService">The post service</param>
-        public ArchiveService(IArchiveRepository repo, ParamService paramService, PostService postService)
+        public ArchiveService(IArchiveRepository repo, IParamService paramService, IPostService postService)
         {
             _repo = repo;
             _paramService = paramService;

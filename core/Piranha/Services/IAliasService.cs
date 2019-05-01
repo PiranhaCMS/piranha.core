@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -12,65 +12,59 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Piranha.Models;
+using Piranha.Repositories;
 
 namespace Piranha.Services
 {
-    public static class ParamServiceSyncExtensions
+    public interface IAliasService
     {
         /// <summary>
-        /// Gets all available models.
+        /// Gets all available models for the specified site.
         /// </summary>
+        /// <param name="siteId">The optional site id</param>
         /// <returns>The available models</returns>
-        public static IEnumerable<Param> GetAll(this IParamService service)
-        {
-            return service.GetAllAsync().GetAwaiter().GetResult();
-        }
+        Task<IEnumerable<Alias>> GetAllAsync(Guid? siteId = null);
 
         /// <summary>
         /// Gets the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The model, or null if it doesn't exist</returns>
-        public static Param GetById(this IParamService service, Guid id)
-        {
-            return service.GetByIdAsync(id).GetAwaiter().GetResult();
-        }
+        Task<Alias> GetByIdAsync(Guid id);
 
         /// <summary>
-        /// Gets the model with the given key.
+        /// Gets the model with the given alias url.
         /// </summary>
-        /// <param name="key">The unique key</param>
+        /// <param name="url">The unique url</param>
+        /// <param name="siteId">The optional site id</param>
         /// <returns>The model</returns>
-        public static Param GetByKey(this IParamService service, string key) {
-            return service.GetByKeyAsync(key).GetAwaiter().GetResult();
-        }
+        Task<Alias> GetByAliasUrlAsync(string url, Guid? siteId = null);
+
+        /// <summary>
+        /// Gets the model with the given redirect url.
+        /// </summary>
+        /// <param name="url">The unique url</param>
+        /// <param name="siteId">The optional site id</param>
+        /// <returns>The model</returns>
+        Task<IEnumerable<Alias>> GetByRedirectUrlAsync(string url, Guid? siteId = null);
 
         /// <summary>
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        public static void Save(this IParamService service, Param model)
-        {
-            service.SaveAsync(model).GetAwaiter().GetResult();
-        }
+        Task SaveAsync(Alias model);
 
         /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public static void Delete(this IParamService service, Guid id)
-        {
-            service.DeleteAsync(id).GetAwaiter().GetResult();
-        }
+        Task DeleteAsync(Guid id);
 
         /// <summary>
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        public static void Delete(this IParamService service, Param model)
-        {
-            service.DeleteAsync(model).GetAwaiter().GetResult();
-        }
+        Task DeleteAsync(Alias model);
     }
 }

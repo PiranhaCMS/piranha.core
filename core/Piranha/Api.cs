@@ -27,53 +27,53 @@ namespace Piranha
         /// <summary>
         /// Gets/sets the alias service.
         /// </summary>
-        public AliasService Aliases { get; private set; }
+        public IAliasService Aliases { get; private set; }
 
         /// <summary>
         /// Gets/sets the archive service.
         /// </summary>
-        public ArchiveService Archives { get; private set; }
+        public IArchiveService Archives { get; private set; }
 
         /// <summary>
         /// Gets the media service.
         /// </summary>
         /// <returns></returns>
-        public MediaService Media { get; private set; }
+        public IMediaService Media { get; private set; }
 
         /// <summary>
         /// Gets the page service.
         /// </summary>
-        public PageService Pages { get; private set; }
+        public IPageService Pages { get; private set; }
 
         /// <summary>
         /// Gets the page type service.
         /// </summary>
-        public PageTypeService PageTypes { get; private set; }
+        public IPageTypeService PageTypes { get; private set; }
 
         /// <summary>
         /// Gets the param service.
         /// </summary>
-        public ParamService Params { get; private set; }
+        public IParamService Params { get; private set; }
 
         /// <summary>
         /// Gets the post service.
         /// </summary>
-        public PostService Posts { get; private set; }
+        public IPostService Posts { get; private set; }
 
         /// <summary>
         /// Gets the post type service.
         /// </summary>
-        public PostTypeService PostTypes { get; private set; }
+        public IPostTypeService PostTypes { get; private set; }
 
         /// <summary>
         /// Gets the site service.
         /// </summary>
-        public SiteService Sites { get; private set; }
+        public ISiteService Sites { get; private set; }
 
         /// <summary>
         /// Gets the site type service.
         /// </summary>
-        public SiteTypeService SiteTypes { get; private set; }
+        public ISiteTypeService SiteTypes { get; private set; }
 
         /// <summary>
         /// Gets if the current repository has caching enabled or not.

@@ -60,7 +60,6 @@ public static class PiranhaEFExtensions
         services.Add(new ServiceDescriptor(typeof(IContentFactory), typeof(ContentFactory), ServiceLifetime.Singleton));
         services.Add(new ServiceDescriptor(typeof(IContentServiceFactory), typeof(ContentServiceFactory), ServiceLifetime.Singleton));
         services.Add(new ServiceDescriptor(typeof(IDb), typeof(T), scope));
-        services.Add(new ServiceDescriptor(typeof(IApi), typeof(Api), scope));
 
         return services;
     }

@@ -18,7 +18,7 @@ using Piranha.Repositories;
 
 namespace Piranha.Services
 {
-    public class SiteTypeService
+    public class SiteTypeService : ISiteTypeService
     {
         private readonly ISiteTypeRepository _repo;
         private readonly ICache _cache;

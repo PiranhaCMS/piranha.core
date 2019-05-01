@@ -21,7 +21,7 @@ namespace Piranha.Services
         /// Gets all available models.
         /// </summary>
         /// <returns>The available models</returns>
-        public static IEnumerable<Site> GetAll(this SiteService service)
+        public static IEnumerable<Site> GetAll(this ISiteService service)
         {
             return service.GetAllAsync().GetAwaiter().GetResult();
         }
@@ -31,7 +31,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The model, or null if it doesn't exist</returns>
-        public static Site GetById(this SiteService service, Guid id)
+        public static Site GetById(this ISiteService service, Guid id)
         {
             return service.GetByIdAsync(id).GetAwaiter().GetResult();
         }
@@ -41,7 +41,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="internalId">The unique internal i</param>
         /// <returns>The model</returns>
-        public static Site GetByInternalId(this SiteService service, string internalId)
+        public static Site GetByInternalId(this ISiteService service, string internalId)
         {
             return service.GetByInternalIdAsync(internalId).GetAwaiter().GetResult();
         }
@@ -51,7 +51,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="hostname">The hostname</param>
         /// <returns>The model</returns>
-        public static Site GetByHostname(this SiteService service, string hostname)
+        public static Site GetByHostname(this ISiteService service, string hostname)
         {
             return service.GetByHostnameAsync(hostname).GetAwaiter().GetResult();
         }
@@ -60,7 +60,7 @@ namespace Piranha.Services
         /// Gets the default side.
         /// </summary>
         /// <returns>The modell, or NULL if it doesnt exist</returns>
-        public static Site GetDefault(this SiteService service)
+        public static Site GetDefault(this ISiteService service)
         {
             return service.GetDefaultAsync().GetAwaiter().GetResult();
         }
@@ -70,7 +70,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="id">Site id</param>
         /// <returns>The site content model</returns>
-        public static DynamicSiteContent GetContentById(this SiteService service, Guid id)
+        public static DynamicSiteContent GetContentById(this ISiteService service, Guid id)
         {
             return service.GetContentByIdAsync(id).GetAwaiter().GetResult();
         }
@@ -81,7 +81,7 @@ namespace Piranha.Services
         /// <param name="id">Site id</param>
         /// <typeparam name="T">The site model type</typeparam>
         /// <returns>The site content model</returns>
-        public static T GetContentById<T>(this SiteService service, Guid id) where T : SiteContent<T>
+        public static T GetContentById<T>(this ISiteService service, Guid id) where T : SiteContent<T>
         {
             return service.GetContentByIdAsync<T>(id).GetAwaiter().GetResult();
         }
@@ -92,7 +92,7 @@ namespace Piranha.Services
         /// <param name="id">The optional site id</param>
         /// <param name="onlyPublished">If only published items should be included</param>
         /// <returns>The sitemap</returns>
-        public static Sitemap GetSitemap(this SiteService service, Guid? id = null, bool onlyPublished = true)
+        public static Sitemap GetSitemap(this ISiteService service, Guid? id = null, bool onlyPublished = true)
         {
             return service.GetSitemapAsync(id, onlyPublished).GetAwaiter().GetResult();
         }
@@ -102,7 +102,7 @@ namespace Piranha.Services
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        public static void Save(this SiteService service, Site model)
+        public static void Save(this ISiteService service, Site model)
         {
             service.SaveAsync(model).GetAwaiter().GetResult();
         }
@@ -114,7 +114,7 @@ namespace Piranha.Services
         /// <param name="siteId">The site id</param>
         /// <param name="model">The site content model</param>
         /// <typeparam name="T">The site content type</typeparam>
-        public static void SaveContent<T>(this SiteService service, Guid siteId, T model) where T : SiteContent<T>
+        public static void SaveContent<T>(this ISiteService service, Guid siteId, T model) where T : SiteContent<T>
         {
             service.SaveContentAsync(siteId, model).GetAwaiter().GetResult();
         }
@@ -123,7 +123,7 @@ namespace Piranha.Services
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public static void Delete(this SiteService service, Guid id)
+        public static void Delete(this ISiteService service, Guid id)
         {
             service.DeleteAsync(id).GetAwaiter().GetResult();
         }
@@ -132,7 +132,7 @@ namespace Piranha.Services
         /// Deletes the given model.
         /// </summary>
         /// <param name="model">The model</param>
-        public static void Delete(this SiteService service, Site model)
+        public static void Delete(this ISiteService service, Site model)
         {
             service.DeleteAsync(model).GetAwaiter().GetResult();
         }

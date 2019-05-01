@@ -38,11 +38,11 @@ namespace Piranha.Extend.Fields
         /// Impicit operator for converting the field to an url string.
         /// </summary>
         /// <param name="image">The video field</param>
-        public static implicit operator string(VideoField image)
+        public static implicit operator string(VideoField video)
         {
-            if (image.Media != null)
+            if (video.Media != null)
             {
-                return image.Media.PublicUrl;
+                return video.Media.PublicUrl;
             }
             return "";
         }

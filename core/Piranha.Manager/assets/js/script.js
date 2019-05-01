@@ -23242,7 +23242,7 @@ piranha.notifications = new function() {
 //
 // This software may be modified and distributed under the terms
 // of the MIT license.  See the LICENSE file for details.
-// 
+//
 // http://github.com/piranhacms/piranha.core
 //
 
@@ -23298,7 +23298,7 @@ piranha.media = new function() {
             if (self.mediaUrlId) {
                 var mediaUrlCtrl = $("#" + self.mediaUrlId);
 
-                if (mediaUrlCtrl.prop("tagName") == "IMG" || mediaUrlCtrl.prop("tagName") == "VIDEO") {
+                if (mediaUrlCtrl.prop("tagName") == "IMG" || mediaUrlCtrl.prop("tagName") == "VIDEO" || mediaUrlCtrl.prop("tagname") == "AUDIO") {
                     mediaUrlCtrl.attr("src", e.data("url"));
                 } else {
                     mediaUrlCtrl.val(e.data("url"));
@@ -23331,8 +23331,8 @@ piranha.media = new function() {
             var mediaUrlCtrl = $("#" + self.mediaUrlId);
 
             if (mediaUrlCtrl.prop("tagName") == "IMG") {
-                mediaUrlCtrl.attr("src", "/manager/assets/img/block-img-placeholder.png");
-            } else if (mediaUrlCtrl.prop("tagName") == "VIDEO") {
+                mediaUrlCtrl.attr("src", baseUrl + "manager/assets/img/block-img-placeholder.png");
+            } else if (mediaUrlCtrl.prop("tagName") == "VIDEO" || mediaUrlCtrl.prop("tagName") == "AUDIO") {
                 mediaUrlCtrl.attr("src", "");
             }
         }
@@ -23341,7 +23341,7 @@ piranha.media = new function() {
     self.bindDropzone = function() {
         $("#dropzonemodal").dropzone({
             paramName: "Uploads",
-            url: "/manager/media/modal/add",
+            url: baseUrl + "manager/media/modal/add",
             uploadMultiple: true,
             init: function() {
                 this.on("queuecomplete",
@@ -23444,19 +23444,30 @@ $("#modalImgPreview").on("show.bs.modal",
         if (contenttype.startsWith("image")) {
             modal.find("#previewImage").show();
             modal.find("#previewVideo").hide();
+            modal.find("#previewAudio").hide();
             modal.find("#previewDocument").hide();
 
             modal.find("#imgPreview").attr("alt", filename);
             modal.find("#imgPreview").attr("src", url);
         } else if (contenttype.startsWith("video")) {
             modal.find("#previewImage").hide();
+            modal.find("#previewAudio").hide();
             modal.find("#previewVideo").show();
             modal.find("#previewDocument").hide();
 
             modal.find("video").attr("src", url);
             modal.find("video").attr("type", contenttype);
+        } else if (contenttype.startsWith("audio")) {
+            modal.find("#previewImage").hide();
+            modal.find("#previewAudio").show();
+            modal.find("#previewVideo").hide();
+            modal.find("#previewDocument").hide();
+
+            modal.find("audio").attr("src", url);
+            modal.find("audio").attr("type", contenttype);
         } else if (contenttype === "application/pdf") {
             modal.find("#previewImage").hide();
+            modal.find("#previewAudio").hide();
             modal.find("#previewVideo").hide();
             modal.find("#previewDocument").show();
 
@@ -24257,7 +24268,7 @@ var manager = {
 
         markdown: function(str) {
             $.ajax({
-                url: "/manager/markdown",
+                url: baseUrl + "manager/markdown",
                 method: "POST",
                 contentType: "text/plain",
                 data: str,
@@ -24270,10 +24281,10 @@ var manager = {
         addregion: function(targetId, pageTypeId, regionTypeId, regionIndex, itemIndex, contentType, cb) {
             $.ajax({
                 url: contentType == "post"
-                    ? "/manager/post/region"
+                    ? baseUrl + "manager/post/region"
                     : contentType == "site"
-                    ? "/manager/site/region"
-                    : "/manager/page/region",
+                    ? baseUrl + "manager/site/region"
+                    : baseUrl + "manager/page/region",
                 method: "POST",
                 contentType: "application/json",
                 dataType: "html",
@@ -24339,7 +24350,7 @@ var manager = {
 
         addblock: function(target, blockType, contentType, includeGroups, groupType, cb) {
             $.ajax({
-                url: "/manager/block/create",
+                url: baseUrl + "manager/block/create",
                 method: "POST",
                 contentType: "application/json",
                 dataType: "html",

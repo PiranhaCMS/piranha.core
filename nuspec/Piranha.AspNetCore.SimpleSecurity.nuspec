@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.AspNetCore.SimpleSecurity</id>
     <title>Piranha AspNetCore SimpleSecurity</title>
-    <version>6.0.0</version>
+    <version>6.1.0</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -11,7 +11,6 @@
     <copyright>Copyright 2017-2019 (c) Håkan Edling</copyright>
     <tags>cms mvc aspnetcore netstandard</tags>
     <license type="expression">MIT</license>
-    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
     <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
     <iconUrl>http://piranhacms.org/assets/twitter-shield.png</iconUrl>
     <releaseNotes>See the changelog available at:
@@ -19,7 +18,7 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework=".NETStandard2.0">
-        <dependency id="Piranha" version="[6.0.0,7.0.0)" />
+        <dependency id="Piranha" version="[6.1.0,7.0.0)" />
         <dependency id="Microsoft.AspNetCore.Authorization" version="2.1.2" />
         <dependency id="Microsoft.AspNetCore.Authentication.Cookies" version="2.1.2" />
       </group>

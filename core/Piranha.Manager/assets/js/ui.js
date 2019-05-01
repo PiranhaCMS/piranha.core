@@ -547,7 +547,7 @@ var manager = {
 
         markdown: function(str) {
             $.ajax({
-                url: "/manager/markdown",
+                url: baseUrl + "manager/markdown",
                 method: "POST",
                 contentType: "text/plain",
                 data: str,
@@ -560,10 +560,10 @@ var manager = {
         addregion: function(targetId, pageTypeId, regionTypeId, regionIndex, itemIndex, contentType, cb) {
             $.ajax({
                 url: contentType == "post"
-                    ? "/manager/post/region"
+                    ? baseUrl + "manager/post/region"
                     : contentType == "site"
-                    ? "/manager/site/region"
-                    : "/manager/page/region",
+                    ? baseUrl + "manager/site/region"
+                    : baseUrl + "manager/page/region",
                 method: "POST",
                 contentType: "application/json",
                 dataType: "html",
@@ -629,7 +629,7 @@ var manager = {
 
         addblock: function(target, blockType, contentType, includeGroups, groupType, cb) {
             $.ajax({
-                url: "/manager/block/create",
+                url: baseUrl + "manager/block/create",
                 method: "POST",
                 contentType: "application/json",
                 dataType: "html",
