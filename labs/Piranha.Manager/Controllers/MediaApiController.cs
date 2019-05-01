@@ -196,5 +196,33 @@ namespace Piranha.Manager.Controllers
                 });
             }
         }
+
+        [Route("delete/{id:Guid}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            try
+            {
+                var folderId = await _service.DeleteMedia(id);
+                var result = await _service.GetList(folderId);
+
+                result.Status = new StatusMessage
+                {
+                    Type = StatusMessage.Success,
+                    Body = $"The media file was successfully deleted"
+                };
+
+                return Ok(result);
+            }
+            catch (ValidationException e)
+            {
+                var result = new MediaListModel();
+                result.Status = new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = e.Message
+                };
+                return BadRequest(result);
+            }
+        }
     }
 }

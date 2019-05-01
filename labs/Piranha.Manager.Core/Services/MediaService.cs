@@ -166,8 +166,19 @@ namespace Piranha.Manager.Services
                     }
                 }
             }
-
             return uploaded;
+        }
+
+        public async Task<Guid?> DeleteMedia(Guid id)
+        {
+            var media = await _api.Media.GetByIdAsync(id);
+
+            if (media != null)
+            {
+                await _api.Media.DeleteAsync(media);
+                return media.FolderId;
+            }
+            return null;
         }
     }
 }

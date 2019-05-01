@@ -163,6 +163,13 @@ namespace Piranha.Manager.Services
                         }
                     };
 
+                    if (blockType.Display != BlockDisplayMode.MasterDetail)
+                    {
+                        item.Meta.Component = blockType.Display == BlockDisplayMode.Horizontal ?
+                            "block-group-horizontal" : "block-group-vertical";
+                    }
+
+
                     var groupItem = new BlockGroupEditModel
                     {
                         Type = block.Type

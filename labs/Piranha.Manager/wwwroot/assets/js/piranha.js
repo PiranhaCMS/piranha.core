@@ -19859,8 +19859,8 @@ piranha.dropzone = new function () {
                 // Default queuecomplete callback
                 if (!options.queuecomplete) {
                     options.queuecomplete = function () {}
-                }            
-        
+                }
+
                 self.on("addedfile", options.addedfile);
                 self.on("removedfile", options.removedfile);
                 self.on("complete", options.complete);
@@ -19870,9 +19870,9 @@ piranha.dropzone = new function () {
 
         var config = Object.assign(defaultOptions, options);
         console.log(selector, config);
-        
+
         return new Dropzone(selector + " form", config);
-    }  
+    }
 };
 /*global
     piranha

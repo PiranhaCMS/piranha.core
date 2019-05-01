@@ -98,7 +98,16 @@ piranha.media = new Vue({
             });
         },
         remove: function (id) {
-            console.log("Remove media: ", id);
+            fetch(piranha.baseUrl + "manager/api/media/delete/" + id)
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    piranha.media.folders = result.folders;
+                    piranha.media.items = result.media;
+
+                    // Push status to notification hub
+                    piranha.notifications.push(result.status);
+                })
+                .catch(function (error) { console.log("error:", error ); });
         },
         removeFolder: function (id) {
             fetch(piranha.baseUrl + "manager/api/media/folder/delete/" + id)
@@ -118,13 +127,13 @@ piranha.media = new Vue({
     mounted: function () {
         this.dropzone = piranha.dropzone.init("#media-upload-container", {
             uploadMultiple: false
-        }); 
+        });
         this.dropzone.on("complete", function (file) {
             if (file.status === "success") {
                 setTimeout(function () {
                     piranha.media.dropzone.removeFile(file);
                 }, 3000)
-            }            
+            }
         })
         this.dropzone.on("queuecomplete", function () {
             piranha.media.refresh();
