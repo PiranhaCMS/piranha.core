@@ -21,7 +21,7 @@ sudo: required
 
 mono: none
 
-dotnet: 2.1.500
+dotnet: 2.2
 
 branches:
   only:
