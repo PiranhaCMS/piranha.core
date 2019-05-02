@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Piranha;
 using Piranha.Extend.Blocks;
 using Piranha.Services;
+using MvcWeb.Models.Blocks;
 
 namespace MvcWeb
 {
@@ -19,7 +20,9 @@ namespace MvcWeb
                     new { id = Guid.NewGuid(), filename = "logo.png" },
                     new { id = Guid.NewGuid(), filename = "teaser1.png" },
                     new { id = Guid.NewGuid(), filename = "teaser2.png" },
-                    new { id = Guid.NewGuid(), filename = "teaser3.png" }
+                    new { id = Guid.NewGuid(), filename = "teaser3.png" },
+                    new { id = Guid.NewGuid(), filename = "drifter1.png" },
+                    new { id = Guid.NewGuid(), filename = "drifter2.jpg" },
                 };
 
                 // Get the default site id
@@ -89,6 +92,36 @@ namespace MvcWeb
                         });
                     }
                 }
+                startpage.Blocks.Add(new GalleryBlock
+                {
+                    Title = "Ornare Ullamcorper",
+                    Description = "<p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>",
+                    Items =
+                    {
+                        new ImageBlock
+                        {
+                            Body = images[5].id
+                        },
+                        new ImageBlock
+                        {
+                            Body = images[6].id
+                        }
+                    }
+                });
+                startpage.Blocks.Add(new ColumnBlock
+                {
+                    Items =
+                    {
+                        new ImageBlock
+                        {
+                            Body = images[6].id
+                        },
+                        new HtmlBlock
+                        {
+                            Body = "<h3>Ornare Mattis Vulputate</h3><p>Nullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam quis risus eget urna mollis ornare vel eu leo. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+                        }
+                    }
+                });
                 using (var stream = File.OpenRead("seed/startpage2.md"))
                 {
                     using (var reader = new StreamReader(stream))

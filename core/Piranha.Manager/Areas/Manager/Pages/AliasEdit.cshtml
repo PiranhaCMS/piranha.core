@@ -1,0 +1,34 @@
+@page "~/manager/aliases"
+@inject IViewLocalizer Localizer
+@{
+    ViewBag.Title = Localizer["Aliases"];
+    ViewBag.MenuItem = "Aliases";
+}
+@section script
+{
+    <script src="~/manager/assets/js/piranha.alias.min.js"></script>
+}
+
+<div id="alias">
+    <div class="top">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">@Localizer["Settings"]</li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer["Aliases"]</li>
+            </ol>
+        </nav>
+
+        <div class="container-fluid">
+            <div class="top-nav">
+                <button class="btn btn-primary btn-labeled" data-toggle="modal" data-target="#aliasModal">
+                    <i class="fas fa-plus"></i>@Localizer["Add"]
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="app" :class="{ ready: !loading }">
+        <partial name="Partial/_AliasList" />
+        <partial name="Partial/_AliasForm" />
+    </div>
+</div>

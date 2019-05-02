@@ -36,10 +36,5 @@ namespace MvcWeb.Models.Regions
         /// </summary>
         [Field]
         public HtmlField Ingress { get; set; }
-
-        [Field(Options = FieldOption.HalfWidth, Placeholder = "Maecenas sed diam eget risus varius." )]
-        public CheckBoxField Box1 { get; set; }
-        [Field(Options = FieldOption.HalfWidth, Placeholder = "Maecenas sed diam eget risus varius." )]
-        public CheckBoxField Box2 { get; set; }
     }
 }

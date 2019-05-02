@@ -1,0 +1,19 @@
+@inject IViewLocalizer Localizer
+@using Piranha.Manager
+@{
+    var menu = Menu.Items;
+}
+
+<nav class="navbar navbar-left fixed-top navbar-dark bg-dark">
+    <a class="navbar-brand" href="~/manager" tabindex="-1"></a>
+    <ul class="navbar-nav">
+        @foreach (var group in menu)
+        {
+            <li class="nav-item nav-header"><span class="navbar-text"><i class="@group.Css"></i>@Localizer[group.Name]</span></li>
+            @foreach (var item in group.Items)
+            {
+                <li class="nav-item@(ViewBag.MenuItem == item.InternalId ? " active" :"")"><a href="@Url.Content(item.Route)" class="nav-link" tabindex="-1"><i class="@item.Css"></i>@Localizer[item.Name]</a></li>
+            }
+        }
+    </ul>
+</nav>

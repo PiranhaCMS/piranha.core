@@ -12,13 +12,12 @@ using System;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Piranha.Areas.Manager.Controllers;
 using Piranha.AspNetCore.Identity.Models;
 
 namespace Piranha.AspNetCore.Identity.Controllers
 {
     [Area("Manager")]
-    public class RoleController : MessageControllerBase
+    public class RoleController : Controller
     {
         private readonly IDb _db;
 
@@ -55,11 +54,11 @@ namespace Piranha.AspNetCore.Identity.Controllers
         {
             if (model.Save(_db))
             {
-                SuccessMessage("The role has been saved.");
+                //SuccessMessage("The role has been saved.");
                 return RedirectToAction("Edit", new {id = model.Role.Id});
             }
 
-            ErrorMessage("The role could not be saved.", false);
+            //ErrorMessage("The role could not be saved.", false);
             return View("Edit", model);
         }
 
@@ -75,11 +74,11 @@ namespace Piranha.AspNetCore.Identity.Controllers
                 _db.Roles.Remove(role);
                 _db.SaveChanges();
 
-                SuccessMessage("The role has been deleted.");
+                //SuccessMessage("The role has been deleted.");
                 return RedirectToAction("List");
             }
 
-            ErrorMessage("The role could not be deleted.", false);
+            //ErrorMessage("The role could not be deleted.", false);
             return RedirectToAction("List");
         }
     }

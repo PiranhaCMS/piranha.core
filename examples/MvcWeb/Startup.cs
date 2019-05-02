@@ -2,10 +2,12 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using Piranha;
 using Piranha.AspNetCore.Identity.SQLite;
 
@@ -17,20 +19,26 @@ namespace MvcWeb
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(config =>
+            services.AddJsonLocalization(options =>
             {
-                config.ModelBinderProviders.Insert(0, new Piranha.Manager.Binders.AbstractModelBinderProvider());
+                options.ResourcesPath = "../../../Resources";
             });
+            services.AddMvc()
+                .AddViewLocalization()
+                .AddDataAnnotationsLocalization()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
             services.AddPiranha();
             services.AddPiranhaApplication();
             services.AddPiranhaFileStorage();
             services.AddPiranhaImageSharp();
             services.AddPiranhaAzureSearch();
+            services.AddPiranhaManager();
+
             services.AddPiranhaEF(options =>
                 options.UseSqlite("Filename=./piranha.mvcweb.db"));
             services.AddPiranhaIdentityWithSeed<IdentitySQLiteDb>(options =>
                 options.UseSqlite("Filename=./piranha.mvcweb.db"));
-            services.AddPiranhaManager();
 
             services.AddMemoryCache();
             services.AddPiranhaMemoryCache();
@@ -50,6 +58,8 @@ namespace MvcWeb
             App.CacheLevel = Piranha.Cache.CacheLevel.Full;
 
             // Custom components
+            App.Blocks.Register<Models.Blocks.ColumnBlock>();
+            App.Blocks.Register<Models.Blocks.GalleryBlock>();
             App.Blocks.Register<Models.Blocks.SeparatorBlock>();
 
             // Build content types

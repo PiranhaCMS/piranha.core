@@ -1,114 +1,149 @@
 /*
- * Copyright (c) 2016 Håkan Edling
+ * Copyright (c) 2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 var gulp = require("gulp"),
-    less = require("gulp-less"),
+    sass = require('gulp-sass'),
     concat = require("gulp-concat"),
     cssmin = require("gulp-cssmin"),
     rename = require("gulp-rename"),
     uglify = require("gulp-uglify");
 
-var paths = {
-    js: [
-        "assets/js/polyfill.js",
-        "assets/lib/jquery/dist/jquery.js",
-        "assets/lib/bootstrap/dist/js/bootstrap.js",
-        "assets/lib/jasny-bootstrap/dist/js/jasny-bootstrap.js",
-        "assets/lib/moment/min/moment.min.js",
-        "assets/lib/bootstrap-datetimepicker-3/build/js/bootstrap-datetimepicker.min.js",
-        "assets/lib/jquery-nestable/jquery.nestable.js",
-        "assets/lib/jquery.ns-autogrow/dist/jquery.ns-autogrow.js",
-        "assets/lib/select2/dist/js/select2.js",
-        "assets/lib/dropzone/dist/dropzone.js",
-        "assets/lib/simplemde/dist/simplemde.min.js",
-        "assets/lib/object.assign-polyfill/object.assign.js",
-        "assets/js/html5sortable.js",
-        "assets/js/piranha.notifications.js",
-        "assets/js/piranha.media.js",
-        "assets/js/piranha.page.js",
-        "assets/js/piranha.post.js",
-        "assets/js/ui.js"
-    ],
-    jsDest: "assets/js/script.js",
-    signalJs: [
-        "node_modules/@aspnet/signalr/dist/browser/signalr.min.js"
-    ],
-    signalDest: "assets/js/script.signalr.js",
-    editorLess: "assets/less/editor.less",
-    less: "assets/less/style.less",
-    css: ["assets/css/*.css", "!assets/css/*.min.css"],
-    cssDest: "assets/css"
-};
+var output = "assets/dist/";
+//var output = "wwwroot/assets/";
+
+var css = [
+    "assets/src/scss/slim.scss"
+];
+
+var fonts = [
+    "node_modules/@fortawesome/fontawesome-free/webfonts/*.*",
+    "assets/src/fonts/*.*"
+];
+
+var js = [
+    {
+        name: "piranha.js",
+        items: [
+            "node_modules/jquery/dist/jquery.slim.js",
+            "node_modules/popper.js/dist/umd/popper.js",
+            "node_modules/bootstrap/dist/js/bootstrap.js",
+            "node_modules/vue/dist/vue.min.js",
+            "node_modules/html5sortable/dist/html5sortable.js",
+            "node_modules/nestable2/dist/jquery.nestable.min.js",
+            "node_modules/dropzone/dist/dropzone.js",
+            "assets/src/js/piranha.dropzone.js",
+            "assets/src/js/piranha.utils.js",
+            "assets/src/js/piranha.blockpicker.js",
+            "assets/src/js/piranha.notifications.js",
+            "assets/src/js/piranha.mediapicker.js",
+            "assets/src/js/piranha.preview.js",
+            "assets/src/js/piranha.editor.js"
+        ]
+    },
+    {
+        name: "piranha.alias.js",
+        items: [
+            "assets/src/js/piranha.alias.js"
+        ]
+    },
+    {
+        name: "piranha.media.js",
+        items: [
+            "assets/src/js/piranha.media.js"
+        ]
+    },
+    {
+        name: "piranha.module.js",
+        items: [
+            "assets/src/js/piranha.module.js"
+        ]
+    },
+    {
+        name: "piranha.pageedit.js",
+        items: [
+            "assets/src/js/components/region.js",
+            "assets/src/js/components/block-group.js",
+            "assets/src/js/components/block-group-horizontal.js",
+
+            "assets/src/js/components/blocks/html-block.js",
+            "assets/src/js/components/blocks/html-column-block.js",
+            "assets/src/js/components/blocks/image-block.js",
+            "assets/src/js/components/blocks/quote-block.js",
+            "assets/src/js/components/blocks/separator-block.js",
+            "assets/src/js/components/blocks/text-block.js",
+            "assets/src/js/components/blocks/missing-block.js",
+
+            "assets/src/js/components/fields/checkbox-field.js",
+            "assets/src/js/components/fields/date-field.js",
+            "assets/src/js/components/fields/string-field.js",
+            "assets/src/js/components/fields/html-field.js",
+            "assets/src/js/components/fields/image-field.js",
+            "assets/src/js/components/fields/number-field.js",
+            "assets/src/js/components/fields/text-field.js",
+            "assets/src/js/components/fields/missing-field.js",
+
+            "assets/src/js/piranha.pageedit.js"
+        ]
+    },
+    {
+        name: "piranha.pagelist.js",
+        items: [
+            "assets/src/js/components/sitemap-item.js",
+            "assets/src/js/piranha.pagelist.js"
+        ]
+    }
+];
 
 //
 // Compile & minimize less files
 //
 gulp.task("min:css", function () {
-  return gulp.src(paths.less)
-    .pipe(less({
-        relativeUrls: true
-    }))
-    .pipe(gulp.dest(paths.cssDest))
-    .pipe(cssmin())
-    .pipe(rename({
-        suffix: ".min"
-    }))
-    .pipe(gulp.dest(paths.cssDest));
+    // Minimize and combine styles
+    for (var n = 0; n < css.length; n++)
+    {
+        gulp.src(css[n])
+            .pipe(sass().on("error", sass.logError))
+            .pipe(cssmin())
+            .pipe(rename({
+                suffix: ".min"
+            }))
+            .pipe(gulp.dest(output + "css"));
+    }
+
+    // Copy fonts
+    for (var n = 0; n < fonts.length; n++)
+    {
+        gulp.src(fonts[n])
+            .pipe(gulp.dest(output + "webfonts"));
+    }
 });
 
 //
-// Compile & minimize editor less file
-//
-gulp.task("min:editor", function () {
-    return gulp.src(paths.editorLess)
-        .pipe(less({
-            relativeUrls: true
-        }))
-        .pipe(gulp.dest(paths.cssDest))
-        .pipe(cssmin())
-        .pipe(rename({
-            suffix: ".min"
-        }))
-        .pipe(gulp.dest(paths.cssDest));
-});
-
-//
-// Combine & minimze js files
+// Compile & minimize less files
 //
 gulp.task("min:js", function () {
-    return gulp.src(paths.js, { base: "." })
-        .pipe(concat(paths.jsDest))
-        .pipe(gulp.dest("."))
-        .pipe(uglify())
-        .pipe(rename({
-            suffix: ".min"
-        }))
-        .pipe(gulp.dest("."));
-});
-
-//
-// Combine & minimze js files
-//
-gulp.task("min:signalr", function () {
-    return gulp.src(paths.signalJs, { base: "." })
-        .pipe(concat(paths.signalDest))
-        .pipe(gulp.dest("."))
-        .pipe(uglify())
-        .pipe(rename({
-            suffix: ".min"
-        }))
-        .pipe(gulp.dest("."));
+    for (var n = 0; n < js.length; n++)
+    {
+        gulp.src(js[n].items, { base: "." })
+            .pipe(concat(output + "js/" + js[n].name))
+            .pipe(gulp.dest("."))
+            .pipe(uglify())
+            .pipe(rename({
+                suffix: ".min"
+            }))
+            .pipe(gulp.dest("."));
+    }
 });
 
 //
 // Default tasks
 //
-gulp.task("serve", ["min:css", "min:editor", "min:js", "min:signalr"]);
+gulp.task("serve", ["min:css", "min:js"]);
 gulp.task("default", ["serve"]);

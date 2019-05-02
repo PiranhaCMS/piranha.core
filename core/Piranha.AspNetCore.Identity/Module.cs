@@ -76,21 +76,19 @@ namespace Piranha.AspNetCore.Identity
             }
 
             // Add manager menu items
-            Menu.Items["System"].Items.Insert(0, new Menu.MenuItem
+            Menu.Items["System"].Items.Insert(0, new MenuItem
             {
                 InternalId = "Users",
                 Name = "Users",
-                Controller = "User",
-                Action = "List",
+                Route = "~/manager/users",
                 Policy = Permissions.Users,
                 Css = "fas fa-users"
             });
-            Menu.Items["System"].Items.Insert(1, new Menu.MenuItem
+            Menu.Items["System"].Items.Insert(1, new MenuItem
             {
                 InternalId = "Roles",
                 Name = "Roles",
-                Controller = "Role",
-                Action = "List",
+                Route = "~/manager/roles",
                 Policy = Permissions.Roles,
                 Css = "fas fa-eye-slash"
             });
