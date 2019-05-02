@@ -1,13 +1,5 @@
 language: csharp
 
-os:
-  - osx
-  - linux
-
-osx_image: xcode9
-
-dist: trusty
-
 addons:
   apt:
     packages:
@@ -36,3 +28,13 @@ cache:
     - "tools/Addins"
     - "tools/gitreleasemanager"
     - "tools/GitVersion.CommandLine"
+
+matrix:
+  include:
+    - os: linux
+      # Ref: https://docs.travis-ci.com/user/reference/xenial
+      dist: xenial
+    - os: osx
+      # Ref: https://docs.travis-ci.com/user/reference/osx
+      dotnet: 2.2.104
+      osx_image: xcode10.1
