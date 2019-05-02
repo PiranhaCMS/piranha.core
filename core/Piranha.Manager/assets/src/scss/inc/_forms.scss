@@ -1,0 +1,21 @@
+@import "variables";
+
+.form-group:not(.form-check) {
+    &.title {
+        max-width: 960px;
+        margin: 0 auto;
+
+        input {
+            font-family: Bitter, serif;
+            font-size: 2.25rem;
+        }
+    }
+
+    >label {
+        font-weight: bold;
+    }
+}
+
+[contenteditable]:focus {
+    outline: 0px solid transparent;
+}

@@ -1,0 +1,272 @@
+@page
+@inject IViewLocalizer Localizer
+@section script
+{
+    <script>
+        $(".dd").nestable({
+            group: 1
+        });
+    </script>
+}
+
+<div class="top">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Section</li>
+            <li class="breadcrumb-item active" aria-current="page">Title</li>
+        </ol>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="top-nav">
+            <div class="btn-group" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-primary btn-labeled dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-plus"></i>
+                    @Localizer["Add"]
+                </button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                    <a class="dropdown-item" href="#">Dropdown link</a>
+                    <a class="dropdown-item" href="#">Dropdown link</a>
+                </div>
+            </div>
+            <button class="btn btn-success btn-labeled" data-toggle="modal" data-target="#aliasModal">
+                <i class="fas fa-check"></i>@Localizer["Save"]
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Is Default</th>
+                        <th>Modified</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a href="#">Sollicitudin Pharetra Commodo</a></td>
+                        <td></td>
+                        <td></td>
+                        <td>2019-03-19</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#">Ultricies Nibh Fusce</a></td>
+                        <td></td>
+                        <td></td>
+                        <td>2019-03-19</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#">Quam Fusce Ornare</a></td>
+                        <td></td>
+                        <td></td>
+                        <td>2019-03-19</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="sitemap dd">
+                <ol class="dd-list">
+                    <li class="dd-item">
+                        <div class="sitemap-item">
+                            <div class="handle dd-handle"><i class="fas fa-ellipsis-v"></i></div>
+                            <div class="link"><a href="#">Page link</a></div>
+                            <div class="type d-none d-md-block">Standard page</div>
+                            <div class="date d-none d-md-block">2019-03-23</div>
+                            <div class="actions">
+                                <a href="#"><i class="fas fa-angle-down"></i></a>
+                                <a href="#"><i class="fas fa-angle-right"></i></a>
+                            </div>
+                        </div>
+                        <ol class="dd-list">
+                            <li class="dd-item">
+                                <div class="sitemap-item">
+                                    <div class="handle dd-handle"><i class="fas fa-ellipsis-v"></i></div>
+                                    <div class="link"><a href="#">Page link</a></div>
+                                    <div class="type d-none d-md-block">Standard page</div>
+                                    <div class="date d-none d-md-block">2019-03-23</div>
+                                    <div class="actions">
+                                        <a href="#"><i class="fas fa-angle-down"></i></a>
+                                        <a href="#"><i class="fas fa-angle-right"></i></a>
+                                    </div>
+                                </div>
+                                <ol class="dd-list">
+                                    <li class="dd-item">
+                                        <div class="sitemap-item">
+                                            <div class="handle dd-handle"><i class="fas fa-ellipsis-v"></i></div>
+                                            <div class="link"><a href="#">Page link</a></div>
+                                            <div class="type d-none d-md-block">Standard page</div>
+                                            <div class="date d-none d-md-block">2019-03-23</div>
+                                            <div class="actions">
+                                                <a href="#"><i class="fas fa-angle-down"></i></a>
+                                                <a href="#"><i class="fas fa-angle-right"></i></a>
+                                                <a class="danger" href="#"><i class="fas fa-trash"></i></a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="dd-item">
+                                        <div class="sitemap-item">
+                                            <div class="handle dd-handle"><i class="fas fa-ellipsis-v"></i></div>
+                                            <div class="link"><a href="#">Page link</a></div>
+                                            <div class="type d-none d-md-block">Standard page</div>
+                                            <div class="date d-none d-md-block">2019-03-23</div>
+                                            <div class="actions">
+                                                <a href="#"><i class="fas fa-angle-down"></i></a>
+                                                <a href="#"><i class="fas fa-angle-right"></i></a>
+                                                <a class="danger" href="#"><i class="fas fa-trash"></i></a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ol>
+                            </li>
+                            <li class="dd-item">
+                                <div class="sitemap-item">
+                                    <div class="handle dd-handle"><i class="fas fa-ellipsis-v"></i></div>
+                                    <div class="link"><a href="#">Page link</a></div>
+                                    <div class="type d-none d-md-block">Standard page</div>
+                                    <div class="date d-none d-md-block">2019-03-23</div>
+                                    <div class="actions">
+                                        <a href="#"><i class="fas fa-angle-down"></i></a>
+                                        <a href="#"><i class="fas fa-angle-right"></i></a>
+                                        <a class="danger" href="#"><i class="fas fa-trash"></i></a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ol>
+                    </li>
+                    <li class="dd-item">
+                        <div class="sitemap-item">
+                            <div class="handle dd-handle"><i class="fas fa-ellipsis-v"></i></div>
+                            <div class="link"><a href="#">Page link</a></div>
+                            <div class="type d-none d-md-block">Standard page</div>
+                            <div class="date d-none d-md-block">2019-03-23</div>
+                            <div class="actions">
+                                <a href="#"><i class="fas fa-angle-down"></i></a>
+                                <a href="#"><i class="fas fa-angle-right"></i></a>
+                                <a class="danger" href="#"><i class="fas fa-trash"></i></a>
+                            </div>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    General
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Title</label>
+                                    <input type="text" class="form-control form-control-lg" placeholder="Add a value">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Firstname</label>
+                                    <input type="text" class="form-control" placeholder="Add a value">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Firstname</label>
+                                    <input type="text" class="form-control" placeholder="Add a value">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <button class="btn btn-success btn-labeled">
+                                    <i class="fas fa-check"></i>@Localizer["Save"]
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="gallery gallery-sm">
+        <div class="gallery-header">
+            Gallery
+        </div>
+
+        <a href="#" class="thumbnail">
+            <div class="thumbnail-icon">
+                <i class="fas fa-folder fa-3x"></i>
+            </div>
+            <p class="thumbnail-text">...</p>
+        </a>
+
+        <a href="#" class="thumbnail" data-toggle="modal" data-target="#previewModal">
+            <img class="thumbnail-image" src="https://picsum.photos/300/200">
+            <p class="thumbnail-text">DC658464_BBQ.jpg</p>
+        </a>
+
+        <a href="#" class="thumbnail">
+            <div class="thumbnail-icon">
+                <i class="fas fa-film fa-3x"></i>
+            </div>
+            <p class="thumbnail-text">DC658464_BBQ.jpg</p>
+        </a>
+
+        <a href="#" class="thumbnail" data-toggle="modal" data-target="#previewModal">
+            <img class="thumbnail-image" src="https://picsum.photos/300/200">
+            <p class="thumbnail-text">DC658464_BBQ.jpg</p>
+        </a>
+
+        <a href="#" class="thumbnail">
+            <div class="thumbnail-icon">
+                <i class="fas fa-file fa-3x"></i>
+            </div>
+            <p class="thumbnail-text">Report-23A.dox</p>
+        </a>
+
+        <a href="#" class="thumbnail" data-toggle="modal" data-target="#previewModal">
+            <img class="thumbnail-image" src="https://picsum.photos/300/200">
+            <p class="thumbnail-text">DC658464_BBQ.jpg</p>
+        </a>
+
+        <a href="#" class="thumbnail" data-toggle="modal" data-target="#previewModal">
+            <img class="thumbnail-image" src="https://picsum.photos/300/200">
+            <p class="thumbnail-text">DC658464_BBQ.jpg</p>
+        </a>
+
+        <a href="#" class="thumbnail" data-toggle="modal" data-target="#previewModal">
+            <img class="thumbnail-image" src="https://picsum.photos/300/200">
+            <p class="thumbnail-text">DC658464_BBQ.jpg</p>
+        </a>
+
+        <a href="#" class="thumbnail" data-toggle="modal" data-target="#previewModal">
+            <img class="thumbnail-image" src="https://picsum.photos/300/200">
+            <p class="thumbnail-text">DC658464_BBQ.jpg</p>
+        </a>
+        <a href="#" class="thumbnail" data-toggle="modal" data-target="#previewModal">
+            <img class="thumbnail-image" src="https://picsum.photos/300/200">
+            <p class="thumbnail-text">DC658464_BBQ.jpg</p>
+        </a>
+
+        <a href="#" class="thumbnail" data-toggle="modal" data-target="#previewModal">
+            <img class="thumbnail-image" src="https://picsum.photos/300/200">
+            <p class="thumbnail-text">DC658464_BBQ.jpg</p>
+        </a>
+    </div>
+</div>

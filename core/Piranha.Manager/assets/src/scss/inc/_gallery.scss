@@ -1,0 +1,112 @@
+@import "variables";
+
+.gallery {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -$gallery-gutter / 2;
+    margin-right: -$gallery-gutter / 2;
+
+    &.gallery-xs {
+        .thumbnail {
+            min-height: $gallery-xs-min-height;
+
+            @each $size, $value in $gallery-xs {
+                @include media-breakpoint-up($size) {
+                    @include make-col($value, $gallery-columns);
+                }
+            }
+        }
+    }
+
+    &.gallery-sm {
+        .thumbnail {
+            min-height: $gallery-sm-min-height;
+
+            @each $size, $value in $gallery-sm {
+                @include media-breakpoint-up($size) {
+                    @include make-col($value, $gallery-columns);
+                }
+            }
+        }
+    }
+
+    &.gallery-md {
+        .thumbnail {
+            min-height: $gallery-md-min-height;
+
+            @each $size, $value in $gallery-md {
+                @include media-breakpoint-up($size) {
+                    @include make-col($value, $gallery-columns);
+                }
+            }
+        }
+    }
+
+    &.gallery-lg {
+        .thumbnail {
+            min-height: $gallery-lg-min-height;
+
+            @each $size, $value in $gallery-lg {
+                @include media-breakpoint-up($size) {
+                    @include make-col($value, $gallery-columns);
+                }
+            }
+        }
+    }
+}
+
+.gallery-header {
+    @extend .card-header;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.thumbnail {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding-left: $gallery-gutter / 2;
+    padding-right: $gallery-gutter / 2;
+    margin-bottom: $thumbnail-margin-bottom;
+
+    &.droppable {
+        &.active > * {
+            background: $thumbnail-active-bg;
+        }
+    }
+
+    .thumbnail-icon {
+        flex-grow: 1;
+        position: relative;
+        background: $thumbnail-bg;
+
+        > * {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+        }
+    }
+
+    .thumbnail-image {
+        flex-grow: 1;
+        max-width: 100%;
+        object-fit: cover;
+        border: $thumbnail-border-width solid $thumbnail-border-color;
+        border-bottom: none;
+        background: $thumbnail-bg;
+        padding: .25rem;
+    }
+
+    .thumbnail-text {
+        margin: 0;
+        padding: .25rem 1rem;
+        text-align: center;
+        background: $thumbnail-bg;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+}

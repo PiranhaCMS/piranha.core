@@ -1,0 +1,24 @@
+.top {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 0;
+
+    .breadcrumb {
+        margin-left: 3rem;
+    }
+
+    .container-fluid {
+        position: fixed;
+        top: 0;
+        left: 3rem;
+        width: calc(100% - 3rem);
+        z-index: 1000; // TODO: Set later
+    }
+
+    .top-nav {
+        background: rgba(255,255,255,.6);
+        padding: .5rem 1rem;
+        float: right;
+    }
+}

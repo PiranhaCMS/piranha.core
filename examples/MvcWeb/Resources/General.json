@@ -1,0 +1,132 @@
+{
+  "Add": {
+    "Values": {
+      "sv-SE": "Lägg till"
+    }
+  },
+  "Content": {
+    "Values": {
+      "sv-SE": "Innehåll"
+    }
+  },
+  "Choose existing": {
+    "Values": {
+      "sv-SE": "Välj befintligt"
+    }
+  },
+  "Content type": {
+    "Values": {
+      "sv-SE": "Innehållstyp"
+    }
+  },
+  "Delete": {
+    "Values": {
+      "sv-SE": "Radera"
+    }
+  },
+  "Details": {
+    "Values": {
+      "sv-SE": "Detaljer"
+    }
+  },
+  "Filename": {
+    "Values": {
+      "sv-SE": "Filnamn"
+    }
+  },
+  "Height": {
+    "Values": {
+      "sv-SE": "Höjd"
+    }
+  },
+  "Edit": {
+    "Values": {
+      "sv-SE": "Redigera"
+    }
+  },
+  "Logout": {
+    "Values": {
+      "sv-SE": "Logga ut"
+    }
+  },
+  "Main content": {
+    "Values": {
+      "sv-SE": "Primärt innehåll"
+    }
+  },
+  "Modified": {
+    "Values": {
+      "sv-SE": "Ändrad"
+    }
+  },
+  "Name": {
+    "Values": {
+      "sv-SE": "Namn"
+    }
+  },
+  "Preview": {
+    "Values": {
+      "sv-SE": "Förhandsvisning"
+    }
+  },
+  "Publish": {
+    "Values": {
+      "sv-SE": "Publicera"
+    }
+  },
+  "Publish date": {
+    "Values": {
+      "sv-SE": "Publiceringsdatum"
+    }
+  },
+  "Save": {
+    "Values": {
+      "sv-SE": "Spara"
+    }
+  },
+  "Select block": {
+    "Values": {
+      "sv-SE": "Välj block"
+    }
+  },
+  "Settings": {
+    "Values": {
+      "sv-SE": "Inställningar"
+    }
+  },
+  "Size": {
+    "Values": {
+      "sv-SE": "Storlek"
+    }
+  },
+  "Slug": {
+    "Values": {
+      "sv-SE": "URL-segment"
+    }
+  },
+  "System": {
+    "Values": {
+      "sv-SE": "System"
+    }
+  },
+  "Update": {
+    "Values": {
+      "sv-SE": "Uppdatera"
+    }
+  },
+  "Type": {
+    "Values": {
+      "sv-SE": "Typ"
+    }
+  },
+  "Version": {
+    "Values": {
+      "sv-SE": "Version"
+    }
+  },
+  "Width": {
+    "Values": {
+      "sv-SE": "Bredd"
+    }
+  }
+}

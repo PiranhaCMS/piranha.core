@@ -1,0 +1,18 @@
+@model MvcWeb.Models.Blocks.GalleryBlock
+
+<div class="row">
+    <div class="col">
+        <p>
+            <div class="card">
+                <div class="card-body" style="background:#f2f2f2"">
+                    @for (var n = 0; n < Model.Items.Count; n++)
+                    {
+                        <p>
+                            @Html.DisplayFor(m => Model.Items[n], Model.Items[n].GetType().Name)
+                        </p>
+                    }
+                </div>
+            </div>
+        </p>
+    </div>
+</div>

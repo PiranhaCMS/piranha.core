@@ -1,0 +1,40 @@
+@inject IViewLocalizer Localizer
+
+<div id="blockpicker" class="modal modal-panel fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!-- Modal header -->
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title"><i class="fas fa-cubes"></i> @Localizer["Select block"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Tabs -->
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active"><i class="fas fa-list"></i> @Localizer["Add"]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"><i class="fas fa-table"></i> @Localizer["Choose existing"]</a>
+                </li>
+            </ul>
+
+            <!-- Modal body -->
+            <div class="modal-body bg-light">
+                <div v-for="category in categories">
+                    <div class="blocktype-category">{{ category.name }}</div>
+                    <div class="blocktype-list">
+                        <div class="blocktype" v-for="item in category.items">
+                            <a href="#" class="btn btn-block" v-on:click.prevent="select(item)">
+                                <i :class="item.icon"></i>
+                                <span>{{ item.name }}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

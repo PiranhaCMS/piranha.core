@@ -28,5 +28,14 @@ namespace Piranha.Extend
         /// Gets/set the block type id.
         /// </summary>
         public string Type { get; set; }
+
+        /// <summary>
+        /// Gets the title of the block when used in a block group.
+        /// </summary>
+        /// <returns>The title</returns>
+        public virtual string GetTitle()
+        {
+            return "[Not Implemented]";
+        }
     }
 }

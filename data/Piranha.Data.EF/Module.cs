@@ -38,11 +38,6 @@ namespace Piranha.Data.EF
         public string Version => Piranha.Utils.GetAssemblyVersion(GetType().Assembly);
 
         /// <summary>
-        /// Gets the release date
-        /// </summary>
-        public string ReleaseDate => "2019-03-03";
-
-        /// <summary>
         /// Gets the description
         /// </summary>
         public string Description => "Data implementation for Entity Framework Core.";
@@ -50,7 +45,12 @@ namespace Piranha.Data.EF
         /// <summary>
         /// Gets the package url.
         /// </summary>
-        public string PackageURL => "https://www.nuget.org/packages/Piranha.Data.EF";
+        public string PackageUrl => "https://www.nuget.org/packages/Piranha.Data.EF";
+
+        /// <summary>
+        /// Gets the icon url.
+        /// </summary>
+        public string IconUrl => "http://piranhacms.org/assets/twitter-shield.png";
 
         /// <summary>
         /// Create automapping.

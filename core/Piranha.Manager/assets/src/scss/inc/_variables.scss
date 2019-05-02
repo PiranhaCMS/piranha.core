@@ -1,0 +1,80 @@
+// Color system
+
+$white:     #fff;
+$gray-100:  #f2f2f2;
+$gray-200:  #e9ecef;
+$gray-300:  #dee2e6;
+$gray-400:  #ced4da;
+$gray-500:  #adb5bd;
+$gray-600:  #6c757d;
+$gray-700:  #495057;
+$gray-800:  #222;
+$gray-900:  #212529;
+$black:     #000;
+
+$blue:      #007eaa;
+$indigo:    #6610f2;
+$purple:    #6f42c1;
+$pink:      #e83e8c;
+$red:       #a94441;
+$orange:    #ff7200;
+$yellow:    #f0ad4e;
+$green:     #439700;
+$teal:      #20c997;
+$cyan:      #17a2b8;
+
+$body-bg: $gray-100;
+
+// Typography
+
+$font-size-base: .875rem;
+
+// Blocks
+
+$block-width: 960px;
+
+// Components
+
+$border-radius:     0;
+$border-radius-lg:  0;
+$border-radius-sm:  0;
+
+// Cards
+
+$card-bg: none;
+$card-cap-bg: none;
+$card-body-bg: $white;
+$card-border-width: 0;
+
+// Gallery
+
+$gallery-gutter: 1rem;
+$gallery-columns: 24;
+
+$gallery-xs: ();
+$gallery-xs: map-merge( ( "xs": 8, "sm": 4, "md": 3, "lg": 2 ), $gallery-xs );
+$gallery-xs-min-height: 85px;
+
+$gallery-sm: ();
+$gallery-sm: map-merge( ( "xs": 12, "sm": 8, "md": 6, "lg": 4 ), $gallery-sm );
+$gallery-sm-min-height: 100px;
+
+$gallery-md: ();
+$gallery-md: map-merge( ( "xs": 12, "sm": 12, "md": 8, "lg": 6 ), $gallery-md );
+$gallery-md-min-height: 100px;
+
+$gallery-lg: ();
+$gallery-lg: map-merge( ( "xs": 24, "sm": 24, "md": 12, "lg": 12 ), $gallery-lg );
+$gallery-lg-min-height: 200px;
+
+// Thumbnails
+
+$thumbnail-bg: $white;
+$thumbnail-active-bg: rgba($black, .075);
+$thumbnail-margin-bottom: 1rem;
+$thumbnail-border-color: $white;
+$thumbnail-border-width: 2px;
+
+// Progress bars
+
+$progress-bg: $gray-400;

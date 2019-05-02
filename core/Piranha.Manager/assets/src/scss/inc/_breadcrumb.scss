@@ -1,0 +1,11 @@
+@import "variables";
+
+.top {
+    .breadcrumb {
+        background: $white;
+        color: $link-color;
+        padding: 1rem;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+}

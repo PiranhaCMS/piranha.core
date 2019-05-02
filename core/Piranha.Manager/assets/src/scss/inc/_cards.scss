@@ -1,0 +1,12 @@
+@import "variables";
+
+.card {
+    .card-header {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .card-body {
+        background: $card-body-bg;
+    }
+}

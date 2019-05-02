@@ -50,11 +50,6 @@ namespace Piranha.AspNetCore.Identity
         public string Version => Piranha.Utils.GetAssemblyVersion(GetType().Assembly);
 
         /// <summary>
-        /// Gets the release date
-        /// </summary>
-        public string ReleaseDate => "2019-03-01";
-
-        /// <summary>
         /// Gets the description
         /// </summary>
         public string Description => "Security module for Piranha CMS using AspNetCore Identity.";
@@ -62,7 +57,12 @@ namespace Piranha.AspNetCore.Identity
         /// <summary>
         /// Gets the package url.
         /// </summary>
-        public string PackageURL => "https://www.nuget.org/packages/Piranha.AspNetCore.Identity";
+        public string PackageUrl => "https://www.nuget.org/packages/Piranha.AspNetCore.Identity";
+
+        /// <summary>
+        /// Gets the icon url.
+        /// </summary>
+        public string IconUrl => "http://piranhacms.org/assets/twitter-shield.png";
 
         /// <summary>
         /// Initializes the module.
@@ -76,21 +76,19 @@ namespace Piranha.AspNetCore.Identity
             }
 
             // Add manager menu items
-            Menu.Items["System"].Items.Insert(0, new Menu.MenuItem
+            Menu.Items["System"].Items.Insert(0, new MenuItem
             {
                 InternalId = "Users",
                 Name = "Users",
-                Controller = "User",
-                Action = "List",
+                Route = "~/manager/users",
                 Policy = Permissions.Users,
                 Css = "fas fa-users"
             });
-            Menu.Items["System"].Items.Insert(1, new Menu.MenuItem
+            Menu.Items["System"].Items.Insert(1, new MenuItem
             {
                 InternalId = "Roles",
                 Name = "Roles",
-                Controller = "Role",
-                Action = "List",
+                Route = "~/manager/roles",
                 Policy = Permissions.Roles,
                 Css = "fas fa-eye-slash"
             });
