@@ -586,6 +586,7 @@ namespace Piranha.Services
             {
                 _cache.Remove(post.Id.ToString());
                 _cache.Remove($"PostId_{post.BlogId}_{post.Slug}");
+                _cache.Remove($"PostInfo_{post.Id.ToString()}");
             }
         }
     }
