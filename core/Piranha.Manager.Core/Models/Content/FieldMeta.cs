@@ -18,6 +18,11 @@ namespace Piranha.Manager.Models.Content
     public class FieldMeta : ContentMeta
     {
         /// <summary>
+        /// Gets/sets the id.
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
         /// Gets/sets if the field should be displayed half width.
         /// </summary>
         public bool IsHalfWidth { get; set; }

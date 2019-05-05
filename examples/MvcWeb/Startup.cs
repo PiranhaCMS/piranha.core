@@ -8,6 +8,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Askmethat.Aspnet.JsonLocalizer.Extensions;
+using Newtonsoft.Json;
 using Piranha;
 using Piranha.AspNetCore.Identity.SQLite;
 
@@ -26,6 +27,9 @@ namespace MvcWeb
             services.AddMvc()
                 .AddViewLocalization()
                 .AddDataAnnotationsLocalization()
+                .AddJsonOptions(options => {
+                    options.SerializerSettings.TypeNameHandling = TypeNameHandling.Auto;
+                })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddPiranha();

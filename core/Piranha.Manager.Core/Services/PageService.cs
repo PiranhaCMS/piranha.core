@@ -11,25 +11,30 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using Piranha.Models;
 using Piranha.Manager.Models;
 using Piranha.Manager.Models.Content;
+using Piranha.Services;
 
 namespace Piranha.Manager.Services
 {
-    public class PageService
+    public class PageService : ContentServiceBase
     {
         private readonly IApi _api;
+        private readonly IContentFactory _factory;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public PageService(IApi api)
+        public PageService(IApi api, IContentFactory factory)
         {
             _api = api;
+            _factory = factory;
         }
 
         /// <summary>
@@ -91,6 +96,7 @@ namespace Piranha.Manager.Services
                     {
                         Meta = new RegionMeta
                         {
+                            Id = regionType.Id,
                             Name = regionType.Title,
                             Description = regionType.Description,
                             Placeholder = regionType.ListTitlePlaceholder,
@@ -118,9 +124,9 @@ namespace Piranha.Manager.Services
 
                             var field = new FieldEditModel
                             {
-                                Type = appFieldType.TypeName,
                                 Meta = new FieldMeta
                                 {
+                                    Id = fieldType.Id,
                                     Name = fieldType.Title,
                                     Component = appFieldType.Component,
                                     Placeholder = fieldType.Placeholder,
@@ -181,6 +187,7 @@ namespace Piranha.Manager.Services
 
                         var groupItem = new BlockGroupEditModel
                         {
+                            Id = block.Id,
                             Type = block.Type
                         };
 
@@ -192,10 +199,10 @@ namespace Piranha.Manager.Services
 
                                 groupItem.Fields.Add(new FieldEditModel
                                 {
-                                    Type = fieldType.TypeName,
                                     Model = (Extend.IField)prop.GetValue(block),
                                     Meta = new FieldMeta
                                     {
+                                        Id = prop.Name,
                                         Name = prop.Name,
                                         Component = fieldType.Component,
                                     }
@@ -243,6 +250,133 @@ namespace Piranha.Manager.Services
                 return model;
             }
             return null;
+        }
+
+        public async Task Save(PageEditModel model)
+        {
+            var pageType = App.PageTypes.GetById(model.TypeId);
+
+            if (pageType != null)
+            {
+                if (model.Id == Guid.Empty)
+                {
+                    model.Id = Guid.NewGuid();
+                }
+
+                var page = await _api.Pages.GetByIdAsync(model.Id);
+
+                if (page == null)
+                {
+                    page = _factory.Create<DynamicPage>(pageType);
+                    page.Id = model.Id;
+                }
+
+                page.SiteId = model.SiteId;
+                page.ParentId = model.ParentId;
+                page.SortOrder = model.SortOrder;
+                page.TypeId = model.TypeId;
+                page.Title = model.Title;
+                page.NavigationTitle = model.NavigationTitle;
+                page.Slug = model.Slug;
+                page.MetaKeywords = model.MetaKeywords;
+                page.MetaDescription = model.MetaDescription;
+                page.Published = DateTime.Parse(model.Published);
+
+                // Save regions
+                foreach (var region in pageType.Regions)
+                {
+                    var modelRegion = model.Regions
+                        .FirstOrDefault(r => r.Meta.Id == region.Id);
+
+                    if (region.Collection)
+                    {
+                        var listRegion = (IRegionList)((IDictionary<string, object>)page.Regions)[region.Id];
+
+                        listRegion.Clear();
+
+                        foreach (var item in modelRegion.Items)
+                        {
+                            if (region.Fields.Count == 1)
+                            {
+                                listRegion.Add(item.Fields[0].Model);
+                            }
+                            else
+                            {
+                                var pageRegion = new ExpandoObject();
+
+                                foreach (var field in region.Fields)
+                                {
+                                    var modelField = item.Fields
+                                        .FirstOrDefault(f => f.Meta.Id == field.Id);
+                                    ((IDictionary<string, object>)pageRegion)[field.Id] = modelField.Model;
+                                }
+                                listRegion.Add(pageRegion);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var pageRegion = ((IDictionary<string, object>)page.Regions)[region.Id];
+
+                        if (region.Fields.Count == 1)
+                        {
+                            ((IDictionary<string, object>)page.Regions)[region.Id] =
+                                modelRegion.Items[0].Fields[0].Model;
+                        }
+                        else
+                        {
+                            foreach (var field in region.Fields)
+                            {
+                                var modelField = modelRegion.Items[0].Fields
+                                    .FirstOrDefault(f => f.Meta.Id == field.Id);
+                                ((IDictionary<string, object>)pageRegion)[field.Id] = modelField.Model;
+                            }
+                        }
+                    }
+                }
+
+                // Save blocks
+                page.Blocks.Clear();
+
+                foreach (var block in model.Blocks)
+                {
+                    if (block.Model is BlockGroupEditModel)
+                    {
+                        var groupBlock = (BlockGroupEditModel)block.Model;
+                        var groupType = App.Blocks.GetByType(groupBlock.Type);
+
+                        if (groupType != null)
+                        {
+                            var pageBlock = (Extend.BlockGroup)Activator.CreateInstance(groupType.Type);
+
+                            pageBlock.Id = groupBlock.Id;
+                            pageBlock.Type = groupBlock.Type;
+
+                            foreach (var field in groupBlock.Fields)
+                            {
+                                var prop = pageBlock.GetType().GetProperty(field.Meta.Id, App.PropertyBindings);
+                                prop.SetValue(pageBlock, field.Model);
+                            }
+
+                            foreach (var item in groupBlock.Items)
+                            {
+                                pageBlock.Items.Add(item.Model);
+                            }
+                            page.Blocks.Add(pageBlock);
+                        }
+                    }
+                    else
+                    {
+                        page.Blocks.Add(block.Model);
+                    }
+                }
+
+                await _api.Pages.SaveAsync(page);
+            }
+            else
+            {
+                throw new ValidationException("Invalid Page Type.");
+            }
         }
 
         private PageListModel.PageItem MapRecursive(SitemapItem item)

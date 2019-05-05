@@ -19,11 +19,6 @@ namespace Piranha.Manager.Models.Content
     public class FieldEditModel
     {
         /// <summary>
-        /// Gets/sets the field type.
-        /// </summary>
-        public string Type { get; set; }
-
-        /// <summary>
         /// Gets/sets the field model.
         /// </summary>
         public IField Model { get; set; }

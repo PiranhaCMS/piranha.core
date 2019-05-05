@@ -21,7 +21,6 @@ namespace Piranha.Extend
         /// <summary>
         /// Gets/sets the id of the block instance.
         /// </summary>
-        [JsonIgnore]
         public Guid Id { get; set; }
 
         /// <summary>

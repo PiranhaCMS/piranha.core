@@ -110,9 +110,9 @@ namespace Piranha.Manager.Services
 
                     var field = new FieldEditModel
                     {
-                        Type = appFieldType.TypeName,
                         Meta = new FieldMeta
                         {
+                            Id = fieldType.Id,
                             Name = fieldType.Title,
                             Component = appFieldType.Component,
                             Placeholder = fieldType.Placeholder,
@@ -183,7 +183,6 @@ namespace Piranha.Manager.Services
 
                             groupItem.Fields.Add(new FieldEditModel
                             {
-                                Type = fieldType.TypeName,
                                 Model = (Extend.IField)prop.GetValue(block),
                                 Meta = new FieldMeta
                                 {

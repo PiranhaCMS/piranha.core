@@ -18,6 +18,11 @@ namespace Piranha.Manager.Models.Content
     public class RegionMeta : ContentMeta
     {
         /// <summary>
+        /// Gets/sets the id.
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
         /// Gets/sets if  this is a collection region.
         /// </summary>
         public bool IsCollection { get; set; }

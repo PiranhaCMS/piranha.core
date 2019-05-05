@@ -697,6 +697,38 @@ piranha.pageedit = new Vue({
                 .catch(function (error) { console.log("error:", error );
             });
         },
+        save: function() {
+            var model = {
+                id: piranha.pageedit.id,
+                siteId: piranha.pageedit.siteId,
+                parentId: piranha.pageedit.parentId,
+                sortOrder: piranha.pageedit.sortOrder,
+                typeId: piranha.pageedit.typeId,
+                title: piranha.pageedit.title,
+                navigationTitle: piranha.pageedit.navigationTitle,
+                slug: piranha.pageedit.slug,
+                metaKeywords: piranha.pageedit.metaKeywords,
+                metaDescription: piranha.pageedit.metaDescription,
+                published: piranha.pageedit.published,
+                blocks: JSON.parse(JSON.stringify(piranha.pageedit.blocks)),
+                regions: JSON.parse(JSON.stringify(piranha.pageedit.regions))
+            };
+
+            fetch(piranha.baseUrl + "manager/api/page/save", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(model)
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                piranha.notifications.push(result);
+            })
+            .catch(function (error) {
+                console.log("error:", error);
+            });
+        },
         remove: function (id) {
             console.log("Remove page: ", id);
         },
