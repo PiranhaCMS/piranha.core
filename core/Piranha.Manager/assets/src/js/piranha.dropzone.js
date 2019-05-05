@@ -61,7 +61,6 @@ piranha.dropzone = new function () {
         };
 
         var config = Object.assign(defaultOptions, options);
-        console.log(selector, config);
 
         return new Dropzone(selector + " form", config);
     }
