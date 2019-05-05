@@ -22,7 +22,7 @@ using Piranha.Services;
 
 namespace Piranha.Manager.Services
 {
-    public class PageService : ContentServiceBase
+    public class PageService
     {
         private readonly IApi _api;
         private readonly IContentFactory _factory;
