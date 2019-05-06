@@ -8,24 +8,24 @@
  *
  */
 
-using System.Collections.Generic;
+using System;
+using Piranha.Extend;
 
 namespace Piranha.Manager.Models.Content
 {
     /// <summary>
-    /// Edit model for a region.
+    /// Edit model for a field.
     /// </summary>
-    public class RegionEditModel
+    public class FieldModel
     {
         /// <summary>
-        /// Gets/sets the available items. A region collection can have several items,
-        /// a regular region will only have one item in the collection.
+        /// Gets/sets the field model.
         /// </summary>
-        public IList<RegionItemEditModel> Items { get; set; } = new List<RegionItemEditModel>();
+        public IField Model { get; set; }
 
         /// <summary>
         /// Gets/sets the meta information.
         /// </summary>
-        public RegionMeta Meta { get; set; }
+        public FieldMeta Meta { get; set; }
     }
 }

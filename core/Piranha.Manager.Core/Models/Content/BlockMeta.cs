@@ -9,23 +9,17 @@
  */
 
 using System;
-using Piranha.Extend;
 
 namespace Piranha.Manager.Models.Content
 {
     /// <summary>
-    /// Edit model for a field.
+    /// Meta information for blocks.
     /// </summary>
-    public class FieldEditModel
+    public class BlockMeta : ContentMeta
     {
         /// <summary>
-        /// Gets/sets the field model.
+        /// Gets/sets if this is a block group.
         /// </summary>
-        public IField Model { get; set; }
-
-        /// <summary>
-        /// Gets/sets the meta information.
-        /// </summary>
-        public FieldMeta Meta { get; set; }
+        public bool IsGroup { get; set; } = false;
     }
 }

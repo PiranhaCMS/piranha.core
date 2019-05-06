@@ -94,7 +94,7 @@ namespace Piranha.Manager.Services
             return model;
         }
 
-        public RegionItemEditModel CreatePageRegion(string type, string region)
+        public RegionItemModel CreatePageRegion(string type, string region)
         {
             var pageType = App.PageTypes.GetById(type);
 
@@ -102,13 +102,13 @@ namespace Piranha.Manager.Services
             {
                 var regionType = pageType.Regions.First(r => r.Id == region);
                 var regionModel = _factory.CreateDynamicRegion(pageType, region);
-                var regionItem = new RegionItemEditModel();
+                var regionItem = new RegionItemModel();
 
                 foreach (var fieldType in regionType.Fields)
                 {
                     var appFieldType = App.Fields.GetByType(fieldType.Type);
 
-                    var field = new FieldEditModel
+                    var field = new FieldModel
                     {
                         Meta = new FieldMeta
                         {
@@ -142,7 +142,7 @@ namespace Piranha.Manager.Services
         /// </summary>
         /// <param name="type">The block type</param>
         /// <returns>The new block</returns>
-        public BlockEditModel CreateBlock(string type)
+        public BlockModel CreateBlock(string type)
         {
             var blockType = App.Blocks.GetByType(type);
 
@@ -152,14 +152,15 @@ namespace Piranha.Manager.Services
 
                 if (block is Extend.BlockGroup)
                 {
-                    var item = new BlockEditModel
+                    var item = new BlockGroupModel
                     {
-                        Meta = new ContentMeta
+                        Meta = new BlockMeta
                         {
                             Name = blockType.Name,
                             Title = block.GetTitle(),
                             Icon = blockType.Icon,
-                            Component = "block-group"
+                            Component = "block-group",
+                            IsGroup = true
                         }
                     };
 
@@ -169,19 +170,13 @@ namespace Piranha.Manager.Services
                             "block-group-horizontal" : "block-group-vertical";
                     }
 
-
-                    var groupItem = new BlockGroupEditModel
-                    {
-                        Type = block.Type
-                    };
-
                     foreach (var prop in block.GetType().GetProperties(App.PropertyBindings))
                     {
                         if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
                         {
                             var fieldType = App.Fields.GetByType(prop.PropertyType);
 
-                            groupItem.Fields.Add(new FieldEditModel
+                            item.Fields.Add(new FieldModel
                             {
                                 Model = (Extend.IField)prop.GetValue(block),
                                 Meta = new FieldMeta
@@ -192,16 +187,15 @@ namespace Piranha.Manager.Services
                             });
                         }
                     }
-                    item.Model = groupItem;
 
                     return item;
                 }
                 else
                 {
-                    return new BlockEditModel
+                    return new BlockItemModel
                     {
                         Model = block,
-                        Meta = new ContentMeta
+                        Meta = new BlockMeta
                         {
                             Name = blockType.Name,
                             Title = block.GetTitle(),

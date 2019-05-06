@@ -92,7 +92,7 @@ namespace Piranha.Manager.Services
 
                 foreach (var regionType in type.Regions)
                 {
-                    var region = new RegionEditModel
+                    var region = new RegionModel
                     {
                         Meta = new RegionMeta
                         {
@@ -116,13 +116,13 @@ namespace Piranha.Manager.Services
 
                     foreach (var regionModel in (IEnumerable)regionListModel)
                     {
-                        var regionItem = new RegionItemEditModel();
+                        var regionItem = new RegionItemModel();
 
                         foreach (var fieldType in regionType.Fields)
                         {
                             var appFieldType = App.Fields.GetByType(fieldType.Type);
 
-                            var field = new FieldEditModel
+                            var field = new FieldModel
                             {
                                 Meta = new FieldMeta
                                 {
@@ -169,13 +169,16 @@ namespace Piranha.Manager.Services
 
                     if (block is Extend.BlockGroup)
                     {
-                        var group = new BlockEditModel
+                        var group = new BlockGroupModel
                         {
-                            Meta = new ContentMeta
+                            Id = block.Id,
+                            Type = block.Type,
+                            Meta = new BlockMeta
                             {
                                 Name = blockType.Name,
                                 Icon = blockType.Icon,
-                                Component = "block-group"
+                                Component = "block-group",
+                                IsGroup = true
                             }
                         };
 
@@ -185,19 +188,13 @@ namespace Piranha.Manager.Services
                                 "block-group-horizontal" : "block-group-vertical";
                         }
 
-                        var groupItem = new BlockGroupEditModel
-                        {
-                            Id = block.Id,
-                            Type = block.Type
-                        };
-
                         foreach (var prop in block.GetType().GetProperties(App.PropertyBindings))
                         {
                             if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
                             {
                                 var fieldType = App.Fields.GetByType(prop.PropertyType);
 
-                                groupItem.Fields.Add(new FieldEditModel
+                                group.Fields.Add(new FieldModel
                                 {
                                     Model = (Extend.IField)prop.GetValue(block),
                                     Meta = new FieldMeta
@@ -215,11 +212,11 @@ namespace Piranha.Manager.Services
                         {
                             blockType = App.Blocks.GetByType(child.Type);
 
-                            groupItem.Items.Add(new BlockEditModel
+                            group.Items.Add(new BlockItemModel
                             {
                                 IsActive = firstChild,
                                 Model = child,
-                                Meta = new ContentMeta
+                                Meta = new BlockMeta
                                 {
                                     Name = blockType.Name,
                                     Title = child.GetTitle(),
@@ -229,15 +226,14 @@ namespace Piranha.Manager.Services
                             });
                             firstChild = false;
                         }
-                        group.Model = groupItem;
                         model.Blocks.Add(group);
                     }
                     else
                     {
-                        model.Blocks.Add(new BlockEditModel
+                        model.Blocks.Add(new BlockItemModel
                         {
                             Model = block,
-                            Meta = new ContentMeta
+                            Meta = new BlockMeta
                             {
                                 Name = blockType.Name,
                                 Title = block.GetTitle(),
@@ -340,37 +336,35 @@ namespace Piranha.Manager.Services
 
                 foreach (var block in model.Blocks)
                 {
-                    if (block.Model is BlockGroupEditModel)
+                    if (block is BlockGroupModel blockGroup)
                     {
-                        var groupBlock = (BlockGroupEditModel)block.Model;
-                        var groupType = App.Blocks.GetByType(groupBlock.Type);
+                        var groupType = App.Blocks.GetByType(blockGroup.Type);
 
                         if (groupType != null)
                         {
                             var pageBlock = (Extend.BlockGroup)Activator.CreateInstance(groupType.Type);
 
-                            pageBlock.Id = groupBlock.Id;
-                            pageBlock.Type = groupBlock.Type;
+                            pageBlock.Id = blockGroup.Id;
+                            pageBlock.Type = blockGroup.Type;
 
-                            foreach (var field in groupBlock.Fields)
+                            foreach (var field in blockGroup.Fields)
                             {
                                 var prop = pageBlock.GetType().GetProperty(field.Meta.Id, App.PropertyBindings);
                                 prop.SetValue(pageBlock, field.Model);
                             }
 
-                            foreach (var item in groupBlock.Items)
+                            foreach (var item in blockGroup.Items)
                             {
                                 pageBlock.Items.Add(item.Model);
                             }
                             page.Blocks.Add(pageBlock);
                         }
                     }
-                    else
+                    else if (block is BlockItemModel blockItem)
                     {
-                        page.Blocks.Add(block.Model);
+                        page.Blocks.Add(blockItem.Model);
                     }
                 }
-
                 await _api.Pages.SaveAsync(page);
             }
             else

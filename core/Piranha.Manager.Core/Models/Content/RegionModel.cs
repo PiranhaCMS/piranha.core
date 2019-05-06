@@ -8,29 +8,24 @@
  *
  */
 
-using Piranha.Extend;
+using System.Collections.Generic;
 
 namespace Piranha.Manager.Models.Content
 {
     /// <summary>
-    /// Edit model for blocks.
+    /// Edit model for a region.
     /// </summary>
-    public class BlockEditModel
+    public class RegionModel
     {
         /// <summary>
-        /// Gets/sets if the block should be active.
+        /// Gets/sets the available items. A region collection can have several items,
+        /// a regular region will only have one item in the collection.
         /// </summary>
-        public bool IsActive { get; set; }
-
-        /// <summary>
-        /// Gets/sets the block model.
-        /// </summary>
-        /// <value></value>
-        public Block Model { get; set; }
+        public IList<RegionItemModel> Items { get; set; } = new List<RegionItemModel>();
 
         /// <summary>
         /// Gets/sets the meta information.
         /// </summary>
-        public ContentMeta Meta { get; set; }
+        public RegionMeta Meta { get; set; }
     }
 }

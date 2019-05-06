@@ -15,9 +15,9 @@ using Piranha.Extend;
 namespace Piranha.Manager.Models.Content
 {
     /// <summary>
-    /// Content edit model.
+    /// Edit model for block groups.
     /// </summary>
-    public abstract class ContentEditModel
+    public class BlockGroupModel : BlockModel
     {
         /// <summary>
         /// Gets/sets the unique id.
@@ -25,23 +25,18 @@ namespace Piranha.Manager.Models.Content
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets/sets the content type id.
+        /// Gets/sets the type of the block group.
         /// </summary>
-        public string TypeId { get; set; }
+        public string Type { get; set; }
 
         /// <summary>
-        /// Gets/sets the mandatory title.
+        /// Gets/sets the available child items in the group.
         /// </summary>
-        public string Title { get; set; }
+        public IList<BlockItemModel> Items { get; set; } = new List<BlockItemModel>();
 
         /// <summary>
-        /// Gets/sets the available blocks.
+        /// Gets/sets the available global group fields.
         /// </summary>
-        public IList<BlockModel> Blocks { get; set; } = new List<BlockModel>();
-
-        /// <summary>
-        /// Gets/sets the available regions.
-        /// </summary>
-        public IList<RegionModel> Regions { get; set; } = new List<RegionModel>();
+        public IList<FieldModel> Fields { get; set; } = new List<FieldModel>();
     }
 }

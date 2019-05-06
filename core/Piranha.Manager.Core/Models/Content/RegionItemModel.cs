@@ -16,7 +16,7 @@ namespace Piranha.Manager.Models.Content
     /// <summary>
     /// Edit model for a region item.
     /// </summary>
-    public class RegionItemEditModel
+    public class RegionItemModel
     {
         /// <summary>
         /// Gets/sets the unique client id.
@@ -31,6 +31,6 @@ namespace Piranha.Manager.Models.Content
         /// <summary>
         /// Gets/sets the available fields.
         /// </summary>
-        public IList<FieldEditModel> Fields { get; set; } = new List<FieldEditModel>();
+        public IList<FieldModel> Fields { get; set; } = new List<FieldModel>();
     }
 }

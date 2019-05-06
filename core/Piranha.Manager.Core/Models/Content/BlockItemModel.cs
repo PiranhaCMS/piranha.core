@@ -16,16 +16,18 @@ namespace Piranha.Manager.Models.Content
     /// <summary>
     /// Edit model for block groups.
     /// </summary>
-    public class BlockGroupEditModel : Block
+    public class BlockItemModel : BlockModel
     {
         /// <summary>
-        /// Gets/sets the available child items in the group.
+        /// Gets/sets if the block should be active
+        /// part of a group.
         /// </summary>
-        public IList<BlockEditModel> Items { get; set; } = new List<BlockEditModel>();
+        public bool IsActive { get; set; }
 
         /// <summary>
-        /// Gets/sets the available global group fields.
+        /// Gets/sets the block model.
         /// </summary>
-        public IList<FieldEditModel> Fields { get; set; } = new List<FieldEditModel>();
+        /// <value></value>
+        public Block Model { get; set; }
     }
 }
