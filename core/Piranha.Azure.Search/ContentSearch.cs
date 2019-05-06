@@ -24,8 +24,8 @@ namespace Piranha.Azure.Search
     /// </summary>
     public static class ContentSearch
     {
-        private static string searchServiceName = "piranha-core";
-        private static string adminApiKey = "F37D17D0E7210B321C9DA2D4D610E5C0";
+        private static string searchServiceName = "";
+        private static string adminApiKey = "";
 
         public static void CreateIndexes()
         {

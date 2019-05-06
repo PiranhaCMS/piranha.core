@@ -36,7 +36,6 @@ namespace MvcWeb
             services.AddPiranhaApplication();
             services.AddPiranhaFileStorage();
             services.AddPiranhaImageSharp();
-            services.AddPiranhaAzureSearch();
             services.AddPiranhaManager();
 
             services.AddPiranhaEF(options =>
