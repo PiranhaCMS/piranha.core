@@ -45,6 +45,7 @@ namespace Piranha.Manager.Services
             return new MediaListModel.MediaItem
             {
                 Id = media.Id,
+                FolderId = media.FolderId,
                 Type = media.Type.ToString(),
                 Filename = media.Filename,
                 PublicUrl = media.PublicUrl.Replace("~", ""),
@@ -83,6 +84,7 @@ namespace Piranha.Manager.Services
                 .Select(m => new MediaListModel.MediaItem
                 {
                     Id = m.Id,
+                    FolderId = m.FolderId,
                     Type = m.Type.ToString(),
                     Filename = m.Filename,
                     PublicUrl = m.PublicUrl.Replace("~", ""),

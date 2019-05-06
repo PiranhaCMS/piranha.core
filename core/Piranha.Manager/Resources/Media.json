@@ -1,4 +1,9 @@
 {
+  "Add folder": {
+    "Values": {
+      "sv-SE": "Lägg till mapp"
+    }
+  },
   "Gallery": {
     "Values": {
       "sv-SE": "Galleri"

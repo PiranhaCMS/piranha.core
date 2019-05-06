@@ -25,6 +25,7 @@ namespace Piranha.Manager.Models
         public class MediaItem
         {
             public Guid Id { get; set; }
+            public Guid? FolderId { get; set; }
             public string Type { get; set; }
             public string Filename { get; set; }
             public string ContentType { get; set; }

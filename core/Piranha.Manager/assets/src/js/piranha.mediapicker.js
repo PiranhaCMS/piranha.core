@@ -36,11 +36,19 @@ piranha.mediapicker = new Vue({
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },
-        open: function (callback, filter) {
+        open: function (callback, filter, folderId) {
             this.callback = callback;
             this.filter = filter;
 
-            this.load();
+            this.load(folderId);
+
+            $("#mediapicker").modal("show");
+        },
+        openCurrentFolder: function (callback, filter) {
+            this.callback = callback;
+            this.filter = filter;
+
+            this.load(this.currentFolderId);
 
             $("#mediapicker").modal("show");
         },

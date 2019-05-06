@@ -19,10 +19,10 @@
 
         <div class="container-fluid">
             <div class="top-nav">
-                <button v-if="listView" v-on:click.prevent="toggle" class="btn btn-secondary"><i class="fas fa-list"></i></button>
-                <button v-if="!listView" v-on:click.prevent="toggle" class="btn btn-secondary"><i class="fas fa-table"></i></button>
-                <button class="btn btn-primary btn-labeled" data-toggle="modal" data-target="#aliasModal">
-                    <i class="fas fa-plus"></i>@Localizer["Add"]
+                <button v-if="listView" v-on:click.prevent="toggle" class="btn btn-secondary"><i class="fas fa-table"></i></button>
+                <button v-if="!listView" v-on:click.prevent="toggle" class="btn btn-secondary"><i class="fas fa-list"></i></button>
+                <button class="btn btn-primary btn-labeled" data-toggle="modal" data-target="#mediaFolderModal">
+                    <i class="fas fa-plus"></i>@Localizer["Add folder"]
                 </button>
             </div>
         </div>
@@ -49,4 +49,6 @@
     <template v-else>
         <partial name="Partial/_MediaGallery" />
     </template>
+
+    <partial name="Partial/_MediaFolderModal" />
 </div>

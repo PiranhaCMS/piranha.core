@@ -9,7 +9,11 @@ Vue.component("image-field", {
             // clear media from block
         },
         select: function () {
-            piranha.mediapicker.open(this.update, "Image");
+            if (this.model.media != null) {
+                piranha.mediapicker.open(this.update, "Image", this.model.media.folderId);
+            } else {
+                piranha.mediapicker.openCurrentFolder(this.update, "Image");
+            }
         },
         remove: function () {
             this.model.media = null;
