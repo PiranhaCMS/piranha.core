@@ -24,22 +24,30 @@ namespace Piranha.Azure.Search
         public string ContentId { get; set; }
 
         [IsSearchable]
+        [Analyzer(AnalyzerName.AsString.StandardLucene)]
         public string Slug { get; set; }
 
+        [IsFilterable]
         public string ContentType { get; set; }
 
         [IsSearchable]
+        [IsSortable]
+        [Analyzer(AnalyzerName.AsString.StandardLucene)]
         public string Title { get; set; }
 
         [IsFilterable]
         [IsSearchable]
+        [IsSortable]
+        [Analyzer(AnalyzerName.AsString.StandardLucene)]
         public string Category { get; set; }
 
         [IsFilterable]
         [IsSearchable]
+        [Analyzer(AnalyzerName.AsString.StandardLucene)]
         public IList<string> Tags { get; set; } = new List<string>();
 
         [IsSearchable]
+        [Analyzer(AnalyzerName.AsString.StandardLucene)]
         public string Body { get; set; }
     }
 }
