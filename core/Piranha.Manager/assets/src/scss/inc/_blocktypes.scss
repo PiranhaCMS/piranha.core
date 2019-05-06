@@ -1,7 +1,6 @@
 @import "variables";
 
 .blocktype-category {
-    background: $gray-400;
     color: $black;
     font-weight: bold;
     text-transform: uppercase;
@@ -19,7 +18,7 @@
     padding: .25rem;
 
     .btn {
-        background: $gray-200;
+        background: white;
         padding: .75rem 0;
         overflow: hidden;
         text-overflow: ellipsis;

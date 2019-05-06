@@ -18,7 +18,7 @@ namespace MvcWeb.Models.Blocks
     /// <summary>
     /// Single column quote block.
     /// </summary>
-    [BlockGroupType(Name = "Gallery", Category = "Content", Icon = "fas fa-images")]
+    [BlockGroupType(Name = "Gallery", Category = "Media", Icon = "fas fa-images")]
     [BlockItemType(Type = typeof(ImageBlock))]
     public class GalleryBlock : BlockGroup
     {
