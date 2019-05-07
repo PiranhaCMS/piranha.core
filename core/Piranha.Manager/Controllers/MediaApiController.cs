@@ -29,10 +29,12 @@ namespace Piranha.Manager.Controllers
     public class MediaApiController : Controller
     {
         private readonly MediaService _service;
+        private readonly IApi _api;
 
-        public MediaApiController(MediaService service)
+        public MediaApiController(MediaService service, IApi api)
         {
             _service = service;
+            _api = api;
         }
 
         /// <summary>
@@ -53,6 +55,33 @@ namespace Piranha.Manager.Controllers
         }
 
         /// <summary>
+        /// Gets the image url for the specified dimensions.
+        /// </summary>
+        /// <param name="id">The unqie id</param>
+        /// <param name="width">The optional width</param>
+        /// <param name="height">The optional height</param>
+        /// <returns>The public url</returns>
+        [Route("url/{id}/{width?}/{height?}")]
+        [HttpGet]
+        public async Task<IActionResult> GetUrl(Guid id, int? width = null, int? height = null)
+        {
+            if (!width.HasValue)
+            {
+                var media = await _api.Media.GetByIdAsync(id);
+
+                if (media != null)
+                {
+                    return Redirect(media.PublicUrl);
+                }
+                return NotFound();
+            }
+            else
+            {
+                return Redirect(await _api.Media.EnsureVersionAsync(id, width.Value, height));
+            }
+        }
+
+        /// <summary>
         /// Gets the list model.
         /// </summary>
         /// <returns>The list model</returns>
@@ -62,27 +91,6 @@ namespace Piranha.Manager.Controllers
         {
             return await _service.GetList(folderId, filter);
         }
-
-        /*
-        [Route("list/media/{mediaId:Guid?}")]
-        [HttpGet]
-        public async Task<MediaListModel> ListByMediaId(Guid? mediaId = null)
-        {
-            Guid? folderId = null;
-
-            if (mediaId.HasValue)
-            {
-                var media = await _service.GetById(mediaId.Value);
-
-                if (media != null)
-                {
-                    folderId = media.folderId;
-                }
-            }
-
-            return await _service.List(folderId);
-        }
-        */
 
         [Route("folder/save")]
         [HttpPost]

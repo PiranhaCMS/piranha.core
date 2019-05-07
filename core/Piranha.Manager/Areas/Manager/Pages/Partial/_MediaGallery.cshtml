@@ -26,7 +26,7 @@
                     <a href="#" class="thumbnail" v-on:click.prevent="piranha.preview.open(item.id)" draggable="true" v-on:dragstart="drag($event, item)">
 
                         <template v-if="item.type === 'Image'">
-                            <img class="thumbnail-image" :src="item.publicUrl">
+                            <img class="thumbnail-image" :src="getThumbnailUrl(item.id)">
                         </template>
 
                         <template v-else-if="item.type === 'Document'">

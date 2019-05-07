@@ -62,6 +62,9 @@ piranha.media = new Vue({
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },
+        getThumbnailUrl: function (id) {
+            return piranha.baseUrl + "manager/api/media/url/" + id + "/210/160";
+        },
         refresh: function () {
             piranha.media.load(piranha.media.currentFolderId);
         },
