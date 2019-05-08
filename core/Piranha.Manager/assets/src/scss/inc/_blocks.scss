@@ -22,7 +22,7 @@
 
 .block {
     position: relative;
-    padding: 2.25rem 1rem 1rem;
+    padding: 2.25rem 1rem;
     border: solid 1px transparent;
     transition: border-color .2s ease-in-out;
 
@@ -53,36 +53,45 @@
                 text-transform: uppercase;
             }
         }
+    }
 
-        .actions {
-            float: right;
+    .actions {
+        float: right;
 
-            .btn {
-                background: $gray-100;
-                width: 1.75rem;
-                height: 1.75rem;
-                border-radius: 50%;
-                transition: all ease-in-out .2s;
+        .btn {
+            background: $gray-100;
+            width: 1.75rem;
+            height: 1.75rem;
+            border-radius: 50%;
+            transition: all ease-in-out .2s;
 
-                &.danger {
-                    color: $danger;
+            &.danger {
+                color: $danger;
 
-                    &:hover {
-                        background: $danger;
-                        color: $white;
-                    }
-                }
-
-                &.handle {
-                    &:hover {
-                        background: $gray-400;
-                    }
+                &:hover {
+                    background: $danger;
+                    color: $white;
                 }
             }
 
-            .handle {
-                cursor: pointer;
+            &.handle {
+                &:hover {
+                    background: $gray-400;
+                }
             }
+
+            &.add {
+                color: $primary;
+
+                &:hover {
+                    background: $primary;
+                    color: $white;
+                }
+            }
+        }
+
+        .handle {
+            cursor: pointer;
         }
     }
 
@@ -92,6 +101,10 @@
         .block-header {
             opacity: 1;
         }
+    }
+
+    &.danger {
+        border-color: $danger;
     }
 
     &.html-block, &.html-column-block {

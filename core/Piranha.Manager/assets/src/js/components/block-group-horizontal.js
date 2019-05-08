@@ -36,6 +36,11 @@ Vue.component("block-group-horizontal", {
     },
     template:
         "<div :id='uid' class='block-group'>" +
+        "  <div class='actions block-group-actions'>" +
+        "    <button v-on:click.prevent='piranha.blockpicker.open(addGroupBlock, 0, model.type)' class='btn btn-sm add'>" +
+        "      <i class='fas fa-plus'></i>" +
+        "    </button>" +
+        "  </div>" +
         "  <div class='block-group-header'>" +
         "    <div class='form-group' v-for='field in model.fields'>" +
         "      <label>{{ field.meta.name }}</label>" +
@@ -67,6 +72,5 @@ Vue.component("block-group-horizontal", {
         "      </div>" +
         "    </div>" +
         "  </div>" +
-        "  <button v-on:click.prevent='piranha.blockpicker.open(addGroupBlock, 0, model.type)' class='btn btn-sm btn-primary btn-labeled mt-3'><i class='fas fa-plus'></i>Add item</button>" +
         "</div>"
 });

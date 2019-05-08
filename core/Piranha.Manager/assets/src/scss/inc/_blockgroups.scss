@@ -1,7 +1,7 @@
 @import "variables";
 
 .block {
-    &.block-group, &.block-group-horizontal {
+    &.block-group {
         background: $gray-100;
         padding-top: 2.5rem;
 
@@ -80,22 +80,32 @@
             }
         }
 
-        &:hover, &:focus-within {
+        &:hover:not(.danger), &:focus-within {
             border-color: transparent;
         }
     }
 
     &.block-group-horizontal {
+        &:hover, &:focus-within {
+            .block:not(.danger) {
+                border-color: transparent;
+            }
+        }
+
         .block {
             height: 100%;
-            padding: 2.25rem .5rem .5rem;
+            padding: 0;
+            transition: border-color ease-in-out .2s, background-color ease-in-out .2s;
 
             .block-header {
-                padding: .25rem .5rem .5rem;
+                background: rgba(255,255,255,.4);
+                padding: .5rem 1rem;
+                top: unset;
+                bottom: 0;
 
                 .actions {
                     .btn {
-                        background: $gray-100;
+                        _background: $white;
                         width: 1.5rem;
                         height: 1.5rem;
                         font-size: .7rem;
@@ -118,6 +128,9 @@
             }
 
             &.html-block, &.html-column-block, &.quote-block, &.text-block {
+                margin: 0 -.5rem 2rem;
+                padding: 0 .5rem;
+
                 .empty:not(:focus-within)
                 {
                     height: 100%;
@@ -134,6 +147,20 @@
                     object-fit: cover;
                 }
             }
+        }
+    }
+
+    .block-group-actions {
+        position: absolute;
+        top: .25rem;
+        right: 5rem;
+        opacity: 0;
+        transition: opacity ease-in-out .2s;
+    }
+
+    &:hover, &:focus-within {
+        .block-group-actions {
+            opacity: 1;
         }
     }
 }

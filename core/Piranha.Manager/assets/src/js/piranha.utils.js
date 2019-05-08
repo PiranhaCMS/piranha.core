@@ -13,3 +13,21 @@ piranha.utils = {
         return str == null || str.replace(/\s/g, "") == "" || str.replace(/\s/g, "") == "<br>";
     }
 };
+
+$(document).ready(function () {
+    $('.block-header .danger').hover(
+        function() {
+            $(this).closest('.block').addClass('danger');
+        },
+        function() {
+            $(this).closest('.block').removeClass('danger');
+        });
+});
+
+$(document).on('mouseenter', '.block-header .danger', function() {
+    $(this).closest('.block').addClass('danger');
+});
+
+$(document).on('mouseleave', '.block-header .danger', function() {
+    $(this).closest('.block').removeClass('danger');
+});
