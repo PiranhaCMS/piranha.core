@@ -143,3 +143,7 @@ piranha.media = new Vue({
         })
     }
 });
+
+$(document).on("shown.bs.modal","#mediaFolderModal", function (event) {
+    $("#mediaFolderName").focus();
+});
