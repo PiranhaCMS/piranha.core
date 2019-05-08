@@ -113,6 +113,7 @@ namespace Piranha.Tests
             Assert.Equal("<p>Lorem ipsum</p>", blocks[0].Fields[0].Value);
         }
 
+        /*
         [Fact]
         public void DeserializeHtmlColumnBlock() {
             var blocks = new List<Block>();
@@ -168,6 +169,7 @@ namespace Piranha.Tests
             Assert.Equal("<p>Column 1</p>", blocks[0].Fields[0].Value);
             Assert.Equal("<p>Column 2</p>", blocks[0].Fields[1].Value);
         }
+        */
 
         [Fact]
         public void DeserializeImageBlock() {
