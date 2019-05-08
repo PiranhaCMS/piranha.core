@@ -221,7 +221,7 @@ namespace Piranha
             // Compose block types
             Instance._blocks.Register<Extend.Blocks.AudioBlock>();
             Instance._blocks.Register<Extend.Blocks.HtmlBlock>();
-            Instance._blocks.Register<Extend.Blocks.HtmlColumnBlock>();
+            //Instance._blocks.Register<Extend.Blocks.HtmlColumnBlock>();
             Instance._blocks.Register<Extend.Blocks.ImageBlock>();
             Instance._blocks.Register<Extend.Blocks.ImageGalleryBlock>();
             Instance._blocks.Register<Extend.Blocks.QuoteBlock>();

@@ -1,11 +1,13 @@
+@import "variables";
+
 .top {
-    position: absolute;
-    width: 100%;
-    left: 0;
-    top: 0;
+    background: $white;
+    height: 3.3rem;
+    margin-bottom: 1rem;
 
     .breadcrumb {
-        margin-left: 3rem;
+        position: absolute;
+        z-index: 1010;
     }
 
     .container-fluid {

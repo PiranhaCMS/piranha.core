@@ -168,11 +168,28 @@ namespace MvcWeb
                                 }
                                 else
                                 {
+                                    featurespage.Blocks.Add(new ColumnBlock
+                                    {
+                                        Items =
+                                        {
+                                            new HtmlBlock
+                                            {
+                                                Body = App.Markdown.Transform(cols[0].Trim())
+                                            },
+                                            new HtmlBlock
+                                            {
+                                                Body = App.Markdown.Transform(cols[1].Trim())
+                                            }
+                                        }
+                                    });
+
+                                    /*
                                     featurespage.Blocks.Add(new HtmlColumnBlock
                                     {
                                         Column1 = App.Markdown.Transform(cols[0].Trim()),
                                         Column2 = App.Markdown.Transform(cols[1].Trim())
                                     });
+                                    */
 
                                     if (n < blocks.Length - 1)
                                     {

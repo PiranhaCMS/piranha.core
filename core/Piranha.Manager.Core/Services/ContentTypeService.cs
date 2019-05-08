@@ -47,14 +47,14 @@ namespace Piranha.Manager.Services
             var parent = App.Blocks.GetByType(parentType);
             var exludeGroups = parent != null && typeof(Piranha.Extend.BlockGroup).IsAssignableFrom(parent.Type);
 
-            foreach (var category in App.Blocks.GetCategories())
+            foreach (var category in App.Blocks.GetCategories().OrderBy(c => c))
             {
                 var listCategory = new BlockListModel.ListCategory
                 {
                     Name = category
                 };
 
-                var items = App.Blocks.GetByCategory(category).Where(i => !i.IsUnlisted);
+                var items = App.Blocks.GetByCategory(category).OrderBy(i => i.Name).Where(i => !i.IsUnlisted);
 
                 // If we have a parent, filter on allowed types
                 if (parent != null)
