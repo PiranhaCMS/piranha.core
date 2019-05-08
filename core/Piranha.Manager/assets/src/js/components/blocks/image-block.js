@@ -16,6 +16,7 @@ Vue.component("image-block", {
             }
         },
         remove: function () {
+            this.model.body.id = null;
             this.model.body.media = null;
         },
         update: function (media) {

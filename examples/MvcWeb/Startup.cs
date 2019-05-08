@@ -62,8 +62,6 @@ namespace MvcWeb
 
             // Custom components
             App.Blocks.Register<Models.Blocks.ColumnBlock>();
-            App.Blocks.Register<Models.Blocks.GalleryBlock>();
-            App.Blocks.Register<Models.Blocks.SeparatorBlock>();
 
             // Build content types
             var pageTypeBuilder = new Piranha.AttributeBuilder.PageTypeBuilder(api)

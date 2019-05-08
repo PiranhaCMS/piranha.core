@@ -23,17 +23,20 @@
 
             <!-- Modal body -->
             <div class="modal-body bg-light">
-                <div v-for="category in categories">
-                    <div class="blocktype-category">{{ category.name }}</div>
-                    <div class="blocktype-list">
-                        <div class="blocktype" v-for="item in category.items">
-                            <a href="#" class="btn btn-block" v-on:click.prevent="select(item)">
-                                <i :class="item.icon"></i>
-                                <span>{{ item.name }}</span>
-                            </a>
+                <form v-on:submit.prevent="selectSingleItem()">
+                    <input v-model="filter" id="blockpickerSearch" type="text" class="form-control" placeholder="Search for a block type">
+                    <div v-for="category in filteredCategories">
+                        <div class="blocktype-category">{{ category.name }}</div>
+                        <div class="blocktype-list">
+                            <div class="blocktype" v-for="item in filterBlockTypes(category)">
+                                <a href="#" class="btn btn-block" v-on:click.prevent="select(item)">
+                                    <i :class="item.icon"></i>
+                                    <span>{{ item.name }}</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>

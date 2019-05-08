@@ -361,6 +361,7 @@ Vue.component("image-block", {
             }
         },
         remove: function () {
+            this.model.body.id = null;
             this.model.body.media = null;
         },
         update: function (media) {
@@ -570,6 +571,7 @@ Vue.component("image-field", {
             }
         },
         remove: function () {
+            this.model.id = null;
             this.model.media = null;
         },
         update: function (media) {

@@ -8,6 +8,16 @@
 {
     <script src="~/manager/assets/js/piranha.pagelist.min.js"></script>
 }
+@section partials
+{
+    @foreach (var action in Piranha.Manager.Actions.PageList)
+    {
+        if (!string.IsNullOrWhiteSpace(action.PartialView))
+        {
+            <partial name="@action.PartialView" />
+        }
+    }
+}
 
 <div id="pagelist">
     <div class="top">
@@ -17,6 +27,15 @@
                 <li class="breadcrumb-item active" aria-current="page">@Localizer["Pages"]</li>
             </ol>
         </nav>
+
+        <div class="container-fluid">
+            <div class="top-nav">
+                @foreach (var action in Piranha.Manager.Actions.PageList)
+                {
+                    <partial name="@action.ActionView" />
+                }
+            </div>
+        </div>
     </div>
 
     <div class="container-fluid app" :class="{ ready: !loading }">

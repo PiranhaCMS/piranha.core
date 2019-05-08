@@ -92,10 +92,8 @@ namespace MvcWeb
                         });
                     }
                 }
-                startpage.Blocks.Add(new GalleryBlock
+                startpage.Blocks.Add(new ImageGalleryBlock
                 {
-                    Title = "Ornare Ullamcorper",
-                    Description = "<p>Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>",
                     Items =
                     {
                         new ImageBlock
@@ -178,7 +176,7 @@ namespace MvcWeb
 
                                     if (n < blocks.Length - 1)
                                     {
-                                        featurespage.Blocks.Add(new Models.Blocks.SeparatorBlock());
+                                        featurespage.Blocks.Add(new SeparatorBlock());
                                     }
                                 }
                             }

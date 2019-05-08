@@ -16,6 +16,7 @@ Vue.component("image-field", {
             }
         },
         remove: function () {
+            this.model.id = null;
             this.model.media = null;
         },
         update: function (media) {

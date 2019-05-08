@@ -154,6 +154,7 @@ namespace Piranha.Manager.Services
                 {
                     var item = new BlockGroupModel
                     {
+                        Type = block.Type,
                         Meta = new BlockMeta
                         {
                             Name = blockType.Name,
