@@ -25,6 +25,19 @@
 
             <!-- Modal Body -->
             <div class="modal-body bg-light">
+
+                <div id="mediapicker-upload-container" class="dropzone-container">
+                    <form action="@Url.Action("Upload", "MediaApi")" class="dropzone needsclick dz-clickable" enctype="multipart/form-data">
+                        <input type="hidden" name="Model.ParentId" v-model="currentFolderId" />
+                        <div class="dz-message needsclick text-center">
+                            <span class="fas fa-cloud-upload-alt"></span>
+                            Drop files here or click to upload.
+                        </div>
+                        <div class="file-list"></div>
+                    </form>
+                    <ul class="media-list list-unstyled"></ul>
+                </div>
+
                 <template v-if="listView">
                     <table class="table table-borderless">
                         <thead>
@@ -49,10 +62,13 @@
                                 <td></td>
                             </tr>
                             <tr v-for="item in items">
-                                <td><a href="#" v-on:click.prevent="select(item)">
-                                    <i v-if="item.type === 'Image'" class="fas fa-image"></i>
-                                    <i v-if="item.type === 'Video'" class="fas fa-video"></i>
-                                    {{ item.filename }}</a></td>
+                                <td>
+                                    <a href="#" v-on:click.prevent="select(item)">
+                                        <i v-if="item.type === 'Image'" class="fas fa-image"></i>
+                                        <i v-if="item.type === 'Video'" class="fas fa-video"></i>
+                                        {{ item.filename }}
+                                    </a>
+                                </td>
                                 <td class="d-none">{{ item.contentType }}</td>
                                 <td class="d-none">{{ item.size }}</td>
                                 <td>{{ item.lastModified }}</td>

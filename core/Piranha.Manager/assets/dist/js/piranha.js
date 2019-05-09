@@ -20044,7 +20044,8 @@ piranha.mediapicker = new Vue({
             name: null
         },
         filter: null,
-        callback: null
+        callback: null,
+        dropzone: null
     },
     methods: {
         toggle: function () {
@@ -20065,6 +20066,9 @@ piranha.mediapicker = new Vue({
                     piranha.mediapicker.items = result.media;
                 })
                 .catch(function (error) { console.log("error:", error ); });
+        },
+        refresh: function () {
+            piranha.mediapicker.load(piranha.mediapicker.currentFolderId);
         },
         open: function (callback, filter, folderId) {
             this.callback = callback;
@@ -20088,6 +20092,19 @@ piranha.mediapicker = new Vue({
 
             $("#mediapicker").modal("hide");
         }
+    },
+    mounted: function () {
+        this.dropzone = piranha.dropzone.init("#mediapicker-upload-container");
+        this.dropzone.on("complete", function (file) {
+            if (file.status === "success") {
+                setTimeout(function () {
+                    piranha.mediapicker.dropzone.removeFile(file);
+                }, 3000)
+            }
+        })
+        this.dropzone.on("queuecomplete", function () {
+            piranha.mediapicker.refresh();
+        })
     }
 });
 
