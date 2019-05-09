@@ -22,8 +22,9 @@
 
 .block {
     position: relative;
-    padding: 2.25rem 1rem;
+    padding: 2.75rem 1rem;
     border: solid 1px transparent;
+    border-radius: $border-radius;
     transition: border-color .2s ease-in-out;
 
     h1, h2, h3, h4, h5 {
@@ -36,13 +37,14 @@
         top: 0;
         left: 0;
         width: 100%;
-        padding: .25rem 1rem;
+        padding: .5rem 1rem;
         font-size: .8rem;
         opacity: 0;
         transition: opacity ease-in-out .2s;
 
         .title {
             float: left;
+            margin-top: .25rem;
 
             i {
                 font-size: .875rem;
@@ -166,6 +168,7 @@
             padding: 1.5rem;
             margin-top: -2.5rem;
             opacity: 0;
+            border-radius: $border-radius;
             transition: opacity ease-in-out .2s;
 
             .card-body {

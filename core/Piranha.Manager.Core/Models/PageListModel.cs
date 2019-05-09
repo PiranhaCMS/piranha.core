@@ -37,6 +37,13 @@ namespace Piranha.Manager.Models
             public List<PageItem> Items { get; set; } = new List<PageItem>();
         }
 
+        public class PageTypeItem
+        {
+            public string Id { get; set; }
+            public string Title { get; set; }
+        }
+
         public IList<SiteItem> Sites { get; set; } = new List<SiteItem>();
+        public IList<PageTypeItem> PageTypes { get; set; } = new List<PageTypeItem>();
     }
 }

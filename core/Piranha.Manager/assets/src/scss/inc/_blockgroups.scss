@@ -99,13 +99,12 @@
 
             .block-header {
                 background: rgba(255,255,255,.4);
-                padding: .5rem 1rem;
+                padding: .5rem 0;
                 top: unset;
-                bottom: 0;
+                bottom: -2.5rem;
 
                 .actions {
                     .btn {
-                        _background: $white;
                         width: 1.5rem;
                         height: 1.5rem;
                         font-size: .7rem;
@@ -128,7 +127,7 @@
             }
 
             &.html-block, &.html-column-block, &.quote-block, &.text-block {
-                margin: 0 -.5rem 2rem;
+                margin: 0 -.5rem;
                 padding: 0 .5rem;
 
                 .empty:not(:focus-within)
@@ -152,7 +151,7 @@
 
     .block-group-actions {
         position: absolute;
-        top: .25rem;
+        top: .5rem;
         right: 5rem;
         opacity: 0;
         transition: opacity ease-in-out .2s;

@@ -51,6 +51,11 @@ namespace Piranha.Manager.Services
                     Title = s.Title,
                     Slug = "/",
                     EditUrl = "manager/site/"
+                }).ToList(),
+                PageTypes = App.PageTypes.Select(t => new PageListModel.PageTypeItem
+                {
+                    Id = t.Id,
+                    Title = t.Title
                 }).ToList()
             };
 

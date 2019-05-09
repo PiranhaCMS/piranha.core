@@ -23,7 +23,11 @@
 
             <!-- Modal body -->
             <div class="modal-body bg-light">
-                <p>TODO</p>
+                <ul>
+                    <li v-for="(type) in pageTypes">
+                        <a href="#">{{ type.title }}</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
