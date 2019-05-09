@@ -347,13 +347,27 @@ namespace Piranha.Areas.Manager.Services
         {
             foreach (var srcBlock in src.Blocks)
             {
-                dest.Blocks.Add(new ContentEditBlock
+                var block = new ContentEditBlock
                 {
                     Id = srcBlock.Id,
                     CLRType = srcBlock.GetType().FullName,
                     IsGroup = typeof(Extend.BlockGroup).IsAssignableFrom(srcBlock.GetType()),
                     Value = srcBlock
-                });
+                };
+
+                if (typeof(Extend.BlockGroup).IsAssignableFrom(srcBlock.GetType()))
+                {
+                    foreach (var subBlock in ((Extend.BlockGroup)srcBlock).Items)
+                    {
+                        block.Items.Add(new ContentEditBlock
+                        {
+                            Id = subBlock.Id,
+                            CLRType = subBlock.GetType().FullName,
+                            Value = subBlock
+                        });
+                    }
+                }
+                dest.Blocks.Add(block);
             }
         }
 
@@ -366,6 +380,14 @@ namespace Piranha.Areas.Manager.Services
             foreach (var srcBlock in src.Blocks)
             {
                 dest.Blocks.Add(srcBlock.Value);
+                
+                if (typeof(Extend.BlockGroup).IsAssignableFrom(srcBlock.Value.GetType()))
+                {
+                    foreach (var subBlock in srcBlock.Items)
+                    {
+                        ((Extend.BlockGroup)srcBlock.Value).Items.Add(subBlock.Value);
+                    }
+                }
             }
         }
 
