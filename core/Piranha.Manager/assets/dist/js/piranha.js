@@ -20035,6 +20035,7 @@ piranha.notifications = new Vue({
 piranha.mediapicker = new Vue({
     el: "#mediapicker",
     data: {
+        search: '',
         listView: true,
         currentFolderId: null,
         parentFolderId: null,
@@ -20046,6 +20047,16 @@ piranha.mediapicker = new Vue({
         filter: null,
         callback: null,
         dropzone: null
+    },
+    computed: {
+        filteredItems: function () {
+            return this.items.filter(function (item) {
+                if (piranha.mediapicker.search.length > 0) {
+                    return item.filename.toLowerCase().indexOf(piranha.mediapicker.search.toLowerCase()) > -1
+                }
+                return true;
+            });
+        }
     },
     methods: {
         toggle: function () {
@@ -20071,6 +20082,7 @@ piranha.mediapicker = new Vue({
             piranha.mediapicker.load(piranha.mediapicker.currentFolderId);
         },
         open: function (callback, filter, folderId) {
+            this.search = '';
             this.callback = callback;
             this.filter = filter;
 
@@ -20085,6 +20097,11 @@ piranha.mediapicker = new Vue({
             this.load(this.currentFolderId);
 
             $("#mediapicker").modal("show");
+        },
+        onEnter: function () {
+            if (this.filteredItems.length == 1) {
+                this.select(this.filteredItems[0]);
+            }
         },
         select: function (item) {
             this.callback(JSON.parse(JSON.stringify(item)));
