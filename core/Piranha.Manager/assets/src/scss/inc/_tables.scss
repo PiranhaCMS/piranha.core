@@ -1,0 +1,71 @@
+@import "variables";
+
+.table {
+    tr {
+
+        &.droppable {
+            &.active {
+                background: $table-active-bg;
+            }
+        }
+
+        td, th {
+            &.actions {
+                text-align: right;
+
+                &.one {
+                    width: 3.5rem;
+                }
+            }
+
+            &.td-small {
+                width: 110px;
+
+                .img-thumbnail {
+                    width: 78px;
+                    height: 78px;
+                }
+            }
+
+            &.td-medium {
+                width: 180px;
+            }
+
+            &:first-child {
+                padding-left: 1.25rem;
+            }
+
+            &:last-child {
+                padding-right: 1.25rem;
+            }
+        }
+    }
+
+    thead {
+        th {
+            text-transform: uppercase;
+        }
+    }
+
+    tbody {
+        tr {
+            background: $white;
+            border-top: solid 2px $body-bg;
+
+            td {
+                &:first-child {
+                    a {
+                        font-family: "Open Sans", sans-serif;
+                        font-size: 1rem;
+
+                        i {
+                            color: $gray-500;
+                            font-size: .875rem;
+                            padding-right: .5rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

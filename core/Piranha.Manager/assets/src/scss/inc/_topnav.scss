@@ -1,0 +1,26 @@
+@import "variables";
+
+.top {
+    background: $white;
+    height: 3.3rem;
+    margin-bottom: 1rem;
+
+    .breadcrumb {
+        position: absolute;
+        z-index: 1010;
+    }
+
+    .container-fluid {
+        position: fixed;
+        top: 0;
+        left: 3rem;
+        width: calc(100% - 3rem);
+        z-index: 1000; // TODO: Set later
+    }
+
+    .top-nav {
+        background: rgba(255,255,255,.6);
+        padding: .5rem 1rem;
+        float: right;
+    }
+}

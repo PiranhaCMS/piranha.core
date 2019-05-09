@@ -1,11 +1,11 @@
 ﻿/*
- * Copyright (c) 2016-2018 Håkan Edling
+ * Copyright (c) 2016-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 namespace Piranha.Extend
@@ -31,19 +31,19 @@ namespace Piranha.Extend
         string Version { get; }
 
         /// <summary>
-        /// Get the module release date
-        /// </summary>
-        string ReleaseDate { get; }
-
-        /// <summary>
         /// Get the module description
         /// </summary>
         string Description { get; }
 
         /// <summary>
-        /// Get the package url for this module
+        /// Get the package url for the module
         /// </summary>
-        string PackageURL { get; }
+        string PackageUrl { get; }
+
+        /// <summary>
+        /// Gets the logo url for the module.
+        /// </summary>
+        string IconUrl { get; }
 
         /// <summary>
         /// Initializes the module.

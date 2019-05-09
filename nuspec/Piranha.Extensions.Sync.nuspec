@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Piranha.Extensions.Sync</id>
+    <title>Piranha Sync Extensions</title>
+    <version>6.1.0</version>
+    <authors>Håkan Edling</authors>
+    <owners>Håkan Edling</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Sync extensions for Piranha</description>
+    <copyright>Copyright 2019 (c) Håkan Edling</copyright>
+    <tags>cms mvc aspnetcore netstandard</tags>
+    <license type="expression">MIT</license>
+    <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
+    <iconUrl>http://piranhacms.org/assets/twitter-shield.png</iconUrl>
+		<releaseNotes>See the changelog available at:
+https://github.com/piranhacms/piranha.core/wiki/changelog
+    </releaseNotes>
+    <dependencies>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Piranha" version="[6.1.0,7.0.0)" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\core\Piranha.Extensions.Sync\bin\Release\netstandard2.0\Piranha.Extensions.Sync.dll" target="lib\netstandard2.0\Piranha.Extensions.Sync.dll" />
+  </files>
+</package>

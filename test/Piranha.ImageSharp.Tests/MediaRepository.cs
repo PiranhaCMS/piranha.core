@@ -1,17 +1,18 @@
 ﻿/*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
-using Piranha.Services;
 using System;
 using System.IO;
 using Xunit;
+using Piranha.Repositories;
+using Piranha.Services;
 
 namespace Piranha.ImageSharp.Tests
 {
@@ -21,8 +22,8 @@ namespace Piranha.ImageSharp.Tests
         private Guid imageId;
 
         protected override void Init() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, null, processor)) {
-                App.Init();
+            using (var api = CreateApi()) {
+                App.Init(api);
 
                 // Add media
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png")) {
@@ -37,14 +38,14 @@ namespace Piranha.ImageSharp.Tests
             }
         }
         protected override void Cleanup() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, null, processor)) {
+            using (var api = CreateApi()) {
                 api.Media.Delete(imageId);
             }
         }
 
         [Fact]
         public void GetOriginal() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, null, processor)) {
+            using (var api = CreateApi()) {
                 var media = api.Media.GetById(imageId);
 
                 Assert.NotNull(media);
@@ -54,7 +55,7 @@ namespace Piranha.ImageSharp.Tests
 
         [Fact]
         public void GetScaled() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, null, processor)) {
+            using (var api = CreateApi()) {
                 var url = api.Media.EnsureVersion(imageId, 640);
 
                 Assert.NotNull(url);
@@ -64,7 +65,7 @@ namespace Piranha.ImageSharp.Tests
 
         [Fact]
         public void GetCropped() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, null, processor)) {
+            using (var api = CreateApi()) {
                 var url = api.Media.EnsureVersion(imageId, 640, 300);
 
                 Assert.NotNull(url);
@@ -74,7 +75,7 @@ namespace Piranha.ImageSharp.Tests
 
         [Fact]
         public void GetScaledOrgSize() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, null, processor)) {
+            using (var api = CreateApi()) {
                 var url = api.Media.EnsureVersion(imageId, 1920);
 
                 Assert.NotNull(url);
@@ -84,12 +85,36 @@ namespace Piranha.ImageSharp.Tests
 
         [Fact]
         public void GetCroppedOrgSize() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage, null, processor)) {
+            using (var api = CreateApi()) {
                 var url = api.Media.EnsureVersion(imageId, 1920, 1080);
 
                 Assert.NotNull(url);
                 Assert.Equal($"~/uploads/{imageId}-HLD_Screenshot_01_mech_1080.png", url);
             }
+        }
+
+        private IApi CreateApi()
+        {
+            var factory = new ContentFactory(services);
+            var serviceFactory = new ContentServiceFactory(factory);
+
+            var db = GetDb();
+
+            return new Api(
+                factory,
+                new AliasRepository(db),
+                new ArchiveRepository(db),
+                new Piranha.Repositories.MediaRepository(db),
+                new PageRepository(db, serviceFactory),
+                new PageTypeRepository(db),
+                new ParamRepository(db),
+                new PostRepository(db, serviceFactory),
+                new PostTypeRepository(db),
+                new SiteRepository(db, serviceFactory),
+                new SiteTypeRepository(db),
+                storage: storage,
+                processor: processor
+            );
         }
     }
 }

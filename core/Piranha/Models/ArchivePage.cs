@@ -9,33 +9,35 @@
  */
 
 using System;
+using System.Threading.Tasks;
 
 namespace Piranha.Models
 {
-    [Obsolete("BlogPage has been renamed to ArchivePage, please update your code.", false)]
-    public class BlogPage<T> : ArchivePage<T> where T : BlogPage<T> { }
+    /// <summary>
+    /// Base class for archive pages.
+    /// </summary>
+    public class ArchivePage<T> : ArchivePage<T, DynamicPost> where T : ArchivePage<T> { }
 
     /// <summary>
     /// Base class for archive pages.
     /// </summary>
-    public class ArchivePage<T> : GenericPage<T>, IArchivePage where T : ArchivePage<T>
+    public class ArchivePage<T, TPost> : GenericPage<T>, IArchivePage
+        where T : ArchivePage<T, TPost>
+        where TPost : PostBase
     {
         /// <summary>
         /// Gets/sets the post archive.
         /// </summary>
-        public PostArchive Archive { get; set; }
+        public PostArchive<TPost> Archive { get; set; }
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         public ArchivePage()
         {
-            Archive = new PostArchive();
+            Archive = new PostArchive<TPost>();
         }
     }
-
-    [Obsolete]
-    public interface IBlogPage : IArchivePage { }
 
     /// <summary>
     /// Interface for registering the basic archive page

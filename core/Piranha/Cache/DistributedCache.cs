@@ -3,14 +3,18 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 
 namespace Piranha.Cache
 {
@@ -19,10 +23,8 @@ namespace Piranha.Cache
     /// </summary>
     public class DistributedCache : ICache
     {
-        /// <summary>
-        /// The private memory cache.
-        /// </summary>
         private readonly IDistributedCache _cache;
+        private readonly Dictionary<Type, bool> _types = new Dictionary<Type, bool>();
 
         /// <summary>
         /// Default constructor.
@@ -79,9 +81,25 @@ namespace Piranha.Cache
             var formatter = new BinaryFormatter();
             using (var stream = new MemoryStream())
             {
-                formatter.Serialize(stream, obj);
-                return stream.ToArray();
-            }            
+                if (IsSerializable(obj.GetType()))
+                {
+                    formatter.Serialize(stream, obj);
+                    return stream.ToArray();
+                }
+                else
+                {
+                    // First, serialize the object to JSON.
+                    var settings = new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.All
+                    };
+                    var json = JsonConvert.SerializeObject(obj, settings);
+
+                    // Next lets convert the json to a byte array
+                    formatter.Serialize(stream, json);
+                    return stream.ToArray();
+                }
+            }
         }
 
         /// <summary>
@@ -100,7 +118,37 @@ namespace Piranha.Cache
             var formatter = new BinaryFormatter();
             using (var stream = new MemoryStream(bytes))
             {
-                return (T)formatter.Deserialize(stream);
+                if (IsSerializable(typeof(T)))
+                {
+                    return (T)formatter.Deserialize(stream);
+                }
+                else
+                {
+                    // First lets decode the byte array into a string
+                    var json = (string)formatter.Deserialize(stream);
+
+                    // Next deserialize the json into an object
+                    var settings = new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.All
+                    };
+                    return JsonConvert.DeserializeObject<T>(json, settings);
+                }
+            }
+        }
+
+        private bool IsSerializable(Type type)
+        {
+            if (_types.TryGetValue(type, out var serializable))
+            {
+                return serializable;
+            }
+            else
+            {
+                var attr = type.GetCustomAttribute<SerializableAttribute>();
+                _types[type] = attr != null;
+
+                return attr != null;
             }
         }
     }

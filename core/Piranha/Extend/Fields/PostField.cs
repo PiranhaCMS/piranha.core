@@ -1,15 +1,17 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
-using Newtonsoft.Json;
 using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Piranha.Services;
 
 namespace Piranha.Extend.Fields
 {
@@ -46,11 +48,13 @@ namespace Piranha.Extend.Fields
         /// Initializes the field for client use.
         /// </summary>
         /// <param name="api">The current api</param>
-        public virtual void Init(IApi api)
+        public virtual async Task Init(IApi api)
         {
             if (Id.HasValue)
             {
-                Post = api.Posts.GetById(Id.Value);
+                Post = await api.Posts
+                    .GetByIdAsync(Id.Value)
+                    .ConfigureAwait(false);
 
                 if (Post == null)
                 {
@@ -66,11 +70,11 @@ namespace Piranha.Extend.Fields
         /// </summary>
         /// <param name="api">The current api</param>
         /// <returns>The referenced post</returns>
-        public virtual T GetPost<T>(IApi api) where T : Models.Post<T>
+        public virtual Task<T> GetPostAsync<T>(IApi api) where T : Models.Post<T>
         {
             if (Id.HasValue)
             {
-                return api.Posts.GetById<T>(Id.Value);
+                return api.Posts.GetByIdAsync<T>(Id.Value);
             }
             return null;
         }
@@ -81,9 +85,9 @@ namespace Piranha.Extend.Fields
         /// <param name="str">The string value</param>
         public static implicit operator PostField(Guid guid)
         {
-            return new PostField 
-            { 
-                Id = guid 
+            return new PostField
+            {
+                Id = guid
             };
         }
 
@@ -93,9 +97,9 @@ namespace Piranha.Extend.Fields
         /// <param name="post">The post object</param>
         public static implicit operator PostField(Models.PostBase post)
         {
-            return new PostField 
-            { 
-                Id = post.Id 
+            return new PostField
+            {
+                Id = post.Id
             };
         }
 
@@ -128,6 +132,10 @@ namespace Piranha.Extend.Fields
         /// <returns>True if the fields are equal</returns>
         public virtual bool Equals(PostField obj)
         {
+            if (obj == null)
+            {
+                return false;
+            }
             return Id == obj.Id;
         }
 
@@ -139,7 +147,11 @@ namespace Piranha.Extend.Fields
         /// <returns>True if the fields are equal</returns>
         public static bool operator ==(PostField field1, PostField field2)
         {
-            return field1.Equals(field2);
+            if ((object)field1 != null && (object)field2 != null)
+            {
+                return field1.Equals(field2);
+            }
+            return false;
         }
 
         /// <summary>
@@ -150,7 +162,7 @@ namespace Piranha.Extend.Fields
         /// <returns>True if the fields are equal</returns>
         public static bool operator !=(PostField field1, PostField field2)
         {
-            return !field1.Equals(field2);
+            return !(field1 == field2);
         }
     }
 }

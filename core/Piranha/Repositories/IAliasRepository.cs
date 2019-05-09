@@ -1,16 +1,17 @@
 ﻿/*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using System;
 using System.Collections.Generic;
-using Piranha.Data;
+using System.Threading.Tasks;
+using Piranha.Models;
 
 namespace Piranha.Repositories
 {
@@ -21,48 +22,42 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The available models</returns>
-        IEnumerable<Alias> GetAll(Guid? siteId = null);
+        Task<IEnumerable<Alias>> GetAll(Guid siteId);
 
         /// <summary>
         /// Gets the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The model, or NULL if it doesn't exist</returns>
-        Alias GetById(Guid id);
+        Task<Alias> GetById(Guid id);
 
         /// <summary>
         /// Gets the model with the given alias url.
         /// </summary>
         /// <param name="url">The unique url</param>
-        /// <param name="siteId">The optional site id</param>
+        /// <param name="siteId">The site id</param>
         /// <returns>The model</returns>
-        Alias GetByAliasUrl(string url, Guid? siteId = null);
+        Task<Alias> GetByAliasUrl(string url, Guid siteId);
 
         /// <summary>
         /// Gets the models with the given redirect url.
         /// </summary>
         /// <param name="url">The unique url</param>
-        /// <param name="siteId">The optional site id</param>
+        /// <param name="siteId">The site id</param>
         /// <returns>The models</returns>
-        IEnumerable<Alias> GetByRedirectUrl(string url, Guid? siteId = null);
+        Task<IEnumerable<Alias>> GetByRedirectUrl(string url, Guid siteId);
 
         /// <summary>
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>
         /// <param name="model">The model</param>
-        void Save(Alias model);
+        Task Save(Alias model);
 
         /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        void Delete(Guid id);
-
-        /// <summary>
-        /// Deletes the given model.
-        /// </summary>
-        /// <param name="model">The model</param>
-        void Delete(Alias model);
+        Task Delete(Guid id);
     }
 }

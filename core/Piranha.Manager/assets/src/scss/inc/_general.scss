@@ -1,0 +1,41 @@
+@import "variables";
+
+body {
+    margin-left: 3rem;
+}
+
+a {
+    transition: text-decoration ease-in-out .15s, color ease-in-out .15s;
+}
+
+img {
+    max-width: 100%;
+}
+
+.container-fluid
+{
+    margin-left: 0;
+    max-width: 1370px;
+}
+
+.app {
+    opacity: 0;
+    transition: opacity ease-in-out .2s;
+
+    &.ready {
+        opacity: 1;
+    }
+}
+
+.empty-info {
+    color: $gray-500;
+    padding: 4rem 3rem 3rem;
+    margin-top: 1rem;
+    font-family: "Open Sans", serif;
+    font-weight: 300;
+    font-size: 1.4rem;
+    line-height: 2.4rem;
+    text-align: center;
+    border: dashed 1px $gray-400;
+    border-radius: .25rem;
+}

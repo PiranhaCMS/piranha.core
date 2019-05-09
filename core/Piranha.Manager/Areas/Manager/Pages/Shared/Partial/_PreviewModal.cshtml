@@ -1,0 +1,109 @@
+@inject IViewLocalizer Localizer
+
+<!-- The Modal -->
+<div class="modal fade" id="previewModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title"><i class="fas fa-images"></i> {{ media.filename }}</h5>
+                <button type="button" class="close" v-on:click.prevent="close">&times;</button>
+            </div>
+
+            <!-- Tabs -->
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="pill" href="#pills-preview">@Localizer["Preview"]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#pills-details">@Localizer["Details"]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#pills-update">@Localizer["Update"]</a>
+                </li>
+            </ul>
+
+            <!-- Modal Body -->
+            <div class="modal-body bg-light">
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active " id="pills-preview">
+                        <template v-if="media.type === 'Image'">
+                            <img class="d-block mx-auto mw-100" :src="media.publicUrl" />
+                        </template>
+                        <template v-else-if="media.type === 'Video'">
+                            <video class="d-block mx-auto mw-100" controls>
+                                <source :src="media.publicUrl" type="">
+                                Your browser does not support the video tag.
+                            </video>
+                        </template>
+                        <template v-else-if="media.type === 'Document'">
+                            <div class="embed-responsive embed-responsive-4by3">
+                                <iframe class="embed-responsive-item" :src="media.publicUrl"></iframe>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div class="py-5 text-center">
+                                <h4 class="my-4">Media preview is not available</h4>
+                                <a :href="media.publicUrl" class="btn btn-primary btn-labeled" target="_blank"><i class="fas fa-external-link-alt"></i>Open media in new tab</a>
+                                <a :href="media.publicUrl" class="btn btn-primary btn-labeled" download><i class="fas fa-file-download"></i>Downlaod media</a>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="tab-pane fade" id="pills-details">
+                        <table class="table table-borderless m-0">
+                            <tbody>
+                                <tr>
+                                    <th>@Localizer["Filename"]</th>
+                                    <td>{{ media.filename }}</td>
+                                </tr>
+                                <tr>
+                                    <th>@Localizer["Content type"]</th>
+                                    <td>{{ media.contentType }}</td>
+                                </tr>
+                                <tr>
+                                    <th>@Localizer["Size"]</th>
+                                    <td>{{ media.size }}</td>
+                                </tr>
+                                <tr>
+                                    <th>@Localizer["Width"]</th>
+                                    <td>{{ media.width }}</td>
+                                </tr>
+                                <tr>
+                                    <th>@Localizer["Height"]</th>
+                                    <td>{{ media.height }}</td>
+                                </tr>
+                                <tr>
+                                    <th>@Localizer["Modified"]</th>
+                                    <td>{{ media.lastModified }}</td>
+                                </tr>
+                                <tr>
+                                    <th>@Localizer["Download"]</th>
+                                    <td><a :href="media.publicUrl" download>Download media</a></td>
+                                </tr>
+                                <tr>
+                                    <th>@Localizer["URL"]</th>
+                                    <td><a :href="media.publicUrl" target="_blank">Open public URL in new tab</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="pills-update">
+                        <div id="media-update-container" class="dropzone-container">        
+                            <form action="@Url.Action("Upload", "MediaApi")" class="dropzone needsclick dz-clickable" enctype="multipart/form-data">
+                                <input type="hidden" name="Model.Id" v-model="media.id" />
+                                <div class="dz-message needsclick text-center">
+                                    <span class="fas fa-cloud-upload-alt"></span>
+                                    Drop a file here or click to update.
+                                </div>
+                                <div class="file-list"></div>
+                            </form>
+                            <ul class="media-list list-unstyled"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

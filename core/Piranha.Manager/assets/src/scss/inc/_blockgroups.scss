@@ -1,0 +1,165 @@
+@import "variables";
+
+.block {
+    &.block-group {
+        background: $gray-100;
+        padding-top: 2.5rem;
+
+        .block-group-header {
+            padding-bottom: .5rem;
+        }
+
+        .block-header {
+            color: $gray-600;
+            padding-top: .5rem;
+            opacity: 1;
+            transition: none;
+        }
+
+        .block {
+            background: $white;
+            padding: .5rem;
+        }
+
+        .actions {
+            .btn {
+                background: $white;
+            }
+        }
+
+        .list-group {
+            border-bottom: none;
+        }
+
+        .list-group-item {
+            background: $white;
+            padding-left: 2.5rem;
+            height: 3rem;
+            border-color: $gray-100;
+            border-bottom: 2px solid $gray-100;
+
+            .actions {
+                position: absolute;
+                top: 50%;
+                right: 0;
+                margin-top: -.7rem;
+            }
+
+            .handle {
+                color: $gray-600;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 2rem;
+                height: 100%;
+                border-right: solid 2px $gray-100;
+                text-align: center;
+
+                i {
+                    font-size: 1rem;
+                    margin-top: 50%;
+                }
+            }
+
+            a {
+                display: block;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                margin-right: 1rem;
+            }
+
+            &.active {
+                border-color: $gray-100;
+                color: $gray-800;
+                font-weight: bold;
+
+                .handle {
+                    border-color: $gray-200;
+                }
+            }
+        }
+
+        &:hover:not(.danger), &:focus-within {
+            border-color: transparent;
+        }
+    }
+
+    &.block-group-horizontal {
+        &:hover, &:focus-within {
+            .block:not(.danger) {
+                border-color: transparent;
+            }
+        }
+
+        .block {
+            height: 100%;
+            padding: 0;
+            transition: border-color ease-in-out .2s, background-color ease-in-out .2s;
+
+            .block-header {
+                background: rgba(255,255,255,.4);
+                padding: .5rem 0;
+                top: unset;
+                bottom: -2.5rem;
+
+                .actions {
+                    .btn {
+                        width: 1.5rem;
+                        height: 1.5rem;
+                        font-size: .7rem;
+                        padding: 0;
+                        line-height: 1.4rem;
+
+                        &.danger {
+                            &:hover {
+                                background: $danger;
+                            }
+                        }
+
+                        &.handle {
+                            &:hover {
+                                background: $gray-400;
+                            }
+                        }
+                    }
+                }
+            }
+
+            &.html-block, &.html-column-block, &.quote-block, &.text-block {
+                margin: 0 -.5rem;
+                padding: 0 .5rem;
+
+                .empty:not(:focus-within)
+                {
+                    height: 100%;
+                }
+            }
+
+            &.image-block {
+                .block-body {
+                    height: 100%;
+                }
+
+                img {
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+        }
+    }
+
+    .block-group-actions {
+        position: absolute;
+        top: .5rem;
+        right: 5rem;
+        opacity: 0;
+        transition: opacity ease-in-out .2s;
+    }
+
+    &:hover, &:focus-within {
+        .block-group-actions {
+            opacity: 1;
+        }
+    }
+}

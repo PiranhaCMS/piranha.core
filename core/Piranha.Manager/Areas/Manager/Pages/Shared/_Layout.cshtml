@@ -1,0 +1,34 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="~/manager/assets/css/slim.min.css">
+
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <partial name="Partial/_Menu" />
+
+    @RenderBody()
+
+    <partial name="Partial/_BlockPickerModal" />
+    <partial name="Partial/_MediaPickerModal" />
+    <partial name="Partial/_PreviewModal" />
+    <partial name="Partial/_Notifications" />
+    <partial name="Partial/_MediaUploadTemplate" />
+
+    @RenderSection("partials", required: false)
+
+    <script>
+        var piranha = {};
+
+        piranha.baseUrl = "@Url.Content("~/")";
+    </script>
+
+    <script src="~/manager/assets/js/piranha.min.js"></script>
+
+    @RenderSection("script", required: false)
+</body>
+</html>

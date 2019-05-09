@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{42A64587-89B5-48F2-84D4-85B97F7847F1}"
 EndProject
@@ -9,26 +9,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{A8
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{DE1913AC-4AA3-4F66-83F1-615710D8367B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha", "core\Piranha\Piranha.csproj", "{7D7EC9B2-BB1B-43FA-BBDC-1AB11D132F07}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha", "core\Piranha\Piranha.csproj", "{7D7EC9B2-BB1B-43FA-BBDC-1AB11D132F07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.AspNetCore", "core\Piranha.AspNetCore\Piranha.AspNetCore.csproj", "{EB8EB8B1-5A47-4223-8498-434591BF624B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AspNetCore", "core\Piranha.AspNetCore\Piranha.AspNetCore.csproj", "{EB8EB8B1-5A47-4223-8498-434591BF624B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.AttributeBuilder", "core\Piranha.AttributeBuilder\Piranha.AttributeBuilder.csproj", "{C510A898-BFE5-4632-AB58-4F8B92CAEE34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AttributeBuilder", "core\Piranha.AttributeBuilder\Piranha.AttributeBuilder.csproj", "{C510A898-BFE5-4632-AB58-4F8B92CAEE34}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Tests", "test\Piranha.Tests\Piranha.Tests.csproj", "{9B19D8C3-E991-41BD-87C9-DE87C44A5BAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Tests", "test\Piranha.Tests\Piranha.Tests.csproj", "{9B19D8C3-E991-41BD-87C9-DE87C44A5BAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.AttributeBuilder.Tests", "test\Piranha.AttributeBuilder.Tests\Piranha.AttributeBuilder.Tests.csproj", "{9C4D5E1B-58DD-47F2-B310-095B352C0D3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AttributeBuilder.Tests", "test\Piranha.AttributeBuilder.Tests\Piranha.AttributeBuilder.Tests.csproj", "{9C4D5E1B-58DD-47F2-B310-095B352C0D3D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".global", ".global", "{88054E40-5547-4EA5-B75E-D446E8E5A021}"
 	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Manager", "core\Piranha.Manager\Piranha.Manager.csproj", "{444EF37E-1F2F-4C3F-88E7-DB291B01E261}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Local.FileStorage", "core\Piranha.Local.FileStorage\Piranha.Local.FileStorage.csproj", "{4587BC7F-94D4-4DF5-B46E-4CC0E462FF03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Local.FileStorage", "core\Piranha.Local.FileStorage\Piranha.Local.FileStorage.csproj", "{4587BC7F-94D4-4DF5-B46E-4CC0E462FF03}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuspec", ".nuspec", "{A1B6ED88-8C91-45B0-9585-036E8A1C4A3C}"
 	ProjectSection(SolutionItems) = preProject
@@ -40,31 +37,43 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuspec", ".nuspec", "{A1B6
 		nuspec\Piranha.AspNetCore.SimpleSecurity.nuspec = nuspec\Piranha.AspNetCore.SimpleSecurity.nuspec
 		nuspec\Piranha.AttributeBuilder.nuspec = nuspec\Piranha.AttributeBuilder.nuspec
 		nuspec\Piranha.Azure.BlobStorage.nuspec = nuspec\Piranha.Azure.BlobStorage.nuspec
+		nuspec\Piranha.Data.EF.nuspec = nuspec\Piranha.Data.EF.nuspec
+		nuspec\Piranha.Extensions.Sync.nuspec = nuspec\Piranha.Extensions.Sync.nuspec
 		nuspec\Piranha.ImageSharp.nuspec = nuspec\Piranha.ImageSharp.nuspec
 		nuspec\Piranha.Local.FileStorage.nuspec = nuspec\Piranha.Local.FileStorage.nuspec
 		nuspec\Piranha.Manager.nuspec = nuspec\Piranha.Manager.nuspec
 		nuspec\Piranha.nuspec = nuspec\Piranha.nuspec
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.AspNetCore.SimpleSecurity", "core\Piranha.AspNetCore.SimpleSecurity\Piranha.AspNetCore.SimpleSecurity.csproj", "{DAE71F77-F4C7-4727-83D3-3AFC7362886D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AspNetCore.SimpleSecurity", "core\Piranha.AspNetCore.SimpleSecurity\Piranha.AspNetCore.SimpleSecurity.csproj", "{DAE71F77-F4C7-4727-83D3-3AFC7362886D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Azure.BlobStorage", "core\Piranha.Azure.BlobStorage\Piranha.Azure.BlobStorage.csproj", "{F1B30DE3-5B64-4A20-A41A-C391719E51FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Azure.BlobStorage", "core\Piranha.Azure.BlobStorage\Piranha.Azure.BlobStorage.csproj", "{F1B30DE3-5B64-4A20-A41A-C391719E51FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.ImageSharp", "core\Piranha.ImageSharp\Piranha.ImageSharp.csproj", "{512309F2-0557-41DF-9BD0-FDE898C2D34A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.ImageSharp", "core\Piranha.ImageSharp\Piranha.ImageSharp.csproj", "{512309F2-0557-41DF-9BD0-FDE898C2D34A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{BB78ACA1-9978-4B95-8124-D92FBCC52C9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.ImageSharp.Tests", "test\Piranha.ImageSharp.Tests\Piranha.ImageSharp.Tests.csproj", "{D604FF1E-06C0-429A-9058-606A0641D301}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.ImageSharp.Tests", "test\Piranha.ImageSharp.Tests\Piranha.ImageSharp.Tests.csproj", "{D604FF1E-06C0-429A-9058-606A0641D301}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.AspNetCore.Identity", "core\Piranha.AspNetCore.Identity\Piranha.AspNetCore.Identity.csproj", "{4BCC1E64-AACC-4D9B-973E-6072416D98A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AspNetCore.Identity", "core\Piranha.AspNetCore.Identity\Piranha.AspNetCore.Identity.csproj", "{4BCC1E64-AACC-4D9B-973E-6072416D98A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.AspNetCore.Identity.SQLite", "core\Piranha.AspNetCore.Identity.SQLite\Piranha.AspNetCore.Identity.SQLite.csproj", "{1F5FD0E8-1B4D-4381-9DFC-C235D3BC4C77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AspNetCore.Identity.SQLite", "core\Piranha.AspNetCore.Identity.SQLite\Piranha.AspNetCore.Identity.SQLite.csproj", "{1F5FD0E8-1B4D-4381-9DFC-C235D3BC4C77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.AspNetCore.Identity.SQLServer", "core\Piranha.AspNetCore.Identity.SQLServer\Piranha.AspNetCore.Identity.SQLServer.csproj", "{CC742AA4-A544-46D4-901C-7A605B4F132B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AspNetCore.Identity.SQLServer", "core\Piranha.AspNetCore.Identity.SQLServer\Piranha.AspNetCore.Identity.SQLServer.csproj", "{CC742AA4-A544-46D4-901C-7A605B4F132B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.AspNetCore.Identity.MySQL", "core\Piranha.AspNetCore.Identity.MySQL\Piranha.AspNetCore.Identity.MySQL.csproj", "{BB0DADBE-987B-4DE6-8173-49BC8BA139BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AspNetCore.Identity.MySQL", "core\Piranha.AspNetCore.Identity.MySQL\Piranha.AspNetCore.Identity.MySQL.csproj", "{BB0DADBE-987B-4DE6-8173-49BC8BA139BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcWeb", "examples\MvcWeb\MvcWeb.csproj", "{14F9CA8A-6532-40CC-81D6-9763351AFD91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcWeb", "examples\MvcWeb\MvcWeb.csproj", "{14F9CA8A-6532-40CC-81D6-9763351AFD91}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Extensions.Sync", "core\Piranha.Extensions.Sync\Piranha.Extensions.Sync.csproj", "{D17485D2-371E-4F7C-952F-57B26606FC6A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{DCC52317-BC88-4F0A-923F-C9D9F6D952ED}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Data.EF", "data\Piranha.Data.EF\Piranha.Data.EF.csproj", "{4CCD6AF9-3A1D-41E3-B58F-80E9D6616CA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Manager.Core", "core\Piranha.Manager.Core\Piranha.Manager.Core.csproj", "{96510F63-4191-494B-B4A3-6C0497837F6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Manager", "core\Piranha.Manager\Piranha.Manager.csproj", "{A21B74AB-86CF-4AC6-87D6-A99656F8D2A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -92,10 +101,6 @@ Global
 		{9C4D5E1B-58DD-47F2-B310-095B352C0D3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C4D5E1B-58DD-47F2-B310-095B352C0D3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C4D5E1B-58DD-47F2-B310-095B352C0D3D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{444EF37E-1F2F-4C3F-88E7-DB291B01E261}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{444EF37E-1F2F-4C3F-88E7-DB291B01E261}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{444EF37E-1F2F-4C3F-88E7-DB291B01E261}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{444EF37E-1F2F-4C3F-88E7-DB291B01E261}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4587BC7F-94D4-4DF5-B46E-4CC0E462FF03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4587BC7F-94D4-4DF5-B46E-4CC0E462FF03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4587BC7F-94D4-4DF5-B46E-4CC0E462FF03}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -136,6 +141,22 @@ Global
 		{14F9CA8A-6532-40CC-81D6-9763351AFD91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14F9CA8A-6532-40CC-81D6-9763351AFD91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14F9CA8A-6532-40CC-81D6-9763351AFD91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D17485D2-371E-4F7C-952F-57B26606FC6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D17485D2-371E-4F7C-952F-57B26606FC6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D17485D2-371E-4F7C-952F-57B26606FC6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D17485D2-371E-4F7C-952F-57B26606FC6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CCD6AF9-3A1D-41E3-B58F-80E9D6616CA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CCD6AF9-3A1D-41E3-B58F-80E9D6616CA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CCD6AF9-3A1D-41E3-B58F-80E9D6616CA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CCD6AF9-3A1D-41E3-B58F-80E9D6616CA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96510F63-4191-494B-B4A3-6C0497837F6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96510F63-4191-494B-B4A3-6C0497837F6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96510F63-4191-494B-B4A3-6C0497837F6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96510F63-4191-494B-B4A3-6C0497837F6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A21B74AB-86CF-4AC6-87D6-A99656F8D2A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A21B74AB-86CF-4AC6-87D6-A99656F8D2A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A21B74AB-86CF-4AC6-87D6-A99656F8D2A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A21B74AB-86CF-4AC6-87D6-A99656F8D2A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -146,7 +167,6 @@ Global
 		{C510A898-BFE5-4632-AB58-4F8B92CAEE34} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 		{9B19D8C3-E991-41BD-87C9-DE87C44A5BAC} = {DE1913AC-4AA3-4F66-83F1-615710D8367B}
 		{9C4D5E1B-58DD-47F2-B310-095B352C0D3D} = {DE1913AC-4AA3-4F66-83F1-615710D8367B}
-		{444EF37E-1F2F-4C3F-88E7-DB291B01E261} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 		{4587BC7F-94D4-4DF5-B46E-4CC0E462FF03} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 		{DAE71F77-F4C7-4727-83D3-3AFC7362886D} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 		{F1B30DE3-5B64-4A20-A41A-C391719E51FD} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
@@ -157,6 +177,10 @@ Global
 		{CC742AA4-A544-46D4-901C-7A605B4F132B} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 		{BB0DADBE-987B-4DE6-8173-49BC8BA139BB} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 		{14F9CA8A-6532-40CC-81D6-9763351AFD91} = {A82A5922-BF05-4DD7-A2C1-DD22F1AD6A57}
+		{D17485D2-371E-4F7C-952F-57B26606FC6A} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
+		{4CCD6AF9-3A1D-41E3-B58F-80E9D6616CA3} = {DCC52317-BC88-4F0A-923F-C9D9F6D952ED}
+		{96510F63-4191-494B-B4A3-6C0497837F6A} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
+		{A21B74AB-86CF-4AC6-87D6-A99656F8D2A0} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF88AA05-D127-4707-8214-A230F0DA569B}

@@ -1,11 +1,11 @@
 ﻿/*
- * Copyright (c) 2016-2018 Håkan Edling
+ * Copyright (c) 2016-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using Microsoft.AspNetCore.Http;
@@ -41,7 +41,7 @@ namespace Piranha.AspNetCore
                 var siteId = service.Site.Id;
                 var authorized = true;
 
-                var response = StartPageRouter.Invoke(api, url, siteId);
+                var response = await StartPageRouter.InvokeAsync(api, url, siteId);
                 if (response != null)
                 {
                     _logger?.LogInformation($"Found startpage\n  Route: {response.Route}\n  Params: {response.QueryString}");
@@ -58,7 +58,7 @@ namespace Piranha.AspNetCore
                     if (authorized)
                     {
                         service.PageId = response.PageId;
-                        
+
                         using (var config = new Config(api))
                         {
                             var headers = context.Response.GetTypedHeaders();
@@ -100,7 +100,10 @@ namespace Piranha.AspNetCore
                             {
                                 context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&" + response.QueryString);
                             }
-                            else context.Request.QueryString = new QueryString("?" + response.QueryString);
+                            else
+                            {
+                                context.Request.QueryString = new QueryString("?" + response.QueryString);
+                            }
                         }
                     }
                 }

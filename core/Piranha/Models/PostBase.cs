@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -16,7 +16,7 @@ namespace Piranha.Models
     /// <summary>
     /// Base class for post models.
     /// </summary>
-    public abstract class PostBase : RoutedContent, IMeta
+    public abstract class PostBase : RoutedContent, IBlockModel, IMeta
     {
         /// <summary>
         /// Gets/sets the blog page id.

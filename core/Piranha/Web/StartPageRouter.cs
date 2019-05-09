@@ -1,14 +1,16 @@
 ﻿/*
- * Copyright (c) 2017-2018 Håkan Edling
+ * Copyright (c) 2017-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
+using System.Threading.Tasks;
+using Piranha.Services;
 
 namespace Piranha.Web
 {
@@ -21,18 +23,19 @@ namespace Piranha.Web
         /// <param name="url">The requested url</param>
         /// <param name="hostname">The optional hostname</param>
         /// <returns>The piranha response, null if no matching page was found</returns>
-        public static IRouteResponse Invoke(IApi api, string url, Guid siteId)
+        public static async Task<IRouteResponse> InvokeAsync(IApi api, string url, Guid siteId)
         {
             if (string.IsNullOrWhiteSpace(url) || url == "/")
             {
-                var page = api.Pages.GetStartpage<Models.PageInfo>(siteId);
+                var page = await api.Pages.GetStartpageAsync<Models.PageInfo>(siteId)
+                    .ConfigureAwait(false);
 
                 if (page != null)
                 {
                     if (page.ContentType == "Page")
                     {
-                        var site = api.Sites.GetById(siteId);
-                        var lastModified = !site.ContentLastModified.HasValue || page.LastModified > site.ContentLastModified 
+                        var site = await api.Sites.GetByIdAsync(siteId).ConfigureAwait(false);
+                        var lastModified = !site.ContentLastModified.HasValue || page.LastModified > site.ContentLastModified
                             ? page.LastModified : site.ContentLastModified.Value;
 
                         return new RouteResponse
@@ -50,7 +53,7 @@ namespace Piranha.Web
                     }
                     else if (page.ContentType == "Blog")
                     {
-                        return ArchiveRouter.Invoke(api, $"/{page.Slug}", siteId);
+                        return await ArchiveRouter.InvokeAsync(api, $"/{page.Slug}", siteId).ConfigureAwait(false);
                     }
                 }
             }

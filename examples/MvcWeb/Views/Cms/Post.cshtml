@@ -9,11 +9,11 @@
             <h1>@Model.Title</h1>
 
             <p class="small">Published:
-                @if (Model.Published.HasValue) 
+                @if (Model.Published.HasValue)
                 {
                     <text>@Model.Published.Value.ToString("yyyy-MM-dd") in <a href="~/blog/category/@Model.Category.Slug">@Model.Category.Title</a> by <a href="https://twitter.com/tidyui" target="_blank">Håkan Edling</a></text>
-                } 
-                else 
+                }
+                else
                 {
                     <span class="label label-info">Unpublished</span>
                 }
@@ -34,7 +34,9 @@
         <div class="col-lg-8 col-md-10 col-xs-12">
             @if (!string.IsNullOrEmpty(Model.Hero.Ingress.Value))
             {
-                <p class="lead">@Model.Hero.Ingress.Value</p>
+                <div class="lead">
+                    @Html.Raw(Model.Hero.Ingress.Value)
+                </div>
             }
 
             @Html.DisplayFor(m => m.Blocks)

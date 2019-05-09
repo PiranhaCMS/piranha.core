@@ -251,7 +251,53 @@ namespace Piranha.Tests
                 Value = "Exception"
             }));
         }
+        // START AUDIO
+        [Fact]
+        public void SerializeAudioField()
+        {
+            var serializer = new AudioFieldSerializer();
+            var id = Guid.NewGuid();
 
+            var str = serializer.Serialize(new AudioField
+            {
+                Id = id
+            });
+
+            Assert.Equal(id.ToString(), str);
+        }
+
+        [Fact]
+        public void DeserializeAudioField()
+        {
+            var serializer = new AudioFieldSerializer();
+            var id = Guid.NewGuid();
+
+            var field = (AudioField)serializer.Deserialize(id.ToString());
+
+            Assert.Equal(id, field.Id.Value);
+        }
+
+        [Fact]
+        public void DeserializeEmptyAudioField()
+        {
+            var serializer = new AudioFieldSerializer();
+
+            var field = (AudioField)serializer.Deserialize(null);
+
+            Assert.False(field.HasValue);
+        }
+
+        [Fact]
+        public void WrongInputToAudioField()
+        {
+            var serializer = new AudioFieldSerializer();
+
+            Assert.Throws<ArgumentException>(() => serializer.Serialize(new StringField()
+            {
+                Value = "Exception"
+            }));
+        }
+        // END AUDIO
         [Fact]
         public void SerializeMediaField() {
             var serializer = new MediaFieldSerializer();

@@ -3,12 +3,13 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace Piranha.Cache
@@ -24,7 +25,7 @@ namespace Piranha.Cache
         /// <summary>
         /// The private cache collection.
         /// </summary>
-        private readonly IDictionary<string, object> _cache = new Dictionary<string, object>();
+        private readonly IDictionary<string, object> _cache = new ConcurrentDictionary<string, object>();
 
         /// <summary>
         /// Gets the model with the specified key from cache.
@@ -38,7 +39,7 @@ namespace Piranha.Cache
 
             if (_cache.TryGetValue(key, out value))
             {
-                return (T)value;
+                return Utils.DeepClone<T>((T)value);
             }
             return default(T);
         }

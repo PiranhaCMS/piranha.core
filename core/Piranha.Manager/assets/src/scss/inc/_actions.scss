@@ -1,0 +1,27 @@
+@import "variables";
+
+.actions {
+    a {
+        display: inline-block;
+        width: 1.5rem;
+        height: 1.5rem;
+        text-align: center;
+        line-height: 1.5rem;
+        border-radius: 50%;
+        transition: background-color ease-in-out .15s, color ease-in-out .15s;
+
+        &:hover, &:focus {
+            background-color: $link-color;
+            color: $white;
+        }
+
+        &.danger {
+            color: $danger;
+
+            &:hover, &:focus {
+                background-color: $danger;
+                color: $white;
+            }
+        }
+    }
+}

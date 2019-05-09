@@ -1,0 +1,46 @@
+@import "variables";
+
+.sitemap {
+    ol {
+        padding: 0;
+    }
+
+    li {
+        list-style-type: none;
+
+        ol {
+            padding-left: 2.4rem;
+        }
+    }
+}
+
+.sitemap-item {
+    background: $white;
+    display: flex;
+    margin-bottom: 2px;
+
+    >div:not(.handle) {
+        padding: .75rem 1rem;
+    }
+
+    .handle {
+        color: $gray-500;
+        width: 2.4rem;
+        padding: .75rem 0;
+        text-align: center;
+        border-right: solid 2px $gray-100;
+    }
+    .actions {
+        width: 7rem;
+    }
+
+    .link {
+        flex-grow: 1;
+
+        a {
+            display: block;
+            font-family: "Open Sans", sans-serif;
+            font-size: 1rem;
+        }
+    }
+}

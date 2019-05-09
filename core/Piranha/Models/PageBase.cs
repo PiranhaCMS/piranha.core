@@ -1,22 +1,23 @@
 ﻿/*
- * Copyright (c) 2016-2018 Håkan Edling
+ * Copyright (c) 2016-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Piranha.Models
 {
     /// <summary>
     /// Base class for page models.
     /// </summary>
-    public abstract class PageBase : RoutedContent, IMeta
+    public abstract class PageBase : RoutedContent, IBlockModel, IMeta
     {
         /// <summary>
         /// Gets/sets the site id.
@@ -26,6 +27,7 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the page content type.
         /// </summary>
+        [StringLength(256)]
         public string ContentType { get; set; }
 
         /// <summary>
@@ -41,6 +43,7 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the navigation title.
         /// </summary>
+        [StringLength(128)]
         public string NavigationTitle { get; set; }
 
         /// <summary>
@@ -51,7 +54,7 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the optional redirect.
         /// </summary>
-        /// <returns></returns>
+        [StringLength(256)]
         public string RedirectUrl { get; set; }
 
         /// <summary>

@@ -1,0 +1,17 @@
+@import "variables";
+
+.top {
+    .breadcrumb {
+        background: $white;
+        color: $gray-600;
+        padding: 1rem;
+        font-weight: bold;
+        text-transform: uppercase;
+
+        .breadcrumb-item {
+            &:first-child + .breadcrumb-item::before {
+                content: ":"
+            }
+        }
+    }
+}

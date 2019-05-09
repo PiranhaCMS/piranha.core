@@ -1,0 +1,37 @@
+@import "variables";
+
+.sortable-placeholder {
+    margin: 0 0 2px;
+    padding: 0;
+    height: 6rem;
+    background: #f2fbff;
+    border: 1px dashed #b6bcbf;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+
+    &.col {
+        padding: 0;
+        margin: 0 15px;
+        height: auto;
+    }
+}
+
+.blocks {
+    .sortable-placeholder {
+        margin-bottom: 1rem;
+    }
+}
+
+.list-group {
+    .sortable-placeholder {
+        height: 3rem;
+        margin-bottom: 0;
+    }
+}
+
+.accordion.sortable {
+    .sortable-placeholder {
+        height: 3rem;
+        margin-bottom: 0;
+    }
+}

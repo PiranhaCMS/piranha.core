@@ -72,6 +72,10 @@ namespace Piranha.Extend.Fields
         /// <returns>True if the fields are equal</returns>
         public virtual bool Equals(SimpleField<T> obj)
         {
+            if (obj == null)
+            {
+                return false;
+            }
             return EqualityComparer<T>.Default.Equals(Value, obj.Value);
         }
 
@@ -83,7 +87,11 @@ namespace Piranha.Extend.Fields
         /// <returns>True if the fields are equal</returns>
         public static bool operator ==(SimpleField<T> field1, SimpleField<T> field2)
         {
-            return field1.Equals(field2);
+            if ((object)field1 != null && (object)field2 != null)
+            {
+                return field1.Equals(field2);
+            }
+            return false;
         }
 
         /// <summary>
@@ -94,7 +102,7 @@ namespace Piranha.Extend.Fields
         /// <returns>True if the fields are equal</returns>
         public static bool operator !=(SimpleField<T> field1, SimpleField<T> field2)
         {
-            return !field1.Equals(field2);
+            return !(field1 == field2);
         }
     }
 }

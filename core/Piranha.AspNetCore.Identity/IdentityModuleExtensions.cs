@@ -3,16 +3,15 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
 using System.Reflection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -38,13 +37,6 @@ public static class IdentityModuleExtensions
     {
         // Add the identity module
         App.Modules.Register<Module>();
-
-        // Register views
-        var assembly = typeof(IdentityModuleExtensions).GetTypeInfo().Assembly;
-        var provider = new EmbeddedFileProvider(assembly, "Piranha.AspNetCore.Identity");
-
-        // Add the file provider to the Razor view engine
-        services.Configure<RazorViewEngineOptions>(options => { options.FileProviders.Add(provider); });
 
         // Setup authorization policies
         services.AddAuthorization(o =>

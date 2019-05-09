@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using Microsoft.AspNetCore.Http;
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Piranha.AspNetCore.Services;
+using Piranha.Services;
 using Piranha.Web;
 using X.Web.Sitemap;
 
@@ -53,14 +54,14 @@ namespace Piranha.AspNetCore
                     var siteId = service.Site.Id;
 
                     // Get the sitemap for the site
-                    var pages = api.Sites.GetSitemap(siteId);
+                    var pages = await api.Sites.GetSitemapAsync(siteId);
 
                     // Generate sitemap.xml
                     var sitemap = new Sitemap();
 
                     foreach (var page in pages)
                     {
-                        var urls = GetPageUrls(api, page, baseUrl);
+                        var urls = await GetPageUrlsAsync(api, page, baseUrl);
 
                         if (urls.Count > 0)
                             sitemap.AddRange(urls);
@@ -73,7 +74,7 @@ namespace Piranha.AspNetCore
             await _next.Invoke(context);
         }
 
-        private List<Url> GetPageUrls(IApi api, Models.SitemapItem item, string baseUrl)
+        private async Task<List<Url>> GetPageUrlsAsync(IApi api, Models.SitemapItem item, string baseUrl)
         {
             var urls = new List<Url>();
 
@@ -88,7 +89,7 @@ namespace Piranha.AspNetCore
                 });
 
                 // Get all posts for the blog
-                var posts = api.Posts.GetAll(item.Id);
+                var posts = await api.Posts.GetAllAsync(item.Id);
                 foreach (var post in posts)
                 {
                     if (post.Published.HasValue && post.Published.Value <= DateTime.Now)
@@ -105,7 +106,7 @@ namespace Piranha.AspNetCore
 
                 foreach (var child in item.Items)
                 {
-                    var childUrls = GetPageUrls(api, child, baseUrl);
+                    var childUrls = await GetPageUrlsAsync(api, child, baseUrl);
 
                     if (childUrls.Count > 0)
                     {

@@ -1,11 +1,11 @@
 ﻿/*
- * Copyright (c) 2016-2018 Håkan Edling
+ * Copyright (c) 2016-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -13,7 +13,7 @@ using System;
 namespace Piranha.Models
 {
     [Serializable]
-    public class SitemapItem : StructureItem<SitemapItem>
+    public class SitemapItem : StructureItem<Sitemap, SitemapItem>
     {
         /// <summary>
         /// Gets/sets the optional original id.
@@ -44,9 +44,9 @@ namespace Piranha.Models
         /// Gets the menu title for the item. The menu title returns
         /// the navigation title if set, otherwise the main title.
         /// </summary>
-        public string MenuTitle 
+        public string MenuTitle
         {
-            get 
+            get
             {
                 if (!string.IsNullOrWhiteSpace(NavigationTitle))
                 {
@@ -74,7 +74,7 @@ namespace Piranha.Models
 
         /// <summary>
         /// Gets/sets the published date.
-        /// </summary>        
+        /// </summary>
         public DateTime? Published { get; set; }
 
         /// <summary>

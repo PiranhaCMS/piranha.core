@@ -1,0 +1,45 @@
+@import "variables";
+
+.blocktype-category {
+    color: $black;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: .25rem 1rem;
+    margin: .25rem 0;
+}
+
+.blocktype-list {
+    margin: 0 -.25rem;
+}
+
+.blocktype {
+    display: inline-block;
+    width: 25%;
+    padding: .25rem;
+
+    .btn {
+        background: white;
+        padding: .75rem 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: background-color ease-in-out .2s;
+
+        &:hover {
+            background-color: $gray-400;
+        }
+    }
+
+    i {
+        display: block;
+        font-size: 1.2rem;
+        margin-bottom: .5rem;
+    }
+
+    span {
+        display: block;
+        font-size: .8rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

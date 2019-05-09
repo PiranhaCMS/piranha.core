@@ -3,13 +3,14 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
-using Newtonsoft.Json;
 using System;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Piranha.Extend.Fields
 {
@@ -21,11 +22,7 @@ namespace Piranha.Extend.Fields
         /// </summary>
         public virtual string GetTitle()
         {
-            if (Media != null)
-            {
-                return Media.Filename;
-            }
-            return null;
+            return Media?.Filename;
         }
 
         /// <summary>
@@ -37,8 +34,8 @@ namespace Piranha.Extend.Fields
         /// <summary>
         /// Gets/sets the related media object.
         /// </summary>
-        [JsonIgnore]
-        public Data.Media Media { get; private set; }
+        /// [JsonIgnore]
+        public Models.Media Media { get; private set; }
 
         /// <summary>
         /// Gets if the field has a media object available.
@@ -49,11 +46,13 @@ namespace Piranha.Extend.Fields
         /// Initializes the field for client use.
         /// </summary>
         /// <param name="api">The current api</param>
-        public virtual void Init(IApi api)
+        public virtual async Task Init(IApi api)
         {
             if (Id.HasValue)
             {
-                Media = api.Media.GetById(Id.Value);
+                Media = await api.Media
+                    .GetByIdAsync(Id.Value)
+                    .ConfigureAwait(false);
 
                 if (Media == null)
                 {
@@ -93,6 +92,10 @@ namespace Piranha.Extend.Fields
         /// <returns>True if the fields are equal</returns>
         public virtual bool Equals(T obj)
         {
+            if (obj == null)
+            {
+                return false;
+            }
             return Id == obj.Id;
         }
 
@@ -104,7 +107,11 @@ namespace Piranha.Extend.Fields
         /// <returns>True if the fields are equal</returns>
         public static bool operator ==(MediaFieldBase<T> field1, MediaFieldBase<T> field2)
         {
-            return field1.Equals(field2);
+            if ((object)field1 != null && (object)field2 != null)
+            {
+                return field1.Equals(field2);
+            }
+            return false;
         }
 
         /// <summary>
@@ -115,7 +122,7 @@ namespace Piranha.Extend.Fields
         /// <returns>True if the fields are equal</returns>
         public static bool operator !=(MediaFieldBase<T> field1, MediaFieldBase<T> field2)
         {
-            return !field1.Equals(field2);
+            return !(field1 == field2);
         }
     }
 }

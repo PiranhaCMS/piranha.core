@@ -1,0 +1,134 @@
+@inject IViewLocalizer Localizer
+
+<!-- The Modal -->
+<div class="modal modal-panel fade" id="mediapicker">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title"><i class="fas fa-images"></i> @Localizer["Select media"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Tabs -->
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link" :class="{active: listView}" v-on:click.prevent="toggle"><i class="fas fa-list"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" :class="{active: !listView}" v-on:click.prevent="toggle"><i class="fas fa-table"></i></a>
+                </li>
+            </ul>
+
+            <!-- Modal Body -->
+            <div class="modal-body bg-light">
+
+                <div id="mediapicker-upload-container" class="dropzone-container">
+                    <form action="@Url.Action("Upload", "MediaApi")" class="dropzone needsclick dz-clickable" enctype="multipart/form-data">
+                        <input type="hidden" name="Model.ParentId" v-model="currentFolderId" />
+                        <div class="dz-message needsclick text-center">
+                            <span class="fas fa-cloud-upload-alt"></span>
+                            Drop files here or click to upload.
+                        </div>
+                        <div class="file-list"></div>
+                    </form>
+                    <ul class="media-list list-unstyled"></ul>
+                </div>
+
+                <template v-if="listView">
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th>@Localizer["Name"]</th>
+                                <th class="td-medium d-none">@Localizer["Type"]</th>
+                                <th class="td-small d-none">@Localizer["Size"]</th>
+                                <th class="td-small">@Localizer["Modified"]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-if="currentFolderId != null">
+                                <td><a href="#" v-on:click.prevent="load(parentFolderId)"><i class="fas fa-folder-open"></i>...</a></td>
+                                <td class="d-none"></td>
+                                <td class="d-none"></td>
+                                <td></td>
+                            </tr>
+                            <tr v-for="folder in folders">
+                                <td><a href="#" v-on:click.prevent="load(folder.id)"><i class="fas fa-folder-open"></i>{{ folder.name }}</a></td>
+                                <td class="d-none"></td>
+                                <td class="d-none"></td>
+                                <td></td>
+                            </tr>
+                            <tr v-for="item in items">
+                                <td>
+                                    <a href="#" v-on:click.prevent="select(item)">
+                                        <i v-if="item.type === 'Image'" class="fas fa-image"></i>
+                                        <i v-if="item.type === 'Video'" class="fas fa-video"></i>
+                                        {{ item.filename }}
+                                    </a>
+                                </td>
+                                <td class="d-none">{{ item.contentType }}</td>
+                                <td class="d-none">{{ item.size }}</td>
+                                <td>{{ item.lastModified }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </template>
+
+                <template v-if="!listView">
+                    <div class="gallery gallery-sm">
+                        <div class="gallery-header">
+                            @Localizer["Gallery"]
+                        </div>
+
+                        <a href="#" class="thumbnail" v-if="currentFolderId != null" v-on:click.prevent="load(parentFolderId)">
+                            <div class="thumbnail-icon">
+                                <i class="fas fa-folder-open fa-3x"></i>
+                            </div>
+                            <p class="thumbnail-text">...</p>
+                        </a>
+
+                        <a href="#" class="thumbnail" v-for="folder in folders" v-on:click.prevent="load(folder.id)">
+                            <div class="thumbnail-icon">
+                                <i class="fas fa-folder fa-3x"></i>
+                            </div>
+                            <p class="thumbnail-text">{{ folder.name }}</p>
+                        </a>
+
+                        <template v-for="item in items">
+                            <a href="#" class="thumbnail" v-on:click.prevent="select(item)">
+
+                                <template v-if="item.type === 'Image'">
+                                    <img class="thumbnail-image" :src="item.publicUrl">
+                                </template>
+
+                                <template v-else-if="item.type === 'Document'">
+                                    <div class="thumbnail-icon">
+                                        <i class="fas fa-file-alt fa-3x"></i>
+                                    </div>
+                                </template>
+
+                                <template v-else-if="item.type === 'Video'">
+                                    <div class="thumbnail-icon">
+                                        <i class="fas fa-film fa-3x"></i>
+                                    </div>
+                                </template>
+
+                                <template v-else>
+                                    <div class="thumbnail-icon">
+                                        <i class="fas fa-file"></i>
+                                        <i class="fas fa-file fa-3x"></i>
+                                    </div>
+                                </template>
+
+                                <p class="thumbnail-text">{{ item.filename }}</p>
+                            </a>
+                        </template>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+</div>

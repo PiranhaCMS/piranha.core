@@ -1,18 +1,20 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
-using Piranha.Services;
 using System;
 using System.Data.SqlClient;
 using System.Linq;
 using Xunit;
+using Piranha.Models;
+using Piranha.Repositories;
+using Piranha.Services;
 
 namespace Piranha.Tests.Hooks
 {
@@ -20,43 +22,52 @@ namespace Piranha.Tests.Hooks
     public class Sites : BaseTests
     {
         private const string TITLE = "My Hook Site";
-        private Guid ID = Guid.NewGuid();
+        private readonly Guid ID = Guid.NewGuid();
 
-        class SiteOnLoadException : Exception {}
-        class SiteOnBeforeSaveException : Exception {}
-        class SiteOnAfterSaveException : Exception {}
-        class SiteOnBeforeDeleteException : Exception {}
-        class SiteOnAfterDeleteException : Exception {}
+        public class SiteOnLoadException : Exception {}
+        public class SiteOnBeforeSaveException : Exception {}
+        public class SiteOnAfterSaveException : Exception {}
+        public class SiteOnBeforeDeleteException : Exception {}
+        public class SiteOnAfterDeleteException : Exception {}
 
-        protected override void Init() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+        protected override void Init()
+        {
+            using (var api = CreateApi())
+            {
                 // Initialize
-                Piranha.App.Init();
+                Piranha.App.Init(api);
 
                 // Create test param
-                api.Sites.Save(new Data.Site() {
+                api.Sites.Save(new Site()
+                {
                     Id = ID,
                     Title = TITLE
                 });
             }
         }
 
-        protected override void Cleanup() {
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
+        protected override void Cleanup()
+        {
+            using (var api = CreateApi())
+            {
                 // Remove test data
                 var sites = api.Sites.GetAll();
 
                 foreach (var s in sites)
+                {
                     api.Sites.Delete(s);
+                }
             }
         }
 
         [Fact]
-        public void OnLoad() {
+        public void OnLoad()
+        {
             Piranha.App.Hooks.Site.RegisterOnLoad(m => throw new SiteOnLoadException());
-
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                Assert.Throws<SiteOnLoadException>(() => {
+            using (var api = CreateApi())
+            {
+                Assert.Throws<SiteOnLoadException>(() =>
+                {
                     api.Sites.GetById(ID);
                 });
             }
@@ -64,11 +75,14 @@ namespace Piranha.Tests.Hooks
         }
 
         [Fact]
-        public void OnBeforeSave() {
+        public void OnBeforeSave()
+        {
             Piranha.App.Hooks.Site.RegisterOnBeforeSave(m => throw new SiteOnBeforeSaveException());
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                Assert.Throws<SiteOnBeforeSaveException>(() => {
-                    api.Sites.Save(new Data.Site() {
+            using (var api = CreateApi())
+            {
+                Assert.Throws<SiteOnBeforeSaveException>(() =>
+                {
+                    api.Sites.Save(new Site {
                         Title = "My First Hook Site"
                     });
                 });
@@ -77,11 +91,14 @@ namespace Piranha.Tests.Hooks
         }
 
         [Fact]
-        public void OnAfterSave() {
+        public void OnAfterSave()
+        {
             Piranha.App.Hooks.Site.RegisterOnAfterSave(m => throw new SiteOnAfterSaveException());
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                Assert.Throws<SiteOnAfterSaveException>(() => {
-                    api.Sites.Save(new Data.Site() {
+            using (var api = CreateApi())
+            {
+                Assert.Throws<SiteOnAfterSaveException>(() =>
+                {
+                    api.Sites.Save(new Site {
                         Title = "My Second Hook Site"
                     });
                 });
@@ -90,25 +107,54 @@ namespace Piranha.Tests.Hooks
         }
 
         [Fact]
-        public void OnBeforeDelete() {
+        public void OnBeforeDelete()
+        {
             Piranha.App.Hooks.Site.RegisterOnBeforeDelete(m => throw new SiteOnBeforeDeleteException());
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                Assert.Throws<SiteOnBeforeDeleteException>(() => {
+            using (var api = CreateApi())
+            {
+                Assert.Throws<SiteOnBeforeDeleteException>(() =>
+                {
                     api.Sites.Delete(ID);
                 });
             }
             Piranha.App.Hooks.Site.Clear();
-        }        
+        }
 
         [Fact]
-        public void OnAfterDelete() {
+        public void OnAfterDelete()
+        {
             Piranha.App.Hooks.Site.RegisterOnAfterDelete(m => throw new SiteOnAfterDeleteException());
-            using (var api = new Api(GetDb(), new ContentServiceFactory(services), storage)) {
-                Assert.Throws<SiteOnAfterDeleteException>(() => {
+            using (var api = CreateApi())
+            {
+                Assert.Throws<SiteOnAfterDeleteException>(() =>
+                {
                     api.Sites.Delete(ID);
                 });
             }
-            Piranha.App.Hooks.Site.Clear();            
-        }        
+            Piranha.App.Hooks.Site.Clear();
+        }
+
+        private IApi CreateApi()
+        {
+            var factory = new ContentFactory(services);
+            var serviceFactory = new ContentServiceFactory(factory);
+
+            var db = GetDb();
+
+            return new Api(
+                factory,
+                new AliasRepository(db),
+                new ArchiveRepository(db),
+                new Piranha.Repositories.MediaRepository(db),
+                new PageRepository(db, serviceFactory),
+                new PageTypeRepository(db),
+                new ParamRepository(db),
+                new PostRepository(db, serviceFactory),
+                new PostTypeRepository(db),
+                new SiteRepository(db, serviceFactory),
+                new SiteTypeRepository(db),
+                storage: storage
+            );
+        }
     }
 }

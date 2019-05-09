@@ -3,14 +3,14 @@
   <metadata>
     <id>Piranha</id>
 		<title>Piranha</title>
-    <version>5.3.1</version>
+    <version>6.1.0</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Core package for Piranha CMS for NetStandard.</description>
-    <copyright>Copyright 2017-2018 (c) Håkan Edling</copyright>
+    <copyright>Copyright 2017-2019 (c) Håkan Edling</copyright>
     <tags>cms mvc aspnetcore netstandard</tags>
-    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <license type="expression">MIT</license>
     <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
     <iconUrl>http://piranhacms.org/assets/twitter-shield.png</iconUrl>
     <releaseNotes>See the changelog available at:
@@ -20,7 +20,8 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
       <group targetFramework=".NETStandard2.0">
         <dependency id="AutoMapper" version="7.0.1" />
         <dependency id="Markdig" version="0.15.0" />
-        <dependency id="Microsoft.EntityFrameworkCore.Relational" version="2.1.4" />
+        <dependency id="Microsoft.Extensions.Caching.Abstractions" version="2.1.1" />
+        <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="2.1.1" />
         <dependency id="Newtonsoft.Json" version="11.0.2" />
       </group>
     </dependencies>

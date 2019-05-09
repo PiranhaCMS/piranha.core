@@ -1,0 +1,22 @@
+{
+  "Add folder": {
+    "Values": {
+      "sv-SE": "Lägg till mapp"
+    }
+  },
+  "Gallery": {
+    "Values": {
+      "sv-SE": "Galleri"
+    }
+  },
+  "Media": {
+    "Values": {
+      "sv-SE": "Media"
+    }
+  },
+  "Select media": {
+    "Values": {
+      "sv-SE": "Välj media"
+    }
+  }
+}
