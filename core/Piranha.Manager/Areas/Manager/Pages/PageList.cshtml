@@ -34,6 +34,10 @@
                 {
                     <partial name="@action.ActionView" />
                 }
+                <button type="button" class="btn btn-primary btn-labeled" data-toggle="modal" data-target="#pageAddModal">
+                    <i class="fas fa-plus"></i>
+                    @Localizer["Add"]
+                </button>
             </div>
         </div>
     </div>
@@ -59,4 +63,6 @@
             </div>
         </div>
     </div>
+
+    <partial name="Partial/_PageAddModal" />
 </div>

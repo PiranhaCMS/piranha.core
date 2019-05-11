@@ -1,8 +1,15 @@
-@page "~/manager/page/{id:Guid}"
+@page "~/manager/page/{id:Guid?}"
 @inject IViewLocalizer Localizer
 @{
     ViewBag.Title = Localizer["Edit page"];
     ViewBag.MenuItem = "Pages";
+
+    @functions {
+        public void OnPostAdd(string type)
+        {
+            throw new Exception("Add new page of type " + type);
+        }
+    }
 }
 @section script
 {

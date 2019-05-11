@@ -29,14 +29,6 @@ namespace Piranha.Manager
             }
         };
 
-        public static ActionList PageList { get; set; } = new ActionList
-        {
-            new ActionItem
-            {
-                InternalId = "Add",
-                ActionView = "Partial/Actions/_PageAdd",
-                PartialView = "Partial/Actions/_PageAddModal"
-            }
-        };
+        public static ActionList PageList { get; set; } = new ActionList();
     }
 }

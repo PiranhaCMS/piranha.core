@@ -19,6 +19,14 @@ piranha.mediapicker = new Vue({
         dropzone: null
     },
     computed: {
+        filteredFolders: function () {
+            return this.folders.filter(function (item) {
+                if (piranha.mediapicker.search.length > 0) {
+                    return item.name.toLowerCase().indexOf(piranha.mediapicker.search.toLowerCase()) > -1
+                }
+                return true;
+            });
+        },
         filteredItems: function () {
             return this.items.filter(function (item) {
                 if (piranha.mediapicker.search.length > 0) {
@@ -69,7 +77,12 @@ piranha.mediapicker = new Vue({
             $("#mediapicker").modal("show");
         },
         onEnter: function () {
-            if (this.filteredItems.length == 1) {
+            if (this.filteredItems.length == 0 && this.filteredFolders.length == 1) {
+                this.load(this.filteredFolders[0].id);
+                this.search = "";
+            }
+
+            if (this.filteredItems.length == 1 && this.filteredFolders.length == 0) {
                 this.select(this.filteredItems[0]);
             }
         },
@@ -93,4 +106,10 @@ piranha.mediapicker = new Vue({
             piranha.mediapicker.refresh();
         })
     }
+});
+
+$(document).ready(function() {
+    $("#mediapicker").on("shown.bs.modal", function() {
+        $("#mediapickerSearch").trigger("focus");
+    });
 });

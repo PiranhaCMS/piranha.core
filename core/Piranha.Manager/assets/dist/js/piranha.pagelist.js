@@ -33,7 +33,8 @@ piranha.pagelist = new Vue({
     data: {
         loading: true,
         items: [],
-        sites: []
+        sites: [],
+        pageTypes: []
     },
     methods: {
         load: function () {
@@ -41,6 +42,7 @@ piranha.pagelist = new Vue({
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     piranha.pagelist.sites = result.sites;
+                    piranha.pagelist.pageTypes = result.pageTypes;
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },

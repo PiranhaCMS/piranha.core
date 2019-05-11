@@ -14,20 +14,22 @@
             <!-- Tabs -->
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active"><i class="fas fa-pen"></i> @Localizer["New"]</a>
+                    <a class="nav-link active"><i class="fas fa-pen"></i> @Localizer["Add"]</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link"><i class="fas fa-book"></i> @Localizer["From template"]</a>
+                    <a class="nav-link"><i class="fas fa-book"></i> @Localizer["Choose template"]</a>
                 </li>
             </ul>
 
             <!-- Modal body -->
             <div class="modal-body bg-light">
-                <ul>
-                    <li v-for="(type) in pageTypes">
-                        <a href="#">{{ type.title }}</a>
-                    </li>
-                </ul>
+                <table class="table">
+                    <tbody>
+                        <tr v-for="(type) in pageTypes">
+                            <td><a href="#">{{ type.title }}</a></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

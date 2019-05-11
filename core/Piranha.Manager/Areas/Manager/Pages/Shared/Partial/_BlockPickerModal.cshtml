@@ -17,14 +17,14 @@
                     <a class="nav-link active"><i class="fas fa-list"></i> @Localizer["Add"]</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link"><i class="fas fa-table"></i> @Localizer["Choose existing"]</a>
+                    <a class="nav-link"><i class="fas fa-cubes"></i> @Localizer["Choose existing"]</a>
                 </li>
             </ul>
 
             <!-- Modal body -->
             <div class="modal-body bg-light">
                 <form v-on:submit.prevent="selectSingleItem()">
-                    <input v-model="filter" id="blockpickerSearch" type="text" class="form-control" placeholder="Search for a block type">
+                    <input v-model="filter" id="blockpickerSearch" type="text" class="form-control" placeholder="@Localizer["Search..."]">
                     <div v-for="category in filteredCategories">
                         <div class="blocktype-category">{{ category.name }}</div>
                         <div class="blocktype-list">

@@ -18,6 +18,10 @@
             margin: 0;
         }
     }
+
+    >div >.block:not(.block-group) {
+        margin: -1rem 0;
+    }
 }
 
 .block {
@@ -234,7 +238,7 @@
     hr {
         margin: 0;
         border-top-width: 2px;
-        border-color: $gray-200;
+        border-color: transparent;
         transition: border-color ease-in-out .2s;
     }
 

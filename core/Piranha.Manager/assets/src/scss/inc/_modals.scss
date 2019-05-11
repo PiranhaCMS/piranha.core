@@ -1,11 +1,5 @@
 @import "variables";
 
-.modal-title {
-    i {
-        color: $primary;
-    }
-}
-
 .modal-panel {
     .modal-dialog {
         width: 500px;
@@ -20,6 +14,7 @@
 
         .modal-content {
             height: 100%;
+            border-radius: 0;
         }
     }
 }
