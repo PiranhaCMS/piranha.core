@@ -38,6 +38,7 @@ var js = [
             "node_modules/html5sortable/dist/html5sortable.js",
             "node_modules/nestable2/dist/jquery.nestable.min.js",
             "node_modules/dropzone/dist/dropzone.js",
+            "assets/src/js/piranha.accessibility.js",
             "assets/src/js/piranha.dropzone.js",
             "assets/src/js/piranha.utils.js",
             "assets/src/js/piranha.blockpicker.js",

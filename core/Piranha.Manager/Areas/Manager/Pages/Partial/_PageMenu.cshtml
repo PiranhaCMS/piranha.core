@@ -3,7 +3,7 @@
 <div class="container-fluid">
     <div class="top-nav">
         <div class="btn-group" role="group" v-if="regions.length > 0">
-            <button type="button" class="btn btn-primary btn-labeled dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button id="contentSelector" type="button" class="btn btn-primary btn-labeled dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span v-if="selectedRegion.uid === 'uid-blocks'"><i class="fas fa-pen-alt"></i>@Localizer["Main content"]</span>
                 <span v-else><i :class="selectedRegion.icon"></i>{{ selectedRegion.name }}</span>
             </button>
