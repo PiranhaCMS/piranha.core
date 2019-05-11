@@ -59,7 +59,7 @@
                                 <td class="d-none"></td>
                                 <td></td>
                             </tr>
-                            <tr v-for="folder in folders">
+                            <tr v-for="folder in filteredFolders">
                                 <td><a href="#" v-on:click.prevent="load(folder.id)"><i class="fas fa-folder-open"></i>{{ folder.name }}</a></td>
                                 <td class="d-none"></td>
                                 <td class="d-none"></td>

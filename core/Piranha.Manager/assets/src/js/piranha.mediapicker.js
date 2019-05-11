@@ -89,6 +89,7 @@ piranha.mediapicker = new Vue({
         select: function (item) {
             this.callback(JSON.parse(JSON.stringify(item)));
             this.callback = null;
+            this.search = "";
 
             $("#mediapicker").modal("hide");
         }
