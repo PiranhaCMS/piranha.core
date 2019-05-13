@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Piranha.AspNetCore.Identity.PostgreSQL</id>
+    <title>Piranha AspNetCore Identity PostgreSQL</title>
+    <version>6.1.0</version>
+    <authors>Håkan Edling, Maik Müller, Jason Underhill</authors>
+    <owners>Håkan Edling</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Piranha CMS AspNetCore Identity provider for PostgreSQL</description>
+    <copyright>Copyright 2018-2019 (c) Håkan Edling</copyright>
+    <tags>cms mvc aspnetcore netstandard</tags>
+    <license type="expression">MIT</license>
+    <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
+    <iconUrl>http://piranhacms.org/assets/twitter-shield.png</iconUrl>
+    <releaseNotes>See the changelog available at:
+https://github.com/piranhacms/piranha.core/wiki/changelog
+    </releaseNotes>
+    <dependencies>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Piranha" version="[6.1.0,7.0.0)" />
+        <dependency id="Piranha.AspNetCore.Identity" version="[6.1.0,7.0.0)" />
+        <dependency id="Microsoft.AspNetCore.Identity.EntityFrameworkCore" version="2.1.3" />
+        <dependency id="Npgsql.EntityFrameworkCore.PostgreSQL" version="2.1.2" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\core\Piranha.AspNetCore.Identity.PostgreSQL\bin\Release\netstandard2.0\Piranha.AspNetCore.Identity.PostgreSQL.dll" target="lib\netstandard2.0\Piranha.AspNetCore.Identity.PostgreSQL.dll" />
+  </files>
+</package>
