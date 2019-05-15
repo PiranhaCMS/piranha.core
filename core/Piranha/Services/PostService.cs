@@ -457,6 +457,9 @@ namespace Piranha.Services
             await _repo.Save(model).ConfigureAwait(false);
             App.Hooks.OnAfterSave<PostBase>(model);
 
+            // Remove the post from cache
+            RemoveFromCache(model);
+
             if (_cache != null)
             {
                 // Clear all categories from cache in case some
