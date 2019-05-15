@@ -143,10 +143,21 @@ header[role="banner"] {
 
         .block {
             margin-bottom: 1rem;
+
+            &.image-block {
+                text-align: center;
+            }
         }
 
         .gallery-block {
             margin-bottom: 2rem;
+        }
+
+        .columns {
+            img {
+                height: 100%;
+                object-fit: cover;
+            }
         }
     }
 }
