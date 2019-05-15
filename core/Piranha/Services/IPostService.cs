@@ -147,12 +147,26 @@ namespace Piranha.Services
         Task<T> GetBySlugAsync<T>(Guid blogId, string slug) where T : PostBase;
 
         /// <summary>
+        /// Gets the category with the id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The model</returns>
+        Task<Taxonomy> GetCategoryByIdAsync(Guid id);
+
+        /// <summary>
         /// Gets the category with the given slug.
         /// </summary>
         /// <param name="blogId">The blog id</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The model</returns>
         Task<Taxonomy> GetCategoryBySlugAsync(Guid blogId, string slug);
+
+        /// <summary>
+        /// Gets the tag with the id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The model</returns>
+        Task<Taxonomy> GetTagByIdAsync(Guid id);
 
         /// <summary>
         /// Gets the tag with the given slug.

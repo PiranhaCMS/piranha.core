@@ -171,6 +171,23 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Gets the category with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The category</returns>
+        public Task<Models.Taxonomy> GetCategoryById(Guid id)
+        {
+            return _db.Categories
+                .Where(c => c.Id == id)
+                .Select(c => new Models.Taxonomy
+                {
+                    Id = c.Id,
+                    Title = c.Title,
+                    Slug = c.Slug
+                }).FirstOrDefaultAsync();
+        }
+
+        /// <summary>
         /// Gets the tag with the given slug.
         /// </summary>
         /// <param name="blogId">The blog id</param>
@@ -179,12 +196,29 @@ namespace Piranha.Repositories
         public Task<Models.Taxonomy> GetTagBySlug(Guid blogId, string slug)
         {
             return _db.Tags
-                .Where(c => c.BlogId == blogId && c.Slug == slug)
-                .Select(c => new Models.Taxonomy
+                .Where(t => t.BlogId == blogId && t.Slug == slug)
+                .Select(t => new Models.Taxonomy
                 {
-                    Id = c.Id,
-                    Title = c.Title,
-                    Slug = c.Slug
+                    Id = t.Id,
+                    Title = t.Title,
+                    Slug = t.Slug
+                }).FirstOrDefaultAsync();
+        }
+
+        /// <summary>
+        /// Gets the tag with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The category</returns>
+        public Task<Models.Taxonomy> GetTagById(Guid id)
+        {
+            return _db.Tags
+                .Where(t => t.Id == id)
+                .Select(t => new Models.Taxonomy
+                {
+                    Id = t.Id,
+                    Title = t.Title,
+                    Slug = t.Slug
                 }).FirstOrDefaultAsync();
         }
 

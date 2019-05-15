@@ -122,6 +122,16 @@ namespace Piranha.Services
             model.TotalPages = Math.Max(Convert.ToInt32(Math.Ceiling((double)model.TotalPosts / pageSize.Value)), 1);
             model.CurrentPage = Math.Min(Math.Max(1, currentPage.HasValue ? currentPage.Value : 1), model.TotalPages);
 
+            // Set related info
+            if (categoryId.HasValue)
+            {
+                model.Category = await _postService.GetCategoryByIdAsync(categoryId.Value);
+            }
+            if (tagId.HasValue)
+            {
+                model.Tag = await _postService.GetTagByIdAsync(tagId.Value);
+            }
+
             // Get the id of the current posts
             var posts = await _repo.GetPosts(archiveId, pageSize.Value, model.CurrentPage, categoryId, tagId, year, month).ConfigureAwait(false);
 

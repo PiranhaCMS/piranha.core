@@ -342,6 +342,27 @@ namespace Piranha.Services
         }
 
         /// <summary>
+        /// Gets the category with the id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The model</returns>
+        public async Task<Taxonomy> GetCategoryByIdAsync(Guid id)
+        {
+            Taxonomy model = _cache.Get<Taxonomy>(id.ToString());
+
+            if (model == null)
+            {
+                model = await _repo.GetCategoryById(id).ConfigureAwait(false);
+
+                if (model != null && _cache != null)
+                {
+                    _cache.Set(model.Id.ToString(), model);
+                }
+            }
+            return model;
+        }
+
+        /// <summary>
         /// Gets the tag with the given slug.
         /// </summary>
         /// <param name="blogId">The blog id</param>
@@ -365,6 +386,27 @@ namespace Piranha.Services
                 {
                     _cache.Set(model.Id.ToString(), model);
                     _cache.Set($"Tag_{blogId}_{slug}", model.Id);
+                }
+            }
+            return model;
+        }
+
+        /// <summary>
+        /// Gets the category with the id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The model</returns>
+        public async Task<Taxonomy> GetTagByIdAsync(Guid id)
+        {
+            Taxonomy model = _cache.Get<Taxonomy>(id.ToString());
+
+            if (model == null)
+            {
+                model = await _repo.GetTagById(id).ConfigureAwait(false);
+
+                if (model != null && _cache != null)
+                {
+                    _cache.Set(model.Id.ToString(), model);
                 }
             }
             return model;
