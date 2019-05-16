@@ -28,6 +28,11 @@ namespace Piranha.Cache
         private readonly IDictionary<string, object> _cache = new ConcurrentDictionary<string, object>();
 
         /// <summary>
+        /// If returned objects should be cloned.
+        /// </summary>
+        private readonly bool _clone = true;
+
+        /// <summary>
         /// Gets the model with the specified key from cache.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
@@ -39,9 +44,22 @@ namespace Piranha.Cache
 
             if (_cache.TryGetValue(key, out value))
             {
+                if (!_clone)
+                {
+                    return (T)value;
+                }
                 return Utils.DeepClone<T>((T)value);
             }
             return default(T);
+        }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        /// <param name="clone">If returned objects should be cloned</param>
+        public SimpleCache(bool clone = true)
+        {
+            _clone = clone;
         }
 
         /// <summary>

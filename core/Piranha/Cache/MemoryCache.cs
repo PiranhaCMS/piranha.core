@@ -23,12 +23,28 @@ namespace Piranha.Cache
         private readonly IMemoryCache _cache;
 
         /// <summary>
+        /// If returned objects should be cloned.
+        /// </summary>
+        private readonly bool _clone = true;
+
+        /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="cache">The currently configured cache</param>
         public MemoryCache(IMemoryCache cache)
         {
             _cache = cache;
+        }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        /// <param name="cache">The currently configured cache</param>
+        /// <param name="clone">If returned objects should be cloned</param>
+        protected MemoryCache(IMemoryCache cache, bool clone)
+        {
+            _cache = cache;
+            _clone = clone;
         }
 
         /// <summary>
@@ -39,7 +55,13 @@ namespace Piranha.Cache
         /// <returns>The cached model, null it wasn't found</returns>
         public T Get<T>(string key)
         {
-            return Utils.DeepClone<T>(_cache.Get<T>(key));
+            var obj = _cache.Get<T>(key);
+
+            if (!_clone)
+            {
+                return obj;
+            }
+            return Utils.DeepClone<T>(obj);
         }
 
         /// <summary>

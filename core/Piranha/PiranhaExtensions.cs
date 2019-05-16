@@ -51,19 +51,29 @@ public static class PiranhaExtensions
     /// Adds the memory cache service for repository caching.
     /// </summary>
     /// <param name="services">The current service collection</param>
+    /// <param name="clone">If returned objects should be cloned</param>
     /// <returns>The updated service collection</returns>
-    public static IServiceCollection AddPiranhaMemoryCache(this IServiceCollection services)
+    public static IServiceCollection AddPiranhaMemoryCache(this IServiceCollection services, bool clone = true)
     {
-        return services.AddSingleton<ICache, MemoryCache>();
+        if (clone)
+        {
+            return services.AddSingleton<ICache, MemoryCache>();
+        }
+        return services.AddSingleton<ICache, MemoryCacheWithoutClone>();
     }
 
     /// <summary>
     /// Adds the simple cache service for repository caching.
     /// </summary>
     /// <param name="services">The current service collection</param>
+    /// <param name="clone">If returned objects should be cloned</param>
     /// <returns>The updated service collection</returns>
-    public static IServiceCollection AddPiranhaSimpleCache(this IServiceCollection services)
+    public static IServiceCollection AddPiranhaSimpleCache(this IServiceCollection services, bool clone = true)
     {
-        return services.AddSingleton<ICache, SimpleCache>();
+        if (clone)
+        {
+            return services.AddSingleton<ICache, SimpleCache>();
+        }
+        return services.AddSingleton<ICache, SimpleCacheWithoutClone>();
     }
 }
