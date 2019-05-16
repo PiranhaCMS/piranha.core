@@ -378,6 +378,15 @@ namespace Piranha.Manager.Services
             }
         }
 
+        /// <summary>
+        /// Deletes the page with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        public Task Delete(Guid id)
+        {
+            return _api.Pages.DeleteAsync(id);
+        }
+
         private PageListModel.PageItem MapRecursive(SitemapItem item)
         {
             var model = new PageListModel.PageItem

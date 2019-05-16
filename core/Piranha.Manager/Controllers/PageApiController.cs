@@ -97,5 +97,43 @@ namespace Piranha.Manager.Controllers
                 Body = "The page was successfully saved"
             };
         }
+
+        /// <summary>
+        /// Deletes the page with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The result of the operation</returns>
+        [Route("delete/{id}")]
+        [HttpGet]
+        public async Task<StatusMessage> Delete(Guid id)
+        {
+            try
+            {
+                await _service.Delete(id);
+            }
+            catch (ValidationException e)
+            {
+                // Validation did not succeed
+                return new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = e.Message
+                };
+            }
+            catch
+            {
+                return new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = "An error occured while deleting the page"
+                };
+            }
+
+            return new StatusMessage
+            {
+                Type = StatusMessage.Success,
+                Body = "The page was successfully deleted"
+            };
+        }
     }
 }

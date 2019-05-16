@@ -21,7 +21,16 @@ piranha.pagelist = new Vue({
                 .catch(function (error) { console.log("error:", error ); });
         },
         remove: function (id) {
-            console.log("Remove page: ", id);
+            var self = this;
+
+            fetch(piranha.baseUrl + "manager/api/page/delete/" + id)
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    piranha.notifications.push(result);
+
+                    self.load();
+                })
+                .catch(function (error) { console.log("error:", error ); });
         }
     },
     created: function () {
