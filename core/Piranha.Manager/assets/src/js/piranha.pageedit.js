@@ -92,8 +92,17 @@ piranha.pageedit = new Vue({
                 console.log("error:", error);
             });
         },
-        remove: function (id) {
-            console.log("Remove page: ", id);
+        remove: function () {
+            var self = this;
+
+            fetch(piranha.baseUrl + "manager/api/page/delete/" + self.id)
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    piranha.notifications.push(result);
+
+                    window.location = piranha.baseUrl + "manager/pages";
+                })
+                .catch(function (error) { console.log("error:", error ); });
         },
         addBlock: function (type, pos) {
             fetch(piranha.baseUrl + "manager/api/content/block/" + type)
