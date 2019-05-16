@@ -374,6 +374,7 @@ namespace Piranha.Repositories
                             };
                             await _db.Blocks.AddAsync(block).ConfigureAwait(false);
                         }
+                        block.ParentId = blocks[n].ParentId;
                         block.CLRType = blocks[n].CLRType;
                         block.IsReusable = blocks[n].IsReusable;
                         block.Title = blocks[n].Title;
@@ -407,7 +408,6 @@ namespace Piranha.Repositories
                         {
                             Id = Guid.NewGuid(),
                             BlockId = block.Id,
-                            ParentId = blocks[n].ParentId,
                             Block = block,
                             PostId = post.Id,
                             SortOrder = n
@@ -576,9 +576,9 @@ namespace Piranha.Repositories
                 {
                     foreach (var postBlock in post.Blocks.OrderBy(b => b.SortOrder))
                     {
-                        if (postBlock.ParentId.HasValue)
+                        if (postBlock.Block.ParentId.HasValue)
                         {
-                            var parent = post.Blocks.FirstOrDefault(b => b.BlockId == postBlock.ParentId.Value);
+                            var parent = post.Blocks.FirstOrDefault(b => b.BlockId == postBlock.Block.ParentId.Value);
                             if (parent != null)
                             {
                                 postBlock.Block.ParentId = parent.Block.Id;

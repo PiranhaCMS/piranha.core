@@ -294,9 +294,13 @@ namespace Piranha.Repositories
 
                     // Delete removed blocks
                     var removed = page.Blocks
-                        .Where(b => !current.Contains(b.BlockId) && !b.Block.IsReusable)
+                        .Where(b => !current.Contains(b.BlockId) && !b.Block.IsReusable && b.Block.ParentId == null)
+                        .Select(b => b.Block);
+                    var removedItems = page.Blocks
+                        .Where(b => !current.Contains(b.BlockId) && b.Block.ParentId != null && removed.Select(p => p.Id).ToList().Contains(b.Block.ParentId.Value))
                         .Select(b => b.Block);
                     _db.Blocks.RemoveRange(removed);
+                    _db.Blocks.RemoveRange(removedItems);
 
                     // Delete the old page blocks
                     page.Blocks.Clear();
@@ -317,6 +321,7 @@ namespace Piranha.Repositories
                             };
                             await _db.Blocks.AddAsync(block).ConfigureAwait(false);
                         }
+                        block.ParentId = blocks[n].ParentId;
                         block.CLRType = blocks[n].CLRType;
                         block.IsReusable = blocks[n].IsReusable;
                         block.Title = blocks[n].Title;
@@ -349,7 +354,6 @@ namespace Piranha.Repositories
                         page.Blocks.Add(new PageBlock
                         {
                             Id = Guid.NewGuid(),
-                            ParentId = blocks[n].ParentId,
                             BlockId = block.Id,
                             Block = block,
                             PageId = page.Id,
@@ -453,9 +457,9 @@ namespace Piranha.Repositories
 
                     foreach (var pageBlock in page.Blocks.OrderBy(b => b.SortOrder))
                     {
-                        if (pageBlock.ParentId.HasValue)
+                        if (pageBlock.Block.ParentId.HasValue)
                         {
-                            var parent = page.Blocks.FirstOrDefault(b => b.BlockId == pageBlock.ParentId.Value);
+                            var parent = page.Blocks.FirstOrDefault(b => b.BlockId == pageBlock.Block.ParentId.Value);
                             if (parent != null)
                             {
                                 pageBlock.Block.ParentId = parent.Block.Id;

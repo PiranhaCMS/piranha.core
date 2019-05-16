@@ -24,10 +24,10 @@ namespace Piranha.Data
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets/sets the optional parent id if this page block
-        /// is part of a group.
+        /// This property is not used any more, but is kept for atm
+        /// backwards compatible SQLite migrations.
         /// </summary>
-        public Guid? ParentId { get; set; }
+        internal Guid? ParentId { get; set; }
 
         /// <summary>
         /// Gets/sets the page id.

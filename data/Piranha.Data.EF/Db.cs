@@ -170,7 +170,6 @@ namespace Piranha
             mb.Entity<Data.Block>().ToTable("Piranha_Blocks");
             mb.Entity<Data.Block>().Property(b => b.CLRType).IsRequired().HasMaxLength(256);
             mb.Entity<Data.Block>().Property(b => b.Title).HasMaxLength(128);
-            mb.Entity<Data.Block>().Ignore(b => b.ParentId);
 
             mb.Entity<Data.BlockField>().ToTable("Piranha_BlockFields");
             mb.Entity<Data.BlockField>().Property(f => f.FieldId).IsRequired().HasMaxLength(64);
@@ -373,6 +372,33 @@ namespace Piranha
                 .ToList();
             foreach (var version in versions)
                 version.FileExtension = ".jpg";
+
+            var pageBlocks = PageBlocks
+                .Where(b => b.ParentId.HasValue)
+                .ToList();
+            var pageBlocksId = pageBlocks.Select(b => b.BlockId).ToList();
+            var blocks = Blocks
+                .Where(b => pageBlocksId.Contains(b.Id))
+                .ToList();
+            foreach (var block in blocks)
+            {
+                var pageBlock = pageBlocks.Single(b => b.BlockId == block.Id);
+                block.ParentId = pageBlock.ParentId;
+                pageBlock.ParentId = null;
+            }
+            var postBlocks = PostBlocks
+                .Where(b => b.ParentId.HasValue)
+                .ToList();
+            var postBlocksId = postBlocks.Select(b => b.BlockId).ToList();
+            blocks = Blocks
+                .Where(b => postBlocksId.Contains(b.Id))
+                .ToList();
+            foreach (var block in blocks)
+            {
+                var postBlock = postBlocks.Single(b => b.BlockId == block.Id);
+                block.ParentId = postBlock.ParentId;
+                postBlock.ParentId = null;
+            }
 
             SaveChanges();
         }

@@ -25,8 +25,6 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the main title.
         /// </summary>
-        [Required]
-        [StringLength(128)]
 	    public string Title { get; set; }
 
         /// <summary>
