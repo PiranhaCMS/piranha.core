@@ -1,16 +1,16 @@
 .navbar {
     .navbar-toggler {
         border-color: #333;
-        margin-top: 1.1rem;
 
         .navbar-toggler-icon {
             color: #fff;
+            height: 1.5rem;
+            font-size: 1.5rem;
         }
     }
 
     .navbar-nav {
         border-top: solid 1px #333;
-        margin-top: 1rem;
     }
 
     .nav {
