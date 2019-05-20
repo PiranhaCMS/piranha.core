@@ -12,7 +12,7 @@ Vue.component("block-group-horizontal", {
             fetch(piranha.baseUrl + "manager/api/content/block/" + type)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    self.model.items.push(result);
+                    self.model.items.push(result.body);
                 })
                 .catch(function (error) { console.log("error:", error );
             });

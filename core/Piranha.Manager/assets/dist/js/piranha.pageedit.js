@@ -120,8 +120,8 @@ Vue.component("block-group", {
             fetch(piranha.baseUrl + "manager/api/content/block/" + type)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    self.model.items.push(result);
-                    self.selectItem(result);
+                    self.model.items.push(result.body);
+                    self.selectItem(result.body);
                 })
                 .catch(function (error) { console.log("error:", error );
             });
@@ -200,7 +200,7 @@ Vue.component("block-group-horizontal", {
             fetch(piranha.baseUrl + "manager/api/content/block/" + type)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    self.model.items.push(result);
+                    self.model.items.push(result.body);
                 })
                 .catch(function (error) { console.log("error:", error );
             });
@@ -759,7 +759,7 @@ piranha.pageedit = new Vue({
             fetch(piranha.baseUrl + "manager/api/content/block/" + type)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    piranha.pageedit.blocks.splice(pos, 0, result);
+                    piranha.pageedit.blocks.splice(pos, 0, result.body);
                 })
                 .catch(function (error) { console.log("error:", error );
             });

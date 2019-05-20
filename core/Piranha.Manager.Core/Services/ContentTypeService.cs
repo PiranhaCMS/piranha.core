@@ -142,7 +142,7 @@ namespace Piranha.Manager.Services
         /// </summary>
         /// <param name="type">The block type</param>
         /// <returns>The new block</returns>
-        public BlockModel CreateBlock(string type)
+        public AsyncResult<BlockModel> CreateBlock(string type)
         {
             var blockType = App.Blocks.GetByType(type);
 
@@ -189,19 +189,25 @@ namespace Piranha.Manager.Services
                         }
                     }
 
-                    return item;
+                    return new AsyncResult<BlockModel>
+                    {
+                        Body = item
+                    };
                 }
                 else
                 {
-                    return new BlockItemModel
+                    return new AsyncResult<BlockModel>
                     {
-                        Model = block,
-                        Meta = new BlockMeta
+                        Body = new BlockItemModel
                         {
-                            Name = blockType.Name,
-                            Title = block.GetTitle(),
-                            Icon = blockType.Icon,
-                            Component = blockType.Component
+                            Model = block,
+                            Meta = new BlockMeta
+                            {
+                                Name = blockType.Name,
+                                Title = block.GetTitle(),
+                                Icon = blockType.Icon,
+                                Component = blockType.Component
+                            }
                         }
                     };
                 }
