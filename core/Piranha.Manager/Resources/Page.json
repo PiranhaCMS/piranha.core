@@ -1,4 +1,9 @@
 {
+  "Add page": {
+    "Values": {
+      "sv-SE": "Lägg till sida"
+    }
+  },
   "Edit page": {
     "Values": {
       "sv-SE": "Redigera sida"
@@ -32,6 +37,11 @@
   "Pages": {
     "Values": {
       "sv-SE": "Sidor"
+    }
+  },
+  "Your page title": {
+    "Values": {
+      "sv-SE": "Din sidtitel"
     }
   }
 }

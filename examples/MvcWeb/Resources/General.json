@@ -14,11 +14,6 @@
       "sv-SE": "Välj befintligt"
     }
   },
-  "Choose template": {
-    "Values": {
-      "sv-SE": "Välj mall"
-    }
-  },
   "Content type": {
     "Values": {
       "sv-SE": "Innehållstyp"
@@ -39,6 +34,11 @@
       "sv-SE": "Filnamn"
     }
   },
+  "From template": {
+    "Values": {
+      "sv-SE": "Från mall"
+    }
+  },
   "Height": {
     "Values": {
       "sv-SE": "Höjd"
@@ -47,6 +47,11 @@
   "Edit": {
     "Values": {
       "sv-SE": "Redigera"
+    }
+  },
+  "Empty": {
+    "Values": {
+      "sv-SE": "Tom"
     }
   },
   "Logout": {

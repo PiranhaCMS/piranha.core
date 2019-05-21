@@ -14,10 +14,10 @@
             <!-- Tabs -->
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active"><i class="fas fa-pen"></i> @Localizer["Add"]</a>
+                    <a class="nav-link active"><i class="fas fa-pen"></i> @Localizer["Empty"]</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link"><i class="fas fa-book"></i> @Localizer["Choose template"]</a>
+                    <a class="nav-link"><i class="fas fa-book"></i> @Localizer["From template"]</a>
                 </li>
             </ul>
 
@@ -26,7 +26,7 @@
                 <table class="table">
                     <tbody>
                         <tr v-for="(type) in pageTypes">
-                            <td><a href="#">{{ type.title }}</a></td>
+                            <td><a :href="piranha.baseUrl + type.addUrl + type.id">{{ type.title }}</a></td>
                         </tr>
                     </tbody>
                 </table>

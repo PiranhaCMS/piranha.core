@@ -61,6 +61,18 @@ namespace Piranha.Manager.Controllers
         }
 
         /// <summary>
+        /// Creates a new page of the specified type.
+        /// </summary>
+        /// <param name="typeId">The type id</param>
+        /// <returns>The page edit model</returns>
+        [Route("create/{typeId}")]
+        [HttpGet]
+        public async Task<PageEditModel> Create(string typeId)
+        {
+            return await _service.Create(typeId);
+        }
+
+        /// <summary>
         /// Saves the given model
         /// </summary>
         /// <param name="model">The model</param>
@@ -82,6 +94,7 @@ namespace Piranha.Manager.Controllers
                     Body = e.Message
                 };
             }
+            /*
             catch
             {
                 return new StatusMessage
@@ -90,6 +103,7 @@ namespace Piranha.Manager.Controllers
                     Body = "An error occured while saving the page"
                 };
             }
+            */
 
             return new StatusMessage
             {

@@ -55,13 +55,14 @@ namespace Piranha.Manager.Services
                 PageTypes = App.PageTypes.Select(t => new PageListModel.PageTypeItem
                 {
                     Id = t.Id,
-                    Title = t.Title
+                    Title = t.Title,
+                    AddUrl = "manager/page/add/"
                 }).ToList()
             };
 
             foreach (var site in model.Sites)
             {
-                var sitemap = await _api.Sites.GetSitemapAsync(site.Id);
+                var sitemap = await _api.Sites.GetSitemapAsync(site.Id, false);
 
                 foreach (var item in sitemap)
                 {
@@ -72,183 +73,28 @@ namespace Piranha.Manager.Services
             return model;
         }
 
+        public async Task<PageEditModel> Create(string typeId)
+        {
+            var page = _api.Pages.Create<DynamicPage>(typeId);
+
+            page.Id = Guid.NewGuid();
+            page.SiteId = (await _api.Sites.GetDefaultAsync()).Id;
+            page.SortOrder = (await _api.Sites.GetSitemapAsync(page.SiteId)).Count;
+
+            if (page != null)
+            {
+                return Transform(page);
+            }
+            return null;
+        }
+
         public async Task<PageEditModel> GetById(Guid id)
         {
             var page = await _api.Pages.GetByIdAsync(id);
 
             if (page != null)
             {
-                var type = App.PageTypes.GetById(page.TypeId);
-
-                var model = new PageEditModel
-                {
-                    Id = page.Id,
-                    SiteId = page.SiteId,
-                    ParentId = page.ParentId,
-                    SortOrder = page.SortOrder,
-                    TypeId = page.TypeId,
-                    Title = page.Title,
-                    NavigationTitle = page.NavigationTitle,
-                    Slug = page.Slug,
-                    MetaKeywords = page.MetaKeywords,
-                    MetaDescription = page.MetaDescription,
-                    Published = page.Published.HasValue ? page.Published.Value.ToString("yyyy-MM-dd HH:mm") : null
-                };
-
-                foreach (var regionType in type.Regions)
-                {
-                    var region = new RegionModel
-                    {
-                        Meta = new RegionMeta
-                        {
-                            Id = regionType.Id,
-                            Name = regionType.Title,
-                            Description = regionType.Description,
-                            Placeholder = regionType.ListTitlePlaceholder,
-                            IsCollection = regionType.Collection,
-                            Icon = regionType.Icon,
-                            Display = regionType.Display.ToString().ToLower()
-                        }
-                    };
-                    var regionListModel = ((IDictionary<string, object>)page.Regions)[regionType.Id];
-
-                    if (!regionType.Collection)
-                    {
-                        var regionModel = (IRegionList)Activator.CreateInstance(typeof(RegionList<>).MakeGenericType(regionListModel.GetType()));
-                        regionModel.Add(regionListModel);
-                        regionListModel = regionModel;
-                    }
-
-                    foreach (var regionModel in (IEnumerable)regionListModel)
-                    {
-                        var regionItem = new RegionItemModel();
-
-                        foreach (var fieldType in regionType.Fields)
-                        {
-                            var appFieldType = App.Fields.GetByType(fieldType.Type);
-
-                            var field = new FieldModel
-                            {
-                                Meta = new FieldMeta
-                                {
-                                    Id = fieldType.Id,
-                                    Name = fieldType.Title,
-                                    Component = appFieldType.Component,
-                                    Placeholder = fieldType.Placeholder,
-                                    IsHalfWidth = fieldType.Options.HasFlag(FieldOption.HalfWidth)
-                                }
-                            };
-
-                            if (regionType.Fields.Count > 1)
-                            {
-                                field.Model = (Extend.IField)((IDictionary<string, object>)regionModel)[fieldType.Id];
-
-                                if (regionType.ListTitleField == fieldType.Id)
-                                {
-                                    regionItem.Title = field.Model.GetTitle();
-                                    field.Meta.NotifyChange = true;
-                                }
-                            }
-                            else
-                            {
-                                field.Model = (Extend.IField)regionModel;
-                                field.Meta.NotifyChange = true;
-                                regionItem.Title = field.Model.GetTitle();
-                            }
-                            regionItem.Fields.Add(field);
-                        }
-
-                        if (string.IsNullOrWhiteSpace(regionItem.Title))
-                        {
-                            regionItem.Title = "...";
-                        }
-
-                        region.Items.Add(regionItem);
-                    }
-                    model.Regions.Add(region);
-                }
-
-                foreach (var block in page.Blocks)
-                {
-                    var blockType = App.Blocks.GetByType(block.Type);
-
-                    if (block is Extend.BlockGroup)
-                    {
-                        var group = new BlockGroupModel
-                        {
-                            Id = block.Id,
-                            Type = block.Type,
-                            Meta = new BlockMeta
-                            {
-                                Name = blockType.Name,
-                                Icon = blockType.Icon,
-                                Component = "block-group",
-                                IsGroup = true
-                            }
-                        };
-
-                        if (blockType.Display != BlockDisplayMode.MasterDetail)
-                        {
-                            group.Meta.Component = blockType.Display == BlockDisplayMode.Horizontal ?
-                                "block-group-horizontal" : "block-group-vertical";
-                        }
-
-                        foreach (var prop in block.GetType().GetProperties(App.PropertyBindings))
-                        {
-                            if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
-                            {
-                                var fieldType = App.Fields.GetByType(prop.PropertyType);
-
-                                group.Fields.Add(new FieldModel
-                                {
-                                    Model = (Extend.IField)prop.GetValue(block),
-                                    Meta = new FieldMeta
-                                    {
-                                        Id = prop.Name,
-                                        Name = prop.Name,
-                                        Component = fieldType.Component,
-                                    }
-                                });
-                            }
-                        }
-
-                        bool firstChild = true;
-                        foreach (var child in ((Extend.BlockGroup)block).Items)
-                        {
-                            blockType = App.Blocks.GetByType(child.Type);
-
-                            group.Items.Add(new BlockItemModel
-                            {
-                                IsActive = firstChild,
-                                Model = child,
-                                Meta = new BlockMeta
-                                {
-                                    Name = blockType.Name,
-                                    Title = child.GetTitle(),
-                                    Icon = blockType.Icon,
-                                    Component = blockType.Component
-                                }
-                            });
-                            firstChild = false;
-                        }
-                        model.Blocks.Add(group);
-                    }
-                    else
-                    {
-                        model.Blocks.Add(new BlockItemModel
-                        {
-                            Model = block,
-                            Meta = new BlockMeta
-                            {
-                                Name = blockType.Name,
-                                Title = block.GetTitle(),
-                                Icon = blockType.Icon,
-                                Component = blockType.Component
-                            }
-                        });
-                    }
-                }
-                return model;
+                return Transform(page);
             }
             return null;
         }
@@ -281,7 +127,7 @@ namespace Piranha.Manager.Services
                 page.Slug = model.Slug;
                 page.MetaKeywords = model.MetaKeywords;
                 page.MetaDescription = model.MetaDescription;
-                page.Published = DateTime.Parse(model.Published);
+                page.Published = !string.IsNullOrEmpty(model.Published) ? DateTime.Parse(model.Published) : (DateTime?)null;
 
                 // Save regions
                 foreach (var region in pageType.Regions)
@@ -395,12 +241,188 @@ namespace Piranha.Manager.Services
                 Title = item.MenuTitle,
                 TypeName = item.PageTypeName,
                 Published = item.Published.HasValue ? item.Published.Value.ToString("yyyy-MM-dd") : null,
-                EditUrl = "manager/page/"
+                Status = !item.Published.HasValue ? PageListModel.PageItem.Unpublished : "",
+                EditUrl = "manager/page/edit/"
             };
 
             foreach (var child in item.Items)
             {
                 model.Items.Add(MapRecursive(child));
+            }
+            return model;
+        }
+
+        private PageEditModel Transform(DynamicPage page)
+        {
+            var type = App.PageTypes.GetById(page.TypeId);
+
+            var model = new PageEditModel
+            {
+                Id = page.Id,
+                SiteId = page.SiteId,
+                ParentId = page.ParentId,
+                SortOrder = page.SortOrder,
+                TypeId = page.TypeId,
+                Title = page.Title,
+                NavigationTitle = page.NavigationTitle,
+                Slug = page.Slug,
+                MetaKeywords = page.MetaKeywords,
+                MetaDescription = page.MetaDescription,
+                Published = page.Published.HasValue ? page.Published.Value.ToString("yyyy-MM-dd HH:mm") : null
+            };
+
+            foreach (var regionType in type.Regions)
+            {
+                var region = new RegionModel
+                {
+                    Meta = new RegionMeta
+                    {
+                        Id = regionType.Id,
+                        Name = regionType.Title,
+                        Description = regionType.Description,
+                        Placeholder = regionType.ListTitlePlaceholder,
+                        IsCollection = regionType.Collection,
+                        Icon = regionType.Icon,
+                        Display = regionType.Display.ToString().ToLower()
+                    }
+                };
+                var regionListModel = ((IDictionary<string, object>)page.Regions)[regionType.Id];
+
+                if (!regionType.Collection)
+                {
+                    var regionModel = (IRegionList)Activator.CreateInstance(typeof(RegionList<>).MakeGenericType(regionListModel.GetType()));
+                    regionModel.Add(regionListModel);
+                    regionListModel = regionModel;
+                }
+
+                foreach (var regionModel in (IEnumerable)regionListModel)
+                {
+                    var regionItem = new RegionItemModel();
+
+                    foreach (var fieldType in regionType.Fields)
+                    {
+                        var appFieldType = App.Fields.GetByType(fieldType.Type);
+
+                        var field = new FieldModel
+                        {
+                            Meta = new FieldMeta
+                            {
+                                Id = fieldType.Id,
+                                Name = fieldType.Title,
+                                Component = appFieldType.Component,
+                                Placeholder = fieldType.Placeholder,
+                                IsHalfWidth = fieldType.Options.HasFlag(FieldOption.HalfWidth)
+                            }
+                        };
+
+                        if (regionType.Fields.Count > 1)
+                        {
+                            field.Model = (Extend.IField)((IDictionary<string, object>)regionModel)[fieldType.Id];
+
+                            if (regionType.ListTitleField == fieldType.Id)
+                            {
+                                regionItem.Title = field.Model.GetTitle();
+                                field.Meta.NotifyChange = true;
+                            }
+                        }
+                        else
+                        {
+                            field.Model = (Extend.IField)regionModel;
+                            field.Meta.NotifyChange = true;
+                            regionItem.Title = field.Model.GetTitle();
+                        }
+                        regionItem.Fields.Add(field);
+                    }
+
+                    if (string.IsNullOrWhiteSpace(regionItem.Title))
+                    {
+                        regionItem.Title = "...";
+                    }
+
+                    region.Items.Add(regionItem);
+                }
+                model.Regions.Add(region);
+            }
+
+            foreach (var block in page.Blocks)
+            {
+                var blockType = App.Blocks.GetByType(block.Type);
+
+                if (block is Extend.BlockGroup)
+                {
+                    var group = new BlockGroupModel
+                    {
+                        Id = block.Id,
+                        Type = block.Type,
+                        Meta = new BlockMeta
+                        {
+                            Name = blockType.Name,
+                            Icon = blockType.Icon,
+                            Component = "block-group",
+                            IsGroup = true
+                        }
+                    };
+
+                    if (blockType.Display != BlockDisplayMode.MasterDetail)
+                    {
+                        group.Meta.Component = blockType.Display == BlockDisplayMode.Horizontal ?
+                            "block-group-horizontal" : "block-group-vertical";
+                    }
+
+                    foreach (var prop in block.GetType().GetProperties(App.PropertyBindings))
+                    {
+                        if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
+                        {
+                            var fieldType = App.Fields.GetByType(prop.PropertyType);
+
+                            group.Fields.Add(new FieldModel
+                            {
+                                Model = (Extend.IField)prop.GetValue(block),
+                                Meta = new FieldMeta
+                                {
+                                    Id = prop.Name,
+                                    Name = prop.Name,
+                                    Component = fieldType.Component,
+                                }
+                            });
+                        }
+                    }
+
+                    bool firstChild = true;
+                    foreach (var child in ((Extend.BlockGroup)block).Items)
+                    {
+                        blockType = App.Blocks.GetByType(child.Type);
+
+                        group.Items.Add(new BlockItemModel
+                        {
+                            IsActive = firstChild,
+                            Model = child,
+                            Meta = new BlockMeta
+                            {
+                                Name = blockType.Name,
+                                Title = child.GetTitle(),
+                                Icon = blockType.Icon,
+                                Component = blockType.Component
+                            }
+                        });
+                        firstChild = false;
+                    }
+                    model.Blocks.Add(group);
+                }
+                else
+                {
+                    model.Blocks.Add(new BlockItemModel
+                    {
+                        Model = block,
+                        Meta = new BlockMeta
+                        {
+                            Name = blockType.Name,
+                            Title = block.GetTitle(),
+                            Icon = blockType.Icon,
+                            Component = blockType.Component
+                        }
+                    });
+                }
             }
             return model;
         }

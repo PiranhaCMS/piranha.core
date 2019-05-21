@@ -34,10 +34,18 @@
                 {
                     <partial name="@action.ActionView" />
                 }
-                <button type="button" class="btn btn-primary btn-labeled" data-toggle="modal" data-target="#pageAddModal">
-                    <i class="fas fa-plus"></i>
-                    @Localizer["Add"]
-                </button>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-primary btn-labeled" data-toggle="modal" data-target="#pageAddModal">
+                        <i class="fas fa-plus"></i>
+                        @Localizer["Add page"]
+                    </button>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="#">@Localizer["Add site"]</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -1,8 +1,9 @@
-@page "~/manager/page/{id:Guid?}"
+@page "~/manager/page/{action}/{id}"
 @inject IViewLocalizer Localizer
 @{
     ViewBag.Title = Localizer["Edit page"];
     ViewBag.MenuItem = "Pages";
+    string action = ((string)RouteData.Values["action"]).ToLower();
 
     @functions {
         public void OnPostAdd(string type)
@@ -15,11 +16,22 @@
 {
     <script src="~/manager/assets/tinymce/tinymce.min.js"></script>
     <script src="~/manager/assets/js/piranha.pageedit.min.js"></script>
-    <script>
-        piranha.pageedit.load("@RouteData.Values["id"]");
+    @if (action == "edit")
+    {
+        <script>
+            piranha.pageedit.load("@RouteData.Values["id"]");
 
-        $(".title input").focus();
-    </script>
+            $(".title input").focus();
+        </script>
+    }
+    else if (action == "add")
+    {
+        <script>
+            piranha.pageedit.create("@RouteData.Values["id"]");
+
+            $(".title input").focus();
+        </script>
+    }
 }
 
 <div id="pageedit">
@@ -42,7 +54,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="form-group title">
-                            <input v-model="title" type="text" class="form-control form-control-lg">
+                            <input v-model="title" type="text" class="form-control form-control-lg" placeholder="@Localizer["Your page title"]">
                         </div>
                     </div>
                 </div>

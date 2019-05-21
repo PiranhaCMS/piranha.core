@@ -39,23 +39,39 @@ piranha.pageedit = new Vue({
         },
     },
     methods: {
+        bind: function (model) {
+            this.id = model.id;
+            this.siteId = model.siteId;
+            this.parentId = model.parentId;
+            this.sortOrder = model.sortOrder;
+            this.typeId = model.typeId;
+            this.title = model.title;
+            this.navigationTitle = model.navigationTitle;
+            this.slug = model.slug;
+            this.metaKeywords = model.metaKeywords;
+            this.metaDescription = model.metaDescription;
+            this.published = model.published;
+            this.blocks = model.blocks;
+            this.regions = model.regions;
+        },
         load: function (id) {
+            var self = this;
+
             fetch(piranha.baseUrl + "manager/api/page/" + id)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    piranha.pageedit.id = result.id;
-                    piranha.pageedit.siteId = result.siteId;
-                    piranha.pageedit.parentId = result.parentId;
-                    piranha.pageedit.sortOrder = result.sortOrder;
-                    piranha.pageedit.typeId = result.typeId;
-                    piranha.pageedit.title = result.title;
-                    piranha.pageedit.navigationTitle = result.navigationTitle;
-                    piranha.pageedit.slug = result.slug;
-                    piranha.pageedit.metaKeywords = result.metaKeywords;
-                    piranha.pageedit.metaDescription = result.metaDescription;
-                    piranha.pageedit.published = result.published;
-                    piranha.pageedit.blocks = result.blocks;
-                    piranha.pageedit.regions = result.regions;
+                    self.bind(result);
+                })
+                .catch(function (error) { console.log("error:", error );
+            });
+        },
+        create: function (id) {
+            var self = this;
+
+            fetch(piranha.baseUrl + "manager/api/page/create/" + id)
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    self.bind(result);
                 })
                 .catch(function (error) { console.log("error:", error );
             });

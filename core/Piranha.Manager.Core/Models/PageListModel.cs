@@ -29,10 +29,15 @@ namespace Piranha.Manager.Models
 
         public class PageItem
         {
+            public static readonly string Draft = "draft";
+            public static readonly string Unpublished = "unpublished";
+
+
             public Guid Id { get; set; }
             public string Title { get; set; }
             public string TypeName { get; set; }
             public string Published { get; set; }
+            public string Status { get; set; }
             public string EditUrl { get; set; }
             public List<PageItem> Items { get; set; } = new List<PageItem>();
         }
@@ -41,6 +46,7 @@ namespace Piranha.Manager.Models
         {
             public string Id { get; set; }
             public string Title { get; set; }
+            public string AddUrl { get; set; }
         }
 
         public IList<SiteItem> Sites { get; set; } = new List<SiteItem>();
