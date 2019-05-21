@@ -9,11 +9,23 @@
         }
     }
 
-    .navbar-nav {
-        border-top: solid 1px #333;
+    .navbar-brand {
+        position: absolute;
+        top: .125rem;
+        right: 0;
+
+        a {
+            margin-left: .5rem;
+
+            img {
+                height: 20px;
+            }
+        }
     }
 
-    .nav {
+    .navbar-nav {
+        width: 100%;
+
         .nav-item {
             a {
                 color: #fff;
