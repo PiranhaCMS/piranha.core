@@ -35,33 +35,6 @@ img {
     }
 }
 
-.docs {
-    img {
-        border-left: solid 4px #f0ad4e;
-        padding: .5rem 0 .5rem 1rem;
-        margin-bottom: 1rem;
-    }
-
-    .construction {
-        background: url('../img/piranha.jpg') 50% 50% no-repeat;
-        background-size: contain;
-
-        p {
-            padding: 9rem 0;
-            text-align: center;
-            font-weight: 300;
-            font-size: 1.2rem;
-            opacity: .6;
-        }
-    }
-
-    .update-info {
-        color: #999;
-        margin-top: -1rem;
-        text-transform: uppercase;
-    }
-}
-
 a {
     color: $color_link;
 

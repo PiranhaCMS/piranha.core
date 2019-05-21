@@ -55,7 +55,7 @@ namespace MvcWeb
                 startpage.Hero.PrimaryImage = images[1].id;
                 startpage.Hero.Ingress =
                     "<p>A lightweight & unobtrusive CMS for ASP.NET Core.</p>" +
-                    "<p><small>Stable version 5.2.1 - 2018-10-17 - <a href=\"https://github.com/piranhacms/piranha.core/wiki/changelog\" target=\"_blank\">Changelog</a></small></p>";
+                    "<p><small>Stable version 6.1.0 - 2019-05-01 - <a href=\"https://github.com/piranhacms/piranha.core/wiki/changelog\" target=\"_blank\">Changelog</a></small></p>";
 
                 // Teasers
                 startpage.Teasers.Add(new Models.Regions.Teaser
@@ -117,6 +117,10 @@ namespace MvcWeb
                         new HtmlBlock
                         {
                             Body = "<h3>Ornare Mattis Vulputate</h3><p>Nullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam quis risus eget urna mollis ornare vel eu leo. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+                        },
+                        new ImageBlock
+                        {
+                            Body = images[5].id
                         }
                     }
                 });
@@ -182,14 +186,6 @@ namespace MvcWeb
                                             }
                                         }
                                     });
-
-                                    /*
-                                    featurespage.Blocks.Add(new HtmlColumnBlock
-                                    {
-                                        Column1 = App.Markdown.Transform(cols[0].Trim()),
-                                        Column2 = App.Markdown.Transform(cols[1].Trim())
-                                    });
-                                    */
 
                                     if (n < blocks.Length - 1)
                                     {
