@@ -1,4 +1,18 @@
 .navbar {
+    .navbar-toggler {
+        border-color: #333;
+
+        .navbar-toggler-icon {
+            color: #fff;
+            height: 1.5rem;
+            font-size: 1.5rem;
+        }
+    }
+
+    .navbar-nav {
+        border-top: solid 1px #333;
+    }
+
     .nav {
         .nav-item {
             a {
@@ -19,34 +33,6 @@
                 a {
                     opacity: 1;
                 }
-            }
-        }
-    }
-
-    &.navbar-mobile {
-        padding: 1rem 0;
-
-        .navbar-toggler {
-            border-color: #333;
-
-            .navbar-toggler-icon {
-                color: #fff;
-            }
-        }
-
-        .navbar-nav {
-            border-top: solid 1px #333;
-            margin-top: 1rem;
-        }
-
-        .nav-item {
-            color: #fff;
-            text-align: center;
-            text-transform: uppercase;
-            opacity: .6;
-
-            &.active {
-                opacity: 1;
             }
         }
     }
