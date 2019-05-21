@@ -4,6 +4,10 @@
     ViewBag.Title = Localizer["Config"];
     ViewBag.MenuItem = "Config";
 }
+@section script
+{
+    <script src="~/manager/assets/js/piranha.config.min.js"></script>
+}
 
 <div id="config">
     <form action="">
@@ -17,14 +21,14 @@
 
             <div class="container-fluid">
                 <div class="top-nav">
-                    <button class="btn btn-success btn-labeled" data-toggle="modal" data-target="#aliasModal">
+                    <button v-on:click.prevent="save" class="btn btn-success btn-labeled">
                         <i class="fas fa-check"></i>@Localizer["Save"]
                     </button>
                 </div>
             </div>
         </div>
 
-        <div class="container-fluid">
+        <div class="container-fluid app" :class="{ ready: !loading }">
             <div class="row">
                 <div class="col">
                     <div class="card">
@@ -42,7 +46,7 @@
                                         </blockquote>
                                         <div class="checkbox">
                                             <label>
-                                                <input id="hierarchicalPageSlugs" type="checkbox">
+                                                <input v-model="model.hierarchicalPageSlugs" type="checkbox">
                                                 If page slugs should include the parent slug.
                                             </label>
                                         </div>
@@ -55,7 +59,7 @@
                                             The default number of levels that should be expanded in the page
                                             sitemap. This is useful for smaller sitemaps.
                                         </blockquote>
-                                        <input id="expandedSitemapLevels" class="form-control" type="number">
+                                        <input v-model="model.expandedSitemapLevels" class="form-control" type="number">
                                     </div>
                                 </div>
                             </div>
@@ -67,7 +71,7 @@
                                             The default page size for archive pages. Please note that this this
                                             can be overridden for specific archives.
                                         </blockquote>
-                                        <input id="archivePageSize" class="form-control" type="number">
+                                        <input v-model="model.archivePageSize" class="form-control" type="number">
                                     </div>
                                 </div>
                             </div>
@@ -91,7 +95,7 @@
                                             The time in minutes that web browsers can use pages before
                                             asking the server for new updates.
                                         </blockquote>
-                                        <input id="pagesExpires" class="form-control" type="number">
+                                        <input v-model="model.pagesExpires" class="form-control" type="number">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -101,7 +105,7 @@
                                             The time in minutes that web browsers can use posts before
                                             asking the server for new updates.
                                         </blockquote>
-                                        <input id="postsExpires" class="form-control" type="number">
+                                        <input v-model="model.postsExpires" class="form-control" type="number">
                                     </div>
                                 </div>
                             </div>
@@ -113,7 +117,7 @@
                                             The full URL (including any folder name) to the CDN used to serve
                                             uploaded media. Leave blank to use default storage URL.
                                         </blockquote>
-                                        <input id="mediaCDN" class="form-control" type="text">
+                                        <input v-model="model.mediaCDN" class="form-control" type="text">
                                     </div>
                                 </div>
                             </div>
@@ -124,6 +128,3 @@
         </div>
     </form>
 </div>
-
-
-}

@@ -31,6 +31,7 @@ public static class ManagerModuleExtensions
 
         // Add the manager services
         services.AddScoped<AliasService>();
+        services.AddScoped<ConfigService>();
         services.AddScoped<ContentTypeService>();
         services.AddScoped<MediaService>();
         services.AddScoped<ModuleService>();

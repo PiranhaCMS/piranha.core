@@ -55,6 +55,12 @@ var js = [
         ]
     },
     {
+        name: "piranha.config.js",
+        items: [
+            "assets/src/js/piranha.config.js"
+        ]
+    },
+    {
         name: "piranha.media.js",
         items: [
             "assets/src/js/piranha.media.js"
