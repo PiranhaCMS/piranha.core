@@ -1,17 +1,5 @@
 @model Piranha.Extend.Blocks.HtmlBlock
-@{
-    bool? isInGroup = (bool?)ViewData["BlockGroup"];
-}
 
-@if (!isInGroup.HasValue)
-{
-    <div class="row justify-content-center block">
-        <div class="col">
-            @Html.Raw(Model.Body)
-        </div>
-    </div>
-}
-else
-{
+<div class="block">
     @Html.Raw(Model.Body)
-}
+</div>

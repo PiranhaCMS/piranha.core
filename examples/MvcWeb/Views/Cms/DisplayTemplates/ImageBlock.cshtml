@@ -1,16 +1,5 @@
 @model Piranha.Extend.Blocks.ImageBlock
-@{
-    bool? isInGroup = (bool?)ViewData["BlockGroup"];
-}
-@if (!isInGroup.HasValue)
-{
-    <div class="row justify-content-center block image-block">
-        <div class="col">
-            <img src="@Url.Content(Model.Body)">
-        </div>
-    </div>
-}
-else
-{
+
+<div class="block">
     <img src="@Url.Content(Model.Body)">
-}
+</div>

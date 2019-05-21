@@ -128,10 +128,14 @@ header[role="banner"] {
         }
 
         .block {
-            margin-bottom: 1rem;
+            margin-bottom: 2rem;
 
             &.image-block {
                 text-align: center;
+            }
+
+            .block {
+                margin-bottom: 0;
             }
         }
 
