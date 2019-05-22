@@ -68,6 +68,8 @@
                             <tr v-for="item in filteredItems">
                                 <td>
                                     <a href="#" v-on:click.prevent="select(item)">
+                                        <i v-if="item.type === 'Audio'" class="fas fa-volume-up"></i>
+                                        <i v-if="item.type === 'Document'" class="fas fa-file-alt"></i>
                                         <i v-if="item.type === 'Image'" class="fas fa-image"></i>
                                         <i v-if="item.type === 'Video'" class="fas fa-video"></i>
                                         {{ item.filename }}
