@@ -91,6 +91,7 @@ var js = [
             "assets/src/js/components/fields/date-field.js",
             "assets/src/js/components/fields/document-field.js",
             "assets/src/js/components/fields/video-field.js",
+            "assets/src/js/components/fields/audio-field.js",
             "assets/src/js/components/fields/string-field.js",
             "assets/src/js/components/fields/html-field.js",
             "assets/src/js/components/fields/image-field.js",

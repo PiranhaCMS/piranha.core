@@ -13,7 +13,7 @@ using Piranha.Models;
 
 namespace Piranha.Extend.Fields
 {
-    [FieldType(Name = "Audio", Shorthand = "Audio")]
+    [FieldType(Name = "Audio", Shorthand = "Audio", Component = "audio-field")]
     public class AudioField : MediaFieldBase<AudioField>
     {
         /// <summary>
