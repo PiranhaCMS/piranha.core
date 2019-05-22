@@ -14,6 +14,7 @@ if [ ! -d "$OUTPUT_DIR" ]; then
 fi
 
 # Create all NuGet packages
+nuget pack nuspec/Piranha.AspNetCore.Identity.PostgreSQL.nuspec -OutputDirectory $OUTPUT_DIR
 nuget pack nuspec/Piranha.AspNetCore.Identity.MySQL.nuspec -OutputDirectory $OUTPUT_DIR
 nuget pack nuspec/Piranha.AspNetCore.Identity.nuspec -OutputDirectory $OUTPUT_DIR
 nuget pack nuspec/Piranha.AspNetCore.Identity.SQLite.nuspec -OutputDirectory $OUTPUT_DIR
