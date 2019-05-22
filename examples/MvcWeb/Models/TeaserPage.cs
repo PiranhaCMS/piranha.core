@@ -21,6 +21,9 @@ namespace MvcWeb.Models
     [PageTypeRoute(Title = "Default", Route = "/teaserpage")]
     public class TeaserPage : Page<TeaserPage>
     {
+        [Region]
+        public Regions.AllFields AllFields { get; set; }
+
         /// <summary>
         /// Gets/sets the page header.
         /// </summary>

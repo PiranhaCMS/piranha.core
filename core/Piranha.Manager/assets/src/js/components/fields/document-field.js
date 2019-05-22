@@ -2,7 +2,7 @@
     piranha
 */
 
-Vue.component("image-field", {
+Vue.component("document-field", {
     props: ["uid", "model", "meta"],
     methods: {
         clear: function () {
@@ -10,9 +10,9 @@ Vue.component("image-field", {
         },
         select: function () {
             if (this.model.media != null) {
-                piranha.mediapicker.open(this.update, "Image", this.model.media.folderId);
+                piranha.mediapicker.open(this.update, "Document", this.model.media.folderId);
             } else {
-                piranha.mediapicker.openCurrentFolder(this.update, "Image");
+                piranha.mediapicker.openCurrentFolder(this.update, "Document");
             }
         },
         remove: function () {
@@ -20,7 +20,7 @@ Vue.component("image-field", {
             this.model.media = null;
         },
         update: function (media) {
-            if (media.type === "Image") {
+            if (media.type === "Document") {
                 this.model.id = media.id;
                 this.model.media = media;
 
@@ -30,7 +30,7 @@ Vue.component("image-field", {
                     title: this.model.media.filename
                 });
             } else {
-                console.log("No image was selected");
+                console.log("No document was selected");
             }
         }
     },
@@ -44,7 +44,7 @@ Vue.component("image-field", {
             if (this.model.media != null) {
                 return this.model.media.filename;
             } else {
-                return "No image selected";
+                return "No document selected";
             }
         };
     },
