@@ -13,7 +13,7 @@ using Piranha.Models;
 
 namespace Piranha.Extend.Fields
 {
-    [FieldType(Name = "Video", Shorthand = "Video")]
+    [FieldType(Name = "Video", Shorthand = "Video", Component = "video-field")]
     public class VideoField : MediaFieldBase<VideoField>
     {
         /// <summary>
