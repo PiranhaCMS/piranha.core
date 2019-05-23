@@ -21,7 +21,8 @@ namespace MvcWeb.Models
     [PageTypeRoute(Title = "Default", Route = "/teaserpage")]
     public class TeaserPage : Page<TeaserPage>
     {
-        [Region]
+        [Region(Title = "All fields")]
+        [RegionDescription("Vestibulum id ligula porta felis euismod <strong>semper</strong>. Curabitur blandit tempus porttitor.")]
         public Regions.AllFields AllFields { get; set; }
 
         /// <summary>

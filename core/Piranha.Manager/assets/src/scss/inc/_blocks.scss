@@ -1,3 +1,4 @@
+@import "content";
 @import "variables";
 
 .blocks {
@@ -30,10 +31,6 @@
     border: solid 1px transparent;
     border-radius: $border-radius;
     transition: border-color .2s ease-in-out;
-
-    h1, h2, h3, h4, h5 {
-        font-family: Bitter, serif;
-    }
 
     .block-header {
         color: $gray-500;
@@ -114,7 +111,7 @@
     }
 
     &.html-block, &.html-column-block {
-        font-size: 1rem;
+        @include content();
 
         .empty:not(:focus-within)
         {

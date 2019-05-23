@@ -43,20 +43,17 @@ Vue.component("region", {
     template:
         "<div class='row' v-if='!model.meta.isCollection'>" +
         "  <div class='col-sm-12' v-if='model.meta.description != null'>" +
-        "    <div class='alert alert-info'>" +
-        "      {{ model.meta.description }}" +
-        "    </div>" +
+        "    <div class='alert alert-info' v-html='model.meta.description'></div>" +
         "  </div>" +
         "  <div class='form-group' :class='{ \"col-sm-6\": field.meta.isHalfWidth, \"col-sm-12\": !field.meta.isHalfWidth }' v-for='field in model.items[0].fields'>" +
         "    <label>{{ field.meta.name }}</label>" +
+        "    <div v-if='field.meta.description != null' v-html='field.meta.description' class='alert alert-info'></div>" +
         "    <component v-if='field.model != null' v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:meta='field.meta' v-bind:model='field.model'></component>" +
         "  </div>" +
         "</div>" +
         "<div v-else>" +
         "  <div v-if='model.meta.description != null'>" +
-        "    <div class='alert alert-info'>" +
-        "      {{ model.meta.description }}" +
-        "    </div>" +
+        "    <div class='alert alert-info' v-html='model.meta.description'></div>" +
         "  </div>" +
         "  <div :id='model.meta.uid' class='accordion sortable mb-3'>" +
         "    <div v-if='model.items.length === 0' class='empty-info unsortable'>" +

@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -40,5 +40,11 @@ namespace Piranha.Models
         /// text based fields.
         /// </summary>
         public string Placeholder { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional description to be shown in
+        /// the manager interface.
+        /// </summary>
+        public string Description { get; set; }
     }
 }

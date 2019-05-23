@@ -162,7 +162,7 @@ namespace Piranha.AttributeBuilder
 
                 if (appFieldType != null)
                 {
-                    return new FieldType
+                    var fieldType = new FieldType
                     {
                         Id = prop.Name,
                         Title = attr.Title,
@@ -170,6 +170,14 @@ namespace Piranha.AttributeBuilder
                         Options = attr.Options,
                         Placeholder = attr.Placeholder
                     };
+
+                    // Get optional description
+                    var descAttr = prop.GetCustomAttribute<FieldDescriptionAttribute>();
+                    if (descAttr != null)
+                    {
+                        fieldType.Description = descAttr.Text;
+                    }
+                    return fieldType;
                 }
             }
             return null;

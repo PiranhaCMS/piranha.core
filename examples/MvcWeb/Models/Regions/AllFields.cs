@@ -19,33 +19,47 @@ namespace MvcWeb.Models.Regions
     /// </summary>
     public class AllFields
     {
-        [Field]
+        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         public AudioField Audio { get; set; }
-        [Field]
+
+        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         public CheckBoxField CheckBox { get; set; }
-        [Field]
+
+        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         public DateField Date { get; set; }
-        [Field]
+
+        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         public HtmlField Html { get; set; }
-        [Field]
+
+        [Field(Options = FieldOption.HalfWidth, Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         public DocumentField Document { get; set; }
-        [Field]
+
+        [Field(Options = FieldOption.HalfWidth, Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         public ImageField Image { get; set; }
-        [Field]
+
+        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         public MediaField Media { get; set; }
-        [Field]
+
+        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
+        [FieldDescription("Duis mollis, est non <strong>commodo luctus</strong>, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.")]
         public VideoField Video { get; set; }
-        [Field]
+
+        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         public MarkdownField Markdown { get; set; }
-        [Field]
+
+        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         public NumberField Number { get; set; }
-        [Field]
+
+        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         public PageField Page { get; set; }
-        [Field]
+
+        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         public PostField Post { get; set; }
-        [Field]
+
+        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         public StringField String { get; set; }
-        [Field]
+
+        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         public TextField Text { get; set; }
     }
 }

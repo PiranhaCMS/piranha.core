@@ -116,7 +116,8 @@ namespace Piranha.Manager.Services
                             Name = fieldType.Title,
                             Component = appFieldType.Component,
                             Placeholder = fieldType.Placeholder,
-                            IsHalfWidth = fieldType.Options.HasFlag(FieldOption.HalfWidth)
+                            IsHalfWidth = fieldType.Options.HasFlag(FieldOption.HalfWidth),
+                            Description = fieldType.Description
                         }
                     };
 
