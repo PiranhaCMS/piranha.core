@@ -81,7 +81,12 @@ namespace Piranha.Runtime
         /// <summary>
         /// Gets/sets the currently accepted audio extensions.
         /// </summary>
-        public MediaTypeList Audios { get; set; } = new MediaTypeList();
+        public MediaTypeList Audio { get; set; } = new MediaTypeList();
+
+        /// <summary>
+        /// Gets/sets the currently accepted resource extensions.
+        /// </summary>
+        public MediaTypeList Resources { get; set; } = new MediaTypeList();
 
         /// <summary>
         /// Checks if the given filename has a supported extension.
@@ -95,7 +100,8 @@ namespace Piranha.Runtime
             return Documents.ContainsExtension(extension) ||
                 Images.ContainsExtension(extension) ||
                 Videos.ContainsExtension(extension) ||
-                Audios.ContainsExtension(extension);
+                Audio.ContainsExtension(extension) ||
+                Resources.ContainsExtension(extension);
         }
 
         /// <summary>
@@ -120,9 +126,13 @@ namespace Piranha.Runtime
             {
                 return MediaType.Video;
             }
-            else if (Audios.ContainsExtension(extension))
+            else if (Audio.ContainsExtension(extension))
             {
                 return MediaType.Audio;
+            }
+            else if (Resources.ContainsExtension(extension))
+            {
+                return MediaType.Resource;
             }
             return MediaType.Unknown;
         }
@@ -150,7 +160,11 @@ namespace Piranha.Runtime
             {
                 return item.ContentType;
             }
-            else if ((item = Audios.SingleOrDefault(t => t.Extension == extension)) != null)
+            else if ((item = Audio.SingleOrDefault(t => t.Extension == extension)) != null)
+            {
+                return item.ContentType;
+            }
+            else if ((item = Resources.SingleOrDefault(t => t.Extension == extension)) != null)
             {
                 return item.ContentType;
             }

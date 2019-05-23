@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using Piranha.Extend;
@@ -31,8 +31,8 @@ namespace Piranha.Tests
             mgr.Images.Add(".jpeg", "image/jpeg");
             mgr.Images.Add(".png", "image/png");
             mgr.Videos.Add(".mp4", "video/mp4");
-            mgr.Audios.Add(".mp3", "audio/mpeg");
-            mgr.Audios.Add(".wav", "audio/wav");
+            mgr.Audio.Add(".mp3", "audio/mpeg");
+            mgr.Audio.Add(".wav", "audio/wav");
         }
 
         /// <summary>

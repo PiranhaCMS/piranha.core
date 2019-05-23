@@ -43,7 +43,7 @@
                 </div>
 
                 <template v-if="listView">
-                    <table class="table table-borderless">
+                    <table class="table table-borderless table-media">
                         <thead>
                             <tr>
                                 <th>@Localizer["Name"]</th>
@@ -72,6 +72,7 @@
                                         <i v-if="item.type === 'Document'" class="fas fa-file-alt"></i>
                                         <i v-if="item.type === 'Image'" class="fas fa-image"></i>
                                         <i v-if="item.type === 'Video'" class="fas fa-video"></i>
+                                        <i v-if="item.type === 'Resource'" class="fas fa-box-open"></i>
                                         {{ item.filename }}
                                     </a>
                                 </td>
@@ -119,6 +120,12 @@
                                 <template v-else-if="item.type === 'Video'">
                                     <div class="thumbnail-icon">
                                         <i class="fas fa-film fa-3x"></i>
+                                    </div>
+                                </template>
+
+                                <template v-else-if="item.type === 'Resource'">
+                                    <div class="thumbnail-icon">
+                                        <i class="fas fa-box-open fa-3x"></i>
                                     </div>
                                 </template>
 

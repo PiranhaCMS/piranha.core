@@ -3,7 +3,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col">
-            <table class="table table-borderless">
+            <table class="table table-borderless table-media">
                 <thead>
                     <tr>
                         <th>@Localizer["Name"]</th>
@@ -41,6 +41,7 @@
                             <i v-if="item.type === 'Document'" class="fas fa-file-alt"></i>
                             <i v-if="item.type === 'Image'" class="fas fa-image"></i>
                             <i v-if="item.type === 'Video'" class="fas fa-video"></i>
+                            <i v-if="item.type === 'Resource'" class="fas fa-box-open"></i>
                             {{ item.filename }}</a>
                         </td>
                         <td>{{ item.contentType }}</td>

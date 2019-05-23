@@ -41,6 +41,12 @@
                             </div>
                         </template>
 
+                        <template v-else-if="item.type === 'Resource'">
+                            <div class="thumbnail-icon">
+                                <i class="fas fa-box-open fa-3x"></i>
+                            </div>
+                        </template>
+
                         <template v-else>
                             <div class="thumbnail-icon">
                                 <i class="fas fa-file"></i>

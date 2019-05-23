@@ -195,8 +195,8 @@ namespace Piranha
             Instance._mediaTypes.Images.Add(".jpeg", "image/jpeg");
             Instance._mediaTypes.Images.Add(".png", "image/png");
             Instance._mediaTypes.Videos.Add(".mp4", "video/mp4");
-            Instance._mediaTypes.Audios.Add(".mp3", "audio/mpeg");
-            Instance._mediaTypes.Audios.Add(".wav", "audio/wav");
+            Instance._mediaTypes.Audio.Add(".mp3", "audio/mpeg");
+            Instance._mediaTypes.Audio.Add(".wav", "audio/wav");
 
             // Compose content types
             Instance._contentTypes.Register<Models.IPage>("Page", "Page");
