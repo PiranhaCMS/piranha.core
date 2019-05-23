@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>7.0.0</Version>
+    <Version>7.0.0-alpha1</Version>
     <Company>Piranha CMS</Company>
   </PropertyGroup>
 
@@ -20,12 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Piranha\Piranha.csproj" />
     <ProjectReference Include="..\Piranha.AspNetCore\Piranha.AspNetCore.csproj" />
-    <ProjectReference Include="..\Piranha.AttributeBuilder\Piranha.AttributeBuilder.csproj" />
-    <ProjectReference Include="..\Piranha.Extensions.Sync\Piranha.Extensions.Sync.csproj" />
-    <ProjectReference Include="..\Piranha.ImageSharp\Piranha.ImageSharp.csproj" />
-    <ProjectReference Include="..\Piranha.Local.FileStorage\Piranha.Local.FileStorage.csproj" />
     <ProjectReference Include="..\Piranha.Manager.Core\Piranha.Manager.Core.csproj" />
-    <ProjectReference Include="..\..\data\Piranha.Data.EF\Piranha.Data.EF.csproj" />
   </ItemGroup>
 
   <ItemGroup>
