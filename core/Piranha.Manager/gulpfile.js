@@ -100,6 +100,7 @@ var js = [
             "assets/src/js/components/fields/image-field.js",
             "assets/src/js/components/fields/number-field.js",
             "assets/src/js/components/fields/text-field.js",
+            "assets/src/js/components/fields/page-field.js",
             "assets/src/js/components/fields/missing-field.js",
 
             "assets/src/js/piranha.pageedit.js"
