@@ -44,8 +44,10 @@ var js = [
             "assets/src/js/piranha.blockpicker.js",
             "assets/src/js/piranha.notifications.js",
             "assets/src/js/piranha.mediapicker.js",
+            "assets/src/js/piranha.pagepicker.js",
             "assets/src/js/piranha.preview.js",
-            "assets/src/js/piranha.editor.js"
+            "assets/src/js/piranha.editor.js",
+            "assets/src/js/components/page-item.js",
         ]
     },
     {
