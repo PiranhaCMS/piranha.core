@@ -4,6 +4,21 @@
       "sv-SE": "Lägg till mapp"
     }
   },
+  "Drop files here or click to upload.": {
+    "Values": {
+      "sv-SE": "Dra filer hit eller klicka för att ladda upp."
+    }
+  },
+  "Download media": {
+    "Values": {
+      "sv-SE": "Ladda ner media"
+    }
+  },
+  "Folder name": {
+    "Values": {
+      "sv-SE": "Mappnamn"
+    }
+  },
   "Gallery": {
     "Values": {
       "sv-SE": "Galleri"
@@ -14,9 +29,24 @@
       "sv-SE": "Media"
     }
   },
+  "Media preview is not available": {
+    "Values": {
+      "sv-SE": "Förhandsgranskning är inte tillgänglig"
+    }
+  },
+  "Open media in new tab": {
+    "Values": {
+      "sv-SE": "Öppna media i ny flik"
+    }
+  },
   "Select media": {
     "Values": {
       "sv-SE": "Välj media"
+    }
+  },
+  "Your browser does not support the video tag.": {
+    "Values": {
+      "sv-SE": "Din webbläsare stödjer inte video."
     }
   }
 }

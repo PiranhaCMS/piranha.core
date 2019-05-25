@@ -50,7 +50,7 @@ Vue.component("block-group-horizontal", {
         "  <div class='row block-group-items'>" +
         "    <div v-if='model.items.length === 0' class='col'>" +
         "      <div class='empty-info unsortable'>" +
-        "        <p>Looks like there's no items here. Click on the button below to get started!</p>" +
+        "        <p>{{ piranha.resources.texts.emptyAddAbove }}</p>" +
         "      </div>" +
         "    </div>" +
         "    <div v-for='child in model.items' v-bind:key='child.meta.uid' class='col'>" +

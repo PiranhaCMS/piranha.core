@@ -45,6 +45,7 @@ var js = [
             "assets/src/js/piranha.notifications.js",
             "assets/src/js/piranha.mediapicker.js",
             "assets/src/js/piranha.preview.js",
+            "assets/src/js/piranha.resources.js",
             "assets/src/js/piranha.editor.js"
         ]
     },

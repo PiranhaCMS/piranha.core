@@ -5,17 +5,11 @@
     max-width: $block-width;
     margin: 0 auto;
 
-    .empty-info {
-        width: 80%;
-        margin: 2rem auto;
-    }
-
     .block-group, .block-group-horizontal {
         .empty-info {
             background: #fff;
             color: $gray-600;
             border-color: $gray-400;
-            width: auto;
             margin: 0;
         }
     }

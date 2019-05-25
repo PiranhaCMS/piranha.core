@@ -16,6 +16,7 @@
 {
     <script src="~/manager/assets/tinymce/tinymce.min.js"></script>
     <script src="~/manager/assets/js/piranha.pageedit.min.js"></script>
+
     @if (action == "edit")
     {
         <script>
@@ -93,7 +94,7 @@
                         </a>
                     </div>
                     <div v-if="blocks.length == 0" class="empty-info">
-                        <p>Welcome to your new page. Click on the button above to add your first block of content!</p>
+                        <p>@Localizer["Welcome to your new page. Click on the button above to add your first block of content!"]</p>
                     </div>
                 </div>
             </div>

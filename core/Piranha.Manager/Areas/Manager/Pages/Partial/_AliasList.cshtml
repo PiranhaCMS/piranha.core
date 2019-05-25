@@ -2,7 +2,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col">
+        <div v-if="items.length !== 0" class="col">
             <table class="table table-borderless">
                 <thead>
                     <tr>
@@ -21,6 +21,11 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+        <div v-else class="col">
+            <div class="empty-info">
+                <p>@Localizer["Looks like there's no items here. Click on the button above to get started!"]</p>
+            </div>
         </div>
     </div>
 </div>

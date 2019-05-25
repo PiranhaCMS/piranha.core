@@ -35,6 +35,7 @@ namespace MvcWeb.Models.Regions
         /// Gets/sets the optional ingress.
         /// </summary>
         [Field]
+        [FieldDescription("Optional text that is shown on top of the background image")]
         public HtmlField Ingress { get; set; }
     }
 }

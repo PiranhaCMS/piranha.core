@@ -19,15 +19,17 @@
     <partial name="Partial/_Notifications" />
     <partial name="Partial/_MediaUploadTemplate" />
 
-    @RenderSection("partials", required: false)
-
     <script>
         var piranha = {};
 
         piranha.baseUrl = "@Url.Content("~/")";
     </script>
 
+    @RenderSection("partials", required: false)
+
     <script src="~/manager/assets/js/piranha.min.js"></script>
+
+    <partial name="Partial/_Resources" />
 
     @RenderSection("script", required: false)
 </body>

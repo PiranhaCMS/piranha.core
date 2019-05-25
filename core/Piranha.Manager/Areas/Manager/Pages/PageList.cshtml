@@ -7,6 +7,10 @@
 @section script
 {
     <script src="~/manager/assets/js/piranha.pagelist.min.js"></script>
+
+    <script>
+        piranha.pagelist.load();
+    </script>
 }
 @section partials
 {
@@ -35,15 +39,12 @@
                     <partial name="@action.ActionView" />
                 }
                 <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-primary btn-labeled" data-toggle="modal" data-target="#pageAddModal">
-                        <i class="fas fa-plus"></i>
-                        @Localizer["Add page"]
+                    <button type="button" class="btn btn-primary btn-labeled dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-plus"></i>@Localizer["Add"]
                     </button>
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#">@Localizer["Add site"]</a>
-                        </div>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#pageAddModal">@Localizer["Add page"]</a>
+                        <a class="dropdown-item" href="#">@Localizer["Add site"]</a>
                     </div>
                 </div>
             </div>

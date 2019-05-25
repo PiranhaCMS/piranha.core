@@ -29,6 +29,11 @@
       "sv-SE": "Detaljer"
     }
   },
+  "Download": {
+    "Values": {
+      "sv-SE": "Ladda ner"
+    }
+  },
   "Filename": {
     "Values": {
       "sv-SE": "Filnamn"
@@ -57,6 +62,21 @@
   "Logout": {
     "Values": {
       "sv-SE": "Logga ut"
+    }
+  },
+  "Looks like there's no items here. Click on the button above to get started!": {
+    "Values": {
+      "sv-SE": "Här var det tomt. Klicka på knappen ovanför för att komma igång!"
+    }
+  },
+  "Looks like there's no items here. Click on the button below to get started!": {
+    "Values": {
+      "sv-SE": "Här var det tomt. Klicka på knappen nedanför för att komma igång!"
+    }
+  },
+  "Looks like there's no items here. Click on the button to the left to get started!": {
+    "Values": {
+      "sv-SE": "Här var det tomt. Klicka på knappen till vänster för att komma igång!"
     }
   },
   "Main content": {

@@ -3,7 +3,6 @@
 
 .region-center {
     max-width: $block-width;
-    padding: 0 1rem;
     margin: 0 auto;
 }
 
@@ -20,6 +19,10 @@
         background: $white url("../img/empty-text.png") no-repeat 50% 50%;
         height: 8rem;
     }
+}
+
+.field-description {
+    margin: -.5rem 0 .5rem;
 }
 
 .media-field {

@@ -41,7 +41,7 @@
                         <template v-else-if="media.type === 'Video'">
                             <video class="d-block mx-auto mw-100" controls>
                                 <source :src="media.publicUrl" type="">
-                                Your browser does not support the video tag.
+                                @Localizer["Your browser does not support the video tag."]
                             </video>
                         </template>
                         <template v-else-if="media.type === 'Document'">
@@ -51,9 +51,9 @@
                         </template>
                         <template v-else>
                             <div class="py-5 text-center">
-                                <h4 class="my-4">Media preview is not available</h4>
-                                <a :href="media.publicUrl" class="btn btn-primary btn-labeled" target="_blank"><i class="fas fa-external-link-alt"></i>Open media in new tab</a>
-                                <a :href="media.publicUrl" class="btn btn-primary btn-labeled" download><i class="fas fa-file-download"></i>Downlaod media</a>
+                                <h4 class="my-4">@Localizer["Media preview is not available"]</h4>
+                                <a :href="media.publicUrl" class="btn btn-primary btn-labeled" target="_blank"><i class="fas fa-external-link-alt"></i>@Localizer["Open media in new tab"]</a>
+                                <a :href="media.publicUrl" class="btn btn-primary btn-labeled" download><i class="fas fa-file-download"></i>@Localizer["Download media"]</a>
                             </div>
                         </template>
                     </div>
@@ -86,7 +86,7 @@
                                 </tr>
                                 <tr>
                                     <th>@Localizer["Download"]</th>
-                                    <td><a :href="media.publicUrl" download>Download media</a></td>
+                                    <td><a :href="media.publicUrl" download>@Localizer["Download media"]</a></td>
                                 </tr>
                                 <tr>
                                     <th>@Localizer["URL"]</th>
@@ -101,7 +101,7 @@
                                 <input type="hidden" name="Model.Id" v-model="media.id" />
                                 <div class="dz-message needsclick text-center">
                                     <span class="fas fa-cloud-upload-alt"></span>
-                                    Drop a file here or click to update.
+                                    @Localizer["Drop files here or click to upload."]
                                 </div>
                                 <div class="file-list"></div>
                             </form>

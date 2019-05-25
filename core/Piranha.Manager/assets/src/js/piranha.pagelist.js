@@ -6,6 +6,7 @@ piranha.pagelist = new Vue({
     el: "#pagelist",
     data: {
         loading: true,
+        updateBindings: false,
         items: [],
         sites: [],
         pageTypes: []
@@ -17,6 +18,8 @@ piranha.pagelist = new Vue({
                 .then(function (result) {
                     piranha.pagelist.sites = result.sites;
                     piranha.pagelist.pageTypes = result.pageTypes;
+
+                    piranha.pagelist.updateBindings = true;
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },
@@ -34,14 +37,21 @@ piranha.pagelist = new Vue({
         }
     },
     created: function () {
-        this.load();
     },
     updated: function () {
-        $(".sitemap-container").nestable({
-            group: 1
-        }).on('change', function (e) {
-            console.log("changed: ", $(e.target).nestable("serialize"));
-        });
+        if (this.updateBindings)
+        {
+            console.log("binding nestable");
+
+            $('.sitemap-container').nestable('destroy');
+            $(".sitemap-container").nestable({
+                group: 1
+            }).on('change', function (e) {
+                console.log("changed: ", $(e.target).nestable("serialize"));
+            });
+
+            this.updateBindings = false;
+        }
 
         this.loading = false;
     }

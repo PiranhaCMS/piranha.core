@@ -9,7 +9,7 @@
             </button>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="btnGroupDrop1">
                 <a href="#" class="dropdown-item" v-if="selectedRegion.uid != 'uid-blocks'" v-on:click.prevent="selectRegion({ uid: 'uid-blocks' })">@Localizer["Main content"]</a>
-                <a href="#" class="dropdown-item" v-if="selectedRegion.name != region.meta.uid" v-on:click.prevent="selectRegion(region.meta)" v-for="region in contentRegions">{{ region.meta.name }}</a>
+                <a href="#" class="dropdown-item" v-if="selectedRegion.uid != region.meta.uid" v-on:click.prevent="selectRegion(region.meta)" v-for="region in contentRegions">{{ region.meta.name }}</a>
             </div>
         </div>
         <button class="btn btn-primary" data-toggle="modal" data-target="#pageSettings">

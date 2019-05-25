@@ -47,7 +47,7 @@ Vue.component("region", {
         "  </div>" +
         "  <div class='form-group' :class='{ \"col-sm-6\": field.meta.isHalfWidth, \"col-sm-12\": !field.meta.isHalfWidth }' v-for='field in model.items[0].fields'>" +
         "    <label>{{ field.meta.name }}</label>" +
-        "    <div v-if='field.meta.description != null' v-html='field.meta.description' class='alert alert-info'></div>" +
+        "    <div v-if='field.meta.description != null' v-html='field.meta.description' class='field-description small text-muted'></div>" +
         "    <component v-if='field.model != null' v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:meta='field.meta' v-bind:model='field.model'></component>" +
         "  </div>" +
         "</div>" +
@@ -55,10 +55,7 @@ Vue.component("region", {
         "  <div v-if='model.meta.description != null'>" +
         "    <div class='alert alert-info' v-html='model.meta.description'></div>" +
         "  </div>" +
-        "  <div :id='model.meta.uid' class='accordion sortable mb-3'>" +
-        "    <div v-if='model.items.length === 0' class='empty-info unsortable'>" +
-        "      <p>Looks like there's no items here. Click on the button below to get started!</p>" +
-        "    </div>" +
+        "  <div :id='model.meta.uid' class='accordion sortable' :class='model.items.length !== 0 ? \"mb-3\" : \"\"'>" +
         "    <div class='card' :key='item.uid' v-for='(item, index) in model.items'>" +
         "      <div class='card-header'>" +
         "        <a href='#' data-toggle='collapse' :data-target='\"#body\" + item.uid'>" +
@@ -83,8 +80,12 @@ Vue.component("region", {
         "      </div>" +
         "    </div>" +
         "  </div>" +
-        "  <button class='btn btn-primary btn-labeled' v-on:click.prevent='addItem()'>" +
-        "    <i class='fas fa-plus'></i>Add item" +
-        "  </button>" +
+        "  <a href='#' class='block-add' v-on:click.prevent='addItem()'>" +
+        "    <hr>" +
+        "    <i class='fas fa-plus-circle'></i>" +
+        "  </a>" +
+        "  <div v-if='model.items.length === 0' class='empty-info unsortable'>" +
+        "    <p>{{ piranha.resources.texts.emptyAddAbove }}</p>" +
+        "  </div>" +
         "</div>"
 });
