@@ -15,7 +15,7 @@ using Piranha.Services;
 
 namespace Piranha.Extend.Fields
 {
-    [FieldType(Name = "Page", Shorthand = "Page")]
+    [FieldType(Name = "Page", Shorthand = "Page", Component = "page-field")]
     public class PageField : IField, IEquatable<PageField>
     {
         /// <summary>
@@ -28,7 +28,7 @@ namespace Piranha.Extend.Fields
         /// Gets/sets the related page object.
         /// </summary>
         [JsonIgnore]
-        public Models.DynamicPage Page { get; private set; }
+        public Models.PageInfo Page { get; private set; }
 
         /// <summary>
         /// Gets if the field has a page object available.
@@ -53,7 +53,7 @@ namespace Piranha.Extend.Fields
             if (Id.HasValue)
             {
                 Page = await api.Pages
-                    .GetByIdAsync(Id.Value)
+                    .GetByIdAsync<Models.PageInfo>(Id.Value)
                     .ConfigureAwait(false);
 
                 if (Page == null)
@@ -90,7 +90,7 @@ namespace Piranha.Extend.Fields
         /// Implicit operator for converting a page object to a field.
         /// </summary>
         /// <param name="page">The page object</param>
-        public static implicit operator PageField(Models.PageBase page)
+        public static implicit operator PageField(Models.PageInfo page)
         {
             return new PageField { Id = page.Id };
         }
