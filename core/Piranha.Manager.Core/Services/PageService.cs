@@ -73,6 +73,15 @@ namespace Piranha.Manager.Services
             return model;
         }
 
+        /// <summary>
+        /// Gets the sitemap model.
+        /// </summary>
+        /// <returns>The list model</returns>
+        public async Task<Sitemap> GetSitemap(Guid? siteId = null)
+        {
+            return await _api.Sites.GetSitemapAsync(siteId, false);
+        }
+
         public async Task<PageEditModel> Create(string typeId)
         {
             var page = _api.Pages.Create<DynamicPage>(typeId);

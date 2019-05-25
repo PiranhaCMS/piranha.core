@@ -49,6 +49,17 @@ namespace Piranha.Manager.Controllers
         }
 
         /// <summary>
+        /// Gets the sitemap model.
+        /// </summary>
+        /// <returns>The list model</returns>
+        [Route("sitemap")]
+        [HttpGet]
+        public async Task<Sitemap> Sitemap()
+        {
+            return await _service.GetSitemap();
+        }
+
+        /// <summary>
         /// Gets the page with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
