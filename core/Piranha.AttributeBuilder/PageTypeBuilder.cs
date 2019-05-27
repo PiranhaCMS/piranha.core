@@ -131,6 +131,46 @@ namespace Piranha.AttributeBuilder
                             });
                     }
 
+                    // Add default custom editors
+                    if (typeof(IArchivePage).IsAssignableFrom(type))
+                    {
+                        pageType.CustomEditors.Add(new ContentTypeEditor
+                        {
+                            Component = "post-archive",
+                            Icon = "fas fa-book",
+                            Title = "Archive"
+                        });
+                    }
+
+                    // Get all custom editors
+                    var editors = type.GetTypeInfo().GetCustomAttributes(typeof(PageTypeEditorAttribute));
+                    foreach (PageTypeEditorAttribute editor in editors)
+                    {
+                        if (!string.IsNullOrWhiteSpace(editor.Component) && !string.IsNullOrWhiteSpace(editor.Title))
+                        {
+                            // Check if we already have an editor registered with this name
+                            var current = pageType.CustomEditors.FirstOrDefault(e => e.Title == editor.Title);
+
+                            if (current != null)
+                            {
+                                // Replace current editor
+                                current.Component = editor.Component;
+                                current.Icon = editor.Icon;
+                                current.Title = editor.Title;
+                            }
+                            else
+                            {
+                                // Add new editor
+                                pageType.CustomEditors.Add(new ContentTypeEditor
+                                {
+                                    Component = editor.Component,
+                                    Icon = editor.Icon,
+                                    Title = editor.Title
+                                });
+                            }
+                        }
+                    }
+
                     // Get all allowed archive items, if this is an archive page
                     if (typeof(IArchivePage).IsAssignableFrom(type))
                     {

@@ -122,11 +122,13 @@ namespace Piranha.AttributeBuilder
                     foreach (PostTypeRouteAttribute route in routes)
                     {
                         if (!string.IsNullOrWhiteSpace(route.Title) && !string.IsNullOrWhiteSpace(route.Route))
+                        {
                             postType.Routes.Add(new ContentTypeRoute
                             {
                                 Title = route.Title,
                                 Route = route.Route
                             });
+                        }
                     }
 
                     var regionTypes = new List<Tuple<int?, RegionType>>();
