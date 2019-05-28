@@ -157,6 +157,7 @@ namespace Piranha.Tests.Repositories
                 page1.Blocks.Add(new Extend.Blocks.TextBlock {
                     Body = "Ipsum Elit"
                 });
+                page1.Published = DateTime.Now;
                 api.Pages.Save(page1);
 
                 var page2 = MyPage.Create(api);
@@ -619,7 +620,7 @@ namespace Piranha.Tests.Repositories
                 page.Ingress = "My fourth ingress";
                 page.Body = "My fourth body";
 
-                api.Pages.Save(page);
+                api.Pages.SaveDraft(page);
 
                 Assert.Equal(count + 1, api.Pages.GetAll(SITE_ID).Count());
             }
@@ -696,6 +697,28 @@ namespace Piranha.Tests.Repositories
                 Assert.NotNull(page);
                 Assert.Equal("Updated page", page.Title);
                 Assert.True(page.IsHidden);
+            }
+        }
+
+        [Fact]
+        public void SaveDraft() {
+            using (var api = CreateApi()) {
+                var page = api.Pages.GetById<MyPage>(PAGE_1_ID);
+
+                Assert.NotNull(page);
+
+                page.Title = "My working copy";
+                api.Pages.SaveDraft(page);
+
+                page = api.Pages.GetById<MyPage>(PAGE_1_ID);
+
+                Assert.NotNull(page);
+                Assert.NotEqual("My working copy", page.Title);
+
+                page = api.Pages.GetDraftById<MyPage>(PAGE_1_ID);
+
+                Assert.NotNull(page);
+                Assert.Equal("My working copy", page.Title);
             }
         }
 

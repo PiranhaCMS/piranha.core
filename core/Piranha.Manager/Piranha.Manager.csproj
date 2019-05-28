@@ -25,6 +25,30 @@
 
   <ItemGroup>
     <EmbeddedResource Include="assets\dist\**\*" />
+    <EmbeddedResource Update="Resources\Localization.General.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Localization.General.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Localization.Media.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Localization.Media.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Localization.Alias.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Localization.Alias.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Localization.General.Designer.cs">
+      <DependentUpon>Localization.General.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Localization.Media.Designer.cs">
+      <DependentUpon>Localization.Media.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Localization.Alias.Designer.cs">
+      <DependentUpon>Localization.Alias.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>

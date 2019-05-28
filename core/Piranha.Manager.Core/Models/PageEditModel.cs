@@ -60,5 +60,10 @@ namespace Piranha.Manager.Models
         /// Gets/sets the published date.
         /// </summary>
         public string Published { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content status.
+        /// </summary>
+        public string State { get; set; }
     }
 }

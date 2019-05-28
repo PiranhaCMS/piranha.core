@@ -117,6 +117,22 @@ namespace Piranha.Services
         Task<Guid?> GetIdBySlugAsync(string slug, Guid? siteId = null);
 
         /// <summary>
+        /// Gets the draft for the page model with the specified id.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="id">The unique id</param>
+        /// <returns>The draft, or null if no draft exists</returns>
+        Task<DynamicPage> GetDraftByIdAsync(Guid id);
+
+        /// <summary>
+        /// Gets the draft for the page model with the specified id.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="id">The unique id</param>
+        /// <returns>The draft, or null if no draft exists</returns>
+        Task<T> GetDraftByIdAsync<T>(Guid id) where T : PageBase;
+
+        /// <summary>
         /// Moves the current page in the structure.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
@@ -130,6 +146,12 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="model">The page model</param>
         Task SaveAsync<T>(T model) where T : PageBase;
+
+        /// <summary>
+        /// Saves the given page model as a draft
+        /// </summary>
+        /// <param name="model">The page model</param>
+        Task SaveDraftAsync<T>(T model) where T : PageBase;
 
         /// <summary>
         /// Deletes the model with the specified id.

@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using Microsoft.EntityFrameworkCore;
@@ -92,8 +92,13 @@ namespace Piranha
 
         /// <summary>
         /// Gets/sets the post field set.
-        /// </summary>        
+        /// </summary>
         DbSet<Data.PostField> PostFields { get; set; }
+
+        /// <summary>
+        /// Gets/sets the page revision set.
+        /// </summary>
+        DbSet<Data.PageRevision> PageRevisions { get; set; }
 
         /// <summary>
         /// Gets/sets the post tag set.
@@ -112,7 +117,7 @@ namespace Piranha
 
         /// <summary>
         /// Gets/sets the site field set.
-        /// </summary>        
+        /// </summary>
         DbSet<Data.SiteField> SiteFields { get; set; }
 
         /// <summary>

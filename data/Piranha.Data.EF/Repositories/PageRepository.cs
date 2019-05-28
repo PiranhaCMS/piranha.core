@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Piranha.Data;
 using Piranha.Services;
 
@@ -76,7 +77,7 @@ namespace Piranha.Repositories
         /// <returns>The page model</returns>
         public async Task<T> GetStartpage<T>(Guid siteId) where T : Models.PageBase
         {
-            var page = await GetQuery<T>(out var fullQuery)
+            var page = await GetQuery<T>()
                 .FirstOrDefaultAsync(p => p.SiteId == siteId && p.ParentId == null && p.SortOrder == 0)
                 .ConfigureAwait(false);
 
@@ -95,7 +96,7 @@ namespace Piranha.Repositories
         /// <returns>The page model</returns>
         public async Task<T> GetById<T>(Guid id) where T : Models.PageBase
         {
-            var page = await GetQuery<T>(out var fullQuery)
+            var page = await GetQuery<T>()
                 .FirstOrDefaultAsync(p => p.Id == id)
                 .ConfigureAwait(false);
 
@@ -115,7 +116,7 @@ namespace Piranha.Repositories
         /// <returns>The page model</returns>
         public async Task<T> GetBySlug<T>(string slug, Guid siteId) where T : Models.PageBase
         {
-            var page = await GetQuery<T>(out var fullQuery)
+            var page = await GetQuery<T>()
                 .FirstOrDefaultAsync(p => p.SiteId == siteId && p.Slug == slug)
                 .ConfigureAwait(false);
 
@@ -125,6 +126,38 @@ namespace Piranha.Repositories
             }
             return null;
         }
+
+        /// <summary>
+        /// Gets the draft for the page model with the specified id.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="id">The unique id</param>
+        /// <returns>The draft, or null if no draft exists</returns>
+        public async Task<T> GetDraftById<T>(Guid id) where T : Models.PageBase
+        {
+            DateTime? lastModified = await _db.Pages
+                .Where(p => p.Id == id)
+                .Select(p => p.LastModified)
+                .FirstOrDefaultAsync()
+                .ConfigureAwait(false);
+
+            if (lastModified.HasValue)
+            {
+                var draft = await _db.PageRevisions
+                    .FirstOrDefaultAsync(r => r.PageId == id && r.Created > lastModified)
+                    .ConfigureAwait(false);
+
+                if (draft != null)
+                {
+                    // Transform data model
+                    var page = JsonConvert.DeserializeObject<Page>(draft.Data);
+
+                    return _contentService.Transform<T>(page, App.PageTypes.GetById(page.PageTypeId), Process);
+                }
+            }
+            return null;
+        }
+
 
         /// <summary>
         /// Moves the current page in the structure.
@@ -159,211 +192,44 @@ namespace Piranha.Repositories
         /// Saves the given page model
         /// </summary>
         /// <param name="model">The page model</param>
-        public async Task<IEnumerable<Guid>> Save<T>(T model) where T : Models.PageBase
+        /// <returns>The other pages that were affected by the move</returns>
+        public Task<IEnumerable<Guid>> Save<T>(T model) where T : Models.PageBase
         {
-            var type = App.PageTypes.GetById(model.TypeId);
-            var affected = new List<Guid>();
-            var isNew = false;
+            return Save<T>(model, false);
+        }
 
-            if (type != null)
+        /// <summary>
+        /// Saves the given model as a draft revision.
+        /// </summary>
+        /// <param name="model">The page model</param>
+        public async Task SaveDraft<T>(T model) where T : Models.PageBase
+        {
+            await Save<T>(model, true);
+        }
+
+        /// <summary>
+        /// Creates a revision from the current version
+        /// of the page with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        public async Task CreateRevision(Guid id)
+        {
+            var page = await GetQuery<Models.PageBase>()
+                .FirstOrDefaultAsync(p => p.Id == id)
+                .ConfigureAwait(false);
+
+            if (page != null)
             {
-                // Set content type
-                model.ContentType = type.ContentTypeId;
-
-                var page = await _db.Pages
-                    .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
-                    .Include(p => p.Fields)
-                    .FirstOrDefaultAsync(p => p.Id == model.Id)
-                    .ConfigureAwait(false);
-
-                if (page == null)
+                await _db.PageRevisions.AddAsync(new PageRevision
                 {
-                    isNew = true;
-                }
+                    Id = Guid.NewGuid(),
+                    PageId = id,
+                    Data = JsonConvert.SerializeObject(page),
+                    Created = page.LastModified
+                }).ConfigureAwait(false);
 
-                if (model.OriginalPageId.HasValue)
-                {
-                    var originalPageIsCopy = (await _db.Pages.FirstOrDefaultAsync(p => p.Id == model.OriginalPageId).ConfigureAwait(false))?.OriginalPageId.HasValue ?? false;
-                    if (originalPageIsCopy)
-                    {
-                        throw new InvalidOperationException("Can not set copy of a copy");
-                    }
-
-                    var originalPageType = (await _db.Pages.FirstOrDefaultAsync(p => p.Id == model.OriginalPageId).ConfigureAwait(false))?.PageTypeId;
-                    if (originalPageType != model.TypeId)
-                    {
-                        throw new InvalidOperationException("Copy can not have a different content type");
-                    }
-
-                    // Transform the model
-                    if (page == null)
-                    {
-                        page = new Page()
-                        {
-                            Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
-                        };
-
-                        _db.Pages.Add(page);
-
-                        // Make room for the new page
-                        affected.AddRange(await MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true));
-                    }
-                    else
-                    {
-                        // Check if the page has been moved
-                        if (page.ParentId != model.ParentId || page.SortOrder != model.SortOrder)
-                        {
-                            // Remove the old position for the page
-                            affected.AddRange(await MovePages(page.Id, page.SiteId, page.ParentId, page.SortOrder + 1, false).ConfigureAwait(false));
-                            // Add room for the new position of the page
-                            affected.AddRange(await MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true).ConfigureAwait(false));
-                        }
-                    }
-
-                    if (isNew || page.Title != model.Title || page.NavigationTitle != model.NavigationTitle)
-                    {
-                        // If this is new page or title has been updated it means
-                        // the global sitemap changes. Notify the service.
-                        affected.Add(page.Id);
-                    }
-
-                    page.PageTypeId = model.TypeId;
-                    page.OriginalPageId = model.OriginalPageId;
-                    page.SiteId = model.SiteId;
-                    page.Title = model.Title;
-                    page.NavigationTitle = model.NavigationTitle;
-                    page.Slug = model.Slug;
-                    page.ParentId = model.ParentId;
-                    page.SortOrder = model.SortOrder;
-                    page.IsHidden = model.IsHidden;
-                    page.Route = model.Route;
-                    page.Published = model.Published;
-
-                    await _db.SaveChangesAsync().ConfigureAwait(false);
-
-                    return affected;
-                }
-
-                // Transform the model
-                if (page == null)
-                {
-                    page = new Page
-                    {
-                        Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
-                        ParentId = model.ParentId,
-                        SortOrder = model.SortOrder,
-                        PageTypeId = model.TypeId,
-                        Created = DateTime.Now,
-                        LastModified = DateTime.Now
-                    };
-                    _db.Pages.Add(page);
-                    model.Id = page.Id;
-
-                    // Make room for the new page
-                    affected.AddRange(await MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true).ConfigureAwait(false));
-                }
-                else
-                {
-                    // Check if the page has been moved
-                    if (page.ParentId != model.ParentId || page.SortOrder != model.SortOrder)
-                    {
-                        // Remove the old position for the page
-                        affected.AddRange(await MovePages(page.Id, page.SiteId, page.ParentId, page.SortOrder + 1, false).ConfigureAwait(false));
-                        // Add room for the new position of the page
-                        affected.AddRange(await MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true).ConfigureAwait(false));
-                    }
-                    page.LastModified = DateTime.Now;
-                }
-
-                if (isNew || page.Title != model.Title || page.NavigationTitle != model.NavigationTitle)
-                {
-                    // If this is new page or title has been updated it means
-                    // the global sitemap changes. Notify the service.
-                    affected.Add(page.Id);
-                }
-
-                page = _contentService.Transform<T>(model, type, page);
-
-                // Transform blocks
-                var blockModels = model.Blocks;
-
-                if (blockModels != null)
-                {
-                    var blocks = _contentService.TransformBlocks(blockModels);
-                    var current = blocks.Select(b => b.Id).ToArray();
-
-                    // Delete removed blocks
-                    var removed = page.Blocks
-                        .Where(b => !current.Contains(b.BlockId) && !b.Block.IsReusable && b.Block.ParentId == null)
-                        .Select(b => b.Block);
-                    var removedItems = page.Blocks
-                        .Where(b => !current.Contains(b.BlockId) && b.Block.ParentId != null && removed.Select(p => p.Id).ToList().Contains(b.Block.ParentId.Value))
-                        .Select(b => b.Block);
-                    _db.Blocks.RemoveRange(removed);
-                    _db.Blocks.RemoveRange(removedItems);
-
-                    // Delete the old page blocks
-                    page.Blocks.Clear();
-
-                    // Now map the new block
-                    for (var n = 0; n < blocks.Count; n++)
-                    {
-                        var block = await _db.Blocks
-                            .Include(b => b.Fields)
-                            .FirstOrDefaultAsync(b => b.Id == blocks[n].Id)
-                            .ConfigureAwait(false);
-                        if (block == null)
-                        {
-                            block = new Block
-                            {
-                                Id = blocks[n].Id != Guid.Empty ? blocks[n].Id : Guid.NewGuid(),
-                                Created = DateTime.Now
-                            };
-                            await _db.Blocks.AddAsync(block).ConfigureAwait(false);
-                        }
-                        block.ParentId = blocks[n].ParentId;
-                        block.CLRType = blocks[n].CLRType;
-                        block.IsReusable = blocks[n].IsReusable;
-                        block.Title = blocks[n].Title;
-                        block.LastModified = DateTime.Now;
-
-                        var currentFields = blocks[n].Fields.Select(f => f.FieldId).Distinct();
-                        var removedFields = block.Fields.Where(f => !currentFields.Contains(f.FieldId));
-                        _db.BlockFields.RemoveRange(removedFields);
-
-                        foreach (var newField in blocks[n].Fields)
-                        {
-                            var field = block.Fields.FirstOrDefault(f => f.FieldId == newField.FieldId);
-                            if (field == null)
-                            {
-                                field = new BlockField
-                                {
-                                    Id = newField.Id != Guid.Empty ? newField.Id : Guid.NewGuid(),
-                                    BlockId = block.Id,
-                                    FieldId = newField.FieldId
-                                };
-                                await _db.BlockFields.AddAsync(field).ConfigureAwait(false);
-                                block.Fields.Add(field);
-                            }
-                            field.SortOrder = newField.SortOrder;
-                            field.CLRType = newField.CLRType;
-                            field.Value = newField.Value;
-                        }
-
-                        // Create the page block
-                        page.Blocks.Add(new PageBlock
-                        {
-                            Id = Guid.NewGuid(),
-                            BlockId = block.Id,
-                            Block = block,
-                            PageId = page.Id,
-                            SortOrder = n
-                        });
-                    }
-                }
                 await _db.SaveChangesAsync().ConfigureAwait(false);
             }
-            return affected;
         }
 
         /// <summary>
@@ -416,12 +282,341 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Deletes the current draft revision for the page
+        /// with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        public async Task DeleteDraft(Guid id)
+        {
+            var page = await GetQuery<Models.PageInfo>()
+                .FirstOrDefaultAsync(p => p.Id == id)
+                .ConfigureAwait(false);
+
+            if (page != null)
+            {
+                var draft = await _db.PageRevisions
+                    .Where(r => r.PageId == id && r.Created > page.LastModified)
+                    .ToListAsync()
+                    .ConfigureAwait(false);
+
+                if (draft.Count > 0)
+                {
+                    _db.PageRevisions.RemoveRange(draft);
+
+                    await _db.SaveChangesAsync().ConfigureAwait(false);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Saves the given page model
+        /// </summary>
+        /// <param name="model">The page model</param>
+        private async Task<IEnumerable<Guid>> Save<T>(T model, bool isDraft) where T : Models.PageBase
+        {
+            var type = App.PageTypes.GetById(model.TypeId);
+            var affected = new List<Guid>();
+            var isNew = false;
+            var lastModified = DateTime.MinValue;
+
+            if (type != null)
+            {
+                // Set content type
+                model.ContentType = type.ContentTypeId;
+
+                IQueryable<Page> pageQuery = _db.Pages;
+                if (isDraft)
+                {
+                    pageQuery = pageQuery.AsNoTracking();
+                }
+
+                var page = await pageQuery
+                    .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
+                    .Include(p => p.Fields)
+                    .FirstOrDefaultAsync(p => p.Id == model.Id)
+                    .ConfigureAwait(false);
+
+                if (page == null)
+                {
+                    isNew = true;
+                }
+                else
+                {
+                    lastModified = page.LastModified;
+                }
+
+                if (model.OriginalPageId.HasValue)
+                {
+                    var originalPageIsCopy = (await _db.Pages.AsNoTracking().FirstOrDefaultAsync(p => p.Id == model.OriginalPageId).ConfigureAwait(false))?.OriginalPageId.HasValue ?? false;
+                    if (originalPageIsCopy)
+                    {
+                        throw new InvalidOperationException("Can not set copy of a copy");
+                    }
+
+                    var originalPageType = (await _db.Pages.AsNoTracking().FirstOrDefaultAsync(p => p.Id == model.OriginalPageId).ConfigureAwait(false))?.PageTypeId;
+                    if (originalPageType != model.TypeId)
+                    {
+                        throw new InvalidOperationException("Copy can not have a different content type");
+                    }
+
+                    // Transform the model
+                    if (page == null)
+                    {
+                        page = new Page()
+                        {
+                            Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
+                        };
+
+                        if (!isDraft)
+                        {
+                            _db.Pages.Add(page);
+
+                            // Make room for the new page
+                            affected.AddRange(await MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true));
+                        }
+                    }
+                    else
+                    {
+                        // Check if the page has been moved
+                        if (!isDraft && (page.ParentId != model.ParentId || page.SortOrder != model.SortOrder))
+                        {
+                            // Remove the old position for the page
+                            affected.AddRange(await MovePages(page.Id, page.SiteId, page.ParentId, page.SortOrder + 1, false).ConfigureAwait(false));
+                            // Add room for the new position of the page
+                            affected.AddRange(await MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true).ConfigureAwait(false));
+                        }
+                    }
+
+                    if (!isDraft && (isNew || page.Title != model.Title || page.NavigationTitle != model.NavigationTitle))
+                    {
+                        // If this is new page or title has been updated it means
+                        // the global sitemap changes. Notify the service.
+                        affected.Add(page.Id);
+                    }
+
+                    page.PageTypeId = model.TypeId;
+                    page.OriginalPageId = model.OriginalPageId;
+                    page.SiteId = model.SiteId;
+                    page.Title = model.Title;
+                    page.NavigationTitle = model.NavigationTitle;
+                    page.Slug = model.Slug;
+                    page.ParentId = model.ParentId;
+                    page.SortOrder = model.SortOrder;
+                    page.IsHidden = model.IsHidden;
+                    page.Route = model.Route;
+                    page.Published = model.Published;
+
+                    if (!isDraft)
+                    {
+                        await _db.SaveChangesAsync().ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        var draft = await _db.PageRevisions
+                            .FirstOrDefaultAsync(r => r.PageId == page.Id && r.Created > lastModified)
+                            .ConfigureAwait(false);
+
+                        if (draft == null)
+                        {
+                            draft = new PageRevision
+                            {
+                                Id = Guid.NewGuid(),
+                                PageId = page.Id
+                            };
+                            await _db.PageRevisions
+                                .AddAsync(draft)
+                                .ConfigureAwait(false);
+                        }
+
+                        draft.Data = JsonConvert.SerializeObject(page);
+                        draft.Created = page.LastModified;
+
+                        await _db.SaveChangesAsync().ConfigureAwait(false);
+                    }
+                    return affected;
+                }
+
+                // Transform the model
+                if (page == null)
+                {
+                    page = new Page
+                    {
+                        Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
+                        ParentId = model.ParentId,
+                        SortOrder = model.SortOrder,
+                        PageTypeId = model.TypeId,
+                        Created = DateTime.Now,
+                        LastModified = DateTime.Now
+                    };
+                    model.Id = page.Id;
+
+                    if (!isDraft)
+                    {
+                        _db.Pages.Add(page);
+
+                        // Make room for the new page
+                        affected.AddRange(await MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true).ConfigureAwait(false));
+                    }
+                }
+                else
+                {
+                    // Check if the page has been moved
+                    if (!isDraft && (page.ParentId != model.ParentId || page.SortOrder != model.SortOrder))
+                    {
+                        // Remove the old position for the page
+                        affected.AddRange(await MovePages(page.Id, page.SiteId, page.ParentId, page.SortOrder + 1, false).ConfigureAwait(false));
+                        // Add room for the new position of the page
+                        affected.AddRange(await MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true).ConfigureAwait(false));
+                    }
+                    page.LastModified = DateTime.Now;
+                }
+
+                if (isNew || page.Title != model.Title || page.NavigationTitle != model.NavigationTitle)
+                {
+                    // If this is new page or title has been updated it means
+                    // the global sitemap changes. Notify the service.
+                    affected.Add(page.Id);
+                }
+
+                page = _contentService.Transform<T>(model, type, page);
+
+                // Transform blocks
+                var blockModels = model.Blocks;
+
+                if (blockModels != null)
+                {
+                    var blocks = _contentService.TransformBlocks(blockModels);
+                    var current = blocks.Select(b => b.Id).ToArray();
+
+                    // Delete removed blocks
+                    var removed = page.Blocks
+                        .Where(b => !current.Contains(b.BlockId) && !b.Block.IsReusable && b.Block.ParentId == null)
+                        .Select(b => b.Block);
+                    var removedItems = page.Blocks
+                        .Where(b => !current.Contains(b.BlockId) && b.Block.ParentId != null && removed.Select(p => p.Id).ToList().Contains(b.Block.ParentId.Value))
+                        .Select(b => b.Block);
+
+                    if (!isDraft)
+                    {
+                        _db.Blocks.RemoveRange(removed);
+                        _db.Blocks.RemoveRange(removedItems);
+                    }
+
+                    // Delete the old page blocks
+                    page.Blocks.Clear();
+
+                    // Now map the new block
+                    for (var n = 0; n < blocks.Count; n++)
+                    {
+                        IQueryable<Block> blockQuery = _db.Blocks;
+
+                        if (isDraft)
+                        {
+                            blockQuery = blockQuery.AsNoTracking();
+                        }
+
+                        var block = await blockQuery
+                            .Include(b => b.Fields)
+                            .FirstOrDefaultAsync(b => b.Id == blocks[n].Id)
+                            .ConfigureAwait(false);
+
+                        if (block == null)
+                        {
+                            block = new Block
+                            {
+                                Id = blocks[n].Id != Guid.Empty ? blocks[n].Id : Guid.NewGuid(),
+                                Created = DateTime.Now
+                            };
+                            if (!isDraft)
+                            {
+                                await _db.Blocks.AddAsync(block).ConfigureAwait(false);
+                            }
+                        }
+                        block.ParentId = blocks[n].ParentId;
+                        block.CLRType = blocks[n].CLRType;
+                        block.IsReusable = blocks[n].IsReusable;
+                        block.Title = blocks[n].Title;
+                        block.LastModified = DateTime.Now;
+
+                        var currentFields = blocks[n].Fields.Select(f => f.FieldId).Distinct();
+                        var removedFields = block.Fields.Where(f => !currentFields.Contains(f.FieldId));
+
+                        if (!isDraft)
+                        {
+                            _db.BlockFields.RemoveRange(removedFields);
+                        }
+
+                        foreach (var newField in blocks[n].Fields)
+                        {
+                            var field = block.Fields.FirstOrDefault(f => f.FieldId == newField.FieldId);
+                            if (field == null)
+                            {
+                                field = new BlockField
+                                {
+                                    Id = newField.Id != Guid.Empty ? newField.Id : Guid.NewGuid(),
+                                    BlockId = block.Id,
+                                    FieldId = newField.FieldId
+                                };
+                                if (!isDraft)
+                                {
+                                    await _db.BlockFields.AddAsync(field).ConfigureAwait(false);
+                                }
+                                block.Fields.Add(field);
+                            }
+                            field.SortOrder = newField.SortOrder;
+                            field.CLRType = newField.CLRType;
+                            field.Value = newField.Value;
+                        }
+
+                        // Create the page block
+                        page.Blocks.Add(new PageBlock
+                        {
+                            Id = Guid.NewGuid(),
+                            BlockId = block.Id,
+                            Block = block,
+                            PageId = page.Id,
+                            SortOrder = n
+                        });
+                    }
+                }
+                if (!isDraft)
+                {
+                    await _db.SaveChangesAsync().ConfigureAwait(false);
+                }
+                else
+                {
+                    var draft = await _db.PageRevisions
+                        .FirstOrDefaultAsync(r => r.PageId == page.Id && r.Created > lastModified)
+                        .ConfigureAwait(false);
+
+                    if (draft == null)
+                    {
+                        draft = new PageRevision
+                        {
+                            Id = Guid.NewGuid(),
+                            PageId = page.Id
+                        };
+                        await _db.PageRevisions
+                            .AddAsync(draft)
+                            .ConfigureAwait(false);
+                    }
+
+                    draft.Data = JsonConvert.SerializeObject(page);
+                    draft.Created = page.LastModified;
+
+                    await _db.SaveChangesAsync().ConfigureAwait(false);
+                }
+            }
+            return affected;
+        }
+
+        /// <summary>
         /// Gets the base query for loading pages.
         /// </summary>
         /// <param name="fullModel">If this is a full load or not</param>
         /// <typeparam name="T">The requested model type</typeparam>
         /// <returns>The queryable</returns>
-        private IQueryable<Page> GetQuery<T>(out bool fullModel)
+        private IQueryable<Page> GetQuery<T>()
         {
             var loadRelated = !typeof(Models.IContentInfo).IsAssignableFrom(typeof(T));
 
@@ -433,11 +628,6 @@ namespace Piranha.Repositories
                 query = query
                     .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                     .Include(p => p.Fields);
-                fullModel = true;
-            }
-            else
-            {
-                fullModel = false;
             }
             return query;
         }

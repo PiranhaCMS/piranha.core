@@ -37,6 +37,9 @@ public static class ManagerModuleExtensions
         services.AddScoped<ModuleService>();
         services.AddScoped<PageService>();
 
+        // Add localization service
+        services.AddScoped<ManagerLocalizer>();
+
         // Add session support
         services.AddSession();
 

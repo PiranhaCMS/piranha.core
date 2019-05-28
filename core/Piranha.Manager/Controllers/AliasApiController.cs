@@ -27,14 +27,16 @@ namespace Piranha.Manager.Controllers
     {
         private readonly IApi _api;
         private readonly AliasService _service;
+        private readonly ManagerLocalizer _localizer;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public AliasApiController(IApi api, AliasService service)
+        public AliasApiController(IApi api, AliasService service, ManagerLocalizer localizer)
         {
             _api = api;
             _service = service;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -66,7 +68,7 @@ namespace Piranha.Manager.Controllers
                 result.Status = new StatusMessage
                 {
                     Type = StatusMessage.Success,
-                    Body = $"The alias <code>{ model.AliasUrl }</code> was added to the list"
+                    Body = _localizer.Alias["The alias was successfully added to the list"]
                 };
 
                 return Ok(result);
@@ -102,7 +104,7 @@ namespace Piranha.Manager.Controllers
                 result.Status = new StatusMessage
                 {
                     Type = StatusMessage.Success,
-                    Body = $"The alias <code>{ alias.AliasUrl }</code> was deleted"
+                    Body = _localizer.Alias["The alias was successfully deleted"]
                 };
 
                 return Ok(result);

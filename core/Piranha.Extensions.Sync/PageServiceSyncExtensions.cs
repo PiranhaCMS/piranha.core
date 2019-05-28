@@ -140,6 +140,26 @@ namespace Piranha.Services
         }
 
         /// <summary>
+        /// Gets the draft for the model with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The draft, or null if it doesn't exist</returns>
+        public static DynamicPage GetDraftById(this IPageService service, Guid id)
+        {
+            return service.GetDraftByIdAsync(id).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Gets the draft for the model with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The draft, or null if it doesn't exist</returns>
+        public static T GetDraftById<T>(this IPageService service, Guid id) where T : PageBase
+        {
+            return service.GetDraftByIdAsync<T>(id).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
         /// Moves the current page in the structure.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
@@ -158,6 +178,15 @@ namespace Piranha.Services
         public static void Save<T>(this IPageService service, T model) where T : PageBase
         {
             service.SaveAsync(model).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Saves the given page model as a draft
+        /// </summary>
+        /// <param name="model">The page model</param>
+        public static void SaveDraft<T>(this IPageService service, T model) where T : PageBase
+        {
+            service.SaveDraftAsync(model).GetAwaiter().GetResult();
         }
 
         /// <summary>

@@ -1,11 +1,11 @@
-@inject IViewLocalizer Localizer
+@inject ManagerLocalizer Localizer
 
 <div id="pageSettings" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <!-- Header -->
             <div class="modal-header border-bottom-0">
-                <h5 class="modal-title"><i class="fas fa-cog"></i> @Localizer["Settings"]</h5>
+                <h5 class="modal-title"><i class="fas fa-cog"></i> @Localizer.General["Settings"]</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -14,7 +14,7 @@
             <!-- Tabs -->
             <ul class="nav nav-tabs" v-if="settingRegions.length > 0" role="tablist">
                 <li class="nav-item">
-                    <a href="#" class="nav-link" :class="{ active: selectedSetting === 'uid-settings' }" v-on:click.prevent="selectSetting('uid-settings')">@Localizer["General"]</a>
+                    <a href="#" class="nav-link" :class="{ active: selectedSetting === 'uid-settings' }" v-on:click.prevent="selectSetting('uid-settings')">@Localizer.General["General"]</a>
                 </li>
                 <li class="nav-item" v-for="region in settingRegions">
                     <a href="#" class="nav-link" :class="{ active: selectedSetting === region.meta.uid }" v-on:click.prevent="selectSetting(region.meta.uid)">{{ region.meta.name }}</a>
@@ -27,13 +27,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>@Localizer["Navigation title"]</label>
+                                <label>@Localizer.Page["Navigation title"]</label>
                                 <input v-model="navigationTitle" type="text" maxlength="128" class="form-control form-control-lg">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>@Localizer["Slug"]</label>
+                                <label>@Localizer.General["Slug"]</label>
                                 <input v-model="slug" type="text" maxlength="128" class="form-control form-control-lg">
                             </div>
                         </div>
@@ -41,20 +41,20 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>@Localizer["Meta keywords"]</label>
+                                <label>@Localizer.Page["Meta keywords"]</label>
                                 <input v-model="metaKeywords" type="text" maxlength="128" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label>@Localizer["Meta description"]</label>
+                                <label>@Localizer.Page["Meta description"]</label>
                                 <textarea v-model="metaDescription" rows="5" maxlength="256" class="form-control"></textarea>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>@Localizer["Hidden"]</label>
+                                <label>@Localizer.Page["Hidden"]</label>
                                 <div class="form-group form-check">
                                     <input id="isHidden" v-model="isHidden" type="checkbox" class="form-check-input">
-                                    <label for="isHidden" class="form-check-label">@Localizer["If the page should be hidden in the sitemap"]</label>
+                                    <label for="isHidden" class="form-check-label">@Localizer.Page["If the page should be hidden in the sitemap"]</label>
                                 </div>
                             </div>
                         </div>
@@ -62,7 +62,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>@Localizer["Publish date"]</label>
+                                <label>@Localizer.General["Publish date"]</label>
                                 <input v-model="published" type="text" class="form-control">
                             </div>
                         </div>

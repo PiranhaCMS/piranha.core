@@ -1,7 +1,8 @@
 @page "~/manager/aliases"
-@inject IViewLocalizer Localizer
+@inject ManagerLocalizer Localizer
+
 @{
-    ViewBag.Title = Localizer["Aliases"];
+    ViewBag.Title = Localizer.Alias["Aliases"];
     ViewBag.MenuItem = "Aliases";
 }
 @section script
@@ -13,15 +14,15 @@
     <div class="top">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item">@Localizer["Settings"]</li>
-                <li class="breadcrumb-item active" aria-current="page">@Localizer["Aliases"]</li>
+                <li class="breadcrumb-item">@Localizer.General["Settings"]</li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer.Alias["Aliases"]</li>
             </ol>
         </nav>
 
         <div class="container-fluid">
             <div class="top-nav">
                 <button class="btn btn-primary btn-labeled" data-toggle="modal" data-target="#aliasModal">
-                    <i class="fas fa-plus"></i>@Localizer["Add"]
+                    <i class="fas fa-plus"></i>@Localizer.General["Add"]
                 </button>
             </div>
         </div>
