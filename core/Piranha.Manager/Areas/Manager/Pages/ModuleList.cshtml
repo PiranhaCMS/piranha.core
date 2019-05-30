@@ -1,7 +1,7 @@
 @page "~/manager/modules"
-@inject IViewLocalizer Localizer
+@inject ManagerLocalizer Localizer
 @{
-    ViewBag.Title = Localizer["Modules"];
+    ViewBag.Title = Localizer.Module["Modules"];
     ViewBag.MenuItem = "Modules";
 }
 @section script
@@ -13,8 +13,8 @@
     <div class="top">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item">@Localizer["Settings"]</li>
-                <li class="breadcrumb-item active" aria-current="page">@Localizer["Modules"]</li>
+                <li class="breadcrumb-item">@Localizer.Menu["Settings"]</li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer.Menu["Modules"]</li>
             </ol>
         </nav>
     </div>
@@ -26,9 +26,9 @@
                     <thead>
                         <tr>
                             <th class="td-small"></th>
-                            <th>@Localizer["Name"]</th>
-                            <th>@Localizer["Package URL"]</th>
-                            <th class="date text-center">@Localizer["Version"]</th>
+                            <th>@Localizer.General["Name"]</th>
+                            <th>@Localizer.Module["Package URL"]</th>
+                            <th class="date text-center">@Localizer.General["Version"]</th>
                         </tr>
                         <tbody>
                             <tr v-for="item in items">

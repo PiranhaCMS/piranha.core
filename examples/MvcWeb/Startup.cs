@@ -78,6 +78,15 @@ namespace MvcWeb
                 .Build()
                 .DeleteOrphans();
 
+            /**
+             *
+             * Test another culture in the UI
+             *
+            var cultureInfo = new System.Globalization.CultureInfo("en-US");
+            System.Globalization.CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+             */
+
             // Register middleware
             app.UseStaticFiles();
             app.UseAuthentication();
