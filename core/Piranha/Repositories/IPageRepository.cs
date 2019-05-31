@@ -57,6 +57,14 @@ namespace Piranha.Repositories
         Task<T> GetBySlug<T>(string slug, Guid siteId) where T : PageBase;
 
         /// <summary>
+        /// Gets the draft for the page model with the specified id.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="id">The unique id</param>
+        /// <returns>The draft, or null if no draft exists</returns>
+        Task<T> GetDraftById<T>(Guid id) where T : PageBase;
+
+        /// <summary>
         /// Moves the current page in the structure.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
@@ -74,10 +82,30 @@ namespace Piranha.Repositories
         Task<IEnumerable<Guid>> Save<T>(T model) where T : PageBase;
 
         /// <summary>
+        /// Saves the given model as a draft revision.
+        /// </summary>
+        /// <param name="model">The page model</param>
+        Task SaveDraft<T>(T model) where T : PageBase;
+
+        /// <summary>
+        /// Creates a revision from the current version
+        /// of the page with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        Task CreateRevision(Guid id);
+
+        /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The other pages that were affected by the move</returns>
         Task<IEnumerable<Guid>> Delete(Guid id);
+
+        /// <summary>
+        /// Deletes the current draft revision for the page
+        /// with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        Task DeleteDraft(Guid id);
     }
 }

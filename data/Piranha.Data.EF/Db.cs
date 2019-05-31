@@ -104,6 +104,11 @@ namespace Piranha
         public DbSet<Data.PostField> PostFields { get; set; }
 
         /// <summary>
+        /// Gets/sets the page revision set.
+        /// </summary>
+        public DbSet<Data.PageRevision> PageRevisions { get; set; }
+
+        /// <summary>
         /// Gets/sets the post tag set.
         /// </summary>
         public DbSet<Data.PostTag> PostTags { get; set; }
@@ -212,6 +217,8 @@ namespace Piranha
             mb.Entity<Data.PageField>().Property(f => f.FieldId).HasMaxLength(64).IsRequired();
             mb.Entity<Data.PageField>().Property(f => f.CLRType).HasMaxLength(256).IsRequired();
             mb.Entity<Data.PageField>().HasIndex(f => new { f.PageId, f.RegionId, f.FieldId, f.SortOrder });
+
+            mb.Entity<Data.PageRevision>().ToTable("Piranha_PageRevisions");
 
             mb.Entity<Data.PageType>().ToTable("Piranha_PageTypes");
             mb.Entity<Data.PageType>().Property(p => p.Id).HasMaxLength(64).IsRequired();

@@ -1,4 +1,4 @@
-@inject IViewLocalizer Localizer
+@inject ManagerLocalizer Localizer
 
 <!-- The Modal -->
 <div class="modal fade" id="previewModal">
@@ -21,13 +21,13 @@
             <!-- Tabs -->
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active" data-toggle="pill" href="#pills-preview">@Localizer["Preview"]</a>
+                    <a class="nav-link active" data-toggle="pill" href="#pills-preview">@Localizer.General["Preview"]</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="pill" href="#pills-details">@Localizer["Details"]</a>
+                    <a class="nav-link" data-toggle="pill" href="#pills-details">@Localizer.General["Details"]</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="pill" href="#pills-update">@Localizer["Update"]</a>
+                    <a class="nav-link" data-toggle="pill" href="#pills-update">@Localizer.General["Update"]</a>
                 </li>
             </ul>
 
@@ -41,7 +41,7 @@
                         <template v-else-if="media.type === 'Video'">
                             <video class="d-block mx-auto mw-100" controls>
                                 <source :src="media.publicUrl" type="">
-                                @Localizer["Your browser does not support the video tag."]
+                                @Localizer.Media["Your browser does not support the video tag."]
                             </video>
                         </template>
                         <template v-else-if="media.type === 'Document'">
@@ -51,9 +51,9 @@
                         </template>
                         <template v-else>
                             <div class="py-5 text-center">
-                                <h4 class="my-4">@Localizer["Media preview is not available"]</h4>
-                                <a :href="media.publicUrl" class="btn btn-primary btn-labeled" target="_blank"><i class="fas fa-external-link-alt"></i>@Localizer["Open media in new tab"]</a>
-                                <a :href="media.publicUrl" class="btn btn-primary btn-labeled" download><i class="fas fa-file-download"></i>@Localizer["Download media"]</a>
+                                <h4 class="my-4">@Localizer.Media["Media preview is not available"]</h4>
+                                <a :href="media.publicUrl" class="btn btn-primary btn-labeled" target="_blank"><i class="fas fa-external-link-alt"></i>@Localizer.Media["Open media in new tab"]</a>
+                                <a :href="media.publicUrl" class="btn btn-primary btn-labeled" download><i class="fas fa-file-download"></i>@Localizer.Media["Download media"]</a>
                             </div>
                         </template>
                     </div>
@@ -61,36 +61,36 @@
                         <table class="table table-borderless m-0">
                             <tbody>
                                 <tr>
-                                    <th>@Localizer["Filename"]</th>
+                                    <th>@Localizer.General["Filename"]</th>
                                     <td>{{ media.filename }}</td>
                                 </tr>
                                 <tr>
-                                    <th>@Localizer["Content type"]</th>
+                                    <th>@Localizer.General["Content type"]</th>
                                     <td>{{ media.contentType }}</td>
                                 </tr>
                                 <tr>
-                                    <th>@Localizer["Size"]</th>
+                                    <th>@Localizer.General["Size"]</th>
                                     <td>{{ media.size }}</td>
                                 </tr>
                                 <tr>
-                                    <th>@Localizer["Width"]</th>
+                                    <th>@Localizer.General["Width"]</th>
                                     <td>{{ media.width }}</td>
                                 </tr>
                                 <tr>
-                                    <th>@Localizer["Height"]</th>
+                                    <th>@Localizer.General["Height"]</th>
                                     <td>{{ media.height }}</td>
                                 </tr>
                                 <tr>
-                                    <th>@Localizer["Modified"]</th>
+                                    <th>@Localizer.General["Modified"]</th>
                                     <td>{{ media.lastModified }}</td>
                                 </tr>
                                 <tr>
-                                    <th>@Localizer["Download"]</th>
-                                    <td><a :href="media.publicUrl" download>@Localizer["Download media"]</a></td>
+                                    <th>@Localizer.General["Download"]</th>
+                                    <td><a :href="media.publicUrl" download>@Localizer.Media["Download media"]</a></td>
                                 </tr>
                                 <tr>
-                                    <th>@Localizer["URL"]</th>
-                                    <td><a :href="media.publicUrl" target="_blank">Open public URL in new tab</a></td>
+                                    <th>@Localizer.General["URL"]</th>
+                                    <td><a :href="media.publicUrl" target="_blank">@Localizer.General["Open public URL in new tab"]</a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -101,7 +101,7 @@
                                 <input type="hidden" name="Model.Id" v-model="media.id" />
                                 <div class="dz-message needsclick text-center">
                                     <span class="fas fa-cloud-upload-alt"></span>
-                                    @Localizer["Drop files here or click to upload."]
+                                    @Localizer.Media["Drop files here or click to upload."]
                                 </div>
                                 <div class="file-list"></div>
                             </form>

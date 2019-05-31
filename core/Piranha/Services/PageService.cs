@@ -345,6 +345,32 @@ namespace Piranha.Services
         }
 
         /// <summary>
+        /// Gets the draft for the page model with the specified id.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="id">The unique id</param>
+        /// <returns>The draft, or null if no draft exists</returns>
+        public Task<DynamicPage> GetDraftByIdAsync(Guid id)
+        {
+            return GetDraftByIdAsync<DynamicPage>(id);
+        }
+
+        /// <summary>
+        /// Gets the draft for the page model with the specified id.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="id">The unique id</param>
+        /// <returns>The draft, or null if no draft exists</returns>
+        public async Task<T> GetDraftByIdAsync<T>(Guid id) where T : PageBase
+        {
+            var draft = await _repo.GetDraftById<T>(id);
+
+            OnLoad(draft);
+
+            return draft;
+        }
+
+        /// <summary>
         /// Moves the current page in the structure.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
@@ -380,7 +406,26 @@ namespace Piranha.Services
         /// Saves the given page model
         /// </summary>
         /// <param name="model">The page model</param>
-        public async Task SaveAsync<T>(T model) where T : PageBase
+        public Task SaveAsync<T>(T model) where T : PageBase
+        {
+            return SaveAsync(model, false);
+        }
+
+        /// <summary>
+        /// Saves the given page model as a draft
+        /// </summary>
+        /// <param name="model">The page model</param>
+        public Task SaveDraftAsync<T>(T model) where T : PageBase
+        {
+            return SaveAsync(model, true);
+        }
+
+        /// <summary>
+        /// Saves the given page model
+        /// </summary>
+        /// <param name="model">The page model</param>
+        /// <param name="isDraft">If we're saving as a draft</param>
+        public async Task SaveAsync<T>(T model, bool isDraft) where T : PageBase
         {
             // Ensure id
             if (model.Id == Guid.Empty)
@@ -435,9 +480,40 @@ namespace Piranha.Services
             var current = await _repo.GetById<PageInfo>(model.Id);
             var changeState = IsPublished(current) != IsPublished(model);
 
-            // Call hooks & save
+            IEnumerable<Guid> affected = new Guid[0];
+
+            // Call before save hook
             App.Hooks.OnBeforeSave<PageBase>(model);
-            var affected = await _repo.Save(model).ConfigureAwait(false);
+
+            // Handle revisions and save
+            if (IsPublished(current) && isDraft)
+            {
+                // We're saving a draft since we have a previously
+                // published version of the page
+                await _repo.SaveDraft(model);
+            }
+            else
+            {
+                if (current == null && isDraft)
+                {
+                    // If we're saving a draft as a normal page instance, make
+                    // sure we remove the published date as this sould effectively
+                    // publish the page.
+                    model.Published = null;
+                }
+                else if (current != null && !isDraft)
+                {
+                    // Save current as a revision before saving the model
+                    // and if a draft revision exists, remove it.
+                    await _repo.CreateRevision(model.Id);
+                    await _repo.DeleteDraft(model.Id);
+                }
+
+                // Save the main page
+                affected = await _repo.Save(model).ConfigureAwait(false);
+            }
+
+            // Call after save hook
             App.Hooks.OnAfterSave<PageBase>(model);
 
             // Remove from cache

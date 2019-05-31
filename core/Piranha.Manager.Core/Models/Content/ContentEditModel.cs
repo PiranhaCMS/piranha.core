@@ -17,7 +17,7 @@ namespace Piranha.Manager.Models.Content
     /// <summary>
     /// Content edit model.
     /// </summary>
-    public abstract class ContentEditModel
+    public abstract class ContentEditModel : AsyncResult
     {
         /// <summary>
         /// Gets/sets the unique id.

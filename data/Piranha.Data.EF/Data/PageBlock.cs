@@ -9,6 +9,7 @@
  */
 
 using System;
+using Newtonsoft.Json;
 
 namespace Piranha.Data
 {
@@ -27,7 +28,7 @@ namespace Piranha.Data
         /// This property is not used any more, but is kept for atm
         /// backwards compatible SQLite migrations.
         /// </summary>
-        internal Guid? ParentId { get; set; }
+        public Guid? ParentId { get; set; }
 
         /// <summary>
         /// Gets/sets the page id.
@@ -47,6 +48,7 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the page containing the block.
         /// </summary>
+        [JsonIgnore]
         public Page Page { get; set; }
 
         /// <summary>

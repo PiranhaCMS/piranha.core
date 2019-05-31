@@ -17,6 +17,7 @@ piranha.pageedit = new Vue({
         metaKeywords: null,
         metaDescription: null,
         published: null,
+        state: "new",
         blocks: [],
         regions: [],
         selectedRegion: {
@@ -51,6 +52,7 @@ piranha.pageedit = new Vue({
             this.metaKeywords = model.metaKeywords;
             this.metaDescription = model.metaDescription;
             this.published = model.published;
+            this.state = model.state;
             this.blocks = model.blocks;
             this.regions = model.regions;
         },
@@ -76,7 +78,21 @@ piranha.pageedit = new Vue({
                 .catch(function (error) { console.log("error:", error );
             });
         },
-        save: function() {
+        save: function ()
+        {
+            this.saveInternal(piranha.baseUrl + "manager/api/page/save");
+        },
+        saveDraft: function ()
+        {
+            this.saveInternal(piranha.baseUrl + "manager/api/page/save/draft");
+        },
+        unpublish: function ()
+        {
+            this.saveInternal(piranha.baseUrl + "manager/api/page/save/unpublish");
+        },
+        saveInternal: function (route) {
+            var self = this;
+
             var model = {
                 id: piranha.pageedit.id,
                 siteId: piranha.pageedit.siteId,
@@ -93,7 +109,7 @@ piranha.pageedit = new Vue({
                 regions: JSON.parse(JSON.stringify(piranha.pageedit.regions))
             };
 
-            fetch(piranha.baseUrl + "manager/api/page/save", {
+            fetch(route, {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",
@@ -102,10 +118,27 @@ piranha.pageedit = new Vue({
             })
             .then(function (response) { return response.json(); })
             .then(function (result) {
-                piranha.notifications.push(result);
+                self.slug = result.slug;
+                self.published = result.published;
+                self.state = result.state;
+
+                piranha.notifications.push(result.status);
             })
             .catch(function (error) {
                 console.log("error:", error);
+            });
+        },
+        revert: function () {
+            var self = this;
+
+            fetch(piranha.baseUrl + "manager/api/page/revert/" + self.id)
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    self.bind(result);
+
+                    piranha.notifications.push(result.status);
+                })
+                .catch(function (error) { console.log("error:", error );
             });
         },
         remove: function () {

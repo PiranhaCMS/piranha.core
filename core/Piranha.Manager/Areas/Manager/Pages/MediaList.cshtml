@@ -1,5 +1,5 @@
 ﻿@page "~/manager/media"
-@inject IViewLocalizer Localizer
+@inject ManagerLocalizer Localizer
 @{
     ViewBag.MenuItem = "Media";
 }
@@ -12,8 +12,8 @@
     <div class="top">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item">@Localizer["Content"]</li>
-                <li class="breadcrumb-item active" aria-current="page">@Localizer["Media"]</li>
+                <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer.Menu["Media"]</li>
             </ol>
         </nav>
 
@@ -22,7 +22,7 @@
                 <button v-if="listView" v-on:click.prevent="toggle" class="btn btn-secondary"><i class="fas fa-table"></i></button>
                 <button v-if="!listView" v-on:click.prevent="toggle" class="btn btn-secondary"><i class="fas fa-list"></i></button>
                 <button class="btn btn-primary btn-labeled" data-toggle="modal" data-target="#mediaFolderModal">
-                    <i class="fas fa-plus"></i>@Localizer["Add folder"]
+                    <i class="fas fa-plus"></i>@Localizer.Media["Add folder"]
                 </button>
             </div>
         </div>
@@ -34,7 +34,7 @@
                 <input type="hidden" name="Model.ParentId" v-model="currentFolderId" />
                 <div class="dz-message needsclick text-center">
                     <span class="fas fa-cloud-upload-alt"></span>
-                    @Localizer["Drop files here or click to upload."]
+                    @Localizer.Media["Drop files here or click to upload."]
                 </div>
                 <div class="file-list"></div>
             </form>

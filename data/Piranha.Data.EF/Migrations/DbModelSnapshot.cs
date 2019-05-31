@@ -324,6 +324,24 @@ namespace Piranha.Migrations
                     b.ToTable("Piranha_PageFields");
                 });
 
+            modelBuilder.Entity("Piranha.Data.PageRevision", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Created");
+
+                    b.Property<string>("Data");
+
+                    b.Property<Guid>("PageId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PageId");
+
+                    b.ToTable("Piranha_PageRevisions");
+                });
+
             modelBuilder.Entity("Piranha.Data.PageType", b =>
                 {
                     b.Property<string>("Id")
@@ -699,6 +717,14 @@ namespace Piranha.Migrations
                 {
                     b.HasOne("Piranha.Data.Page", "Page")
                         .WithMany("Fields")
+                        .HasForeignKey("PageId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Piranha.Data.PageRevision", b =>
+                {
+                    b.HasOne("Piranha.Data.Page", "Page")
+                        .WithMany()
                         .HasForeignKey("PageId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

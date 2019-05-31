@@ -1,11 +1,11 @@
-@inject IViewLocalizer Localizer
+@inject ManagerLocalizer Localizer
 
 <div class="container-fluid">
     <div class="row">
         <div class="col">
             <div class="gallery gallery-sm">
                 <div class="gallery-header">
-                    @Localizer["Gallery"]
+                    @Localizer.Media["Gallery"]
                 </div>
 
                 <a href="#" class="thumbnail droppable" v-if="currentFolderId != null" v-on:click.prevent="load(parentFolderId)">

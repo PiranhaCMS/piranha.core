@@ -1,7 +1,7 @@
 @page "~/manager/page/{action}/{id}"
-@inject IViewLocalizer Localizer
+@inject ManagerLocalizer Localizer
 @{
-    ViewBag.Title = Localizer["Edit page"];
+    ViewBag.Title = Localizer.Page["Edit page"];
     ViewBag.MenuItem = "Pages";
     string action = ((string)RouteData.Values["action"]).ToLower();
 
@@ -39,9 +39,9 @@
     <div class="top">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item">@Localizer["Content"]</li>
-                <li class="breadcrumb-item"><a href="~/manager/pages">@Localizer["Pages"]</a></li>
-                <li class="breadcrumb-item active" aria-current="page">@Localizer["Edit"]</li>
+                <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
+                <li class="breadcrumb-item"><a href="~/manager/pages">@Localizer.Menu["Pages"]</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer.General["Edit"]</li>
             </ol>
         </nav>
 
@@ -55,7 +55,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="form-group title">
-                            <input v-model="title" type="text" class="form-control form-control-lg" placeholder="@Localizer["Your page title"]">
+                            <input v-model="title" type="text" class="form-control form-control-lg" placeholder="@Localizer.Page["Your page title"]">
                         </div>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
                         </a>
                     </div>
                     <div v-if="blocks.length == 0" class="empty-info">
-                        <p>@Localizer["Welcome to your new page. Click on the button above to add your first block of content!"]</p>
+                        <p>@Localizer.Page["Welcome to your new page. Click on the button above to add your first block of content!"]</p>
                     </div>
                 </div>
             </div>

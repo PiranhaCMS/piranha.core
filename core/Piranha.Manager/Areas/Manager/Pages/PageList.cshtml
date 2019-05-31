@@ -1,7 +1,7 @@
 @page "~/manager/pages"
-@inject IViewLocalizer Localizer
+@inject ManagerLocalizer Localizer
 @{
-    ViewBag.Title = Localizer["Pages"];
+    ViewBag.Title = Localizer.Page["Pages"];
     ViewBag.MenuItem = "Pages";
 }
 @section script
@@ -27,8 +27,8 @@
     <div class="top">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item">@Localizer["Content"]</li>
-                <li class="breadcrumb-item active" aria-current="page">@Localizer["Pages"]</li>
+                <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer.Menu["Pages"]</li>
             </ol>
         </nav>
 
@@ -40,11 +40,11 @@
                 }
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-primary btn-labeled dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-plus"></i>@Localizer["Add"]
+                        <i class="fas fa-plus"></i>@Localizer.General["Add"]
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#pageAddModal">@Localizer["Add page"]</a>
-                        <a class="dropdown-item" href="#">@Localizer["Add site"]</a>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#pageAddModal">@Localizer.Page["Add page"]</a>
+                        <a class="dropdown-item" href="#">@Localizer.Site["Add site"]</a>
                     </div>
                 </div>
             </div>

@@ -83,23 +83,30 @@ namespace Piranha.Manager.Services
 
             if (page != null)
             {
-                return Transform(page);
+                return Transform(page, false);
             }
             return null;
         }
 
-        public async Task<PageEditModel> GetById(Guid id)
+        public async Task<PageEditModel> GetById(Guid id, bool useDraft = true)
         {
-            var page = await _api.Pages.GetByIdAsync(id);
+            var isDraft = true;
+            var page = useDraft ? await _api.Pages.GetDraftByIdAsync(id) : null;
+
+            if (page == null)
+            {
+                page = await _api.Pages.GetByIdAsync(id);
+                isDraft = false;
+            }
 
             if (page != null)
             {
-                return Transform(page);
+                return Transform(page, isDraft);
             }
             return null;
         }
 
-        public async Task Save(PageEditModel model)
+        public async Task Save(PageEditModel model, bool draft)
         {
             var pageType = App.PageTypes.GetById(model.TypeId);
 
@@ -216,7 +223,16 @@ namespace Piranha.Manager.Services
                         page.Blocks.Add(blockItem.Model);
                     }
                 }
-                await _api.Pages.SaveAsync(page);
+
+                // Save page
+                if (draft)
+                {
+                    await _api.Pages.SaveDraftAsync(page);
+                }
+                else
+                {
+                    await _api.Pages.SaveAsync(page);
+                }
             }
             else
             {
@@ -252,7 +268,7 @@ namespace Piranha.Manager.Services
             return model;
         }
 
-        private PageEditModel Transform(DynamicPage page)
+        private PageEditModel Transform(DynamicPage page, bool isDraft)
         {
             var type = App.PageTypes.GetById(page.TypeId);
 
@@ -268,7 +284,8 @@ namespace Piranha.Manager.Services
                 Slug = page.Slug,
                 MetaKeywords = page.MetaKeywords,
                 MetaDescription = page.MetaDescription,
-                Published = page.Published.HasValue ? page.Published.Value.ToString("yyyy-MM-dd HH:mm") : null
+                Published = page.Published.HasValue ? page.Published.Value.ToString("yyyy-MM-dd HH:mm") : null,
+                State = GetState(page, isDraft)
             };
 
             foreach (var regionType in type.Regions)
@@ -426,6 +443,26 @@ namespace Piranha.Manager.Services
                 }
             }
             return model;
+        }
+
+        private string GetState(DynamicPage page, bool isDraft)
+        {
+            if (page.Created != DateTime.MinValue)
+            {
+                if (page.Published.HasValue)
+                {
+                    if (isDraft)
+                    {
+                        return ContentState.Draft;
+                    }
+                    return ContentState.Published;
+                }
+                else
+                {
+                    return ContentState.Unpublished;
+                }
+            }
+            return ContentState.New;
         }
     }
 }

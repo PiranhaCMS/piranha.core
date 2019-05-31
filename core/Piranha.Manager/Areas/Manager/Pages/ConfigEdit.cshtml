@@ -1,7 +1,7 @@
 @page "~/manager/config"
-@inject IViewLocalizer Localizer
+@inject ManagerLocalizer Localizer
 @{
-    ViewBag.Title = Localizer["Config"];
+    ViewBag.Title = Localizer.Config["Config"];
     ViewBag.MenuItem = "Config";
 }
 @section script
@@ -14,15 +14,15 @@
         <div class="top">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item">@Localizer["System"]</li>
-                    <li class="breadcrumb-item active" aria-current="page">@Localizer["Config"]</li>
+                    <li class="breadcrumb-item">@Localizer.Menu["System"]</li>
+                    <li class="breadcrumb-item active" aria-current="page">@Localizer.Menu["Config"]</li>
                 </ol>
             </nav>
 
             <div class="container-fluid">
                 <div class="top-nav">
                     <button v-on:click.prevent="save" class="btn btn-success btn-labeled">
-                        <i class="fas fa-check"></i>@Localizer["Save"]
+                        <i class="fas fa-check"></i>@Localizer.General["Save"]
                     </button>
                 </div>
             </div>
@@ -33,13 +33,13 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-header">
-                            <span class="title">@Localizer["General"]</span>
+                            <span class="title">@Localizer.General["General"]</span>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>@Localizer["Hierarchical page slugs"]</label>
+                                        <label>@Localizer.Config["Hierarchical page slugs"]</label>
                                         <blockquote>
                                             If page slugs should take their parent slug into account when
                                             being generated. This is prefered for larger sitemaps.
@@ -47,14 +47,14 @@
                                         <div class="checkbox">
                                             <label>
                                                 <input v-model="model.hierarchicalPageSlugs" type="checkbox">
-                                                If page slugs should include the parent slug.
+                                                @Localizer.Config["If page slugs should include the parent slug."]
                                             </label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>@Localizer["Expanded levels in the sitemap"]</label>
+                                        <label>@Localizer.Config["Expanded levels in the sitemap"]</label>
                                         <blockquote>
                                             The default number of levels that should be expanded in the page
                                             sitemap. This is useful for smaller sitemaps.
@@ -66,7 +66,7 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>@Localizer["Archive page size"]</label>
+                                        <label>@Localizer.Config["Archive page size"]</label>
                                         <blockquote>
                                             The default page size for archive pages. Please note that this this
                                             can be overridden for specific archives.
@@ -84,13 +84,13 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-header">
-                            <span class="title">@Localizer["Caching"]</span>
+                            <span class="title">@Localizer.Config["Caching"]</span>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>@Localizer["Page cache expiration (minutes)"]</label>
+                                        <label>@Localizer.Config["Page cache expiration (minutes)"]</label>
                                         <blockquote>
                                             The time in minutes that web browsers can use pages before
                                             asking the server for new updates.
@@ -100,7 +100,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>@Localizer["Post cache expiration (minutes)"]</label>
+                                        <label>@Localizer.Config["Post cache expiration (minutes)"]</label>
                                         <blockquote>
                                             The time in minutes that web browsers can use posts before
                                             asking the server for new updates.
@@ -112,7 +112,7 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>@Localizer["Media CDN"]</label>
+                                        <label>@Localizer.Config["Media CDN"]</label>
                                         <blockquote>
                                             The full URL (including any folder name) to the CDN used to serve
                                             uploaded media. Leave blank to use default storage URL.

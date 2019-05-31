@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Piranha.Manager.Models;
 using Piranha.Manager.Services;
 using Piranha.Models;
@@ -28,13 +29,15 @@ namespace Piranha.Manager.Controllers
     public class PageApiController : Controller
     {
         private readonly PageService _service;
+        private readonly ManagerLocalizer _localizer;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public PageApiController(PageService service)
+        public PageApiController(PageService service, ManagerLocalizer localizer)
         {
             _service = service;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -72,6 +75,7 @@ namespace Piranha.Manager.Controllers
             return await _service.Create(typeId);
         }
 
+
         /// <summary>
         /// Saves the given model
         /// </summary>
@@ -79,37 +83,64 @@ namespace Piranha.Manager.Controllers
         /// <returns>The result of the operation</returns>
         [Route("save")]
         [HttpPost]
-        public async Task<StatusMessage> Save(PageEditModel model)
+        public Task<PageEditModel> Save(PageEditModel model)
         {
-            try
+            // Ensure that we have a published date
+            if (string.IsNullOrEmpty(model.Published))
             {
-                await _service.Save(model);
+                model.Published = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
             }
-            catch (ValidationException e)
-            {
-                // Validation did not succeed
-                return new StatusMessage
-                {
-                    Type = StatusMessage.Error,
-                    Body = e.Message
-                };
-            }
-            /*
-            catch
-            {
-                return new StatusMessage
-                {
-                    Type = StatusMessage.Error,
-                    Body = "An error occured while saving the page"
-                };
-            }
-            */
 
-            return new StatusMessage
+            return Save(model, false);
+        }
+
+        /// <summary>
+        /// Saves the given model
+        /// </summary>
+        /// <param name="model">The model</param>
+        /// <returns>The result of the operation</returns>
+        [Route("save/draft")]
+        [HttpPost]
+        public Task<PageEditModel> SaveDraft(PageEditModel model)
+        {
+            return Save(model, true);
+        }
+
+        /// <summary>
+        /// Saves the given model and unpublishes it
+        /// </summary>
+        /// <param name="model">The model</param>
+        /// <returns>The result of the operation</returns>
+        [Route("save/unpublish")]
+        [HttpPost]
+        public Task<PageEditModel> SaveUnpublish(PageEditModel model)
+        {
+            // Remove published date
+            model.Published = null;
+
+            return Save(model, false);
+        }
+
+        [Route("revert/{id}")]
+        [HttpGet]
+        public async Task<PageEditModel> Revert(Guid id)
+        {
+            var page = await _service.GetById(id, false);
+
+            if (page != null)
+            {
+                await _service.Save(page, false);
+
+                page = await _service.GetById(id);
+            }
+
+            page.Status = new StatusMessage
             {
                 Type = StatusMessage.Success,
-                Body = "The page was successfully saved"
+                Body = _localizer.Page["The page was successfully reverted to its previous state"]
             };
+
+            return page;
         }
 
         /// <summary>
@@ -139,15 +170,58 @@ namespace Piranha.Manager.Controllers
                 return new StatusMessage
                 {
                     Type = StatusMessage.Error,
-                    Body = "An error occured while deleting the page"
+                    Body = _localizer.Page["An error occured while deleting the page"]
                 };
             }
 
             return new StatusMessage
             {
                 Type = StatusMessage.Success,
-                Body = "The page was successfully deleted"
+                Body = _localizer.Page["The page was successfully deleted"]
             };
+        }
+
+        /// <summary>
+        /// Saves the given model
+        /// </summary>
+        /// <param name="model">The model</param>
+        /// <returns>The result of the operation</returns>
+        private async Task<PageEditModel> Save(PageEditModel model, bool draft = false)
+        {
+            try
+            {
+                await _service.Save(model, draft);
+            }
+            catch (ValidationException e)
+            {
+                model.Status = new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = e.Message
+                };
+
+                return model;
+            }
+            /*
+            catch
+            {
+                return new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = "An error occured while saving the page"
+                };
+            }
+            */
+
+            var ret = await _service.GetById(model.Id);
+            ret.Status = new StatusMessage
+            {
+                Type = StatusMessage.Success,
+                Body = draft ? _localizer.Page["The page was successfully saved"]
+                    : string.IsNullOrEmpty(model.Published) ? _localizer.Page["The page was successfully unpublished"] : _localizer.Page["The page was successfully published"]
+            };
+
+            return ret;
         }
     }
 }

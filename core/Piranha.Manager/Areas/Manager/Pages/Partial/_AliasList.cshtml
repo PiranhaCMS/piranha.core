@@ -1,4 +1,4 @@
-@inject IViewLocalizer Localizer
+@inject ManagerLocalizer Localizer
 
 <div class="container-fluid">
     <div class="row">
@@ -6,9 +6,9 @@
             <table class="table table-borderless">
                 <thead>
                     <tr>
-                        <th>@Localizer["Alias URL"]</th>
-                        <th>@Localizer["Redirect URL"]</th>
-                        <th class="text-center">@Localizer["Permanent"]</th>
+                        <th>@Localizer.Alias["Alias URL"]</th>
+                        <th>@Localizer.Alias["Redirect URL"]</th>
+                        <th class="text-center">@Localizer.Alias["Permanent"]</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -24,7 +24,7 @@
         </div>
         <div v-else class="col">
             <div class="empty-info">
-                <p>@Localizer["Looks like there's no items here. Click on the button above to get started!"]</p>
+                <p>@Localizer.General["Looks like there's no items here. Click on the button above to get started!"]</p>
             </div>
         </div>
     </div>
