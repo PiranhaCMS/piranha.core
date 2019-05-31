@@ -45,6 +45,9 @@
   <data name="The page was successfully published" xml:space="preserve">
     <value>Sidan har publicerats</value>
   </data>
+  <data name="The page was successfully unpublished" xml:space="preserve">
+    <value>Sidan har avpublicerats</value>
+  </data>
   <data name="The page was successfully saved" xml:space="preserve">
     <value>Sidan har sparats</value>
   </data>

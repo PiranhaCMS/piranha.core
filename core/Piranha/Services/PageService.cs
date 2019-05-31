@@ -476,12 +476,6 @@ namespace Piranha.Services
                 model.Slug = Utils.GenerateSlug(model.Slug);
             }
 
-            // Ensure publish date
-            if (!isDraft && !model.Published.HasValue)
-            {
-                model.Published = DateTime.Now;
-            }
-
             // Check if we're changing the state
             var current = await _repo.GetById<PageInfo>(model.Id);
             var changeState = IsPublished(current) != IsPublished(model);

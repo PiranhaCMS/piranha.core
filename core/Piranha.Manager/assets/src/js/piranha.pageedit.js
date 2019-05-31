@@ -78,7 +78,19 @@ piranha.pageedit = new Vue({
                 .catch(function (error) { console.log("error:", error );
             });
         },
-        save: function (draft) {
+        save: function ()
+        {
+            this.saveInternal(piranha.baseUrl + "manager/api/page/save");
+        },
+        saveDraft: function ()
+        {
+            this.saveInternal(piranha.baseUrl + "manager/api/page/save/draft");
+        },
+        unpublish: function ()
+        {
+            this.saveInternal(piranha.baseUrl + "manager/api/page/save/unpublish");
+        },
+        saveInternal: function (route) {
             var self = this;
 
             var model = {
@@ -96,11 +108,6 @@ piranha.pageedit = new Vue({
                 blocks: JSON.parse(JSON.stringify(piranha.pageedit.blocks)),
                 regions: JSON.parse(JSON.stringify(piranha.pageedit.regions))
             };
-
-            var route = piranha.baseUrl + "manager/api/page/save";
-            if (draft === true) {
-                route += "/draft";
-            }
 
             fetch(route, {
                 method: "post",
