@@ -30,7 +30,7 @@ namespace Piranha.Cache
         /// <summary>
         /// If returned objects should be cloned.
         /// </summary>
-        private readonly bool _clone = true;
+        private readonly bool _clone = false;
 
         /// <summary>
         /// Gets the model with the specified key from cache.

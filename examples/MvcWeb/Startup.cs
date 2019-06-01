@@ -55,7 +55,7 @@ namespace MvcWeb
                 options.UseSqlite("Filename=./piranha.mvcweb.db"));
 
             services.AddMemoryCache();
-            services.AddPiranhaMemoryCache(clone: false);
+            services.AddPiranhaMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

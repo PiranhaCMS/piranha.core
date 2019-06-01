@@ -15,12 +15,12 @@ namespace Piranha.Cache
     /// <summary>
     /// Simple in memory cache.
     /// </summary>
-    public class MemoryCacheWithoutClone : MemoryCache
+    public class MemoryCacheWithClone : MemoryCache
     {
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="cache">The currently configured cache</param>
-        public MemoryCacheWithoutClone(IMemoryCache cache) : base(cache, false) { }
+        public MemoryCacheWithClone(IMemoryCache cache) : base(cache, true) { }
     }
 }

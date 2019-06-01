@@ -17,12 +17,12 @@ namespace Piranha.Cache
     /// <summary>
     /// Simple in memory cache.
     /// </summary>
-    public class SimpleCacheWithoutClone : SimpleCache
+    public class SimpleCacheWithClone : SimpleCache
     {
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="clone">If returned objects should be cloned</param>
-        public SimpleCacheWithoutClone() : base(false) { }
+        public SimpleCacheWithClone() : base(true) { }
     }
 }

@@ -53,13 +53,13 @@ public static class PiranhaExtensions
     /// <param name="services">The current service collection</param>
     /// <param name="clone">If returned objects should be cloned</param>
     /// <returns>The updated service collection</returns>
-    public static IServiceCollection AddPiranhaMemoryCache(this IServiceCollection services, bool clone = true)
+    public static IServiceCollection AddPiranhaMemoryCache(this IServiceCollection services, bool clone = false)
     {
         if (clone)
         {
-            return services.AddSingleton<ICache, MemoryCache>();
+            return services.AddSingleton<ICache, MemoryCacheWithClone>();
         }
-        return services.AddSingleton<ICache, MemoryCacheWithoutClone>();
+        return services.AddSingleton<ICache, MemoryCache>();
     }
 
     /// <summary>
@@ -68,12 +68,12 @@ public static class PiranhaExtensions
     /// <param name="services">The current service collection</param>
     /// <param name="clone">If returned objects should be cloned</param>
     /// <returns>The updated service collection</returns>
-    public static IServiceCollection AddPiranhaSimpleCache(this IServiceCollection services, bool clone = true)
+    public static IServiceCollection AddPiranhaSimpleCache(this IServiceCollection services, bool clone = false)
     {
         if (clone)
         {
-            return services.AddSingleton<ICache, SimpleCache>();
+            return services.AddSingleton<ICache, SimpleCacheWithClone>();
         }
-        return services.AddSingleton<ICache, SimpleCacheWithoutClone>();
+        return services.AddSingleton<ICache, SimpleCache>();
     }
 }
