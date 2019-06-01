@@ -75,6 +75,16 @@ $thumbnail-margin-bottom: 1rem;
 $thumbnail-border-color: $white;
 $thumbnail-border-width: 2px;
 
+// Inverted tabs
+
+$nav-tabs-inverted-border-color: $gray-300;
+$nav-tabs-inverted-border-width: 1px;
+$nav-tabs-inverted-border-radius: $border-radius;
+$nav-tabs-inverted-link-hover-border-color: $nav-tabs-inverted-border-color $gray-200 $gray-200;
+$nav-tabs-inverted-link-active-color: $gray-700;
+$nav-tabs-inverted-link-active-bg: $white;
+$nav-tabs-inverted-link-active-border-color: $nav-tabs-inverted-link-active-bg $gray-300 $gray-300;
+
 // Progress bars
 
 $progress-bg: $gray-400;

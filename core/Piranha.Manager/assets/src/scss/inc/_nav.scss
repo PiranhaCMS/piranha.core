@@ -1,0 +1,40 @@
+@import "mixins";
+@import "variables";
+
+.nav-tabs-inverted {
+    border-top: $nav-tabs-inverted-border-width solid $nav-tabs-inverted-border-color;
+
+    .nav-item {
+        margin-top: -$nav-tabs-inverted-border-width;
+    }
+
+    .nav-link {
+        border: $nav-tabs-inverted-border-width solid transparent;
+        @include border-bottom-radius($nav-tabs-inverted-border-radius);
+
+        &:hover,
+        &:focus {
+            border-color: $nav-tabs-inverted-link-hover-border-color;
+        }
+
+        &.disabled {
+            color: $nav-link-disabled-color;
+            background-color: transparent;
+            border-color: transparent;
+        }
+    }
+
+    .nav-link.active,
+    .nav-item.show .nav-link {
+        color: $nav-tabs-inverted-link-active-color;
+        background-color: $nav-tabs-inverted-link-active-bg;
+        border-color: $nav-tabs-inverted-link-active-border-color;
+    }
+
+    .dropdown-menu {
+        // Make dropdown border overlap tab border
+        margin-bottom: -$nav-tabs-inverted-border-width;
+        // Remove the top rounded corners here since there is a hard edge above the menu
+        @include border-bottom-radius(0);
+    }
+}
