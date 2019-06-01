@@ -20,10 +20,6 @@ namespace MvcWeb
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddJsonLocalization(options =>
-            //{
-            //    options.ResourcesPath = "Resources";
-            //});
             services.AddLocalization(options =>
                 options.ResourcesPath = "Resources"
             );
@@ -34,13 +30,6 @@ namespace MvcWeb
                 {
                     options.SerializerSettings.TypeNameHandling = TypeNameHandling.Auto;
                 })
-/*
-                .AddRazorPagesOptions(options =>
-                {
-                    options.Conventions.AddPageRoute("/Areas/Manager/PageEdit", "manager/page/add");
-
-                })
-*/
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddPiranha();
