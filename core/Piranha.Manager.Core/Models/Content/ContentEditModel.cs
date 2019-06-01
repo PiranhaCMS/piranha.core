@@ -35,6 +35,11 @@ namespace Piranha.Manager.Models.Content
         public string Title { get; set; }
 
         /// <summary>
+        /// Gets/sets if blocks should be used.
+        /// </summary>
+        public bool UseBlocks { get; set; } = true;
+
+        /// <summary>
         /// Gets/sets the available blocks.
         /// </summary>
         public IList<BlockModel> Blocks { get; set; } = new List<BlockModel>();
@@ -43,5 +48,10 @@ namespace Piranha.Manager.Models.Content
         /// Gets/sets the available regions.
         /// </summary>
         public IList<RegionModel> Regions { get; set; } = new List<RegionModel>();
+
+        /// <summary>
+        /// Gets/sets the available custom editors.
+        /// </summary>
+        public IList<EditorModel> Editors { get; set; } = new List<EditorModel>();
     }
 }

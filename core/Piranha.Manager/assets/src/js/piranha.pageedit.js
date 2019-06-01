@@ -20,6 +20,8 @@ piranha.pageedit = new Vue({
         state: "new",
         blocks: [],
         regions: [],
+        editors: [],
+        useBlocks: true,
         selectedRegion: {
             uid: "uid-blocks",
             name: null,
@@ -55,6 +57,20 @@ piranha.pageedit = new Vue({
             this.state = model.state;
             this.blocks = model.blocks;
             this.regions = model.regions;
+            this.editors = model.editors;
+            this.useBlocks = model.useBlocks;
+
+            if (!this.useBlocks) {
+                // First choice, select the first custom editor
+                if (this.editors.length > 0) {
+                    this.selectedRegion = this.editors[0];
+                }
+
+                // Second choice, select the first content region
+                else if (this.contentRegions.length > 0) {
+                    this.selectedRegion = this.contentRegions[0].meta;
+                }
+            }
         },
         load: function (id) {
             var self = this;

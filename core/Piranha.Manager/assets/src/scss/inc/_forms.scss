@@ -8,11 +8,9 @@
         input {
             font-family: Bitter, serif;
             font-size: 2.25rem;
-            border-color: #fff;
-            transition: border-color ease-in-out .2s;
+            border-color: $gray-400;
 
             &:hover, &:focus {
-                border-color: $gray-400;
                 outline: none;
                 box-shadow: none;
             }

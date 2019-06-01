@@ -76,3 +76,18 @@
         }
     }
 }
+
+.card-body {
+    .table {
+        tbody {
+            tr {
+                background: $body-bg;
+                border-top: solid 2px $white;
+
+                &.unpublished {
+                    opacity: .6;
+                }
+            }
+        }
+    }
+}

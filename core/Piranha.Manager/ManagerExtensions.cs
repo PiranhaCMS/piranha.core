@@ -36,6 +36,7 @@ public static class ManagerModuleExtensions
         services.AddScoped<MediaService>();
         services.AddScoped<ModuleService>();
         services.AddScoped<PageService>();
+        services.AddScoped<PostService>();
 
         // Add localization service
         services.AddScoped<ManagerLocalizer>();

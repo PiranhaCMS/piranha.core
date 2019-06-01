@@ -30,9 +30,17 @@ namespace MvcWeb
             services.AddMvc()
                 .AddViewLocalization()
                 .AddDataAnnotationsLocalization()
-                .AddJsonOptions(options => {
+                .AddJsonOptions(options =>
+                {
                     options.SerializerSettings.TypeNameHandling = TypeNameHandling.Auto;
                 })
+/*
+                .AddRazorPagesOptions(options =>
+                {
+                    options.Conventions.AddPageRoute("/Areas/Manager/PageEdit", "manager/page/add");
+
+                })
+*/
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddPiranha();
@@ -47,7 +55,7 @@ namespace MvcWeb
                 options.UseSqlite("Filename=./piranha.mvcweb.db"));
 
             services.AddMemoryCache();
-            services.AddPiranhaMemoryCache();
+            services.AddPiranhaMemoryCache(clone: false);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

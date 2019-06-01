@@ -240,6 +240,55 @@ namespace MvcWeb
                 }
                 blogpost.Published = DateTime.Now;
                 await api.Posts.SaveAsync(blogpost);
+
+                // Unpublished Post
+                blogpost = Models.BlogPost.Create(api);
+                blogpost.BlogId = blogpage.Id;
+                blogpost.Title = "What is Piranha unpublished";
+                blogpost.Category = "Piranha CMS";
+                blogpost.Tags.Add("welcome");
+
+                using (var stream = File.OpenRead("seed/blogpost.md"))
+                {
+                    using (var reader = new StreamReader(stream))
+                    {
+                        var body = reader.ReadToEnd();
+
+                        foreach (var block in body.Split("@"))
+                        {
+                            blogpost.Blocks.Add(new HtmlBlock
+                            {
+                                Body = App.Markdown.Transform(block.Trim())
+                            });
+                        }
+                    }
+                }
+                await api.Posts.SaveAsync(blogpost);
+
+                // Scheduled Post
+                blogpost = Models.BlogPost.Create(api);
+                blogpost.BlogId = blogpage.Id;
+                blogpost.Title = "What is Piranha scheduled";
+                blogpost.Category = "Another category";
+                blogpost.Tags.Add("welcome");
+
+                using (var stream = File.OpenRead("seed/blogpost.md"))
+                {
+                    using (var reader = new StreamReader(stream))
+                    {
+                        var body = reader.ReadToEnd();
+
+                        foreach (var block in body.Split("@"))
+                        {
+                            blogpost.Blocks.Add(new HtmlBlock
+                            {
+                                Body = App.Markdown.Transform(block.Trim())
+                            });
+                        }
+                    }
+                }
+                blogpost.Published = DateTime.Now.AddDays(7);
+                await api.Posts.SaveAsync(blogpost);
             }
         }
     }

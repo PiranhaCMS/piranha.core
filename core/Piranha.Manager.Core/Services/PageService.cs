@@ -285,7 +285,8 @@ namespace Piranha.Manager.Services
                 MetaKeywords = page.MetaKeywords,
                 MetaDescription = page.MetaDescription,
                 Published = page.Published.HasValue ? page.Published.Value.ToString("yyyy-MM-dd HH:mm") : null,
-                State = GetState(page, isDraft)
+                State = GetState(page, isDraft),
+                UseBlocks = type.UseBlocks
             };
 
             foreach (var regionType in type.Regions)
@@ -441,6 +442,17 @@ namespace Piranha.Manager.Services
                         }
                     });
                 }
+            }
+
+            // Custom editors
+            foreach (var editor in type.CustomEditors)
+            {
+                model.Editors.Add(new EditorModel
+                {
+                    Component = editor.Component,
+                    Icon = editor.Icon,
+                    Name = editor.Title
+                });
             }
             return model;
         }
