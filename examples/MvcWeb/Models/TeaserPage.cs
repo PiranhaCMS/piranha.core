@@ -8,9 +8,9 @@
  *
  */
 
-using System.Collections.Generic;
 using Piranha.AttributeBuilder;
 using Piranha.Models;
+using System.Collections.Generic;
 
 namespace MvcWeb.Models
 {

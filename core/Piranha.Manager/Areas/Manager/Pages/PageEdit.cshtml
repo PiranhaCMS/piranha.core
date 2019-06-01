@@ -44,8 +44,11 @@
                 <li class="breadcrumb-item active" aria-current="page">@Localizer.General["Edit"]</li>
             </ol>
         </nav>
-
         <partial name="Partial/_PageMenu" />
+    </div>
+
+    <div class="container-fluid">
+        <partial name="Partial/_RegionSelector" />
     </div>
 
     <div class="container-fluid app" :class="{ ready: !loading }">
@@ -116,6 +119,10 @@
                     <region v-bind:model="region"></region>
                 </div>
             </div>
+        </div>
+
+        <div class="card" :class="{ 'd-none': selectedRegion.uid != 'settings' }">
+            Settings!
         </div>
     </div>
 

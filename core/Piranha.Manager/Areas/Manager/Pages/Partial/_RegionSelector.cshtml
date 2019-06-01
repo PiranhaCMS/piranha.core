@@ -1,0 +1,11 @@
+@inject ManagerLocalizer Localizer
+
+<div class="card" v-if="regions.length > 0">
+    <div class="card-body region-selector">
+        <span>@Localizer.General["Edit region"]: </span>
+
+        <a href="#" class="btn btn-primary" v-if="useBlocks" :class="{ 'active' : selectedRegion.uid != 'uid-blocks' }" v-on:click.prevent="selectRegion({ uid: 'uid-blocks' })">@Localizer.General["Main content"]</a>
+        <a href="#" class="btn btn-primary" :class="{ 'active' : selectedRegion.uid != editor.uid }" v-on:click.prevent="selectRegion(editor)" v-for="editor in editors">{{ editor.name }}</a>
+        <a href="#" class="btn btn-primary" :class="{ 'active' : selectedRegion.uid != region.meta.uid }" v-on:click.prevent="selectRegion(region.meta)" v-for="region in contentRegions">{{ region.meta.name }}</a>
+    </div>
+</div>
