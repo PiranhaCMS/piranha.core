@@ -1,0 +1,50 @@
+@import "variables";
+
+#login {
+    .container {
+        max-width: 360px;
+        margin-top: 6rem;
+    }
+
+    .card-body {
+        padding: 2rem;
+
+        &.card-body-logo {
+            background: $primary url("../img/seigaiha-overlay.png");
+            color: $white;
+            text-align: center;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+
+            .logo {
+                background: url("../img/logo.png") no-repeat 50% 50%;
+                height: 150px;
+                margin-bottom: 1rem;
+            }
+
+            p {
+                font: 300 32px "Open Sans",Arial;
+                text-transform: uppercase;
+                margin-bottom: 0;
+
+                small {
+                    display: block;
+                    font-size: .8rem;
+                    font-weight: 400;
+                    text-transform: none;
+                    opacity: .6;
+                }
+            }
+        }
+
+        &.card-body-form {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+
+            .form-control {
+                background: $gray-100;
+                border: 0;
+            }
+        }
+    }
+}
