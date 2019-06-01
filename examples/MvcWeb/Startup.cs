@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
-using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using Newtonsoft.Json;
 using Piranha;
 using Piranha.AspNetCore.Identity.SQLite;
