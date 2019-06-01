@@ -1,12 +1,10 @@
 @import "variables";
 
 .top {
-    background: $white;
-    height: 3.3rem;
+    //background: $white;
     margin-bottom: 1rem;
 
     .breadcrumb {
-        position: absolute;
         z-index: 1010;
     }
 

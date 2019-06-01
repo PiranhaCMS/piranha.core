@@ -11,16 +11,23 @@
 <div id="media">
     <div class="top">
         <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
+            <ol class="breadcrumb mb-0">
                 <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
                 <li class="breadcrumb-item active" aria-current="page">@Localizer.Menu["Media"]</li>
             </ol>
-        </nav>
+        </nav>        
+
+        <ul class="nav nav-tabs-inverted mb-3">
+            <li class="nav-item ">
+                <a href="#" v-on:click.prevent="showList" v-bind:class="{ active: listView }" class="nav-link" ><i class="fas fa-list"></i> @Localizer.Media["List"]</a>               
+            </li>
+            <li class="nav-item">
+                 <a href="#" v-on:click.prevent="showGallery" v-bind:class="{ active: !listView }" class="nav-link"><i class="fas fa-table"></i> @Localizer.Media["Gallery"]</a>
+            </li>
+        </ul>
 
         <div class="container-fluid">
             <div class="top-nav">
-                <button v-if="listView" v-on:click.prevent="toggle" class="btn btn-secondary"><i class="fas fa-table"></i></button>
-                <button v-if="!listView" v-on:click.prevent="toggle" class="btn btn-secondary"><i class="fas fa-list"></i></button>
                 <button class="btn btn-primary btn-labeled" data-toggle="modal" data-target="#mediaFolderModal">
                     <i class="fas fa-plus"></i>@Localizer.Media["Add folder"]
                 </button>

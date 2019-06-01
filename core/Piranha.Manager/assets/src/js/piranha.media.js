@@ -48,8 +48,11 @@ piranha.media = new Vue({
             console.log("Media ID", mediaId);
             console.log("Folder ID", folder.id);
         },
-        toggle: function () {
-            this.listView = !this.listView;
+        showList: function () {
+            this.listView = true;
+        },
+        showGallery: function () {
+            this.listView = false;
         },
         load: function (id) {
             fetch(piranha.baseUrl + "manager/api/media/list" + (id ? "/" + id : ""))
