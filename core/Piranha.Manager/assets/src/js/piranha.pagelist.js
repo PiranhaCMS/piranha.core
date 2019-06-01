@@ -45,6 +45,7 @@ piranha.pagelist = new Vue({
 
             $('.sitemap-container').nestable('destroy');
             $(".sitemap-container").nestable({
+                maxDepth: 100,
                 group: 1
             }).on('change', function (e) {
                 console.log("changed: ", $(e.target).nestable("serialize"));
