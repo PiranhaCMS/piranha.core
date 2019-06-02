@@ -9,6 +9,7 @@
  */
 
 using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Piranha.Manager.Models;
 using Piranha.Manager.Services;
@@ -20,6 +21,7 @@ namespace Piranha.Manager.Controllers
     /// </summary>
     [Area("Manager")]
     [Route("manager/api/config")]
+    [Authorize(Policy = Permission.Admin)]
     [ApiController]
     public class ConfigApiController : Controller
     {
@@ -39,6 +41,7 @@ namespace Piranha.Manager.Controllers
         /// <returns>The list model</returns>
         [Route("")]
         [HttpGet]
+        [Authorize(Policy = Permission.Config)]
         public ConfigModel List()
         {
             return _service.Get();
@@ -50,6 +53,7 @@ namespace Piranha.Manager.Controllers
         /// <param name="model">The config model</param>
         [Route("save")]
         [HttpPost]
+        [Authorize(Policy = Permission.ConfigEdit)]
         public AsyncResult Save(ConfigModel model)
         {
             try

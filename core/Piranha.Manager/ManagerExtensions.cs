@@ -49,6 +49,11 @@ public static class ManagerModuleExtensions
 
         // Setup authorization policies
         services.AddAuthorization(o => {
+            // Admin policy
+            o.AddPolicy(Permission.Admin, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+            });
+
             // Alias policies
             o.AddPolicy(Permission.Aliases, policy => {
                 policy.RequireClaim(Permission.Admin, Permission.Admin);

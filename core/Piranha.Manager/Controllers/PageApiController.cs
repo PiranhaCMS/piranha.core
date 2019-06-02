@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Piranha.Manager.Models;
@@ -25,6 +26,7 @@ namespace Piranha.Manager.Controllers
     /// </summary>
     [Area("Manager")]
     [Route("manager/api/page")]
+    [Authorize(Policy = Permission.Admin)]
     [ApiController]
     public class PageApiController : Controller
     {
@@ -46,6 +48,7 @@ namespace Piranha.Manager.Controllers
         /// <returns>The list model</returns>
         [Route("list")]
         [HttpGet]
+        [Authorize(Policy = Permission.Pages)]
         public async Task<PageListModel> List()
         {
             return await _service.GetList();
@@ -58,6 +61,7 @@ namespace Piranha.Manager.Controllers
         /// <returns>The page edit model</returns>
         [Route("{id:Guid}")]
         [HttpGet]
+        [Authorize(Policy = Permission.PagesEdit)]
         public async Task<PageEditModel> Get(Guid id)
         {
             return await _service.GetById(id);
@@ -70,6 +74,7 @@ namespace Piranha.Manager.Controllers
         /// <returns>The page edit model</returns>
         [Route("create/{typeId}")]
         [HttpGet]
+        [Authorize(Policy = Permission.PagesAdd)]
         public async Task<PageEditModel> Create(string typeId)
         {
             return await _service.Create(typeId);
@@ -83,6 +88,7 @@ namespace Piranha.Manager.Controllers
         /// <returns>The result of the operation</returns>
         [Route("save")]
         [HttpPost]
+        [Authorize(Policy = Permission.PagesPublish)]
         public Task<PageEditModel> Save(PageEditModel model)
         {
             // Ensure that we have a published date
@@ -101,6 +107,7 @@ namespace Piranha.Manager.Controllers
         /// <returns>The result of the operation</returns>
         [Route("save/draft")]
         [HttpPost]
+        [Authorize(Policy = Permission.PagesSave)]
         public Task<PageEditModel> SaveDraft(PageEditModel model)
         {
             return Save(model, true);
@@ -113,6 +120,7 @@ namespace Piranha.Manager.Controllers
         /// <returns>The result of the operation</returns>
         [Route("save/unpublish")]
         [HttpPost]
+        [Authorize(Policy = Permission.PagesPublish)]
         public Task<PageEditModel> SaveUnpublish(PageEditModel model)
         {
             // Remove published date
@@ -123,6 +131,7 @@ namespace Piranha.Manager.Controllers
 
         [Route("revert/{id}")]
         [HttpGet]
+        [Authorize(Policy = Permission.PagesSave)]
         public async Task<PageEditModel> Revert(Guid id)
         {
             var page = await _service.GetById(id, false);
@@ -150,6 +159,7 @@ namespace Piranha.Manager.Controllers
         /// <returns>The result of the operation</returns>
         [Route("delete/{id}")]
         [HttpGet]
+        [Authorize(Policy = Permission.PagesDelete)]
         public async Task<StatusMessage> Delete(Guid id)
         {
             try

@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Piranha.Manager.Models;
@@ -25,6 +26,7 @@ namespace Piranha.Manager.Controllers
     /// </summary>
     [Area("Manager")]
     [Route("manager/api/post")]
+    [Authorize(Policy = Permission.Admin)]
     [ApiController]
     public class PostApiController : Controller
     {
@@ -46,6 +48,7 @@ namespace Piranha.Manager.Controllers
         /// <returns>The list model</returns>
         [Route("list/{id}")]
         [HttpGet]
+        [Authorize(Policy = Permission.Posts)]
         public async Task<PostListModel> List(Guid id)
         {
             return await _service.GetList(id);

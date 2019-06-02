@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Piranha.Manager.Models;
 using Piranha.Manager.Services;
@@ -25,6 +26,7 @@ namespace Piranha.Manager.Controllers
     /// </summary>
     [Area("Manager")]
     [Route("manager/api/media")]
+    [Authorize(Policy = Permission.Admin)]
     [ApiController]
     public class MediaApiController : Controller
     {
@@ -94,6 +96,7 @@ namespace Piranha.Manager.Controllers
 
         [Route("folder/save")]
         [HttpPost]
+        [Authorize(Policy = Permission.MediaAddFolder)]
         public async Task<IActionResult> SaveFolder(MediaFolderModel model)
         {
             try
@@ -123,6 +126,7 @@ namespace Piranha.Manager.Controllers
         }
 
         [Route("folder/delete/{id:Guid}")]
+        [Authorize(Policy = Permission.MediaDeleteFolder)]
         public async Task<IActionResult> DeleteFolder(Guid id)
         {
             try
@@ -158,6 +162,7 @@ namespace Piranha.Manager.Controllers
         [HttpPost]
         [Route("upload")]
         [Consumes("multipart/form-data")]
+        [Authorize(Policy = Permission.MediaAdd)]
         public async Task<IActionResult> Upload([FromForm] MediaUploadModel model)
         {
             // Allow for dropzone uploads
@@ -206,6 +211,7 @@ namespace Piranha.Manager.Controllers
         }
 
         [Route("delete/{id:Guid}")]
+        [Authorize(Policy = Permission.MediaDelete)]
         public async Task<IActionResult> Delete(Guid id)
         {
             try

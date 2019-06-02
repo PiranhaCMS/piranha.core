@@ -11,6 +11,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Piranha.Manager.Models;
 using Piranha.Manager.Services;
@@ -22,6 +23,7 @@ namespace Piranha.Manager.Controllers
     /// </summary>
     [Area("Manager")]
     [Route("manager/api/alias")]
+    [Authorize(Policy = Permission.Admin)]
     [ApiController]
     public class AliasApiController : Controller
     {
@@ -45,6 +47,7 @@ namespace Piranha.Manager.Controllers
         /// <returns>The list model</returns>
         [Route("list")]
         [HttpGet]
+        [Authorize(Policy = Permission.Aliases)]
         public async Task<AliasListModel> List()
         {
             return await _service.GetList();
@@ -57,6 +60,7 @@ namespace Piranha.Manager.Controllers
         /// <returns>The updated list model</returns>
         [Route("save")]
         [HttpPost]
+        [Authorize(Policy = Permission.AliasesEdit)]
         public async Task<IActionResult> Save(AliasListModel.ListItem model)
         {
             try
@@ -93,6 +97,7 @@ namespace Piranha.Manager.Controllers
         /// <returns>The updated list model</returns>
         [Route("delete/{id:Guid}")]
         [HttpGet]
+        [Authorize(Policy = Permission.AliasesDelete)]
         public async Task<IActionResult> Delete(Guid id)
         {
             var alias = await _service.Delete(id);

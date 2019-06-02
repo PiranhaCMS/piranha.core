@@ -9,6 +9,7 @@
  */
 
 using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Piranha.Manager.Models;
 using Piranha.Manager.Services;
@@ -20,6 +21,7 @@ namespace Piranha.Manager.Controllers
     /// </summary>
     [Area("Manager")]
     [Route("manager/api/module")]
+    [Authorize(Policy = Permission.Admin)]
     [ApiController]
     public class ModuleApiController : Controller
     {
@@ -39,6 +41,7 @@ namespace Piranha.Manager.Controllers
         /// <returns>The list model</returns>
         [Route("list")]
         [HttpGet]
+        [Authorize(Policy = Permission.Modules)]
         public ModuleListModel List()
         {
             return _service.GetList();
