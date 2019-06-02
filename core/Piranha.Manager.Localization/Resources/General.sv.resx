@@ -13,108 +13,108 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>Lägg till</value>
   </data>
   <data name="Content" xml:space="preserve">
-    <value>Content</value>
+    <value>Innehåll</value>
   </data>
   <data name="Content type" xml:space="preserve">
-    <value>Content type</value>
+    <value>Innehållstyp</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Radera</value>
   </data>
   <data name="Details" xml:space="preserve">
-    <value>Details</value>
+    <value>Detaljer</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>Ladda ner</value>
   </data>
   <data name="Filename" xml:space="preserve">
-    <value>Filename</value>
+    <value>Filnamn</value>
   </data>
   <data name="Height" xml:space="preserve">
-    <value>Height</value>
+    <value>Höjd</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>Redigera</value>
   </data>
   <data name="Empty" xml:space="preserve">
-    <value>Empty</value>
+    <value>Tom</value>
   </data>
   <data name="General" xml:space="preserve">
-    <value>General</value>
+    <value>Generellt</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+    <value>Logga ut</value>
   </data>
   <data name="Looks like there's no items here. Click on the button above to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button above to get started!</value>
+    <value>Här var det tomt. Klicka på knappen ovanför för att komma igång!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button below to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button below to get started!</value>
+    <value>Här var det tomt. Klicka på knappen nedanför för att komma igång!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button to the left to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button to the left to get started!</value>
+    <value>Här var det tomt. Klicka på knappen till vänster för att komma igång!</value>
   </data>
   <data name="Main content" xml:space="preserve">
-    <value>Main content</value>
+    <value>Primärt innehåll</value>
   </data>
   <data name="Modified" xml:space="preserve">
-    <value>Modified</value>
+    <value>Ändrad</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>Namn</value>
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
-    <value>Open public URL in new tab</value>
+    <value>Öppna i ny flik</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Preview</value>
+    <value>Förhandsgranska</value>
   </data>
   <data name="Publish" xml:space="preserve">
-    <value>Publish</value>
+    <value>Publicera</value>
   </data>
   <data name="Publish date" xml:space="preserve">
-    <value>Publish date</value>
+    <value>Publiceringsdatum</value>
   </data>
   <data name="Revert" xml:space="preserve">
-    <value>Revert</value>
+    <value>Återgå</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>Spara</value>
   </data>
   <data name="Search..." xml:space="preserve">
-    <value>Search...</value>
+    <value>Sök...</value>
   </data>
   <data name="Select block" xml:space="preserve">
-    <value>Select block</value>
+    <value>Välj block</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Inställningar</value>
   </data>
   <data name="Size" xml:space="preserve">
-    <value>Size</value>
+    <value>Storlek</value>
   </data>
   <data name="Slug" xml:space="preserve">
-    <value>Slug</value>
+    <value>URL-segment</value>
   </data>
   <data name="System" xml:space="preserve">
     <value>System</value>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Update</value>
+    <value>Uppdatera</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Type</value>
+    <value>Typ</value>
   </data>
   <data name="Unpublish" xml:space="preserve">
-    <value>Unpublish</value>
+    <value>Avpublicera</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Version</value>
   </data>
   <data name="Width" xml:space="preserve">
-    <value>Width</value>
+    <value>Bredd</value>
   </data>
 </root>
