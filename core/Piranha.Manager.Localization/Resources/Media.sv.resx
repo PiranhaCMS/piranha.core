@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Add folder" xml:space="preserve">
+    <value>Lägg till mapp</value>
+  </data>
+  <data name="Drop files here or click to upload." xml:space="preserve">
+    <value>Dra filer hit eller klicka för att ladda upp.</value>
+  </data>
+  <data name="Download media" xml:space="preserve">
+    <value>Ladda ner media</value>
+  </data>
+  <data name="Folder name" xml:space="preserve">
+    <value>Mappnamn</value>
+  </data>
+  <data name="Gallery" xml:space="preserve">
+    <value>Galleri</value>
+  </data>
+  <data name="Media" xml:space="preserve">
+    <value>Media</value>
+  </data>
+  <data name="Media preview is not available" xml:space="preserve">
+    <value>Förhandsgranskning är inte tillgänglig</value>
+  </data>
+  <data name="Open media in new tab" xml:space="preserve">
+    <value>Öppna media i ny flik</value>
+  </data>
+  <data name="Select media" xml:space="preserve">
+    <value>Välj media</value>
+  </data>
+  <data name="Your browser does not support the video tag." xml:space="preserve">
+    <value>Din webbläsare stödjer inte video.</value>
+  </data>
+</root>
