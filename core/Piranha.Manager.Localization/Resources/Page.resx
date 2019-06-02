@@ -13,51 +13,51 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add page" xml:space="preserve">
-    <value>Lägg till sida</value>
+    <value>Add page</value>
   </data>
   <data name="An error occured while deleting the page" xml:space="preserve">
-    <value>Ett fel inträffade när sidan skulle raderas</value>
+    <value>An error occured while deleting the page</value>
   </data>
   <data name="Edit page" xml:space="preserve">
-    <value>Redigera sida</value>
+    <value>Edit page</value>
   </data>
   <data name="Hidden" xml:space="preserve">
-    <value>Dold</value>
+    <value>Hidden</value>
   </data>
   <data name="If the page should be hidden in the sitemap" xml:space="preserve">
-    <value>Om sidan ska vara dold i sitemap</value>
+    <value>If the page should be hidden in the sitemap</value>
   </data>
   <data name="Meta keywords" xml:space="preserve">
-    <value>Nyckelord</value>
+    <value>Meta keywords</value>
   </data>
   <data name="Meta description" xml:space="preserve">
-    <value>Beskrivning</value>
+    <value>Meta description</value>
   </data>
   <data name="Navigation title" xml:space="preserve">
-    <value>Navigeringstitel</value>
+    <value>Navigation title</value>
   </data>
   <data name="Pages" xml:space="preserve">
-    <value>Sidor</value>
+    <value>Pages</value>
   </data>
   <data name="The page was successfully deleted" xml:space="preserve">
-    <value>Sidan har raderats</value>
+    <value>The page was successfully deleted</value>
   </data>
   <data name="The page was successfully published" xml:space="preserve">
-    <value>Sidan har publicerats</value>
+    <value>The page was successfully published</value>
   </data>
   <data name="The page was successfully unpublished" xml:space="preserve">
-    <value>Sidan har avpublicerats</value>
+    <value>The page was successfully unpublished</value>
   </data>
   <data name="The page was successfully saved" xml:space="preserve">
-    <value>Sidan har sparats</value>
+    <value>he page was successfully saved</value>
   </data>
   <data name="The page was successfully reverted to its previous state" xml:space="preserve">
-    <value>Sidan har återställts till föregående version</value>
+    <value>The page was successfully reverted to its previous state</value>
   </data>
   <data name="Welcome to your new page. Click on the button above to add your first block of content!" xml:space="preserve">
-    <value>Välkommen till din nya sida. Klicka på knappen ovan för att börja lägga till innehåll!</value>
+    <value>Welcome to your new page. Click on the button above to add your first block of content!</value>
   </data>
   <data name="Your page title" xml:space="preserve">
-    <value>Din sidtitel</value>
+    <value>Your page title</value>
   </data>
 </root>

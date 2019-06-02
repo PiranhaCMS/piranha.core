@@ -16,105 +16,105 @@
     <value>Lägg till</value>
   </data>
   <data name="Content" xml:space="preserve">
-    <value>Innehåll</value>
+    <value>Content</value>
   </data>
   <data name="Content type" xml:space="preserve">
-    <value>Innehållstyp</value>
+    <value>Content type</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Radera</value>
+    <value>Delete</value>
   </data>
   <data name="Details" xml:space="preserve">
-    <value>Detaljer</value>
+    <value>Details</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Ladda ner</value>
+    <value>Download</value>
   </data>
   <data name="Filename" xml:space="preserve">
-    <value>Filnamn</value>
+    <value>Filename</value>
   </data>
   <data name="Height" xml:space="preserve">
-    <value>Höjd</value>
+    <value>Height</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Redigera</value>
+    <value>Edit</value>
   </data>
   <data name="Empty" xml:space="preserve">
-    <value>Tom</value>
+    <value>Empty</value>
   </data>
   <data name="General" xml:space="preserve">
-    <value>Generellt</value>
+    <value>General</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Logga ut</value>
+    <value>Logout</value>
   </data>
   <data name="Looks like there's no items here. Click on the button above to get started!" xml:space="preserve">
-    <value>Här var det tomt. Klicka på knappen ovanför för att komma igång!</value>
+    <value>Looks like there's no items here. Click on the button above to get started!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button below to get started!" xml:space="preserve">
-    <value>Här var det tomt. Klicka på knappen nedanför för att komma igång!</value>
+    <value>Looks like there's no items here. Click on the button below to get started!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button to the left to get started!" xml:space="preserve">
-    <value>Här var det tomt. Klicka på knappen till vänster för att komma igång!</value>
+    <value>Looks like there's no items here. Click on the button to the left to get started!</value>
   </data>
   <data name="Main content" xml:space="preserve">
-    <value>Primärt innehåll</value>
+    <value>Main content</value>
   </data>
   <data name="Modified" xml:space="preserve">
-    <value>Ändrad</value>
+    <value>Modified</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Namn</value>
+    <value>Name</value>
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
-    <value>Öppna i ny flik</value>
+    <value>Open public URL in new tab</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Förhandsvisning</value>
+    <value>Preview</value>
   </data>
   <data name="Publish" xml:space="preserve">
-    <value>Publicera</value>
+    <value>Publish</value>
   </data>
   <data name="Publish date" xml:space="preserve">
-    <value>Publiceringsdatum</value>
+    <value>Publish date</value>
   </data>
   <data name="Revert" xml:space="preserve">
-    <value>Återgå</value>
+    <value>Revert</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Spara</value>
+    <value>Save</value>
   </data>
   <data name="Search..." xml:space="preserve">
-    <value>Sök...</value>
+    <value>Search...</value>
   </data>
   <data name="Select block" xml:space="preserve">
-    <value>Välj block</value>
+    <value>Select block</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Inställningar</value>
+    <value>Settings</value>
   </data>
   <data name="Size" xml:space="preserve">
-    <value>Storlek</value>
+    <value>Size</value>
   </data>
   <data name="Slug" xml:space="preserve">
-    <value>URL-segment</value>
+    <value>Slug</value>
   </data>
   <data name="System" xml:space="preserve">
     <value>System</value>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Uppdatera</value>
+    <value>Update</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Typ</value>
+    <value>Type</value>
   </data>
   <data name="Unpublish" xml:space="preserve">
-    <value>Avpublicera</value>
+    <value>Unpublish</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Version</value>
   </data>
   <data name="Width" xml:space="preserve">
-    <value>Bredd</value>
+    <value>Width</value>
   </data>
 </root>
