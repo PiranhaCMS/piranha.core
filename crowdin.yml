@@ -1,4 +1,4 @@
 files:
-  - source: /core/Piranha.Manager.Localization/Resources/
+  - source: '/core/Piranha.Manager.Localization/Resources/[A-Z]*.resx'
     translation: >-
       /core/Piranha.Manager.Localization/Resources/%file_name%.%two_letters_code%.%file_extension%
