@@ -13,28 +13,28 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Config" xml:space="preserve">
-    <value>Konfiguration</value>
+    <value>Config</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>Hierarkiska URL:er</value>
+    <value>Hierarchical page slugs</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>Om sidors URL-segment ska skapas utifrån sin förälder</value>
+    <value>If page slugs should include the parent slug.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
-    <value>Antal expanderade nivåer i sidstruktur</value>
+    <value>Expanded levels in the sitemap</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
-    <value>Arkivstorlek</value>
+    <value>Archive page size</value>
   </data>
   <data name="Caching" xml:space="preserve">
-    <value>Cache</value>
+    <value>Caching</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Giltighet för sidor (minuter)</value>
+    <value>Page cache expiration (minutes)</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Giltighet för artiklar (minuter)</value>
+    <value>Post cache expiration (minutes)</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
     <value>Media CDN</value>
