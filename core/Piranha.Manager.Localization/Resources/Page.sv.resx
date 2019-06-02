@@ -25,7 +25,7 @@
     <value>Dold</value>
   </data>
   <data name="If the page should be hidden in the sitemap" xml:space="preserve">
-    <value>Om sidan ska vara dold i sitemap</value>
+    <value>Om sidan ska vara dold i sidstrukturen</value>
   </data>
   <data name="Meta keywords" xml:space="preserve">
     <value>Nyckelord</value>
