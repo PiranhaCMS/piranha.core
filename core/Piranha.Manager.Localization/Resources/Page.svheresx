@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Add page" xml:space="preserve">
+    <value>Lägg till sida</value>
+  </data>
+  <data name="An error occured while deleting the page" xml:space="preserve">
+    <value>Ett fel inträffade när sidan skulle raderas</value>
+  </data>
+  <data name="Edit page" xml:space="preserve">
+    <value>Redigera sida</value>
+  </data>
+  <data name="Hidden" xml:space="preserve">
+    <value>Dold</value>
+  </data>
+  <data name="If the page should be hidden in the sitemap" xml:space="preserve">
+    <value>Om sidan ska vara dold i sitemap</value>
+  </data>
+  <data name="Meta keywords" xml:space="preserve">
+    <value>Nyckelord</value>
+  </data>
+  <data name="Meta description" xml:space="preserve">
+    <value>Beskrivning</value>
+  </data>
+  <data name="Navigation title" xml:space="preserve">
+    <value>Navigeringstitel</value>
+  </data>
+  <data name="Pages" xml:space="preserve">
+    <value>Sidor</value>
+  </data>
+  <data name="The page was successfully deleted" xml:space="preserve">
+    <value>Sidan har raderats</value>
+  </data>
+  <data name="The page was successfully published" xml:space="preserve">
+    <value>Sidan har publicerats</value>
+  </data>
+  <data name="The page was successfully unpublished" xml:space="preserve">
+    <value>Sidan har avpublicerats</value>
+  </data>
+  <data name="The page was successfully saved" xml:space="preserve">
+    <value>Sidan har sparats</value>
+  </data>
+  <data name="The page was successfully reverted to its previous state" xml:space="preserve">
+    <value>Sidan har återställts till föregående version</value>
+  </data>
+  <data name="Welcome to your new page. Click on the button above to add your first block of content!" xml:space="preserve">
+    <value>Välkommen till din nya sida. Klicka på knappen ovan för att börja lägga till innehåll!</value>
+  </data>
+  <data name="Your page title" xml:space="preserve">
+    <value>Din sidtitel</value>
+  </data>
+</root>
