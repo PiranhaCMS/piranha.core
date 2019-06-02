@@ -15,5 +15,6 @@
                 <li class="nav-item@(ViewBag.MenuItem == item.InternalId ? " active" :"")"><a href="@Url.Content(item.Route)" class="nav-link" tabindex="-1"><i class="@item.Css"></i>@Localizer.Menu[item.Name]</a></li>
             }
         }
+        <li class="nav-item nav-header"><a class="navbar-text" href="~/manager/logout"><i class="fas fa-power-off"></i>@Localizer.Menu["Logout"]</a></li>
     </ul>
 </nav>

@@ -23,6 +23,10 @@ namespace MvcWeb
                 options.ResourcesPath = "Resources"
             );
             services.AddMvc()
+                .AddRazorPagesOptions(options => {
+                    options.Conventions.AuthorizeAreaFolder("Manager", "/");
+                    options.Conventions.AllowAnonymousToAreaPage("Manager", "/login");
+                })
                 .AddViewLocalization()
                 .AddDataAnnotationsLocalization()
                 .AddJsonOptions(options =>

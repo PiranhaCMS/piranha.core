@@ -15,6 +15,10 @@
             width: 200px;
         }
 
+        a:hover {
+            text-decoration: none;
+        }
+
         .nav-item {
             position: relative;
             white-space: nowrap;

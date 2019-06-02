@@ -1,6 +1,9 @@
 @page "~/manager/login"
+@model LoginModel
 @inject ManagerLocalizer Localizer
-
+@{
+    Layout = null;
+}
 
 <!doctype html>
 <html lang="en">
@@ -14,7 +17,7 @@
 </head>
 <body id="login">
     <div class="container">
-        <form action="post">
+        <form method="post">
             <div class="card card-login">
                 <div class="card-body card-body-logo">
                     <div class="logo">
@@ -26,10 +29,10 @@
                 </div>
                 <div class="card-body card-body-form">
                     <div class="form-group">
-                        <input type="text" class="form-control form-control-lg text-center" placeholder="@Localizer.General["username"]">
+                        <input name="username" type="text" class="form-control form-control-lg text-center" placeholder="@Localizer.General["username"]">
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control form-control-lg text-center" placeholder="@Localizer.General["password"]">
+                        <input name="password" type="password" class="form-control form-control-lg text-center" placeholder="@Localizer.General["password"]">
                     </div>
                     <button class="btn btn-lg btn-block btn-primary" type="submit">
                         <i class="fas fa-check"></i>
