@@ -9,22 +9,13 @@
 }
 
 <div id="media">
-    <div class="top">
+    <div class="top mb-0">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0">
                 <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
                 <li class="breadcrumb-item active" aria-current="page">@Localizer.Menu["Media"]</li>
             </ol>
-        </nav>        
-
-        <ul class="nav nav-tabs-inverted mb-3">
-            <li class="nav-item ">
-                <a href="#" v-on:click.prevent="showList" v-bind:class="{ active: listView }" class="nav-link" ><i class="fas fa-list"></i> @Localizer.Media["List"]</a>               
-            </li>
-            <li class="nav-item">
-                 <a href="#" v-on:click.prevent="showGallery" v-bind:class="{ active: !listView }" class="nav-link"><i class="fas fa-table"></i> @Localizer.Media["Gallery"]</a>
-            </li>
-        </ul>
+        </nav>  
 
         <div class="container-fluid">
             <div class="top-nav">
@@ -34,6 +25,17 @@
             </div>
         </div>
     </div>
+
+    <nav class="mb-3">
+        <ul class="nav nav-tabs-inverted">
+            <li class="nav-item ">
+                <a href="#" v-on:click.prevent="showList" v-bind:class="{ active: listView }" class="nav-link" ><i class="fas fa-list"></i> @Localizer.Media["List"]</a>               
+            </li>
+            <li class="nav-item">
+                 <a href="#" v-on:click.prevent="showGallery" v-bind:class="{ active: !listView }" class="nav-link"><i class="fas fa-table"></i> @Localizer.Media["Gallery"]</a>
+            </li>
+        </ul>
+    </nav>
 
     <div class="container-fluid">
         <div id="media-upload-container" class="dropzone-container">
