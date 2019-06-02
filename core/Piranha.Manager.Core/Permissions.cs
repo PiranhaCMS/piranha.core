@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 namespace Piranha.Manager
@@ -13,7 +13,7 @@ namespace Piranha.Manager
     /// <summary>
     /// The available manager permissions.
     /// </summary>
-    public static class Permission 
+    public static class Permission
     {
         public const string Admin = "PiranhaAdmin";
         public const string Aliases = "PiranhaAliases";
