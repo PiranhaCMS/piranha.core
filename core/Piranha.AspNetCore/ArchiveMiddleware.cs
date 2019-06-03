@@ -10,10 +10,9 @@
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading.Tasks;
 using Piranha.AspNetCore.Services;
 using Piranha.Web;
+using System.Threading.Tasks;
 
 namespace Piranha.AspNetCore
 {
@@ -37,22 +36,36 @@ namespace Piranha.AspNetCore
             {
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
                 var siteId = service.Site.Id;
+                bool authorized = true;
 
                 var response = await ArchiveRouter.InvokeAsync(api, url, siteId);
+
                 if (response != null)
                 {
                     _logger?.LogInformation($"Found archive\n  Route: {response.Route}\n  Params: {response.QueryString}");
 
-                    service.PageId = response.PageId;
-                    context.Request.Path = new PathString(response.Route);
-
-                    if (context.Request.QueryString.HasValue)
+                    if (!response.IsPublished)
                     {
-                        context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&" + response.QueryString);
+                        if (!context.User.HasClaim(Security.Permission.PagePreview, Security.Permission.PagePreview))
+                        {
+                            _logger?.LogInformation($"User not authorized to preview unpublished archive page");
+                            authorized = false;
+                        }
                     }
-                    else
+
+                    if (authorized)
                     {
-                        context.Request.QueryString = new QueryString("?" + response.QueryString);
+                        service.PageId = response.PageId;
+                        context.Request.Path = new PathString(response.Route);
+
+                        if (context.Request.QueryString.HasValue)
+                        {
+                            context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&" + response.QueryString);
+                        }
+                        else
+                        {
+                            context.Request.QueryString = new QueryString("?" + response.QueryString);
+                        }
                     }
                 }
             }
