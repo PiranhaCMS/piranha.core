@@ -28,12 +28,12 @@
     <value>Permanent</value>
   </data>
   <data name="If the redirect should be permanent" xml:space="preserve">
-    <value>If the redirect should be permanent</value>
+    <value>Soll die Umleitung permanent sein</value>
   </data>
   <data name="The alias was successfully added to the list" xml:space="preserve">
-    <value>The alias was successfully added to the list</value>
+    <value>Der Alias wurde erfolgreich zur Liste hinzugefügt</value>
   </data>
   <data name="The alias was successfully deleted" xml:space="preserve">
-    <value>The alias was successfully deleted</value>
+    <value>Der Alias wurde erfolgreich gelöscht</value>
   </data>
 </root>
