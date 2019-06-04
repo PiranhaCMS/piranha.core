@@ -16,7 +16,7 @@
     <value>Konfiguration</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>Hierarchical page slugs</value>
+    <value>Hierarchische Seitentitle für die Url</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
     <value>If page slugs should include the parent slug.</value>
