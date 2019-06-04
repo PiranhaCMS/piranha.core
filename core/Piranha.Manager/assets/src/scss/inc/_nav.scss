@@ -38,3 +38,21 @@
         @include border-bottom-radius(0);
     }
 }
+
+.nav-tabs {
+    &.nav-tabs-card {
+        border: 0;
+
+        .nav-link {
+            border: 0;
+
+            &.active {
+                background: $white;
+            }
+
+            i {
+                margin-right: .25rem;
+            }
+        }
+    }
+}

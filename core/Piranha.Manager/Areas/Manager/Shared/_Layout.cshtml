@@ -9,15 +9,15 @@
     <title>@ViewBag.Title</title>
 </head>
 <body>
-    <partial name="Partial/_Menu" />
+    <partial name="~/Areas/Manager/Shared/Partial/_Menu.cshtml" />
 
     @RenderBody()
 
-    <partial name="Partial/_BlockPickerModal" />
-    <partial name="Partial/_MediaPickerModal" />
-    <partial name="Partial/_PreviewModal" />
-    <partial name="Partial/_Notifications" />
-    <partial name="Partial/_MediaUploadTemplate" />
+    <partial name="~/Areas/Manager/Shared/Partial/_BlockPickerModal.cshtml" />
+    <partial name="~/Areas/Manager/Shared/Partial/_MediaPickerModal.cshtml" />
+    <partial name="~/Areas/Manager/Shared/Partial/_PreviewModal.cshtml" />
+    <partial name="~/Areas/Manager/Shared/Partial/_Notifications.cshtml" />
+    <partial name="~/Areas/Manager/Shared/Partial/_MediaUploadTemplate.cshtml" />
 
     <script>
         var piranha = {};
@@ -29,7 +29,7 @@
 
     <script src="~/manager/assets/js/piranha.min.js"></script>
 
-    <partial name="Partial/_Resources" />
+    <partial name="~/Areas/Manager/Shared/Partial/_Resources.cshtml" />
 
     @RenderSection("script", required: false)
 </body>

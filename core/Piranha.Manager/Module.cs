@@ -32,6 +32,7 @@ namespace Piranha.Manager
             new PermissionItem { Name = Permission.MediaDelete, Title = "Delete Media", Category = "Media" },
             new PermissionItem { Name = Permission.MediaDeleteFolder, Title = "Delete Media Folders", Category = "Media" },
             new PermissionItem { Name = Permission.MediaEdit, Title = "Edit Media", Category = "Media" },
+            new PermissionItem { Name = Permission.Modules, Title = "List Modules", Category = "Modules" },
             new PermissionItem { Name = Permission.Pages, Title = "List Pages", Category = "Pages" },
             new PermissionItem { Name = Permission.PagesAdd, Title = "Add Pages", Category = "Pages" },
             new PermissionItem { Name = Permission.PagesDelete, Title = "Delete Pages", Category = "Pages" },

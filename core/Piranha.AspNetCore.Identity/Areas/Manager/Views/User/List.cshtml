@@ -1,60 +1,57 @@
 @using Piranha.AspNetCore.Identity
 @model Piranha.AspNetCore.Identity.Models.UserListModel
+@inject ManagerLocalizer Localizer
 @{
     ViewBag.Title = "Users";
-    ViewBag.Controller = "User";
+    ViewBag.MenuItem = "User";
 }
 
-<div class="row">
-    <div class="col-sm-12 buttons">
-        <a href="@Url.Action("Add")" class="btn btn-labeled btn-primary pull-right">
-            <span class="btn-label">
-                <i class="fas fa-plus"></i>
-            </span>Add user
-        </a>
+<div class="top">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">@Localizer.General["Settings"]</li>
+            <li class="breadcrumb-item active" aria-current="page">Users</li>
+        </ol>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="top-nav">
+            <a href="@Url.Action("Add")" class="btn btn-primary btn-labeled">
+                <i class="fas fa-plus"></i>@Localizer.General["Add"]
+            </a>
+        </div>
     </div>
 </div>
 
-@if (!string.IsNullOrWhiteSpace(ViewBag.Message))
-{
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="@ViewBag.MessageCss">
-                @Html.Raw(ViewBag.Message)
-            </div>
-        </div>
-    </div>
-}
-
-<table class="table table-striped table-main">
-    <thead>
-    <tr>
-        <th>Username</th>
-        <th>Email</th>
-        <th>Roles</th>
-        <th class="actions one"></th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var user in Model.Users)
-    {
+<div class="container-fluid">
+    <table class="table table-borderless">
+        <thead>
         <tr>
-            <td class="text-limit-cell">
-                <span class="text-limit">
-                    <img src="@Utils.GetGravatarUrl(user.Email, 25)" alt="Gravatar for @user.Email" style="padding-right: 10px">
-                    <a href="@Url.Action("Edit", new {id = user.Id})">@user.UserName</a>
-                </span>
-            </td>
-            <td>@user.Email</td>
-            <td>
-                @string.Join(", ", user.Roles)
-            </td>
-            <td class="actions one">
-                <a class="remove" href="@Url.Action("Delete", new {id = user.Id})">
-                    <span class="fas fa-trash text-danger"></span>
-                </a>
-            </td>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Roles</th>
+            <th class="actions one"></th>
         </tr>
-    }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>
+                    <img src="@Utils.GetGravatarUrl(user.Email, 25)" alt="Gravatar for @user.Email" style="padding-right: 10px">
+                    <a href="@Url.Action("Edit", new { id = user.Id })">@user.UserName</a>
+                </td>
+                <td>@user.Email</td>
+                <td>
+                    @string.Join(", ", user.Roles)
+                </td>
+                <td class="actions one">
+                    <a class="remove" href="@Url.Action("Delete", new {id = user.Id})">
+                        <span class="fas fa-trash text-danger"></span>
+                    </a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

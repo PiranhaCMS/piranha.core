@@ -11,6 +11,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <ProjectReference Include="..\Piranha\Piranha.csproj" />
     <ProjectReference Include="..\Piranha.Manager\Piranha.Manager.csproj" />
+    <ProjectReference Include="..\Piranha.Manager.Localization\Piranha.Manager.Localization.csproj" />
   </ItemGroup>
 
 </Project>
