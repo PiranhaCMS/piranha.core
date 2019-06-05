@@ -10,3 +10,16 @@
     top: 50%;
 	right: 0;
 }
+
+@mixin arrow-bottom($color, $size, $margin) {
+	content: "";
+	display: block;
+	width: 0;
+	height: 0;
+	border: solid $size transparent;
+	border-bottom-color: $color;
+	position: absolute;
+    margin-left: $margin;
+    bottom: 0;
+	left: 50%;
+}

@@ -39,15 +39,17 @@
     }
 }
 
-.nav-tabs {
-    &.nav-tabs-card {
-        border: 0;
+.nav-pills {
+    &.nav-pills-card {
+        background: $white;
+        padding: 1rem 1rem 0;
 
         .nav-link {
-            border: 0;
+            background: $white;
 
             &.active {
-                background: $white;
+                background: $body-bg;
+                color: $gray-700;
             }
 
             i {
