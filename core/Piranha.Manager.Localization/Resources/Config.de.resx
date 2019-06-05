@@ -13,30 +13,30 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Config" xml:space="preserve">
-    <value>Config</value>
+    <value>Konfiguration</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>Hierarchical page slugs</value>
+    <value>Hierarchische Seitentitle für die Url</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>If page slugs should include the parent slug.</value>
+    <value>Wenn der Seitentitel für die Url den Seitentitel des Eltern Url Titels enthalten soll.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
-    <value>Expanded levels in the sitemap</value>
+    <value>Klappt die Ebenen in der Sitemap auf</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
-    <value>Archive page size</value>
+    <value>Seitegröße des Archivs</value>
   </data>
   <data name="Caching" xml:space="preserve">
     <value>Caching</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Page cache expiration (minutes)</value>
+    <value>Ablaufzeit des Seiten Caches (in Minuten)</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Post cache expiration (minutes)</value>
+    <value>Ablaufzeit des Beitrags Caches (in Minuten)</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
-    <value>Media CDN</value>
+    <value>Medien CDN</value>
   </data>
 </root>
