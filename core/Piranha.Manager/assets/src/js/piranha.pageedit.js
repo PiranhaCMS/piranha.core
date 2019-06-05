@@ -134,10 +134,16 @@ piranha.pageedit = new Vue({
             })
             .then(function (response) { return response.json(); })
             .then(function (result) {
+                var oldState = self.state;
+
+                self.id = result.id;
                 self.slug = result.slug;
                 self.published = result.published;
                 self.state = result.state;
 
+                if (oldState === 'new' && result.state !== 'new') {
+                    window.history.replaceState({ state: "created"}, "Edit page", piranha.baseUrl + "manager/page/edit/" + result.id);
+                }
                 piranha.notifications.push(result.status);
             })
             .catch(function (error) {
