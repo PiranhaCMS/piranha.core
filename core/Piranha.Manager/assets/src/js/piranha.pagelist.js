@@ -41,14 +41,28 @@ piranha.pagelist = new Vue({
     updated: function () {
         if (this.updateBindings)
         {
-            console.log("binding nestable");
-
             $('.sitemap-container').nestable('destroy');
             $(".sitemap-container").nestable({
                 maxDepth: 100,
                 group: 1
             }).on('change', function (e) {
-                console.log("changed: ", $(e.target).nestable("serialize"));
+                fetch(piranha.baseUrl + "manager/api/page/move", {
+                    method: "post",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        items: $(e.target).nestable("serialize")
+                    })
+                })
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    piranha.notifications.push(result);
+                })
+                .catch(function (error) {
+                    console.log("error:", error);
+                });
+                //console.log("changed: ", $(e.target).nestable("serialize"));
             });
 
             this.updateBindings = false;

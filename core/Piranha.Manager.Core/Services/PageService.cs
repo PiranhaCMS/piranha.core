@@ -249,6 +249,35 @@ namespace Piranha.Manager.Services
             return _api.Pages.DeleteAsync(id);
         }
 
+        /// <summary>
+        /// Updates the sitemap according to the given structure. Please note
+        /// that only the first page that has changed position is moved.
+        /// </summary>
+        /// <param name="structure">The page structure</param>
+        public async Task<bool> MovePages(StructureModel structure)
+        {
+            Guid? siteId = null;
+
+            if (structure.Items.Count > 0)
+            {
+                var page = await _api.Pages.GetByIdAsync<PageInfo>(new Guid(structure.Items[0].Id));
+
+                if (page != null)
+                {
+                    siteId = page.SiteId;
+                }
+            }
+
+            for (var n = 0; n < structure.Items.Count; n++)
+            {
+                if (await MovePage(structure.Items[n], n))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private PageListModel.PageItem MapRecursive(SitemapItem item)
         {
             var model = new PageListModel.PageItem
@@ -266,6 +295,32 @@ namespace Piranha.Manager.Services
                 model.Items.Add(MapRecursive(child));
             }
             return model;
+        }
+
+        private async Task<bool> MovePage(StructureModel.StructureItem page, int sortOrder = 1, Guid? parentId = null)
+        {
+            var model = await _api.Pages.GetByIdAsync<PageInfo>(new Guid(page.Id));
+
+            if (model != null)
+            {
+                if (model.ParentId != parentId || model.SortOrder != sortOrder)
+                {
+                    // Move the page in the structure.
+                    await _api.Pages.MoveAsync(model, parentId, sortOrder);
+
+                    // We only move one page at a time so we're done
+                    return true;
+                }
+
+                for (var n = 0; n < page.Children.Count; n++)
+                {
+                    if (await MovePage(page.Children[n], n, new Guid(page.Id)))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         private PageEditModel Transform(DynamicPage page, bool isDraft)
