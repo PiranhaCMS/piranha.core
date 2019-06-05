@@ -1,10 +1,16 @@
-﻿<!doctype html>
+﻿@{
+    var module = Piranha.App.Modules.Get<Piranha.Manager.Module>();
+}
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="stylesheet" href="~/manager/assets/css/slim.min.css">
+    @foreach (var style in module.Styles) {
+    <link href="@Url.Content(style)" rel="stylesheet" type="text/css" />
+    }
 
     <title>@ViewBag.Title</title>
 </head>
@@ -31,6 +37,9 @@
 
     <partial name="~/Areas/Manager/Shared/Partial/_Resources.cshtml" />
 
+    @foreach (var script in module.Scripts) {
+    <script type="text/javascript" src="@Url.Content(script)"></script>
+    }
     @RenderSection("script", required: false)
 </body>
 </html>
