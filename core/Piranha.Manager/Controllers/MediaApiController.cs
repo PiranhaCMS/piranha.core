@@ -210,6 +210,40 @@ namespace Piranha.Manager.Controllers
             }
         }
 
+        [Route("move/{mediaId}/{folderId?}")]
+        [Authorize(Policy = Permission.MediaEdit)]
+        public async Task<IActionResult> Move(Guid mediaId, Guid? folderId)
+        {
+            try
+            {
+                var media = await _api.Media.GetByIdAsync(mediaId);
+                if (media != null)
+                {
+                    await _api.Media.MoveAsync(media, folderId);
+
+                    return Ok(new StatusMessage
+                    {
+                        Type = StatusMessage.Success,
+                        Body = $"{media.Filename} was successfully moved."
+                    });
+                }
+
+                return BadRequest(new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = "Media was not found."
+                });
+            }            
+            catch (Exception e)
+            {
+                return BadRequest(new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = e.Message
+                });
+            }
+        }
+
         [Route("delete/{id:Guid}")]
         [Authorize(Policy = Permission.MediaDelete)]
         public async Task<IActionResult> Delete(Guid id)

@@ -14,7 +14,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="droppable" v-if="currentFolderId != null">
+                    <tr class="droppable" v-if="currentFolderId != null" v-on:dragover="dragover" v-on:dragleave="dragleave" v-on:drop="drop($event, parentFolderId)">
                         <td>
                             <a href="#" v-on:click.prevent="load(parentFolderId)"><i class="fas fa-folder-open"></i>...</a>
                         </td>
@@ -23,7 +23,7 @@
                         <td></td>
                         <td class="actions one"></td>
                     </tr>
-                    <tr class="droppable" v-for="folder in folders" v-on:dragover="dragover" v-on:dragleave="dragleave" v-on:drop="drop($event, folder)">
+                    <tr class="droppable" v-for="folder in folders" v-on:dragover="dragover" v-on:dragleave="dragleave" v-on:drop="drop($event, folder.id)">
                         <td>
                             <a href="#" v-on:click.prevent="load(folder.id)"><i class="fas fa-folder-open"></i>{{ folder.name }}</a>
                         </td>

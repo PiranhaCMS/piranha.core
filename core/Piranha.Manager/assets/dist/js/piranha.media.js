@@ -35,7 +35,7 @@ piranha.media = new Vue({
                 target.classList.remove("active");
             }
         },
-        drop: function (event, folder) {
+        drop: function (event, folderId) {
             event.preventDefault();
 
             var target = event.target.closest(".droppable");
@@ -45,8 +45,16 @@ piranha.media = new Vue({
 
             var mediaId = event.dataTransfer.getData("mediaId");
 
-            console.log("Media ID", mediaId);
-            console.log("Folder ID", folder.id);
+            fetch(piranha.baseUrl + "manager/api/media/move/" + mediaId + "/" + (folderId ? folderId : ""))
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    if (result.type === "success") {
+                        piranha.media.refresh();
+                    }
+                    // Push status to notification hub
+                    piranha.notifications.push(result);
+                })
+                .catch(function (error) { console.log("error:", error); });
         },
         showList: function () {
             this.listView = true;
