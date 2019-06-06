@@ -26,16 +26,18 @@
         </div>
     </div>
 
-    <nav class="mb-3">
-        <ul class="nav nav-tabs-inverted">
-            <li class="nav-item ">
-                <a href="#" v-on:click.prevent="showList" v-bind:class="{ active: listView }" class="nav-link" ><i class="fas fa-list"></i> @Localizer.Media["List"]</a>               
-            </li>
-            <li class="nav-item">
-                 <a href="#" v-on:click.prevent="showGallery" v-bind:class="{ active: !listView }" class="nav-link"><i class="fas fa-table"></i> @Localizer.Media["Gallery"]</a>
-            </li>
-        </ul>
-    </nav>
+    <div class="container-fluid">
+        <nav class="my-3">
+            <ul class="nav nav-pills justify-content-center">
+                <li class="nav-item ">
+                    <a href="#" v-on:click.prevent="showList" v-bind:class="{ active: listView }" class="nav-link" ><i class="fas fa-list"></i> @Localizer.Media["List"]</a>               
+                </li>
+                <li class="nav-item">
+                     <a href="#" v-on:click.prevent="showGallery" v-bind:class="{ active: !listView }" class="nav-link"><i class="fas fa-table"></i> @Localizer.Media["Gallery"]</a>
+                </li>
+            </ul>
+        </nav>    
+    </div>    
 
     <div class="container-fluid">
         <div id="media-upload-container" class="dropzone-container">
