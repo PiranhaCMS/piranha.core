@@ -72,14 +72,20 @@
                                     <th>@Localizer.General["Size"]</th>
                                     <td>{{ media.size }}</td>
                                 </tr>
-                                <tr>
-                                    <th>@Localizer.General["Width"]</th>
-                                    <td>{{ media.width }}</td>
-                                </tr>
-                                <tr>
-                                    <th>@Localizer.General["Height"]</th>
-                                    <td>{{ media.height }}</td>
-                                </tr>
+                                <template v-if="media.width && media.height">
+                                    <tr>
+                                        <th>@Localizer.General["Dimensions"]</th>
+                                        <td>{{ media.width }} x {{ media.height }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>@Localizer.General["Width"]</th>
+                                        <td>{{ media.width }} @Localizer.General["pixels"]</td>
+                                    </tr>
+                                    <tr>
+                                        <th>@Localizer.General["Height"]</th>
+                                        <td>{{ media.height }} @Localizer.General["pixels"]</td>
+                                    </tr>
+                                </template>
                                 <tr>
                                     <th>@Localizer.General["Modified"]</th>
                                     <td>{{ media.lastModified }}</td>
