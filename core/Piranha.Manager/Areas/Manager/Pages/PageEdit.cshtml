@@ -75,6 +75,7 @@
                     <div class="col">
                         <div class="form-group title">
                             <input v-model="title" type="text" class="form-control form-control-lg" placeholder="@Localizer.Page["Your page title"]">
+                            <span v-if="state === 'draft'" class="badge badge-info"><i class="fas fa-pen"></i> @Localizer.General["Draft"]</span>
                         </div>
                     </div>
                 </div>
