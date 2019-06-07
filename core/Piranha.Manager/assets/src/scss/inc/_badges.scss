@@ -2,12 +2,16 @@
     font-weight: normal;
 }
 
-.title {
+.breadcrumb {
+    .badge-item {
+        position: relative;
+        margin-left: .5rem;
+    }
+
     .badge {
         padding: .5rem 1rem;
         position: absolute;
-        top: -.5rem;
-        right: -.5rem;
+        top: -.175rem;
         text-transform: uppercase;
 
         i {

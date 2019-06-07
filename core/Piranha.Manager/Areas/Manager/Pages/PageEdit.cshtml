@@ -42,6 +42,7 @@
                 <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
                 <li class="breadcrumb-item"><a href="~/manager/pages">@Localizer.Menu["Pages"]</a></li>
                 <li class="breadcrumb-item active" aria-current="page">@Localizer.General["Edit"]</li>
+                <li v-if="state === 'draft'" class="badge-item"><span class="badge badge-info"><i class="fas fa-pen"></i> @Localizer.General["Draft"]</span></li>
             </ol>
         </nav>
 
@@ -75,7 +76,6 @@
                     <div class="col">
                         <div class="form-group title">
                             <input v-model="title" type="text" class="form-control form-control-lg" placeholder="@Localizer.Page["Your page title"]">
-                            <span v-if="state === 'draft'" class="badge badge-info"><i class="fas fa-pen"></i> @Localizer.General["Draft"]</span>
                         </div>
                     </div>
                 </div>
