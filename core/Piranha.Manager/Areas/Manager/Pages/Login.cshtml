@@ -4,6 +4,14 @@
 @{
     Layout = null;
 }
+@section script
+{
+    <script>
+        $(document).ready(function() {
+            $("#username").focus();
+        });
+    </script>
+}
 
 <!doctype html>
 <html lang="en">
@@ -29,7 +37,7 @@
                 </div>
                 <div class="card-body card-body-form">
                     <div class="form-group">
-                        <input name="username" type="text" class="form-control form-control-lg text-center" placeholder="@Localizer.General["username"]">
+                        <input id="username" name="username" type="text" class="form-control form-control-lg text-center" placeholder="@Localizer.General["username"]">
                     </div>
                     <div class="form-group">
                         <input name="password" type="password" class="form-control form-control-lg text-center" placeholder="@Localizer.General["password"]">

@@ -171,10 +171,13 @@ namespace Piranha.Repositories
         {
             var affected = new List<Guid>();
 
+            var source = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId && p.Id != model.Id).ToListAsync().ConfigureAwait(false);
+            var dest = model.ParentId == parentId ? source : await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == parentId).ToListAsync().ConfigureAwait(false);
+
             // Remove the old position for the page
-            affected.AddRange(await MovePages(model.Id, model.SiteId, model.ParentId, model.SortOrder + 1, false).ConfigureAwait(false));
+            affected.AddRange(MovePages(source, model.Id, model.SiteId, model.ParentId, model.SortOrder + 1, false));
             // Add room for the new position of the page
-            affected.AddRange(await MovePages(model.Id, model.SiteId, parentId, sortOrder, true).ConfigureAwait(false));
+            affected.AddRange(MovePages(dest, model.Id, model.SiteId, parentId, sortOrder, true));
 
             // Update the position of the current page
             var page = await _db.Pages
@@ -273,8 +276,10 @@ namespace Piranha.Repositories
                 // Remove the main page.
                 _db.Pages.Remove(model);
 
+                var siblings = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync().ConfigureAwait(false);
+
                 // Move all remaining pages after this page in the site structure.
-                affected.AddRange(await MovePages(id, model.SiteId, model.ParentId, model.SortOrder + 1, false).ConfigureAwait(false));
+                affected.AddRange(MovePages(siblings, id, model.SiteId, model.ParentId, model.SortOrder + 1, false));
 
                 await _db.SaveChangesAsync().ConfigureAwait(false);
             }
@@ -372,7 +377,8 @@ namespace Piranha.Repositories
                             _db.Pages.Add(page);
 
                             // Make room for the new page
-                            affected.AddRange(await MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true));
+                            var dest = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync().ConfigureAwait(false);
+                            affected.AddRange(MovePages(dest, page.Id, model.SiteId, model.ParentId, model.SortOrder, true));
                         }
                     }
                     else
@@ -380,10 +386,13 @@ namespace Piranha.Repositories
                         // Check if the page has been moved
                         if (!isDraft && (page.ParentId != model.ParentId || page.SortOrder != model.SortOrder))
                         {
+                            var source = await _db.Pages.Where(p => p.SiteId == page.SiteId && p.ParentId == page.ParentId && p.Id != model.Id).ToListAsync().ConfigureAwait(false);
+                            var dest = page.ParentId == model.ParentId ? source : await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync().ConfigureAwait(false);
+
                             // Remove the old position for the page
-                            affected.AddRange(await MovePages(page.Id, page.SiteId, page.ParentId, page.SortOrder + 1, false).ConfigureAwait(false));
+                            affected.AddRange(MovePages(source, page.Id, page.SiteId, page.ParentId, page.SortOrder + 1, false));
                             // Add room for the new position of the page
-                            affected.AddRange(await MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true).ConfigureAwait(false));
+                            affected.AddRange(MovePages(dest, page.Id, model.SiteId, model.ParentId, model.SortOrder, true));
                         }
                     }
 
@@ -455,7 +464,8 @@ namespace Piranha.Repositories
                         _db.Pages.Add(page);
 
                         // Make room for the new page
-                        affected.AddRange(await MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true).ConfigureAwait(false));
+                        var dest = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync().ConfigureAwait(false);
+                        affected.AddRange(MovePages(dest, page.Id, model.SiteId, model.ParentId, model.SortOrder, true));
                     }
                 }
                 else
@@ -463,10 +473,13 @@ namespace Piranha.Repositories
                     // Check if the page has been moved
                     if (!isDraft && (page.ParentId != model.ParentId || page.SortOrder != model.SortOrder))
                     {
+                        var source = await _db.Pages.Where(p => p.SiteId == page.SiteId && p.ParentId == page.ParentId && p.Id != model.Id).ToListAsync().ConfigureAwait(false);
+                        var dest = page.ParentId == model.ParentId ? source : await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync().ConfigureAwait(false);
+
                         // Remove the old position for the page
-                        affected.AddRange(await MovePages(page.Id, page.SiteId, page.ParentId, page.SortOrder + 1, false).ConfigureAwait(false));
+                        affected.AddRange(MovePages(source, page.Id, page.SiteId, page.ParentId, page.SortOrder + 1, false));
                         // Add room for the new position of the page
-                        affected.AddRange(await MovePages(page.Id, model.SiteId, model.ParentId, model.SortOrder, true).ConfigureAwait(false));
+                        affected.AddRange(MovePages(dest, page.Id, model.SiteId, model.ParentId, model.SortOrder, true));
                     }
                     page.LastModified = DateTime.Now;
                 }
@@ -669,18 +682,15 @@ namespace Piranha.Repositories
         /// <param name="parentId">The parent id</param>
         /// <param name="sortOrder">The sort order</param>
         /// <param name="increase">If sort order should be increase or decreased</param>
-        private async Task<IEnumerable<Guid>> MovePages(Guid pageId, Guid siteId, Guid? parentId, int sortOrder, bool increase)
+        private IEnumerable<Guid> MovePages(IList<Page> pages, Guid pageId, Guid siteId, Guid? parentId, int sortOrder, bool increase)
         {
-            var pages = await _db.Pages
-                .Where(p => p.SiteId == siteId && p.ParentId == parentId && p.SortOrder >= sortOrder && p.Id != pageId)
-                .ToListAsync()
-                .ConfigureAwait(false);
+            var affected = pages.Where(p => p.SortOrder >= sortOrder).ToList();
 
-            foreach (var page in pages)
+            foreach (var page in affected)
             {
                 page.SortOrder = increase ? page.SortOrder + 1 : page.SortOrder - 1;
             }
-            return pages.Select(p => p.Id).ToList();
+            return affected.Select(p => p.Id).ToList();
         }
     }
 }

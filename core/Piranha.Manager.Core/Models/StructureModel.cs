@@ -8,6 +8,7 @@
  *
  */
 
+using System;
 using System.Collections.Generic;
 
 namespace Piranha.Manager.Models
@@ -34,6 +35,11 @@ namespace Piranha.Manager.Models
                 Children = new List<StructureItem>();
             }
         }
+
+        /// <summary>
+        /// The id of the item to move.
+        /// </summary>
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets/sets the structure items.

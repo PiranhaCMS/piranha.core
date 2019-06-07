@@ -256,26 +256,41 @@ namespace Piranha.Manager.Services
         /// <param name="structure">The page structure</param>
         public async Task<bool> MovePages(StructureModel structure)
         {
-            Guid? siteId = null;
+            var pos = GetPosition(structure.Id, structure.Items);
 
-            if (structure.Items.Count > 0)
+            if (pos != null)
             {
-                var page = await _api.Pages.GetByIdAsync<PageInfo>(new Guid(structure.Items[0].Id));
+                var page = await _api.Pages.GetByIdAsync<PageInfo>(structure.Id);
 
                 if (page != null)
                 {
-                    siteId = page.SiteId;
-                }
-            }
+                    await _api.Pages.MoveAsync(page, pos.Item1, pos.Item2);
 
-            for (var n = 0; n < structure.Items.Count; n++)
-            {
-                if (await MovePage(structure.Items[n], n))
-                {
                     return true;
                 }
             }
             return false;
+        }
+
+        private Tuple<Guid?,int> GetPosition(Guid id, IList<StructureModel.StructureItem> items, Guid? parentId = null)
+        {
+            for (var n = 0; n < items.Count; n++)
+            {
+                if (id == new Guid(items[n].Id))
+                {
+                    return new Tuple<Guid?, int>(parentId, n);
+                }
+                else if (items[n].Children.Count > 0)
+                {
+                    var pos = GetPosition(id, items[n].Children, new Guid(items[n].Id));
+
+                    if (pos != null)
+                    {
+                        return pos;
+                    }
+                }
+            }
+            return null;
         }
 
         private PageListModel.PageItem MapRecursive(SitemapItem item)
@@ -295,32 +310,6 @@ namespace Piranha.Manager.Services
                 model.Items.Add(MapRecursive(child));
             }
             return model;
-        }
-
-        private async Task<bool> MovePage(StructureModel.StructureItem page, int sortOrder = 1, Guid? parentId = null)
-        {
-            var model = await _api.Pages.GetByIdAsync<PageInfo>(new Guid(page.Id));
-
-            if (model != null)
-            {
-                if (model.ParentId != parentId || model.SortOrder != sortOrder)
-                {
-                    // Move the page in the structure.
-                    await _api.Pages.MoveAsync(model, parentId, sortOrder);
-
-                    // We only move one page at a time so we're done
-                    return true;
-                }
-
-                for (var n = 0; n < page.Children.Count; n++)
-                {
-                    if (await MovePage(page.Children[n], n, new Guid(page.Id)))
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
         }
 
         private PageEditModel Transform(DynamicPage page, bool isDraft)
