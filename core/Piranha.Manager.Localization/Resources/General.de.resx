@@ -30,6 +30,9 @@
   <data name="Download" xml:space="preserve">
     <value>Download</value>
   </data>
+  <data name="Draft" xml:space="preserve">
+    <value>Entwurf</value>
+  </data>
   <data name="Filename" xml:space="preserve">
     <value>Dateiname</value>
   </data>
