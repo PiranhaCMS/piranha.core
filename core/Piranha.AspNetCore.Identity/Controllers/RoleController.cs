@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -13,11 +13,12 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Piranha.AspNetCore.Identity.Models;
+using Piranha.Manager.Controllers;
 
 namespace Piranha.AspNetCore.Identity.Controllers
 {
     [Area("Manager")]
-    public class RoleController : Controller
+    public class RoleController : ManagerController
     {
         private readonly IDb _db;
 
@@ -54,11 +55,11 @@ namespace Piranha.AspNetCore.Identity.Controllers
         {
             if (model.Save(_db))
             {
-                //SuccessMessage("The role has been saved.");
+                SuccessMessage("The role has been saved.");
                 return RedirectToAction("Edit", new {id = model.Role.Id});
             }
 
-            //ErrorMessage("The role could not be saved.", false);
+            ErrorMessage("The role could not be saved.", false);
             return View("Edit", model);
         }
 
@@ -74,11 +75,11 @@ namespace Piranha.AspNetCore.Identity.Controllers
                 _db.Roles.Remove(role);
                 _db.SaveChanges();
 
-                //SuccessMessage("The role has been deleted.");
+                SuccessMessage("The role has been deleted.");
                 return RedirectToAction("List");
             }
 
-            //ErrorMessage("The role could not be deleted.", false);
+            ErrorMessage("The role could not be deleted.", false);
             return RedirectToAction("List");
         }
     }

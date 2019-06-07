@@ -31,17 +31,6 @@
         </div>
     </div>
 
-    @if (!string.IsNullOrWhiteSpace(ViewBag.Message))
-    {
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="@ViewBag.MessageCss">
-                    @Html.Raw(ViewBag.Message)
-                </div>
-            </div>
-        </div>
-    }
-
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">

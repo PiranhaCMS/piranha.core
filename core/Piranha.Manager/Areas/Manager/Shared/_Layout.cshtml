@@ -16,7 +16,7 @@
 </head>
 <body>
     <partial name="~/Areas/Manager/Shared/Partial/_Menu.cshtml" />
-
+@ViewBag.MessageType
     @RenderBody()
 
     <partial name="~/Areas/Manager/Shared/Partial/_BlockPickerModal.cshtml" />
@@ -34,6 +34,16 @@
     @RenderSection("partials", required: false)
 
     <script src="~/manager/assets/js/piranha.min.js"></script>
+    @if (!string.IsNullOrWhiteSpace(ViewBag.Message))
+    {
+    <script>
+        piranha.notifications.push({
+            body: "@Html.Raw(ViewBag.Message)",
+            type: "@Html.Raw(ViewBag.MessageCss)",
+            hide: true
+        });
+    </script>
+    }
 
     <partial name="~/Areas/Manager/Shared/Partial/_Resources.cshtml" />
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Piranha.AspNetCore.Identity.Data;
 using Piranha.AspNetCore.Identity.Models;
+using Piranha.Manager.Controllers;
 
 namespace Piranha.AspNetCore.Identity.Controllers
 {
@@ -23,7 +24,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
     /// Manager controller for managing users accounts.
     /// </summary>
     [Area("Manager")]
-    public class UserController : Controller
+    public class UserController : ManagerController
     {
         private readonly IDb _db;
         private readonly UserManager<User> _userManager;
@@ -81,35 +82,35 @@ namespace Piranha.AspNetCore.Identity.Controllers
         {
             if (string.IsNullOrWhiteSpace(model.User.UserName))
             {
-                //ErrorMessage("User name is mandatory.", false);
+                ErrorMessage("User name is mandatory.", false);
                 return View("Edit", model);
             }
 
             if (string.IsNullOrWhiteSpace(model.User.Email))
             {
-                //ErrorMessage("Email is mandatory.", false);
+                ErrorMessage("Email is mandatory.", false);
                 return View("Edit", model);
             }
 
             if (!string.IsNullOrWhiteSpace(model.Password) && model.Password != model.PasswordConfirm)
             {
-                //ErrorMessage($"The new passwords does not match. {model.Password} - {model.PasswordConfirm}", false);
+                ErrorMessage($"The new passwords does not match. {model.Password} - {model.PasswordConfirm}", false);
                 return View("Edit", model);
             }
 
             if (model.User.Id == Guid.Empty && string.IsNullOrWhiteSpace(model.Password))
             {
-                //ErrorMessage("Password is mandatory when creating a new user.", false);
+                ErrorMessage("Password is mandatory when creating a new user.", false);
                 return View("Edit", model);
             }
 
             if (await model.Save(_userManager))
             {
-                //SuccessMessage("The user has been saved.");
+                SuccessMessage("The user has been saved.");
                 return RedirectToAction("Edit", new {id = model.User.Id});
             }
 
-            //ErrorMessage("The user could not be saved.", false);
+            ErrorMessage("The user could not be saved.", false);
             return View("Edit", model);
         }
 
@@ -128,11 +129,11 @@ namespace Piranha.AspNetCore.Identity.Controllers
                 _db.Users.Remove(user);
                 _db.SaveChanges();
 
-                //SuccessMessage("The user has been deleted.");
+                SuccessMessage("The user has been deleted.");
                 return RedirectToAction("List");
             }
 
-            //ErrorMessage("Could not find the user to delete.");
+            ErrorMessage("Could not find the user to delete.");
             return RedirectToAction("List");
         }
     }
