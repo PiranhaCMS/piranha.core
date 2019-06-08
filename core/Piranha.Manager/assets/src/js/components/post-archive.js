@@ -89,9 +89,6 @@ Vue.component("post-archive", {
         "    </div>" +
         "    <button class='btn btn-sm btn-primary btn-labeled float-right'><i class='fas fa-plus'></i>Add item</button>" +
         "  </div>" +
-        "  <div class='mb-4'>" +
-        "    <input type='text' class='form-control' placeholder='Search for a post in the archive'>" +
-        "  </div>" +
         "  <table class='table'>" +
         "    <tbody>" +
         "      <tr v-if='isSelected(post)' v-for='post in items' :class='post.status'>" +
