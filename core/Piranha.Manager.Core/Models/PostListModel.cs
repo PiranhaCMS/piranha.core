@@ -27,6 +27,7 @@ namespace Piranha.Manager.Models
             public string Published { get; set; }
             public string Status { get; set; }
             public string EditUrl { get; set; }
+            public bool isScheduled { get; set; }
         }
 
         public class PostTypeItem

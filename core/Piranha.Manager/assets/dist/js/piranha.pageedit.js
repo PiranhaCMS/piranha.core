@@ -97,7 +97,8 @@ Vue.component("post-archive", {
             items: [],
             categories: [],
             postTypes: [],
-            status: "all"
+            status: "all",
+            category: "All categories"
         }
     },
     methods: {
@@ -126,13 +127,26 @@ Vue.component("post-archive", {
                 .catch(function (error) { console.log("error:", error ); });
         },
         isSelected: function (item) {
+            // Check category
+            if (this.category !== "All categories" && item.category !== this.category) {
+                return false;
+            }
+
+            // Check status
             if (this.status === "draft") {
                 return item.status === "draft" || item.status === "unpublished";
+            } else if (this.status === 'scheduled') {
+                return item.isScheduled;
             }
+
+            // Selected
             return true;
         },
         selectStatus: function (status) {
             this.status = status;
+        },
+        selectCategory: function (category) {
+            this.category = category;
         }
     },
     mounted: function () {
@@ -157,11 +171,12 @@ Vue.component("post-archive", {
         "      </div>" +
         "    </div>" +
         "    <div v-if='categories.length > 1' class='btn-group' role='group'>" +
-        "      <button type='button' class='btn btn-sm btn-light dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
-        "        All categories" +
+        "      <button type='button' class='btn btn-sm dropdown-toggle' :class='category === \"All categories\" ? \"btn-light\" : \"btn-primary\"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
+        "        {{ category }}" +
         "      </button>" +
         "      <div class='dropdown-menu dropdown-menu-right'>" +
-        "        <a v-for='category in categories' href='#' class='dropdown-item'>{{ category.title }}</a>" +
+        "        <a v-on:click.prevent='selectCategory(\"All categories\")' href='#' class='dropdown-item'>All categories</a>" +
+        "        <a v-on:click.prevent='selectCategory(category.title)' v-for='category in categories' href='#' class='dropdown-item'>{{ category.title }}</a>" +
         "      </div>" +
         "    </div>" +
         "    <button class='btn btn-sm btn-primary btn-labeled float-right'><i class='fas fa-plus'></i>Add item</button>" +
