@@ -64,18 +64,18 @@
                         {
                             <li class="list-group-item">
                                 <div class="row">
-                                    <div class="col-xs-4">
+                                    <div class="col-sm-4">
                                         <div class="checkbox">
-                                            <label>
+                                            <label class="mb-0">
                                                 <input type="checkbox" name="SelectedRoles[]" value="@Model.Roles[n].Name" @(Model.SelectedRoles.Contains(Model.Roles[n].Name) ? "checked=checked" : "")> @Model.Roles[n].Name
                                             </label>
                                         </div>
                                     </div>
                                     @if (n + 1 < Model.Roles.Count())
                                     {
-                                        <div class="col-xs-4">
+                                        <div class="col-sm-4">
                                             <div class="checkbox">
-                                                <label>
+                                                <label class="mb-0">
                                                     <input type="checkbox" name="SelectedRoles[]" value="@Model.Roles[n + 1].Name" @(Model.SelectedRoles.Contains(Model.Roles[n + 1].Name) ? "checked=checked" : "")> @Model.Roles[n + 1].Name
                                                 </label>
                                             </div>
@@ -83,9 +83,9 @@
                                     }
                                     @if (n + 2 < Model.Roles.Count())
                                     {
-                                        <div class="col-xs-4">
+                                        <div class="col-sm-4">
                                             <div class="checkbox">
-                                                <label>
+                                                <label class="mb-0">
                                                     <input type="checkbox" name="SelectedRoles[]" value="@Model.Roles[n + 2].Name" @(Model.SelectedRoles.Contains(Model.Roles[n + 2].Name) ? "checked=checked" : "")> @Model.Roles[n + 2].Name
                                                 </label>
                                             </div>
