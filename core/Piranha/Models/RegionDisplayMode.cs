@@ -14,6 +14,7 @@ namespace Piranha.Models
     {
         Content,
         Full,
-        Setting
+        Setting,
+        Hidden
     }
 }

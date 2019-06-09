@@ -1087,7 +1087,7 @@ piranha.pageedit = new Vue({
     computed: {
         contentRegions: function () {
             return this.regions.filter(function (item) {
-                return item.meta.display != "setting";
+                return item.meta.display != "setting" && item.meta.display != "hidden";
             });
         },
         settingRegions: function () {
