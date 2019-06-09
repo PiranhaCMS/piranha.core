@@ -27,7 +27,6 @@ namespace Piranha.Extend.Fields
         /// <summary>
         /// Gets/sets the related page object.
         /// </summary>
-        [JsonIgnore]
         public Models.PageInfo Page { get; private set; }
 
         /// <summary>
@@ -90,7 +89,7 @@ namespace Piranha.Extend.Fields
         /// Implicit operator for converting a page object to a field.
         /// </summary>
         /// <param name="page">The page object</param>
-        public static implicit operator PageField(Models.PageInfo page)
+        public static implicit operator PageField(Models.PageBase page)
         {
             return new PageField { Id = page.Id };
         }

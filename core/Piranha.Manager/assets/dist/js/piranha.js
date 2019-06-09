@@ -20217,6 +20217,72 @@ $(document).ready(function() {
     piranha
 */
 
+piranha.pagepicker = new Vue({
+    el: "#pagepicker",
+    data: {
+        search: '',
+        items: [],
+        currentSiteId: null,
+        filter: null,
+        callback: null,
+    },
+    computed: {
+        filteredItems: function () {
+            return this.items.filter(function (item) {
+                if (piranha.pagepicker.search.length > 0) {
+                    return item.title.toLowerCase().indexOf(piranha.pagepicker.search.toLowerCase()) > -1
+                }
+                return true;
+            });
+        }
+    },
+    methods: {
+        load: function (siteId) {
+            var url = piranha.baseUrl + "manager/api/page/sitemap" + (siteId ? "/" + siteId : "");
+
+            fetch(url)
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    piranha.pagepicker.items = result;
+                    piranha.pagepicker.currentSiteId = siteId;
+                })
+                .catch(function (error) { console.log("error:", error ); });
+        },
+        refresh: function () {
+            piranha.pagepicker.load(piranha.pagepicker.currentSiteId);
+        },
+        open: function (callback, siteId) {
+            this.search = '';
+            this.callback = callback;
+
+            this.load(siteId);
+
+            $("#pagepicker").modal("show");
+        },
+        onEnter: function () {
+            if (this.filteredItems.length == 1 && this.filteredFolders.length == 0) {
+                this.select(this.filteredItems[0]);
+            }
+        },
+        select: function (item) {
+            this.callback(JSON.parse(JSON.stringify(item)));
+            this.callback = null;
+            this.search = "";
+
+            $("#pagepicker").modal("hide");
+        }
+    }
+});
+
+$(document).ready(function() {
+    $("#pagepicker").on("shown.bs.modal", function() {
+        $("#pagepickerSearch").trigger("focus");
+    });
+});
+/*global
+    piranha
+*/
+
 piranha.preview = new Vue({
     el: "#previewModal",
     data: {
@@ -20310,4 +20376,25 @@ $(document).on('focusin', function (e) {
     if ($(e.target).closest(".tox-tinymce-inline").length) {
         e.stopImmediatePropagation();
     }
+});
+/*global
+    piranha
+*/
+
+Vue.component("page-item", {
+    props: ["item"],
+    template:
+        "<li class='dd-item' :data-id='item.id'>" +
+        "  <div class='sitemap-item'>" +
+        "    <div class='link'>" +
+        "      <a href='#' v-on:click.prevent='piranha.pagepicker.select(item)'>" +
+        "        {{ item.title }}" +
+        "      </a>" +
+        "    </div>" +
+        "  </div>" +
+        "  <ol v-if='item.items.length > 0' class='dd-list'>" +
+        "    <page-item v-for='child in item.items' v-bind:key='child.id' v-bind:item='child'>" +
+        "    </page-item>" +
+        "  </ol>" +
+        "</li>"
 });
