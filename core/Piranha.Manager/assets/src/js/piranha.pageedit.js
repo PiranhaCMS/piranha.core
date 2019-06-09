@@ -187,6 +187,9 @@ piranha.pageedit = new Vue({
         moveBlock: function (from, to) {
             this.blocks.splice(to, 0, this.blocks.splice(from, 1)[0])
         },
+        collapseBlock: function (block) {
+            block.meta.isCollapsed = !block.meta.isCollapsed;
+        },
         removeBlock: function (block) {
             var index = this.blocks.indexOf(block);
 

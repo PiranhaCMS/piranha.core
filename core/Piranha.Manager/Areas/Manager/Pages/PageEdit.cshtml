@@ -91,12 +91,16 @@
                         <i class="fas fa-plus-circle"></i>
                     </a>
                     <div v-for="(block, index) in blocks" v-bind:key="block.meta.uid">
-                        <div :class="'block ' + block.meta.component">
+                        <div :class="'block ' + block.meta.component + (block.meta.isCollapsed ? ' collapsed' : '')">
                             <div class="block-header">
                                 <div class="title">
                                     <i :class="block.meta.icon"></i><strong>{{ block.meta.name }}</strong>
                                 </div>
                                 <div class="actions">
+                                    <span v-on:click.prevent="collapseBlock(block)" class="btn btn-sm">
+                                        <i v-if="block.meta.isCollapsed" class="fas fa-chevron-down"></i>
+                                        <i v-else class="fas fa-chevron-up"></i>
+                                    </span>
                                     <span class="btn btn-sm handle">
                                         <i class="fas fa-ellipsis-v"></i>
                                     </span>

@@ -52,6 +52,18 @@
         }
     }
 
+    &.collapsed {
+        border-color: $gray-400;
+        padding-bottom: 0;
+
+        >.block-header {
+            opacity: 1;
+        }
+        >.block-body, >.block-group {
+            display: none;
+        }
+    }
+
     .actions {
         float: right;
 
@@ -62,18 +74,16 @@
             border-radius: 50%;
             transition: all ease-in-out .2s;
 
+            &:hover {
+                background: $gray-400;
+            }
+
             &.danger {
                 color: $danger;
 
                 &:hover {
                     background: $danger;
                     color: $white;
-                }
-            }
-
-            &.handle {
-                &:hover {
-                    background: $gray-400;
                 }
             }
 

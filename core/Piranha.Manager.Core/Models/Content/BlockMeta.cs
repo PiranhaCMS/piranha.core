@@ -21,5 +21,10 @@ namespace Piranha.Manager.Models.Content
         /// Gets/sets if this is a block group.
         /// </summary>
         public bool IsGroup { get; set; } = false;
+
+        /// <summary>
+        /// Gets/sets if the block is collapsed.
+        /// </summary>
+        public bool isCollapsed { get; set; } = false;
     }
 }
