@@ -9,7 +9,7 @@
  */
 
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.WindowsAzure.Storage.Auth;
+using Microsoft.Azure.Storage.Auth;
 using Piranha;
 using Piranha.Azure;
 
