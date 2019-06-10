@@ -22,24 +22,24 @@
     <value>Sistema</value>
   </data>
   <data name="Pages" xml:space="preserve">
-    <value>Pages</value>
+    <value>Páginas</value>
   </data>
   <data name="Media" xml:space="preserve">
     <value>Media</value>
   </data>
   <data name="Aliases" xml:space="preserve">
-    <value>Aliases</value>
+    <value>Alias</value>
   </data>
   <data name="Sites" xml:space="preserve">
-    <value>Sites</value>
+    <value>Sitios</value>
   </data>
   <data name="Config" xml:space="preserve">
-    <value>Config</value>
+    <value>Configuración</value>
   </data>
   <data name="Modules" xml:space="preserve">
-    <value>Modules</value>
+    <value>Módulos</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+    <value>Desconectar</value>
   </data>
 </root>
