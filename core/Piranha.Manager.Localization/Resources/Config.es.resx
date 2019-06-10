@@ -31,10 +31,10 @@
     <value>Caching</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Page cache expiration (minutes)</value>
+    <value>Expiración del caché de página (minutos)</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Post cache expiration (minutes)</value>
+    <value>Expiración de caché de blog posts (minutos)</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
     <value>Media CDN</value>
