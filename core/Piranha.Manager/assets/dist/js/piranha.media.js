@@ -63,13 +63,16 @@ piranha.media = new Vue({
             this.listView = false;
         },
         load: function (id) {
+            var self = this;
+
             fetch(piranha.baseUrl + "manager/api/media/list" + (id ? "/" + id : ""))
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    piranha.media.currentFolderId = result.currentFolderId;
-                    piranha.media.parentFolderId = result.parentFolderId;
-                    piranha.media.folders = result.folders;
-                    piranha.media.items = result.media;
+                    self.currentFolderId = result.currentFolderId;
+                    self.parentFolderId = result.parentFolderId;
+                    self.folders = result.folders;
+                    self.items = result.media;
+                    self.listView = result.viewMode === "list";
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },

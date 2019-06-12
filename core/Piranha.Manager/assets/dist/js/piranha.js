@@ -20141,6 +20141,8 @@ piranha.mediapicker = new Vue({
             this.listView = !this.listView;
         },
         load: function (id) {
+            var self = this;
+
             var url = piranha.baseUrl + "manager/api/media/list" + (id ? "/" + id : "");
             if (this.filter) {
                 url += "?filter=" + this.filter;
@@ -20149,10 +20151,11 @@ piranha.mediapicker = new Vue({
             fetch(url)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    piranha.mediapicker.currentFolderId = result.currentFolderId;
-                    piranha.mediapicker.parentFolderId = result.parentFolderId;
-                    piranha.mediapicker.folders = result.folders;
-                    piranha.mediapicker.items = result.media;
+                    self.currentFolderId = result.currentFolderId;
+                    self.parentFolderId = result.parentFolderId;
+                    self.folders = result.folders;
+                    self.items = result.media;
+                    self.listView = result.viewMode === "list";
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },

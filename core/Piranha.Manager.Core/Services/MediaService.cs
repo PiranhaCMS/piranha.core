@@ -102,6 +102,15 @@ namespace Piranha.Manager.Services
                     .ToList();
             }
 
+            if (model.Media.Where(m => m.Type == "Image").Count() > model.Media.Count / 2)
+            {
+                model.ViewMode = MediaListModel.GalleryView;
+            }
+            else
+            {
+                model.ViewMode = MediaListModel.ListView;
+            }
+
             var structure = await _api.Media.GetStructureAsync();
             model.Folders = structure.GetPartial(folderId)
                 .Select(f => new MediaListModel.FolderItem

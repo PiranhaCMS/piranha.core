@@ -72,12 +72,12 @@ namespace Piranha.Manager.Controllers
         /// </summary>
         /// <param name="typeId">The type id</param>
         /// <returns>The page edit model</returns>
-        [Route("create/{typeId}")]
+        [Route("create/{siteId}/{typeId}")]
         [HttpGet]
         [Authorize(Policy = Permission.PagesAdd)]
-        public async Task<PageEditModel> Create(string typeId)
+        public async Task<PageEditModel> Create(Guid siteId, string typeId)
         {
-            return await _service.Create(typeId);
+            return await _service.Create(siteId, typeId);
         }
 
 

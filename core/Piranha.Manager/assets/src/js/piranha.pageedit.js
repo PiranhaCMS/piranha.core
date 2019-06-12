@@ -83,10 +83,10 @@ piranha.pageedit = new Vue({
                 .catch(function (error) { console.log("error:", error );
             });
         },
-        create: function (id) {
+        create: function (id, pageType) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/page/create/" + id)
+            fetch(piranha.baseUrl + "manager/api/page/create/" + id + "/" + pageType)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.bind(result);

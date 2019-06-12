@@ -1,4 +1,4 @@
-@page "~/manager/page/{action}/{id}"
+@page "~/manager/page/{action}/{id}/{pageType?}"
 @inject ManagerLocalizer Localizer
 @{
     ViewBag.Title = Localizer.Page["Edit page"];
@@ -28,7 +28,7 @@
     else if (action == "add")
     {
         <script>
-            piranha.pageedit.create("@RouteData.Values["id"]");
+            piranha.pageedit.create("@RouteData.Values["id"]", "@RouteData.Values["pageType"]");
 
             $(".title input").focus();
         </script>

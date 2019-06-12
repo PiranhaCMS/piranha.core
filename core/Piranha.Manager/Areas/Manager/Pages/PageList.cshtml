@@ -59,7 +59,7 @@
                                             @Localizer.Page["Add page"]
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="pageGroup">
-                                            <a class="dropdown-item" :href="piranha.baseUrl + type.addUrl + type.id" v-for="type in pageTypes">{{ type.title }}</a>
+                                            <a class="dropdown-item" :href="piranha.baseUrl + type.addUrl + site.id + '/' + type.id" v-for="type in pageTypes">{{ type.title }}</a>
                                         </div>
                                     </div>
                                 </div>

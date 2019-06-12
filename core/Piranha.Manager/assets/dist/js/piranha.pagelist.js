@@ -6,13 +6,7 @@ Vue.component("sitemap-item", {
     props: ["item"],
     methods: {
         toggleItem: function (item) {
-            if (item.isExpanded) {
-                console.log("Setting item.isExpanded = false");
-                item.isExpanded = false;
-            } else {
-                console.log("Setting item.isExpanded = true");
-                item.isExpanded = true;
-            }
+            item.isExpanded = !item.isExpanded;
         }
     },
     template:

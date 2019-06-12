@@ -15,6 +15,9 @@ namespace Piranha.Manager.Models
 {
     public class MediaListModel
     {
+        public static string ListView = "list";
+        public static string GalleryView = "gallery";
+
         public class FolderItem
         {
             public Guid Id { get; set; }
@@ -60,5 +63,10 @@ namespace Piranha.Manager.Models
         /// Gets/sets the optional status message from the last operation.
         /// </summary>
         public StatusMessage Status { get; set; }
+
+        /// <summary>
+        /// Gets/sets the recommended view mode for the folder.
+        /// </summary>
+        public string ViewMode { get; set; }
     }
 }

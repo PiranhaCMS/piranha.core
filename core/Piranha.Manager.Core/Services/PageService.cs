@@ -73,12 +73,12 @@ namespace Piranha.Manager.Services
             return model;
         }
 
-        public async Task<PageEditModel> Create(string typeId)
+        public async Task<PageEditModel> Create(Guid siteId, string typeId)
         {
             var page = _api.Pages.Create<DynamicPage>(typeId);
 
             page.Id = Guid.NewGuid();
-            page.SiteId = (await _api.Sites.GetDefaultAsync()).Id;
+            page.SiteId = siteId;
             page.SortOrder = (await _api.Sites.GetSitemapAsync(page.SiteId)).Count;
 
             if (page != null)
