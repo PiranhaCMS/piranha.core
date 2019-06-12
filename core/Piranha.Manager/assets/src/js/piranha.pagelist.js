@@ -38,34 +38,41 @@ piranha.pagelist = new Vue({
         bind: function () {
             var self = this;
 
-            $(".sitemap-container").nestable({
-                maxDepth: 100,
-                group: 1,
-                callback: function (l, e) {
-                    fetch(piranha.baseUrl + "manager/api/page/move", {
-                        method: "post",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                            id: $(e).attr("data-id"),
-                            items: $(l).nestable("serialize")
+            $(".sitemap-container").each(function (i, e) {
+                $(e).nestable({
+                    maxDepth: 100,
+                    group: i,
+                    callback: function (l, e) {
+                        fetch(piranha.baseUrl + "manager/api/page/move", {
+                            method: "post",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                id: $(e).attr("data-id"),
+                                items: $(l).nestable("serialize")
+                            })
                         })
-                    })
-                    .then(function (response) { return response.json(); })
-                    .then(function (result) {
-                        piranha.notifications.push(result.status);
+                        .then(function (response) { return response.json(); })
+                        .then(function (result) {
+                            piranha.notifications.push(result.status);
 
-                        if (result.status.type === "success") {
-                            $('.sitemap-container').nestable('destroy');
-                            piranha.pagelist.sites = result.sites;
-                            self.bind();
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log("error:", error);
-                    });
-                }
+                            if (result.status.type === "success") {
+                                $('.sitemap-container').nestable('destroy');
+                                self.sites = [];
+                                Vue.nextTick(function () {
+                                    self.sites = result.sites;
+                                    Vue.nextTick(function () {
+                                        self.bind();
+                                    });
+                                });
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log("error:", error);
+                        });
+                    }
+                })
             });
         }
     },
