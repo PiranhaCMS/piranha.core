@@ -4,11 +4,26 @@
 
 Vue.component("sitemap-item", {
     props: ["item"],
+    methods: {
+        toggleItem: function (item) {
+            if (item.isExpanded) {
+                console.log("Setting item.isExpanded = false");
+                item.isExpanded = false;
+            } else {
+                console.log("Setting item.isExpanded = true");
+                item.isExpanded = true;
+            }
+        }
+    },
     template:
-        "<li class='dd-item' :data-id='item.id'>" +
+        "<li class='dd-item' :class='{ expanded: item.isExpanded || item.items.length === 0 }' :data-id='item.id'>" +
         "  <div class='sitemap-item'>" +
         "    <div class='handle dd-handle'><i class='fas fa-ellipsis-v'></i></div>" +
         "    <div class='link'>" +
+        "      <span v-if='item.items.length > 0' class='actions'>" +
+        "        <a v-if='item.isExpanded' v-on:click.prevent='toggleItem(item)' class='expand' href='#'><i class='fas fa-minus'></i></a>" +
+        "        <a v-if='!item.isExpanded' v-on:click.prevent='toggleItem(item)' class='expand' href='#'><i class='fas fa-plus'></i></a>" +
+        "      </span>" +
         "      <a :href='piranha.baseUrl + item.editUrl + item.id'>" +
         "        {{ item.title }}" +
         "        <span v-if='item.status' class='badge badge-primary'>{{ item.status }}</span>" +
@@ -65,14 +80,10 @@ piranha.pagelist = new Vue({
                     self.load();
                 })
                 .catch(function (error) { console.log("error:", error ); });
-        }
-    },
-    created: function () {
-    },
-    updated: function () {
-        if (this.updateBindings)
-        {
-            //$('.sitemap-container').nestable('destroy');
+        },
+        bind: function () {
+            var self = this;
+
             $(".sitemap-container").nestable({
                 maxDepth: 100,
                 group: 1,
@@ -89,34 +100,27 @@ piranha.pagelist = new Vue({
                     })
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
-                        piranha.notifications.push(result);
+                        piranha.notifications.push(result.status);
+
+                        if (result.status.type === "success") {
+                            $('.sitemap-container').nestable('destroy');
+                            piranha.pagelist.sites = result.sites;
+                            self.bind();
+                        }
                     })
                     .catch(function (error) {
                         console.log("error:", error);
                     });
                 }
-            }); /*.on('change', function (e, l) {
-                console.log("on change: ", e);
-
-                fetch(piranha.baseUrl + "manager/api/page/move", {
-                    method: "post",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        items: $(e.target).nestable("serialize")
-                    })
-                })
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    piranha.notifications.push(result);
-                })
-                .catch(function (error) {
-                    console.log("error:", error);
-                });
-                //console.log("changed: ", $(e.target).nestable("serialize"));
-            });*/
-
+            });
+        }
+    },
+    created: function () {
+    },
+    updated: function () {
+        if (this.updateBindings)
+        {
+            this.bind();
             this.updateBindings = false;
         }
 

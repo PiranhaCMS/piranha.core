@@ -194,20 +194,25 @@ namespace Piranha.Manager.Controllers
         [Route("move")]
         [HttpPost]
         [Authorize(Policy = Permission.PagesEdit)]
-        public async Task<StatusMessage> Move([FromBody]StructureModel model)
+        public async Task<PageListModel> Move([FromBody]StructureModel model)
         {
             if (await _service.MovePages(model))
             {
-                return new StatusMessage
+                var list = await List();
+
+                list.Status = new StatusMessage
                 {
                     Type = StatusMessage.Success,
                     Body = _localizer.Page["The sitemap was successfully updated"]
                 };
+                return list;
             }
-            return new StatusMessage
-            {
-                Type = StatusMessage.Warning,
-                Body = _localizer.Page["No pages changed position"]
+            return new PageListModel {
+                Status = new StatusMessage
+                {
+                    Type = StatusMessage.Warning,
+                    Body = _localizer.Page["No pages changed position"]
+                }
             };
         }
 

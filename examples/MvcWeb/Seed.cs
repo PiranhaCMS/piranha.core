@@ -27,6 +27,14 @@ namespace MvcWeb
 
                 // Get the default site id
                 var siteId = (await api.Sites.GetDefaultAsync()).Id;
+                var site2Id = Guid.NewGuid();
+
+                await api.Sites.SaveAsync(new Piranha.Models.Site
+                {
+                    Id = site2Id,
+                    Title = "Swedish",
+                    Culture = "sv-SE"
+                });
 
                 // Upload images
                 foreach (var image in images)
@@ -135,6 +143,10 @@ namespace MvcWeb
                     }
                 }
                 startpage.Published = DateTime.Now;
+                await api.Pages.SaveAsync(startpage);
+
+                startpage.Id = Guid.NewGuid();
+                startpage.SiteId = site2Id;
                 await api.Pages.SaveAsync(startpage);
 
                 // Features page

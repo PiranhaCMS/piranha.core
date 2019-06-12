@@ -1,6 +1,7 @@
 @import "variables";
 
 #login {
+    background: $primary url("../img/login.png");
     margin-left: 0;
 
     .container {
@@ -9,14 +10,11 @@
     }
 
     .card-body {
-        padding: 2rem;
+        background: transparent;
 
         &.card-body-logo {
-            background: $primary url("../img/seigaiha-overlay.png");
             color: $white;
             text-align: center;
-            border-bottom-left-radius: 0;
-            border-bottom-right-radius: 0;
 
             .logo {
                 background: url("../img/logo.png") no-repeat 50% 50%;
@@ -40,12 +38,10 @@
         }
 
         &.card-body-form {
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
-
             .form-control {
-                background: $gray-100;
+                //background: $gray-100;
                 border: 0;
+                font-weight: 300;
             }
         }
     }

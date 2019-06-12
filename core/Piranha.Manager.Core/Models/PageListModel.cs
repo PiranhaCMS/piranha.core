@@ -40,6 +40,7 @@ namespace Piranha.Manager.Models
             public string Status { get; set; }
             public string EditUrl { get; set; }
             public bool IsDraft { get; set; }
+            public bool IsExpanded { get; set; }
             public List<PageItem> Items { get; set; } = new List<PageItem>();
         }
 
@@ -52,5 +53,6 @@ namespace Piranha.Manager.Models
 
         public IList<SiteItem> Sites { get; set; } = new List<SiteItem>();
         public IList<PageTypeItem> PageTypes { get; set; } = new List<PageTypeItem>();
+        public StatusMessage Status { get; set; }
     }
 }

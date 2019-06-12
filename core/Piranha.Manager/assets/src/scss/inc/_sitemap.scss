@@ -12,6 +12,12 @@
             padding-left: 2.4rem;
         }
     }
+
+    &:not(.sitemap-container) {
+        >ol>li {
+            margin-bottom: 1rem;
+        }
+    }
 }
 
 .sitemap-item {
@@ -32,6 +38,17 @@
     }
     .actions {
         width: 7rem;
+
+        .expand {
+            background: $primary;
+            color: $white;
+            font-size: .65rem;
+            width: 1rem;
+            height: 1rem;
+            line-height: 1rem;
+            float: left;
+            margin: .25rem .5rem 0 0;
+        }
     }
     .date {
         width: 7rem;

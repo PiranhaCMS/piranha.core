@@ -39,9 +39,6 @@
                 {
                     <partial name="@action.ActionView" />
                 }
-                <button type="button" class="btn btn-primary btn-labeled" data-toggle="modal" data-target="#pageAddModal">
-                    <i class="fas fa-plus"></i>@Localizer.General["Add"]
-                </button>
             </div>
         </div>
     </div>
@@ -52,9 +49,20 @@
                 <div class="sitemap">
                     <ol>
                         <li v-for="site in sites">
-                            <div class="sitemap-item">
+                            <div class="sitemap-item" v-bind:key="site.id">
                                 <div class="handle"><i class="fas fa-globe"></i></div>
                                 <div class="link"><a :href="piranha.baseUrl + site.editUrl + site.id">{{ site.title }} <small>(<code>{{ site.slug }}</code>)</small></a></div>
+                                <div>
+                                    <div class="btn-group" role="group">
+                                        <button id="pageGroup" type="button" class="btn btn-sm btn-primary btn-labeled dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-plus"></i>
+                                            @Localizer.Page["Add page"]
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="pageGroup">
+                                            <a class="dropdown-item" :href="piranha.baseUrl + type.addUrl + type.id" v-for="type in pageTypes">{{ type.title }}</a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="sitemap sitemap-container dd">
                                 <ol class="dd-list">

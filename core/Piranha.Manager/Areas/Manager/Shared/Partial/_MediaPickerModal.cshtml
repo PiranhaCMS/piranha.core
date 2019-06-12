@@ -1,4 +1,4 @@
-@inject IViewLocalizer Localizer
+@inject ManagerLocalizer Localizer
 
 <!-- The Modal -->
 <div class="modal modal-panel fade" id="mediapicker">
@@ -6,32 +6,41 @@
         <div class="modal-content">
 
             <!-- Modal Header -->
-            <div class="modal-header border-bottom-0">
-                <h5 class="modal-title"><i class="fas fa-images"></i> @Localizer["Select media"]</h5>
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-images"></i> @Localizer.Media["Select media"]</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
 
-            <!-- Tabs -->
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a class="nav-link" :class="{active: listView}" v-on:click.prevent="toggle"><i class="fas fa-list"></i></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" :class="{active: !listView}" v-on:click.prevent="toggle"><i class="fas fa-table"></i></a>
-                </li>
-            </ul>
-
             <!-- Modal Body -->
             <div class="modal-body bg-light">
+                <!-- Pills -->
+                <div class="row">
+                    <div class="col">
+                        <ul class="nav nav-pills mb-3">
+                            <li class="nav-item">
+                                <a class="nav-link" :class="{active: listView}" v-on:click.prevent="toggle" href="#"><i class="fas fa-list"></i></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" :class="{active: !listView}" v-on:click.prevent="toggle" href="#"><i class="fas fa-table"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <div class="d-flex flex-row">
+                            <input v-model="folderName" v-on:keyup.enter="savefolder" type="text" placeholder="@Localizer.Media["Add folder"]" class="form-control flex-fill">
+                            <button v-on:click.prevent="savefolder" class="btn btn-primary ml-3"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
 
                 <div id="mediapicker-upload-container" class="dropzone-container">
                     <form action="@Url.Action("Upload", "MediaApi")" class="dropzone needsclick dz-clickable" enctype="multipart/form-data">
                         <input type="hidden" name="Model.ParentId" v-model="currentFolderId" />
                         <div class="dz-message needsclick text-center">
                             <span class="fas fa-cloud-upload-alt"></span>
-                            @Localizer["Drop files here or click to upload."]
+                            @Localizer.Media["Drop files here or click to upload."]
                         </div>
                         <div class="file-list"></div>
                     </form>
@@ -39,17 +48,17 @@
                 </div>
 
                 <div class="form-group mt-3">
-                     <input id="mediapickerSearch" class="form-control" v-model="search" v-on:keyup.enter="onEnter" placeholder="@Localizer["Search..."]"/>
+                     <input id="mediapickerSearch" class="form-control" v-model="search" v-on:keyup.enter="onEnter" placeholder="@Localizer.General["Search..."]"/>
                 </div>
 
                 <template v-if="listView">
                     <table class="table table-borderless table-media">
                         <thead>
                             <tr>
-                                <th>@Localizer["Name"]</th>
-                                <th class="td-medium d-none">@Localizer["Type"]</th>
-                                <th class="td-small d-none">@Localizer["Size"]</th>
-                                <th class="td-small">@Localizer["Modified"]</th>
+                                <th>@Localizer.General["Name"]</th>
+                                <th class="td-medium d-none">@Localizer.General["Type"]</th>
+                                <th class="td-small d-none">@Localizer.General["Size"]</th>
+                                <th class="td-small">@Localizer.General["Modified"]</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -87,7 +96,7 @@
                 <template v-if="!listView">
                     <div class="gallery gallery-sm">
                         <div class="gallery-header">
-                            @Localizer["Gallery"]
+                            @Localizer.Media["Gallery"]
                         </div>
 
                         <a href="#" class="thumbnail" v-if="currentFolderId != null" v-on:click.prevent="load(parentFolderId)">

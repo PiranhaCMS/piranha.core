@@ -20105,6 +20105,7 @@ piranha.mediapicker = new Vue({
     el: "#mediapicker",
     data: {
         search: '',
+        folderName: '',
         listView: true,
         currentFolderId: null,
         parentFolderId: null,
@@ -20194,6 +20195,39 @@ piranha.mediapicker = new Vue({
             this.search = "";
 
             $("#mediapicker").modal("hide");
+        },
+        savefolder: function () {
+            var self = this;
+
+            if (self.folderName !== "") {
+                fetch(piranha.baseUrl + "manager/api/media/folder/save", {
+                    method: "post",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        parentId: self.currentFolderId,
+                        name: self.folderName
+                    })
+                })
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    if (result.status.type === "success")
+                    {
+                        // Clear input
+                        self.folderName = null;
+
+                        self.folders = result.folders;
+                        self.items = result.media;
+                    }
+
+                    // Push status to notification hub
+                    piranha.notifications.push(result.status);
+                })
+                .catch(function (error) {
+                    console.log("error:", error);
+                });
+            }
         }
     },
     mounted: function () {

@@ -34,14 +34,10 @@ piranha.pagelist = new Vue({
                     self.load();
                 })
                 .catch(function (error) { console.log("error:", error ); });
-        }
-    },
-    created: function () {
-    },
-    updated: function () {
-        if (this.updateBindings)
-        {
-            //$('.sitemap-container').nestable('destroy');
+        },
+        bind: function () {
+            var self = this;
+
             $(".sitemap-container").nestable({
                 maxDepth: 100,
                 group: 1,
@@ -58,34 +54,27 @@ piranha.pagelist = new Vue({
                     })
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
-                        piranha.notifications.push(result);
+                        piranha.notifications.push(result.status);
+
+                        if (result.status.type === "success") {
+                            $('.sitemap-container').nestable('destroy');
+                            piranha.pagelist.sites = result.sites;
+                            self.bind();
+                        }
                     })
                     .catch(function (error) {
                         console.log("error:", error);
                     });
                 }
-            }); /*.on('change', function (e, l) {
-                console.log("on change: ", e);
-
-                fetch(piranha.baseUrl + "manager/api/page/move", {
-                    method: "post",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        items: $(e.target).nestable("serialize")
-                    })
-                })
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    piranha.notifications.push(result);
-                })
-                .catch(function (error) {
-                    console.log("error:", error);
-                });
-                //console.log("changed: ", $(e.target).nestable("serialize"));
-            });*/
-
+            });
+        }
+    },
+    created: function () {
+    },
+    updated: function () {
+        if (this.updateBindings)
+        {
+            this.bind();
             this.updateBindings = false;
         }
 

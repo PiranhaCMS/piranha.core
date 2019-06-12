@@ -31,8 +31,20 @@
     display: block;
 }
 
-.dd-item > button {
-    display: none;
+.dd-item {
+    >button {
+        display: none;
+    }
+
+    >.dd-list {
+        display: none;
+    }
+
+    &.expanded {
+        >.dd-list {
+            display: block;
+        }
+    }
 }
 
 .dd-expand {

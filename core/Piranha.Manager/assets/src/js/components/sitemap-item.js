@@ -4,11 +4,26 @@
 
 Vue.component("sitemap-item", {
     props: ["item"],
+    methods: {
+        toggleItem: function (item) {
+            if (item.isExpanded) {
+                console.log("Setting item.isExpanded = false");
+                item.isExpanded = false;
+            } else {
+                console.log("Setting item.isExpanded = true");
+                item.isExpanded = true;
+            }
+        }
+    },
     template:
-        "<li class='dd-item' :data-id='item.id'>" +
+        "<li class='dd-item' :class='{ expanded: item.isExpanded || item.items.length === 0 }' :data-id='item.id'>" +
         "  <div class='sitemap-item'>" +
         "    <div class='handle dd-handle'><i class='fas fa-ellipsis-v'></i></div>" +
         "    <div class='link'>" +
+        "      <span v-if='item.items.length > 0' class='actions'>" +
+        "        <a v-if='item.isExpanded' v-on:click.prevent='toggleItem(item)' class='expand' href='#'><i class='fas fa-minus'></i></a>" +
+        "        <a v-if='!item.isExpanded' v-on:click.prevent='toggleItem(item)' class='expand' href='#'><i class='fas fa-plus'></i></a>" +
+        "      </span>" +
         "      <a :href='piranha.baseUrl + item.editUrl + item.id'>" +
         "        {{ item.title }}" +
         "        <span v-if='item.status' class='badge badge-primary'>{{ item.status }}</span>" +
