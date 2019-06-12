@@ -104,8 +104,13 @@ piranha.pagelist = new Vue({
 
                         if (result.status.type === "success") {
                             $('.sitemap-container').nestable('destroy');
-                            piranha.pagelist.sites = result.sites;
-                            self.bind();
+                            self.sites = [];
+                            Vue.nextTick(function () {
+                                self.sites = result.sites;
+                                Vue.nextTick(function () {
+                                    self.bind();
+                                });
+                            });
                         }
                     })
                     .catch(function (error) {
