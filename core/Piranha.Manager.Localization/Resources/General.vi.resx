@@ -21,8 +21,14 @@
   <data name="Content type" xml:space="preserve">
     <value>Loại nội dung</value>
   </data>
+  <data name="Culture" xml:space="preserve">
+    <value>Culture</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Xoá</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
   </data>
   <data name="Details" xml:space="preserve">
     <value>Chi tiêt</value>
@@ -47,6 +53,12 @@
   </data>
   <data name="General" xml:space="preserve">
     <value>Tổng quan</value>
+  </data>
+  <data name="Internal id" xml:space="preserve">
+    <value>Internal id</value>
+  </data>
+  <data name="Is default" xml:space="preserve">
+    <value>Is default</value>
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Đăng xuất</value>
