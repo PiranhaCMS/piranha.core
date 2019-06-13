@@ -312,7 +312,19 @@ Vue.component("block-group-horizontal", {
             fetch(piranha.baseUrl + "manager/api/content/block/" + type)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
+                    sortable("#" + self.uid + " .block-group-items", "destroy");
+
                     self.model.items.push(result.body);
+
+                    Vue.nextTick(function () {
+                        sortable("#" + self.uid + " .block-group-items", {
+                            handle: '.handle',
+                            items: ":not(.unsortable)",
+                            placeholderClass: "col sortable-placeholder"
+                        })[0].addEventListener("sortupdate", function (e) {
+                            self.moveItem(e.detail.origin.index, e.detail.destination.index);
+                        });
+                    });
                 })
                 .catch(function (error) { console.log("error:", error );
             });
@@ -323,6 +335,8 @@ Vue.component("block-group-horizontal", {
     },
     mounted: function () {
         var self = this;
+
+        console.log("binding sortable columns: ", this.uid);
 
         sortable("#" + this.uid + " .block-group-items", {
             handle: '.handle',
