@@ -79,45 +79,45 @@
     <value>Xuất bản</value>
   </data>
   <data name="Publish date" xml:space="preserve">
-    <value>Publish date</value>
+    <value>Ngày Công Bố</value>
   </data>
   <data name="Revert" xml:space="preserve">
-    <value>Revert</value>
+    <value>Phục hồi</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>Lưu</value>
   </data>
   <data name="Search..." xml:space="preserve">
-    <value>Search...</value>
+    <value>Tìm kiếm...</value>
   </data>
   <data name="Select block" xml:space="preserve">
     <value>Select block</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Thiết lập</value>
   </data>
   <data name="Size" xml:space="preserve">
-    <value>Size</value>
+    <value>Kích thước</value>
   </data>
   <data name="Slug" xml:space="preserve">
     <value>Slug</value>
   </data>
   <data name="System" xml:space="preserve">
-    <value>System</value>
+    <value>Hệ thống</value>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Update</value>
+    <value>Cập nhật</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Type</value>
+    <value>Loại</value>
   </data>
   <data name="Unpublish" xml:space="preserve">
-    <value>Unpublish</value>
+    <value>Không công bố</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Version</value>
+    <value>Phiên bản</value>
   </data>
   <data name="Width" xml:space="preserve">
-    <value>Width</value>
+    <value>Chiều rộng</value>
   </data>
 </root>
