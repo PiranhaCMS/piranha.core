@@ -15,4 +15,10 @@
   <data name="Add site" xml:space="preserve">
     <value>Agregar sitio</value>
   </data>
+  <data name="Edit site" xml:space="preserve">
+    <value>Edit site</value>
+  </data>
+  <data name="Hostnames" xml:space="preserve">
+    <value>Hostnames</value>
+  </data>
 </root>
