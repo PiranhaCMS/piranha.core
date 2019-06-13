@@ -22,6 +22,6 @@
     <value>Domännamn</value>
   </data>
   <data name="If this should be the default site of the installation." xml:space="preserve">
-    <value>If this should be the default site of the installation.</value>
+    <value>Om det här ska vara standardsajten för installationen.</value>
   </data>
 </root>
