@@ -21,4 +21,7 @@
   <data name="Hostnames" xml:space="preserve">
     <value>Domännamn</value>
   </data>
+  <data name="If this should be the default site of the installation." xml:space="preserve">
+    <value>If this should be the default site of the installation.</value>
+  </data>
 </root>
