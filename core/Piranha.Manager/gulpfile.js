@@ -88,6 +88,7 @@ var js = [
             "assets/src/js/components/blocks/separator-block.js",
             "assets/src/js/components/blocks/text-block.js",
             "assets/src/js/components/blocks/missing-block.js",
+            "assets/src/js/components/blocks/audio-block.js",
 
             "assets/src/js/components/fields/checkbox-field.js",
             "assets/src/js/components/fields/date-field.js",
