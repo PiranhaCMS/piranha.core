@@ -109,10 +109,10 @@
     <value>Actualizar</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Type</value>
+    <value>Tipo</value>
   </data>
   <data name="Unpublish" xml:space="preserve">
-    <value>Unpublish</value>
+    <value>Remover publicación</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Versión</value>

@@ -13,22 +13,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add page" xml:space="preserve">
-    <value>Add page</value>
+    <value>Thêm trang</value>
   </data>
   <data name="An error occured while deleting the page" xml:space="preserve">
-    <value>An error occured while deleting the page</value>
+    <value>Có 1 lỗi đã xãy ra trong khi xóa trang</value>
   </data>
   <data name="Edit page" xml:space="preserve">
-    <value>Edit page</value>
+    <value>Chỉnh sửa trang</value>
   </data>
   <data name="Hidden" xml:space="preserve">
-    <value>Hidden</value>
+    <value>Ẩn</value>
   </data>
   <data name="If the page should be hidden in the sitemap" xml:space="preserve">
     <value>If the page should be hidden in the sitemap</value>
   </data>
   <data name="Meta keywords" xml:space="preserve">
-    <value>Meta keywords</value>
+    <value>Từ khóa Meta</value>
   </data>
   <data name="Meta description" xml:space="preserve">
     <value>Meta description</value>
@@ -37,27 +37,27 @@
     <value>Navigation title</value>
   </data>
   <data name="Pages" xml:space="preserve">
-    <value>Pages</value>
+    <value>Các trang</value>
   </data>
   <data name="The page was successfully deleted" xml:space="preserve">
-    <value>The page was successfully deleted</value>
+    <value>Trang đã được xóa thành công</value>
   </data>
   <data name="The page was successfully published" xml:space="preserve">
-    <value>The page was successfully published</value>
+    <value>Trang đã được xuất bản thành công</value>
   </data>
   <data name="The page was successfully unpublished" xml:space="preserve">
     <value>The page was successfully unpublished</value>
   </data>
   <data name="The page was successfully saved" xml:space="preserve">
-    <value>The page was successfully saved</value>
+    <value>Trang đã được lưu thành công</value>
   </data>
   <data name="The page was successfully reverted to its previous state" xml:space="preserve">
-    <value>The page was successfully reverted to its previous state</value>
+    <value>Trang đã được phục hồi về trạng thái trước đó thành công</value>
   </data>
   <data name="Welcome to your new page. Click on the button above to add your first block of content!" xml:space="preserve">
     <value>Welcome to your new page. Click on the button above to add your first block of content!</value>
   </data>
   <data name="Your page title" xml:space="preserve">
-    <value>Your page title</value>
+    <value>Tiêu đề trang của bạn</value>
   </data>
 </root>

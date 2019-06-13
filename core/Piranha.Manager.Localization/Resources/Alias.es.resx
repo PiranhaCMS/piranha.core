@@ -25,10 +25,10 @@
     <value>URL de redirección</value>
   </data>
   <data name="Permanent" xml:space="preserve">
-    <value>Permanent</value>
+    <value>Permanente</value>
   </data>
   <data name="If the redirect should be permanent" xml:space="preserve">
-    <value>If the redirect should be permanent</value>
+    <value>Si la redirección debe ser permanente</value>
   </data>
   <data name="The alias was successfully added to the list" xml:space="preserve">
     <value>El alias se ha añadido correctamente a la lista</value>
