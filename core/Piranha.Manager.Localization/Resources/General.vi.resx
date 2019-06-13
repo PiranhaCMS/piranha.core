@@ -13,70 +13,70 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>Thêm</value>
   </data>
   <data name="Content" xml:space="preserve">
-    <value>Content</value>
+    <value>Nội Dung</value>
   </data>
   <data name="Content type" xml:space="preserve">
-    <value>Content type</value>
+    <value>Loại nội dung</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Xoá</value>
   </data>
   <data name="Details" xml:space="preserve">
-    <value>Details</value>
+    <value>Chi tiêt</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>Tải về</value>
   </data>
   <data name="Draft" xml:space="preserve">
-    <value>Draft</value>
+    <value>Bản nháp</value>
   </data>
   <data name="Filename" xml:space="preserve">
-    <value>Filename</value>
+    <value>Tên tập tin</value>
   </data>
   <data name="Height" xml:space="preserve">
-    <value>Height</value>
+    <value>Chiều cao</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>Chỉnh sửa</value>
   </data>
   <data name="Empty" xml:space="preserve">
-    <value>Empty</value>
+    <value>Trống</value>
   </data>
   <data name="General" xml:space="preserve">
-    <value>General</value>
+    <value>Tổng quan</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+    <value>Đăng xuất</value>
   </data>
   <data name="Looks like there's no items here. Click on the button above to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button above to get started!</value>
+    <value>Có vẻ như không có mục nào ở đây. Nhấn vào nút bên trên để bắt đầu!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button below to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button below to get started!</value>
+    <value>Có vẻ như không có mục nào ở đây. Nhấn vào nút bên dưới để bắt đầu!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button to the left to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button to the left to get started!</value>
+    <value>Có vẻ như không có mục nào ở đây. Nhấn vào nút bên trái để bắt đầu!</value>
   </data>
   <data name="Main content" xml:space="preserve">
-    <value>Main content</value>
+    <value>Nội dung chính</value>
   </data>
   <data name="Modified" xml:space="preserve">
-    <value>Modified</value>
+    <value>Đã được chỉnh sửa</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>Tên</value>
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
-    <value>Open public URL in new tab</value>
+    <value>Mở đường dẫn công khai trong tab mới</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Preview</value>
+    <value>Xem trước</value>
   </data>
   <data name="Publish" xml:space="preserve">
-    <value>Publish</value>
+    <value>Xuất bản</value>
   </data>
   <data name="Publish date" xml:space="preserve">
     <value>Publish date</value>
