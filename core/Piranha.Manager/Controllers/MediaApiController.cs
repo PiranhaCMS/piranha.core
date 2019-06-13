@@ -97,13 +97,13 @@ namespace Piranha.Manager.Controllers
         [Route("folder/save")]
         [HttpPost]
         [Authorize(Policy = Permission.MediaAddFolder)]
-        public async Task<IActionResult> SaveFolder(MediaFolderModel model)
+        public async Task<IActionResult> SaveFolder(MediaFolderModel model, MediaType? filter = null)
         {
             try
             {
                 await _service.SaveFolder(model);
 
-                var result = await _service.GetList(model.ParentId);
+                var result = await _service.GetList(model.ParentId, filter);
 
                 result.Status = new StatusMessage
                 {
