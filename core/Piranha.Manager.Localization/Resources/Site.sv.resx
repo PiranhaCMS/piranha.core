@@ -15,4 +15,10 @@
   <data name="Add site" xml:space="preserve">
     <value>Lägg till sajt</value>
   </data>
+  <data name="Edit site" xml:space="preserve">
+    <value>Redigera sajt</value>
+  </data>
+  <data name="Hostnames" xml:space="preserve">
+    <value>Domännamn</value>
+  </data>
 </root>
