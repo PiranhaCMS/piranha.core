@@ -56,10 +56,11 @@
         border-color: $gray-400;
         padding-bottom: 0;
 
-        >.block-header {
+        > .block-header {
             opacity: 1;
         }
-        >.block-body, >.block-group {
+
+        > .block-body, > .block-group {
             display: none;
         }
     }
@@ -102,6 +103,61 @@
         }
     }
 
+    .has-media-picker {
+
+        .media-picker {
+            background: rgba(0,0,0,.4);
+            position: absolute;
+            width: 90%;
+            top: 50%;
+            left: 5%;
+            padding: 1.5rem;
+            margin-top: -2.5rem;
+            opacity: 0;
+            border-radius: $border-radius;
+            transition: opacity ease-in-out .2s;
+
+            &.slide-in {
+                position: relative;
+                width: 0;
+                top: auto;
+                left: auto;
+                margin-top: 0;
+                padding: 0;
+                background-color: transparent;
+                transition: all ease-in-out .2s;
+
+                .card {
+                    margin-left: 1rem;
+                }
+
+                .card-body {
+                    border: 1px solid $gray-400;
+                }
+            }
+
+            .card-body {
+                padding: .4rem 1rem;
+                margin-right: 1rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+
+    &:hover, &:focus-within {
+        .has-media-picker {
+            .media-picker {
+                opacity: 1;
+
+                &.slide-in {
+                    width: 50%;
+                }
+            }
+        }
+    }
+
     &:hover, &:focus-within {
         border-color: $gray-400;
 
@@ -117,16 +173,14 @@
     &.html-block, &.html-column-block {
         @include content();
 
-        .empty:not(:focus-within)
-        {
+        .empty:not(:focus-within) {
             background: $gray-100 url("../img/empty-text.png") no-repeat 50% 50%;
             height: 8rem;
         }
     }
 
     &.quote-block {
-        .empty:not(:focus-within)
-        {
+        .empty:not(:focus-within) {
             background: $gray-100 url("../img/empty-text.png") no-repeat 50% 50%;
             height: 8rem;
         }
@@ -153,7 +207,6 @@
                 display: inline;
             }
         }
-
     }
 
     &.image-block {
@@ -162,33 +215,6 @@
 
         .empty {
             background: $gray-100;
-        }
-
-        .media-picker {
-            background: rgba(0,0,0,.4);
-            position: absolute;
-            width: 90%;
-            top: 50%;
-            left: 5%;
-            padding: 1.5rem;
-            margin-top: -2.5rem;
-            opacity: 0;
-            border-radius: $border-radius;
-            transition: opacity ease-in-out .2s;
-
-            .card-body {
-                padding: .4rem 1rem;
-                margin-right: 1rem;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-        }
-
-        &:hover, &:focus-within {
-            .media-picker {
-                opacity: 1;
-            }
         }
     }
 
@@ -202,8 +228,7 @@
     }
 
     &.text-block {
-        .empty:not(:focus-within)
-        {
+        .empty:not(:focus-within) {
             background: $gray-100 url("../img/empty-text.png") no-repeat 50% 50%;
             height: 8rem;
         }
