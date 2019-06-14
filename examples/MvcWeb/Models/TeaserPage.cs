@@ -35,7 +35,7 @@ namespace MvcWeb.Models
         /// <summary>
         /// Gets/sets the available teasers.
         /// </summary>
-        [Region(ListTitle = "Title", ListPlaceholder = "New Teaser", Icon = "fas fa-bookmark")]
+        [Region(Display = RegionDisplayMode.Setting, ListTitle = "Title", ListPlaceholder = "New Teaser", Icon = "fas fa-bookmark")]
         public IList<Regions.Teaser> Teasers { get; set; } = new List<Regions.Teaser>();
 
         /// <summary>

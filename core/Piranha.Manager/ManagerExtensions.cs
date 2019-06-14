@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2018 Håkan Edling
+ * Copyright (c) 2016-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -37,6 +37,7 @@ public static class ManagerModuleExtensions
         services.AddScoped<ModuleService>();
         services.AddScoped<PageService>();
         services.AddScoped<PostService>();
+        services.AddScoped<SiteService>();
 
         // Add localization service
         services.AddScoped<ManagerLocalizer>();

@@ -36,8 +36,6 @@ Vue.component("block-group-horizontal", {
     mounted: function () {
         var self = this;
 
-        console.log("binding sortable columns: ", this.uid);
-
         sortable("#" + this.uid + " .block-group-items", {
             handle: '.handle',
             items: ":not(.unsortable)",

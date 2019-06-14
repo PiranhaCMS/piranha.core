@@ -1,0 +1,82 @@
+@inject ManagerLocalizer Localizer
+
+<div id="siteedit" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title"><i class="fas fa-cog"></i> @Localizer.Site["Edit site"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active">@Localizer.General["Settings"]</a>
+                </li>
+            </ul>
+
+            <!-- Body -->
+            <div class="modal-body bg-light">
+                <div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>@Localizer.General["Title"]</label>
+                                <input id="sitetitle" v-model="title" type="text" class="form-control form-control autofocus" placeholder="@Localizer.Site["Your site title"]">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>@Localizer.General["Internal id"]</label>
+                                <input v-model="internalId" type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>@Localizer.Site["Hostnames"]</label>
+                                <input v-model="hostnames" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>@Localizer.General["Culture"]</label>
+                                <input v-model="culture" type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>@Localizer.General["Description"]</label>
+                                <textarea v-model="description" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>@Localizer.General["Is default"]</label>
+                                <div class="form-check">
+                                    <input v-model="isDefault" type="checkbox" class="form-check-input">
+                                    <label class="form-check-label" for="exampleCheck1">@Localizer.Site["If this should be the default site of the installation."]</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button v-on:click.prevent="save" class="btn btn-labeled btn-success">
+                    <i class="fas fa-check"></i>@Localizer.General["Save"]
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

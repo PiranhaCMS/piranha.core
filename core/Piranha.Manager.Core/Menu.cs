@@ -41,10 +41,6 @@ namespace Piranha.Manager
                     new MenuItem
                     {
                         InternalId = "Aliases", Name = "Aliases", Route = "~/manager/aliases", Policy = Permission.Aliases, Css = "fas fa-random"
-                    },
-                    new MenuItem
-                    {
-                        InternalId = "Sites", Name = "Sites", Route = "~/manager/aliases", Policy = Permission.Sites, Css = "fas fa-globe"
                     }
                 }
             },

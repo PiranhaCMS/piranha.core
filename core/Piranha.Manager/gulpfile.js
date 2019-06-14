@@ -113,6 +113,12 @@ var js = [
             "assets/src/js/components/sitemap-item.js",
             "assets/src/js/piranha.pagelist.js"
         ]
+    },
+    {
+        name: "piranha.siteedit.js",
+        items: [
+            "assets/src/js/piranha.siteedit.js"
+        ]
     }
 ];
 

@@ -20203,7 +20203,7 @@ piranha.mediapicker = new Vue({
             var self = this;
 
             if (self.folderName !== "") {
-                fetch(piranha.baseUrl + "manager/api/media/folder/save", {
+                fetch(piranha.baseUrl + "manager/api/media/folder/save" + (self.filter ? "?filter=" + self.filter : ""), {
                     method: "post",
                     headers: {
                         "Content-Type": "application/json",
