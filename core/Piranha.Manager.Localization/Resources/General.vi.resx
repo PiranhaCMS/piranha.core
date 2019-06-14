@@ -22,13 +22,13 @@
     <value>Loại nội dung</value>
   </data>
   <data name="Culture" xml:space="preserve">
-    <value>Culture</value>
+    <value>Văn hóa</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Xoá</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Description</value>
+    <value>Mô tả</value>
   </data>
   <data name="Details" xml:space="preserve">
     <value>Chi tiêt</value>
@@ -55,10 +55,10 @@
     <value>Tổng quan</value>
   </data>
   <data name="Internal id" xml:space="preserve">
-    <value>Internal id</value>
+    <value>ID nội bộ</value>
   </data>
   <data name="Is default" xml:space="preserve">
-    <value>Is default</value>
+    <value>Là mặc định</value>
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Đăng xuất</value>
@@ -118,7 +118,7 @@
     <value>Hệ thống</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Tiêu đề</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Cập nhật</value>
