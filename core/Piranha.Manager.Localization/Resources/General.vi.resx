@@ -33,6 +33,9 @@
   <data name="Details" xml:space="preserve">
     <value>Chi tiêt</value>
   </data>
+  <data name="Dimensions" xml:space="preserve">
+    <value>Dimensions</value>
+  </data>
   <data name="Download" xml:space="preserve">
     <value>Tải về</value>
   </data>
@@ -83,6 +86,9 @@
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
     <value>Mở đường dẫn công khai trong tab mới</value>
+  </data>
+  <data name="Pixels" xml:space="preserve">
+    <value>Pixels</value>
   </data>
   <data name="Preview" xml:space="preserve">
     <value>Xem trước</value>
