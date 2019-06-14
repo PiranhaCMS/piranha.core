@@ -22,6 +22,6 @@
     <value>Tên miền máy chủ</value>
   </data>
   <data name="If this should be the default site of the installation." xml:space="preserve">
-    <value>If this should be the default site of the installation.</value>
+    <value>Chọn nếu muốn là trang mặc định khi cài đặt.</value>
   </data>
 </root>
