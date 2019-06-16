@@ -1247,6 +1247,8 @@ piranha.pageedit = new Vue({
         regions: [],
         editors: [],
         useBlocks: true,
+        saving: false,
+        savingDraft: false,
         selectedRegion: {
             uid: "uid-blocks",
             name: null,
@@ -1321,14 +1323,17 @@ piranha.pageedit = new Vue({
         },
         save: function ()
         {
+            this.saving = true;
             this.saveInternal(piranha.baseUrl + "manager/api/page/save");
         },
         saveDraft: function ()
         {
+            this.savingDraft = true;
             this.saveInternal(piranha.baseUrl + "manager/api/page/save/draft");
         },
         unpublish: function ()
         {
+            this.saving = true;
             this.saveInternal(piranha.baseUrl + "manager/api/page/save/unpublish");
         },
         saveInternal: function (route) {
@@ -1370,6 +1375,9 @@ piranha.pageedit = new Vue({
                     window.history.replaceState({ state: "created"}, "Edit page", piranha.baseUrl + "manager/page/edit/" + result.id);
                 }
                 piranha.notifications.push(result.status);
+
+                self.saving = false;
+                self.savingDraft = false;
             })
             .catch(function (error) {
                 console.log("error:", error);

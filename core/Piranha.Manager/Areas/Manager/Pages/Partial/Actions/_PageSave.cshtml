@@ -1,7 +1,7 @@
 @inject ManagerLocalizer Localizer
 
 <div class="btn-group" role="group">
-    <button v-on:click.prevent="saveDraft" type="button" class="btn btn-primary btn-labeled">
+    <button v-on:click.prevent="saveDraft" :class="{ 'btn-loading' : savingDraft }" type="button" class="btn btn-primary btn-labeled">
         <i class="fas fa-save"></i>
         @Localizer.General["Save"]
     </button>
@@ -14,7 +14,7 @@
     </div>
 </div>
 <div class="btn-group" role="group">
-    <button v-on:click.prevent="save" type="button" class="btn btn-success btn-labeled">
+    <button v-on:click.prevent="save" :class="{ 'btn-loading' : saving }" type="button" class="btn btn-success btn-labeled">
         <i class="fas fa-check"></i>
         @Localizer.General["Publish"]
     </button>

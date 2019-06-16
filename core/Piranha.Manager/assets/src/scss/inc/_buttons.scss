@@ -12,10 +12,29 @@
             margin-right: .25rem;
         }
     }
+
+    &.btn-loading {
+        > [class^="fa"] {
+            &:before {
+                //content: "\f1ce";
+                content: "\f110";
+                display: inline-block;
+                animation: btn-loading-animation 1s linear;
+                animation-iteration-count: infinite;
+            }
+        }
+    }
 }
 
 .btn-group {
     .dropdown-menu {
         min-width: 100%;
+    }
+}
+
+@keyframes btn-loading-animation {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
     }
 }
