@@ -11,3 +11,16 @@
         border-radius: $border-radius;
     }
 }
+
+.bg-light {
+    .accordion {
+        .card-header {
+            background: $white;
+        }
+
+        .card-body {
+            border: solid 2px $white;
+            border-radius: 0;
+        }
+    }
+}

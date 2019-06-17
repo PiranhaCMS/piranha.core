@@ -67,6 +67,15 @@
                                 </div>
                             </div>
                         </div>
+                        <div v-if="siteTypes.length > 0" class="col">
+                            <div class="form-group">
+                                <label>@Localizer.General["Content type"]</label>
+                                <select v-model="typeId" class="form-control">
+                                    <option></option>
+                                    <option value="{{ siteType.id }}" v-for="siteType in siteTypes">{{ siteType.title }}</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

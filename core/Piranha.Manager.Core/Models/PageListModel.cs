@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using Piranha.Manager.Models.Content;
 
 namespace Piranha.Manager.Models
 {
@@ -44,15 +45,8 @@ namespace Piranha.Manager.Models
             public List<PageItem> Items { get; set; } = new List<PageItem>();
         }
 
-        public class PageTypeItem
-        {
-            public string Id { get; set; }
-            public string Title { get; set; }
-            public string AddUrl { get; set; }
-        }
-
         public IList<SiteItem> Sites { get; set; } = new List<SiteItem>();
-        public IList<PageTypeItem> PageTypes { get; set; } = new List<PageTypeItem>();
+        public IList<ContentTypeModel> PageTypes { get; set; } = new List<ContentTypeModel>();
         public StatusMessage Status { get; set; }
     }
 }

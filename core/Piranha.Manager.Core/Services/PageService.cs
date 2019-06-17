@@ -52,7 +52,7 @@ namespace Piranha.Manager.Services
                     Slug = "/",
                     EditUrl = "manager/site/edit/"
                 }).ToList(),
-                PageTypes = App.PageTypes.Select(t => new PageListModel.PageTypeItem
+                PageTypes = App.PageTypes.Select(t => new ContentTypeModel
                 {
                     Id = t.Id,
                     Title = t.Title,

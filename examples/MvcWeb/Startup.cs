@@ -77,6 +77,10 @@ namespace MvcWeb
                 .AddType(typeof(Models.BlogPost))
                 .Build()
                 .DeleteOrphans();
+            var siteTypeBuilder = new Piranha.AttributeBuilder.SiteTypeBuilder(api)
+                .AddType(typeof(Models.StandardSite))
+                .Build()
+                .DeleteOrphans();
 
             /**
              *

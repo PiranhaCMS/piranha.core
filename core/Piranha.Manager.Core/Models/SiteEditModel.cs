@@ -8,8 +8,8 @@
  *
  */
 
-using System;
 using System.Collections.Generic;
+using Piranha.Manager.Models.Content;
 
 namespace Piranha.Manager.Models
 {
@@ -42,6 +42,8 @@ namespace Piranha.Manager.Models
         /// Gets/sets the optional culture for the site.
         /// </summary>
         public string Culture { get; set; }
+
+        public IList<ContentTypeModel> SiteTypes { get; set; } = new List<ContentTypeModel>();
 
         /// <summary>
         /// Default constructor.

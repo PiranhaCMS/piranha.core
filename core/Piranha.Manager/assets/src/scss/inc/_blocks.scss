@@ -296,23 +296,20 @@
             color: $gray-700;
         }
     }
+}
 
-    /*
-    .block-placeholder {
-        background: #f2fbff;
-        height: 0;
-        border: 1px dashed #fff;
-        margin: 1.25rem 1rem 1rem;
-        transition: all ease-in-out .2s;
-    }
+.bg-light {
+    .block-add {
+        i {
+            background: $gray-100;
+            border-color: $gray-100;
+            color: $primary;
+        }
 
-    &.active {
-        margin-bottom: 118px;
-
-        .block-placeholder {
-            height: 100px;
-            border: 1px dashed #b6bcbf;
+        &:hover, &:focus-within, &.active {
+            i {
+                color: $gray-700;
+            }
         }
     }
-    */
 }

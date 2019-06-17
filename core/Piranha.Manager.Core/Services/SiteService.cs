@@ -64,6 +64,7 @@ namespace Piranha.Manager.Services
                     Id = model.Id
                 };
             }
+            site.SiteTypeId = model.TypeId;
             site.Title = model.Title;
             site.InternalId = model.InternalId;
             site.Culture = model.Culture;
@@ -85,7 +86,12 @@ namespace Piranha.Manager.Services
                 Culture = site.Culture,
                 Description = site.Description,
                 Hostnames = site.Hostnames,
-                IsDefault = site.IsDefault
+                IsDefault = site.IsDefault,
+                SiteTypes = App.SiteTypes.Select(t => new ContentTypeModel
+                {
+                    Id = t.Id,
+                    Title = t.Title
+                }).ToList()
             };
         }
     }

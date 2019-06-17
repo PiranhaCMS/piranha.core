@@ -13,7 +13,8 @@ piranha.siteedit = new Vue({
         culture: null,
         description: null,
         hostnames: null,
-        isDefault: false
+        isDefault: false,
+        siteTypes: []
     },
     methods: {
         load: function (id) {
@@ -30,6 +31,7 @@ piranha.siteedit = new Vue({
                     self.description = result.description;
                     self.hostnames = result.hostnames;
                     self.isDefault = result.isDefault;
+                    self.siteTypes = result.siteTypes;
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },
