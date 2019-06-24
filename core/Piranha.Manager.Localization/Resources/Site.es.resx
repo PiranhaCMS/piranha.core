@@ -16,9 +16,12 @@
     <value>Agregar sitio</value>
   </data>
   <data name="Edit site" xml:space="preserve">
-    <value>Edit site</value>
+    <value>Editar sitio</value>
   </data>
   <data name="Hostnames" xml:space="preserve">
-    <value>Hostnames</value>
+    <value>Nombres de host</value>
+  </data>
+  <data name="If this should be the default site of the installation." xml:space="preserve">
+    <value>Este debería ser el sitio por defecto de la instalación.</value>
   </data>
 </root>

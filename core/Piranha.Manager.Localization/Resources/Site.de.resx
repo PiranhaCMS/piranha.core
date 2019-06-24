@@ -16,9 +16,12 @@
     <value>Seite hinzufügen</value>
   </data>
   <data name="Edit site" xml:space="preserve">
-    <value>Edit site</value>
+    <value>Website bearbeiten</value>
   </data>
   <data name="Hostnames" xml:space="preserve">
-    <value>Hostnames</value>
+    <value>Hostnamen</value>
+  </data>
+  <data name="If this should be the default site of the installation." xml:space="preserve">
+    <value>Soll dies die Standardseite der Installation sein.</value>
   </data>
 </root>

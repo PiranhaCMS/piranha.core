@@ -33,6 +33,9 @@
   <data name="Details" xml:space="preserve">
     <value>Details</value>
   </data>
+  <data name="Dimensions" xml:space="preserve">
+    <value>Dimensions</value>
+  </data>
   <data name="Download" xml:space="preserve">
     <value>Download</value>
   </data>
@@ -84,6 +87,9 @@
   <data name="Open public URL in new tab" xml:space="preserve">
     <value>Open public URL in new tab</value>
   </data>
+  <data name="Pixels" xml:space="preserve">
+    <value>Pixels</value>
+  </data>
   <data name="Preview" xml:space="preserve">
     <value>Preview</value>
   </data>
@@ -116,6 +122,9 @@
   </data>
   <data name="System" xml:space="preserve">
     <value>System</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Title</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Update</value>
