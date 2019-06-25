@@ -16,7 +16,7 @@
     <value>Añadir</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>All</value>
+    <value>Todos</value>
   </data>
   <data name="Content" xml:space="preserve">
     <value>Contenido</value>
@@ -46,7 +46,7 @@
     <value>Borrador</value>
   </data>
   <data name="Drafts" xml:space="preserve">
-    <value>Drafts</value>
+    <value>Borradores</value>
   </data>
   <data name="Filename" xml:space="preserve">
     <value>Nombre del archivo</value>
@@ -112,7 +112,7 @@
     <value>Guardar</value>
   </data>
   <data name="Scheduled" xml:space="preserve">
-    <value>Scheduled</value>
+    <value>Programado</value>
   </data>
   <data name="Search..." xml:space="preserve">
     <value>Buscar...</value>
