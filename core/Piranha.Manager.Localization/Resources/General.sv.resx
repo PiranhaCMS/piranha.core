@@ -16,7 +16,7 @@
     <value>Lägg till</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>All</value>
+    <value>Alla</value>
   </data>
   <data name="Content" xml:space="preserve">
     <value>Innehåll</value>
@@ -37,7 +37,7 @@
     <value>Detaljer</value>
   </data>
   <data name="Dimensions" xml:space="preserve">
-    <value>Dimensions</value>
+    <value>Dimensioner</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>Ladda ner</value>
@@ -46,7 +46,7 @@
     <value>Arbetskopia</value>
   </data>
   <data name="Drafts" xml:space="preserve">
-    <value>Drafts</value>
+    <value>Arbetskopior</value>
   </data>
   <data name="Filename" xml:space="preserve">
     <value>Filnamn</value>
