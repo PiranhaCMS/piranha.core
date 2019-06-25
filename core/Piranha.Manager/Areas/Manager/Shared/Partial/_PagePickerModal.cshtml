@@ -1,0 +1,32 @@
+@inject IViewLocalizer Localizer
+
+<!-- The Modal -->
+<div class="modal modal-panel fade" id="pagepicker">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title"><i class="fas fa-copy"></i> @Localizer["Select page"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body bg-light">
+
+                <div class="form-group mt-3">
+                     <input id="pagepickerSearch" class="form-control" v-model="search" v-on:keyup.enter="onEnter" placeholder="@Localizer["Search..."]"/>
+                </div>
+
+                <div class="sitemap sitemap-container">
+                    <ol>
+                        <page-item v-for="item in items" v-bind:key="item.id" v-bind:item="item"></page-item>
+                    </ol>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
