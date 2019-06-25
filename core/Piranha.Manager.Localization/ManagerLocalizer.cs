@@ -50,6 +50,11 @@ namespace Piranha.Manager
         public IStringLocalizer<Localization.Page> Page { get; private set; }
 
         /// <summary>
+        /// Gets/sets post string localization.
+        /// </summary>
+        public IStringLocalizer<Localization.Post> Post { get; private set; }
+
+        /// <summary>
         /// Gets/sets site string localization.
         /// </summary>
         public IStringLocalizer<Localization.Site> Site { get; private set; }
@@ -65,6 +70,7 @@ namespace Piranha.Manager
             IStringLocalizer<Localization.Menu> menu,
             IStringLocalizer<Localization.Module> module,
             IStringLocalizer<Localization.Page> page,
+            IStringLocalizer<Localization.Post> post,
             IStringLocalizer<Localization.Site> site)
         {
             Alias = alias;
@@ -74,6 +80,7 @@ namespace Piranha.Manager
             Media = media;
             Menu = menu;
             Page = page;
+            Post = post;
             Site = site;
         }
     }
