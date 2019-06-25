@@ -94,7 +94,7 @@
     <value>Öppna i ny flik</value>
   </data>
   <data name="Pixels" xml:space="preserve">
-    <value>Pixels</value>
+    <value>Pixlar</value>
   </data>
   <data name="Preview" xml:space="preserve">
     <value>Förhandsgranska</value>
@@ -112,7 +112,7 @@
     <value>Spara</value>
   </data>
   <data name="Scheduled" xml:space="preserve">
-    <value>Scheduled</value>
+    <value>Schemalagda</value>
   </data>
   <data name="Search..." xml:space="preserve">
     <value>Sök...</value>
