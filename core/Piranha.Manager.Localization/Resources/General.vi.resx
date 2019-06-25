@@ -16,7 +16,7 @@
     <value>Thêm</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>All</value>
+    <value>Tất cả</value>
   </data>
   <data name="Content" xml:space="preserve">
     <value>Nội Dung</value>
@@ -46,7 +46,7 @@
     <value>Bản nháp</value>
   </data>
   <data name="Drafts" xml:space="preserve">
-    <value>Drafts</value>
+    <value>Bảng nháp</value>
   </data>
   <data name="Filename" xml:space="preserve">
     <value>Tên tập tin</value>
@@ -112,7 +112,7 @@
     <value>Lưu</value>
   </data>
   <data name="Scheduled" xml:space="preserve">
-    <value>Scheduled</value>
+    <value>Đã lên lịch trình</value>
   </data>
   <data name="Search..." xml:space="preserve">
     <value>Tìm kiếm...</value>
