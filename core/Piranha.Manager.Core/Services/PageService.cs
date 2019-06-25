@@ -60,13 +60,19 @@ namespace Piranha.Manager.Services
                 }).ToList()
             };
 
+            var expandedLevels = 0;
+            using (var config = new Config(_api))
+            {
+                expandedLevels = config.ManagerExpandedSitemapLevels;
+            }
+
             foreach (var site in model.Sites)
             {
                 var sitemap = await _api.Sites.GetSitemapAsync(site.Id, false);
 
                 foreach (var item in sitemap)
                 {
-                    site.Pages.Add(MapRecursive(item));
+                    site.Pages.Add(MapRecursive(item, 0, expandedLevels));
                 }
             }
 
@@ -302,7 +308,7 @@ namespace Piranha.Manager.Services
             return null;
         }
 
-        private PageListModel.PageItem MapRecursive(SitemapItem item)
+        private PageListModel.PageItem MapRecursive(SitemapItem item, int level, int expandedLevels)
         {
             var model = new PageListModel.PageItem
             {
@@ -311,12 +317,13 @@ namespace Piranha.Manager.Services
                 TypeName = item.PageTypeName,
                 Published = item.Published.HasValue ? item.Published.Value.ToString("yyyy-MM-dd") : null,
                 Status = !item.Published.HasValue ? PageListModel.PageItem.Unpublished : "",
-                EditUrl = "manager/page/edit/"
+                EditUrl = "manager/page/edit/",
+                IsExpanded = level < expandedLevels
             };
 
             foreach (var child in item.Items)
             {
-                model.Items.Add(MapRecursive(child));
+                model.Items.Add(MapRecursive(child, level + 1, expandedLevels));
             }
             return model;
         }
