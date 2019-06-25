@@ -14,9 +14,9 @@ Vue.component("sitemap-item", {
         "  <div class='sitemap-item'>" +
         "    <div class='handle dd-handle'><i class='fas fa-ellipsis-v'></i></div>" +
         "    <div class='link'>" +
-        "      <span v-if='item.items.length > 0' class='actions'>" +
-        "        <a v-if='item.isExpanded' v-on:click.prevent='toggleItem(item)' class='expand' href='#'><i class='fas fa-minus'></i></a>" +
-        "        <a v-if='!item.isExpanded' v-on:click.prevent='toggleItem(item)' class='expand' href='#'><i class='fas fa-plus'></i></a>" +
+        "      <span class='actions'>" +
+        "        <a v-if='item.items.length > 0 && item.isExpanded' v-on:click.prevent='toggleItem(item)' class='expand' href='#'><i class='fas fa-minus'></i></a>" +
+        "        <a v-if='item.items.length > 0 && !item.isExpanded' v-on:click.prevent='toggleItem(item)' class='expand' href='#'><i class='fas fa-plus'></i></a>" +
         "      </span>" +
         "      <a :href='piranha.baseUrl + item.editUrl + item.id'>" +
         "        {{ item.title }}" +

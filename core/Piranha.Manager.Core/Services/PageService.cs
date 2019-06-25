@@ -68,15 +68,34 @@ namespace Piranha.Manager.Services
 
             foreach (var site in model.Sites)
             {
-                var sitemap = await _api.Sites.GetSitemapAsync(site.Id, false);
+                site.Pages.AddRange(await GetPageStructure(site.Id));
+            }
+            return model;
+        }
 
-                foreach (var item in sitemap)
-                {
-                    site.Pages.Add(MapRecursive(item, 0, expandedLevels));
-                }
+        /// <summary>
+        /// Gets the hierachical page structure for the specified site.
+        /// </summary>
+        /// <param name="siteId">The site id</param>
+        /// <returns>The structure</returns>
+        public async Task<List<PageListModel.PageItem>> GetPageStructure(Guid siteId)
+        {
+            var pages = new List<PageListModel.PageItem>();
+
+            // Get the configured expanded levels
+            var expandedLevels = 0;
+            using (var config = new Config(_api))
+            {
+                expandedLevels = config.ManagerExpandedSitemapLevels;
             }
 
-            return model;
+            // Get the sitemap and transform
+            var sitemap = await _api.Sites.GetSitemapAsync(siteId, false);
+            foreach (var item in sitemap)
+            {
+                pages.Add(MapRecursive(item, 0, expandedLevels));
+            }
+            return pages;
         }
 
         /// <summary>

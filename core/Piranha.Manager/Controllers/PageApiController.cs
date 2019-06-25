@@ -31,14 +31,16 @@ namespace Piranha.Manager.Controllers
     public class PageApiController : Controller
     {
         private readonly PageService _service;
+        private readonly IApi _api;
         private readonly ManagerLocalizer _localizer;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public PageApiController(PageService service, ManagerLocalizer localizer)
+        public PageApiController(PageService service, IApi api, ManagerLocalizer localizer)
         {
             _service = service;
+            _api = api;
             _localizer = localizer;
         }
 
@@ -58,11 +60,15 @@ namespace Piranha.Manager.Controllers
         /// Gets the sitemap model.
         /// </summary>
         /// <returns>The list model</returns>
-        [Route("sitemap")]
+        [Route("sitemap/{siteId?}")]
         [HttpGet]
-        public async Task<Sitemap> Sitemap()
+        public async Task<List<PageListModel.PageItem>> Sitemap(Guid? siteId = null)
         {
-            return await _service.GetSitemap();
+            if (!siteId.HasValue)
+            {
+                siteId = (await _api.Sites.GetDefaultAsync()).Id;
+            }
+            return await _service.GetPageStructure(siteId.Value);
         }
 
         /// <summary>

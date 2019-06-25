@@ -25,7 +25,7 @@ namespace Piranha.Manager.Models
             public string Title { get; set; }
             public string Slug { get; set; }
             public string EditUrl { get; set; }
-            public IList<PageItem> Pages { get; set; } = new List<PageItem>();
+            public List<PageItem> Pages { get; set; } = new List<PageItem>();
         }
 
         public class PageItem
