@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2018 Håkan Edling
+ * Copyright (c) 2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -10,19 +10,17 @@
 
 using Piranha.AttributeBuilder;
 using Piranha.Models;
+using Piranha.Extend.Fields;
 
 namespace RazorWeb.Models
 {
     /// <summary>
-    /// Basic blog page.
+    /// Basic page with main content in markdown.
     /// </summary>
-    [PageType(Title = "Blog archive", UseBlocks = false)]
-    public class BlogArchive : ArchivePage<BlogArchive>
+    [SiteType(Title = "Standard Site")]
+    public class StandardSite : SiteContent<StandardSite>
     {
-        /// <summary>
-        /// Gets/sets the page header.
-        /// </summary>
         [Region]
-        public Regions.Hero Hero { get; set; }
+        public HtmlField Footer { get; set; }
     }
 }

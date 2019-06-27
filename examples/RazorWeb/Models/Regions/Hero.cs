@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/tidyui/coreweb
- * 
+ *
  */
 
 using Piranha.AttributeBuilder;
@@ -35,6 +35,7 @@ namespace RazorWeb.Models.Regions
         /// Gets/sets the optional ingress.
         /// </summary>
         [Field]
+        [FieldDescription("Optional text that is shown on top of the background image")]
         public HtmlField Ingress { get; set; }
     }
 }

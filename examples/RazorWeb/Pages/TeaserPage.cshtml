@@ -11,7 +11,7 @@
     <div class="container latest-post">
         <div class="row">
             <div class="col text-center">
-                Latest news: 
+                Latest news:
                 <strong>@Model.Data.LatestPost.Published.Value.ToString("yyyy-MM-dd")</strong>
                 -
                 <a href="@Model.Data.LatestPost.Permalink">@Model.Data.LatestPost.Title</a>
@@ -24,7 +24,7 @@
 
 <div class="container body-container">
     <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-10 col-xs-12">
+        <div class="col-md-10 col-xs-12">
             @Html.DisplayFor(m => m.Data.Blocks)
         </div>
     </div>

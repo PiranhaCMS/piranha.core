@@ -18,7 +18,7 @@
         return "";
     };
 
-    Func<Piranha.Models.DynamicPost, Piranha.Extend.Blocks.HtmlBlock> GetFirstHtmlBlock = (post) => 
+    Func<Piranha.Models.DynamicPost, Piranha.Extend.Blocks.HtmlBlock> GetFirstHtmlBlock = (post) =>
     {
         foreach (var block in post.Blocks)
         {
@@ -28,7 +28,7 @@
             }
         }
         return null;
-    };    
+    };
 }
 
 @Html.DisplayFor(m => m.Data.Hero)
@@ -36,7 +36,7 @@
 <div class="container body-container">
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-10 col-xs-12">
-            @foreach (var post in Model.Data.Archive.Posts) 
+            @foreach (var post in Model.Data.Archive.Posts)
             {
                 <article class="archive-item">
                     <header>
@@ -61,10 +61,10 @@
                     <a href="@post.Permalink" class="btn btn-sm btn-default">Read more</a>
                 </article>
             }
-        </div>    
+        </div>
     </div>
 
-    @if (Model.Data.Archive.TotalPages > 1) 
+    @if (Model.Data.Archive.TotalPages > 1)
     {
         <div class="row">
             <div class="col">
@@ -82,25 +82,25 @@
                             <span class="sr-only">Previous</span>
                         </a>
                     </li>
-                    @for (var n = 1; n <= Model.Data.Archive.TotalPages; n++) 
+                    @for (var n = 1; n <= Model.Data.Archive.TotalPages; n++)
                     {
                         <li class="page-item @(Model.Data.Archive.CurrentPage == n ? "active" : "")"><a class="page-link" href="@BlogLink()/page/@n">@n</a></li>
                     }
                     <li class="page-item">
                         <a class="page-link" href="@BlogLink()/page/@Math.Min(Model.Data.Archive.TotalPages, Model.Data.Archive.CurrentPage + 1)">
                             <span aria-hidden="true">&rsaquo;</span>
-                            <span class="sr-only">Next</span>                        
+                            <span class="sr-only">Next</span>
                         </a>
                     </li>
                     <li class="page-item">
                         <a class="page-link" href="@BlogLink()/page/@Model.Data.Archive.TotalPages">
                             <span aria-hidden="true">&raquo;</span>
-                            <span class="sr-only">Next</span>                        
+                            <span class="sr-only">Next</span>
                         </a>
                     </li>
                 </ul>
                 </nav>
             </div>
-        </div>        
+        </div>
     }
 </div>

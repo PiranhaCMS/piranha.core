@@ -3,6 +3,8 @@ using System.IO;
 using System.Threading.Tasks;
 using Piranha;
 using Piranha.Extend.Blocks;
+using Piranha.Services;
+using RazorWeb.Models.Blocks;
 
 namespace RazorWeb
 {
@@ -18,11 +20,21 @@ namespace RazorWeb
                     new { id = Guid.NewGuid(), filename = "logo.png" },
                     new { id = Guid.NewGuid(), filename = "teaser1.png" },
                     new { id = Guid.NewGuid(), filename = "teaser2.png" },
-                    new { id = Guid.NewGuid(), filename = "teaser3.png" }
+                    new { id = Guid.NewGuid(), filename = "teaser3.png" },
+                    new { id = Guid.NewGuid(), filename = "drifter1.png" },
+                    new { id = Guid.NewGuid(), filename = "drifter2.jpg" },
                 };
 
                 // Get the default site id
                 var siteId = (await api.Sites.GetDefaultAsync()).Id;
+                var site2Id = Guid.NewGuid();
+
+                await api.Sites.SaveAsync(new Piranha.Models.Site
+                {
+                    Id = site2Id,
+                    Title = "Swedish",
+                    Culture = "sv-SE"
+                });
 
                 // Upload images
                 foreach (var image in images)
@@ -51,7 +63,7 @@ namespace RazorWeb
                 startpage.Hero.PrimaryImage = images[1].id;
                 startpage.Hero.Ingress =
                     "<p>A lightweight & unobtrusive CMS for ASP.NET Core.</p>" +
-                    "<p><small>Stable version 5.2.1 - 2018-10-17 - <a href=\"https://github.com/piranhacms/piranha.core/wiki/changelog\" target=\"_blank\">Changelog</a></small></p>";
+                    "<p><small>Stable version 6.1.0 - 2019-05-01 - <a href=\"https://github.com/piranhacms/piranha.core/wiki/changelog\" target=\"_blank\">Changelog</a></small></p>";
 
                 // Teasers
                 startpage.Teasers.Add(new Models.Regions.Teaser
@@ -88,6 +100,38 @@ namespace RazorWeb
                         });
                     }
                 }
+                startpage.Blocks.Add(new ImageGalleryBlock
+                {
+                    Items =
+                    {
+                        new ImageBlock
+                        {
+                            Body = images[5].id
+                        },
+                        new ImageBlock
+                        {
+                            Body = images[6].id
+                        }
+                    }
+                });
+                startpage.Blocks.Add(new ColumnBlock
+                {
+                    Items =
+                    {
+                        new ImageBlock
+                        {
+                            Body = images[6].id
+                        },
+                        new HtmlBlock
+                        {
+                            Body = "<h3>Ornare Mattis Vulputate</h3><p>Nullam id dolor id nibh ultricies vehicula ut id elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam quis risus eget urna mollis ornare vel eu leo. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+                        },
+                        new ImageBlock
+                        {
+                            Body = images[5].id
+                        }
+                    }
+                });
                 using (var stream = File.OpenRead("seed/startpage2.md"))
                 {
                     using (var reader = new StreamReader(stream))
@@ -99,6 +143,10 @@ namespace RazorWeb
                     }
                 }
                 startpage.Published = DateTime.Now;
+                await api.Pages.SaveAsync(startpage);
+
+                startpage.Id = Guid.NewGuid();
+                startpage.SiteId = site2Id;
                 await api.Pages.SaveAsync(startpage);
 
                 // Features page
@@ -136,15 +184,24 @@ namespace RazorWeb
                                 }
                                 else
                                 {
-                                    featurespage.Blocks.Add(new HtmlColumnBlock
+                                    featurespage.Blocks.Add(new ColumnBlock
                                     {
-                                        Column1 = App.Markdown.Transform(cols[0].Trim()),
-                                        Column2 = App.Markdown.Transform(cols[1].Trim())
+                                        Items =
+                                        {
+                                            new HtmlBlock
+                                            {
+                                                Body = App.Markdown.Transform(cols[0].Trim())
+                                            },
+                                            new HtmlBlock
+                                            {
+                                                Body = App.Markdown.Transform(cols[1].Trim())
+                                            }
+                                        }
                                     });
 
                                     if (n < blocks.Length - 1)
                                     {
-                                        featurespage.Blocks.Add(new Models.Blocks.SeparatorBlock());
+                                        featurespage.Blocks.Add(new SeparatorBlock());
                                     }
                                 }
                             }
@@ -194,6 +251,55 @@ namespace RazorWeb
                     }
                 }
                 blogpost.Published = DateTime.Now;
+                await api.Posts.SaveAsync(blogpost);
+
+                // Unpublished Post
+                blogpost = Models.BlogPost.Create(api);
+                blogpost.BlogId = blogpage.Id;
+                blogpost.Title = "What is Piranha unpublished";
+                blogpost.Category = "Piranha CMS";
+                blogpost.Tags.Add("welcome");
+
+                using (var stream = File.OpenRead("seed/blogpost.md"))
+                {
+                    using (var reader = new StreamReader(stream))
+                    {
+                        var body = reader.ReadToEnd();
+
+                        foreach (var block in body.Split("@"))
+                        {
+                            blogpost.Blocks.Add(new HtmlBlock
+                            {
+                                Body = App.Markdown.Transform(block.Trim())
+                            });
+                        }
+                    }
+                }
+                await api.Posts.SaveAsync(blogpost);
+
+                // Scheduled Post
+                blogpost = Models.BlogPost.Create(api);
+                blogpost.BlogId = blogpage.Id;
+                blogpost.Title = "What is Piranha scheduled";
+                blogpost.Category = "Another category";
+                blogpost.Tags.Add("welcome");
+
+                using (var stream = File.OpenRead("seed/blogpost.md"))
+                {
+                    using (var reader = new StreamReader(stream))
+                    {
+                        var body = reader.ReadToEnd();
+
+                        foreach (var block in body.Split("@"))
+                        {
+                            blogpost.Blocks.Add(new HtmlBlock
+                            {
+                                Body = App.Markdown.Transform(block.Trim())
+                            });
+                        }
+                    }
+                }
+                blogpost.Published = DateTime.Now.AddDays(7);
                 await api.Posts.SaveAsync(blogpost);
             }
         }

@@ -1,9 +1,9 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using Piranha;
 using Piranha.AspNetCore.Identity.SQLite;
 
@@ -15,18 +15,33 @@ namespace RazorWeb
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(config =>
-            {
-                config.ModelBinderProviders.Insert(0, new Piranha.Manager.Binders.AbstractModelBinderProvider());
-            });
+            services.AddLocalization(options =>
+                options.ResourcesPath = "Resources"
+            );
+            services.AddMvc()
+                .AddRazorPagesOptions(options => {
+                    options.Conventions.AuthorizeAreaFolder("Manager", "/");
+                    options.Conventions.AllowAnonymousToAreaPage("Manager", "/login");
+                })
+                .AddViewLocalization()
+                .AddDataAnnotationsLocalization()
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.TypeNameHandling = TypeNameHandling.Auto;
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddPiranha();
             services.AddPiranhaApplication();
             services.AddPiranhaFileStorage();
             services.AddPiranhaImageSharp();
+            services.AddPiranhaManager();
+
             services.AddPiranhaEF(options =>
                 options.UseSqlite("Filename=./piranha.razorweb.db"));
             services.AddPiranhaIdentityWithSeed<IdentitySQLiteDb>(options =>
                 options.UseSqlite("Filename=./piranha.razorweb.db"));
-            services.AddPiranhaManager();
+
             services.AddMemoryCache();
             services.AddPiranhaMemoryCache();
         }
@@ -42,22 +57,35 @@ namespace RazorWeb
             App.Init(api);
 
             // Configure cache level
-            App.CacheLevel = Piranha.Cache.CacheLevel.Basic;
+            App.CacheLevel = Piranha.Cache.CacheLevel.Full;
 
             // Custom components
-            App.Blocks.Register<Models.Blocks.SeparatorBlock>();
+            App.Blocks.Register<Models.Blocks.ColumnBlock>();
 
             // Build content types
             var pageTypeBuilder = new Piranha.AttributeBuilder.PageTypeBuilder(api)
                 .AddType(typeof(Models.BlogArchive))
                 .AddType(typeof(Models.StandardPage))
-                .AddType(typeof(Models.TeaserPage));
-            pageTypeBuilder.Build()
+                .AddType(typeof(Models.TeaserPage))
+                .Build()
                 .DeleteOrphans();
             var postTypeBuilder = new Piranha.AttributeBuilder.PostTypeBuilder(api)
-                .AddType(typeof(Models.BlogPost));
-            postTypeBuilder.Build()
+                .AddType(typeof(Models.BlogPost))
+                .Build()
                 .DeleteOrphans();
+            var siteTypeBuilder = new Piranha.AttributeBuilder.SiteTypeBuilder(api)
+                .AddType(typeof(Models.StandardSite))
+                .Build()
+                .DeleteOrphans();
+
+            /**
+             *
+             * Test another culture in the UI
+             *
+            var cultureInfo = new System.Globalization.CultureInfo("en-US");
+            System.Globalization.CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+             */
 
             // Register middleware
             app.UseStaticFiles();
@@ -69,6 +97,10 @@ namespace RazorWeb
                 routes.MapRoute(name: "areaRoute",
                     template: "{area:exists}/{controller}/{action}/{id?}",
                     defaults: new { controller = "Home", action = "Index" });
+
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=home}/{action=index}/{id?}");
             });
 
             Seed.RunAsync(api).GetAwaiter().GetResult();
