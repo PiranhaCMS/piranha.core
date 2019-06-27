@@ -12,16 +12,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Add site" xml:space="preserve">
-    <value>Site toevoegen</value>
-  </data>
-  <data name="Edit site" xml:space="preserve">
-    <value>Site bewerken</value>
-  </data>
-  <data name="Hostnames" xml:space="preserve">
-    <value>Hostnamen</value>
-  </data>
-  <data name="If this should be the default site of the installation." xml:space="preserve">
-    <value>Als dit de standaard site van de installatie moet zijn.</value>
+  <data name="All categories" xml:space="preserve">
+    <value>Todas las categorías</value>
   </data>
 </root>

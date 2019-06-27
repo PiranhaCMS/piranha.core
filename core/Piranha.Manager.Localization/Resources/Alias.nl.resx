@@ -13,27 +13,27 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Aliases" xml:space="preserve">
-    <value>Aliases</value>
+    <value>Aliassen</value>
   </data>
   <data name="Add new alias" xml:space="preserve">
-    <value>Add new alias</value>
+    <value>Nieuwe alias toevoegen</value>
   </data>
   <data name="Alias URL" xml:space="preserve">
     <value>Alias URL</value>
   </data>
   <data name="Redirect URL" xml:space="preserve">
-    <value>Redirect URL</value>
+    <value>Omleiding URL</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>Permanent</value>
   </data>
   <data name="If the redirect should be permanent" xml:space="preserve">
-    <value>If the redirect should be permanent</value>
+    <value>Als de omleiding permanent moet zijn</value>
   </data>
   <data name="The alias was successfully added to the list" xml:space="preserve">
-    <value>The alias was successfully added to the list</value>
+    <value>De alias is met succes toegevoegd aan de lijst</value>
   </data>
   <data name="The alias was successfully deleted" xml:space="preserve">
-    <value>The alias was successfully deleted</value>
+    <value>De alias is succesvol verwijderd</value>
   </data>
 </root>

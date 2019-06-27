@@ -15,6 +15,9 @@
   <data name="Add" xml:space="preserve">
     <value>Lägg till</value>
   </data>
+  <data name="All" xml:space="preserve">
+    <value>Alla</value>
+  </data>
   <data name="Content" xml:space="preserve">
     <value>Innehåll</value>
   </data>
@@ -34,13 +37,16 @@
     <value>Detaljer</value>
   </data>
   <data name="Dimensions" xml:space="preserve">
-    <value>Dimensions</value>
+    <value>Dimensioner</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>Ladda ner</value>
   </data>
   <data name="Draft" xml:space="preserve">
     <value>Arbetskopia</value>
+  </data>
+  <data name="Drafts" xml:space="preserve">
+    <value>Arbetskopior</value>
   </data>
   <data name="Filename" xml:space="preserve">
     <value>Filnamn</value>
@@ -88,7 +94,7 @@
     <value>Öppna i ny flik</value>
   </data>
   <data name="Pixels" xml:space="preserve">
-    <value>Pixels</value>
+    <value>Pixlar</value>
   </data>
   <data name="Preview" xml:space="preserve">
     <value>Förhandsgranska</value>
@@ -104,6 +110,9 @@
   </data>
   <data name="Save" xml:space="preserve">
     <value>Spara</value>
+  </data>
+  <data name="Scheduled" xml:space="preserve">
+    <value>Schemalagda</value>
   </data>
   <data name="Search..." xml:space="preserve">
     <value>Sök...</value>
