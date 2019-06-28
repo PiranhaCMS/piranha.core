@@ -1,4 +1,5 @@
 ﻿@page "~/manager/media"
+@model MediaListViewModel
 @inject ManagerLocalizer Localizer
 @{
     ViewBag.MenuItem = "Media";
@@ -15,7 +16,7 @@
                 <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
                 <li class="breadcrumb-item active" aria-current="page">@Localizer.Menu["Media"]</li>
             </ol>
-        </nav>  
+        </nav>
 
         <div class="container-fluid">
             <div class="top-nav">
@@ -30,14 +31,14 @@
         <nav class="my-3">
             <ul class="nav nav-pills justify-content-center">
                 <li class="nav-item ">
-                    <a href="#" v-on:click.prevent="showList" v-bind:class="{ active: listView }" class="nav-link" ><i class="fas fa-list"></i> @Localizer.Media["List"]</a>               
+                    <a href="#" v-on:click.prevent="showList" v-bind:class="{ active: listView }" class="nav-link" ><i class="fas fa-list"></i> @Localizer.Media["List"]</a>
                 </li>
                 <li class="nav-item">
                      <a href="#" v-on:click.prevent="showGallery" v-bind:class="{ active: !listView }" class="nav-link"><i class="fas fa-table"></i> @Localizer.Media["Gallery"]</a>
                 </li>
             </ul>
-        </nav>    
-    </div>    
+        </nav>
+    </div>
 
     <div class="container-fluid">
         <div id="media-upload-container" class="dropzone-container">

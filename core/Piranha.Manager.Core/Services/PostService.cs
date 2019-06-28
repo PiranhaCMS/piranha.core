@@ -56,7 +56,7 @@ namespace Piranha.Manager.Services
                     Published = p.Published.HasValue ? p.Published.Value.ToString("yyyy-MM-dd HH:mm") : null,
                     Status = GetState(p, false),
                     isScheduled = p.Published.HasValue && p.Published.Value > DateTime.Now,
-                    EditUrl = "manager/post/"
+                    EditUrl = "manager/post/edit/"
                 }).ToList();
 
             // Get categories

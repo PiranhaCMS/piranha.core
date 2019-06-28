@@ -98,7 +98,7 @@ Vue.component("post-archive", {
             categories: [],
             postTypes: [],
             status: "all",
-            category: "All categories"
+            category: piranha.resources.texts.allCategories
         }
     },
     methods: {
@@ -128,7 +128,7 @@ Vue.component("post-archive", {
         },
         isSelected: function (item) {
             // Check category
-            if (this.category !== "All categories" && item.category !== this.category) {
+            if (this.category !== piranha.resources.texts.allCategories && item.category !== this.category) {
                 return false;
             }
 
@@ -158,28 +158,33 @@ Vue.component("post-archive", {
         "<div :id='uid'>" +
         "  <div class='mb-2'>" +
         "    <div class='btn-group' role='group'>" +
-        "      <button v-on:click='selectStatus(\"all\")' class='btn btn-sm' :class='status === \"all\" ? \"btn-primary\" : \"btn-light\"' href='#'>All</button>" +
-        "      <button v-on:click='selectStatus(\"draft\")' class='btn btn-sm' :class='status === \"draft\" ? \"btn-primary\" : \"btn-light\"' href='#'>Drafts</button>" +
-        "      <button v-on:click='selectStatus(\"scheduled\")' class='btn btn-sm' :class='status === \"scheduled\" ? \"btn-primary\" : \"btn-light\"' href='#'>Scheduled</button>" +
+        "      <button v-on:click='selectStatus(\"all\")' class='btn btn-sm' :class='status === \"all\" ? \"btn-primary\" : \"btn-light\"' href='#'>{{ piranha.resources.texts.all }}</button>" +
+        "      <button v-on:click='selectStatus(\"draft\")' class='btn btn-sm' :class='status === \"draft\" ? \"btn-primary\" : \"btn-light\"' href='#'>{{ piranha.resources.texts.drafts }}</button>" +
+        "      <button v-on:click='selectStatus(\"scheduled\")' class='btn btn-sm' :class='status === \"scheduled\" ? \"btn-primary\" : \"btn-light\"' href='#'>{{ piranha.resources.texts.scheduled }}</button>" +
         "    </div>" +
         "    <div v-if='postTypes.length > 1' class='btn-group' role='group'>" +
         "      <button type='button' class='btn btn-sm btn-light dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
-        "        All types" +
+        "        {{ piranha.resources.texts.all }}" +
         "      </button>" +
         "      <div class='dropdown-menu dropdown-menu-right'>" +
         "        <a v-for='type in postTypes' href='#' class='dropdown-item'>{{ type.title }}</a>" +
         "      </div>" +
         "    </div>" +
         "    <div v-if='categories.length > 1' class='btn-group' role='group'>" +
-        "      <button type='button' class='btn btn-sm dropdown-toggle' :class='category === \"All categories\" ? \"btn-light\" : \"btn-primary\"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
+        "      <button type='button' class='btn btn-sm dropdown-toggle' :class='category === piranha.resources.texts.allCategories ? \"btn-light\" : \"btn-primary\"' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
         "        {{ category }}" +
         "      </button>" +
         "      <div class='dropdown-menu dropdown-menu-right'>" +
-        "        <a v-on:click.prevent='selectCategory(\"All categories\")' href='#' class='dropdown-item'>All categories</a>" +
+        "        <a v-on:click.prevent='selectCategory(piranha.resources.texts.allCategories)' href='#' class='dropdown-item'>{{ piranha.resources.texts.allCategories }}</a>" +
         "        <a v-on:click.prevent='selectCategory(category.title)' v-for='category in categories' href='#' class='dropdown-item'>{{ category.title }}</a>" +
         "      </div>" +
         "    </div>" +
-        "    <button class='btn btn-sm btn-primary btn-labeled float-right'><i class='fas fa-plus'></i>Add item</button>" +
+        "    <div class='btn-group float-right'>" +
+        "      <button disabled id='addPostGroup' class='btn btn-sm btn-primary btn-labeled dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fas fa-plus'></i>{{ piranha.resources.texts.add }}</button>" +
+        "      <div class='dropdown-menu dropdown-menu-right' aria-labelledby='addPostGroup'>" +
+        "        <a class='dropdown-item' href='#' v-for='type in postTypes'>{{ type.title }}</a>" +
+        "      </div>" +
+        "    </div>" +
         "  </div>" +
         "  <table class='table'>" +
         "    <tbody>" +

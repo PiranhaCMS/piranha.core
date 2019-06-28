@@ -13,8 +13,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Piranha.Manager.Models
 {
-    [Authorize(Policy = Permission.Pages)]
-    public class PageListViewModel : PageModel
+    [Authorize(Policy = Permission.Config)]
+    public class ConfigEditViewModel : PageModel
     {
     }
 }

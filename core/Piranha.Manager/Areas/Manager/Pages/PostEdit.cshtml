@@ -1,0 +1,40 @@
+@page "~/manager/post/{action}/{id}/{postType?}"
+@inject ManagerLocalizer Localizer
+@{
+    ViewBag.Title = Localizer.Page["Edit post"];
+    ViewBag.MenuItem = "Pages";
+    string action = ((string)RouteData.Values["action"]).ToLower();
+}
+
+<div id="postedit">
+    <div class="top">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
+                <li class="breadcrumb-item"><a href="~/manager/pages">@Localizer.Menu["Pages"]</a></li>
+                <li class="breadcrumb-item">@Localizer.General["Edit"]</li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer.General["Edit post"]</li>
+                <li v-if="state === 'draft'" class="badge-item"><span class="badge badge-info"><i class="fas fa-pen"></i> @Localizer.General["Draft"]</span></li>
+            </ol>
+        </nav>
+
+        <!-- Menu -->
+    </div>
+
+    <div class="container-fluid app" :class="{ ready: !loading }">
+        <!-- Content navigation -->
+
+        <!-- Title -->
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group title">
+                            <input v-model="title" type="text" class="form-control form-control-lg" placeholder="@Localizer.Post["Your post title"]">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
