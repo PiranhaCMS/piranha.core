@@ -111,6 +111,10 @@ namespace Piranha.Extend.Fields
             {
                 return field1.Equals(field2);
             }
+            else if ((object)field1 == null && (object)field2 == null)
+            {
+                return true;
+            }
             return false;
         }
 
