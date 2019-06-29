@@ -43,14 +43,16 @@ namespace Piranha.Extend.Fields
         /// <summary>
         /// Gets the current enum type.
         /// </summary>
-        public override Type EnumType {
+        public override Type EnumType
+        {
             get { return typeof(T); }
         }
 
         /// <summary>
         /// Gets/sets the selected value as a string.
         /// </summary>
-        public override string EnumValue {
+        public override string EnumValue
+        {
             get { return Value.ToString(); }
             set { Value = (T)Enum.Parse(typeof(T), value); }
         }
@@ -59,8 +61,10 @@ namespace Piranha.Extend.Fields
         /// Gets the available items to choose from. Primarily used
         /// from the manager interface.
         /// </summary>
-        public override List<SelectFieldItem> Items {
-            get {
+        public override List<SelectFieldItem> Items
+        {
+            get
+            {
                 InitMetaData();
 
                 return _items;
@@ -133,7 +137,7 @@ namespace Piranha.Extend.Fields
             {
                 return field1.Equals(field2);
             }
-            else if ((object)field1 != null && (object)field2 != null)
+            else if ((object)field1 == null && (object)field2 == null)
             {
                 return true;
             }
