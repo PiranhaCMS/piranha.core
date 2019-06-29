@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha</id>
 		<title>Piranha</title>
-    <version>6.1.0</version>
+    <version>7.0.0-alpha1</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -18,11 +18,11 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework=".NETStandard2.0">
-        <dependency id="AutoMapper" version="7.0.1" />
         <dependency id="Markdig" version="0.15.0" />
         <dependency id="Microsoft.Extensions.Caching.Abstractions" version="2.1.1" />
         <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="2.1.1" />
         <dependency id="Newtonsoft.Json" version="11.0.2" />
+        <dependency id="System.ComponentModel.Annotations" version="4.5.0" />
       </group>
     </dependencies>
   </metadata>
