@@ -9,11 +9,12 @@
  */
 
 using System.Reflection;
-using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Session;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Newtonsoft.Json;
 using Piranha.Manager;
 using Piranha.Manager.Hubs;
 using Piranha.Manager.Services;
@@ -229,6 +230,21 @@ public static class ManagerModuleExtensions
             .UseSignalR(routes =>
             {
                 routes.MapHub<PreviewHub>("/manager/preview");
+            });
+    }
+
+    public static IMvcBuilder AddPiranhaManagerOptions(this IMvcBuilder builder)
+    {
+        return builder
+            .AddRazorPagesOptions(options => {
+                options.Conventions.AuthorizeAreaFolder("Manager", "/");
+                options.Conventions.AllowAnonymousToAreaPage("Manager", "/login");
+            })
+            .AddViewLocalization()
+            .AddDataAnnotationsLocalization()
+            .AddJsonOptions(options =>
+            {
+                options.SerializerSettings.TypeNameHandling = TypeNameHandling.Auto;
             });
     }
 }

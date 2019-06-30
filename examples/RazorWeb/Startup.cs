@@ -19,16 +19,7 @@ namespace RazorWeb
                 options.ResourcesPath = "Resources"
             );
             services.AddMvc()
-                .AddRazorPagesOptions(options => {
-                    options.Conventions.AuthorizeAreaFolder("Manager", "/");
-                    options.Conventions.AllowAnonymousToAreaPage("Manager", "/login");
-                })
-                .AddViewLocalization()
-                .AddDataAnnotationsLocalization()
-                .AddJsonOptions(options =>
-                {
-                    options.SerializerSettings.TypeNameHandling = TypeNameHandling.Auto;
-                })
+                .AddPiranhaManagerOptions()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddPiranha();
