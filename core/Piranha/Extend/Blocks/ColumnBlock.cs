@@ -8,11 +8,9 @@
  *
  */
 
-using System;
-using Piranha.Extend;
 using Piranha.Models;
 
-namespace MvcWeb.Models.Blocks
+namespace Piranha.Extend.Blocks
 {
     /// <summary>
     /// Single column quote block.

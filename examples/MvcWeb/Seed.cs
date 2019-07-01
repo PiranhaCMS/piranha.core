@@ -3,8 +3,6 @@ using System.IO;
 using System.Threading.Tasks;
 using Piranha;
 using Piranha.Extend.Blocks;
-using Piranha.Services;
-using MvcWeb.Models.Blocks;
 
 namespace MvcWeb
 {

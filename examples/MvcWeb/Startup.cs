@@ -50,9 +50,6 @@ namespace MvcWeb
             // Configure cache level
             App.CacheLevel = Piranha.Cache.CacheLevel.Full;
 
-            // Custom components
-            App.Blocks.Register<Models.Blocks.ColumnBlock>();
-
             // Build content types
             var pageTypeBuilder = new Piranha.AttributeBuilder.PageTypeBuilder(api)
                 .AddType(typeof(Models.BlogArchive))
