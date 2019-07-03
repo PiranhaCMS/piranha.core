@@ -19,21 +19,21 @@
     <value>Добавяне на нов псевдоним</value>
   </data>
   <data name="Alias URL" xml:space="preserve">
-    <value>URL на псевдонима</value>
+    <value>Линк за псевдонима</value>
   </data>
   <data name="Redirect URL" xml:space="preserve">
-    <value>Redirect URL</value>
+    <value>Линк на препратката</value>
   </data>
   <data name="Permanent" xml:space="preserve">
-    <value>Permanent</value>
+    <value>Постоянен</value>
   </data>
   <data name="If the redirect should be permanent" xml:space="preserve">
-    <value>If the redirect should be permanent</value>
+    <value>Ако препратката трябва да е постоянна</value>
   </data>
   <data name="The alias was successfully added to the list" xml:space="preserve">
-    <value>The alias was successfully added to the list</value>
+    <value>Псевдонимът е успешно добавен</value>
   </data>
   <data name="The alias was successfully deleted" xml:space="preserve">
-    <value>The alias was successfully deleted</value>
+    <value>Псевдонимът е успешно изтрит</value>
   </data>
 </root>
