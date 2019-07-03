@@ -37,27 +37,27 @@
     <value>Заглавие (навигация)</value>
   </data>
   <data name="Pages" xml:space="preserve">
-    <value>Pages</value>
+    <value>Страници</value>
   </data>
   <data name="The page was successfully deleted" xml:space="preserve">
-    <value>The page was successfully deleted</value>
+    <value>Страницата е успешно изтрита</value>
   </data>
   <data name="The page was successfully published" xml:space="preserve">
-    <value>The page was successfully published</value>
+    <value>Страницата е успешно публикувана</value>
   </data>
   <data name="The page was successfully unpublished" xml:space="preserve">
-    <value>The page was successfully unpublished</value>
+    <value>Страницата вече не е публикувана</value>
   </data>
   <data name="The page was successfully saved" xml:space="preserve">
-    <value>The page was successfully saved</value>
+    <value>Страницата е успешно запазена</value>
   </data>
   <data name="The page was successfully reverted to its previous state" xml:space="preserve">
-    <value>The page was successfully reverted to its previous state</value>
+    <value>Страницата бе възвърната до предишното ѝ състояние</value>
   </data>
   <data name="Welcome to your new page. Click on the button above to add your first block of content!" xml:space="preserve">
-    <value>Welcome to your new page. Click on the button above to add your first block of content!</value>
+    <value>Добре дошли в новата си страница. Щракнете върху бутонът отгоре, за да добавите ново съдържание!</value>
   </data>
   <data name="Your page title" xml:space="preserve">
-    <value>Your page title</value>
+    <value>Заглавието на вашата страница</value>
   </data>
 </root>
