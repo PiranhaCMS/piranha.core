@@ -13,13 +13,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Aliases" xml:space="preserve">
-    <value>Aliases</value>
+    <value>Псевдоними</value>
   </data>
   <data name="Add new alias" xml:space="preserve">
-    <value>Add new alias</value>
+    <value>Добавяне на нов псевдоним</value>
   </data>
   <data name="Alias URL" xml:space="preserve">
-    <value>Alias URL</value>
+    <value>URL на псевдонима</value>
   </data>
   <data name="Redirect URL" xml:space="preserve">
     <value>Redirect URL</value>
