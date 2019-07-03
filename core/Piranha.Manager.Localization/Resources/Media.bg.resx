@@ -13,10 +13,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add folder" xml:space="preserve">
-    <value>Add folder</value>
+    <value>Добавяне на папка</value>
   </data>
   <data name="Drop files here or click to upload." xml:space="preserve">
-    <value>Drop files here or click to upload.</value>
+    <value>Тук пуснете файлове с влачене или просто щракнете за избор на файл за качване</value>
   </data>
   <data name="Download media" xml:space="preserve">
     <value>Download media</value>
