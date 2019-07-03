@@ -19,24 +19,24 @@
     <value>Йерархично структурирани никове на страниците</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>If page slugs should include the parent slug.</value>
+    <value>Да се включи "родителят" към ника на страницата</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
-    <value>Expanded levels in the sitemap</value>
+    <value>Разгънати нива в картата на сайта</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
-    <value>Archive page size</value>
+    <value>Размер на архивите (лимитира показаните постове)</value>
   </data>
   <data name="Caching" xml:space="preserve">
-    <value>Caching</value>
+    <value>Кеширане</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Page cache expiration (minutes)</value>
+    <value>Времетраене на кеша за страници (в минути)</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Post cache expiration (minutes)</value>
+    <value>Времетраене на кеша за постове (в минути)</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
-    <value>Media CDN</value>
+    <value>CDN Хранилище</value>
   </data>
 </root>
