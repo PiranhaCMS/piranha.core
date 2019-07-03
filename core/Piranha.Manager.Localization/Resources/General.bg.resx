@@ -13,141 +13,141 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>Добави</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>All</value>
+    <value>Всички</value>
   </data>
   <data name="Content" xml:space="preserve">
-    <value>Content</value>
+    <value>Съдържание</value>
   </data>
   <data name="Content type" xml:space="preserve">
-    <value>Content type</value>
+    <value>Тип на съдържанието</value>
   </data>
   <data name="Culture" xml:space="preserve">
-    <value>Culture</value>
+    <value>Култура</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Изтрий</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Description</value>
+    <value>Описание</value>
   </data>
   <data name="Details" xml:space="preserve">
-    <value>Details</value>
+    <value>Подробности</value>
   </data>
   <data name="Dimensions" xml:space="preserve">
-    <value>Dimensions</value>
+    <value>Размери</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>Изтегли</value>
   </data>
   <data name="Draft" xml:space="preserve">
-    <value>Draft</value>
+    <value>Чернова</value>
   </data>
   <data name="Drafts" xml:space="preserve">
-    <value>Drafts</value>
+    <value>Чернови</value>
   </data>
   <data name="Filename" xml:space="preserve">
-    <value>Filename</value>
+    <value>Име на файл</value>
   </data>
   <data name="Height" xml:space="preserve">
-    <value>Height</value>
+    <value>Височина</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>Редактирай</value>
   </data>
   <data name="Empty" xml:space="preserve">
-    <value>Empty</value>
+    <value>Празно</value>
   </data>
   <data name="General" xml:space="preserve">
-    <value>General</value>
+    <value>Общи</value>
   </data>
   <data name="Internal id" xml:space="preserve">
-    <value>Internal id</value>
+    <value>Вътрешен идентифициращ номер</value>
   </data>
   <data name="Is default" xml:space="preserve">
-    <value>Is default</value>
+    <value>По подразбиране</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+    <value>Изход</value>
   </data>
   <data name="Looks like there's no items here. Click on the button above to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button above to get started!</value>
+    <value>Тук няма нищо. Щракнете върху бутонът отгоре, за да започнете!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button below to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button below to get started!</value>
+    <value>Тук няма нищо. Щракнете върху бутонът отдолу, за да започнете!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button to the left to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button to the left to get started!</value>
+    <value>Тук няма нищо. Щракнете върху бутонът вляво, за да започнете!</value>
   </data>
   <data name="Main content" xml:space="preserve">
-    <value>Main content</value>
+    <value>Основно съдържание</value>
   </data>
   <data name="Modified" xml:space="preserve">
-    <value>Modified</value>
+    <value>Променен</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>Име</value>
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
-    <value>Open public URL in new tab</value>
+    <value>Отвори публичният линк в нов раздел</value>
   </data>
   <data name="Pixels" xml:space="preserve">
-    <value>Pixels</value>
+    <value>Пиксели</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Preview</value>
+    <value>Прегледай</value>
   </data>
   <data name="Publish" xml:space="preserve">
-    <value>Publish</value>
+    <value>Публикувай</value>
   </data>
   <data name="Publish date" xml:space="preserve">
-    <value>Publish date</value>
+    <value>Дата на публикуване</value>
   </data>
   <data name="Revert" xml:space="preserve">
-    <value>Revert</value>
+    <value>Към предишно състояние</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>Запази</value>
   </data>
   <data name="Scheduled" xml:space="preserve">
-    <value>Scheduled</value>
+    <value>Планирано</value>
   </data>
   <data name="Search..." xml:space="preserve">
-    <value>Search...</value>
+    <value>Търси...</value>
   </data>
   <data name="Select block" xml:space="preserve">
-    <value>Select block</value>
+    <value>Избери блок</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Настройки</value>
   </data>
   <data name="Size" xml:space="preserve">
-    <value>Size</value>
+    <value>Размер</value>
   </data>
   <data name="Slug" xml:space="preserve">
-    <value>Slug</value>
+    <value>Ник</value>
   </data>
   <data name="System" xml:space="preserve">
-    <value>System</value>
+    <value>Система</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Заглавие</value>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Update</value>
+    <value>Обнови</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Type</value>
+    <value>Тип</value>
   </data>
   <data name="Unpublish" xml:space="preserve">
-    <value>Unpublish</value>
+    <value>Премахване на публикацията</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Version</value>
+    <value>Версия</value>
   </data>
   <data name="Width" xml:space="preserve">
-    <value>Width</value>
+    <value>Ширина</value>
   </data>
 </root>

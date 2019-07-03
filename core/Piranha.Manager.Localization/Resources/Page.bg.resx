@@ -13,51 +13,51 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add page" xml:space="preserve">
-    <value>Add page</value>
+    <value>Добави страница</value>
   </data>
   <data name="An error occured while deleting the page" xml:space="preserve">
-    <value>An error occured while deleting the page</value>
+    <value>Възникна грешка при изтриване на страницата</value>
   </data>
   <data name="Edit page" xml:space="preserve">
-    <value>Edit page</value>
+    <value>Редактирай страницата</value>
   </data>
   <data name="Hidden" xml:space="preserve">
-    <value>Hidden</value>
+    <value>Скрий</value>
   </data>
   <data name="If the page should be hidden in the sitemap" xml:space="preserve">
-    <value>If the page should be hidden in the sitemap</value>
+    <value>Да се скрие страницата в картата на сайта</value>
   </data>
   <data name="Meta keywords" xml:space="preserve">
-    <value>Meta keywords</value>
+    <value>Мета ключови думи</value>
   </data>
   <data name="Meta description" xml:space="preserve">
-    <value>Meta description</value>
+    <value>Мета описание</value>
   </data>
   <data name="Navigation title" xml:space="preserve">
-    <value>Navigation title</value>
+    <value>Заглавие (навигация)</value>
   </data>
   <data name="Pages" xml:space="preserve">
-    <value>Pages</value>
+    <value>Страници</value>
   </data>
   <data name="The page was successfully deleted" xml:space="preserve">
-    <value>The page was successfully deleted</value>
+    <value>Страницата е успешно изтрита</value>
   </data>
   <data name="The page was successfully published" xml:space="preserve">
-    <value>The page was successfully published</value>
+    <value>Страницата е успешно публикувана</value>
   </data>
   <data name="The page was successfully unpublished" xml:space="preserve">
-    <value>The page was successfully unpublished</value>
+    <value>Страницата вече не е публикувана</value>
   </data>
   <data name="The page was successfully saved" xml:space="preserve">
-    <value>The page was successfully saved</value>
+    <value>Страницата е успешно запазена</value>
   </data>
   <data name="The page was successfully reverted to its previous state" xml:space="preserve">
-    <value>The page was successfully reverted to its previous state</value>
+    <value>Страницата бе възвърната до предишното ѝ състояние</value>
   </data>
   <data name="Welcome to your new page. Click on the button above to add your first block of content!" xml:space="preserve">
-    <value>Welcome to your new page. Click on the button above to add your first block of content!</value>
+    <value>Добре дошли в новата си страница. Щракнете върху бутонът отгоре, за да добавите ново съдържание!</value>
   </data>
   <data name="Your page title" xml:space="preserve">
-    <value>Your page title</value>
+    <value>Заглавието на вашата страница</value>
   </data>
 </root>
