@@ -88,7 +88,7 @@ Vue.component("post-archive", {
         "      </div>" +
         "    </div>" +
         "    <div class='btn-group float-right'>" +
-        "      <button disabled id='addPostGroup' class='btn btn-sm btn-primary btn-labeled dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fas fa-plus'></i>{{ piranha.resources.texts.add }}</button>" +
+        "      <button id='addPostGroup' class='btn btn-sm btn-primary btn-labeled dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fas fa-plus'></i>{{ piranha.resources.texts.add }}</button>" +
         "      <div class='dropdown-menu dropdown-menu-right' aria-labelledby='addPostGroup'>" +
         "        <a class='dropdown-item' href='#' v-for='type in postTypes'>{{ type.title }}</a>" +
         "      </div>" +
@@ -98,7 +98,7 @@ Vue.component("post-archive", {
         "    <tbody>" +
         "      <tr v-if='isSelected(post)' v-for='post in items' :class='post.status'>" +
         "        <td>" +
-        "          <a href='#'>{{ post.title }}</a> " +
+        "          <a :href='piranha.baseUrl + post.editUrl + post.id'>{{ post.title }}</a> " +
         "          <small v-if='post.status === \"published\"' class='text-muted'>| Published: {{ post.published }}</small>" +
         "          <small v-else-if='post.status === \"unpublished\"' class='text-muted'>| Unpublished</small>" +
         "        </td>" +

@@ -9,35 +9,19 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace Piranha.Manager.Models
 {
     /// <summary>
     /// Page edit model.
     /// </summary>
-    public class PageEditModel : Content.ContentEditModel
+    public class PostEditModel : Content.ContentEditModel
     {
         /// <summary>
-        /// Gets/sets the mandatory site id.
+        /// Gets/sets the mandatory blog id.
         /// </summary>
-        public Guid SiteId { get; set; }
-
-        /// <summary>
-        /// Gets/sets the optional parent id. This determines the
-        /// hierarchical position of the page.
-        /// </summary>
-        public Guid? ParentId { get; set; }
-
-        /// <summary>
-        /// Gets/sets the sort order of the page in its
-        /// hierarchical position.
-        /// </summary>
-        public int SortOrder { get; set; }
-
-        /// <summary>
-        /// Gets/sets the optional navigation title.
-        /// </summary>
-        public string NavigationTitle { get; set; }
+        public Guid BlogId { get; set; }
 
         /// <summary>
         /// Gets/sets the unique slug.
@@ -63,5 +47,25 @@ namespace Piranha.Manager.Models
         /// Gets/sets the content status.
         /// </summary>
         public string State { get; set; }
+
+        /// <summary>
+        /// Gets/sets the selected category.
+        /// </summary>
+        public string SelectedCategory { get; set; }
+
+        /// <summary>
+        /// Gets/sets the selected tags.
+        /// </summary>
+        public List<string> SelectedTags { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Gets/sets the available categories.
+        /// </summary>
+        public List<string> Categories { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Gets/sets the available tags.
+        /// </summary>
+        public List<string> Tags { get; set; } = new List<string>();
     }
 }

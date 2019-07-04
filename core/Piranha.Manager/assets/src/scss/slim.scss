@@ -1,6 +1,7 @@
 @import "inc/variables";
 @import "inc/bootstrap-slim";
 @import "inc/fontawesome";
+@import  "../../../node_modules/select2/dist/css/select2";
 @import "inc/fonts";
 @import "inc/general";
 @import "inc/nav";
@@ -29,3 +30,4 @@
 @import "inc/login";
 @import "inc/tinymce";
 @import "inc/dropzone";
+@import "inc/select2";

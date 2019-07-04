@@ -2,22 +2,21 @@
     piranha
 */
 
-piranha.pageedit = new Vue({
-    el: "#pageedit",
+piranha.postedit = new Vue({
+    el: "#postedit",
     data: {
         loading: true,
         id: null,
-        siteId: null,
-        parentId: null,
-        sortOrder: 0,
+        blogId: null,
         typeId: null,
         title: null,
-        navigationTitle: null,
         slug: null,
         metaKeywords: null,
         metaDescription: null,
         published: null,
         state: "new",
+        categories: [],
+        tags: [],
         blocks: [],
         regions: [],
         editors: [],
@@ -29,7 +28,9 @@ piranha.pageedit = new Vue({
             name: null,
             icon: null,
         },
-        selectedSetting: "uid-settings"
+        selectedSetting: "uid-settings",
+        selectedCategory: null,
+        selectedTags: []
     },
     computed: {
         contentRegions: function () {
@@ -46,12 +47,9 @@ piranha.pageedit = new Vue({
     methods: {
         bind: function (model) {
             this.id = model.id;
-            this.siteId = model.siteId;
-            this.parentId = model.parentId;
-            this.sortOrder = model.sortOrder;
+            this.blogId = model.blogId;
             this.typeId = model.typeId;
             this.title = model.title;
-            this.navigationTitle = model.navigationTitle;
             this.slug = model.slug;
             this.metaKeywords = model.metaKeywords;
             this.metaDescription = model.metaDescription;
@@ -60,7 +58,11 @@ piranha.pageedit = new Vue({
             this.blocks = model.blocks;
             this.regions = model.regions;
             this.editors = model.editors;
+            this.categories = model.categories;
+            this.tags = model.tags;
             this.useBlocks = model.useBlocks;
+            this.selectedCategory = model.selectedCategory;
+            this.selectedTags = model.selectedTags;
 
             if (!this.useBlocks) {
                 // First choice, select the first custom editor
@@ -77,7 +79,7 @@ piranha.pageedit = new Vue({
         load: function (id) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/page/" + id)
+            fetch(piranha.baseUrl + "manager/api/post/" + id)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.bind(result);
@@ -85,10 +87,10 @@ piranha.pageedit = new Vue({
                 .catch(function (error) { console.log("error:", error );
             });
         },
-        create: function (id, pageType) {
+        create: function (id, postType) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/page/create/" + id + "/" + pageType)
+            fetch(piranha.baseUrl + "manager/api/post/create/" + id + "/" + postType)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.bind(result);
@@ -99,35 +101,32 @@ piranha.pageedit = new Vue({
         save: function ()
         {
             this.saving = true;
-            this.saveInternal(piranha.baseUrl + "manager/api/page/save");
+            this.saveInternal(piranha.baseUrl + "manager/api/post/save");
         },
         saveDraft: function ()
         {
             this.savingDraft = true;
-            this.saveInternal(piranha.baseUrl + "manager/api/page/save/draft");
+            this.saveInternal(piranha.baseUrl + "manager/api/post/save/draft");
         },
         unpublish: function ()
         {
             this.saving = true;
-            this.saveInternal(piranha.baseUrl + "manager/api/page/save/unpublish");
+            this.saveInternal(piranha.baseUrl + "manager/api/post/save/unpublish");
         },
         saveInternal: function (route) {
             var self = this;
 
             var model = {
-                id: piranha.pageedit.id,
-                siteId: piranha.pageedit.siteId,
-                parentId: piranha.pageedit.parentId,
-                sortOrder: piranha.pageedit.sortOrder,
-                typeId: piranha.pageedit.typeId,
-                title: piranha.pageedit.title,
-                navigationTitle: piranha.pageedit.navigationTitle,
-                slug: piranha.pageedit.slug,
-                metaKeywords: piranha.pageedit.metaKeywords,
-                metaDescription: piranha.pageedit.metaDescription,
-                published: piranha.pageedit.published,
-                blocks: JSON.parse(JSON.stringify(piranha.pageedit.blocks)),
-                regions: JSON.parse(JSON.stringify(piranha.pageedit.regions))
+                id: self.id,
+                blogId: self.blogId,
+                typeId: self.typeId,
+                title: self.title,
+                slug: self.slug,
+                metaKeywords: self.metaKeywords,
+                metaDescription: self.metaDescription,
+                published: self.published,
+                blocks: JSON.parse(JSON.stringify(self.blocks)),
+                regions: JSON.parse(JSON.stringify(self.regions))
             };
 
             fetch(route, {
@@ -147,7 +146,7 @@ piranha.pageedit = new Vue({
                 self.state = result.state;
 
                 if (oldState === 'new' && result.state !== 'new') {
-                    window.history.replaceState({ state: "created"}, "Edit page", piranha.baseUrl + "manager/page/edit/" + result.id);
+                    window.history.replaceState({ state: "created"}, "Edit post", piranha.baseUrl + "manager/post/edit/" + result.id);
                 }
                 piranha.notifications.push(result.status);
 
@@ -161,7 +160,7 @@ piranha.pageedit = new Vue({
         revert: function () {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/page/revert/" + self.id)
+            fetch(piranha.baseUrl + "manager/api/post/revert/" + self.id)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.bind(result);
@@ -174,20 +173,22 @@ piranha.pageedit = new Vue({
         remove: function () {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/page/delete/" + self.id)
+            fetch(piranha.baseUrl + "manager/api/post/delete/" + self.id)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     piranha.notifications.push(result);
 
-                    window.location = piranha.baseUrl + "manager/pages";
+                    window.location = piranha.baseUrl + "manager/page/" + self.blogId;
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },
         addBlock: function (type, pos) {
+            var self = this;
+
             fetch(piranha.baseUrl + "manager/api/content/block/" + type)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    piranha.pageedit.blocks.splice(pos, 0, result.body);
+                    self.blocks.splice(pos, 0, result.body);
                 })
                 .catch(function (error) { console.log("error:", error );
             });
@@ -215,14 +216,17 @@ piranha.pageedit = new Vue({
     created: function () {
     },
     updated: function () {
+        var self = this;
+
         if (this.loading)
         {
             sortable(".blocks", {
                 handle: ".handle",
                 items: ":not(.unsortable)"
             })[0].addEventListener("sortupdate", function (e) {
-                piranha.pageedit.moveBlock(e.detail.origin.index, e.detail.destination.index);
+                self.moveBlock(e.detail.origin.index, e.detail.destination.index);
             });
+            $('.select2').select2({ tags: true })
         }
         else {
             sortable(".blocks", "disable");

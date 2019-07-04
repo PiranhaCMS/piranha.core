@@ -38,6 +38,7 @@ var js = [
             "node_modules/html5sortable/dist/html5sortable.js",
             "node_modules/nestable2/dist/jquery.nestable.min.js",
             "node_modules/dropzone/dist/dropzone.js",
+            "node_modules/select2/dist/js/select2.js",
             "assets/src/js/piranha.accessibility.js",
             "assets/src/js/piranha.dropzone.js",
             "assets/src/js/piranha.utils.js",
@@ -76,7 +77,7 @@ var js = [
         ]
     },
     {
-        name: "piranha.pageedit.js",
+        name: "piranha.contentedit.js",
         items: [
             "assets/src/js/components/region.js",
             "assets/src/js/components/post-archive.js",
@@ -105,8 +106,12 @@ var js = [
             "assets/src/js/components/fields/number-field.js",
             "assets/src/js/components/fields/text-field.js",
             "assets/src/js/components/fields/page-field.js",
-            "assets/src/js/components/fields/missing-field.js",
-
+            "assets/src/js/components/fields/missing-field.js"
+        ]
+    },
+    {
+        name: "piranha.pageedit.js",
+        items: [
             "assets/src/js/piranha.pageedit.js"
         ]
     },
@@ -115,6 +120,12 @@ var js = [
         items: [
             "assets/src/js/components/sitemap-item.js",
             "assets/src/js/piranha.pagelist.js"
+        ]
+    },
+    {
+        name: "piranha.postedit.js",
+        items: [
+            "assets/src/js/piranha.postedit.js"
         ]
     },
     {

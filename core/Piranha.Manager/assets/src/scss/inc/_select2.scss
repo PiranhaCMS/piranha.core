@@ -1,0 +1,35 @@
+@import "variables";
+
+.form-group {
+    .select2-container--default {
+        .select2-selection--single {
+            height: 2.25rem;
+            border-color: $gray-400;
+            padding: .25rem .5rem;
+
+            .select2-selection__arrow {
+                top: 5px;
+            }
+        }
+
+        .select2-selection--multiple {
+            height: 2.25rem;
+            border-color: $gray-400;
+
+            .select2-selection__choice {
+                background-color: $gray-100;
+                border-color: $gray-100;
+
+                .select2-selection__choice__remove {
+                    margin-right: .25rem;
+                }
+            }
+        }
+
+        &.select2-container--focus {
+            &.select2-selection--single, .select2-selection--multiple {
+                border-color: $gray-400;
+            }
+        }
+    }
+}

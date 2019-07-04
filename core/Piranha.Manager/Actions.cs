@@ -29,6 +29,18 @@ namespace Piranha.Manager
             }
         };
 
+        /// <summary>
+        /// Gets/sets the available actions for the page edit view.
+        /// </summary>
+        public static ActionList PostEdit { get; set; } = new ActionList
+        {
+            new ActionItem
+            {
+                InternalId = "Save",
+                ActionView = "Partial/Actions/_PostSave"
+            }
+        };
+
         public static ActionList PageList { get; set; } = new ActionList();
     }
 }

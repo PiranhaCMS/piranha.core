@@ -53,5 +53,18 @@ namespace Piranha.Manager.Controllers
         {
             return await _service.GetList(id);
         }
+
+        /// <summary>
+        /// Gets the post with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The post edit model</returns>
+        [Route("{id:Guid}")]
+        [HttpGet]
+        [Authorize(Policy = Permission.PostsEdit)]
+        public async Task<PostEditModel> Get(Guid id)
+        {
+            return await _service.GetById(id);
+        }
     }
 }
