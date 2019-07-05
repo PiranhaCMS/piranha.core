@@ -226,7 +226,21 @@ piranha.postedit = new Vue({
             })[0].addEventListener("sortupdate", function (e) {
                 self.moveBlock(e.detail.origin.index, e.detail.destination.index);
             });
-            $('.select2').select2({ tags: true })
+            $(".select2").select2({
+                tags: true,
+                selectOnClose: true
+            })
+            $("#selectedCategory").on("change", function() {
+                var item = $(this).find("option:selected").text();
+                self.selectedCategory = item;
+            });
+            $("#selectedTags").on("change", function() {
+                var items = $(this).find("option:selected");
+                self.selectedTags = [];
+                for (var n = 0; n < items.length; n++) {
+                    self.selectedTags.push(items[n].text);
+                }
+            });
         }
         else {
             sortable(".blocks", "disable");

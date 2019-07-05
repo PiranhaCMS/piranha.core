@@ -95,7 +95,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Category</label>
-                                <select class="form-control select2" v-model="selectedCategory">
+                                <select id="selectedCategory" class="form-control select2" v-model="selectedCategory">
                                     <option :value="item" v-for="item in categories">{{ item }}</option>
                                 </select>
                             </div>
@@ -103,7 +103,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Tags</label>
-                                <select class="form-control select2" multiple="multiple" v-model="selectedTags">
+                                <select id="selectedTags" class="form-control select2" multiple="multiple" v-model="selectedTags">
                                     <option :value="item" v-for="item in tags">{{ item }}</option>
                                 </select>
                             </div>
