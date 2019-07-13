@@ -46,6 +46,7 @@ var js = [
             "assets/src/js/piranha.notifications.js",
             "assets/src/js/piranha.mediapicker.js",
             "assets/src/js/piranha.pagepicker.js",
+            "assets/src/js/piranha.postpicker.js",
             "assets/src/js/piranha.preview.js",
             "assets/src/js/piranha.resources.js",
             "assets/src/js/piranha.editor.js",
@@ -106,6 +107,7 @@ var js = [
             "assets/src/js/components/fields/number-field.js",
             "assets/src/js/components/fields/text-field.js",
             "assets/src/js/components/fields/page-field.js",
+            "assets/src/js/components/fields/post-field.js",
             "assets/src/js/components/fields/missing-field.js"
         ]
     },

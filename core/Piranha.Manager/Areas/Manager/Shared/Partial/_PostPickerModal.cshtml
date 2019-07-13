@@ -1,0 +1,66 @@
+@inject IViewLocalizer Localizer
+
+<!-- The Modal -->
+<div class="modal modal-panel fade" id="postpicker">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title"><i class="fas fa-copy"></i> @Localizer["Select post"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body bg-light">
+
+                <div class="form-group d-flex justify-content-center">
+                    <div class="dropdown mr-3">
+                        <button class="btn btn-primary btn-labeled dropdown-toggle" type="button" data-toggle="dropdown">
+                            <span class="btn-label">
+                                <i class="fas fa-font"></i>
+                            </span>
+                            {{ currentArchiveTitle }}
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#" li v-for="archive in archives" v-on:click.prevent="load(currentSiteId, archive.id)">{{ archive.title }}</a>
+                        </div>
+                    </div>
+                    <div class="dropdown" v-if="sites.length > 1">
+                        <button class="btn btn-primary btn-labeled dropdown-toggle" type="button" data-toggle="dropdown">
+                            <span class="btn-label">
+                                <i class="fas fa-globe"></i>
+                            </span>
+                            {{ currentSiteTitle }}
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#" li v-for="site in sites" v-on:click.prevent="load(site.id)">{{ site.title }}</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mt-3">
+                    <input id="postpickerSearch" class="form-control" v-model="search" v-on:keyup.enter="onEnter" placeholder="@Localizer["Search..."]" />
+                </div>
+
+                <table class="table table-borderless table-media">
+                    <thead>
+                        <tr>
+                            <th>@Localizer["Name"]</th>
+                            <th class="td-medium">@Localizer["Published"]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="post in filteredPosts">
+                            <td><a href="#" v-on:click.prevent="select(post)">{{ post.title }}</a></td>
+                            <td>{{ post.published }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -33,6 +33,85 @@ namespace Piranha.Manager.Services
             _factory = factory;
         }
 
+        public async Task<PostModalModel> GetArchiveMap(Guid? siteId, Guid? archiveId)
+        {
+            var model = new PostModalModel();
+
+            // Get default site if none is selected
+            if (!siteId.HasValue)
+            {
+                var site = await _api.Sites.GetDefaultAsync();
+                if (site != null)
+                {
+                    siteId = site.Id;
+                }
+            }
+
+            model.SiteId = siteId.Value;
+
+            // Get the sites available
+            model.Sites = (await _api.Sites.GetAllAsync())
+                .Select(s => new PostModalModel.SiteItem
+                {
+                    Id = s.Id,
+                    Title = s.Title
+                })
+                .OrderBy(s => s.Title)
+                .ToList();
+
+            // Get the current site title
+            var currentSite = model.Sites.FirstOrDefault(s => s.Id == siteId.Value);
+            if (currentSite != null)
+            {
+                model.SiteTitle = currentSite.Title;
+            }
+
+            // Get the blogs available
+            model.Archives = (await _api.Pages.GetAllBlogsAsync<PageInfo>(siteId.Value))
+                .Select(p => new PostModalModel.ArchiveItem
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    Slug = p.Slug
+                })
+                .OrderBy(p => p.Title)
+                .ToList();
+
+            if (model.Archives.Count() > 0)
+            {
+                if (!archiveId.HasValue)
+                {
+                    // Select the first blog
+                    archiveId = model.Archives.First().Id;
+                }
+
+                var archive = model.Archives.FirstOrDefault(b => b.Id == archiveId.Value);
+                if (archive != null)
+                {
+                    model.ArchiveId = archive.Id;
+                    model.ArchiveTitle = archive.Title;
+                    model.ArchiveSlug = archive.Slug;
+                }
+
+                // Get the available posts
+                model.Posts = (await _api.Posts.GetAllAsync<PostInfo>(archiveId.Value))
+                    .Select(p => new PostModalModel.PostModalItem
+                    {
+                        Id = p.Id,
+                        Title = p.Title,
+                        Permalink = "/" + model.ArchiveSlug + "/" + p.Slug,
+                        Published = p.Published.HasValue ? p.Published.Value.ToString("yyyy-MM-dd HH:mm") : null
+                    }).ToList();
+
+                // Sort so we show unpublished drafts first
+                model.Posts = model.Posts.Where(p => string.IsNullOrEmpty(p.Published))
+                    .Concat(model.Posts.Where(p => !string.IsNullOrEmpty(p.Published)))
+                    .ToList();
+            }
+
+            return model;
+        }
+
         public async Task<PostListModel> GetList(Guid archiveId)
         {
             var model = new PostListModel

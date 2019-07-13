@@ -66,5 +66,13 @@ namespace Piranha.Manager.Controllers
         {
             return await _service.GetById(id);
         }
+
+        [Route("modal")]
+        [HttpGet]
+        [Authorize(Policy = Permission.Posts)]
+        public async Task<PostModalModel> Modal(Guid? siteId, Guid? archiveId)
+        {
+            return await _service.GetArchiveMap(siteId, archiveId);
+        }
     }
 }

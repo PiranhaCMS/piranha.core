@@ -15,7 +15,7 @@ using Piranha.Services;
 
 namespace Piranha.Extend.Fields
 {
-    [FieldType(Name = "Post", Shorthand = "Post")]
+    [FieldType(Name = "Post", Shorthand = "Post", Component = "post-field")]
     public class PostField : IField, IEquatable<PostField>
     {
         /// <summary>
@@ -27,8 +27,7 @@ namespace Piranha.Extend.Fields
         /// <summary>
         /// Gets/sets the related post object.
         /// </summary>
-        [JsonIgnore]
-        public Models.DynamicPost Post { get; private set; }
+        public Models.PostInfo Post { get; private set; }
 
         /// <summary>
         /// Gets if the field has a post object available.
@@ -53,7 +52,7 @@ namespace Piranha.Extend.Fields
             if (Id.HasValue)
             {
                 Post = await api.Posts
-                    .GetByIdAsync(Id.Value)
+                    .GetByIdAsync<Models.PostInfo>(Id.Value)
                     .ConfigureAwait(false);
 
                 if (Post == null)
