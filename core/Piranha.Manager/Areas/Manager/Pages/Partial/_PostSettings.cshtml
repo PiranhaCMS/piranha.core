@@ -1,0 +1,63 @@
+@inject ManagerLocalizer Localizer
+
+<div id="postSettings" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title"><i class="fas fa-cog"></i> @Localizer.General["Settings"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Tabs -->
+            <ul class="nav nav-tabs" v-if="settingRegions.length > 0" role="tablist">
+                <li class="nav-item">
+                    <a href="#" class="nav-link" :class="{ active: selectedSetting === 'uid-settings' }" v-on:click.prevent="selectSetting('uid-settings')">@Localizer.General["General"]</a>
+                </li>
+                <li class="nav-item" v-for="region in settingRegions">
+                    <a href="#" class="nav-link" :class="{ active: selectedSetting === region.meta.uid }" v-on:click.prevent="selectSetting(region.meta.uid)">{{ region.meta.name }}</a>
+                </li>
+            </ul>
+
+            <!-- Body -->
+            <div class="modal-body bg-light">
+                <div :class="{ 'd-none': selectedSetting != 'uid-settings' }">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>@Localizer.General["Slug"]</label>
+                                <input v-model="slug" type="text" maxlength="128" class="form-control form-control-lg">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>@Localizer.General["Publish date"]</label>
+                                <input v-model="published" type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>@Localizer.Page["Meta keywords"]</label>
+                                <input v-model="metaKeywords" type="text" maxlength="128" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>@Localizer.Page["Meta description"]</label>
+                                <textarea v-model="metaDescription" rows="5" maxlength="256" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div :class="{ 'd-none': selectedSetting != region.meta.uid }" v-for="region in settingRegions">
+                    <region v-bind:model="region"></region>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

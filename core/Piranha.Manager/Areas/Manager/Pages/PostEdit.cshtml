@@ -1,4 +1,5 @@
 @page "~/manager/post/{action}/{id}/{postType?}"
+@model PostEditViewModel
 @inject ManagerLocalizer Localizer
 @{
     ViewBag.Title = Localizer.Page["Edit post"];
@@ -165,4 +166,6 @@
             </div>
         </div>
     </div>
+
+    <partial name="Partial/_PostSettings" />
 </div>
