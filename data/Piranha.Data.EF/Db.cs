@@ -9,7 +9,6 @@
  */
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 using System;
 using System.Linq;
 
@@ -79,6 +78,11 @@ namespace Piranha
         public DbSet<Data.PageField> PageFields { get; set; }
 
         /// <summary>
+        /// Gets/sets the page revision set.
+        /// </summary>
+        public DbSet<Data.PageRevision> PageRevisions { get; set; }
+
+        /// <summary>
         /// Gets/sets the page type set.
         /// </summary>
         public DbSet<Data.PageType> PageTypes { get; set; }
@@ -104,9 +108,9 @@ namespace Piranha
         public DbSet<Data.PostField> PostFields { get; set; }
 
         /// <summary>
-        /// Gets/sets the page revision set.
+        /// Gets/sets the post revision set.
         /// </summary>
-        public DbSet<Data.PageRevision> PageRevisions { get; set; }
+        public DbSet<Data.PostRevision> PostRevisions { get; set; }
 
         /// <summary>
         /// Gets/sets the post tag set.
@@ -248,6 +252,8 @@ namespace Piranha
             mb.Entity<Data.PostField>().Property(f => f.FieldId).HasMaxLength(64).IsRequired();
             mb.Entity<Data.PostField>().Property(f => f.CLRType).HasMaxLength(256).IsRequired();
             mb.Entity<Data.PostField>().HasIndex(f => new { f.PostId, f.RegionId, f.FieldId, f.SortOrder });
+
+            mb.Entity<Data.PostRevision>().ToTable("Piranha_PostRevisions");
 
             mb.Entity<Data.PostTag>().ToTable("Piranha_PostTags");
             mb.Entity<Data.PostTag>().HasKey(t => new { t.PostId, t.TagId });

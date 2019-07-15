@@ -9,6 +9,7 @@
  */
 
 using System;
+using Newtonsoft.Json;
 
 namespace Piranha.Data
 {
@@ -24,6 +25,7 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the blog page this category belongs to.
         /// </summary>
+        [JsonIgnore]
         public Page Blog { get; set; }
     }
 }

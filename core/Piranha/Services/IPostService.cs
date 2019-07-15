@@ -111,6 +111,22 @@ namespace Piranha.Services
         Task<T> GetByIdAsync<T>(Guid id) where T : PostBase;
 
         /// <summary>
+        /// Gets the draft for the post model with the specified id.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="id">The unique id</param>
+        /// <returns>The draft, or null if no draft exists</returns>
+        Task<DynamicPost> GetDraftByIdAsync(Guid id);
+
+        /// <summary>
+        /// Gets the draft for the post model with the specified id.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="id">The unique id</param>
+        /// <returns>The draft, or null if no draft exists</returns>
+        Task<T> GetDraftByIdAsync<T>(Guid id) where T : PostBase;
+
+        /// <summary>
         /// Gets the post model with the specified slug.
         /// </summary>
         /// <param name="blog">The unique blog slug</param>
@@ -181,6 +197,12 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="model">The post model</param>
         Task SaveAsync<T>(T model) where T : PostBase;
+
+        /// <summary>
+        /// Saves the given post model as a draft
+        /// </summary>
+        /// <param name="model">The post model</param>
+        Task SaveDraftAsync<T>(T model) where T : PostBase;
 
         /// <summary>
         /// Deletes the model with the specified id.

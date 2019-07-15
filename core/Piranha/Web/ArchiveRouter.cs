@@ -31,142 +31,154 @@ namespace Piranha.Web
 
                 if (segments.Length >= 1)
                 {
-                    var blog = await api.Pages.GetBySlugAsync<Models.PageInfo>(segments[0], siteId)
-                        .ConfigureAwait(false);
+                    Models.PageInfo blog = null;
 
-                    if (blog != null && blog.ContentType == "Blog")
+                    // Scan for the most unique slug
+                    for (var i = segments.Length; i > 0; i--)
                     {
-                        // First check that this is a valid archive URL
-                        if (segments.Length == 2)
+                        var slug = string.Join("/", segments.Subset(0, i));
+                        blog = await api.Pages.GetBySlugAsync<Models.PageInfo>(slug, siteId)
+                            .ConfigureAwait(false);
+
+                        if (blog != null)
                         {
-                            try
-                            {
-                                var number = Convert.ToInt32(segments[1]);
-                                if (number < 1900 || number > DateTime.Now.Year)
-                                    return null;
-                            }
-                            catch
+                            if (blog.ContentType != "Blog")
                             {
                                 return null;
                             }
+
+                            // First check that this is a valid archive URL
+                            if (segments.Length == i + 1)
+                            {
+                                try
+                                {
+                                    var number = Convert.ToInt32(segments[i]);
+                                    if (number < 1900 || number > DateTime.Now.Year)
+                                        return null;
+                                }
+                                catch
+                                {
+                                    return null;
+                                }
+                            }
+
+                            var route = blog.Route ?? "/archive";
+
+                            int? page = null;
+                            int? year = null;
+                            int? month = null;
+                            Guid? categoryId = null;
+                            Guid? tagId = null;
+                            bool foundCategory = false;
+                            bool foundTag = false;
+                            bool foundPage = false;
+
+                            for (var n = i; n < segments.Length; n++)
+                            {
+                                if (segments[n] == "category" && !foundPage)
+                                {
+                                    foundCategory = true;
+                                    continue;
+                                }
+
+                                if (segments[n] == "tag" && !foundPage && !foundCategory)
+                                {
+                                    foundTag = true;
+                                    continue;
+                                }
+
+                                if (segments[n] == "page")
+                                {
+                                    foundPage = true;
+                                    continue;
+                                }
+
+                                if (foundCategory)
+                                {
+                                    try
+                                    {
+                                        categoryId = (await api.Posts.GetCategoryBySlugAsync(blog.Id, segments[n]).ConfigureAwait(false))?.Id;
+
+                                        if (!categoryId.HasValue)
+                                            categoryId = Guid.Empty;
+                                    }
+                                    finally
+                                    {
+                                        foundCategory = false;
+                                    }
+                                }
+
+                                if (foundTag)
+                                {
+                                    try
+                                    {
+                                        tagId = (await api.Posts.GetTagBySlugAsync(blog.Id, segments[n]).ConfigureAwait(false))?.Id;
+
+                                        if (!tagId.HasValue)
+                                            tagId = Guid.Empty;
+                                    }
+                                    finally
+                                    {
+                                        foundTag = false;
+                                    }
+                                }
+
+                                if (foundPage)
+                                {
+                                    try
+                                    {
+                                        page = Convert.ToInt32(segments[n]);
+                                    }
+                                    catch
+                                    {
+                                        // We don't care about the exception, we just
+                                        // discard malformed input
+                                    }
+                                    break;
+                                }
+
+                                if (!year.HasValue)
+                                {
+                                    try
+                                    {
+                                        year = Convert.ToInt32(segments[n]);
+
+                                        if (year.Value > DateTime.Now.Year)
+                                            year = DateTime.Now.Year;
+                                    }
+                                    catch
+                                    {
+                                        // We don't care about the exception, we just
+                                        // discard malformed input
+                                    }
+                                }
+                                else
+                                {
+                                    try
+                                    {
+                                        month = Math.Max(Math.Min(Convert.ToInt32(segments[n]), 12), 1);
+                                    }
+                                    catch
+                                    {
+                                        // We don't care about the exception, we just
+                                        // discard malformed input
+                                    }
+                                }
+                            }
+
+                            return new RouteResponse
+                            {
+                                PageId = blog.Id,
+                                Route = route,
+                                QueryString = $"id={blog.Id}&year={year}&month={month}&page={page}&pagenum={page}&category={categoryId}&tag={tagId}&piranha_handled=true",
+                                IsPublished = blog.Published.HasValue && blog.Published.Value <= DateTime.Now,
+                                CacheInfo = new HttpCacheInfo
+                                {
+                                    EntityTag = Utils.GenerateETag(blog.Id.ToString(), blog.LastModified),
+                                    LastModified = blog.LastModified
+                                }
+                            };
                         }
-
-                        var route = blog.Route ?? "/archive";
-
-                        int? page = null;
-                        int? year = null;
-                        int? month = null;
-                        Guid? categoryId = null;
-                        Guid? tagId = null;
-                        bool foundCategory = false;
-                        bool foundTag = false;
-                        bool foundPage = false;
-
-                        for (var n = 1; n < segments.Length; n++)
-                        {
-                            if (segments[n] == "category" && !foundPage)
-                            {
-                                foundCategory = true;
-                                continue;
-                            }
-
-                            if (segments[n] == "tag" && !foundPage && !foundCategory)
-                            {
-                                foundTag = true;
-                                continue;
-                            }
-
-                            if (segments[n] == "page")
-                            {
-                                foundPage = true;
-                                continue;
-                            }
-
-                            if (foundCategory)
-                            {
-                                try
-                                {
-                                    categoryId = (await api.Posts.GetCategoryBySlugAsync(blog.Id, segments[n]).ConfigureAwait(false))?.Id;
-
-                                    if (!categoryId.HasValue)
-                                        categoryId = Guid.Empty;
-                                }
-                                finally
-                                {
-                                    foundCategory = false;
-                                }
-                            }
-
-                            if (foundTag)
-                            {
-                                try
-                                {
-                                    tagId = (await api.Posts.GetTagBySlugAsync(blog.Id, segments[n]).ConfigureAwait(false))?.Id;
-
-                                    if (!tagId.HasValue)
-                                        tagId = Guid.Empty;
-                                }
-                                finally
-                                {
-                                    foundTag = false;
-                                }
-                            }
-
-                            if (foundPage)
-                            {
-                                try
-                                {
-                                    page = Convert.ToInt32(segments[n]);
-                                }
-                                catch
-                                {
-                                    // We don't care about the exception, we just
-                                    // discard malformed input
-                                }
-                                break;
-                            }
-
-                            if (!year.HasValue)
-                            {
-                                try
-                                {
-                                    year = Convert.ToInt32(segments[n]);
-
-                                    if (year.Value > DateTime.Now.Year)
-                                        year = DateTime.Now.Year;
-                                }
-                                catch
-                                {
-                                    // We don't care about the exception, we just
-                                    // discard malformed input
-                                }
-                            }
-                            else
-                            {
-                                try
-                                {
-                                    month = Math.Max(Math.Min(Convert.ToInt32(segments[n]), 12), 1);
-                                }
-                                catch
-                                {
-                                    // We don't care about the exception, we just
-                                    // discard malformed input
-                                }
-                            }
-                        }
-
-                        return new RouteResponse
-                        {
-                            PageId = blog.Id,
-                            Route = route,
-                            QueryString = $"id={blog.Id}&year={year}&month={month}&page={page}&pagenum={page}&category={categoryId}&tag={tagId}&piranha_handled=true",
-                            IsPublished = blog.Published.HasValue && blog.Published.Value <= DateTime.Now,
-                            CacheInfo = new HttpCacheInfo
-                            {
-                                EntityTag = Utils.GenerateETag(blog.Id.ToString(), blog.LastModified),
-                                LastModified = blog.LastModified
-                            }
-                        };
                     }
                 }
             }

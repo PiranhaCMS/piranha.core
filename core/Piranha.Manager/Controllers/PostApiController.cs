@@ -74,5 +74,119 @@ namespace Piranha.Manager.Controllers
         {
             return await _service.GetArchiveMap(siteId, archiveId);
         }
+
+        /// <summary>
+        /// Saves the given model
+        /// </summary>
+        /// <param name="model">The model</param>
+        /// <returns>The result of the operation</returns>
+        [Route("save")]
+        [HttpPost]
+        [Authorize(Policy = Permission.PostsPublish)]
+        public Task<PostEditModel> Save(PostEditModel model)
+        {
+            // Ensure that we have a published date
+            if (string.IsNullOrEmpty(model.Published))
+            {
+                model.Published = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+            }
+
+            return Save(model, false);
+        }
+
+        /// <summary>
+        /// Saves the given model
+        /// </summary>
+        /// <param name="model">The model</param>
+        /// <returns>The result of the operation</returns>
+        [Route("save/draft")]
+        [HttpPost]
+        [Authorize(Policy = Permission.PostsSave)]
+        public Task<PostEditModel> SaveDraft(PostEditModel model)
+        {
+            return Save(model, true);
+        }
+
+        /// <summary>
+        /// Saves the given model and unpublishes it
+        /// </summary>
+        /// <param name="model">The model</param>
+        /// <returns>The result of the operation</returns>
+        [Route("save/unpublish")]
+        [HttpPost]
+        [Authorize(Policy = Permission.PostsPublish)]
+        public Task<PostEditModel> SaveUnpublish(PostEditModel model)
+        {
+            // Remove published date
+            model.Published = null;
+
+            return Save(model, false);
+        }
+
+        [Route("revert/{id}")]
+        [HttpGet]
+        [Authorize(Policy = Permission.PostsSave)]
+        public async Task<PostEditModel> Revert(Guid id)
+        {
+            var post = await _service.GetById(id, false);
+
+            if (post != null)
+            {
+                await _service.Save(post, false);
+
+                post = await _service.GetById(id);
+            }
+
+            post.Status = new StatusMessage
+            {
+                Type = StatusMessage.Success,
+                Body = _localizer.Post["The post was successfully reverted to its previous state"]
+            };
+
+            return post;
+        }
+
+        /// <summary>
+        /// Saves the given model
+        /// </summary>
+        /// <param name="model">The model</param>
+        /// <returns>The result of the operation</returns>
+        private async Task<PostEditModel> Save(PostEditModel model, bool draft = false)
+        {
+            try
+            {
+                await _service.Save(model, draft);
+            }
+            catch (ValidationException e)
+            {
+                model.Status = new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = e.Message
+                };
+
+                return model;
+            }
+            /*
+            catch
+            {
+                return new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = "An error occured while saving the page"
+                };
+            }
+            */
+
+            var ret = await _service.GetById(model.Id);
+            ret.Status = new StatusMessage
+            {
+                Type = StatusMessage.Success,
+                Body = draft ? _localizer.Post["The post was successfully saved"]
+                    : string.IsNullOrEmpty(model.Published) ? _localizer.Post["The post was successfully unpublished"] : _localizer.Page["The post was successfully published"]
+            };
+
+            return ret;
+        }
     }
 }

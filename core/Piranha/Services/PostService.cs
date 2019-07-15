@@ -313,6 +313,36 @@ namespace Piranha.Services
         }
 
         /// <summary>
+        /// Gets the draft for the post model with the specified id.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="id">The unique id</param>
+        /// <returns>The draft, or null if no draft exists</returns>
+        public Task<DynamicPost> GetDraftByIdAsync(Guid id)
+        {
+            return GetDraftByIdAsync<DynamicPost>(id);
+        }
+
+        /// <summary>
+        /// Gets the draft for the post model with the specified id.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="id">The unique id</param>
+        /// <returns>The draft, or null if no draft exists</returns>
+        public async Task<T> GetDraftByIdAsync<T>(Guid id) where T : PostBase
+        {
+            var draft = await _repo.GetDraftById<T>(id);
+
+            if (draft != null)
+            {
+                var blog = await _pageService.GetByIdAsync<PageInfo>(draft.BlogId).ConfigureAwait(false);
+
+                OnLoad(draft, blog);
+            }
+            return draft;
+        }
+
+        /// <summary>
         /// Gets the category with the given slug.
         /// </summary>
         /// <param name="blogId">The blog id</param>
@@ -416,7 +446,25 @@ namespace Piranha.Services
         /// Saves the given post model
         /// </summary>
         /// <param name="model">The post model</param>
-        public async Task SaveAsync<T>(T model) where T : PostBase
+        public Task SaveAsync<T>(T model) where T : PostBase
+        {
+            return SaveAsync(model, false);
+        }
+
+        /// <summary>
+        /// Saves the given post model as a draft
+        /// </summary>
+        /// <param name="model">The post model</param>
+        public Task SaveDraftAsync<T>(T model) where T : PostBase
+        {
+            return SaveAsync(model, true);
+        }
+
+        /// <summary>
+        /// Saves the given post model
+        /// </summary>
+        /// <param name="model">The post model</param>
+        private async Task SaveAsync<T>(T model, bool isDraft) where T : PostBase
         {
             // Ensure id
             if (model.Id == Guid.Empty)
@@ -454,13 +502,43 @@ namespace Piranha.Services
 
             // Call hooks & save
             App.Hooks.OnBeforeSave<PostBase>(model);
-            await _repo.Save(model).ConfigureAwait(false);
+
+            // Handle revisions and save
+            var current = await _repo.GetById<PostInfo>(model.Id);
+
+            if (IsPublished(current) && isDraft)
+            {
+                // We're saving a draft since we have a previously
+                // published version of the post
+                await _repo.SaveDraft(model);
+            }
+            else
+            {
+                if (current == null && isDraft)
+                {
+                    // If we're saving a draft as a normal post instance, make
+                    // sure we remove the published date as this sould effectively
+                    // publish the post.
+                    model.Published = null;
+                }
+                else if (current != null && !isDraft)
+                {
+                    // Save current as a revision before saving the model
+                    // and if a draft revision exists, remove it.
+                    await _repo.CreateRevision(model.Id);
+                    await _repo.DeleteDraft(model.Id);
+                }
+
+                // Save the main post
+                await _repo.Save(model).ConfigureAwait(false);
+            }
+
             App.Hooks.OnAfterSave<PostBase>(model);
 
             // Remove the post from cache
             RemoveFromCache(model);
 
-            if (_cache != null)
+            if (!isDraft && _cache != null)
             {
                 // Clear all categories from cache in case some
                 // unused where deleted.
@@ -633,6 +711,16 @@ namespace Piranha.Services
                 _cache.Remove($"PostId_{post.BlogId}_{post.Slug}");
                 _cache.Remove($"PostInfo_{post.Id.ToString()}");
             }
+        }
+
+        /// <summary>
+        /// Checks if the given post is published
+        /// </summary>
+        /// <param name="model">The posts model</param>
+        /// <returns>If the post is published</returns>
+        private bool IsPublished (PostBase model)
+        {
+            return model != null && model.Published.HasValue && model.Published.Value <= DateTime.Now;
         }
     }
 }

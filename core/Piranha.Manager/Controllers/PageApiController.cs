@@ -97,7 +97,6 @@ namespace Piranha.Manager.Controllers
             return await _service.Create(siteId, typeId);
         }
 
-
         /// <summary>
         /// Saves the given model
         /// </summary>

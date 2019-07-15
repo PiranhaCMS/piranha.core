@@ -158,7 +158,6 @@ namespace Piranha.Repositories
             return null;
         }
 
-
         /// <summary>
         /// Moves the current page in the structure.
         /// </summary>
@@ -461,7 +460,7 @@ namespace Piranha.Repositories
 
                     if (!isDraft)
                     {
-                        _db.Pages.Add(page);
+                        await _db.Pages.AddAsync(page);
 
                         // Make room for the new page
                         var dest = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync().ConfigureAwait(false);
@@ -522,7 +521,6 @@ namespace Piranha.Repositories
                     for (var n = 0; n < blocks.Count; n++)
                     {
                         IQueryable<Block> blockQuery = _db.Blocks;
-
                         if (isDraft)
                         {
                             blockQuery = blockQuery.AsNoTracking();

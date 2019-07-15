@@ -9,6 +9,7 @@
  */
 
 using System;
+using Newtonsoft.Json;
 
 namespace Piranha.Data
 {
@@ -28,6 +29,7 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the post.
         /// </summary>
+        [JsonIgnore]
         public Post Post { get; set; }
 
         /// <summary>

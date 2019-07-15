@@ -63,6 +63,14 @@ namespace Piranha.Repositories
         Task<T> GetBySlug<T>(Guid blogId, string slug) where T : PostBase;
 
         /// <summary>
+        /// Gets the draft for the post model with the specified id.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="id">The unique id</param>
+        /// <returns>The draft, or null if no draft exists</returns>
+        Task<T> GetDraftById<T>(Guid id) where T : PostBase;
+
+        /// <summary>
         /// Gets the category with the id.
         /// </summary>
         /// <param name="id">The unique id</param>
@@ -99,9 +107,29 @@ namespace Piranha.Repositories
         Task Save<T>(T model) where T : PostBase;
 
         /// <summary>
+        /// Saves the given model as a draft revision.
+        /// </summary>
+        /// <param name="model">The post model</param>
+        Task SaveDraft<T>(T model) where T : PostBase;
+
+        /// <summary>
+        /// Creates a revision from the current version
+        /// of the post with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        Task CreateRevision(Guid id);
+
+        /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
         Task Delete(Guid id);
+
+        /// <summary>
+        /// Deletes the current draft revision for the post
+        /// with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        Task DeleteDraft(Guid id);
     }
 }

@@ -126,7 +126,9 @@ piranha.postedit = new Vue({
                 metaDescription: self.metaDescription,
                 published: self.published,
                 blocks: JSON.parse(JSON.stringify(self.blocks)),
-                regions: JSON.parse(JSON.stringify(self.regions))
+                regions: JSON.parse(JSON.stringify(self.regions)),
+                selectedCategory: self.selectedCategory,
+                selectedTags: JSON.parse(JSON.stringify(self.selectedTags))
             };
 
             fetch(route, {
@@ -164,6 +166,13 @@ piranha.postedit = new Vue({
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.bind(result);
+
+                    Vue.nextTick(function () {
+                        $(".select2").select2({
+                            tags: true,
+                            selectOnClose: true
+                        });
+                    });
 
                     piranha.notifications.push(result.status);
                 })
@@ -229,7 +238,7 @@ piranha.postedit = new Vue({
             $(".select2").select2({
                 tags: true,
                 selectOnClose: true
-            })
+            });
             $("#selectedCategory").on("change", function() {
                 var item = $(this).find("option:selected").text();
                 self.selectedCategory = item;

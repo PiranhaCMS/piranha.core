@@ -35,10 +35,16 @@ namespace Piranha.Web
                 for (var n = include; n > 0; n--)
                 {
                     var slug = string.Join("/", segments.Subset(0, n));
-                    var page = await api.Pages.GetBySlugAsync<Models.PageInfo>(slug, siteId);
+                    var page = await api.Pages.GetBySlugAsync<Models.PageInfo>(slug, siteId)
+                        .ConfigureAwait(false);
 
-                    if (page != null && page.ContentType == "Page")
+                    if (page != null)
                     {
+                        if (page.ContentType != "Page")
+                        {
+                            return null;
+                        }
+
                         if (string.IsNullOrWhiteSpace(page.RedirectUrl))
                         {
                             var site = await api.Sites.GetByIdAsync(siteId);

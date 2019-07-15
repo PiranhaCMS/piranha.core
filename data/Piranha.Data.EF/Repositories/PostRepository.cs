@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Piranha.Data;
 using Piranha.Services;
 
@@ -153,6 +154,37 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Gets the draft for the page model with the specified id.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="id">The unique id</param>
+        /// <returns>The draft, or null if no draft exists</returns>
+        public async Task<T> GetDraftById<T>(Guid id) where T : Models.PostBase
+        {
+            DateTime? lastModified = await _db.Posts
+                .Where(p => p.Id == id)
+                .Select(p => p.LastModified)
+                .FirstOrDefaultAsync()
+                .ConfigureAwait(false);
+
+            if (lastModified.HasValue)
+            {
+                var draft = await _db.PostRevisions
+                    .FirstOrDefaultAsync(r => r.PostId == id && r.Created > lastModified)
+                    .ConfigureAwait(false);
+
+                if (draft != null)
+                {
+                    // Transform data model
+                    var post = JsonConvert.DeserializeObject<Post>(draft.Data);
+
+                    return _contentService.Transform<T>(post, App.PostTypes.GetById(post.PostTypeId), Process);
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Gets the category with the given slug.
         /// </summary>
         /// <param name="blogId">The blog id</param>
@@ -226,223 +258,42 @@ namespace Piranha.Repositories
         /// Saves the given post model
         /// </summary>
         /// <param name="model">The post model</param>
-        public async Task Save<T>(T model) where T : Models.PostBase
+        public Task Save<T>(T model) where T : Models.PostBase
         {
-            var type = App.PostTypes.GetById(model.TypeId);
+            return Save<T>(model, false);
+        }
 
-            if (type != null)
+        /// <summary>
+        /// Saves the given model as a draft revision.
+        /// </summary>
+        /// <param name="model">The post model</param>
+        public Task SaveDraft<T>(T model) where T : Models.PostBase
+        {
+            return Save<T>(model, true);
+        }
+
+        /// <summary>
+        /// Creates a revision from the current version
+        /// of the page with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        public async Task CreateRevision(Guid id)
+        {
+            var post = await GetQuery<Models.PostBase>()
+                .FirstOrDefaultAsync(p => p.Id == id)
+                .ConfigureAwait(false);
+
+            if (post != null)
             {
-                // Ensure category
-                var category = await _db.Categories
-                    .FirstOrDefaultAsync(c => c.Id == model.Category.Id)
-                    .ConfigureAwait(false);
-
-                if (category == null)
+                await _db.PostRevisions.AddAsync(new PostRevision
                 {
-                    if (!string.IsNullOrWhiteSpace(model.Category.Slug))
-                    {
-                        category = await _db.Categories
-                            .FirstOrDefaultAsync(c => c.BlogId == model.BlogId && c.Slug == model.Category.Slug)
-                            .ConfigureAwait(false);
-                    }
-                    if (category == null && !string.IsNullOrWhiteSpace(model.Category.Title))
-                    {
-                        category = await _db.Categories
-                            .FirstOrDefaultAsync(c => c.BlogId == model.BlogId && c.Title == model.Category.Title)
-                            .ConfigureAwait(false);
-                    }
-
-                    if (category == null)
-                    {
-                        category = new Category
-                        {
-                            Id = model.Category.Id != Guid.Empty ? model.Category.Id : Guid.NewGuid(),
-                            BlogId = model.BlogId,
-                            Title = model.Category.Title,
-                            Slug = Utils.GenerateSlug(model.Category.Title),
-                            Created = DateTime.Now,
-                            LastModified = DateTime.Now
-                        };
-                        await _db.Categories.AddAsync(category).ConfigureAwait(false);
-                    }
-                    model.Category.Id = category.Id;
-                }
-
-                // Ensure tags
-                foreach (var t in model.Tags)
-                {
-                    var tag = await _db.Tags
-                        .FirstOrDefaultAsync(tg => tg.Id == t.Id)
-                        .ConfigureAwait(false);
-
-                    if (tag == null)
-                    {
-                        if (!string.IsNullOrWhiteSpace(t.Slug))
-                        {
-                            tag = await _db.Tags
-                                .FirstOrDefaultAsync(tg => tg.BlogId == model.BlogId && tg.Slug == t.Slug)
-                                .ConfigureAwait(false);
-                        }
-                        if (tag == null && !string.IsNullOrWhiteSpace(t.Title))
-                        {
-                            tag = await _db.Tags
-                                .FirstOrDefaultAsync(tg => tg.BlogId == model.BlogId && tg.Title == t.Title)
-                                .ConfigureAwait(false);
-                        }
-
-                        if (tag == null)
-                        {
-                            tag = new Tag
-                            {
-                                Id = t.Id != Guid.Empty ? t.Id : Guid.NewGuid(),
-                                BlogId = model.BlogId,
-                                Title = t.Title,
-                                Slug = Utils.GenerateSlug(t.Title),
-                                Created = DateTime.Now,
-                                LastModified = DateTime.Now
-                            };
-                            await _db.Tags.AddAsync(tag).ConfigureAwait(false);
-                        }
-                        t.Id = tag.Id;
-                    }
-                }
-
-                // Ensure that we have a slug
-                if (string.IsNullOrWhiteSpace(model.Slug))
-                {
-                    model.Slug = Utils.GenerateSlug(model.Title, false);
-                }
-                else
-                {
-                    model.Slug = Utils.GenerateSlug(model.Slug, false);
-                }
-
-                var post = await _db.Posts
-                    .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
-                    .Include(p => p.Fields)
-                    .Include(p => p.Tags)
-                    .FirstOrDefaultAsync(p => p.Id == model.Id)
-                    .ConfigureAwait(false);
-
-                // If not, create a new post
-                if (post == null)
-                {
-                    post = new Post
-                    {
-                        Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
-                        Created = DateTime.Now,
-                        LastModified = DateTime.Now
-                    };
-                    await _db.Posts.AddAsync(post).ConfigureAwait(false);
-                    model.Id = post.Id;
-                }
-                else
-                {
-                    post.LastModified = DateTime.Now;
-                }
-                post = _contentService.Transform<T>(model, type, post);
-
-                // Transform blocks
-                var blockModels = model.Blocks;
-
-                if (blockModels != null)
-                {
-                    var blocks = _contentService.TransformBlocks(blockModels);
-                    var current = blocks.Select(b => b.Id).ToArray();
-
-                    // Delete removed blocks
-                    var removed = post.Blocks
-                        .Where(b => !current.Contains(b.BlockId) && !b.Block.IsReusable)
-                        .Select(b => b.Block);
-                    _db.Blocks.RemoveRange(removed);
-
-                    // Delete the old page blocks
-                    post.Blocks.Clear();
-
-                    // Now map the new block
-                    for (var n = 0; n < blocks.Count; n++)
-                    {
-                        var block = _db.Blocks
-                            .Include(b => b.Fields)
-                            .FirstOrDefault(b => b.Id == blocks[n].Id);
-                        if (block == null)
-                        {
-                            block = new Block
-                            {
-                                Id = blocks[n].Id != Guid.Empty ? blocks[n].Id : Guid.NewGuid(),
-                                Created = DateTime.Now
-                            };
-                            await _db.Blocks.AddAsync(block).ConfigureAwait(false);
-                        }
-                        block.ParentId = blocks[n].ParentId;
-                        block.CLRType = blocks[n].CLRType;
-                        block.IsReusable = blocks[n].IsReusable;
-                        block.Title = blocks[n].Title;
-                        block.LastModified = DateTime.Now;
-
-                        var currentFields = blocks[n].Fields.Select(f => f.FieldId).Distinct();
-                        var removedFields = block.Fields.Where(f => !currentFields.Contains(f.FieldId));
-                        _db.BlockFields.RemoveRange(removedFields);
-
-                        foreach (var newField in blocks[n].Fields)
-                        {
-                            var field = block.Fields.FirstOrDefault(f => f.FieldId == newField.FieldId);
-                            if (field == null)
-                            {
-                                field = new BlockField
-                                {
-                                    Id = newField.Id != Guid.Empty ? newField.Id : Guid.NewGuid(),
-                                    BlockId = block.Id,
-                                    FieldId = newField.FieldId
-                                };
-                                await _db.BlockFields.AddAsync(field).ConfigureAwait(false);
-                                block.Fields.Add(field);
-                            }
-                            field.SortOrder = newField.SortOrder;
-                            field.CLRType = newField.CLRType;
-                            field.Value = newField.Value;
-                        }
-
-                        // Create the page block
-                        post.Blocks.Add(new PostBlock
-                        {
-                            Id = Guid.NewGuid(),
-                            BlockId = block.Id,
-                            Block = block,
-                            PostId = post.Id,
-                            SortOrder = n
-                        });
-                    }
-                }
-
-                // Remove tags
-                var removedTags = new List<PostTag>();
-                foreach (var tag in post.Tags)
-                {
-                    if (!model.Tags.Any(t => t.Id == tag.TagId))
-                    {
-                        removedTags.Add(tag);
-                    }
-                }
-                foreach (var removed in removedTags)
-                {
-                    post.Tags.Remove(removed);
-                }
-
-                // Add tags
-                foreach (var tag in model.Tags)
-                {
-                    if (!post.Tags.Any(t => t.PostId == post.Id && t.TagId == tag.Id))
-                        post.Tags.Add(new PostTag
-                        {
-                            PostId = post.Id,
-                            TagId = tag.Id
-                        });
-                }
+                    Id = Guid.NewGuid(),
+                    PostId = id,
+                    Data = JsonConvert.SerializeObject(post),
+                    Created = post.LastModified
+                }).ConfigureAwait(false);
 
                 await _db.SaveChangesAsync().ConfigureAwait(false);
-                await DeleteUnusedCategories(model.BlogId).ConfigureAwait(false);
-                await DeleteUnusedTags(model.BlogId).ConfigureAwait(false);
             }
         }
 
@@ -487,6 +338,348 @@ namespace Piranha.Repositories
                 await _db.SaveChangesAsync().ConfigureAwait(false);
                 await DeleteUnusedCategories(model.BlogId).ConfigureAwait(false);
                 await DeleteUnusedTags(model.BlogId).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Deletes the current draft revision for the page
+        /// with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        public async Task DeleteDraft(Guid id)
+        {
+            var post = await GetQuery<Models.PostInfo>()
+                .FirstOrDefaultAsync(p => p.Id == id)
+                .ConfigureAwait(false);
+
+            if (post != null)
+            {
+                var draft = await _db.PostRevisions
+                    .Where(r => r.PostId == id && r.Created > post.LastModified)
+                    .ToListAsync()
+                    .ConfigureAwait(false);
+
+                if (draft.Count > 0)
+                {
+                    _db.PostRevisions.RemoveRange(draft);
+
+                    await _db.SaveChangesAsync().ConfigureAwait(false);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Saves the given post model
+        /// </summary>
+        /// <param name="model">The post model</param>
+        private async Task Save<T>(T model, bool isDraft) where T : Models.PostBase
+        {
+            var type = App.PostTypes.GetById(model.TypeId);
+            var lastModified = DateTime.MinValue;
+
+            if (type != null)
+            {
+                // Ensure category
+                var category = await _db.Categories
+                    .FirstOrDefaultAsync(c => c.Id == model.Category.Id)
+                    .ConfigureAwait(false);
+
+                if (category == null)
+                {
+                    if (!string.IsNullOrWhiteSpace(model.Category.Slug))
+                    {
+                        category = await _db.Categories
+                            .FirstOrDefaultAsync(c => c.BlogId == model.BlogId && c.Slug == model.Category.Slug)
+                            .ConfigureAwait(false);
+                    }
+                    if (category == null && !string.IsNullOrWhiteSpace(model.Category.Title))
+                    {
+                        category = await _db.Categories
+                            .FirstOrDefaultAsync(c => c.BlogId == model.BlogId && c.Title == model.Category.Title)
+                            .ConfigureAwait(false);
+                    }
+
+                    if (category == null)
+                    {
+                        category = new Category
+                        {
+                            Id = model.Category.Id != Guid.Empty ? model.Category.Id : Guid.NewGuid(),
+                            BlogId = model.BlogId,
+                            Title = model.Category.Title,
+                            Slug = Utils.GenerateSlug(model.Category.Title),
+                            Created = DateTime.Now,
+                            LastModified = DateTime.Now
+                        };
+                        await _db.Categories.AddAsync(category).ConfigureAwait(false);
+                    }
+                    model.Category.Id = category.Id;
+                    model.Category.Title = category.Title;
+                    model.Category.Slug = category.Slug;
+                }
+
+                // Ensure tags
+                foreach (var t in model.Tags)
+                {
+                    var tag = await _db.Tags
+                        .FirstOrDefaultAsync(tg => tg.Id == t.Id)
+                        .ConfigureAwait(false);
+
+                    if (tag == null)
+                    {
+                        if (!string.IsNullOrWhiteSpace(t.Slug))
+                        {
+                            tag = await _db.Tags
+                                .FirstOrDefaultAsync(tg => tg.BlogId == model.BlogId && tg.Slug == t.Slug)
+                                .ConfigureAwait(false);
+                        }
+                        if (tag == null && !string.IsNullOrWhiteSpace(t.Title))
+                        {
+                            tag = await _db.Tags
+                                .FirstOrDefaultAsync(tg => tg.BlogId == model.BlogId && tg.Title == t.Title)
+                                .ConfigureAwait(false);
+                        }
+
+                        if (tag == null)
+                        {
+                            tag = new Tag
+                            {
+                                Id = t.Id != Guid.Empty ? t.Id : Guid.NewGuid(),
+                                BlogId = model.BlogId,
+                                Title = t.Title,
+                                Slug = Utils.GenerateSlug(t.Title),
+                                Created = DateTime.Now,
+                                LastModified = DateTime.Now
+                            };
+                            await _db.Tags.AddAsync(tag).ConfigureAwait(false);
+                        }
+                        t.Id = tag.Id;
+                    }
+                    t.Title = tag.Title;
+                    t.Slug = tag.Slug;
+                }
+
+                // Ensure that we have a slug
+                if (string.IsNullOrWhiteSpace(model.Slug))
+                {
+                    model.Slug = Utils.GenerateSlug(model.Title, false);
+                }
+                else
+                {
+                    model.Slug = Utils.GenerateSlug(model.Slug, false);
+                }
+
+                IQueryable<Post> postQuery = _db.Posts;
+                if (isDraft)
+                {
+                    postQuery = postQuery.AsNoTracking();
+                }
+
+                var post = await postQuery
+                    .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
+                    .Include(p => p.Fields)
+                    .Include(p => p.Tags).ThenInclude(t => t.Tag)
+                    .FirstOrDefaultAsync(p => p.Id == model.Id)
+                    .ConfigureAwait(false);
+
+                // If not, create a new post
+                if (post == null)
+                {
+                    post = new Post
+                    {
+                        Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
+                        Created = DateTime.Now,
+                        LastModified = DateTime.Now
+                    };
+                    model.Id = post.Id;
+
+                    if (!isDraft)
+                    {
+                        await _db.Posts.AddAsync(post).ConfigureAwait(false);
+                    }
+                }
+                else
+                {
+                    post.LastModified = DateTime.Now;
+                }
+                post = _contentService.Transform<T>(model, type, post);
+
+                if (isDraft)
+                {
+                    post.Category = new Category
+                    {
+                        Id = model.Category.Id,
+                        BlogId = model.BlogId,
+                        Title = model.Category.Title,
+                        Slug = model.Category.Slug
+                    };
+                }
+
+                // Transform blocks
+                var blockModels = model.Blocks;
+
+                if (blockModels != null)
+                {
+                    var blocks = _contentService.TransformBlocks(blockModels);
+                    var current = blocks.Select(b => b.Id).ToArray();
+
+                    // Delete removed blocks
+                    var removed = post.Blocks
+                        .Where(b => !current.Contains(b.BlockId) && !b.Block.IsReusable && b.Block.ParentId == null)
+                        .Select(b => b.Block);
+                    var removedItems = post.Blocks
+                        .Where(b => !current.Contains(b.BlockId) && b.Block.ParentId != null && removed.Select(p => p.Id).ToList().Contains(b.Block.ParentId.Value))
+                        .Select(b => b.Block);
+
+                    if (!isDraft)
+                    {
+                        _db.Blocks.RemoveRange(removed);
+                        _db.Blocks.RemoveRange(removedItems);
+                    }
+
+                    // Delete the old page blocks
+                    post.Blocks.Clear();
+
+                    // Now map the new block
+                    for (var n = 0; n < blocks.Count; n++)
+                    {
+                        IQueryable<Block> blockQuery = _db.Blocks;
+                        if (isDraft)
+                        {
+                            blockQuery = blockQuery.AsNoTracking();
+                        }
+
+                        var block = blockQuery
+                            .Include(b => b.Fields)
+                            .FirstOrDefault(b => b.Id == blocks[n].Id);
+
+                        if (block == null)
+                        {
+                            block = new Block
+                            {
+                                Id = blocks[n].Id != Guid.Empty ? blocks[n].Id : Guid.NewGuid(),
+                                Created = DateTime.Now
+                            };
+                            if (!isDraft)
+                            {
+                                await _db.Blocks.AddAsync(block).ConfigureAwait(false);
+                            }
+                        }
+                        block.ParentId = blocks[n].ParentId;
+                        block.CLRType = blocks[n].CLRType;
+                        block.IsReusable = blocks[n].IsReusable;
+                        block.Title = blocks[n].Title;
+                        block.LastModified = DateTime.Now;
+
+                        var currentFields = blocks[n].Fields.Select(f => f.FieldId).Distinct();
+                        var removedFields = block.Fields.Where(f => !currentFields.Contains(f.FieldId));
+
+                        if (!isDraft)
+                        {
+                            _db.BlockFields.RemoveRange(removedFields);
+                        }
+
+                        foreach (var newField in blocks[n].Fields)
+                        {
+                            var field = block.Fields.FirstOrDefault(f => f.FieldId == newField.FieldId);
+                            if (field == null)
+                            {
+                                field = new BlockField
+                                {
+                                    Id = newField.Id != Guid.Empty ? newField.Id : Guid.NewGuid(),
+                                    BlockId = block.Id,
+                                    FieldId = newField.FieldId
+                                };
+                                if (!isDraft)
+                                {
+                                    await _db.BlockFields.AddAsync(field).ConfigureAwait(false);
+                                }
+                                block.Fields.Add(field);
+                            }
+                            field.SortOrder = newField.SortOrder;
+                            field.CLRType = newField.CLRType;
+                            field.Value = newField.Value;
+                        }
+
+                        // Create the page block
+                        post.Blocks.Add(new PostBlock
+                        {
+                            Id = Guid.NewGuid(),
+                            BlockId = block.Id,
+                            Block = block,
+                            PostId = post.Id,
+                            SortOrder = n
+                        });
+                    }
+                }
+
+                // Remove tags
+                var removedTags = new List<PostTag>();
+                foreach (var tag in post.Tags)
+                {
+                    if (!model.Tags.Any(t => t.Id == tag.TagId))
+                    {
+                        removedTags.Add(tag);
+                    }
+                }
+                foreach (var removed in removedTags)
+                {
+                    post.Tags.Remove(removed);
+                }
+
+                // Add tags
+                foreach (var tag in model.Tags)
+                {
+                    if (!post.Tags.Any(t => t.PostId == post.Id && t.TagId == tag.Id))
+                    {
+                        var postTag = new PostTag
+                        {
+                            PostId = post.Id,
+                            TagId = tag.Id
+                        };
+
+                        if (isDraft)
+                        {
+                            postTag.Tag = new Tag
+                            {
+                                Id = tag.Id,
+                                BlogId = post.BlogId,
+                                Title = tag.Title,
+                                Slug = tag.Slug
+                            };
+                        }
+                        post.Tags.Add(postTag);
+                    }
+                }
+
+                if (!isDraft)
+                {
+                    await _db.SaveChangesAsync().ConfigureAwait(false);
+                    await DeleteUnusedCategories(model.BlogId).ConfigureAwait(false);
+                    await DeleteUnusedTags(model.BlogId).ConfigureAwait(false);
+                }
+                else
+                {
+                    var draft = await _db.PostRevisions
+                        .FirstOrDefaultAsync(r => r.PostId == post.Id && r.Created > lastModified)
+                        .ConfigureAwait(false);
+
+                    if (draft == null)
+                    {
+                        draft = new PostRevision
+                        {
+                            Id = Guid.NewGuid(),
+                            PostId = post.Id
+                        };
+                        await _db.PostRevisions
+                            .AddAsync(draft)
+                            .ConfigureAwait(false);
+                    }
+
+                    draft.Data = JsonConvert.SerializeObject(post);
+                    draft.Created = post.LastModified;
+
+                    await _db.SaveChangesAsync().ConfigureAwait(false);
+                }
             }
         }
 
@@ -586,7 +779,6 @@ namespace Piranha.Repositories
                         }
                     }
                     model.Blocks = _contentService.TransformBlocks(post.Blocks.OrderBy(b => b.SortOrder).Select(b => b.Block));
-
                 }
             }
         }

@@ -425,7 +425,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="model">The page model</param>
         /// <param name="isDraft">If we're saving as a draft</param>
-        public async Task SaveAsync<T>(T model, bool isDraft) where T : PageBase
+        private async Task SaveAsync<T>(T model, bool isDraft) where T : PageBase
         {
             // Ensure id
             if (model.Id == Guid.Empty)

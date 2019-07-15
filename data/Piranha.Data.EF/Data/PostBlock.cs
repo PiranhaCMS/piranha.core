@@ -48,12 +48,12 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the post containing the block.
         /// </summary>
+        [JsonIgnore]
         public Post Post { get; set; }
 
         /// <summary>
         /// Gets/sets the block data.
         /// </summary>
-        [JsonIgnore]
         public Block Block { get; set; }
     }
 }

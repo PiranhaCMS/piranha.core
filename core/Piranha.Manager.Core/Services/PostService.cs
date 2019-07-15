@@ -152,8 +152,7 @@ namespace Piranha.Manager.Services
         public async Task<PostEditModel> GetById(Guid id, bool useDraft = true)
         {
             var isDraft = true;
-            //var page = useDraft ? await _api.Posts.GetDraftByIdAsync(id) : null;
-            var post = useDraft ? await _api.Posts.GetByIdAsync(id) : null;
+            var post = useDraft ? await _api.Posts.GetDraftByIdAsync(id) : null;
 
             if (post == null)
             {
@@ -178,6 +177,153 @@ namespace Piranha.Manager.Services
             return null;
         }
 
+        public async Task Save(PostEditModel model, bool draft)
+        {
+            var postType = App.PostTypes.GetById(model.TypeId);
+
+            if (postType != null)
+            {
+                if (model.Id == Guid.Empty)
+                {
+                    model.Id = Guid.NewGuid();
+                }
+
+                var post = await _api.Posts.GetByIdAsync(model.Id);
+
+                if (post == null)
+                {
+                    post = _factory.Create<DynamicPost>(postType);
+                    post.Id = model.Id;
+                }
+
+                post.BlogId = model.BlogId;
+                post.TypeId = model.TypeId;
+                post.Title = model.Title;
+                post.Slug = model.Slug;
+                post.MetaKeywords = model.MetaKeywords;
+                post.MetaDescription = model.MetaDescription;
+                post.Published = !string.IsNullOrEmpty(model.Published) ? DateTime.Parse(model.Published) : (DateTime?)null;
+
+                // Save category
+                post.Category = new Taxonomy
+                {
+                    Title = model.SelectedCategory
+                };
+
+                // Save tags
+                post.Tags.Clear();
+                foreach (var tag in model.SelectedTags)
+                {
+                    post.Tags.Add(new Taxonomy
+                    {
+                        Title = tag
+                    });
+                }
+
+                // Save regions
+                foreach (var region in postType.Regions)
+                {
+                    var modelRegion = model.Regions
+                        .FirstOrDefault(r => r.Meta.Id == region.Id);
+
+                    if (region.Collection)
+                    {
+                        var listRegion = (IRegionList)((IDictionary<string, object>)post.Regions)[region.Id];
+
+                        listRegion.Clear();
+
+                        foreach (var item in modelRegion.Items)
+                        {
+                            if (region.Fields.Count == 1)
+                            {
+                                listRegion.Add(item.Fields[0].Model);
+                            }
+                            else
+                            {
+                                var postRegion = new ExpandoObject();
+
+                                foreach (var field in region.Fields)
+                                {
+                                    var modelField = item.Fields
+                                        .FirstOrDefault(f => f.Meta.Id == field.Id);
+                                    ((IDictionary<string, object>)postRegion)[field.Id] = modelField.Model;
+                                }
+                                listRegion.Add(postRegion);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var postRegion = ((IDictionary<string, object>)post.Regions)[region.Id];
+
+                        if (region.Fields.Count == 1)
+                        {
+                            ((IDictionary<string, object>)post.Regions)[region.Id] =
+                                modelRegion.Items[0].Fields[0].Model;
+                        }
+                        else
+                        {
+                            foreach (var field in region.Fields)
+                            {
+                                var modelField = modelRegion.Items[0].Fields
+                                    .FirstOrDefault(f => f.Meta.Id == field.Id);
+                                ((IDictionary<string, object>)postRegion)[field.Id] = modelField.Model;
+                            }
+                        }
+                    }
+                }
+
+                // Save blocks
+                post.Blocks.Clear();
+
+                foreach (var block in model.Blocks)
+                {
+                    if (block is BlockGroupModel blockGroup)
+                    {
+                        var groupType = App.Blocks.GetByType(blockGroup.Type);
+
+                        if (groupType != null)
+                        {
+                            var postBlock = (Extend.BlockGroup)Activator.CreateInstance(groupType.Type);
+
+                            postBlock.Id = blockGroup.Id;
+                            postBlock.Type = blockGroup.Type;
+
+                            foreach (var field in blockGroup.Fields)
+                            {
+                                var prop = postBlock.GetType().GetProperty(field.Meta.Id, App.PropertyBindings);
+                                prop.SetValue(postBlock, field.Model);
+                            }
+
+                            foreach (var item in blockGroup.Items)
+                            {
+                                postBlock.Items.Add(item.Model);
+                            }
+                            post.Blocks.Add(postBlock);
+                        }
+                    }
+                    else if (block is BlockItemModel blockItem)
+                    {
+                        post.Blocks.Add(blockItem.Model);
+                    }
+                }
+
+                // Save post
+                if (draft)
+                {
+                    await _api.Posts.SaveDraftAsync(post);
+                }
+                else
+                {
+                    await _api.Posts.SaveAsync(post);
+                }
+            }
+            else
+            {
+                throw new ValidationException("Invalid Post Type.");
+            }
+        }
+
         private PostEditModel Transform(DynamicPost post, bool isDraft)
         {
             var type = App.PostTypes.GetById(post.TypeId);
@@ -192,7 +338,7 @@ namespace Piranha.Manager.Services
                 MetaKeywords = post.MetaKeywords,
                 MetaDescription = post.MetaDescription,
                 Published = post.Published.HasValue ? post.Published.Value.ToString("yyyy-MM-dd HH:mm") : null,
-                State = "published", //GetState(post, isDraft),
+                State = GetState(post, isDraft),
                 UseBlocks = type.UseBlocks
             };
 
