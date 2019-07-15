@@ -17,6 +17,6 @@ Vue.component("quote-block", {
     template:
         "<div class='block-body' :class='{ empty: isEmpty }'>" +
         "  <i class='fas fa-quote-right quote'></i>" +
-        "  <p class='lead' contenteditable='true' spellcheck='false' v-model='model.body.value' v-on:blur='onBlur'></pre>" +
+        "  <p class='lead' contenteditable='true' spellcheck='false' v-html='model.body.value' v-on:blur='onBlur'></pre>" +
         "</div>"
 });
