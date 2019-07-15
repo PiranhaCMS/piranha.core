@@ -20,7 +20,6 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
       <group targetFramework=".NETStandard2.0">
         <dependency id="Piranha" version="7.0.0-alpha2" />
         <dependency id="Piranha.AspNetCore" version="7.0.0-alpha2" />
-        <dependency id="Piranha.Extensions.Sync" version="7.0.0-alpha2" />
         <dependency id="Piranha.Manager.Localization" version="7.0.0-alpha2" />
         <dependency id="Microsoft.AspNetCore" version="2.2.0" />
         <dependency id="Microsoft.AspNetCore.Mvc" version="2.2.0" />
