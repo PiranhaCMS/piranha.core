@@ -45,6 +45,12 @@ namespace MvcWeb.Models
         public IList<Regions.Teaser> Quotes { get; set; } = new List<Regions.Teaser>();
 
         /// <summary>
+        /// Gets/sets the available links.
+        /// </summary>
+        [Region(ListTitle = "ButtonText", ListPlaceholder = "New Link", Icon = "fas fa-quote-right")]
+        public IList<Regions.Href> Links { get; set; } = new List<Regions.Href>();
+
+        /// <summary>
         /// Gets/sets the latest post.
         /// </summary>
         public PostInfo LatestPost { get; set; }
