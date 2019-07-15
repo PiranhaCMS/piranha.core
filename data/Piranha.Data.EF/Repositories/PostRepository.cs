@@ -693,8 +693,20 @@ namespace Piranha.Repositories
                 .Where(p => p.BlogId == blogId)
                 .Select(p => p.CategoryId)
                 .Distinct()
-                .ToArrayAsync()
+                .ToListAsync()
                 .ConfigureAwait(false);
+
+            var drafts = await _db.PostRevisions
+                .Where(r => r.Post.BlogId == blogId && r.Created > r.Post.LastModified)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            foreach (var draft in drafts)
+            {
+                var post = JsonConvert.DeserializeObject<Post>(draft.Data);
+                used.Add(post.CategoryId);
+            }
+            used = used.Distinct().ToList();
 
             var unused = await _db.Categories
                 .Where(c => c.BlogId == blogId && !used.Contains(c.Id))
@@ -718,8 +730,24 @@ namespace Piranha.Repositories
                 .Where(t => t.Post.BlogId == blogId)
                 .Select(t => t.TagId)
                 .Distinct()
-                .ToArrayAsync()
+                .ToListAsync()
                 .ConfigureAwait(false);
+
+            var drafts = await _db.PostRevisions
+                .Where(r => r.Post.BlogId == blogId && r.Created > r.Post.LastModified)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            foreach (var draft in drafts)
+            {
+                var post = JsonConvert.DeserializeObject<Post>(draft.Data);
+
+                foreach (var tag in post.Tags)
+                {
+                    used.Add(tag.TagId);
+                }
+            }
+            used = used.Distinct().ToList();
 
             var unused = await _db.Tags
                 .Where(t => t.BlogId == blogId && !used.Contains(t.Id))
