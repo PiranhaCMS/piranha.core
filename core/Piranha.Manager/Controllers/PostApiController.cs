@@ -67,6 +67,21 @@ namespace Piranha.Manager.Controllers
             return await _service.GetById(id);
         }
 
+        /// <summary>
+        /// Creates a new post of the specified type.
+        /// </summary>
+        /// <param name="archiveId">The archive id</param>
+        /// <param name="typeId">The type id</param>
+        /// <returns>The page edit model</returns>
+        [Route("create/{archiveId}/{typeId}")]
+        [HttpGet]
+        [Authorize(Policy = Permission.PostsAdd)]
+        public async Task<PostEditModel> Create(Guid archiveId, string typeId)
+        {
+            return await _service.Create(archiveId, typeId);
+        }
+
+
         [Route("modal")]
         [HttpGet]
         [Authorize(Policy = Permission.Posts)]

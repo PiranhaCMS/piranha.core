@@ -90,7 +90,7 @@ Vue.component("post-archive", {
         "    <div class='btn-group float-right'>" +
         "      <button id='addPostGroup' class='btn btn-sm btn-primary btn-labeled dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fas fa-plus'></i>{{ piranha.resources.texts.add }}</button>" +
         "      <div class='dropdown-menu dropdown-menu-right' aria-labelledby='addPostGroup'>" +
-        "        <a class='dropdown-item' href='#' v-for='type in postTypes'>{{ type.title }}</a>" +
+        "        <a class='dropdown-item' :href='piranha.baseUrl + type.addUrl + id + \"/\" + type.id' v-for='type in postTypes'>{{ type.title }}</a>" +
         "      </div>" +
         "    </div>" +
         "  </div>" +

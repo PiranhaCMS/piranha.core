@@ -177,6 +177,30 @@ namespace Piranha.Manager.Services
             return null;
         }
 
+        public async Task<PostEditModel> Create(Guid archiveId, string typeId)
+        {
+            var post = _api.Posts.Create<DynamicPost>(typeId);
+
+            if (post != null)
+            {
+                post.Id = Guid.NewGuid();
+                post.BlogId = archiveId;
+
+                var postModel = Transform(post, false);
+
+                postModel.Categories = (await _api.Posts.GetAllCategoriesAsync(post.BlogId))
+                    .Select(c => c.Title).ToList();
+                postModel.Tags = (await _api.Posts.GetAllTagsAsync(post.BlogId))
+                    .Select(t => t.Title).ToList();
+
+                postModel.SelectedCategory = post.Category?.Title;
+                postModel.SelectedTags = post.Tags.Select(t => t.Title).ToList();
+
+                return postModel;
+            }
+            return null;
+        }
+
         public async Task Save(PostEditModel model, bool draft)
         {
             var postType = App.PostTypes.GetById(model.TypeId);

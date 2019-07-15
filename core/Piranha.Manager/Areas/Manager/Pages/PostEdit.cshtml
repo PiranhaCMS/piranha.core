@@ -23,7 +23,7 @@
     else if (action == "add")
     {
         <script>
-            piranha.postedit.create("@RouteData.Values["id"]", "@RouteData.Values["pageType"]");
+            piranha.postedit.create("@RouteData.Values["id"]", "@RouteData.Values["postType"]");
 
             $(".title input").focus();
         </script>
@@ -110,7 +110,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="#" class="block-add unsortable" v-on:click.prevent="piranha.blockpicker.open(piranha.pageedit.addBlock, 0)">
+                    <a href="#" class="block-add unsortable" v-on:click.prevent="piranha.blockpicker.open(piranha.postedit.addBlock, 0)">
                         <hr>
                         <i class="fas fa-plus-circle"></i>
                     </a>
@@ -136,7 +136,7 @@
                             <component v-if="!block.meta.isGroup" v-bind:is="block.meta.component" v-bind:uid="block.meta.uid" v-bind:model="block.model"></component>
                             <component v-if="block.meta.isGroup" v-bind:is="block.meta.component" v-bind:uid="block.meta.uid" v-bind:model="block"></component>
                         </div>
-                        <a href="#" class="block-add" v-on:click.prevent="piranha.blockpicker.open(piranha.pageedit.addBlock, index + 1)">
+                        <a href="#" class="block-add" v-on:click.prevent="piranha.blockpicker.open(piranha.postedit.addBlock, index + 1)">
                             <hr>
                             <i class="fas fa-plus-circle"></i>
                         </a>
