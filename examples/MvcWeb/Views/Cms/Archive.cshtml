@@ -56,7 +56,7 @@
                     {
                         <img src="@Url.Content(post.Regions.Hero.PrimaryImage.Media.PublicUrl)">
                     }
-                    @Html.Raw(GetFirstHtmlBlock(post).Body)
+                    @Html.Raw(GetFirstHtmlBlock(post)?.Body ?? "")
 
                     <a href="@post.Permalink" class="btn btn-sm btn-default">Read more</a>
                 </article>
