@@ -95,7 +95,7 @@
                     <div class="row unsortable mb-3">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>Category</label>
+                                <label>@Localizer.Post["Category"]</label>
                                 <select id="selectedCategory" class="form-control select2" v-model="selectedCategory">
                                     <option :value="item" v-for="item in categories">{{ item }}</option>
                                 </select>
@@ -103,7 +103,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>Tags</label>
+                                <label>@Localizer.Menu["Tags"]</label>
                                 <select id="selectedTags" class="form-control select2" multiple="multiple" v-model="selectedTags">
                                     <option :value="item" v-for="item in tags">{{ item }}</option>
                                 </select>

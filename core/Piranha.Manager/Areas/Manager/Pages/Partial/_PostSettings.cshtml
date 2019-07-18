@@ -30,22 +30,16 @@
                                 <label>@Localizer.General["Slug"]</label>
                                 <input v-model="slug" type="text" maxlength="128" class="form-control form-control-lg">
                             </div>
-                        </div>
-                        <div class="col-md-6">
                             <div class="form-group">
                                 <label>@Localizer.General["Publish date"]</label>
                                 <input v-model="published" type="text" class="form-control">
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>@Localizer.Page["Meta keywords"]</label>
-                                <input v-model="metaKeywords" type="text" maxlength="128" class="form-control">
+                                <input v-model="metaKeywords" type="text" maxlength="128" class="form-control form-control-lg">
                             </div>
-                        </div>
-                        <div class="col-md-6">
                             <div class="form-group">
                                 <label>@Localizer.Page["Meta description"]</label>
                                 <textarea v-model="metaDescription" rows="5" maxlength="256" class="form-control"></textarea>

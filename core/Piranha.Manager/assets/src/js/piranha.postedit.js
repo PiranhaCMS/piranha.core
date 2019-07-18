@@ -168,9 +168,15 @@ piranha.postedit = new Vue({
                     self.bind(result);
 
                     Vue.nextTick(function () {
-                        $(".select2").select2({
+                        $("#selectedCategory").select2({
                             tags: true,
-                            selectOnClose: true
+                            selectOnClose: true,
+                            placeholder: piranha.resources.texts.addCategory
+                        });
+                        $("#selectedTags").select2({
+                            tags: true,
+                            selectOnClose: true,
+                            placeholder: piranha.resources.texts.addTags
                         });
                     });
 
@@ -235,13 +241,19 @@ piranha.postedit = new Vue({
             })[0].addEventListener("sortupdate", function (e) {
                 self.moveBlock(e.detail.origin.index, e.detail.destination.index);
             });
-            $(".select2").select2({
+            $("#selectedCategory").select2({
                 tags: true,
-                selectOnClose: true
+                selectOnClose: true,
+                placeholder: piranha.resources.texts.addCategory
             });
             $("#selectedCategory").on("change", function() {
                 var item = $(this).find("option:selected").text();
                 self.selectedCategory = item;
+            });
+            $("#selectedTags").select2({
+                tags: true,
+                selectOnClose: true,
+                placeholder: piranha.resources.texts.addTags
             });
             $("#selectedTags").on("change", function() {
                 var items = $(this).find("option:selected");
