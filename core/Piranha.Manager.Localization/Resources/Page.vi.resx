@@ -25,7 +25,7 @@
     <value>Ẩn</value>
   </data>
   <data name="If the page should be hidden in the sitemap" xml:space="preserve">
-    <value>If the page should be hidden in the sitemap</value>
+    <value>Chọn nếu muốn trang được ẩn trên bản đồ trang</value>
   </data>
   <data name="Meta keywords" xml:space="preserve">
     <value>Từ khóa Meta</value>
@@ -34,7 +34,7 @@
     <value>Mô tả Meta</value>
   </data>
   <data name="Navigation title" xml:space="preserve">
-    <value>Navigation title</value>
+    <value>Tiêu đề điều hướng</value>
   </data>
   <data name="Pages" xml:space="preserve">
     <value>Các trang</value>
