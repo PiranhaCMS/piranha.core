@@ -6,7 +6,7 @@ build:
 commands:
   - dotnet test
   - dotnet build ./examples/MvcWeb
-  - dotnet publish ./examples/MvcWeb -o ../../site
+  - dotnet publish ./examples/MvcWeb -o site
  artifacts:
   files:
     - ./site/**/*
