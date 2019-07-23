@@ -1,0 +1,13 @@
+version: 0.2
+
+phases:
+
+build:
+commands:
+  - dotnet test
+  - dotnet build ./examples/MvcWeb
+  - dotnet publish ./examples/MvcWeb -o ../../site
+ artifacts:
+  files:
+    - ./site/**/*
+    - aws-windows-deployment-manifest.json
