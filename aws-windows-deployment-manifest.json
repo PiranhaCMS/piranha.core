@@ -1,0 +1,14 @@
+{
+  "manifestVersion": 1,
+  "deployments": {
+      "aspNetCoreWeb": [{
+              "name": "piranha-dotnet",
+              "parameters": {
+                  "appBundle": "./site",
+                  "iisPath": "/",
+                  "iisWebSite": "Pirahna"
+              }
+          }
+      ]
+  }
+}
