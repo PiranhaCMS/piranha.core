@@ -7,7 +7,7 @@ commands:
   - dotnet test
   - dotnet build ./examples/MvcWeb
   - dotnet publish ./examples/MvcWeb -o site
- artifacts:
+artifacts:
   files:
     - ./site/**/*
     - aws-windows-deployment-manifest.json
