@@ -8,13 +8,14 @@
  *
  */
 
+using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
-using Piranha.Web;
-using System;
-using System.Threading.Tasks;
 using Piranha.AspNetCore.Services;
+using Piranha.Models;
+using Piranha.Web;
 
 namespace Piranha.AspNetCore
 {
@@ -40,6 +41,7 @@ namespace Piranha.AspNetCore
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
                 var siteId = service.Site.Id;
                 var authorized = true;
+                var draft = IsDraft(context);
 
                 var response = await PageRouter.InvokeAsync(api, url, siteId);
                 if (response != null)
@@ -67,7 +69,7 @@ namespace Piranha.AspNetCore
                                 var expires = config.CacheExpiresPages;
 
                                 // Only use caching for published pages
-                                if (response.IsPublished && expires > 0)
+                                if (response.IsPublished && expires > 0 && !draft)
                                 {
                                     _logger?.LogInformation("Caching enabled. Setting MaxAge, LastModified & ETag");
 
@@ -113,7 +115,7 @@ namespace Piranha.AspNetCore
                         {
                             _logger?.LogInformation($"Redirecting to url: {response.RedirectUrl}");
 
-                            context.Response.Redirect(response.RedirectUrl, response.RedirectType == Models.RedirectType.Permanent);
+                            context.Response.Redirect(response.RedirectUrl, response.RedirectType == RedirectType.Permanent);
                             return;
                         }
                     }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2018 Håkan Edling
+ * Copyright (c) 2016-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -11,6 +11,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Piranha.Security;
 
 public static class CoreExtensions
 {
@@ -21,7 +22,15 @@ public static class CoreExtensions
     public static IServiceCollection AddPiranhaApplication(this IServiceCollection services)
     {
         return services
-            .AddScoped<Piranha.AspNetCore.Services.IApplicationService, Piranha.AspNetCore.Services.ApplicationService>();
+            .AddScoped<Piranha.AspNetCore.Services.IApplicationService, Piranha.AspNetCore.Services.ApplicationService>()
+            .AddAuthorization(o => {
+            o.AddPolicy(Permission.PagePreview, policy => {
+                policy.RequireClaim(Permission.PagePreview, Permission.PagePreview);
+            });
+            o.AddPolicy(Permission.PostPreview, policy => {
+                policy.RequireClaim(Permission.PostPreview, Permission.PostPreview);
+            });
+        });
     }
 
     /// <summary>

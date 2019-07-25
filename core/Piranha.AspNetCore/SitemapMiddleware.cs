@@ -10,13 +10,10 @@
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Piranha.AspNetCore.Services;
-using Piranha.Services;
-using Piranha.Web;
 using X.Web.Sitemap;
 
 namespace Piranha.AspNetCore
@@ -74,7 +71,7 @@ namespace Piranha.AspNetCore
             await _next.Invoke(context);
         }
 
-        private async Task<List<Url>> GetPageUrlsAsync(IApi api, Models.SitemapItem item, string baseUrl)
+        private async Task<List<Url>> GetPageUrlsAsync(IApi api, Piranha.Models.SitemapItem item, string baseUrl)
         {
             var urls = new List<Url>();
 

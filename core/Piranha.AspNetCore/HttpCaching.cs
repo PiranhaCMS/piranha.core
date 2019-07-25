@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2018 Håkan Edling
+ * Copyright (c) 2017-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -8,9 +8,10 @@
  *
  */
 
+using System;
 using Microsoft.AspNetCore.Http;
 using Piranha.Web;
-using System;
+using Piranha.Models;
 
 namespace Piranha.AspNetCore
 {
@@ -46,7 +47,7 @@ namespace Piranha.AspNetCore
         /// </summary>
         /// <param name="page">The page</param>
         /// <returns>The cache info</returns>
-        public static HttpCacheInfo Get(Models.PageBase page)
+        public static HttpCacheInfo Get(PageBase page)
         {
             return new HttpCacheInfo
             {

@@ -1,30 +1,30 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Piranha;
+using Piranha.AspNetCore.Models;
 using Piranha.Models;
 using RazorWeb.Models;
 
 namespace RazorWeb.Pages
 {
-    public class TeaserPageModel : Microsoft.AspNetCore.Mvc.RazorPages.PageModel
+    public class TeaserPageModel : SinglePageModel<TeaserPage>
     {
-        private readonly IApi _api;
         private readonly IDb _db;
-        public TeaserPage Data { get; private set; }
 
-        public TeaserPageModel(IApi api, IDb db) : base()
+        public TeaserPageModel(IApi api, IAuthorizationService auth, IDb db) : base(api, auth)
         {
-            _api = api;
             _db = db;
         }
 
-        public async Task OnGet(Guid id, bool startpage = false)
+        public override async Task<IActionResult> OnGet(Guid id, bool draft = false)
         {
-            Data = await _api.Pages.GetByIdAsync<TeaserPage>(id);
+            var result = await base.OnGet(id, draft);
 
-            if (startpage)
+            if (Data != null && Data.IsStartPage)
             {
                 var latest = await _db.Posts
                     .Where(p => p.Published <= DateTime.Now)
@@ -39,6 +39,7 @@ namespace RazorWeb.Pages
                         .GetByIdAsync<PostInfo>(latest.First());
                 }
             }
+            return result;
         }
     }
 }

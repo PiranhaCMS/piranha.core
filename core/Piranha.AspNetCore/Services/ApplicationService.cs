@@ -14,7 +14,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Piranha.Extend.Fields;
 using Piranha.Models;
-using Piranha.Services;
 
 namespace Piranha.AspNetCore.Services
 {
@@ -152,7 +151,7 @@ namespace Piranha.AspNetCore.Services
             // Gets the current site info
             if (!context.Request.Path.Value.StartsWith("/manager/"))
             {
-                Models.Site site = null;
+                Site site = null;
 
                 // Try to get the requested site by hostname & prefix
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
