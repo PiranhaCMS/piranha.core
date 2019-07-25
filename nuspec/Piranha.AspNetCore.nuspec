@@ -19,9 +19,7 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     <dependencies>
       <group targetFramework=".NETStandard2.0">
         <dependency id="Piranha" version="7.0.0-alpha2" />
-        <dependency id="Microsoft.AspNetCore.Http" version="2.2.0" />
-        <dependency id="Microsoft.AspNetCore.Http.Extensions" version="2.2.0" />
-        <dependency id="Microsoft.Extensions.Logging.Abstractions" version="2.2.0" />
+        <dependency id="Microsoft.AspNetCore.Mvc" version="2.2.0" />
         <dependency id="XSitemap" version="2.0.5" />
       </group>
     </dependencies>
