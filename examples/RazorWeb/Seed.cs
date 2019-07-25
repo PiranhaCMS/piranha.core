@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Piranha;
 using Piranha.Extend.Blocks;
 using Piranha.Services;
-using RazorWeb.Models.Blocks;
 
 namespace RazorWeb
 {
