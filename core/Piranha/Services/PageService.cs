@@ -365,7 +365,7 @@ namespace Piranha.Services
         {
             var draft = await _repo.GetDraftById<T>(id);
 
-            OnLoad(draft);
+            OnLoad(draft, true);
 
             return draft;
         }
@@ -637,7 +637,8 @@ namespace Piranha.Services
         /// Processes the model on load.
         /// </summary>
         /// <param name="model">The model</param>
-        private void OnLoad(PageBase model)
+        /// <param name="isDraft">If this is a draft</param>
+        private void OnLoad(PageBase model, bool isDraft = false)
         {
             if (model != null)
             {
@@ -653,8 +654,8 @@ namespace Piranha.Services
 
                 App.Hooks.OnLoad<PageBase>(model);
 
-                // Never cache dynamic or simple instances
-                if (_cache != null && !(model is DynamicPage))
+                // Never cache drafts, dynamic or simple instances
+                if (!isDraft && _cache != null && !(model is DynamicPage))
                 {
                     if (model is PageInfo)
                     {

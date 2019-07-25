@@ -337,7 +337,7 @@ namespace Piranha.Services
             {
                 var blog = await _pageService.GetByIdAsync<PageInfo>(draft.BlogId).ConfigureAwait(false);
 
-                OnLoad(draft, blog);
+                OnLoad(draft, blog, true);
             }
             return draft;
         }
@@ -664,7 +664,8 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="model">The model</param>
         /// <param name="blog">The blog page the post belongs to</param>
-        private void OnLoad(PostBase model, PageInfo blog)
+        /// <param name="isDraft">If this is a draft</param>
+        private void OnLoad(PostBase model, PageInfo blog, bool isDraft = false)
         {
             if (model != null)
             {
@@ -683,8 +684,8 @@ namespace Piranha.Services
 
                 App.Hooks.OnLoad<PostBase>(model);
 
-                // Never cache dynamic or simple instances
-                if (_cache != null && !(model is DynamicPost))
+                // Never cache drafts, dynamic or simple instances
+                if (!isDraft && _cache != null && !(model is DynamicPost))
                 {
                     if (model is PostInfo)
                     {
