@@ -135,6 +135,13 @@ var js = [
         items: [
             "assets/src/js/piranha.siteedit.js"
         ]
+    },
+    {
+        name: "signalr.min.js",
+        items: [
+            "node_modules/@aspnet/signalr/dist/browser/signalr.js"
+
+        ]
     }
 ];
 

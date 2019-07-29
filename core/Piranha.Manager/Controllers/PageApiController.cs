@@ -14,6 +14,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Localization;
 using Piranha.Manager.Models;
 using Piranha.Manager.Services;
@@ -33,15 +34,17 @@ namespace Piranha.Manager.Controllers
         private readonly PageService _service;
         private readonly IApi _api;
         private readonly ManagerLocalizer _localizer;
+        private readonly IHubContext<Hubs.PreviewHub> _hub;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public PageApiController(PageService service, IApi api, ManagerLocalizer localizer)
+        public PageApiController(PageService service, IApi api, ManagerLocalizer localizer, IHubContext<Hubs.PreviewHub> hub)
         {
             _service = service;
             _api = api;
             _localizer = localizer;
+            _hub = hub;
         }
 
         /// <summary>
@@ -105,7 +108,7 @@ namespace Piranha.Manager.Controllers
         [Route("save")]
         [HttpPost]
         [Authorize(Policy = Permission.PagesPublish)]
-        public Task<PageEditModel> Save(PageEditModel model)
+        public async Task<PageEditModel> Save(PageEditModel model)
         {
             // Ensure that we have a published date
             if (string.IsNullOrEmpty(model.Published))
@@ -113,7 +116,12 @@ namespace Piranha.Manager.Controllers
                 model.Published = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
             }
 
-            return Save(model, false);
+            var ret = await Save(model, false);
+
+            if (_hub != null)
+                await _hub.Clients.All.SendAsync("Update", model.Id);
+
+            return ret;
         }
 
         /// <summary>
@@ -124,9 +132,14 @@ namespace Piranha.Manager.Controllers
         [Route("save/draft")]
         [HttpPost]
         [Authorize(Policy = Permission.PagesSave)]
-        public Task<PageEditModel> SaveDraft(PageEditModel model)
+        public async Task<PageEditModel> SaveDraft(PageEditModel model)
         {
-            return Save(model, true);
+            var ret = await Save(model, true);
+
+            if (_hub != null)
+                await _hub.Clients.All.SendAsync("Update", model.Id);
+
+            return ret;
         }
 
         /// <summary>
@@ -137,12 +150,17 @@ namespace Piranha.Manager.Controllers
         [Route("save/unpublish")]
         [HttpPost]
         [Authorize(Policy = Permission.PagesPublish)]
-        public Task<PageEditModel> SaveUnpublish(PageEditModel model)
+        public async Task<PageEditModel> SaveUnpublish(PageEditModel model)
         {
             // Remove published date
             model.Published = null;
 
-            return Save(model, false);
+            var ret = await Save(model, false);
+
+            if (_hub != null)
+                await _hub.Clients.All.SendAsync("Update", model.Id);
+
+            return ret;
         }
 
         [Route("revert/{id}")]
@@ -164,6 +182,10 @@ namespace Piranha.Manager.Controllers
                 Type = StatusMessage.Success,
                 Body = _localizer.Page["The page was successfully reverted to its previous state"]
             };
+
+
+            if (_hub != null)
+                await _hub.Clients.All.SendAsync("Update", id);
 
             return page;
         }
