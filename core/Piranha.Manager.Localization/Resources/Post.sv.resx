@@ -18,8 +18,17 @@
   <data name="Add or select existing tags (optional)" xml:space="preserve">
     <value>Lägg till eller välj befintliga taggar (valfritt)</value>
   </data>
+  <data name="All categories" xml:space="preserve">
+    <value>Alla kategorier</value>
+  </data>
   <data name="Categories" xml:space="preserve">
     <value>Kategorier</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Kategori</value>
+  </data>
+  <data name="Tag" xml:space="preserve">
+    <value>Tagg</value>
   </data>
   <data name="Tags" xml:space="preserve">
     <value>Taggar</value>
