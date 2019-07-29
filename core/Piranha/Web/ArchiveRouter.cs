@@ -63,8 +63,6 @@ namespace Piranha.Web
                                             return null;
                                     }
                                     break;
-                                default:
-                                    break;
                             }
 
 
