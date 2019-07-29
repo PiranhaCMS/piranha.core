@@ -31,34 +31,42 @@ namespace Piranha.Web
 
                 if (segments.Length >= 2)
                 {
-                    var post = await api.Posts.GetBySlugAsync<Models.PostInfo>(segments[0], segments[1], siteId);
+                    var include = segments.Length;
 
-                    if (post != null)
+                    // Scan for the most unique slug
+                    for (var n = include; n > 0; n--)
                     {
-                        var page = await api.Pages.GetByIdAsync<Models.PageInfo>(post.BlogId);
-                        var site = await api.Sites.GetByIdAsync(page.SiteId);
-                        var route = post.Route ?? "/post";
-                        var lastModified = !site.ContentLastModified.HasValue || post.LastModified > site.ContentLastModified
-                            ? post.LastModified : site.ContentLastModified.Value;
+                        var blog = string.Join("/", segments.Subset(0, n));                        
 
-                        if (segments.Length > 2)
-                        {
-                            route += "/" + string.Join("/", segments.Subset(2));
-                        }
+                        var post = await api.Posts.GetBySlugAsync<Models.PostInfo>(blog, segments[include -1], siteId);
 
-                        return new RouteResponse
+                        if (post != null)
                         {
-                            PageId = post.BlogId,
-                            Route = route,
-                            QueryString = $"id={post.Id}&piranha_handled=true",
-                            IsPublished = post.Published.HasValue && page.Published.HasValue && post.Published.Value <= DateTime.Now && page.Published.Value <= DateTime.Now,
-                            CacheInfo = new HttpCacheInfo
+                            var page = await api.Pages.GetByIdAsync<Models.PageInfo>(post.BlogId);
+                            var site = await api.Sites.GetByIdAsync(page.SiteId);
+                            var route = post.Route ?? "/post";
+                            var lastModified = !site.ContentLastModified.HasValue || post.LastModified > site.ContentLastModified
+                                ? post.LastModified : site.ContentLastModified.Value;
+
+                            if (segments.Length > 2)
                             {
-                                EntityTag = Utils.GenerateETag(post.Id.ToString(), lastModified),
-                                LastModified = lastModified
+                                route += "/" + string.Join("/", segments.Subset(include));
                             }
-                        };
-                    }
+
+                            return new RouteResponse
+                            {
+                                PageId = post.BlogId,
+                                Route = route,
+                                QueryString = $"id={post.Id}&piranha_handled=true",
+                                IsPublished = post.Published.HasValue && page.Published.HasValue && post.Published.Value <= DateTime.Now && page.Published.Value <= DateTime.Now,
+                                CacheInfo = new HttpCacheInfo
+                                {
+                                    EntityTag = Utils.GenerateETag(post.Id.ToString(), lastModified),
+                                    LastModified = lastModified
+                                }
+                            };
+                        }
+                    }                    
                 }
             }
             return null;
