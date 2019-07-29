@@ -9,15 +9,13 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
+using Microsoft.AspNetCore.SignalR;
 using Piranha.Manager.Models;
 using Piranha.Manager.Services;
-using Piranha.Models;
 
 namespace Piranha.Manager.Controllers
 {
@@ -32,14 +30,16 @@ namespace Piranha.Manager.Controllers
     {
         private readonly PostService _service;
         private readonly ManagerLocalizer _localizer;
+        private readonly IHubContext<Hubs.PreviewHub> _hub;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public PostApiController(PostService service, ManagerLocalizer localizer)
+        public PostApiController(PostService service, ManagerLocalizer localizer, IHubContext<Hubs.PreviewHub> hub)
         {
             _service = service;
             _localizer = localizer;
+            _hub = hub;
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Piranha.Manager.Controllers
         [Route("save")]
         [HttpPost]
         [Authorize(Policy = Permission.PostsPublish)]
-        public Task<PostEditModel> Save(PostEditModel model)
+        public async Task<PostEditModel> Save(PostEditModel model)
         {
             // Ensure that we have a published date
             if (string.IsNullOrEmpty(model.Published))
@@ -106,7 +106,10 @@ namespace Piranha.Manager.Controllers
                 model.Published = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
             }
 
-            return Save(model, false);
+            var ret = await Save(model, false);
+            await _hub?.Clients.All.SendAsync("Update", model.Id);
+
+            return ret;
         }
 
         /// <summary>
@@ -117,9 +120,12 @@ namespace Piranha.Manager.Controllers
         [Route("save/draft")]
         [HttpPost]
         [Authorize(Policy = Permission.PostsSave)]
-        public Task<PostEditModel> SaveDraft(PostEditModel model)
+        public async Task<PostEditModel> SaveDraft(PostEditModel model)
         {
-            return Save(model, true);
+            var ret = await Save(model, true);
+            await _hub?.Clients.All.SendAsync("Update", model.Id);
+
+            return ret;
         }
 
         /// <summary>
@@ -130,12 +136,15 @@ namespace Piranha.Manager.Controllers
         [Route("save/unpublish")]
         [HttpPost]
         [Authorize(Policy = Permission.PostsPublish)]
-        public Task<PostEditModel> SaveUnpublish(PostEditModel model)
+        public async Task<PostEditModel> SaveUnpublish(PostEditModel model)
         {
             // Remove published date
             model.Published = null;
 
-            return Save(model, false);
+            var ret = await Save(model, false);
+            await _hub?.Clients.All.SendAsync("Update", model.Id);
+
+            return ret;
         }
 
         [Route("revert/{id}")]
@@ -157,6 +166,8 @@ namespace Piranha.Manager.Controllers
                 Type = StatusMessage.Success,
                 Body = _localizer.Post["The post was successfully reverted to its previous state"]
             };
+
+            await _hub?.Clients.All.SendAsync("Update", id);
 
             return post;
         }

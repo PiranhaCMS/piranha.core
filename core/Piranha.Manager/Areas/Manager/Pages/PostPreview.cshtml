@@ -1,0 +1,59 @@
+@page "~/manager/post/preview/{id}"
+@model PostPreviewModel
+@{
+    Layout = "";
+
+    var sizes = Piranha.App.Modules.Get<Piranha.Manager.Module>().PreviewSizes;
+}
+
+<!doctype html>
+<html lang="en" id="manager-preview">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Live Preview</title>
+
+    <link rel="stylesheet" href="~/manager/assets/css/slim.min.css">
+</head>
+<body>
+    <div class="preview">
+        <div class="preview-header">
+            @foreach (var size in sizes)
+            {
+                <a class="preview-size" href="#" data-width="@size.Width"><i class="@size.IconCss"></i><span>@size.Title</span></a>
+            }
+        </div>
+        <div class="preview-body">
+            <iframe id="preview" src="@Model.Permalink">
+            </iframe>
+        </div>
+    </div>
+    <script>
+        var piranha = {};
+
+        piranha.baseUrl = "@Url.Content("~/")";
+    </script>
+    <script src="~/manager/assets/js/piranha.min.js"></script>
+    <script src="~/manager/assets/js/signalr.min.js"></script>
+    <script>
+        "use strict";
+
+        var currentId = '@Model.Id';
+        var connection = new signalR.HubConnectionBuilder().withUrl('/manager/preview').build();
+
+        connection.on('Update', function (id) {
+            if (id == currentId)
+                document.getElementById('preview').contentWindow.location.reload();
+        });
+
+        connection.start().catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        $(document).on('click', '.preview-size', function (e) {
+            $('#preview').css({ width: $(this).attr('data-width') });
+            return false;
+        });
+    </script>
+</body>
+</html>

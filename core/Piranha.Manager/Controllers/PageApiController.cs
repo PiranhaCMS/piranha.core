@@ -15,10 +15,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Localization;
 using Piranha.Manager.Models;
 using Piranha.Manager.Services;
-using Piranha.Models;
 
 namespace Piranha.Manager.Controllers
 {
@@ -117,9 +115,7 @@ namespace Piranha.Manager.Controllers
             }
 
             var ret = await Save(model, false);
-
-            if (_hub != null)
-                await _hub.Clients.All.SendAsync("Update", model.Id);
+            await _hub?.Clients.All.SendAsync("Update", model.Id);
 
             return ret;
         }
@@ -135,9 +131,7 @@ namespace Piranha.Manager.Controllers
         public async Task<PageEditModel> SaveDraft(PageEditModel model)
         {
             var ret = await Save(model, true);
-
-            if (_hub != null)
-                await _hub.Clients.All.SendAsync("Update", model.Id);
+            await _hub?.Clients.All.SendAsync("Update", model.Id);
 
             return ret;
         }
@@ -156,9 +150,7 @@ namespace Piranha.Manager.Controllers
             model.Published = null;
 
             var ret = await Save(model, false);
-
-            if (_hub != null)
-                await _hub.Clients.All.SendAsync("Update", model.Id);
+            await _hub?.Clients.All.SendAsync("Update", model.Id);
 
             return ret;
         }
@@ -183,9 +175,7 @@ namespace Piranha.Manager.Controllers
                 Body = _localizer.Page["The page was successfully reverted to its previous state"]
             };
 
-
-            if (_hub != null)
-                await _hub.Clients.All.SendAsync("Update", id);
+            await _hub?.Clients.All.SendAsync("Update", id);
 
             return page;
         }
