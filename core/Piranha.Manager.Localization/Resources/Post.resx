@@ -18,8 +18,17 @@
   <data name="Add or select existing tags (optional)" xml:space="preserve">
     <value>Add or select existing tags (optional)</value>
   </data>
+  <data name="All categories" xml:space="preserve">
+    <value>All categories</value>
+  </data>
   <data name="Categories" xml:space="preserve">
     <value>Categories</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="Tag" xml:space="preserve">
+    <value>Tag</value>
   </data>
   <data name="Tags" xml:space="preserve">
     <value>Tags</value>
