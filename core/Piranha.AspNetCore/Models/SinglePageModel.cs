@@ -10,8 +10,8 @@
 
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Piranha.AspNetCore.Services;
 using Piranha.Models;
 
 namespace Piranha.AspNetCore.Models
@@ -19,7 +19,7 @@ namespace Piranha.AspNetCore.Models
     public class SinglePageModel<T> : Microsoft.AspNetCore.Mvc.RazorPages.PageModel where T : PageBase
     {
         protected readonly IApi _api;
-        protected readonly IAuthorizationService _auth;
+        protected readonly IModelLoader _loader;
 
         /// <summary>
         /// Gets/sets the model data.
@@ -30,10 +30,10 @@ namespace Piranha.AspNetCore.Models
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public SinglePageModel(IApi api, IAuthorizationService auth)
+        public SinglePageModel(IApi api, IModelLoader loader)
         {
             _api = api;
-            _auth = auth;
+            _loader = loader;
         }
 
         /// <summary>
@@ -43,41 +43,11 @@ namespace Piranha.AspNetCore.Models
         /// <param name="draft">If the draft should be fetched</param>
         public virtual async Task<IActionResult> OnGet(Guid id, bool draft = false)
         {
-            // Check if we're requesting a draft
-            if (draft)
-            {
-                // Check that the current user is authorized to preview pages
-                if ((await _auth.AuthorizeAsync(HttpContext.User, Security.Permission.PagePreview)).Succeeded)
-                {
-                    // Get the draft, if available
-                    Data = await _api.Pages.GetDraftByIdAsync<T>(id);
+            Data = await _loader.GetPage<T>(id, HttpContext.User, draft);
 
-                    if (Data == null)
-                    {
-                        Data = await _api.Pages.GetByIdAsync<T>(id);
-                    }
-                }
-            }
-
-            // No draft loaded or requested, try to get the published page
             if (Data == null)
             {
-                Data = await _api.Pages.GetByIdAsync<T>(id);
-
-                if (Data != null)
-                {
-                    // Make sure the page is published
-                    if (!Data.Published.HasValue || Data.Published.Value > DateTime.Now)
-                    {
-                        // No published version exists
-                        return NotFound();
-                    }
-                }
-                else
-                {
-                    // No page found with the specified id
-                    return NotFound();
-                }
+                return NotFound();
             }
             return Page();
         }

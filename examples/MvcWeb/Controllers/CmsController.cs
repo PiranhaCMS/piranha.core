@@ -3,8 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Piranha;
+using Piranha.AspNetCore.Services;
 using Piranha.Models;
-using Piranha.Services;
 
 namespace MvcWeb.Controllers
 {
@@ -12,15 +12,17 @@ namespace MvcWeb.Controllers
     {
         private readonly IApi _api;
         private readonly IDb _db;
+        private readonly IModelLoader _loader;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="app">The current app</param>
-        public CmsController(IApi api, IDb db)
+        public CmsController(IApi api, IDb db, IModelLoader loader)
         {
             _api = api;
             _db = db;
+            _loader = loader;
         }
 
         /// <summary>
@@ -47,9 +49,9 @@ namespace MvcWeb.Controllers
         /// </summary>
         /// <param name="id">The unique page id</param>
         [Route("page")]
-        public async Task<IActionResult> Page(Guid id)
+        public async Task<IActionResult> Page(Guid id, bool draft = false)
         {
-            var model = await _api.Pages.GetByIdAsync<Models.StandardPage>(id);
+            var model = await _loader.GetPage<Models.StandardPage>(id, HttpContext.User, draft);
 
             return View(model);
         }
@@ -59,9 +61,9 @@ namespace MvcWeb.Controllers
         /// </summary>
         /// <param name="id">The unique page id</param>
         [Route("pagewide")]
-        public async Task<IActionResult> PageWide(Guid id)
+        public async Task<IActionResult> PageWide(Guid id, bool draft = false)
         {
-            var model = await _api.Pages.GetByIdAsync<Models.StandardPage>(id);
+            var model = await _loader.GetPage<Models.StandardPage>(id, HttpContext.User, draft);
 
             return View(model);
         }
@@ -72,9 +74,9 @@ namespace MvcWeb.Controllers
         /// <param name="id">The unique post id</param>
         ///
         [Route("post")]
-        public async Task<IActionResult> Post(Guid id)
+        public async Task<IActionResult> Post(Guid id, bool draft = false)
         {
-            var model = await _api.Posts.GetByIdAsync<Models.BlogPost>(id);
+            var model = await _loader.GetPost<Models.BlogPost>(id, HttpContext.User, draft);
 
             return View(model);
         }
@@ -85,9 +87,9 @@ namespace MvcWeb.Controllers
         /// <param name="id">The page id</param>
         /// <param name="startpage">If this is the startpage of the site</param>
         [Route("teaserpage")]
-        public async Task<IActionResult> TeaserPage(Guid id, bool startpage = false)
+        public async Task<IActionResult> TeaserPage(Guid id, bool startpage = false, bool draft = false)
         {
-            var model = await _api.Pages.GetByIdAsync<Models.TeaserPage>(id);
+            var model = await _loader.GetPage<Models.TeaserPage>(id, HttpContext.User, draft);
 
             if (startpage)
             {

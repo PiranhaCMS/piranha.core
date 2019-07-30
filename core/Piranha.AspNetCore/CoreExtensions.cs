@@ -23,6 +23,7 @@ public static class CoreExtensions
     {
         return services
             .AddScoped<Piranha.AspNetCore.Services.IApplicationService, Piranha.AspNetCore.Services.ApplicationService>()
+            .AddScoped<Piranha.AspNetCore.Services.IModelLoader, Piranha.AspNetCore.Services.ModelLoader>()
             .AddAuthorization(o => {
             o.AddPolicy(Permission.PagePreview, policy => {
                 policy.RequireClaim(Permission.PagePreview, Permission.PagePreview);

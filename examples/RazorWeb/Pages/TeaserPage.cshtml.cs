@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Piranha;
 using Piranha.AspNetCore.Models;
+using Piranha.AspNetCore.Services;
 using Piranha.Models;
 using RazorWeb.Models;
 
@@ -15,7 +16,7 @@ namespace RazorWeb.Pages
     {
         private readonly IDb _db;
 
-        public TeaserPageModel(IApi api, IAuthorizationService auth, IDb db) : base(api, auth)
+        public TeaserPageModel(IApi api, IModelLoader loader, IDb db) : base(api, loader)
         {
             _db = db;
         }
