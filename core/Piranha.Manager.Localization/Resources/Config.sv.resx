@@ -59,7 +59,7 @@
     <value>Max antal sidversioner som ska sparas för varje sida. Om du anger 0 så tolkas detta som ingen begränsning.</value>
   </data>
   <data name="The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation." xml:space="preserve">
-    <value>Max antal artikelversioner som ska sparas för varje sida. Om du anger 0 så tolkas detta som ingen begränsning.</value>
+    <value>Max antal artikelversioner som ska sparas för varje artikel. Om du anger 0 så tolkas detta som ingen begränsning.</value>
   </data>
   <data name="The time in minutes that web browsers can use pages before asking the server for new updates." xml:space="preserve">
     <value>Hur lång tid i minuter som webbläsare får spara sidor i sin cache innan den frågar om det finns en ny version.</value>
