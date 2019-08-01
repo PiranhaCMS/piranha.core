@@ -55,8 +55,10 @@
     }
 
     .badge {
+        padding: .25rem .5rem;
         margin-left: .5rem;
-        opacity: .5;
+        font-size: .65rem;
+        text-transform: uppercase;
     }
 
     .link {

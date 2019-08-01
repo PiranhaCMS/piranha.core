@@ -16,6 +16,7 @@ piranha.pageedit = new Vue({
         slug: null,
         metaKeywords: null,
         metaDescription: null,
+        isHidden: false,
         published: null,
         state: "new",
         blocks: [],
@@ -55,6 +56,7 @@ piranha.pageedit = new Vue({
             this.slug = model.slug;
             this.metaKeywords = model.metaKeywords;
             this.metaDescription = model.metaDescription;
+            this.isHidden = model.isHidden;
             this.published = model.published;
             this.state = model.state;
             this.blocks = model.blocks;
@@ -125,6 +127,7 @@ piranha.pageedit = new Vue({
                 slug: piranha.pageedit.slug,
                 metaKeywords: piranha.pageedit.metaKeywords,
                 metaDescription: piranha.pageedit.metaDescription,
+                isHidden: piranha.pageedit.isHidden,
                 published: piranha.pageedit.published,
                 blocks: JSON.parse(JSON.stringify(piranha.pageedit.blocks)),
                 regions: JSON.parse(JSON.stringify(piranha.pageedit.regions))

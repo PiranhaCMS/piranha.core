@@ -17,8 +17,8 @@ namespace Piranha.Manager.Models
     {
         public class PostItem
         {
-            public static readonly string Draft = "draft";
-            public static readonly string Unpublished = "unpublished";
+            public static readonly string Draft = "Draft";
+            public static readonly string Unpublished = "Unpublished";
 
             public string Id { get; set; }
             public string Title { get; set; }

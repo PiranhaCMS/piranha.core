@@ -55,6 +55,11 @@ namespace Piranha.Manager.Models
         public string MetaDescription { get; set; }
 
         /// <summary>
+        /// Gets/sets if the page should be hidden in the menu structure.
+        /// </summary>
+        public bool IsHidden { get; set; }
+
+        /// <summary>
         /// Gets/sets the published date.
         /// </summary>
         public string Published { get; set; }

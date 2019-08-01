@@ -30,8 +30,8 @@ namespace Piranha.Manager.Models
 
         public class PageItem
         {
-            public static readonly string Draft = "draft";
-            public static readonly string Unpublished = "unpublished";
+            public static readonly string Draft = "Draft";
+            public static readonly string Unpublished = "Unpublished";
 
 
             public Guid Id { get; set; }

@@ -26,15 +26,17 @@ namespace Piranha.Manager.Services
     {
         private readonly IApi _api;
         private readonly IContentFactory _factory;
+        private readonly ManagerLocalizer _localizer;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public PageService(IApi api, IContentFactory factory)
+        public PageService(IApi api, IContentFactory factory, ManagerLocalizer localizer)
         {
             _api = api;
             _factory = factory;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -91,9 +93,10 @@ namespace Piranha.Manager.Services
 
             // Get the sitemap and transform
             var sitemap = await _api.Sites.GetSitemapAsync(siteId, false);
+            var drafts = await _api.Pages.GetAllDraftsAsync(siteId);
             foreach (var item in sitemap)
             {
-                pages.Add(MapRecursive(item, 0, expandedLevels));
+                pages.Add(MapRecursive(item, 0, expandedLevels, drafts));
             }
             return pages;
         }
@@ -168,6 +171,7 @@ namespace Piranha.Manager.Services
                 page.Slug = model.Slug;
                 page.MetaKeywords = model.MetaKeywords;
                 page.MetaDescription = model.MetaDescription;
+                page.IsHidden = model.IsHidden;
                 page.Published = !string.IsNullOrEmpty(model.Published) ? DateTime.Parse(model.Published) : (DateTime?)null;
 
                 // Save regions
@@ -327,7 +331,7 @@ namespace Piranha.Manager.Services
             return null;
         }
 
-        private PageListModel.PageItem MapRecursive(SitemapItem item, int level, int expandedLevels)
+        private PageListModel.PageItem MapRecursive(SitemapItem item, int level, int expandedLevels, IEnumerable<Guid> drafts)
         {
             var model = new PageListModel.PageItem
             {
@@ -335,14 +339,15 @@ namespace Piranha.Manager.Services
                 Title = item.MenuTitle,
                 TypeName = item.PageTypeName,
                 Published = item.Published.HasValue ? item.Published.Value.ToString("yyyy-MM-dd") : null,
-                Status = !item.Published.HasValue ? PageListModel.PageItem.Unpublished : "",
+                Status = drafts.Contains(item.Id) ? _localizer.General[PageListModel.PageItem.Draft] :
+                    !item.Published.HasValue ? _localizer.General[PageListModel.PageItem.Unpublished] : "",
                 EditUrl = "manager/page/edit/",
                 IsExpanded = level < expandedLevels
             };
 
             foreach (var child in item.Items)
             {
-                model.Items.Add(MapRecursive(child, level + 1, expandedLevels));
+                model.Items.Add(MapRecursive(child, level + 1, expandedLevels, drafts));
             }
             return model;
         }
@@ -363,6 +368,7 @@ namespace Piranha.Manager.Services
                 Slug = page.Slug,
                 MetaKeywords = page.MetaKeywords,
                 MetaDescription = page.MetaDescription,
+                IsHidden = page.IsHidden,
                 Published = page.Published.HasValue ? page.Published.Value.ToString("yyyy-MM-dd HH:mm") : null,
                 State = GetState(page, isDraft),
                 UseBlocks = type.UseBlocks

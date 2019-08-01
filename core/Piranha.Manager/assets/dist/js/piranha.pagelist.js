@@ -20,7 +20,7 @@ Vue.component("sitemap-item", {
         "      </span>" +
         "      <a :href='piranha.baseUrl + item.editUrl + item.id'>" +
         "        {{ item.title }}" +
-        "        <span v-if='item.status' class='badge badge-primary'>{{ item.status }}</span>" +
+        "        <span v-if='item.status' class='badge badge-info'>{{ item.status }}</span>" +
         "      </a>" +
         "    </div>" +
         "    <div class='type d-none d-md-block'>{{ item.typeName }}</div>" +
