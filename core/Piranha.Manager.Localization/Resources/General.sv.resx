@@ -63,6 +63,9 @@
   <data name="General" xml:space="preserve">
     <value>Generellt</value>
   </data>
+  <data name="History" xml:space="preserve">
+    <value>Historik</value>
+  </data>
   <data name="Internal id" xml:space="preserve">
     <value>Internt id</value>
   </data>
@@ -143,6 +146,9 @@
   </data>
   <data name="Unpublish" xml:space="preserve">
     <value>Avpublicera</value>
+  </data>
+  <data name="Unpublished" xml:space="preserve">
+    <value>Ej publicerad</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Version</value>

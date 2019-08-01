@@ -63,6 +63,9 @@
   <data name="General" xml:space="preserve">
     <value>Allgemein</value>
   </data>
+  <data name="History" xml:space="preserve">
+    <value>History</value>
+  </data>
   <data name="Internal id" xml:space="preserve">
     <value>Interne Id</value>
   </data>
@@ -143,6 +146,9 @@
   </data>
   <data name="Unpublish" xml:space="preserve">
     <value>Zurückziehen</value>
+  </data>
+  <data name="Unpublished" xml:space="preserve">
+    <value>Unpublished</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Version</value>
