@@ -64,7 +64,7 @@
     <value>Tổng quan</value>
   </data>
   <data name="History" xml:space="preserve">
-    <value>History</value>
+    <value>Lịch sử</value>
   </data>
   <data name="Internal id" xml:space="preserve">
     <value>ID nội bộ</value>
@@ -148,7 +148,7 @@
     <value>Không công bố</value>
   </data>
   <data name="Unpublished" xml:space="preserve">
-    <value>Unpublished</value>
+    <value>Ngừng xuất bản</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Phiên bản</value>
