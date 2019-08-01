@@ -52,12 +52,12 @@
     <value>De pagina is succesvol opgeslagen</value>
   </data>
   <data name="The page was successfully reverted to its previous state" xml:space="preserve">
-    <value>De pagina is met succes teruggezet naar de vorige status</value>
+    <value>De pagina is succesvol teruggezet naar de vorige status</value>
   </data>
   <data name="Welcome to your new page. Click on the button above to add your first block of content!" xml:space="preserve">
-    <value>Welkom op uw nieuwe pagina. Klik op de knop hierboven om uw eerste inhoudsblok toe te voegen!</value>
+    <value>Welkom op je nieuwe pagina. Klik op de knop hierboven om je eerste inhoudsblok toe te voegen!</value>
   </data>
   <data name="Your page title" xml:space="preserve">
-    <value>Uw paginatitel</value>
+    <value>Jouw paginatitel</value>
   </data>
 </root>
