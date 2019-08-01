@@ -13,19 +13,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add or select existing category" xml:space="preserve">
-    <value>Add or select existing category</value>
+    <value>Maak of selecteer een categorie</value>
   </data>
   <data name="Add or select existing tags (optional)" xml:space="preserve">
-    <value>Add or select existing tags (optional)</value>
+    <value>Maak of selecteer tags (optioneel)</value>
   </data>
   <data name="All categories" xml:space="preserve">
-    <value>All categories</value>
+    <value>Alle categorieën</value>
   </data>
   <data name="Categories" xml:space="preserve">
-    <value>Categories</value>
+    <value>Categorieën</value>
   </data>
   <data name="Category" xml:space="preserve">
-    <value>Category</value>
+    <value>Categorie</value>
   </data>
   <data name="Tag" xml:space="preserve">
     <value>Tag</value>
@@ -34,7 +34,7 @@
     <value>Tags</value>
   </data>
   <data name="Welcome to your new post. Click on the button above to add your first block of content!" xml:space="preserve">
-    <value>Welcome to your new post. Click on the button above to add your first block of content!</value>
+    <value>Welkom bij je nieuwe artikel. Klik op de knop hierboven om je eerste inhoudsblok toe te voegen!</value>
   </data>
   <data name="Your post title" xml:space="preserve">
     <value>Your post title</value>
