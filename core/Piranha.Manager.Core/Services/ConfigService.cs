@@ -8,10 +8,6 @@
  *
  */
 
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Piranha.Models;
 using Piranha.Manager.Models;
 
 namespace Piranha.Manager.Services
@@ -44,7 +40,9 @@ namespace Piranha.Manager.Services
                     ArchivePageSize = config.ArchivePageSize,
                     PagesExpires = config.CacheExpiresPages,
                     PostsExpires = config.CacheExpiresPosts,
-                    MediaCDN = config.MediaCDN
+                    MediaCDN = config.MediaCDN,
+                    PageRevisions = config.PageRevisions,
+                    PostRevisions = config.PostRevisions
                 };
             }
         }
@@ -63,6 +61,8 @@ namespace Piranha.Manager.Services
                 config.CacheExpiresPages = model.PagesExpires;
                 config.CacheExpiresPosts = model.PostsExpires;
                 config.MediaCDN = model.MediaCDN;
+                config.PageRevisions = model.PageRevisions;
+                config.PostRevisions = model.PostRevisions;
             }
         }
     }

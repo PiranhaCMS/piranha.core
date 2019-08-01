@@ -24,21 +24,25 @@ namespace Piranha.Services
         private readonly IContentFactory _factory;
         private readonly ISiteService _siteService;
         private readonly IPageService _pageService;
+        private readonly IParamService _paramService;
         private readonly ICache _cache;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="repo">The main repository</param>
+        /// <param name="factory">The content factory</param>
         /// <param name="siteService">The site service</param>
-        /// <param name="pageService">The site service</param>
+        /// <param name="pageService">The page service</param>
+        /// <param name="paramService">The param service</param>
         /// <param name="cache">The optional model cache</param>
-        public PostService(IPostRepository repo, IContentFactory factory, ISiteService siteService, IPageService pageService, ICache cache = null)
+        public PostService(IPostRepository repo, IContentFactory factory, ISiteService siteService, IPageService pageService, IParamService paramService, ICache cache = null)
         {
             _repo = repo;
             _factory = factory;
             _siteService = siteService;
             _pageService = pageService;
+            _paramService = paramService;
 
             if ((int)App.CacheLevel > 2)
             {
@@ -523,10 +527,13 @@ namespace Piranha.Services
                 }
                 else if (current != null && !isDraft)
                 {
-                    // Save current as a revision before saving the model
-                    // and if a draft revision exists, remove it.
-                    await _repo.CreateRevision(model.Id);
-                    await _repo.DeleteDraft(model.Id);
+                    using (var config = new Config(_paramService))
+                    {
+                        // Save current as a revision before saving the model
+                        // and if a draft revision exists, remove it.
+                        await _repo.DeleteDraft(model.Id);
+                        await _repo.CreateRevision(model.Id, config.PostRevisions);
+                    }
                 }
 
                 // Save the main post

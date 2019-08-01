@@ -12,7 +12,9 @@ piranha.config = new Vue({
             archivePageSize: null,
             pagesExpires: null,
             postsExpires: null,
-            mediaCDN: null
+            mediaCDN: null,
+            pageRevisions: null,
+            postRevisions: null
         }
     },
     methods: {
@@ -28,6 +30,8 @@ piranha.config = new Vue({
                     self.model.pagesExpires = result.pagesExpires;
                     self.model.postsExpires = result.postsExpires;
                     self.model.mediaCDN = result.mediaCDN;
+                    self.model.pageRevisions = result.pageRevisions;
+                    self.model.postRevisions = result.postRevisions;
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },
@@ -45,7 +49,9 @@ piranha.config = new Vue({
                         archivePageSize: self.model.archivePageSize,
                         pagesExpires: self.model.pagesExpires,
                         postsExpires: self.model.postsExpires,
-                        mediaCDN: self.model.mediaCDN
+                        mediaCDN: self.model.mediaCDN,
+                        pageRevisions: self.model.pageRevisions,
+                        postRevisions: self.model.postRevisions
                     })
                 })
                 .then(function (response) { return response.json(); })

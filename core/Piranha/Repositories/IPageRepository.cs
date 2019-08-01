@@ -100,7 +100,8 @@ namespace Piranha.Repositories
         /// of the page with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        Task CreateRevision(Guid id);
+        /// <param name="revisions">The maximum number of revisions that should be stored</param>
+        Task CreateRevision(Guid id, int revisions);
 
         /// <summary>
         /// Deletes the model with the specified id.

@@ -85,6 +85,40 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-header">
+                            <span class="title">@Localizer.General["History"]</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@Localizer.Config["Page revisions"]</label>
+                                        <blockquote>
+                                            The maximum number of page revisions that should be stored
+                                            for each page. A value of 0 means no limitation.
+                                        </blockquote>
+                                        <input v-model="model.pageRevisions" class="form-control" type="number">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@Localizer.Config["Post revisions"]</label>
+                                        <blockquote>
+                                            The maximum number of post revisions that should be stored
+                                            for each page. A value of 0 means no limitation.
+                                        </blockquote>
+                                        <input v-model="model.postRevisions" class="form-control" type="number">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">
                             <span class="title">@Localizer.Config["Caching"]</span>
                         </div>
                         <div class="card-body">

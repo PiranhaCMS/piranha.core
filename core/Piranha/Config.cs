@@ -33,6 +33,8 @@ namespace Piranha
         public static readonly string PAGES_HIERARCHICAL_SLUGS = "HierarchicalPageSlugs";
         public static readonly string MEDIA_CDN_URL = "MediaCdnUrl";
         public static readonly string MANAGER_EXPANDED_SITEMAP_LEVELS = "ManagerExpandedSitemapLevels";
+        public static readonly string PAGE_REVISIONS = "PageRevisions";
+        public static readonly string POST_REVISIONS = "PostRevisions";
 
         /// <summary>
         /// Gets/sets the currently configured archive page size.
@@ -184,6 +186,54 @@ namespace Piranha
                     value = value + "/";
 
                 param.Value = value;
+                _service.SaveAsync(param).GetAwaiter().GetResult();
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the currently configured page revisions that should be saved.
+        /// </summary>
+        public int PageRevisions {
+            get {
+                var param = _service.GetByKeyAsync(PAGE_REVISIONS).GetAwaiter().GetResult();
+                if (param != null)
+                    return Convert.ToInt32(param.Value);
+                return 10;
+            }
+            set {
+                var param = _service.GetByKeyAsync(PAGE_REVISIONS).GetAwaiter().GetResult();
+                if (param == null)
+                {
+                    param = new Param
+                    {
+                        Key = PAGE_REVISIONS
+                    };
+                }
+                param.Value = value.ToString();
+                _service.SaveAsync(param).GetAwaiter().GetResult();
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the currently configured post revisions that should be saved.
+        /// </summary>
+        public int PostRevisions {
+            get {
+                var param = _service.GetByKeyAsync(POST_REVISIONS).GetAwaiter().GetResult();
+                if (param != null)
+                    return Convert.ToInt32(param.Value);
+                return 10;
+            }
+            set {
+                var param = _service.GetByKeyAsync(POST_REVISIONS).GetAwaiter().GetResult();
+                if (param == null)
+                {
+                    param = new Param
+                    {
+                        Key = POST_REVISIONS
+                    };
+                }
+                param.Value = value.ToString();
                 _service.SaveAsync(param).GetAwaiter().GetResult();
             }
         }

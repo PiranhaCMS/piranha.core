@@ -514,10 +514,13 @@ namespace Piranha.Services
                 }
                 else if (current != null && !isDraft)
                 {
-                    // Save current as a revision before saving the model
-                    // and if a draft revision exists, remove it.
-                    await _repo.CreateRevision(model.Id);
-                    await _repo.DeleteDraft(model.Id);
+                    using (var config = new Config(_paramService))
+                    {
+                        // Save current as a revision before saving the model
+                        // and if a draft revision exists, remove it.
+                        await _repo.DeleteDraft(model.Id);
+                        await _repo.CreateRevision(model.Id, config.PageRevisions);
+                    }
                 }
 
                 // Save the main page

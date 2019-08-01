@@ -23,5 +23,7 @@ namespace Piranha.Manager.Models
         public int PagesExpires { get; set; }
         public int PostsExpires { get; set; }
         public string MediaCDN { get; set; }
+        public int PageRevisions { get; set; }
+        public int PostRevisions { get; set; }
     }
 }

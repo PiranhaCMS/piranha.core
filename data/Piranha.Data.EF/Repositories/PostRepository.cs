@@ -277,7 +277,8 @@ namespace Piranha.Repositories
         /// of the page with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public async Task CreateRevision(Guid id)
+        /// <param name="revisions">The maximum number of revisions that should be stored</param>
+        public async Task CreateRevision(Guid id, int revisions)
         {
             var post = await GetQuery<Models.PostBase>()
                 .FirstOrDefaultAsync(p => p.Id == id)
@@ -294,6 +295,31 @@ namespace Piranha.Repositories
                 }).ConfigureAwait(false);
 
                 await _db.SaveChangesAsync().ConfigureAwait(false);
+
+                // Check if we have a limit set on the number of revisions
+                // we want to store.
+                if (revisions != 0)
+                {
+                    var existing = await _db.PostRevisions
+                        .Where(r => r.PostId == id)
+                        .OrderByDescending(r => r.Created)
+                        .Select(r => r.Id)
+                        .Take(revisions)
+                        .ToListAsync();
+
+                    if (existing.Count == revisions)
+                    {
+                        var removed = await _db.PostRevisions
+                            .Where(r => r.PostId == id && !existing.Contains(r.Id))
+                            .ToListAsync();
+
+                        if (removed.Count > 0)
+                        {
+                            _db.PostRevisions.RemoveRange(removed);
+                            await _db.SaveChangesAsync();
+                        }
+                    }
+                }
             }
         }
 
