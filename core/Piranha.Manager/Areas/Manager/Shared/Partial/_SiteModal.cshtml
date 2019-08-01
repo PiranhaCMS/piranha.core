@@ -82,6 +82,9 @@
 
             <!-- Footer -->
             <div class="modal-footer">
+                <button v-if="!isNew" v-on:click.prevent="remove" class="btn btn-labeled btn-danger">
+                    <i class="fas fa-trash"></i>@Localizer.General["Delete"]
+                </button>
                 <button v-on:click.prevent="save" class="btn btn-labeled btn-success">
                     <i class="fas fa-check"></i>@Localizer.General["Save"]
                 </button>

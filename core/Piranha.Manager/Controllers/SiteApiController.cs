@@ -9,15 +9,12 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
 using Piranha.Manager.Models;
 using Piranha.Manager.Services;
-using Piranha.Models;
 
 namespace Piranha.Manager.Controllers
 {
@@ -56,6 +53,18 @@ namespace Piranha.Manager.Controllers
         }
 
         /// <summary>
+        /// Creates a new site.
+        /// </summary>
+        /// <returns>The site edit model</returns>
+        [Route("create")]
+        [HttpGet]
+        [Authorize(Policy = Permission.SitesAdd)]
+        public SiteEditModel Create()
+        {
+            return _service.Create();
+        }
+
+        /// <summary>
         /// Gets the site with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
@@ -91,6 +100,45 @@ namespace Piranha.Manager.Controllers
             {
                 Type = StatusMessage.Success,
                 Body = _localizer.Site["The site was successfully saved"]
+            };
+        }
+
+        /// <summary>
+        /// Deletes the site with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The result of the operation</returns>
+        [Route("delete/{id}")]
+        [HttpGet]
+        [Authorize(Policy = Permission.SitesDelete)]
+        public async Task<StatusMessage> Delete(Guid id)
+        {
+            try
+            {
+                await _service.Delete(id);
+            }
+            catch (ValidationException e)
+            {
+                // Validation did not succeed
+                return new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = e.Message
+                };
+            }
+            catch
+            {
+                return new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = _localizer.Site["An error occured while deleting the site"]
+                };
+            }
+
+            return new StatusMessage
+            {
+                Type = StatusMessage.Success,
+                Body = _localizer.Site["The site was successfully deleted"]
             };
         }
     }

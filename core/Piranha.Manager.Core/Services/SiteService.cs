@@ -53,6 +53,18 @@ namespace Piranha.Manager.Services
             return null;
         }
 
+        /// <summary>
+        /// Creates a new site edit model.
+        /// </summary>
+        /// <returns>The edit model</returns>
+        public SiteEditModel Create()
+        {
+            return new SiteEditModel
+            {
+                Id = Guid.NewGuid()
+            };
+        }
+
         public async Task Save(SiteEditModel model)
         {
             var site = await _api.Sites.GetByIdAsync(model.Id);
@@ -73,6 +85,15 @@ namespace Piranha.Manager.Services
             site.IsDefault = model.IsDefault;
 
             await _api.Sites.SaveAsync(site);
+        }
+
+        /// <summary>
+        /// Deletes the site with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        public Task Delete(Guid id)
+        {
+            return _api.Sites.DeleteAsync(id);
         }
 
         private SiteEditModel Transform(Site site)

@@ -15,7 +15,8 @@ piranha.siteedit = new Vue({
         hostnames: null,
         isDefault: false,
         siteTypes: [],
-        callback: null
+        isNew: false,
+        callback: null,
     },
     methods: {
         load: function (id) {
@@ -77,6 +78,7 @@ piranha.siteedit = new Vue({
         open: function (id, cb) {
             // Store callback
             this.callback = cb;
+            this.isNew = false;
 
             // Load the site data from the server
             this.load(id);
@@ -84,7 +86,53 @@ piranha.siteedit = new Vue({
             // Open the modal
             $("#siteedit").modal("show");
             $("#sitetitle").focus();
-        }
+        },
+        create: function (cb) {
+            var self = this;
+
+            // Create a new site
+            fetch(piranha.baseUrl + "manager/api/site/create")
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    self.id = result.id;
+                    self.typeId = result.typeId;
+                    self.title = result.title;
+                    self.internalId = result.internalId;
+                    self.culture = result.culture;
+                    self.description = result.description;
+                    self.hostnames = result.hostnames;
+                    self.isDefault = result.isDefault;
+                    self.siteTypes = result.siteTypes;
+
+                    self.isNew = true;
+                    self.callback = cb;
+                })
+                .catch(function (error) { console.log("error:", error ); });
+
+            // Open the modal
+            $("#siteedit").modal("show");
+            $("#sitetitle").focus();
+        },
+        remove: function () {
+            var self = this;
+
+            fetch(piranha.baseUrl + "manager/api/site/delete/" + self.id)
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    piranha.notifications.push(result);
+
+                    if (result.type === "success") {
+                        $("#siteedit").modal("hide");
+
+                        if (self.callback)
+                        {
+                            self.callback();
+                            self.callback = null;
+                        }
+                    }
+                })
+                .catch(function (error) { console.log("error:", error ); });
+        },
     },
     updated: function () {
         this.loading = false;

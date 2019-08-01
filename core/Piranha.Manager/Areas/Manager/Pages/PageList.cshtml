@@ -42,7 +42,7 @@
                 {
                     <partial name="@action.ActionView" />
                 }
-                <button disabled class="btn btn-primary btn-labeled">
+                <button v-on:click.prevent="piranha.siteedit.create(load)" class="btn btn-primary btn-labeled">
                     <i class="fas fa-globe"></i>
                     @Localizer.Site["Add site"]
                 </button>
