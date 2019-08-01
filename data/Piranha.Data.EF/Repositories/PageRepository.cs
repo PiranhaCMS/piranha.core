@@ -70,6 +70,24 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Gets the id of all pages that have a draft for
+        /// the specified site.
+        /// </summary>
+        /// <param name="siteId">The unique site id</param>
+        /// <returns>The pages that have a draft</returns>
+        public async Task<IEnumerable<Guid>> GetAllDrafts(Guid siteId)
+        {
+            return await _db.PageRevisions
+                .AsNoTracking()
+                .Where(r => r.Page.SiteId == siteId && r.Created > r.Page.LastModified)
+                .Select(r => r.PageId)
+                .Distinct()
+                .ToListAsync()
+                .ConfigureAwait(false);
+        }
+
+
+        /// <summary>
         /// Gets the site startpage.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>

@@ -167,6 +167,17 @@ namespace Piranha.Services
         }
 
         /// <summary>
+        /// Gets the id of all pages that have a draft for
+        /// the specified site.
+        /// </summary>
+        /// <param name="siteId">The unique site id</param>
+        /// <returns>The pages that have a draft</returns>
+        public async Task<IEnumerable<Guid>> GetAllDraftsAsync(Guid? siteId = null)
+        {
+            return await _repo.GetAllDrafts((await EnsureSiteIdAsync(siteId).ConfigureAwait(false)).Value);
+        }
+
+        /// <summary>
         /// Gets the site startpage.
         /// </summary>
         /// <param name="siteId">The optional site id</param>
@@ -385,7 +396,7 @@ namespace Piranha.Services
             App.Hooks.OnAfterSave<PageBase>(model);
 
             // Remove the moved page from cache
-            RemoveFromCache(model);
+            await RemoveFromCache(model);
 
             // Remove all affected pages from cache
             if (_cache != null)
@@ -395,7 +406,7 @@ namespace Piranha.Services
                     var page = await GetByIdAsync<PageInfo>(id).ConfigureAwait(false);
                     if (page != null)
                     {
-                        RemoveFromCache(model);
+                        await RemoveFromCache(model);
                     }
                 }
             }
@@ -517,7 +528,7 @@ namespace Piranha.Services
             App.Hooks.OnAfterSave<PageBase>(model);
 
             // Remove from cache
-            RemoveFromCache(model);
+            await RemoveFromCache(model);
 
             // Remove all affected pages from cache
             if (_cache != null)
@@ -527,7 +538,7 @@ namespace Piranha.Services
                     var page = await GetByIdAsync<PageInfo>(id).ConfigureAwait(false);
                     if (page != null)
                     {
-                        RemoveFromCache(model);
+                        await RemoveFromCache(model);
                     }
                 }
             }
@@ -565,7 +576,7 @@ namespace Piranha.Services
             App.Hooks.OnAfterDelete<PageBase>(model);
 
             // Remove from cache & invalidate sitemap
-            RemoveFromCache(model);
+            await RemoveFromCache(model);
 
             await _siteService.InvalidateSitemapAsync(model.SiteId).ConfigureAwait(false);
         }
@@ -685,7 +696,7 @@ namespace Piranha.Services
         /// Removes the given model from cache.
         /// </summary>
         /// <param name="model">The model</param>
-        private void RemoveFromCache(PageBase model)
+        private async Task RemoveFromCache(PageBase model)
         {
             if (_cache != null)
             {
@@ -697,6 +708,9 @@ namespace Piranha.Services
                     _cache.Remove($"Page_{model.SiteId}");
                     _cache.Remove($"PageInfo_{model.SiteId}");
                 }
+
+                // Remove the site & clear the sitemap from cache
+                await _siteService.RemoveSitemapFromCacheAsync(model.SiteId);
             }
         }
 

@@ -63,6 +63,14 @@ namespace Piranha.Services
         Task<IEnumerable<T>> GetAllBlogsAsync<T>(Guid? siteId = null) where T : Models.PageBase;
 
         /// <summary>
+        /// Gets the id of all pages that have a draft for
+        /// the specified site.
+        /// </summary>
+        /// <param name="siteId">The unique site id</param>
+        /// <returns>The pages that have a draft</returns>
+        Task<IEnumerable<Guid>> GetAllDraftsAsync(Guid? siteId = null);
+
+        /// <summary>
         /// Gets the site startpage.
         /// </summary>
         /// <param name="siteId">The optional site id</param>

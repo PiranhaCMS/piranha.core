@@ -409,6 +409,23 @@ namespace Piranha.Services
         }
 
         /// <summary>
+        /// Removes the sitemap from the cache.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        public async Task RemoveSitemapFromCacheAsync(Guid id)
+        {
+            if (_cache != null)
+            {
+                var site = await GetByIdAsync(id);
+
+                if (site != null)
+                {
+                    _cache.Remove($"Sitemap_{id}");
+                }
+            }
+        }
+
+        /// <summary>
         /// Processes the model on load.
         /// </summary>
         /// <param name="model">The model</param>

@@ -114,5 +114,11 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="model">The model</param>
         Task DeleteAsync(Site model);
+
+        /// <summary>
+        /// Removes the sitemap from the cache.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        Task RemoveSitemapFromCacheAsync(Guid id);
     }
 }

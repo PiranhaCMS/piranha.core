@@ -32,6 +32,14 @@ namespace Piranha.Repositories
         Task<IEnumerable<Guid>> GetAllBlogs(Guid siteId);
 
         /// <summary>
+        /// Gets the id of all pages that have a draft for
+        /// the specified site.
+        /// </summary>
+        /// <param name="siteId">The unique site id</param>
+        /// <returns>The pages that have a draft</returns>
+        Task<IEnumerable<Guid>> GetAllDrafts(Guid siteId);
+
+        /// <summary>
         /// Gets the site startpage.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
