@@ -14,7 +14,8 @@ piranha.siteedit = new Vue({
         description: null,
         hostnames: null,
         isDefault: false,
-        siteTypes: []
+        siteTypes: [],
+        callback: null
     },
     methods: {
         load: function (id) {
@@ -36,6 +37,7 @@ piranha.siteedit = new Vue({
                 .catch(function (error) { console.log("error:", error ); });
         },
         save: function () {
+            var self = this;
             var model = {
                 id: this.id,
                 typeId: this.typeId,
@@ -60,13 +62,22 @@ piranha.siteedit = new Vue({
 
                 if (result.type === "success") {
                     $("#siteedit").modal("hide");
+
+                    if (self.callback)
+                    {
+                        self.callback();
+                        self.callback = null;
+                    }
                 }
             })
             .catch(function (error) {
                 console.log("error:", error);
             });
         },
-        open: function (id) {
+        open: function (id, cb) {
+            // Store callback
+            this.callback = cb;
+
             // Load the site data from the server
             this.load(id);
 

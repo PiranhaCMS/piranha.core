@@ -58,7 +58,7 @@
                         <li v-for="site in sites">
                             <div class="sitemap-item" v-bind:key="site.id">
                                 <div class="handle"><i class="fas fa-globe"></i></div>
-                                <div class="link"><a v-on:click.prevent="piranha.siteedit.open(site.id)" href="#">{{ site.title }} <small style="display:none">(<code>{{ site.slug }}</code>)</small></a></div>
+                                <div class="link"><a v-on:click.prevent="piranha.siteedit.open(site.id, load)" href="#">{{ site.title }} <small style="display:none">(<code>{{ site.slug }}</code>)</small></a></div>
                                 <div>
                                     <div class="btn-group" role="group">
                                         <button id="pageGroup" type="button" class="btn btn-sm btn-primary btn-labeled dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
