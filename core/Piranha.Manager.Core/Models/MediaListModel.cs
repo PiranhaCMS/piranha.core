@@ -13,29 +13,88 @@ using System.Collections.Generic;
 
 namespace Piranha.Manager.Models
 {
+    /// <summary>
+    /// List model for the media view.
+    /// </summary>
     public class MediaListModel
     {
         public static string ListView = "list";
         public static string GalleryView = "gallery";
 
+        /// <summary>
+        /// A folder item in the list view.
+        /// </summary>
         public class FolderItem
         {
+            /// <summary>
+            /// Gets/sets the unique id.
+            /// </summary>
             public Guid Id { get; set; }
+
+            /// <summary>
+            /// Gets/sets the name.
+            /// </summary>
             public string Name { get; set; }
+
+            /// <summary>
+            /// Gets/sets the item count in the folder.
+            /// </summary>
             public int ItemCount { get; set; }
         }
 
+        /// <summary>
+        /// A media item in the list view.
+        /// </summary>
         public class MediaItem
         {
+            /// <summary>
+            /// Gets/sets the unique id.
+            /// </summary>
             public Guid Id { get; set; }
+
+            /// <summary>
+            /// Gets/sets the optional folder id.
+            /// </summary>
             public Guid? FolderId { get; set; }
+
+            /// <summary>
+            /// Gets/sets the media type.
+            /// </summary>
             public string Type { get; set; }
+
+            /// <summary>
+            /// Gets/sets the filename of the uploaded media.
+            /// </summary>
             public string Filename { get; set; }
+
+            /// <summary>
+            /// Gets/sets the content type of the uploaded media.
+            /// </summary>
             public string ContentType { get; set; }
+
+            /// <summary>
+            /// Gets/sets the public url used to access the uploaded media.
+            /// </summary>
             public string PublicUrl { get; set; }
+
+            /// <summary>
+            /// Gets/sets the file size.
+            /// </summary>
             public string Size { get; set; }
+
+            /// <summary>
+            /// Gets/sets the optional width.
+            /// </summary>
             public int? Width { get; set; }
+
+            /// <summary>
+            /// Gets/sets the optional height.
+            /// </summary>
             public int? Height { get; set; }
+
+            /// <summary>
+            /// Gets/sets the last modification date.
+            /// </summary>
             public string LastModified { get; set; }
         }
 

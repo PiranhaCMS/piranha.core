@@ -8,12 +8,10 @@
  *
  */
 
-using System;
-
 namespace Piranha.Manager.Models
 {
     /// <summary>
-    /// Config model.
+    /// The different states revision based content can have.
     /// </summary>
     public static class ContentState
     {

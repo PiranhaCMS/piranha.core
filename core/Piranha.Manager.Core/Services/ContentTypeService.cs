@@ -94,6 +94,12 @@ namespace Piranha.Manager.Services
             return model;
         }
 
+        /// <summary>
+        /// Creates a new page region.
+        /// </summary>
+        /// <param name="type">The page type</param>
+        /// <param name="region">The region id</param>
+        /// <returns>The new region item</returns>
         public RegionItemModel CreatePageRegion(string type, string region)
         {
             var pageType = App.PageTypes.GetById(type);

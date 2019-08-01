@@ -8,7 +8,6 @@
  *
  */
 
-using System;
 using Piranha.Extend;
 
 namespace Piranha.Manager.Models.Content
