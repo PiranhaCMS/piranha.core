@@ -1,17 +1,10 @@
-@page "~/manager/page/{action}/{id}/{pageType?}"
+@page "~/manager/page/{action}/{id}/{pageType?}/{after?}"
 @model PageEditViewModel
 @inject ManagerLocalizer Localizer
 @{
     ViewBag.Title = Localizer.Page["Edit page"];
     ViewBag.MenuItem = "Pages";
     string action = ((string)RouteData.Values["action"]).ToLower();
-
-    @functions {
-        public void OnPostAdd(string type)
-        {
-            throw new Exception("Add new page of type " + type);
-        }
-    }
 }
 @section script
 {
@@ -31,6 +24,14 @@
     {
         <script>
             piranha.pageedit.create("@RouteData.Values["id"]", "@RouteData.Values["pageType"]");
+
+            $(".title input").focus();
+        </script>
+    }
+    else if (action == "addrelative")
+    {
+        <script>
+            piranha.pageedit.createrelative("@RouteData.Values["id"]", "@RouteData.Values["pageType"]", "@RouteData.Values["after"]");
 
             $(".title input").focus();
         </script>

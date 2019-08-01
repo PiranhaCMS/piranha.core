@@ -98,6 +98,17 @@ piranha.pageedit = new Vue({
                 .catch(function (error) { console.log("error:", error );
             });
         },
+        createrelative: function (id, pageType, after) {
+            var self = this;
+
+            fetch(piranha.baseUrl + "manager/api/page/createrelative/" + id + "/" + pageType + "/" + after)
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    self.bind(result);
+                })
+                .catch(function (error) { console.log("error:", error );
+            });
+        },
         save: function ()
         {
             this.saving = true;

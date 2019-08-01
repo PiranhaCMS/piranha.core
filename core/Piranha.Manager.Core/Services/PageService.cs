@@ -125,6 +125,27 @@ namespace Piranha.Manager.Services
             return null;
         }
 
+        public async Task<PageEditModel> CreateRelative(Guid pageId, string typeId, bool after)
+        {
+            var relative = await _api.Pages.GetByIdAsync<PageInfo>(pageId);
+
+            if (relative != null)
+            {
+                var page = _api.Pages.Create<DynamicPage>(typeId);
+
+                page.Id = Guid.NewGuid();
+                page.SiteId = relative.SiteId;
+                page.ParentId = after ? relative.ParentId : relative.Id;
+                page.SortOrder = after ? relative.SortOrder + 1 : 0;
+
+                if (page != null)
+                {
+                    return Transform(page, false);
+                }
+            }
+            return null;
+        }
+
         public async Task<PageEditModel> GetById(Guid id, bool useDraft = true)
         {
             var isDraft = true;

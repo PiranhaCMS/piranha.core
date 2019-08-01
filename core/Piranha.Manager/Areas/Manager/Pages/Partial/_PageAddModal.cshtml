@@ -23,7 +23,7 @@
                 <table class="table">
                     <tbody>
                         <tr v-for="(type) in pageTypes">
-                            <td><a :href="piranha.baseUrl + type.addUrl + type.id">{{ type.title }}</a></td>
+                            <td><a :href="piranha.baseUrl + 'manager/page/addrelative/' + addPageId + '/' + type.id + '/' + addAfter">{{ type.title }}</a></td>
                         </tr>
                     </tbody>
                 </table>

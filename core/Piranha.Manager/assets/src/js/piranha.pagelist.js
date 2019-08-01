@@ -9,7 +9,9 @@ piranha.pagelist = new Vue({
         updateBindings: false,
         items: [],
         sites: [],
-        pageTypes: []
+        pageTypes: [],
+        addPageId: null,
+        addAfter: true
     },
     methods: {
         load: function () {
@@ -74,7 +76,14 @@ piranha.pagelist = new Vue({
                     }
                 })
             });
-        }
+        },
+        add: function (pageId, after) {
+            this.addPageId = pageId;
+            this.addAfter = after;
+
+            // Open the modal
+            $("#pageAddModal").modal("show");
+        },
     },
     created: function () {
     },

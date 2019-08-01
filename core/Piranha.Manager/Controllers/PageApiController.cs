@@ -99,6 +99,19 @@ namespace Piranha.Manager.Controllers
         }
 
         /// <summary>
+        /// Creates a new page of the specified type.
+        /// </summary>
+        /// <param name="typeId">The type id</param>
+        /// <returns>The page edit model</returns>
+        [Route("createrelative/{pageId}/{typeId}/{after}")]
+        [HttpGet]
+        [Authorize(Policy = Permission.PagesAdd)]
+        public async Task<PageEditModel> CreateRelative(Guid pageId, string typeId, bool after)
+        {
+            return await _service.CreateRelative(pageId, typeId, after);
+        }
+
+        /// <summary>
         /// Saves the given model
         /// </summary>
         /// <param name="model">The model</param>

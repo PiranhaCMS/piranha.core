@@ -26,8 +26,8 @@ Vue.component("sitemap-item", {
         "    <div class='type d-none d-md-block'>{{ item.typeName }}</div>" +
         "    <div class='date d-none d-md-block'>{{ item.published }}</div>" +
         "    <div class='actions'>" +
-        "      <a href='#' data-toggle='modal' data-target='#pageAddModal'><i class='fas fa-angle-down'></i></a>" +
-        "      <a href='#' data-toggle='modal' data-target='#pageAddModal'><i class='fas fa-angle-right'></i></a>" +
+        "      <a href='#' v-on:click='piranha.pagelist.add(item.id, true)'><i class='fas fa-angle-down'></i></a>" +
+        "      <a href='#' v-on:click='piranha.pagelist.add(item.id, false)'><i class='fas fa-angle-right'></i></a>" +
         "      <a v-if='item.items.length === 0' v-on:click.prevent='piranha.pagelist.remove(item.id)' class='danger' href='#'><i class='fas fa-trash'></i></a>" +
         "    </div>" +
         "  </div>" +
