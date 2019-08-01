@@ -64,7 +64,7 @@
     <value>Общи</value>
   </data>
   <data name="History" xml:space="preserve">
-    <value>History</value>
+    <value>История</value>
   </data>
   <data name="Internal id" xml:space="preserve">
     <value>Вътрешен идентифициращ номер</value>
@@ -148,7 +148,7 @@
     <value>Премахване на публикацията</value>
   </data>
   <data name="Unpublished" xml:space="preserve">
-    <value>Unpublished</value>
+    <value>Непубликуван</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Версия</value>
