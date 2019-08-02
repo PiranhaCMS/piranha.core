@@ -19,16 +19,16 @@
     <value>Thêm hoặc chọn thẻ có sẵn(không bắt buộc)</value>
   </data>
   <data name="All categories" xml:space="preserve">
-    <value>All categories</value>
+    <value>Tất cả các danh mục</value>
   </data>
   <data name="Categories" xml:space="preserve">
     <value>Danh mục</value>
   </data>
   <data name="Category" xml:space="preserve">
-    <value>Category</value>
+    <value>Danh mục</value>
   </data>
   <data name="Tag" xml:space="preserve">
-    <value>Tag</value>
+    <value>Thẻ</value>
   </data>
   <data name="Tags" xml:space="preserve">
     <value>Thẻ</value>
