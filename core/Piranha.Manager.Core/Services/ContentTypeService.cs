@@ -97,7 +97,7 @@ namespace Piranha.Manager.Services
         /// <summary>
         /// Creates a new page region.
         /// </summary>
-        /// <param name="type">The page type</param>
+        /// <param name="type">The type id</param>
         /// <param name="region">The region id</param>
         /// <returns>The new region item</returns>
         public RegionItemModel CreatePageRegion(string type, string region)
@@ -106,42 +106,70 @@ namespace Piranha.Manager.Services
 
             if (pageType != null)
             {
-                var regionType = pageType.Regions.First(r => r.Id == region);
-                var regionModel = _factory.CreateDynamicRegion(pageType, region);
-                var regionItem = new RegionItemModel();
-
-                foreach (var fieldType in regionType.Fields)
-                {
-                    var appFieldType = App.Fields.GetByType(fieldType.Type);
-
-                    var field = new FieldModel
-                    {
-                        Meta = new FieldMeta
-                        {
-                            Id = fieldType.Id,
-                            Name = fieldType.Title,
-                            Component = appFieldType.Component,
-                            Placeholder = fieldType.Placeholder,
-                            IsHalfWidth = fieldType.Options.HasFlag(FieldOption.HalfWidth),
-                            Description = fieldType.Description
-                        }
-                    };
-
-                    if (regionType.Fields.Count > 1)
-                    {
-                        field.Model = (Extend.IField)((IDictionary<string, object>)regionModel)[fieldType.Id];
-                        field.Meta.NotifyChange = regionType.ListTitleField == fieldType.Id;
-                    }
-                    else
-                    {
-                        field.Model = (Extend.IField)regionModel;
-                        field.Meta.NotifyChange = true;
-                    }
-                    regionItem.Fields.Add(field);
-                }
-                return regionItem;
+                return CreateRegion(pageType, region);
             }
             return null;
+        }
+
+        /// <summary>
+        /// Creates a new post region.
+        /// </summary>
+        /// <param name="type">The type id</param>
+        /// <param name="region">The region id</param>
+        /// <returns>The new region item</returns>
+        public RegionItemModel CreatePostRegion(string type, string region)
+        {
+            var postType = App.PostTypes.GetById(type);
+
+            if (postType != null)
+            {
+                return CreateRegion(postType, region);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Creates a new region for the given content type.
+        /// </summary>
+        /// <param name="type">The content type</param>
+        /// <param name="region">The region id</param>
+        /// <returns>The new region item</returns>
+        private RegionItemModel CreateRegion(ContentType type, string region)
+        {
+            var regionType = type.Regions.First(r => r.Id == region);
+            var regionModel = _factory.CreateDynamicRegion(type, region);
+            var regionItem = new RegionItemModel();
+
+            foreach (var fieldType in regionType.Fields)
+            {
+                var appFieldType = App.Fields.GetByType(fieldType.Type);
+
+                var field = new FieldModel
+                {
+                    Meta = new FieldMeta
+                    {
+                        Id = fieldType.Id,
+                        Name = fieldType.Title,
+                        Component = appFieldType.Component,
+                        Placeholder = fieldType.Placeholder,
+                        IsHalfWidth = fieldType.Options.HasFlag(FieldOption.HalfWidth),
+                        Description = fieldType.Description
+                    }
+                };
+
+                if (regionType.Fields.Count > 1)
+                {
+                    field.Model = (Extend.IField)((IDictionary<string, object>)regionModel)[fieldType.Id];
+                    field.Meta.NotifyChange = regionType.ListTitleField == fieldType.Id;
+                }
+                else
+                {
+                    field.Model = (Extend.IField)regionModel;
+                    field.Meta.NotifyChange = true;
+                }
+                regionItem.Fields.Add(field);
+            }
+            return regionItem;
         }
 
         /// <summary>

@@ -1,5 +1,5 @@
 Vue.component("region", {
-    props: ["model"],
+    props: ["model", "content", "type"],
     methods: {
         moveItem: function (from, to) {
             this.model.items.splice(to, 0, this.model.items.splice(from, 1)[0])
@@ -7,7 +7,7 @@ Vue.component("region", {
         addItem: function () {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/content/page/region/" + piranha.pageedit.typeId + "/" + this.model.meta.name)
+            fetch(piranha.baseUrl + "manager/api/content/region/" + this.content + "/" + this.type + "/" + this.model.meta.name)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.model.items.push(result);

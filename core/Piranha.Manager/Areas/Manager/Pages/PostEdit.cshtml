@@ -161,7 +161,7 @@
         <div class="card" :class="{ 'd-none': selectedRegion.uid != region.meta.uid }" v-for="region in contentRegions">
             <div class="card-body">
                 <div class="region-center">
-                    <region v-bind:model="region"></region>
+                    <region v-bind:content="'post'" v-bind:type="typeId" v-bind:model="region"></region>
                 </div>
             </div>
         </div>

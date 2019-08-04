@@ -64,11 +64,19 @@ namespace Piranha.Manager.Controllers
             return NotFound();
         }
 
-        [Route("page/region/{type}/{region}")]
+        [Route("region/{content}/{type}/{region}")]
         [HttpGet]
-        public IActionResult CreatePageRegion(string type, string region)
+        public IActionResult CreateRegion(string content, string type, string region)
         {
-            return Ok(_service.CreatePageRegion(type, region));
+            if (content == "page")
+            {
+                return Ok(_service.CreatePageRegion(type, region));
+            }
+            else if (content == "post")
+            {
+                return Ok(_service.CreatePostRegion(type, region));
+            }
+            return NotFound();
         }
     }
 }
