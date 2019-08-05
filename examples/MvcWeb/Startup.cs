@@ -27,6 +27,7 @@ namespace MvcWeb
             services.AddPiranhaFileStorage();
             services.AddPiranhaImageSharp();
             services.AddPiranhaManager();
+            services.AddPiranhaApi();
 
             services.AddPiranhaEF(options =>
                 options.UseSqlite("Filename=./piranha.mvcweb.db"));

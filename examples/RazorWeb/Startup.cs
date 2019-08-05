@@ -27,6 +27,7 @@ namespace RazorWeb
             services.AddPiranhaFileStorage();
             services.AddPiranhaImageSharp();
             services.AddPiranhaManager();
+            services.AddPiranhaApi();
 
             services.AddPiranhaEF(options =>
                 options.UseSqlite("Filename=./piranha.razorweb.db"));
