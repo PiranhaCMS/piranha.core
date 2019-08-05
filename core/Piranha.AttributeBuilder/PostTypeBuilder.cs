@@ -118,6 +118,7 @@ namespace Piranha.AttributeBuilder
                         UseBlocks = attr.UseBlocks
                     };
 
+                    // Get all post routes
                     var routes = type.GetTypeInfo().GetCustomAttributes(typeof(PostTypeRouteAttribute));
                     foreach (PostTypeRouteAttribute route in routes)
                     {
@@ -128,6 +129,35 @@ namespace Piranha.AttributeBuilder
                                 Title = route.Title,
                                 Route = route.Route
                             });
+                        }
+                    }
+
+                    // Get all custom editors
+                    var editors = type.GetTypeInfo().GetCustomAttributes(typeof(PostTypeEditorAttribute));
+                    foreach (PostTypeEditorAttribute editor in editors)
+                    {
+                        if (!string.IsNullOrWhiteSpace(editor.Component) && !string.IsNullOrWhiteSpace(editor.Title))
+                        {
+                            // Check if we already have an editor registered with this name
+                            var current = postType.CustomEditors.FirstOrDefault(e => e.Title == editor.Title);
+
+                            if (current != null)
+                            {
+                                // Replace current editor
+                                current.Component = editor.Component;
+                                current.Icon = editor.Icon;
+                                current.Title = editor.Title;
+                            }
+                            else
+                            {
+                                // Add new editor
+                                postType.CustomEditors.Add(new ContentTypeEditor
+                                {
+                                    Component = editor.Component,
+                                    Icon = editor.Icon,
+                                    Title = editor.Title
+                                });
+                            }
                         }
                     }
 
