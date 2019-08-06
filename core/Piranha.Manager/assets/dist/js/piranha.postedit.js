@@ -269,5 +269,8 @@ piranha.postedit = new Vue({
         }
 
         this.loading = false;
+    },
+    components: {
+        datepicker: vuejsDatepicker
     }
 });
