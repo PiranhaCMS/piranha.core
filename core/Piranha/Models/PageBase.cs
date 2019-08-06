@@ -52,7 +52,6 @@ namespace Piranha.Models
         [StringLength(128)]
         public string BrowserTitle { get; set; }
 
-
         /// <summary>
         /// Gets/sets if the page is hidden in the navigation.
         /// </summary>
