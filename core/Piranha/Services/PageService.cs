@@ -612,6 +612,7 @@ namespace Piranha.Services
                 copy.SiteId = model.SiteId;
                 copy.Title = model.Title;
                 copy.NavigationTitle = model.NavigationTitle;
+                copy.BrowserTitle = model.BrowserTitle;
                 copy.Slug = model.Slug;
                 copy.ParentId = model.ParentId;
                 copy.SortOrder = model.SortOrder;

@@ -40,6 +40,11 @@ namespace Piranha.Manager.Models
         public string NavigationTitle { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional text for use in the document's &lt;title&gt;&lt;/title&gt; tag.
+        /// </summary>
+        public string BrowserTitle { get; set; }
+
+        /// <summary>
         /// Gets/sets the unique slug.
         /// </summary>
         public string Slug { get; set; }

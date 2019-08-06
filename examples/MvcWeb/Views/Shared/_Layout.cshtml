@@ -1,4 +1,4 @@
-@using Microsoft.AspNetCore.Hosting
+﻿@using Microsoft.AspNetCore.Hosting
 @inject IHostingEnvironment Env
 
 <!doctype html>
@@ -15,14 +15,22 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bitter:700|Open+Sans:300,400,600">
     <link rel="stylesheet" href="~/assets/css/style.min.css">
 
-    <title>@ViewBag.Title</title>
-
-    @if (Model is Piranha.Models.IMeta) {
-        <partial name="Partial/_Meta.cshtml" />
+    @if (string.IsNullOrEmpty(ViewBag.BrowserTitle))
+    {
+        <title>@ViewBag.Title</title>
+    }
+    else
+    {
+        <title>@ViewBag.BrowserTitle</title>
     }
 
-    @RenderSection("head", required: false)
-</head>
+            @if (Model is Piranha.Models.IMeta)
+            {
+                <partial name="Partial/_Meta.cshtml" />
+            }
+
+            @RenderSection("head", required: false)
+    </head>
 <body>
     <header role="banner">
         <div class="menu">

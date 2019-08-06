@@ -206,6 +206,7 @@ namespace Piranha
             mb.Entity<Data.Page>().Property(p => p.ContentType).HasMaxLength(255).IsRequired().HasDefaultValue("Page");
             mb.Entity<Data.Page>().Property(p => p.Title).HasMaxLength(128).IsRequired();
             mb.Entity<Data.Page>().Property(p => p.NavigationTitle).HasMaxLength(128);
+            mb.Entity<Data.Page>().Property(p => p.BrowserTitle).HasMaxLength(128);
             mb.Entity<Data.Page>().Property(p => p.Slug).HasMaxLength(128).IsRequired();
             mb.Entity<Data.Page>().Property(p => p.MetaKeywords).HasMaxLength(128);
             mb.Entity<Data.Page>().Property(p => p.MetaDescription).HasMaxLength(256);

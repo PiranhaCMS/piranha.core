@@ -1,5 +1,6 @@
 @model MvcWeb.Models.StandardPage
 @{
+    if (!string.IsNullOrEmpty(Model.BrowserTitle)) { ViewBag.BrowserTitle = Model.BrowserTitle;}
     ViewBag.Title = Model.Title;
 }
 

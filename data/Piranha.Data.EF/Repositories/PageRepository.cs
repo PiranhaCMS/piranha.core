@@ -439,7 +439,7 @@ namespace Piranha.Repositories
                         }
                     }
 
-                    if (!isDraft && (isNew || page.Title != model.Title || page.NavigationTitle != model.NavigationTitle))
+                    if (!isDraft && (isNew || page.Title != model.Title || page.NavigationTitle != model.NavigationTitle || page.BrowserTitle != model.BrowserTitle))
                     {
                         // If this is new page or title has been updated it means
                         // the global sitemap changes. Notify the service.
@@ -451,6 +451,7 @@ namespace Piranha.Repositories
                     page.SiteId = model.SiteId;
                     page.Title = model.Title;
                     page.NavigationTitle = model.NavigationTitle;
+                    page.BrowserTitle = model.BrowserTitle;
                     page.Slug = model.Slug;
                     page.ParentId = model.ParentId;
                     page.SortOrder = model.SortOrder;
@@ -527,7 +528,7 @@ namespace Piranha.Repositories
                     page.LastModified = DateTime.Now;
                 }
 
-                if (isNew || page.Title != model.Title || page.NavigationTitle != model.NavigationTitle)
+                if (isNew || page.Title != model.Title || page.NavigationTitle != model.NavigationTitle || page.BrowserTitle != model.BrowserTitle)
                 {
                     // If this is new page or title has been updated it means
                     // the global sitemap changes. Notify the service.

@@ -193,6 +193,7 @@ namespace Piranha.Manager.Services
                 page.MetaKeywords = model.MetaKeywords;
                 page.MetaDescription = model.MetaDescription;
                 page.IsHidden = model.IsHidden;
+                page.BrowserTitle = model.BrowserTitle;
                 page.Published = !string.IsNullOrEmpty(model.Published) ? DateTime.Parse(model.Published) : (DateTime?)null;
 
                 // Save regions
@@ -386,6 +387,7 @@ namespace Piranha.Manager.Services
                 TypeId = page.TypeId,
                 Title = page.Title,
                 NavigationTitle = page.NavigationTitle,
+                BrowserTitle = page.BrowserTitle,
                 Slug = page.Slug,
                 MetaKeywords = page.MetaKeywords,
                 MetaDescription = page.MetaDescription,

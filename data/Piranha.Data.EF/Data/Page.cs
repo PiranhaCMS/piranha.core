@@ -50,6 +50,11 @@ namespace Piranha.Data
 	    public string NavigationTitle { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional text for use in the document's &lt;title&gt;&lt;/title&gt; tag.
+        /// </summary>
+        public string BrowserTitle { get; set; }
+
+        /// <summary>
         /// Gets/sets if the page should be visible
         /// in the navigation.
         /// </summary>

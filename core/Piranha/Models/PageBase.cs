@@ -47,6 +47,13 @@ namespace Piranha.Models
         public string NavigationTitle { get; set; }
 
         /// <summary>
+        /// Gets/sets the text for use in the document's &lt;title&gt;&lt;/title&gt; tag.
+        /// </summary>
+        [StringLength(128)]
+        public string BrowserTitle { get; set; }
+
+
+        /// <summary>
         /// Gets/sets if the page is hidden in the navigation.
         /// </summary>
         public bool IsHidden { get; set; }

@@ -52,6 +52,7 @@ namespace MvcWeb
                 var startpage = Models.TeaserPage.Create(api);
                 startpage.SiteId = siteId;
                 startpage.Title = "Piranha CMS - Open Source, Cross Platform Asp.NET Core CMS";
+                startpage.BrowserTitle = "Piranha CMS - BrowserTitle - Open Source, Cross Platform Asp.NET Core CMS";
                 startpage.NavigationTitle = "Home";
                 startpage.MetaKeywords = "Piranha, Piranha CMS, CMS, AspNetCore, DotNetCore, MVC, .NET, .NET Core";
                 startpage.MetaDescription = "Piranha is the fun, fast and lightweight framework for developing cms-based web applications with AspNetCore.";
@@ -215,6 +216,7 @@ namespace MvcWeb
                 blogpage.SiteId = siteId;
                 blogpage.Title = "Blog Archive";
                 blogpage.NavigationTitle = "Blog";
+                blogpage.BrowserTitle = "Blog Archive: Piranha CMS related news";
                 blogpage.SortOrder = 2;
                 blogpage.MetaKeywords = "Piranha, Piranha CMS, CMS, AspNetCore, DotNetCore, MVC, Blog, News";
                 blogpage.MetaDescription = "Read the latest blog posts about Piranha, fast and lightweight framework for developing cms-based web applications with AspNetCore.";
