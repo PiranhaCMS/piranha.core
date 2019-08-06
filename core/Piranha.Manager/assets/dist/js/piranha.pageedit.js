@@ -244,5 +244,8 @@ piranha.pageedit = new Vue({
         }
 
         this.loading = false;
+    },
+    components: {
+        datepicker: vuejsDatepicker
     }
 });

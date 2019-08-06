@@ -28,13 +28,13 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>@Localizer.Page["Navigation title"]</label>
-                                <input v-model="navigationTitle" type="text" maxlength="128" class="form-control form-control-lg">
+                                <input v-model="navigationTitle" type="text" maxlength="128" class="form-control">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>@Localizer.General["Slug"]</label>
-                                <input v-model="slug" type="text" maxlength="128" class="form-control form-control-lg">
+                                <input v-model="slug" type="text" maxlength="128" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -63,7 +63,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>@Localizer.General["Publish date"]</label>
-                                <input v-model="published" type="text" class="form-control">
+                                <datepicker v-model="published" :format="'yyyy-MM-dd'" :bootstrap-styling="true"></datepicker>
                             </div>
                         </div>
                     </div>
