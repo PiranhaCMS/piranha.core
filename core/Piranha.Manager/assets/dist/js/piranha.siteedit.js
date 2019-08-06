@@ -15,7 +15,13 @@ piranha.siteedit = new Vue({
         hostnames: null,
         isDefault: false,
         siteTypes: [],
+        regions: [],
         isNew: false,
+        selectedRegion: {
+            uid: "uid-settings",
+            name: null,
+            icon: null,
+        },
         callback: null,
     },
     methods: {
@@ -34,6 +40,13 @@ piranha.siteedit = new Vue({
                     self.hostnames = result.hostnames;
                     self.isDefault = result.isDefault;
                     self.siteTypes = result.siteTypes;
+                })
+                .catch(function (error) { console.log("error:", error ); });
+
+            fetch(piranha.baseUrl + "manager/api/site/content/" + id)
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    self.regions = result.regions;
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },
@@ -62,6 +75,25 @@ piranha.siteedit = new Vue({
                 piranha.notifications.push(result);
 
                 if (result.type === "success") {
+                    // Check if we should save content as well
+                    if (self.id != null && self.typeId != null) {
+                        var content = {
+                            id: self.id,
+                            typeId: self.typeId,
+                            title: self.title,
+                            regions: JSON.parse(JSON.stringify(self.regions))
+                        };
+
+                        fetch(piranha.baseUrl + "manager/api/site/savecontent", {
+                            method: "post",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(content)
+                        })
+                        .catch(function (error) { console.log("error:", error ); });
+                    }
+
                     $("#siteedit").modal("hide");
 
                     if (self.callback)
@@ -79,6 +111,11 @@ piranha.siteedit = new Vue({
             // Store callback
             this.callback = cb;
             this.isNew = false;
+            this.selectedRegion = {
+                uid: "uid-settings",
+                name: null,
+                icon: null,
+            };
 
             // Load the site data from the server
             this.load(id);
@@ -106,6 +143,11 @@ piranha.siteedit = new Vue({
 
                     self.isNew = true;
                     self.callback = cb;
+                    self.selectedRegion = {
+                        uid: "uid-settings",
+                        name: null,
+                        icon: null,
+                    };
                 })
                 .catch(function (error) { console.log("error:", error ); });
 
@@ -132,6 +174,9 @@ piranha.siteedit = new Vue({
                     }
                 })
                 .catch(function (error) { console.log("error:", error ); });
+        },
+        selectRegion: function (region) {
+            this.selectedRegion = region;
         },
     },
     updated: function () {

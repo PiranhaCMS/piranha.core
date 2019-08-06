@@ -53,6 +53,25 @@ namespace Piranha.Manager.Controllers
         }
 
         /// <summary>
+        /// Gets the site content with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The page edit model</returns>
+        [Route("content/{id:Guid}")]
+        [HttpGet]
+        [Authorize(Policy = Permission.SitesEdit)]
+        public async Task<IActionResult> GetContent(Guid id)
+        {
+            var model = await _service.GetContentById(id);
+
+            if (model != null)
+            {
+                return Ok(model);
+            }
+            return NotFound();
+        }
+
+        /// <summary>
         /// Creates a new site.
         /// </summary>
         /// <returns>The site edit model</returns>
@@ -77,6 +96,45 @@ namespace Piranha.Manager.Controllers
             try
             {
                 await _service.Save(model);
+            }
+            catch (ValidationException e)
+            {
+                // Validation did not succeed
+                return new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = e.Message
+                };
+            }
+            catch
+            {
+                return new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = _localizer.Site["An error occured while saving the site"]
+                };
+            }
+
+            return new StatusMessage
+            {
+                Type = StatusMessage.Success,
+                Body = _localizer.Site["The site was successfully saved"]
+            };
+        }
+
+        /// <summary>
+        /// Gets the site with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The page edit model</returns>
+        [Route("savecontent")]
+        [HttpPost]
+        [Authorize(Policy = Permission.SitesEdit)]
+        public async Task<StatusMessage> SaveContent(SiteContentEditModel model)
+        {
+            try
+            {
+                await _service.SaveContent(model);
             }
             catch (ValidationException e)
             {

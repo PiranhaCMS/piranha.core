@@ -9,6 +9,10 @@
  */
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using Piranha.Models;
@@ -50,6 +54,23 @@ namespace Piranha.Manager.Services
         }
 
         /// <summary>
+        /// Gets the content edit model for the site with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The edit model</returns>
+        public async Task<SiteContentEditModel> GetContentById(Guid id)
+        {
+            var site = await _api.Sites.GetContentByIdAsync(id);
+
+            if (site != null)
+            {
+                return Transform(site);
+            }
+            return null;
+        }
+
+
+        /// <summary>
         /// Creates a new site edit model.
         /// </summary>
         /// <returns>The edit model</returns>
@@ -61,6 +82,10 @@ namespace Piranha.Manager.Services
             };
         }
 
+        /// <summary>
+        /// Saves the given site.
+        /// </summary>
+        /// <param name="model">The site edit model</param>
         public async Task Save(SiteEditModel model)
         {
             var site = await _api.Sites.GetByIdAsync(model.Id);
@@ -81,6 +106,90 @@ namespace Piranha.Manager.Services
             site.IsDefault = model.IsDefault;
 
             await _api.Sites.SaveAsync(site);
+        }
+
+        public async Task SaveContent(SiteContentEditModel model)
+        {
+            var siteType = App.SiteTypes.GetById(model.TypeId);
+
+            if (siteType != null)
+            {
+                if (model.Id == Guid.Empty)
+                {
+                    model.Id = Guid.NewGuid();
+                }
+
+                var site = await _api.Sites.GetContentByIdAsync(model.Id);
+
+                if (site == null)
+                {
+                    site = _factory.Create<DynamicSiteContent>(siteType);
+                    site.Id = model.Id;
+                }
+
+                site.TypeId = model.TypeId;
+                site.Title = model.Title;
+
+                // Save regions
+                foreach (var region in siteType.Regions)
+                {
+                    var modelRegion = model.Regions
+                        .FirstOrDefault(r => r.Meta.Id == region.Id);
+
+                    if (region.Collection)
+                    {
+                        var listRegion = (IRegionList)((IDictionary<string, object>)site.Regions)[region.Id];
+
+                        listRegion.Clear();
+
+                        foreach (var item in modelRegion.Items)
+                        {
+                            if (region.Fields.Count == 1)
+                            {
+                                listRegion.Add(item.Fields[0].Model);
+                            }
+                            else
+                            {
+                                var postRegion = new ExpandoObject();
+
+                                foreach (var field in region.Fields)
+                                {
+                                    var modelField = item.Fields
+                                        .FirstOrDefault(f => f.Meta.Id == field.Id);
+                                    ((IDictionary<string, object>)postRegion)[field.Id] = modelField.Model;
+                                }
+                                listRegion.Add(postRegion);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var postRegion = ((IDictionary<string, object>)site.Regions)[region.Id];
+
+                        if (region.Fields.Count == 1)
+                        {
+                            ((IDictionary<string, object>)site.Regions)[region.Id] =
+                                modelRegion.Items[0].Fields[0].Model;
+                        }
+                        else
+                        {
+                            foreach (var field in region.Fields)
+                            {
+                                var modelField = modelRegion.Items[0].Fields
+                                    .FirstOrDefault(f => f.Meta.Id == field.Id);
+                                ((IDictionary<string, object>)postRegion)[field.Id] = modelField.Model;
+                            }
+                        }
+                    }
+                }
+
+                // Save site
+                await _api.Sites.SaveContentAsync(model.Id, site);
+            }
+            else
+            {
+                throw new ValidationException("Invalid Post Type.");
+            }
         }
 
         /// <summary>
@@ -110,6 +219,94 @@ namespace Piranha.Manager.Services
                     Title = t.Title
                 }).ToList()
             };
+        }
+
+        private SiteContentEditModel Transform(DynamicSiteContent site)
+        {
+            var type = App.SiteTypes.GetById(site.TypeId);
+
+            var model = new SiteContentEditModel
+            {
+                Id = site.Id,
+                TypeId = site.TypeId,
+                Title = site.Title,
+                UseBlocks = false
+            };
+
+            foreach (var regionType in type.Regions)
+            {
+                var region = new RegionModel
+                {
+                    Meta = new RegionMeta
+                    {
+                        Id = regionType.Id,
+                        Name = regionType.Title,
+                        Description = regionType.Description,
+                        Placeholder = regionType.ListTitlePlaceholder,
+                        IsCollection = regionType.Collection,
+                        Icon = regionType.Icon,
+                        Display = regionType.Display.ToString().ToLower()
+                    }
+                };
+                var regionListModel = ((IDictionary<string, object>)site.Regions)[regionType.Id];
+
+                if (!regionType.Collection)
+                {
+                    var regionModel = (IRegionList)Activator.CreateInstance(typeof(RegionList<>).MakeGenericType(regionListModel.GetType()));
+                    regionModel.Add(regionListModel);
+                    regionListModel = regionModel;
+                }
+
+                foreach (var regionModel in (IEnumerable)regionListModel)
+                {
+                    var regionItem = new RegionItemModel();
+
+                    foreach (var fieldType in regionType.Fields)
+                    {
+                        var appFieldType = App.Fields.GetByType(fieldType.Type);
+
+                        var field = new FieldModel
+                        {
+                            Meta = new FieldMeta
+                            {
+                                Id = fieldType.Id,
+                                Name = fieldType.Title,
+                                Component = appFieldType.Component,
+                                Placeholder = fieldType.Placeholder,
+                                IsHalfWidth = fieldType.Options.HasFlag(FieldOption.HalfWidth),
+                                Description = fieldType.Description
+                            }
+                        };
+
+                        if (regionType.Fields.Count > 1)
+                        {
+                            field.Model = (Extend.IField)((IDictionary<string, object>)regionModel)[fieldType.Id];
+
+                            if (regionType.ListTitleField == fieldType.Id)
+                            {
+                                regionItem.Title = field.Model.GetTitle();
+                                field.Meta.NotifyChange = true;
+                            }
+                        }
+                        else
+                        {
+                            field.Model = (Extend.IField)regionModel;
+                            field.Meta.NotifyChange = true;
+                            regionItem.Title = field.Model.GetTitle();
+                        }
+                        regionItem.Fields.Add(field);
+                    }
+
+                    if (string.IsNullOrWhiteSpace(regionItem.Title))
+                    {
+                        regionItem.Title = "...";
+                    }
+
+                    region.Items.Add(regionItem);
+                }
+                model.Regions.Add(region);
+            }
+            return model;
         }
     }
 }
