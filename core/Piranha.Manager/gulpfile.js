@@ -13,7 +13,9 @@ var gulp = require("gulp"),
     concat = require("gulp-concat"),
     cssmin = require("gulp-cssmin"),
     rename = require("gulp-rename"),
-    uglify = require("gulp-uglify");
+    uglifyes = require('uglify-es'),
+    composer = require('gulp-uglify/composer'),
+    uglify = composer(uglifyes, console);
 
 var output = "assets/dist/";
 //var output = "wwwroot/assets/";
@@ -39,6 +41,7 @@ var js = [
             "node_modules/nestable2/dist/jquery.nestable.min.js",
             "node_modules/dropzone/dist/dropzone.js",
             "node_modules/select2/dist/js/select2.js",
+            "node_modules/vuejs-datepicker/dist/vuejs-datepicker.min.js",
             "assets/src/js/piranha.accessibility.js",
             "assets/src/js/piranha.dropzone.js",
             "assets/src/js/piranha.utils.js",
@@ -178,7 +181,9 @@ gulp.task("min:js", function () {
         gulp.src(js[n].items, { base: "." })
             .pipe(concat(output + "js/" + js[n].name))
             .pipe(gulp.dest("."))
-            .pipe(uglify())
+            .pipe(uglify().on('error', function (e) {
+                console.log(e);
+            }))
             .pipe(rename({
                 suffix: ".min"
             }))
