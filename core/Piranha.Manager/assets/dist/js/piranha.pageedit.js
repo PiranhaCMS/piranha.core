@@ -74,6 +74,12 @@ piranha.pageedit = new Vue({
                 else if (this.contentRegions.length > 0) {
                     this.selectedRegion = this.contentRegions[0].meta;
                 }
+            } else {
+                this.selectedRegion = {
+                    uid: "uid-blocks",
+                    name: null,
+                    icon: null,
+                };
             }
         },
         load: function (id) {

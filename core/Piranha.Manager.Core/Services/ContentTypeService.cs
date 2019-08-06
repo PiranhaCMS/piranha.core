@@ -126,6 +126,23 @@ namespace Piranha.Manager.Services
         }
 
         /// <summary>
+        /// Creates a new site region.
+        /// </summary>
+        /// <param name="type">The type id</param>
+        /// <param name="region">The region id</param>
+        /// <returns>The new region item</returns>
+        public RegionItemModel CreateSiteRegion(string type, string region)
+        {
+            var siteType = App.SiteTypes.GetById(type);
+
+            if (siteType != null)
+            {
+                return CreateRegion(siteType, region);
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Creates a new region for the given content type.
         /// </summary>
         /// <param name="type">The content type</param>

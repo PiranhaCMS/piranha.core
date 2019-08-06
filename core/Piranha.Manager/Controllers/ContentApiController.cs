@@ -64,6 +64,13 @@ namespace Piranha.Manager.Controllers
             return NotFound();
         }
 
+        /// <summary>
+        /// Creates a new region for the specified content type.
+        /// </summary>
+        /// <param name="content">The type of content</param>
+        /// <param name="type">The content type</param>
+        /// <param name="region">The region id</param>
+        /// <returns>The new region model</returns>
         [Route("region/{content}/{type}/{region}")]
         [HttpGet]
         public IActionResult CreateRegion(string content, string type, string region)
@@ -75,6 +82,10 @@ namespace Piranha.Manager.Controllers
             else if (content == "post")
             {
                 return Ok(_service.CreatePostRegion(type, region));
+            }
+            else if (content == "site")
+            {
+                return Ok(_service.CreateSiteRegion(type, region));
             }
             return NotFound();
         }
