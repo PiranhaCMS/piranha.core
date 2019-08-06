@@ -692,7 +692,7 @@ namespace Piranha.Repositories
         /// Performs additional processing and loads related models.
         /// </summary>
         /// <param name="page">The source page</param>
-        /// <param name="model">The targe model</param>
+        /// <param name="model">The target model</param>
         private void Process<T>(Data.Page page, T model) where T : Models.PageBase
         {
             if (!(model is Models.IContentInfo))

@@ -10,7 +10,7 @@ namespace Piranha.Migrations
         {
             migrationBuilder.AddColumn<Guid>(
                                              name: "BrowserTitle",
-                                             table: "Piranha_PageRevisions",
+                                             table: "Piranha_Pages",
                                              nullable: true);
         }
 
@@ -18,7 +18,7 @@ namespace Piranha.Migrations
         {
             migrationBuilder.DropColumn(
                                         name: "BrowserTitle",
-                                        table: "Piranha_PageRevisions");
+                                        table: "Piranha_Pages");
         }
     }
 }
