@@ -46,7 +46,7 @@ Vue.component("region", {
         "    <div class='alert alert-info' v-html='model.meta.description'></div>" +
         "  </div>" +
         "  <div class='form-group' :class='{ \"col-sm-6\": field.meta.isHalfWidth, \"col-sm-12\": !field.meta.isHalfWidth }' v-for='field in model.items[0].fields'>" +
-        "    <label>{{ field.meta.name }}</label>" +
+        "    <label v-if='model.items[0].fields.length > 1'>{{ field.meta.name }}</label>" +
         "    <div v-if='field.meta.description != null' v-html='field.meta.description' class='field-description small text-muted'></div>" +
         "    <component v-if='field.model != null' v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:meta='field.meta' v-bind:model='field.model'></component>" +
         "  </div>" +
