@@ -18,6 +18,13 @@
             z-index: 1050;
         }
     }
+
+    .editor-preview-side {
+        padding: 1rem;
+
+        @include content();
+    }
+
     .CodeMirror:not(.CodeMirror-fullscreen) {
         width: 50%;
         border: 0;
@@ -27,6 +34,7 @@
     .CodeMirror-fullscreen {
         z-index: 1050;
     }
+
     .markdown-preview {
         width: 50%;
         padding: 1rem;
