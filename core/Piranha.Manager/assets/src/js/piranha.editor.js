@@ -3,6 +3,8 @@
 */
 
 piranha.editor = {
+    editors = [],
+
     addInline: function (id) {
         tinymce.init({
             selector: "#" + id,
@@ -21,8 +23,79 @@ piranha.editor = {
             block_formats: 'Paragraph=p;Header 1=h1;Header 2=h2;Header 3=h3;Header 4=h4;Code=pre;Quote=blockquote'
         });
     },
+    addInlineMarkdown: function (id, value, update) {
+        var preview = $("#" + id).parent().find(".markdown-preview");
+        var simplemde = new SimpleMDE({
+            element: document.getElementById(id),
+            status: false,
+            spellChecker: false,
+            hideIcons: ["preview", "guide"],
+            initialValue: value,
+            toolbar: [
+                "bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link",
+                {
+                    name: "image",
+                    action: function customFunction(editor) {
+                        piranha.mediapicker.openCurrentFolder(function(media) {
+                            var cm = editor.codemirror;
+                            var active = simplemde.getState(cm).image;
+
+                            var startPoint = cm.getCursor("start");
+                            var endPoint = cm.getCursor("end");
+
+                            if (active) {
+                                text = cm.getLine(startPoint.line);
+                                cm.replaceRange("![" + media.filename + "](" + media.publicUrl + ")",
+                                    {
+                                        line: startPoint.line,
+                                        ch: 0
+                                    });
+                            } else {
+                                cm.replaceSelection("![" + media.filename + "](" + media.publicUrl + ")");
+                            }
+                            cm.setSelection(startPoint, endPoint);
+                            cm.focus();
+                        }, "Image");
+                    },
+                    className: "fa fa-picture-o",
+                    title: "Image"
+                },
+                "side-by-side", "fullscreen"
+            ],
+            renderingConfig: {
+                singleLineBreaks: false
+            }
+        });
+        simplemde.codemirror.on("change", function() {
+            preview.html(simplemde.markdown(simplemde.value()));
+            update(simplemde.value());
+        });
+        setTimeout(function() {
+            preview.html(simplemde.markdown(simplemde.value()));
+            simplemde.codemirror.refresh();
+        }.bind(simplemde), 0);
+
+        this.editors[id] = simplemde;
+    },
     remove: function (id) {
         tinymce.remove(tinymce.get(id));
+    },
+    removeMarkdown: function (id) {
+        var simplemde = this.editors[id];
+
+        if (simplemde != null) {
+            var index = this.editors.indexOf(simplemde);
+
+            simplemde.toTextArea();
+            this.editors.splice[index, 1];
+        }
+    },
+    refreshMarkdown: function () {
+        for (var key in this.editors) {
+            if (this.editors.hasOwnProperty(key)) {
+                this.editors[key].codemirror.refresh();
+            }
+        }
     }
 };
 

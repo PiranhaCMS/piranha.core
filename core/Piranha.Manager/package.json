@@ -26,6 +26,7 @@
     "vue": "2.6.10",
     "dropzone": "5.5.1",
     "select2": "4.0.7",
-    "vuejs-datepicker": "1.6.2"
+    "vuejs-datepicker": "1.6.2",
+    "simplemde": "1.11.2"
   }
 }

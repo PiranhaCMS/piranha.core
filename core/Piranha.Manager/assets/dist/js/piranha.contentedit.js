@@ -778,169 +778,6 @@ Vue.component("video-block", {
         "</div>"
 });
 
-Vue.component("checkbox-field", {
-    props: ["uid", "model", "meta"],
-    template:
-        "<div class='form-group form-check'>" +
-        "  <input type='checkbox' class='form-check-input' :id='meta.uid' v-model='model.value'>" +
-        "  <label class='form-check-label' :for='meta.uid'>{{ meta.placeholder}}</label>" +
-        "</div>"
-});
-
-Vue.component("date-field", {
-    props: ["uid", "model", "meta"],
-    template:
-        "<input class='form-control' type='text' :placeholder='meta.placeholder' v-model='model.value'>"
-});
-
-/*global
-    piranha
-*/
-
-Vue.component("document-field", {
-    props: ["uid", "model", "meta"],
-    methods: {
-        clear: function () {
-            // clear media from block
-        },
-        select: function () {
-            if (this.model.media != null) {
-                piranha.mediapicker.open(this.update, "Document", this.model.media.folderId);
-            } else {
-                piranha.mediapicker.openCurrentFolder(this.update, "Document");
-            }
-        },
-        remove: function () {
-            this.model.id = null;
-            this.model.media = null;
-        },
-        update: function (media) {
-            if (media.type === "Document") {
-                this.model.id = media.id;
-                this.model.media = media;
-
-                // Tell parent that title has been updated
-                this.$emit('update-title', {
-                    uid: this.uid,
-                    title: this.model.media.filename
-                });
-            } else {
-                console.log("No document was selected");
-            }
-        }
-    },
-    computed: {
-        isEmpty: function () {
-            return this.model.media == null;
-        }
-    },
-    mounted: function() {
-        this.model.getTitle = function () {
-            if (this.model.media != null) {
-                return this.model.media.filename;
-            } else {
-                return "No document selected";
-            }
-        };
-    },
-    template:
-        "<div class='media-field' :class='{ empty: isEmpty }'>" +
-        "  <div class='media-picker'>" +
-        "    <div class='btn-group float-right'>" +
-        "      <button v-on:click.prevent='select' class='btn btn-primary text-center'>" +
-        "        <i class='fas fa-plus'></i>" +
-        "      </button>" +
-        "      <button v-on:click.prevent='remove' class='btn btn-danger text-center'>" +
-        "        <i class='fas fa-times'></i>" +
-        "      </button>" +
-        "    </div>" +
-        "    <div class='card text-left'>" +
-        "      <div class='card-body' v-if='isEmpty'>" +
-        "        <span v-if='meta.placeholder != null' class='text-secondary'>{{ meta.placeholder }}</span>" +
-        "        <span v-if='meta.placeholder == null' class='text-secondary'>&nbsp;</span>" +
-        "      </div>" +
-        "      <div class='card-body' v-else>" +
-        "        <a href='#' v-on:click.prevent='piranha.preview.open(model.id)'>{{ model.media.filename }}</a>" +
-        "      </div>" +
-        "    </div>" +
-        "  </div>" +
-        "</div>"
-});
-
-/*global
-    piranha
-*/
-
-Vue.component("video-field", {
-    props: ["uid", "model", "meta"],
-    methods: {
-        clear: function () {
-            // clear media from block
-        },
-        select: function () {
-            if (this.model.media != null) {
-                piranha.mediapicker.open(this.update, "Video", this.model.media.folderId);
-            } else {
-                piranha.mediapicker.openCurrentFolder(this.update, "Video");
-            }
-        },
-        remove: function () {
-            this.model.id = null;
-            this.model.media = null;
-        },
-        update: function (media) {
-            if (media.type === "Video") {
-                this.model.id = media.id;
-                this.model.media = media;
-
-                // Tell parent that title has been updated
-                this.$emit('update-title', {
-                    uid: this.uid,
-                    title: this.model.media.filename
-                });
-            } else {
-                console.log("No video was selected");
-            }
-        }
-    },
-    computed: {
-        isEmpty: function () {
-            return this.model.media == null;
-        }
-    },
-    mounted: function() {
-        this.model.getTitle = function () {
-            if (this.model.media != null) {
-                return this.model.media.filename;
-            } else {
-                return "No video selected";
-            }
-        };
-    },
-    template:
-        "<div class='media-field' :class='{ empty: isEmpty }'>" +
-        "  <div class='media-picker'>" +
-        "    <div class='btn-group float-right'>" +
-        "      <button v-on:click.prevent='select' class='btn btn-primary text-center'>" +
-        "        <i class='fas fa-plus'></i>" +
-        "      </button>" +
-        "      <button v-on:click.prevent='remove' class='btn btn-danger text-center'>" +
-        "        <i class='fas fa-times'></i>" +
-        "      </button>" +
-        "    </div>" +
-        "    <div class='card text-left'>" +
-        "      <div class='card-body' v-if='isEmpty'>" +
-        "        <span v-if='meta.placeholder != null' class='text-secondary'>{{ meta.placeholder }}</span>" +
-        "        <span v-if='meta.placeholder == null' class='text-secondary'>&nbsp;</span>" +
-        "      </div>" +
-        "      <div class='card-body' v-else>" +
-        "        <a href='#' v-on:click.prevent='piranha.preview.open(model.id)'>{{ model.media.filename }}</a>" +
-        "      </div>" +
-        "    </div>" +
-        "  </div>" +
-        "</div>"
-});
-
 /*global
     piranha
 */
@@ -1015,11 +852,33 @@ Vue.component("audio-field", {
         "</div>"
 });
 
+Vue.component("checkbox-field", {
+    props: ["uid", "model", "meta"],
+    template:
+        "<div class='form-group form-check'>" +
+        "  <input type='checkbox' class='form-check-input' :id='meta.uid' v-model='model.value'>" +
+        "  <label class='form-check-label' :for='meta.uid'>{{ meta.placeholder}}</label>" +
+        "</div>"
+});
+
+Vue.component("date-field", {
+    props: ["uid", "model", "meta"],
+    template: "<datepicker v-model='model.value' :format='_options.format' :bootstrap-styling='true'></datepicker>",
+    components: {
+        datepicker: vuejsDatepicker
+    },
+    created: function () {
+        this._options = {
+            format = "yyyy-MM-dd"
+        };
+    }
+});
+
 /*global
     piranha
 */
 
-Vue.component("media-field", {
+Vue.component("document-field", {
     props: ["uid", "model", "meta"],
     methods: {
         clear: function () {
@@ -1027,9 +886,9 @@ Vue.component("media-field", {
         },
         select: function () {
             if (this.model.media != null) {
-                piranha.mediapicker.open(this.update, null, this.model.media.folderId);
+                piranha.mediapicker.open(this.update, "Document", this.model.media.folderId);
             } else {
-                piranha.mediapicker.openCurrentFolder(this.update, null);
+                piranha.mediapicker.openCurrentFolder(this.update, "Document");
             }
         },
         remove: function () {
@@ -1037,14 +896,18 @@ Vue.component("media-field", {
             this.model.media = null;
         },
         update: function (media) {
-            this.model.id = media.id;
-            this.model.media = media;
+            if (media.type === "Document") {
+                this.model.id = media.id;
+                this.model.media = media;
 
-            // Tell parent that title has been updated
-            this.$emit('update-title', {
-                uid: this.uid,
-                title: this.model.media.filename
-            });
+                // Tell parent that title has been updated
+                this.$emit('update-title', {
+                    uid: this.uid,
+                    title: this.model.media.filename
+                });
+            } else {
+                console.log("No document was selected");
+            }
         }
     },
     computed: {
@@ -1057,7 +920,7 @@ Vue.component("media-field", {
             if (this.model.media != null) {
                 return this.model.media.filename;
             } else {
-                return "No media selected";
+                return "No document selected";
             }
         };
     },
@@ -1083,28 +946,6 @@ Vue.component("media-field", {
         "    </div>" +
         "  </div>" +
         "</div>"
-});
-
-Vue.component("string-field", {
-    props: ["uid", "model", "meta"],
-    methods: {
-        update: function () {
-            if (this.meta.notifyChange) {
-                console.log("update field: ", {
-                    uid: this.uid,
-                    title: this.model.value
-                });
-
-                // Tell parent that value has been updated
-                this.$emit('update-field', {
-                    uid: this.uid,
-                    title: this.model.value
-                });
-            }
-        }
-    },
-    template:
-        "<input class='form-control' type='text' :placeholder='meta.placeholder' v-model='model.value' v-on:change='update()'>"
 });
 
 Vue.component("html-field", {
@@ -1210,16 +1051,118 @@ Vue.component("image-field", {
         "</div>"
 });
 
+Vue.component("markdown-field", {
+    props: ["uid", "model"],
+    data: function () {
+        return {
+            body: this.model.value
+        };
+    },
+    methods: {
+        update: function (md) {
+            this.model.value = md;
+        }
+    },
+    computed: {
+        isEmpty: function () {
+            return this.model.value == null || this.model.value === "";
+        }
+    },
+    mounted: function () {
+        var self = this;
+
+        piranha.editor.addInlineMarkdown(self.uid, self.model.value, self.update);
+    },
+    beforeDestroy: function () {
+        piranha.editor.remove(this.uid);
+    },
+    template:
+        "<div class='markdown-field' :class='{ empty: isEmpty }'>" +
+        "  <textarea :id='uid' spellcheck='false' v-html='model.value'></textarea>" +
+        "  <div class='markdown-preview'></div>" +
+        "</div>"
+});
+
+/*global
+    piranha
+*/
+
+Vue.component("media-field", {
+    props: ["uid", "model", "meta"],
+    methods: {
+        clear: function () {
+            // clear media from block
+        },
+        select: function () {
+            if (this.model.media != null) {
+                piranha.mediapicker.open(this.update, null, this.model.media.folderId);
+            } else {
+                piranha.mediapicker.openCurrentFolder(this.update, null);
+            }
+        },
+        remove: function () {
+            this.model.id = null;
+            this.model.media = null;
+        },
+        update: function (media) {
+            this.model.id = media.id;
+            this.model.media = media;
+
+            // Tell parent that title has been updated
+            this.$emit('update-title', {
+                uid: this.uid,
+                title: this.model.media.filename
+            });
+        }
+    },
+    computed: {
+        isEmpty: function () {
+            return this.model.media == null;
+        }
+    },
+    mounted: function() {
+        this.model.getTitle = function () {
+            if (this.model.media != null) {
+                return this.model.media.filename;
+            } else {
+                return "No media selected";
+            }
+        };
+    },
+    template:
+        "<div class='media-field' :class='{ empty: isEmpty }'>" +
+        "  <div class='media-picker'>" +
+        "    <div class='btn-group float-right'>" +
+        "      <button v-on:click.prevent='select' class='btn btn-primary text-center'>" +
+        "        <i class='fas fa-plus'></i>" +
+        "      </button>" +
+        "      <button v-on:click.prevent='remove' class='btn btn-danger text-center'>" +
+        "        <i class='fas fa-times'></i>" +
+        "      </button>" +
+        "    </div>" +
+        "    <div class='card text-left'>" +
+        "      <div class='card-body' v-if='isEmpty'>" +
+        "        <span v-if='meta.placeholder != null' class='text-secondary'>{{ meta.placeholder }}</span>" +
+        "        <span v-if='meta.placeholder == null' class='text-secondary'>&nbsp;</span>" +
+        "      </div>" +
+        "      <div class='card-body' v-else>" +
+        "        <a href='#' v-on:click.prevent='piranha.preview.open(model.id)'>{{ model.media.filename }}</a>" +
+        "      </div>" +
+        "    </div>" +
+        "  </div>" +
+        "</div>"
+});
+
+Vue.component("missing-field", {
+    props: ["meta", "model"],
+    template:
+        "<div class='alert alert-danger text-center' role='alert'>No component registered for <code>{{ meta.type }}</code></div>"
+});
+
 Vue.component("number-field", {
     props: ["uid", "model", "meta"],
     template:
         "<input class='form-control' type='text' :placeholder='meta.placeholder' v-model='model.value'>"
-});
-
-Vue.component("text-field", {
-    props: ["uid", "model", "meta"],
-    template:
-        "<textarea class='form-control' rows='4' :placeholder='meta.placeholder' v-model='model.value'></textarea>"
 });
 
 /*global
@@ -1354,8 +1297,104 @@ Vue.component("post-field", {
         "</div>"
 });
 
-Vue.component("missing-field", {
-    props: ["meta", "model"],
+Vue.component("string-field", {
+    props: ["uid", "model", "meta"],
+    methods: {
+        update: function () {
+            if (this.meta.notifyChange) {
+                console.log("update field: ", {
+                    uid: this.uid,
+                    title: this.model.value
+                });
+
+                // Tell parent that value has been updated
+                this.$emit('update-field', {
+                    uid: this.uid,
+                    title: this.model.value
+                });
+            }
+        }
+    },
     template:
-        "<div class='alert alert-danger text-center' role='alert'>No component registered for <code>{{ meta.type }}</code></div>"
+        "<input class='form-control' type='text' :placeholder='meta.placeholder' v-model='model.value' v-on:change='update()'>"
+});
+
+Vue.component("text-field", {
+    props: ["uid", "model", "meta"],
+    template:
+        "<textarea class='form-control' rows='4' :placeholder='meta.placeholder' v-model='model.value'></textarea>"
+});
+
+/*global
+    piranha
+*/
+
+Vue.component("video-field", {
+    props: ["uid", "model", "meta"],
+    methods: {
+        clear: function () {
+            // clear media from block
+        },
+        select: function () {
+            if (this.model.media != null) {
+                piranha.mediapicker.open(this.update, "Video", this.model.media.folderId);
+            } else {
+                piranha.mediapicker.openCurrentFolder(this.update, "Video");
+            }
+        },
+        remove: function () {
+            this.model.id = null;
+            this.model.media = null;
+        },
+        update: function (media) {
+            if (media.type === "Video") {
+                this.model.id = media.id;
+                this.model.media = media;
+
+                // Tell parent that title has been updated
+                this.$emit('update-title', {
+                    uid: this.uid,
+                    title: this.model.media.filename
+                });
+            } else {
+                console.log("No video was selected");
+            }
+        }
+    },
+    computed: {
+        isEmpty: function () {
+            return this.model.media == null;
+        }
+    },
+    mounted: function() {
+        this.model.getTitle = function () {
+            if (this.model.media != null) {
+                return this.model.media.filename;
+            } else {
+                return "No video selected";
+            }
+        };
+    },
+    template:
+        "<div class='media-field' :class='{ empty: isEmpty }'>" +
+        "  <div class='media-picker'>" +
+        "    <div class='btn-group float-right'>" +
+        "      <button v-on:click.prevent='select' class='btn btn-primary text-center'>" +
+        "        <i class='fas fa-plus'></i>" +
+        "      </button>" +
+        "      <button v-on:click.prevent='remove' class='btn btn-danger text-center'>" +
+        "        <i class='fas fa-times'></i>" +
+        "      </button>" +
+        "    </div>" +
+        "    <div class='card text-left'>" +
+        "      <div class='card-body' v-if='isEmpty'>" +
+        "        <span v-if='meta.placeholder != null' class='text-secondary'>{{ meta.placeholder }}</span>" +
+        "        <span v-if='meta.placeholder == null' class='text-secondary'>&nbsp;</span>" +
+        "      </div>" +
+        "      <div class='card-body' v-else>" +
+        "        <a href='#' v-on:click.prevent='piranha.preview.open(model.id)'>{{ model.media.filename }}</a>" +
+        "      </div>" +
+        "    </div>" +
+        "  </div>" +
+        "</div>"
 });
