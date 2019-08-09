@@ -9,6 +9,14 @@
 }
 
 .tox {
+    .tox-dialog__header {
+        .tox-button {
+            border-radius: 50%;
+            transition: background-color ease-in-out .2s;
+            border: none;
+        }
+    }
+
     .tox-dialog__body {
         .tox-button {
             height: 36px;
