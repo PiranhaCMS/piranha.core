@@ -18,8 +18,6 @@
 }
 @section partials
 {
-    <partial name="~/Areas/Manager/Shared/Partial/_SiteModal.cshtml" />
-
     @foreach (var action in Piranha.Manager.Actions.PageList)
     {
         if (!string.IsNullOrWhiteSpace(action.PartialView))
@@ -84,6 +82,7 @@
             </div>
         </div>
     </div>
-
     <partial name="Partial/_PageAddModal" />
 </div>
+
+<partial name="~/Areas/Manager/Shared/Partial/_SiteModal.cshtml" />

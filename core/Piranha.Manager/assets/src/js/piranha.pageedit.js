@@ -227,9 +227,15 @@ piranha.pageedit = new Vue({
         },
         selectRegion: function (region) {
             this.selectedRegion = region;
+            Vue.nextTick(function () {
+                piranha.editor.refreshMarkdown();
+            });
         },
         selectSetting: function (uid) {
             this.selectedSetting = uid;
+            Vue.nextTick(function () {
+                piranha.editor.refreshMarkdown();
+            });
         }
     },
     created: function () {

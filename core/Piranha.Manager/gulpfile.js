@@ -21,7 +21,8 @@ var output = "assets/dist/";
 //var output = "wwwroot/assets/";
 
 var css = [
-    "assets/src/scss/slim.scss"
+    "assets/src/scss/slim.scss",
+    "assets/src/scss/full.scss"
 ];
 
 var fonts = [
@@ -42,6 +43,7 @@ var js = [
             "node_modules/dropzone/dist/dropzone.js",
             "node_modules/select2/dist/js/select2.js",
             "node_modules/vuejs-datepicker/dist/vuejs-datepicker.min.js",
+            "node_modules/simplemde/dist/simplemde.min.js",
             "assets/src/js/piranha.accessibility.js",
             "assets/src/js/piranha.dropzone.js",
             "assets/src/js/piranha.utils.js",
@@ -98,20 +100,21 @@ var js = [
             "assets/src/js/components/blocks/audio-block.js",
             "assets/src/js/components/blocks/video-block.js",
 
+            "assets/src/js/components/fields/audio-field.js",
             "assets/src/js/components/fields/checkbox-field.js",
             "assets/src/js/components/fields/date-field.js",
             "assets/src/js/components/fields/document-field.js",
-            "assets/src/js/components/fields/video-field.js",
-            "assets/src/js/components/fields/audio-field.js",
-            "assets/src/js/components/fields/media-field.js",
-            "assets/src/js/components/fields/string-field.js",
             "assets/src/js/components/fields/html-field.js",
             "assets/src/js/components/fields/image-field.js",
+            "assets/src/js/components/fields/markdown-field.js",
+            "assets/src/js/components/fields/media-field.js",
+            "assets/src/js/components/fields/missing-field.js",
             "assets/src/js/components/fields/number-field.js",
-            "assets/src/js/components/fields/text-field.js",
             "assets/src/js/components/fields/page-field.js",
             "assets/src/js/components/fields/post-field.js",
-            "assets/src/js/components/fields/missing-field.js"
+            "assets/src/js/components/fields/string-field.js",
+            "assets/src/js/components/fields/text-field.js",
+            "assets/src/js/components/fields/video-field.js"
         ]
     },
     {

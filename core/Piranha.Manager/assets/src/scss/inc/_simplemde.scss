@@ -1,0 +1,44 @@
+@import "variables";
+
+.markdown-field {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    border: solid 1px $gray-400;
+    border-radius: $border-radius;
+
+    .editor-toolbar {
+        &:not(.fullscreen) {
+            width: 100%;
+            border: 0;
+            border-bottom: solid 1px $gray-400;
+        }
+
+        &.fullscreen {
+            z-index: 1050;
+        }
+    }
+
+    .editor-preview-side {
+        padding: 1rem;
+
+        @include content();
+    }
+
+    .CodeMirror:not(.CodeMirror-fullscreen) {
+        width: 50%;
+        border: 0;
+        border-right: solid 1px $gray-400;
+        border-radius: 0;
+    }
+    .CodeMirror-fullscreen {
+        z-index: 1050;
+    }
+
+    .markdown-preview {
+        width: 50%;
+        padding: 1rem;
+
+        @include content();
+    }
+}
