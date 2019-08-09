@@ -21,7 +21,8 @@ var output = "assets/dist/";
 //var output = "wwwroot/assets/";
 
 var css = [
-    "assets/src/scss/slim.scss"
+    "assets/src/scss/slim.scss",
+    "assets/src/scss/full.scss"
 ];
 
 var fonts = [
