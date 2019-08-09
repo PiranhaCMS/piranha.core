@@ -1,7 +1,20 @@
 .tox-tinymce-inline {
     width: auto !important;
     margin-top: -.5rem !important;
-    z-index: 2000;
+    z-index: 2000 !important;
+}
+
+.tox-silver-sink {
+    z-index: 2010 !important;
+}
+
+.tox {
+    .tox-dialog__body {
+        .tox-button {
+            height: 36px;
+            margin-left: 4px;
+        }
+    }
 }
 
 .html-block, .html-column-block, .html-field {

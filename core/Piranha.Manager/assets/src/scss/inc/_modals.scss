@@ -1,5 +1,13 @@
 @import "variables";
 
+.modal-backdrop {
+    z-index: 3000;
+}
+
+.modal {
+    z-index: 3010;
+}
+
 .modal-panel {
     .modal-dialog {
         width: 500px;

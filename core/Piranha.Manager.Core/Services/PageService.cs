@@ -363,7 +363,8 @@ namespace Piranha.Manager.Services
                 Status = drafts.Contains(item.Id) ? _localizer.General[PageListModel.PageItem.Draft] :
                     !item.Published.HasValue ? _localizer.General[PageListModel.PageItem.Unpublished] : "",
                 EditUrl = "manager/page/edit/",
-                IsExpanded = level < expandedLevels
+                IsExpanded = level < expandedLevels,
+                Permalink = item.Permalink
             };
 
             foreach (var child in item.Items)

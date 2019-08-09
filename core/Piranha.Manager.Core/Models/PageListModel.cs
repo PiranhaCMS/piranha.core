@@ -42,6 +42,7 @@ namespace Piranha.Manager.Models
             public string EditUrl { get; set; }
             public bool IsDraft { get; set; }
             public bool IsExpanded { get; set; }
+            public string Permalink { get; set; }
             public List<PageItem> Items { get; set; } = new List<PageItem>();
         }
 
