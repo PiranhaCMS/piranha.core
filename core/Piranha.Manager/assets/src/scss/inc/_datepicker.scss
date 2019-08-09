@@ -1,0 +1,32 @@
+@import "variables";
+
+.vdp-datepicker {
+    .vdp-datepicker__calendar {
+        header {
+            span {
+            }
+
+            .prev {
+            }
+
+            .next {
+            }
+        }
+
+        .cell {
+            &.selected,
+            &.selected:hover,
+            &.selected.highlighted {
+                color: white;
+                background: $blue;
+            }
+
+            &:not(.blank):not(.disabled).day:hover,
+            &:not(.blank):not(.disabled).month:hover,
+            &:not(.blank):not(.disabled).year:hover {
+                border-color: $blue;
+            }
+        }
+    }
+}
+
