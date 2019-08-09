@@ -4,16 +4,15 @@
     .vdp-datepicker__calendar {
         header {
             span {
-            }
-
-            .prev {
-            }
-
-            .next {
+                font-weight: 500;
             }
         }
 
         .cell {
+            &.day-header {
+                font-weight: 500;
+            }
+
             &.selected,
             &.selected:hover,
             &.selected.highlighted {
