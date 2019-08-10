@@ -31,15 +31,15 @@
     <value>Aliaser</value>
   </data>
   <data name="Sites" xml:space="preserve">
-    <value>Sites</value>
+    <value>Sider</value>
   </data>
   <data name="Config" xml:space="preserve">
     <value>Config</value>
   </data>
   <data name="Modules" xml:space="preserve">
-    <value>Modules</value>
+    <value>Moduler</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+    <value>Logg ut</value>
   </data>
 </root>
