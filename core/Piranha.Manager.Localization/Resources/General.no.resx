@@ -115,45 +115,45 @@
     <value>Lagre</value>
   </data>
   <data name="Scheduled" xml:space="preserve">
-    <value>Scheduled</value>
+    <value>Planlagt</value>
   </data>
   <data name="Search..." xml:space="preserve">
-    <value>Search...</value>
+    <value>Søk...</value>
   </data>
   <data name="Select block" xml:space="preserve">
-    <value>Select block</value>
+    <value>Velg blokk</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Innstillinger</value>
   </data>
   <data name="Size" xml:space="preserve">
-    <value>Size</value>
+    <value>Størrelse</value>
   </data>
   <data name="Slug" xml:space="preserve">
-    <value>Slug</value>
+    <value>URL-segment</value>
   </data>
   <data name="System" xml:space="preserve">
     <value>System</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Tittel</value>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Update</value>
+    <value>Oppdater</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Type</value>
   </data>
   <data name="Unpublish" xml:space="preserve">
-    <value>Unpublish</value>
+    <value>Avpubliser</value>
   </data>
   <data name="Unpublished" xml:space="preserve">
-    <value>Unpublished</value>
+    <value>Upublisert</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Version</value>
+    <value>Versjon</value>
   </data>
   <data name="Width" xml:space="preserve">
-    <value>Width</value>
+    <value>Bredde</value>
   </data>
 </root>
