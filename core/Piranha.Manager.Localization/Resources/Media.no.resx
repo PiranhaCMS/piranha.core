@@ -16,7 +16,7 @@
     <value>Legg til mappe</value>
   </data>
   <data name="Drop files here or click to upload." xml:space="preserve">
-    <value>Slipp filer her eller klikk for å laste opp.</value>
+    <value>Dra filer hit eller klikk for å laste opp.</value>
   </data>
   <data name="Download media" xml:space="preserve">
     <value>Last ned media</value>
@@ -40,6 +40,6 @@
     <value>Velg media</value>
   </data>
   <data name="Your browser does not support the video tag." xml:space="preserve">
-    <value>Nettleseren din støtter ikke video tagen.</value>
+    <value>Nettleseren din støtter ikke video.</value>
   </data>
 </root>
