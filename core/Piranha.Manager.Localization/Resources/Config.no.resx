@@ -16,44 +16,44 @@
     <value>Konfigurasjon</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>Hierarchical page slugs</value>
+    <value>Hierarkisk URLer</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>If page slugs should include the parent slug.</value>
+    <value>Om siders URL-segment skal skapes utifra sin foreldre.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
-    <value>Expanded levels in the sitemap</value>
+    <value>Antall utvidede nivåer i sidestruktur</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
-    <value>Archive page size</value>
+    <value>Arkivstørrelse</value>
   </data>
   <data name="Caching" xml:space="preserve">
-    <value>Caching</value>
+    <value>Cache</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Page cache expiration (minutes)</value>
+    <value>Gyldighet for sider (minutter)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
-    <value>Page revisions</value>
+    <value>Sideversjoner</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Post cache expiration (minutes)</value>
+    <value>Gyldighet for artikler (minutter)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
-    <value>Post revisions</value>
+    <value>Artikelversjoner</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
     <value>Media CDN</value>
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
-    <value>If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps.</value>
+    <value>Hvis URL-segmenter skal være basert på foreldrene når de opprettes. Dette anbefales for større nettsteder.</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
-    <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
+    <value>Hvor mange nivåer i sidestrukturen skal angis som standard. Dette er nyttig for mindre nettsteder uten for mange sider.</value>
   </data>
   <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
-    <value>The default page size for archive pages. Please note that this this can be overridden for specific archives.</value>
+    <value>Hvor mange artikler som skal lastes som standard i et arkiv. Merk at dette kan omgås av spesifikke arkivsider.</value>
   </data>
   <data name="The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation." xml:space="preserve">
     <value>The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation.</value>
