@@ -19,9 +19,9 @@
     <value>Rediger side</value>
   </data>
   <data name="Hostnames" xml:space="preserve">
-    <value>Tjenernavn</value>
+    <value>Domenenavn</value>
   </data>
   <data name="If this should be the default site of the installation." xml:space="preserve">
-    <value>Om denne siden skal være standard for installasjonen.</value>
+    <value>Om denne siden skal være standardsiden for denne installasjonen.</value>
   </data>
 </root>
