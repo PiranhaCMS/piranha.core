@@ -19,7 +19,7 @@ Vue.component("sitemap-item", {
         "        <a v-if='item.items.length > 0 && !item.isExpanded' v-on:click.prevent='toggleItem(item)' class='expand' href='#'><i class='fas fa-plus'></i></a>" +
         "      </span>" +
         "      <a :href='piranha.baseUrl + item.editUrl + item.id'>" +
-        "        {{ item.title }}" +
+        "        <span v-html='item.title'></span>" +
         "        <span v-if='item.status' class='badge badge-info'>{{ item.status }}</span>" +
         "      </a>" +
         "    </div>" +
