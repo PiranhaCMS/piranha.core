@@ -47,7 +47,9 @@ namespace Piranha.Manager.Services
         {
             var model = new PageListModel
             {
-                Sites = (await _api.Sites.GetAllAsync()).Select(s => new PageListModel.SiteItem
+                Sites = (await _api.Sites.GetAllAsync())
+                    .OrderByDescending(s => s.IsDefault)
+                    .Select(s => new PageListModel.SiteItem
                 {
                     Id = s.Id,
                     Title = s.Title,
