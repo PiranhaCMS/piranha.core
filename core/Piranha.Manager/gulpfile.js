@@ -112,6 +112,7 @@ var js = [
             "assets/src/js/components/fields/number-field.js",
             "assets/src/js/components/fields/page-field.js",
             "assets/src/js/components/fields/post-field.js",
+            "assets/src/js/components/fields/readonly-field.js",
             "assets/src/js/components/fields/string-field.js",
             "assets/src/js/components/fields/text-field.js",
             "assets/src/js/components/fields/video-field.js"

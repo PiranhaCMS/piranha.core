@@ -10,13 +10,11 @@
 
 using System;
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Piranha.Extend;
 using Piranha.Extend.Serializers;
 using Piranha.Runtime;
 using Piranha.Security;
-using Piranha.Services;
 
 namespace Piranha
 {
@@ -213,6 +211,7 @@ namespace Piranha
             Instance._fields.Register<Extend.Fields.NumberField>();
             Instance._fields.Register<Extend.Fields.PageField>();
             Instance._fields.Register<Extend.Fields.PostField>();
+            Instance._fields.Register<Extend.Fields.ReadonlyField>();
             Instance._fields.Register<Extend.Fields.StringField>();
             Instance._fields.Register<Extend.Fields.TextField>();
             Instance._fields.Register<Extend.Fields.VideoField>();

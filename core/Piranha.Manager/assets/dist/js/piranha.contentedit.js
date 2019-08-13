@@ -7,7 +7,7 @@ Vue.component("region", {
         addItem: function () {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/content/region/" + this.content + "/" + this.type + "/" + this.model.meta.name)
+            fetch(piranha.baseUrl + "manager/api/content/region/" + this.content + "/" + this.type + "/" + this.model.meta.id)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.model.items.push(result);
@@ -1297,6 +1297,14 @@ Vue.component("post-field", {
         "      </div>" +
         "    </div>" +
         "  </div>" +
+        "</div>"
+});
+
+Vue.component("readonly-field", {
+    props: ["uid", "model", "meta"],
+    template:
+        "<div class='alert alert-secondary mb-0'>" +
+        "  <pre class='mb-0'>{{ model.value }}</pre>" +
         "</div>"
 });
 
