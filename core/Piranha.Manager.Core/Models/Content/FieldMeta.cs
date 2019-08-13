@@ -8,6 +8,8 @@
  *
  */
 
+using System.Collections.Generic;
+
 namespace Piranha.Manager.Models.Content
 {
     /// <summary>
@@ -29,5 +31,10 @@ namespace Piranha.Manager.Models.Content
         /// Gets/sets if this field should notify parent on change.
         /// </summary>
         public bool NotifyChange { get; set; }
+
+        /// <summary>
+        /// Gets/sets the field options
+        /// </summary>
+        public IDictionary<int, string> Options { get; set; } = new Dictionary<int, string>();
     }
 }
