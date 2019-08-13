@@ -7,7 +7,7 @@ Vue.component("region", {
         addItem: function () {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/content/region/" + this.content + "/" + this.type + "/" + this.model.meta.name)
+            fetch(piranha.baseUrl + "manager/api/content/region/" + this.content + "/" + this.type + "/" + this.model.meta.id)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.model.items.push(result);
