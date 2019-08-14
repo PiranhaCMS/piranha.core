@@ -84,15 +84,7 @@
                             <input v-model="title" type="text" class="form-control form-control-lg" placeholder="@Localizer.Post["Your post title"]">
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Blocks -->
-        <div class="card" :class="{ 'd-none': selectedRegion.uid != 'uid-blocks' }">
-            <div class="card-body">
-                <div class="blocks">
-                    <div class="row unsortable mb-3">
+                    <div class="row mb-3 mt-3">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>@Localizer.Post["Category"]</label>
@@ -110,6 +102,14 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Blocks -->
+        <div class="card" :class="{ 'd-none': selectedRegion.uid != 'uid-blocks' }">
+            <div class="card-body">
+                <div class="blocks">
                     <a href="#" class="block-add unsortable" v-on:click.prevent="piranha.blockpicker.open(piranha.postedit.addBlock, 0)">
                         <hr>
                         <i class="fas fa-plus-circle"></i>
