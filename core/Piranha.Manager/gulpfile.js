@@ -115,7 +115,8 @@ var js = [
             "assets/src/js/components/fields/readonly-field.js",
             "assets/src/js/components/fields/string-field.js",
             "assets/src/js/components/fields/text-field.js",
-            "assets/src/js/components/fields/video-field.js"
+            "assets/src/js/components/fields/video-field.js",
+            "assets/src/js/components/fields/select-field.js",
         ]
     },
     {
