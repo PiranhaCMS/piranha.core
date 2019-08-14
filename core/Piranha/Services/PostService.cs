@@ -504,6 +504,12 @@ namespace Piranha.Services
                 model.Slug = Utils.GenerateSlug(model.Slug, false);
             }
 
+            // Ensure category
+            if (model.Category == null || (string.IsNullOrWhiteSpace(model.Category.Title) && string.IsNullOrWhiteSpace(model.Category.Slug)))
+            {
+                throw new ValidationException("The Category field is required");
+            }
+
             // Call hooks & save
             App.Hooks.OnBeforeSave<PostBase>(model);
 

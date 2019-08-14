@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Piranha.Models
 {
@@ -21,16 +22,19 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the blog page id.
         /// </summary>
+        [Required]
         public Guid BlogId { get; set; }
 
         /// <summary>
         /// Gets/sets the category.
         /// </summary>
+        [Required]
         public Taxonomy Category { get; set; }
 
         /// <summary>
         /// Gets/sets the optional redirect.
         /// </summary>
+        [StringLength(256)]
         public string RedirectUrl { get; set; }
 
         /// <summary>

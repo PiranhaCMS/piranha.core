@@ -84,18 +84,18 @@
                             <input v-model="title" type="text" class="form-control form-control-lg" placeholder="@Localizer.Post["Your post title"]">
                         </div>
                     </div>
-                    <div class="row mb-3 mt-3">
+                    <div class="row mt-3">
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>@Localizer.Post["Category"]</label>
+                            <div class="form-group mb-0">
+                                <label style="display:none">@Localizer.Post["Category"]</label>
                                 <select id="selectedCategory" class="form-control select2" v-model="selectedCategory">
                                     <option :value="item" v-for="item in categories">{{ item }}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>@Localizer.Post["Tags"]</label>
+                            <div class="form-group mb-0">
+                                <label style="display:none">@Localizer.Post["Tags"]</label>
                                 <select id="selectedTags" class="form-control select2" multiple="multiple" v-model="selectedTags">
                                     <option :value="item" v-for="item in tags">{{ item }}</option>
                                 </select>
