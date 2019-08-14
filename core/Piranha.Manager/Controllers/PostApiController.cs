@@ -172,6 +172,46 @@ namespace Piranha.Manager.Controllers
             return post;
         }
 
+
+        /// <summary>
+        /// Deletes the post with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The result of the operation</returns>
+        [Route("delete/{id}")]
+        [HttpGet]
+        [Authorize(Policy = Permission.PostsDelete)]
+        public async Task<StatusMessage> Delete(Guid id)
+        {
+            try
+            {
+                await _service.Delete(id);
+            }
+            catch (ValidationException e)
+            {
+                // Validation did not succeed
+                return new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = e.Message
+                };
+            }
+            catch
+            {
+                return new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = _localizer.Post["An error occured while deleting the post"]
+                };
+            }
+
+            return new StatusMessage
+            {
+                Type = StatusMessage.Success,
+                Body = _localizer.Page["The post was successfully deleted"]
+            };
+        }
+
         /// <summary>
         /// Saves the given model
         /// </summary>

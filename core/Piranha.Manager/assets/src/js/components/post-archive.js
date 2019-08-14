@@ -109,7 +109,7 @@ Vue.component("post-archive", {
         "          {{ post.category }}" +
         "        </td>" +
         "        <td class='actions one'>" +
-        "          <a href='remove(post.id)' class='danger'><i class='fas fa-trash'></i></a>" +
+        "          <a v-on:click.prevent='remove(post.id)' class='danger'><i class='fas fa-trash'></i></a>" +
         "        </td>" +
         "      </tr>" +
         "    </tbody>" +

@@ -193,7 +193,7 @@ piranha.postedit = new Vue({
                 .then(function (result) {
                     piranha.notifications.push(result);
 
-                    window.location = piranha.baseUrl + "manager/page/" + self.blogId;
+                    window.location = piranha.baseUrl + "manager/page/edit/" + self.blogId;
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },

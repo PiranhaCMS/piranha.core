@@ -348,6 +348,15 @@ namespace Piranha.Manager.Services
             }
         }
 
+        /// <summary>
+        /// Deletes the post with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        public Task Delete(Guid id)
+        {
+            return _api.Posts.DeleteAsync(id);
+        }
+
         private PostEditModel Transform(DynamicPost post, bool isDraft)
         {
             var type = App.PostTypes.GetById(post.TypeId);
