@@ -19,6 +19,13 @@ namespace RazorWeb.Models.Regions
     /// </summary>
     public class AllFields
     {
+        public enum StyleType
+        {
+            Standard,
+            Wide,
+            Narrow
+        }
+
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         public AudioField Audio { get; set; }
 
@@ -61,5 +68,8 @@ namespace RazorWeb.Models.Regions
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         public TextField Text { get; set; }
+
+        [Field]
+        public SelectField<StyleType> Style { get; set; }
     }
 }
