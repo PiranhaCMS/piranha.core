@@ -17,22 +17,22 @@
                 </h5>
                 <button type="button" class="close" v-on:click.prevent="close">&times;</button>
             </div>
+
+            <!-- Tabs -->
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="pill" href="#pills-preview"><i class="far fa-eye"></i> @Localizer.General["Preview"]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#pills-details"><i class="fas fa-info-circle"></i> @Localizer.General["Details"]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#pills-update"><i class="far fa-edit"></i> @Localizer.General["Update"]</a>
+                </li>
+            </ul>
+
             <!-- Modal Body -->
             <div class="modal-body bg-light">
-
-                <!-- Pills -->
-                <ul class="nav nav-pills mb-3">
-                    <li class="nav-item">
-                        <a class="nav-link active" data-toggle="pill" href="#pills-preview"><i class="far fa-eye"></i> @Localizer.General["Preview"]</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="pill" href="#pills-details"><i class="fas fa-info-circle"></i> @Localizer.General["Details"]</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="pill" href="#pills-update"><i class="far fa-edit"></i> @Localizer.General["Update"]</a>
-                    </li>
-                </ul>
-
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active " id="pills-preview">
                         <template v-if="media.type === 'Image'">
