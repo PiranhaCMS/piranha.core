@@ -22,7 +22,7 @@
     <value>Detach page</value>
   </data>
   <data name="Edit original" xml:space="preserve">
-    <value>Edit original</value>
+    <value>Sửa bản gốc</value>
   </data>
   <data name="Edit page" xml:space="preserve">
     <value>Chỉnh sửa trang</value>
@@ -55,7 +55,7 @@
     <value>Trang đã được xuất bản thành công</value>
   </data>
   <data name="The page was successfully unpublished" xml:space="preserve">
-    <value>The page was successfully unpublished</value>
+    <value>Trang này chưa được công bố thành công</value>
   </data>
   <data name="The page was successfully saved" xml:space="preserve">
     <value>Trang đã được lưu thành công</value>
