@@ -18,6 +18,12 @@
   <data name="An error occured while deleting the page" xml:space="preserve">
     <value>An error occured while deleting the page</value>
   </data>
+  <data name="Detach page" xml:space="preserve">
+    <value>Detach page</value>
+  </data>
+  <data name="Edit original" xml:space="preserve">
+    <value>Edit original</value>
+  </data>
   <data name="Edit page" xml:space="preserve">
     <value>Edit page</value>
   </data>
@@ -42,6 +48,9 @@
   <data name="The page was successfully deleted" xml:space="preserve">
     <value>The page was successfully deleted</value>
   </data>
+  <data name="The page was successfully detached from the original" xml:space="preserve">
+    <value>The page was successfully detached from the original</value>
+  </data>
   <data name="The page was successfully published" xml:space="preserve">
     <value>The page was successfully published</value>
   </data>
@@ -53,6 +62,9 @@
   </data>
   <data name="The page was successfully reverted to its previous state" xml:space="preserve">
     <value>The page was successfully reverted to its previous state</value>
+  </data>
+  <data name="This is a copy. In order to edit the content of the page you first need to detach it from the original. If you want to keep the page as a copy you should edit the content of the original page." xml:space="preserve">
+    <value>This is a copy. In order to edit the content of the page you first need to detach it from the original. If you want to keep the page as a copy you should edit the content of the original page.</value>
   </data>
   <data name="Welcome to your new page. Click on the button above to add your first block of content!" xml:space="preserve">
     <value>Welcome to your new page. Click on the button above to add your first block of content!</value>
