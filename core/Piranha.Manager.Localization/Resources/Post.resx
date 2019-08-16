@@ -28,8 +28,8 @@
     <value>Category</value>
   </data>
   <data name="Edit post" xml:space="preserve">
-    <value>Edit post</value>
-  </data>
+	  <value>Edit post</value>
+	</data>
   <data name="Tag" xml:space="preserve">
     <value>Tag</value>
   </data>

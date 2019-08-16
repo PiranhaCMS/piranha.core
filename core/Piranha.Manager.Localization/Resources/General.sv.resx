@@ -24,6 +24,9 @@
   <data name="Content type" xml:space="preserve">
     <value>Innehållstyp</value>
   </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Kopia</value>
+  </data>
   <data name="Culture" xml:space="preserve">
     <value>Kulturinställning</value>
   </data>
