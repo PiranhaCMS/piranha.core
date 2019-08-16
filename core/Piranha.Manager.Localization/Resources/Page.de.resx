@@ -19,10 +19,10 @@
     <value>Beim Löschen der Seite ist ein Fehler aufgetreten</value>
   </data>
   <data name="Detach page" xml:space="preserve">
-    <value>Detach page</value>
+    <value>Seite lösen</value>
   </data>
   <data name="Edit original" xml:space="preserve">
-    <value>Edit original</value>
+    <value>Original bearbeiten</value>
   </data>
   <data name="Edit page" xml:space="preserve">
     <value>Seite bearbeiten</value>
@@ -49,7 +49,7 @@
     <value>Die Seite wurde erfolgreich entfernt</value>
   </data>
   <data name="The page was successfully detached from the original" xml:space="preserve">
-    <value>The page was successfully detached from the original</value>
+    <value>Die Seite wurde erfolgreich vom Original getrennt</value>
   </data>
   <data name="The page was successfully published" xml:space="preserve">
     <value>Die Seite wurde erfolgreich veröffentlicht</value>
