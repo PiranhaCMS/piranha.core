@@ -31,13 +31,13 @@
     <value>Bộ nhớ đệm</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Thời gian hết hạn bộ nhớ đệm(phút)</value>
+    <value>Thời gian hết hạn bộ nhớ đệm của trang(phút)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
     <value>Sửa đổi trang</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Post cache expiration (minutes)</value>
+    <value>Thời gian hết hạn bộ nhớ đệm của bài viết(phút)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
     <value>Sửa đổi bài viết</value>
