@@ -24,6 +24,9 @@
   <data name="Content type" xml:space="preserve">
     <value>Content type</value>
   </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
   <data name="Culture" xml:space="preserve">
     <value>Culture</value>
   </data>
@@ -93,6 +96,9 @@
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="New" xml:space="preserve">
+    <value>New</value>
+  </data>
   <data name="Open public URL in new tab" xml:space="preserve">
     <value>Open public URL in new tab</value>
   </data>
@@ -122,6 +128,12 @@
   </data>
   <data name="Select block" xml:space="preserve">
     <value>Select block</value>
+  </data>
+  <data name="Select page" xml:space="preserve">
+    <value>Select page</value>
+  </data>
+  <data name="Select post" xml:space="preserve">
+    <value>Select post</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>

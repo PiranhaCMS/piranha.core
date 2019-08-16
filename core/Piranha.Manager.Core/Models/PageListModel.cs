@@ -35,6 +35,7 @@ namespace Piranha.Manager.Models
 
 
             public Guid Id { get; set; }
+            public Guid SiteId { get; set; }
             public string Title { get; set; }
             public string TypeName { get; set; }
             public string Published { get; set; }

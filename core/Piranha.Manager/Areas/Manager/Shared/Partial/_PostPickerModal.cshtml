@@ -1,4 +1,4 @@
-@inject IViewLocalizer Localizer
+@inject ManagerLocalizer Localizer
 
 <!-- The Modal -->
 <div class="modal modal-panel fade" id="postpicker">
@@ -7,7 +7,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header border-bottom-0">
-                <h5 class="modal-title"><i class="fas fa-copy"></i> @Localizer["Select post"]</h5>
+                <h5 class="modal-title"><i class="fas fa-copy"></i> @Localizer.General["Select post"]</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -42,14 +42,14 @@
                 </div>
 
                 <div class="form-group mt-3">
-                    <input id="postpickerSearch" class="form-control" v-model="search" v-on:keyup.enter="onEnter" placeholder="@Localizer["Search..."]" />
+                    <input id="postpickerSearch" class="form-control" v-model="search" v-on:keyup.enter="onEnter" placeholder="@Localizer.General["Search..."]" />
                 </div>
 
                 <table class="table table-borderless table-media">
                     <thead>
                         <tr>
-                            <th>@Localizer["Name"]</th>
-                            <th class="td-medium">@Localizer["Published"]</th>
+                            <th>@Localizer.General["Name"]</th>
+                            <th class="td-medium">@Localizer.General["Publish date"]</th>
                         </tr>
                     </thead>
                     <tbody>

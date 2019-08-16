@@ -9,6 +9,7 @@ piranha.pageedit = new Vue({
         id: null,
         siteId: null,
         parentId: null,
+        originalId: null,
         sortOrder: 0,
         typeId: null,
         title: null,
@@ -23,6 +24,7 @@ piranha.pageedit = new Vue({
         regions: [],
         editors: [],
         useBlocks: true,
+        isCopy: false,
         saving: false,
         savingDraft: false,
         selectedRegion: {
@@ -49,6 +51,7 @@ piranha.pageedit = new Vue({
             this.id = model.id;
             this.siteId = model.siteId;
             this.parentId = model.parentId;
+            this.originalId = model.originalId;
             this.sortOrder = model.sortOrder;
             this.typeId = model.typeId;
             this.title = model.title;
@@ -63,6 +66,7 @@ piranha.pageedit = new Vue({
             this.regions = model.regions;
             this.editors = model.editors;
             this.useBlocks = model.useBlocks;
+            this.isCopy = model.isCopy;
 
             if (!this.useBlocks) {
                 // First choice, select the first custom editor
@@ -115,6 +119,17 @@ piranha.pageedit = new Vue({
                 .catch(function (error) { console.log("error:", error );
             });
         },
+        copyrelative: function (source, id, after) {
+            var self = this;
+
+            fetch(piranha.baseUrl + "manager/api/page/copyrelative/" + source + "/" + id + "/" + after)
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    self.bind(result);
+                })
+                .catch(function (error) { console.log("error:", error );
+            });
+        },
         save: function ()
         {
             this.saving = true;
@@ -137,6 +152,7 @@ piranha.pageedit = new Vue({
                 id: piranha.pageedit.id,
                 siteId: piranha.pageedit.siteId,
                 parentId: piranha.pageedit.parentId,
+                originalId: piranha.pageedit.originalId,
                 sortOrder: piranha.pageedit.sortOrder,
                 typeId: piranha.pageedit.typeId,
                 title: piranha.pageedit.title,
@@ -146,6 +162,7 @@ piranha.pageedit = new Vue({
                 metaDescription: piranha.pageedit.metaDescription,
                 isHidden: piranha.pageedit.isHidden,
                 published: piranha.pageedit.published,
+                isCopy: piranha.pageedit.isCopy,
                 blocks: JSON.parse(JSON.stringify(piranha.pageedit.blocks)),
                 regions: JSON.parse(JSON.stringify(piranha.pageedit.regions))
             };
@@ -165,6 +182,7 @@ piranha.pageedit = new Vue({
                 self.slug = result.slug;
                 self.published = result.published;
                 self.state = result.state;
+                self.isCopy = result.isCopy;
 
                 if (oldState === 'new' && result.state !== 'new') {
                     window.history.replaceState({ state: "created"}, "Edit page", piranha.baseUrl + "manager/page/edit/" + result.id);
@@ -190,6 +208,20 @@ piranha.pageedit = new Vue({
                 })
                 .catch(function (error) { console.log("error:", error );
             });
+        },
+        detach: function () {
+            var self = this;
+
+            fetch(piranha.baseUrl + "manager/api/page/detach/" + self.id)
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    self.bind(result);
+
+                    piranha.notifications.push(result.status);
+                })
+                .catch(function (error) { console.log("error:", error );
+            });
+
         },
         remove: function () {
             var self = this;

@@ -36,6 +36,14 @@
             $(".title input").focus();
         </script>
     }
+    else if (action == "copyrelative")
+    {
+        <script>
+            piranha.pageedit.copyrelative("@RouteData.Values["id"]", "@RouteData.Values["pageType"]", "@RouteData.Values["after"]");
+
+            $(".title input").focus();
+        </script>
+    }
 }
 
 <div id="pageedit">
@@ -45,6 +53,7 @@
                 <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
                 <li class="breadcrumb-item"><a href="~/manager/pages">@Localizer.Menu["Pages"]</a></li>
                 <li class="breadcrumb-item active" aria-current="page">@Localizer.General["Edit"]</li>
+                <li v-if="isCopy" class="badge-item"><span class="badge badge-warning">@Localizer.General["Copy"]</span></li>
                 <li v-if="state === 'draft'" class="badge-item"><span class="badge badge-info"><i class="fas fa-pen"></i> @Localizer.General["Draft"]</span></li>
             </ol>
         </nav>
@@ -53,6 +62,25 @@
     </div>
 
     <div class="container-fluid app" :class="{ ready: !loading }">
+        <div v-if="isCopy" class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="alert alert-info">
+                            <p class="region-center mb-3">
+                                This is a copy. In order to edit the content of the page you first need to <strong>detach</strong> it from
+                                the original. If you want to keep the page as a copy you should edit the content of the original page.
+                            </p>
+                            <p class="region-center text-right">
+                                <a v-if="state !== 'new'" v-on:click.prevent="detach()" href="#" class="btn btn-primary btn-labeled"><i class="fas fa-cut"></i> Detach page</a>
+                                <a :href="piranha.baseUrl + 'manager/page/edit/' + originalId" class="btn btn-primary btn-labeled"><i class="fas fa-pen"></i> Edit original</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Content navigation -->
         <ul v-if="(useBlocks && (editors.length + contentRegions.length > 0)) || editors.length + contentRegions.length > 1" class="nav nav-pills nav-pills-card justify-content-center">
             <li v-if="useBlocks" class="nav-item">
@@ -87,12 +115,13 @@
 
         <!-- Blocks -->
         <div class="card" :class="{ 'd-none': selectedRegion.uid != 'uid-blocks' }">
-            <div class="card-body">
+            <div class="card-body" v-bind:class="{ readonly: isCopy }">
                 <div class="blocks">
-                    <a href="#" class="block-add unsortable" v-on:click.prevent="piranha.blockpicker.open(piranha.pageedit.addBlock, 0)">
+                    <a v-if="!isCopy" href="#" class="block-add unsortable" v-on:click.prevent="piranha.blockpicker.open(piranha.pageedit.addBlock, 0)">
                         <hr>
                         <i class="fas fa-plus-circle"></i>
                     </a>
+                    <span v-else class="block-add unsortable"><hr><i class="fas fa-plus-circle"></i></span>
                     <div v-for="(block, index) in blocks" v-bind:key="block.meta.uid">
                         <div :class="'block ' + block.meta.component + (block.meta.isCollapsed ? ' collapsed' : '')">
                             <div class="block-header">
@@ -114,11 +143,13 @@
                             </div>
                             <component v-if="!block.meta.isGroup" v-bind:is="block.meta.component" v-bind:uid="block.meta.uid" v-bind:model="block.model"></component>
                             <component v-if="block.meta.isGroup" v-bind:is="block.meta.component" v-bind:uid="block.meta.uid" v-bind:model="block"></component>
+                            <div class="content-blocker"></div>
                         </div>
-                        <a href="#" class="block-add" v-on:click.prevent="piranha.blockpicker.open(piranha.pageedit.addBlock, index + 1)">
+                        <a v-if="!isCopy" href="#" class="block-add" v-on:click.prevent="piranha.blockpicker.open(piranha.pageedit.addBlock, index + 1)">
                             <hr>
                             <i class="fas fa-plus-circle"></i>
                         </a>
+                        <span v-else class="block-add"><hr><i class="fas fa-plus-circle"></i></span>
                     </div>
                     <div v-if="blocks.length == 0" class="empty-info">
                         <p>@Localizer.Page["Welcome to your new page. Click on the button above to add your first block of content!"]</p>
@@ -139,8 +170,9 @@
         <!-- Content Regions -->
         <div class="card" :class="{ 'd-none': selectedRegion.uid != region.meta.uid }" v-for="region in contentRegions">
             <div class="card-body">
-                <div class="region-center">
+                <div class="region region-center" :class="{ readonly: isCopy }">
                     <region v-bind:content="'page'" v-bind:type="typeId" v-bind:model="region"></region>
+                    <div class="content-blocker"></div>
                 </div>
             </div>
         </div>

@@ -1,5 +1,9 @@
 @import "variables";
 
+html {
+    min-width: 768px;
+}
+
 body {
     margin-left: 3rem;
 }

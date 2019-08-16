@@ -79,6 +79,26 @@ namespace Piranha.Services
         }
 
         /// <summary>
+        /// Creates and initializes a copy of the given page.
+        /// </summary>
+        /// <param name="originalPage">The orginal page</param>
+        /// <returns>The created copy</returns>
+        public async Task<T> CopyAsync<T>(T originalPage) where T : Models.PageBase
+        {
+            var model = await GetByIdAsync<T>(originalPage.Id);
+
+            model.Id = Guid.NewGuid();
+            model.OriginalPageId = originalPage.Id;
+            model.Title = $"Copy of { model.Title }";
+            model.NavigationTitle = null;
+            model.Slug = null;
+            model.Created = model.LastModified = DateTime.MinValue;
+            model.Published = null;
+
+            return model;
+        }
+
+        /// <summary>
         /// Detaches a copy and initializes it as a standalone page
         /// </summary>
         /// <returns>The standalone page</returns>
@@ -97,6 +117,14 @@ namespace Piranha.Services
             foreach (var pageBlock in page.Blocks)
             {
                 pageBlock.Id = Guid.Empty;
+
+                if (pageBlock is Extend.BlockGroup)
+                {
+                    foreach (var childBlock in ((Extend.BlockGroup)pageBlock).Items)
+                    {
+                        childBlock.Id = Guid.Empty;
+                    }
+                }
             }
 
             await SaveAsync(page).ConfigureAwait(false);
@@ -479,7 +507,7 @@ namespace Piranha.Services
                             prefix = parentSlug + "/";
                         }
                     }
-                    model.Slug = prefix + Utils.GenerateSlug(model.NavigationTitle != null ? model.NavigationTitle : model.Title);
+                    model.Slug = prefix + Utils.GenerateSlug(!string.IsNullOrWhiteSpace(model.NavigationTitle) ? model.NavigationTitle : model.Title);
                 }
             }
             else
@@ -602,11 +630,24 @@ namespace Piranha.Services
 
             if (original != null)
             {
-                // Clone the original in case we are caching in system
-                // memory, otherwise we'll destroy the original.
-                var copy = Utils.DeepClone<T>(original);
+                T copy = null;
 
-                // Now let's move over the fields we want from the
+                if (model is DynamicPage)
+                {
+                    // No need to clone as we don't cache dynamic models
+                    copy = original;
+                }
+                else
+                {
+                    // Clone the original in case we are caching in system
+                    // memory, otherwise we'll destroy the original.
+                    copy = Utils.DeepClone<T>(original);
+
+                    // Initialize all blocks & regions
+                    _factory.Init(copy, App.PageTypes.GetById(copy.TypeId));
+                }
+
+                // Now let's move over the fields we want to the
                 // soft copy.
                 copy.Id = model.Id;
                 copy.SiteId = model.SiteId;

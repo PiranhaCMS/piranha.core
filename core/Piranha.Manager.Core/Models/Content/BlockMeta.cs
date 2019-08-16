@@ -24,5 +24,10 @@ namespace Piranha.Manager.Models.Content
         /// Gets/sets if the block is collapsed.
         /// </summary>
         public bool isCollapsed { get; set; } = false;
+
+        /// <summary>
+        /// Gets/sets if the block is readonly.
+        /// </summary>
+        public bool IsReadonly { get; set; } = false;
     }
 }

@@ -413,6 +413,7 @@ namespace Piranha.Repositories
                         page = new Page()
                         {
                             Id = model.Id != Guid.Empty ? model.Id : Guid.NewGuid(),
+                            Created = DateTime.Now,
                         };
 
                         if (!isDraft)
@@ -457,6 +458,7 @@ namespace Piranha.Repositories
                     page.IsHidden = model.IsHidden;
                     page.Route = model.Route;
                     page.Published = model.Published;
+                    page.LastModified = DateTime.Now;
 
                     if (!isDraft)
                     {

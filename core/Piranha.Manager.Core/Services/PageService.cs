@@ -98,7 +98,7 @@ namespace Piranha.Manager.Services
             var drafts = await _api.Pages.GetAllDraftsAsync(siteId);
             foreach (var item in sitemap)
             {
-                pages.Add(MapRecursive(item, 0, expandedLevels, drafts));
+                pages.Add(MapRecursive(siteId, item, 0, expandedLevels, drafts));
             }
             return pages;
         }
@@ -148,6 +148,31 @@ namespace Piranha.Manager.Services
             return null;
         }
 
+        public async Task<PageEditModel> CopyRelative(Guid sourceId, Guid pageId, bool after)
+        {
+            var relative = await _api.Pages.GetByIdAsync<PageInfo>(pageId);
+
+            if (relative != null)
+            {
+                var original = await _api.Pages.GetByIdAsync(sourceId);
+
+                if (original != null)
+                {
+                    var page = await _api.Pages.CopyAsync(original);
+
+                    page.SiteId = relative.SiteId;
+                    page.ParentId = after ? relative.ParentId : relative.Id;
+                    page.SortOrder = after ? relative.SortOrder + 1 : 0;
+
+                    if (page != null)
+                    {
+                        return Transform(page, false);
+                    }
+                }
+            }
+            return null;
+        }
+
         public async Task<PageEditModel> GetById(Guid id, bool useDraft = true)
         {
             var isDraft = true;
@@ -162,6 +187,21 @@ namespace Piranha.Manager.Services
             if (page != null)
             {
                 return Transform(page, isDraft);
+            }
+            return null;
+        }
+
+        public async Task<PageEditModel> Detach(Guid id)
+        {
+            var page = await _api.Pages.GetByIdAsync(id);
+
+            if (page != null)
+            {
+                await _api.Pages.DetachAsync(page);
+
+                page = await _api.Pages.GetByIdAsync(id);
+
+                return Transform(page, false);
             }
             return null;
         }
@@ -187,6 +227,7 @@ namespace Piranha.Manager.Services
 
                 page.SiteId = model.SiteId;
                 page.ParentId = model.ParentId;
+                page.OriginalPageId = model.OriginalId;
                 page.SortOrder = model.SortOrder;
                 page.TypeId = model.TypeId;
                 page.Title = model.Title;
@@ -197,91 +238,97 @@ namespace Piranha.Manager.Services
                 page.IsHidden = model.IsHidden;
                 page.Published = !string.IsNullOrEmpty(model.Published) ? DateTime.Parse(model.Published) : (DateTime?)null;
 
-                // Save regions
-                foreach (var region in pageType.Regions)
+                //
+                // We only need to save regions & blocks for pages that are not copies
+                //
+                if (!page.OriginalPageId.HasValue)
                 {
-                    var modelRegion = model.Regions
-                        .FirstOrDefault(r => r.Meta.Id == region.Id);
-
-                    if (region.Collection)
+                    // Save regions
+                    foreach (var region in pageType.Regions)
                     {
-                        var listRegion = (IRegionList)((IDictionary<string, object>)page.Regions)[region.Id];
+                        var modelRegion = model.Regions
+                            .FirstOrDefault(r => r.Meta.Id == region.Id);
 
-                        listRegion.Clear();
-
-                        foreach (var item in modelRegion.Items)
+                        if (region.Collection)
                         {
-                            if (region.Fields.Count == 1)
-                            {
-                                listRegion.Add(item.Fields[0].Model);
-                            }
-                            else
-                            {
-                                var pageRegion = new ExpandoObject();
+                            var listRegion = (IRegionList)((IDictionary<string, object>)page.Regions)[region.Id];
 
-                                foreach (var field in region.Fields)
+                            listRegion.Clear();
+
+                            foreach (var item in modelRegion.Items)
+                            {
+                                if (region.Fields.Count == 1)
                                 {
-                                    var modelField = item.Fields
-                                        .FirstOrDefault(f => f.Meta.Id == field.Id);
-                                    ((IDictionary<string, object>)pageRegion)[field.Id] = modelField.Model;
+                                    listRegion.Add(item.Fields[0].Model);
                                 }
-                                listRegion.Add(pageRegion);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        var pageRegion = ((IDictionary<string, object>)page.Regions)[region.Id];
+                                else
+                                {
+                                    var pageRegion = new ExpandoObject();
 
-                        if (region.Fields.Count == 1)
-                        {
-                            ((IDictionary<string, object>)page.Regions)[region.Id] =
-                                modelRegion.Items[0].Fields[0].Model;
+                                    foreach (var field in region.Fields)
+                                    {
+                                        var modelField = item.Fields
+                                            .FirstOrDefault(f => f.Meta.Id == field.Id);
+                                        ((IDictionary<string, object>)pageRegion)[field.Id] = modelField.Model;
+                                    }
+                                    listRegion.Add(pageRegion);
+                                }
+                            }
                         }
                         else
                         {
-                            foreach (var field in region.Fields)
+                            var pageRegion = ((IDictionary<string, object>)page.Regions)[region.Id];
+
+                            if (region.Fields.Count == 1)
                             {
-                                var modelField = modelRegion.Items[0].Fields
-                                    .FirstOrDefault(f => f.Meta.Id == field.Id);
-                                ((IDictionary<string, object>)pageRegion)[field.Id] = modelField.Model;
+                                ((IDictionary<string, object>)page.Regions)[region.Id] =
+                                    modelRegion.Items[0].Fields[0].Model;
+                            }
+                            else
+                            {
+                                foreach (var field in region.Fields)
+                                {
+                                    var modelField = modelRegion.Items[0].Fields
+                                        .FirstOrDefault(f => f.Meta.Id == field.Id);
+                                    ((IDictionary<string, object>)pageRegion)[field.Id] = modelField.Model;
+                                }
                             }
                         }
                     }
-                }
 
-                // Save blocks
-                page.Blocks.Clear();
+                    // Save blocks
+                    page.Blocks.Clear();
 
-                foreach (var block in model.Blocks)
-                {
-                    if (block is BlockGroupModel blockGroup)
+                    foreach (var block in model.Blocks)
                     {
-                        var groupType = App.Blocks.GetByType(blockGroup.Type);
-
-                        if (groupType != null)
+                        if (block is BlockGroupModel blockGroup)
                         {
-                            var pageBlock = (Extend.BlockGroup)Activator.CreateInstance(groupType.Type);
+                            var groupType = App.Blocks.GetByType(blockGroup.Type);
 
-                            pageBlock.Id = blockGroup.Id;
-                            pageBlock.Type = blockGroup.Type;
-
-                            foreach (var field in blockGroup.Fields)
+                            if (groupType != null)
                             {
-                                var prop = pageBlock.GetType().GetProperty(field.Meta.Id, App.PropertyBindings);
-                                prop.SetValue(pageBlock, field.Model);
-                            }
+                                var pageBlock = (Extend.BlockGroup)Activator.CreateInstance(groupType.Type);
 
-                            foreach (var item in blockGroup.Items)
-                            {
-                                pageBlock.Items.Add(item.Model);
+                                pageBlock.Id = blockGroup.Id;
+                                pageBlock.Type = blockGroup.Type;
+
+                                foreach (var field in blockGroup.Fields)
+                                {
+                                    var prop = pageBlock.GetType().GetProperty(field.Meta.Id, App.PropertyBindings);
+                                    prop.SetValue(pageBlock, field.Model);
+                                }
+
+                                foreach (var item in blockGroup.Items)
+                                {
+                                    pageBlock.Items.Add(item.Model);
+                                }
+                                page.Blocks.Add(pageBlock);
                             }
-                            page.Blocks.Add(pageBlock);
                         }
-                    }
-                    else if (block is BlockItemModel blockItem)
-                    {
-                        page.Blocks.Add(blockItem.Model);
+                        else if (block is BlockItemModel blockItem)
+                        {
+                            page.Blocks.Add(blockItem.Model);
+                        }
                     }
                 }
 
@@ -354,11 +401,12 @@ namespace Piranha.Manager.Services
             return null;
         }
 
-        private PageListModel.PageItem MapRecursive(SitemapItem item, int level, int expandedLevels, IEnumerable<Guid> drafts)
+        private PageListModel.PageItem MapRecursive(Guid siteId, SitemapItem item, int level, int expandedLevels, IEnumerable<Guid> drafts)
         {
             var model = new PageListModel.PageItem
             {
                 Id = item.Id,
+                SiteId = siteId,
                 Title = item.MenuTitle,
                 TypeName = item.PageTypeName,
                 Published = item.Published.HasValue ? item.Published.Value.ToString("yyyy-MM-dd") : null,
@@ -371,7 +419,7 @@ namespace Piranha.Manager.Services
 
             foreach (var child in item.Items)
             {
-                model.Items.Add(MapRecursive(child, level + 1, expandedLevels, drafts));
+                model.Items.Add(MapRecursive(siteId, child, level + 1, expandedLevels, drafts));
             }
             return model;
         }
@@ -385,6 +433,7 @@ namespace Piranha.Manager.Services
                 Id = page.Id,
                 SiteId = page.SiteId,
                 ParentId = page.ParentId,
+                OriginalId = page.OriginalPageId,
                 SortOrder = page.SortOrder,
                 TypeId = page.TypeId,
                 Title = page.Title,
@@ -495,7 +544,8 @@ namespace Piranha.Manager.Services
                             Name = blockType.Name,
                             Icon = blockType.Icon,
                             Component = "block-group",
-                            IsGroup = true
+                            IsGroup = true,
+                            IsReadonly = page.OriginalPageId.HasValue
                         }
                     };
 
@@ -555,7 +605,8 @@ namespace Piranha.Manager.Services
                             Name = blockType.Name,
                             Title = block.GetTitle(),
                             Icon = blockType.Icon,
-                            Component = blockType.Component
+                            Component = blockType.Component,
+                            IsReadonly = page.OriginalPageId.HasValue
                         }
                     });
                 }

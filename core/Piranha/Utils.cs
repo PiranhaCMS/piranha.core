@@ -223,7 +223,7 @@ namespace Piranha
 
             var settings = new JsonSerializerSettings
             {
-                TypeNameHandling = TypeNameHandling.All
+                TypeNameHandling = TypeNameHandling.Auto
             };
             var json = JsonConvert.SerializeObject(obj, settings);
 

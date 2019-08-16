@@ -1,11 +1,11 @@
-@inject IViewLocalizer Localizer
+@inject ManagerLocalizer Localizer
 
 <div id="blockpicker" class="modal modal-panel fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <!-- Modal header -->
             <div class="modal-header border-bottom-0">
-                <h5 class="modal-title"><i class="fas fa-cubes"></i> @Localizer["Select block"]</h5>
+                <h5 class="modal-title"><i class="fas fa-cubes"></i> @Localizer.General["Select block"]</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -14,17 +14,17 @@
             <!-- Tabs -->
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active"><i class="fas fa-pen"></i> @Localizer["Add"]</a>
+                    <a class="nav-link active"><i class="fas fa-pen"></i> @Localizer.General["Add"]</a>
                 </li>
                 <!--li class="nav-item">
-                    <a class="nav-link"><i class="fas fa-cubes"></i> @Localizer["Choose existing"]</a>
+                    <a class="nav-link"><i class="fas fa-cubes"></i> @Localizer.General["Choose existing"]</a>
                 </li-->
             </ul>
 
             <!-- Modal body -->
             <div class="modal-body bg-light">
                 <form v-on:submit.prevent="selectSingleItem()">
-                    <input v-model="filter" id="blockpickerSearch" type="text" class="form-control" placeholder="@Localizer["Search..."]">
+                    <input v-model="filter" id="blockpickerSearch" type="text" class="form-control" placeholder="@Localizer.General["Search..."]">
                     <div v-for="category in filteredCategories">
                         <div class="blocktype-category">{{ category.name }}</div>
                         <div class="blocktype-list">

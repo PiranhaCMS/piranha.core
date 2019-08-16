@@ -128,6 +128,7 @@ var js = [
     {
         name: "piranha.pagelist.js",
         items: [
+            "assets/src/js/components/pagecopy-item.js",
             "assets/src/js/components/sitemap-item.js",
             "assets/src/js/piranha.pagelist.js"
         ]

@@ -31,6 +31,13 @@ namespace Piranha.Services
         T Copy<T>(T originalPage) where T : Models.PageBase;
 
         /// <summary>
+        /// Creates and initializes a copy of the given page.
+        /// </summary>
+        /// <param name="originalPage">The orginal page</param>
+        /// <returns>The created copy</returns>
+        Task<T> CopyAsync<T>(T originalPage) where T : Models.PageBase;
+
+        /// <summary>
         /// Detaches a copy and initializes it as a standalone page
         /// </summary>
         /// <returns>The standalone page</returns>

@@ -5,28 +5,42 @@
         <div class="modal-content">
             <!-- Modal header -->
             <div class="modal-header border-bottom-0">
-                <h5 class="modal-title"><i class="fas fa-random"></i> @Localizer.Page["Add page"]</h5>
+                <h5 class="modal-title"><i class="fas fa-file"></i> @Localizer.Page["Add page"]</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-
             <!-- Tabs -->
-            <ul class="nav nav-tabs">
+            <ul class="nav nav-tabs" id="pageAddTabs" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active"><i class="fas fa-pen"></i> @Localizer.General["Empty"]</a>
+                    <a href="#pageAddNew" data-toggle="tab" class="nav-link active"><i class="fas fa-plus"></i> @Localizer.General["New"]</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#pageAddCopy" data-toggle="tab" class="nav-link"><i class="fas fa-copy"></i> @Localizer.General["Copy"]</a>
                 </li>
             </ul>
 
             <!-- Modal body -->
             <div class="modal-body bg-light">
-                <table class="table">
-                    <tbody>
-                        <tr v-for="(type) in pageTypes">
-                            <td><a :href="piranha.baseUrl + 'manager/page/addrelative/' + addPageId + '/' + type.id + '/' + addAfter">{{ type.title }}</a></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <!-- Tab content -->
+                <div id="pageAddTabsContent" class="tab-content">
+                    <div id="pageAddNew" class="tab-pane show active" role="tabpanel">
+                        <table class="table">
+                            <tbody>
+                                <tr v-for="(type) in pageTypes">
+                                    <td><a :href="piranha.baseUrl + 'manager/page/addrelative/' + addPageId + '/' + type.id + '/' + addAfter">{{ type.title }}</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="pageAddCopy" class="tab-pane" role="tabpanel">
+                        <div class="sitemap sitemap-container">
+                            <ol v-for="site in sites">
+                                <pagecopy-item v-for="item in site.pages" v-bind:key="item.id" v-bind:item="item"></pagecopy-item>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

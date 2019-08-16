@@ -29,6 +29,11 @@ namespace Piranha.Manager.Models
         public Guid? ParentId { get; set; }
 
         /// <summary>
+        /// Gets/sets the id of the original page if this is a copy.
+        /// </summary>
+        public Guid? OriginalId { get; set; }
+
+        /// <summary>
         /// Gets/sets the sort order of the page in its
         /// hierarchical position.
         /// </summary>
@@ -68,5 +73,10 @@ namespace Piranha.Manager.Models
         /// Gets/sets the content status.
         /// </summary>
         public string State { get; set; }
+
+        /// <summary>
+        /// Gets/sets if this is a copy.
+        /// </summary>
+        public bool IsCopy { get { return OriginalId.HasValue; } }
     }
 }

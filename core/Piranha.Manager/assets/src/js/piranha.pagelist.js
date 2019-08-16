@@ -10,6 +10,7 @@ piranha.pagelist = new Vue({
         items: [],
         sites: [],
         pageTypes: [],
+        addSiteId: null,
         addPageId: null,
         addAfter: true
     },
@@ -77,7 +78,8 @@ piranha.pagelist = new Vue({
                 })
             });
         },
-        add: function (pageId, after) {
+        add: function (siteId, pageId, after) {
+            this.addSiteId = siteId;
             this.addPageId = pageId;
             this.addAfter = after;
 

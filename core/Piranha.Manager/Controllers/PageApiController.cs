@@ -112,6 +112,43 @@ namespace Piranha.Manager.Controllers
         }
 
         /// <summary>
+        /// Creates a new page of the specified type.
+        /// </summary>
+        /// <param name="typeId">The type id</param>
+        /// <returns>The page edit model</returns>
+        [Route("copyrelative/{sourceId}/{pageId}/{after}")]
+        [HttpGet]
+        [Authorize(Policy = Permission.PagesAdd)]
+        public async Task<PageEditModel> CopyRelative(Guid sourceId, Guid pageId, bool after)
+        {
+            return await _service.CopyRelative(sourceId, pageId, after);
+        }
+
+        /// <summary>
+        /// Detaches the given copy into a unique page instance.
+        /// </summary>
+        /// <param name="pageId">The page id</param>
+        /// <returns>The page edit model</returns>
+        [Route("detach/{pageId}")]
+        [HttpGet]
+        [Authorize(Policy = Permission.PagesEdit)]
+        public async Task<PageEditModel> Detach(Guid pageId)
+        {
+            var model = await _service.Detach(pageId);
+
+            if (model != null)
+            {
+                model.Status = new StatusMessage
+                {
+                    Type = StatusMessage.Success,
+                    Body = _localizer.Page["The page was successfully detached from the original"]
+                };
+                return model;
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Saves the given model
         /// </summary>
         /// <param name="model">The model</param>
