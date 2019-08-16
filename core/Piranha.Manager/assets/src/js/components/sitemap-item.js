@@ -20,8 +20,8 @@ Vue.component("sitemap-item", {
         "      </span>" +
         "      <a :href='piranha.baseUrl + item.editUrl + item.id'>" +
         "        <span v-html='item.title'></span>" +
-        "        <span v-if='item.isCopy' class='badge badge-warning'>{{ piranha.resources.texts.copy }}</span>" +
         "        <span v-if='item.status' class='badge badge-info'>{{ item.status }}</span>" +
+        "        <span v-if='item.isCopy' class='badge badge-warning'>{{ piranha.resources.texts.copy }}</span>" +
         "      </a>" +
         "    </div>" +
         "    <div class='type d-none d-md-block'>{{ item.typeName }}</div>" +

@@ -12,11 +12,15 @@ Vue.component("pagecopy-item", {
     template:
         "<li class='dd-item' :class='{ expanded: item.isExpanded || item.items.length === 0 }'>" +
         "  <div class='sitemap-item expanded'>" +
-        "    <div class='link'>" +
-        "      <span class='actions'></span>" +
-        "      <a :href='piranha.baseUrl + \"manager/page/copyrelative/\" + item.id + \"/\" + piranha.pagelist.addPageId + \"/\" + piranha.pagelist.addAfter'>" +
+        "    <div class='link' :class='{ readonly: item.isCopy }'>" +
+        "      <a v-if='!item.isCopy' :href='piranha.baseUrl + \"manager/page/copyrelative/\" + item.id + \"/\" + piranha.pagelist.addPageId + \"/\" + piranha.pagelist.addAfter'>" +
         "        {{ item.title }}" +
         "      </a>" +
+        "      <a href='#' v-else>" +
+        "        {{ item.title }}" +
+        "        <span v-if='item.isCopy' class='badge badge-warning'>{{ piranha.resources.texts.copy }}</span>" +
+        "      </a>" +
+        "      <div class='content-blocker'></div>" +
         "    </div>" +
         "    <div class='type d-none d-md-block'>" +
         "      {{ item.typeName }}" +
@@ -51,8 +55,8 @@ Vue.component("sitemap-item", {
         "      </span>" +
         "      <a :href='piranha.baseUrl + item.editUrl + item.id'>" +
         "        <span v-html='item.title'></span>" +
-        "        <span v-if='item.isCopy' class='badge badge-warning'>{{ piranha.resources.texts.copy }}</span>" +
         "        <span v-if='item.status' class='badge badge-info'>{{ item.status }}</span>" +
+        "        <span v-if='item.isCopy' class='badge badge-warning'>{{ piranha.resources.texts.copy }}</span>" +
         "      </a>" +
         "    </div>" +
         "    <div class='type d-none d-md-block'>{{ item.typeName }}</div>" +
