@@ -60,7 +60,7 @@ Vue.component("sitemap-item", {
         "      </a>" +
         "    </div>" +
         "    <div class='type d-none d-md-block'>{{ item.typeName }}</div>" +
-        "    <div class='date d-none d-md-block'>{{ item.published }}</div>" +
+        "    <div class='date d-none d-lg-block'>{{ item.published }}</div>" +
         "    <div class='actions'>" +
         "      <a href='#' v-on:click.prevent='piranha.pagelist.add(item.siteId, item.id, true)'><i class='fas fa-angle-down'></i></a>" +
         "      <a href='#' v-on:click.prevent='piranha.pagelist.add(item.siteId, item.id, false)'><i class='fas fa-angle-right'></i></a>" +

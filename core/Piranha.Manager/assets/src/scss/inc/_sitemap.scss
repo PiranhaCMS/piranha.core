@@ -50,12 +50,20 @@
             margin: .25rem .5rem 0 0;
         }
     }
+    .type {
+        width: 9rem;
+        text-align: right;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap
+    }
     .date {
         width: 7rem;
     }
 
     .badge {
         padding: .25rem .5rem;
+        margin-top: .2rem;
         margin-left: .5rem;
         font-size: .65rem;
         text-transform: uppercase;
