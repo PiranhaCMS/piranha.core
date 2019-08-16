@@ -41,6 +41,7 @@ namespace Piranha.Manager.Models
             public string Published { get; set; }
             public string Status { get; set; }
             public string EditUrl { get; set; }
+            public bool IsCopy { get; set; }
             public bool IsDraft { get; set; }
             public bool IsExpanded { get; set; }
             public string Permalink { get; set; }

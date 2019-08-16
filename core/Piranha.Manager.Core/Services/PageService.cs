@@ -414,6 +414,7 @@ namespace Piranha.Manager.Services
                     !item.Published.HasValue ? _localizer.General[PageListModel.PageItem.Unpublished] : "",
                 EditUrl = "manager/page/edit/",
                 IsExpanded = level < expandedLevels,
+                IsCopy = item.OriginalPageId.HasValue,
                 Permalink = item.Permalink
             };
 
