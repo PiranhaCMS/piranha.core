@@ -25,7 +25,7 @@
     <value>Loại nội dung</value>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Copy</value>
+    <value>Sao chép</value>
   </data>
   <data name="Culture" xml:space="preserve">
     <value>Văn hóa</value>
@@ -40,7 +40,7 @@
     <value>Chi tiêt</value>
   </data>
   <data name="Dimensions" xml:space="preserve">
-    <value>Dimensions</value>
+    <value>Kích thước</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>Tải về</value>
@@ -100,7 +100,7 @@
     <value>Mở đường dẫn công khai trong tab mới</value>
   </data>
   <data name="Pixels" xml:space="preserve">
-    <value>Pixels</value>
+    <value>Độ phân giải</value>
   </data>
   <data name="Preview" xml:space="preserve">
     <value>Xem trước</value>
@@ -124,7 +124,7 @@
     <value>Tìm kiếm...</value>
   </data>
   <data name="Select block" xml:space="preserve">
-    <value>Select block</value>
+    <value>Chọn Khối</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Thiết lập</value>
