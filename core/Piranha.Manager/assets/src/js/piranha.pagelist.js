@@ -11,6 +11,7 @@ piranha.pagelist = new Vue({
         sites: [],
         pageTypes: [],
         addSiteId: null,
+        addSiteTitle: null,
         addPageId: null,
         addAfter: true
     },
@@ -79,13 +80,34 @@ piranha.pagelist = new Vue({
             });
         },
         add: function (siteId, pageId, after) {
-            this.addSiteId = siteId;
-            this.addPageId = pageId;
-            this.addAfter = after;
+            var self = this;
+
+            self.addSiteId = siteId;
+            self.addPageId = pageId;
+            self.addAfter = after;
+
+            // Get the site title
+            self.sites.forEach(function (e) {
+                if (e.id === siteId) {
+                    self.addSiteTitle = e.title;
+                }
+            });
 
             // Open the modal
             $("#pageAddModal").modal("show");
         },
+        selectSite: function (siteId) {
+            var self = this;
+
+            self.addSiteId = siteId;
+
+            // Get the site title
+            self.sites.forEach(function (e) {
+                if (e.id === siteId) {
+                    self.addSiteTitle = e.title;
+                }
+            });
+        }
     },
     created: function () {
     },

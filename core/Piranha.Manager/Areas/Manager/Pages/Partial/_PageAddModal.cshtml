@@ -34,8 +34,22 @@
                         </table>
                     </div>
                     <div id="pageAddCopy" class="tab-pane" role="tabpanel">
+                        <div class="form-group d-flex justify-content-center">
+                            <div class="dropdown" v-if="sites.length > 1">
+                                <button class="btn btn-primary btn-labeled dropdown-toggle" type="button" data-toggle="dropdown">
+                                    <span class="btn-label">
+                                        <i class="fas fa-globe"></i>
+                                    </span>
+                                    {{ addSiteTitle }}
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#" li v-for="site in sites" v-on:click.prevent="selectSite(site.id)">{{ site.title }}</a>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="sitemap sitemap-container">
-                            <ol v-for="site in sites">
+                            <ol v-if="site.id === addSiteId" v-for="site in sites">
                                 <pagecopy-item v-for="item in site.pages" v-bind:key="item.id" v-bind:item="item"></pagecopy-item>
                             </ol>
                         </div>
