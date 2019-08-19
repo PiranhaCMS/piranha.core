@@ -26398,6 +26398,7 @@ piranha.editor = {
     addInline: function (id) {
         tinymce.init({
             selector: "#" + id,
+            fixed_toolbar_container: "#" + id + "-wrapper",
             menubar: false,
             branding: false,
             statusbar: false,

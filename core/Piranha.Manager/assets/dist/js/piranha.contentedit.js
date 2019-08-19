@@ -420,7 +420,7 @@ Vue.component("html-block", {
         piranha.editor.remove(this.uid);
     },
     template:
-        "<div class='block-body' :class='{ empty: isEmpty }'>" +
+        "<div :id='uid + \"-wrapper\"' class='field block-body' :class='{ empty: isEmpty }'>" +
         "  <div contenteditable='true' :id='uid' spellcheck='false' v-html='body' v-on:blur='onBlur'></div>" +
         "</div>"
 });
@@ -464,12 +464,12 @@ Vue.component("html-column-block", {
     template:
         "<div class='block-body' class='row'>" +
         "  <div class='col-md-6'>" +
-        "    <div :class='{ empty: isEmpty1 }'>" +
+        "    <div :id='uid + 1 + \"-wrapper\"' class='field' :class='{ empty: isEmpty1 }'>" +
         "      <div :id='uid + 1' contenteditable='true' spellcheck='false' v-html='column1' v-on:blur='onBlurCol1'></div>" +
         "    </div>" +
         "  </div>" +
         "  <div class='col-md-6'>" +
-        "    <div :class='{ empty: isEmpty2 }'>" +
+        "    <div :id='uid + 2 + \"-wrapper\"' class='field' :class='{ empty: isEmpty2 }'>" +
         "      <div :id='uid + 2' contenteditable='true' spellcheck='false' v-html='column2' v-on:blur='onBlurCol2'></div>" +
         "    </div>" +
         "  </div>" +
@@ -975,7 +975,7 @@ Vue.component("html-field", {
         piranha.editor.remove(this.uid);
     },
     template:
-        "<div class='html-field' :class='{ empty: isEmpty }'>" +
+        "<div :id='uid + \"-wrapper\"' class='field html-field' :class='{ empty: isEmpty }'>" +
         "  <div contenteditable='true' :id='uid' spellcheck='false' v-html='body' v-on:blur='onBlur'></div>" +
         "</div>"
 });

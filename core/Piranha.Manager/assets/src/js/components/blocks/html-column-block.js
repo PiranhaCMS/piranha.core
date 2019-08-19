@@ -37,12 +37,12 @@ Vue.component("html-column-block", {
     template:
         "<div class='block-body' class='row'>" +
         "  <div class='col-md-6'>" +
-        "    <div :class='{ empty: isEmpty1 }'>" +
+        "    <div :id='uid + 1 + \"-wrapper\"' class='field' :class='{ empty: isEmpty1 }'>" +
         "      <div :id='uid + 1' contenteditable='true' spellcheck='false' v-html='column1' v-on:blur='onBlurCol1'></div>" +
         "    </div>" +
         "  </div>" +
         "  <div class='col-md-6'>" +
-        "    <div :class='{ empty: isEmpty2 }'>" +
+        "    <div :id='uid + 2 + \"-wrapper\"' class='field' :class='{ empty: isEmpty2 }'>" +
         "      <div :id='uid + 2' contenteditable='true' spellcheck='false' v-html='column2' v-on:blur='onBlurCol2'></div>" +
         "    </div>" +
         "  </div>" +

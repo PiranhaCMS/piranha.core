@@ -1,6 +1,10 @@
 @import "content";
 @import "variables";
 
+.field {
+    position: relative;
+}
+
 .region-center {
     max-width: $block-width;
     margin: 0 auto;

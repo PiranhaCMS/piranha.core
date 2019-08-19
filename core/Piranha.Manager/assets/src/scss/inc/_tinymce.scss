@@ -1,11 +1,19 @@
 .tox-tinymce-inline {
+    position: absolute !important;
+    top: -2rem;
     width: auto !important;
-    margin-top: -.5rem !important;
-    z-index: 4000 !important;
+    min-width: 520px;
+    z-index: 2000 !important;
+}
+
+.block {
+    .tox-tinymce-inline {
+        top: -3.5rem;
+    }
 }
 
 .tox-silver-sink {
-    z-index: 4010 !important;
+    z-index: 2010 !important;
 }
 
 .tox {
