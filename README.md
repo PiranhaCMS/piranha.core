@@ -36,7 +36,7 @@ Piranha is currently built for `NetStandard 2.0` and uses the following awesome 
 * [.NET Core SDK 2.1.5](https://www.microsoft.com/net/core/) or later
 * An IDE or Editor of your choice
 
-#### Get the latest source code and get going:
+#### Get the latest source code and get going
 
     > git clone https://github.com/PiranhaCMS/piranha.core.git
     > cd piranha.core
@@ -44,6 +44,17 @@ Piranha is currently built for `NetStandard 2.0` and uses the following awesome 
     > dotnet build
     > cd examples/MvcWeb
     > dotnet run
+
+#### Log into the Manager
+
+The default credentials for the example projects as
+well as the templates are:
+
+    admin / password
+
+For production scenarios we advice you to remove this
+user, or change the password **and** update the password
+strength policy.
     
 #### Build and update javascript/css assets
 
