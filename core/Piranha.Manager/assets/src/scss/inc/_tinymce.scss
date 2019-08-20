@@ -31,6 +31,12 @@
             margin-left: 4px;
         }
     }
+
+    .tox-collection__item-label {
+        >* {
+            white-space: nowrap;
+        }
+    }
 }
 
 .html-block, .html-column-block, .html-field {
