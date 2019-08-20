@@ -1,7 +1,8 @@
 @using Piranha.Manager
 @inject ManagerLocalizer Localizer
+@inject IAuthorizationService Auth
 @{
-    var menu = Menu.Items;
+    var menu = await Menu.Items.GetForUser(User, Auth);
 }
 
 <nav class="navbar navbar-left fixed-top navbar-dark bg-dark">
