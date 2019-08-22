@@ -67,6 +67,9 @@ namespace RazorWeb
                 .Build()
                 .DeleteOrphans();
 
+            // Configure editor
+            Piranha.Manager.Editor.EditorConfig.FromFile("editorconfig.json");
+
             /**
              *
              * Test another culture in the UI

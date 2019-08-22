@@ -48,7 +48,10 @@ Vue.component("region", {
         "  <div class='form-group' :class='{ \"col-sm-6\": field.meta.isHalfWidth, \"col-sm-12\": !field.meta.isHalfWidth }' v-for='field in model.items[0].fields'>" +
         "    <label v-if='model.items[0].fields.length > 1'>{{ field.meta.name }}</label>" +
         "    <div v-if='field.meta.description != null' v-html='field.meta.description' class='field-description small text-muted'></div>" +
-        "    <component v-if='field.model != null' v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:meta='field.meta' v-bind:model='field.model'></component>" +
+        "    <div class='field-body'>" +
+        "      <div :id='\"tb-\" + field.meta.uid' class='component-toolbar'></div>" +
+        "      <component v-if='field.model != null' v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:meta='field.meta' v-bind:toolbar='\"tb-\" + field.meta.uid' v-bind:model='field.model'></component>" +
+        "    </div>" +
         "  </div>" +
         "</div>" +
         "<div v-else>" +
@@ -73,7 +76,10 @@ Vue.component("region", {
         "          <div class='row'>" +
         "            <div class='form-group' :class='{ \"col-sm-6\": field.meta.isHalfWidth, \"col-sm-12\": !field.meta.isHalfWidth }' v-for='field in item.fields'>" +
         "              <label>{{ field.meta.name }}</label>" +
-        "              <component v-if='field.model != null' v-bind:is='field.meta.component' v-bind:uid='item.uid' v-bind:meta='field.meta' v-bind:model='field.model' v-on:update-field='updateTitle($event)'></component>" +
+        "              <div class='field-body'>" +
+        "                <div :id='\"tb-\" + field.meta.uid' class='component-toolbar'></div>" +
+        "                <component v-if='field.model != null' v-bind:is='field.meta.component' v-bind:uid='item.uid' v-bind:meta='field.meta' v-bind:toolbar='\"tb-\" + field.meta.uid' v-bind:model='field.model' v-on:update-field='updateTitle($event)'></component>" +
+        "              </div>" +
         "            </div>" +
         "          </div>" +
         "        </div>" +
@@ -210,7 +216,7 @@ Vue.component("post-archive", {
 });
 
 Vue.component("block-group", {
-    props: ["uid", "model"],
+    props: ["uid", "toolbar", "model"],
     methods: {
         selectItem: function (item) {
             for (var n = 0; n < this.model.items.length; n++) {
@@ -271,7 +277,7 @@ Vue.component("block-group", {
         "  <div class='block-group-header'>" +
         "    <div class='form-group' v-for='field in model.fields'>" +
         "      <label>{{ field.meta.name }}</label>" +
-        "      <component v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:meta='field.meta' v-bind:model='field.model'></component>" +
+        "      <component v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:meta='field.meta' v-bind:toolbar='toolbar' v-bind:model='field.model'></component>" +
         "    </div>" +
         "  </div>" +
         "  <div class='row'>" +
@@ -296,7 +302,7 @@ Vue.component("block-group", {
         "        <p>{{ piranha.resources.texts.emptyAddLeft }}</p>" +
         "      </div>" +
         "      <div v-for='child in model.items' v-if='child.isActive' :class='\"block \" + child.meta.component'>" +
-        "        <component v-bind:is='child.meta.component' v-bind:uid='child.meta.uid' v-bind:model='child.model' v-on:update-title='updateTitle($event)'></component>" +
+        "        <component v-bind:is='child.meta.component' v-bind:uid='child.meta.uid' v-bind:toolbar='toolbar' v-bind:model='child.model' v-on:update-title='updateTitle($event)'></component>" +
         "      </div>" +
         "    </div>" +
         "  </div>" +
@@ -304,7 +310,7 @@ Vue.component("block-group", {
 });
 
 Vue.component("block-group-horizontal", {
-    props: ["uid", "model"],
+    props: ["uid", "toolbar", "model"],
     methods: {
         removeItem: function (item) {
             var itemIndex = this.model.items.indexOf(item);
@@ -361,7 +367,7 @@ Vue.component("block-group-horizontal", {
         "  <div class='block-group-header'>" +
         "    <div class='form-group' v-for='field in model.fields'>" +
         "      <label>{{ field.meta.name }}</label>" +
-        "      <component v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:meta='field.meta' v-bind:model='field.model'></component>" +
+        "      <component v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:meta='field.meta' v-bind:toolbar='toolbar' v-bind:model='field.model'></component>" +
         "    </div>" +
         "  </div>" +
         "  <div class='row block-group-items'>" +
@@ -385,7 +391,7 @@ Vue.component("block-group-horizontal", {
         "            </button>" +
         "          </div>" +
         "        </div>" +
-        "        <component v-bind:is='child.meta.component' v-bind:uid='child.meta.uid' v-bind:model='child.model'></component>" +
+        "        <component v-bind:is='child.meta.component' v-bind:uid='child.meta.uid' v-bind:toolbar='toolbar' v-bind:model='child.model'></component>" +
         "      </div>" +
         "    </div>" +
         "  </div>" +
@@ -397,7 +403,7 @@ Vue.component("block-group-horizontal", {
 */
 
 Vue.component("html-block", {
-    props: ["uid", "model"],
+    props: ["uid", "toolbar", "model"],
     data: function () {
         return {
             body: this.model.body.value
@@ -414,13 +420,13 @@ Vue.component("html-block", {
         }
     },
     mounted: function () {
-        piranha.editor.addInline(this.uid);
+        piranha.editor.addInline(this.uid, this.toolbar);
     },
     beforeDestroy: function () {
         piranha.editor.remove(this.uid);
     },
     template:
-        "<div :id='uid + \"-wrapper\"' class='field block-body' :class='{ empty: isEmpty }'>" +
+        "<div class='block-body' :class='{ empty: isEmpty }'>" +
         "  <div contenteditable='true' :id='uid' spellcheck='false' v-html='body' v-on:blur='onBlur'></div>" +
         "</div>"
 });
@@ -430,7 +436,7 @@ Vue.component("html-block", {
 */
 
 Vue.component("html-column-block", {
-    props: ["uid", "model"],
+    props: ["uid", "toolbar", "model"],
     data: function () {
         return {
             column1: this.model.column1.value,
@@ -454,8 +460,8 @@ Vue.component("html-column-block", {
         }
     },
     mounted: function () {
-        piranha.editor.addInline(this.uid + 1);
-        piranha.editor.addInline(this.uid + 2);
+        piranha.editor.addInline(this.uid + 1, this.toolbar);
+        piranha.editor.addInline(this.uid + 2, this.toolbar);
     },
     beforeDestroy: function () {
         piranha.editor.remove(this.uid + 1);
@@ -464,12 +470,12 @@ Vue.component("html-column-block", {
     template:
         "<div class='block-body' class='row'>" +
         "  <div class='col-md-6'>" +
-        "    <div :id='uid + 1 + \"-wrapper\"' class='field' :class='{ empty: isEmpty1 }'>" +
+        "    <div :class='{ empty: isEmpty1 }'>" +
         "      <div :id='uid + 1' contenteditable='true' spellcheck='false' v-html='column1' v-on:blur='onBlurCol1'></div>" +
         "    </div>" +
         "  </div>" +
         "  <div class='col-md-6'>" +
-        "    <div :id='uid + 2 + \"-wrapper\"' class='field' :class='{ empty: isEmpty2 }'>" +
+        "    <div :class='{ empty: isEmpty2 }'>" +
         "      <div :id='uid + 2' contenteditable='true' spellcheck='false' v-html='column2' v-on:blur='onBlurCol2'></div>" +
         "    </div>" +
         "  </div>" +
@@ -952,7 +958,7 @@ Vue.component("document-field", {
 });
 
 Vue.component("html-field", {
-    props: ["uid", "model"],
+    props: ["uid", "toolbar", "model"],
     data: function () {
         return {
             body: this.model.value
@@ -969,13 +975,13 @@ Vue.component("html-field", {
         }
     },
     mounted: function () {
-        piranha.editor.addInline(this.uid);
+        piranha.editor.addInline(this.uid, this.toolbar);
     },
     beforeDestroy: function () {
         piranha.editor.remove(this.uid);
     },
     template:
-        "<div :id='uid + \"-wrapper\"' class='field html-field' :class='{ empty: isEmpty }'>" +
+        "<div class='field html-field' :class='{ empty: isEmpty }'>" +
         "  <div contenteditable='true' :id='uid' spellcheck='false' v-html='body' v-on:blur='onBlur'></div>" +
         "</div>"
 });

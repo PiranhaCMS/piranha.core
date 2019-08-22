@@ -1,14 +1,15 @@
-.tox-tinymce-inline {
-    position: absolute !important;
-    top: -2rem;
-    width: auto !important;
-    min-width: 520px;
-    z-index: 2000 !important;
+.component-toolbar {
+    position: absolute;
+    top: -.5rem;
+    left: .5rem;
+    right: 9.5rem;
+    z-index: 2000;
 }
 
-.block {
-    .tox-tinymce-inline {
-        top: -3.5rem;
+.region {
+    .component-toolbar {
+        top: -2rem;
+        right: .5rem;
     }
 }
 
@@ -42,5 +43,13 @@
 .html-block, .html-column-block, .html-field {
     .mce-content-body {
         height: 100%;
+    }
+
+    .empty:not(:focus-within) {
+        .mce-content-body {
+            p {
+                height: 7rem;
+            }
+        }
     }
 }

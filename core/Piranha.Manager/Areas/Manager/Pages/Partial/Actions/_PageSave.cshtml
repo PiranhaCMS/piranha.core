@@ -1,6 +1,6 @@
 @inject ManagerLocalizer Localizer
 
-<div class="btn-group" role="group">
+<div class="btn-group d-none d-lg-inline-flex" role="group">
     <button v-on:click.prevent="saveDraft" :class="{ 'btn-loading' : savingDraft }" type="button" class="btn btn-primary btn-labeled">
         <i class="fas fa-save"></i>
         @Localizer.General["Save"]
@@ -13,7 +13,18 @@
         </div>
     </div>
 </div>
-<div class="btn-group" role="group">
+<div class="dropdown d-inline-block d-lg-none">
+    <button :class="{ 'btn-loading' : savingDraft }" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-save mr-1"></i>
+    </button>
+    <div class="dropdown-menu">
+        <a v-on:click.prevent="saveDraft" class="dropdown-item" href="#">@Localizer.General["Save"]</a>
+        <a v-if="state === 'draft'" v-on:click.prevent="revert" class="dropdown-item" href="#">@Localizer.General["Revert"]</a>
+        <a v-if="state !== 'new'" class="dropdown-item" :href="piranha.baseUrl + 'manager/page/preview/' + id" target="_preview">@Localizer.General["Preview"]</a>
+    </div>
+</div>
+
+<div class="btn-group  d-none d-lg-inline-flex" role="group">
     <button v-on:click.prevent="save" :class="{ 'btn-loading' : saving }" type="button" class="btn btn-success btn-labeled">
         <i class="fas fa-check"></i>
         @Localizer.General["Publish"]
@@ -24,5 +35,15 @@
             <a v-if="state !== 'new' && state !== 'unpublished'" v-on:click.prevent="unpublish" class="dropdown-item" href="#">@Localizer.General["Unpublish"]</a>
             <a v-if="state !== 'new'" v-on:click.prevent="remove" class="dropdown-item text-danger" href="#">@Localizer.General["Delete"]</a>
         </div>
+    </div>
+</div>
+<div class="dropdown d-inline-block d-lg-none">
+    <button :class="{ 'btn-loading' : saving }" class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-check mr-1"></i>
+    </button>
+    <div class="dropdown-menu">
+        <a v-on:click.prevent="save" class="dropdown-item" href="#">@Localizer.General["Publish"]</a>
+        <a v-if="state !== 'new' && state !== 'unpublished'" v-on:click.prevent="unpublish" class="dropdown-item" href="#">@Localizer.General["Unpublish"]</a>
+        <a v-if="state !== 'new'" v-on:click.prevent="remove" class="dropdown-item text-danger" href="#">@Localizer.General["Delete"]</a>
     </div>
 </div>

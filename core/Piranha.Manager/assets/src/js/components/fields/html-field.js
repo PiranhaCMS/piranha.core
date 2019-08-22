@@ -1,5 +1,5 @@
 Vue.component("html-field", {
-    props: ["uid", "model"],
+    props: ["uid", "toolbar", "model"],
     data: function () {
         return {
             body: this.model.value
@@ -16,13 +16,13 @@ Vue.component("html-field", {
         }
     },
     mounted: function () {
-        piranha.editor.addInline(this.uid);
+        piranha.editor.addInline(this.uid, this.toolbar);
     },
     beforeDestroy: function () {
         piranha.editor.remove(this.uid);
     },
     template:
-        "<div :id='uid + \"-wrapper\"' class='field html-field' :class='{ empty: isEmpty }'>" +
+        "<div class='field html-field' :class='{ empty: isEmpty }'>" +
         "  <div contenteditable='true' :id='uid' spellcheck='false' v-html='body' v-on:blur='onBlur'></div>" +
         "</div>"
 });

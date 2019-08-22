@@ -3,7 +3,7 @@
 */
 
 Vue.component("html-column-block", {
-    props: ["uid", "model"],
+    props: ["uid", "toolbar", "model"],
     data: function () {
         return {
             column1: this.model.column1.value,
@@ -27,8 +27,8 @@ Vue.component("html-column-block", {
         }
     },
     mounted: function () {
-        piranha.editor.addInline(this.uid + 1);
-        piranha.editor.addInline(this.uid + 2);
+        piranha.editor.addInline(this.uid + 1, this.toolbar);
+        piranha.editor.addInline(this.uid + 2, this.toolbar);
     },
     beforeDestroy: function () {
         piranha.editor.remove(this.uid + 1);
@@ -37,12 +37,12 @@ Vue.component("html-column-block", {
     template:
         "<div class='block-body' class='row'>" +
         "  <div class='col-md-6'>" +
-        "    <div :id='uid + 1 + \"-wrapper\"' class='field' :class='{ empty: isEmpty1 }'>" +
+        "    <div :class='{ empty: isEmpty1 }'>" +
         "      <div :id='uid + 1' contenteditable='true' spellcheck='false' v-html='column1' v-on:blur='onBlurCol1'></div>" +
         "    </div>" +
         "  </div>" +
         "  <div class='col-md-6'>" +
-        "    <div :id='uid + 2 + \"-wrapper\"' class='field' :class='{ empty: isEmpty2 }'>" +
+        "    <div :class='{ empty: isEmpty2 }'>" +
         "      <div :id='uid + 2' contenteditable='true' spellcheck='false' v-html='column2' v-on:blur='onBlurCol2'></div>" +
         "    </div>" +
         "  </div>" +

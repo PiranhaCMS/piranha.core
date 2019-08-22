@@ -4,7 +4,7 @@
     background: $white;
     height: 3.3rem;
     margin-bottom: 1rem;
-    
+
     .breadcrumb {
         position: absolute;
         z-index: 1010;
@@ -15,12 +15,13 @@
         top: 0;
         left: 3rem;
         width: calc(100% - 3rem);
-        z-index: 1000; // TODO: Set later
+        z-index: 1030;
     }
 
     .top-nav {
         background: rgba(255,255,255,.6);
         padding: .5rem 1rem;
-        float: right;
+        position: absolute;
+        right: 0;
     }
 }

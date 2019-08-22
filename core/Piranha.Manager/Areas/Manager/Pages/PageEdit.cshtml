@@ -123,6 +123,7 @@
                     <span v-else class="block-add unsortable"><hr><i class="fas fa-plus-circle"></i></span>
                     <div v-for="(block, index) in blocks" v-bind:key="block.meta.uid">
                         <div :class="'block ' + block.meta.component + (block.meta.isCollapsed ? ' collapsed' : '')">
+                            <div :id="'tb-' + block.meta.uid" class="component-toolbar"></div>
                             <div class="block-header">
                                 <div class="title">
                                     <i :class="block.meta.icon"></i><strong>{{ block.meta.name }}</strong>
@@ -140,8 +141,8 @@
                                     </button>
                                 </div>
                             </div>
-                            <component v-if="!block.meta.isGroup" v-bind:is="block.meta.component" v-bind:uid="block.meta.uid" v-bind:model="block.model"></component>
-                            <component v-if="block.meta.isGroup" v-bind:is="block.meta.component" v-bind:uid="block.meta.uid" v-bind:model="block"></component>
+                            <component v-if="!block.meta.isGroup" v-bind:is="block.meta.component" v-bind:uid="block.meta.uid" v-bind:toolbar="'tb-' + block.meta.uid" v-bind:model="block.model"></component>
+                            <component v-if="block.meta.isGroup" v-bind:is="block.meta.component" v-bind:uid="block.meta.uid" v-bind:toolbar="'tb-' + block.meta.uid" v-bind:model="block"></component>
                             <div class="content-blocker"></div>
                         </div>
                         <a v-if="!isCopy" href="#" class="block-add" v-on:click.prevent="piranha.blockpicker.open(piranha.pageedit.addBlock, index + 1)">

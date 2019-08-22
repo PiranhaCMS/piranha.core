@@ -1,5 +1,5 @@
 Vue.component("block-group", {
-    props: ["uid", "model"],
+    props: ["uid", "toolbar", "model"],
     methods: {
         selectItem: function (item) {
             for (var n = 0; n < this.model.items.length; n++) {
@@ -60,7 +60,7 @@ Vue.component("block-group", {
         "  <div class='block-group-header'>" +
         "    <div class='form-group' v-for='field in model.fields'>" +
         "      <label>{{ field.meta.name }}</label>" +
-        "      <component v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:meta='field.meta' v-bind:model='field.model'></component>" +
+        "      <component v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:meta='field.meta' v-bind:toolbar='toolbar' v-bind:model='field.model'></component>" +
         "    </div>" +
         "  </div>" +
         "  <div class='row'>" +
@@ -85,7 +85,7 @@ Vue.component("block-group", {
         "        <p>{{ piranha.resources.texts.emptyAddLeft }}</p>" +
         "      </div>" +
         "      <div v-for='child in model.items' v-if='child.isActive' :class='\"block \" + child.meta.component'>" +
-        "        <component v-bind:is='child.meta.component' v-bind:uid='child.meta.uid' v-bind:model='child.model' v-on:update-title='updateTitle($event)'></component>" +
+        "        <component v-bind:is='child.meta.component' v-bind:uid='child.meta.uid' v-bind:toolbar='toolbar' v-bind:model='child.model' v-on:update-title='updateTitle($event)'></component>" +
         "      </div>" +
         "    </div>" +
         "  </div>" +

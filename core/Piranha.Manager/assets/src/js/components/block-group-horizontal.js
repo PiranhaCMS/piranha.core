@@ -1,5 +1,5 @@
 Vue.component("block-group-horizontal", {
-    props: ["uid", "model"],
+    props: ["uid", "toolbar", "model"],
     methods: {
         removeItem: function (item) {
             var itemIndex = this.model.items.indexOf(item);
@@ -56,7 +56,7 @@ Vue.component("block-group-horizontal", {
         "  <div class='block-group-header'>" +
         "    <div class='form-group' v-for='field in model.fields'>" +
         "      <label>{{ field.meta.name }}</label>" +
-        "      <component v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:meta='field.meta' v-bind:model='field.model'></component>" +
+        "      <component v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:meta='field.meta' v-bind:toolbar='toolbar' v-bind:model='field.model'></component>" +
         "    </div>" +
         "  </div>" +
         "  <div class='row block-group-items'>" +
@@ -80,7 +80,7 @@ Vue.component("block-group-horizontal", {
         "            </button>" +
         "          </div>" +
         "        </div>" +
-        "        <component v-bind:is='child.meta.component' v-bind:uid='child.meta.uid' v-bind:model='child.model'></component>" +
+        "        <component v-bind:is='child.meta.component' v-bind:uid='child.meta.uid' v-bind:toolbar='toolbar' v-bind:model='child.model'></component>" +
         "      </div>" +
         "    </div>" +
         "  </div>" +

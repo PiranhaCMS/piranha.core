@@ -25878,6 +25878,28 @@ $(document).on('mouseenter', '.block-header .danger', function() {
 $(document).on('mouseleave', '.block-header .danger', function() {
     $(this).closest('.block').removeClass('danger');
 });
+
+$(window).scroll(function () {
+    var scroll = $(this).scrollTop();
+
+    $(".block .component-toolbar").each(function () {
+        var parent = $(this).parent();
+        var parentTop = parent.offset().top;
+
+        if (scroll > parentTop) {
+            var parentHeight = parent.outerHeight();
+            var bottom = parentTop + parentHeight;
+
+            if (scroll > bottom) {
+                $(this).css({ "top": parentHeight + "px" })
+            } else {
+                $(this).css({ "top": scroll - parentTop + "px" })
+            }
+        } else {
+            $(this).removeAttr("style");
+        }
+    });
+});
 /*global
     piranha
 */
@@ -26395,22 +26417,23 @@ piranha.resources = new function() {
 piranha.editor = {
     editors = [],
 
-    addInline: function (id) {
+    addInline: function (id, toolbarId) {
         tinymce.init({
             selector: "#" + id,
-            fixed_toolbar_container: "#" + id + "-wrapper",
+            fixed_toolbar_container: "#" + toolbarId,
             menubar: false,
             branding: false,
             statusbar: false,
             inline: true,
             convert_urls: false,
             plugins: [
-                "autoresize autolink code hr paste lists piranhalink piranhaimage"
+                piranha.editorconfig.plugins
             ],
             width: "100%",
             autoresize_min_height: 0,
-            toolbar: "bold italic | bullist numlist hr | alignleft aligncenter alignright | formatselect | piranhalink piranhaimage",
-            block_formats: 'Paragraph=p;Header 1=h1;Header 2=h2;Header 3=h3;Header 4=h4;Code=pre;Quote=blockquote',
+            toolbar: piranha.editorconfig.toolbar,
+            block_formats: piranha.editorconfig.block_formats,
+            style_formats: piranha.editorconfig.style_formats,
             file_picker_callback: function(callback, value, meta) {
                 // Provide file and text for the link dialog
                 if (meta.filetype == 'file') {
