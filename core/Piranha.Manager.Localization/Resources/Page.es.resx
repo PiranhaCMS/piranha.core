@@ -19,10 +19,10 @@
     <value>Ocurrió un error al eliminar la página</value>
   </data>
   <data name="Detach page" xml:space="preserve">
-    <value>Detach page</value>
+    <value>Separar página</value>
   </data>
   <data name="Edit original" xml:space="preserve">
-    <value>Edit original</value>
+    <value>Editar original</value>
   </data>
   <data name="Edit page" xml:space="preserve">
     <value>Editar página</value>
@@ -49,7 +49,7 @@
     <value>La página fue eliminada correctamente</value>
   </data>
   <data name="The page was successfully detached from the original" xml:space="preserve">
-    <value>The page was successfully detached from the original</value>
+    <value>La página fue separada con éxito del original</value>
   </data>
   <data name="The page was successfully published" xml:space="preserve">
     <value>La página fue publicada con éxito</value>
@@ -64,7 +64,7 @@
     <value>La página fue revertida con éxito a su estado anterior</value>
   </data>
   <data name="This is a copy. In order to edit the content of the page you first need to detach it from the original. If you want to keep the page as a copy you should edit the content of the original page." xml:space="preserve">
-    <value>This is a copy. In order to edit the content of the page you first need to detach it from the original. If you want to keep the page as a copy you should edit the content of the original page.</value>
+    <value>Esta es una copia. Para editar el contenido de la página primero necesita separarlo del original. Si desea mantener la página como una copia, debe editar el contenido de la página original.</value>
   </data>
   <data name="Welcome to your new page. Click on the button above to add your first block of content!" xml:space="preserve">
     <value>Bienvenido a tu nueva página. ¡Haz clic en el botón de arriba para añadir tu primer bloque de contenido!</value>

@@ -25,7 +25,7 @@
     <value>Tipo de contenido</value>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Copy</value>
+    <value>Copiar</value>
   </data>
   <data name="Culture" xml:space="preserve">
     <value>Cultura</value>
@@ -67,7 +67,7 @@
     <value>General</value>
   </data>
   <data name="History" xml:space="preserve">
-    <value>History</value>
+    <value>Historial</value>
   </data>
   <data name="Internal id" xml:space="preserve">
     <value>Id interno</value>
@@ -151,7 +151,7 @@
     <value>Remover publicación</value>
   </data>
   <data name="Unpublished" xml:space="preserve">
-    <value>Unpublished</value>
+    <value>Remover publicación</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Versión</value>
