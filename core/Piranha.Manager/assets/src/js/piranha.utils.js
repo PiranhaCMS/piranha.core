@@ -35,7 +35,7 @@ $(document).on('mouseleave', '.block-header .danger', function() {
 $(window).scroll(function () {
     var scroll = $(this).scrollTop();
 
-    $(".block .component-toolbar").each(function () {
+    $(".app .component-toolbar").each(function () {
         var parent = $(this).parent();
         var parentTop = parent.offset().top;
 
