@@ -16,22 +16,22 @@
     <value>Map toevoegen</value>
   </data>
   <data name="Drop files here or click to upload." xml:space="preserve">
-    <value>Drop files here or click to upload.</value>
+    <value>Sleep bestanden hierheen of klik om bestanden te uploaden.</value>
   </data>
   <data name="Download media" xml:space="preserve">
-    <value>Download media</value>
+    <value>Media downloaden</value>
   </data>
   <data name="Folder name" xml:space="preserve">
     <value>Mapnaam</value>
   </data>
   <data name="Gallery" xml:space="preserve">
-    <value>Gallery</value>
+    <value>Galerij</value>
   </data>
   <data name="Media" xml:space="preserve">
     <value>Media</value>
   </data>
   <data name="Media preview is not available" xml:space="preserve">
-    <value>Media preview is not available</value>
+    <value>Media voorbeeld is niet beschikbaar</value>
   </data>
   <data name="Open media in new tab" xml:space="preserve">
     <value>Open media in nieuw tabblad</value>
