@@ -19,10 +19,10 @@
     <value>Er is een fout opgetreden tijdens het verwijderen van de pagina</value>
   </data>
   <data name="Detach page" xml:space="preserve">
-    <value>Detach page</value>
+    <value>Pagina loskoppelen</value>
   </data>
   <data name="Edit original" xml:space="preserve">
-    <value>Edit original</value>
+    <value>Origineel bewerken</value>
   </data>
   <data name="Edit page" xml:space="preserve">
     <value>Pagina wijzigen</value>
@@ -49,7 +49,7 @@
     <value>De pagina is succesvol verwijderd</value>
   </data>
   <data name="The page was successfully detached from the original" xml:space="preserve">
-    <value>The page was successfully detached from the original</value>
+    <value>De pagina is succesvol losgekoppeld van het origineel</value>
   </data>
   <data name="The page was successfully published" xml:space="preserve">
     <value>De pagina is succesvol gepubliceerd</value>
