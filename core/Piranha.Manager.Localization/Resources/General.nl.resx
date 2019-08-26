@@ -79,13 +79,13 @@
     <value>Uitloggen</value>
   </data>
   <data name="Looks like there's no items here. Click on the button above to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button above to get started!</value>
+    <value>Het lijkt erop dat er hier geen items zijn. Klik op de knop hierboven om aan de slag te gaan!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button below to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button below to get started!</value>
+    <value>Het lijkt erop dat er hier geen items zijn. Klik op de knop hieronder om aan de slag te gaan!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button to the left to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button to the left to get started!</value>
+    <value>Het lijkt erop dat er hier geen items zijn. Klik op de knop links om aan de slag te gaan!</value>
   </data>
   <data name="Main content" xml:space="preserve">
     <value>Hoofdinhoud</value>
@@ -133,7 +133,7 @@
     <value>Grootte</value>
   </data>
   <data name="Slug" xml:space="preserve">
-    <value>Slug</value>
+    <value>Korte naam</value>
   </data>
   <data name="System" xml:space="preserve">
     <value>Systeem</value>
