@@ -31,13 +31,13 @@
     <value>Cache</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Page cache expiration (minutes)</value>
+    <value>Pagina cache verlooptijd (minuten)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
     <value>Paginarevisies</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Post cache expiration (minutes)</value>
+    <value>Artikel cache verlooptijd (minuten)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
     <value>Revisies weergeven</value>
