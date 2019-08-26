@@ -106,7 +106,7 @@
                             <p class="thumbnail-text">...</p>
                         </a>
 
-                        <a href="#" class="thumbnail" v-for="folder in folders" v-on:click.prevent="load(folder.id)">
+                        <a href="#" class="thumbnail" v-for="folder in filteredFolders" v-on:click.prevent="load(folder.id)">
                             <div class="thumbnail-icon">
                                 <i class="fas fa-folder fa-3x"></i>
                             </div>
