@@ -25,10 +25,10 @@
     <value>Expanded levels in the sitemap</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
-    <value>Archive page size</value>
+    <value>Archief pagina grootte</value>
   </data>
   <data name="Caching" xml:space="preserve">
-    <value>Caching</value>
+    <value>Cache</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
     <value>Page cache expiration (minutes)</value>
