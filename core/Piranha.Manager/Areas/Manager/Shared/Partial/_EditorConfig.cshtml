@@ -11,7 +11,7 @@
             {
                 if (style.Type == EditorStyleType.Block)
                 {
-<text>            { title: "@style.Title", inline: "@style.Tag"@Html.Raw(style.HasClasses ? ", classes: \"" + style.Classes + "\"" : "") },
+<text>            { title: "@style.Title", block: "@style.Tag"@Html.Raw(style.HasClasses ? ", classes: \"" + style.Classes + "\"" : "") },
 </text>
                 }
                 else if (style.Type == EditorStyleType.Format)
