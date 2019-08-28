@@ -65,7 +65,7 @@
         }
     }
 
-    .actions {
+    .actions, .custom-actions {
         float: right;
 
         .btn {
@@ -73,7 +73,15 @@
             width: 1.75rem;
             height: 1.75rem;
             border-radius: 50%;
+            position: relative;
             transition: all ease-in-out .2s;
+
+            i {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translateX(-50%) translateY(-50%);
+            }
 
             &:hover {
                 background: $gray-400;
@@ -98,9 +106,18 @@
             }
         }
 
-        .handle {
+        .btn {
             cursor: pointer;
         }
+    }
+
+    .custom-actions {
+        position: absolute;
+        top: .5rem;
+        right: 7rem;
+        float: none;
+        opacity: 0;
+        transition: opacity ease-in-out .2s;
     }
 
     .has-media-picker {
@@ -161,7 +178,7 @@
     &:hover, &:focus-within {
         border-color: $gray-400;
 
-        .block-header {
+        .block-header, .custom-actions {
             opacity: 1;
         }
     }
