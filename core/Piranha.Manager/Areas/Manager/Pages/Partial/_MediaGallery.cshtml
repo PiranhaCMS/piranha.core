@@ -9,6 +9,7 @@
                 </div>
 
                 <a href="#" class="thumbnail droppable" v-if="currentFolderId != null" v-on:click.prevent="load(parentFolderId)" v-on:dragover="dragover" v-on:dragleave="dragleave" v-on:drop="drop($event, parentFolderId)">
+                    <img src="~/manager/assets/img/media-placeholder.jpg">
                     <div class="thumbnail-icon">
                         <i class="fas fa-folder-open fa-3x"></i>
                     </div>
@@ -16,6 +17,8 @@
                 </a>
 
                 <a href="#" class="thumbnail droppable" v-for="folder in folders" v-on:click.prevent="load(folder.id)" v-on:dragover="dragover" v-on:dragleave="dragleave" v-on:drop="drop($event, folder.id)">
+                    <button class="btn btn-danger media-delete" v-if="folder.itemCount === 0" v-on:click.stop="removeFolder(folder.id)"><i class="fas fa-trash"></i></button>
+                    <img src="~/manager/assets/img/media-placeholder.jpg">
                     <div class="thumbnail-icon">
                         <i class="fas fa-folder fa-3x"></i>
                     </div>
@@ -31,24 +34,28 @@
                         </template>
 
                         <template v-else-if="item.type === 'Document'">
+                            <img src="~/manager/assets/img/media-placeholder.jpg">
                             <div class="thumbnail-icon">
                                 <i class="fas fa-file-alt fa-3x"></i>
                             </div>
                         </template>
 
                         <template v-else-if="item.type === 'Video'">
+                            <img src="~/manager/assets/img/media-placeholder.jpg">
                             <div class="thumbnail-icon">
                                 <i class="fas fa-film fa-3x"></i>
                             </div>
                         </template>
 
                         <template v-else-if="item.type === 'Resource'">
+                            <img src="~/manager/assets/img/media-placeholder.jpg">
                             <div class="thumbnail-icon">
                                 <i class="fas fa-box-open fa-3x"></i>
                             </div>
                         </template>
 
                         <template v-else>
+                            <img src="~/manager/assets/img/media-placeholder.jpg">
                             <div class="thumbnail-icon">
                                 <i class="fas fa-file"></i>
                                 <i class="fas fa-file fa-3x"></i>

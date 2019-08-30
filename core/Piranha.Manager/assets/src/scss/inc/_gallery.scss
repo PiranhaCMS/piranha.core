@@ -79,9 +79,14 @@
     }
 
     .thumbnail-icon {
-        flex-grow: 1;
-        position: relative;
         background: $thumbnail-bg;
+        flex-grow: 1;
+        position: absolute;
+        width: 3rem;
+        height: 3em;
+        top: calc(50% - 10px);
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
 
         > * {
             position: absolute;
@@ -121,6 +126,7 @@
         background: rgba(255,255,255,.85);
         color: $danger;
         opacity: 0;
+        z-index: 10;
         transition: all ease-in-out .2s;
 
         &:hover {
