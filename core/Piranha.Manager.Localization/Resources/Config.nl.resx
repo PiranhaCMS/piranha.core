@@ -25,22 +25,22 @@
     <value>Expanded levels in the sitemap</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
-    <value>Archive page size</value>
+    <value>Archief pagina grootte</value>
   </data>
   <data name="Caching" xml:space="preserve">
-    <value>Caching</value>
+    <value>Cache</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Page cache expiration (minutes)</value>
+    <value>Pagina cache verlooptijd (minuten)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
     <value>Paginarevisies</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Post cache expiration (minutes)</value>
+    <value>Artikel cache verlooptijd (minuten)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
-    <value>Post revisions</value>
+    <value>Revisies weergeven</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
     <value>Media CDN</value>
@@ -68,6 +68,6 @@
     <value>The time in minutes that web browsers can use posts before asking the server for new updates.</value>
   </data>
   <data name="The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL." xml:space="preserve">
-    <value>The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL.</value>
+    <value>De volledige URL (inclusief een mapnaam) naar de CDN die gebruikt wordt om geüploade media te serveren. Leeg laten om standaard opslag URL te gebruiken.</value>
   </data>
 </root>
