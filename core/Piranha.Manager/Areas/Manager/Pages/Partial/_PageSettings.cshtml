@@ -51,6 +51,17 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
+                                <label>@Localizer.General["Redirect"]</label>
+                                <input type="text" v-model="redirectUrl" maxlength="256" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>@Localizer.General["Redirect Type"]</label>
+                                <select v-model="redirectType" class="form-control">
+                                    <option value="Permanent">@Localizer.General["Permanent"]</option>
+                                    <option value="Temporary">@Localizer.General["Temporary"]</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label>@Localizer.Page["Hidden"]</label>
                                 <div class="form-group form-check">
                                     <input id="isHidden" v-model="isHidden" type="checkbox" class="form-check-input">

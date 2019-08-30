@@ -227,6 +227,8 @@ namespace Piranha.Manager.Services
                 post.MetaKeywords = model.MetaKeywords;
                 post.MetaDescription = model.MetaDescription;
                 post.Published = !string.IsNullOrEmpty(model.Published) ? DateTime.Parse(model.Published) : (DateTime?)null;
+                post.RedirectUrl = model.RedirectUrl;
+                post.RedirectType = (RedirectType)Enum.Parse(typeof(RedirectType), model.RedirectType);
 
                 // Save category
                 post.Category = new Taxonomy
@@ -371,6 +373,8 @@ namespace Piranha.Manager.Services
                 MetaKeywords = post.MetaKeywords,
                 MetaDescription = post.MetaDescription,
                 Published = post.Published.HasValue ? post.Published.Value.ToString("yyyy-MM-dd HH:mm") : null,
+                RedirectUrl = post.RedirectUrl,
+                RedirectType = post.RedirectType.ToString(),
                 State = GetState(post, isDraft),
                 UseBlocks = type.UseBlocks
             };

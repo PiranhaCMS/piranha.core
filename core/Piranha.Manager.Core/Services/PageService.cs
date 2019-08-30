@@ -237,6 +237,8 @@ namespace Piranha.Manager.Services
                 page.MetaDescription = model.MetaDescription;
                 page.IsHidden = model.IsHidden;
                 page.Published = !string.IsNullOrEmpty(model.Published) ? DateTime.Parse(model.Published) : (DateTime?)null;
+                page.RedirectUrl = model.RedirectUrl;
+                page.RedirectType = (RedirectType)Enum.Parse(typeof(RedirectType), model.RedirectType);
 
                 //
                 // We only need to save regions & blocks for pages that are not copies
@@ -444,6 +446,8 @@ namespace Piranha.Manager.Services
                 MetaDescription = page.MetaDescription,
                 IsHidden = page.IsHidden,
                 Published = page.Published.HasValue ? page.Published.Value.ToString("yyyy-MM-dd HH:mm") : null,
+                RedirectUrl = page.RedirectUrl,
+                RedirectType = page.RedirectType.ToString(),
                 State = GetState(page, isDraft),
                 UseBlocks = type.UseBlocks
             };

@@ -70,6 +70,16 @@ namespace Piranha.Manager.Models
         public string Published { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional redirect url.
+        /// </summary>
+        public string RedirectUrl { get; set; }
+
+        /// <summary>
+        /// Gets/sets the redirect type.
+        /// </summary>
+        public string RedirectType { get; set; } = "permanent";
+
+        /// <summary>
         /// Gets/sets the content status.
         /// </summary>
         public string State { get; set; }

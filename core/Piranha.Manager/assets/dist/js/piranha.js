@@ -26081,6 +26081,7 @@ piranha.mediapicker = new Vue({
                     self.folders = result.folders;
                     self.items = result.media;
                     self.listView = result.viewMode === "list";
+                    self.search = "";
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },

@@ -14,6 +14,8 @@ piranha.postedit = new Vue({
         metaKeywords: null,
         metaDescription: null,
         published: null,
+        redirectUrl: null,
+        redirectType: null,
         state: "new",
         categories: [],
         tags: [],
@@ -54,6 +56,8 @@ piranha.postedit = new Vue({
             this.metaKeywords = model.metaKeywords;
             this.metaDescription = model.metaDescription;
             this.published = model.published;
+            this.redirectUrl = model.redirectUrl;
+            this.redirectType = model.redirectType;
             this.state = model.state;
             this.blocks = model.blocks;
             this.regions = model.regions;
@@ -125,6 +129,8 @@ piranha.postedit = new Vue({
                 metaKeywords: self.metaKeywords,
                 metaDescription: self.metaDescription,
                 published: self.published,
+                redirectUrl: self.redirectUrl,
+                redirectType: self.redirectType,
                 blocks: JSON.parse(JSON.stringify(self.blocks)),
                 regions: JSON.parse(JSON.stringify(self.regions)),
                 selectedCategory: self.selectedCategory,

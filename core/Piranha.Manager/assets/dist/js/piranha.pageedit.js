@@ -19,6 +19,8 @@ piranha.pageedit = new Vue({
         metaDescription: null,
         isHidden: false,
         published: null,
+        redirectUrl: null,
+        redirectType: null,
         state: "new",
         blocks: [],
         regions: [],
@@ -61,6 +63,8 @@ piranha.pageedit = new Vue({
             this.metaDescription = model.metaDescription;
             this.isHidden = model.isHidden;
             this.published = model.published;
+            this.redirectUrl = model.redirectUrl;
+            this.redirectType = model.redirectType;
             this.state = model.state;
             this.blocks = model.blocks;
             this.regions = model.regions;
@@ -149,22 +153,24 @@ piranha.pageedit = new Vue({
             var self = this;
 
             var model = {
-                id: piranha.pageedit.id,
-                siteId: piranha.pageedit.siteId,
-                parentId: piranha.pageedit.parentId,
-                originalId: piranha.pageedit.originalId,
-                sortOrder: piranha.pageedit.sortOrder,
-                typeId: piranha.pageedit.typeId,
-                title: piranha.pageedit.title,
-                navigationTitle: piranha.pageedit.navigationTitle,
-                slug: piranha.pageedit.slug,
-                metaKeywords: piranha.pageedit.metaKeywords,
-                metaDescription: piranha.pageedit.metaDescription,
-                isHidden: piranha.pageedit.isHidden,
-                published: piranha.pageedit.published,
-                isCopy: piranha.pageedit.isCopy,
-                blocks: JSON.parse(JSON.stringify(piranha.pageedit.blocks)),
-                regions: JSON.parse(JSON.stringify(piranha.pageedit.regions))
+                id: self.id,
+                siteId: self.siteId,
+                parentId: self.parentId,
+                originalId: self.originalId,
+                sortOrder: self.sortOrder,
+                typeId: self.typeId,
+                title: self.title,
+                navigationTitle: self.navigationTitle,
+                slug: self.slug,
+                metaKeywords: self.metaKeywords,
+                metaDescription: self.metaDescription,
+                isHidden: self.isHidden,
+                published: self.published,
+                redirectUrl: self.redirectUrl,
+                redirectType: self.redirectType,
+                isCopy: self.isCopy,
+                blocks: JSON.parse(JSON.stringify(self.blocks)),
+                regions: JSON.parse(JSON.stringify(self.regions))
             };
 
             fetch(route, {
