@@ -1182,21 +1182,22 @@ Vue.component("page-field", {
     props: ["uid", "model", "meta"],
     methods: {
         select: function () {
-            piranha.pagepicker.open(this.update);
+            var siteId = null;
+
+            if (this.model.page) {
+                siteId = this.model.page.siteId;
+            } else if (piranha.pageedit) {
+                siteId = piranha.pageedit.siteId;
+            }
+            piranha.pagepicker.open(this.update, siteId);
         },
         remove: function () {
             this.model.id = null;
             this.model.page = null;
         },
         update: function (page) {
-
-            console.log("update", page);
-
             this.model.id = page.id;
             this.model.page = page;
-
-            console.log("uid", this.uid);
-            console.log("title", this.model.page.title);
 
             // Tell parent that title has been updated
             this.$emit('update-title', {

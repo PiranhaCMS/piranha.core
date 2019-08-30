@@ -34,7 +34,7 @@ piranha.postpicker = new Vue({
                 url += "?siteId=" + siteId;
                 if (archiveId) {
                     url += "&archiveId=" + archiveId;
-                }                    
+                }
             }
 
             fetch(url)
@@ -53,7 +53,7 @@ piranha.postpicker = new Vue({
                 .catch(function (error) { console.log("error:", error ); });
         },
         refresh: function () {
-            piranha.postpicker.load(piranha.postpicker.currentSiteId, piranha.postpicker.currentArchiveId);
+            this.load(this.currentSiteId, this.currentArchiveId);
         },
         open: function (callback, siteId, archiveId, currentPostId) {
             this.search = '';
@@ -64,8 +64,8 @@ piranha.postpicker = new Vue({
             $("#postpicker").modal("show");
         },
         onEnter: function () {
-            if (this.filteredItems.length == 1 && this.filteredFolders.length == 0) {
-                this.select(this.filteredItems[0]);
+            if (this.filteredPosts.length == 1) {
+                this.select(this.filteredPosts[0]);
             }
         },
         select: function (item) {

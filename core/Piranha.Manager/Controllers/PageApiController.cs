@@ -63,13 +63,14 @@ namespace Piranha.Manager.Controllers
         /// <returns>The list model</returns>
         [Route("sitemap/{siteId?}")]
         [HttpGet]
-        public async Task<List<PageListModel.PageItem>> Sitemap(Guid? siteId = null)
+        public async Task<SiteListModel> Sitemap(Guid? siteId = null)
         {
             if (!siteId.HasValue)
             {
                 siteId = (await _api.Sites.GetDefaultAsync()).Id;
             }
-            return await _service.GetPageStructure(siteId.Value);
+            return await _service.GetSiteList(siteId.Value);
+            //return await _service.GetPageStructure(siteId.Value);
         }
 
         /// <summary>

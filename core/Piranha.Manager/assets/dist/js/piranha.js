@@ -26187,16 +26187,20 @@ piranha.pagepicker = new Vue({
     el: "#pagepicker",
     data: {
         search: '',
+        sites: [],
         items: [],
         currentSiteId: null,
+        currentSiteTitle: null,
         filter: null,
         callback: null,
     },
     computed: {
         filteredItems: function () {
+            var self = this;
+
             return this.items.filter(function (item) {
-                if (piranha.pagepicker.search.length > 0) {
-                    return item.title.toLowerCase().indexOf(piranha.pagepicker.search.toLowerCase()) > -1
+                if (self.search.length > 0) {
+                    return item.title.toLowerCase().indexOf(self.search.toLowerCase()) > -1
                 }
                 return true;
             });
@@ -26205,17 +26209,20 @@ piranha.pagepicker = new Vue({
     methods: {
         load: function (siteId) {
             var url = piranha.baseUrl + "manager/api/page/sitemap" + (siteId ? "/" + siteId : "");
+            var self = this;
 
             fetch(url)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    piranha.pagepicker.items = result;
-                    piranha.pagepicker.currentSiteId = siteId;
+                    self.currentSiteId = result.siteId;
+                    self.currentSiteTitle = result.siteTitle;
+                    self.sites = result.sites;
+                    self.items = result.items;
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },
         refresh: function () {
-            piranha.pagepicker.load(piranha.pagepicker.currentSiteId);
+            this.load(piranha.pagepicker.currentSiteId);
         },
         open: function (callback, siteId) {
             this.search = '';
@@ -26226,7 +26233,7 @@ piranha.pagepicker = new Vue({
             $("#pagepicker").modal("show");
         },
         onEnter: function () {
-            if (this.filteredItems.length == 1 && this.filteredFolders.length == 0) {
+            if (this.filteredItems.length == 1) {
                 this.select(this.filteredItems[0]);
             }
         },
@@ -26281,7 +26288,7 @@ piranha.postpicker = new Vue({
                 url += "?siteId=" + siteId;
                 if (archiveId) {
                     url += "&archiveId=" + archiveId;
-                }                    
+                }
             }
 
             fetch(url)
@@ -26300,7 +26307,7 @@ piranha.postpicker = new Vue({
                 .catch(function (error) { console.log("error:", error ); });
         },
         refresh: function () {
-            piranha.postpicker.load(piranha.postpicker.currentSiteId, piranha.postpicker.currentArchiveId);
+            this.load(this.currentSiteId, this.currentArchiveId);
         },
         open: function (callback, siteId, archiveId, currentPostId) {
             this.search = '';
@@ -26311,8 +26318,8 @@ piranha.postpicker = new Vue({
             $("#postpicker").modal("show");
         },
         onEnter: function () {
-            if (this.filteredItems.length == 1 && this.filteredFolders.length == 0) {
-                this.select(this.filteredItems[0]);
+            if (this.filteredPosts.length == 1) {
+                this.select(this.filteredPosts[0]);
             }
         },
         select: function (item) {
