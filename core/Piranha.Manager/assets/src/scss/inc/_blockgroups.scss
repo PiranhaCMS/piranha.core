@@ -143,10 +143,12 @@
                     height: 100%;
                 }
 
-                img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
+                .block-body:not(.empty) {
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
                 }
             }
         }
