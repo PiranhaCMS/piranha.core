@@ -97,7 +97,7 @@
                 <button v-if="!isConfirm" v-on:click.prevent="save" class="btn btn-labeled btn-success">
                     <i class="fas fa-check"></i>@Localizer.General["Save"]
                 </button>
-                <div v-if="isConfirm" class="alert alert-danger" role="alert">
+                <div v-if="isConfirm" class="alert alert-danger w-100" role="alert">
                     <h5>@Localizer.Site["Are you really sure?"]</h5>
                     <p>
                         @Html.Raw(Localizer.Site["ConfirmDelete"])
