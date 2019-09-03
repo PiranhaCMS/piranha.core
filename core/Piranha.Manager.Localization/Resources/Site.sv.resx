@@ -15,6 +15,9 @@
   <data name="Add site" xml:space="preserve">
     <value>Lägg till sajt</value>
   </data>
+  <data name="Are you really sure?" xml:space="preserve">
+    <value>Är du helt säker?</value>
+  </data>
   <data name="Edit site" xml:space="preserve">
     <value>Redigera sajt</value>
   </data>
@@ -23,5 +26,11 @@
   </data>
   <data name="If this should be the default site of the installation." xml:space="preserve">
     <value>Om det här ska vara standardsajten för installationen.</value>
+  </data>
+  <data name="Please type in the name of the site to confirm." xml:space="preserve">
+    <value>Skriv in sajtens namn för att bekräfta.</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Den här åtgärden &lt;strong>kan inte&lt;/strong> ångras. Detta kommer att permanent radera sajten {{ title }} och alla dess &lt;strong>sidor&lt;/strong>, &lt;strong>arkiv&lt;/strong> och &lt;strong>artiklar&lt;/strong>.</value>
   </data>
 </root>

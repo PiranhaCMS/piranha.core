@@ -18,8 +18,14 @@
   <data name="All" xml:space="preserve">
     <value>Alle</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="Content" xml:space="preserve">
     <value>Innhold</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Continue</value>
   </data>
   <data name="Content type" xml:space="preserve">
     <value>Innholdstype</value>
@@ -74,6 +80,9 @@
   </data>
   <data name="Is default" xml:space="preserve">
     <value>Standard</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Login</value>
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Logg ut</value>
@@ -158,5 +167,11 @@
   </data>
   <data name="Width" xml:space="preserve">
     <value>Bredde</value>
+  </data>
+  <data name="username" xml:space="preserve">
+    <value>username</value>
+  </data>
+  <data name="password" xml:space="preserve">
+    <value>password</value>
   </data>
 </root>
