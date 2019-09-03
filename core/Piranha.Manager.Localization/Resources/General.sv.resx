@@ -18,8 +18,14 @@
   <data name="All" xml:space="preserve">
     <value>Alla</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Avbryt</value>
+  </data>
   <data name="Content" xml:space="preserve">
     <value>Innehåll</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Fortsätt</value>
   </data>
   <data name="Content type" xml:space="preserve">
     <value>Innehållstyp</value>
@@ -74,6 +80,9 @@
   </data>
   <data name="Is default" xml:space="preserve">
     <value>Standard</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Logga in</value>
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Logga ut</value>
@@ -158,5 +167,11 @@
   </data>
   <data name="Width" xml:space="preserve">
     <value>Bredd</value>
+  </data>
+  <data name="username" xml:space="preserve">
+    <value>användarnamn</value>
+  </data>
+  <data name="password" xml:space="preserve">
+    <value>lösenord</value>
   </data>
 </root>
