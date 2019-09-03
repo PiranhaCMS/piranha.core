@@ -59,7 +59,7 @@
                     </div>
                 </div>
 
-                <div :class="{ 'd-none': selectedSetting != region.meta.uid }" v-for="region in settingRegions">
+                <div class="region" :class="{ 'd-none': selectedSetting != region.meta.uid }" v-for="region in settingRegions">
                     <region v-bind:content="'post'" v-bind:type="typeId" v-bind:model="region"></region>
                 </div>
             </div>
