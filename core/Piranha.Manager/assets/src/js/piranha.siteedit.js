@@ -17,6 +17,8 @@ piranha.siteedit = new Vue({
         siteTypes: [],
         regions: [],
         isNew: false,
+        isConfirm: false,
+        confirmTitle: null,
         selectedRegion: {
             uid: "uid-settings",
             name: null,
@@ -117,6 +119,9 @@ piranha.siteedit = new Vue({
                 icon: null,
             };
 
+            this.isConfirm = false;
+            this.confirmTitle = null;
+
             // Load the site data from the server
             this.load(id);
 
@@ -155,7 +160,17 @@ piranha.siteedit = new Vue({
             $("#siteedit").modal("show");
             $("#sitetitle").focus();
         },
+        confirm: function () {
+            this.isConfirm = true;
+        },
+        cancel: function () {
+            this.isConfirm = false;
+            this.confirmTitle = null;
+        },
         remove: function () {
+            this.isConfirm = false;
+            this.confirmTitle = null;
+
             var self = this;
 
             fetch(piranha.baseUrl + "manager/api/site/delete/" + self.id)

@@ -25,7 +25,7 @@
     <link href="@Url.Content(style)" rel="stylesheet" type="text/css" />
     }
 
-    <title>Login</title>
+    <title>@Localizer.General["Login"]</title>
 </head>
 <body id="login">
     <div class="container">
@@ -36,7 +36,7 @@
                     </div>
                     <p class="banner">
                         Piranha CMS
-                        <small>Version @Piranha.Utils.GetAssemblyVersion(typeof(Piranha.Manager.Module).Assembly)</small>
+                        <small>@Localizer.General["Version"] @Piranha.Utils.GetAssemblyVersion(typeof(Piranha.Manager.Module).Assembly)</small>
                     </p>
                 </div>
                 <div class="card-body card-body-form">

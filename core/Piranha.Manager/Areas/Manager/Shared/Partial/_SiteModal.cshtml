@@ -91,12 +91,29 @@
 
             <!-- Footer -->
             <div class="modal-footer">
-                <button v-if="!isNew" v-on:click.prevent="remove" class="btn btn-labeled btn-danger">
+                <button v-if="!isConfirm && !isNew " v-on:click.prevent="confirm" :disabled="isConfirm" class="btn btn-labeled btn-danger">
                     <i class="fas fa-trash"></i>@Localizer.General["Delete"]
                 </button>
-                <button v-on:click.prevent="save" class="btn btn-labeled btn-success">
+                <button v-if="!isConfirm" v-on:click.prevent="save" class="btn btn-labeled btn-success">
                     <i class="fas fa-check"></i>@Localizer.General["Save"]
                 </button>
+                <div v-if="isConfirm" class="alert alert-danger" role="alert">
+                    <h5>@Localizer.Site["Are you really sure?"]</h5>
+                    <p>
+                        @Html.Raw(Localizer.Site["ConfirmDelete"])
+                    </p>
+                    <div class="form-group">
+                        <input v-model="confirmTitle" class="form-control" type="text" placeholder="@Localizer.Site["Please type in the name of the site to confirm."]">
+                    </div>
+                    <p class="text-right">
+                        <button v-on:click.prevent="cancel" class="btn btn-secondary">
+                            @Localizer.General["Cancel"]
+                        </button>
+                        <button v-on:click.prevent="remove" :disabled="confirmTitle != title" class="btn btn-labeled btn-danger">
+                            <i class="fas fa-trash"></i>@Localizer.General["Continue"]
+                        </button>
+                    </p>
+                </div>
             </div>
         </div>
     </div>
