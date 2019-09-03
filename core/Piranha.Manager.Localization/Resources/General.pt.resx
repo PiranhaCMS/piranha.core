@@ -13,13 +13,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>Adicionar</value>
   </data>
   <data name="All" xml:space="preserve">
     <value>All</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="Content" xml:space="preserve">
-    <value>Content</value>
+    <value>Conteúdo</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Continue</value>
   </data>
   <data name="Content type" xml:space="preserve">
     <value>Content type</value>
@@ -74,6 +80,9 @@
   </data>
   <data name="Is default" xml:space="preserve">
     <value>Is default</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Login</value>
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Logout</value>
@@ -158,5 +167,11 @@
   </data>
   <data name="Width" xml:space="preserve">
     <value>Width</value>
+  </data>
+  <data name="username" xml:space="preserve">
+    <value>username</value>
+  </data>
+  <data name="password" xml:space="preserve">
+    <value>password</value>
   </data>
 </root>
