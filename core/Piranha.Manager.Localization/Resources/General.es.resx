@@ -19,13 +19,13 @@
     <value>Todos</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Cancelar</value>
   </data>
   <data name="Content" xml:space="preserve">
     <value>Contenido</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Continue</value>
+    <value>Continuar</value>
   </data>
   <data name="Content type" xml:space="preserve">
     <value>Tipo de contenido</value>
@@ -82,7 +82,7 @@
     <value>Es por defecto</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Iniciar sesión</value>
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Desconectar</value>
@@ -169,9 +169,9 @@
     <value>Ancho</value>
   </data>
   <data name="username" xml:space="preserve">
-    <value>username</value>
+    <value>nombre de usuario</value>
   </data>
   <data name="password" xml:space="preserve">
-    <value>password</value>
+    <value>contraseña</value>
   </data>
 </root>
