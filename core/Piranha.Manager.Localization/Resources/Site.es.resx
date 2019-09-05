@@ -16,7 +16,7 @@
     <value>Agregar sitio</value>
   </data>
   <data name="Are you really sure?" xml:space="preserve">
-    <value>Are you really sure?</value>
+    <value>¿Está seguro?</value>
   </data>
   <data name="Edit site" xml:space="preserve">
     <value>Editar sitio</value>
@@ -28,7 +28,7 @@
     <value>Este debería ser el sitio por defecto de la instalación.</value>
   </data>
   <data name="Please type in the name of the site to confirm." xml:space="preserve">
-    <value>Please type in the name of the site to confirm.</value>
+    <value>Por favor, escriba el nombre del sitio para confirmar.</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
     <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the site {{ title }} and all of its &lt;strong>pages&lt;/strong>, &lt;strong>archives&lt;/strong> and &lt;strong>posts&lt;/strong>.</value>
