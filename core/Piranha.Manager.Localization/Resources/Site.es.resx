@@ -31,6 +31,6 @@
     <value>Por favor, escriba el nombre del sitio para confirmar.</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
-    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the site {{ title }} and all of its &lt;strong>pages&lt;/strong>, &lt;strong>archives&lt;/strong> and &lt;strong>posts&lt;/strong>.</value>
+    <value>Está acción &lt;strong>no se puede&lt;/strong> deshacer. Se borrará permanentemente el sitio {{ title }} y todas sus &lt;strong>páginas&lt;/strong>, &lt;strong>archivos&lt;/strong> y &lt;strong>posts&lt;/strong>.</value>
   </data>
 </root>
