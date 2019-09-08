@@ -84,7 +84,7 @@
                 </div>
 
                 <!-- Regions -->
-                <div v-for="(region) in regions" v-if="selectedRegion.uid === region.meta.uid">
+                <div class="region" v-for="(region) in regions" v-if="selectedRegion.uid === region.meta.uid">
                     <region v-bind:content="'site'" v-bind:type="typeId" v-bind:model="region"></region>
                 </div>
             </div>
