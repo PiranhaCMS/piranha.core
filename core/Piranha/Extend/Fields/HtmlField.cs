@@ -8,6 +8,8 @@
  *
  */
 
+using System.Text.RegularExpressions;
+
 namespace Piranha.Extend.Fields
 {
     [FieldType(Name = "Html", Shorthand = "Html", Component = "html-field")]
@@ -29,6 +31,25 @@ namespace Piranha.Extend.Fields
         public static implicit operator string(HtmlField field)
         {
             return field.Value;
+        }
+
+        /// <summary>
+        /// Gets the list item title if this field is used in
+        /// a collection regions.
+        /// </summary>
+        public override string GetTitle()
+        {
+            if (Value != null)
+            {
+                var title = Regex.Replace(Value, @"<[^>]*>", "");
+
+                if (title.Length > 40)
+                {
+                    title = title.Substring(0, 40) + "...";
+                }
+                return title;
+            }
+            return null;
         }
     }
 }
