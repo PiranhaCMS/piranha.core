@@ -75,6 +75,15 @@
             text-align: center;
         }
     }
+
+    .badge {
+        padding: .25rem .5rem;
+        margin-top: .2rem;
+        margin-left: .5rem;
+        font-size: .65rem;
+        text-transform: uppercase;
+        float: right;
+    }
 }
 
 .card-body {

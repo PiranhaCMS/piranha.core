@@ -114,6 +114,23 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Gets the id of all posts that have a draft for
+        /// the specified blog.
+        /// </summary>
+        /// <param name="blogId">The unique blog id</param>
+        /// <returns>The posts that have a draft</returns>
+        public async Task<IEnumerable<Guid>> GetAllDrafts(Guid blogId)
+        {
+            return await _db.PostRevisions
+                .AsNoTracking()
+                .Where(r => r.Post.BlogId == blogId && r.Created > r.Post.LastModified)
+                .Select(r => r.PostId)
+                .Distinct()
+                .ToListAsync()
+                .ConfigureAwait(false);
+        }
+
+        /// <summary>
         /// Gets the post model with the specified id.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>

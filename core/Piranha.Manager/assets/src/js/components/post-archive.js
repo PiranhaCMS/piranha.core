@@ -99,8 +99,9 @@ Vue.component("post-archive", {
         "      <tr v-if='isSelected(post)' v-for='post in items' :class='post.status'>" +
         "        <td>" +
         "          <a :href='piranha.baseUrl + post.editUrl + post.id'>{{ post.title }}</a> " +
-        "          <small v-if='post.status === \"published\"' class='text-muted'>| Published: {{ post.published }}</small>" +
+        "          <small v-if='post.status === \"published\" || post.status === \"draft\"' class='text-muted'>| Published: {{ post.published }}</small>" +
         "          <small v-else-if='post.status === \"unpublished\"' class='text-muted'>| Unpublished</small>" +
+        "          <span v-if='post.status === \"draft\"' class='badge badge-info float-right'>{{ piranha.resources.texts.draft }}</span>" +
         "        </td>" +
         "        <td>" +
         "          {{ post.typeName }}" +

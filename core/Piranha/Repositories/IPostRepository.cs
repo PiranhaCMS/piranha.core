@@ -46,6 +46,14 @@ namespace Piranha.Repositories
         Task<IEnumerable<Taxonomy>> GetAllTags(Guid blogId);
 
         /// <summary>
+        /// Gets the id of all posts that have a draft for
+        /// the specified blog.
+        /// </summary>
+        /// <param name="blogId">The unique blog id</param>
+        /// <returns>The posts that have a draft</returns>
+        Task<IEnumerable<Guid>> GetAllDrafts(Guid blogId);
+
+        /// <summary>
         /// Gets the post model with the specified id.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
