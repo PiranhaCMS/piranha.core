@@ -10,6 +10,10 @@
         background: $card-body-bg;
         border-radius: $border-radius;
     }
+
+    &.active {
+        overflow: visible !important;
+    }
 }
 
 .bg-light {

@@ -78,7 +78,7 @@ Vue.component("region", {
         "              <label>{{ field.meta.name }}</label>" +
         "              <div class='field-body'>" +
         "                <div :id='\"tb-\" + field.meta.uid' class='component-toolbar'></div>" +
-        "                <component v-if='field.model != null' v-bind:is='field.meta.component' v-bind:uid='item.uid' v-bind:meta='field.meta' v-bind:toolbar='\"tb-\" + field.meta.uid' v-bind:model='field.model' v-on:update-field='updateTitle($event)'></component>" +
+        "                <component v-if='field.model != null' v-bind:is='field.meta.component' v-bind:uid='item.uid' v-bind:meta='field.meta' v-bind:toolbar='\"tb-\" + field.meta.uid' v-bind:model='field.model' v-on:update-title='updateTitle($event)'></component>" +
         "              </div>" +
         "            </div>" +
         "          </div>" +
@@ -967,6 +967,17 @@ Vue.component("html-field", {
     methods: {
         onBlur: function (e) {
             this.model.value = e.target.innerHTML;
+
+            // Tell parent that title has been updated
+            var title = this.model.value.replace(/(<([^>]+)>)/ig, "");
+            if (title.length > 40) {
+                title = title.substring(0, 40) + "...";
+            }
+
+            this.$emit('update-title', {
+                uid: this.uid,
+                title: title
+            });
         }
     },
     computed: {

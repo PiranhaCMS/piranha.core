@@ -25879,6 +25879,14 @@ $(document).on('mouseleave', '.block-header .danger', function() {
     $(this).closest('.block').removeClass('danger');
 });
 
+$(document).on('shown.bs.collapse', '.collapse', function () {
+	$(this).parent().addClass('active');
+});
+
+$(document).on('hide.bs.collapse', '.collapse', function () {
+	$(this).parent().removeClass('active');
+});
+
 $(window).scroll(function () {
     var scroll = $(this).scrollTop();
 

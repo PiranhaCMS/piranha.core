@@ -8,6 +8,17 @@ Vue.component("html-field", {
     methods: {
         onBlur: function (e) {
             this.model.value = e.target.innerHTML;
+
+            // Tell parent that title has been updated
+            var title = this.model.value.replace(/(<([^>]+)>)/ig, "");
+            if (title.length > 40) {
+                title = title.substring(0, 40) + "...";
+            }
+
+            this.$emit('update-title', {
+                uid: this.uid,
+                title: title
+            });
         }
     },
     computed: {
