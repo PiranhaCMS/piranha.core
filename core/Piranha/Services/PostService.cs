@@ -393,7 +393,7 @@ namespace Piranha.Services
         /// <returns>The model</returns>
         public async Task<Taxonomy> GetCategoryByIdAsync(Guid id)
         {
-            Taxonomy model = _cache.Get<Taxonomy>(id.ToString());
+            Taxonomy model = _cache?.Get<Taxonomy>(id.ToString());
 
             if (model == null)
             {
@@ -443,7 +443,7 @@ namespace Piranha.Services
         /// <returns>The model</returns>
         public async Task<Taxonomy> GetTagByIdAsync(Guid id)
         {
-            Taxonomy model = _cache.Get<Taxonomy>(id.ToString());
+            Taxonomy model = _cache?.Get<Taxonomy>(id.ToString());
 
             if (model == null)
             {
