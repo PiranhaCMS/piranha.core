@@ -231,6 +231,7 @@ namespace Piranha.Manager.Services
                                 Model = (Extend.IField)prop.GetValue(block),
                                 Meta = new FieldMeta
                                 {
+                                    Id = prop.Name,
                                     Name = prop.Name,
                                     Component = fieldType.Component,
                                 }
