@@ -21,6 +21,9 @@
   <data name="Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Продолжить</value>
+  </data>
   <data name="Content" xml:space="preserve">
     <value>Контент</value>
   </data>
@@ -77,6 +80,9 @@
   </data>
   <data name="Is default" xml:space="preserve">
     <value>По умолчанию</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Войти</value>
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Выйти</value>

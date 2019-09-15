@@ -33,7 +33,4 @@
   <data name="ConfirmDelete" xml:space="preserve">
     <value>Это действие &lt;strong>не может&lt;/strong> быть отменено. Это полностью удалит сайт {{ title }} и все &lt;strong>страницы&lt;/strong>, &lt;strong>архивы&lt;/strong> и &lt;strong>посты&lt;/strong>.</value>
   </data>   
-  <data name="If this should be the default site of the installation." xml:space="preserve">
-    <value>Это сайт по умолчанию</value>
-  </data>
 </root>
