@@ -19,21 +19,21 @@
     <value>Add new alias</value>
   </data>
   <data name="Alias URL" xml:space="preserve">
-    <value>Alias URL</value>
+    <value>Псевдоним URL</value>
   </data>
   <data name="Redirect URL" xml:space="preserve">
-    <value>Redirect URL</value>
+    <value>Перенаправление URL</value>
   </data>
   <data name="Permanent" xml:space="preserve">
-    <value>Permanent</value>
+    <value>Постоянный</value>
   </data>
   <data name="If the redirect should be permanent" xml:space="preserve">
-    <value>If the redirect should be permanent</value>
+    <value>Перенаправление должно быть постоянным</value>
   </data>
   <data name="The alias was successfully added to the list" xml:space="preserve">
-    <value>The alias was successfully added to the list</value>
+    <value>Псевдоним был успешно добавлен в список</value>
   </data>
   <data name="The alias was successfully deleted" xml:space="preserve">
-    <value>The alias was successfully deleted</value>
+    <value>Псевдоним был успешно удален</value>
   </data>
 </root>
