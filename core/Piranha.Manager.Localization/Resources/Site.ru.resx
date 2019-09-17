@@ -32,5 +32,5 @@
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
     <value>Это действие &lt;strong>не может&lt;/strong> быть отменено. Это полностью удалит сайт {{ title }} и все &lt;strong>страницы&lt;/strong>, &lt;strong>архивы&lt;/strong> и &lt;strong>посты&lt;/strong>.</value>
-  </data>   
+  </data>
 </root>

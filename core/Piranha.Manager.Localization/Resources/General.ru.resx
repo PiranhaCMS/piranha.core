@@ -21,11 +21,11 @@
   <data name="Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
-  <data name="Continue" xml:space="preserve">
-    <value>Продолжить</value>
-  </data>
   <data name="Content" xml:space="preserve">
     <value>Контент</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Продолжить</value>
   </data>
   <data name="Content type" xml:space="preserve">
     <value>Тип контента</value>

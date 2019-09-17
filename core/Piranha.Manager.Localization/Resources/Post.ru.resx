@@ -28,8 +28,8 @@
     <value>Категория</value>
   </data>
   <data name="Edit post" xml:space="preserve">
-    <value>Редактировать пост</value>
-  </data>
+	  <value>Редактировать пост</value>
+	</data>
   <data name="Tag" xml:space="preserve">
     <value>Тэг</value>
   </data>
