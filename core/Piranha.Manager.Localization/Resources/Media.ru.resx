@@ -13,33 +13,33 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add folder" xml:space="preserve">
-    <value>Add folder</value>
+    <value>Добавить каталог</value>
   </data>
   <data name="Drop files here or click to upload." xml:space="preserve">
-    <value>Drop files here or click to upload.</value>
+    <value>Перетащите сюда файлы для загрузки</value>
   </data>
   <data name="Download media" xml:space="preserve">
-    <value>Download media</value>
+    <value>Загрузить</value>
   </data>
   <data name="Folder name" xml:space="preserve">
-    <value>Folder name</value>
+    <value>Имя каталога</value>
   </data>
   <data name="Gallery" xml:space="preserve">
-    <value>Gallery</value>
+    <value>Галерея</value>
   </data>
   <data name="Media" xml:space="preserve">
-    <value>Media</value>
+    <value>Медиа</value>
   </data>
   <data name="Media preview is not available" xml:space="preserve">
-    <value>Media preview is not available</value>
+    <value>Предпросмотр недоступен</value>
   </data>
   <data name="Open media in new tab" xml:space="preserve">
-    <value>Open media in new tab</value>
+    <value>Открыть в новой вкладке</value>
   </data>
   <data name="Select media" xml:space="preserve">
-    <value>Select media</value>
+    <value>Выбор медиа</value>
   </data>
   <data name="Your browser does not support the video tag." xml:space="preserve">
-    <value>Your browser does not support the video tag.</value>
+    <value>Ваш браузер не поддерживает видео</value>
   </data>
 </root>

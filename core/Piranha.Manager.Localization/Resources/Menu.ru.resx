@@ -13,33 +13,33 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Content" xml:space="preserve">
-    <value>Content</value>
+    <value>Контент</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Настройки</value>
   </data>
   <data name="System" xml:space="preserve">
-    <value>System</value>
+    <value>Система</value>
   </data>
   <data name="Pages" xml:space="preserve">
-    <value>Pages</value>
+    <value>Страницы</value>
   </data>
   <data name="Media" xml:space="preserve">
-    <value>Media</value>
+    <value>Медиа</value>
   </data>
   <data name="Aliases" xml:space="preserve">
-    <value>Aliases</value>
+    <value>Псевдонимы</value>
   </data>
   <data name="Sites" xml:space="preserve">
-    <value>Sites</value>
+    <value>Сайты</value>
   </data>
   <data name="Config" xml:space="preserve">
-    <value>Config</value>
+    <value>Конфигурация</value>
   </data>
   <data name="Modules" xml:space="preserve">
-    <value>Modules</value>
+    <value>Модули</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+    <value>Выйти</value>
   </data>
 </root>
