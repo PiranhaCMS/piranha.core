@@ -13,24 +13,24 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add site" xml:space="preserve">
-    <value>Add site</value>
+    <value>Добавить сайт</value>
   </data>
   <data name="Are you really sure?" xml:space="preserve">
-    <value>Are you really sure?</value>
+    <value>Вы уверены?</value>
   </data>
   <data name="Edit site" xml:space="preserve">
-    <value>Edit site</value>
+    <value>Редактировать сайт</value>
   </data>
   <data name="Hostnames" xml:space="preserve">
-    <value>Hostnames</value>
+    <value>Имя севера</value>
   </data>
   <data name="If this should be the default site of the installation." xml:space="preserve">
-    <value>If this should be the default site of the installation.</value>
+    <value>Это сайт по умолчанию.</value>
   </data>
   <data name="Please type in the name of the site to confirm." xml:space="preserve">
-    <value>Please type in the name of the site to confirm.</value>
+    <value>Введите имя сайта для подтверждения.</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
-    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the site {{ title }} and all of its &lt;strong>pages&lt;/strong>, &lt;strong>archives&lt;/strong> and &lt;strong>posts&lt;/strong>.</value>
+    <value>Это действие &lt;strong>не может&lt;/strong> быть отменено. Это полностью удалит сайт {{ title }} и все &lt;strong>страницы&lt;/strong>, &lt;strong>архивы&lt;/strong> и &lt;strong>посты&lt;/strong>.</value>
   </data>
 </root>
