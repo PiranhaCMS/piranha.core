@@ -55,21 +55,21 @@
     <value>Strona została pomyślnie opublikowana</value>
   </data>
   <data name="The page was successfully unpublished" xml:space="preserve">
-    <value>The page was successfully unpublished</value>
+    <value>Strona została pomyślnie wycofana</value>
   </data>
   <data name="The page was successfully saved" xml:space="preserve">
-    <value>The page was successfully saved</value>
+    <value>Strona została pomyślnie zapisana</value>
   </data>
   <data name="The page was successfully reverted to its previous state" xml:space="preserve">
-    <value>The page was successfully reverted to its previous state</value>
+    <value>Pomyślnie przywrócono stronę do poprzedniego stanu</value>
   </data>
   <data name="This is a copy. In order to edit the content of the page you first need to detach it from the original. If you want to keep the page as a copy you should edit the content of the original page." xml:space="preserve">
-    <value>This is a copy. In order to edit the content of the page you first need to detach it from the original. If you want to keep the page as a copy you should edit the content of the original page.</value>
+    <value>To jest kopia. W celu modyfikacji zawartości strony należy ją najpierw odczepić od oryginału. Jeśli chcesz zatrzymać stronę jako kopię, edytuj zawartość oryginału.</value>
   </data>
   <data name="Welcome to your new page. Click on the button above to add your first block of content!" xml:space="preserve">
-    <value>Welcome to your new page. Click on the button above to add your first block of content!</value>
+    <value>Witaj na swojej nowej stronie. Naciśnij na przycisk powyżej aby dodać pierwszy kawałek treści!</value>
   </data>
   <data name="Your page title" xml:space="preserve">
-    <value>Your page title</value>
+    <value>Tytuł twojej strony</value>
   </data>
 </root>
