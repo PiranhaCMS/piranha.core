@@ -13,33 +13,33 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add or select existing category" xml:space="preserve">
-    <value>Add or select existing category</value>
+    <value>Dodaj lub wybierz kategorię</value>
   </data>
   <data name="Add or select existing tags (optional)" xml:space="preserve">
-    <value>Add or select existing tags (optional)</value>
+    <value>Dodaj lub wybierz tagi (opcjonalne)</value>
   </data>
   <data name="All categories" xml:space="preserve">
-    <value>All categories</value>
+    <value>Wszystkie kategorie</value>
   </data>
   <data name="Categories" xml:space="preserve">
-    <value>Categories</value>
+    <value>Kategorie</value>
   </data>
   <data name="Category" xml:space="preserve">
-    <value>Category</value>
+    <value>Kategoria</value>
   </data>
   <data name="Edit post" xml:space="preserve">
-	  <value>Edit post</value>
+	  <value>Edytuj post</value>
 	</data>
   <data name="Tag" xml:space="preserve">
     <value>Tag</value>
   </data>
   <data name="Tags" xml:space="preserve">
-    <value>Tags</value>
+    <value>Tagi</value>
   </data>
   <data name="Welcome to your new post. Click on the button above to add your first block of content!" xml:space="preserve">
-    <value>Welcome to your new post. Click on the button above to add your first block of content!</value>
+    <value>Witaj w swoim nowym poście. Naciśnij na przycisk powyżej aby dodać pierwszy kawałek treści!</value>
   </data>
   <data name="Your post title" xml:space="preserve">
-    <value>Your post title</value>
+    <value>Tytuł twojego posta</value>
   </data>
 </root>
