@@ -163,15 +163,15 @@
     <value>Nieopublikowany</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Version</value>
+    <value>Wersja</value>
   </data>
   <data name="Width" xml:space="preserve">
-    <value>Width</value>
+    <value>Szerokość</value>
   </data>
   <data name="username" xml:space="preserve">
-    <value>username</value>
+    <value>Nazwa użytkownika</value>
   </data>
   <data name="password" xml:space="preserve">
-    <value>password</value>
+    <value>Hasło</value>
   </data>
 </root>
