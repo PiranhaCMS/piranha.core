@@ -24,6 +24,7 @@ namespace Prianha.Manager.Tests
                 "https://unpkg.com/jquery",
                 ("https://unpkg.com/react@16.7.0/umd/react.production.min.js","sha384-bDWFfmoLfqL0ZuPgUiUz3ekiv8NyiuJrrk1wGblri8Nut8UVD6mj7vXhjnenE9vy"),
                 new ManagerScriptDefinition("This doesn't check for valid Urls atm, just nulls/whitespace only.", type:"text/babel"),
+                new ManagerScriptDefinition("AGH", "HASHBROWNS",ECrossOriginPolicy.None),
                 "/lib/js/dist/somescript.min.js"
             });
 
@@ -32,6 +33,7 @@ namespace Prianha.Manager.Tests
                 "<script type=\"text/javascript\" src=\"https://unpkg.com/jquery\"></script>",
                 "<script type=\"text/javascript\" src=\"https://unpkg.com/react@16.7.0/umd/react.production.min.js\" integrity=\"sha384-bDWFfmoLfqL0ZuPgUiUz3ekiv8NyiuJrrk1wGblri8Nut8UVD6mj7vXhjnenE9vy\" crossorigin=\"anonymous\"></script>",
                 "<script type=\"text/babel\" src=\"This doesn't check for valid Urls atm, just nulls/whitespace only.\"></script>",
+                "<script type=\"text/javascript\" src=\"AGH\" integrity=\"HASHBROWNS\" ></script>",
                 "<script type=\"text/javascript\" src=\"/lib/js/dist/somescript.min.js\"></script>"
             };
             foreach (var scriptDef in scriptDefs)

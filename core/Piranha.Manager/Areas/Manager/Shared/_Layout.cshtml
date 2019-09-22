@@ -58,9 +58,13 @@
             //Url.Content does not error on absolute paths, so no additional logic needs to be taken here.
             <script type="@script.Type" src="@Url.Content(script.Src)"></script>
         }
+        else if (script.CrossOriginValue == ECrossOriginPolicy.None)
+        {
+            <script type="@script.Type" src="@Url.Content(script.Src)" integrity="@script.Integrity"></script>
+        }
         else
         {
-            <script type="@script.Type" src="@Url.Content(script.Src)" integrity="@script.Integrity" crossorigin="@(script.CrossOriginUseCredentials? "use-credentials":"anonymous")"></script>
+            <script type="@script.Type" src="@Url.Content(script.Src)" integrity="@script.Integrity" crossorigin="@script.GetCrossOriginValueStrValue()"></script>
         }
     }
     @RenderSection("script", required: false)

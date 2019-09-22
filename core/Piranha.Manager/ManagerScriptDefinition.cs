@@ -6,6 +6,13 @@ using Microsoft.AspNetCore.Routing.Constraints;
 namespace Piranha.Manager
 {
 
+    public enum ECrossOriginPolicy
+    {
+        None,
+        Anonymous,
+        UseCredentials
+    }
+
     /// <summary>
     /// Defines custom script resources with sources, hashes, and other future features as needed.
     /// </summary>
@@ -24,7 +31,22 @@ namespace Piranha.Manager
         /// <summary>
         /// If true, set crossorigin to "use-credentials". Otherwise, set to "anonymous".
         /// </summary>
-        public bool CrossOriginUseCredentials { get; }
+        public ECrossOriginPolicy CrossOriginValue { get; }
+
+        public string GetCrossOriginValueStrValue(bool includeAttributeName = false)
+        {
+            switch (CrossOriginValue)
+            {
+                case ECrossOriginPolicy.None:
+                    return "";
+                case ECrossOriginPolicy.Anonymous:
+                    return includeAttributeName ? "crossorigin=\"anonymous\"": "anonymous";
+                case ECrossOriginPolicy.UseCredentials:
+                    return includeAttributeName ? "crossorigin=\"use-credentials\"" : "use-credentials";
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
 
         /// <summary>
         /// The script type.
@@ -38,13 +60,13 @@ namespace Piranha.Manager
         /// <returns></returns>
         public override int GetHashCode() => Integrity?.GetHashCode() ?? Src.GetHashCode();
 
-        public ManagerScriptDefinition(string src, string integrity = null, bool crossOriginUseCredentials = false, string type = "text/javascript")
+        public ManagerScriptDefinition(string src, string integrity = null, ECrossOriginPolicy crossOriginValue = ECrossOriginPolicy.Anonymous, string type = "text/javascript")
         {
             if (src == null) throw new ArgumentNullException(nameof(src));
             if (string.IsNullOrWhiteSpace(src)) throw new ArgumentException("Source url must not be null or whitespace.", nameof(src));
             Src = src;
             Integrity = integrity;
-            CrossOriginUseCredentials = crossOriginUseCredentials;
+            CrossOriginValue = crossOriginValue;
             Type = type;
         }
 
@@ -53,7 +75,7 @@ namespace Piranha.Manager
         /// Returns a text string of what a rendered script tag for this script would look like.
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => $"<script type=\"{Type}\" src=\"{Src}\"{(string.IsNullOrWhiteSpace(Integrity) ? "":$" integrity=\"{Integrity}\" crossorigin=\"{(CrossOriginUseCredentials ? "use-credentials":"anonymous")}\"")}></script>";
+        public override string ToString() => $"<script type=\"{Type}\" src=\"{Src}\"{(string.IsNullOrWhiteSpace(Integrity) ? "":$" integrity=\"{Integrity}\" {GetCrossOriginValueStrValue(true)}")}></script>";
 
         /// <summary>
         /// Backwards compatibility for the original string list.
