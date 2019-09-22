@@ -52,9 +52,6 @@ namespace Piranha.Manager
         /// </summary>
         public string Type { get; }
 
-        
-        
-
         /// <summary>
         /// Get the hash code for this script.
         /// </summary>
