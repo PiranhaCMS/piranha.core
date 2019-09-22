@@ -13,63 +13,63 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add page" xml:space="preserve">
-    <value>Add page</value>
+    <value>Dodaj strone</value>
   </data>
   <data name="An error occured while deleting the page" xml:space="preserve">
-    <value>An error occured while deleting the page</value>
+    <value>Wystąpił błąd podczas usuwania strony</value>
   </data>
   <data name="Detach page" xml:space="preserve">
-    <value>Detach page</value>
+    <value>Odczep stronę</value>
   </data>
   <data name="Edit original" xml:space="preserve">
-    <value>Edit original</value>
+    <value>Edytuj oryginał</value>
   </data>
   <data name="Edit page" xml:space="preserve">
-    <value>Edit page</value>
+    <value>Edytuj stronę</value>
   </data>
   <data name="Hidden" xml:space="preserve">
-    <value>Hidden</value>
+    <value>Ukryty</value>
   </data>
   <data name="If the page should be hidden in the sitemap" xml:space="preserve">
-    <value>If the page should be hidden in the sitemap</value>
+    <value>Czy strona powinna być ukryta w mapie witryny</value>
   </data>
   <data name="Meta keywords" xml:space="preserve">
-    <value>Meta keywords</value>
+    <value>Słowa kluczowe</value>
   </data>
   <data name="Meta description" xml:space="preserve">
-    <value>Meta description</value>
+    <value>Opis meta</value>
   </data>
   <data name="Navigation title" xml:space="preserve">
-    <value>Navigation title</value>
+    <value>Tytuł nawigacji</value>
   </data>
   <data name="Pages" xml:space="preserve">
-    <value>Pages</value>
+    <value>Strony</value>
   </data>
   <data name="The page was successfully deleted" xml:space="preserve">
-    <value>The page was successfully deleted</value>
+    <value>Strona została pomyślnie usunięta</value>
   </data>
   <data name="The page was successfully detached from the original" xml:space="preserve">
-    <value>The page was successfully detached from the original</value>
+    <value>Strona została pomyślnie odczepiona od oryginału</value>
   </data>
   <data name="The page was successfully published" xml:space="preserve">
-    <value>The page was successfully published</value>
+    <value>Strona została pomyślnie opublikowana</value>
   </data>
   <data name="The page was successfully unpublished" xml:space="preserve">
-    <value>The page was successfully unpublished</value>
+    <value>Strona została pomyślnie wycofana</value>
   </data>
   <data name="The page was successfully saved" xml:space="preserve">
-    <value>The page was successfully saved</value>
+    <value>Strona została pomyślnie zapisana</value>
   </data>
   <data name="The page was successfully reverted to its previous state" xml:space="preserve">
-    <value>The page was successfully reverted to its previous state</value>
+    <value>Pomyślnie przywrócono stronę do poprzedniego stanu</value>
   </data>
   <data name="This is a copy. In order to edit the content of the page you first need to detach it from the original. If you want to keep the page as a copy you should edit the content of the original page." xml:space="preserve">
-    <value>This is a copy. In order to edit the content of the page you first need to detach it from the original. If you want to keep the page as a copy you should edit the content of the original page.</value>
+    <value>To jest kopia. W celu modyfikacji zawartości strony należy ją najpierw odczepić od oryginału. Jeśli chcesz zatrzymać stronę jako kopię, edytuj zawartość oryginału.</value>
   </data>
   <data name="Welcome to your new page. Click on the button above to add your first block of content!" xml:space="preserve">
-    <value>Welcome to your new page. Click on the button above to add your first block of content!</value>
+    <value>Witaj na swojej nowej stronie. Naciśnij na przycisk powyżej aby dodać pierwszy kawałek treści!</value>
   </data>
   <data name="Your page title" xml:space="preserve">
-    <value>Your page title</value>
+    <value>Tytuł twojej strony</value>
   </data>
 </root>

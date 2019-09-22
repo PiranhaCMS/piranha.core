@@ -16,10 +16,10 @@
     <value>Добавить каталог</value>
   </data>
   <data name="Drop files here or click to upload." xml:space="preserve">
-    <value>Перетащите сюда файлы для загрузки</value>
+    <value>Перетащите сюда файлы или кликните для загрузки.</value>
   </data>
   <data name="Download media" xml:space="preserve">
-    <value>Загрузить</value>
+    <value>Скачать медиа</value>
   </data>
   <data name="Folder name" xml:space="preserve">
     <value>Имя каталога</value>

@@ -43,13 +43,13 @@
     <value>Описание</value>
   </data>
   <data name="Details" xml:space="preserve">
-    <value>Детально</value>
+    <value>Подробнее</value>
   </data>
   <data name="Dimensions" xml:space="preserve">
     <value>Измерения</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Загрузить</value>
+    <value>Скачать</value>
   </data>
   <data name="Draft" xml:space="preserve">
     <value>Черновик</value>
@@ -70,7 +70,7 @@
     <value>Пустой</value>
   </data>
   <data name="General" xml:space="preserve">
-    <value>Основное</value>
+    <value>Общее</value>
   </data>
   <data name="History" xml:space="preserve">
     <value>История</value>
@@ -109,19 +109,19 @@
     <value>Открывать внешние ссылки в новой вкладке</value>
   </data>
   <data name="Pixels" xml:space="preserve">
-    <value>Пиклелей</value>
+    <value>Пикселей</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Просмотр</value>
+    <value>Предпросмотр</value>
   </data>
   <data name="Publish" xml:space="preserve">
-    <value>Публикация</value>
+    <value>Опубликовать</value>
   </data>
   <data name="Publish date" xml:space="preserve">
     <value>Дата публикации</value>
   </data>
   <data name="Revert" xml:space="preserve">
-    <value>Отменить</value>
+    <value>Сброс</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Сохранить</value>
@@ -160,7 +160,7 @@
     <value>Снять с публикации</value>
   </data>
   <data name="Unpublished" xml:space="preserve">
-    <value>Неопубликованная</value>
+    <value>Неопубликованные</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Версия</value>
