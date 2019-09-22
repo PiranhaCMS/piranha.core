@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Routing.Constraints;
 
 namespace Piranha.Manager
 {
-
     public enum ECrossOriginPolicy
     {
         None,
@@ -16,7 +15,7 @@ namespace Piranha.Manager
     /// <summary>
     /// Defines custom script resources with sources, hashes, and other future features as needed.
     /// </summary>
-    public class ManagerScriptDefinition
+    public class ManagerScriptDefinition : IEquatable<ManagerScriptDefinition>
     {
         /// <summary>
         /// The script source.
@@ -53,17 +52,34 @@ namespace Piranha.Manager
         /// </summary>
         public string Type { get; }
 
+        
+        
+
         /// <summary>
         /// Get the hash code for this script.
         /// </summary>
         /// <remarks>The integrity hash will still be unique to the file, even moreso than the address. If the same file gets loaded with SRI hashes from two different sources they'll still be labeled the same file.</remarks>
         /// <returns></returns>
-        public override int GetHashCode() => Integrity?.GetHashCode() ?? Src.GetHashCode();
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((Src != null ? Src.GetHashCode() : 0) * 397) ^ (Integrity != null ? Integrity.GetHashCode() : 0);
+            }
+        }
 
         public ManagerScriptDefinition(string src, string integrity = null, ECrossOriginPolicy crossOriginValue = ECrossOriginPolicy.Anonymous, string type = "text/javascript")
         {
-            if (src == null) throw new ArgumentNullException(nameof(src));
-            if (string.IsNullOrWhiteSpace(src)) throw new ArgumentException("Source url must not be null or whitespace.", nameof(src));
+            if (src == null)
+            {
+                throw new ArgumentNullException(nameof(src));
+            }
+
+            if (string.IsNullOrWhiteSpace(src))
+            {
+                throw new ArgumentException("Source url must not be null or whitespace.", nameof(src));
+            }
+
             Src = src;
             Integrity = integrity;
             CrossOriginValue = crossOriginValue;
@@ -88,5 +104,34 @@ namespace Piranha.Manager
         /// </summary>
         /// <param name="valTup"></param>
         public static implicit operator ManagerScriptDefinition((string src, string integrity) valTup) => new ManagerScriptDefinition(valTup.src, valTup.integrity);
+
+        public bool Equals(ManagerScriptDefinition other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+            return Integrity == null ? Src == other.Src : Integrity == other.Integrity;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            return obj.GetType() == this.GetType() && Equals((ManagerScriptDefinition) obj);
+        }
     }
 }

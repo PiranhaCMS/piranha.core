@@ -9,7 +9,7 @@ namespace Prianha.Manager.Tests
 {
     public class ManagerScriptingTests
     {
-        private ITestOutputHelper _helper;
+        private readonly ITestOutputHelper _helper;
 
         /// <summary>
         /// Test to both demonstrate how the class works and what each of its various forms translate to.
@@ -20,7 +20,6 @@ namespace Prianha.Manager.Tests
             var scriptDefs = new List<ManagerScriptDefinition>();
             scriptDefs.AddRange(new[]
             {
-                
                 "https://unpkg.com/jquery",
                 ("https://unpkg.com/react@16.7.0/umd/react.production.min.js","sha384-bDWFfmoLfqL0ZuPgUiUz3ekiv8NyiuJrrk1wGblri8Nut8UVD6mj7vXhjnenE9vy"),
                 new ManagerScriptDefinition("This doesn't check for valid Urls atm, just nulls/whitespace only.", type:"text/babel"),
