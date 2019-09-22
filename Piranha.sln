@@ -70,11 +70,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Data.EF", "data\Pir
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Manager.Core", "core\Piranha.Manager.Core\Piranha.Manager.Core.csproj", "{96510F63-4191-494B-B4A3-6C0497837F6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Manager", "core\Piranha.Manager\Piranha.Manager.csproj", "{A21B74AB-86CF-4AC6-87D6-A99656F8D2A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Manager", "core\Piranha.Manager\Piranha.Manager.csproj", "{A21B74AB-86CF-4AC6-87D6-A99656F8D2A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Manager.Localization", "core\Piranha.Manager.Localization\Piranha.Manager.Localization.csproj", "{22D8ED84-0A3B-4A02-B17B-ED8839323CCC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Manager.Localization", "core\Piranha.Manager.Localization\Piranha.Manager.Localization.csproj", "{22D8ED84-0A3B-4A02-B17B-ED8839323CCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.WebApi", "core\Piranha.WebApi\Piranha.WebApi.csproj", "{D61EFBBC-5DB5-4810-9FE7-B9FE0C47A035}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.WebApi", "core\Piranha.WebApi\Piranha.WebApi.csproj", "{D61EFBBC-5DB5-4810-9FE7-B9FE0C47A035}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prianha.Manager.Tests", "test\Prianha.Manager.Tests\Prianha.Manager.Tests.csproj", "{1CB2D174-70D8-4F51-A131-81C43E0FFEA5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -162,6 +164,10 @@ Global
 		{D61EFBBC-5DB5-4810-9FE7-B9FE0C47A035}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D61EFBBC-5DB5-4810-9FE7-B9FE0C47A035}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D61EFBBC-5DB5-4810-9FE7-B9FE0C47A035}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CB2D174-70D8-4F51-A131-81C43E0FFEA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CB2D174-70D8-4F51-A131-81C43E0FFEA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CB2D174-70D8-4F51-A131-81C43E0FFEA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CB2D174-70D8-4F51-A131-81C43E0FFEA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -187,6 +193,7 @@ Global
 		{A21B74AB-86CF-4AC6-87D6-A99656F8D2A0} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 		{22D8ED84-0A3B-4A02-B17B-ED8839323CCC} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 		{D61EFBBC-5DB5-4810-9FE7-B9FE0C47A035} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
+		{1CB2D174-70D8-4F51-A131-81C43E0FFEA5} = {DE1913AC-4AA3-4F66-83F1-615710D8367B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF88AA05-D127-4707-8214-A230F0DA569B}
