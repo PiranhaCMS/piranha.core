@@ -1,0 +1,12 @@
+{
+  "name": "piranha.manager.summernote",
+  "version": "7.0.4",
+  "description": "Summernote WYSIWYG Editor for Piranha CMS",
+  "main": "index.js",
+  "author": "Håkan Edling",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "3.9.1",
+    "summernote": "0.8.11"
+  }
+}
