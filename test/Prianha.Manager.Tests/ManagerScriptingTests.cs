@@ -18,7 +18,7 @@ namespace Prianha.Manager.Tests
         public void CustomScriptListTest()
         {
             var scriptDefs = new List<ManagerScriptDefinition>();
-            scriptDefs.AddRange(new ManagerScriptDefinition[]
+            scriptDefs.AddRange(new[]
             {
                 
                 "https://unpkg.com/jquery",
