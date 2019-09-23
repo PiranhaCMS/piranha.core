@@ -21,6 +21,28 @@ var ImageButton = function (context) {
     return button.render();
 }
 
+var LinkButton = function (context) {
+    var ui = $.summernote.ui;
+
+    // create button
+    var button = ui.button({
+        contents: '<i class="note-icon-link"/>',
+        tooltip: 'Link',
+        click: function () {
+            var range = context.invoke('createRange');
+            context.invoke('saveRange');
+
+            piranha.summernote.linkmodal.open('', range.toString(), '', function (data) {
+                context.invoke('restoreRange');
+                context.invoke('pasteHTML', '<a href="' + data.url + '">' + data.text + '</a>');
+                console.log(data);
+            });
+        }
+    });
+
+    return button.render();
+}
+
 //
 // Create a new inline editor
 //
@@ -29,11 +51,12 @@ piranha.editor.addInline = function (id, toolbarId, cb) {
         toolbar: [
             ['style', ['bold', 'italic', 'underline', 'clear']],
             ['para', ['ul', 'ol', 'paragraph']],
-            ['media', ['piranhaimage']],
+            ['media', ['piranhalink', 'piranhaimage']],
             ['view', ['codeview']],
         ],
         buttons: {
-            piranhaimage: ImageButton
+            piranhaimage: ImageButton,
+            piranhalink: LinkButton
         },
         popover: {
             image: [],

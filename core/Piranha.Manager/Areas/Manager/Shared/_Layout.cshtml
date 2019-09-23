@@ -8,7 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="stylesheet" href="~/manager/assets/css/full.min.css">
-    @foreach (var style in module.Styles) {
+    @foreach (var style in module.Styles)
+    {
     <link href="@Url.Content(style)" rel="stylesheet" type="text/css" />
     }
 
@@ -26,6 +27,10 @@
     <partial name="~/Areas/Manager/Shared/Partial/_PreviewModal.cshtml" />
     <partial name="~/Areas/Manager/Shared/Partial/_Notifications.cshtml" />
     <partial name="~/Areas/Manager/Shared/Partial/_MediaUploadTemplate.cshtml" />
+    @foreach (var partial in module.Partials)
+    {
+    <partial name="@partial" />
+    }
 
     <script>
         var piranha = {};
@@ -51,7 +56,8 @@
 
     <partial name="~/Areas/Manager/Shared/Partial/_Resources.cshtml" />
 
-    @foreach (var script in module.Scripts) {
+    @foreach (var script in module.Scripts)
+    {
     <script type="text/javascript" src="@Url.Content(script)"></script>
     }
     @RenderSection("script", required: false)

@@ -46,10 +46,20 @@ public static class SummernoteExtensions
         EditorScripts.EditorScriptUrl = "~/manager/summernote/piranha.editor.js";
 
         //
-        // Register default summernote styles
+        // Register styles
         //
         App.Modules.Get<Piranha.Manager.Module>().Styles.Add("~/manager/summernote/summernote.css");
         App.Modules.Get<Piranha.Manager.Module>().Styles.Add("~/manager/summernote/piranha.editor.css");
+
+        //
+        // Register scripts
+        //
+        App.Modules.Get<Piranha.Manager.Module>().Scripts.Add("~/manager/summernote/piranha.summernote.js");
+
+        //
+        // Register partials
+        //
+        App.Modules.Get<Piranha.Manager.Module>().Partials.Add("~/Areas/Manager/Shared/Partial/_SummernoteLink.cshtml");
 
         //
         // Add the embedded resources
