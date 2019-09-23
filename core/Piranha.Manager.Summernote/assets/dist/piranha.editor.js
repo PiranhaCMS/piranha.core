@@ -24,13 +24,13 @@ var ImageButton = function (context) {
 //
 // Create a new inline editor
 //
-piranha.editor.addInline = function (id, toolbarId) {
+piranha.editor.addInline = function (id, toolbarId, cb) {
     $("#" + id).summernote({
         toolbar: [
             ['style', ['bold', 'italic', 'underline', 'clear']],
             ['para', ['ul', 'ol', 'paragraph']],
             ['media', ['piranhaimage']],
-            ['view', ['fullscreen', 'codeview']],
+            ['view', ['codeview']],
         ],
         buttons: {
             piranhaimage: ImageButton
@@ -39,6 +39,12 @@ piranha.editor.addInline = function (id, toolbarId) {
             image: [],
             link: [],
             air: []
+        },
+        callbacks: {
+            onBlur: function () {
+                if (cb)
+                    cb($('#' + id).summernote('code'));
+            }
         }
     });
 };
