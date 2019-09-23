@@ -7,7 +7,7 @@ var ImageButton = function (context) {
 
     // create button
     var button = ui.button({
-        contents: '<i class="fa fa-image"/>',
+        contents: '<i class="note-icon-picture"/>',
         tooltip: 'Image',
         click: function () {
             context.invoke('saveRange');
