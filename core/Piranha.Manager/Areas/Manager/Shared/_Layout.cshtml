@@ -40,19 +40,32 @@
     <script src="~/manager/assets/js/piranha.min.js"></script>
     @if (!string.IsNullOrWhiteSpace(ViewBag.Message))
     {
-    <script>
+        <script>
         piranha.notifications.push({
             body: "@Html.Raw(ViewBag.Message)",
             type: "@Html.Raw(ViewBag.MessageCss)",
             hide: true
         });
-    </script>
+        </script>
     }
 
     <partial name="~/Areas/Manager/Shared/Partial/_Resources.cshtml" />
 
-    @foreach (var script in module.Scripts) {
-    <script type="text/javascript" src="@Url.Content(script)"></script>
+    @foreach (var script in module.Scripts)
+    {
+        if (string.IsNullOrWhiteSpace(script.Integrity))
+        {
+            //Url.Content does not error on absolute paths, so no additional logic needs to be taken here.
+            <script type="@script.Type" src="@Url.Content(script.Src)"></script>
+        }
+        else if (script.CrossOriginValue == ECrossOriginPolicy.None)
+        {
+            <script type="@script.Type" src="@Url.Content(script.Src)" integrity="@script.Integrity"></script>
+        }
+        else
+        {
+            <script type="@script.Type" src="@Url.Content(script.Src)" integrity="@script.Integrity" crossorigin="@script.GetCrossOriginValueStrValue()"></script>
+        }
     }
     @RenderSection("script", required: false)
 </body>

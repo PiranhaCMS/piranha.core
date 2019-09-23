@@ -55,7 +55,7 @@ namespace Piranha.Manager
         /// <summary>
         /// The currently registered custom scripts.
         /// </summary>
-        public List<string> Scripts { get; private set; }
+        public List<ManagerScriptDefinition> Scripts { get; private set; }
 
         /// <summary>
         /// The currently registered custom styles.
@@ -133,7 +133,7 @@ namespace Piranha.Manager
         public Module()
         {
             Partials = new List<string>();
-            Scripts = new List<string>();
+            Scripts = new List<ManagerScriptDefinition>();
             Styles = new List<string>();
         }
 
