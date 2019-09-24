@@ -8,13 +8,9 @@
  *
  */
 
-using System.Reflection;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Session;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using Newtonsoft.Json;
 using Piranha;
 using Piranha.Manager.Editor;
 

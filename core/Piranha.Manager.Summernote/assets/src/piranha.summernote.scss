@@ -31,7 +31,7 @@
     }
 }
 
-.block {
+.block:not(.block-group-horizontal):not(.block-group) {
     &:hover, &:focus-within {
         .note-toolbar {
             &.panel-heading {
