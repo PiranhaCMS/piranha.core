@@ -27,4 +27,8 @@
     <EmbeddedResource Include="assets\dist\**\*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="node_modules\**" />
+  </ItemGroup>
+
 </Project>

@@ -1,7 +1,3 @@
-/*global
-    piranha, summernote
-*/
-
 var ImageButton = function (context) {
     var ui = $.summernote.ui;
 

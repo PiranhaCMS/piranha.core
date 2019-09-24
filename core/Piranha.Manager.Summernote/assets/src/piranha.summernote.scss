@@ -1,0 +1,54 @@
+@import "../dist/summernote";
+
+.note-toolbar {
+    &.panel-heading {
+        position: absolute !important;
+        width: auto !important;
+        background: #fff;
+        border: solid 1px #ced4da;
+        display: none;
+    }
+}
+
+.note-editor {
+    &.note-frame {
+        border: 0 none;
+
+        .note-statusbar {
+            display: none;
+        }
+    }
+}
+
+.empty {
+    .note-editor {
+        &.note-frame,
+        &.note-frame .note-editing-area,
+        &.note-frame .note-editing-area .note-editable {
+            background: transparent;
+            height: 100%;
+        }
+    }
+}
+
+.block {
+    &:hover, &:focus-within {
+        .note-toolbar {
+            &.panel-heading {
+                top: -3.1rem !important;
+                display: block;
+            }
+        }
+    }
+}
+
+.field {
+    &:hover, &:focus-within {
+        .note-toolbar {
+            &.panel-heading {
+                top: -2.5rem !important;
+                display: block;
+            }
+        }
+    }
+}
