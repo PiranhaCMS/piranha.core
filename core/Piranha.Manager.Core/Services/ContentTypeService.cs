@@ -51,20 +51,31 @@ namespace Piranha.Manager.Services
                     Name = category
                 };
 
-                var items = App.Blocks.GetByCategory(category).OrderBy(i => i.Name).Where(i => !i.IsUnlisted);
+                var items = App.Blocks.GetByCategory(category).OrderBy(i => i.Name).ToList();
 
                 // If we have a parent, filter on allowed types
                 if (parent != null)
                 {
                     if (parent.ItemTypes.Count > 0)
                     {
-                        items = items.Where(i => parent.ItemTypes.Contains(i.Type));
+                        // Only allow specified types
+                        items = items.Where(i => parent.ItemTypes.Contains(i.Type)).ToList();
+                    }
+                    else
+                    {
+                        // Remove unlisted types
+                        items = items.Where(i => !i.IsUnlisted).ToList();
                     }
 
                     if (exludeGroups)
                     {
-                        items = items.Where(i => !typeof(Piranha.Extend.BlockGroup).IsAssignableFrom(i.Type));
+                        items = items.Where(i => !typeof(Piranha.Extend.BlockGroup).IsAssignableFrom(i.Type)).ToList();
                     }
+                }
+                // Else remove unlisted types
+                else
+                {
+                    items = items.Where(i => !i.IsUnlisted).ToList();
                 }
 
                 foreach (var block in items) {
