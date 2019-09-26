@@ -263,6 +263,14 @@ piranha.pageedit = new Vue({
                 this.blocks.splice(index, 1);
             }
         },
+        updateBlockTitle: function (e) {
+            for (var n = 0; n < this.blocks.length; n++) {
+                if (this.blocks[n].meta.uid === e.uid) {
+                    this.blocks[n].meta.title = e.title;
+                    break;
+                }
+            }
+        },
         selectRegion: function (region) {
             this.selectedRegion = region;
             Vue.nextTick(function () {

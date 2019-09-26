@@ -33,6 +33,7 @@ namespace Piranha
         public static readonly string PAGES_HIERARCHICAL_SLUGS = "HierarchicalPageSlugs";
         public static readonly string MEDIA_CDN_URL = "MediaCdnUrl";
         public static readonly string MANAGER_EXPANDED_SITEMAP_LEVELS = "ManagerExpandedSitemapLevels";
+        public static readonly string MANAGER_DEFAULT_COLLAPSED_BLOCKS = "ManagerDefaultCollapsedBlocks";
         public static readonly string PAGE_REVISIONS = "PageRevisions";
         public static readonly string POST_REVISIONS = "PostRevisions";
 
@@ -153,6 +154,31 @@ namespace Piranha
                     param = new Param
                     {
                         Key = MANAGER_EXPANDED_SITEMAP_LEVELS
+                    };
+                }
+                param.Value = value.ToString();
+                _service.SaveAsync(param).GetAwaiter().GetResult();
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets if blocks should be collapsed by default in the
+        /// manager interface.
+        /// </summary>
+        public bool ManagerDefaultCollapsedBlocks {
+            get {
+                var param = _service.GetByKeyAsync(MANAGER_DEFAULT_COLLAPSED_BLOCKS).GetAwaiter().GetResult();
+                if (param != null)
+                    return Convert.ToBoolean(param.Value);
+                return false;
+            }
+            set {
+                var param = _service.GetByKeyAsync(MANAGER_DEFAULT_COLLAPSED_BLOCKS).GetAwaiter().GetResult();
+                if (param == null)
+                {
+                    param = new Param
+                    {
+                        Key = MANAGER_DEFAULT_COLLAPSED_BLOCKS
                     };
                 }
                 param.Value = value.ToString();

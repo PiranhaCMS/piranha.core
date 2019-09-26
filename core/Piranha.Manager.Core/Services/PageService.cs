@@ -457,6 +457,7 @@ namespace Piranha.Manager.Services
 
         private PageEditModel Transform(DynamicPage page, bool isDraft)
         {
+            var config = new Config(_api);
             var type = App.PageTypes.GetById(page.TypeId);
 
             var model = new PageEditModel
@@ -578,7 +579,8 @@ namespace Piranha.Manager.Services
                             Icon = blockType.Icon,
                             Component = "block-group",
                             IsGroup = true,
-                            IsReadonly = page.OriginalPageId.HasValue
+                            IsReadonly = page.OriginalPageId.HasValue,
+                            isCollapsed = config.ManagerDefaultCollapsedBlocks
                         }
                     };
 
@@ -639,7 +641,8 @@ namespace Piranha.Manager.Services
                             Title = block.GetTitle(),
                             Icon = blockType.Icon,
                             Component = blockType.Component,
-                            IsReadonly = page.OriginalPageId.HasValue
+                            IsReadonly = page.OriginalPageId.HasValue,
+                            isCollapsed = config.ManagerDefaultCollapsedBlocks
                         }
                     });
                 }

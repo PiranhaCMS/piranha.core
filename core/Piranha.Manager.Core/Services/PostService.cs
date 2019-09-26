@@ -376,6 +376,7 @@ namespace Piranha.Manager.Services
 
         private PostEditModel Transform(DynamicPost post, bool isDraft)
         {
+            var config = new Config(_api);
             var type = App.PostTypes.GetById(post.TypeId);
 
             var model = new PostEditModel
@@ -491,7 +492,8 @@ namespace Piranha.Manager.Services
                             Name = blockType.Name,
                             Icon = blockType.Icon,
                             Component = "block-group",
-                            IsGroup = true
+                            IsGroup = true,
+                            isCollapsed = config.ManagerDefaultCollapsedBlocks
                         }
                     };
 
@@ -551,7 +553,8 @@ namespace Piranha.Manager.Services
                             Name = blockType.Name,
                             Title = block.GetTitle(),
                             Icon = blockType.Icon,
-                            Component = blockType.Component
+                            Component = blockType.Component,
+                            isCollapsed = config.ManagerDefaultCollapsedBlocks
                         }
                     });
                 }
