@@ -114,6 +114,9 @@ namespace Piranha.Manager.Services
 
         public async Task<PostListModel> GetList(Guid archiveId)
         {
+            var page = await _api.Pages.GetByIdAsync<PageInfo>(archiveId);
+            var pageType = App.PageTypes.GetById(page.TypeId);
+
             var model = new PostListModel
             {
                 PostTypes = App.PostTypes.Select(t => new PostListModel.PostTypeItem
@@ -123,6 +126,15 @@ namespace Piranha.Manager.Services
                     AddUrl = "manager/post/add/"
                 }).ToList()
             };
+
+            // We have specified the post types that should be available
+            // in this archive. Filter them accordingly
+            if (pageType.ArchiveItemTypes.Count > 0)
+            {
+                model.PostTypes = model.PostTypes
+                    .Where(t => pageType.ArchiveItemTypes.Contains(t.Id))
+                    .ToList();
+            }
 
             // Get drafts
             var drafts = await _api.Posts.GetAllDraftsAsync(archiveId);
