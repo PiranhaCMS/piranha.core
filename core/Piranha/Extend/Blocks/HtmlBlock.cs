@@ -8,6 +8,7 @@
  *
  */
 
+using System.Text.RegularExpressions;
 using Piranha.Extend.Fields;
 
 namespace Piranha.Extend.Blocks
@@ -22,5 +23,20 @@ namespace Piranha.Extend.Blocks
         /// Gets/sets the HTML body.
         /// </summary>
         public HtmlField Body { get; set; }
+
+        public override string GetTitle()
+        {
+            if (Body.Value != null)
+            {
+                var title = Regex.Replace(Body.Value, @"<[^>]*>", "");
+
+                if (title.Length > 40)
+                {
+                    title = title.Substring(0, 40) + "...";
+                }
+                return title;
+            }
+            return "Empty";
+        }
     }
 }

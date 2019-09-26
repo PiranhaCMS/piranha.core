@@ -3,10 +3,21 @@
 */
 
 Vue.component("text-block", {
-    props: ["model"],
+    props: ["uid", "model"],
     methods: {
         onBlur: function (e) {
             this.model.body.value = e.target.innerHTML;
+
+            // Tell parent that title has been updated
+            var title = this.model.body.value.replace(/(<([^>]+)>)/ig, "");
+            if (title.length > 40) {
+                title = title.substring(0, 40) + "...";
+            }
+
+            this.$emit('update-title', {
+                uid: this.uid,
+                title: title
+            });
         }
     },
     computed: {

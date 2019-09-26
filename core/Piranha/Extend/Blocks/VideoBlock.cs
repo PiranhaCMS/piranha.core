@@ -22,5 +22,17 @@ namespace Piranha.Extend.Blocks
         /// Gets/sets the video body.
         /// </summary>
         public VideoField Body { get; set; }
+
+        public override string GetTitle()
+        {
+            if (Body != null && Body.Media != null)
+            {
+                return Body.Media.Filename;
+            }
+            else
+            {
+                return "No video selected";
+            }
+        }
     }
 }

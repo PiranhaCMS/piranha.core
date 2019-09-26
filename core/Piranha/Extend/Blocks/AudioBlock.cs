@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using Piranha.Extend.Fields;
@@ -22,5 +22,17 @@ namespace Piranha.Extend.Blocks
         /// Gets/sets the Audio body.
         /// </summary>
         public AudioField Body { get; set; }
+
+        public override string GetTitle()
+        {
+            if (Body != null && Body.Media != null)
+            {
+                return Body.Media.Filename;
+            }
+            else
+            {
+                return "No audio selected";
+            }
+        }
     }
 }

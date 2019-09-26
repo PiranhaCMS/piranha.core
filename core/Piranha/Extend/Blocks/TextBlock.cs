@@ -23,5 +23,14 @@ namespace Piranha.Extend.Blocks
         /// Gets/sets the text body.
         /// </summary>
         public TextField Body { get; set; }
+
+        public override string GetTitle()
+        {
+            if (Body.Value != null)
+            {
+                return Body.Value;
+            }
+            return "Empty";
+        }
     }
 }
