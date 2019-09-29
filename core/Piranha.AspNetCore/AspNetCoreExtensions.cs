@@ -8,12 +8,14 @@
  *
  */
 
+using System;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using System;
+using Piranha.Extend;
 using Piranha.Security;
 
-public static class CoreExtensions
+public static class AspNetCoreExtensions
 {
     /// <summary>
     /// Adds the piranha application service.
@@ -137,5 +139,28 @@ public static class CoreExtensions
     {
         return builder
             .UseMiddleware<Piranha.AspNetCore.SitemapMiddleware>();
+    }
+
+    /// <summary>
+    /// Converts the type name of the block into a pretty
+    /// css class name.
+    /// </summary>
+    /// <param name="block">The current block</param>
+    /// <returns>The css class name</returns>
+    public static string CssName(this Block block)
+    {
+        return ClassNameToWebName(block.GetType().Name);
+    }
+
+    /// <summary>
+    /// Converts a standard camel case class name to a lowercase
+    /// string with each word separated with a dash, suitable
+    /// for use in views.
+    /// </summary>
+    /// <param name="str">The camel case string</param>
+    /// <returns>The converted string</returns>
+    private static string ClassNameToWebName(string str)
+    {
+        return Regex.Replace(str, "([A-Z])", " $1", RegexOptions.Compiled).Trim().Replace(" ", "-").ToLower();
     }
 }
