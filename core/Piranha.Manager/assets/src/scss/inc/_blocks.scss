@@ -104,6 +104,10 @@
                     color: $white;
                 }
             }
+
+            &.selected {
+                background: $gray-400 !important;
+            }
         }
 
         .btn {

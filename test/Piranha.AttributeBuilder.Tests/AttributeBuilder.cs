@@ -14,6 +14,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
+using Piranha.Extend;
 using Piranha.Repositories;
 using Piranha.Services;
 

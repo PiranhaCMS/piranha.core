@@ -10,6 +10,7 @@
 
 using System.Collections.Generic;
 using Piranha.AttributeBuilder;
+using Piranha.Extend;
 using Piranha.Models;
 
 namespace RazorWeb.Models

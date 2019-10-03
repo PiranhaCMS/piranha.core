@@ -9,6 +9,7 @@
  */
 
 using Piranha.AttributeBuilder;
+using Piranha.Extend;
 using Piranha.Models;
 using Piranha.Extend.Fields;
 

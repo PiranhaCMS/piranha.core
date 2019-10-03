@@ -14,6 +14,7 @@ using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Piranha.AttributeBuilder;
+using Piranha.Extend;
 using Piranha.Extend.Fields;
 using Piranha.Models;
 using Piranha.Repositories;

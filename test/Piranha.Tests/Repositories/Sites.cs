@@ -13,6 +13,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Xunit;
 using Piranha.AttributeBuilder;
+using Piranha.Extend;
 using Piranha.Extend.Fields;
 using Piranha.Models;
 using Piranha.Repositories;

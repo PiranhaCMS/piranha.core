@@ -11,7 +11,7 @@
 using Piranha.Models;
 using System;
 
-namespace Piranha.AttributeBuilder
+namespace Piranha.Extend
 {
     /// <summary>
     /// Attribute for marking a property as a field.

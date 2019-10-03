@@ -11,7 +11,7 @@
 using System;
 using Piranha.Models;
 
-namespace Piranha.AttributeBuilder
+namespace Piranha.Extend
 {
     /// <summary>
     /// Attribute for marking a property as a region.

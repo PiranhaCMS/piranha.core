@@ -29,5 +29,10 @@ namespace Piranha.Manager.Models.Content
         /// Gets/sets if the block is readonly.
         /// </summary>
         public bool IsReadonly { get; set; } = false;
+
+        /// <summary>
+        /// If the global header fields should be visible.
+        /// </summary>
+        public bool ShowHeader { get; set; } = true;
     }
 }

@@ -8,10 +8,11 @@
  *
  */
 
-using Piranha.Extend;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Piranha.Extend;
+using Piranha.Extend.Fields;
 
 namespace Piranha.Runtime
 {
@@ -82,6 +83,27 @@ namespace Piranha.Runtime
                 if (!typeof(BlockGroup).IsAssignableFrom(itemType))
                 {
                     item.ItemTypes.Add(itemType);
+                }
+            }
+
+            // Automatically register fields for convenience
+            foreach (var prop in typeof(TValue).GetProperties(App.PropertyBindings))
+            {
+                if (typeof(IField).IsAssignableFrom(prop.PropertyType))
+                {
+                    MethodInfo generic = null;
+
+                    if (typeof(SelectFieldBase).IsAssignableFrom(prop.PropertyType))
+                    {
+                        var method = typeof(Runtime.AppFieldList).GetMethod("RegisterSelect");
+                        generic = method.MakeGenericMethod(prop.PropertyType.GenericTypeArguments.First());
+                    }
+                    else
+                    {
+                        var method = typeof(Runtime.AppFieldList).GetMethod("Register");
+                        generic = method.MakeGenericMethod(prop.PropertyType);
+                    }
+                    generic.Invoke(App.Fields, null);
                 }
             }
             return item;

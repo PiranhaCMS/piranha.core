@@ -152,13 +152,16 @@
                 }
             }
         }
+
+        .block-group-actions {
+            opacity: 0;
+        }
     }
 
     .block-group-actions {
         position: absolute;
         top: .5rem;
         right: 7rem;
-        opacity: 0;
         transition: opacity ease-in-out .2s;
     }
 

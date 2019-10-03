@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Piranha.Models;
 using Piranha.Manager.Models;
 using Piranha.Manager.Models.Content;
@@ -237,6 +238,8 @@ namespace Piranha.Manager.Services
                         if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
                         {
                             var fieldType = App.Fields.GetByType(prop.PropertyType);
+
+                            // Create the block field
                             var field = new FieldModel
                             {
                                 Model = (Extend.IField)prop.GetValue(block),
@@ -247,6 +250,8 @@ namespace Piranha.Manager.Services
                                     Component = fieldType.Component,
                                 }
                             };
+
+                            // Check if this is a select field
                             if (typeof(Extend.Fields.SelectFieldBase).IsAssignableFrom(fieldType.Type))
                             {
                                 foreach(var selectItem in ((Extend.Fields.SelectFieldBase)Activator.CreateInstance(fieldType.Type)).Items)
@@ -254,6 +259,23 @@ namespace Piranha.Manager.Services
                                     field.Meta.Options.Add(Convert.ToInt32(selectItem.Value), selectItem.Title);
                                 }
                             }
+
+                            // Check if we have field meta-data available
+                            var attr = prop.GetCustomAttribute<Extend.FieldAttribute>();
+                            if (attr != null)
+                            {
+                                field.Meta.Name = !string.IsNullOrWhiteSpace(attr.Title) ? attr.Title : field.Meta.Name;
+                                field.Meta.Placeholder = attr.Placeholder;
+                                field.Meta.IsHalfWidth = attr.Options.HasFlag(FieldOption.HalfWidth);
+                            }
+
+                            // Check if we have field description meta-data available
+                            var descAttr = prop.GetCustomAttribute<Extend.FieldDescriptionAttribute>();
+                            if (descAttr != null)
+                            {
+                                field.Meta.Description = descAttr.Text;
+                            }
+
                             item.Fields.Add(field);
                         }
                     }

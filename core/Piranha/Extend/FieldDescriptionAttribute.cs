@@ -3,20 +3,20 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
 
-namespace Piranha.AttributeBuilder
+namespace Piranha.Extend
 {
     /// <summary>
-    /// Attribute for marking a property as a region.
+    /// Attribute for adding a description to a field.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    public class RegionDescriptionAttribute : Attribute
+    public class FieldDescriptionAttribute : Attribute
     {
         /// <summary>
         /// Gets/sets the optional description text.
@@ -26,14 +26,14 @@ namespace Piranha.AttributeBuilder
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public RegionDescriptionAttribute() { }
+        public FieldDescriptionAttribute() { }
 
         /// <summary>
         /// Creates a new description attribute and
         /// sets the description text.
         /// </summary>
         /// <param name="text">The description text</param>
-        public RegionDescriptionAttribute(string text)
+        public FieldDescriptionAttribute(string text)
         {
             Text = text;
         }

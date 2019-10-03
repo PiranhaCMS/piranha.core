@@ -40,6 +40,9 @@ Vue.component("block-group", {
                 }
             }
         },
+        toggleHeader: function () {
+            this.model.meta.showHeader = !this.model.meta.showHeader;
+        },
         moveItem: function (from, to) {
             this.model.items.splice(to, 0, this.model.items.splice(from, 1)[0])
         }
@@ -57,10 +60,18 @@ Vue.component("block-group", {
     },
     template:
         "<div :id='uid' class='block-group'>" +
+        "  <div v-if='model.fields.length > 0' class='actions block-group-actions'>" +
+        "    <button v-on:click.prevent='toggleHeader()' class='btn btn-sm' :class='{ selected: model.meta.showHeader }'>" +
+        "      <i class='fas fa-list'></i>" +
+        "    </button>" +
+        "  </div>" +
         "  <div class='block-group-header'>" +
-        "    <div class='form-group' v-for='field in model.fields'>" +
-        "      <label>{{ field.meta.name }}</label>" +
-        "      <component v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:meta='field.meta' v-bind:toolbar='toolbar' v-bind:model='field.model'></component>" +
+        "    <div v-if='model.meta.showHeader' class='row'>" +
+        "      <div class='form-group' :class='{ \"col-sm-6\": field.meta.isHalfWidth, \"col-sm-12\": !field.meta.isHalfWidth }' v-for='field in model.fields'>" +
+        "        <label>{{ field.meta.name }}</label>" +
+        "        <div v-if='field.meta.description != null' v-html='field.meta.description' class='field-description small text-muted'></div>" +
+        "        <component v-bind:is='field.meta.component' v-bind:uid='field.meta.uid' v-bind:meta='field.meta' v-bind:toolbar='toolbar' v-bind:model='field.model'></component>" +
+        "      </div>" +
         "    </div>" +
         "  </div>" +
         "  <div class='row'>" +
