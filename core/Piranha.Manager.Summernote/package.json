@@ -12,6 +12,7 @@
     "gulp-sass": "^4.0.2",
     "gulp-uglify": "3.0.2",
     "uglify-es": "3.3.10",
-    "summernote": "0.8.11"
+    "summernote": "0.8.11",
+    "codemirror": "5.49.0"
   }
 }

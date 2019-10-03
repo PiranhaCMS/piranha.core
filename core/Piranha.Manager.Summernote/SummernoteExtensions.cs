@@ -33,8 +33,9 @@ public static class SummernoteExtensions
     /// Uses the Tiny MCE editor module.
     /// </summary>
     /// <param name="builder">The current application builder</param>
+    /// <param name="withCodeMirrorDefaults"></param>
     /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranhaSummernote(this IApplicationBuilder builder) {
+    public static IApplicationBuilder UsePiranhaSummernote(this IApplicationBuilder builder, bool withCodeMirrorDefaults = true) {
         //
         // Register the editor scripts.
         //
@@ -50,6 +51,22 @@ public static class SummernoteExtensions
         // Register partials
         //
         App.Modules.Get<Piranha.Manager.Module>().Partials.Add("~/Areas/Manager/Shared/Partial/_SummernoteLink.cshtml");
+
+        //
+        // Register Codemirror styles and scripts
+        //
+        // ReSharper disable once InvertIf
+        if (withCodeMirrorDefaults)
+        {
+            App.Modules.Get<Piranha.Manager.Module>().Styles.Add("~/manager/summernote/codemirror.css");
+            App.Modules.Get<Piranha.Manager.Module>().Styles.Add("~/manager/summernote/show-hint.css");
+            App.Modules.Get<Piranha.Manager.Module>().Scripts.Add("~/manager/summernote/codemirror.js");
+            App.Modules.Get<Piranha.Manager.Module>().Scripts.Add("~/manager/summernote/xml.js");
+            App.Modules.Get<Piranha.Manager.Module>().Scripts.Add("~/manager/summernote/show-hint.js");
+            App.Modules.Get<Piranha.Manager.Module>().Scripts.Add("~/manager/summernote/xml-hint.js");
+            App.Modules.Get<Piranha.Manager.Module>().Scripts.Add("~/manager/summernote/html-hint.js");
+            App.Modules.Get<Piranha.Manager.Module>().Scripts.Add("~/manager/summernote/htmlhint.js");
+        }
 
         //
         // Add the embedded resources
