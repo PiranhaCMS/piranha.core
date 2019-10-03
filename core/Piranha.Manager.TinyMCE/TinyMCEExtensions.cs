@@ -8,14 +8,9 @@
  *
  */
 
-using System.Reflection;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Session;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using Newtonsoft.Json;
-using Piranha;
 using Piranha.Manager.Editor;
 
 public static class TinyMCEExtensions
@@ -50,7 +45,7 @@ public static class TinyMCEExtensions
         //
         return builder.UseStaticFiles(new StaticFileOptions
         {
-            FileProvider = new EmbeddedFileProvider(typeof(TinyMCEExtensions).Assembly, "Piranha.Manager.TinyMCE.assets"),
+            FileProvider = new EmbeddedFileProvider(typeof(TinyMCEExtensions).Assembly, "Piranha.Manager.TinyMce.assets"),
             RequestPath = "/manager/tiny"
         });
     }

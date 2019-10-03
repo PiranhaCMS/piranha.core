@@ -12,6 +12,9 @@ Vue.component("html-block", {
     methods: {
         onBlur: function (e) {
             this.model.body.value = e.target.innerHTML;
+        },
+        onChange: function (data) {
+            this.model.body.value = data;
         }
     },
     computed: {
@@ -20,7 +23,7 @@ Vue.component("html-block", {
         }
     },
     mounted: function () {
-        piranha.editor.addInline(this.uid, this.toolbar);
+        piranha.editor.addInline(this.uid, this.toolbar, this.onChange);
     },
     beforeDestroy: function () {
         piranha.editor.remove(this.uid);

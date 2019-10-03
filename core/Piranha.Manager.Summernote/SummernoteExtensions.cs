@@ -8,13 +8,9 @@
  *
  */
 
-using System.Reflection;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Session;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using Newtonsoft.Json;
 using Piranha;
 using Piranha.Manager.Editor;
 
@@ -43,13 +39,17 @@ public static class SummernoteExtensions
         // Register the editor scripts.
         //
         EditorScripts.MainScriptUrl = "~/manager/summernote/summernote.min.js";
-        EditorScripts.EditorScriptUrl = "~/manager/summernote/piranha.editor.js";
+        EditorScripts.EditorScriptUrl = "~/manager/summernote/piranha.summernote.min.js";
 
         //
-        // Register default summernote styles
+        // Register styles
         //
-        App.Modules.Get<Piranha.Manager.Module>().Styles.Add("~/manager/summernote/summernote.css");
-        App.Modules.Get<Piranha.Manager.Module>().Styles.Add("~/manager/summernote/piranha.editor.css");
+        App.Modules.Get<Piranha.Manager.Module>().Styles.Add("~/manager/summernote/piranha.summernote.min.css");
+
+        //
+        // Register partials
+        //
+        App.Modules.Get<Piranha.Manager.Module>().Partials.Add("~/Areas/Manager/Shared/Partial/_SummernoteLink.cshtml");
 
         //
         // Add the embedded resources

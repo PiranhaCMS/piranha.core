@@ -8,13 +8,28 @@
  *
  */
 
-var gulp = require("gulp");
+var gulp = require("gulp"),
+    sass = require('gulp-sass'),
+    concat = require("gulp-concat"),
+    cssmin = require("gulp-cssmin"),
+    rename = require("gulp-rename"),
+    uglifyes = require('uglify-es'),
+    composer = require('gulp-uglify/composer'),
+    uglify = composer(uglifyes, console);
 
 var output = "assets/dist/";
 
 var resources = [
-    "node_modules/summernote/dist/**/*.*",
-    "assets/src/*.*"
+    "node_modules/summernote/dist/**/*.*"
+];
+
+var styles = [
+    "assets/src/piranha.summernote.scss",
+];
+
+var scripts = [
+    "assets/src/piranha.summernote.js",
+    "assets/src/piranha.editor.js"
 ];
 
 gulp.task("min", function () {
@@ -24,6 +39,30 @@ gulp.task("min", function () {
         gulp.src(resources[n])
             .pipe(gulp.dest(output));
     }
+
+    // Compile scss
+    for (var n = 0; n < styles.length; n++)
+    {
+        gulp.src(styles[n])
+            .pipe(sass().on("error", sass.logError))
+            .pipe(cssmin())
+            .pipe(rename({
+                suffix: ".min"
+            }))
+            .pipe(gulp.dest(output));
+    }
+
+    // Compile js
+    gulp.src(scripts, { base: "." })
+        .pipe(concat(output + "piranha.summernote.js"))
+        .pipe(gulp.dest("."))
+        .pipe(uglify().on('error', function (e) {
+            console.log(e);
+        }))
+        .pipe(rename({
+            suffix: ".min"
+        }))
+        .pipe(gulp.dest("."));
 });
 
 //
