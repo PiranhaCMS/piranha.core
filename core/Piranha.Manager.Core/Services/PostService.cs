@@ -508,8 +508,7 @@ namespace Piranha.Manager.Services
                         if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
                         {
                             var fieldType = App.Fields.GetByType(prop.PropertyType);
-
-                            group.Fields.Add(new FieldModel
+                            var field = new FieldModel
                             {
                                 Model = (Extend.IField)prop.GetValue(block),
                                 Meta = new FieldMeta
@@ -518,7 +517,15 @@ namespace Piranha.Manager.Services
                                     Name = prop.Name,
                                     Component = fieldType.Component,
                                 }
-                            });
+                            };
+                            if (typeof(Extend.Fields.SelectFieldBase).IsAssignableFrom(fieldType.Type))
+                            {
+                                foreach(var item in ((Extend.Fields.SelectFieldBase)Activator.CreateInstance(fieldType.Type)).Items)
+                                {
+                                    field.Meta.Options.Add(Convert.ToInt32(item.Value), item.Title);
+                                }
+                            }
+                            group.Fields.Add(field);
                         }
                     }
 

@@ -8,6 +8,7 @@
  *
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Piranha.Models;
@@ -236,8 +237,7 @@ namespace Piranha.Manager.Services
                         if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
                         {
                             var fieldType = App.Fields.GetByType(prop.PropertyType);
-
-                            item.Fields.Add(new FieldModel
+                            var field = new FieldModel
                             {
                                 Model = (Extend.IField)prop.GetValue(block),
                                 Meta = new FieldMeta
@@ -246,7 +246,15 @@ namespace Piranha.Manager.Services
                                     Name = prop.Name,
                                     Component = fieldType.Component,
                                 }
-                            });
+                            };
+                            if (typeof(Extend.Fields.SelectFieldBase).IsAssignableFrom(fieldType.Type))
+                            {
+                                foreach(var selectItem in ((Extend.Fields.SelectFieldBase)Activator.CreateInstance(fieldType.Type)).Items)
+                                {
+                                    field.Meta.Options.Add(Convert.ToInt32(selectItem.Value), selectItem.Title);
+                                }
+                            }
+                            item.Fields.Add(field);
                         }
                     }
 
