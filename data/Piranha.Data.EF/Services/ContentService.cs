@@ -217,16 +217,23 @@ namespace Piranha.Services
                     model.Id = block.Id;
                     model.Type = block.CLRType;
 
-                    foreach (var field in block.Fields)
+                    foreach (var prop in model.GetType().GetProperties(App.PropertyBindings))
                     {
-                        var prop = model.GetType().GetProperty(field.FieldId, App.PropertyBindings);
-
-                        if (prop != null)
+                        if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
                         {
-                            var type = App.Fields.GetByType(field.CLRType);
-                            var val = (Extend.IField)App.DeserializeObject(field.Value, type.Type);
+                            var field = block.Fields.FirstOrDefault(f => f.FieldId == prop.Name);
 
-                            prop.SetValue(model, val);
+                            if (field != null)
+                            {
+                                var type = App.Fields.GetByType(field.CLRType);
+                                var val = (Extend.IField)App.DeserializeObject(field.Value, type.Type);
+
+                                prop.SetValue(model, val);
+                            }
+                            else
+                            {
+                                prop.SetValue(model, Activator.CreateInstance(prop.PropertyType));
+                            }
                         }
                     }
 
