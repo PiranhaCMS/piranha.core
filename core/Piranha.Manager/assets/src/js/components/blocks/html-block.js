@@ -11,7 +11,7 @@ Vue.component("html-block", {
     },
     methods: {
         onBlur: function (e) {
-            this.model.body.value = e.target.innerHTML;
+            this.model.body.value = tinyMCE.activeEditor.getContent();
 
             // Tell parent that title has been updated
             var title = this.model.body.value.replace(/(<([^>]+)>)/ig, "");

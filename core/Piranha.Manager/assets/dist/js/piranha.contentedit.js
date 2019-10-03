@@ -412,7 +412,7 @@ Vue.component("html-block", {
     },
     methods: {
         onBlur: function (e) {
-            this.model.body.value = e.target.innerHTML;
+            this.model.body.value = tinyMCE.activeEditor.getContent();
 
             // Tell parent that title has been updated
             var title = this.model.body.value.replace(/(<([^>]+)>)/ig, "");
@@ -457,10 +457,10 @@ Vue.component("html-column-block", {
     },
     methods: {
         onBlurCol1: function (e) {
-            this.model.column1.value = e.target.innerHTML;
+            this.model.column1.value = tinyMCE.activeEditor.getContent();
         },
         onBlurCol2: function (e) {
-            this.model.column2.value = e.target.innerHTML;
+            this.model.column2.value = tinyMCE.activeEditor.getContent();
         }
     },
     computed: {
@@ -1000,7 +1000,7 @@ Vue.component("html-field", {
     },
     methods: {
         onBlur: function (e) {
-            this.model.value = e.target.innerHTML;
+            this.model.value = tinyMCE.activeEditor.getContent();
 
             // Tell parent that title has been updated
             var title = this.model.value.replace(/(<([^>]+)>)/ig, "");

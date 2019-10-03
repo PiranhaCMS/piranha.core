@@ -12,10 +12,10 @@ Vue.component("html-column-block", {
     },
     methods: {
         onBlurCol1: function (e) {
-            this.model.column1.value = e.target.innerHTML;
+            this.model.column1.value = tinyMCE.activeEditor.getContent();
         },
         onBlurCol2: function (e) {
-            this.model.column2.value = e.target.innerHTML;
+            this.model.column2.value = tinyMCE.activeEditor.getContent();
         }
     },
     computed: {

@@ -7,7 +7,7 @@ Vue.component("html-field", {
     },
     methods: {
         onBlur: function (e) {
-            this.model.value = e.target.innerHTML;
+            this.model.value = tinyMCE.activeEditor.getContent();
 
             // Tell parent that title has been updated
             var title = this.model.value.replace(/(<([^>]+)>)/ig, "");
