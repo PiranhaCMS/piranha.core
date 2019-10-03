@@ -59,6 +59,12 @@ piranha.editor.addInline = function (id, toolbarId, cb) {
             link: [],
             air: []
         },
+        codemirror: {
+            lineNumbers: true,
+            mode: "text/html",
+            lineWrapping: true,
+            extraKeys: { "Ctrl-Space": "autocomplete" }
+        },
         callbacks: {
             onBlur: function () {
                 if (cb)

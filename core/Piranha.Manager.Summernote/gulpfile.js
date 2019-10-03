@@ -1,3 +1,4 @@
+/// <binding BeforeBuild='min' />
 /*
  * Copyright (c) 2019 Håkan Edling
  *
@@ -20,7 +21,13 @@ var gulp = require("gulp"),
 var output = "assets/dist/";
 
 var resources = [
-    "node_modules/summernote/dist/**/*.*"
+    "node_modules/summernote/dist/**/*.*",
+    "node_modules/codemirror/lib/*.*",
+    "node_modules/codemirror/mode/xml/*.*",
+    "node_modules/codemirror/addon/hint/show-hint.css",
+    "node_modules/codemirror/addon/hint/show-hint.js",
+    "node_modules/codemirror/addon/hint/xml-hint.js",
+    "node_modules/codemirror/addon/hint/html-hint.js"
 ];
 
 var styles = [
@@ -34,14 +41,15 @@ var scripts = [
 
 gulp.task("min", function () {
     // Copy resources
-    for (var n = 0; n < resources.length; n++)
+    var n;
+    for (n = 0; n < resources.length; n++)
     {
         gulp.src(resources[n])
             .pipe(gulp.dest(output));
     }
 
     // Compile scss
-    for (var n = 0; n < styles.length; n++)
+    for (n = 0; n < styles.length; n++)
     {
         gulp.src(styles[n])
             .pipe(sass().on("error", sass.logError))
