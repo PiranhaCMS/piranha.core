@@ -26076,7 +26076,7 @@ piranha.mediapicker = new Vue({
         load: function (id) {
             var self = this;
 
-            var url = piranha.baseUrl + "manager/api/media/list" + (id ? "/" + id : "");
+            var url = piranha.baseUrl + "manager/api/media/list" + (id ? "/" + id : "")+"/?width=210&height=160";
             if (this.filter) {
                 url += "?filter=" + this.filter;
             }
@@ -26366,6 +26366,11 @@ piranha.preview = new Vue({
         dropzone: null
     },
     methods: {
+        openItem: function (media) {
+            piranha.preview.media = media;
+            piranha.preview.show();
+        },
+        //TODO: Rename loadAndOpen?
         open: function (mediaId) {
             piranha.preview.load(mediaId);
             piranha.preview.show();

@@ -26,11 +26,11 @@
                 </a>
 
                 <template v-for="item in items">
-                    <a href="#" class="thumbnail" v-on:click.prevent="piranha.preview.open(item.id)" draggable="true" v-on:dragstart="drag($event, item)">
+                    <a href="#" class="thumbnail" v-on:click.prevent="piranha.preview.openItem(item)" draggable="true" v-on:dragstart="drag($event, item)">
                         <button class="btn btn-danger media-delete" v-on:click.stop="remove(item.id)"><i class="fas fa-trash"></i></button>
 
                         <template v-if="item.type === 'Image'">
-                            <img class="thumbnail-image" :src="getThumbnailUrl(item.id)">
+                            <img class="thumbnail-image" :src="item.altVersionUrl">
                         </template>
 
                         <template v-else-if="item.type === 'Document'">

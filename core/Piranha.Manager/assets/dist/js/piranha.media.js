@@ -65,7 +65,7 @@ piranha.media = new Vue({
         load: function (id) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/media/list" + (id ? "/" + id : ""))
+            fetch(piranha.baseUrl + "manager/api/media/list" + (id ? "/" + id : "") + "/?width=210&height=160")
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.currentFolderId = result.currentFolderId;
