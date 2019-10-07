@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Hosting;
 using Piranha;
 using Piranha.AspNetCore.Identity.SQLite;
 
@@ -18,9 +18,9 @@ namespace MvcWeb
             services.AddLocalization(options =>
                 options.ResourcesPath = "Resources"
             );
-            services.AddMvc()
-                .AddPiranhaManagerOptions()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddControllersWithViews();
+            services.AddRazorPages()
+                .AddPiranhaManagerOptions();
 
             services.AddPiranha();
             services.AddPiranhaApplication();
@@ -39,7 +39,7 @@ namespace MvcWeb
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApi api)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApi api)
         {
             if (env.IsDevelopment())
             {
@@ -79,17 +79,17 @@ namespace MvcWeb
             // Register middleware
             app.UseStaticFiles();
             app.UseAuthentication();
+            app.UseAuthorization();
             app.UsePiranha();
             app.UsePiranhaManager();
-            app.UseMvc(routes =>
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(name: "areaRoute",
-                    template: "{area:exists}/{controller}/{action}/{id?}",
-                    defaults: new { controller = "Home", action = "Index" });
-
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=home}/{action=index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapPiranhaManager();
             });
 
             Seed.RunAsync(api).GetAwaiter().GetResult();

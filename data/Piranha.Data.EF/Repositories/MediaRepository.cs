@@ -178,7 +178,7 @@ namespace Piranha.Repositories
             {
                 if (!media.Versions.Any(v => v.Id == version.Id))
                 {
-                    media.Versions.Add(new MediaVersion
+                    var mediaVersion = new MediaVersion
                     {
                         Id = version.Id,
                         MediaId = media.Id,
@@ -186,7 +186,9 @@ namespace Piranha.Repositories
                         Width = version.Width,
                         Height = version.Height,
                         FileExtension = version.FileExtension
-                    });
+                    };
+                    _db.MediaVersions.Add(mediaVersion);
+                    media.Versions.Add(mediaVersion);
                 }
             }
 

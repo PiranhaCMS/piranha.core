@@ -8,10 +8,8 @@
  *
  */
 
-using System.Reflection;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Session;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
@@ -219,30 +217,30 @@ public static class ManagerModuleExtensions
     /// <param name="builder">The current application builder</param>
     /// <returns>The builder</returns>
     public static IApplicationBuilder UsePiranhaManager(this IApplicationBuilder builder) {
-        builder.UseStaticFiles(new StaticFileOptions
+        return builder.UseStaticFiles(new StaticFileOptions
         {
             FileProvider = new EmbeddedFileProvider(typeof(ManagerModuleExtensions).Assembly, "Piranha.Manager.assets.dist"),
             RequestPath = "/manager/assets"
         });
+    }
 
-        return builder
-            .UseSession()
-            .UseSignalR(routes =>
-            {
-                routes.MapHub<PreviewHub>("/manager/preview");
-            });
+    public static void MapPiranhaManager(this IEndpointRouteBuilder builder)
+    {
+        builder.MapHub<PreviewHub>("/manager/preview");
+        builder.MapRazorPages().RequireAuthorization();
     }
 
     public static IMvcBuilder AddPiranhaManagerOptions(this IMvcBuilder builder)
     {
         return builder
-            .AddRazorPagesOptions(options => {
+            .AddRazorPagesOptions(options =>
+            {
                 options.Conventions.AuthorizeAreaFolder("Manager", "/");
                 options.Conventions.AllowAnonymousToAreaPage("Manager", "/login");
             })
             .AddViewLocalization()
             .AddDataAnnotationsLocalization()
-            .AddJsonOptions(options =>
+            .AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.TypeNameHandling = TypeNameHandling.Auto;
             });

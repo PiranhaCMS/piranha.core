@@ -386,7 +386,7 @@ namespace Piranha.Services
                                             };
                                             media.Versions.Add(version);
 
-                                            _repo.Save(media);
+                                            _repo.Save(media).Wait();
                                             RemoveFromCache(media);
 
                                             upload = true;
