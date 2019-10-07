@@ -416,7 +416,7 @@ namespace Piranha.Services
         {
             if (_cache != null)
             {
-                var site = await GetByIdAsync(id);
+                var site = await GetByIdAsync(id).ConfigureAwait(false);
 
                 if (site != null)
                 {

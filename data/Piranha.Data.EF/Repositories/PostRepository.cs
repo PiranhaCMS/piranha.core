@@ -322,18 +322,20 @@ namespace Piranha.Repositories
                         .OrderByDescending(r => r.Created)
                         .Select(r => r.Id)
                         .Take(revisions)
-                        .ToListAsync();
+                        .ToListAsync()
+                        .ConfigureAwait(false);
 
                     if (existing.Count == revisions)
                     {
                         var removed = await _db.PostRevisions
                             .Where(r => r.PostId == id && !existing.Contains(r.Id))
-                            .ToListAsync();
+                            .ToListAsync()
+                            .ConfigureAwait(false);
 
                         if (removed.Count > 0)
                         {
                             _db.PostRevisions.RemoveRange(removed);
-                            await _db.SaveChangesAsync();
+                            await _db.SaveChangesAsync().ConfigureAwait(false);
                         }
                     }
                 }
@@ -546,6 +548,19 @@ namespace Piranha.Repositories
                 }
                 post = _contentService.Transform<T>(model, type, post);
 
+                // Make sure foreign key is set for fields
+                if (!isDraft)
+                {
+                    foreach (var field in post.Fields)
+                    {
+                        if (field.PostId == Guid.Empty)
+                        {
+                            field.PostId = post.Id;
+                            await _db.PostFields.AddAsync(field).ConfigureAwait(false);
+                        }
+                    }
+                }
+
                 if (isDraft)
                 {
                     post.Category = new Category
@@ -643,15 +658,20 @@ namespace Piranha.Repositories
                             field.Value = newField.Value;
                         }
 
-                        // Create the page block
-                        post.Blocks.Add(new PostBlock
+                        // Create the post block
+                        var postBlock = new PostBlock
                         {
                             Id = Guid.NewGuid(),
                             BlockId = block.Id,
                             Block = block,
                             PostId = post.Id,
                             SortOrder = n
-                        });
+                        };
+                        if (!isDraft)
+                        {
+                            await _db.PostBlocks.AddAsync(postBlock).ConfigureAwait(false);
+                        }
+                        post.Blocks.Add(postBlock);
                     }
                 }
 

@@ -266,6 +266,16 @@ namespace Piranha.Repositories
 
                 _contentService.Transform(content, type, site);
 
+                // Make sure foreign key is set for fields
+                foreach (var field in site.Fields)
+                {
+                    if (field.SiteId == Guid.Empty)
+                    {
+                        field.SiteId = site.Id;
+                        await _db.SiteFields.AddAsync(field).ConfigureAwait(false);
+                    }
+                }
+
                 // Since we've updated global site content, update the
                 // global last modified date for the site.
                 site.ContentLastModified = DateTime.Now;

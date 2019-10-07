@@ -137,7 +137,8 @@ namespace Piranha.Repositories
         public async Task Save(Alias model)
         {
             var alias = await _db.Aliases
-                .FirstOrDefaultAsync(p => p.Id == model.Id);
+                .FirstOrDefaultAsync(p => p.Id == model.Id)
+                .ConfigureAwait(false);
 
             if (alias == null)
             {

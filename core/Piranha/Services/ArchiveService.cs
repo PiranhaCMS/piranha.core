@@ -125,11 +125,11 @@ namespace Piranha.Services
             // Set related info
             if (categoryId.HasValue)
             {
-                model.Category = await _postService.GetCategoryByIdAsync(categoryId.Value);
+                model.Category = await _postService.GetCategoryByIdAsync(categoryId.Value).ConfigureAwait(false);
             }
             if (tagId.HasValue)
             {
-                model.Tag = await _postService.GetTagByIdAsync(tagId.Value);
+                model.Tag = await _postService.GetTagByIdAsync(tagId.Value).ConfigureAwait(false);
             }
 
             // Get the id of the current posts

@@ -19,8 +19,8 @@ namespace RazorWeb
                 options.ResourcesPath = "Resources"
             );
             services.AddMvc()
-                .AddPiranhaManagerOptions()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                //.AddPiranhaManagerOptions()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddPiranha();
             services.AddPiranhaApplication();

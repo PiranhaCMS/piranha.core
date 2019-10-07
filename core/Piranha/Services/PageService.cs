@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -85,7 +85,7 @@ namespace Piranha.Services
         /// <returns>The created copy</returns>
         public async Task<T> CopyAsync<T>(T originalPage) where T : Models.PageBase
         {
-            var model = await GetByIdAsync<T>(originalPage.Id);
+            var model = await GetByIdAsync<T>(originalPage.Id).ConfigureAwait(false);
 
             model.Id = Guid.NewGuid();
             model.OriginalPageId = originalPage.Id;
@@ -402,7 +402,7 @@ namespace Piranha.Services
         /// <returns>The draft, or null if no draft exists</returns>
         public async Task<T> GetDraftByIdAsync<T>(Guid id) where T : PageBase
         {
-            var draft = await _repo.GetDraftById<T>(id);
+            var draft = await _repo.GetDraftById<T>(id).ConfigureAwait(false);
 
             OnLoad(draft, true);
 
@@ -424,7 +424,7 @@ namespace Piranha.Services
             App.Hooks.OnAfterSave<PageBase>(model);
 
             // Remove the moved page from cache
-            await RemoveFromCache(model);
+            await RemoveFromCache(model).ConfigureAwait(false);
 
             // Remove all affected pages from cache
             if (_cache != null)
@@ -434,7 +434,7 @@ namespace Piranha.Services
                     var page = await GetByIdAsync<PageInfo>(id).ConfigureAwait(false);
                     if (page != null)
                     {
-                        await RemoveFromCache(model);
+                        await RemoveFromCache(model).ConfigureAwait(false);
                     }
                 }
             }
@@ -516,7 +516,7 @@ namespace Piranha.Services
             }
 
             // Check if we're changing the state
-            var current = await _repo.GetById<PageInfo>(model.Id);
+            var current = await _repo.GetById<PageInfo>(model.Id).ConfigureAwait(false);
             var changeState = IsPublished(current) != IsPublished(model);
 
             IEnumerable<Guid> affected = new Guid[0];
@@ -529,7 +529,7 @@ namespace Piranha.Services
             {
                 // We're saving a draft since we have a previously
                 // published version of the page
-                await _repo.SaveDraft(model);
+                await _repo.SaveDraft(model).ConfigureAwait(false);
             }
             else
             {
@@ -546,8 +546,8 @@ namespace Piranha.Services
                     {
                         // Save current as a revision before saving the model
                         // and if a draft revision exists, remove it.
-                        await _repo.DeleteDraft(model.Id);
-                        await _repo.CreateRevision(model.Id, config.PageRevisions);
+                        await _repo.DeleteDraft(model.Id).ConfigureAwait(false);
+                        await _repo.CreateRevision(model.Id, config.PageRevisions).ConfigureAwait(false);
                     }
                 }
 
@@ -559,7 +559,7 @@ namespace Piranha.Services
             App.Hooks.OnAfterSave<PageBase>(model);
 
             // Remove from cache
-            await RemoveFromCache(model);
+            await RemoveFromCache(model).ConfigureAwait(false);
 
             // Remove all affected pages from cache
             if (_cache != null)
@@ -569,7 +569,7 @@ namespace Piranha.Services
                     var page = await GetByIdAsync<PageInfo>(id).ConfigureAwait(false);
                     if (page != null)
                     {
-                        await RemoveFromCache(model);
+                        await RemoveFromCache(model).ConfigureAwait(false);
                     }
                 }
             }
@@ -607,7 +607,7 @@ namespace Piranha.Services
             App.Hooks.OnAfterDelete<PageBase>(model);
 
             // Remove from cache & invalidate sitemap
-            await RemoveFromCache(model);
+            await RemoveFromCache(model).ConfigureAwait(false);
 
             await _siteService.InvalidateSitemapAsync(model.SiteId).ConfigureAwait(false);
         }
@@ -754,7 +754,7 @@ namespace Piranha.Services
                 }
 
                 // Remove the site & clear the sitemap from cache
-                await _siteService.RemoveSitemapFromCacheAsync(model.SiteId);
+                await _siteService.RemoveSitemapFromCacheAsync(model.SiteId).ConfigureAwait(false);
             }
         }
 

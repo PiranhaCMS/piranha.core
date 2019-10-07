@@ -346,7 +346,7 @@ namespace Piranha.Services
         /// <returns>The draft, or null if no draft exists</returns>
         public async Task<T> GetDraftByIdAsync<T>(Guid id) where T : PostBase
         {
-            var draft = await _repo.GetDraftById<T>(id);
+            var draft = await _repo.GetDraftById<T>(id).ConfigureAwait(false);
 
             if (draft != null)
             {
@@ -525,13 +525,13 @@ namespace Piranha.Services
             App.Hooks.OnBeforeSave<PostBase>(model);
 
             // Handle revisions and save
-            var current = await _repo.GetById<PostInfo>(model.Id);
+            var current = await _repo.GetById<PostInfo>(model.Id).ConfigureAwait(false);
 
             if (IsPublished(current) && isDraft)
             {
                 // We're saving a draft since we have a previously
                 // published version of the post
-                await _repo.SaveDraft(model);
+                await _repo.SaveDraft(model).ConfigureAwait(false);
             }
             else
             {
@@ -548,8 +548,8 @@ namespace Piranha.Services
                     {
                         // Save current as a revision before saving the model
                         // and if a draft revision exists, remove it.
-                        await _repo.DeleteDraft(model.Id);
-                        await _repo.CreateRevision(model.Id, config.PostRevisions);
+                        await _repo.DeleteDraft(model.Id).ConfigureAwait(false);
+                        await _repo.CreateRevision(model.Id, config.PostRevisions).ConfigureAwait(false);
                     }
                 }
 
