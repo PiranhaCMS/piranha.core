@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Piranha.AttributeBuilder;
@@ -25,15 +26,15 @@ namespace Piranha.Tests.Repositories
     [Collection("Integration tests")]
     public class PagesCached : Pages
     {
-        protected override void Init() {
+        public override async Task InitializeAsync() {
             cache = new Cache.SimpleCache();
 
-            base.Init();
+            await base.InitializeAsync();
         }
     }
 
     [Collection("Integration tests")]
-    public class Pages : BaseTests
+    public class Pages : BaseTestsAsync
     {
         public readonly Guid SITE_ID = Guid.NewGuid();
         public readonly Guid SITE_EMPTY_ID = Guid.NewGuid();
@@ -120,7 +121,7 @@ namespace Piranha.Tests.Repositories
             public MyFourthField Body { get; set; }
         }
 
-        protected override void Init() {
+        public override async Task InitializeAsync() {
             services = new ServiceCollection()
                 .AddSingleton<IMyService, MyService>()
                 .BuildServiceProvider();
@@ -140,11 +141,11 @@ namespace Piranha.Tests.Repositories
 
                 var site = new Site {
                     Id = SITE_ID,
-                    Title = "Default Site",
-                    InternalId = "DefaultSite",
+                    Title = "My Test Site",
+                    InternalId = "MyTestSite",
                     IsDefault = true
                 };
-                api.Sites.Save(site);
+                await api.Sites.SaveAsync(site);
 
                 var page1 = MyPage.Create(api);
                 page1.Id = PAGE_1_ID;
@@ -159,7 +160,7 @@ namespace Piranha.Tests.Repositories
                     Body = "Ipsum Elit"
                 });
                 page1.Published = DateTime.Now;
-                api.Pages.Save(page1);
+                await api.Pages.SaveAsync(page1);
 
                 var page2 = MyPage.Create(api);
                 page2.Id = PAGE_2_ID;
@@ -167,7 +168,7 @@ namespace Piranha.Tests.Repositories
                 page2.Title = "My second page";
                 page2.Ingress = "My second ingress";
                 page2.Body = "My second body";
-                api.Pages.Save(page2);
+                await api.Pages.SaveAsync(page2);
 
                 var page3 = MyPage.Create(api);
                 page3.Id = PAGE_3_ID;
@@ -175,7 +176,7 @@ namespace Piranha.Tests.Repositories
                 page3.Title = "My third page";
                 page3.Ingress = "My third ingress";
                 page3.Body = "My third body";
-                api.Pages.Save(page3);
+                await api.Pages.SaveAsync(page3);
 
                 var page4 = MyCollectionPage.Create(api);
                 page4.SiteId = SITE_ID;
@@ -190,18 +191,18 @@ namespace Piranha.Tests.Repositories
                 page4.Texts.Add(new TextField {
                     Value = "Third text"
                 });
-                api.Pages.Save(page4);
+                await api.Pages.SaveAsync(page4);
 
                 var page5 = MyBlogPage.Create(api);
                 page5.SiteId = SITE_ID;
                 page5.Title = "Blog Archive";
-                api.Pages.Save(page5);
+                await api.Pages.SaveAsync(page5);
 
                 var page6 = MyDIPage.Create(api);
                 page6.Id = PAGE_DI_ID;
                 page6.SiteId = SITE_ID;
                 page6.Title = "My Injection Page";
-                api.Pages.Save(page6);
+                await api.Pages.SaveAsync(page6);
 
                 var page7 = MyPage.Create(api);
                 page7.Id = PAGE_7_ID;
@@ -211,7 +212,7 @@ namespace Piranha.Tests.Repositories
                 page7.Body = "My base body";
                 page7.ParentId = PAGE_1_ID;
                 page7.SortOrder = 1;
-                api.Pages.Save(page7);
+                await api.Pages.SaveAsync(page7);
 
                 var page8 = MyPage.Create(api);
                 page8.OriginalPageId = PAGE_7_ID;
@@ -223,60 +224,79 @@ namespace Piranha.Tests.Repositories
                 page8.IsHidden = true;
                 page8.Route = "test-route";
 
-                api.Pages.Save(page8);
+                await api.Pages.SaveAsync(page8);
             }
         }
 
-        protected override void Cleanup() {
-            using (var api = CreateApi()) {
-                var pages = api.Pages.GetAll(SITE_ID);
+        public override async Task DisposeAsync() {
+            using (var api = CreateApi())
+            {
+                var pages = await api.Pages.GetAllAsync(SITE_ID);
 
                 foreach (var page in pages.Where(p => p.OriginalPageId.HasValue))
-                    api.Pages.Delete(page);
+                {
+                    await api.Pages.DeleteAsync(page);
+                }
                 foreach (var page in pages.Where(p => p.ParentId.HasValue))
-                    api.Pages.Delete(page);
+                {
+                    await api.Pages.DeleteAsync(page);
+                }
                 foreach (var page in pages.Where(p => !p.ParentId.HasValue))
-                    api.Pages.Delete(page);
+                {
+                    await api.Pages.DeleteAsync(page);
+                }
 
-                var types = api.PageTypes.GetAll();
+                var types = await api.PageTypes.GetAllAsync();
                 foreach (var t in types)
-                    api.PageTypes.Delete(t);
+                {
+                    await api.PageTypes.DeleteAsync(t);
+                }
 
-                var site = api.Sites.GetById(SITE_ID);
+                var site = await api.Sites.GetByIdAsync(SITE_ID);
                 if (site != null)
-                    api.Sites.Delete(site);
+                {
+                    await api.Sites.DeleteAsync(site);
+                }
             }
         }
 
         [Fact]
-        public void IsCached() {
-            using (var api = CreateApi()) {
+        public void IsCached()
+        {
+            using (var api = CreateApi())
+            {
                 Assert.Equal(this.GetType() == typeof(PagesCached), ((Api)api).IsCached);
             }
         }
 
         [Fact]
-        public void GetNoneById() {
-            using (var api = CreateApi()) {
-                var none = api.Pages.GetById(Guid.NewGuid());
+        public async Task GetNoneById()
+        {
+            using (var api = CreateApi())
+            {
+                var none = await api.Pages.GetByIdAsync(Guid.NewGuid());
 
                 Assert.Null(none);
             }
         }
 
         [Fact]
-        public void GetNoneBySlug() {
-            using (var api = CreateApi()) {
-                var none = api.Pages.GetBySlug("none-existing-slug");
+        public async Task GetNoneBySlug()
+        {
+            using (var api = CreateApi())
+            {
+                var none = await api.Pages.GetBySlugAsync("none-existing-slug");
 
                 Assert.Null(none);
             }
         }
 
         [Fact]
-        public void GetStartpage() {
-            using (var api = CreateApi()) {
-                var model = api.Pages.GetStartpage();
+        public async Task GetStartpage()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Pages.GetStartpageAsync();
 
                 Assert.NotNull(model);
                 Assert.Null(model.ParentId);
@@ -285,9 +305,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetStartpageBySite() {
-            using (var api = CreateApi()) {
-                var model = api.Pages.GetStartpage(SITE_ID);
+        public async Task GetStartpageBySite()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Pages.GetStartpageAsync(SITE_ID);
 
                 Assert.NotNull(model);
                 Assert.Null(model.ParentId);
@@ -296,18 +318,22 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetStartpageNone() {
-            using (var api = CreateApi()) {
-                var model = api.Pages.GetStartpage(SITE_EMPTY_ID);
+        public async Task GetStartpageNone()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Pages.GetStartpageAsync(SITE_EMPTY_ID);
 
                 Assert.Null(model);
             }
         }
 
         [Fact]
-        public void GetIdBySlug() {
-            using (var api = CreateApi()) {
-                var model = api.Pages.GetIdBySlug("my-first-page");
+        public async Task GetIdBySlug()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Pages.GetIdBySlugAsync("my-first-page");
 
                 Assert.NotNull(model);
                 Assert.Equal(PAGE_1_ID, model.Value);
@@ -315,9 +341,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetIdBySlugSiteId() {
-            using (var api = CreateApi()) {
-                var model = api.Pages.GetIdBySlug("my-first-page", SITE_ID);
+        public async Task GetIdBySlugSiteId()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Pages.GetIdBySlugAsync("my-first-page", SITE_ID);
 
                 Assert.NotNull(model);
                 Assert.Equal(PAGE_1_ID, model.Value);
@@ -325,9 +353,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetAll() {
-            using (var api = CreateApi()) {
-                var pages = api.Pages.GetAll(SITE_ID);
+        public async Task GetAll()
+        {
+            using (var api = CreateApi())
+            {
+                var pages = await api.Pages.GetAllAsync(SITE_ID);
 
                 Assert.NotNull(pages);
                 Assert.NotEmpty(pages);
@@ -335,9 +365,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetAllByBaseClass() {
-            using (var api = CreateApi()) {
-                var pages = api.Pages.GetAll<Models.PageBase>(SITE_ID);
+        public async Task GetAllByBaseClass()
+        {
+            using (var api = CreateApi())
+            {
+                var pages = await api.Pages.GetAllAsync<Models.PageBase>(SITE_ID);
 
                 Assert.NotNull(pages);
                 Assert.NotEmpty(pages);
@@ -345,9 +377,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetAllBlogs() {
-            using (var api = CreateApi()) {
-                var pages = api.Pages.GetAllBlogs(SITE_ID);
+        public async Task GetAllBlogs()
+        {
+            using (var api = CreateApi())
+            {
+                var pages = await api.Pages.GetAllBlogsAsync(SITE_ID);
 
                 Assert.NotNull(pages);
                 Assert.NotEmpty(pages);
@@ -355,9 +389,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetAllBlogsByBaseClass() {
-            using (var api = CreateApi()) {
-                var pages = api.Pages.GetAllBlogs<MyBlogPage>(SITE_ID);
+        public async Task GetAllBlogsByBaseClass()
+        {
+            using (var api = CreateApi())
+            {
+                var pages = await api.Pages.GetAllBlogsAsync<MyBlogPage>(SITE_ID);
 
                 Assert.NotNull(pages);
                 Assert.NotEmpty(pages);
@@ -365,9 +401,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetAllByMissing() {
-            using (var api = CreateApi()) {
-                var pages = api.Pages.GetAll<MissingPage>(SITE_ID);
+        public async Task GetAllByMissing()
+        {
+            using (var api = CreateApi())
+            {
+                var pages = await api.Pages.GetAllAsync<MissingPage>(SITE_ID);
 
                 Assert.NotNull(pages);
                 Assert.Empty(pages);
@@ -375,9 +413,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetGenericById() {
-            using (var api = CreateApi()) {
-                var model = api.Pages.GetById<MyPage>(PAGE_1_ID);
+        public async Task GetGenericById()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Pages.GetByIdAsync<MyPage>(PAGE_1_ID);
 
                 Assert.NotNull(model);
                 Assert.Equal("my-first-page", model.Slug);
@@ -386,9 +426,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetBaseClassById() {
-            using (var api = CreateApi()) {
-                var model = api.Pages.GetById<Models.PageBase>(PAGE_1_ID);
+        public async Task GetBaseClassById()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Pages.GetByIdAsync<Models.PageBase>(PAGE_1_ID);
 
                 Assert.NotNull(model);
                 Assert.Equal(typeof(MyPage), model.GetType());
@@ -398,9 +440,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetBlocksById() {
-            using (var api = CreateApi()) {
-                var model = api.Pages.GetById<MyPage>(PAGE_1_ID);
+        public async Task GetBlocksById()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Pages.GetByIdAsync<MyPage>(PAGE_1_ID);
 
                 Assert.NotNull(model);
                 Assert.Equal(2, model.Blocks.Count);
@@ -410,18 +454,22 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetMissingById() {
-            using (var api = CreateApi()) {
-                var model = api.Pages.GetById<MissingPage>(PAGE_1_ID);
+        public async Task GetMissingById()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Pages.GetByIdAsync<MissingPage>(PAGE_1_ID);
 
                 Assert.Null(model);
             }
         }
 
         [Fact]
-        public void GetInfoById() {
-            using (var api = CreateApi()) {
-                var model = api.Pages.GetById<Models.PageInfo>(PAGE_1_ID);
+        public async Task GetInfoById()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Pages.GetByIdAsync<Models.PageInfo>(PAGE_1_ID);
 
                 Assert.NotNull(model);
                 Assert.Equal("my-first-page", model.Slug);
@@ -430,9 +478,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetGenericBySlug() {
-            using (var api = CreateApi()) {
-                var model = api.Pages.GetBySlug<MyPage>("my-first-page");
+        public async Task GetGenericBySlug()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Pages.GetBySlugAsync<MyPage>("my-first-page");
 
                 Assert.NotNull(model);
                 Assert.Equal("my-first-page", model.Slug);
@@ -441,9 +491,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetBaseClassBySlug() {
-            using (var api = CreateApi()) {
-                var model = api.Pages.GetBySlug<Models.PageBase>("my-first-page");
+        public async Task GetBaseClassBySlug()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Pages.GetBySlugAsync<Models.PageBase>("my-first-page");
 
                 Assert.NotNull(model);
                 Assert.Equal(typeof(MyPage), model.GetType());
@@ -453,18 +505,22 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetMissingBySlug() {
-            using (var api = CreateApi()) {
-                var model = api.Pages.GetBySlug<MissingPage>("my-first-page");
+        public async Task GetMissingBySlug()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Pages.GetBySlugAsync<MissingPage>("my-first-page");
 
                 Assert.Null(model);
             }
         }
 
         [Fact]
-        public void GetInfoBySlug() {
-            using (var api = CreateApi()) {
-                var model = api.Pages.GetBySlug<Models.PageInfo>("my-first-page");
+        public async Task GetInfoBySlug()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Pages.GetBySlugAsync<Models.PageInfo>("my-first-page");
 
                 Assert.NotNull(model);
                 Assert.Equal("my-first-page", model.Slug);
@@ -473,9 +529,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetDynamicById() {
-            using (var api = CreateApi()) {
-                var model = api.Pages.GetById(PAGE_1_ID);
+        public async Task GetDynamicById()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Pages.GetByIdAsync(PAGE_1_ID);
 
                 Assert.NotNull(model);
                 Assert.Equal("my-first-page", model.Slug);
@@ -484,9 +542,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetDynamicBySlug() {
-            using (var api = CreateApi()) {
-                var model = api.Pages.GetBySlug("my-first-page");
+        public async Task GetDynamicBySlug()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Pages.GetBySlugAsync("my-first-page");
 
                 Assert.NotNull(model);
                 Assert.Equal("My first page", model.Title);
@@ -495,9 +555,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void CheckPermlinkSyntax() {
-            using (var api = CreateApi()) {
-                var model = api.Pages.GetById(PAGE_1_ID);
+        public async Task CheckPermlinkSyntax()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Pages.GetByIdAsync(PAGE_1_ID);
 
                 Assert.NotNull(model);
                 Assert.NotNull(model.Permalink);
@@ -506,9 +568,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetCollectionPage() {
-            using (var api = CreateApi()) {
-                var page = api.Pages.GetBySlug<MyCollectionPage>("my-collection-page");
+        public async Task GetCollectionPage()
+        {
+            using (var api = CreateApi())
+            {
+                var page = await api.Pages.GetBySlugAsync<MyCollectionPage>("my-collection-page");
 
                 Assert.NotNull(page);
                 Assert.Equal(3, page.Texts.Count);
@@ -517,9 +581,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetCollectionPageBaseClass() {
-            using (var api = CreateApi()) {
-                var page = api.Pages.GetBySlug<Models.PageBase>("my-collection-page");
+        public async Task GetCollectionPageBaseClass()
+        {
+            using (var api = CreateApi())
+            {
+                var page = await api.Pages.GetBySlugAsync<Models.PageBase>("my-collection-page");
 
                 Assert.NotNull(page);
                 Assert.Equal(typeof(MyCollectionPage), page.GetType());
@@ -529,9 +595,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetDynamicCollectionPage() {
-            using (var api = CreateApi()) {
-                var page = api.Pages.GetBySlug("my-collection-page");
+        public async Task GetDynamicCollectionPage()
+        {
+            using (var api = CreateApi())
+            {
+                var page = await api.Pages.GetBySlugAsync("my-collection-page");
 
                 Assert.NotNull(page);
                 Assert.Equal(3, page.Regions.Texts.Count);
@@ -540,8 +608,10 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void EmptyCollectionPage() {
-            using (var api = CreateApi()) {
+        public async Task EmptyCollectionPage()
+        {
+            using (var api = CreateApi())
+            {
                 var page = MyCollectionPage.Create(api);
 
                 Assert.Equal(0, page.Texts.Count);
@@ -549,17 +619,19 @@ namespace Piranha.Tests.Repositories
                 page.SiteId = SITE_ID;
                 page.Title = "Another collection page";
 
-                api.Pages.Save(page);
+                await api.Pages.SaveAsync(page);
 
-                page = api.Pages.GetBySlug<MyCollectionPage>(Piranha.Utils.GenerateSlug(page.Title), SITE_ID);
+                page = await api.Pages.GetBySlugAsync<MyCollectionPage>(Piranha.Utils.GenerateSlug(page.Title), SITE_ID);
 
                 Assert.Equal(0, page.Texts.Count);
             }
         }
 
         [Fact]
-        public void EmptyDynamicCollectionPage() {
-            using (var api = CreateApi()) {
+        public async Task EmptyDynamicCollectionPage()
+        {
+            using (var api = CreateApi())
+            {
                 var page = Piranha.Models.DynamicPage.Create(api, "MyCollectionPage");
 
                 Assert.Equal(0, page.Regions.Texts.Count);
@@ -567,17 +639,19 @@ namespace Piranha.Tests.Repositories
                 page.SiteId = SITE_ID;
                 page.Title = "Third collection page";
 
-                api.Pages.Save(page);
+                await api.Pages.SaveAsync(page);
 
-                page = api.Pages.GetBySlug(Piranha.Utils.GenerateSlug(page.Title), SITE_ID);
+                page = await api.Pages.GetBySlugAsync(Piranha.Utils.GenerateSlug(page.Title), SITE_ID);
 
                 Assert.Equal(0, page.Regions.Texts.Count);
             }
         }
 
         [Fact]
-        public void EmptyCollectionPageComplex() {
-            using (var api = CreateApi()) {
+        public async Task EmptyCollectionPageComplex()
+        {
+            using (var api = CreateApi())
+            {
                 var page = MyCollectionPage.Create(api);
 
                 Assert.Equal(0, page.Teasers.Count);
@@ -585,17 +659,19 @@ namespace Piranha.Tests.Repositories
                 page.SiteId = SITE_ID;
                 page.Title = "Fourth collection page";
 
-                api.Pages.Save(page);
+                await api.Pages.SaveAsync(page);
 
-                page = api.Pages.GetBySlug<MyCollectionPage>(Piranha.Utils.GenerateSlug(page.Title), SITE_ID);
+                page = await api.Pages.GetBySlugAsync<MyCollectionPage>(Piranha.Utils.GenerateSlug(page.Title), SITE_ID);
 
                 Assert.Equal(0, page.Teasers.Count);
             }
         }
 
         [Fact]
-        public void EmptyDynamicCollectionPageComplex() {
-            using (var api = CreateApi()) {
+        public async Task EmptyDynamicCollectionPageComplex()
+        {
+            using (var api = CreateApi())
+            {
                 var page = Piranha.Models.DynamicPage.Create(api, "MyCollectionPage");
 
                 Assert.Equal(0, page.Regions.Teasers.Count);
@@ -603,34 +679,39 @@ namespace Piranha.Tests.Repositories
                 page.SiteId = SITE_ID;
                 page.Title = "Fifth collection page";
 
-                api.Pages.Save(page);
+                await api.Pages.SaveAsync(page);
 
-                page = api.Pages.GetBySlug(Piranha.Utils.GenerateSlug(page.Title), SITE_ID);
+                page = await api.Pages.GetBySlugAsync(Piranha.Utils.GenerateSlug(page.Title), SITE_ID);
 
                 Assert.Equal(0, page.Regions.Teasers.Count);
             }
         }
 
         [Fact]
-        public void Add() {
-            using (var api = CreateApi()) {
-                var count = api.Pages.GetAll(SITE_ID).Count();
+        public async Task Add()
+        {
+            using (var api = CreateApi())
+            {
+                var count = (await api.Pages.GetAllAsync(SITE_ID)).Count();
                 var page = MyPage.Create(api, "MyPage");
                 page.SiteId = SITE_ID;
                 page.Title = "My fourth page";
                 page.Ingress = "My fourth ingress";
                 page.Body = "My fourth body";
 
-                api.Pages.SaveDraft(page);
+                await api.Pages.SaveDraftAsync(page);
 
-                Assert.Equal(count + 1, api.Pages.GetAll(SITE_ID).Count());
+                Assert.Equal(count + 1, (await api.Pages.GetAllAsync(SITE_ID)).Count());
             }
         }
 
         [Fact]
-        public void AddHierarchical() {
-            using (var api = CreateApi()) {
-                using (var config = new Piranha.Config(api)) {
+        public async Task AddHierarchical()
+        {
+            using (var api = CreateApi())
+            {
+                using (var config = new Piranha.Config(api))
+                {
                     config.HierarchicalPageSlugs = true;
                 }
 
@@ -642,22 +723,25 @@ namespace Piranha.Tests.Repositories
                 page.Ingress = "My subpage ingress";
                 page.Body = "My subpage body";
 
-                api.Pages.Save(page);
+                await api.Pages.SaveAsync(page);
 
-                page = api.Pages.GetById<MyPage>(page.Id);
+                page = await api.Pages.GetByIdAsync<MyPage>(page.Id);
 
                 Assert.NotNull(page);
                 Assert.Equal("my-first-page/my-subpage", page.Slug);
 
-                var param = api.Params.GetByKey(Piranha.Config.PAGES_HIERARCHICAL_SLUGS);
-                api.Params.Delete(param);
+                var param = await api.Params.GetByKeyAsync(Piranha.Config.PAGES_HIERARCHICAL_SLUGS);
+                await api.Params.DeleteAsync(param);
             }
         }
 
         [Fact]
-        public void AddNonHierarchical() {
-            using (var api = CreateApi()) {
-                using (var config = new Piranha.Config(api)) {
+        public async Task AddNonHierarchical()
+        {
+            using (var api = CreateApi())
+            {
+                using (var config = new Piranha.Config(api))
+                {
                     config.HierarchicalPageSlugs = false;
                 }
 
@@ -669,31 +753,33 @@ namespace Piranha.Tests.Repositories
                 page.Ingress = "My subpage ingress";
                 page.Body = "My subpage body";
 
-                api.Pages.Save(page);
+                await api.Pages.SaveAsync(page);
 
-                page = api.Pages.GetById<MyPage>(page.Id);
+                page = await api.Pages.GetByIdAsync<MyPage>(page.Id);
 
                 Assert.NotNull(page);
                 Assert.Equal("my-second-subpage", page.Slug);
 
-                var param = api.Params.GetByKey(Piranha.Config.PAGES_HIERARCHICAL_SLUGS);
-                api.Params.Delete(param);
+                var param = await api.Params.GetByKeyAsync(Piranha.Config.PAGES_HIERARCHICAL_SLUGS);
+                await api.Params.DeleteAsync(param);
             }
         }
 
         [Fact]
-        public void Update() {
-            using (var api = CreateApi()) {
-                var page = api.Pages.GetById<MyPage>(PAGE_1_ID);
+        public async Task Update()
+        {
+            using (var api = CreateApi())
+            {
+                var page = await api.Pages.GetByIdAsync<MyPage>(PAGE_1_ID);
 
                 Assert.NotNull(page);
                 Assert.Equal("My first page", page.Title);
 
                 page.Title = "Updated page";
                 page.IsHidden = true;
-                api.Pages.Save(page);
+                await api.Pages.SaveAsync(page);
 
-                page = api.Pages.GetById<MyPage>(PAGE_1_ID);
+                page = await api.Pages.GetByIdAsync<MyPage>(PAGE_1_ID);
 
                 Assert.NotNull(page);
                 Assert.Equal("Updated page", page.Title);
@@ -702,21 +788,23 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void SaveDraft() {
-            using (var api = CreateApi()) {
-                var page = api.Pages.GetById<MyPage>(PAGE_1_ID);
+        public async Task SaveDraft()
+        {
+            using (var api = CreateApi())
+            {
+                var page = await api.Pages.GetByIdAsync<MyPage>(PAGE_1_ID);
 
                 Assert.NotNull(page);
 
                 page.Title = "My working copy";
-                api.Pages.SaveDraft(page);
+                await api.Pages.SaveDraftAsync(page);
 
-                page = api.Pages.GetById<MyPage>(PAGE_1_ID);
+                page = await api.Pages.GetByIdAsync<MyPage>(PAGE_1_ID);
 
                 Assert.NotNull(page);
                 Assert.NotEqual("My working copy", page.Title);
 
-                page = api.Pages.GetDraftById<MyPage>(PAGE_1_ID);
+                page = await api.Pages.GetDraftByIdAsync<MyPage>(PAGE_1_ID);
 
                 Assert.NotNull(page);
                 Assert.Equal("My working copy", page.Title);
@@ -724,9 +812,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void UpdateCollectionPage() {
-            using (var api = CreateApi()) {
-                var page = api.Pages.GetBySlug<MyCollectionPage>("my-collection-page", SITE_ID);
+        public async Task UpdateCollectionPage()
+        {
+            using (var api = CreateApi())
+            {
+                var page = await api.Pages.GetBySlugAsync<MyCollectionPage>("my-collection-page", SITE_ID);
 
                 Assert.NotNull(page);
                 Assert.Equal(3, page.Texts.Count);
@@ -734,9 +824,9 @@ namespace Piranha.Tests.Repositories
 
                 page.Texts[0] = "Updated text";
                 page.Texts.RemoveAt(2);
-                api.Pages.Save(page);
+                await api.Pages.SaveAsync(page);
 
-                page = api.Pages.GetBySlug<MyCollectionPage>("my-collection-page", SITE_ID);
+                page = await api.Pages.GetBySlugAsync<MyCollectionPage>("my-collection-page", SITE_ID);
 
                 Assert.NotNull(page);
                 Assert.Equal(2, page.Texts.Count);
@@ -745,17 +835,19 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void Move() {
-            using (var api = CreateApi()) {
-                var page = api.Pages.GetById(PAGE_1_ID);
+        public async Task Move()
+        {
+            using (var api = CreateApi())
+            {
+                var page = await api.Pages.GetByIdAsync(PAGE_1_ID);
 
                 Assert.NotNull(page);
                 Assert.True(page.SortOrder > 0);
 
                 page.SortOrder = 0;
-                api.Pages.Move(page, null, 0);
+                await api.Pages.MoveAsync(page, null, 0);
 
-                page = api.Pages.GetById(PAGE_1_ID);
+                page = await api.Pages.GetByIdAsync(PAGE_1_ID);
 
                 Assert.NotNull(page);
                 Assert.Equal(0, page.SortOrder);
@@ -763,34 +855,40 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void Delete() {
-            using (var api = CreateApi()) {
-                var page = api.Pages.GetById<MyPage>(PAGE_3_ID);
-                var count = api.Pages.GetAll(SITE_ID).Count();
+        public async Task Delete()
+        {
+            using (var api = CreateApi())
+            {
+                var page = await api.Pages.GetByIdAsync<MyPage>(PAGE_3_ID);
+                var count = (await api.Pages.GetAllAsync(SITE_ID)).Count();
 
                 Assert.NotNull(page);
 
-                api.Pages.Delete(page);
+                await api.Pages.DeleteAsync(page);
 
-                Assert.Equal(count - 1, api.Pages.GetAll(SITE_ID).Count());
+                Assert.Equal(count - 1, (await api.Pages.GetAllAsync(SITE_ID)).Count());
             }
         }
 
         [Fact]
-        public void DeleteById() {
-            using (var api = CreateApi()) {
-                var count = api.Pages.GetAll(SITE_ID).Count();
+        public async Task DeleteById()
+        {
+            using (var api = CreateApi())
+            {
+                var count = (await api.Pages.GetAllAsync(SITE_ID)).Count();
 
-                api.Pages.Delete(PAGE_2_ID);
+                await api.Pages.DeleteAsync(PAGE_2_ID);
 
-                Assert.Equal(count - 1, api.Pages.GetAll(SITE_ID).Count());
+                Assert.Equal(count - 1, (await api.Pages.GetAllAsync(SITE_ID)).Count());
             }
         }
 
         [Fact]
-        public void GetDIGeneric() {
-            using (var api = CreateApi()) {
-                var page = api.Pages.GetById<MyDIPage>(PAGE_DI_ID);
+        public async Task GetDIGeneric()
+        {
+            using (var api = CreateApi())
+            {
+                var page = await api.Pages.GetByIdAsync<MyDIPage>(PAGE_DI_ID);
 
                 Assert.NotNull(page);
                 Assert.Equal("My service value", page.Body.Value);
@@ -798,9 +896,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetDIDynamic() {
-            using (var api = CreateApi()) {
-                var page = api.Pages.GetById(PAGE_DI_ID);
+        public async Task GetDIDynamic()
+        {
+            using (var api = CreateApi())
+            {
+                var page = await api.Pages.GetByIdAsync(PAGE_DI_ID);
 
                 Assert.NotNull(page);
                 Assert.Equal("My service value", page.Regions.Body.Value);
@@ -808,8 +908,10 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void CreateDIGeneric() {
-            using (var api = CreateApi()) {
+        public void CreateDIGeneric()
+        {
+            using (var api = CreateApi())
+            {
                 var page = MyDIPage.Create(api);
 
                 Assert.NotNull(page);
@@ -818,8 +920,10 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void CreateDIDynamic() {
-            using (var api = CreateApi()) {
+        public void CreateDIDynamic()
+        {
+            using (var api = CreateApi())
+            {
                 var page = Models.DynamicPage.Create(api, nameof(MyDIPage));
 
                 Assert.NotNull(page);
@@ -828,9 +932,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetCopyGenericById() {
-            using (var api = CreateApi()) {
-                var model = api.Pages.GetById<MyPage>(PAGE_8_ID);
+        public async Task GetCopyGenericById()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Pages.GetByIdAsync<MyPage>(PAGE_8_ID);
 
                 Assert.NotNull(model);
                 Assert.Equal("My copied page", model.Title);
@@ -846,9 +952,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetCopyGenericBySlug() {
-            using (var api = CreateApi()) {
-                var model = api.Pages.GetBySlug<MyPage>("my-first-page/my-copied-page");
+        public async Task GetCopyGenericBySlug()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Pages.GetBySlugAsync<MyPage>("my-first-page/my-copied-page");
 
                 Assert.NotNull(model);
                 Assert.Equal("My copied page", model.Title);
@@ -864,15 +972,17 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void UpdatingCopyShouldIgnoreBodyAndDate() {
-            using (var api = CreateApi()) {
-                var page = api.Pages.GetById<MyPage>(PAGE_8_ID);
+        public async Task UpdatingCopyShouldIgnoreBodyAndDate()
+        {
+            using (var api = CreateApi())
+            {
+                var page = await api.Pages.GetByIdAsync<MyPage>(PAGE_8_ID);
                 page.Created = DateTime.Parse("2001-01-01");
                 page.LastModified = DateTime.Parse("2001-01-01");
                 page.Body = "My edits to the body";
 
-                api.Pages.Save(page);
-                page = api.Pages.GetById<MyPage>(PAGE_8_ID);
+                await api.Pages.SaveAsync(page);
+                page = await api.Pages.GetByIdAsync<MyPage>(PAGE_8_ID);
 
                 Assert.NotEqual(DateTime.Parse("2001-01-01"), page.Created);
                 Assert.NotEqual(DateTime.Parse("2001-01-01"), page.LastModified);
@@ -881,14 +991,17 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void CanNotUpdateCopyOriginalPageWithAnotherCopy() {
-            using (var api = CreateApi()) {
+        public async Task CanNotUpdateCopyOriginalPageWithAnotherCopy()
+        {
+            using (var api = CreateApi())
+            {
                 var page = MyPage.Create(api);
                 page.Title = "New title";
                 page.OriginalPageId = PAGE_8_ID; // PAGE_8 is an copy of PAGE_7
 
-                var exn = Assert.Throws<InvalidOperationException>(() => {
-                    api.Pages.Save(page);
+                var exn = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                {
+                    await api.Pages.SaveAsync(page);
                 });
 
                 Assert.Equal("Can not set copy of a copy", exn.Message);
@@ -896,14 +1009,17 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void CanNotUpdateCopyWithAnotherTypeIdOtherThanOriginalPageTypeId() {
-            using (var api = CreateApi()) {
+        public async Task CanNotUpdateCopyWithAnotherTypeIdOtherThanOriginalPageTypeId()
+        {
+            using (var api = CreateApi())
+            {
                 var page = MissingPage.Create(api);
                 page.Title = "New title";
                 page.OriginalPageId = PAGE_7_ID;
 
-                var exn = Assert.Throws<InvalidOperationException>(() => {
-                    api.Pages.Save(page);
+                var exn = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                {
+                    await api.Pages.SaveAsync(page);
                 });
 
                 Assert.Equal("Copy can not have a different content type", exn.Message);
@@ -911,22 +1027,26 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void DetachShouldCopyBlocks() {
-            using (var api = CreateApi()) {
-                var originalPage = api.Pages.GetById<MyPage>(PAGE_7_ID);
-                var copy = api.Pages.GetById<MyPage>(PAGE_8_ID);
-                var originalBlock = new Extend.Blocks.TextBlock {
+        public async Task DetachShouldCopyBlocks()
+        {
+            using (var api = CreateApi())
+            {
+                var originalPage = await api.Pages.GetByIdAsync<MyPage>(PAGE_7_ID);
+                var copy = await api.Pages.GetByIdAsync<MyPage>(PAGE_8_ID);
+                var originalBlock = new Extend.Blocks.TextBlock
+                {
                     Id = Guid.NewGuid(),
                     Body = "test",
                 };
 
                 originalPage.Blocks.Add(originalBlock);
-                api.Pages.Save(originalPage);
+                await api.Pages.SaveAsync(originalPage);
 
-                api.Pages.Detach(copy);
+                await api.Pages.DetachAsync(copy);
 
-                var p = api.Pages.GetById<MyPage>(PAGE_8_ID);
-                Assert.Collection(p.Blocks, e => {
+                var p = await api.Pages.GetByIdAsync<MyPage>(PAGE_8_ID);
+                Assert.Collection(p.Blocks, e =>
+                {
                     Assert.NotEqual(e.Id, originalBlock.Id);
                     var eBlock = Assert.IsType<Extend.Blocks.TextBlock>(e);
                     Assert.Equal(eBlock.Body.Value, originalBlock.Body.Value);
@@ -935,32 +1055,37 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void DetachShouldCopyRegions() {
-            using (var api = CreateApi()) {
-                var originalPage = api.Pages.GetById<MyPage>(PAGE_7_ID);
+        public async Task DetachShouldCopyRegions()
+        {
+            using (var api = CreateApi())
+            {
+                var originalPage = await api.Pages.GetByIdAsync<MyPage>(PAGE_7_ID);
                 originalPage.Body = "body to be copied";
                 originalPage.Ingress = "ingress to be copied";
-                api.Pages.Save(originalPage);
+                await api.Pages.SaveAsync(originalPage);
 
-                var copy = api.Pages.GetById<MyPage>(PAGE_8_ID);
-                api.Pages.Detach(copy);
+                var copy = await api.Pages.GetByIdAsync<MyPage>(PAGE_8_ID);
+                await api.Pages.DetachAsync(copy);
 
-                originalPage = api.Pages.GetById<MyPage>(PAGE_7_ID);
+                originalPage = await api.Pages.GetByIdAsync<MyPage>(PAGE_7_ID);
                 originalPage.Body = "body should not be copied";
                 originalPage.Ingress = "ingress should not be copied";
-                api.Pages.Save(originalPage);
+                await api.Pages.SaveAsync(originalPage);
 
-                var p = api.Pages.GetById<MyPage>(PAGE_8_ID);
+                var p = await api.Pages.GetByIdAsync<MyPage>(PAGE_8_ID);
                 Assert.Equal("body to be copied", p.Body.Value);
                 Assert.Equal("ingress to be copied", p.Ingress.Value);
             }
         }
 
         [Fact]
-        public void DeleteShouldThrowWhenPageHasCopies() {
-            using (var api = CreateApi()) {
-                var exn = Assert.Throws<InvalidOperationException>(() => {
-                    api.Pages.Delete(PAGE_7_ID);
+        public async Task DeleteShouldThrowWhenPageHasCopies()
+        {
+            using (var api = CreateApi())
+            {
+                var exn = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                {
+                    await api.Pages.DeleteAsync(PAGE_7_ID);
                 });
                 Assert.Equal("Can not delete page because it has copies", exn.Message);
             }
