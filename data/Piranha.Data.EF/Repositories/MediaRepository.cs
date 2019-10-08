@@ -73,8 +73,6 @@ namespace Piranha.Repositories
                 .ConfigureAwait(false);
 
         /// <inheritdoc cref="IMediaRepository.GetAllByIdAsync"/>
-        public Task<IEnumerable<Models.Media>> GetAllByIdAsync(IEnumerable<Guid> mediaIds) => GetById(mediaIds.ToArray());
-
         public Task<IEnumerable<Models.Media>> GetById(params Guid[] ids) => _db.Media.AsNoTracking()
             .Include(c => c.Versions).Where(m => ids.Contains(m.Id)).OrderBy(m => m.Filename).ToArrayAsync()
             .ContinueWith(t => t.Result.Select(m => (Models.Media) m));

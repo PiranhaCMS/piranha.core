@@ -89,7 +89,7 @@ namespace Piranha.Manager.Controllers
         /// <returns>The list model</returns>
         [Route("list/{folderId:Guid?}")]
         [HttpGet]
-        public async Task<MediaListModel> List(Guid? folderId = null, MediaType? filter = null, [FromQuery] int? width = null, [FromQuery] int? height = null)
+        public async Task<MediaListModel> List(Guid? folderId = null, [FromQuery]MediaType? filter = null, [FromQuery] int? width = null, [FromQuery] int? height = null)
         {
             return await _service.GetList(folderId, filter, width, height);
         }

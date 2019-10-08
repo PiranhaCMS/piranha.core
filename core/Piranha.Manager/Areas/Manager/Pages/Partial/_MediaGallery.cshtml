@@ -30,7 +30,7 @@
                         <button class="btn btn-danger media-delete" v-on:click.stop="remove(item.id)"><i class="fas fa-trash"></i></button>
 
                         <template v-if="item.type === 'Image'">
-                            <img class="thumbnail-image" :src="item.altVersionUrl">
+                            <img class="thumbnail-image" :src="getThumbnailUrl(item)">
                         </template>
 
                         <template v-else-if="item.type === 'Document'">

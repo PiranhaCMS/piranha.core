@@ -53,8 +53,8 @@ namespace Piranha.Services
         {
             var guids = ids as Guid[] ?? ids.ToArray();
             var partial = (_cache != null ? guids.Select(c => _cache.Get<Media>(c.ToString())) : Enumerable.Empty<Media>()).Where(c => c != null).ToArray();
-            var missingIds = guids.Except(partial.Select(c => c.Id));
-            var returns = partial.Concat((await _repo.GetAllByIdAsync(missingIds)).Select(c =>
+            var missingIds = guids.Except(partial.Select(c => c.Id)).ToArray();
+            var returns = partial.Concat((await _repo.GetById(missingIds)).OrderBy(c => c.Filename).Select(c =>
             {
                 OnLoad(c);
                 return c;
@@ -68,15 +68,13 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="folderId">The optional folder id</param>
         /// <returns>The available media</returns>
-        public async Task<IEnumerable<Media>> GetAllByIdAsync(Guid? folderId = null)
+        public Task<IEnumerable<Media>> GetAllByFolderIdAsync(Guid? folderId = null)
         {
-            var baseIds = await _repo.GetAll(folderId);
-            var returns = await _getFast(baseIds);
-            return returns;
+            return _repo.GetAll(folderId).ContinueWith(t => _getFast(t.Result.ToArray())).Unwrap();
         }
 
-        /// <inheritdoc cref="IMediaService.GetCountAsync"/>
-        public Task<int> GetCountAsync(Guid? folderId = null) => _repo.CountAll(folderId);
+        /// <inheritdoc cref="IMediaService.CountFolderItemsAsync"/>
+        public Task<int> CountFolderItemsAsync(Guid? folderId = null) => _repo.CountAll(folderId);
 
         /// <summary>
         /// Gets all media folders available in the specified

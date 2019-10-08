@@ -79,7 +79,7 @@ namespace Piranha.Manager.Services
                 }
             }
 
-            var holdMedia = (await _api.Media.GetAllByIdAsync(folderId));
+            var holdMedia = (await _api.Media.GetAllByFolderIdAsync(folderId));
             if (filter.HasValue)
             {
                 holdMedia = holdMedia
@@ -108,14 +108,15 @@ namespace Piranha.Manager.Services
                 }).ToList();
 
             foreach (var folder in model.Folders)
-                folder.ItemCount = await _api.Media.GetCountAsync(folder.Id) +
+                folder.ItemCount = await _api.Media.CountFolderItemsAsync(folder.Id) +
                                    structure.GetPartial(folder.Id).Count;
             if (width.HasValue)
                 foreach (var mp in pairMedia.Where(m => m.media.Type == MediaType.Image))
                 {
-                    mp.mediaItem.AltVersionUrl =
-                        (await _api.Media.EnsureVersionAsync(mp.media, width.Value, height).ConfigureAwait(false))
-                        .TrimStart('~');
+                    if (mp.media.Versions.Any(v => v.Width == width && v.Height == height))
+                        mp.mediaItem.AltVersionUrl =
+                            (await _api.Media.EnsureVersionAsync(mp.media, width.Value, height).ConfigureAwait(false))
+                            .TrimStart('~');
                 }
 
             model.Media = pairMedia.Select(m => m.mediaItem).ToList();
