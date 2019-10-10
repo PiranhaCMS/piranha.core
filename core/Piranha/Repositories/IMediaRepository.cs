@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Piranha.Models;
 
@@ -25,6 +26,13 @@ namespace Piranha.Repositories
         Task<IEnumerable<Guid>> GetAll(Guid? folderId = null);
 
         /// <summary>
+        /// Count the amount of items in the given folder.
+        /// </summary>
+        /// <param name="folderId">The optional folder id</param>
+        /// <returns></returns>
+        Task<int> CountAll(Guid? folderId);
+
+        /// <summary>
         /// Gets all media folders available in the specified
         /// folder.
         /// </summary>
@@ -33,11 +41,26 @@ namespace Piranha.Repositories
         Task<IEnumerable<Guid>> GetAllFolders(Guid? folderId = null);
 
         /// <summary>
+        /// Get media for all Ids in this enumerable.
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        Task<IEnumerable<Media>> GetById(params Guid[] ids);
+
+        /// <summary>
         /// Gets the media with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The media</returns>
         Task<Media> GetById(Guid id);
+
+        ///// <summary>
+        ///// Gets the media matching the specified IdQuery.
+        ///// </summary>
+        ///// <param name="idQuery"></param>
+        ///// <returns></returns>
+        //IQueryable<Media> GetById(IQueryable<Guid> idQuery);
+
 
         /// <summary>
         /// Gets the media folder with the given id.

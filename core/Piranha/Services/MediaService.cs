@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Piranha.Models;
@@ -27,7 +28,7 @@ namespace Piranha.Services
         private readonly IStorage _storage;
         private readonly IImageProcessor _processor;
         private readonly ICache _cache;
-        private static object ScaleMutex = new object();
+        private static readonly object ScaleMutex = new object();
         private const string MEDIA_STRUCTURE = "MediaStructure";
 
         /// <summary>
@@ -47,27 +48,33 @@ namespace Piranha.Services
             _cache = cache;
         }
 
+        //Separated this into its own thing in case it needed to get reused elsewhere.
+        private async Task<IEnumerable<Media>> _getFast(IEnumerable<Guid> ids)
+        {
+            var guids = ids as Guid[] ?? ids.ToArray();
+            var partial = (_cache != null ? guids.Select(c => _cache.Get<Media>(c.ToString())) : Enumerable.Empty<Media>()).Where(c => c != null).ToArray();
+            var missingIds = guids.Except(partial.Select(c => c.Id)).ToArray();
+            var returns = partial.Concat((await _repo.GetById(missingIds)).OrderBy(c => c.Filename).Select(c =>
+            {
+                OnLoad(c);
+                return c;
+            })).ToArray();
+            return returns;
+        }
+
+
         /// <summary>
         /// Gets all media available in the specified folder.
         /// </summary>
         /// <param name="folderId">The optional folder id</param>
         /// <returns>The available media</returns>
-        public async Task<IEnumerable<Media>> GetAllAsync(Guid? folderId = null)
+        public Task<IEnumerable<Media>> GetAllByFolderIdAsync(Guid? folderId = null)
         {
-            var models = new List<Media>();
-            var items = await _repo.GetAll(folderId).ConfigureAwait(false);
-
-            foreach (var item in items)
-            {
-                var media = await GetByIdAsync(item).ConfigureAwait(false);
-
-                if (media != null)
-                {
-                    models.Add(media);
-                }
-            }
-            return models;
+            return _repo.GetAll(folderId).ContinueWith(t => _getFast(t.Result.ToArray())).Unwrap();
         }
+
+        /// <inheritdoc cref="IMediaService.CountFolderItemsAsync"/>
+        public Task<int> CountFolderItemsAsync(Guid? folderId = null) => _repo.CountAll(folderId);
 
         /// <summary>
         /// Gets all media folders available in the specified
@@ -91,6 +98,7 @@ namespace Piranha.Services
             }
             return models;
         }
+
 
         /// <summary>
         /// Gets the media with the given id.
@@ -314,104 +322,97 @@ namespace Piranha.Services
         /// <returns>The public URL</returns>
         public async Task<string> EnsureVersionAsync(Guid id, int width, int? height = null)
         {
-            if (_processor != null)
+            if (_processor == null) return null;
+
+            var media = await GetByIdAsync(id).ConfigureAwait(false);
+
+            return media != null ? await EnsureVersionAsync(media, width, height) : null;
+        }
+
+        public async Task<string> EnsureVersionAsync(Media media, int width, int? height = null)
+        {
+            // If the requested size is equal to the original size, return true
+            if (media.Width == width && (!height.HasValue || media.Height == height.Value))
+                return GetPublicUrl(media);
+
+            var query = media.Versions
+                .Where(v => v.Width == width);
+
+            query = height.HasValue ? query.Where(v => v.Height == height) : query.Where(v => !v.Height.HasValue);
+
+            var version = query.FirstOrDefault();
+
+            if (version != null)
+                return media.Width == width && (!height.HasValue || media.Height == height.Value)
+                    ? GetPublicUrl(media)
+                    : GetPublicUrl(media, width, height, version.FileExtension);
+
+            // Get the image file
+            using (var stream = new MemoryStream())
             {
-                var media = await GetByIdAsync(id).ConfigureAwait(false);
-
-                if (media != null)
+                using (var session = await _storage.OpenAsync().ConfigureAwait(false))
                 {
-                    var query = media.Versions
-                        .Where(v => v.Width == width);
-
-                    if (height.HasValue)
+                    if (!await session.GetAsync(media.Id + "-" + media.Filename, stream).ConfigureAwait(false))
                     {
-                        query = query.Where(v => v.Height == height);
-                    }
-                    else
-                    {
-                        query = query.Where(v => !v.Height.HasValue);
+                        return null;
                     }
 
-                    var version = query.FirstOrDefault();
+                    // Reset strem position
+                    stream.Position = 0;
 
-                    if (version == null)
+                    using (var output = new MemoryStream())
                     {
-                        // If the requested size is equal to the original size, return true
-                        if (media.Width == width && (!height.HasValue || media.Height == height.Value))
-                            return GetPublicUrl(media);
-
-                        // Get the image file
-                        using (var stream = new MemoryStream())
+                        if (height.HasValue)
                         {
-                            using (var session = await _storage.OpenAsync().ConfigureAwait(false))
+                            _processor.CropScale(stream, output, width, height.Value);
+                        }
+                        else
+                        {
+                            _processor.Scale(stream, output, width);
+                        }
+                        output.Position = 0;
+                        bool upload = false;
+
+                        lock (ScaleMutex)
+                        {
+                            // We have to make sure we don't scale multiple files
+                            // at the same time as it can create index violations.
+                            version = query.FirstOrDefault();
+
+                            if (version == null)
                             {
-                                if (!await session.GetAsync(media.Id + "-" + media.Filename, stream).ConfigureAwait(false))
+                                var info = new FileInfo(media.Filename);
+
+                                version = new MediaVersion
                                 {
-                                    return null;
-                                }
+                                    Id = Guid.NewGuid(),
+                                    Size = output.Length,
+                                    Width = width,
+                                    Height = height,
+                                    FileExtension = info.Extension
+                                };
+                                media.Versions.Add(version);
 
-                                // Reset strem position
-                                stream.Position = 0;
+                                _repo.Save(media).Wait();
+                                RemoveFromCache(media);
 
-                                using (var output = new MemoryStream())
-                                {
-                                    if (height.HasValue)
-                                    {
-                                        _processor.CropScale(stream, output, width, height.Value);
-                                    }
-                                    else
-                                    {
-                                        _processor.Scale(stream, output, width);
-                                    }
-                                    output.Position = 0;
-                                    bool upload = false;
-
-                                    lock (ScaleMutex)
-                                    {
-                                        // We have to make sure we don't scale multiple files
-                                        // at the same time as it can create index violations.
-                                        version = query.FirstOrDefault();
-
-                                        if (version == null)
-                                        {
-                                            var info = new FileInfo(media.Filename);
-
-                                            version = new MediaVersion
-                                            {
-                                                Id = Guid.NewGuid(),
-                                                Size = output.Length,
-                                                Width = width,
-                                                Height = height,
-                                                FileExtension = info.Extension
-                                            };
-                                            media.Versions.Add(version);
-
-                                            _repo.Save(media);
-                                            RemoveFromCache(media);
-
-                                            upload = true;
-                                        }
-                                    }
-
-                                    if (upload)
-                                    {
-                                        return await session.PutAsync(GetResourceName(media, width, height), media.ContentType, output)
-                                            .ConfigureAwait(false);
-                                    }
-                                }
+                                upload = true;
                             }
                         }
-                    }
-                    else
-                    {
-                        // If the requested size is equal to the original size, return true
-                        if (media.Width == width && (!height.HasValue || media.Height == height.Value))
-                            return GetPublicUrl(media);
+
+                        if (upload)
+                        {
+                            return await session.PutAsync(GetResourceName(media, width, height), media.ContentType,
+                                    output)
+                                .ConfigureAwait(false);
+                        }
+                        //When moving this out of its parent method, realized that if the mutex failed, it would just fall back to the null instead of trying to return the issue.
+                        //Added this to ensure that queries didn't just give up if they weren't the first to the party.
                         return GetPublicUrl(media, width, height, version.FileExtension);
                     }
                 }
             }
-            return null;
+            // If the requested size is equal to the original size, return true
         }
 
         /// <summary>

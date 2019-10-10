@@ -68,6 +68,11 @@ namespace Piranha.Manager
         public List<string> Partials { get; private set; }
 
         /// <summary>
+        /// Gets/sets the url to the currently registered editor init script.
+        /// </summary>
+        public static string EditorInitScriptUrl { get; set; }
+
+        /// <summary>
         /// The currently registered preview sizes.
         /// </summary>
         public List<PreviewSize> PreviewSizes { get; private set; } = new List<PreviewSize> {

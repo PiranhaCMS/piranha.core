@@ -24,7 +24,7 @@ namespace Piranha.Services
         /// <returns>The available media</returns>
         public static IEnumerable<Media> GetAll(this IMediaService service, Guid? folderId = null)
         {
-            return service.GetAllAsync(folderId).GetAwaiter().GetResult();
+            return service.GetAllByFolderIdAsync(folderId).GetAwaiter().GetResult();
         }
 
         /// <summary>

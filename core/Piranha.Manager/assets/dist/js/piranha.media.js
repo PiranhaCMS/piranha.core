@@ -65,7 +65,7 @@ piranha.media = new Vue({
         load: function (id) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/media/list" + (id ? "/" + id : ""))
+            fetch(piranha.baseUrl + "manager/api/media/list" + (id ? "/" + id : "") + "/?width=210&height=160")
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.currentFolderId = result.currentFolderId;
@@ -76,8 +76,8 @@ piranha.media = new Vue({
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },
-        getThumbnailUrl: function (id) {
-            return piranha.baseUrl + "manager/api/media/url/" + id + "/210/160";
+        getThumbnailUrl: function (item) {
+            return item.altVersionUrl !== null ? item.altVersionUrl : piranha.baseUrl + "manager/api/media/url/" + item.id + "/210/160";
         },
         refresh: function () {
             piranha.media.load(piranha.media.currentFolderId);

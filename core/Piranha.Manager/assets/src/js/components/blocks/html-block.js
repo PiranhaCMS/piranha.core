@@ -11,18 +11,10 @@ Vue.component("html-block", {
     },
     methods: {
         onBlur: function (e) {
-            this.model.body.value = tinyMCE.activeEditor.getContent();
-
-            // Tell parent that title has been updated
-            var title = this.model.body.value.replace(/(<([^>]+)>)/ig, "");
-            if (title.length > 40) {
-                title = title.substring(0, 40) + "...";
-            }
-
-            this.$emit('update-title', {
-                uid: this.uid,
-                title: title
-            });
+            this.model.body.value = e.target.innerHTML;
+        },
+        onChange: function (data) {
+            this.model.body.value = data;
         }
     },
     computed: {
@@ -31,7 +23,7 @@ Vue.component("html-block", {
         }
     },
     mounted: function () {
-        piranha.editor.addInline(this.uid, this.toolbar);
+        piranha.editor.addInline(this.uid, this.toolbar, this.onChange);
     },
     beforeDestroy: function () {
         piranha.editor.remove(this.uid);

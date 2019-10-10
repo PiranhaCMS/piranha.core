@@ -93,6 +93,11 @@ namespace Piranha.Manager.Models
             public int? Height { get; set; }
 
             /// <summary>
+            /// An optional version url for a different size when requested via the list api call on the MediaApiController. Only use when expecting this call.
+            /// </summary>
+            public string AltVersionUrl { get; set; }
+
+            /// <summary>
             /// Gets/sets the last modification date.
             /// </summary>
             public string LastModified { get; set; }

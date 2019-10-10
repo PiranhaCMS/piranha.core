@@ -12,7 +12,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SQLite" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SQLite" Version="2.2.4" />
     <ProjectReference Include="..\Piranha\Piranha.csproj" />
     <ProjectReference Include="..\Piranha.AspNetCore.Identity\Piranha.AspNetCore.Identity.csproj" />
   </ItemGroup>

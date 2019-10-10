@@ -26076,9 +26076,9 @@ piranha.mediapicker = new Vue({
         load: function (id) {
             var self = this;
 
-            var url = piranha.baseUrl + "manager/api/media/list" + (id ? "/" + id : "");
+            var url = piranha.baseUrl + "manager/api/media/list" + (id ? "/" + id : "")+"/?width=210&height=160";
             if (this.filter) {
-                url += "?filter=" + this.filter;
+                url += "&filter=" + this.filter;
             }
 
             fetch(url)
@@ -26093,8 +26093,8 @@ piranha.mediapicker = new Vue({
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },
-        getThumbnailUrl: function (id) {
-            return piranha.baseUrl + "manager/api/media/url/" + id + "/210/160";
+        getThumbnailUrl: function (item) {
+            return item.altVersionUrl !== null ? item.altVersionUrl : piranha.baseUrl + "manager/api/media/url/" + item.id + "/210/160";
         },
         refresh: function () {
             piranha.mediapicker.load(piranha.mediapicker.currentFolderId);
@@ -26366,6 +26366,11 @@ piranha.preview = new Vue({
         dropzone: null
     },
     methods: {
+        openItem: function (media) {
+            piranha.preview.media = media;
+            piranha.preview.show();
+        },
+        //TODO: Rename loadAndOpen?
         open: function (mediaId) {
             piranha.preview.load(mediaId);
             piranha.preview.show();
@@ -26434,38 +26439,7 @@ piranha.editor = {
     editors = [],
 
     addInline: function (id, toolbarId) {
-        tinymce.init({
-            selector: "#" + id,
-            fixed_toolbar_container: "#" + toolbarId,
-            menubar: false,
-            branding: false,
-            statusbar: false,
-            inline: true,
-            convert_urls: false,
-            plugins: [
-                piranha.editorconfig.plugins
-            ],
-            width: "100%",
-            autoresize_min_height: 0,
-            toolbar: piranha.editorconfig.toolbar,
-            block_formats: piranha.editorconfig.block_formats,
-            style_formats: piranha.editorconfig.style_formats,
-            file_picker_callback: function(callback, value, meta) {
-                // Provide file and text for the link dialog
-                if (meta.filetype == 'file') {
-                    piranha.mediapicker.openCurrentFolder(function (data) {
-                        callback(data.publicUrl, { text: data.filename });
-                    }, null);
-                }
-
-                // Provide image and alt text for the image dialog
-                if (meta.filetype == 'image') {
-                    piranha.mediapicker.openCurrentFolder(function (data) {
-                        callback(data.publicUrl, { alt: "" });
-                    }, "image");
-                }
-            }
-        });
+        console.log("No HTML editor registered.")
     },
     addInlineMarkdown: function (id, value, update) {
         var preview = $("#" + id).parent().find(".markdown-preview");
@@ -26522,7 +26496,7 @@ piranha.editor = {
         this.editors[id] = simplemde;
     },
     remove: function (id) {
-        tinymce.remove(tinymce.get(id));
+        console.log("No HTML editor registered.")
     },
     removeMarkdown: function (id) {
         var simplemde = this.editors[id];

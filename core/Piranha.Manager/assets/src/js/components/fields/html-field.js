@@ -19,6 +19,20 @@ Vue.component("html-field", {
                 uid: this.uid,
                 title: title
             });
+        },
+        onChange: function (data) {
+            this.model.value = data;
+
+            // Tell parent that title has been updated
+            var title = this.model.value.replace(/(<([^>]+)>)/ig, "");
+            if (title.length > 40) {
+                title = title.substring(0, 40) + "...";
+            }
+
+            this.$emit('update-title', {
+                uid: this.uid,
+                title: title
+            });
         }
     },
     computed: {
@@ -27,7 +41,7 @@ Vue.component("html-field", {
         }
     },
     mounted: function () {
-        piranha.editor.addInline(this.uid, this.toolbar);
+        piranha.editor.addInline(this.uid, this.toolbar, this.onChange);
     },
     beforeDestroy: function () {
         piranha.editor.remove(this.uid);
