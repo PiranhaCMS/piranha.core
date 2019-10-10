@@ -8,7 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="stylesheet" href="~/manager/assets/css/full.min.css">
-    @foreach (var style in module.Styles) {
+    @foreach (var style in module.Styles)
+    {
     <link href="@Url.Content(style)" rel="stylesheet" type="text/css" />
     }
 
@@ -44,13 +45,13 @@
     <script src="~/manager/assets/js/piranha.min.js"></script>
     @if (!string.IsNullOrWhiteSpace(ViewBag.Message))
     {
-        <script>
+    <script>
         piranha.notifications.push({
             body: "@Html.Raw(ViewBag.Message)",
             type: "@Html.Raw(ViewBag.MessageCss)",
             hide: true
         });
-        </script>
+    </script>
     }
 
     <partial name="~/Areas/Manager/Shared/Partial/_Resources.cshtml" />
@@ -59,7 +60,6 @@
     {
         if (string.IsNullOrWhiteSpace(script.Integrity))
         {
-            //Url.Content does not error on absolute paths, so no additional logic needs to be taken here.
             <script type="@script.Type" src="@Url.Content(script.Src)"></script>
         }
         else if (script.CrossOriginValue == ECrossOriginPolicy.None)

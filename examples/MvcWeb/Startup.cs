@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using Piranha;
 using Piranha.AspNetCore.Identity.SQLite;
 
@@ -27,6 +26,8 @@ namespace MvcWeb
             services.AddPiranhaFileStorage();
             services.AddPiranhaImageSharp();
             services.AddPiranhaManager();
+            services.AddPiranhaSummernote();
+            //services.AddPiranhaTinyMCE();
             services.AddPiranhaApi();
 
             services.AddPiranhaEF(options =>
@@ -81,6 +82,8 @@ namespace MvcWeb
             app.UseAuthentication();
             app.UsePiranha();
             app.UsePiranhaManager();
+            app.UsePiranhaSummernote();
+            //app.UsePiranhaTinyMCE();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(name: "areaRoute",
