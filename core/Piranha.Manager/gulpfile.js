@@ -1,3 +1,4 @@
+/// <binding BeforeBuild='min:js, min:css' />
 /*
  * Copyright (c) 2019 Håkan Edling
  *

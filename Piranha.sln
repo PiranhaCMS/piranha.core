@@ -76,7 +76,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Manager.Localizatio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.WebApi", "core\Piranha.WebApi\Piranha.WebApi.csproj", "{D61EFBBC-5DB5-4810-9FE7-B9FE0C47A035}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prianha.Manager.Tests", "test\Prianha.Manager.Tests\Prianha.Manager.Tests.csproj", "{1CB2D174-70D8-4F51-A131-81C43E0FFEA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prianha.Manager.Tests", "test\Prianha.Manager.Tests\Prianha.Manager.Tests.csproj", "{1CB2D174-70D8-4F51-A131-81C43E0FFEA5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazorWeb", "examples\RazorWeb\RazorWeb.csproj", "{860EAC24-EE01-4531-8479-54A8490A2F41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -168,6 +170,10 @@ Global
 		{1CB2D174-70D8-4F51-A131-81C43E0FFEA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CB2D174-70D8-4F51-A131-81C43E0FFEA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CB2D174-70D8-4F51-A131-81C43E0FFEA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{860EAC24-EE01-4531-8479-54A8490A2F41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{860EAC24-EE01-4531-8479-54A8490A2F41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{860EAC24-EE01-4531-8479-54A8490A2F41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{860EAC24-EE01-4531-8479-54A8490A2F41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -194,6 +200,7 @@ Global
 		{22D8ED84-0A3B-4A02-B17B-ED8839323CCC} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 		{D61EFBBC-5DB5-4810-9FE7-B9FE0C47A035} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 		{1CB2D174-70D8-4F51-A131-81C43E0FFEA5} = {DE1913AC-4AA3-4F66-83F1-615710D8367B}
+		{860EAC24-EE01-4531-8479-54A8490A2F41} = {A82A5922-BF05-4DD7-A2C1-DD22F1AD6A57}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF88AA05-D127-4707-8214-A230F0DA569B}

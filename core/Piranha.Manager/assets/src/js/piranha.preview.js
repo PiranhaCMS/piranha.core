@@ -19,6 +19,11 @@ piranha.preview = new Vue({
         dropzone: null
     },
     methods: {
+        openItem: function (media) {
+            piranha.preview.media = media;
+            piranha.preview.show();
+        },
+        //TODO: Rename loadAndOpen?
         open: function (mediaId) {
             piranha.preview.load(mediaId);
             piranha.preview.show();
