@@ -55,6 +55,12 @@
                                     <option value="Temporary">@Localizer.General["Temporary"]</option>
                                 </select>
                             </div>
+                            <div class="form-group" v-if="routes && routes.length > 1">
+                                <label>@Localizer.General["Route"]</label>
+                                <select v-model="selectedRoute" class="form-control">
+                                    <option :value="route" v-for="route in routes">{{ route.title }}</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>

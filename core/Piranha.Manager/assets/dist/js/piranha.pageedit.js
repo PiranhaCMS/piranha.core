@@ -34,7 +34,9 @@ piranha.pageedit = new Vue({
             name: null,
             icon: null,
         },
-        selectedSetting: "uid-settings"
+        selectedSetting: "uid-settings",
+        selectedRoute: null,
+        routes: []
     },
     computed: {
         contentRegions: function () {
@@ -71,6 +73,8 @@ piranha.pageedit = new Vue({
             this.editors = model.editors;
             this.useBlocks = model.useBlocks;
             this.isCopy = model.isCopy;
+            this.selectedRoute = model.selectedRoute;
+            this.routes = model.routes;
 
             if (!this.useBlocks) {
                 // First choice, select the first custom editor
@@ -170,7 +174,8 @@ piranha.pageedit = new Vue({
                 redirectType: self.redirectType,
                 isCopy: self.isCopy,
                 blocks: JSON.parse(JSON.stringify(self.blocks)),
-                regions: JSON.parse(JSON.stringify(self.regions))
+                regions: JSON.parse(JSON.stringify(self.regions)),
+                selectedRoute: self.selectedRoute
             };
 
             fetch(route, {
@@ -189,6 +194,7 @@ piranha.pageedit = new Vue({
                 self.published = result.published;
                 self.state = result.state;
                 self.isCopy = result.isCopy;
+                self.selectedRoute = result.selectedRoute;
 
                 if (oldState === 'new' && result.state !== 'new') {
                     window.history.replaceState({ state: "created"}, "Edit page", piranha.baseUrl + "manager/page/edit/" + result.id);

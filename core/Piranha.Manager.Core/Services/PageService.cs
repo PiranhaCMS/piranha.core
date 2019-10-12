@@ -269,6 +269,12 @@ namespace Piranha.Manager.Services
                 page.RedirectUrl = model.RedirectUrl;
                 page.RedirectType = (RedirectType)Enum.Parse(typeof(RedirectType), model.RedirectType);
 
+                if (pageType.Routes.Count > 1)
+                {
+                    page.Route = pageType.Routes.FirstOrDefault(r => r.Route == model.SelectedRoute?.Route)
+                                 ?? pageType.Routes.First();
+                }
+
                 //
                 // We only need to save regions & blocks for pages that are not copies
                 //
@@ -460,6 +466,7 @@ namespace Piranha.Manager.Services
         {
             var config = new Config(_api);
             var type = App.PageTypes.GetById(page.TypeId);
+            var route = type.Routes.FirstOrDefault(r => r.Route == page.Route) ?? type.Routes.FirstOrDefault();
 
             var model = new PageEditModel
             {
@@ -479,8 +486,21 @@ namespace Piranha.Manager.Services
                 RedirectUrl = page.RedirectUrl,
                 RedirectType = page.RedirectType.ToString(),
                 State = GetState(page, isDraft),
-                UseBlocks = type.UseBlocks
+                UseBlocks = type.UseBlocks,
+                SelectedRoute = route == null ? null : new RouteModel
+                {
+                    Title = route.Title,
+                    Route = route.Route
+                }
             };
+
+            foreach (var r in type.Routes)
+            {
+                model.Routes.Add(new RouteModel {
+                    Title = r.Title,
+                    Route = r.Route
+                });
+            }
 
             foreach (var regionType in type.Regions)
             {

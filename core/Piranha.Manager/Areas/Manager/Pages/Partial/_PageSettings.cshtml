@@ -68,6 +68,12 @@
                                     <label for="isHidden" class="form-check-label">@Localizer.Page["If the page should be hidden in the sitemap"]</label>
                                 </div>
                             </div>
+                            <div class="form-group" v-if="routes && routes.length > 1">
+                                <label>@Localizer.General["Route"]</label>
+                                <select v-model="selectedRoute" class="form-control">
+                                    <option :value="route" v-for="route in routes">{{ route.title }}</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="row">

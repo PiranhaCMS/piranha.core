@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace Piranha.Manager.Models
 {
@@ -88,5 +89,15 @@ namespace Piranha.Manager.Models
         /// Gets/sets if this is a copy.
         /// </summary>
         public bool IsCopy { get { return OriginalId.HasValue; } }
+
+        /// <summary>
+        /// Gets/sets the available routes.
+        /// </summary>
+        public List<RouteModel> Routes { get; set; } = new List<RouteModel>();
+        
+        /// <summary>
+        /// Gets/sets the selected route.
+        /// </summary>
+        public RouteModel SelectedRoute { get; set; }
     }
 }

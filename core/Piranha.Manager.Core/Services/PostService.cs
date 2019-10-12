@@ -245,6 +245,12 @@ namespace Piranha.Manager.Services
                 post.Published = !string.IsNullOrEmpty(model.Published) ? DateTime.Parse(model.Published) : (DateTime?)null;
                 post.RedirectUrl = model.RedirectUrl;
                 post.RedirectType = (RedirectType)Enum.Parse(typeof(RedirectType), model.RedirectType);
+                
+                if (postType.Routes.Count > 1)
+                {
+                    post.Route = postType.Routes.FirstOrDefault(r => r.Route == model.SelectedRoute?.Route)
+                                 ?? postType.Routes.First();
+                }
 
                 // Save category
                 post.Category = new Taxonomy
@@ -379,6 +385,7 @@ namespace Piranha.Manager.Services
         {
             var config = new Config(_api);
             var type = App.PostTypes.GetById(post.TypeId);
+            var route = type.Routes.FirstOrDefault(r => r.Route == post.Route) ?? type.Routes.FirstOrDefault();
 
             var model = new PostEditModel
             {
@@ -393,8 +400,22 @@ namespace Piranha.Manager.Services
                 RedirectUrl = post.RedirectUrl,
                 RedirectType = post.RedirectType.ToString(),
                 State = GetState(post, isDraft),
-                UseBlocks = type.UseBlocks
+                UseBlocks = type.UseBlocks,
+                SelectedRoute = route == null ? null : new RouteModel
+                {
+                    Title = route.Title,
+                    Route = route.Route
+                }
             };
+
+            foreach (var r in type.Routes)
+            {
+                model.Routes.Add(new RouteModel
+                {
+                    Title = r.Title,
+                    Route = r.Route
+                });
+            }
 
             foreach (var regionType in type.Regions)
             {

@@ -32,7 +32,9 @@ piranha.postedit = new Vue({
         },
         selectedSetting: "uid-settings",
         selectedCategory: null,
-        selectedTags: []
+        selectedTags: [],
+        selectedRoute: null,
+        routes: []
     },
     computed: {
         contentRegions: function () {
@@ -67,6 +69,8 @@ piranha.postedit = new Vue({
             this.useBlocks = model.useBlocks;
             this.selectedCategory = model.selectedCategory;
             this.selectedTags = model.selectedTags;
+            this.selectedRoute = model.selectedRoute;
+            this.routes = model.routes;
 
             if (!this.useBlocks) {
                 // First choice, select the first custom editor
@@ -134,7 +138,8 @@ piranha.postedit = new Vue({
                 blocks: JSON.parse(JSON.stringify(self.blocks)),
                 regions: JSON.parse(JSON.stringify(self.regions)),
                 selectedCategory: self.selectedCategory,
-                selectedTags: JSON.parse(JSON.stringify(self.selectedTags))
+                selectedTags: JSON.parse(JSON.stringify(self.selectedTags)),
+                selectedRoute: self.selectedRoute
             };
 
             fetch(route, {
@@ -152,7 +157,8 @@ piranha.postedit = new Vue({
                 self.slug = result.slug;
                 self.published = result.published;
                 self.state = result.state;
-
+                self.selectedRoute = result.selectedRoute;
+                
                 if (oldState === 'new' && result.state !== 'new') {
                     window.history.replaceState({ state: "created"}, "Edit post", piranha.baseUrl + "manager/post/edit/" + result.id);
                 }
