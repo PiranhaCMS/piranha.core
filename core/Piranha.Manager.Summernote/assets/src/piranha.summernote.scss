@@ -7,6 +7,15 @@
         background: #fff;
         border: solid 1px #ced4da;
         display: none;
+
+        >.btn-group {
+            margin-top: 0;
+
+            .btn-sm {
+                color: #222F3E;
+                font-size: 1rem;
+            }
+        }
     }
 }
 

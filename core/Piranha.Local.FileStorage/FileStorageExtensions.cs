@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using Microsoft.Extensions.DependencyInjection;
@@ -25,6 +25,8 @@ public static class FileStorageExtensions
     public static IServiceCollection AddPiranhaFileStorage(this IServiceCollection services,
         string basePath = null, string baseUrl = null, ServiceLifetime scope = ServiceLifetime.Singleton)
     {
+        App.Modules.Register<FileStorageModule>();
+
         services.Add(new ServiceDescriptor(typeof(IStorage), sp => new FileStorage(basePath, baseUrl), scope));
 
         return services;

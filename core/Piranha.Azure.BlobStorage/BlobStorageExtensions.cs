@@ -26,6 +26,8 @@ public static class BlobStorageExtensions
     public static IServiceCollection AddPiranhaBlobStorage(this IServiceCollection services,
         StorageCredentials credentials, string containerName = "uploads", ServiceLifetime scope = ServiceLifetime.Singleton)
     {
+        App.Modules.Register<BlobStorageModule>();
+
         services.Add(new ServiceDescriptor(typeof(IStorage), sp => new BlobStorage(credentials, containerName), scope));
 
         return services;
@@ -42,6 +44,8 @@ public static class BlobStorageExtensions
     public static IServiceCollection AddPiranhaBlobStorage(this IServiceCollection services,
         string connectionString, string containerName = "uploads", ServiceLifetime scope = ServiceLifetime.Singleton)
     {
+        App.Modules.Register<BlobStorageModule>();
+
         services.Add(new ServiceDescriptor(typeof(IStorage), sp => new BlobStorage(connectionString, containerName), scope));
 
         return services;
