@@ -109,7 +109,7 @@
     <value>Otwórz adres URL w nowej zakładce</value>
   </data>
   <data name="Permanent" xml:space="preserve">
-    <value>Permanent</value>
+    <value>Stałe</value>
   </data>
   <data name="Pixels" xml:space="preserve">
     <value>Piksele</value>
@@ -124,16 +124,16 @@
     <value>Data publikacji</value>
   </data>
   <data name="Redirect" xml:space="preserve">
-    <value>Redirect</value>
+    <value>Przekierowanie</value>
   </data>
   <data name="Redirect Type" xml:space="preserve">
-    <value>Redirect Type</value>
+    <value>Typ przekierowania</value>
   </data>
   <data name="Revert" xml:space="preserve">
     <value>Przywróć</value>
   </data>
   <data name="Route" xml:space="preserve">
-    <value>Route</value>
+    <value>Ścieżka</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Zapisz</value>
@@ -160,7 +160,7 @@
     <value>System</value>
   </data>
   <data name="Temporary" xml:space="preserve">
-    <value>Temporary</value>
+    <value>Tymczasowe</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Tytuł</value>
