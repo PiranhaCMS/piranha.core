@@ -49,6 +49,13 @@ namespace Piranha.Services
         Task<Media> GetByIdAsync(Guid id);
 
         /// <summary>
+        /// Gets the media with the given id.
+        /// </summary>
+        /// <param name="ids">The unique id</param>
+        /// <returns>The media</returns>
+        Task<IEnumerable<Media>> GetByIdAsync(params Guid[] ids);
+
+        /// <summary>
         /// Gets the media folder with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
