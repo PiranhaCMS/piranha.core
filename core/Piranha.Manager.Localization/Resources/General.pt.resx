@@ -13,7 +13,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Adicionar</value>
+    <value>Add</value>
   </data>
   <data name="All" xml:space="preserve">
     <value>All</value>
@@ -22,7 +22,7 @@
     <value>Cancel</value>
   </data>
   <data name="Content" xml:space="preserve">
-    <value>Conteúdo</value>
+    <value>Content</value>
   </data>
   <data name="Continue" xml:space="preserve">
     <value>Continue</value>
@@ -108,6 +108,9 @@
   <data name="Open public URL in new tab" xml:space="preserve">
     <value>Open public URL in new tab</value>
   </data>
+  <data name="Permanent" xml:space="preserve">
+    <value>Permanent</value>
+  </data>
   <data name="Pixels" xml:space="preserve">
     <value>Pixels</value>
   </data>
@@ -120,8 +123,17 @@
   <data name="Publish date" xml:space="preserve">
     <value>Publish date</value>
   </data>
+  <data name="Redirect" xml:space="preserve">
+    <value>Redirect</value>
+  </data>
+  <data name="Redirect Type" xml:space="preserve">
+    <value>Redirect Type</value>
+  </data>
   <data name="Revert" xml:space="preserve">
     <value>Revert</value>
+  </data>
+  <data name="Route" xml:space="preserve">
+    <value>Route</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>
@@ -146,6 +158,9 @@
   </data>
   <data name="System" xml:space="preserve">
     <value>System</value>
+  </data>
+  <data name="Temporary" xml:space="preserve">
+    <value>Temporary</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Title</value>

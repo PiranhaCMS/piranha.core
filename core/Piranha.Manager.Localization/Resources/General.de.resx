@@ -108,6 +108,9 @@
   <data name="Open public URL in new tab" xml:space="preserve">
     <value>Öffne öffentliche URL im neuen Tab</value>
   </data>
+  <data name="Permanent" xml:space="preserve">
+    <value>Permanent</value>
+  </data>
   <data name="Pixels" xml:space="preserve">
     <value>Pixel</value>
   </data>
@@ -120,8 +123,17 @@
   <data name="Publish date" xml:space="preserve">
     <value>Veröffentlichungsdatum</value>
   </data>
+  <data name="Redirect" xml:space="preserve">
+    <value>Redirect</value>
+  </data>
+  <data name="Redirect Type" xml:space="preserve">
+    <value>Redirect Type</value>
+  </data>
   <data name="Revert" xml:space="preserve">
     <value>Zurücksetzen</value>
+  </data>
+  <data name="Route" xml:space="preserve">
+    <value>Route</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Speichern</value>
@@ -146,6 +158,9 @@
   </data>
   <data name="System" xml:space="preserve">
     <value>System</value>
+  </data>
+  <data name="Temporary" xml:space="preserve">
+    <value>Temporary</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Titel</value>
