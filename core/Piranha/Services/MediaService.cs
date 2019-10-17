@@ -119,6 +119,16 @@ namespace Piranha.Services
         }
 
         /// <summary>
+        /// Get all media matching the given IDs.
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        public Task<IEnumerable<Media>> GetByIdAsync(params Guid[] ids)
+        {
+            return _repo.GetById(ids);
+        }
+
+        /// <summary>
         /// Gets the media folder with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
