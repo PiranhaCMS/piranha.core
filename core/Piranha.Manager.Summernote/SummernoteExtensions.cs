@@ -65,7 +65,6 @@ public static class SummernoteExtensions
             App.Modules.Get<Piranha.Manager.Module>().Scripts.Add("~/manager/summernote/show-hint.js");
             App.Modules.Get<Piranha.Manager.Module>().Scripts.Add("~/manager/summernote/xml-hint.js");
             App.Modules.Get<Piranha.Manager.Module>().Scripts.Add("~/manager/summernote/html-hint.js");
-            App.Modules.Get<Piranha.Manager.Module>().Scripts.Add("~/manager/summernote/htmlhint.js");
         }
 
         //
