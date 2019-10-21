@@ -5,6 +5,7 @@
 piranha.media = new Vue({
     el: "#media",
     data: {
+        loading: true,
         listView: true,
         currentFolderId: null,
         parentFolderId: null,
@@ -138,23 +139,26 @@ piranha.media = new Vue({
                 .catch(function (error) { console.log("error:", error ); });
         }
     },
-    created: function () {
-        this.load();
-    },
-    mounted: function () {
-        this.dropzone = piranha.dropzone.init("#media-upload-container", {
-            uploadMultiple: false
-        });
-        this.dropzone.on("complete", function (file) {
-            if (file.status === "success") {
-                setTimeout(function () {
-                    piranha.media.dropzone.removeFile(file);
-                }, 3000)
+    updated: function () {
+        if (this.loading) {
+            if (piranha.permissions.media.add) {
+                this.dropzone = piranha.dropzone.init("#media-upload-container", {
+                    uploadMultiple: false
+                });
+                this.dropzone.on("complete", function (file) {
+                    if (file.status === "success") {
+                        setTimeout(function () {
+                            piranha.media.dropzone.removeFile(file);
+                        }, 3000)
+                    }
+                });
+                this.dropzone.on("queuecomplete", function () {
+                    piranha.media.refresh();
+                });
             }
-        })
-        this.dropzone.on("queuecomplete", function () {
-            piranha.media.refresh();
-        })
+
+            this.loading = false;
+        }
     }
 });
 

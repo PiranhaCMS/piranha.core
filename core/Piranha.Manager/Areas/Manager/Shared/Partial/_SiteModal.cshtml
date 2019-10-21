@@ -91,10 +91,10 @@
 
             <!-- Footer -->
             <div class="modal-footer">
-                <button v-if="!isConfirm && !isNew " v-on:click.prevent="confirm" :disabled="isConfirm" class="btn btn-labeled btn-danger">
+                <button v-if="piranha.permissions.sites.delete && !isConfirm && !isNew " v-on:click.prevent="confirm" :disabled="isConfirm" class="btn btn-labeled btn-danger">
                     <i class="fas fa-trash"></i>@Localizer.General["Delete"]
                 </button>
-                <button v-if="!isConfirm" v-on:click.prevent="save" class="btn btn-labeled btn-success">
+                <button v-if="piranha.permissions.sites.save && !isConfirm" v-on:click.prevent="save" class="btn btn-labeled btn-success">
                     <i class="fas fa-check"></i>@Localizer.General["Save"]
                 </button>
                 <div v-if="isConfirm" class="alert alert-danger w-100" role="alert">

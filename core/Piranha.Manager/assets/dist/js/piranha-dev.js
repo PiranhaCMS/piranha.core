@@ -37788,6 +37788,68 @@ piranha.dropzone = new function () {
     piranha
 */
 
+piranha.permissions = {
+    aliases: {
+        edit: false,
+        delete: false
+    },
+    media: {
+        add: false,
+        addFolder: false,
+        delete: false,
+        deleteFolder: false,
+        edit: false
+    },
+    pages: {
+        add: false,
+        delete: false,
+        edit: false,
+        preview: false,
+        publish: false,
+        save: false
+    },
+    posts: {
+        add: false,
+        delete: false,
+        edit: false,
+        preview: false,
+        publish: false,
+        save: false
+    },
+    sites: {
+        add: false,
+        delete: false,
+        edit: false,
+        save: false
+    },
+
+    load: function (cb) {
+        var self = this;
+
+        fetch(piranha.baseUrl + "manager/api/permissions")
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                self.aliases = result.aliases;
+                self.media = result.media;
+                self.pages = result.pages;
+                self.posts = result.posts;
+                self.sites = result.sites;
+
+                if (cb)
+                    cb();
+            })
+            .catch(function (error) {
+                console.log("error:", error );
+
+                if (cb)
+                    cb();
+            });
+    }
+};
+/*global
+    piranha
+*/
+
 piranha.utils = {
     formatUrl: function (str) {
         return str.replace("~/", piranha.baseUrl);
@@ -38107,17 +38169,19 @@ piranha.mediapicker = new Vue({
         }
     },
     mounted: function () {
-        this.dropzone = piranha.dropzone.init("#mediapicker-upload-container");
-        this.dropzone.on("complete", function (file) {
-            if (file.status === "success") {
-                setTimeout(function () {
-                    piranha.mediapicker.dropzone.removeFile(file);
-                }, 3000)
-            }
-        })
-        this.dropzone.on("queuecomplete", function () {
-            piranha.mediapicker.refresh();
-        })
+        if (document.getElementById("#mediapicker-upload-container")) {
+            this.dropzone = piranha.dropzone.init("#mediapicker-upload-container");
+            this.dropzone.on("complete", function (file) {
+                if (file.status === "success") {
+                    setTimeout(function () {
+                        piranha.mediapicker.dropzone.removeFile(file);
+                    }, 3000)
+                }
+            });
+            this.dropzone.on("queuecomplete", function () {
+                piranha.mediapicker.refresh();
+            });
+        }
     }
 });
 

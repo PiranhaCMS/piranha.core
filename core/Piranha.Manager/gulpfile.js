@@ -47,6 +47,7 @@ var js = [
             "node_modules/simplemde/dist/simplemde.min.js",
             "assets/src/js/piranha.accessibility.js",
             "assets/src/js/piranha.dropzone.js",
+            "assets/src/js/piranha.permissions.js",
             "assets/src/js/piranha.utils.js",
             "assets/src/js/piranha.blockpicker.js",
             "assets/src/js/piranha.notifications.js",

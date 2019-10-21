@@ -1,3 +1,4 @@
+@inject IAuthorizationService Auth
 @inject ManagerLocalizer Localizer
 
 <!-- The Modal -->
@@ -26,9 +27,12 @@
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="pill" href="#pills-details"><i class="fas fa-info-circle"></i> @Localizer.General["Details"]</a>
                 </li>
+                @if ((await Auth.AuthorizeAsync(User, Permission.MediaEdit)).Succeeded)
+                {
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="pill" href="#pills-update"><i class="far fa-edit"></i> @Localizer.General["Update"]</a>
                 </li>
+                }
             </ul>
 
             <!-- Modal Body -->

@@ -16,33 +16,37 @@
     @if (action == "edit")
     {
         <script>
-            piranha.pageedit.load("@RouteData.Values["id"]");
-
-            $(".title input").focus();
+            piranha.permissions.load(function () {
+                piranha.pageedit.load("@RouteData.Values["id"]");
+                $(".title input").focus();
+            });
         </script>
     }
     else if (action == "add")
     {
         <script>
-            piranha.pageedit.create("@RouteData.Values["id"]", "@RouteData.Values["pageType"]");
-
-            $(".title input").focus();
+            piranha.permissions.load(function () {
+                piranha.pageedit.create("@RouteData.Values["id"]", "@RouteData.Values["pageType"]");
+                $(".title input").focus();
+            });
         </script>
     }
     else if (action == "addrelative")
     {
         <script>
-            piranha.pageedit.createrelative("@RouteData.Values["id"]", "@RouteData.Values["pageType"]", "@RouteData.Values["after"]");
-
-            $(".title input").focus();
+            piranha.permissions.load(function () {
+                piranha.pageedit.createrelative("@RouteData.Values["id"]", "@RouteData.Values["pageType"]", "@RouteData.Values["after"]");
+                $(".title input").focus();
+            });
         </script>
     }
     else if (action == "copyrelative")
     {
         <script>
-            piranha.pageedit.copyrelative("@RouteData.Values["id"]", "@RouteData.Values["pageType"]", "@RouteData.Values["after"]");
-
-            $(".title input").focus();
+            piranha.permissions.load(function () {
+                piranha.pageedit.copyrelative("@RouteData.Values["id"]", "@RouteData.Values["pageType"]", "@RouteData.Values["after"]");
+                $(".title input").focus();
+            });
         </script>
     }
 }

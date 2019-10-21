@@ -1,3 +1,4 @@
+@inject IAuthorizationService Auth
 @inject ManagerLocalizer Localizer
 
 <!-- The Modal -->
@@ -29,23 +30,29 @@
                     </div>
                     <div class="col">
                         <div class="d-flex flex-row">
+                            @if ((await Auth.AuthorizeAsync(User, Permission.MediaAddFolder)).Succeeded)
+                            {
                             <input v-model="folderName" v-on:keyup.enter="savefolder" type="text" placeholder="@Localizer.Media["Add folder"]" class="form-control flex-fill">
                             <button v-on:click.prevent="savefolder" class="btn btn-primary ml-3"><i class="fas fa-plus"></i></button>
+                            }
                         </div>
                     </div>
                 </div>
 
-                <div id="mediapicker-upload-container" class="dropzone-container">
-                    <form action="@Url.Action("Upload", "MediaApi")" class="dropzone needsclick dz-clickable" enctype="multipart/form-data">
-                        <input type="hidden" name="Model.ParentId" v-model="currentFolderId" />
-                        <div class="dz-message needsclick text-center">
-                            <span class="fas fa-cloud-upload-alt"></span>
-                            @Localizer.Media["Drop files here or click to upload."]
-                        </div>
-                        <div class="file-list"></div>
-                    </form>
-                    <ul class="media-list list-unstyled"></ul>
-                </div>
+                @if ((await Auth.AuthorizeAsync(User, Permission.MediaAdd)).Succeeded)
+                {
+                    <div id="mediapicker-upload-container" class="dropzone-container">
+                        <form action="@Url.Action("Upload", "MediaApi")" class="dropzone needsclick dz-clickable" enctype="multipart/form-data">
+                            <input type="hidden" name="Model.ParentId" v-model="currentFolderId" />
+                            <div class="dz-message needsclick text-center">
+                                <span class="fas fa-cloud-upload-alt"></span>
+                                @Localizer.Media["Drop files here or click to upload."]
+                            </div>
+                            <div class="file-list"></div>
+                        </form>
+                        <ul class="media-list list-unstyled"></ul>
+                    </div>
+                }
 
                 <div class="form-group mt-3">
                      <input id="mediapickerSearch" class="form-control" v-model="search" v-on:keyup.enter="onEnter" placeholder="@Localizer.General["Search..."]"/>

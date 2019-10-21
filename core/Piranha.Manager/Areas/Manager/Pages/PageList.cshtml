@@ -43,7 +43,7 @@
                 {
                     <partial name="@action.ActionView" />
                 }
-                <button v-on:click.prevent="piranha.siteedit.create(load)" class="btn btn-primary btn-labeled">
+                <button v-if="piranha.permissions.sites.add" v-on:click.prevent="piranha.siteedit.create(load)" class="btn btn-primary btn-labeled">
                     <i class="fas fa-globe"></i>
                     @Localizer.Site["Add site"]
                 </button>
@@ -59,9 +59,12 @@
                         <li v-for="site in sites">
                             <div class="sitemap-item" v-bind:key="site.id">
                                 <div class="handle"><i class="fas fa-globe"></i></div>
-                                <div class="link"><a v-on:click.prevent="piranha.siteedit.open(site.id, load)" href="#">{{ site.title }} <small style="display:none">(<code>{{ site.slug }}</code>)</small></a></div>
+                                <div class="link">
+                                    <a v-if="piranha.permissions.sites.edit" v-on:click.prevent="piranha.siteedit.open(site.id, load)" href="#">{{ site.title }} <small style="display:none">(<code>{{ site.slug }}</code>)</small></a>
+                                    <span v-else class="title">{{ site.title }} <small style="display:none">(<code>{{ site.slug }}</code>)</small></span>
+                                </div>
                                 <div>
-                                    <div class="btn-group" role="group">
+                                    <div v-if="piranha.permissions.pages.add" class="btn-group" role="group">
                                         <button id="pageGroup" type="button" class="btn btn-sm btn-primary btn-labeled dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-plus"></i>
                                             @Localizer.Page["Add page"]

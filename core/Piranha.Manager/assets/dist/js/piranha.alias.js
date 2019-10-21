@@ -74,9 +74,6 @@
                 .catch(function (error) { console.log("error:", error ); });
         }
     },
-    created: function () {
-        this.load();
-    },
     updated: function () {
         this.loading = false;
     }

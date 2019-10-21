@@ -26168,17 +26168,19 @@ piranha.mediapicker = new Vue({
         }
     },
     mounted: function () {
-        this.dropzone = piranha.dropzone.init("#mediapicker-upload-container");
-        this.dropzone.on("complete", function (file) {
-            if (file.status === "success") {
-                setTimeout(function () {
-                    piranha.mediapicker.dropzone.removeFile(file);
-                }, 3000)
-            }
-        })
-        this.dropzone.on("queuecomplete", function () {
-            piranha.mediapicker.refresh();
-        })
+        if (document.getElementById("#mediapicker-upload-container")) {
+            this.dropzone = piranha.dropzone.init("#mediapicker-upload-container");
+            this.dropzone.on("complete", function (file) {
+                if (file.status === "success") {
+                    setTimeout(function () {
+                        piranha.mediapicker.dropzone.removeFile(file);
+                    }, 3000)
+                }
+            });
+            this.dropzone.on("queuecomplete", function () {
+                piranha.mediapicker.refresh();
+            });
+        }
     }
 });
 

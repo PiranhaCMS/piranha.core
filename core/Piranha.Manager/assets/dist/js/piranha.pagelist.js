@@ -53,18 +53,23 @@ Vue.component("sitemap-item", {
         "        <a v-if='item.items.length > 0 && item.isExpanded' v-on:click.prevent='toggleItem(item)' class='expand' href='#'><i class='fas fa-minus'></i></a>" +
         "        <a v-if='item.items.length > 0 && !item.isExpanded' v-on:click.prevent='toggleItem(item)' class='expand' href='#'><i class='fas fa-plus'></i></a>" +
         "      </span>" +
-        "      <a :href='piranha.baseUrl + item.editUrl + item.id'>" +
+        "      <a v-if='piranha.permissions.pages.edit' :href='piranha.baseUrl + item.editUrl + item.id'>" +
         "        <span v-html='item.title'></span>" +
         "        <span v-if='item.status' class='badge badge-info'>{{ item.status }}</span>" +
         "        <span v-if='item.isCopy' class='badge badge-warning'>{{ piranha.resources.texts.copy }}</span>" +
         "      </a>" +
+        "      <span v-else class='title'>" +
+        "        <span v-html='item.title'></span>" +
+        "        <span v-if='item.status' class='badge badge-info'>{{ item.status }}</span>" +
+        "        <span v-if='item.isCopy' class='badge badge-warning'>{{ piranha.resources.texts.copy }}</span>" +
+        "      </span>" +
         "    </div>" +
         "    <div class='type d-none d-md-block'>{{ item.typeName }}</div>" +
         "    <div class='date d-none d-lg-block'>{{ item.published }}</div>" +
         "    <div class='actions'>" +
-        "      <a href='#' v-on:click.prevent='piranha.pagelist.add(item.siteId, item.id, true)'><i class='fas fa-angle-down'></i></a>" +
-        "      <a href='#' v-on:click.prevent='piranha.pagelist.add(item.siteId, item.id, false)'><i class='fas fa-angle-right'></i></a>" +
-        "      <a v-if='item.items.length === 0' v-on:click.prevent='piranha.pagelist.remove(item.id)' class='danger' href='#'><i class='fas fa-trash'></i></a>" +
+        "      <a v-if='piranha.permissions.pages.add' href='#' v-on:click.prevent='piranha.pagelist.add(item.siteId, item.id, true)'><i class='fas fa-angle-down'></i></a>" +
+        "      <a v-if='piranha.permissions.pages.add' href='#' v-on:click.prevent='piranha.pagelist.add(item.siteId, item.id, false)'><i class='fas fa-angle-right'></i></a>" +
+        "      <a v-if='piranha.permissions.pages.delete && item.items.length === 0' v-on:click.prevent='piranha.pagelist.remove(item.id)' class='danger' href='#'><i class='fas fa-trash'></i></a>" +
         "    </div>" +
         "  </div>" +
         "  <ol v-if='item.items.length > 0' class='dd-list'>" +
@@ -93,15 +98,18 @@ piranha.pagelist = new Vue({
     },
     methods: {
         load: function () {
-            fetch(piranha.baseUrl + "manager/api/page/list")
+            var self = this;
+
+            piranha.permissions.load(function () {
+                fetch(piranha.baseUrl + "manager/api/page/list")
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    piranha.pagelist.sites = result.sites;
-                    piranha.pagelist.pageTypes = result.pageTypes;
-
-                    piranha.pagelist.updateBindings = true;
+                    self.sites = result.sites;
+                    self.pageTypes = result.pageTypes;
+                    self.updateBindings = true;
                 })
                 .catch(function (error) { console.log("error:", error ); });
+            });
         },
         remove: function (id) {
             var self = this;

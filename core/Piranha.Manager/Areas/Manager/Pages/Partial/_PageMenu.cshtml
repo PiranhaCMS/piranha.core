@@ -1,8 +1,8 @@
 @inject ManagerLocalizer Localizer
 
-<div class="container-fluid">
+<div class="container-fluid app" :class="{ ready: !loading }">
     <div class="top-nav">
-        <button class="btn btn-primary" data-toggle="modal" data-target="#pageSettings">
+        <button class="btn btn-primary btn-icon" data-toggle="modal" data-target="#pageSettings">
             <i class="fas fa-cog"></i>
         </button>
         @foreach (var action in Piranha.Manager.Actions.PageEdit)

@@ -1,0 +1,9 @@
+@inject IAuthorizationService Auth
+@inject ManagerLocalizer Localizer
+
+@if ((await Auth.AuthorizeAsync(User, Permission.PagesDelete)).Succeeded)
+{
+    <button v-if="state !== 'new'" v-on:click.prevent="remove" class="btn btn-danger btn-icon" title="@Localizer.General["Delete"]">
+        <i class="fas fa-trash"></i>
+    </button>
+}

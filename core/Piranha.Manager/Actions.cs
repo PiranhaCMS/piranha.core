@@ -18,29 +18,62 @@ namespace Piranha.Manager
     public static class Actions
     {
         /// <summary>
-        /// Gets/sets the available actions for the page edit view.
+        /// Gets the available actions for the alias view.
         /// </summary>
-        public static ActionList PageEdit { get; set; } = new ActionList
+        public static ActionList AliasEdit { get; private set; } = new ActionList();
+
+        /// <summary>
+        /// Gets the available actions for the config view.
+        /// </summary>
+        public static ActionList ConfigEdit { get; private set; } = new ActionList();
+
+        /// <summary>
+        /// Gets the available actions for the page edit view.
+        /// </summary>
+        public static ActionList PageEdit { get; private set; } = new ActionList
         {
+            new ActionItem
+            {
+                InternalId = "Preview",
+                ActionView = "Partial/Actions/_PagePreview"
+            },
             new ActionItem
             {
                 InternalId = "Save",
                 ActionView = "Partial/Actions/_PageSave"
+            },
+            new ActionItem
+            {
+                InternalId = "Delete",
+                ActionView = "Partial/Actions/_PageDelete"
             }
         };
 
         /// <summary>
-        /// Gets/sets the available actions for the page edit view.
+        /// Gets the actions available for the page list view.
         /// </summary>
-        public static ActionList PostEdit { get; set; } = new ActionList
+        public static ActionList PageList { get; private set; } = new ActionList();
+
+        /// <summary>
+        /// Gets the available actions for the page edit view.
+        /// </summary>
+        public static ActionList PostEdit { get; private set; } = new ActionList
         {
+            new ActionItem
+            {
+                InternalId = "Preview",
+                ActionView = "Partial/Actions/_PostPreview"
+            },
             new ActionItem
             {
                 InternalId = "Save",
                 ActionView = "Partial/Actions/_PostSave"
+            },
+            new ActionItem
+            {
+                InternalId = "Delete",
+                ActionView = "Partial/Actions/_PostDelete"
             }
         };
-
-        public static ActionList PageList { get; set; } = new ActionList();
     }
 }

@@ -43,9 +43,9 @@
             </ol>
         </nav>
 
-        <div class="container-fluid">
+        <div class="container-fluid app" :class="{ ready: !loading }">
             <div class="top-nav">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#postSettings">
+                <button class="btn btn-primary btn-icon" data-toggle="modal" data-target="#postSettings">
                     <i class="fas fa-cog"></i>
                 </button>
                 @foreach (var postAction in Piranha.Manager.Actions.PostEdit)

@@ -1,5 +1,6 @@
 @using Piranha
 @model Piranha.AspNetCore.Identity.Models.RoleEditModel
+@inject IAuthorizationService Auth
 @inject ManagerLocalizer Localizer
 @{
     ViewBag.Title = "Edit role";
@@ -21,12 +22,15 @@
 
         <div class="container-fluid">
             <div class="top-nav">
-                <button type="submit" class="btn btn-labeled btn-success pull-right">
-                    <span class="btn-label">
-                        <i class="fas fa-check"></i>
-                    </span>
-                    @Localizer.General["Save"]
-                </button>
+                @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.RolesSave)).Succeeded)
+                {
+                    <button type="submit" class="btn btn-labeled btn-success pull-right">
+                        <span class="btn-label">
+                            <i class="fas fa-check"></i>
+                        </span>
+                        @Localizer.General["Save"]
+                    </button>
+                }
             </div>
         </div>
     </div>

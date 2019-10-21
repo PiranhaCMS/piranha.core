@@ -1,0 +1,9 @@
+@inject IAuthorizationService Auth
+@inject ManagerLocalizer Localizer
+
+@if ((await Auth.AuthorizeAsync(User, Piranha.Security.Permission.PagePreview)).Succeeded)
+{
+    <a v-if="state !== 'new'" class="btn btn-primary btn-icon" :href="piranha.baseUrl + 'manager/page/preview/' + id" target="_preview" title="@Localizer.General["Preview"]">
+        <i class="fas fa-eye"></i>
+    </a>
+}

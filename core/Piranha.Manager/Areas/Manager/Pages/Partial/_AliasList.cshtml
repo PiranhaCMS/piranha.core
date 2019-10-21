@@ -17,7 +17,7 @@
                         <td><code>{{ item.aliasUrl }}</code></td>
                         <td><code>{{ item.redirectUrl }}</code></td>
                         <td class="text-center"><i v-if="item.isPermanent" class="fas fa-check"></i></td>
-                        <td class="actions one"><a href="#" class="danger" v-on:click.prevent="remove(item.id)"><i class="fas fa-trash"></i></a></td>
+                        <td class="actions one"><a v-if="piranha.permissions.aliases.delete" href="#" class="danger" v-on:click.prevent="remove(item.id)"><i class="fas fa-trash"></i></a></td>
                     </tr>
                 </tbody>
             </table>

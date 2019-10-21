@@ -54,7 +54,7 @@ namespace Piranha.Manager
                     },
                     new MenuItem
                     {
-                        InternalId = "Modules", Name = "Modules", Route = "~/manager/modules", Policy = Permission.Config, Css = "fas fa-code-branch"
+                        InternalId = "Modules", Name = "Modules", Route = "~/manager/modules", Policy = Permission.Modules, Css = "fas fa-code-branch"
                     }
                 }
             }

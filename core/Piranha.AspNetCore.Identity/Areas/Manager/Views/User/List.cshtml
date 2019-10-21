@@ -1,5 +1,6 @@
 @using Piranha.AspNetCore.Identity
 @model Piranha.AspNetCore.Identity.Models.UserListModel
+@inject IAuthorizationService Auth
 @inject ManagerLocalizer Localizer
 @{
     ViewBag.Title = "Users";
@@ -16,9 +17,12 @@
 
     <div class="container-fluid">
         <div class="top-nav">
-            <a href="@Url.Action("Add")" class="btn btn-primary btn-labeled">
-                <i class="fas fa-plus"></i>@Localizer.General["Add"]
-            </a>
+            @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.UsersAdd)).Succeeded)
+            {
+                <a href="@Url.Action("Add")" class="btn btn-primary btn-labeled">
+                    <i class="fas fa-plus"></i>@Localizer.General["Add"]
+                </a>
+            }
         </div>
     </div>
 </div>
@@ -39,16 +43,26 @@
             <tr>
                 <td>
                     <img src="@Utils.GetGravatarUrl(user.Email, 25)" alt="Gravatar for @user.Email" style="padding-right: 10px">
-                    <a href="@Url.Action("Edit", new { id = user.Id })">@user.UserName</a>
+                    @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.UsersEdit)).Succeeded)
+                    {
+                        <a href="@Url.Action("Edit", new { id = user.Id })">@user.UserName</a>
+                    }
+                    else
+                    {
+                        <span class="title">@user.UserName</span>
+                    }
                 </td>
                 <td>@user.Email</td>
                 <td>
                     @string.Join(", ", user.Roles)
                 </td>
                 <td class="actions one">
-                    <a class="remove" href="@Url.Action("Delete", new {id = user.Id})">
-                        <span class="fas fa-trash text-danger"></span>
-                    </a>
+                    @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.UsersDelete)).Succeeded)
+                    {
+                        <a class="danger" href="@Url.Action("Delete", new {id = user.Id})">
+                            <span class="fas fa-trash"></span>
+                        </a>
+                    }
                 </td>
             </tr>
         }
