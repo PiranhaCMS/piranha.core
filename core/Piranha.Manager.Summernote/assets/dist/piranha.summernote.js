@@ -133,6 +133,10 @@ piranha.editor.addInline = function (id, toolbarId, cb) {
             onBlur: function () {
                 if (cb)
                     cb($('#' + id).summernote('code'));
+            },
+            onBlurCodeview: function () {
+                if (cb)
+                    cb($('#' + id).summernote('code'));
             }
         }
     });
