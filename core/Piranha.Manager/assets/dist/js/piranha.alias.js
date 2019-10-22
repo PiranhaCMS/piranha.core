@@ -26,6 +26,13 @@
                 .catch(function (error) { console.log("error:", error ); });
         },
         save: function () {
+            // Validate form
+            var form = document.getElementById("aliasForm");
+            if (form.checkValidity() === false) {
+                form.classList.add("was-validated");
+                return;
+            }
+
             fetch(piranha.baseUrl + "manager/api/alias/save", {
                     method: "post",
                     headers: {
@@ -43,6 +50,9 @@
                 .then(function (result) {
                     if (result.status.type === "success")
                     {
+                        // Remove validation class
+                        form.classList.remove("was-validated");
+
                         // Close modal
                         $("#aliasModal").modal("hide");
 

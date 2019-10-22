@@ -25869,6 +25869,17 @@ $(document).ready(function () {
         function() {
             $(this).closest('.block').removeClass('danger');
         });
+
+    $('form.validate').submit(
+        function (e) {
+            if ($(this).get(0).checkValidity() === false) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                $(this).addClass('was-validated');
+            }
+        }
+    );
 });
 
 $(document).on('mouseenter', '.block-header .danger', function() {
