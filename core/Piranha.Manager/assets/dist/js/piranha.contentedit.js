@@ -185,12 +185,13 @@ Vue.component("post-archive", {
         "        <a v-on:click.prevent='selectCategory(category.title)' v-for='category in categories' href='#' class='dropdown-item'>{{ category.title }}</a>" +
         "      </div>" +
         "    </div>" +
-        "    <div v-if='piranha.permissions.posts.add' class='btn-group float-right'>" +
+        "    <div v-if='postTypes.length > 1 && piranha.permissions.posts.add' class='btn-group float-right'>" +
         "      <button id='addPostGroup' class='btn btn-sm btn-primary btn-labeled dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fas fa-plus'></i>{{ piranha.resources.texts.add }}</button>" +
         "      <div class='dropdown-menu dropdown-menu-right' aria-labelledby='addPostGroup'>" +
         "        <a class='dropdown-item' :href='piranha.baseUrl + type.addUrl + id + \"/\" + type.id' v-for='type in postTypes'>{{ type.title }}</a>" +
         "      </div>" +
         "    </div>" +
+        "    <a v-if='postTypes.length === 1 && piranha.permissions.posts.add' :href='piranha.baseUrl + postTypes[0].addUrl + id + \"/\" + postTypes[0].id' class='btn btn-sm btn-primary btn-labeled float-right'><i class='fas fa-plus'></i>{{ piranha.resources.texts.add }}</a>" +
         "  </div>" +
         "  <table class='table'>" +
         "    <tbody>" +
