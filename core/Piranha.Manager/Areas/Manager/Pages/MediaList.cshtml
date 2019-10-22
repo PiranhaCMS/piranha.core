@@ -1,9 +1,10 @@
-﻿@page "~/manager/media"
+﻿@page "~/manager/media/{folderId?}"
 @model MediaListViewModel
 @inject IAuthorizationService Auth
 @inject ManagerLocalizer Localizer
 @{
     ViewBag.MenuItem = "Media";
+    var folderId = @RouteData.Values["folderId"];
 }
 @section script
 {
@@ -11,7 +12,7 @@
 
     <script>
         piranha.permissions.load(function () {
-            piranha.media.load();
+            piranha.media.load("@folderId");
         });
     </script>
 }
