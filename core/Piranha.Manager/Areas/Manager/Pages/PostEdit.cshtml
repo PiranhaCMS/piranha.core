@@ -16,17 +16,19 @@
     @if (action == "edit")
     {
         <script>
-            piranha.postedit.load("@RouteData.Values["id"]");
-
-            $(".title input").focus();
+            piranha.permissions.load(function () {
+                piranha.postedit.load("@RouteData.Values["id"]");
+                $(".title input").focus();
+            });
         </script>
     }
     else if (action == "add")
     {
         <script>
-            piranha.postedit.create("@RouteData.Values["id"]", "@RouteData.Values["postType"]");
-
-            $(".title input").focus();
+            piranha.permissions.load(function () {
+                piranha.postedit.create("@RouteData.Values["id"]", "@RouteData.Values["postType"]");
+                $(".title input").focus();
+            });
         </script>
     }
 }

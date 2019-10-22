@@ -37789,6 +37789,7 @@ piranha.dropzone = new function () {
 */
 
 piranha.permissions = {
+    loaded: false,
     aliases: {
         edit: false,
         delete: false
@@ -37826,24 +37827,30 @@ piranha.permissions = {
     load: function (cb) {
         var self = this;
 
-        fetch(piranha.baseUrl + "manager/api/permissions")
-            .then(function (response) { return response.json(); })
-            .then(function (result) {
-                self.aliases = result.aliases;
-                self.media = result.media;
-                self.pages = result.pages;
-                self.posts = result.posts;
-                self.sites = result.sites;
+        if (!this.loaded) {
+            fetch(piranha.baseUrl + "manager/api/permissions")
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    self.aliases = result.aliases;
+                    self.media = result.media;
+                    self.pages = result.pages;
+                    self.posts = result.posts;
+                    self.sites = result.sites;
+                    self.loaded = true;
 
-                if (cb)
-                    cb();
-            })
-            .catch(function (error) {
-                console.log("error:", error );
+                    if (cb)
+                        cb();
+                })
+                .catch(function (error) {
+                    console.log("error:", error );
 
-                if (cb)
-                    cb();
-            });
+                    if (cb)
+                        cb();
+                });
+        } else {
+            if (cb)
+                cb();
+        }
     }
 };
 /*global
@@ -38180,19 +38187,21 @@ piranha.mediapicker = new Vue({
         }
     },
     mounted: function () {
-        if (document.getElementById("#mediapicker-upload-container")) {
-            this.dropzone = piranha.dropzone.init("#mediapicker-upload-container");
-            this.dropzone.on("complete", function (file) {
-                if (file.status === "success") {
-                    setTimeout(function () {
-                        piranha.mediapicker.dropzone.removeFile(file);
-                    }, 3000)
-                }
-            });
-            this.dropzone.on("queuecomplete", function () {
-                piranha.mediapicker.refresh();
-            });
-        }
+        piranha.permissions.load(function () {
+            if (piranha.permissions.media.add) {
+                this.dropzone = piranha.dropzone.init("#mediapicker-upload-container");
+                this.dropzone.on("complete", function (file) {
+                    if (file.status === "success") {
+                        setTimeout(function () {
+                            piranha.mediapicker.dropzone.removeFile(file);
+                        }, 3000)
+                    }
+                });
+                this.dropzone.on("queuecomplete", function () {
+                    piranha.mediapicker.refresh();
+                });
+            }
+        });
     }
 });
 
