@@ -1,0 +1,9 @@
+@inject IAuthorizationService Auth
+@inject ManagerLocalizer Localizer
+
+@if ((await Auth.AuthorizeAsync(User, Permission.MediaAddFolder)).Succeeded)
+{
+    <button class="btn btn-primary btn-labeled" data-toggle="modal" data-target="#mediaFolderModal">
+        <i class="fas fa-plus"></i>@Localizer.Media["Add folder"]
+    </button>
+}

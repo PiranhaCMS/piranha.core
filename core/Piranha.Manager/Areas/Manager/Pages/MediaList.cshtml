@@ -28,11 +28,9 @@
 
         <div v-if="!loading" class="container-fluid">
             <div class="top-nav">
-                @if ((await Auth.AuthorizeAsync(User, Permission.MediaAddFolder)).Succeeded)
+                @foreach (var action in Piranha.Manager.Actions.MediaList)
                 {
-                    <button class="btn btn-primary btn-labeled" data-toggle="modal" data-target="#mediaFolderModal">
-                        <i class="fas fa-plus"></i>@Localizer.Media["Add folder"]
-                    </button>
+                    <partial name="@action.ActionView" />
                 }
             </div>
         </div>

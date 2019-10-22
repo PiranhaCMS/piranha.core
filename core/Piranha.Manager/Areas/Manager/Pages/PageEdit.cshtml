@@ -63,7 +63,14 @@
             </ol>
         </nav>
 
-        <partial name="Partial/_PageMenu" />
+        <div class="container-fluid app" :class="{ ready: !loading }">
+            <div class="top-nav">
+                @foreach (var menuAction in Piranha.Manager.Actions.PageEdit)
+                {
+                    <partial name="@menuAction.ActionView" />
+                }
+            </div>
+        </div>
     </div>
 
     <div class="container-fluid app" :class="{ ready: !loading }">

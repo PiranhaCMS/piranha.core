@@ -27,12 +27,6 @@
 
         <div class="container-fluid">
             <div class="top-nav">
-                @if ((await Auth.AuthorizeAsync(User, Permission.AliasesEdit)).Succeeded)
-                {
-                    <button class="btn btn-primary btn-labeled" data-toggle="modal" data-target="#aliasModal">
-                        <i class="fas fa-plus"></i>@Localizer.General["Add"]
-                    </button>
-                }
                 @foreach (var action in Piranha.Manager.Actions.AliasEdit)
                 {
                     <partial name="@action.ActionView" />

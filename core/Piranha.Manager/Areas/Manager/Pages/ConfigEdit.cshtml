@@ -22,12 +22,6 @@
 
         <div class="container-fluid">
             <div class="top-nav">
-                @if ((await Auth.AuthorizeAsync(User, Permission.ConfigEdit)).Succeeded)
-                {
-                    <button v-on:click.prevent="save" class="btn btn-success btn-labeled">
-                        <i class="fas fa-check"></i>@Localizer.General["Save"]
-                    </button>
-                }
                 @foreach (var action in Piranha.Manager.Actions.ConfigEdit)
                 {
                     <partial name="@action.ActionView" />
