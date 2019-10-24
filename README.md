@@ -32,7 +32,7 @@ Piranha is currently built for `NetStandard 2.0` and uses the following awesome 
 
 #### Prerequisites
 
-* [.NET Core SDK 2.2.103](https://www.microsoft.com/net/core/) or later
+* [.NET Core SDK 2.2.402](https://www.microsoft.com/net/core/)
 * An IDE or Editor of your choice
 
 #### Get the latest source code and get going
