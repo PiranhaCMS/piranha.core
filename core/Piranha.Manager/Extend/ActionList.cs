@@ -11,13 +11,14 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Piranha.Manager
+namespace Piranha.Manager.Extend
 {
-    /// <summary>
-    /// Static class for defining the manager menu.
-    /// </summary>
-    public class ActionList : List<ActionItem>
+    public class ActionList<T> : List<T> where T : IAction
     {
+        /// <summary>
+        /// Removes the item with the given internal id.
+        /// </summary>
+        /// <param name="internalId">The internal id</param>
         public void Remove(string internalId)
         {
             var item = this.FirstOrDefault(i => i.InternalId == internalId);

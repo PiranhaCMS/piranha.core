@@ -21,7 +21,7 @@
 
         <div class="container-fluid app" :class="{ ready: !loading }">
             <div class="top-nav">
-                @foreach (var action in Piranha.Manager.Actions.ModuleList)
+                @foreach (var action in Piranha.Manager.Actions.Toolbars.ModuleList)
                 {
                     <partial name="@action.ActionView" />
                 }

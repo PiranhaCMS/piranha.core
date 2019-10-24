@@ -19,7 +19,7 @@
 }
 @section partials
 {
-    @foreach (var action in Piranha.Manager.Actions.PageList)
+    @foreach (var action in Piranha.Manager.Actions.Toolbars.PageList)
     {
         if (!string.IsNullOrWhiteSpace(action.PartialView))
         {
@@ -39,7 +39,7 @@
 
         <div class="container-fluid">
             <div class="top-nav">
-                @foreach (var action in Piranha.Manager.Actions.PageList)
+                @foreach (var action in Piranha.Manager.Actions.Toolbars.PageList)
                 {
                     <partial name="@action.ActionView" />
                 }

@@ -8,10 +8,7 @@
  *
  */
 
-using System.Reflection;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Session;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
@@ -246,5 +243,10 @@ public static class ManagerModuleExtensions
             {
                 options.SerializerSettings.TypeNameHandling = TypeNameHandling.Auto;
             });
+    }
+
+    public static Piranha.Manager.Module Manager(this Piranha.Runtime.AppModuleList modules)
+    {
+        return modules.Get<Piranha.Manager.Module>();
     }
 }

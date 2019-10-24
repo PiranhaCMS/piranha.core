@@ -33,6 +33,12 @@
                     <a class="nav-link" data-toggle="pill" href="#pills-update"><i class="far fa-edit"></i> @Localizer.General["Update"]</a>
                 </li>
                 }
+                @foreach (var action in Piranha.Manager.Actions.Modals.MediaPreview)
+                {
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#@action.Uid"><i class="@action.Css"></i> @action.Title</a>
+                </li>
+                }
             </ul>
 
             <!-- Modal Body -->
@@ -118,6 +124,12 @@
                             <ul class="media-list list-unstyled"></ul>
                         </div>
                     </div>
+                    @foreach (var action in Piranha.Manager.Actions.Modals.MediaPreview)
+                    {
+                        <div class="tab-pane fade" id="@action.Uid">
+                            <component v-bind:is="'@action.Component'" v-bind:uid="'@action.Uid'" v-bind:model="this"></component>
+                        </div>
+                    }
                 </div>
             </div>
 

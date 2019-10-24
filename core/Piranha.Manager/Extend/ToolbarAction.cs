@@ -8,11 +8,9 @@
  *
  */
 
-using System.Collections.Generic;
-
-namespace Piranha.Manager
+namespace Piranha.Manager.Extend
 {
-    public class ActionItem
+    public class ToolbarAction : IAction
     {
         /// <summary>
         /// Gets/sets the internal id of the action.

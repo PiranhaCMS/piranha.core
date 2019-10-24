@@ -47,7 +47,7 @@
 
         <div class="container-fluid app" :class="{ ready: !loading }">
             <div class="top-nav">
-                @foreach (var postAction in Piranha.Manager.Actions.PostEdit)
+                @foreach (var postAction in Piranha.Manager.Actions.Toolbars.PostEdit)
                 {
                     <partial name="@postAction.ActionView" />
                 }

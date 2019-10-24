@@ -28,7 +28,7 @@
 
         <div v-if="!loading" class="container-fluid">
             <div class="top-nav">
-                @foreach (var action in Piranha.Manager.Actions.MediaList)
+                @foreach (var action in Piranha.Manager.Actions.Toolbars.MediaList)
                 {
                     <partial name="@action.ActionView" />
                 }

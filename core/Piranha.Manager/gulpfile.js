@@ -33,7 +33,7 @@ var fonts = [
 
 var js = [
     {
-        name: "piranha-dev.js",
+        name: "piranha-deps-dev.js",
         items: [
             "node_modules/jquery/dist/jquery.slim.js",
             "node_modules/popper.js/dist/umd/popper.js",
@@ -44,24 +44,11 @@ var js = [
             "node_modules/dropzone/dist/dropzone.js",
             "node_modules/select2/dist/js/select2.js",
             "node_modules/vuejs-datepicker/dist/vuejs-datepicker.min.js",
-            "node_modules/simplemde/dist/simplemde.min.js",
-            "assets/src/js/piranha.accessibility.js",
-            "assets/src/js/piranha.dropzone.js",
-            "assets/src/js/piranha.permissions.js",
-            "assets/src/js/piranha.utils.js",
-            "assets/src/js/piranha.blockpicker.js",
-            "assets/src/js/piranha.notifications.js",
-            "assets/src/js/piranha.mediapicker.js",
-            "assets/src/js/piranha.pagepicker.js",
-            "assets/src/js/piranha.postpicker.js",
-            "assets/src/js/piranha.preview.js",
-            "assets/src/js/piranha.resources.js",
-            "assets/src/js/piranha.editor.js",
-            "assets/src/js/components/page-item.js"
+            "node_modules/simplemde/dist/simplemde.min.js"
         ]
     },
     {
-        name: "piranha.js",
+        name: "piranha-deps.js",
         items: [
             "node_modules/jquery/dist/jquery.slim.js",
             "node_modules/popper.js/dist/umd/popper.js",
@@ -72,9 +59,15 @@ var js = [
             "node_modules/dropzone/dist/dropzone.js",
             "node_modules/select2/dist/js/select2.js",
             "node_modules/vuejs-datepicker/dist/vuejs-datepicker.min.js",
-            "node_modules/simplemde/dist/simplemde.min.js",
+            "node_modules/simplemde/dist/simplemde.min.js"
+        ]
+    },
+    {
+        name: "piranha.js",
+        items: [
             "assets/src/js/piranha.accessibility.js",
             "assets/src/js/piranha.dropzone.js",
+            "assets/src/js/piranha.permissions.js",
             "assets/src/js/piranha.utils.js",
             "assets/src/js/piranha.blockpicker.js",
             "assets/src/js/piranha.notifications.js",

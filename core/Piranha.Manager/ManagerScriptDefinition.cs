@@ -1,7 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Routing.Constraints;
+﻿/*
+ * Copyright (c) 2019 @121GWJolt
+ *
+ * This software may be modified and distributed under the terms
+ * of the MIT license.  See the LICENSE file for details.
+ *
+ * https://github.com/piranhacms/piranha.core
+ *
+ */
+
+ using System;
 
 namespace Piranha.Manager
 {
@@ -31,6 +38,8 @@ namespace Piranha.Manager
         /// If true, set crossorigin to "use-credentials". Otherwise, set to "anonymous".
         /// </summary>
         public ECrossOriginPolicy CrossOriginValue { get; }
+
+        public bool RenderBeforeCoreScripts { get; set; } = false;
 
         public string GetCrossOriginValueStrValue(bool includeAttributeName = false)
         {

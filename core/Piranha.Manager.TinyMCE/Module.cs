@@ -9,10 +9,11 @@
  */
 
 using System.Reflection;
+using Piranha.Extend;
 
 namespace Piranha.Manager.TinyMCE
 {
-    public sealed class Module : Extend.IModule
+    public sealed class Module : IModule
     {
         /// <summary>
         /// Gets the Author

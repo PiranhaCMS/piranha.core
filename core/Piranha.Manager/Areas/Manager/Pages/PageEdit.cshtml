@@ -65,7 +65,7 @@
 
         <div class="container-fluid app" :class="{ ready: !loading }">
             <div class="top-nav">
-                @foreach (var menuAction in Piranha.Manager.Actions.PageEdit)
+                @foreach (var menuAction in Piranha.Manager.Actions.Toolbars.PageEdit)
                 {
                     <partial name="@menuAction.ActionView" />
                 }
