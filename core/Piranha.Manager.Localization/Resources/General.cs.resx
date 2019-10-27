@@ -94,73 +94,73 @@
     <value>Vypadá to, že tu nejsou žádné položky. Začněte kliknutím na tlačítko níže!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button to the left to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button to the left to get started!</value>
+    <value>Vypadá to, že tu nejsou žádné položky. Začněte kliknutím na tlačítko vlevo!</value>
   </data>
   <data name="Main content" xml:space="preserve">
-    <value>Main content</value>
+    <value>Hlavní obsah</value>
   </data>
   <data name="Modified" xml:space="preserve">
-    <value>Modified</value>
+    <value>Změněno</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>Název</value>
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
-    <value>Open public URL in new tab</value>
+    <value>Otevřete veřejnou adresu URL na nové kartě</value>
   </data>
   <data name="Permanent" xml:space="preserve">
-    <value>Permanent</value>
+    <value>Trvalý</value>
   </data>
   <data name="Pixels" xml:space="preserve">
-    <value>Pixels</value>
+    <value>Pixely</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Preview</value>
+    <value>Náhled</value>
   </data>
   <data name="Publish" xml:space="preserve">
-    <value>Publish</value>
+    <value>Zveřejnit</value>
   </data>
   <data name="Publish date" xml:space="preserve">
-    <value>Publish date</value>
+    <value>Datum zveřejnění</value>
   </data>
   <data name="Redirect" xml:space="preserve">
-    <value>Redirect</value>
+    <value>Přesměrovat</value>
   </data>
   <data name="Redirect Type" xml:space="preserve">
-    <value>Redirect Type</value>
+    <value>Typ přesměrování</value>
   </data>
   <data name="Revert" xml:space="preserve">
-    <value>Revert</value>
+    <value>Vrátit zpět</value>
   </data>
   <data name="Route" xml:space="preserve">
-    <value>Route</value>
+    <value>Trasa</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>Uložit</value>
   </data>
   <data name="Scheduled" xml:space="preserve">
-    <value>Scheduled</value>
+    <value>Naplánováno</value>
   </data>
   <data name="Search..." xml:space="preserve">
-    <value>Search...</value>
+    <value>Hledat...</value>
   </data>
   <data name="Select block" xml:space="preserve">
-    <value>Select block</value>
+    <value>Vyberte blok</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Nastavení</value>
   </data>
   <data name="Size" xml:space="preserve">
-    <value>Size</value>
+    <value>Velikost</value>
   </data>
   <data name="Slug" xml:space="preserve">
     <value>Slug</value>
   </data>
   <data name="System" xml:space="preserve">
-    <value>System</value>
+    <value>Systém</value>
   </data>
   <data name="Temporary" xml:space="preserve">
-    <value>Temporary</value>
+    <value>Dočasný</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Title</value>
@@ -178,15 +178,15 @@
     <value>Unpublished</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Version</value>
+    <value>Verze</value>
   </data>
   <data name="Width" xml:space="preserve">
-    <value>Width</value>
+    <value>Šířka</value>
   </data>
   <data name="username" xml:space="preserve">
-    <value>username</value>
+    <value>uživatelské jméno</value>
   </data>
   <data name="password" xml:space="preserve">
-    <value>password</value>
+    <value>heslo</value>
   </data>
 </root>
