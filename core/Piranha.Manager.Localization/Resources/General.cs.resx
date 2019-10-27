@@ -34,64 +34,64 @@
     <value>Kopírovat</value>
   </data>
   <data name="Culture" xml:space="preserve">
-    <value>Culture</value>
+    <value>Kultura</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Smazat</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Description</value>
+    <value>Popis</value>
   </data>
   <data name="Details" xml:space="preserve">
-    <value>Details</value>
+    <value>Detaily</value>
   </data>
   <data name="Dimensions" xml:space="preserve">
-    <value>Dimensions</value>
+    <value>Rozměry</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>Stáhnout</value>
   </data>
   <data name="Draft" xml:space="preserve">
-    <value>Draft</value>
+    <value>Koncept</value>
   </data>
   <data name="Drafts" xml:space="preserve">
-    <value>Drafts</value>
+    <value>Koncepty</value>
   </data>
   <data name="Filename" xml:space="preserve">
-    <value>Filename</value>
+    <value>Název souboru</value>
   </data>
   <data name="Height" xml:space="preserve">
-    <value>Height</value>
+    <value>Výška</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>Upravit</value>
   </data>
   <data name="Empty" xml:space="preserve">
-    <value>Empty</value>
+    <value>Prázdné</value>
   </data>
   <data name="General" xml:space="preserve">
-    <value>General</value>
+    <value>Obecné</value>
   </data>
   <data name="History" xml:space="preserve">
-    <value>History</value>
+    <value>Historie</value>
   </data>
   <data name="Internal id" xml:space="preserve">
-    <value>Internal id</value>
+    <value>Interní id</value>
   </data>
   <data name="Is default" xml:space="preserve">
-    <value>Is default</value>
+    <value>Je výchozí</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Přihlásit se</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+    <value>Odhlásit se</value>
   </data>
   <data name="Looks like there's no items here. Click on the button above to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button above to get started!</value>
+    <value>Vypadá to, že tu nejsou žádné položky. Začněte kliknutím na tlačítko výše!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button below to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button below to get started!</value>
+    <value>Vypadá to, že tu nejsou žádné položky. Začněte kliknutím na tlačítko níže!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button to the left to get started!" xml:space="preserve">
     <value>Looks like there's no items here. Click on the button to the left to get started!</value>
