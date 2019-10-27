@@ -25,22 +25,22 @@
     <value>Expanded levels in the sitemap</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
-    <value>Archive page size</value>
+    <value>Velikost archivu stránek</value>
   </data>
   <data name="Caching" xml:space="preserve">
-    <value>Caching</value>
+    <value>Mezipamět</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Page cache expiration (minutes)</value>
+    <value>Vypršení platnosti mezipaměti stránky (minuty)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
-    <value>Page revisions</value>
+    <value>Revize stránek</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Post cache expiration (minutes)</value>
+    <value>Vypršení platnosti mezipaměti příspěvku (minuty)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
-    <value>Post revisions</value>
+    <value>Revize příspěvků</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
     <value>Media CDN</value>
