@@ -16,13 +16,13 @@
     <value>Konfigurace</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>Hierarchical page slugs</value>
+    <value>Hierarchické URL segmenty</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>If page slugs should include the parent slug.</value>
+    <value>Pokud má URL segment obsahovat nadřazený segment.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
-    <value>Expanded levels in the sitemap</value>
+    <value>Úroveň rozbalení v mapě stránek</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
     <value>Velikost archivu stránek</value>
@@ -43,11 +43,11 @@
     <value>Revize příspěvků</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
-    <value>Media CDN</value>
+    <value>Média CDN</value>
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
-    <value>If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps.</value>
+    <value>Pokud se má brát při generování URL segmentu v potaz nadřazený segment. Toto je doporučováno pro větší mapu stránek.</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
     <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
