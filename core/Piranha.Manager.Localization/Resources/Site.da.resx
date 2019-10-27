@@ -13,16 +13,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add site" xml:space="preserve">
-    <value>Add site</value>
+    <value>Tilføj websted</value>
   </data>
   <data name="Are you really sure?" xml:space="preserve">
-    <value>Are you really sure?</value>
+    <value>Er du helt sikker?</value>
   </data>
   <data name="Edit site" xml:space="preserve">
-    <value>Edit site</value>
+    <value>Redigér webside</value>
   </data>
   <data name="Hostnames" xml:space="preserve">
-    <value>Hostnames</value>
+    <value>Værtsnavne</value>
   </data>
   <data name="If this should be the default site of the installation." xml:space="preserve">
     <value>If this should be the default site of the installation.</value>
