@@ -13,22 +13,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add page" xml:space="preserve">
-    <value>Add page</value>
+    <value>Přidat stránku</value>
   </data>
   <data name="An error occured while deleting the page" xml:space="preserve">
-    <value>An error occured while deleting the page</value>
+    <value>Došlo k chybě během odstraňování stránky</value>
   </data>
   <data name="Detach page" xml:space="preserve">
-    <value>Detach page</value>
+    <value>Odpojit stránku</value>
   </data>
   <data name="Edit original" xml:space="preserve">
-    <value>Edit original</value>
+    <value>Upravit originál</value>
   </data>
   <data name="Edit page" xml:space="preserve">
-    <value>Edit page</value>
+    <value>Upravit stránku</value>
   </data>
   <data name="Hidden" xml:space="preserve">
-    <value>Hidden</value>
+    <value>Nezobrazovat</value>
   </data>
   <data name="If the page should be hidden in the sitemap" xml:space="preserve">
     <value>If the page should be hidden in the sitemap</value>
