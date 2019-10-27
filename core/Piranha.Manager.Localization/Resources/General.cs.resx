@@ -154,7 +154,7 @@
     <value>Velikost</value>
   </data>
   <data name="Slug" xml:space="preserve">
-    <value>Slug</value>
+    <value>URL segment</value>
   </data>
   <data name="System" xml:space="preserve">
     <value>Systém</value>
