@@ -214,14 +214,16 @@ namespace Piranha.Services
                 }
             }
 
+            var type = App.MediaTypes.GetItem(content.Filename);
+
             model.Filename = content.Filename;
             model.FolderId = content.FolderId;
             model.Type = App.MediaTypes.GetMediaType(content.Filename);
-            model.ContentType = App.MediaTypes.GetContentType(content.Filename);
+            model.ContentType = type.ContentType;
             model.LastModified = DateTime.Now;
 
             // Pre-process if this is an image
-            if (_processor != null && model.Type == MediaType.Image)
+            if (_processor != null && type.AllowProcessing && model.Type == MediaType.Image)
             {
                 byte[] bytes;
 
@@ -341,6 +343,13 @@ namespace Piranha.Services
 
         public async Task<string> EnsureVersionAsync(Media media, int width, int? height = null)
         {
+            // Get the media type
+            var type = App.MediaTypes.GetItem(media.Filename);
+
+            // If this type doesn't allow processing, return the original url
+            if (!type.AllowProcessing)
+                return GetPublicUrl(media);
+
             // If the requested size is equal to the original size, return true
             if (media.Width == width && (!height.HasValue || media.Height == height.Value))
                 return GetPublicUrl(media);
