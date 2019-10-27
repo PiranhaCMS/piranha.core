@@ -28,12 +28,12 @@
     <value>Trvalý</value>
   </data>
   <data name="If the redirect should be permanent" xml:space="preserve">
-    <value>If the redirect should be permanent</value>
+    <value>Pokud by mělo být přesměrování trvalé</value>
   </data>
   <data name="The alias was successfully added to the list" xml:space="preserve">
-    <value>The alias was successfully added to the list</value>
+    <value>Alias byl úspěšně přidán do seznamu</value>
   </data>
   <data name="The alias was successfully deleted" xml:space="preserve">
-    <value>The alias was successfully deleted</value>
+    <value>Alias byl úspěšně odstraněn</value>
   </data>
 </root>
