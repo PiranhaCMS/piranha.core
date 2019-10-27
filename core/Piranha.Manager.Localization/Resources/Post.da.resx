@@ -13,22 +13,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add or select existing category" xml:space="preserve">
-    <value>Add or select existing category</value>
+    <value>Tilføj eller vælg en eksisterende kategori</value>
   </data>
   <data name="Add or select existing tags (optional)" xml:space="preserve">
-    <value>Add or select existing tags (optional)</value>
+    <value>Tilføj eller vælg eksisterende tags (valgfrit)</value>
   </data>
   <data name="All categories" xml:space="preserve">
-    <value>All categories</value>
+    <value>Alle kategorier</value>
   </data>
   <data name="Categories" xml:space="preserve">
-    <value>Categories</value>
+    <value>Kategorier</value>
   </data>
   <data name="Category" xml:space="preserve">
-    <value>Category</value>
+    <value>Kategori</value>
   </data>
   <data name="Edit post" xml:space="preserve">
-	  <value>Edit post</value>
+	  <value>Rediger opslag</value>
 	</data>
   <data name="Tag" xml:space="preserve">
     <value>Tag</value>
@@ -40,6 +40,6 @@
     <value>Welcome to your new post. Click on the button above to add your first block of content!</value>
   </data>
   <data name="Your post title" xml:space="preserve">
-    <value>Your post title</value>
+    <value>Dit opslags titel</value>
   </data>
 </root>
