@@ -37,9 +37,9 @@
     <value>Otevřete soubor v nové kartě</value>
   </data>
   <data name="Select media" xml:space="preserve">
-    <value>Select media</value>
+    <value>Vyberte soubor</value>
   </data>
   <data name="Your browser does not support the video tag." xml:space="preserve">
-    <value>Your browser does not support the video tag.</value>
+    <value>Váš prohlížeč nepodporuje značku videa.</value>
   </data>
 </root>
