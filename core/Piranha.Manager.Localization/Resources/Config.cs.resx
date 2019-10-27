@@ -13,61 +13,61 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Config" xml:space="preserve">
-    <value>Config</value>
+    <value>Konfigurace</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>Hierarchical page slugs</value>
+    <value>Hierarchické URL segmenty</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>If page slugs should include the parent slug.</value>
+    <value>Pokud má URL segment obsahovat nadřazený segment.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
-    <value>Expanded levels in the sitemap</value>
+    <value>Úroveň rozbalení v mapě stránek</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
-    <value>Archive page size</value>
+    <value>Velikost archivu stránek</value>
   </data>
   <data name="Caching" xml:space="preserve">
-    <value>Caching</value>
+    <value>Mezipamět</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Page cache expiration (minutes)</value>
+    <value>Vypršení platnosti mezipaměti stránky (minuty)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
-    <value>Page revisions</value>
+    <value>Revize stránek</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Post cache expiration (minutes)</value>
+    <value>Vypršení platnosti mezipaměti příspěvku (minuty)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
-    <value>Post revisions</value>
+    <value>Revize příspěvků</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
-    <value>Media CDN</value>
+    <value>Média CDN</value>
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
-    <value>If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps.</value>
+    <value>Pokud se má brát při generování URL segmentu v potaz nadřazený segment. Toto je doporučováno pro větší mapu stránek.</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
-    <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
+    <value>Výchozí počet úrovní, který půjde rozbalit v mapě stránek. Toto je užitečné u menší mapy stránek.</value>
   </data>
   <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
-    <value>The default page size for archive pages. Please note that this this can be overridden for specific archives.</value>
+    <value>Výchozí velikost stránky pro archiv stránek. Vezměte prosím na vědomí, že toto lze přepsat pro konkrétní archivy.</value>
   </data>
   <data name="The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation." xml:space="preserve">
-    <value>The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation.</value>
+    <value>Maximální počet revizí, které by měly být uloženy pro každou stránku. Hodnota 0 znamená bez omezení.</value>
   </data>
   <data name="The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation." xml:space="preserve">
-    <value>The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation.</value>
+    <value>Maximální počet revizí, které by měly být uloženy pro každý příspěvek. Hodnota 0 znamená bez omezení.</value>
   </data>
   <data name="The time in minutes that web browsers can use pages before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use pages before asking the server for new updates.</value>
+    <value>Čas v minutách, kdy webové prohlížeče mohou používat stránky, než požádají server o nové aktualizace.</value>
   </data>
   <data name="The time in minutes that web browsers can use posts before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use posts before asking the server for new updates.</value>
+    <value>Čas v minutách, kdy webové prohlížeče mohou používat příspěvky, než požádají server o nové aktualizace.</value>
   </data>
   <data name="The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL." xml:space="preserve">
-    <value>The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL.</value>
+    <value>Úplná adresa URL (včetně názvu složky) na CDN použitá k poskytování nahraných médií. Chcete-li použít výchozí adresu URL úložiště, ponechte prázdné.</value>
   </data>
 </root>
