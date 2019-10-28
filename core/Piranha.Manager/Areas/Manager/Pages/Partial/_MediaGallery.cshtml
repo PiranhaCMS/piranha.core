@@ -17,7 +17,7 @@
                 </a>
 
                 <a href="#" class="thumbnail droppable" v-for="folder in folders" v-on:click.prevent="load(folder.id)" v-on:dragover="dragover" v-on:dragleave="dragleave" v-on:drop="drop($event, folder.id)">
-                    <button v-if="piranha.permissions.media.deleteFolder && folder.itemCount === 0" class="btn btn-danger media-delete" v-on:click.stop="removeFolder(folder.id)"><i class="fas fa-trash"></i></button>
+                    <button v-if="piranha.permissions.media.deleteFolder && folder.itemCount === 0" class="btn btn-danger media-delete" v-on:click.stop.prevent="removeFolder(folder.id)"><i class="fas fa-trash"></i></button>
                     <img src="~/manager/assets/img/media-placeholder.jpg">
                     <div class="thumbnail-icon">
                         <i class="fas fa-folder fa-3x"></i>
@@ -27,9 +27,10 @@
 
                 <template v-for="item in items">
                     <a href="#" class="thumbnail" v-on:click.prevent="piranha.preview.openItem(item)" draggable="true" v-on:dragstart="drag($event, item)">
-                        <button v-if="piranha.permissions.media.delete" class="btn btn-danger media-delete" v-on:click.stop="remove(item.id)"><i class="fas fa-trash"></i></button>
+                        <button v-if="piranha.permissions.media.delete" class="btn btn-danger media-delete" v-on:click.stop.prevent="remove(item.id)"><i class="fas fa-trash"></i></button>
 
                         <template v-if="item.type === 'Image'">
+                            <img src="~/manager/assets/img/media-placeholder.jpg">
                             <img class="thumbnail-image" :src="getThumbnailUrl(item)">
                         </template>
 
