@@ -54,11 +54,11 @@ namespace Piranha.Services
             var guids = ids as Guid[] ?? ids.ToArray();
             var partial = (_cache != null ? guids.Select(c => _cache.Get<Media>(c.ToString())) : Enumerable.Empty<Media>()).Where(c => c != null).ToArray();
             var missingIds = guids.Except(partial.Select(c => c.Id)).ToArray();
-            var returns = partial.Concat((await _repo.GetById(missingIds)).OrderBy(c => c.Filename).Select(c =>
+            var returns = partial.Concat((await _repo.GetById(missingIds)).Select(c =>
             {
                 OnLoad(c);
                 return c;
-            })).ToArray();
+            })).OrderBy(m => m.Filename).ToArray();
             return returns;
         }
 
