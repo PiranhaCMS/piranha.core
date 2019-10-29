@@ -13,7 +13,7 @@ using System;
 namespace Piranha.Data
 {
     [Serializable]
-    public sealed class Alias : Models.Alias<Guid>
+    public sealed class Alias : Models.Alias
     {
         /// <summary>
         /// Gets/sets the site this alias is for.

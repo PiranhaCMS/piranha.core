@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 namespace Piranha.Data
 {
     [Serializable]
-    public sealed class MediaVersion : Models.MediaVersion<Guid>
+    public sealed class MediaVersion : Models.MediaVersion
     {
         /// <summary>
         /// Gets/sets the id of the media this is

@@ -14,20 +14,17 @@ using System.ComponentModel.DataAnnotations;
 namespace Piranha.Models
 {
     [Serializable]
-    public sealed class Alias : Alias<Guid> { }
-
-    [Serializable]
-    public abstract class Alias<TKey>
+    public class Alias
     {
         /// <summary>
         /// Gets/sets the unique id.
         /// </summary>
-        public TKey Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets/sets the id of the site this alias is for.
         /// </summary>
-        public TKey SiteId { get; set; }
+        public Guid SiteId { get; set; }
 
         /// <summary>
         /// Gets/sets the alias url.

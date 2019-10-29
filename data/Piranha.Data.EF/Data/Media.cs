@@ -15,13 +15,8 @@ using System.Linq;
 namespace Piranha.Data
 {
     [Serializable]
-    public sealed class Media : Models.Media<Guid>
+    public sealed class Media : Models.MediaBase
     {
-        /// <summary>
-        /// Gets/sets the optional folder id.
-        /// </summary>
-        public Guid? FolderId { get; set; }
-
         /// <summary>
         /// Gets/sets the optional folder.
         /// </summary>

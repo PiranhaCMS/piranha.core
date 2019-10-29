@@ -16,5 +16,5 @@ namespace Piranha.Data
     /// String parameter.
     /// </summary>
     [Serializable]
-    public sealed class Param : Models.Param<Guid> { }
+    public sealed class Param : Models.Param { }
 }
