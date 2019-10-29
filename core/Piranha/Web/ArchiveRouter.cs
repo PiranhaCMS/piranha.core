@@ -42,7 +42,8 @@ namespace Piranha.Web
 
                         if (blog != null)
                         {
-                            if (blog.ContentType != "Blog")
+                            var type = App.PageTypes.GetById(blog.TypeId);
+                            if (type == null || !type.IsArchive)
                             {
                                 return null;
                             }

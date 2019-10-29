@@ -39,11 +39,6 @@ namespace Piranha.Models
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets/sets the content type id.
-        /// </summary>
-        public string ContentTypeId { get; set; }
-
-        /// <summary>
         /// Gets/sets the available regions.
         /// </summary>
         public IList<RegionType> Regions { get; set; } = new List<RegionType>();

@@ -40,7 +40,8 @@ namespace Piranha.Web
 
                     if (page != null)
                     {
-                        if (page.ContentType != "Page")
+                        var type = App.PageTypes.GetById(page.TypeId);
+                        if (type == null || type.IsArchive)
                         {
                             return null;
                         }

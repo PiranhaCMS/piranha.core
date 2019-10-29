@@ -115,8 +115,8 @@ namespace Piranha.AttributeBuilder
                         Id = attr.Id,
                         CLRType = type.GetTypeInfo().AssemblyQualifiedName,
                         Title = attr.Title,
-                        ContentTypeId = App.ContentTypes.GetId(type),
-                        UseBlocks = attr.UseBlocks
+                        UseBlocks = attr.UseBlocks,
+                        IsArchive = typeof(IArchivePage).IsAssignableFrom(type)
                     };
 
                     // Get all page routes
