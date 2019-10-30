@@ -9,7 +9,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -126,6 +125,7 @@ namespace Piranha.Manager.Controllers
         }
 
         [Route("folder/delete/{id:Guid}")]
+        [HttpGet]
         [Authorize(Policy = Permission.MediaDeleteFolder)]
         public async Task<IActionResult> DeleteFolder(Guid id)
         {
@@ -159,8 +159,8 @@ namespace Piranha.Manager.Controllers
         /// Adds a new media upload.
         /// </summary>
         /// <param name="model">The upload model</param>
-        [HttpPost]
         [Route("upload")]
+        [HttpPost]
         [Consumes("multipart/form-data")]
         [Authorize(Policy = Permission.MediaAdd)]
         public async Task<IActionResult> Upload([FromForm] MediaUploadModel model)
@@ -211,6 +211,7 @@ namespace Piranha.Manager.Controllers
         }
 
         [Route("move/{mediaId}/{folderId?}")]
+        [HttpGet]
         [Authorize(Policy = Permission.MediaEdit)]
         public async Task<IActionResult> Move(Guid mediaId, Guid? folderId)
         {
@@ -233,7 +234,7 @@ namespace Piranha.Manager.Controllers
                     Type = StatusMessage.Error,
                     Body = "Media was not found."
                 });
-            }            
+            }
             catch (Exception e)
             {
                 return BadRequest(new StatusMessage
@@ -245,6 +246,7 @@ namespace Piranha.Manager.Controllers
         }
 
         [Route("delete/{id:Guid}")]
+        [HttpGet]
         [Authorize(Policy = Permission.MediaDelete)]
         public async Task<IActionResult> Delete(Guid id)
         {
