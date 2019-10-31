@@ -90,7 +90,7 @@ namespace Piranha.Tests
                Value = new DateTime(2001, 1, 5, 16, 0, 0)
             });
 
-            Assert.Equal("2001-01-05 00:00:00", str);
+            Assert.Equal("2001-01-05", str);
         }
 
         [Fact]
