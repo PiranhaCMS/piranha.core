@@ -22,7 +22,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="blogId">The unique id</param>
         /// <returns>The posts</returns>
-        Task<IEnumerable<Guid>> GetAll(Guid blogId);
+        Task<IEnumerable<Guid>> GetAll(Guid blogId, int? index = null, int? pageSize = null);
 
         /// <summary>
         /// Gets the available posts for the specified site.
@@ -77,6 +77,13 @@ namespace Piranha.Repositories
         /// <param name="id">The unique id</param>
         /// <returns>The draft, or null if no draft exists</returns>
         Task<T> GetDraftById<T>(Guid id) where T : PostBase;
+
+        /// <summary>
+        /// Gets the number of available posts in the specified archive.
+        /// </summary>
+        /// <param name="archiveId">The archive id</param>
+        /// <returns>The number of posts</returns>
+        Task<int> GetCount(Guid archiveId);
 
         /// <summary>
         /// Gets the category with the id.

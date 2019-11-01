@@ -46,12 +46,12 @@ namespace Piranha.Manager.Controllers
         /// Gets the list model.
         /// </summary>
         /// <returns>The list model</returns>
-        [Route("list/{id}")]
+        [Route("list/{id}/{index?}")]
         [HttpGet]
         [Authorize(Policy = Permission.Posts)]
-        public async Task<PostListModel> List(Guid id)
+        public async Task<PostListModel> List(Guid id, int index = 0)
         {
-            return await _service.GetList(id);
+            return await _service.GetList(id, index);
         }
 
         /// <summary>

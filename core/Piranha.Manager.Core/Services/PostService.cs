@@ -113,10 +113,16 @@ namespace Piranha.Manager.Services
             return model;
         }
 
-        public async Task<PostListModel> GetList(Guid archiveId)
+        public async Task<PostListModel> GetList(Guid archiveId, int index = 0)
         {
             var page = await _api.Pages.GetByIdAsync<PageInfo>(archiveId);
             var pageType = App.PageTypes.GetById(page.TypeId);
+            var pageSize = 0;
+
+            using (var config = new Config(_api))
+            {
+                pageSize = config.ArchivePageSize;
+            }
 
             var model = new PostListModel
             {
@@ -125,8 +131,12 @@ namespace Piranha.Manager.Services
                     Id = t.Id,
                     Title = t.Title,
                     AddUrl = "manager/post/add/"
-                }).ToList()
+                }).ToList(),
+                TotalPosts = await _api.Posts.GetCountAsync(archiveId)
             };
+
+            model.TotalPages = Convert.ToInt32(Math.Ceiling(model.TotalPosts / Convert.ToDouble(pageSize)));
+            model.Index = index;
 
             // We have specified the post types that should be available
             // in this archive. Filter them accordingly
@@ -141,7 +151,7 @@ namespace Piranha.Manager.Services
             var drafts = await _api.Posts.GetAllDraftsAsync(archiveId);
 
             // Get posts
-            model.Posts = (await _api.Posts.GetAllAsync<PostInfo>(archiveId))
+            model.Posts = (await _api.Posts.GetAllAsync<PostInfo>(archiveId, index, pageSize))
                 .Select(p => new PostListModel.PostItem
                 {
                     Id = p.Id.ToString(),
@@ -245,7 +255,7 @@ namespace Piranha.Manager.Services
                 post.Published = !string.IsNullOrEmpty(model.Published) ? DateTime.Parse(model.Published) : (DateTime?)null;
                 post.RedirectUrl = model.RedirectUrl;
                 post.RedirectType = (RedirectType)Enum.Parse(typeof(RedirectType), model.RedirectType);
-                
+
                 if (postType.Routes.Count > 1)
                 {
                     post.Route = postType.Routes.FirstOrDefault(r => r.Route == model.SelectedRoute?.Route)

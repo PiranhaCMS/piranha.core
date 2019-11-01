@@ -40,14 +40,26 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="blogId">The blog id</param>
         /// <returns>The posts</returns>
-        public async Task<IEnumerable<Guid>> GetAll(Guid blogId)
+        public async Task<IEnumerable<Guid>> GetAll(Guid blogId, int? index = null, int? pageSize = null)
         {
-            return await _db.Posts
+            // Prepare base query
+            IQueryable<Data.Post> query = _db.Posts
                 .AsNoTracking()
                 .Where(p => p.BlogId == blogId)
                 .OrderByDescending(p => p.Published)
                 .ThenByDescending(p => p.LastModified)
-                .ThenBy(p => p.Title)
+                .ThenBy(p => p.Title);
+
+            // Add paging if requested
+            if (index.HasValue && pageSize.HasValue)
+            {
+                query = query
+                    .Skip(index.Value * pageSize.Value)
+                    .Take(pageSize.Value);
+            }
+
+            // Execute query
+            return await query
                 .Select(p => p.Id)
                 .ToListAsync()
                 .ConfigureAwait(false);
@@ -199,6 +211,18 @@ namespace Piranha.Repositories
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Gets the number of available posts in the specified archive.
+        /// </summary>
+        /// <param name="archiveId">The archive id</param>
+        /// <returns>The number of posts</returns>
+        public Task<int> GetCount(Guid archiveId)
+        {
+            return _db.Posts
+                .Where(p => p.BlogId == archiveId)
+                .CountAsync();
         }
 
         /// <summary>

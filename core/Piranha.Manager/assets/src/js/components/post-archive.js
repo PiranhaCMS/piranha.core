@@ -5,20 +5,30 @@ Vue.component("post-archive", {
             items: [],
             categories: [],
             postTypes: [],
+            totalPosts: 0,
+            totalPages: 0,
+            index: 0,
             status: "all",
             category: piranha.resources.texts.allCategories
         }
     },
     methods: {
-        load: function () {
+        load: function (index) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/post/list/" + self.id)
+            if (!index) {
+                index = 0;
+            }
+
+            fetch(piranha.baseUrl + "manager/api/post/list/" + self.id + "/" + index)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.items = result.posts;
                     self.categories = result.categories;
                     self.postTypes = result.postTypes;
+                    self.totalPosts = result.totalPosts;
+                    self.totalPages = result.totalPages;
+                    self.index = result.index;
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },
@@ -33,6 +43,32 @@ Vue.component("post-archive", {
                     self.load();
                 })
                 .catch(function (error) { console.log("error:", error ); });
+        },
+        first: function () {
+            if (this.hasPrev()) {
+                this.load(0);
+            }
+        },
+        prev: function () {
+            if (this.hasPrev()) {
+                this.load(this.index - 1);
+            }
+        },
+        next: function () {
+            if (this.hasNext()) {
+                this.load(this.index + 1);
+            }
+        },
+        last: function () {
+            if (this.hasNext()) {
+                this.load(this.totalPages - 1);
+            }
+        },
+        hasPrev: function () {
+            return this.index > 0;
+        },
+        hasNext: function () {
+            return this.index < (this.totalPages - 1);
         },
         isSelected: function (item) {
             // Check category
@@ -116,5 +152,14 @@ Vue.component("post-archive", {
         "      </tr>" +
         "    </tbody>" +
         "  </table>" +
+        "  <nav v-if='totalPages > 1'>" +
+        "    <ul class='pagination justify-content-center'>" +
+        "      <li class='page-item' :class='{ disabled: !hasPrev() }'><button v-on:click.prevent='first()' :disabled='!hasPrev()' class='page-link' href='#'><i class='fas fa-angle-double-left'></i></i></button></li>" +
+        "      <li class='page-item' :class='{ disabled: !hasPrev() }'><button v-on:click.prevent='prev()' :disabled='!hasPrev()' class='page-link' href='#'><i class='fas fa-chevron-left'></i></button></li>" +
+        "      <li class='page-item disabled'><span class='page-link'>{{ index + 1}} / {{ totalPages }}</span></li>" +
+        "      <li class='page-item' :class='{ disabled: !hasNext() }'><button v-on:click.prevent='next()' :disabled='!hasNext()' class='page-link' href='#'><i class='fas fa-chevron-right'></i></button></li>" +
+        "      <li class='page-item' :class='{ disabled: !hasNext() }'><button v-on:click.prevent='last()' :disabled='!hasNext()' class='page-link' href='#'><i class='fas fa-angle-double-right'></i></button></li>" +
+        "    </ul>" +
+        "  </nav>" +
         "</div>"
 });

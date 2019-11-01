@@ -95,9 +95,9 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="blogId">The unique blog id</param>
         /// <returns>The posts</returns>
-        public Task<IEnumerable<DynamicPost>> GetAllAsync(Guid blogId)
+        public Task<IEnumerable<DynamicPost>> GetAllAsync(Guid blogId, int? index = null, int? pageSize = null)
         {
-            return GetAllAsync<DynamicPost>(blogId);
+            return GetAllAsync<DynamicPost>(blogId, index, pageSize);
         }
 
         /// <summary>
@@ -105,10 +105,19 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="blogId">The unique id</param>
         /// <returns>The posts</returns>
-        public async Task<IEnumerable<T>> GetAllAsync<T>(Guid blogId) where T : PostBase
+        public async Task<IEnumerable<T>> GetAllAsync<T>(Guid blogId, int? index = null, int? pageSize = null) where T : PostBase
         {
+            if (index.HasValue && !pageSize.HasValue)
+            {
+                // No page size provided, use default archive size
+                using (var config = new Config(_paramService))
+                {
+                    pageSize = config.ArchivePageSize;
+                }
+            }
+
             var models = new List<T>();
-            var posts = await _repo.GetAll(blogId).ConfigureAwait(false);
+            var posts = await _repo.GetAll(blogId, index, pageSize).ConfigureAwait(false);
             var pages = new List<PageInfo>();
 
             foreach (var postId in posts)
@@ -215,6 +224,16 @@ namespace Piranha.Services
         public Task<IEnumerable<Guid>> GetAllDraftsAsync(Guid blogId)
         {
             return _repo.GetAllDrafts(blogId);
+        }
+
+        /// <summary>
+        /// Gets the number of available posts in the specified archive.
+        /// </summary>
+        /// <param name="archiveId">The archive id</param>
+        /// <returns>The number of posts</returns>
+        public Task<int> GetCountAsync(Guid archiveId)
+        {
+            return _repo.GetCount(archiveId);
         }
 
         /// <summary>
