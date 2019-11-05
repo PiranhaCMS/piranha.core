@@ -115,6 +115,7 @@
                         <div id="media-update-container" class="dropzone-container">
                             <form action="@Url.Action("Upload", "MediaApi")" class="dropzone needsclick dz-clickable" enctype="multipart/form-data">
                                 <input type="hidden" name="Model.Id" v-model="media.id" />
+                                <input type="hidden" name="Model.ParentId" v-model="media.folderId" />
                                 <div class="dz-message needsclick text-center">
                                     <span class="fas fa-cloud-upload-alt"></span>
                                     @Localizer.Media["Drop files here or click to upload."]
