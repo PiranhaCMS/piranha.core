@@ -23,70 +23,75 @@
 
             <!-- Body -->
             <div class="modal-body bg-light">
-                <!-- Settings -->
-                <div v-if="selectedRegion.uid === 'uid-settings'">
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label>@Localizer.General["Title"]</label>
-                                <input id="sitetitle" v-model="title" type="text" class="form-control form-control autofocus" placeholder="@Localizer.Site["Your site title"]">
+                <form id="siteForm" action="post" v-on:submit.prevent="save()" novalidate>
+                    <!-- Settings -->
+                    <div v-if="selectedRegion.uid === 'uid-settings'">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>@Localizer.General["Title"]</label>
+                                    <input id="sitetitle" v-model="title" type="text" class="form-control form-control autofocus" placeholder="@Localizer.Site["Your site title"]" required>
+                                    <div class="invalid-feedback">
+                                        @Localizer.General["Title is mandatory."]
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label>@Localizer.General["Internal id"]</label>
-                                <input v-model="internalId" type="text" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label>@Localizer.Site["Hostnames"]</label>
-                                <input v-model="hostnames" type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label>@Localizer.General["Culture"]</label>
-                                <input v-model="culture" type="text" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label>@Localizer.General["Description"]</label>
-                                <textarea v-model="description" class="form-control"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label>@Localizer.General["Is default"]</label>
-                                <div class="form-check">
-                                    <input v-model="isDefault" type="checkbox" class="form-check-input">
-                                    <label class="form-check-label" for="exampleCheck1">@Localizer.Site["If this should be the default site of the installation."]</label>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>@Localizer.General["Internal id"]</label>
+                                    <input v-model="internalId" type="text" class="form-control">
                                 </div>
                             </div>
                         </div>
-                        <div v-if="siteTypes.length > 0" class="col">
-                            <div class="form-group">
-                                <label>@Localizer.General["Content type"]</label>
-                                <select v-model="typeId" class="form-control">
-                                    <option></option>
-                                    <option :value="siteType.id" v-for="siteType in siteTypes">{{ siteType.title }}</option>
-                                </select>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>@Localizer.Site["Hostnames"]</label>
+                                    <input v-model="hostnames" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>@Localizer.General["Culture"]</label>
+                                    <input v-model="culture" type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>@Localizer.General["Description"]</label>
+                                    <textarea v-model="description" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>@Localizer.General["Is default"]</label>
+                                    <div class="form-check">
+                                        <input v-model="isDefault" type="checkbox" class="form-check-input">
+                                        <label class="form-check-label" for="exampleCheck1">@Localizer.Site["If this should be the default site of the installation."]</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="siteTypes.length > 0" class="col">
+                                <div class="form-group">
+                                    <label>@Localizer.General["Content type"]</label>
+                                    <select v-model="typeId" class="form-control">
+                                        <option></option>
+                                        <option :value="siteType.id" v-for="siteType in siteTypes">{{ siteType.title }}</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Regions -->
-                <div class="region" v-for="(region) in regions" v-if="selectedRegion.uid === region.meta.uid">
-                    <region v-bind:content="'site'" v-bind:type="typeId" v-bind:model="region"></region>
-                </div>
+                    <!-- Regions -->
+                    <div class="region" v-for="(region) in regions" v-if="selectedRegion.uid === region.meta.uid">
+                        <region v-bind:content="'site'" v-bind:type="typeId" v-bind:model="region"></region>
+                    </div>
+                </form>                
             </div>
 
             <!-- Footer -->
@@ -94,7 +99,7 @@
                 <button v-if="piranha.permissions.sites.delete && !isConfirm && !isNew " v-on:click.prevent="confirm" :disabled="isConfirm" class="btn btn-labeled btn-danger">
                     <i class="fas fa-trash"></i>@Localizer.General["Delete"]
                 </button>
-                <button v-if="piranha.permissions.sites.save && !isConfirm" v-on:click.prevent="save" class="btn btn-labeled btn-success">
+                <button v-if="piranha.permissions.sites.save && !isConfirm" form="siteForm" class="btn btn-labeled btn-success">
                     <i class="fas fa-check"></i>@Localizer.General["Save"]
                 </button>
                 <div v-if="isConfirm" class="alert alert-danger w-100" role="alert">
