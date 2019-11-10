@@ -169,7 +169,7 @@
     }
 
     &:hover, &:focus-within {
-        .has-media-picker {
+        >.has-media-picker {
             .media-picker {
                 opacity: 1;
 
@@ -183,7 +183,7 @@
     &:hover, &:focus-within {
         border-color: $gray-400;
 
-        .block-header, .custom-actions {
+        >.block-header, .custom-actions {
             opacity: 1;
         }
     }

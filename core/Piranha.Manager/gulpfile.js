@@ -111,6 +111,7 @@ var js = [
             "assets/src/js/components/post-archive.js",
             "assets/src/js/components/block-group.js",
             "assets/src/js/components/block-group-horizontal.js",
+            "assets/src/js/components/block-group-vertical.js",
 
             "assets/src/js/components/blocks/html-block.js",
             "assets/src/js/components/blocks/html-column-block.js",
