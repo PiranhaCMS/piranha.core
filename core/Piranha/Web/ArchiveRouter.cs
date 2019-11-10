@@ -10,7 +10,6 @@
 
 using System;
 using System.Threading.Tasks;
-using Piranha.Services;
 
 namespace Piranha.Web
 {
