@@ -42,10 +42,12 @@
 
 .block:not(.block-group-horizontal):not(.block-group) {
     &:hover, &:focus-within {
-        .note-toolbar {
-            &.panel-heading {
-                top: -3.1rem !important;
-                display: block;
+        >.block-body {
+            .note-toolbar {
+                &.panel-heading {
+                    top: -3.1rem !important;
+                    display: block;
+                }
             }
         }
     }
@@ -63,13 +65,13 @@
 }
 
 .CodeMirror {
-    background: #f4f4f4 !important;
+    background: #f2f2f2 !important;
     border: 0;
     font-size: .9rem;
     padding: .5rem 1.1rem .5rem .25rem;
 
     .CodeMirror-gutters {
-        background: #f4f4f4;
+        background: #f2f2f2;
         border-right-color: #fff;
     }
 }
