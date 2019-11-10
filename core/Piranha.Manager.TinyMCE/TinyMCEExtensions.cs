@@ -45,7 +45,7 @@ public static class TinyMCEExtensions
         //
         return builder.UseStaticFiles(new StaticFileOptions
         {
-            FileProvider = new EmbeddedFileProvider(typeof(TinyMCEExtensions).Assembly, "Piranha.Manager.TinyMce.assets"),
+            FileProvider = new EmbeddedFileProvider(typeof(TinyMCEExtensions).Assembly, "Piranha.Manager.TinyMCE.assets"),
             RequestPath = "/manager/tiny"
         });
     }
