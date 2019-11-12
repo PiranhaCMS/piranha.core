@@ -59,7 +59,7 @@ Vue.component("block-group-horizontal", {
         "      <i class='fas fa-list'></i>" +
         "    </button>" +
         "  </div>" +
-        "  <div v-if='model.meta.showHeader' class='block-group-header'>" +
+        "  <div v-if='model.meta.showHeader && model.fields.length > 0' class='block-group-header'>" +
         "    <div class='row'>" +
         "      <div class='form-group' :class='{ \"col-sm-6\": field.meta.isHalfWidth, \"col-sm-12\": !field.meta.isHalfWidth }' v-for='field in model.fields'>" +
         "        <label>{{ field.meta.name }}</label>" +
