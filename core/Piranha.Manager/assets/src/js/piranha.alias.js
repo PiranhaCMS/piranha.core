@@ -73,15 +73,26 @@
                 });
         },
         remove: function (id) {
-            fetch(piranha.baseUrl + "manager/api/alias/delete/" + id)
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    piranha.alias.items = result.items;
+            var self = this;
 
-                    // Push status to notification hub
-                    piranha.notifications.push(result.status);
-                })
-                .catch(function (error) { console.log("error:", error ); });
+            piranha.alert.open({
+                title: piranha.resources.texts.delete,
+                body: piranha.resources.texts.deleteAliasConfirm,
+                confirmCss: "btn-danger",
+                confirmIcon: "fas fa-trash",
+                confirmText: piranha.resources.texts.delete,
+                onConfirm: function () {
+                    fetch(piranha.baseUrl + "manager/api/alias/delete/" + id)
+                    .then(function (response) { return response.json(); })
+                    .then(function (result) {
+                        self.items = result.items;
+
+                        // Push status to notification hub
+                        piranha.notifications.push(result.status);
+                    })
+                    .catch(function (error) { console.log("error:", error ); });
+                }
+            });
         }
     },
     updated: function () {

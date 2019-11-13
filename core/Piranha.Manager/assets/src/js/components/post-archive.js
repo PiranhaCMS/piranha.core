@@ -35,14 +35,23 @@ Vue.component("post-archive", {
         remove: function (postId) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/post/delete/" + postId)
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    piranha.notifications.push(result);
+            piranha.alert.open({
+                title: piranha.resources.texts.delete,
+                body: piranha.resources.texts.deletePostConfirm,
+                confirmCss: "btn-danger",
+                confirmIcon: "fas fa-trash",
+                confirmText: piranha.resources.texts.delete,
+                onConfirm: function () {
+                    fetch(piranha.baseUrl + "manager/api/post/delete/" + postId)
+                    .then(function (response) { return response.json(); })
+                    .then(function (result) {
+                        piranha.notifications.push(result);
 
-                    self.load();
-                })
-                .catch(function (error) { console.log("error:", error ); });
+                        self.load();
+                    })
+                    .catch(function (error) { console.log("error:", error ); });
+                }
+            });
         },
         first: function () {
             if (this.hasPrev()) {

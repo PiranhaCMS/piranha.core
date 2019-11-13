@@ -66,6 +66,7 @@ var js = [
         name: "piranha.js",
         items: [
             "assets/src/js/piranha.accessibility.js",
+            "assets/src/js/piranha.alert.js",
             "assets/src/js/piranha.dropzone.js",
             "assets/src/js/piranha.permissions.js",
             "assets/src/js/piranha.utils.js",
