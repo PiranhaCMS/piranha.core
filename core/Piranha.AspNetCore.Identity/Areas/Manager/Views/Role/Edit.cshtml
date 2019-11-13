@@ -7,7 +7,7 @@
     ViewBag.MenuItem = "Roles";
 }
 
-@using (var form = Html.BeginForm("Save", "Role", FormMethod.Post, new {@class = "form", role = "form"}))
+@using (var form = Html.BeginForm("Save", "Role", FormMethod.Post, new {@class = "form validate", role = "form", novalidate = ""}))
 {
     @Html.HiddenFor(m => m.Role.Id)
 
@@ -45,13 +45,13 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>@Localizer.General["Name"]</label>
-                            @Html.TextBoxFor(m => m.Role.Name, new {@class = "form-control small", maxlength = 128})
+                            @Html.TextBoxFor(m => m.Role.Name, new { @class = "form-control small", maxlength = 128, required = ""})
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Normalized name</label>
-                            @Html.TextBoxFor(m => m.Role.NormalizedName, new {@class = "form-control small", maxlength = 128})
+                            @Html.TextBoxFor(m => m.Role.NormalizedName, new { @class = "form-control small", maxlength = 128 })
                         </div>
                     </div>
                 </div>
