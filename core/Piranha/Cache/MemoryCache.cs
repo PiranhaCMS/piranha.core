@@ -55,13 +55,15 @@ namespace Piranha.Cache
         /// <returns>The cached model, null it wasn't found</returns>
         public T Get<T>(string key)
         {
-            var obj = _cache.Get<T>(key);
-
-            if (!_clone)
+            if (_cache.TryGetValue<T>(key, out var obj))
             {
-                return obj;
+                if (!_clone)
+                {
+                    return obj;
+                }
+                return Utils.DeepClone<T>(obj);
             }
-            return Utils.DeepClone<T>(obj);
+            return default(T);
         }
 
         /// <summary>
