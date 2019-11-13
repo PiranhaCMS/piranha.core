@@ -1,6 +1,12 @@
+// Required
 @import "../../../node_modules/bootstrap/scss/functions";
 @import "../../../node_modules/bootstrap/scss/variables";
 @import "../../../node_modules/bootstrap/scss/mixins";
+
+// Remove valid state from form validation styling
+$form-validation-states: map-remove($form-validation-states, "valid");
+
+// Optional
 @import "../../../node_modules/bootstrap/scss/root";
 @import "../../../node_modules/bootstrap/scss/reboot";
 @import "../../../node_modules/bootstrap/scss/type";
