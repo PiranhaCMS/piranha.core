@@ -1,0 +1,26 @@
+<div id="alert" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" :class="{ 'modal-sm': !verifyPhrase }" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ title }}</h5>
+            </div>
+            <div class="modal-body text-center">
+                <p>{{ body }}</p>
+                <div v-if="verifyPhrase" class="alert alert-danger w-100">
+                    <p v-html="verifyText"></p>
+                    <div class="form-group">
+                        <input v-model="verifyInput" type="text" class="form-control" :placeholder="verifyPlaceholder">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" v-on:click.prevent="cancel()">
+                    <i v-if="cancelIcon" :class="cancelIcon"></i>{{ cancelText }}
+                </button>
+                <button type="button" class="btn btn-danger btn-labeled" :disabled="!canConfirm()" v-on:click.prevent="confirm()">
+                    <i v-if="confirmIcon" :class="confirmIcon"></i>{{ confirmText }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

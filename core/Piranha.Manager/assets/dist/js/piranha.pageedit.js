@@ -238,14 +238,23 @@ piranha.pageedit = new Vue({
         remove: function () {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/page/delete/" + self.id)
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    piranha.notifications.push(result);
+            piranha.alert.open({
+                title: piranha.resources.texts.delete,
+                body: piranha.resources.texts.deletePageConfirm,
+                confirmCss: "btn-danger",
+                confirmIcon: "fas fa-trash",
+                confirmText: piranha.resources.texts.delete,
+                onConfirm: function () {
+                    fetch(piranha.baseUrl + "manager/api/page/delete/" + self.id)
+                    .then(function (response) { return response.json(); })
+                    .then(function (result) {
+                        piranha.notifications.push(result);
 
-                    window.location = piranha.baseUrl + "manager/pages";
-                })
-                .catch(function (error) { console.log("error:", error ); });
+                        window.location = piranha.baseUrl + "manager/pages";
+                    })
+                    .catch(function (error) { console.log("error:", error ); });
+                }
+            });
         },
         addBlock: function (type, pos) {
             fetch(piranha.baseUrl + "manager/api/content/block/" + type)

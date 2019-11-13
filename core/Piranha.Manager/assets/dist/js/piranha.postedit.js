@@ -158,7 +158,7 @@ piranha.postedit = new Vue({
                 self.published = result.published;
                 self.state = result.state;
                 self.selectedRoute = result.selectedRoute;
-                
+
                 if (oldState === 'new' && result.state !== 'new') {
                     window.history.replaceState({ state: "created"}, "Edit post", piranha.baseUrl + "manager/post/edit/" + result.id);
                 }
@@ -200,14 +200,23 @@ piranha.postedit = new Vue({
         remove: function () {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/post/delete/" + self.id)
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    piranha.notifications.push(result);
+            piranha.alert.open({
+                title: piranha.resources.texts.delete,
+                body: piranha.resources.texts.deletePostConfirm,
+                confirmCss: "btn-danger",
+                confirmIcon: "fas fa-trash",
+                confirmText: piranha.resources.texts.delete,
+                onConfirm: function () {
+                    fetch(piranha.baseUrl + "manager/api/post/delete/" + self.id)
+                    .then(function (response) { return response.json(); })
+                    .then(function (result) {
+                        piranha.notifications.push(result);
 
-                    window.location = piranha.baseUrl + "manager/page/edit/" + self.blogId;
-                })
-                .catch(function (error) { console.log("error:", error ); });
+                        window.location = piranha.baseUrl + "manager/page/edit/" + self.blogId;
+                    })
+                    .catch(function (error) { console.log("error:", error ); });
+                }
+            });
         },
         addBlock: function (type, pos) {
             var self = this;
