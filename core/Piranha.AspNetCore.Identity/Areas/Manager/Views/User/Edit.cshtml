@@ -13,7 +13,7 @@
     ViewBag.MenuItem = "Users";
 }
 
-@using (var form = Html.BeginForm("Save", "User", FormMethod.Post, new {@class = "form", role = "form", autocomplete = "off"}))
+@using (var form = Html.BeginForm("Save", "User", FormMethod.Post, new {@class = "form validate", role = "form", autocomplete = "off", novalidate = ""}))
 {
     @Html.HiddenFor(m => m.User.Id)
 
@@ -51,13 +51,13 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Username</label>
-                            @Html.TextBoxFor(m => m.User.UserName, new {@class = "form-control small", maxlength = 128, placeholder = "The user name used to log in"})
+                            @Html.TextBoxFor(m => m.User.UserName, new { @class = "form-control small", maxlength = 128, placeholder = "The user name used to log in", required = ""})
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Email address</label>
-                            @Html.TextBoxFor(m => m.User.Email, new {@class = "form-control small", type = "email", maxlength = 128, placeholder = "The email address for the user"})
+                            @Html.TextBoxFor(m => m.User.Email, new { @class = "form-control small", type = "email", maxlength = 128, placeholder = "The email address for the user", required = ""})
                         </div>
                     </div>
                 </div>
