@@ -27,6 +27,9 @@
   <data name="Permanent" xml:space="preserve">
     <value>Постоянен</value>
   </data>
+  <data name="Are you sure you want to delete this alias?" xml:space="preserve">
+    <value>Are you sure you want to delete this alias?</value>
+  </data>
   <data name="If the redirect should be permanent" xml:space="preserve">
     <value>Ако препратката трябва да е постоянна</value>
   </data>
