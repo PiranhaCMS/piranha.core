@@ -84,6 +84,13 @@ piranha.media = new Vue({
             piranha.media.load(piranha.media.currentFolderId);
         },
         savefolder: function () {
+            // Validate form
+            var form = document.getElementById("mediaFolderForm");
+            if (form.checkValidity() === false) {
+                form.classList.add("was-validated");
+                return;
+            }
+
             fetch(piranha.baseUrl + "manager/api/media/folder/save", {
                 method: "post",
                 headers: {

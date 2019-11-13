@@ -7,7 +7,7 @@
     ViewBag.MenuItem = "Roles";
 }
 
-@using (var form = Html.BeginForm("Save", "Role", FormMethod.Post, new {@class = "form", role = "form"}))
+@using (var form = Html.BeginForm("Save", "Role", FormMethod.Post, new {@class = "form validate", role = "form", novalidate = ""}))
 {
     @Html.HiddenFor(m => m.Role.Id)
 
@@ -15,7 +15,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">@Localizer.General["Settings"]</li>
-                <li class="breadcrumb-item" aria-current="page"><a href="@Url.Action("List")">Roles</a></li>
+                <li class="breadcrumb-item" aria-current="page"><a href="@Url.Action("List")">@Localizer.General["Roles"]</a></li>
                 <li class="breadcrumb-item active" aria-current="page">@Localizer.General["Edit"]</li>
             </ol>
         </nav>
@@ -45,13 +45,16 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>@Localizer.General["Name"]</label>
-                            @Html.TextBoxFor(m => m.Role.Name, new {@class = "form-control small", maxlength = 128})
+                            @Html.TextBoxFor(m => m.Role.Name, new { @class = "form-control small", maxlength = 128, required = ""})
+                            <div class="invalid-feedback">
+                                @Localizer.General["Name is mandatory."]
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label>Normalized name</label>
-                            @Html.TextBoxFor(m => m.Role.NormalizedName, new {@class = "form-control small", maxlength = 128})
+                            <label>@Localizer.General["Normalized name"]</label>
+                            @Html.TextBoxFor(m => m.Role.NormalizedName, new { @class = "form-control small", maxlength = 128 })
                         </div>
                     </div>
                 </div>
@@ -65,7 +68,7 @@
 
             <div class="card">
                 <div class="card-header">
-                    <span class="title">@module Permissions</span>
+                    <span class="title">@module @Localizer.General["Permissions"]</span>
                 </div>
                 <div class="card-body">
                     @foreach (var category in categories)

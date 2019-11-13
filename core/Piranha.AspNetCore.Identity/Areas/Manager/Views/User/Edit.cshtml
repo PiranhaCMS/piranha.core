@@ -13,7 +13,7 @@
     ViewBag.MenuItem = "Users";
 }
 
-@using (var form = Html.BeginForm("Save", "User", FormMethod.Post, new {@class = "form", role = "form", autocomplete = "off"}))
+@using (var form = Html.BeginForm("Save", "User", FormMethod.Post, new {@class = "form validate", role = "form", autocomplete = "off", novalidate = ""}))
 {
     @Html.HiddenFor(m => m.User.Id)
 
@@ -21,7 +21,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">@Localizer.General["Settings"]</li>
-                <li class="breadcrumb-item" aria-current="page"><a href="@Url.Action("List")">Users</a></li>
+                <li class="breadcrumb-item" aria-current="page"><a href="@Url.Action("List")">@Localizer.General["Users"]</a></li>
                 <li class="breadcrumb-item active" aria-current="page">@Localizer.General["Edit"]</li>
             </ol>
         </nav>
@@ -44,25 +44,31 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
-                <span class="title">General information</span>
+                <span class="title">@Localizer.General["General information"]</span>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label>Username</label>
-                            @Html.TextBoxFor(m => m.User.UserName, new {@class = "form-control small", maxlength = 128, placeholder = "The user name used to log in"})
+                            <label>@Localizer.General["Username"]</label>
+                            @Html.TextBoxFor(m => m.User.UserName, new { @class = "form-control small", maxlength = 128, placeholder = "The user name used to log in", required = ""})
+                            <div class="invalid-feedback">
+                                @Localizer.General["Username is mandatory."]
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label>Email address</label>
-                            @Html.TextBoxFor(m => m.User.Email, new {@class = "form-control small", type = "email", maxlength = 128, placeholder = "The email address for the user"})
+                            <label>@Localizer.General["Email address"]</label>
+                            @Html.TextBoxFor(m => m.User.Email, new { @class = "form-control small", type = "email", maxlength = 128, placeholder = "The email address for the user", required = ""})
+                            <div class="invalid-feedback">
+                                @Localizer.General["Email address is mandatory."]
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Roles</label>
+                    <label>@Localizer.General["Roles"]</label>
                     <ul class="list-group">
                         @for (var n = 0; n < Model.Roles.Count(); n += 3)
                         {
@@ -105,13 +111,13 @@
 
         <div class="card">
             <div class="card-header">
-                <span class="title">Update password</span>
+                <span class="title">@Localizer.General["Update password"]</span>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label>Password</label>
+                            <label>@Localizer.General["Password"]</label>
                             @Html.PasswordFor(m => m.Password, new {@class = "form-control small", maxlength = 128, placeholder = "Add new password"})
                         </div>
                     </div>
