@@ -36,6 +36,9 @@
   <data name="Tags" xml:space="preserve">
     <value>Thẻ</value>
   </data>
+  <data name="Are you sure you want to delete this post?" xml:space="preserve">
+    <value>Are you sure you want to delete this post?</value>
+  </data>
   <data name="Welcome to your new post. Click on the button above to add your first block of content!" xml:space="preserve">
     <value>Chào mừng bạn viết bài mới. Nhấn nút bên trên để thêm nội dung đầu tiên!</value>
   </data>
