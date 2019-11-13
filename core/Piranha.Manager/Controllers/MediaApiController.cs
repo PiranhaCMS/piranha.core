@@ -217,36 +217,39 @@ namespace Piranha.Manager.Controllers
         {
             try
             {
-                var media = await _api.Media.GetByIdAsync(mediaId);
-                if (media != null)
+                if (mediaId != folderId)
                 {
-                    await _api.Media.MoveAsync(media, folderId);
-
-                    return Ok(new StatusMessage
+                    var media = await _api.Media.GetByIdAsync(mediaId);
+                    if (media != null)
                     {
-                        Type = StatusMessage.Success,
-                        Body = $"{media.Filename} was successfully moved."
+                        await _api.Media.MoveAsync(media, folderId);
+
+                        return Ok(new StatusMessage
+                        {
+                            Type = StatusMessage.Success,
+                            Body = $"{media.Filename} was successfully moved."
+                        });
+                    }
+
+                    var folder = await _api.Media.GetFolderByIdAsync(mediaId);
+                    if (folder != null)
+                    {
+                        folder.ParentId = folderId;
+                        await _api.Media.SaveFolderAsync(folder);
+
+                        return Ok(new StatusMessage
+                        {
+                            Type = StatusMessage.Success,
+                            Body = $"{folder.Name} was successfully moved."
+                        });
+                    }
+                    return BadRequest(new StatusMessage
+                    {
+                        Type = StatusMessage.Error,
+                        Body = "Media was not found."
                     });
                 }
-
-                var folder = await _api.Media.GetFolderByIdAsync(mediaId);
-                if (folder != null)
-                {
-                    folder.ParentId = folderId;
-                    await _api.Media.SaveFolderAsync(folder);
-
-                    return Ok(new StatusMessage
-                    {
-                        Type = StatusMessage.Success,
-                        Body = $"{folder.Name} was successfully moved."
-                    });
-                }
-
-                return BadRequest(new StatusMessage
-                {
-                    Type = StatusMessage.Error,
-                    Body = "Media was not found."
-                });
+                return BadRequest();
             }
             catch (Exception e)
             {
