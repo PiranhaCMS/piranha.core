@@ -109,7 +109,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
                 return View("Edit", model);
             }
 
-            if (_userManager.PasswordValidators.Count > 0)
+            if (!string.IsNullOrWhiteSpace(model.Password) && _userManager.PasswordValidators.Count > 0)
             {
                 var errors = new List<string>();
                 foreach (var validator in _userManager.PasswordValidators)
