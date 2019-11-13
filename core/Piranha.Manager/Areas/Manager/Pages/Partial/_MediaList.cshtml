@@ -23,7 +23,7 @@
                         <td></td>
                         <td class="actions one"></td>
                     </tr>
-                    <tr class="droppable" v-for="folder in folders" v-on:dragover="dragover" v-on:dragleave="dragleave" v-on:drop="drop($event, folder.id)">
+                    <tr class="droppable" v-for="folder in folders" draggable="true" v-on:dragstart="drag($event, folder)" v-on:dragover="dragover" v-on:dragleave="dragleave" v-on:drop="drop($event, folder.id)">
                         <td>
                             <a href="#" v-on:click.prevent="load(folder.id)"><i class="fas fa-folder-open"></i>{{ folder.name }}</a>
                         </td>

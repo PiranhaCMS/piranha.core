@@ -229,6 +229,19 @@ namespace Piranha.Manager.Controllers
                     });
                 }
 
+                var folder = await _api.Media.GetFolderByIdAsync(mediaId);
+                if (folder != null)
+                {
+                    folder.ParentId = folderId;
+                    await _api.Media.SaveFolderAsync(folder);
+
+                    return Ok(new StatusMessage
+                    {
+                        Type = StatusMessage.Success,
+                        Body = $"{folder.Name} was successfully moved."
+                    });
+                }
+
                 return BadRequest(new StatusMessage
                 {
                     Type = StatusMessage.Error,
