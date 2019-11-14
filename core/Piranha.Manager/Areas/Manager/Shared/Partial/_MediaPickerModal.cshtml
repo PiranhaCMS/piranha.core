@@ -107,7 +107,7 @@
                         </div>
 
                         <a href="#" class="thumbnail" v-if="currentFolderId != null" v-on:click.prevent="load(parentFolderId)">
-                            <img src="~/manager/assets/img/media-placeholder.jpg">
+                            <img src="~/manager/assets/img/media-placeholder.png">
                             <div class="thumbnail-icon">
                                 <i class="fas fa-folder-open fa-3x"></i>
                             </div>
@@ -115,7 +115,7 @@
                         </a>
 
                         <a href="#" class="thumbnail" v-for="folder in filteredFolders" v-on:click.prevent="load(folder.id)">
-                            <img src="~/manager/assets/img/media-placeholder.jpg">
+                            <img src="~/manager/assets/img/media-placeholder.png">
                             <div class="thumbnail-icon">
                                 <i class="fas fa-folder fa-3x"></i>
                             </div>

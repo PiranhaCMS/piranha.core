@@ -73,9 +73,17 @@
     padding-bottom: 1.5rem;
     margin-bottom: $thumbnail-margin-bottom;
 
+    img {
+        background: #fff;
+    }
+
     &.droppable {
         &.active > * {
             background: $thumbnail-active-bg;
+
+            img {
+                background: $thumbnail-active-bg;
+            }
         }
     }
 

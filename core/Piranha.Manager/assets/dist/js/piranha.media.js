@@ -23,25 +23,25 @@ piranha.media = new Vue({
         dragover: function (event) {
             event.preventDefault();
 
-            var target = event.target.closest(".droppable");
-            if (!target.classList.contains("actice")) {
-                target.classList.add("active");
+            var target = $(event.target).closest(".droppable");
+            if (!target.hasClass("active")) {
+                target.addClass("active");
             }
         },
         dragleave: function (event) {
             event.preventDefault();
 
-            var target = event.target.closest(".droppable");
-            if (!target.classList.contains("actice")) {
-                target.classList.remove("active");
+            var target = $(event.target).closest(".droppable");
+            if (target.hasClass("active")) {
+                target.removeClass("active");
             }
         },
         drop: function (event, folderId) {
             event.preventDefault();
 
-            var target = event.target.closest(".droppable");
-            if (!target.classList.contains("actice")) {
-                target.classList.remove("active");
+            var target = $(event.target).closest(".droppable");
+            if (target.hasClass("active")) {
+                target.removeClass("active");
             }
 
             var mediaId = event.dataTransfer.getData("mediaId");
