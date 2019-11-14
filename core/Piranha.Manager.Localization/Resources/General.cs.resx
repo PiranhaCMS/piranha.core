@@ -151,7 +151,7 @@
     <value>Vrátit zpět</value>
   </data>
   <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
+    <value>Role</value>
   </data>
   <data name="Route" xml:space="preserve">
     <value>Trasa</value>
@@ -190,16 +190,16 @@
     <value>Aktualizovat</value>
   </data>
   <data name="Update password" xml:space="preserve">
-    <value>Update password</value>
+    <value>Změnit heslo</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Username</value>
+    <value>Uživatelské jméno</value>
   </data>
   <data name="Username is mandatory." xml:space="preserve">
-    <value>Username is mandatory.</value>
+    <value>Uživatelské jméno je povinné.</value>
   </data>
   <data name="Title is mandatory." xml:space="preserve">
-    <value>Title is mandatory.</value>
+    <value>Název je povinný.</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Typ</value>
@@ -211,7 +211,7 @@
     <value>Nezveřejněno</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>Uživatelé</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Verze</value>
