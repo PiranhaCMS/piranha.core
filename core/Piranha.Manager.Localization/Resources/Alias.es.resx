@@ -22,13 +22,13 @@
     <value>URL de Alias</value>
   </data>
   <data name="Alias URL is mandatory." xml:space="preserve">
-    <value>Alias URL is mandatory.</value>
+    <value>La URL del alias es obligatoria.</value>
   </data>
   <data name="Redirect URL" xml:space="preserve">
     <value>URL de redirección</value>
   </data>
   <data name="Redirect URL is mandatory." xml:space="preserve">
-    <value>Redirect URL is mandatory.</value>
+    <value>La URL de redirección es obligatoria.</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>Permanente</value>
