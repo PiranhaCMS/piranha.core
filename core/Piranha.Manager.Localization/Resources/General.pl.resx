@@ -58,10 +58,10 @@
     <value>Wersje robocze</value>
   </data>
   <data name="Email address" xml:space="preserve">
-    <value>Email address</value>
+    <value>Adres email</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>Adres e-mail jest obowiązkowy.</value>
   </data>
   <data name="Filename" xml:space="preserve">
     <value>Nazwa pliku</value>
@@ -79,7 +79,7 @@
     <value>Ogólne</value>
   </data>
   <data name="General information" xml:space="preserve">
-    <value>General information</value>
+    <value>Informacje ogólne</value>
   </data>
   <data name="History" xml:space="preserve">
     <value>Historia</value>
@@ -115,19 +115,19 @@
     <value>Nazwa</value>
   </data>
   <data name="Name is mandatory." xml:space="preserve">
-    <value>Name is mandatory.</value>
+    <value>Nazwa jest obowiązkowa.</value>
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
     <value>Otwórz adres URL w nowej zakładce</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>Hasło</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>Stałe</value>
   </data>
   <data name="Permissions" xml:space="preserve">
-    <value>Permissions</value>
+    <value>Uprawnienia</value>
   </data>
   <data name="Pixels" xml:space="preserve">
     <value>Piksele</value>
@@ -151,7 +151,7 @@
     <value>Przywróć</value>
   </data>
   <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
+    <value>Role</value>
   </data>
   <data name="Route" xml:space="preserve">
     <value>Ścieżka</value>
@@ -190,16 +190,16 @@
     <value>Aktualizacja</value>
   </data>
   <data name="Update password" xml:space="preserve">
-    <value>Update password</value>
+    <value>Zaktualizuj hasło</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Username</value>
+    <value>Nazwa użytkownika</value>
   </data>
   <data name="Username is mandatory." xml:space="preserve">
-    <value>Username is mandatory.</value>
+    <value>Nazwa użytkownika jest obowiązkowa.</value>
   </data>
   <data name="Title is mandatory." xml:space="preserve">
-    <value>Title is mandatory.</value>
+    <value>Tytuł jest obowiązkowy.</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Typ</value>
@@ -211,7 +211,7 @@
     <value>Nieopublikowany</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>Użytkownicy</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Wersja</value>
