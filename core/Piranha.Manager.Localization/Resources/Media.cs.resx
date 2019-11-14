@@ -25,7 +25,7 @@
     <value>Název složky</value>
   </data>
   <data name="Folder name is mandatory." xml:space="preserve">
-    <value>Folder name is mandatory.</value>
+    <value>Název složky je povinný.</value>
   </data>
   <data name="Gallery" xml:space="preserve">
     <value>Galerie</value>
