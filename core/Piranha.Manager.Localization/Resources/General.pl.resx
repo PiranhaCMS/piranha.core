@@ -57,6 +57,12 @@
   <data name="Drafts" xml:space="preserve">
     <value>Wersje robocze</value>
   </data>
+  <data name="Email address" xml:space="preserve">
+    <value>Email address</value>
+  </data>
+  <data name="Email address is mandatory." xml:space="preserve">
+    <value>Email address is mandatory.</value>
+  </data>
   <data name="Filename" xml:space="preserve">
     <value>Nazwa pliku</value>
   </data>
@@ -71,6 +77,9 @@
   </data>
   <data name="General" xml:space="preserve">
     <value>Ogólne</value>
+  </data>
+  <data name="General information" xml:space="preserve">
+    <value>General information</value>
   </data>
   <data name="History" xml:space="preserve">
     <value>Historia</value>
@@ -105,11 +114,20 @@
   <data name="Name" xml:space="preserve">
     <value>Nazwa</value>
   </data>
+  <data name="Name is mandatory." xml:space="preserve">
+    <value>Name is mandatory.</value>
+  </data>
   <data name="Open public URL in new tab" xml:space="preserve">
     <value>Otwórz adres URL w nowej zakładce</value>
   </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
   <data name="Permanent" xml:space="preserve">
     <value>Stałe</value>
+  </data>
+  <data name="Permissions" xml:space="preserve">
+    <value>Permissions</value>
   </data>
   <data name="Pixels" xml:space="preserve">
     <value>Piksele</value>
@@ -131,6 +149,9 @@
   </data>
   <data name="Revert" xml:space="preserve">
     <value>Przywróć</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>Roles</value>
   </data>
   <data name="Route" xml:space="preserve">
     <value>Ścieżka</value>
@@ -168,6 +189,18 @@
   <data name="Update" xml:space="preserve">
     <value>Aktualizacja</value>
   </data>
+  <data name="Update password" xml:space="preserve">
+    <value>Update password</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="Username is mandatory." xml:space="preserve">
+    <value>Username is mandatory.</value>
+  </data>
+  <data name="Title is mandatory." xml:space="preserve">
+    <value>Title is mandatory.</value>
+  </data>
   <data name="Type" xml:space="preserve">
     <value>Typ</value>
   </data>
@@ -176,6 +209,9 @@
   </data>
   <data name="Unpublished" xml:space="preserve">
     <value>Nieopublikowany</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Users</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Wersja</value>
