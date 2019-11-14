@@ -58,10 +58,10 @@
     <value>Arbetskopior</value>
   </data>
   <data name="Email address" xml:space="preserve">
-    <value>Email address</value>
+    <value>E-post adress</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>E-post adress är obligatoriskt.</value>
   </data>
   <data name="Filename" xml:space="preserve">
     <value>Filnamn</value>
@@ -79,7 +79,7 @@
     <value>Generellt</value>
   </data>
   <data name="General information" xml:space="preserve">
-    <value>General information</value>
+    <value>Allmän information</value>
   </data>
   <data name="History" xml:space="preserve">
     <value>Historik</value>
@@ -115,19 +115,19 @@
     <value>Namn</value>
   </data>
   <data name="Name is mandatory." xml:space="preserve">
-    <value>Name is mandatory.</value>
+    <value>Namn är obligatoriskt.</value>
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
     <value>Öppna i ny flik</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>Lösenord</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>Permanent</value>
   </data>
   <data name="Permissions" xml:space="preserve">
-    <value>Permissions</value>
+    <value>Rättigheter</value>
   </data>
   <data name="Pixels" xml:space="preserve">
     <value>Pixlar</value>
@@ -151,7 +151,7 @@
     <value>Återgå</value>
   </data>
   <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
+    <value>Roller</value>
   </data>
   <data name="Route" xml:space="preserve">
     <value>Route</value>
@@ -190,16 +190,16 @@
     <value>Uppdatera</value>
   </data>
   <data name="Update password" xml:space="preserve">
-    <value>Update password</value>
+    <value>Uppdatera lösenord</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Username</value>
+    <value>Användarnamn</value>
   </data>
   <data name="Username is mandatory." xml:space="preserve">
-    <value>Username is mandatory.</value>
+    <value>Användarnamn är obligatoriskt.</value>
   </data>
   <data name="Title is mandatory." xml:space="preserve">
-    <value>Title is mandatory.</value>
+    <value>Titel är obligatoriskt.</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Typ</value>
@@ -211,7 +211,7 @@
     <value>Ej publicerad</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>Användare</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Version</value>
