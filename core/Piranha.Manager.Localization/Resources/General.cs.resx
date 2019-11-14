@@ -58,10 +58,10 @@
     <value>Koncepty</value>
   </data>
   <data name="Email address" xml:space="preserve">
-    <value>Email address</value>
+    <value>E-mailová adresa</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>E-mailová adresa je povinná.</value>
   </data>
   <data name="Filename" xml:space="preserve">
     <value>Název souboru</value>
@@ -79,7 +79,7 @@
     <value>Obecné</value>
   </data>
   <data name="General information" xml:space="preserve">
-    <value>General information</value>
+    <value>Obecné informace</value>
   </data>
   <data name="History" xml:space="preserve">
     <value>Historie</value>
@@ -115,19 +115,19 @@
     <value>Název</value>
   </data>
   <data name="Name is mandatory." xml:space="preserve">
-    <value>Name is mandatory.</value>
+    <value>Jméno je povinné.</value>
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
     <value>Otevřete veřejnou adresu URL na nové kartě</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>Heslo</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>Trvalý</value>
   </data>
   <data name="Permissions" xml:space="preserve">
-    <value>Permissions</value>
+    <value>Oprávnění</value>
   </data>
   <data name="Pixels" xml:space="preserve">
     <value>Pixely</value>
