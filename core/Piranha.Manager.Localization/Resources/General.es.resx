@@ -58,10 +58,10 @@
     <value>Borradores</value>
   </data>
   <data name="Email address" xml:space="preserve">
-    <value>Email address</value>
+    <value>Dirección de email</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>La dirección de email es obligatoria.</value>
   </data>
   <data name="Filename" xml:space="preserve">
     <value>Nombre del archivo</value>
@@ -79,7 +79,7 @@
     <value>General</value>
   </data>
   <data name="General information" xml:space="preserve">
-    <value>General information</value>
+    <value>Información general</value>
   </data>
   <data name="History" xml:space="preserve">
     <value>Historial</value>
@@ -115,19 +115,19 @@
     <value>Nombre</value>
   </data>
   <data name="Name is mandatory." xml:space="preserve">
-    <value>Name is mandatory.</value>
+    <value>El nombre es obligatorio.</value>
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
     <value>Abrir URL pública en pestaña nueva</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>Contraseña</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>Permanente</value>
   </data>
   <data name="Permissions" xml:space="preserve">
-    <value>Permissions</value>
+    <value>Permisos</value>
   </data>
   <data name="Pixels" xml:space="preserve">
     <value>Pixeles</value>
@@ -190,16 +190,16 @@
     <value>Actualizar</value>
   </data>
   <data name="Update password" xml:space="preserve">
-    <value>Update password</value>
+    <value>Actualizar contraseña</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Username</value>
+    <value>Usuario</value>
   </data>
   <data name="Username is mandatory." xml:space="preserve">
-    <value>Username is mandatory.</value>
+    <value>Nombre de usuario es obligatorio.</value>
   </data>
   <data name="Title is mandatory." xml:space="preserve">
-    <value>Title is mandatory.</value>
+    <value>El título es obligatorio.</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Tipo</value>
@@ -211,7 +211,7 @@
     <value>Remover publicación</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>Usuarios</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Versión</value>
