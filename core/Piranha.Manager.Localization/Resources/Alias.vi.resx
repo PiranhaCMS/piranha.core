@@ -21,8 +21,14 @@
   <data name="Alias URL" xml:space="preserve">
     <value>URL bí danh</value>
   </data>
+  <data name="Alias URL is mandatory." xml:space="preserve">
+    <value>Alias URL is mandatory.</value>
+  </data>
   <data name="Redirect URL" xml:space="preserve">
     <value>Đường dẫn Url chuyển đến</value>
+  </data>
+  <data name="Redirect URL is mandatory." xml:space="preserve">
+    <value>Redirect URL is mandatory.</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>Vĩnh viễn</value>

@@ -24,6 +24,9 @@
   <data name="Folder name" xml:space="preserve">
     <value>Mappnamn</value>
   </data>
+  <data name="Folder name is mandatory." xml:space="preserve">
+    <value>Mappnamn är obligatoriskt.</value>
+  </data>
   <data name="Gallery" xml:space="preserve">
     <value>Galleri</value>
   </data>
