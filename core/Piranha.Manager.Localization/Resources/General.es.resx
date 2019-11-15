@@ -219,10 +219,4 @@
   <data name="Width" xml:space="preserve">
     <value>Ancho</value>
   </data>
-  <data name="username" xml:space="preserve">
-    <value>nombre de usuario</value>
-  </data>
-  <data name="password" xml:space="preserve">
-    <value>contraseña</value>
-  </data>
 </root>
