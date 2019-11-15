@@ -45,6 +45,34 @@
     }
 }
 
+.tiny-brand {
+    position: absolute;
+    right: 1rem;
+    font-size: .8rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    display: none;
+    opacity: .7;
+
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.html-field {
+    .tiny-brand {
+        bottom: .5rem;
+    }
+}
+
+.html-block, .html-field {
+    &:hover, &:focus-within {
+        .tiny-brand {
+            display: block;
+        }
+    }
+}
+
 .html-block, .html-column-block, .html-field {
     .mce-content-body {
         height: 100%;

@@ -38,6 +38,7 @@ piranha.editor.addInline = function (id, toolbarId) {
             }
         }
     });
+    $("#" + id).parent().append("<a class='tiny-brand' href='https://www.tiny.cloud' target='tiny'>Powered by Tiny</a>");
 };
 
 //
@@ -45,4 +46,5 @@ piranha.editor.addInline = function (id, toolbarId) {
 //
 piranha.editor.remove = function (id) {
     tinymce.remove(tinymce.get(id));
+    $("#" + id).parent().find('.tiny-brand').remove();
 };

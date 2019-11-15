@@ -27,8 +27,8 @@ namespace RazorWeb
             services.AddPiranhaFileStorage();
             services.AddPiranhaImageSharp();
             services.AddPiranhaManager();
-            services.AddPiranhaSummernote();
-            //services.AddPiranhaTinyMCE();
+            //services.AddPiranhaSummernote();
+            services.AddPiranhaTinyMCE();
             services.AddPiranhaApi();
 
             services.AddPiranhaEF(options =>
@@ -86,8 +86,8 @@ namespace RazorWeb
             app.UseAuthentication();
             app.UsePiranha();
             app.UsePiranhaManager();
-            app.UsePiranhaSummernote();
-            //app.UsePiranhaTinyMCE();
+            //app.UsePiranhaSummernote();
+            app.UsePiranhaTinyMCE();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(name: "areaRoute",
