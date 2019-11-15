@@ -219,10 +219,4 @@
   <data name="Width" xml:space="preserve">
     <value>Bredd</value>
   </data>
-  <data name="username" xml:space="preserve">
-    <value>användarnamn</value>
-  </data>
-  <data name="password" xml:space="preserve">
-    <value>lösenord</value>
-  </data>
 </root>
