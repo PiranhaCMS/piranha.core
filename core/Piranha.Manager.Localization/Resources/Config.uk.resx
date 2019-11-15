@@ -13,7 +13,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Config" xml:space="preserve">
-    <value>Config</value>
+    <value>Налаштування</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
     <value>Hierarchical page slugs</value>
@@ -28,19 +28,19 @@
     <value>Archive page size</value>
   </data>
   <data name="Caching" xml:space="preserve">
-    <value>Caching</value>
+    <value>Кешування</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
     <value>Page cache expiration (minutes)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
-    <value>Page revisions</value>
+    <value>Ревізії сторінки</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Post cache expiration (minutes)</value>
+    <value>Термін дії кешу поста (у хвилинах)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
-    <value>Post revisions</value>
+    <value>Ревізії посту</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
     <value>Media CDN</value>
