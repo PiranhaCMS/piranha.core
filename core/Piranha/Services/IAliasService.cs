@@ -12,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Piranha.Models;
-using Piranha.Repositories;
 
 namespace Piranha.Services
 {

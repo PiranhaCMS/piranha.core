@@ -56,7 +56,7 @@ namespace Piranha.WebApi
         [Route("list/{folderId:Guid?}")]
         public Task<IEnumerable<Media>> GetByFolderId(Guid? folderId = null)
         {
-            return _api.Media.GetAllAsync(folderId);
+            return _api.Media.GetAllByFolderIdAsync(folderId);
         }
 
         /// <summary>

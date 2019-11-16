@@ -57,6 +57,12 @@
   <data name="Drafts" xml:space="preserve">
     <value>Чернови</value>
   </data>
+  <data name="Email address" xml:space="preserve">
+    <value>Email address</value>
+  </data>
+  <data name="Email address is mandatory." xml:space="preserve">
+    <value>Email address is mandatory.</value>
+  </data>
   <data name="Filename" xml:space="preserve">
     <value>Име на файл</value>
   </data>
@@ -71,6 +77,9 @@
   </data>
   <data name="General" xml:space="preserve">
     <value>Общи</value>
+  </data>
+  <data name="General information" xml:space="preserve">
+    <value>General information</value>
   </data>
   <data name="History" xml:space="preserve">
     <value>История</value>
@@ -105,8 +114,20 @@
   <data name="Name" xml:space="preserve">
     <value>Име</value>
   </data>
+  <data name="Name is mandatory." xml:space="preserve">
+    <value>Name is mandatory.</value>
+  </data>
   <data name="Open public URL in new tab" xml:space="preserve">
     <value>Отвори публичният линк в нов раздел</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Permanent" xml:space="preserve">
+    <value>Permanent</value>
+  </data>
+  <data name="Permissions" xml:space="preserve">
+    <value>Permissions</value>
   </data>
   <data name="Pixels" xml:space="preserve">
     <value>Пиксели</value>
@@ -120,8 +141,20 @@
   <data name="Publish date" xml:space="preserve">
     <value>Дата на публикуване</value>
   </data>
+  <data name="Redirect" xml:space="preserve">
+    <value>Redirect</value>
+  </data>
+  <data name="Redirect Type" xml:space="preserve">
+    <value>Redirect Type</value>
+  </data>
   <data name="Revert" xml:space="preserve">
     <value>Към предишно състояние</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="Route" xml:space="preserve">
+    <value>Route</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Запази</value>
@@ -147,11 +180,26 @@
   <data name="System" xml:space="preserve">
     <value>Система</value>
   </data>
+  <data name="Temporary" xml:space="preserve">
+    <value>Temporary</value>
+  </data>
   <data name="Title" xml:space="preserve">
     <value>Заглавие</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Обнови</value>
+  </data>
+  <data name="Update password" xml:space="preserve">
+    <value>Update password</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="Username is mandatory." xml:space="preserve">
+    <value>Username is mandatory.</value>
+  </data>
+  <data name="Title is mandatory." xml:space="preserve">
+    <value>Title is mandatory.</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Тип</value>
@@ -162,16 +210,13 @@
   <data name="Unpublished" xml:space="preserve">
     <value>Непубликуван</value>
   </data>
+  <data name="Users" xml:space="preserve">
+    <value>Users</value>
+  </data>
   <data name="Version" xml:space="preserve">
     <value>Версия</value>
   </data>
   <data name="Width" xml:space="preserve">
     <value>Ширина</value>
-  </data>
-  <data name="username" xml:space="preserve">
-    <value>username</value>
-  </data>
-  <data name="password" xml:space="preserve">
-    <value>password</value>
   </data>
 </root>

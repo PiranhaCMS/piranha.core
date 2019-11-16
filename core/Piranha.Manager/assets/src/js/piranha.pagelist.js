@@ -17,27 +17,39 @@ piranha.pagelist = new Vue({
     },
     methods: {
         load: function () {
-            fetch(piranha.baseUrl + "manager/api/page/list")
+            var self = this;
+
+            piranha.permissions.load(function () {
+                fetch(piranha.baseUrl + "manager/api/page/list")
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    piranha.pagelist.sites = result.sites;
-                    piranha.pagelist.pageTypes = result.pageTypes;
-
-                    piranha.pagelist.updateBindings = true;
+                    self.sites = result.sites;
+                    self.pageTypes = result.pageTypes;
+                    self.updateBindings = true;
                 })
                 .catch(function (error) { console.log("error:", error ); });
+            });
         },
         remove: function (id) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/page/delete/" + id)
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    piranha.notifications.push(result);
+            piranha.alert.open({
+                title: piranha.resources.texts.delete,
+                body: piranha.resources.texts.deletePageConfirm,
+                confirmCss: "btn-danger",
+                confirmIcon: "fas fa-trash",
+                confirmText: piranha.resources.texts.delete,
+                onConfirm: function () {
+                    fetch(piranha.baseUrl + "manager/api/page/delete/" + id)
+                    .then(function (response) { return response.json(); })
+                    .then(function (result) {
+                        piranha.notifications.push(result);
 
-                    self.load();
-                })
-                .catch(function (error) { console.log("error:", error ); });
+                        self.load();
+                    })
+                    .catch(function (error) { console.log("error:", error ); });
+                }
+            });
         },
         bind: function () {
             var self = this;
@@ -50,7 +62,7 @@ piranha.pagelist = new Vue({
                         fetch(piranha.baseUrl + "manager/api/page/move", {
                             method: "post",
                             headers: {
-                                "Content-Type": "application/json",
+                                "Content-Type": "application/json"
                             },
                             body: JSON.stringify({
                                 id: $(e).attr("data-id"),

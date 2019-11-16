@@ -14,13 +14,8 @@ using System.Collections.Generic;
 namespace Piranha.Data
 {
     [Serializable]
-    public sealed class MediaFolder : Models.MediaFolder<Guid>
+    public sealed class MediaFolder : Models.MediaFolder
     {
-        /// <summary>
-        /// Gets/sets the optional parent id.
-        /// </summary>
-        public Guid? ParentId { get; set; }
-
         /// <summary>
         /// Gets/sets the available media.
         /// </summary>

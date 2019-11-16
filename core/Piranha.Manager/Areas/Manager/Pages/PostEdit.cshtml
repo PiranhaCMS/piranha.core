@@ -8,24 +8,27 @@
 }
 @section script
 {
-    <script src="~/manager/assets/tinymce/tinymce.min.js"></script>
+    <script src="@Url.Content(Piranha.Manager.Editor.EditorScripts.MainScriptUrl)"></script>
+    <script src="@Url.Content(Piranha.Manager.Editor.EditorScripts.EditorScriptUrl)"></script>
     <script src="~/manager/assets/js/piranha.contentedit.min.js"></script>
     <script src="~/manager/assets/js/piranha.postedit.min.js"></script>
 
     @if (action == "edit")
     {
         <script>
-            piranha.postedit.load("@RouteData.Values["id"]");
-
-            $(".title input").focus();
+            piranha.permissions.load(function () {
+                piranha.postedit.load("@RouteData.Values["id"]");
+                $(".title input").focus();
+            });
         </script>
     }
     else if (action == "add")
     {
         <script>
-            piranha.postedit.create("@RouteData.Values["id"]", "@RouteData.Values["postType"]");
-
-            $(".title input").focus();
+            piranha.permissions.load(function () {
+                piranha.postedit.create("@RouteData.Values["id"]", "@RouteData.Values["postType"]");
+                $(".title input").focus();
+            });
         </script>
     }
 }
@@ -42,12 +45,9 @@
             </ol>
         </nav>
 
-        <div class="container-fluid">
+        <div class="container-fluid app" :class="{ ready: !loading }">
             <div class="top-nav">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#postSettings">
-                    <i class="fas fa-cog"></i>
-                </button>
-                @foreach (var postAction in Piranha.Manager.Actions.PostEdit)
+                @foreach (var postAction in Piranha.Manager.Actions.Toolbars.PostEdit)
                 {
                     <partial name="@postAction.ActionView" />
                 }

@@ -14,13 +14,8 @@ using System.Collections.Generic;
 namespace Piranha.Models
 {
     [Serializable]
-    public sealed class Media : Media<Guid>
+    public sealed class Media : MediaBase
     {
-        /// <summary>
-        /// Gets/sets the optional folder id.
-        /// </summary>
-        public Guid? FolderId { get; set; }
-
         /// <summary>
         /// Gets/sets the available versions.
         /// </summary>
@@ -28,12 +23,17 @@ namespace Piranha.Models
     }
 
     [Serializable]
-    public abstract class Media<TKey>
+    public abstract class MediaBase
     {
         /// <summary>
         /// Gets/sets the unique id.
         /// </summary>
-        public TKey Id { get; set; }
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional folder id.
+        /// </summary>
+        public Guid? FolderId { get; set; }
 
         /// <summary>
         /// Gets/sets the media type.

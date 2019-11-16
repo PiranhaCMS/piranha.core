@@ -36,6 +36,9 @@
   <data name="Tags" xml:space="preserve">
     <value>Etiquetas</value>
   </data>
+  <data name="Are you sure you want to delete this post?" xml:space="preserve">
+    <value>¿Estás seguro que quieres borrar esta publicación?</value>
+  </data>
   <data name="Welcome to your new post. Click on the button above to add your first block of content!" xml:space="preserve">
     <value>Bienvenido a tu nuevo post. ¡Haz clic en el botón de arriba para añadir tu primer bloque de contenido!</value>
   </data>

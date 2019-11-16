@@ -13,27 +13,36 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Aliases" xml:space="preserve">
-    <value>Aliases</value>
+    <value>Псевдоніми</value>
   </data>
   <data name="Add new alias" xml:space="preserve">
-    <value>Add new alias</value>
+    <value>Додати новий псевдонім</value>
   </data>
   <data name="Alias URL" xml:space="preserve">
-    <value>Alias URL</value>
+    <value>URL псевдоніма</value>
+  </data>
+  <data name="Alias URL is mandatory." xml:space="preserve">
+    <value>URL псевдоніма є обов'язковим.</value>
   </data>
   <data name="Redirect URL" xml:space="preserve">
-    <value>Redirect URL</value>
+    <value>URL перенаправлення</value>
+  </data>
+  <data name="Redirect URL is mandatory." xml:space="preserve">
+    <value>URL перенаправлення є обов'язковим.</value>
   </data>
   <data name="Permanent" xml:space="preserve">
-    <value>Permanent</value>
+    <value>Назавжди</value>
+  </data>
+  <data name="Are you sure you want to delete this alias?" xml:space="preserve">
+    <value>Ви дійсно бажаєте видалити цей псевдонім?</value>
   </data>
   <data name="If the redirect should be permanent" xml:space="preserve">
-    <value>If the redirect should be permanent</value>
+    <value>Чи перенаправлення має бути постійним</value>
   </data>
   <data name="The alias was successfully added to the list" xml:space="preserve">
-    <value>The alias was successfully added to the list</value>
+    <value>Псевдонім успішно доданий до списку</value>
   </data>
   <data name="The alias was successfully deleted" xml:space="preserve">
-    <value>The alias was successfully deleted</value>
+    <value>Псевдонім успішно видалений</value>
   </data>
 </root>

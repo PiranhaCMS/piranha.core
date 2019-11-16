@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Piranha.Manager.Summernote</id>
+    <title>Piranha Manager</title>
+    <version>7.1.0</version>
+    <authors>Håkan Edling</authors>
+    <owners>Håkan Edling</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Summernote WYSIWYG Editor for Piranha CMS.</description>
+    <copyright>Copyright 2019 (c) Håkan Edling</copyright>
+    <tags>cms mvc aspnetcore netstandard</tags>
+    <license type="expression">MIT</license>
+    <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
+    <iconUrl>http://piranhacms.org/assets/twitter-shield.png</iconUrl>
+    <releaseNotes>See the changelog available at:
+https://github.com/piranhacms/piranha.core/wiki/changelog
+    </releaseNotes>
+    <dependencies>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Piranha.Manager" version="[7.1.0,8.0.0)" />
+        <dependency id="Microsoft.AspNetCore.Mvc" version="2.2.0" />
+        <dependency id="Microsoft.Extensions.FileProviders.Embedded" version="2.2.0" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\core\Piranha.Manager.Summernote\bin\Release\netstandard2.0\Piranha.Manager.Summernote.dll" target="lib\netstandard2.0\Piranha.Manager.Summernote.dll" />
+    <file src="..\core\Piranha.Manager.Summernote\bin\Release\netstandard2.0\Piranha.Manager.Summernote.views.dll" target="lib\netstandard2.0\Piranha.Manager.Summernote.views.dll" />
+  </files>
+</package>

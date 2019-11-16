@@ -10,13 +10,18 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label>@Localizer.Media["Folder name"]</label>
-                    <input v-model="folder.name" id="mediaFolderName" type="text" class="form-control">
-                </div>
+                <form id="mediaFolderForm" action="post" v-on:submit.prevent="savefolder()" novalidate>
+                    <div class="form-group">
+                        <label>@Localizer.Media["Folder name"]</label>
+                        <input v-model="folder.name" id="mediaFolderName" type="text" class="form-control" required>
+                        <div class="invalid-feedback">
+                            @Localizer.Media["Folder name is mandatory."]
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
-                <button v-on:click.prevent="savefolder()" class="btn btn-success btn-labeled">
+                <button form="mediaFolderForm" type="submit" class="btn btn-success btn-labeled">
                     <i class="fas fa-check"></i>@Localizer.General["Save"]
                 </button>
             </div>

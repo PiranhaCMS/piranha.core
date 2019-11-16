@@ -1,3 +1,4 @@
+/// <binding BeforeBuild='min:js, min:css' />
 /*
  * Copyright (c) 2019 Håkan Edling
  *
@@ -32,7 +33,22 @@ var fonts = [
 
 var js = [
     {
-        name: "piranha.js",
+        name: "piranha-deps-dev.js",
+        items: [
+            "node_modules/jquery/dist/jquery.slim.js",
+            "node_modules/popper.js/dist/umd/popper.js",
+            "node_modules/bootstrap/dist/js/bootstrap.js",
+            "node_modules/vue/dist/vue.js",
+            "node_modules/html5sortable/dist/html5sortable.js",
+            "node_modules/nestable2/dist/jquery.nestable.min.js",
+            "node_modules/dropzone/dist/dropzone.js",
+            "node_modules/select2/dist/js/select2.js",
+            "node_modules/vuejs-datepicker/dist/vuejs-datepicker.min.js",
+            "node_modules/simplemde/dist/simplemde.min.js"
+        ]
+    },
+    {
+        name: "piranha-deps.js",
         items: [
             "node_modules/jquery/dist/jquery.slim.js",
             "node_modules/popper.js/dist/umd/popper.js",
@@ -43,9 +59,16 @@ var js = [
             "node_modules/dropzone/dist/dropzone.js",
             "node_modules/select2/dist/js/select2.js",
             "node_modules/vuejs-datepicker/dist/vuejs-datepicker.min.js",
-            "node_modules/simplemde/dist/simplemde.min.js",
+            "node_modules/simplemde/dist/simplemde.min.js"
+        ]
+    },
+    {
+        name: "piranha.js",
+        items: [
             "assets/src/js/piranha.accessibility.js",
+            "assets/src/js/piranha.alert.js",
             "assets/src/js/piranha.dropzone.js",
+            "assets/src/js/piranha.permissions.js",
             "assets/src/js/piranha.utils.js",
             "assets/src/js/piranha.blockpicker.js",
             "assets/src/js/piranha.notifications.js",
@@ -89,6 +112,7 @@ var js = [
             "assets/src/js/components/post-archive.js",
             "assets/src/js/components/block-group.js",
             "assets/src/js/components/block-group-horizontal.js",
+            "assets/src/js/components/block-group-vertical.js",
 
             "assets/src/js/components/blocks/html-block.js",
             "assets/src/js/components/blocks/html-column-block.js",

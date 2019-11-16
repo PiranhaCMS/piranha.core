@@ -31,6 +31,11 @@ namespace Piranha.Runtime
             /// Gets/sets the content type.
             /// </summary>
             public string ContentType { get; set; }
+
+            /// <summary>
+            /// If image processing should be applied to this media type.
+            /// </summary>
+            public bool AllowProcessing { get; set; }
         }
 
         /// <summary>
@@ -38,17 +43,29 @@ namespace Piranha.Runtime
         /// </summary>
         public class MediaTypeList : List<MediaTypeItem>
         {
+            private bool _allowProcessing = false;
+
+            /// <summary>
+            /// Default constructor
+            /// </summary>
+            /// <param name="allowProcessing">If image processing should be applied by default</param>
+            public MediaTypeList(bool allowProcessing = false)
+            {
+                _allowProcessing = allowProcessing;
+            }
+
             /// <summary>
             /// Adds a new media type.
             /// </summary>
             /// <param name="extension">The file extension</param>
             /// <param name="contentType">The content type</param>
-            public void Add(string extension, string contentType)
+            public void Add(string extension, string contentType, bool? allowProcessing = null)
             {
                 Add(new MediaTypeItem
                 {
                     Extension = extension.ToLower(),
-                    ContentType = contentType
+                    ContentType = contentType,
+                    AllowProcessing = allowProcessing.HasValue ? allowProcessing.Value : _allowProcessing
                 });
             }
 
@@ -71,7 +88,7 @@ namespace Piranha.Runtime
         /// <summary>
         /// Gets/sets the currently accepted image extensions.
         /// </summary>
-        public MediaTypeList Images { get; set; } = new MediaTypeList();
+        public MediaTypeList Images { get; set; } = new MediaTypeList(true);
 
         /// <summary>
         /// Gets/sets the currently accepted video extensions.
@@ -170,6 +187,39 @@ namespace Piranha.Runtime
             }
 
             return "application/octet-stream";
+        }
+
+        /// <summary>
+        /// Gets the media type item for the given filename based on its extensions.
+        /// </summary>
+        /// <param name="filename">The path or filename</param>
+        /// <returns>The media type item</returns>
+        public MediaTypeItem GetItem(string filename)
+        {
+            var extension = Path.GetExtension(filename).ToLower();
+            MediaTypeItem item = null;
+
+            if ((item = Documents.SingleOrDefault(t => t.Extension == extension)) != null)
+            {
+                return item;
+            }
+            else if ((item = Images.SingleOrDefault(t => t.Extension == extension)) != null)
+            {
+                return item;
+            }
+            else if ((item = Videos.SingleOrDefault(t => t.Extension == extension)) != null)
+            {
+                return item;
+            }
+            else if ((item = Audio.SingleOrDefault(t => t.Extension == extension)) != null)
+            {
+                return item;
+            }
+            else if ((item = Resources.SingleOrDefault(t => t.Extension == extension)) != null)
+            {
+                return item;
+            }
+            return null;
         }
     }
 }

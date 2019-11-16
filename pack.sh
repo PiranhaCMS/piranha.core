@@ -27,5 +27,7 @@ nuget pack nuspec/Piranha.ImageSharp.nuspec -OutputDirectory $OUTPUT_DIR
 nuget pack nuspec/Piranha.Local.FileStorage.nuspec -OutputDirectory $OUTPUT_DIR
 nuget pack nuspec/Piranha.Manager.nuspec -OutputDirectory $OUTPUT_DIR
 nuget pack nuspec/Piranha.Manager.Localization.nuspec -OutputDirectory $OUTPUT_DIR
+nuget pack nuspec/Piranha.Manager.Summernote.nuspec -OutputDirectory $OUTPUT_DIR
+nuget pack nuspec/Piranha.Manager.TinyMCE.nuspec -OutputDirectory $OUTPUT_DIR
 nuget pack nuspec/Piranha.nuspec -OutputDirectory $OUTPUT_DIR
 nuget pack nuspec/Piranha.WebApi.nuspec -OutputDirectory $OUTPUT_DIR

@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.Azure.BlobStorage</id>
     <title>Piranha Azure BlobStorage</title>
-    <version>7.0.0</version>
+    <version>7.1.0</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -18,7 +18,7 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework=".NETStandard2.0">
-        <dependency id="Piranha" version="[7.0.0,8.0.0)" />
+        <dependency id="Piranha" version="[7.1.0,8.0.0)" />
         <dependency id="Microsoft.Azure.KeyVault.Core" version="3.0.1" />
         <dependency id="Microsoft.Azure.Storage.Blob" version="10.0.3" />
       </group>

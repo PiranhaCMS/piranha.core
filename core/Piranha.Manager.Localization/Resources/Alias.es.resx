@@ -21,11 +21,20 @@
   <data name="Alias URL" xml:space="preserve">
     <value>URL de Alias</value>
   </data>
+  <data name="Alias URL is mandatory." xml:space="preserve">
+    <value>La URL del alias es obligatoria.</value>
+  </data>
   <data name="Redirect URL" xml:space="preserve">
     <value>URL de redirección</value>
   </data>
+  <data name="Redirect URL is mandatory." xml:space="preserve">
+    <value>La URL de redirección es obligatoria.</value>
+  </data>
   <data name="Permanent" xml:space="preserve">
     <value>Permanente</value>
+  </data>
+  <data name="Are you sure you want to delete this alias?" xml:space="preserve">
+    <value>¿Estás seguro que deseas eliminar este alias?</value>
   </data>
   <data name="If the redirect should be permanent" xml:space="preserve">
     <value>Si la redirección debe ser permanente</value>

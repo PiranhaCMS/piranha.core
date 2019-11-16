@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.AspNetCore.Identity</id>
     <title>Piranha AspNetCore Identity</title>
-    <version>7.0.0</version>
+    <version>7.1.0</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -11,15 +11,15 @@
     <copyright>Copyright 2018-2019 (c) Håkan Edling</copyright>
     <tags>cms mvc aspnetcore netstandard</tags>
     <license type="expression">MIT</license>
-    <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
+    <projectUrl>https://github.com/piranhacms/piranha.core</projectUrl>
     <iconUrl>http://piranhacms.org/assets/twitter-shield.png</iconUrl>
     <releaseNotes>See the changelog available at:
 https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework=".NETStandard2.0">
-        <dependency id="Piranha" version="[7.0.0,8.0.0)" />
-        <dependency id="Piranha.Manager" version="[7.0.0,8.0.0)" />
+        <dependency id="Piranha" version="[7.1.0,8.0.0)" />
+        <dependency id="Piranha.Manager" version="[7.1.0,8.0.0)" />
         <dependency id="Microsoft.AspNetCore.Identity.EntityFrameworkCore" version="2.2.0" />
       </group>
     </dependencies>

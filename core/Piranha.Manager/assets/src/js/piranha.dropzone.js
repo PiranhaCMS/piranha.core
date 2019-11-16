@@ -40,7 +40,7 @@ piranha.dropzone = new function () {
                 // Default complete callback
                 if (!options.complete) {
                     options.complete = function (file) {
-                        console.log(file)
+                        //console.log(file)
                         if (file.status !== "success" && file.xhr.responseText !== "" ) {
                             var response = JSON.parse(file.xhr.responseText);
                             file.previewElement.querySelector("[data-dz-errormessage]").innerText = response.body;

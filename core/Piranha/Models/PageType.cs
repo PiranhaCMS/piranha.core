@@ -24,6 +24,11 @@ namespace Piranha.Models
         public bool UseBlocks { get; set; } = true;
 
         /// <summary>
+        /// Gets/sets if this is an archive page or not.
+        /// </summary>
+        public bool IsArchive { get; set; }
+
+        /// <summary>
         /// Gets/sets the allowed items types if this is an Archive
         /// Page. If the collection is empty all Post Types should
         /// be considered to be allowed.

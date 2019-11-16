@@ -10,7 +10,6 @@
 
 using System;
 using System.Threading.Tasks;
-using Piranha.Services;
 
 namespace Piranha.Web
 {
@@ -32,28 +31,33 @@ namespace Piranha.Web
 
                 if (page != null)
                 {
-                    if (page.ContentType == "Page")
-                    {
-                        var site = await api.Sites.GetByIdAsync(siteId).ConfigureAwait(false);
-                        var lastModified = !site.ContentLastModified.HasValue || page.LastModified > site.ContentLastModified
-                            ? page.LastModified : site.ContentLastModified.Value;
+                    var type = App.PageTypes.GetById(page.TypeId);
 
-                        return new RouteResponse
-                        {
-                            PageId = page.Id,
-                            Route = page.Route ?? "/page",
-                            QueryString = "id=" + page.Id + "&startpage=true&piranha_handled=true",
-                            IsPublished = page.Published.HasValue && page.Published.Value <= DateTime.Now,
-                            CacheInfo = new HttpCacheInfo
-                            {
-                                EntityTag = Utils.GenerateETag(page.Id.ToString(), lastModified),
-                                LastModified = lastModified
-                            }
-                        };
-                    }
-                    else if (page.ContentType == "Blog")
+                    if (type != null)
                     {
-                        return await ArchiveRouter.InvokeAsync(api, $"/{page.Slug}", siteId).ConfigureAwait(false);
+                        if (!type.IsArchive)
+                        {
+                            var site = await api.Sites.GetByIdAsync(siteId).ConfigureAwait(false);
+                            var lastModified = !site.ContentLastModified.HasValue || page.LastModified > site.ContentLastModified
+                                ? page.LastModified : site.ContentLastModified.Value;
+
+                            return new RouteResponse
+                            {
+                                PageId = page.Id,
+                                Route = page.Route ?? "/page",
+                                QueryString = "id=" + page.Id + "&startpage=true&piranha_handled=true",
+                                IsPublished = page.Published.HasValue && page.Published.Value <= DateTime.Now,
+                                CacheInfo = new HttpCacheInfo
+                                {
+                                    EntityTag = Utils.GenerateETag(page.Id.ToString(), lastModified),
+                                    LastModified = lastModified
+                                }
+                            };
+                        }
+                        else
+                        {
+                            return await ArchiveRouter.InvokeAsync(api, $"/{page.Slug}", siteId).ConfigureAwait(false);
+                        }
                     }
                 }
             }

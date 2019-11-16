@@ -13,19 +13,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Piranha.Models
 {
-    [Serializable]
-    public sealed class Param : Param<Guid> { }
-
     /// <summary>
     /// String parameter.
     /// </summary>
     [Serializable]
-    public abstract class Param<TKey>
+    public class Param
     {
         /// <summary>
         /// Gets/sets the unique id.
         /// </summary>
-        public TKey Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets/sets the unique key.

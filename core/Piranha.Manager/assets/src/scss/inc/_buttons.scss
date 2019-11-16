@@ -24,6 +24,20 @@
             }
         }
     }
+
+    &.btn-icon {
+        position: relative;
+        width: 2.3rem;
+        height: 2.2rem;
+
+        i {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            margin-top: -1px;
+        }
+    }
 }
 
 .btn-group {

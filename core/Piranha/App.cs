@@ -64,11 +64,6 @@ namespace Piranha
         private readonly SerializerManager _serializers;
 
         /// <summary>
-        /// The currently registered content types.
-        /// </summary>
-        private readonly ContentTypeManager _contentTypes;
-
-        /// <summary>
         /// The currently registered hooks.
         /// </summary>
         private readonly HookManager _hooks;
@@ -141,11 +136,6 @@ namespace Piranha
         public static SerializerManager Serializers => Instance._serializers;
 
         /// <summary>
-        /// Gets the currently registered content types.
-        /// </summary>
-        public static ContentTypeManager ContentTypes => Instance._contentTypes;
-
-        /// <summary>
         /// Gets the currently registered hooks.
         /// </summary>
         public static HookManager Hooks => Instance._hooks;
@@ -195,10 +185,6 @@ namespace Piranha
             Instance._mediaTypes.Videos.Add(".mp4", "video/mp4");
             Instance._mediaTypes.Audio.Add(".mp3", "audio/mpeg");
             Instance._mediaTypes.Audio.Add(".wav", "audio/wav");
-
-            // Compose content types
-            Instance._contentTypes.Register<Models.IPage>("Page", "Page");
-            Instance._contentTypes.Register<Models.IArchivePage>("Blog", "Archive", true);
 
             // Compose field types
             Instance._fields.Register<Extend.Fields.CheckBoxField>();
@@ -271,7 +257,6 @@ namespace Piranha
             _modules = new AppModuleList();
             _mediaTypes = new MediaManager();
             _serializers = new SerializerManager();
-            _contentTypes = new ContentTypeManager();
             _hooks = new HookManager();
             _permissions = new PermissionManager();
             _pageTypes = new ContentTypeList<Models.PageType>();

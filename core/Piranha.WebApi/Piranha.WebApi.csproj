@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <Version>7.1.0-alpha1</Version>
+    <Version>7.1.0</Version>
     <Company>Piranha CMS</Company>
   </PropertyGroup>
 

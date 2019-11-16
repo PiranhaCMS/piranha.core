@@ -12,11 +12,12 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 using System.Reflection;
+using Piranha.Extend;
 using Piranha.Security;
 
 namespace Piranha.Manager
 {
-    public sealed class Module : Extend.IModule
+    public sealed class Module : IModule
     {
         private readonly List<PermissionItem> _permissions = new List<PermissionItem>
         {
@@ -66,6 +67,11 @@ namespace Piranha.Manager
         /// The currently registrered partial views.
         /// </summary>
         public List<string> Partials { get; private set; }
+
+        /// <summary>
+        /// Gets/sets the url to the currently registered editor init script.
+        /// </summary>
+        public static string EditorInitScriptUrl { get; set; }
 
         /// <summary>
         /// The currently registered preview sizes.

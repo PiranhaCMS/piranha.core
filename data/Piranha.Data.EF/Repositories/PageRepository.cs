@@ -371,9 +371,6 @@ namespace Piranha.Repositories
 
             if (type != null)
             {
-                // Set content type
-                model.ContentType = type.ContentTypeId;
-
                 IQueryable<Page> pageQuery = _db.Pages;
                 if (isDraft)
                 {
@@ -449,6 +446,7 @@ namespace Piranha.Repositories
                         affected.Add(page.Id);
                     }
 
+                    page.ContentType = type.IsArchive ? "Blog" : "Page";
                     page.PageTypeId = model.TypeId;
                     page.OriginalPageId = model.OriginalPageId;
                     page.SiteId = model.SiteId;
@@ -539,6 +537,7 @@ namespace Piranha.Repositories
                 }
 
                 page = _contentService.Transform<T>(model, type, page);
+                page.ContentType = type.IsArchive ? "Blog" : "Page";
 
                 // Make sure foreign key is set for fields
                 if (!isDraft)

@@ -13,63 +13,66 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add page" xml:space="preserve">
-    <value>Add page</value>
+    <value>Додати сторінку</value>
   </data>
   <data name="An error occured while deleting the page" xml:space="preserve">
-    <value>An error occured while deleting the page</value>
+    <value>Сталася помилка під час видалення сторінки</value>
   </data>
   <data name="Detach page" xml:space="preserve">
-    <value>Detach page</value>
+    <value>Від'єднати сторінку</value>
   </data>
   <data name="Edit original" xml:space="preserve">
-    <value>Edit original</value>
+    <value>Редагувати оригінал</value>
   </data>
   <data name="Edit page" xml:space="preserve">
-    <value>Edit page</value>
+    <value>Редагувати сторінку</value>
   </data>
   <data name="Hidden" xml:space="preserve">
-    <value>Hidden</value>
+    <value>Прихована</value>
   </data>
   <data name="If the page should be hidden in the sitemap" xml:space="preserve">
-    <value>If the page should be hidden in the sitemap</value>
+    <value>Чи має сторінка бути прихованою в карті сайту</value>
   </data>
   <data name="Meta keywords" xml:space="preserve">
-    <value>Meta keywords</value>
+    <value>Мета-ключові слова</value>
   </data>
   <data name="Meta description" xml:space="preserve">
-    <value>Meta description</value>
+    <value>Мета-опис</value>
   </data>
   <data name="Navigation title" xml:space="preserve">
-    <value>Navigation title</value>
+    <value>Заголовок навігації</value>
+  </data>
+  <data name="Are you sure you want to delete this page?" xml:space="preserve">
+    <value>Ви дійсно бажаєте видалити цю сторінку?</value>
   </data>
   <data name="Pages" xml:space="preserve">
-    <value>Pages</value>
+    <value>Сторінки</value>
   </data>
   <data name="The page was successfully deleted" xml:space="preserve">
-    <value>The page was successfully deleted</value>
+    <value>Сторінку успішно видалено</value>
   </data>
   <data name="The page was successfully detached from the original" xml:space="preserve">
-    <value>The page was successfully detached from the original</value>
+    <value>Сторінку успішно від’єднано від оригіналу</value>
   </data>
   <data name="The page was successfully published" xml:space="preserve">
-    <value>The page was successfully published</value>
+    <value>Сторінку опубліковано успішно</value>
   </data>
   <data name="The page was successfully unpublished" xml:space="preserve">
-    <value>The page was successfully unpublished</value>
+    <value>Сторінка успішно знята з публікації</value>
   </data>
   <data name="The page was successfully saved" xml:space="preserve">
-    <value>The page was successfully saved</value>
+    <value>Сторінка успішно збережена</value>
   </data>
   <data name="The page was successfully reverted to its previous state" xml:space="preserve">
-    <value>The page was successfully reverted to its previous state</value>
+    <value>Сторінка була успішно повернута до попереднього стану</value>
   </data>
   <data name="This is a copy. In order to edit the content of the page you first need to detach it from the original. If you want to keep the page as a copy you should edit the content of the original page." xml:space="preserve">
-    <value>This is a copy. In order to edit the content of the page you first need to detach it from the original. If you want to keep the page as a copy you should edit the content of the original page.</value>
+    <value>Це копія. Для редагування вмісту сторінки потрібно спершу відв'язати її від оригіналу. Якщо ви хочете зберегти сторінку як копію, вам слід відредагувати вміст оригіналу.</value>
   </data>
   <data name="Welcome to your new page. Click on the button above to add your first block of content!" xml:space="preserve">
-    <value>Welcome to your new page. Click on the button above to add your first block of content!</value>
+    <value>Ласкаво просимо на вашу нову сторінку. Натисніть на кнопку вище, щоб додати ваш перший контент!</value>
   </data>
   <data name="Your page title" xml:space="preserve">
-    <value>Your page title</value>
+    <value>Заголовок вашої сторінки</value>
   </data>
 </root>

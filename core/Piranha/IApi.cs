@@ -9,7 +9,6 @@
  */
 
 using System;
-using Piranha.Repositories;
 using Piranha.Services;
 
 namespace Piranha

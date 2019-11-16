@@ -12,10 +12,16 @@ Vue.component("html-column-block", {
     },
     methods: {
         onBlurCol1: function (e) {
-            this.model.column1.value = tinyMCE.activeEditor.getContent();
+            this.model.column1.value = e.target.innerHTML;
         },
         onBlurCol2: function (e) {
-            this.model.column2.value = tinyMCE.activeEditor.getContent();
+            this.model.column2.value = e.target.innerHTML;
+        },
+        onChangeCol1: function (data) {
+            this.model.column1.value = data;
+        },
+        onChangeCol2: function (data) {
+            this.model.column2.value = data;
         }
     },
     computed: {
@@ -27,8 +33,8 @@ Vue.component("html-column-block", {
         }
     },
     mounted: function () {
-        piranha.editor.addInline(this.uid + 1, this.toolbar);
-        piranha.editor.addInline(this.uid + 2, this.toolbar);
+        piranha.editor.addInline(this.uid + 1, this.toolbar, this.onChangeCol1);
+        piranha.editor.addInline(this.uid + 2, this.toolbar, this.onChangeCol2);
     },
     beforeDestroy: function () {
         piranha.editor.remove(this.uid + 1);

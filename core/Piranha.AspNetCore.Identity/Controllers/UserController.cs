@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -80,6 +81,10 @@ namespace Piranha.AspNetCore.Identity.Controllers
         [Authorize(Policy = Permissions.UsersSave)]
         public async Task<IActionResult> Save(UserEditModel model)
         {
+            // Refresh roles in the model if validation fails
+            var temp = UserEditModel.Create(_db);
+            model.Roles = temp.Roles;
+
             if (string.IsNullOrWhiteSpace(model.User.UserName))
             {
                 ErrorMessage("User name is mandatory.", false);
@@ -102,6 +107,22 @@ namespace Piranha.AspNetCore.Identity.Controllers
             {
                 ErrorMessage("Password is mandatory when creating a new user.", false);
                 return View("Edit", model);
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.Password) && _userManager.PasswordValidators.Count > 0)
+            {
+                var errors = new List<string>();
+                foreach (var validator in _userManager.PasswordValidators)
+                {
+                    var result = await validator.ValidateAsync(_userManager, model.User, model.Password);
+                    if (!result.Succeeded)
+                        errors.AddRange(result.Errors.Select(msg => msg.Description));
+                    if (errors.Count > 0)
+                    {
+                        ErrorMessage(string.Join("<br />", errors), false);
+                        return View("Edit", model);
+                    }
+                }
             }
 
             if (await model.Save(_userManager))

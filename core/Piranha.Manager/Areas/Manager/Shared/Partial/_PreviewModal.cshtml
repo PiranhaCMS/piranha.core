@@ -1,3 +1,4 @@
+@inject IAuthorizationService Auth
 @inject ManagerLocalizer Localizer
 
 <!-- The Modal -->
@@ -26,9 +27,18 @@
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="pill" href="#pills-details"><i class="fas fa-info-circle"></i> @Localizer.General["Details"]</a>
                 </li>
+                @if ((await Auth.AuthorizeAsync(User, Permission.MediaEdit)).Succeeded)
+                {
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="pill" href="#pills-update"><i class="far fa-edit"></i> @Localizer.General["Update"]</a>
                 </li>
+                }
+                @foreach (var action in Piranha.Manager.Actions.Modals.MediaPreview)
+                {
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#@action.Uid"><i class="@action.Css"></i> @action.Title</a>
+                </li>
+                }
             </ul>
 
             <!-- Modal Body -->
@@ -105,6 +115,7 @@
                         <div id="media-update-container" class="dropzone-container">
                             <form action="@Url.Action("Upload", "MediaApi")" class="dropzone needsclick dz-clickable" enctype="multipart/form-data">
                                 <input type="hidden" name="Model.Id" v-model="media.id" />
+                                <input type="hidden" name="Model.ParentId" v-model="media.folderId" />
                                 <div class="dz-message needsclick text-center">
                                     <span class="fas fa-cloud-upload-alt"></span>
                                     @Localizer.Media["Drop files here or click to upload."]
@@ -114,6 +125,12 @@
                             <ul class="media-list list-unstyled"></ul>
                         </div>
                     </div>
+                    @foreach (var action in Piranha.Manager.Actions.Modals.MediaPreview)
+                    {
+                        <div class="tab-pane fade" id="@action.Uid">
+                            <component v-bind:is="'@action.Component'" v-bind:uid="'@action.Uid'" v-bind:model="this"></component>
+                        </div>
+                    }
                 </div>
             </div>
 

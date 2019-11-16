@@ -1,5 +1,6 @@
 @page "~/manager/config"
 @model ConfigEditViewModel
+@inject IAuthorizationService Auth
 @inject ManagerLocalizer Localizer
 @{
     ViewBag.Title = Localizer.Config["Config"];
@@ -11,141 +12,65 @@
 }
 
 <div id="config">
-    <form action="">
-        <div class="top">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">@Localizer.Menu["System"]</li>
-                    <li class="breadcrumb-item active" aria-current="page">@Localizer.Menu["Config"]</li>
-                </ol>
-            </nav>
+    <div class="top">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">@Localizer.Menu["System"]</li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer.Menu["Config"]</li>
+            </ol>
+        </nav>
 
-            <div class="container-fluid">
-                <div class="top-nav">
-                    <button v-on:click.prevent="save" class="btn btn-success btn-labeled">
-                        <i class="fas fa-check"></i>@Localizer.General["Save"]
-                    </button>
-                </div>
+        <div class="container-fluid">
+            <div class="top-nav">
+                @foreach (var action in Piranha.Manager.Actions.Toolbars.ConfigEdit)
+                {
+                    <partial name="@action.ActionView" />
+                }
             </div>
         </div>
+    </div>
 
-        <div class="container-fluid app" :class="{ ready: !loading }">
-            <div class="row">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-header">
-                            <span class="title">@Localizer.General["General"]</span>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>@Localizer.Config["Hierarchical page slugs"]</label>
-                                        <blockquote>
-                                            @Localizer.Config["If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps."]
-                                        </blockquote>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input v-model="model.hierarchicalPageSlugs" type="checkbox">
-                                                @Localizer.Config["If page slugs should include the parent slug."]
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>@Localizer.Config["Expanded levels in the sitemap"]</label>
-                                        <blockquote>
-                                            @Localizer.Config["The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps."]
-                                        </blockquote>
-                                        <input v-model="model.expandedSitemapLevels" class="form-control" type="number">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>@Localizer.Config["Archive page size"]</label>
-                                        <blockquote>
-                                            @Localizer.Config["The default page size for archive pages. Please note that this this can be overridden for specific archives."]
-                                        </blockquote>
-                                        <input v-model="model.archivePageSize" class="form-control" type="number">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    <div class="container-fluid app" :class="{ ready: !loading }">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="title">@Localizer.General["General"]</span>
                     </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-header">
-                            <span class="title">@Localizer.General["History"]</span>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>@Localizer.Config["Page revisions"]</label>
-                                        <blockquote>
-                                            @Localizer.Config["The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation."]
-                                        </blockquote>
-                                        <input v-model="model.pageRevisions" class="form-control" type="number">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>@Localizer.Config["Post revisions"]</label>
-                                        <blockquote>
-                                            @Localizer.Config["The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation."]
-                                        </blockquote>
-                                        <input v-model="model.postRevisions" class="form-control" type="number">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>@Localizer.Config["Hierarchical page slugs"]</label>
+                                    <blockquote>
+                                        @Localizer.Config["If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps."]
+                                    </blockquote>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input v-model="model.hierarchicalPageSlugs" type="checkbox">
+                                            @Localizer.Config["If page slugs should include the parent slug."]
+                                        </label>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-header">
-                            <span class="title">@Localizer.Config["Caching"]</span>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>@Localizer.Config["Page cache expiration (minutes)"]</label>
-                                        <blockquote>
-                                            @Localizer.Config["The time in minutes that web browsers can use pages before asking the server for new updates."]
-                                        </blockquote>
-                                        <input v-model="model.pagesExpires" class="form-control" type="number">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>@Localizer.Config["Post cache expiration (minutes)"]</label>
-                                        <blockquote>
-                                            @Localizer.Config["The time in minutes that web browsers can use posts before asking the server for new updates."]
-                                        </blockquote>
-                                        <input v-model="model.postsExpires" class="form-control" type="number">
-                                    </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>@Localizer.Config["Expanded levels in the sitemap"]</label>
+                                    <blockquote>
+                                        @Localizer.Config["The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps."]
+                                    </blockquote>
+                                    <input v-model="model.expandedSitemapLevels" class="form-control" type="number">
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>@Localizer.Config["Media CDN"]</label>
-                                        <blockquote>
-                                            @Localizer.Config["The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL."]
-                                        </blockquote>
-                                        <input v-model="model.mediaCDN" class="form-control" type="text">
-                                    </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>@Localizer.Config["Archive page size"]</label>
+                                    <blockquote>
+                                        @Localizer.Config["The default page size for archive pages. Please note that this this can be overridden for specific archives."]
+                                    </blockquote>
+                                    <input v-model="model.archivePageSize" class="form-control" type="number">
                                 </div>
                             </div>
                         </div>
@@ -153,5 +78,80 @@
                 </div>
             </div>
         </div>
-    </form>
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="title">@Localizer.General["History"]</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>@Localizer.Config["Page revisions"]</label>
+                                    <blockquote>
+                                        @Localizer.Config["The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation."]
+                                    </blockquote>
+                                    <input v-model="model.pageRevisions" class="form-control" type="number">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>@Localizer.Config["Post revisions"]</label>
+                                    <blockquote>
+                                        @Localizer.Config["The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation."]
+                                    </blockquote>
+                                    <input v-model="model.postRevisions" class="form-control" type="number">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="title">@Localizer.Config["Caching"]</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>@Localizer.Config["Page cache expiration (minutes)"]</label>
+                                    <blockquote>
+                                        @Localizer.Config["The time in minutes that web browsers can use pages before asking the server for new updates."]
+                                    </blockquote>
+                                    <input v-model="model.pagesExpires" class="form-control" type="number">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>@Localizer.Config["Post cache expiration (minutes)"]</label>
+                                    <blockquote>
+                                        @Localizer.Config["The time in minutes that web browsers can use posts before asking the server for new updates."]
+                                    </blockquote>
+                                    <input v-model="model.postsExpires" class="form-control" type="number">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>@Localizer.Config["Media CDN"]</label>
+                                    <blockquote>
+                                        @Localizer.Config["The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL."]
+                                    </blockquote>
+                                    <input v-model="model.mediaCDN" class="form-control" type="text">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

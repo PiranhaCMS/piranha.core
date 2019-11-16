@@ -2,7 +2,6 @@
 
 .table {
     tr {
-
         &.droppable {
             &.active {
                 background: $table-active-bg;
@@ -54,7 +53,7 @@
 
             td {
                 &:first-child {
-                    a {
+                    a, span.title {
                         font-family: "Open Sans", sans-serif;
                         font-size: 1rem;
 

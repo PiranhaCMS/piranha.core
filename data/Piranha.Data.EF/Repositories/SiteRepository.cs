@@ -228,6 +228,7 @@ namespace Piranha.Repositories
             site.Hostnames = model.Hostnames;
             site.Culture = model.Culture;
             site.IsDefault = model.IsDefault;
+            site.ContentLastModified = model.ContentLastModified;
             site.LastModified = DateTime.Now;
 
             await _db.SaveChangesAsync().ConfigureAwait(false);

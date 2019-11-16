@@ -32,7 +32,9 @@ piranha.postedit = new Vue({
         },
         selectedSetting: "uid-settings",
         selectedCategory: null,
-        selectedTags: []
+        selectedTags: [],
+        selectedRoute: null,
+        routes: []
     },
     computed: {
         contentRegions: function () {
@@ -67,6 +69,8 @@ piranha.postedit = new Vue({
             this.useBlocks = model.useBlocks;
             this.selectedCategory = model.selectedCategory;
             this.selectedTags = model.selectedTags;
+            this.selectedRoute = model.selectedRoute;
+            this.routes = model.routes;
 
             if (!this.useBlocks) {
                 // First choice, select the first custom editor
@@ -134,7 +138,8 @@ piranha.postedit = new Vue({
                 blocks: JSON.parse(JSON.stringify(self.blocks)),
                 regions: JSON.parse(JSON.stringify(self.regions)),
                 selectedCategory: self.selectedCategory,
-                selectedTags: JSON.parse(JSON.stringify(self.selectedTags))
+                selectedTags: JSON.parse(JSON.stringify(self.selectedTags)),
+                selectedRoute: self.selectedRoute
             };
 
             fetch(route, {
@@ -152,6 +157,7 @@ piranha.postedit = new Vue({
                 self.slug = result.slug;
                 self.published = result.published;
                 self.state = result.state;
+                self.selectedRoute = result.selectedRoute;
 
                 if (oldState === 'new' && result.state !== 'new') {
                     window.history.replaceState({ state: "created"}, "Edit post", piranha.baseUrl + "manager/post/edit/" + result.id);
@@ -194,14 +200,23 @@ piranha.postedit = new Vue({
         remove: function () {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/post/delete/" + self.id)
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    piranha.notifications.push(result);
+            piranha.alert.open({
+                title: piranha.resources.texts.delete,
+                body: piranha.resources.texts.deletePostConfirm,
+                confirmCss: "btn-danger",
+                confirmIcon: "fas fa-trash",
+                confirmText: piranha.resources.texts.delete,
+                onConfirm: function () {
+                    fetch(piranha.baseUrl + "manager/api/post/delete/" + self.id)
+                    .then(function (response) { return response.json(); })
+                    .then(function (result) {
+                        piranha.notifications.push(result);
 
-                    window.location = piranha.baseUrl + "manager/page/edit/" + self.blogId;
-                })
-                .catch(function (error) { console.log("error:", error ); });
+                        window.location = piranha.baseUrl + "manager/page/edit/" + self.blogId;
+                    })
+                    .catch(function (error) { console.log("error:", error ); });
+                }
+            });
         },
         addBlock: function (type, pos) {
             var self = this;

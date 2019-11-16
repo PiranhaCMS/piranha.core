@@ -42,6 +42,9 @@
   <data name="Navigation title" xml:space="preserve">
     <value>Navigation title</value>
   </data>
+  <data name="Are you sure you want to delete this page?" xml:space="preserve">
+    <value>Are you sure you want to delete this page?</value>
+  </data>
   <data name="Pages" xml:space="preserve">
     <value>Pages</value>
   </data>

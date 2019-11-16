@@ -8,7 +8,6 @@
  *
  */
 
-using Newtonsoft.Json;
 using System;
 
 namespace Piranha.Extend

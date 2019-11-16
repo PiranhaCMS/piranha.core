@@ -14,21 +14,17 @@ using System.ComponentModel.DataAnnotations;
 namespace Piranha.Models
 {
     [Serializable]
-    public sealed class MediaFolder : MediaFolder<Guid>
-    {
-        /// <summary>
-        /// Gets/sets the optional parent id.
-        /// </summary>
-        public Guid? ParentId { get; set; }
-    }
-
-    [Serializable]
-    public abstract class MediaFolder<TKey>
+    public class MediaFolder
     {
         /// <summary>
         /// Gets/sets the unique id.
         /// </summary>
-        public TKey Id { get; set; }
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional parent id.
+        /// </summary>
+        public Guid? ParentId { get; set; }
 
         /// <summary>
         /// Gets/sets the folder name.

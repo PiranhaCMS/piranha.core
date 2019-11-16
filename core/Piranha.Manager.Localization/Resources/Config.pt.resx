@@ -13,61 +13,61 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Config" xml:space="preserve">
-    <value>Config</value>
+    <value>Configuração</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>Hierarchical page slugs</value>
+    <value>Slugs hierárquicos das páginas</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>If page slugs should include the parent slug.</value>
+    <value>Se o slugs das páginas devem incluir o slug pai.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
-    <value>Expanded levels in the sitemap</value>
+    <value>Níveis expandidos no sitemap</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
-    <value>Archive page size</value>
+    <value>Tamanho do arquivo da página</value>
   </data>
   <data name="Caching" xml:space="preserve">
     <value>Caching</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Page cache expiration (minutes)</value>
+    <value>Expiração do cache de página (minutos)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
-    <value>Page revisions</value>
+    <value>Revisões da página</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Post cache expiration (minutes)</value>
+    <value>Expiração do cache de post (minutos)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
-    <value>Post revisions</value>
+    <value>Revisões do post</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
     <value>Media CDN</value>
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
-    <value>If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps.</value>
+    <value>Se o slugs das páginas devem ter em conta seu slug pai ao ser gerado. Isso é recomendado para sitemaps grandes.</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
-    <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
+    <value>O número padrão de níveis que devem ser expandidos no sitemap da página. Isto é útil para sitemaps menores.</value>
   </data>
   <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
-    <value>The default page size for archive pages. Please note that this this can be overridden for specific archives.</value>
+    <value>O tamanho padrão para paginação de páginas de arquivo. Note que esse valor pode ser sobrescrito para páginas específicas.</value>
   </data>
   <data name="The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation." xml:space="preserve">
-    <value>The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation.</value>
+    <value>O número máximo de revisões de página que devem ser armazenadas para cada página. Um valor de 0 significa sem limitação.</value>
   </data>
   <data name="The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation." xml:space="preserve">
-    <value>The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation.</value>
+    <value>O número máximo de revisões de posts que devem ser armazenadas para cada post. Um valor de 0 significa sem limitação.</value>
   </data>
   <data name="The time in minutes that web browsers can use pages before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use pages before asking the server for new updates.</value>
+    <value>O tempo em minutos que os navegadores podem usar páginas antes de pedir novas atualizações ao servidor.</value>
   </data>
   <data name="The time in minutes that web browsers can use posts before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use posts before asking the server for new updates.</value>
+    <value>O tempo em minutos que os navegadores podem usar páginas antes de pedir novas atualizações ao servidor.</value>
   </data>
   <data name="The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL." xml:space="preserve">
-    <value>The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL.</value>
+    <value>A URL completa (incluindo qualquer nome de pasta) para o CDN usado para servir as mídia de upload. Deixe em branco para usar a URL de armazenamento padrão.</value>
   </data>
 </root>

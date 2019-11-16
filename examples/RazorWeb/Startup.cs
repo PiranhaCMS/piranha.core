@@ -28,6 +28,8 @@ namespace RazorWeb
             services.AddPiranhaFileStorage();
             services.AddPiranhaImageSharp();
             services.AddPiranhaManager();
+            //services.AddPiranhaSummernote();
+            services.AddPiranhaTinyMCE();
             services.AddPiranhaApi();
 
             services.AddPiranhaEF(options =>
@@ -86,6 +88,8 @@ namespace RazorWeb
             app.UseAuthorization();
             app.UsePiranha();
             app.UsePiranhaManager();
+            //app.UsePiranhaSummernote();
+            app.UsePiranhaTinyMCE();
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {

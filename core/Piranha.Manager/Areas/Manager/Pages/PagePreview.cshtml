@@ -1,4 +1,4 @@
-@page "~/manager/page/preview/{id}"
+﻿@page "~/manager/page/preview/{id}"
 @model PagePreviewModel
 @{
     Layout = "";
@@ -28,12 +28,20 @@
             </iframe>
         </div>
     </div>
-    <script>
-        var piranha = {};
-
-        piranha.baseUrl = "@Url.Content("~/")";
+    <script type="text/javascript">
+    var piranha = {};
+    window.piranha = piranha;
+    piranha.baseUrl = "@Url.Content("~/")";
     </script>
-    <script src="~/manager/assets/js/piranha.min.js"></script>
+    <environment include="Development">
+        <script type="text/javascript" src="~/manager/assets/js/piranha-dev.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script type="text/javascript" src="~/manager/assets/js/piranha.min.js"></script>
+    </environment>
+    <script type="text/javascript">
+        Vue.prototype.piranha = window.piranha;
+    </script>
     <script src="~/manager/assets/js/signalr.min.js"></script>
     <script>
         "use strict";

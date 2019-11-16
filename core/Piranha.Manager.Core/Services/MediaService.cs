@@ -62,7 +62,7 @@ namespace Piranha.Manager.Services
         /// </summary>
         /// <param name="folderId">The optional folder id</param>
         /// <returns>The list model</returns>
-        public async Task<MediaListModel> GetList(Guid? folderId = null, MediaType? filter = null)
+        public async Task<MediaListModel> GetList(Guid? folderId = null, MediaType? filter = null, int? width = null, int? height = null)
         {
             var model = new MediaListModel
             {
@@ -79,36 +79,25 @@ namespace Piranha.Manager.Services
                 }
             }
 
-            model.Media = (await _api.Media.GetAllAsync(folderId))
-                .Select(m => new MediaListModel.MediaItem
+            var holdMedia = (await _api.Media.GetAllByFolderIdAsync(folderId));
+            if (filter.HasValue)
+            {
+                holdMedia = holdMedia
+                    .Where(m => m.Type == filter.Value);
+            }
+            var pairMedia = holdMedia.Select(m => new { media = m, mediaItem = new MediaListModel.MediaItem
                 {
                     Id = m.Id,
                     FolderId = m.FolderId,
                     Type = m.Type.ToString(),
                     Filename = m.Filename,
-                    PublicUrl = m.PublicUrl.Replace("~", ""),
+                    PublicUrl = m.PublicUrl.TrimStart('~'), //Will only enumerate the start of the string, probably a faster operation.
                     ContentType = m.ContentType,
                     Size = Utils.FormatByteSize(m.Size),
                     Width = m.Width,
                     Height = m.Height,
                     LastModified = m.LastModified.ToString("yyyy-MM-dd")
-                }).ToList();
-
-            if (filter.HasValue)
-            {
-                model.Media = model.Media
-                    .Where(m => m.Type == filter.Value.ToString())
-                    .ToList();
-            }
-
-            if (model.Media.Where(m => m.Type == "Image").Count() > model.Media.Count / 2)
-            {
-                model.ViewMode = MediaListModel.GalleryView;
-            }
-            else
-            {
-                model.ViewMode = MediaListModel.ListView;
-            }
+                }}).ToArray();
 
             var structure = await _api.Media.GetStructureAsync();
             model.Folders = structure.GetPartial(folderId)
@@ -119,12 +108,20 @@ namespace Piranha.Manager.Services
                 }).ToList();
 
             foreach (var folder in model.Folders)
-            {
-                //
-                // TODO: Optimize, we don't need all this data
-                //
-                folder.ItemCount = (await _api.Media.GetAllAsync(folder.Id)).Count() + structure.GetPartial(folder.Id).Count();
-            }
+                folder.ItemCount = await _api.Media.CountFolderItemsAsync(folder.Id) +
+                                   structure.GetPartial(folder.Id).Count;
+            if (width.HasValue)
+                foreach (var mp in pairMedia.Where(m => m.media.Type == MediaType.Image))
+                {
+                    if (mp.media.Versions.Any(v => v.Width == width && v.Height == height))
+                        mp.mediaItem.AltVersionUrl =
+                            (await _api.Media.EnsureVersionAsync(mp.media, width.Value, height).ConfigureAwait(false))
+                            .TrimStart('~');
+                }
+
+            model.Media = pairMedia.Select(m => m.mediaItem).ToList();
+            model.ViewMode = model.Media.Count(m => m.Type == "Image") > model.Media.Count / 2 ? MediaListModel.GalleryView : MediaListModel.ListView;
+
             return model;
         }
 

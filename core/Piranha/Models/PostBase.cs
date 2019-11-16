@@ -45,7 +45,7 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the available tags.
         /// </summary>
-        public TaxonomyList Tags { get; set; } = new TaxonomyList();
+        public IList<Taxonomy> Tags { get; set; } = new List<Taxonomy>();
 
         /// <summary>
         /// Gets/sets the available blocks.

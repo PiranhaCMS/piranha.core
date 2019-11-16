@@ -53,6 +53,13 @@ piranha.siteedit = new Vue({
                 .catch(function (error) { console.log("error:", error ); });
         },
         save: function () {
+            // Validate form
+            var form = document.getElementById("siteForm");
+            if (form.checkValidity() === false) {
+                form.classList.add("was-validated");
+                return;
+            }
+
             var self = this;
             var model = {
                 id: this.id,
@@ -110,6 +117,10 @@ piranha.siteedit = new Vue({
             });
         },
         open: function (id, cb) {
+            // Remove old validation
+            var form = document.getElementById("siteForm");
+            form.classList.remove("was-validated");
+
             // Store callback
             this.callback = cb;
             this.isNew = false;
@@ -131,6 +142,10 @@ piranha.siteedit = new Vue({
         },
         create: function (cb) {
             var self = this;
+
+            // Remove old validation
+            var form = document.getElementById("siteForm");
+            form.classList.remove("was-validated");
 
             // Create a new site
             fetch(piranha.baseUrl + "manager/api/site/create")

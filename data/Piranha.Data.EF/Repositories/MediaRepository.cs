@@ -36,16 +36,24 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="folderId">The optional folder id</param>
         /// <returns>The available media</returns>
-        public async Task<IEnumerable<Guid>> GetAll(Guid? folderId = null)
-        {
-            return await _db.Media
+        public async Task<IEnumerable<Guid>> GetAll(Guid? folderId = null) =>
+            await _db.Media
                 .AsNoTracking()
                 .Where(m => m.FolderId == folderId)
                 .OrderBy(m => m.Filename)
                 .Select(m => m.Id)
                 .ToListAsync()
                 .ConfigureAwait(false);
-        }
+
+        /// <summary>
+        /// <inheritdoc cref="IMediaRepository.CountAll"/>
+        /// </summary>
+        /// <param name="folderId"></param>
+        /// <returns></returns>
+        public Task<int> CountAll(Guid? folderId) =>
+            _db.Media
+                .AsNoTracking()
+                .Where(m => m.FolderId == folderId).CountAsync();
 
         /// <summary>
         /// Gets all media folders available in the specified
@@ -53,59 +61,38 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="folderId">The optional folder id</param>
         /// <returns>The available media folders</returns>
-        public async Task<IEnumerable<Guid>> GetAllFolders(Guid? folderId = null)
-        {
-            return await _db.MediaFolders
+        public async Task<IEnumerable<Guid>> GetAllFolders(Guid? folderId = null) =>
+            await _db.MediaFolders
                 .AsNoTracking()
                 .Where(f => f.ParentId == folderId)
                 .OrderBy(f => f.Name)
                 .Select(f => f.Id)
                 .ToListAsync()
                 .ConfigureAwait(false);
-        }
+
+        /// <inheritdoc cref="IMediaRepository.GetAllByIdAsync"/>
+        public Task<IEnumerable<Models.Media>> GetById(params Guid[] ids) => _db.Media.AsNoTracking()
+            .Include(c => c.Versions).Where(m => ids.Contains(m.Id)).OrderBy(m => m.Filename).ToArrayAsync()
+            .ContinueWith(t => t.Result.Select(m => (Models.Media) m));
 
         /// <summary>
         /// Gets the media with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The media</returns>
-        public Task<Models.Media> GetById(Guid id)
-        {
-            return _db.Media
+        public Task<Models.Media> GetById(Guid id) =>
+            _db.Media
                 .AsNoTracking()
                 .Include(m => m.Versions)
-                .Select(m => new Models.Media
-                {
-                    Id = m.Id,
-                    FolderId = m.FolderId,
-                    Type = m.Type,
-                    Filename = m.Filename,
-                    ContentType = m.ContentType,
-                    Size = m.Size,
-                    Width = m.Width,
-                    Height = m.Height,
-                    Created = m.Created,
-                    LastModified = m.LastModified,
-                    Versions = m.Versions.Select(v => new Models.MediaVersion
-                    {
-                        Id = v.Id,
-                        Size = v.Size,
-                        Width = v.Width,
-                        Height = v.Height,
-                        FileExtension = v.FileExtension
-                    }).ToList()
-                })
-                .FirstOrDefaultAsync(m => m.Id == id);
-        }
+                .FirstOrDefaultAsync(m => m.Id == id).ContinueWith(t => (Models.Media)t.Result);
 
         /// <summary>
         /// Gets the media folder with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The media folder</returns>
-        public Task<Models.MediaFolder> GetFolderById(Guid id)
-        {
-            return _db.MediaFolders
+        public Task<Models.MediaFolder> GetFolderById(Guid id) =>
+            _db.MediaFolders
                 .AsNoTracking()
                 .Select(f => new Models.MediaFolder
                 {
@@ -115,7 +102,6 @@ namespace Piranha.Repositories
                     Created = f.Created
                 })
                 .FirstOrDefaultAsync(f => f.Id == id);
-        }
 
         /// <summary>
         /// Gets the hierachical media structure.
@@ -176,7 +162,7 @@ namespace Piranha.Repositories
             // Add new versions
             foreach (var version in model.Versions)
             {
-                if (!media.Versions.Any(v => v.Id == version.Id))
+                if (media.Versions.All(v => v.Id != version.Id))
                 {
                     var mediaVersion = new MediaVersion
                     {
@@ -286,12 +272,13 @@ namespace Piranha.Repositories
         {
             var result = new Models.MediaStructure();
 
-            foreach (var folder in folders.Where(f => f.ParentId == parentId).OrderBy(f => f.Name))
+            var mediaFolders = folders as MediaFolder[] ?? folders.ToArray();
+            foreach (var folder in mediaFolders.Where(f => f.ParentId == parentId).OrderBy(f => f.Name))
             {
                 var item = Module.Mapper.Map<MediaFolder, Models.MediaStructureItem>(folder);
 
                 item.Level = level;
-                item.Items = Sort(folders, folder.Id, level + 1);
+                item.Items = Sort(mediaFolders, folder.Id, level + 1);
 
                 result.Add(item);
             }

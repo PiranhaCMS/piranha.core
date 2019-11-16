@@ -1,0 +1,9 @@
+@inject IAuthorizationService Auth
+@inject ManagerLocalizer Localizer
+
+@if ((await Auth.AuthorizeAsync(User, Permission.ConfigEdit)).Succeeded)
+{
+    <button v-on:click.prevent="save" class="btn btn-success btn-labeled">
+        <i class="fas fa-check"></i>@Localizer.General["Save"]
+    </button>
+}

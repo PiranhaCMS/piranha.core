@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using System;
@@ -87,10 +87,10 @@ namespace Piranha.Tests
             var serializer = new DateFieldSerializer();
 
             var str = serializer.Serialize(new DateField() {
-               Value = new DateTime(2001, 1, 5, 16, 0, 0) 
+               Value = new DateTime(2001, 1, 5, 16, 0, 0)
             });
 
-            Assert.Equal("2001-01-05 16:00:00", str);
+            Assert.Equal("2001-01-05", str);
         }
 
         [Fact]
@@ -120,7 +120,7 @@ namespace Piranha.Tests
 
             var field = (DateField)serializer.Deserialize(null);
 
-            Assert.False(field.Value.HasValue);            
+            Assert.False(field.Value.HasValue);
         }
 
         [Fact]
@@ -160,7 +160,7 @@ namespace Piranha.Tests
 
             var field = (ImageField)serializer.Deserialize(null);
 
-            Assert.False(field.HasValue);            
+            Assert.False(field.HasValue);
         }
 
         [Fact]
@@ -200,7 +200,7 @@ namespace Piranha.Tests
 
             var field = (DocumentField)serializer.Deserialize(null);
 
-            Assert.False(field.HasValue);            
+            Assert.False(field.HasValue);
         }
 
         [Fact]
@@ -240,7 +240,7 @@ namespace Piranha.Tests
 
             var field = (VideoField)serializer.Deserialize(null);
 
-            Assert.False(field.HasValue);            
+            Assert.False(field.HasValue);
         }
 
         [Fact]
@@ -326,7 +326,7 @@ namespace Piranha.Tests
 
             var field = (MediaField)serializer.Deserialize(null);
 
-            Assert.False(field.HasValue);            
+            Assert.False(field.HasValue);
         }
 
         [Fact]
@@ -420,6 +420,6 @@ namespace Piranha.Tests
             Assert.Throws<ArgumentException>(() => serializer.Serialize(new DateField() {
                 Value = DateTime.Now
             }));
-        }        
+        }
     }
 }

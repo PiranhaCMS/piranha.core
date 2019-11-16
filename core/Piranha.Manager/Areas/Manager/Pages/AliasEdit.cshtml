@@ -1,5 +1,6 @@
 @page "~/manager/aliases"
 @model AliasEditViewModel
+@inject IAuthorizationService Auth
 @inject ManagerLocalizer Localizer
 @{
     ViewBag.Title = Localizer.Alias["Aliases"];
@@ -8,6 +9,11 @@
 @section script
 {
     <script src="~/manager/assets/js/piranha.alias.min.js"></script>
+    <script>
+        piranha.permissions.load(function () {
+            piranha.alias.load();
+        });
+    </script>
 }
 
 <div id="alias">
@@ -21,15 +27,19 @@
 
         <div class="container-fluid">
             <div class="top-nav">
-                <button class="btn btn-primary btn-labeled" data-toggle="modal" data-target="#aliasModal">
-                    <i class="fas fa-plus"></i>@Localizer.General["Add"]
-                </button>
+                @foreach (var action in Piranha.Manager.Actions.Toolbars.AliasEdit)
+                {
+                    <partial name="@action.ActionView" />
+                }
             </div>
         </div>
     </div>
 
     <div class="app" :class="{ ready: !loading }">
         <partial name="Partial/_AliasList" />
-        <partial name="Partial/_AliasForm" />
+        @if ((await Auth.AuthorizeAsync(User, Permission.AliasesEdit)).Succeeded)
+        {
+            <partial name="Partial/_AliasForm" />
+        }
     </div>
 </div>

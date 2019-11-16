@@ -24,6 +24,9 @@
   <data name="Folder name" xml:space="preserve">
     <value>Nombre de carpeta</value>
   </data>
+  <data name="Folder name is mandatory." xml:space="preserve">
+    <value>El nombre de carpeta es obligatorio.</value>
+  </data>
   <data name="Gallery" xml:space="preserve">
     <value>Galería</value>
   </data>

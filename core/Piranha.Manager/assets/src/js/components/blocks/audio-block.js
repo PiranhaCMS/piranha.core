@@ -55,7 +55,7 @@ Vue.component("audio-block", {
     },
     template:
         "<div class='block-body has-media-picker d-flex align-items-center' :class='{ empty: isEmpty }'>" +
-        "  <audio class='flex-grow-1' :src='mediaUrl' controls></audio>" +
+        "  <audio class='flex-grow-1 w-50' :src='mediaUrl' controls></audio>" +
         "  <div class='media-picker slide-in'>" +
         "    <div class='btn-group float-right'>" +
         "      <button v-on:click.prevent='select' class='btn btn-primary text-center'>" +

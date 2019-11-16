@@ -8,40 +8,45 @@
 }
 @section script
 {
-    <script src="~/manager/assets/tinymce/tinymce.min.js"></script>
+    <script src="@Url.Content(Piranha.Manager.Editor.EditorScripts.MainScriptUrl)"></script>
+    <script src="@Url.Content(Piranha.Manager.Editor.EditorScripts.EditorScriptUrl)"></script>
     <script src="~/manager/assets/js/piranha.contentedit.min.js"></script>
     <script src="~/manager/assets/js/piranha.pageedit.min.js"></script>
 
     @if (action == "edit")
     {
         <script>
-            piranha.pageedit.load("@RouteData.Values["id"]");
-
-            $(".title input").focus();
+            piranha.permissions.load(function () {
+                piranha.pageedit.load("@RouteData.Values["id"]");
+                $(".title input").focus();
+            });
         </script>
     }
     else if (action == "add")
     {
         <script>
-            piranha.pageedit.create("@RouteData.Values["id"]", "@RouteData.Values["pageType"]");
-
-            $(".title input").focus();
+            piranha.permissions.load(function () {
+                piranha.pageedit.create("@RouteData.Values["id"]", "@RouteData.Values["pageType"]");
+                $(".title input").focus();
+            });
         </script>
     }
     else if (action == "addrelative")
     {
         <script>
-            piranha.pageedit.createrelative("@RouteData.Values["id"]", "@RouteData.Values["pageType"]", "@RouteData.Values["after"]");
-
-            $(".title input").focus();
+            piranha.permissions.load(function () {
+                piranha.pageedit.createrelative("@RouteData.Values["id"]", "@RouteData.Values["pageType"]", "@RouteData.Values["after"]");
+                $(".title input").focus();
+            });
         </script>
     }
     else if (action == "copyrelative")
     {
         <script>
-            piranha.pageedit.copyrelative("@RouteData.Values["id"]", "@RouteData.Values["pageType"]", "@RouteData.Values["after"]");
-
-            $(".title input").focus();
+            piranha.permissions.load(function () {
+                piranha.pageedit.copyrelative("@RouteData.Values["id"]", "@RouteData.Values["pageType"]", "@RouteData.Values["after"]");
+                $(".title input").focus();
+            });
         </script>
     }
 }
@@ -58,7 +63,14 @@
             </ol>
         </nav>
 
-        <partial name="Partial/_PageMenu" />
+        <div class="container-fluid app" :class="{ ready: !loading }">
+            <div class="top-nav">
+                @foreach (var menuAction in Piranha.Manager.Actions.Toolbars.PageEdit)
+                {
+                    <partial name="@menuAction.ActionView" />
+                }
+            </div>
+        </div>
     </div>
 
     <div class="container-fluid app" :class="{ ready: !loading }">

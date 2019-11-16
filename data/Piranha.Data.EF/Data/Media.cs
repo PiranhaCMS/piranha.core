@@ -10,17 +10,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Piranha.Data
 {
     [Serializable]
-    public sealed class Media : Models.Media<Guid>
+    public sealed class Media : Models.MediaBase
     {
-        /// <summary>
-        /// Gets/sets the optional folder id.
-        /// </summary>
-        public Guid? FolderId { get; set; }
-
         /// <summary>
         /// Gets/sets the optional folder.
         /// </summary>
@@ -30,5 +26,55 @@ namespace Piranha.Data
         /// Gets/sets the available versions.
         /// </summary>
         public IList<MediaVersion> Versions { get; set; } = new List<MediaVersion>();
+
+        public static implicit operator Models.Media(Data.Media m)
+        {
+            return m == null? null : new Models.Media
+            {
+                Id = m.Id,
+                FolderId = m.FolderId,
+                Type = m.Type,
+                Filename = m.Filename,
+                ContentType = m.ContentType,
+                Size = m.Size,
+                Width = m.Width,
+                Height = m.Height,
+                Created = m.Created,
+                LastModified = m.LastModified,
+                Versions = m.Versions.Select(v => new Models.MediaVersion
+                {
+                    Id = v.Id,
+                    Size = v.Size,
+                    Width = v.Width,
+                    Height = v.Height,
+                    FileExtension = v.FileExtension
+                }).ToList()
+            };
+        }
+
+        public static implicit operator Media(Models.Media m)
+        {
+            return new Media
+            {
+                Id = m.Id,
+                FolderId = m.FolderId,
+                Type = m.Type,
+                Filename = m.Filename,
+                ContentType = m.ContentType,
+                Size = m.Size,
+                Width = m.Width,
+                Height = m.Height,
+                Created = m.Created,
+                LastModified = m.LastModified,
+                Versions = m.Versions.Select(v => new MediaVersion
+                {
+                    Id = v.Id,
+                    Size = v.Size,
+                    Width = v.Width,
+                    Height = v.Height,
+                    FileExtension = v.FileExtension
+                }).ToList()
+            };
+        }
     }
 }

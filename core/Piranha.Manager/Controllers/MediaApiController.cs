@@ -9,7 +9,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -89,9 +88,9 @@ namespace Piranha.Manager.Controllers
         /// <returns>The list model</returns>
         [Route("list/{folderId:Guid?}")]
         [HttpGet]
-        public async Task<MediaListModel> List(Guid? folderId = null, MediaType? filter = null)
+        public async Task<MediaListModel> List(Guid? folderId = null, [FromQuery]MediaType? filter = null, [FromQuery] int? width = null, [FromQuery] int? height = null)
         {
-            return await _service.GetList(folderId, filter);
+            return await _service.GetList(folderId, filter, width, height);
         }
 
         [Route("folder/save")]
@@ -126,6 +125,7 @@ namespace Piranha.Manager.Controllers
         }
 
         [Route("folder/delete/{id:Guid}")]
+        [HttpGet]
         [Authorize(Policy = Permission.MediaDeleteFolder)]
         public async Task<IActionResult> DeleteFolder(Guid id)
         {
@@ -159,8 +159,8 @@ namespace Piranha.Manager.Controllers
         /// Adds a new media upload.
         /// </summary>
         /// <param name="model">The upload model</param>
-        [HttpPost]
         [Route("upload")]
+        [HttpPost]
         [Consumes("multipart/form-data")]
         [Authorize(Policy = Permission.MediaAdd)]
         public async Task<IActionResult> Upload([FromForm] MediaUploadModel model)
@@ -211,29 +211,46 @@ namespace Piranha.Manager.Controllers
         }
 
         [Route("move/{mediaId}/{folderId?}")]
+        [HttpGet]
         [Authorize(Policy = Permission.MediaEdit)]
         public async Task<IActionResult> Move(Guid mediaId, Guid? folderId)
         {
             try
             {
-                var media = await _api.Media.GetByIdAsync(mediaId);
-                if (media != null)
+                if (mediaId != folderId)
                 {
-                    await _api.Media.MoveAsync(media, folderId);
-
-                    return Ok(new StatusMessage
+                    var media = await _api.Media.GetByIdAsync(mediaId);
+                    if (media != null)
                     {
-                        Type = StatusMessage.Success,
-                        Body = $"{media.Filename} was successfully moved."
+                        await _api.Media.MoveAsync(media, folderId);
+
+                        return Ok(new StatusMessage
+                        {
+                            Type = StatusMessage.Success,
+                            Body = $"{media.Filename} was successfully moved."
+                        });
+                    }
+
+                    var folder = await _api.Media.GetFolderByIdAsync(mediaId);
+                    if (folder != null)
+                    {
+                        folder.ParentId = folderId;
+                        await _api.Media.SaveFolderAsync(folder);
+
+                        return Ok(new StatusMessage
+                        {
+                            Type = StatusMessage.Success,
+                            Body = $"{folder.Name} was successfully moved."
+                        });
+                    }
+                    return BadRequest(new StatusMessage
+                    {
+                        Type = StatusMessage.Error,
+                        Body = "Media was not found."
                     });
                 }
-
-                return BadRequest(new StatusMessage
-                {
-                    Type = StatusMessage.Error,
-                    Body = "Media was not found."
-                });
-            }            
+                return BadRequest();
+            }
             catch (Exception e)
             {
                 return BadRequest(new StatusMessage
@@ -245,6 +262,7 @@ namespace Piranha.Manager.Controllers
         }
 
         [Route("delete/{id:Guid}")]
+        [HttpGet]
         [Authorize(Policy = Permission.MediaDelete)]
         public async Task<IActionResult> Delete(Guid id)
         {

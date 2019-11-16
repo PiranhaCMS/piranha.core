@@ -6,15 +6,15 @@
         padding-top: 2.5rem;
         margin: 0;
 
-        .block-group-header {
-            padding-bottom: .5rem;
-        }
-
         .block-header {
             color: $gray-600;
             padding-top: .5rem;
             opacity: 1;
             transition: none;
+        }
+
+        .block-group-header {
+            margin-bottom: .5rem;
         }
 
         .block {
@@ -86,13 +86,42 @@
         }
     }
 
-    &.block-group-horizontal {
+    &.block-group-horizontal, &.block-group-vertical {
+        .block-group-header {
+            background: $gray-100;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: .25rem;
+        }
+
         &:hover, &:focus-within {
-            .block:not(.danger) {
+            .block:not(.danger):not(.collapsed) {
                 border-color: transparent;
             }
         }
 
+        .block-group-actions {
+            opacity: 0;
+        }
+    }
+
+    &.block-group-vertical {
+        .block {
+            padding: 2.75rem .5rem;
+            margin: 0 -.5rem;
+
+            &.collapsed {
+                padding: 1.35rem .5rem;
+                margin-bottom: .25rem;
+            }
+        }
+
+        .empty-info {
+            margin: 0 -1rem;
+        }
+    }
+
+    &.block-group-horizontal {
         .block {
             height: 100%;
             padding: 0;
@@ -151,10 +180,6 @@
                     }
                 }
             }
-        }
-
-        .block-group-actions {
-            opacity: 0;
         }
     }
 

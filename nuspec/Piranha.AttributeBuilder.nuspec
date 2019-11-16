@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.AttributeBuilder</id>
     <title>Piranha AttributeBuilder</title>
-    <version>7.0.1</version>
+    <version>7.1.0</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -18,7 +18,7 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework=".NETStandard2.0">
-        <dependency id="Piranha" version="[7.0.3,8.0.0)" />
+        <dependency id="Piranha" version="[7.1.0,8.0.0)" />
       </group>
     </dependencies>
   </metadata>

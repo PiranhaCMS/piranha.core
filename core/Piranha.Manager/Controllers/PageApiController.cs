@@ -33,16 +33,18 @@ namespace Piranha.Manager.Controllers
         private readonly IApi _api;
         private readonly ManagerLocalizer _localizer;
         private readonly IHubContext<Hubs.PreviewHub> _hub;
+        private readonly IAuthorizationService _auth;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public PageApiController(PageService service, IApi api, ManagerLocalizer localizer, IHubContext<Hubs.PreviewHub> hub)
+        public PageApiController(PageService service, IApi api, ManagerLocalizer localizer, IHubContext<Hubs.PreviewHub> hub, IAuthorizationService auth)
         {
             _service = service;
             _api = api;
             _localizer = localizer;
             _hub = hub;
+            _auth = auth;
         }
 
         /// <summary>
@@ -54,7 +56,9 @@ namespace Piranha.Manager.Controllers
         [Authorize(Policy = Permission.Pages)]
         public async Task<PageListModel> List()
         {
-            return await _service.GetList();
+            var model = await _service.GetList();
+
+            return model;
         }
 
         /// <summary>

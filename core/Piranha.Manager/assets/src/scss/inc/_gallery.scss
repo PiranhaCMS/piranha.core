@@ -70,11 +70,20 @@
     flex-direction: column;
     padding-left: $gallery-gutter / 2;
     padding-right: $gallery-gutter / 2;
+    padding-bottom: 1.5rem;
     margin-bottom: $thumbnail-margin-bottom;
+
+    img {
+        background: #fff;
+    }
 
     &.droppable {
         &.active > * {
             background: $thumbnail-active-bg;
+
+            img {
+                background: $thumbnail-active-bg;
+            }
         }
     }
 
@@ -98,12 +107,13 @@
 
     .thumbnail-image {
         flex-grow: 1;
-        max-width: 100%;
+        max-width: calc(100% - #{$gallery-gutter});
         object-fit: cover;
         border: $thumbnail-border-width solid $thumbnail-border-color;
         border-bottom: none;
         background: $thumbnail-bg;
         padding: .25rem;
+        position: absolute;
     }
 
     .thumbnail-text {
@@ -114,6 +124,9 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
+        position: absolute;
+        bottom: 0;
+        width: calc(100% - #{$gallery-gutter});
     }
 
     .media-delete {
