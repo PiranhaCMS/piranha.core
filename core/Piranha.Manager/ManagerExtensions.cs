@@ -227,7 +227,7 @@ public static class ManagerModuleExtensions
     public static void MapPiranhaManager(this IEndpointRouteBuilder builder)
     {
         builder.MapHub<PreviewHub>("/manager/preview");
-        builder.MapRazorPages().RequireAuthorization();
+        builder.MapRazorPages();
     }
 
     public static IMvcBuilder AddPiranhaManagerOptions(this IMvcBuilder builder)
