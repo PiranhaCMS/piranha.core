@@ -21,18 +21,17 @@ This is a **complete rewrite** of Piranha CMS for `NetStandard`. The goal of thi
 is to create a version capable of targeting multiple platforms & frameworks with minimal
 depenencies, but still provide a flexible & high performance CMS library.
 
-Piranha is currently built for `NetStandard 2.0` and uses the following awesome packages:
+Piranha is currently built for `NetStandard 2.0` and `NetCoreApp 3.0` and uses the following awesome packages:
 
-* Markdig `0.15.0`
-* Microsoft.AspNetCore.App `2.2.0`
-* Microsoft.EntityFrameworkCore `2.2.0`
-* Newtonsoft.Json `11.0.2`
+* Markdig `0.17.1`
+* Microsoft.EntityFrameworkCore `3.0.0`
+* Newtonsoft.Json `12.0.2`
 
 ## Getting started
 
 #### Prerequisites
 
-* [.NET Core SDK 2.2.402](https://www.microsoft.com/net/core/)
+* [.NET Core SDK 3.0.100](https://dotnet.microsoft.com/download/dotnet-core/3.0)
 * An IDE or Editor of your choice
 
 #### Get the latest source code and get going
