@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Piranha;
 using Piranha.AspNetCore.Identity.SQLite;
@@ -18,16 +19,15 @@ namespace RazorWeb
             services.AddLocalization(options =>
                 options.ResourcesPath = "Resources"
             );
-            services.AddMvc()
-                .AddPiranhaManagerOptions()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddControllersWithViews();
+            services.AddRazorPages()
+                .AddPiranhaManagerOptions();
 
             services.AddPiranha();
             services.AddPiranhaApplication();
             services.AddPiranhaFileStorage();
             services.AddPiranhaImageSharp();
             services.AddPiranhaManager();
-            //services.AddPiranhaSummernote();
             services.AddPiranhaTinyMCE();
             services.AddPiranhaApi();
 
@@ -41,7 +41,7 @@ namespace RazorWeb
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApi api)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApi api)
         {
             if (env.IsDevelopment())
             {
@@ -83,20 +83,19 @@ namespace RazorWeb
 
             // Register middleware
             app.UseStaticFiles();
-            app.UseAuthentication();
             app.UsePiranha();
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UsePiranhaManager();
-            //app.UsePiranhaSummernote();
             app.UsePiranhaTinyMCE();
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(name: "areaRoute",
-                    template: "{area:exists}/{controller}/{action}/{id?}",
-                    defaults: new { controller = "Home", action = "Index" });
-
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=home}/{action=index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapPiranhaManager();
             });
 
             Seed.RunAsync(api).GetAwaiter().GetResult();

@@ -10,9 +10,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
@@ -166,7 +164,7 @@ namespace Piranha.Repositories
             {
                 if (media.Versions.All(v => v.Id != version.Id))
                 {
-                    media.Versions.Add(new MediaVersion
+                    var mediaVersion = new MediaVersion
                     {
                         Id = version.Id,
                         MediaId = media.Id,
@@ -174,7 +172,9 @@ namespace Piranha.Repositories
                         Width = version.Width,
                         Height = version.Height,
                         FileExtension = version.FileExtension
-                    });
+                    };
+                    _db.MediaVersions.Add(mediaVersion);
+                    media.Versions.Add(mediaVersion);
                 }
             }
 

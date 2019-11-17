@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.20" />
-    <PackageReference Include="Microsoft.Azure.Search" Version="5.0.3" />
+    <PackageReference Include="Microsoft.Azure.Search" Version="10.0.1" />
   </ItemGroup>
 
   <ItemGroup>

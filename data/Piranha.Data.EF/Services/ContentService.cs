@@ -186,12 +186,16 @@ namespace Piranha.Services
                             if (fields.Count > 0)
                                 items.AddRange(fields);
                         }
+
                         // Now delete removed collection items
                         var removedFields = content.Fields
                             .Where(f => f.RegionId == regionKey && !items.Contains(f.Id))
                             .ToList();
+
                         foreach (var removed in removedFields)
+                        {
                             content.Fields.Remove(removed);
+                        }
                     }
                 }
             }

@@ -224,7 +224,7 @@ namespace Piranha.Repositories
         /// <param name="model">The page model</param>
         public async Task SaveDraft<T>(T model) where T : Models.PageBase
         {
-            await Save<T>(model, true);
+            await Save<T>(model, true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -260,18 +260,20 @@ namespace Piranha.Repositories
                         .OrderByDescending(r => r.Created)
                         .Select(r => r.Id)
                         .Take(revisions)
-                        .ToListAsync();
+                        .ToListAsync()
+                        .ConfigureAwait(false);
 
                     if (existing.Count == revisions)
                     {
                         var removed = await _db.PageRevisions
                             .Where(r => r.PageId == id && !existing.Contains(r.Id))
-                            .ToListAsync();
+                            .ToListAsync()
+                            .ConfigureAwait(false);
 
                         if (removed.Count > 0)
                         {
                             _db.PageRevisions.RemoveRange(removed);
-                            await _db.SaveChangesAsync();
+                            await _db.SaveChangesAsync().ConfigureAwait(false);
                         }
                     }
                 }
@@ -415,7 +417,7 @@ namespace Piranha.Repositories
 
                         if (!isDraft)
                         {
-                            _db.Pages.Add(page);
+                            await _db.Pages.AddAsync(page).ConfigureAwait(false);
 
                             // Make room for the new page
                             var dest = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync().ConfigureAwait(false);
@@ -504,7 +506,7 @@ namespace Piranha.Repositories
 
                     if (!isDraft)
                     {
-                        await _db.Pages.AddAsync(page);
+                        await _db.Pages.AddAsync(page).ConfigureAwait(false);
 
                         // Make room for the new page
                         var dest = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync().ConfigureAwait(false);
@@ -536,6 +538,19 @@ namespace Piranha.Repositories
 
                 page = _contentService.Transform<T>(model, type, page);
                 page.ContentType = type.IsArchive ? "Blog" : "Page";
+
+                // Make sure foreign key is set for fields
+                if (!isDraft)
+                {
+                    foreach (var field in page.Fields)
+                    {
+                        if (field.PageId == Guid.Empty)
+                        {
+                            field.PageId = page.Id;
+                            await _db.PageFields.AddAsync(field).ConfigureAwait(false);
+                        }
+                    }
+                }
 
                 // Transform blocks
                 var blockModels = model.Blocks;
@@ -625,14 +640,19 @@ namespace Piranha.Repositories
                         }
 
                         // Create the page block
-                        page.Blocks.Add(new PageBlock
+                        var pageBlock = new PageBlock
                         {
                             Id = Guid.NewGuid(),
                             BlockId = block.Id,
                             Block = block,
                             PageId = page.Id,
                             SortOrder = n
-                        });
+                        };
+                        if (!isDraft)
+                        {
+                            await _db.PageBlocks.AddAsync(pageBlock).ConfigureAwait(false);
+                        }
+                        page.Blocks.Add(pageBlock);
                     }
                 }
                 if (!isDraft)
