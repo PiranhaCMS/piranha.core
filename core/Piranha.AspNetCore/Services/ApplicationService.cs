@@ -132,6 +132,16 @@ namespace Piranha.AspNetCore.Services
         public Guid PageId { get; set; }
 
         /// <summary>
+        /// Gets/sets the current page.
+        /// </summary>
+        public PageBase CurrentPage { get; set; }
+
+        /// <summary>
+        /// Gets/sets the current post.
+        /// </summary>
+        public PostBase CurrentPost { get; set; }
+
+        /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>

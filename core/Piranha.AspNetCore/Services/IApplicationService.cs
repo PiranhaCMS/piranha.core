@@ -43,6 +43,16 @@ namespace Piranha.AspNetCore.Services
         Guid PageId { get; set; }
 
         /// <summary>
+        /// Gets/sets the current page.
+        /// </summary>
+        PageBase CurrentPage { get; set; }
+
+        /// <summary>
+        /// Gets/sets the current post.
+        /// </summary>
+        PostBase CurrentPost { get; set; }
+
+        /// <summary>
         /// Initializes the service.
         /// </summary>
         Task InitAsync(HttpContext context);
