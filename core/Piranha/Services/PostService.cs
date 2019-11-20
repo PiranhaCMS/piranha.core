@@ -73,26 +73,6 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the available posts for the specified blog.
         /// </summary>
-        /// <returns>The posts</returns>
-        [Obsolete("Please refer to GetAllBySiteIdAsync(siteId)", true)]
-        public IEnumerable<DynamicPost> GetAll()
-        {
-            return GetAll<DynamicPost>();
-        }
-
-        /// <summary>
-        /// Gets the available post items.
-        /// </summary>
-        /// <returns>The posts</returns>
-        [Obsolete("Please refer to GetAllBySiteIdAsync(siteId)", true)]
-        public IEnumerable<T> GetAll<T>() where T : PostBase
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Gets the available posts for the specified blog.
-        /// </summary>
         /// <param name="blogId">The unique blog id</param>
         /// <returns>The posts</returns>
         public Task<IEnumerable<DynamicPost>> GetAllAsync(Guid blogId, int? index = null, int? pageSize = null)

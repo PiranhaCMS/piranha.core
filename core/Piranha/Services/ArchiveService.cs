@@ -34,30 +34,6 @@ namespace Piranha.Services
             _postService = postService;
         }
 
-        [Obsolete("The archive service now only loads the PostArchive and not the page. Please refer to GetByIdAsync<T>()", true)]
-        public T GetById<T>(Guid id, int? page = 1, Guid? categoryId = null, int? year = null, int? month = null, int? pageSize = null) where T : Models.ArchivePage<T>
-        {
-            return null;
-        }
-
-        [Obsolete("The archive service now only loads the PostArchive and not the page. Please refer to GetByIdAsync<T>()", true)]
-        public T GetById<T>(Guid id, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : Models.ArchivePage<T>
-        {
-            return null;
-        }
-
-        [Obsolete("The archive service now only loads the PostArchive and not the page. Please refer to GetByIdAsync<T>()", true)]
-        public T GetByCategoryId<T>(Guid id, Guid categoryId, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : Models.ArchivePage<T>
-        {
-            return null;
-        }
-
-        [Obsolete("The archive service now only loads the PostArchive and not the page. Please refer to GetByIdAsync<T>()", true)]
-        public T GetByTagId<T>(Guid id, Guid tagId, int? page = 1, int? year = null, int? month = null, int? pageSize = null) where T : Models.ArchivePage<T>
-        {
-            return null;
-        }
-
         /// <summary>
         /// Gets the post archive for the specified archive page
         /// with the given filters applied.
