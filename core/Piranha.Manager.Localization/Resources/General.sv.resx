@@ -18,6 +18,9 @@
   <data name="All" xml:space="preserve">
     <value>Alla</value>
   </data>
+  <data name="An error occurred" xml:space="preserve">
+    <value>Ett fel inträffade</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Avbryt</value>
   </data>
