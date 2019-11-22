@@ -47,27 +47,27 @@
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
-    <value>If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps.</value>
+    <value>Да се включи ли никът на страницата "родител" при генериране на нов ник на страница? Предпочита се при голяма карта на сайта.</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
-    <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
+    <value>Разгънатите нива в картата на сайта, по подразбиране. Полезно при малка карта на сайта.</value>
   </data>
   <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
-    <value>The default page size for archive pages. Please note that this this can be overridden for specific archives.</value>
+    <value>Количество на страници в архиви по подразбиране. Имайте предвид, че тази стойност може да бъде надхвърлена за определени архиви.</value>
   </data>
   <data name="The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation." xml:space="preserve">
-    <value>The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation.</value>
+    <value>Максимална стойност на преглежданията, които да се запазват за всяка страница. Стойност 0 означава без лимит.</value>
   </data>
   <data name="The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation." xml:space="preserve">
-    <value>The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation.</value>
+    <value>Максимална стойност на преглежданията, които да се запазват за всеки пост. Стойност 0 означава без лимит.</value>
   </data>
   <data name="The time in minutes that web browsers can use pages before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use pages before asking the server for new updates.</value>
+    <value>Времето в минути, за което браузърите могат да използват страници преди запитване към сървърът за опреснение.</value>
   </data>
   <data name="The time in minutes that web browsers can use posts before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use posts before asking the server for new updates.</value>
+    <value>Времето в минути, за което браузърите могат да използват постове преди запитване към сървърът за опреснение.</value>
   </data>
   <data name="The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL." xml:space="preserve">
-    <value>The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL.</value>
+    <value>Пълен линк (включвайки имена на папки) към CDN използван за качване на файлове. Оставете празно, за да се използва хранилището по подразбиране.</value>
   </data>
 </root>
