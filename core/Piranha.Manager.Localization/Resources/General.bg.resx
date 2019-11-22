@@ -19,7 +19,7 @@
     <value>Всички</value>
   </data>
   <data name="An error occurred" xml:space="preserve">
-    <value>An error occurred</value>
+    <value>Възникна грешка</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Отмени</value>
@@ -214,7 +214,7 @@
     <value>Непубликуван</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>Потребители</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Версия</value>
