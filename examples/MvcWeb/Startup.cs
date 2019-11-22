@@ -84,6 +84,7 @@ namespace MvcWeb
             app.UsePiranhaManager();
             app.UsePiranhaSummernote();
             //app.UsePiranhaTinyMCE();
+            app.UsePiranhaIdentity();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(name: "areaRoute",

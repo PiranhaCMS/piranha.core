@@ -11,6 +11,7 @@
 using System;
 using System.Reflection;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +20,7 @@ using Piranha;
 using Piranha.AspNetCore.Identity;
 using Piranha.AspNetCore.Identity.Data;
 using Piranha.Manager;
+using Piranha.Manager.Editor;
 using IDb = Piranha.AspNetCore.Identity.IDb;
 using Module = Piranha.AspNetCore.Identity.Module;
 
@@ -114,6 +116,7 @@ public static class IdentityModuleExtensions
         services.ConfigureApplicationCookie(cookieOptions != null ? cookieOptions : SetDefaultCookieOptions);
         services.AddScoped<ISecurity, IdentitySecurity>();
 
+
         return services;
     }
 
@@ -185,5 +188,22 @@ public static class IdentityModuleExtensions
         options.LoginPath = "/manager/login";
         options.AccessDeniedPath = "/manager/login";
         options.SlidingExpiration = true;
+    }
+
+    /// <summary>
+    /// Uses the Piranha identity module.
+    /// </summary>
+    /// <param name="builder">The current application builder</param>
+    /// <returns>The builder</returns>
+    public static IApplicationBuilder UsePiranhaIdentity(this IApplicationBuilder builder)
+    {
+        //
+        // Add the embedded resources
+        //
+        return builder.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new EmbeddedFileProvider(typeof(IdentityModuleExtensions).Assembly, "Piranha.AspNetCore.Identity.assets"),
+            RequestPath = "/manager/identity"
+        });
     }
 }
