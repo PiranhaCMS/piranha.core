@@ -57,8 +57,9 @@ namespace Piranha.AspNetCore.Identity.Models
             return null;
         }
 
-        public async Task<bool> Save(UserManager<User> userManager)
+        public async Task<IdentityResult> Save(UserManager<User> userManager)
         {
+            IdentityResult result;
             var user = await userManager.FindByIdAsync(User.Id.ToString());
 
             if (user == null)
@@ -71,28 +72,57 @@ namespace Piranha.AspNetCore.Identity.Models
                 };
                 User.Id = user.Id;
 
-                await userManager.CreateAsync(user, Password);
+                result = await userManager.CreateAsync(user, Password);
+                if (!result.Succeeded) {
+                    return result;
+                }
             }
             else
             {
-                await userManager.SetUserNameAsync(user, User.UserName);
-                await userManager.SetEmailAsync(user, User.Email);
+                result = await userManager.SetUserNameAsync(user, User.UserName);
+                if (!result.Succeeded)
+                {
+                    return result;
+                }
+
+                result = await userManager.SetEmailAsync(user, User.Email);
+                if (!result.Succeeded)
+                {
+                    return result;
+                }
             }
 
             // Remove old roles
             var roles = await userManager.GetRolesAsync(user);
-            await userManager.RemoveFromRolesAsync(user, roles);
+            result = await userManager.RemoveFromRolesAsync(user, roles);
+            if (!result.Succeeded)
+            {
+                return result;
+            }
 
             // Add current roles
-            await userManager.AddToRolesAsync(user, SelectedRoles);
+            result = await userManager.AddToRolesAsync(user, SelectedRoles);
+            if (!result.Succeeded)
+            {
+                return result;
+            }
 
             if (!string.IsNullOrWhiteSpace(Password))
             {
-                await userManager.RemovePasswordAsync(user);
-                await userManager.AddPasswordAsync(user, Password);
+                result = await userManager.RemovePasswordAsync(user);
+                if (!result.Succeeded)
+                {
+                    return result;
+                }
+                result = await userManager.AddPasswordAsync(user, Password);
+                if (!result.Succeeded)
+                {
+                    return result;
+                }
             }
 
-            return true;
+            
+            return result;
         }
     }
 }

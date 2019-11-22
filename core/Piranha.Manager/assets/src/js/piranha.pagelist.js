@@ -18,7 +18,7 @@ piranha.pagelist = new Vue({
     methods: {
         load: function () {
             var self = this;
-
+            console.log(piranha.baseUrl + "manager/api/page/list");
             piranha.permissions.load(function () {
                 fetch(piranha.baseUrl + "manager/api/page/list")
                 .then(function (response) { return response.json(); })

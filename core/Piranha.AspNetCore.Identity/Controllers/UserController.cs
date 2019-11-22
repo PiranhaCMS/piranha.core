@@ -15,9 +15,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Piranha.AspNetCore.Identity.Data;
 using Piranha.AspNetCore.Identity.Models;
+using Piranha.Manager;
 using Piranha.Manager.Controllers;
+using Piranha.Manager.Models;
 
 namespace Piranha.AspNetCore.Identity.Controllers
 {
@@ -29,16 +32,18 @@ namespace Piranha.AspNetCore.Identity.Controllers
     {
         private readonly IDb _db;
         private readonly UserManager<User> _userManager;
+        private readonly ManagerLocalizer _localizer;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
         /// <param name="userManager">The current user manager</param>
-        public UserController(IDb db, UserManager<User> userManager)
+        public UserController(IDb db, UserManager<User> userManager, ManagerLocalizer localizer)
         {
             _db = db;
             _userManager = userManager;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -48,18 +53,41 @@ namespace Piranha.AspNetCore.Identity.Controllers
         [Authorize(Policy = Permissions.Users)]
         public IActionResult List()
         {
-            return View(UserListModel.Get(_db));
+            return View();
+        }
+
+        /// <summary>
+        /// Gets the list view with the currently available users.
+        /// </summary>
+        [Route("/manager/users/list")]
+        [Authorize(Policy = Permissions.Users)]
+        public UserListModel Get()
+        {
+            return UserListModel.Get(_db);
         }
 
         /// <summary>
         /// Gets the edit view for an existing user.
         /// </summary>
         /// <param name="id">The user id</param>
-        [Route("/manager/user/{id:Guid}")]
+        [Route("/manager/user/{id:Guid?}")]
         [Authorize(Policy = Permissions.UsersEdit)]
         public IActionResult Edit(Guid id)
         {
-            return View(UserEditModel.GetById(_db, id));
+            return View(id);
+            //return View(UserEditModel.GetById(_db, id));
+        }
+
+        /// <summary>
+        /// Gets the edit view for an existing user.
+        /// </summary>
+        /// <param name="id">The user id</param>
+        [Route("/manager/user/edit/{id:Guid}")]
+        [Authorize(Policy = Permissions.UsersEdit)]
+        public UserEditModel Get(Guid id)
+        {
+            return UserEditModel.GetById(_db, id);
+            //return View(UserEditModel.GetById(_db, id));
         }
 
         /// <summary>
@@ -67,9 +95,10 @@ namespace Piranha.AspNetCore.Identity.Controllers
         /// </summary>
         [Route("/manager/user/add")]
         [Authorize(Policy = Permissions.UsersEdit)]
-        public IActionResult Add()
+        public UserEditModel Add()
         {
-            return View("Edit", UserEditModel.Create(_db));
+            return UserEditModel.Create(_db);
+            //return View("Edit", UserEditModel.Create(_db));
         }
 
         /// <summary>
@@ -79,60 +108,96 @@ namespace Piranha.AspNetCore.Identity.Controllers
         [HttpPost]
         [Route("/manager/user/save")]
         [Authorize(Policy = Permissions.UsersSave)]
-        public async Task<IActionResult> Save(UserEditModel model)
+        public async Task<IActionResult> Save([FromBody] UserEditModel model)
         {
             // Refresh roles in the model if validation fails
-            var temp = UserEditModel.Create(_db);
-            model.Roles = temp.Roles;
+            //var temp = UserEditModel.Create(_db);
+            //model.Roles = temp.Roles;
 
-            if (string.IsNullOrWhiteSpace(model.User.UserName))
+            if(model.User == null)
             {
-                ErrorMessage("User name is mandatory.", false);
-                return View("Edit", model);
+                return BadRequest(GetErrorMessage(_localizer.General["The user could not be found."]));
             }
 
-            if (string.IsNullOrWhiteSpace(model.User.Email))
-            {
-                ErrorMessage("Email is mandatory.", false);
-                return View("Edit", model);
-            }
+            
 
-            if (!string.IsNullOrWhiteSpace(model.Password) && model.Password != model.PasswordConfirm)
-            {
-                ErrorMessage($"The new passwords does not match. {model.Password} - {model.PasswordConfirm}", false);
-                return View("Edit", model);
-            }
+            try { 
+                var userId = model.User.Id;
+                var isNew = userId == Guid.Empty;
 
-            if (model.User.Id == Guid.Empty && string.IsNullOrWhiteSpace(model.Password))
-            {
-                ErrorMessage("Password is mandatory when creating a new user.", false);
-                return View("Edit", model);
-            }
-
-            if (!string.IsNullOrWhiteSpace(model.Password) && _userManager.PasswordValidators.Count > 0)
-            {
-                var errors = new List<string>();
-                foreach (var validator in _userManager.PasswordValidators)
+                if (string.IsNullOrWhiteSpace(model.User.UserName))
                 {
-                    var result = await validator.ValidateAsync(_userManager, model.User, model.Password);
-                    if (!result.Succeeded)
-                        errors.AddRange(result.Errors.Select(msg => msg.Description));
-                    if (errors.Count > 0)
+                    //ErrorMessage("User name is mandatory.", false);
+                    return BadRequest(GetErrorMessage(_localizer.General["Username is mandatory."]));
+                }
+
+                if (string.IsNullOrWhiteSpace(model.User.Email))
+                {
+                    //ErrorMessage("Email is mandatory.", false);
+                    return BadRequest(GetErrorMessage(_localizer.General["Email address is mandatory."]));
+                }
+
+                if (!string.IsNullOrWhiteSpace(model.Password) && model.Password != model.PasswordConfirm)
+                {
+                    //ErrorMessage($"The new passwords does not match. {model.Password} - {model.PasswordConfirm}", false);
+                    return BadRequest(GetErrorMessage(string.Format("{0} {1} - {2}", _localizer.General["The new passwords does not match."], model.Password, model.PasswordConfirm)));
+                }
+
+                if (model.User.Id == Guid.Empty && string.IsNullOrWhiteSpace(model.Password))
+                {
+                    //ErrorMessage("Password is mandatory when creating a new user.", false);
+                    return BadRequest(GetErrorMessage(_localizer.General["Password is mandatory when creating a new user."]));
+                }
+
+                
+
+                if (!string.IsNullOrWhiteSpace(model.Password) && _userManager.PasswordValidators.Count > 0)
+                {
+                    var errors = new List<string>();
+                    foreach (var validator in _userManager.PasswordValidators)
                     {
-                        ErrorMessage(string.Join("<br />", errors), false);
-                        return View("Edit", model);
+                        var errorResult = await validator.ValidateAsync(_userManager, model.User, model.Password);
+                        if (!errorResult.Succeeded)
+                            errors.AddRange(errorResult.Errors.Select(msg => msg.Description));
+                        if (errors.Count > 0)
+                        {
+                            //ErrorMessage(string.Join("<br />", errors), false);5
+                            return BadRequest(GetErrorMessage(string.Join("<br />", errors)));
+                        }
                     }
                 }
-            }
 
-            if (await model.Save(_userManager))
+                //check username
+                if (await _db.Users.CountAsync(u => u.UserName.ToLower().Trim() == model.User.UserName.ToLower().Trim() && u.Id != userId) > 0)
+                {
+                    return BadRequest(GetErrorMessage("Username is used by another user."));
+                }
+
+                //check email
+                if (await _db.Users.CountAsync(u => u.Email.ToLower().Trim() == model.User.Email.ToLower().Trim() && u.Id != userId) > 0)
+                {
+                    return BadRequest(GetErrorMessage("Email address is used by another user."));
+                }
+
+                var result = await model.Save(_userManager);
+                if (result.Succeeded)
+                {
+                    //SuccessMessage("The user has been saved.");
+                    return Ok(Get(model.User.Id));
+                    //return RedirectToAction("Edit", new {id = model.User.Id});
+                }
+
+                var errorMessages = new List<string>();
+                errorMessages.AddRange(result.Errors.Select(msg => msg.Description));
+
+                //ErrorMessage("The user could not be saved.", false);
+                return BadRequest(GetErrorMessage("The user could not be saved.<br/><br/>" + string.Join("<br />", errorMessages)));
+                //return View("Edit", model);
+            }
+            catch (Exception ex)
             {
-                SuccessMessage("The user has been saved.");
-                return RedirectToAction("Edit", new {id = model.User.Id});
+                return BadRequest(GetErrorMessage(ex.Message));
             }
-
-            ErrorMessage("The user could not be saved.", false);
-            return View("Edit", model);
         }
 
         /// <summary>
@@ -141,21 +206,51 @@ namespace Piranha.AspNetCore.Identity.Controllers
         /// <param name="id">The user id</param>
         [Route("/manager/user/delete/{id:Guid}")]
         [Authorize(Policy = Permissions.UsersSave)]
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             var user = _db.Users.FirstOrDefault(u => u.Id == id);
+
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            if (currentUser != null && user.Id == currentUser.Id)
+            {
+                return BadRequest(GetErrorMessage(_localizer.General["Can't delete yourself."]));
+            }
 
             if (user != null)
             {
                 _db.Users.Remove(user);
                 _db.SaveChanges();
 
-                SuccessMessage("The user has been deleted.");
-                return RedirectToAction("List");
+                //SuccessMessage("The user has been deleted.");
+                //return RedirectToAction("List");
+                return Ok(GetSuccessMessage(_localizer.General["The user has been deleted."]));
             }
 
-            ErrorMessage("Could not find the user to delete.");
-            return RedirectToAction("List");
+
+            //ErrorMessage("Could not find the user to delete.");
+            //return RedirectToAction("List");
+            return NotFound(GetErrorMessage(_localizer.General["The user could not be found."]));
+        }
+
+        private AliasListModel GetSuccessMessage(string message)
+        {
+            return GetMessage(message, StatusMessage.Success);
+        }
+
+        private AliasListModel GetErrorMessage(string errorMessage)
+        {
+            return GetMessage(!string.IsNullOrWhiteSpace(errorMessage) ? errorMessage :  _localizer.General["An error occurred"], StatusMessage.Error);
+        }
+
+        private AliasListModel GetMessage(string message, string type)
+        {
+            var result = new AliasListModel();
+            result.Status = new StatusMessage
+            {
+                Type = type,
+                Body = message
+            };
+            return result;
         }
     }
 }
