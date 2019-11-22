@@ -16,7 +16,7 @@
     <value>Добави сайт</value>
   </data>
   <data name="Are you really sure?" xml:space="preserve">
-    <value>Are you really sure?</value>
+    <value>Наистина ли сте сигурни?</value>
   </data>
   <data name="Edit site" xml:space="preserve">
     <value>Редактирай сайта</value>
@@ -28,9 +28,9 @@
     <value>По подразбиране</value>
   </data>
   <data name="Please type in the name of the site to confirm." xml:space="preserve">
-    <value>Please type in the name of the site to confirm.</value>
+    <value>Моля, въведете името на сайта, за да потвърдите.</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
-    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the site {{ title }} and all of its &lt;strong>pages&lt;/strong>, &lt;strong>archives&lt;/strong> and &lt;strong>posts&lt;/strong>.</value>
+    <value>Това действие &lt;strong>не може&lt;/strong> да бъде отменено. Това ще изтрие завинаги сайтът {{ title }} и всичките му &lt;strong>страници&lt;/strong>, &lt;strong>архиви&lt;/strong> и &lt;strong>постове&lt;/strong>.</value>
   </data>
 </root>
