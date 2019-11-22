@@ -18,20 +18,23 @@
   <data name="All" xml:space="preserve">
     <value>Всички</value>
   </data>
+  <data name="An error occurred" xml:space="preserve">
+    <value>An error occurred</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Отмени</value>
   </data>
   <data name="Content" xml:space="preserve">
     <value>Съдържание</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Continue</value>
+    <value>Продължи</value>
   </data>
   <data name="Content type" xml:space="preserve">
     <value>Тип на съдържанието</value>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Copy</value>
+    <value>Копирай</value>
   </data>
   <data name="Culture" xml:space="preserve">
     <value>Култура</value>
@@ -58,10 +61,10 @@
     <value>Чернови</value>
   </data>
   <data name="Email address" xml:space="preserve">
-    <value>Email address</value>
+    <value>Имейл адрес</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>Имейл адресът е задължителен.</value>
   </data>
   <data name="Filename" xml:space="preserve">
     <value>Име на файл</value>
@@ -79,7 +82,7 @@
     <value>Общи</value>
   </data>
   <data name="General information" xml:space="preserve">
-    <value>General information</value>
+    <value>Основна информация</value>
   </data>
   <data name="History" xml:space="preserve">
     <value>История</value>
@@ -91,7 +94,7 @@
     <value>По подразбиране</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Вход</value>
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Изход</value>
@@ -115,19 +118,19 @@
     <value>Име</value>
   </data>
   <data name="Name is mandatory." xml:space="preserve">
-    <value>Name is mandatory.</value>
+    <value>Името е задължително.</value>
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
     <value>Отвори публичният линк в нов раздел</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>Парола</value>
   </data>
   <data name="Permanent" xml:space="preserve">
-    <value>Permanent</value>
+    <value>Постоянен</value>
   </data>
   <data name="Permissions" xml:space="preserve">
-    <value>Permissions</value>
+    <value>Права</value>
   </data>
   <data name="Pixels" xml:space="preserve">
     <value>Пиксели</value>
@@ -142,19 +145,19 @@
     <value>Дата на публикуване</value>
   </data>
   <data name="Redirect" xml:space="preserve">
-    <value>Redirect</value>
+    <value>Препратка</value>
   </data>
   <data name="Redirect Type" xml:space="preserve">
-    <value>Redirect Type</value>
+    <value>Вид на препратката</value>
   </data>
   <data name="Revert" xml:space="preserve">
     <value>Към предишно състояние</value>
   </data>
   <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
+    <value>Роли</value>
   </data>
   <data name="Route" xml:space="preserve">
-    <value>Route</value>
+    <value>Маршрут</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Запази</value>
@@ -181,7 +184,7 @@
     <value>Система</value>
   </data>
   <data name="Temporary" xml:space="preserve">
-    <value>Temporary</value>
+    <value>Временен</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Заглавие</value>
@@ -190,13 +193,13 @@
     <value>Обнови</value>
   </data>
   <data name="Update password" xml:space="preserve">
-    <value>Update password</value>
+    <value>Обнови на паролата</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Username</value>
+    <value>Потребителско име</value>
   </data>
   <data name="Username is mandatory." xml:space="preserve">
-    <value>Username is mandatory.</value>
+    <value>Потребителското име е задължително.</value>
   </data>
   <data name="Title is mandatory." xml:space="preserve">
     <value>Title is mandatory.</value>
