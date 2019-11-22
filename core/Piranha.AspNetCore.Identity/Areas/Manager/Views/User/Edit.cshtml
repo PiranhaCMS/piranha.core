@@ -64,7 +64,6 @@
                             <div class="form-group">
                                 <label>@Localizer.General["Username"]</label>
                                 <input v-model="userModel.user.userName" class="form-control small" maxlength="128" placeholder="Användarnamn som används vid inloggning" required />
-                                @*@Html.TextBoxFor(m => m.User.UserName, new { @class = "form-control small", maxlength = 128, placeholder = "The user name used to log in", required = ""})*@
                                 <div class="invalid-feedback">
                                     @Localizer.General["Username is mandatory."]
                                 </div>
@@ -74,7 +73,6 @@
                             <div class="form-group">
                                 <label>@Localizer.General["Email address"]</label>
                                 <input type="email" v-model="userModel.user.email" class="form-control small" maxlength="128" placeholder="E-postadress" required />
-                                @*@Html.TextBoxFor(m => m.User.Email, new { @class = "form-control small", type = "email", maxlength = 128, placeholder = "The email address for the user", required = ""})*@
                                 <div class="invalid-feedback">
                                     @Localizer.General["Email address is mandatory."]
                                 </div>
@@ -112,14 +110,12 @@
                             <div class="form-group">
                                 <label>@Localizer.General["Password"]</label>
                                 <input type="password" v-model="userModel.password" class="form-control small" maxlength="128" placeholder="Nytt lösenord" />
-                                @*@Html.PasswordFor(m => m.Password, new {@class = "form-control small", maxlength = 128, placeholder = "Add new password"})*@
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>&nbsp;</label>
                                 <input type="password" v-model="userModel.passwordConfirm" class="form-control small" maxlength="128" placeholder="Bekräfta nytt lösenord" />
-                                @*@Html.PasswordFor(m => m.PasswordConfirm, new {@class = "form-control small", maxlength = 128, placeholder = "Confirm new password"})*@
                             </div>
                         </div>
                     </div>

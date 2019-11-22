@@ -29,6 +29,8 @@ namespace Piranha.Manager
         /// </summary>
         public IStringLocalizer<Localization.General> General { get; private set; }
 
+        public IStringLocalizer<Localization.Security> Security { get; private set; }
+
         /// <summary>
         /// Gets/sets media string localization.
         /// </summary>
@@ -66,6 +68,7 @@ namespace Piranha.Manager
             IStringLocalizer<Localization.Alias> alias,
             IStringLocalizer<Localization.Config> config,
             IStringLocalizer<Localization.General> general,
+            IStringLocalizer<Localization.Security> security,
             IStringLocalizer<Localization.Media> media,
             IStringLocalizer<Localization.Menu> menu,
             IStringLocalizer<Localization.Module> module,
@@ -76,6 +79,7 @@ namespace Piranha.Manager
             Alias = alias;
             Config = config;
             General = general;
+            Security = security;
             Module = module;
             Media = media;
             Menu = menu;

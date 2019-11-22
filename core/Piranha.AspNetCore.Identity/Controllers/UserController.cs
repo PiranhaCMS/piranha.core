@@ -116,7 +116,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
 
             if(model.User == null)
             {
-                return BadRequest(GetErrorMessage(_localizer.General["The user could not be found."]));
+                return BadRequest(GetErrorMessage(_localizer.Security["The user could not be found."]));
             }
 
             
@@ -127,26 +127,22 @@ namespace Piranha.AspNetCore.Identity.Controllers
 
                 if (string.IsNullOrWhiteSpace(model.User.UserName))
                 {
-                    //ErrorMessage("User name is mandatory.", false);
                     return BadRequest(GetErrorMessage(_localizer.General["Username is mandatory."]));
                 }
 
                 if (string.IsNullOrWhiteSpace(model.User.Email))
                 {
-                    //ErrorMessage("Email is mandatory.", false);
                     return BadRequest(GetErrorMessage(_localizer.General["Email address is mandatory."]));
                 }
 
                 if (!string.IsNullOrWhiteSpace(model.Password) && model.Password != model.PasswordConfirm)
                 {
-                    //ErrorMessage($"The new passwords does not match. {model.Password} - {model.PasswordConfirm}", false);
-                    return BadRequest(GetErrorMessage(string.Format("{0} {1} - {2}", _localizer.General["The new passwords does not match."], model.Password, model.PasswordConfirm)));
+                    return BadRequest(GetErrorMessage(string.Format("{0} {1} - {2}", _localizer.Security["The new passwords does not match."], model.Password, model.PasswordConfirm)));
                 }
 
                 if (model.User.Id == Guid.Empty && string.IsNullOrWhiteSpace(model.Password))
                 {
-                    //ErrorMessage("Password is mandatory when creating a new user.", false);
-                    return BadRequest(GetErrorMessage(_localizer.General["Password is mandatory when creating a new user."]));
+                    return BadRequest(GetErrorMessage(_localizer.Security["Password is mandatory when creating a new user."]));
                 }
 
                 
@@ -161,7 +157,6 @@ namespace Piranha.AspNetCore.Identity.Controllers
                             errors.AddRange(errorResult.Errors.Select(msg => msg.Description));
                         if (errors.Count > 0)
                         {
-                            //ErrorMessage(string.Join("<br />", errors), false);5
                             return BadRequest(GetErrorMessage(string.Join("<br />", errors)));
                         }
                     }
@@ -170,29 +165,25 @@ namespace Piranha.AspNetCore.Identity.Controllers
                 //check username
                 if (await _db.Users.CountAsync(u => u.UserName.ToLower().Trim() == model.User.UserName.ToLower().Trim() && u.Id != userId) > 0)
                 {
-                    return BadRequest(GetErrorMessage("Username is used by another user."));
+                    return BadRequest(GetErrorMessage(_localizer.Security["Username is used by another user."]));
                 }
 
                 //check email
                 if (await _db.Users.CountAsync(u => u.Email.ToLower().Trim() == model.User.Email.ToLower().Trim() && u.Id != userId) > 0)
                 {
-                    return BadRequest(GetErrorMessage("Email address is used by another user."));
+                    return BadRequest(GetErrorMessage(_localizer.Security["Email address is used by another user."]));
                 }
 
                 var result = await model.Save(_userManager);
                 if (result.Succeeded)
                 {
-                    //SuccessMessage("The user has been saved.");
                     return Ok(Get(model.User.Id));
-                    //return RedirectToAction("Edit", new {id = model.User.Id});
                 }
 
                 var errorMessages = new List<string>();
                 errorMessages.AddRange(result.Errors.Select(msg => msg.Description));
 
-                //ErrorMessage("The user could not be saved.", false);
-                return BadRequest(GetErrorMessage("The user could not be saved.<br/><br/>" + string.Join("<br />", errorMessages)));
-                //return View("Edit", model);
+                return BadRequest(GetErrorMessage(_localizer.Security["The user could not be saved."] + "<br/><br/>" + string.Join("<br />", errorMessages)));
             }
             catch (Exception ex)
             {
@@ -213,7 +204,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);
             if (currentUser != null && user.Id == currentUser.Id)
             {
-                return BadRequest(GetErrorMessage(_localizer.General["Can't delete yourself."]));
+                return BadRequest(GetErrorMessage(_localizer.Security["Can't delete yourself."]));
             }
 
             if (user != null)
@@ -221,15 +212,11 @@ namespace Piranha.AspNetCore.Identity.Controllers
                 _db.Users.Remove(user);
                 _db.SaveChanges();
 
-                //SuccessMessage("The user has been deleted.");
-                //return RedirectToAction("List");
-                return Ok(GetSuccessMessage(_localizer.General["The user has been deleted."]));
+                return Ok(GetSuccessMessage(_localizer.Security["The user has been deleted."]));
             }
 
 
-            //ErrorMessage("Could not find the user to delete.");
-            //return RedirectToAction("List");
-            return NotFound(GetErrorMessage(_localizer.General["The user could not be found."]));
+            return NotFound(GetErrorMessage(_localizer.Security["The user could not be found."]));
         }
 
         private AliasListModel GetSuccessMessage(string message)
