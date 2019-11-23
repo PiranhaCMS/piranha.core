@@ -16,7 +16,7 @@
     <value>Seite hinzufügen</value>
   </data>
   <data name="Are you really sure?" xml:space="preserve">
-    <value>Are you really sure?</value>
+    <value>Sind Sie wirklich sicher?</value>
   </data>
   <data name="Edit site" xml:space="preserve">
     <value>Website bearbeiten</value>
@@ -28,9 +28,9 @@
     <value>Soll dies die Standardseite der Installation sein.</value>
   </data>
   <data name="Please type in the name of the site to confirm." xml:space="preserve">
-    <value>Please type in the name of the site to confirm.</value>
+    <value>Bitte geben Sie den Namen der Website zur Bestätigung ein.</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
-    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the site {{ title }} and all of its &lt;strong>pages&lt;/strong>, &lt;strong>archives&lt;/strong> and &lt;strong>posts&lt;/strong>.</value>
+    <value>Diese Aktion kann &lt;strong>nicht&lt;/strong> rückgängig gemacht werden. Diese wird die Webseite {{ title }} und alle ihre &lt;strong>Seiten&lt;/strong>, &lt;strong>Archive&lt;/strong> und &lt;strong>Posts&lt;/strong> permanent löschen.</value>
   </data>
 </root>
