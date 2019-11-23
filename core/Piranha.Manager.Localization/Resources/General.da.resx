@@ -37,7 +37,7 @@
     <value>Kopiér</value>
   </data>
   <data name="Culture" xml:space="preserve">
-    <value>Culture</value>
+    <value>Sprog og område</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Slet</value>
@@ -64,19 +64,19 @@
     <value>Emailadresse</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>Indtast venligst en e-mailadresse.</value>
   </data>
   <data name="Filename" xml:space="preserve">
     <value>Filnavn</value>
   </data>
   <data name="Height" xml:space="preserve">
-    <value>Height</value>
+    <value>Højde</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Redigér</value>
   </data>
   <data name="Empty" xml:space="preserve">
-    <value>Empty</value>
+    <value>Intet indhold</value>
   </data>
   <data name="General" xml:space="preserve">
     <value>Generelt</value>
@@ -88,7 +88,7 @@
     <value>Historik</value>
   </data>
   <data name="Internal id" xml:space="preserve">
-    <value>Internal id</value>
+    <value>Internt ID</value>
   </data>
   <data name="Is default" xml:space="preserve">
     <value>Is default</value>
