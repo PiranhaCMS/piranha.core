@@ -115,7 +115,7 @@
     <value>Modified</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>Navn</value>
   </data>
   <data name="Name is mandatory." xml:space="preserve">
     <value>Name is mandatory.</value>
@@ -124,25 +124,25 @@
     <value>Open public URL in new tab</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>Adgangskode</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>Permanent</value>
   </data>
   <data name="Permissions" xml:space="preserve">
-    <value>Permissions</value>
+    <value>Tilladelser</value>
   </data>
   <data name="Pixels" xml:space="preserve">
     <value>Pixels</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Preview</value>
+    <value>Forhåndsvisning</value>
   </data>
   <data name="Publish" xml:space="preserve">
-    <value>Publish</value>
+    <value>Udgiv</value>
   </data>
   <data name="Publish date" xml:space="preserve">
-    <value>Publish date</value>
+    <value>Udgivelsesdato</value>
   </data>
   <data name="Redirect" xml:space="preserve">
     <value>Redirect</value>
@@ -151,28 +151,28 @@
     <value>Redirect Type</value>
   </data>
   <data name="Revert" xml:space="preserve">
-    <value>Revert</value>
+    <value>Gendan</value>
   </data>
   <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
+    <value>Roller</value>
   </data>
   <data name="Route" xml:space="preserve">
     <value>Route</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>Gem</value>
   </data>
   <data name="Scheduled" xml:space="preserve">
     <value>Scheduled</value>
   </data>
   <data name="Search..." xml:space="preserve">
-    <value>Search...</value>
+    <value>Søg...</value>
   </data>
   <data name="Select block" xml:space="preserve">
     <value>Select block</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Indstillinger</value>
   </data>
   <data name="Size" xml:space="preserve">
     <value>Size</value>
@@ -187,7 +187,7 @@
     <value>Temporary</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Titel</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Update</value>
@@ -214,7 +214,7 @@
     <value>Unpublished</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>Brugere</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Version</value>
