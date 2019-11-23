@@ -13,40 +13,40 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>Tilføj</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>All</value>
+    <value>Alt</value>
   </data>
   <data name="An error occurred" xml:space="preserve">
-    <value>An error occurred</value>
+    <value>Der opstod en fejl</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Annullér</value>
   </data>
   <data name="Content" xml:space="preserve">
-    <value>Content</value>
+    <value>Indhold</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Continue</value>
+    <value>Fortsæt</value>
   </data>
   <data name="Content type" xml:space="preserve">
-    <value>Content type</value>
+    <value>Indholdstype</value>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Copy</value>
+    <value>Kopiér</value>
   </data>
   <data name="Culture" xml:space="preserve">
     <value>Culture</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Slet</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Description</value>
+    <value>Beskrivelse</value>
   </data>
   <data name="Details" xml:space="preserve">
-    <value>Details</value>
+    <value>Detaljer</value>
   </data>
   <data name="Dimensions" xml:space="preserve">
     <value>Dimensions</value>
@@ -55,37 +55,37 @@
     <value>Download</value>
   </data>
   <data name="Draft" xml:space="preserve">
-    <value>Draft</value>
+    <value>Kladde</value>
   </data>
   <data name="Drafts" xml:space="preserve">
-    <value>Drafts</value>
+    <value>Kladder</value>
   </data>
   <data name="Email address" xml:space="preserve">
-    <value>Email address</value>
+    <value>Emailadresse</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
     <value>Email address is mandatory.</value>
   </data>
   <data name="Filename" xml:space="preserve">
-    <value>Filename</value>
+    <value>Filnavn</value>
   </data>
   <data name="Height" xml:space="preserve">
     <value>Height</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>Redigér</value>
   </data>
   <data name="Empty" xml:space="preserve">
     <value>Empty</value>
   </data>
   <data name="General" xml:space="preserve">
-    <value>General</value>
+    <value>Generelt</value>
   </data>
   <data name="General information" xml:space="preserve">
-    <value>General information</value>
+    <value>Generel information</value>
   </data>
   <data name="History" xml:space="preserve">
-    <value>History</value>
+    <value>Historik</value>
   </data>
   <data name="Internal id" xml:space="preserve">
     <value>Internal id</value>
@@ -94,10 +94,10 @@
     <value>Is default</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Log på</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+    <value>Log af</value>
   </data>
   <data name="Looks like there's no items here. Click on the button above to get started!" xml:space="preserve">
     <value>Looks like there's no items here. Click on the button above to get started!</value>
