@@ -19,16 +19,16 @@
     <value>Alle</value>
   </data>
   <data name="An error occurred" xml:space="preserve">
-    <value>An error occurred</value>
+    <value>Es ist ein Fehler aufgetreten</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Abbrechen</value>
   </data>
   <data name="Content" xml:space="preserve">
     <value>Inhalt</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Continue</value>
+    <value>Weiter</value>
   </data>
   <data name="Content type" xml:space="preserve">
     <value>Inhaltstyp</value>
@@ -61,10 +61,10 @@
     <value>Entwürfe</value>
   </data>
   <data name="Email address" xml:space="preserve">
-    <value>Email address</value>
+    <value>E‐Mail‐Adresse</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>E-Mail Adresse erforderlich.</value>
   </data>
   <data name="Filename" xml:space="preserve">
     <value>Dateiname</value>
@@ -82,7 +82,7 @@
     <value>Allgemein</value>
   </data>
   <data name="General information" xml:space="preserve">
-    <value>General information</value>
+    <value>Allgemeine Information</value>
   </data>
   <data name="History" xml:space="preserve">
     <value>Verlauf</value>
@@ -94,7 +94,7 @@
     <value>Standard</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Anmelden</value>
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Abmelden</value>
