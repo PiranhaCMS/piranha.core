@@ -31,6 +31,6 @@
     <value>Indtast navnet på webstedet for at bekræfte.</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
-    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the site {{ title }} and all of its &lt;strong>pages&lt;/strong>, &lt;strong>archives&lt;/strong> and &lt;strong>posts&lt;/strong>.</value>
+    <value>Denne handling kan &lt;strong>ikke&lt;/strong> fortrydes. Dette vil slette webstedet {{ title }} of alle dets &lt;strong>sider&lt;/strong>, &lt;strong>samlinger&lt;/strong> og &lt;strong>opslag&lt;/strong>.</value>
   </data>
 </root>
