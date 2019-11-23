@@ -19,7 +19,7 @@
     <value>Der opstod en fejl under sletning af siden</value>
   </data>
   <data name="Detach page" xml:space="preserve">
-    <value>Detach page</value>
+    <value>Løsriv side</value>
   </data>
   <data name="Edit original" xml:space="preserve">
     <value>Redigér oprindelig</value>
@@ -52,7 +52,7 @@
     <value>Siden blev slettet</value>
   </data>
   <data name="The page was successfully detached from the original" xml:space="preserve">
-    <value>The page was successfully detached from the original</value>
+    <value>Siden er nu løsrevet fra den oprindelige side</value>
   </data>
   <data name="The page was successfully published" xml:space="preserve">
     <value>Siden blev udgivet</value>
@@ -64,10 +64,10 @@
     <value>Siden blev gemt</value>
   </data>
   <data name="The page was successfully reverted to its previous state" xml:space="preserve">
-    <value>The page was successfully reverted to its previous state</value>
+    <value>Siden er nu gendannet</value>
   </data>
   <data name="This is a copy. In order to edit the content of the page you first need to detach it from the original. If you want to keep the page as a copy you should edit the content of the original page." xml:space="preserve">
-    <value>This is a copy. In order to edit the content of the page you first need to detach it from the original. If you want to keep the page as a copy you should edit the content of the original page.</value>
+    <value>Dette er en kopi. For at ændre indholdet på siden skal den løsrives fra den oprindelige side. Hvis du vil beholde siden som en kopi, skal du ændre den oprindelige sides indhold.</value>
   </data>
   <data name="Welcome to your new page. Click on the button above to add your first block of content!" xml:space="preserve">
     <value>Her er din nye side. Tryk på knappen ovenfor for at tilføje det første indhold!</value>
