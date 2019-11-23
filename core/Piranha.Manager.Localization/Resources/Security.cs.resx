@@ -13,19 +13,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Username is used by another user." xml:space="preserve">
-    <value>Username is used by another user.</value>
+    <value>Uživatelské jméno používá jiný uživatel.</value>
   </data>
   <data name="Email address is used by another user." xml:space="preserve">
-    <value>Email address is used by another user.</value>
+    <value>E-mailovou adresu používá jiný uživatel.</value>
   </data>
   <data name="The user could not be found." xml:space="preserve">
-    <value>The user could not be found.</value>
+    <value>Uživatel nenalezen.</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>E-mailová adresa je povinná.</value>
   </data>
   <data name="The new passwords does not match." xml:space="preserve">
-    <value>The new passwords does not match.</value>
+    <value>Nová hesla se neshodují.</value>
   </data>
   <data name="Password is mandatory when creating a new user." xml:space="preserve">
     <value>Password is mandatory when creating a new user.</value>
