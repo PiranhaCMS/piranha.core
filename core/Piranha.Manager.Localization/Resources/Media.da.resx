@@ -16,7 +16,7 @@
     <value>Tilføj mappe</value>
   </data>
   <data name="Drop files here or click to upload." xml:space="preserve">
-    <value>Drop files here or click to upload.</value>
+    <value>Træk filer hertil eller klik for at overføre.</value>
   </data>
   <data name="Download media" xml:space="preserve">
     <value>Download media</value>
@@ -25,16 +25,16 @@
     <value>Mappenavn</value>
   </data>
   <data name="Folder name is mandatory." xml:space="preserve">
-    <value>Folder name is mandatory.</value>
+    <value>Indtast venligst et mappenavn.</value>
   </data>
   <data name="Gallery" xml:space="preserve">
     <value>Album</value>
   </data>
   <data name="Media" xml:space="preserve">
-    <value>Media</value>
+    <value>Mediebibliotek</value>
   </data>
   <data name="Media preview is not available" xml:space="preserve">
-    <value>Media preview is not available</value>
+    <value>Forhåndsvisning af medier er ikke tilgængeligt</value>
   </data>
   <data name="Open media in new tab" xml:space="preserve">
     <value>Open media in new tab</value>
