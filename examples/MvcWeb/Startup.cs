@@ -82,6 +82,7 @@ namespace MvcWeb
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UsePiranhaIdentity();
             app.UsePiranhaManager();
             app.UsePiranhaTinyMCE();
             app.UseEndpoints(endpoints =>

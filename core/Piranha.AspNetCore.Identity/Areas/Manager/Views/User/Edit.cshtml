@@ -1,134 +1,126 @@
-@model Piranha.AspNetCore.Identity.Models.UserEditModel
+@model Guid
 @inject IAuthorizationService Auth
 @inject ManagerLocalizer Localizer
 @{
-    if (Model.User.Id != Guid.Empty)
-    {
-        ViewBag.Title = "Edit user";
-    }
-    else
+    var userId = Model;
+    var isNewUser = userId == Guid.Empty;
+
+    if (isNewUser)
     {
         ViewBag.Title = "Add user";
     }
+    else
+    {
+        ViewBag.Title = "Edit user";
+    }
     ViewBag.MenuItem = "Users";
 }
+@section script { 
+    <script src="~/manager/identity/piranha.useredit.js"></script>
+    <script type="text/javascript">
+        piranha.useredit.currentUserName = "@User.Identity.Name";
+        piranha.useredit.load("@userId", @(isNewUser ? 1 : 0));
+    </script>
+}
+<form id="usereditForm" class="form validate" novalidate>
+    <div id="useredit">
+        <div class="top">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">@Localizer.General["Settings"]</li>
+                    <li class="breadcrumb-item" aria-current="page"><a href="@Url.Action("List")">@Localizer.General["Users"]</a></li>
+                    <li v-if="!loading" class="breadcrumb-item active" aria-current="page"><span v-if="isNew">@Localizer.General["Add"]</span><span v-else>@Localizer.General["Edit"]</span></li>
+                </ol>
+            </nav>
 
-@using (var form = Html.BeginForm("Save", "User", FormMethod.Post, new {@class = "form validate", role = "form", autocomplete = "off", novalidate = ""}))
-{
-    @Html.HiddenFor(m => m.User.Id)
+            <div class="container-fluid app" :class="{ ready: !loading }">
+                <div class="top-nav">
+                    @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.UsersSave)).Succeeded)
+                    {
+                        <button type="submit" class="btn btn-labeled btn-success pull-right" v-on:click.prevent="save()">
+                            <span class="btn-label">
+                                <i class="fas fa-check"></i>
+                            </span>
+                            <span v-if="isNew">@Localizer.General["Add"]</span><span v-else>@Localizer.General["Save"]</span>
+                        </button>
+                    }
 
-    <div class="top">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">@Localizer.General["Settings"]</li>
-                <li class="breadcrumb-item" aria-current="page"><a href="@Url.Action("List")">@Localizer.General["Users"]</a></li>
-                <li class="breadcrumb-item active" aria-current="page">@Localizer.General["Edit"]</li>
-            </ol>
-        </nav>
-
-        <div class="container-fluid">
-            <div class="top-nav">
-                @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.UsersSave)).Succeeded)
-                {
-                    <button type="submit" class="btn btn-labeled btn-success pull-right">
-                        <span class="btn-label">
-                            <i class="fas fa-check"></i>
-                        </span>
-                        @Localizer.General["Save"]
-                    </button>
-                }
+                    @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.UsersDelete)).Succeeded)
+                    {
+                        <button v-if="!isNew && userModel && currentUserName != userModel.user.userName" title="Radera" class="btn btn-danger btn-icon" v-on:click.prevent="remove(userModel.user.id)"><i class="fas fa-trash"></i></button>
+                    }
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="container-fluid">
-        <div class="card">
-            <div class="card-header">
-                <span class="title">@Localizer.General["General information"]</span>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>@Localizer.General["Username"]</label>
-                            @Html.TextBoxFor(m => m.User.UserName, new { @class = "form-control small", maxlength = 128, placeholder = "The user name used to log in", required = ""})
-                            <div class="invalid-feedback">
-                                @Localizer.General["Username is mandatory."]
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>@Localizer.General["Email address"]</label>
-                            @Html.TextBoxFor(m => m.User.Email, new { @class = "form-control small", type = "email", maxlength = 128, placeholder = "The email address for the user", required = ""})
-                            <div class="invalid-feedback">
-                                @Localizer.General["Email address is mandatory."]
-                            </div>
-                        </div>
-                    </div>
+        <div v-if="userModel" class="container-fluid app" :class="{ ready: !loading }">
+            <div class="card">
+                <div class="card-header">
+                    <span class="title">@Localizer.General["General information"]</span>
                 </div>
-                <div class="form-group">
-                    <label>@Localizer.General["Roles"]</label>
-                    <ul class="list-group">
-                        @for (var n = 0; n < Model.Roles.Count(); n += 3)
-                        {
-                            <li class="list-group-item">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>@Localizer.General["Username"]</label>
+                                <input v-model="userModel.user.userName" class="form-control small" maxlength="128" placeholder="Användarnamn som används vid inloggning" required />
+                                <div class="invalid-feedback">
+                                    @Localizer.General["Username is mandatory."]
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>@Localizer.General["Email address"]</label>
+                                <input type="email" v-model="userModel.user.email" class="form-control small" maxlength="128" placeholder="E-postadress" required />
+                                <div class="invalid-feedback">
+                                    @Localizer.General["Email address is mandatory."]
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>@Localizer.General["Roles"]</label>
+                        <ul class="list-group">
+                        
+                            <li class="list-group-item" v-for="roleRow in getRoleRows()">
                                 <div class="row">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-4" v-for="role in roleRow">
                                         <div class="checkbox">
                                             <label class="mb-0">
-                                                <input type="checkbox" name="SelectedRoles[]" value="@Model.Roles[n].Name" @(Model.SelectedRoles.Contains(Model.Roles[n].Name) ? "checked=checked" : "")> @Model.Roles[n].Name
+                                                <input type="checkbox" v-model="userModel.selectedRoles" :value="role.name"> {{ role.name }}
                                             </label>
                                         </div>
                                     </div>
-                                    @if (n + 1 < Model.Roles.Count())
-                                    {
-                                        <div class="col-sm-4">
-                                            <div class="checkbox">
-                                                <label class="mb-0">
-                                                    <input type="checkbox" name="SelectedRoles[]" value="@Model.Roles[n + 1].Name" @(Model.SelectedRoles.Contains(Model.Roles[n + 1].Name) ? "checked=checked" : "")> @Model.Roles[n + 1].Name
-                                                </label>
-                                            </div>
-                                        </div>
-                                    }
-                                    @if (n + 2 < Model.Roles.Count())
-                                    {
-                                        <div class="col-sm-4">
-                                            <div class="checkbox">
-                                                <label class="mb-0">
-                                                    <input type="checkbox" name="SelectedRoles[]" value="@Model.Roles[n + 2].Name" @(Model.SelectedRoles.Contains(Model.Roles[n + 2].Name) ? "checked=checked" : "")> @Model.Roles[n + 2].Name
-                                                </label>
-                                            </div>
-                                        </div>
-                                    }
                                 </div>
                             </li>
-                        }
-                    </ul>
+                        
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="card">
-            <div class="card-header">
-                <span class="title">@Localizer.General["Update password"]</span>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>@Localizer.General["Password"]</label>
-                            @Html.PasswordFor(m => m.Password, new {@class = "form-control small", maxlength = 128, placeholder = "Add new password"})
+            <div class="card">
+                <div class="card-header">
+                    <span class="title">@Localizer.General["Update password"]</span>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>@Localizer.General["Password"]</label>
+                                <input type="password" v-model="userModel.password" class="form-control small" maxlength="128" placeholder="Nytt lösenord" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>&nbsp;</label>
-                            @Html.PasswordFor(m => m.PasswordConfirm, new {@class = "form-control small", maxlength = 128, placeholder = "Confirm new password"})
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <input type="password" v-model="userModel.passwordConfirm" class="form-control small" maxlength="128" placeholder="Bekräfta nytt lösenord" />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-}
+</form>

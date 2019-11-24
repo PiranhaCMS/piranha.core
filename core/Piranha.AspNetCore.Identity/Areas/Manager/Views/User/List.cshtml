@@ -1,71 +1,87 @@
 @using Piranha.AspNetCore.Identity
-@model Piranha.AspNetCore.Identity.Models.UserListModel
 @inject IAuthorizationService Auth
 @inject ManagerLocalizer Localizer
 @{
     ViewBag.Title = "Users";
     ViewBag.MenuItem = "Users";
+
+    var userIsDelete = Context.Request.Query["d"] == "1";
 }
+@section script { 
+    <script src="~/manager/identity/piranha.userlist.js"></script>
+    <script type="text/javascript">
+        piranha.userlist.currentUserName = "@User.Identity.Name";
+        piranha.userlist.load();
+        @if (userIsDelete) { 
+            <text>
+            piranha.notifications.push({
+                body: "@Localizer.Security["The user has been deleted."]",
+                type: "success",
+                hide: true
+            });
+            </text>
+        }
+    </script>
+}
+<div id="userlist">
+    <div class="top">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">@Localizer.General["Settings"]</li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer.General["Users"]</li>
+            </ol>
+        </nav>
 
-<div class="top">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">@Localizer.General["Settings"]</li>
-            <li class="breadcrumb-item active" aria-current="page">Users</li>
-        </ol>
-    </nav>
-
-    <div class="container-fluid">
-        <div class="top-nav">
-            @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.UsersAdd)).Succeeded)
-            {
-                <a href="@Url.Action("Add")" class="btn btn-primary btn-labeled">
-                    <i class="fas fa-plus"></i>@Localizer.General["Add"]
-                </a>
-            }
+        <div class="container-fluid app" :class="{ ready: !loading }">
+            <div class="top-nav">
+                @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.UsersAdd)).Succeeded)
+                {
+                    <a href="@Url.Action("Edit", Guid.Empty)" class="btn btn-primary btn-labeled">
+                        <i class="fas fa-plus"></i>@Localizer.General["Add"]
+                    </a>
+                }
+            </div>
         </div>
     </div>
-</div>
 
-<div class="container-fluid">
-    <table class="table table-borderless">
-        <thead>
-        <tr>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Roles</th>
-            <th class="actions one"></th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var user in Model.Users)
-        {
+    <div class="container-fluid app" :class="{ ready: !loading }">
+        <table class="table table-borderless">
+            <thead>
             <tr>
-                <td>
-                    <img src="@Utils.GetGravatarUrl(user.Email, 25)" alt="Gravatar for @user.Email" style="padding-right: 10px">
-                    @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.UsersEdit)).Succeeded)
-                    {
-                        <a href="@Url.Action("Edit", new { id = user.Id })">@user.UserName</a>
-                    }
-                    else
-                    {
-                        <span class="title">@user.UserName</span>
-                    }
-                </td>
-                <td>@user.Email</td>
-                <td>
-                    @string.Join(", ", user.Roles)
-                </td>
-                <td class="actions one">
-                    @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.UsersDelete)).Succeeded)
-                    {
-                        <a class="danger" href="@Url.Action("Delete", new {id = user.Id})">
-                            <span class="fas fa-trash"></span>
-                        </a>
-                    }
-                </td>
+                <th>@Localizer.General["Username"]</th>
+                <th>@Localizer.General["Email address"]</th>
+                <th>@Localizer.General["Roles"]</th>
+                <th class="actions one"></th>
             </tr>
-        }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <tr v-for="user in users">
+                    <td>
+                        <img v-if="user.gravatarUrl" :src="user.gravatarUrl" :alt="'Gravatar for ' + user.email" style="padding-right: 10px">
+                        @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.UsersEdit)).Succeeded)
+                        {
+                            <a :href="'/manager/user/' + user.id">{{ user.userName }}</a>
+                        }
+                        else
+                        {
+                            <span class="title">{{ user.userName }}</span>
+                        }
+                    </td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        {{ user.roles.join(', ') }}
+                    </td>
+                    <td class="actions one">
+                        @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.UsersDelete)).Succeeded)
+                        {
+                            <a class="danger" v-on:click.prevent="remove(user)" v-if="user.userName != currentUserName">
+                                <span class="fas fa-trash"></span>
+                            </a>
+                        }
+                    </td>
+                </tr>
+            
+            </tbody>
+        </table>
+    </div>
 </div>
