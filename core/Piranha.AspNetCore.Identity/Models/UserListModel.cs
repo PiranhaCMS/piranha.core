@@ -28,7 +28,8 @@ namespace Piranha.AspNetCore.Identity.Models
                     {
                         Id = u.Id,
                         UserName = u.UserName,
-                        Email = u.Email
+                        Email = u.Email,
+                        GravatarUrl = !string.IsNullOrWhiteSpace(u.Email) ? Utils.GetGravatarUrl(u.Email, 25) : null
                     }).ToList()
             };
 
@@ -60,6 +61,8 @@ namespace Piranha.AspNetCore.Identity.Models
             public string UserName { get; set; }
             public string Email { get; set; }
             public IList<string> Roles { get; set; } = new List<string>();
+
+            public string GravatarUrl { get; set; }
         }
     }
 }
