@@ -34,8 +34,8 @@ namespace Piranha.Tests.Routers
         private Guid TAG1_ID = Guid.NewGuid();
         private Guid TAG2_ID = Guid.NewGuid();
 
-        [PageType(Title = "My PageType")]
-        public class MyPage : Models.ArchivePage<MyPage>
+        [PageType(Title = "My PageType", IsArchive = true)]
+        public class MyPage : Models.Page<MyPage>
         {
         }
 

@@ -82,8 +82,8 @@ namespace Piranha.Tests.Repositories
             public MarkdownField Body { get; set; }
         }
 
-        [PageType(Title = "My BlogType")]
-        public class MyBlogPage : Models.ArchivePage<MyBlogPage>
+        [PageType(Title = "My BlogType", IsArchive = true)]
+        public class MyBlogPage : Models.Page<MyBlogPage>
         {
             [Region]
             public TextField Ingress { get; set; }

@@ -116,7 +116,7 @@ namespace Piranha.AttributeBuilder
                         CLRType = type.GetTypeInfo().AssemblyQualifiedName,
                         Title = attr.Title,
                         UseBlocks = attr.UseBlocks,
-                        IsArchive = typeof(IArchivePage).IsAssignableFrom(type)
+                        IsArchive = typeof(IArchivePage).IsAssignableFrom(type) || attr.IsArchive
                     };
 
                     // Get all page routes
@@ -132,7 +132,7 @@ namespace Piranha.AttributeBuilder
                     }
 
                     // Add default custom editors
-                    if (typeof(IArchivePage).IsAssignableFrom(type))
+                    if (pageType.IsArchive)
                     {
                         pageType.CustomEditors.Add(new ContentTypeEditor
                         {
@@ -172,7 +172,7 @@ namespace Piranha.AttributeBuilder
                     }
 
                     // Get all allowed archive items, if this is an archive page
-                    if (typeof(IArchivePage).IsAssignableFrom(type))
+                    if (pageType.IsArchive)
                     {
                         var itemTypes = type.GetCustomAttributes(typeof(PageTypeArchiveItemAttribute));
                         foreach (PageTypeArchiveItemAttribute itemType in itemTypes)
