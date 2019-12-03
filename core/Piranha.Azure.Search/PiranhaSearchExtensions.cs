@@ -16,7 +16,19 @@ using Piranha.Azure.Search;
 public static class PiranhaSearchExtensions
 {
     /// <summary>
-    /// Adds the Piranha identity module.
+    /// Adds the Azure Search module.
+    /// </summary>
+    /// <param name="services">The current service collection</param>
+    /// <returns>The services</returns>
+    public static PiranhaServiceBuilder UseAzureSearch(this PiranhaServiceBuilder serviceBuilder)
+    {
+        serviceBuilder.AddPiranhaAzureSearch.AddPiranhaAzureSearch();
+
+        return serviceBuilder;
+    }
+
+    /// <summary>
+    /// Adds the Azure Search module.
     /// </summary>
     /// <param name="services">The current service collection</param>
     /// <returns>The services</returns>

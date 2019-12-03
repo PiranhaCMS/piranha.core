@@ -11,10 +11,19 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Piranha;
+using Piranha.AspNetCore;
 using Piranha.Manager.Editor;
 
 public static class TinyMCEExtensions
 {
+    public static PiranhaServiceBuilder UseTinyMCE(this PiranhaServiceBuilder serviceBuilder)
+    {
+        serviceBuilder.Services.AddPiranhaTinyMCE();
+
+        return serviceBuilder;
+    }
+
     /// <summary>
     /// Adds the Tiny MCE editor module.
     /// </summary>
@@ -29,9 +38,21 @@ public static class TinyMCEExtensions
     }
 
     /// <summary>
+    /// Uses the Tiny MCE editor module if simple startup is enabled.
+    /// </summary>
+    /// <param name="piranha">The Piranha application builder</param>
+    /// <returns>The builder</returns>
+    public static PiranhaApplicationBuilder UseTinyMCE(this PiranhaApplicationBuilder piranha)
+    {
+        piranha.Builder.UsePiranhaTinyMCE();
+
+        return piranha;
+    }
+
+    /// <summary>
     /// Uses the Tiny MCE editor module.
     /// </summary>
-    /// <param name="builder">The current application builder</param>
+    /// <param name="builder">The application builder</param>
     /// <returns>The builder</returns>
     public static IApplicationBuilder UsePiranhaTinyMCE(this IApplicationBuilder builder) {
         //

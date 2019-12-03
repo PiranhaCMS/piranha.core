@@ -17,6 +17,20 @@ using System;
 
 public static class PiranhaEFExtensions
 {
+    public static PiranhaServiceBuilder UseEF(this PiranhaServiceBuilder serviceBuilder, Action<DbContextOptionsBuilder> dboptions,
+        ServiceLifetime scope = ServiceLifetime.Scoped)
+    {
+        return serviceBuilder.UseEF<Db>(dboptions, scope);
+    }
+
+    public static PiranhaServiceBuilder UseEF<T>(this PiranhaServiceBuilder serviceBuilder, Action<DbContextOptionsBuilder> dboptions,
+        ServiceLifetime scope = ServiceLifetime.Scoped) where T : DbContext, IDb
+    {
+        serviceBuilder.Services.AddPiranhaEF<T>(dboptions, scope);
+
+        return serviceBuilder;
+    }
+
     /// <summary>
     /// Adds the default services needed to run Piranha over
     /// Entity Framework Core.

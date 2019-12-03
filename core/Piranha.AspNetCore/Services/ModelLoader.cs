@@ -20,15 +20,17 @@ namespace Piranha.AspNetCore.Services
     {
         protected readonly IApi _api;
         protected readonly IAuthorizationService _auth;
+        protected readonly IApplicationService _app;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public ModelLoader(IApi api, IAuthorizationService auth)
+        public ModelLoader(IApi api, IAuthorizationService auth, IApplicationService app)
         {
             _api = api;
             _auth = auth;
+            _app = app;
         }
 
         /// <summary>
@@ -42,6 +44,11 @@ namespace Piranha.AspNetCore.Services
         public async Task<T> GetPage<T>(Guid id, ClaimsPrincipal user, bool draft = false)
             where T : PageBase
         {
+            if (!draft && _app.CurrentPage != null && _app.CurrentPage.Id == id && _app.CurrentPage is T)
+            {
+                return (T)_app.CurrentPage;
+            }
+
             T model = null;
 
             // Check if we're requesting a draft
@@ -94,6 +101,12 @@ namespace Piranha.AspNetCore.Services
         public async Task<T> GetPost<T>(Guid id, ClaimsPrincipal user, bool draft = false)
             where T : PostBase
         {
+            if (!draft && _app.CurrentPost != null && _app.CurrentPost.Id == id && _app.CurrentPost is T)
+            {
+                return (T)_app.CurrentPost;
+            }
+
+
             T model = null;
 
             // Check if we're requesting a draft

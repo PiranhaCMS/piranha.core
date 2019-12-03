@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Piranha\Piranha.csproj" />
+    <ProjectReference Include="..\Piranha.AspNetCore\Piranha.AspNetCore.csproj" />
     <ProjectReference Include="..\Piranha.Manager.Core\Piranha.Manager.Core.csproj" />
     <ProjectReference Include="..\Piranha.Manager.Localization\Piranha.Manager.Localization.csproj" />
   </ItemGroup>

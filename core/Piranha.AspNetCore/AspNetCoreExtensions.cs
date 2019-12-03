@@ -9,14 +9,30 @@
  */
 
 using System;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Piranha;
+using Piranha.AspNetCore;
 using Piranha.Extend;
 using Piranha.Security;
 
 public static class AspNetCoreExtensions
 {
+    public static IServiceCollection AddPiranha(this IServiceCollection services, Action<PiranhaServiceBuilder> options)
+    {
+        var serviceBuilder = new PiranhaServiceBuilder(services);
+
+        services.AddControllersWithViews();
+        services.AddPiranha();
+        services.AddPiranhaApplication();
+
+        options?.Invoke(serviceBuilder);
+
+        return serviceBuilder.Services;
+    }
+
     /// <summary>
     /// Adds the piranha application service.
     /// </summary>
@@ -34,6 +50,40 @@ public static class AspNetCoreExtensions
                 policy.RequireClaim(Permission.PostPreview, Permission.PostPreview);
             });
         });
+    }
+
+    /// <summary>
+    /// Simple startup with integrated middleware that also adds common
+    /// dependencies needed for an integrated web application.
+    /// </summary>
+    /// <param name="builder">The application builder</param>
+    /// <param name="options">Action for configuring the builder</param>
+    /// <returns>The updated application builder</returns>
+    public static IApplicationBuilder UsePiranha(this IApplicationBuilder builder, Action<PiranhaApplicationBuilder> options)
+    {
+        var piranhaOptions = new PiranhaApplicationBuilder(builder);
+
+        piranhaOptions.Builder
+            .UseStaticFiles()
+            .UseIntegratedPiranha()
+            .UseRouting()
+            .UseAuthentication()
+            .UseAuthorization();
+
+        options?.Invoke(piranhaOptions);
+
+        return piranhaOptions.Builder;
+    }
+
+    /// <summary>
+    /// Uses the integrated piranha middleware.
+    /// </summary>
+    /// <param name="builder">The current application builder</param>
+    /// <returns>The builder</returns>
+    public static IApplicationBuilder UseIntegratedPiranha(this IApplicationBuilder builder)
+    {
+        return builder
+            .UseMiddleware<Piranha.AspNetCore.IntegratedMiddleware>();
     }
 
     /// <summary>
@@ -117,17 +167,6 @@ public static class AspNetCoreExtensions
     {
         return builder
             .UseMiddleware<Piranha.AspNetCore.StartPageMiddleware>();
-    }
-
-    /// <summary>
-    /// Uses the piranha site routing middleware.
-    /// </summary>
-    /// <param name="builder">The current application builder</param>
-    /// <returns>The builder</returns>
-    [Obsolete("Please replace UsePiranhaSites with UsePiranhaApplication.", true)]
-    public static IApplicationBuilder UsePiranhaSites(this IApplicationBuilder builder)
-    {
-        return UsePiranhaApplication(builder);
     }
 
     /// <summary>

@@ -9,7 +9,6 @@
  */
 
 using System;
-using System.Reflection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -19,13 +18,66 @@ using Microsoft.Extensions.FileProviders;
 using Piranha;
 using Piranha.AspNetCore.Identity;
 using Piranha.AspNetCore.Identity.Data;
+using Piranha.AspNetCore;
 using Piranha.Manager;
-using Piranha.Manager.Editor;
+
 using IDb = Piranha.AspNetCore.Identity.IDb;
 using Module = Piranha.AspNetCore.Identity.Module;
 
 public static class IdentityModuleExtensions
 {
+    /// <summary>
+    /// Extensions method for simplified setup.
+    /// </summary>
+    /// <param name="serviceBuilder">The current service builder</param>
+    /// <param name="dbOptions">The db options</param>
+    /// <param name="identityOptions">The optional identity options</param>
+    /// <param name="cookieOptions">The optional cookie options</param>
+    /// <typeparam name="T">The DbContext type</typeparam>
+    /// <returns>The builder</returns>
+    public static PiranhaServiceBuilder UseIdentity<T>(this PiranhaServiceBuilder serviceBuilder,
+        Action<DbContextOptionsBuilder> dbOptions,
+        Action<IdentityOptions> identityOptions = null,
+        Action<CookieAuthenticationOptions> cookieOptions = null)
+        where T : Db<T>
+    {
+        serviceBuilder.Services.AddPiranhaIdentity<T>(dbOptions, identityOptions, cookieOptions);
+
+        return serviceBuilder;
+    }
+
+    /// <summary>
+    /// Extensions method for simplified setup.
+    /// </summary>
+    /// <param name="serviceBuilder">The current service builder</param>
+    /// <param name="dbOptions">The db options</param>
+    /// <param name="identityOptions">The optional identity options</param>
+    /// <param name="cookieOptions">The optional cookie options</param>
+    /// <typeparam name="T">The DbContext type</typeparam>
+    /// <returns>The builder</returns>
+    public static PiranhaServiceBuilder UseIdentityWithSeed<T>(this PiranhaServiceBuilder serviceBuilder,
+        Action<DbContextOptionsBuilder> dbOptions,
+        Action<IdentityOptions> identityOptions = null,
+        Action<CookieAuthenticationOptions> cookieOptions = null)
+        where T : Db<T>
+    {
+        serviceBuilder.Services.AddPiranhaIdentityWithSeed<T>(dbOptions, identityOptions, cookieOptions);
+
+        return serviceBuilder;
+    }
+
+    /// <summary>
+    /// Uses the Piranha identity module.
+    /// </summary>
+    /// <param name="builder">The current application builder</param>
+    /// <returns>The builder</returns>
+    public static PiranhaApplicationBuilder UseIdentity(this PiranhaApplicationBuilder applicationBuilder)
+    {
+        applicationBuilder.Builder.UsePiranhaIdentity();
+
+        return applicationBuilder;
+    }
+
     /// <summary>
     /// Adds the Piranha identity module.
     /// </summary>

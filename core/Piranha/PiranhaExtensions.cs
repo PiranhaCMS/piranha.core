@@ -9,6 +9,8 @@
  */
 
 using System;
+using System.Linq;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;
 using Piranha.Cache;
@@ -26,17 +28,6 @@ public static class PiranhaExtensions
     }
 
     /// <summary>
-    /// Adds the memory cache service for repository caching.
-    /// </summary>
-    /// <param name="services">The current service collection</param>
-    /// <returns>The updated service collection</returns>
-    [Obsolete("Please use AddPiranhaSimpleCache instead", true)]
-    public static IServiceCollection AddPiranhaMemCache(this IServiceCollection services)
-    {
-        return services;
-    }
-
-    /// <summary>
     /// Adds the distributed cache service for repository caching.
     /// </summary>
     /// <param name="services">The current service collection</param>
@@ -44,6 +35,18 @@ public static class PiranhaExtensions
     public static IServiceCollection AddPiranhaDistributedCache(this IServiceCollection services)
     {
         return services.AddSingleton<ICache, DistributedCache>();
+    }
+
+    public static PiranhaServiceBuilder UseMemoryCache(this PiranhaServiceBuilder serviceBuilder, bool clone = false)
+    {
+        // Check dependent services
+        if (!serviceBuilder.Services.Any(s => s.ServiceType == typeof(IMemoryCache)))
+        {
+            throw new NotSupportedException("You need to register a IMemoryCache service in order to use Memory Cache in Piranha");
+        }
+        serviceBuilder.Services.AddPiranhaMemoryCache();
+
+        return serviceBuilder;
     }
 
     /// <summary>

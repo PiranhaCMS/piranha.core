@@ -19,7 +19,101 @@ using System.Threading.Tasks;
 
 namespace Piranha.AttributeBuilder
 {
-    public abstract class ContentTypeBuilder<T, TType> where T : ContentTypeBuilder<T, TType> where TType : ContentType
+    /// <summary>
+    /// Class for simple access to the different content type
+    /// builders available.
+    /// </summary>
+    public class ContentTypeBuilder
+    {
+        private readonly PageTypeBuilder _pageTypes;
+        private readonly PostTypeBuilder _postTypes;
+        private readonly SiteTypeBuilder _siteTypes;
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        /// <param name="api">The current api</param>
+        public ContentTypeBuilder(IApi api)
+        {
+            _pageTypes = new PageTypeBuilder(api);
+            _postTypes = new PostTypeBuilder(api);
+            _siteTypes = new SiteTypeBuilder(api);
+        }
+
+        /// <summary>
+        /// Adds all content types available in the given assembly.
+        /// </summary>
+        /// <param name="assembly">The assembly</param>
+        /// <returns>The builder</returns>
+        public ContentTypeBuilder AddAssembly(Assembly assembly)
+        {
+            foreach (var type in assembly.GetTypes())
+            {
+                if (type.IsClass && !type.IsAbstract)
+                {
+                    var pageAttr = type.GetCustomAttribute<PageTypeAttribute>();
+                    if (pageAttr != null)
+                    {
+                        _pageTypes.AddType(type);
+                        continue;
+                    }
+
+                    var postAttr = type.GetCustomAttribute<PostTypeAttribute>();
+                    if (postAttr != null)
+                    {
+                        _postTypes.AddType(type);
+                        continue;
+                    }
+
+                    var siteAttr = type.GetCustomAttribute<SiteTypeAttribute>();
+                    if (siteAttr != null)
+                    {
+                        _siteTypes.AddType(type);
+                        continue;
+                    }
+                }
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// Builds all of the importer content types and saves the to the
+        /// database.
+        /// </summary>
+        /// <returns>The builder</returns>
+        public ContentTypeBuilder Build()
+        {
+            _pageTypes.Build();
+            _postTypes.Build();
+            _siteTypes.Build();
+
+            return this;
+        }
+
+        /// <summary>
+        /// Deletes all content types that does not currently exist in
+        /// the builder.
+        /// </summary>
+        /// <returns>The builder</returns>
+        public ContentTypeBuilder DeleteOrphans()
+        {
+            _pageTypes.DeleteOrphans();
+            _postTypes.DeleteOrphans();
+            _siteTypes.DeleteOrphans();
+
+            return this;
+        }
+    }
+
+    /// <summary>
+    /// Abstract base class for importing a content type from attributes.
+    /// </summary>
+    /// <typeparam name="T">The builder type</typeparam>
+    /// <typeparam name="TType">The content type</typeparam>
+    /// <typeparam name="TAttr">The attribute type</typeparam>
+    public abstract class ContentTypeBuilder<T, TType>
+        where T : ContentTypeBuilder<T, TType>
+        where TType : ContentType
     {
         protected readonly List<Type> _types = new List<Type>();
 

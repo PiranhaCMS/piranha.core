@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Piranha;
+using Piranha.AspNetCore;
 using Piranha.Manager.Editor;
 
 public static class SummernoteExtensions
@@ -27,6 +28,18 @@ public static class SummernoteExtensions
 
         // Return the service collection
         return services;
+    }
+
+    /// <summary>
+    /// Uses the Summernote editor module if simple startup is enabled.
+    /// </summary>
+    /// <param name="piranha">The Piranha application builder</param>
+    /// <returns>The builder</returns>
+    public static PiranhaApplicationBuilder UseSummernote(this PiranhaApplicationBuilder piranha)
+    {
+        piranha.Builder.UsePiranhaSummernote();
+
+        return piranha;
     }
 
     /// <summary>
