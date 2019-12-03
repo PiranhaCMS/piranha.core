@@ -65,6 +65,7 @@ namespace Piranha.Data.EF
                 cfg.CreateMap<Data.Category, Data.Category>()
                     .ForMember(c => c.Id, o => o.Ignore())
                     .ForMember(c => c.Created, o => o.Ignore());
+                cfg.CreateMap<Data.Category, Models.Taxonomy>();
                 cfg.CreateMap<Data.MediaFolder, Data.MediaFolder>()
                     .ForMember(f => f.Id, o => o.Ignore())
                     .ForMember(f => f.Created, o => o.Ignore())
@@ -133,6 +134,7 @@ namespace Piranha.Data.EF
                 cfg.CreateMap<Data.Tag, Data.Tag>()
                     .ForMember(t => t.Id, o => o.Ignore())
                     .ForMember(t => t.Created, o => o.Ignore());
+                cfg.CreateMap<Data.Tag, Models.Taxonomy>();
             });
             mapperConfig.AssertConfigurationIsValid();
             Mapper = mapperConfig.CreateMapper();
