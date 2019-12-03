@@ -19,18 +19,18 @@
     <value>Er du helt sikker?</value>
   </data>
   <data name="Edit site" xml:space="preserve">
-    <value>Redigér webside</value>
+    <value>Redigér websted</value>
   </data>
   <data name="Hostnames" xml:space="preserve">
     <value>Værtsnavne</value>
   </data>
   <data name="If this should be the default site of the installation." xml:space="preserve">
-    <value>If this should be the default site of the installation.</value>
+    <value>Markér, hvis dette er standard webstedet.</value>
   </data>
   <data name="Please type in the name of the site to confirm." xml:space="preserve">
-    <value>Please type in the name of the site to confirm.</value>
+    <value>Indtast navnet på webstedet for at bekræfte.</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
-    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the site {{ title }} and all of its &lt;strong>pages&lt;/strong>, &lt;strong>archives&lt;/strong> and &lt;strong>posts&lt;/strong>.</value>
+    <value>Denne handling kan &lt;strong>ikke&lt;/strong> fortrydes. Dette vil slette webstedet {{ title }} of alle dets &lt;strong>sider&lt;/strong>, &lt;strong>samlinger&lt;/strong> og &lt;strong>opslag&lt;/strong>.</value>
   </data>
 </root>
