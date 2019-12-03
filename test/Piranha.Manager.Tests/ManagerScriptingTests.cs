@@ -5,7 +5,7 @@ using Piranha.Manager;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Prianha.Manager.Tests
+namespace Piranha.Manager.Tests
 {
     public class ManagerScriptingTests
     {
