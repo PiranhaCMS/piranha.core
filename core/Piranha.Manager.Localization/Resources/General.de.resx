@@ -19,16 +19,16 @@
     <value>Alle</value>
   </data>
   <data name="An error occurred" xml:space="preserve">
-    <value>An error occurred</value>
+    <value>Es ist ein Fehler aufgetreten</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Abbrechen</value>
   </data>
   <data name="Content" xml:space="preserve">
     <value>Inhalt</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Continue</value>
+    <value>Weiter</value>
   </data>
   <data name="Content type" xml:space="preserve">
     <value>Inhaltstyp</value>
@@ -61,10 +61,10 @@
     <value>Entwürfe</value>
   </data>
   <data name="Email address" xml:space="preserve">
-    <value>Email address</value>
+    <value>E‐Mail‐Adresse</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>E-Mail Adresse erforderlich.</value>
   </data>
   <data name="Filename" xml:space="preserve">
     <value>Dateiname</value>
@@ -82,7 +82,7 @@
     <value>Allgemein</value>
   </data>
   <data name="General information" xml:space="preserve">
-    <value>General information</value>
+    <value>Allgemeine Information</value>
   </data>
   <data name="History" xml:space="preserve">
     <value>Verlauf</value>
@@ -94,7 +94,7 @@
     <value>Standard</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Anmelden</value>
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Abmelden</value>
@@ -118,19 +118,19 @@
     <value>Name</value>
   </data>
   <data name="Name is mandatory." xml:space="preserve">
-    <value>Name is mandatory.</value>
+    <value>Name ist erforderlich.</value>
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
     <value>Öffne öffentliche URL im neuen Tab</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>Passwort</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>Permanent</value>
   </data>
   <data name="Permissions" xml:space="preserve">
-    <value>Permissions</value>
+    <value>Berechtigungen</value>
   </data>
   <data name="Pixels" xml:space="preserve">
     <value>Pixel</value>
@@ -145,16 +145,16 @@
     <value>Veröffentlichungsdatum</value>
   </data>
   <data name="Redirect" xml:space="preserve">
-    <value>Redirect</value>
+    <value>Umleitung</value>
   </data>
   <data name="Redirect Type" xml:space="preserve">
-    <value>Redirect Type</value>
+    <value>Umleitung-Typ</value>
   </data>
   <data name="Revert" xml:space="preserve">
     <value>Zurücksetzen</value>
   </data>
   <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
+    <value>Rollen</value>
   </data>
   <data name="Route" xml:space="preserve">
     <value>Route</value>
@@ -184,7 +184,7 @@
     <value>System</value>
   </data>
   <data name="Temporary" xml:space="preserve">
-    <value>Temporary</value>
+    <value>Vorläufig</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Titel</value>
@@ -193,16 +193,16 @@
     <value>Aktualisierung</value>
   </data>
   <data name="Update password" xml:space="preserve">
-    <value>Update password</value>
+    <value>Passwort aktualisieren</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Username</value>
+    <value>Benutzername</value>
   </data>
   <data name="Username is mandatory." xml:space="preserve">
-    <value>Username is mandatory.</value>
+    <value>Benutzername ist erforderlich.</value>
   </data>
   <data name="Title is mandatory." xml:space="preserve">
-    <value>Title is mandatory.</value>
+    <value>Titel ist erforderlich.</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Typ</value>
@@ -214,7 +214,7 @@
     <value>Unveröffentlicht</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>Benutzer</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Version</value>

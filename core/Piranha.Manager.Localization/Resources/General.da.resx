@@ -13,40 +13,40 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>Tilføj</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>All</value>
+    <value>Alt</value>
   </data>
   <data name="An error occurred" xml:space="preserve">
-    <value>An error occurred</value>
+    <value>Der opstod en fejl</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Annullér</value>
   </data>
   <data name="Content" xml:space="preserve">
-    <value>Content</value>
+    <value>Indhold</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Continue</value>
+    <value>Fortsæt</value>
   </data>
   <data name="Content type" xml:space="preserve">
-    <value>Content type</value>
+    <value>Indholdstype</value>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Copy</value>
+    <value>Kopiér</value>
   </data>
   <data name="Culture" xml:space="preserve">
-    <value>Culture</value>
+    <value>Sprog og område</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Slet</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Description</value>
+    <value>Beskrivelse</value>
   </data>
   <data name="Details" xml:space="preserve">
-    <value>Details</value>
+    <value>Detaljer</value>
   </data>
   <data name="Dimensions" xml:space="preserve">
     <value>Dimensions</value>
@@ -55,49 +55,49 @@
     <value>Download</value>
   </data>
   <data name="Draft" xml:space="preserve">
-    <value>Draft</value>
+    <value>Kladde</value>
   </data>
   <data name="Drafts" xml:space="preserve">
-    <value>Drafts</value>
+    <value>Kladder</value>
   </data>
   <data name="Email address" xml:space="preserve">
-    <value>Email address</value>
+    <value>Emailadresse</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>Indtast venligst en e-mailadresse.</value>
   </data>
   <data name="Filename" xml:space="preserve">
-    <value>Filename</value>
+    <value>Filnavn</value>
   </data>
   <data name="Height" xml:space="preserve">
-    <value>Height</value>
+    <value>Højde</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>Redigér</value>
   </data>
   <data name="Empty" xml:space="preserve">
-    <value>Empty</value>
+    <value>Intet indhold</value>
   </data>
   <data name="General" xml:space="preserve">
-    <value>General</value>
+    <value>Generelt</value>
   </data>
   <data name="General information" xml:space="preserve">
-    <value>General information</value>
+    <value>Generel information</value>
   </data>
   <data name="History" xml:space="preserve">
-    <value>History</value>
+    <value>Historik</value>
   </data>
   <data name="Internal id" xml:space="preserve">
-    <value>Internal id</value>
+    <value>Internt ID</value>
   </data>
   <data name="Is default" xml:space="preserve">
     <value>Is default</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Log på</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+    <value>Log af</value>
   </data>
   <data name="Looks like there's no items here. Click on the button above to get started!" xml:space="preserve">
     <value>Looks like there's no items here. Click on the button above to get started!</value>
@@ -115,7 +115,7 @@
     <value>Modified</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>Navn</value>
   </data>
   <data name="Name is mandatory." xml:space="preserve">
     <value>Name is mandatory.</value>
@@ -124,25 +124,25 @@
     <value>Open public URL in new tab</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>Adgangskode</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>Permanent</value>
   </data>
   <data name="Permissions" xml:space="preserve">
-    <value>Permissions</value>
+    <value>Tilladelser</value>
   </data>
   <data name="Pixels" xml:space="preserve">
     <value>Pixels</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Preview</value>
+    <value>Forhåndsvisning</value>
   </data>
   <data name="Publish" xml:space="preserve">
-    <value>Publish</value>
+    <value>Udgiv</value>
   </data>
   <data name="Publish date" xml:space="preserve">
-    <value>Publish date</value>
+    <value>Udgivelsesdato</value>
   </data>
   <data name="Redirect" xml:space="preserve">
     <value>Redirect</value>
@@ -151,28 +151,28 @@
     <value>Redirect Type</value>
   </data>
   <data name="Revert" xml:space="preserve">
-    <value>Revert</value>
+    <value>Gendan</value>
   </data>
   <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
+    <value>Roller</value>
   </data>
   <data name="Route" xml:space="preserve">
     <value>Route</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>Gem</value>
   </data>
   <data name="Scheduled" xml:space="preserve">
     <value>Scheduled</value>
   </data>
   <data name="Search..." xml:space="preserve">
-    <value>Search...</value>
+    <value>Søg...</value>
   </data>
   <data name="Select block" xml:space="preserve">
     <value>Select block</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Indstillinger</value>
   </data>
   <data name="Size" xml:space="preserve">
     <value>Size</value>
@@ -187,7 +187,7 @@
     <value>Temporary</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Titel</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Update</value>
@@ -214,7 +214,7 @@
     <value>Unpublished</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>Brugere</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Version</value>
