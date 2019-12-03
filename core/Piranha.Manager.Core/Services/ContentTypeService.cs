@@ -184,6 +184,8 @@ namespace Piranha.Manager.Services
                     }
                 };
 
+                PopulateFieldOptions(appFieldType, field);
+
                 if (regionType.Fields.Count > 1)
                 {
                     field.Model = (Extend.IField)((IDictionary<string, object>)regionModel)[fieldType.Id];
@@ -251,14 +253,7 @@ namespace Piranha.Manager.Services
                                 }
                             };
 
-                            // Check if this is a select field
-                            if (typeof(Extend.Fields.SelectFieldBase).IsAssignableFrom(fieldType.Type))
-                            {
-                                foreach(var selectItem in ((Extend.Fields.SelectFieldBase)Activator.CreateInstance(fieldType.Type)).Items)
-                                {
-                                    field.Meta.Options.Add(Convert.ToInt32(selectItem.Value), selectItem.Title);
-                                }
-                            }
+                            PopulateFieldOptions(fieldType, field);
 
                             // Check if we have field meta-data available
                             var attr = prop.GetCustomAttribute<Extend.FieldAttribute>();
@@ -304,6 +299,23 @@ namespace Piranha.Manager.Services
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Adds options to field's meta if required
+        /// </summary>
+        /// <param name="fieldType">Type of field</param>
+        /// <param name="fieldModel">Field model</param>
+        private void PopulateFieldOptions(Runtime.AppField fieldType, FieldModel fieldModel)
+        {
+            // Check if this is a select field
+            if (typeof(Extend.Fields.SelectFieldBase).IsAssignableFrom(fieldType.Type))
+            {
+                foreach (var selectItem in ((Extend.Fields.SelectFieldBase)Activator.CreateInstance(fieldType.Type)).Items)
+                {
+                    fieldModel.Meta.Options.Add(Convert.ToInt32(selectItem.Value), selectItem.Title);
+                }
+            }
         }
     }
 }
