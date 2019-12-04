@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <OutputType>Library</OutputType>
     <Version>8.0.0</Version>
     <Company>Piranha CMS</Company>
   </PropertyGroup>
