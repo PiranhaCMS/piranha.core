@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.ImageSharp</id>
     <title>Piranha ImageSharp</title>
-    <version>7.1.0-rc1</version>
+    <version>8.0.0-rc1</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -17,9 +17,9 @@
 https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
-      <group targetFramework=".NETStandard2.0">
-        <dependency id="Piranha" version="[7.1.0,8.0.0)" />
-        <dependency id="SixLabors.ImageSharp" version="1.0.0-beta0006" />
+      <group targetFramework="netstandard2.0">
+        <dependency id="Piranha" version="[8.0.0,9.0.0)" />
+        <dependency id="SixLabors.ImageSharp" version="1.0.0-beta0007" />
       </group>
     </dependencies>
   </metadata>

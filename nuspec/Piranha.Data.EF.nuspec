@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.Data.EF</id>
     <title>Piranha Data EF</title>
-    <version>7.1.0</version>
+    <version>8.0.0</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -17,14 +17,14 @@
 https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
-      <group targetFramework=".NETStandard2.0">
-        <dependency id="Piranha" version="[7.1.0,8.0.0)" />
-        <dependency id="AutoMapper" version="[8.1.0]" />
-        <dependency id="Microsoft.EntityFrameworkCore.Relational" version="2.2.0" />
+      <group targetFramework="netstandard2.1">
+        <dependency id="Piranha" version="[8.0.0,9.0.0)" />
+        <dependency id="AutoMapper" version="[9.0.0]" />
+        <dependency id="Microsoft.EntityFrameworkCore.Relational" version="3.1.0" />
       </group>
     </dependencies>
   </metadata>
   <files>
-    <file src="..\data\Piranha.Data.EF\bin\Release\netstandard2.0\Piranha.Data.EF.dll" target="lib\netstandard2.0\Piranha.Data.EF.dll" />
+    <file src="..\data\Piranha.Data.EF\bin\Release\netstandard2.1\Piranha.Data.EF.dll" target="lib\netstandard2.1\Piranha.Data.EF.dll" />
   </files>
 </package>
