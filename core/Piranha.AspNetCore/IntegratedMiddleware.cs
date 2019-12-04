@@ -187,18 +187,140 @@ namespace Piranha.AspNetCore
                 else if (page != null)
                 {
                     route.Append(page.Route ?? (pageType.IsArchive ? "/archive" : "/page"));
-                    for (var n = pos; n < segments.Length; n++)
-                    {
-                        route.Append("/");
-                        route.Append(segments[n]);
-                    }
 
+                    // Set the basic query
                     query.Append("?id=");
                     query.Append(page.Id);
 
                     if (!page.ParentId.HasValue && page.SortOrder == 0)
                     {
                         query.Append("&startpage=true");
+                    }
+
+                    if (!pageType.IsArchive)
+                    {
+                        // This is a regular page, append trailing segments
+                        for (var n = pos; n < segments.Length; n++)
+                        {
+                            route.Append("/");
+                            route.Append(segments[n]);
+                        }
+                    }
+                    else
+                    {
+                        // This is an archive, check for archive params
+                        int? year = null;
+                        bool foundCategory = false;
+                        bool foundTag = false;
+                        bool foundPage = false;
+
+                        for (var n = pos; n < segments.Length; n++)
+                        {
+                            if (segments[n] == "category" && !foundPage)
+                            {
+                                foundCategory = true;
+                                continue;
+                            }
+
+                            if (segments[n] == "tag" && !foundPage && !foundCategory)
+                            {
+                                foundTag = true;
+                                continue;
+                            }
+
+                            if (segments[n] == "page")
+                            {
+                                foundPage = true;
+                                continue;
+                            }
+
+                            if (foundCategory)
+                            {
+                                try
+                                {
+                                    var categoryId = (await api.Posts.GetCategoryBySlugAsync(page.Id, segments[n]).ConfigureAwait(false))?.Id;
+
+                                    if (categoryId.HasValue)
+                                    {
+                                        query.Append("&category=");
+                                        query.Append(categoryId);
+                                    }
+                                }
+                                finally
+                                {
+                                    foundCategory = false;
+                                }
+                            }
+
+                            if (foundTag)
+                            {
+                                try
+                                {
+                                    var tagId = (await api.Posts.GetTagBySlugAsync(page.Id, segments[n]).ConfigureAwait(false))?.Id;
+
+                                    if (tagId.HasValue)
+                                    {
+                                        query.Append("&tag=");
+                                        query.Append(tagId);
+                                    }
+                                }
+                                finally
+                                {
+                                    foundTag = false;
+                                }
+                            }
+
+                            if (foundPage)
+                            {
+                                try
+                                {
+                                    var pageNum = Convert.ToInt32(segments[n]);
+                                    query.Append("&page=");
+                                    query.Append(pageNum);
+                                }
+                                catch
+                                {
+                                    // We don't care about the exception, we just
+                                    // discard malformed input
+                                }
+                                // Page number should always be last, break the loop
+                                break;
+                            }
+
+                            if (!year.HasValue)
+                            {
+                                try
+                                {
+                                    year = Convert.ToInt32(segments[n]);
+
+                                    if (year.Value > DateTime.Now.Year)
+                                    {
+                                        year = DateTime.Now.Year;
+                                    }
+                                    query.Append("&year=");
+                                    query.Append(year);
+                                }
+                                catch
+                                {
+                                    // We don't care about the exception, we just
+                                    // discard malformed input
+                                }
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    var month = Math.Max(Math.Min(Convert.ToInt32(segments[n]), 12), 1);
+                                    query.Append("&month=");
+                                    query.Append(month);
+                                }
+                                catch
+                                {
+                                    // We don't care about the exception, we just
+                                    // discard malformed input
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -208,8 +330,8 @@ namespace Piranha.AspNetCore
                     var strQuery = query.ToString();
 
 #if DEBUG
-                    _logger?.LogDebug($"SETTING ROUTE: [{ strRoute }]");
-                    _logger?.LogDebug($"SETTING QUERY: [{ strQuery }]");
+                    _logger?.LogInformation($"SETTING ROUTE: [{ strRoute }]");
+                    _logger?.LogInformation($"SETTING QUERY: [{ strQuery }]");
 #endif
 
                     context.Request.Path = new PathString(strRoute);
