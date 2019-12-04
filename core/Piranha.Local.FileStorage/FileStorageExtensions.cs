@@ -15,22 +15,6 @@ using Piranha.Local;
 public static class FileStorageExtensions
 {
     /// <summary>
-    /// Adds the FileStorage module.
-    /// </summary>
-    /// <param name="services">The current service collection</param>
-    /// <param name="basePath">The optional base path for where uploaded media is stored.null Default is wwwroot/uploads/</param>
-    /// <param name="baseUrl">The optional base url for accessing uploaded media. Default is ~/uploads/</params>
-    /// <param name="scope">The optional service scope. Default is singleton</param>
-    /// <returns>The service collection</returns>
-    public static PiranhaServiceBuilder UseFileStorage(this PiranhaServiceBuilder serviceBuilder,
-        string basePath = null, string baseUrl = null, ServiceLifetime scope = ServiceLifetime.Singleton)
-    {
-        serviceBuilder.Services.AddPiranhaFileStorage(basePath, baseUrl, scope);
-
-        return serviceBuilder;
-    }
-
-    /// <summary>
     /// Adds the services for the local FileStorage service.
     /// </summary>
     /// <param name="services">The current service collection</param>

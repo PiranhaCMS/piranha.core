@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2019 Håkan Edling
+ * Copyright (c) 2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -11,19 +11,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using Piranha;
-using Piranha.AspNetCore;
 using Piranha.Manager.Editor;
 
 public static class TinyMCEExtensions
 {
-    public static PiranhaServiceBuilder UseTinyMCE(this PiranhaServiceBuilder serviceBuilder)
-    {
-        serviceBuilder.Services.AddPiranhaTinyMCE();
-
-        return serviceBuilder;
-    }
-
     /// <summary>
     /// Adds the Tiny MCE editor module.
     /// </summary>
@@ -35,18 +26,6 @@ public static class TinyMCEExtensions
 
         // Return the service collection
         return services;
-    }
-
-    /// <summary>
-    /// Uses the Tiny MCE editor module if simple startup is enabled.
-    /// </summary>
-    /// <param name="piranha">The Piranha application builder</param>
-    /// <returns>The builder</returns>
-    public static PiranhaApplicationBuilder UseTinyMCE(this PiranhaApplicationBuilder piranha)
-    {
-        piranha.Builder.UsePiranhaTinyMCE();
-
-        return piranha;
     }
 
     /// <summary>

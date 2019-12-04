@@ -51,21 +51,6 @@ namespace RazorWeb
                 .Build()
                 .DeleteOrphans();
 
-            /*
-            var pageTypeBuilder = new Piranha.AttributeBuilder.PageTypeBuilder(api)
-                .AddAssembly(typeof(Startup).Assembly)
-                .Build()
-                .DeleteOrphans();
-            var postTypeBuilder = new Piranha.AttributeBuilder.PostTypeBuilder(api)
-                .AddAssembly(typeof(Startup).Assembly)
-                .Build()
-                .DeleteOrphans();
-            var siteTypeBuilder = new Piranha.AttributeBuilder.SiteTypeBuilder(api)
-                .AddAssembly(typeof(Startup).Assembly)
-                .Build()
-                .DeleteOrphans();
-            */
-
             // Configure editor
             Piranha.Manager.Editor.EditorConfig.FromFile("editorconfig.json");
 

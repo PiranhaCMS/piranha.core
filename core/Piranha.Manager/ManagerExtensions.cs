@@ -13,30 +13,12 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
-using Piranha;
-using Piranha.AspNetCore;
 using Piranha.Manager;
 using Piranha.Manager.Hubs;
 using Piranha.Manager.Services;
 
 public static class ManagerModuleExtensions
 {
-    public static PiranhaServiceBuilder UseManager(this PiranhaServiceBuilder options)
-    {
-        // Add dependent services
-        options.Services.AddLocalization(options =>
-            options.ResourcesPath = "Resources"
-        );
-        options.Services.AddControllersWithViews();
-        options.Services.AddRazorPages()
-            .AddPiranhaManagerOptions();
-
-        // Add manager services
-        options.Services.AddPiranhaManager();
-
-        return options;
-    }
-
     /// <summary>
     /// Adds the Piranha manager module.
     /// </summary>
@@ -230,26 +212,6 @@ public static class ManagerModuleExtensions
     }
 
     /// <summary>
-    /// Uses the Piranha Manager if simple startup is enabled.
-    /// </summary>
-    /// <param name="piranha">The Piranha application builder</param>
-    /// <returns>The builder</returns>
-    public static PiranhaApplicationBuilder UseManager(this PiranhaApplicationBuilder piranha)
-    {
-        piranha.Builder.UsePiranhaManager();
-        piranha.Builder.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-
-            endpoints.MapPiranhaManager();
-        });
-
-        return piranha;
-    }
-
-    /// <summary>
     /// Uses the Piranha Manager.
     /// </summary>
     /// <param name="builder">The application builder</param>
@@ -262,6 +224,11 @@ public static class ManagerModuleExtensions
         });
     }
 
+    /// <summary>
+    /// Adds the mappings needed for the Piranha Manager to
+    /// the endpoint routes.
+    /// </summary>
+    /// <param name="builder">The route builder</param>
     public static void MapPiranhaManager(this IEndpointRouteBuilder builder)
     {
         builder.MapHub<PreviewHub>("/manager/preview");
@@ -284,6 +251,12 @@ public static class ManagerModuleExtensions
             });
     }
 
+    /// <summary>
+    /// Static accessor to Manager module if it is registered in the Piranha
+    /// application.
+    /// </summary>
+    /// <param name="modules">The available modules</param>
+    /// <returns>The manager module</returns>
     public static Piranha.Manager.Module Manager(this Piranha.Runtime.AppModuleList modules)
     {
         return modules.Get<Piranha.Manager.Module>();
