@@ -6,7 +6,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <base href="@(new Uri(new Uri(Url.ActionContext.HttpContext.Request.Scheme + "://" + Url.ActionContext.HttpContext.Request.Host.Value), Url.Content("~")).ToString())" />
     <link rel="stylesheet" href="~/manager/assets/css/full.min.css">
     @foreach (var style in module.Styles)
     {
