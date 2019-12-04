@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.Manager.TinyMCE</id>
     <title>Piranha Manager</title>
-    <version>7.1.0</version>
+    <version>8.0.0</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -17,14 +17,12 @@
 https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
-      <group targetFramework=".NETStandard2.0">
-        <dependency id="Piranha.Manager" version="[7.1.0,8.0.0)" />
-        <dependency id="Microsoft.AspNetCore.Mvc" version="2.2.0" />
-        <dependency id="Microsoft.Extensions.FileProviders.Embedded" version="2.2.0" />
+      <group targetFramework="netcoreapp3.1">
+        <dependency id="Piranha.Manager" version="[8.0.0,9.0.0)" />
       </group>
     </dependencies>
   </metadata>
   <files>
-    <file src="..\core\Piranha.Manager.TinyMCE\bin\Release\netstandard2.0\Piranha.Manager.TinyMCE.dll" target="lib\netstandard2.0\Piranha.Manager.TinyMCE.dll" />
+    <file src="..\core\Piranha.Manager.TinyMCE\bin\Release\netcoreapp3.1\Piranha.Manager.TinyMCE.dll" target="lib\netcoreapp3.1\Piranha.Manager.TinyMCE.dll" />
   </files>
 </package>

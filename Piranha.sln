@@ -82,6 +82,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazorWeb", "examples\RazorW
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Manager.TinyMCE", "core\Piranha.Manager.TinyMCE\Piranha.Manager.TinyMCE.csproj", "{A52B0CDE-AD56-4B85-9DD1-01B7494D17C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Manager.Tests", "test\Piranha.Manager.Tests\Piranha.Manager.Tests.csproj", "{497CBEC0-6D71-43ED-9E8C-6A0DB605AA47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -180,6 +182,10 @@ Global
 		{A52B0CDE-AD56-4B85-9DD1-01B7494D17C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A52B0CDE-AD56-4B85-9DD1-01B7494D17C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A52B0CDE-AD56-4B85-9DD1-01B7494D17C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{497CBEC0-6D71-43ED-9E8C-6A0DB605AA47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{497CBEC0-6D71-43ED-9E8C-6A0DB605AA47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{497CBEC0-6D71-43ED-9E8C-6A0DB605AA47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{497CBEC0-6D71-43ED-9E8C-6A0DB605AA47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -208,6 +214,7 @@ Global
 		{DE3DC067-69E7-4CD4-BA76-02D4898ABA25} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 		{4A1E96A1-B7FD-4A8E-8440-924D63911770} = {A82A5922-BF05-4DD7-A2C1-DD22F1AD6A57}
 		{A52B0CDE-AD56-4B85-9DD1-01B7494D17C9} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
+		{497CBEC0-6D71-43ED-9E8C-6A0DB605AA47} = {DE1913AC-4AA3-4F66-83F1-615710D8367B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF88AA05-D127-4707-8214-A230F0DA569B}

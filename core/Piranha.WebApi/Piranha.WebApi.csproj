@@ -1,11 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-    <OutputType>Library</OutputType>
-    <Version>7.1.0</Version>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Version>8.0.0</Version>
     <Company>Piranha CMS</Company>
   </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Piranha\Piranha.csproj" />
