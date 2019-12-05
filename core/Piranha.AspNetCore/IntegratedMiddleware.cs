@@ -96,7 +96,21 @@ namespace Piranha.AspNetCore
                 }
 
                 //
-                // 3: Get the current page
+                // 3: Check for alias
+                //
+                if (segments != null && segments.Length > pos)
+                {
+                    var alias = await api.Aliases.GetByAliasUrlAsync($"/{ string.Join("/", segments.Subset(pos)) }", service.Site.Id);
+
+                    if (alias != null)
+                    {
+                        context.Response.Redirect(alias.RedirectUrl, alias.Type == RedirectType.Permanent);
+                        return;
+                    }
+                }
+
+                //
+                // 4: Get the current page
                 //
                 PageBase page = null;
                 PageType pageType = null;
@@ -131,7 +145,7 @@ namespace Piranha.AspNetCore
                 }
 
                 //
-                // 4: Get the current post
+                // 5: Get the current post
                 //
                 PostBase post = null;
                 PostType postType = null;
@@ -167,7 +181,7 @@ namespace Piranha.AspNetCore
 #endif
 
                 //
-                // 5: Route request
+                // 6: Route request
                 //
                 var route = new StringBuilder();
                 var query = new StringBuilder();
@@ -206,7 +220,7 @@ namespace Piranha.AspNetCore
                             route.Append(segments[n]);
                         }
                     }
-                    else
+                    else if (post == null)
                     {
                         // This is an archive, check for archive params
                         int? year = null;

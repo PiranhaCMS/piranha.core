@@ -50,6 +50,7 @@ public static class AspNetCoreStartupExtensions
         piranhaOptions.Builder
             .UseStaticFiles()
             .UseIntegratedPiranha()
+            .UsePiranhaSitemap()
             .UseRouting()
             .UseAuthentication()
             .UseAuthorization();
