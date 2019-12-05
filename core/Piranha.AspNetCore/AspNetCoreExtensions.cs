@@ -9,9 +9,12 @@
  */
 
 using System;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Piranha;
+using Piranha.AspNetCore;
 using Piranha.Extend;
 using Piranha.Security;
 
@@ -26,14 +29,28 @@ public static class AspNetCoreExtensions
         return services
             .AddScoped<Piranha.AspNetCore.Services.IApplicationService, Piranha.AspNetCore.Services.ApplicationService>()
             .AddScoped<Piranha.AspNetCore.Services.IModelLoader, Piranha.AspNetCore.Services.ModelLoader>()
-            .AddAuthorization(o => {
-            o.AddPolicy(Permission.PagePreview, policy => {
-                policy.RequireClaim(Permission.PagePreview, Permission.PagePreview);
+            .AddAuthorization(o =>
+            {
+                o.AddPolicy(Permission.PagePreview, policy =>
+                {
+                    policy.RequireClaim(Permission.PagePreview, Permission.PagePreview);
+                });
+                o.AddPolicy(Permission.PostPreview, policy =>
+                {
+                    policy.RequireClaim(Permission.PostPreview, Permission.PostPreview);
+                });
             });
-            o.AddPolicy(Permission.PostPreview, policy => {
-                policy.RequireClaim(Permission.PostPreview, Permission.PostPreview);
-            });
-        });
+    }
+
+    /// <summary>
+    /// Uses the integrated piranha middleware.
+    /// </summary>
+    /// <param name="builder">The current application builder</param>
+    /// <returns>The builder</returns>
+    public static IApplicationBuilder UseIntegratedPiranha(this IApplicationBuilder builder)
+    {
+        return builder
+            .UseMiddleware<Piranha.AspNetCore.IntegratedMiddleware>();
     }
 
     /// <summary>
@@ -117,17 +134,6 @@ public static class AspNetCoreExtensions
     {
         return builder
             .UseMiddleware<Piranha.AspNetCore.StartPageMiddleware>();
-    }
-
-    /// <summary>
-    /// Uses the piranha site routing middleware.
-    /// </summary>
-    /// <param name="builder">The current application builder</param>
-    /// <returns>The builder</returns>
-    [Obsolete("Please replace UsePiranhaSites with UsePiranhaApplication.", true)]
-    public static IApplicationBuilder UsePiranhaSites(this IApplicationBuilder builder)
-    {
-        return UsePiranhaApplication(builder);
     }
 
     /// <summary>

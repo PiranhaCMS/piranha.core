@@ -7,7 +7,7 @@
         {
             "taskName": "build",
             "args": [
-                "${workspaceRoot}/examples/CoreWeb/CoreWeb.csproj"
+                "${workspaceRoot}/examples/RazorWeb/RazorWeb.csproj"
             ],
             "isBuildCommand": true,
             "problemMatcher": "$msCompile"

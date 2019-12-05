@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2019 Håkan Edling
+ * Copyright (c) 2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -31,7 +31,7 @@ public static class TinyMCEExtensions
     /// <summary>
     /// Uses the Tiny MCE editor module.
     /// </summary>
-    /// <param name="builder">The current application builder</param>
+    /// <param name="builder">The application builder</param>
     /// <returns>The builder</returns>
     public static IApplicationBuilder UsePiranhaTinyMCE(this IApplicationBuilder builder) {
         //

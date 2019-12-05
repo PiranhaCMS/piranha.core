@@ -212,9 +212,9 @@ public static class ManagerModuleExtensions
     }
 
     /// <summary>
-    /// Uses the piranha middleware.
+    /// Uses the Piranha Manager.
     /// </summary>
-    /// <param name="builder">The current application builder</param>
+    /// <param name="builder">The application builder</param>
     /// <returns>The builder</returns>
     public static IApplicationBuilder UsePiranhaManager(this IApplicationBuilder builder) {
         return builder.UseStaticFiles(new StaticFileOptions
@@ -224,6 +224,11 @@ public static class ManagerModuleExtensions
         });
     }
 
+    /// <summary>
+    /// Adds the mappings needed for the Piranha Manager to
+    /// the endpoint routes.
+    /// </summary>
+    /// <param name="builder">The route builder</param>
     public static void MapPiranhaManager(this IEndpointRouteBuilder builder)
     {
         builder.MapHub<PreviewHub>("/manager/preview");
@@ -246,6 +251,12 @@ public static class ManagerModuleExtensions
             });
     }
 
+    /// <summary>
+    /// Static accessor to Manager module if it is registered in the Piranha
+    /// application.
+    /// </summary>
+    /// <param name="modules">The available modules</param>
+    /// <returns>The manager module</returns>
     public static Piranha.Manager.Module Manager(this Piranha.Runtime.AppModuleList modules)
     {
         return modules.Get<Piranha.Manager.Module>();

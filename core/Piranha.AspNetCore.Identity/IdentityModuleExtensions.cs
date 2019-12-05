@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -9,7 +9,6 @@
  */
 
 using System;
-using System.Reflection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -20,7 +19,7 @@ using Piranha;
 using Piranha.AspNetCore.Identity;
 using Piranha.AspNetCore.Identity.Data;
 using Piranha.Manager;
-using Piranha.Manager.Editor;
+
 using IDb = Piranha.AspNetCore.Identity.IDb;
 using Module = Piranha.AspNetCore.Identity.Module;
 
