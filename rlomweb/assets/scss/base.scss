@@ -1,0 +1,113 @@
+.header-bg {
+    background-size: cover;
+    background-position: 50% 50%;
+}
+
+header {
+    padding: 1rem 0;
+
+    h1+.lead {
+       margin: 2rem 0; 
+    }
+
+    &.site-header {
+        .navbar {
+            padding: .5rem 0;
+        }
+
+        &.site-header-dark {
+            position: initial;
+
+            .nav-site {
+                a {
+                    color: #000;
+        
+                    &:hover {
+                        color: #000;
+                    }
+                }
+        
+                .active {
+                    a {
+                        color: #000;
+                    }
+                }    
+            }
+
+            .navbar-toggler {
+                background: #222;
+            }
+        }
+    }
+
+    &.page-header {
+        background-size: cover;
+        background-position: 50% 50%;            
+    }
+}
+
+.main {
+    margin: 3rem 0;
+
+    img {
+        max-width: 100%;
+    }
+}
+
+.teasers {
+    margin-bottom: 1rem;
+
+    .teaser {
+        margin-bottom: 2rem;
+    }
+}
+
+.archive-item {
+    padding-top: 3rem;
+
+    &:first-child {
+        padding-top: 0;
+    }
+
+    a {
+        font-weight: 500;
+    }
+}
+
+.tag {
+    white-space: nowrap;
+}
+
+.post-header {
+    img {
+        margin-top: 2rem;
+    }
+
+    .tag {
+        margin-right: 1rem;
+    }
+}
+
+.post-body {
+    margin-top: 3rem;
+}
+
+.page-body {
+    h1 {
+        margin-bottom: 3rem;
+    }
+}
+
+blockquote {
+    padding: 1rem 3rem;
+    margin: 2rem 0;
+    font-size: 1.2rem;
+    border-left: solid 4px #eee;
+}
+
+p {
+    &.text {
+        font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+        font-size: 87.5%;        
+    }
+}

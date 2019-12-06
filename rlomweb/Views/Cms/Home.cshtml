@@ -1,0 +1,187 @@
+﻿@model RlomHomePage
+@inject IApi Api
+
+@{
+    ViewBag.Title = Model.Title;
+}
+<!-- Start Landing Page Image -->
+<div class="landing">
+    <div class="home-wrap">
+        <div class="home-inner">
+            <div class="video-background">
+                <div class="video-wrap">
+                    <div id="video">
+                        <video id="bgvid" playsinline autoplay muted loop>
+                            <source src="~/rlomassets/img/demo_vid.mp4" type="video/mp4">
+                            <source src="~/rlomassets/img/demo_vid.webm" type="video/webm">
+                        </video>
+                    </div> <!--- End Video ID -->
+                </div> <!--- End Video Wrap -->
+            </div> <!--- End Video Background -->
+        </div>
+    </div>
+</div>
+<!--- Start Landing Page Caption -->
+<div class="caption text-center">
+
+    <div class="os-animation" data-animation="bounceInUp" data-delay=".6s">
+        <h1>Welcome to Redeeming Love</h1>
+    </div>
+
+    <div class="os-animation" data-animation="bounceInUp" data-delay=".8s">
+        <h3>We <img src="~/rlomassets/img/captionheart1.png" /> You Here</h3>
+    </div>
+
+    <div class="os-animation" data-animation="bounceInUp" data-delay="1s">
+        <a class="btn btn-outline-light btn-lg" href="#features">Schedule Your Visit</a>
+    </div>
+
+</div>
+<!--- End Landing Page Caption -->
+<!--- Bouncing Down Arrow -->
+<a class="down-arrow" href="#features">
+    <div class="arrow bounce d-none d-md-block">
+        <i class="fas fa-angle-down" aria-hidden="true"></i>
+    </div>
+</a>
+
+<!--- Start Features Section -->
+<div id="features" class="offset">
+
+    <!--- Start Who We Are -->
+    <div class="fixed-background">
+
+        <!--- Start of Row Dark -->
+        <div id="whoweare" class="row dark">
+
+            <div class=" col-12 os-animation" data-animation="fadeInUp">
+                <h3 class="heading wwa-header">Who We Are</h3>
+                <div class="heading-underline"></div>
+                <div class="wwa-text">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. <b>Lorem ipsum dolor sit amet, consectetur adipiscing elit</b>. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. <b>Lorem ipsum dolor sit amet, consectetur adipiscing elit</b>. Sed dignissim lacinia nunc. </p>
+
+                    <p>Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit. </p>
+
+                    <p><i>Lorem ipsum dolor sit amet, consectetur adipiscing elit</i>. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. Sed lectus. Integer euismod lacus luctus magna. <b>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos</b>. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. </p>
+
+                    <p>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. <i>Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa</i>. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est pulvinar ullamcorper. <b>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui</b>. Nulla facilisi. <i>Proin quam</i>. Integer lacinia sollicitudin massa. Cras metus. </p>
+
+                    <p>Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. Aenean laoreet. Vestibulum nisi lectus, commodo ac, facilisis ac, ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus quis, aliquet eget, justo. Sed pretium blandit orci. Ut eu diam at pede suscipit sodales. Aenean lectus elit, fermentum non, convallis id, sagittis at, neque. <b>Cras metus</b>. Nullam mauris orci, aliquet et, iaculis et, viverra vitae, ligula. </p>
+                </div>
+            </div>
+
+        </div>
+        <!--- End of Row Dark -->
+
+        <div class="fixed-wrap">
+            <div id="fixed">
+            </div>
+        </div>
+
+
+    </div>
+    <!--- End Who We Are -->
+    <!--- Start How We Worship -->
+    <div class="fixed-background">
+
+        <!--- Start of Row Dark -->
+        <div id="howwepraise" class="row dark">
+
+            <div class=" col-12 os-animation" data-animation="fadeInUp">
+                <h3 class="heading hwp-header">How We Praise</h3>
+                <div class="heading-underline"></div>
+                <div class="hwp-text">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. <b>Lorem ipsum dolor sit amet, consectetur adipiscing elit</b>. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. <b>Lorem ipsum dolor sit amet, consectetur adipiscing elit</b>. Sed dignissim lacinia nunc. </p>
+
+                    <p>Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit. </p>
+
+                    <p><i>Lorem ipsum dolor sit amet, consectetur adipiscing elit</i>. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. Sed lectus. Integer euismod lacus luctus magna. <b>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos</b>. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. </p>
+
+                    <p>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. <i>Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa</i>. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est pulvinar ullamcorper. <b>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui</b>. Nulla facilisi. <i>Proin quam</i>. Integer lacinia sollicitudin massa. Cras metus. </p>
+
+                    <p>Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. Aenean laoreet. Vestibulum nisi lectus, commodo ac, facilisis ac, ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus quis, aliquet eget, justo. Sed pretium blandit orci. Ut eu diam at pede suscipit sodales. Aenean lectus elit, fermentum non, convallis id, sagittis at, neque. <b>Cras metus</b>. Nullam mauris orci, aliquet et, iaculis et, viverra vitae, ligula. </p>
+                </div>
+            </div>
+
+        </div>
+        <!--- End of Row Dark -->
+
+        <div class="fixed-wrap">
+            <div id="fixed-2">
+            </div>
+        </div>
+
+    </div>
+    <!--- End How We Worship -->
+    <!--- Start Sermons -->
+    <div class="fixed-background">
+
+        <!--- Start of Row Dark -->
+        <div id="sermons" class="row dark">
+
+            <div class=" col-12 os-animation" data-animation="fadeInUp">
+                <h3 class="heading sermons-header">Sermons</h3>
+                <div class="heading-underline"></div>
+                <div class="sermons-text">
+
+
+                    <!--- Start Sermons Columns -->
+                    <div class="row justify-content-md-center">
+
+                        <div class="col-md-6 col-lg-4">
+                            <div class="os-animation" data-animation="fadeInLeft">
+                                <div class="sermons-column text-center">
+                                    <h3>struggling doesn't mean failing</h3>
+                                    <div class="sermons-features">
+                                        <p><strong>Speaker: </strong>Min. Corey Cobb</p>
+                                        <h4><span class="item">Watch Sermon </span><i class="far fa-file-video"></i></h4>
+                                        <h4><span class="item">Sermon Notes </span><i class="far fa-file-pdf"></i></h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-4">
+                            <div class="os-animation" data-animation="fadeInLeft">
+                                <div class="sermons-column text-center">
+                                    <h3>there is a place prepared</h3>
+                                    <div class="sermons-features">
+                                        <p><strong>Speaker: </strong>Pastor Emma White</p>
+                                        <h4><span class="item">Watch Sermon </span><i class="far fa-file-video"></i></h4>
+                                        <h4><span class="item">Sermon Notes </span><i class="far fa-file-pdf"></i></h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-4">
+                            <div class="os-animation" data-animation="fadeInLeft">
+                                <div class="sermons-column text-center">
+                                    <h3>repent and enjoy great glory</h3>
+                                    <div class="sermons-features">
+                                        <p><strong>Speaker: </strong>Pastor Emma White</p>
+                                        <h4><span class="item">Watch Sermon </span><i class="far fa-file-video"></i></h4>
+                                        <h4><span class="item">Sermon Notes </span><i class="far fa-file-pdf"></i></h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!--- End Sermons Columns -->
+
+                </div>
+            </div>
+
+        </div>
+        <!--- End of Row Dark -->
+
+        <div class="fixed-wrap">
+            <div id="fixed-3">
+            </div>
+        </div>
+
+    </div>
+    <!--- End Sermons -->
+
+</div>

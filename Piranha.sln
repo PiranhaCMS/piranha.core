@@ -82,6 +82,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazorWeb", "examples\RazorW
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Manager.TinyMCE", "core\Piranha.Manager.TinyMCE\Piranha.Manager.TinyMCE.csproj", "{A52B0CDE-AD56-4B85-9DD1-01B7494D17C9}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rlomweb", "rlomweb\rlomweb.csproj", "{6AE4018F-EF3A-427B-9265-D44BB83867CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -180,6 +182,10 @@ Global
 		{A52B0CDE-AD56-4B85-9DD1-01B7494D17C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A52B0CDE-AD56-4B85-9DD1-01B7494D17C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A52B0CDE-AD56-4B85-9DD1-01B7494D17C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AE4018F-EF3A-427B-9265-D44BB83867CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AE4018F-EF3A-427B-9265-D44BB83867CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AE4018F-EF3A-427B-9265-D44BB83867CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AE4018F-EF3A-427B-9265-D44BB83867CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

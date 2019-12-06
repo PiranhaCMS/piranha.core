@@ -1,0 +1,30 @@
+@model Piranha.Extend.Blocks.ImageGalleryBlock
+@using Piranha.Extend.Blocks
+@{
+    var unique = "gallery-" + Guid.NewGuid().ToString();
+}
+
+<div id="@unique" class="carousel slide gallery-block" data-ride="carousel">
+    <ol class="carousel-indicators">
+        @for (var n = 0; n < Model.Items.Count; n++)
+        {
+            <li data-target="#@unique" data-slide-to="@n" class="@(n == 0 ? "active" : "")"></li>
+        }
+    </ol>
+    <div class="carousel-inner">
+        @foreach (var item in Model.Items)
+        {
+            <div class="carousel-item @(item == Model.Items.First() ? "active" : "")">
+                <img src="@Url.Content(WebApp.Media.ResizeImage(((ImageBlock)item).Body.Media, 890, 482))" class="d-block w-100">
+            </div>
+        }
+    </div>
+    <a class="carousel-control-prev" href="#@unique" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#@unique" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>

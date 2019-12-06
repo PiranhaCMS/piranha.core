@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <Version>7.1.0</Version>
     <Company>Piranha CMS</Company>
     <AssemblyTitle>Piranha.AttributeBuilder</AssemblyTitle>

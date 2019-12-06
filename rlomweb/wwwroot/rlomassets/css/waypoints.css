@@ -1,0 +1,25 @@
+/*============= WAYPOINTS =============*/
+
+.os-animation{
+  opacity: 0;
+  margin: 0!important;
+  max-width: 100%;
+ }
+ .os-animation.animated {
+  opacity: 1;
+ }
+
+
+/*--- TURN OFF ANIMATION ON MOBILE *
+@media (max-width: 768px) {
+.animated, .os-animation {
+	-webkit-animation: none;
+	-moz-animation: none;
+	-o-animation: none;
+	animation: none;
+	opacity: 1;
+	-webkit-animation-delay: none !important;
+	-moz-animation-delay: none !important;
+	animation-delay: none !important;
+	}
+}

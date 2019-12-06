@@ -1,0 +1,283 @@
+@import url('https://fonts.googleapis.com/css?family=Aguafina+Script|Arizonia|Courgette|Great+Vibes|Lato:400,700,900|Mr+Dafoe|Parisienne|Pinyon+Script|Rochester|Tangerine:400,700&display=swap');
+
+/* Go back through video and document what the following markup does. */
+body {
+	overflow-x: hidden;
+	font-family: 'Lato', sans-serif;
+	color: #505962;
+}
+
+/*======= Nav Scrolling Offset =======*/
+.offset:before {
+	height: 4rem;
+	margin-top: -4rem;
+	content: "";
+	display: block;
+}
+
+/*======= Extra Bootstrap Column Padding =======*/
+[class*="col-"] {
+	padding: 1rem;
+}
+
+/*======= Navigation =======*/
+.navbar {
+	padding: .7rem 1rem;
+	font-size: .9rem;
+	font-weight: 700;
+	letter-spacing: .1rem;
+	transition: background-color .5s ease 0s;
+}
+
+.navbar-brand img {
+	height: 6rem;
+}
+
+.svg-inline--fa.fa-w-14 {
+	color: white;
+	font-size: 1.6rem;
+}
+
+.navbar-nav li {
+	padding-right: .8rem;
+}
+
+.navbar-nav .nav-link {
+	color: white;
+	padding-top: .8rem;
+}
+
+.navbar-nav .nav-link.active,
+.navbar-nav .nav-link:hover {
+	color: #1ebba3;
+}
+
+.navbar.solid {
+	background: rgba(0, 0, 0, 0.8)!important;
+	transition: background-color 1s ease 0s;
+}
+
+/*======= LANDING PAGE =======*/
+.home-inner {
+	background-image: url('img/computers.png');
+}
+/*.home {*/
+/*  padding-bottom: -2rem;*/
+/*}*/
+.caption {
+  width: 100%;
+  max-width: 100%;
+  position: absolute;
+  top: 38%;
+  z-index: 1;
+}
+.caption h1 {
+  color: white;
+  font-size: 3rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: .3rem;
+  text-shadow: .1rem .1rem .8rem black;
+  padding-bottom: 1rem;
+}
+.caption h3 {
+  color: white;
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  font-weight: 400;
+  text-shadow: .1rem .1rem .5rem black;
+  padding-bottom: 2rem;
+}
+.btn-lg {
+  border-width: medium;
+  border-radius: 0;
+  padding: .8rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  display: inline-block!important;
+}
+
+/*============= FEATURES SECTION =============*/
+
+/*.narrow {*/
+/*  width: 75%;*/
+/*  margin: 0 auto;*/
+/*  padding-top: .1rem;*/
+/*}*/
+.btn-sm {
+  border-width: medium;
+  border-radius: 0;
+  padding: .5rem 1.1rem;
+  font-size: .9rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  margin: 1rem;
+}
+h3.heading {
+  font-size: 1.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 1.9rem;
+}
+.heading-underline {
+  width: 3rem;
+  height: .2rem;
+  background-color: #541DC3;
+  margin: 0 auto 2rem;
+}
+/* #features {
+  margin-top: -2rem;
+} */
+/* .feature {
+  text-align: center;
+}
+.feature .fa-layers {
+  color: #1EBBA3;
+  margin: 0 auto;
+  width: 3.9rem;
+  height: 6rem;
+}
+.feature h3 {
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  padding-bottom: .4rem;
+}
+.feature p {
+  font-size: 1.1rem;
+} */
+.wwa-text, .wwa-header, .hwp-text, .hwp-header, .sermons-header {
+  color: #FFFFFF;
+}
+
+/*===== FIXED BACKGROUND IMG DARK =====*/
+#fixed {
+  background-image: url('img/whowearebgimg.jpg');
+  z-index: -1;
+}
+#fixed-2 {
+  background-image: url('img/RLOMPraiseTeam.jpg');
+  z-index: -1;
+}
+#fixed-3 {
+  background-image: url('img/texture-old-paper-background-gray-39957286.jpg');
+  z-index: -1;
+}
+.dark {
+  /*background-color: rgba(0, 0, 0, 0.75);*/
+  padding: 7rem 2rem;
+  text-align: center;
+  z-index: 1000!important;
+}
+/*.dark-2 {*/
+/*  background-color: rgba(0, 0, 0, 0.75);*/
+/*  padding: 7rem 2rem;*/
+/*  text-align: center;*/
+/*  z-index: 1001!important;*/
+/*}*/
+/*.dark h3, .dark p {*/
+/*  color: #E9ECEF;*/
+/*}*/
+/*.dark-2 h3, .dark2 p {*/
+/*  color: #E9ECEF;*/
+/*}*/
+
+/*============= SERMON SECTION =============*/
+
+/*.jumbotron {*/
+/*	background-image: url('img/white-light-gray-texture-background-white-light-gray-texture-background-abstract-marble-cement-texture-stone-natural-139646444.jpg');*/
+/*}*/
+.sermons-column {
+  border-radius: 25px;
+  background: linear-gradient(-45deg, #2D0040, #401751, #A34F00, #401751, #2D0040);
+  background-size: 300% 300%;
+  padding: 2rem;
+  box-shadow: 0 5px .8rem rgb(0, 0, 0, 0.3);
+  transition: transform .7s ease;
+  overflow: hidden;
+  position: relative;
+  -webkit-animation: Gradient 15s ease infinite;
+  -moz-animation: Gradient 15s ease infinite;
+  animation: Gradient 15s ease infinite;
+}
+@-webkit-keyframes Gradient {
+	0% {
+		background-position: 0% 50%
+	}
+	50% {
+		background-position: 100% 50%
+	}
+	100% {
+		background-position: 0% 50%
+	}
+}
+
+@-moz-keyframes Gradient {
+	0% {
+		background-position: 0% 50%
+	}
+	50% {
+		background-position: 100% 50%
+	}
+	100% {
+		background-position: 0% 50%
+	}
+}
+
+@keyframes Gradient {
+	0% {
+		background-position: 0% 50%
+	}
+	50% {
+		background-position: 100% 50%
+	}
+	100% {
+		background-position: 0% 50%
+	}
+}
+.sermons-column:hover {
+  transform: scale(1.1);
+}
+.sermons-column h3 {
+  padding: 1rem;
+  text-transform: uppercase;
+  border-bottom: .1rem solid rgba(0, 0, 0, 0.1);
+  height:8rem;
+  color:white;
+}
+.sermons-column p {
+  opacity: .8;
+  margin-top: 1.3rem;
+}
+.sermons-column h4 {
+  font-size: 1.1rem;
+  padding: .4rem;
+}
+.sermons-column .item {
+  font-weight: 700;
+}
+.sermons-column h1 {
+  padding: .8rem 0;
+}
+.sermons-features {
+	background-color: white;
+	padding: 0;
+}
+
+/*============= CONTACT SECTION =============*/
+footer {
+  background: url('img/footer/footer.jpg') no-repeat;
+  /*background-color: #40474e;*/
+  background-size: cover;
+  color: white;
+}
+/*footer .row {
+  background-color: rgba(57, 63, 70, 0.85);
+  padding: 1rem 2rem 3rem;
+}*/
+footer img {
+  height: 6rem;
+  margin: 1.5rem 0;
+}
+

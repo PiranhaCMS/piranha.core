@@ -1,0 +1,104 @@
+/*--- Bootstrap Mobile Gutter Fix --*/
+.row, .container-fluid {
+margin-left: 0px!important;
+margin-right: 0px!important;
+}
+
+/*--- Fix for Fixed Navbar jumping on scroll --*/
+.fixed-top  {
+ -webkit-backface-visibility: hidden;
+}
+
+/*--- Fixed Landing Page Section --*/
+.landing {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* Change height of landing page image. */
+  display: table;
+  z-index: -1;
+}
+.home-wrap {
+  clip: rect(0, auto, auto, 0);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.home-inner {
+  position: fixed; /* Change to relative to remove fixed style. */
+  display: table;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center center;
+  -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+  will-change: transform;
+}
+
+/*--- iOS Fixed Background Image --*/
+.fixed-background {
+  position: relative;
+  width: 100%;
+}
+.fixed-wrap {
+  clip: rect(0, auto, auto, 0);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -999!important;
+}
+/*--- Features Dark Background Image --*/
+#fixed {
+  position: fixed;
+  display: block;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center center;
+  -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+  will-change: transform;
+}
+/*--- Team Light Background Image --*/
+#fixed-2 {
+  position: fixed;
+  display: block;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center center;
+  -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+  will-change: transform;
+}
+#fixed-3 {
+  position: fixed;
+  display: block;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center center;
+  -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+  will-change: transform;
+}
+/*--- Prevent WayPoints from Browser Window Scrolling On Mobile --*/
+/* Devices under 768px (md) */
+@media (max-width: 767px) {
+  .row {
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+}

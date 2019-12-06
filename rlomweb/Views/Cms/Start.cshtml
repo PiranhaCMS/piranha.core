@@ -1,0 +1,78 @@
+@model StartPage
+@inject IApi Api
+
+@{
+    ViewBag.Title = Model.Title;
+    ViewBag.HasImage = Model.Hero.PrimaryImage.HasValue;
+
+    string PrimaryImage() {
+        if (Model.Hero.PrimaryImage.HasValue) {
+            return $"style=background-image:url({Url.Content(Model.Hero.PrimaryImage)})";
+        }
+        return "";
+    }
+}
+
+<header class="page-header" @PrimaryImage()>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-9">
+                <h1>@Model.Title</h1>
+                <p class="lead">
+                    @Html.Raw(Model.Hero.Ingress)
+                </p>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="main">
+    <div class="container">
+        @if (Model.Teasers.Count > 0) {
+            var pos = 0;
+            var size = 4;
+
+            while (pos < Model.Teasers.Count) {
+                var rest = Model.Teasers.Count - pos;
+                var cols = 0;
+                
+                if (rest == 1) {
+                    size = 8;
+                    cols = 1;
+                } else if (rest <= 4 && rest % 3 != 0 && rest % 2 == 0) {
+                    size = 6;
+                    cols = 2;
+                } else {
+                    size = 4;
+                    cols = 3;
+                }
+
+                <div class="row justify-content-center teasers">
+                    @for (var n = 0; n < cols; n++) {
+                        var teaser = Model.Teasers[pos + n];
+
+                        <div class="col-sm-6 col-md-@size teaser">
+                            <div class="teaser-body">
+                                <span class="teaser-subtitle">@teaser.SubTitle</span>
+                                <h3>@teaser.Title</h3>
+                                @Html.Raw(teaser.Body)
+                                @if (teaser.PageLink.HasValue) {
+                                    <p><a href="@teaser.PageLink.Page.Permalink">Read more..</a></p>
+                                } else if (teaser.PostLink.HasValue) {
+                                    <p><a href="@teaser.PostLink.Post.Permalink">Read more..</a></p>                                
+                                }
+                            </div>
+                        </div>                        
+                    }
+                </div>
+                pos += cols;
+            }
+        }
+
+        <div class="row justify-content-center">
+            <div class="col-sm-10 page-body">
+                @Html.DisplayFor(m => m.Blocks)
+            </div>
+        </div>
+    </div>
+</div>
