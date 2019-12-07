@@ -165,7 +165,10 @@ namespace Piranha.Manager.Services
         {
             var regionType = type.Regions.First(r => r.Id == region);
             var regionModel = _factory.CreateDynamicRegion(type, region);
-            var regionItem = new RegionItemModel();
+            var regionItem = new RegionItemModel
+            {
+                Title = regionType.ListTitlePlaceholder ?? "..."
+            };
 
             foreach (var fieldType in regionType.Fields)
             {
