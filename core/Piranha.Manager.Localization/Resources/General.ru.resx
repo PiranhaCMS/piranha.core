@@ -130,7 +130,7 @@
     <value>Permanent</value>
   </data>
   <data name="Permissions" xml:space="preserve">
-    <value>Permissions</value>
+    <value>Права доступа</value>
   </data>
   <data name="Pixels" xml:space="preserve">
     <value>Пикселей</value>
@@ -193,13 +193,13 @@
     <value>Обновить</value>
   </data>
   <data name="Update password" xml:space="preserve">
-    <value>Update password</value>
+    <value>Сменить пароль</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Имя пользователя</value>
   </data>
   <data name="Username is mandatory." xml:space="preserve">
-    <value>Username is mandatory.</value>
+    <value>Имя пользователя является обязательным.</value>
   </data>
   <data name="Title is mandatory." xml:space="preserve">
     <value>Title is mandatory.</value>
