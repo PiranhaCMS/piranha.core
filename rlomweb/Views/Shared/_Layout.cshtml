@@ -31,71 +31,72 @@
     @RenderSection("head", required: false)
 </head>
 <body data-spy="scroll" data-target="#navbarResponsive">
-
-    <partial name="Partial/_Menu.cshtml" />
-    @*<header class="site-header @(ViewBag.HasImage == null || !ViewBag.HasImage ? "site-header-dark" : "")">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm">
-                        <partial name="Partial/_Menu.cshtml" />
+    <!-- Start Home Section -->
+    <div id="home" class="home">
+        <partial name="Partial/_Menu.cshtml" />
+        @*<header class="site-header @(ViewBag.HasImage == null || !ViewBag.HasImage ? "site-header-dark" : "")">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm">
+                            <partial name="Partial/_Menu.cshtml" />
+                        </div>
                     </div>
                 </div>
-            </div>
-        </header>*@
+            </header>*@
 
-    @RenderBody()
+        @RenderBody()
 
-    <!--- Start Footer Section -->
-    <div id="contact" class="offset">
+        <!--- Start Footer Section -->
+        <div id="contact" class="offset">
 
-        <footer>
-            <div class="row text-center">
+            <footer>
+                <div class="row text-center">
 
-                <div class="col-md-4">
-                    <img src="~/rlomassets/img/rlom_logo.png" alt="">
-                    <p>At our core is a collection of design and development solutions that represent everything your business needs to compete in the modern marketplace.</p>
-                </div>
+                    <div class="col-md-4">
+                        <img src="~/rlomassets/img/rlom_logo.png" alt="">
+                        <p>At our core is a collection of design and development solutions that represent everything your business needs to compete in the modern marketplace.</p>
+                    </div>
 
-                <div class="col-md-4">
-                    <h3 class="text-center">CONTACT INFO</h3>
-                    <strong>Our Location</strong>
-                    <p>1528 Sherman St. SE<br />Decatur, AL 35601</p>
-                    <strong>Contact Info</strong>
-                    <p>contact@redeemingloveoutreachministries.org</p>
-                </div>
+                    <div class="col-md-4">
+                        <h3 class="text-center">CONTACT INFO</h3>
+                        <strong>Our Location</strong>
+                        <p>1528 Sherman St. SE<br />Decatur, AL 35601</p>
+                        <strong>Contact Info</strong>
+                        <p>contact@redeemingloveoutreachministries.org</p>
+                    </div>
 
-                <div class="col-md-4">
-                    <h3 class="text-center">CONNECT WITH US</h3>
-                    <a href="#"><i class="fab fa-facebook-square"></i></a>
-                    <a href="#"><i class="fab fa-twitter-square"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-reddit-square"></i></a>
-                    <a href="#"><i class="fab fa-linkedin"></i></a>
-                    <br><br>
-                    <a class="btn btn-outline-light btn-sm" href="contact.html">SEND US AN EMAIL</a>
-                </div>
+                    <div class="col-md-4">
+                        <h3 class="text-center">CONNECT WITH US</h3>
+                        <a href="#"><i class="fab fa-facebook-square"></i></a>
+                        <a href="#"><i class="fab fa-twitter-square"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-reddit-square"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <br><br>
+                        <a class="btn btn-outline-light btn-sm" href="contact.html">SEND US AN EMAIL</a>
+                    </div>
 
-                <hr class="socket">
-                &copy; Redeeming Love Outreach Ministries.
+                    <hr class="socket">
+                    &copy; Redeeming Love Outreach Ministries.
 
-            </div> <!--- End of Row -->
-        </footer> <!--- End of Footer -->
+                </div> <!--- End of Row -->
+            </footer> <!--- End of Footer -->
 
-    </div>
-    <!--- End of Footer Section -->
-    <!-- Start javascript -->
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="https://use.fontawesome.com/releases/v5.8.2/js/all.js"></script>
-    <script src="bootstrap-4.1.3-dist/js/bootstrap.min.js"></script>
-    <script src="~/rlomassets/js/contact.js"></script>
-    <script src="~/rlomassets/js/custom.js"></script>
-    <script src="~/rlomassets/js/jquery.counterup.js"></script>
-    <script src="~/rlomassets/js/jquery.waypoints.min.js"></script>
-    <script src="~/rlomassets/js/lightbox.js"></script>
-    <script src="~/rlomassets/js/owl.carousel.js"></script>
-    <script src="~/rlomassets/js/validator.js"></script>
-    <script src="~/rlomassets/js/waypoints.js"></script>
-    <!-- End javascript -->
-    @RenderSection("script", required: false)
+        </div>
+        <!--- End of Footer Section -->
+        <!-- Start javascript -->
+        <script src="~/rlomassets/js/jquery-3.3.1.min.js"></script>
+        <script src="https://use.fontawesome.com/releases/v5.8.2/js/all.js"></script>
+        <script src="~/rlomassets/bootstrap-4.1.3-dist/js/bootstrap.min.js"></script>
+        <script src="~/rlomassets/js/contact.js"></script>
+        <script src="~/rlomassets/js/custom.js"></script>
+        <script src="~/rlomassets/js/jquery.counterup.js"></script>
+        <script src="~/rlomassets/js/jquery.waypoints.min.js"></script>
+        <script src="~/rlomassets/js/lightbox.js"></script>
+        <script src="~/rlomassets/js/owl.carousel.js"></script>
+        <script src="~/rlomassets/js/validator.js"></script>
+        <script src="~/rlomassets/js/waypoints.js"></script>
+        <!-- End javascript -->
+        @RenderSection("script", required: false)
 </body>
 </html>
