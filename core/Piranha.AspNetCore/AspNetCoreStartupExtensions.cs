@@ -26,12 +26,17 @@ public static class AspNetCoreStartupExtensions
     {
         var serviceBuilder = new PiranhaServiceBuilder(services);
 
+        options?.Invoke(serviceBuilder);
+
         services.AddControllersWithViews();
-        services.AddRazorPages();
+        var mvcBuilder = services.AddRazorPages();
+        if (serviceBuilder.AddRazorRuntimeCompilation)
+        {
+            mvcBuilder.AddRazorRuntimeCompilation();
+        }
         services.AddPiranha();
         services.AddPiranhaApplication();
 
-        options?.Invoke(serviceBuilder);
 
         return serviceBuilder.Services;
     }

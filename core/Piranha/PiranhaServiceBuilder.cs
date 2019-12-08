@@ -23,6 +23,11 @@ namespace Piranha
         public readonly IServiceCollection Services;
 
         /// <summary>
+        /// Gets/sets if runtime compilation should be enabled.
+        /// </summary>
+        public bool AddRazorRuntimeCompilation { get; set; }
+
+        /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="builder">The current application builder</param>
