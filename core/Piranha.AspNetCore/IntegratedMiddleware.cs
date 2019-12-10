@@ -291,6 +291,8 @@ namespace Piranha.AspNetCore
                                     var pageNum = Convert.ToInt32(segments[n]);
                                     query.Append("&page=");
                                     query.Append(pageNum);
+                                    query.Append("&pagenum=");
+                                    query.Append(pageNum);
                                 }
                                 catch
                                 {
