@@ -195,7 +195,7 @@ namespace Piranha.AspNetCore
                         route.Append(segments[n]);
                     }
 
-                    query.Append("?id=");
+                    query.Append("id=");
                     query.Append(post.Id);
                 }
                 else if (page != null)
@@ -203,7 +203,7 @@ namespace Piranha.AspNetCore
                     route.Append(page.Route ?? (pageType.IsArchive ? "/archive" : "/page"));
 
                     // Set the basic query
-                    query.Append("?id=");
+                    query.Append("id=");
                     query.Append(page.Id);
 
                     if (!page.ParentId.HasValue && page.SortOrder == 0)
@@ -351,7 +351,15 @@ namespace Piranha.AspNetCore
 #endif
 
                     context.Request.Path = new PathString(strRoute);
-                    context.Request.QueryString = new QueryString(strQuery);
+                    if (context.Request.QueryString.HasValue)
+                    {
+                        context.Request.QueryString =
+                            new QueryString(context.Request.QueryString.Value + "&" + strQuery);
+                    }
+                    else {
+                        context.Request.QueryString =
+                            new QueryString("?" + strQuery);
+                    }
                 }
             }
             await _next.Invoke(context);
