@@ -25,7 +25,7 @@
     <value>Имя каталога</value>
   </data>
   <data name="Folder name is mandatory." xml:space="preserve">
-    <value>Folder name is mandatory.</value>
+    <value>Имя каталога является обязательным.</value>
   </data>
   <data name="Gallery" xml:space="preserve">
     <value>Галерея</value>
