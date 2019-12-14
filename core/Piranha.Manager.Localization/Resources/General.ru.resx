@@ -19,7 +19,7 @@
     <value>Все</value>
   </data>
   <data name="An error occurred" xml:space="preserve">
-    <value>An error occurred</value>
+    <value>Произошла ошибка</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Отмена</value>
@@ -61,10 +61,10 @@
     <value>Черновики</value>
   </data>
   <data name="Email address" xml:space="preserve">
-    <value>Email address</value>
+    <value>Адрес электронной почты</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>Адрес является обязательным.</value>
   </data>
   <data name="Filename" xml:space="preserve">
     <value>Имя файла</value>
@@ -82,7 +82,7 @@
     <value>Общее</value>
   </data>
   <data name="General information" xml:space="preserve">
-    <value>General information</value>
+    <value>Общая информация</value>
   </data>
   <data name="History" xml:space="preserve">
     <value>История</value>
@@ -124,13 +124,13 @@
     <value>Открывать внешние ссылки в новой вкладке</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>Пароль</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>Permanent</value>
   </data>
   <data name="Permissions" xml:space="preserve">
-    <value>Permissions</value>
+    <value>Права доступа</value>
   </data>
   <data name="Pixels" xml:space="preserve">
     <value>Пикселей</value>
@@ -145,19 +145,19 @@
     <value>Дата публикации</value>
   </data>
   <data name="Redirect" xml:space="preserve">
-    <value>Redirect</value>
+    <value>Перенаправление</value>
   </data>
   <data name="Redirect Type" xml:space="preserve">
-    <value>Redirect Type</value>
+    <value>Тип перенаправления</value>
   </data>
   <data name="Revert" xml:space="preserve">
     <value>Сброс</value>
   </data>
   <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
+    <value>Роли</value>
   </data>
   <data name="Route" xml:space="preserve">
-    <value>Route</value>
+    <value>Маршрут</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Сохранить</value>
@@ -193,13 +193,13 @@
     <value>Обновить</value>
   </data>
   <data name="Update password" xml:space="preserve">
-    <value>Update password</value>
+    <value>Сменить пароль</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Username</value>
+    <value>Имя пользователя</value>
   </data>
   <data name="Username is mandatory." xml:space="preserve">
-    <value>Username is mandatory.</value>
+    <value>Имя пользователя является обязательным.</value>
   </data>
   <data name="Title is mandatory." xml:space="preserve">
     <value>Title is mandatory.</value>
@@ -214,7 +214,7 @@
     <value>Неопубликованные</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>Пользователи</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Версия</value>
