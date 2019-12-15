@@ -17,10 +17,10 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-9">
-                <h1>@Model.Title</h1>
-                <p class="lead">
+                @*<h1>@Model.Title</h1>*@
+                @*<p class="lead">
                     @Html.Raw(Model.Hero.Ingress)
-                </p>
+                </p>*@
             </div>
         </div>
     </div>
@@ -28,6 +28,14 @@
 
 <div class="main">
     <div class="container">
+        <div class="row">
+            <div class="col-sm-9">
+                <h1>@Model.Title</h1>
+                <p class="lead">
+                    @Html.Raw(Model.Hero.Ingress)
+                </p>
+            </div>
+        </div>
         @if (Model.Teasers.Count > 0) {
             var pos = 0;
             var size = 4;

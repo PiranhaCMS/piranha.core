@@ -4,50 +4,66 @@
 
 @*Not the best solution but meanwhile... class = d-sm-block d-md-none is hiding on md screen solution*@
 @*<nav class="navbar navbar-toggleable-sm navbar-dark bg-faded d-sm-block d-md-none">
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <a class="navbar-brand" href="#"></a>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-            @foreach (var item in sitemap)
-            {
-                <a class="nav-item nav-link @(item.Id == WebApp.PageId ? "active" : "")" href="@item.Permalink"><span>@item.MenuTitle</span></a>
-            }
-        </div>
-    </div>
-</nav>*@
-@*Not the best solution but meanwhile... class =  d-none d-md-block is hiding on sm screen solution*@
-@*<nav class="navbar d-none d-md-block">
-    <ul class="nav nav-site justify-content-center">
-        @foreach (var item in sitemap)
-        {
-            <li class="nav-item @(item.Id == WebApp.PageId ? "active" : "")">
-                <a class="nav-link" href="@item.Permalink"><span>@item.MenuTitle</span></a>
-            </li>
-        }
-    </ul>
-</nav>*@
-
-<nav class="navbar navbar-expand-lg fixed-top navbar-dark">
-
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#"><img src="~/rlomassets/img/rlom_logo.png" /></a>        
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
-            <span class="custom-toggler-icon"><i class="fas fa-bars"></i></span>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
         </button>
-
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
+        <a class="navbar-brand" href="#"></a>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
                 @foreach (var item in sitemap)
                 {
-                    <li class="nav-item @(item.Id == WebApp.PageId ? "active" : "")">
-                        <a class="nav-link" href="@item.Permalink"><span>@item.MenuTitle</span></a>
-                    </li>
+                    <a class="nav-item nav-link @(item.Id == WebApp.PageId ? "active" : "")" href="@item.Permalink"><span>@item.MenuTitle</span></a>
                 }
-            </ul>
+            </div>
+        </div>
+    </nav>*@
+@*Not the best solution but meanwhile... class =  d-none d-md-block is hiding on sm screen solution*@
+@*<nav class="navbar d-none d-md-block">
+        <ul class="nav nav-site justify-content-center">
+            @foreach (var item in sitemap)
+            {
+                <li class="nav-item @(item.Id == WebApp.PageId ? "active" : "")">
+                    <a class="nav-link" href="@item.Permalink"><span>@item.MenuTitle</span></a>
+                </li>
+            }
+        </ul>
+    </nav>*@
+    <nav class="navbar navbar-expand-lg fixed-top">
+
+        <div class="container-fluid">
+            @if (ViewBag.Title == "Home")
+            {
+                <a class="navbar-brand" href="#"><img id="logo-image" src="~/rlomassets/img/rlom_logo.png" /></a>
+            }
+            else
+            {
+                <a class="navbar-brand" href="#"><img id="logo-image1" src="~/rlomassets/img/rlom_logo1.png" /></a>
+            }
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+                <span class="custom-toggler-icon"><i class="fas fa-bars"></i></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    @foreach (var item in sitemap)
+                    {
+                        <li class="nav-item @(item.Id == WebApp.PageId ? "active" : "")">
+                            <a class="nav-link" href="@item.Permalink"><span>@item.MenuTitle</span></a>
+                        </li>
+                    }
+                    <li class="nav-item">
+                        <a class="nav-link" href=""><span>Give</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href=""><span>Love Notes</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href=""><span>Education</span></a>
+                    </li>
+                </ul>
+            </div>
+
         </div>
 
-    </div>
-
-</nav>
+    </nav>

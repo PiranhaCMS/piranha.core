@@ -8,12 +8,23 @@ header {
     margin: 2rem 0; }
   header.site-header.site-header-dark {
     position: initial; }
-    header.site-header.site-header-dark .nav-site a {
+    /*header.site-header.site-header-dark .nav-site a {
       color: #000; }
       header.site-header.site-header-dark .nav-site a:hover {
         color: #000; }
     header.site-header.site-header-dark .nav-site .active a {
-      color: #000; }
+      color: #000; }*/
+    header.site-header.site-header-dark {
+        color: #000;
+    }
+
+        header.site-header.site-header-dark {
+            color: #000;
+        }
+
+    header.site-header.site-header-dark {
+        color: #000;
+    }
   header.page-header {
     background-size: cover;
     background-position: 50% 50%; }
@@ -54,7 +65,7 @@ body {
   font-family: 'Montserrat', sans-serif; }
 
 header {
-  color: #fff; }
+  /*color: #fff;*/ }
   header.site-header {
     padding: 0;
     position: absolute;
@@ -67,33 +78,34 @@ header {
       border-radius: 80px;
       float: right; }
 
-.nav-site li a {
-  color: #fff;
-  padding: 0;
-  margin: 1em 1em;
-  font-size: .9rem;
-  text-transform: uppercase;
-  transition: all ease-in-out .2s; }
-  .nav-site li a:hover {
+/*.nav-site li a {
+    color: #fff;
+    padding: 0;
+    margin: 1em 1em;
+    font-size: .9rem;
+    text-transform: uppercase;
+    transition: all ease-in-out .2s;
+}*/
+  /*.nav-site li a:hover {
     padding: .8em 0;
     color: #fff;
     transition: all ease-in-out .2s; }
     .nav-site li a:hover span {
       padding: .2em 1em;
       border-color: #fff;
-      transition: all ease-in-out .2s; }
-  .nav-site li a span {
+      transition: all ease-in-out .2s; }*/
+  /*.nav-site li a span {
     display: block;
     padding: 1em;
     border-color: transparent;
     border-style: solid;
     border-width: 1px 0;
-    transition: all ease-in-out .2s; }
+    transition: all ease-in-out .2s; }*/
 
-.nav-site li.active a {
+/*.nav-site li.active a {
   color: #fff;
   font-weight: 500;
-  text-shadow: 0 0 5px #fff; }
+  text-shadow: 0 0 5px #fff; }*/
 
 .header-bg.header-bg-empty a:hover span {
   border-color: #000; }

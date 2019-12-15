@@ -28,10 +28,6 @@
     <ProjectReference Include="..\core\Piranha.WebApi\Piranha.WebApi.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\rlomassets\" />
-  </ItemGroup>
-
   <!--
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />

@@ -21,46 +21,13 @@ body {
 }
 
 /*======= Navigation =======*/
-.navbar {
-	padding: .7rem 1rem;
-	font-size: .9rem;
-	font-weight: 700;
-	letter-spacing: .1rem;
-	transition: background-color .5s ease 0s;
-}
-
-.navbar-brand img {
-	height: 6rem;
-}
-
-.svg-inline--fa.fa-w-14 {
-	color: white;
-	font-size: 1.6rem;
-}
-
-.navbar-nav li {
-	padding-right: .8rem;
-}
-
-.navbar-nav .nav-link {
-	color: white;
-	padding-top: .8rem;
-}
-
-.navbar-nav .nav-link.active,
-.navbar-nav .nav-link:hover {
-	color: #1ebba3;
-}
-
-.navbar.solid {
-	background: rgba(0, 0, 0, 0.8)!important;
-	transition: background-color 1s ease 0s;
-}
+/* These styles are now found in homenavbarstyle.css and othernavbarstyle.css */
 
 /*======= LANDING PAGE =======*/
 .home-inner {
 	background-image: url('img/computers.png');
 }
+
 /*.home {*/
 /*  padding-bottom: -2rem;*/
 /*}*/
