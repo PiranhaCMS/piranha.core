@@ -16,6 +16,7 @@ namespace Piranha.Models
     /// <summary>
     /// Abstract base class for templated content.
     /// </summary>
+    [Serializable]
     public abstract class Content
     {
         /// <summary>

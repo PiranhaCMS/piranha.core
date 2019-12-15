@@ -15,12 +15,14 @@ namespace Piranha.Models
     /// <summary>
     /// Base class for archive pages.
     /// </summary>
+    [Serializable]
     [Obsolete("ArchivePage is obsolete. Please use a regular Page with IsArchive = true")]
     public class ArchivePage<T> : ArchivePage<T, DynamicPost> where T : ArchivePage<T> { }
 
     /// <summary>
     /// Base class for archive pages.
     /// </summary>
+    [Serializable]
     [Obsolete("ArchivePage is obsolete. Please use a regular Page with IsArchive = true")]
     public class ArchivePage<T, TPost> : GenericPage<T>, IArchivePage
         where T : ArchivePage<T, TPost>

@@ -16,6 +16,7 @@ namespace Piranha.Models
     /// <summary>
     /// Abstract base class for templated content with a route.
     /// </summary>
+    [Serializable]
     public abstract class RoutedContent : Content
     {
         /// <summary>

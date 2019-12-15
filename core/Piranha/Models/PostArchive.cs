@@ -8,12 +8,15 @@
  *
  */
 
+using System;
 using System.Collections.Generic;
 
 namespace Piranha.Models
 {
+    [Serializable]
     public class PostArchive : PostArchive<DynamicPost> { }
 
+    [Serializable]
     public class PostArchive<T> where T : PostBase
     {
         /// <summary>

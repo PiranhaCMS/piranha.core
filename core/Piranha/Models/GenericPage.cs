@@ -8,12 +8,15 @@
  *
  */
 
+using System;
+
 namespace Piranha.Models
 {
     /// <summary>
     /// Generic page model.
     /// </summary>
     /// <typeparam name="T">The model type</typeparam>
+    [Serializable]
     public class GenericPage<T> : PageBase where T : GenericPage<T>
     {
         /// <summary>
