@@ -19,7 +19,7 @@ namespace Piranha.Runtime
         /// <summary>
         /// The standard repository hooks for a data model.
         /// </summary>
-        public sealed class RepositoryHooks<T>
+        public sealed class ServiceHooks<T>
         {
             /// <summary>
             /// Registers a new hook to be executed after the model
@@ -105,42 +105,47 @@ namespace Piranha.Runtime
         /// <summary>
         /// Gets the hooks available for aliases.
         /// </summary>
-        public RepositoryHooks<Alias> Alias { get; private set; } = new RepositoryHooks<Alias>();
+        public ServiceHooks<Alias> Alias { get; private set; } = new ServiceHooks<Alias>();
+
+        /// <summary>
+        /// Gets the hooks available for comments.
+        /// </summary>
+        public ServiceHooks<Comment> Comments { get; private set; } = new ServiceHooks<Comment>();
 
         /// <summary>
         /// Gets the hooks available for media.
         /// </summary>
-        public RepositoryHooks<Media> Media { get; private set; } = new RepositoryHooks<Media>();
+        public ServiceHooks<Media> Media { get; private set; } = new ServiceHooks<Media>();
 
         /// <summary>
         /// Gets the hooks available for media folders.
         /// </summary>
-        public RepositoryHooks<MediaFolder> MediaFolder { get; private set; } = new RepositoryHooks<MediaFolder>();
+        public ServiceHooks<MediaFolder> MediaFolder { get; private set; } = new ServiceHooks<MediaFolder>();
 
         /// <summary>
         /// Gets the hooks available for pages.
         /// </summary>
-        public RepositoryHooks<PageBase> Pages { get; private set; } = new RepositoryHooks<PageBase>();
+        public ServiceHooks<PageBase> Pages { get; private set; } = new ServiceHooks<PageBase>();
 
         /// <summary>
         /// Gets the hooks available for params.
         /// </summary>
-        public RepositoryHooks<Param> Param { get; private set; } = new RepositoryHooks<Param>();
+        public ServiceHooks<Param> Param { get; private set; } = new ServiceHooks<Param>();
 
         /// <summary>
         /// Gets the hooks available for posts.
         /// </summary>
-        public RepositoryHooks<PostBase> Posts { get; private set; } = new RepositoryHooks<PostBase>();
+        public ServiceHooks<PostBase> Posts { get; private set; } = new ServiceHooks<PostBase>();
 
         /// <summary>
         /// Gets the hooks available for sites.
         /// </summary>
-        public RepositoryHooks<Site> Site { get; private set; } = new RepositoryHooks<Site>();
+        public ServiceHooks<Site> Site { get; private set; } = new ServiceHooks<Site>();
 
         /// <summary>
         /// Gets the hooks available for sites.
         /// </summary>
-        public RepositoryHooks<SiteContentBase> SiteContent { get; private set; } = new RepositoryHooks<SiteContentBase>();
+        public ServiceHooks<SiteContentBase> SiteContent { get; private set; } = new ServiceHooks<SiteContentBase>();
 
         /// <summary>
         /// Gets the hook for slug generation.

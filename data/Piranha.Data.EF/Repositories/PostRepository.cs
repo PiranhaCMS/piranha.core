@@ -143,6 +143,52 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Gets the comments available for the post with the specified id. If no post id
+        /// is provided all comments are fetched.
+        /// </summary>
+        /// <param name="postId">The unique post id</param>
+        /// <param name="onlyApproved">If only approved comments should be fetched</param>
+        /// <param name="page">The page number</param>
+        /// <param name="pageSize">The page size</param>
+        /// <returns>The available comments</returns>
+        public async Task<IEnumerable<Models.Comment>> GetAllComments(Guid? postId, bool onlyApproved,
+            int page, int pageSize)
+        {
+            // Create base query
+            IQueryable<PostComment> query = _db.PostComments
+                .AsNoTracking();
+
+            // Check if only should include a comments for a certain post
+            if (postId.HasValue)
+            {
+                query = query.Where(c => c.PostId == postId.Value);
+            }
+
+            // Check if we should only include approved
+            if (onlyApproved)
+            {
+                query = query.Where(c => c.IsApproved);
+            }
+
+            // Get the comments
+            return await query
+                .OrderByDescending(c => c.Created)
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .Select(c => new Models.Comment
+                {
+                    Id = c.Id,
+                    UserId = c.UserId,
+                    Author = c.Author,
+                    Email = c.Email,
+                    Url = c.Url,
+                    IsApproved = c.IsApproved,
+                    Body = c.Body,
+                    Created = c.Created
+                }).ToListAsync();
+        }
+
+        /// <summary>
         /// Gets the post model with the specified id.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
@@ -312,6 +358,38 @@ namespace Piranha.Repositories
         {
             return Save<T>(model, true);
         }
+
+        /// <summary>
+        /// Saves the comment.
+        /// </summary>
+        /// <param name="postId">The unique post id</param>
+        /// <param name="model">The comment model</param>
+        public async Task SaveComment(Guid postId, Models.Comment model)
+        {
+            var comment = await _db.PostComments
+                .FirstOrDefaultAsync(c => c.Id == model.Id);
+
+            if (comment == null)
+            {
+                comment = new PostComment
+                {
+                    Id = model.Id
+                };
+                await _db.PostComments.AddAsync(comment);
+            }
+
+            comment.UserId = model.UserId;
+            comment.PostId = postId;
+            comment.Author = model.Author;
+            comment.Email = model.Email;
+            comment.Url = model.Url;
+            comment.IsApproved = model.IsApproved;
+            comment.Body = model.Body;
+            comment.Created = model.Created;
+
+            await _db.SaveChangesAsync();
+        }
+
 
         /// <summary>
         /// Creates a revision from the current version
@@ -876,8 +954,10 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="post">The source post</param>
         /// <param name="model">The targe model</param>
-        private void Process<T>(Data.Post post, T model) where T : Models.PostBase
+        private async void Process<T>(Data.Post post, T model) where T : Models.PostBase
         {
+            model.CommentCount = await _db.PostComments.CountAsync(c => c.PostId == model.Id);
+
             if (!(model is Models.IContentInfo))
             {
                 if (post.Blocks.Count > 0)

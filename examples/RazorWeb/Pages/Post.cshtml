@@ -1,5 +1,5 @@
 @page
-@model SinglePostModel<BlogPost>
+@model SinglePostWithCommentsModel<BlogPost>
 @{
     ViewData["Title"] = Model.Data.Title;
 }
@@ -8,15 +8,19 @@
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-10 col-xs-12">
             <h1>@Model.Data.Title</h1>
-
-            <p class="small">Published:
-                @if (Model.Data.Published.HasValue)
+            <p class="small">
+                <strong>In</strong> <a href="/blog/category/@Model.Data.Category.Slug">@Model.Data.Category.Title</a> <span class="sep">&#9670;</span>
+                <strong>Tags</strong>
+                @foreach (var tag in Model.Data.Tags)
                 {
-                    <text>@Model.Data.Published.Value.ToString("yyyy-MM-dd") in <a href="~/blog/category/@Model.Data.Category.Slug">@Model.Data.Category.Title</a> by <a href="https://twitter.com/tidyui" target="_blank">Håkan Edling</a></text>
+                    <a href="/blog/tag/@tag.Slug">#@tag.Title</a>
                 }
-                else
+                <span class="sep">&#9670;</span>
+                <strong>Published</strong> @Model.Data.Published.Value.ToString("yyyy-MM-dd")
+                @if (Model.Data.CommentCount > 0)
                 {
-                    <span class="label label-info">Unpublished</span>
+                    <span class="sep">&#9670;</span>
+                    <a href="#comments">@Model.Data.CommentCount @(Model.Data.CommentCount == 1 ? "comment" : "comments")</a>
                 }
             </p>
         </div>
@@ -32,13 +36,50 @@
     }
 
     <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-10 col-xs-12">
+        <div class="col col-lg-8 col-md-10">
             @if (!string.IsNullOrEmpty(Model.Data.Hero.Ingress.Value))
             {
                 <p class="lead">@Model.Data.Hero.Ingress.Value</p>
             }
 
             @Html.DisplayFor(m => m.Data.Blocks)
+        </div>
+    </div>
+
+    <div class="row justify-content-center comments">
+        <div id="comments" class="col col-lg-8 col-md-10">
+            <div class="alert alert-warning mt-2 mb-5">
+                <form method="post" action="@Model.Data.Permalink?action=comment">
+                    @Html.AntiForgeryToken()
+
+                    <h4 class="mb-3">Leave a comment</h4>
+                    <p class="mb-4"><small>
+                        Please note that we won't show your email to others, or use it for sending
+                        unwanted emails. We will only use it to render your Gravatar image and to
+                        validate you as a real person.
+                    </small></p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input name="CommentAuthor" type="text" class="form-control form-control-sm" placeholder="Your name">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <input name="CommentEmail" type="text" class="form-control form-control-sm" placeholder="Your email address">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input name="CommentUrl" type="text" class="form-control form-control-sm" placeholder="An (optional) URL to your website">
+                    </div>
+                    <div class="form-group">
+                        <textarea name="CommentBody" rows="6" class="form-control form-control-sm" placeholder="Your awesome comment"></textarea>
+                    </div>
+                    <div class="form-group text-left">
+                        <button class="btn btn-sm btn-success">Post Comment</button>
+                </div>
+                </form>
+            </div>
+            @Html.DisplayFor(m => m.Comments)
         </div>
     </div>
 </div>

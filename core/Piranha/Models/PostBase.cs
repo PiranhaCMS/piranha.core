@@ -51,5 +51,10 @@ namespace Piranha.Models
         /// Gets/sets the available blocks.
         /// </summary>
         public IList<Extend.Block> Blocks { get; set; } = new List<Extend.Block>();
+
+        /// <summary>
+        /// Gets/sets the comment count.
+        /// </summary>
+        public int CommentCount { get; set; }
     }
 }

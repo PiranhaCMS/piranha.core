@@ -252,6 +252,16 @@ namespace RazorWeb
                 blogpost.Published = DateTime.Now;
                 await api.Posts.SaveAsync(blogpost);
 
+                // Add some comments
+                await api.Posts.SaveCommentAsync(blogpost.Id, new Piranha.Models.Comment
+                {
+                    Author = "Håkan Edling",
+                    Email = "hakan@tidyui.com",
+                    Url = "http://piranhacms.org",
+                    Body = "Awesome to see that the project is up and running! Now maybe it's time to start customizing it to your needs. You can find a lot of information in the official docs.",
+                    IsApproved = true
+                });
+
                 // Unpublished Post
                 blogpost = Models.BlogPost.Create(api);
                 blogpost.BlogId = blogpage.Id;

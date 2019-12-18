@@ -56,5 +56,13 @@ namespace Piranha.AspNetCore.Services
         /// Initializes the service.
         /// </summary>
         Task InitAsync(HttpContext context);
+
+        /// <summary>
+        /// Gets the gravatar URL from the given parameters.
+        /// </summary>
+        /// <param name="email">The email address</param>
+        /// <param name="size">The requested size</param>
+        /// <returns>The gravatar URL</returns>
+        string GetGravatarUrl(string email, int size = 0);
     }
 }

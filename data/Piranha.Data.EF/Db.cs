@@ -73,6 +73,11 @@ namespace Piranha
         public DbSet<Data.PageBlock> PageBlocks { get; set; }
 
         /// <summary>
+        /// Gets/sets the page comments.
+        /// </summary>
+        public DbSet<Data.PageComment> PageComments { get; set; }
+
+        /// <summary>
         /// Gets/sets the page field set.
         /// </summary>
         public DbSet<Data.PageField> PageFields { get; set; }
@@ -101,6 +106,11 @@ namespace Piranha
         /// Gets/sets the post block set.
         /// </summary>
         public DbSet<Data.PostBlock> PostBlocks { get; set; }
+
+        /// <summary>
+        /// Gets/sets the post comments.
+        /// </summary>
+        public DbSet<Data.PostComment> PostComments { get; set; }
 
         /// <summary>
         /// Gets/sets the post field set.
@@ -216,6 +226,12 @@ namespace Piranha
             mb.Entity<Data.PageBlock>().ToTable("Piranha_PageBlocks");
             mb.Entity<Data.PageBlock>().HasIndex(b => new { b.PageId, b.SortOrder }).IsUnique();
 
+            mb.Entity<Data.PageComment>().ToTable("Piranha_PageComments");
+            mb.Entity<Data.PostComment>().Property(c => c.UserId).HasMaxLength(128);
+            mb.Entity<Data.PageComment>().Property(c => c.Author).HasMaxLength(128).IsRequired();
+            mb.Entity<Data.PageComment>().Property(c => c.Email).HasMaxLength(128).IsRequired();
+            mb.Entity<Data.PageComment>().Property(c => c.Url).HasMaxLength(256);
+
             mb.Entity<Data.PageField>().ToTable("Piranha_PageFields");
             mb.Entity<Data.PageField>().Property(f => f.RegionId).HasMaxLength(64).IsRequired();
             mb.Entity<Data.PageField>().Property(f => f.FieldId).HasMaxLength(64).IsRequired();
@@ -246,6 +262,12 @@ namespace Piranha
 
             mb.Entity<Data.PostBlock>().ToTable("Piranha_PostBlocks");
             mb.Entity<Data.PostBlock>().HasIndex(b => new { b.PostId, b.SortOrder }).IsUnique();
+
+            mb.Entity<Data.PostComment>().ToTable("Piranha_PostComments");
+            mb.Entity<Data.PostComment>().Property(c => c.UserId).HasMaxLength(128);
+            mb.Entity<Data.PostComment>().Property(c => c.Author).HasMaxLength(128).IsRequired();
+            mb.Entity<Data.PostComment>().Property(c => c.Email).HasMaxLength(128).IsRequired();
+            mb.Entity<Data.PostComment>().Property(c => c.Url).HasMaxLength(256);
 
             mb.Entity<Data.PostField>().ToTable("Piranha_PostFields");
             mb.Entity<Data.PostField>().Property(f => f.RegionId).HasMaxLength(64).IsRequired();

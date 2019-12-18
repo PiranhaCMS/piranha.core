@@ -207,6 +207,43 @@ namespace Piranha.Services
         }
 
         /// <summary>
+        /// Gets the comments available for the post with the specified id.
+        /// </summary>
+        /// <param name="postId">The unique post id</param>
+        /// <param name="onlyApproved">If only approved comments should be fetched</param>
+        /// <param name="page">The optional page number</param>
+        /// <param name="pageSize">The optional page size</param>
+        /// <returns>The available comments</returns>
+        public async Task<IEnumerable<Comment>> GetAllCommentsAsync(Guid? postId = null, bool onlyApproved = true,
+            int? page = null, int? pageSize = null)
+        {
+            // Ensure page number
+            if (!page.HasValue)
+            {
+                page = 0;
+            }
+
+            // Ensure page size
+            if (!pageSize.HasValue)
+            {
+                using (var config = new Config(_paramService))
+                {
+                    pageSize = config.ArchivePageSize;
+                }
+            }
+
+            // Get the comments
+            var comments = await _repo.GetAllComments(postId.Value, onlyApproved, page.Value, pageSize.Value);
+
+            // Execute hook
+            foreach (var comment in comments)
+            {
+                App.Hooks.OnLoad<Comment>(comment);
+            }
+            return comments;
+        }
+
+        /// <summary>
         /// Gets the number of available posts in the specified archive.
         /// </summary>
         /// <param name="archiveId">The archive id</param>
@@ -472,6 +509,50 @@ namespace Piranha.Services
         public Task SaveDraftAsync<T>(T model) where T : PostBase
         {
             return SaveAsync(model, true);
+        }
+
+        /// <summary>
+        /// Saves the comment.
+        /// </summary>
+        /// <param name="model">The comment model</param>
+        /// <param name="postId">The unique post id</param>
+        public async Task SaveCommentAsync(Guid postId, Comment model)
+        {
+            // Make sure we have a post
+            var post = await GetByIdAsync<PostInfo>(postId);
+
+            if (post != null)
+            {
+                // Ensure id
+                if (model.Id == Guid.Empty)
+                {
+                    model.Id = Guid.NewGuid();
+                }
+
+                // Ensure created date
+                if (model.Created == DateTime.MinValue)
+                {
+                    model.Created = DateTime.Now;
+                }
+
+                // Validate model
+                var context = new ValidationContext(model);
+                Validator.ValidateObject(model, context, true);
+
+                // Call hooks & save
+                App.Hooks.OnBeforeSave<Comment>(model);
+
+                await _repo.SaveComment(postId, model);
+
+                App.Hooks.OnAfterSave<Comment>(model);
+
+                // Invalidate parent post from cache
+                RemoveFromCache(post);
+            }
+            else
+            {
+                throw new ArgumentException($"Could not find post with id { postId.ToString() }");
+            }
         }
 
         /// <summary>

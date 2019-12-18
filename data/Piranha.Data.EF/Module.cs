@@ -99,7 +99,8 @@ namespace Piranha.Data.EF
                 cfg.CreateMap<Data.Post, Models.PostBase>()
                     .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PostTypeId))
                     .ForMember(p => p.Permalink, o => o.Ignore())
-                    .ForMember(p => p.Blocks, o => o.Ignore());
+                    .ForMember(p => p.Blocks, o => o.Ignore())
+                    .ForMember(p => p.CommentCount, o => o.Ignore());
                 cfg.CreateMap<Data.PostTag, Models.Taxonomy>()
                     .ForMember(p => p.Id, o => o.MapFrom(m => m.TagId))
                     .ForMember(p => p.Title, o => o.MapFrom(m => m.Tag.Title))

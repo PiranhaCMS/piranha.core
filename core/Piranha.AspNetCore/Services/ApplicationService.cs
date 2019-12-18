@@ -11,6 +11,8 @@
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using Piranha.Extend.Fields;
 using Piranha.Models;
@@ -193,6 +195,28 @@ namespace Piranha.AspNetCore.Services
 
             // Get the current url
             Url = context.Request.Path.Value;
+        }
+
+        /// <summary>
+        /// Gets the gravatar URL from the given parameters.
+        /// </summary>
+        /// <param name="email">The email address</param>
+        /// <param name="size">The requested size</param>
+        /// <returns>The gravatar URL</returns>
+        public string GetGravatarUrl(string email, int size = 0)
+        {
+            using (var md5 = MD5.Create())
+            {
+                var bytes = md5.ComputeHash(Encoding.UTF8.GetBytes(email));
+
+                var sb = new StringBuilder(bytes.Length * 2);
+                for (var n = 0; n < bytes.Length; n++)
+                {
+                    sb.Append(bytes[n].ToString("X2"));
+                }
+                return "https://www.gravatar.com/avatar/" + sb.ToString().ToLower() +
+                       (size > 0 ? "?s=" + size : "");
+            }
         }
     }
 }

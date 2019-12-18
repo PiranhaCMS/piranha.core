@@ -90,6 +90,18 @@ namespace Piranha.Services
         Task<IEnumerable<Guid>> GetAllDraftsAsync(Guid blogId);
 
         /// <summary>
+        /// Gets the comments available for the post with the specified id. If no post id
+        /// is provided all comments are fetched.
+        /// </summary>
+        /// <param name="postId">The unique post id</param>
+        /// <param name="onlyApproved">If only approved comments should be fetched</param>
+        /// <param name="page">The optional page number</param>
+        /// <param name="pageSize">The optional page size</param>
+        /// <returns>The available comments</returns>
+        Task<IEnumerable<Comment>> GetAllCommentsAsync(Guid? postId = null, bool onlyApproved = true,
+            int? page = null, int? pageSize = null);
+
+        /// <summary>
         /// Gets the number of available posts in the specified archive.
         /// </summary>
         /// <param name="archiveId">The archive id</param>
@@ -194,7 +206,7 @@ namespace Piranha.Services
         Task<Taxonomy> GetTagBySlugAsync(Guid blogId, string slug);
 
         /// <summary>
-        /// Saves the given post model
+        /// Saves the given post model.
         /// </summary>
         /// <param name="model">The post model</param>
         Task SaveAsync<T>(T model) where T : PostBase;
@@ -204,6 +216,13 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="model">The post model</param>
         Task SaveDraftAsync<T>(T model) where T : PostBase;
+
+        /// <summary>
+        /// Saves the comment.
+        /// </summary>
+        /// <param name="model">The comment model</param>
+        /// <param name="postId">The unique post id</param>
+        Task SaveCommentAsync(Guid postId, Comment model);
 
         /// <summary>
         /// Deletes the model with the specified id.
