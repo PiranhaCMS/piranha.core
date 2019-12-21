@@ -233,7 +233,7 @@ namespace Piranha.Services
             }
 
             // Get the comments
-            var comments = await _repo.GetAllComments(postId.Value, onlyApproved, page.Value, pageSize.Value);
+            var comments = await _repo.GetAllComments(postId, onlyApproved, page.Value, pageSize.Value);
 
             // Execute hook
             foreach (var comment in comments)

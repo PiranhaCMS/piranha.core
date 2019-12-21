@@ -390,7 +390,6 @@ namespace Piranha.Repositories
             await _db.SaveChangesAsync();
         }
 
-
         /// <summary>
         /// Creates a revision from the current version
         /// of the page with the given id.

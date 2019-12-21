@@ -206,6 +206,44 @@ namespace Piranha.Services
         }
 
         /// <summary>
+        /// Gets the comments available for the page with the specified id. If no page id
+        /// is provided all comments are fetched.
+        /// </summary>
+        /// <param name="pageId">The unique page id</param>
+        /// <param name="onlyApproved">If only approved comments should be fetched</param>
+        /// <param name="page">The optional page number</param>
+        /// <param name="pageSize">The optional page size</param>
+        /// <returns>The available comments</returns>
+        public async Task<IEnumerable<Comment>> GetAllCommentsAsync(Guid? pageId = null, bool onlyApproved = true,
+            int? page = null, int? pageSize = null)
+        {
+            // Ensure page number
+            if (!page.HasValue)
+            {
+                page = 0;
+            }
+
+            // Ensure page size
+            if (!pageSize.HasValue)
+            {
+                using (var config = new Config(_paramService))
+                {
+                    pageSize = config.ArchivePageSize;
+                }
+            }
+
+            // Get the comments
+            var comments = await _repo.GetAllComments(pageId, onlyApproved, page.Value, pageSize.Value);
+
+            // Execute hook
+            foreach (var comment in comments)
+            {
+                App.Hooks.OnLoad<Comment>(comment);
+            }
+            return comments;
+        }
+
+        /// <summary>
         /// Gets the site startpage.
         /// </summary>
         /// <param name="siteId">The optional site id</param>
@@ -578,6 +616,51 @@ namespace Piranha.Services
             if (changeState || affected.Count() > 0)
             {
                 await _siteService.InvalidateSitemapAsync(model.SiteId).ConfigureAwait(false);
+            }
+        }
+
+
+        /// <summary>
+        /// Saves the comment.
+        /// </summary>
+        /// <param name="pageId">The unique page id</param>
+        /// <param name="model">The comment model</param>
+        public async Task SaveCommentAsync(Guid pageId, Comment model)
+        {
+            // Make sure we have a post
+            var page = await GetByIdAsync<PageInfo>(pageId);
+
+            if (page != null)
+            {
+                // Ensure id
+                if (model.Id == Guid.Empty)
+                {
+                    model.Id = Guid.NewGuid();
+                }
+
+                // Ensure created date
+                if (model.Created == DateTime.MinValue)
+                {
+                    model.Created = DateTime.Now;
+                }
+
+                // Validate model
+                var context = new ValidationContext(model);
+                Validator.ValidateObject(model, context, true);
+
+                // Call hooks & save
+                App.Hooks.OnBeforeSave<Comment>(model);
+
+                await _repo.SaveComment(pageId, model);
+
+                App.Hooks.OnAfterSave<Comment>(model);
+
+                // Invalidate parent post from cache
+                await RemoveFromCache(page);
+            }
+            else
+            {
+                throw new ArgumentException($"Could not find page with id { pageId.ToString() }");
             }
         }
 

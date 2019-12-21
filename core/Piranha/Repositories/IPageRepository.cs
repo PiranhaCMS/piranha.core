@@ -40,6 +40,18 @@ namespace Piranha.Repositories
         Task<IEnumerable<Guid>> GetAllDrafts(Guid siteId);
 
         /// <summary>
+        /// Gets the comments available for the page with the specified id. If no page id
+        /// is provided all comments are fetched.
+        /// </summary>
+        /// <param name="pageId">The unique page id</param>
+        /// <param name="onlyApproved">If only approved comments should be fetched</param>
+        /// <param name="page">The page number</param>
+        /// <param name="pageSize">The page size</param>
+        /// <returns>The available comments</returns>
+        Task<IEnumerable<Comment>> GetAllComments(Guid? pageId, bool onlyApproved,
+            int page, int pageSize);
+
+        /// <summary>
         /// Gets the site startpage.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
@@ -94,6 +106,13 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="model">The page model</param>
         Task SaveDraft<T>(T model) where T : PageBase;
+
+        /// <summary>
+        /// Saves the comment.
+        /// </summary>
+        /// <param name="pageId">The unique page id</param>
+        /// <param name="model">The comment model</param>
+        Task SaveComment(Guid pageId, Comment model);
 
         /// <summary>
         /// Creates a revision from the current version

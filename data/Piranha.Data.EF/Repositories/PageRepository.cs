@@ -86,6 +86,51 @@ namespace Piranha.Repositories
                 .ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Gets the comments available for the page with the specified id. If no page id
+        /// is provided all comments are fetched.
+        /// </summary>
+        /// <param name="pageId">The unique post id</param>
+        /// <param name="onlyApproved">If only approved comments should be fetched</param>
+        /// <param name="page">The page number</param>
+        /// <param name="pageSize">The page size</param>
+        /// <returns>The available comments</returns>
+        public async Task<IEnumerable<Models.Comment>> GetAllComments(Guid? pageId, bool onlyApproved,
+            int page, int pageSize)
+        {
+            // Create base query
+            IQueryable<PageComment> query = _db.PageComments
+                .AsNoTracking();
+
+            // Check if only should include a comments for a certain page
+            if (pageId.HasValue)
+            {
+                query = query.Where(c => c.PageId == pageId.Value);
+            }
+
+            // Check if we should only include approved
+            if (onlyApproved)
+            {
+                query = query.Where(c => c.IsApproved);
+            }
+
+            // Get the comments
+            return await query
+                .OrderByDescending(c => c.Created)
+                .Skip(page * pageSize)
+                .Take(pageSize)
+                .Select(c => new Models.Comment
+                {
+                    Id = c.Id,
+                    UserId = c.UserId,
+                    Author = c.Author,
+                    Email = c.Email,
+                    Url = c.Url,
+                    IsApproved = c.IsApproved,
+                    Body = c.Body,
+                    Created = c.Created
+                }).ToListAsync();
+        }
 
         /// <summary>
         /// Gets the site startpage.
@@ -225,6 +270,37 @@ namespace Piranha.Repositories
         public async Task SaveDraft<T>(T model) where T : Models.PageBase
         {
             await Save<T>(model, true).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Saves the comment.
+        /// </summary>
+        /// <param name="pageId">The unique page id</param>
+        /// <param name="model">The comment model</param>
+        public async Task SaveComment(Guid pageId, Models.Comment model)
+        {
+            var comment = await _db.PageComments
+                .FirstOrDefaultAsync(c => c.Id == model.Id);
+
+            if (comment == null)
+            {
+                comment = new PageComment
+                {
+                    Id = model.Id
+                };
+                await _db.PageComments.AddAsync(comment);
+            }
+
+            comment.UserId = model.UserId;
+            comment.PageId = pageId;
+            comment.Author = model.Author;
+            comment.Email = model.Email;
+            comment.Url = model.Url;
+            comment.IsApproved = model.IsApproved;
+            comment.Body = model.Body;
+            comment.Created = model.Created;
+
+            await _db.SaveChangesAsync();
         }
 
         /// <summary>
@@ -713,8 +789,10 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="page">The source page</param>
         /// <param name="model">The targe model</param>
-        private void Process<T>(Data.Page page, T model) where T : Models.PageBase
+        private async void Process<T>(Data.Page page, T model) where T : Models.PageBase
         {
+            model.CommentCount = await _db.PageComments.CountAsync(c => c.PageId == model.Id);
+
             if (!(model is Models.IContentInfo))
             {
                 if (page.Blocks.Count > 0)

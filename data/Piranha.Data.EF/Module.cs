@@ -76,7 +76,8 @@ namespace Piranha.Data.EF
                 cfg.CreateMap<Data.Page, Models.PageBase>()
                     .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PageTypeId))
                     .ForMember(p => p.Permalink, o => o.MapFrom(m => "/" + m.Slug))
-                    .ForMember(p => p.Blocks, o => o.Ignore());
+                    .ForMember(p => p.Blocks, o => o.Ignore())
+                    .ForMember(p => p.CommentCount, o => o.Ignore());
                 cfg.CreateMap<Models.PageBase, Data.Page>()
                     .ForMember(p => p.ContentType, o => o.Ignore())
                     .ForMember(p => p.PageTypeId, o => o.MapFrom(m => m.TypeId))

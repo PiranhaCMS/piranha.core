@@ -160,7 +160,73 @@ namespace Piranha.Tests.Repositories
                         Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
                     });
                 });
+            }
+        }
 
+        [Fact]
+        public async Task AddPageComment()
+        {
+            using (var api = CreateApi())
+            {
+                var count = (await api.Pages.GetByIdAsync(BLOG_ID)).CommentCount;
+
+                await api.Pages.SaveCommentAsync(BLOG_ID, new Comment
+                {
+                    Author = "John Doe",
+                    Email = "john@doe.com",
+                    Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
+                });
+
+                var newCount = (await api.Pages.GetByIdAsync(BLOG_ID)).CommentCount;
+
+                Assert.Equal(count + 1, newCount);
+            }
+        }
+
+        [Fact]
+        public async Task AddPageCommentNoAuthor()
+        {
+            using (var api = CreateApi())
+            {
+                await Assert.ThrowsAsync<ValidationException>(async () => {
+                    await api.Pages.SaveCommentAsync(BLOG_ID, new Comment
+                    {
+                        Email = "john@doe.com",
+                        Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
+                    });
+                });
+            }
+        }
+
+        [Fact]
+        public async Task AddPageCommentNoEmail()
+        {
+            using (var api = CreateApi())
+            {
+                await Assert.ThrowsAsync<ValidationException>(async () => {
+                    await api.Pages.SaveCommentAsync(BLOG_ID, new Comment
+                    {
+                        Author = "John Doe",
+                        Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
+                    });
+                });
+
+            }
+        }
+
+        [Fact]
+        public async Task AddPageCommentBadEmail()
+        {
+            using (var api = CreateApi())
+            {
+                await Assert.ThrowsAsync<ValidationException>(async () => {
+                    await api.Pages.SaveCommentAsync(BLOG_ID, new Comment
+                    {
+                        Author = "John Doe",
+                        Email = "ThisIsNotAnEmail",
+                        Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
+                    });
+                });
             }
         }
 
