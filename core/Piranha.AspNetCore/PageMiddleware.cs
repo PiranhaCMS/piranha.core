@@ -40,7 +40,6 @@ namespace Piranha.AspNetCore
             {
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
                 var siteId = service.Site.Id;
-                var authorized = true;
                 var draft = IsDraft(context);
 
                 var response = await PageRouter.InvokeAsync(api, url, siteId);
@@ -48,76 +47,64 @@ namespace Piranha.AspNetCore
                 {
                     _logger?.LogInformation($"Found page\n  Route: {response.Route}\n  Params: {response.QueryString}");
 
-                    if (!response.IsPublished)
+                    if (string.IsNullOrWhiteSpace(response.RedirectUrl))
                     {
-                        if (!context.User.HasClaim(Security.Permission.PagePreview, Security.Permission.PagePreview))
+                        service.PageId = response.PageId;
+
+                        using (var config = new Config(api))
                         {
-                            _logger?.LogInformation($"User not authorized to preview unpublished page");
-                            authorized = false;
-                        }
-                    }
+                            var headers = context.Response.GetTypedHeaders();
+                            var expires = config.CacheExpiresPages;
 
-                    if (authorized)
-                    {
-                        if (string.IsNullOrWhiteSpace(response.RedirectUrl))
-                        {
-                            service.PageId = response.PageId;
-
-                            using (var config = new Config(api))
+                            // Only use caching for published pages
+                            if (response.IsPublished && expires > 0 && !draft)
                             {
-                                var headers = context.Response.GetTypedHeaders();
-                                var expires = config.CacheExpiresPages;
+                                _logger?.LogInformation("Caching enabled. Setting MaxAge, LastModified & ETag");
 
-                                // Only use caching for published pages
-                                if (response.IsPublished && expires > 0 && !draft)
+                                headers.CacheControl = new CacheControlHeaderValue
                                 {
-                                    _logger?.LogInformation("Caching enabled. Setting MaxAge, LastModified & ETag");
+                                    Public = true,
+                                    MaxAge = TimeSpan.FromMinutes(expires),
+                                };
 
-                                    headers.CacheControl = new CacheControlHeaderValue
-                                    {
-                                        Public = true,
-                                        MaxAge = TimeSpan.FromMinutes(expires),
-                                    };
-
-                                    headers.ETag = new EntityTagHeaderValue(response.CacheInfo.EntityTag);
-                                    headers.LastModified = response.CacheInfo.LastModified;
-                                }
-                                else
-                                {
-                                    headers.CacheControl = new CacheControlHeaderValue
-                                    {
-                                        NoCache = true
-                                    };
-                                }
-                            }
-
-                            if (HttpCaching.IsCached(context, response.CacheInfo))
-                            {
-                                _logger?.LogInformation("Client has current version. Returning NotModified");
-
-                                context.Response.StatusCode = 304;
-                                return;
+                                headers.ETag = new EntityTagHeaderValue(response.CacheInfo.EntityTag);
+                                headers.LastModified = response.CacheInfo.LastModified;
                             }
                             else
                             {
-                                context.Request.Path = new PathString(response.Route);
-
-                                if (context.Request.QueryString.HasValue)
+                                headers.CacheControl = new CacheControlHeaderValue
                                 {
-                                    context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&" + response.QueryString);
-                                }
-                                else {
-                                    context.Request.QueryString = new QueryString("?" + response.QueryString);
-                                }
+                                    NoCache = true
+                                };
                             }
+                        }
+
+                        if (HttpCaching.IsCached(context, response.CacheInfo))
+                        {
+                            _logger?.LogInformation("Client has current version. Returning NotModified");
+
+                            context.Response.StatusCode = 304;
+                            return;
                         }
                         else
                         {
-                            _logger?.LogInformation($"Redirecting to url: {response.RedirectUrl}");
+                            context.Request.Path = new PathString(response.Route);
 
-                            context.Response.Redirect(response.RedirectUrl, response.RedirectType == RedirectType.Permanent);
-                            return;
+                            if (context.Request.QueryString.HasValue)
+                            {
+                                context.Request.QueryString = new QueryString(context.Request.QueryString.Value + "&" + response.QueryString);
+                            }
+                            else {
+                                context.Request.QueryString = new QueryString("?" + response.QueryString);
+                            }
                         }
+                    }
+                    else
+                    {
+                        _logger?.LogInformation($"Redirecting to url: {response.RedirectUrl}");
+
+                        context.Response.Redirect(response.RedirectUrl, response.RedirectType == RedirectType.Permanent);
+                        return;
                     }
                 }
             }
