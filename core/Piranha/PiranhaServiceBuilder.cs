@@ -15,7 +15,7 @@ namespace Piranha
     /// <summary>
     /// Service builder for simple application startup.
     /// </summary>
-    public class PiranhaServiceBuilder
+    public class PiranhaServiceBuilder : PiranhaRouteConfig
     {
         /// <summary>
         /// The inner Service collection.

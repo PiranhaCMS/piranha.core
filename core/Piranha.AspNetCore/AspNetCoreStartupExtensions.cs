@@ -28,6 +28,16 @@ public static class AspNetCoreStartupExtensions
 
         options?.Invoke(serviceBuilder);
 
+        var config = new PiranhaRouteConfig
+        {
+            UseAliasRouting = serviceBuilder.UseAliasRouting,
+            UsePageRouting = serviceBuilder.UsePageRouting,
+            UsePostRouting = serviceBuilder.UsePostRouting,
+            UseSiteRouting = serviceBuilder.UseSiteRouting,
+            UseStartpageRouting = serviceBuilder.UseStartpageRouting
+        };
+        services.AddSingleton<PiranhaRouteConfig>(config);
+
         services.AddControllersWithViews();
         var mvcBuilder = services.AddRazorPages();
         if (serviceBuilder.AddRazorRuntimeCompilation)

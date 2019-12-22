@@ -22,12 +22,17 @@ namespace Piranha.AspNetCore
 {
     public class IntegratedMiddleware : MiddlewareBase
     {
+        private readonly PiranhaRouteConfig _config;
+
         /// <summary>
         /// Creates a new middleware instance.
         /// </summary>
         /// <param name="next">The next middleware in the pipeline</param>
         /// <param name="factory">The logger factory</param>
-        public IntegratedMiddleware(RequestDelegate next, ILoggerFactory factory = null) : base(next, factory) { }
+        public IntegratedMiddleware(RequestDelegate next, PiranhaRouteConfig config, ILoggerFactory factory = null) : base(next, factory)
+        {
+            _config = config;
+        }
 
         /// <summary>
         /// Invokes the middleware.
@@ -53,24 +58,27 @@ namespace Piranha.AspNetCore
                 //
                 Site site = null;
 
-                // Try to get the requested site by hostname & prefix
-                if (segments.Length > 0)
+                if (_config.UseSiteRouting)
                 {
-                    site = await api.Sites.GetByHostnameAsync($"{context.Request.Host.Host}/{segments[0]}")
-                        .ConfigureAwait(false);
-
-                    if (site != null)
+                    // Try to get the requested site by hostname & prefix
+                    if (segments.Length > 0)
                     {
-                        context.Request.Path = "/" + string.Join("/", segments.Skip(1));
-                        pos = 1;
-                    }
-                }
+                        site = await api.Sites.GetByHostnameAsync($"{context.Request.Host.Host}/{segments[0]}")
+                            .ConfigureAwait(false);
 
-                // Try to get the requested site by hostname
-                if (site == null)
-                {
-                    site = await api.Sites.GetByHostnameAsync(context.Request.Host.Host)
-                        .ConfigureAwait(false);
+                        if (site != null)
+                        {
+                            context.Request.Path = "/" + string.Join("/", segments.Skip(1));
+                            pos = 1;
+                        }
+                    }
+
+                    // Try to get the requested site by hostname
+                    if (site == null)
+                    {
+                        site = await api.Sites.GetByHostnameAsync(context.Request.Host.Host)
+                            .ConfigureAwait(false);
+                    }
                 }
 
                 // If we didn't find the site, get the default site
@@ -96,9 +104,18 @@ namespace Piranha.AspNetCore
                 }
 
                 //
+                // Check if we shouldn't handle empty requests for startpage
+                //
+                if (segments.Length == 0 && !_config.UseStartpageRouting)
+                {
+                    await _next.Invoke(context);
+                    return;
+                }
+
+                //
                 // 3: Check for alias
                 //
-                if (segments != null && segments.Length > pos)
+                if (_config.UseAliasRouting && segments != null && segments.Length > pos)
                 {
                     var alias = await api.Aliases.GetByAliasUrlAsync($"/{ string.Join("/", segments.Subset(pos)) }", service.Site.Id);
 
@@ -150,35 +167,36 @@ namespace Piranha.AspNetCore
                 PostBase post = null;
                 PostType postType = null;
 
-                if (page != null && pageType.IsArchive && segments.Length > pos)
+                if (_config.UsePostRouting)
                 {
-                    post = await api.Posts.GetBySlugAsync<PostBase>(page.Id, segments[pos])
-                        .ConfigureAwait(false);
+                    if (page != null && pageType.IsArchive && segments.Length > pos)
+                    {
+                        post = await api.Posts.GetBySlugAsync<PostBase>(page.Id, segments[pos])
+                            .ConfigureAwait(false);
+
+                        if (post != null)
+                        {
+                            pos++;
+                        }
+                    }
 
                     if (post != null)
                     {
-                        pos++;
+                        postType = App.PostTypes.GetById(post.TypeId);
+                        service.CurrentPost = post;
                     }
                 }
 
-                if (post != null)
-                {
-                    postType = App.PostTypes.GetById(post.TypeId);
-                    service.CurrentPost = post;
-                }
-
-#if DEBUG
-                _logger?.LogDebug($"FOUND SITE: [{ site.Id }]");
+                _logger?.LogDebug($"Found Site: [{ site.Id }]");
                 if (page != null)
                 {
-                    _logger?.LogDebug($"FOUND PAGE: [{ page.Id }]");
+                    _logger?.LogDebug($"Found Page: [{ page.Id }]");
                 }
 
                 if (post != null)
                 {
-                    _logger?.LogDebug($"FOUND POST: [{ post.Id }]");
+                    _logger?.LogDebug($"Found Post: [{ post.Id }]");
                 }
-#endif
 
                 //
                 // 6: Route request
@@ -188,155 +206,175 @@ namespace Piranha.AspNetCore
 
                 if (post != null)
                 {
-                    route.Append(post.Route ?? "/post");
-                    for (var n = pos; n < segments.Length; n++)
+                    if (string.IsNullOrWhiteSpace(post.RedirectUrl))
                     {
-                        route.Append("/");
-                        route.Append(segments[n]);
-                    }
-
-                    query.Append("id=");
-                    query.Append(post.Id);
-                }
-                else if (page != null)
-                {
-                    route.Append(page.Route ?? (pageType.IsArchive ? "/archive" : "/page"));
-
-                    // Set the basic query
-                    query.Append("id=");
-                    query.Append(page.Id);
-
-                    if (!page.ParentId.HasValue && page.SortOrder == 0)
-                    {
-                        query.Append("&startpage=true");
-                    }
-
-                    if (!pageType.IsArchive)
-                    {
-                        // This is a regular page, append trailing segments
+                        route.Append(post.Route ?? "/post");
                         for (var n = pos; n < segments.Length; n++)
                         {
                             route.Append("/");
                             route.Append(segments[n]);
                         }
+
+                        query.Append("id=");
+                        query.Append(post.Id);
                     }
-                    else if (post == null)
+                    else
                     {
-                        // This is an archive, check for archive params
-                        int? year = null;
-                        bool foundCategory = false;
-                        bool foundTag = false;
-                        bool foundPage = false;
+                        _logger?.LogDebug($"Setting redirect: [{ post.RedirectUrl }]");
 
-                        for (var n = pos; n < segments.Length; n++)
+                        context.Response.Redirect(post.RedirectUrl, post.RedirectType == RedirectType.Permanent);
+                        return;
+                    }
+                }
+                else if (page != null && _config.UsePageRouting)
+                {
+                    if (string.IsNullOrWhiteSpace(page.RedirectUrl))
+                    {
+                        route.Append(page.Route ?? (pageType.IsArchive ? "/archive" : "/page"));
+
+                        // Set the basic query
+                        query.Append("id=");
+                        query.Append(page.Id);
+
+                        if (!page.ParentId.HasValue && page.SortOrder == 0)
                         {
-                            if (segments[n] == "category" && !foundPage)
-                            {
-                                foundCategory = true;
-                                continue;
-                            }
+                            query.Append("&startpage=true");
+                        }
 
-                            if (segments[n] == "tag" && !foundPage && !foundCategory)
+                        if (!pageType.IsArchive)
+                        {
+                            // This is a regular page, append trailing segments
+                            for (var n = pos; n < segments.Length; n++)
                             {
-                                foundTag = true;
-                                continue;
+                                route.Append("/");
+                                route.Append(segments[n]);
                             }
+                        }
+                        else if (post == null)
+                        {
+                            // This is an archive, check for archive params
+                            int? year = null;
+                            bool foundCategory = false;
+                            bool foundTag = false;
+                            bool foundPage = false;
 
-                            if (segments[n] == "page")
+                            for (var n = pos; n < segments.Length; n++)
                             {
-                                foundPage = true;
-                                continue;
-                            }
-
-                            if (foundCategory)
-                            {
-                                try
+                                if (segments[n] == "category" && !foundPage)
                                 {
-                                    var categoryId = (await api.Posts.GetCategoryBySlugAsync(page.Id, segments[n]).ConfigureAwait(false))?.Id;
+                                    foundCategory = true;
+                                    continue;
+                                }
 
-                                    if (categoryId.HasValue)
+                                if (segments[n] == "tag" && !foundPage && !foundCategory)
+                                {
+                                    foundTag = true;
+                                    continue;
+                                }
+
+                                if (segments[n] == "page")
+                                {
+                                    foundPage = true;
+                                    continue;
+                                }
+
+                                if (foundCategory)
+                                {
+                                    try
                                     {
-                                        query.Append("&category=");
-                                        query.Append(categoryId);
+                                        var categoryId = (await api.Posts.GetCategoryBySlugAsync(page.Id, segments[n]).ConfigureAwait(false))?.Id;
+
+                                        if (categoryId.HasValue)
+                                        {
+                                            query.Append("&category=");
+                                            query.Append(categoryId);
+                                        }
+                                    }
+                                    finally
+                                    {
+                                        foundCategory = false;
                                     }
                                 }
-                                finally
-                                {
-                                    foundCategory = false;
-                                }
-                            }
 
-                            if (foundTag)
-                            {
-                                try
+                                if (foundTag)
                                 {
-                                    var tagId = (await api.Posts.GetTagBySlugAsync(page.Id, segments[n]).ConfigureAwait(false))?.Id;
-
-                                    if (tagId.HasValue)
+                                    try
                                     {
-                                        query.Append("&tag=");
-                                        query.Append(tagId);
+                                        var tagId = (await api.Posts.GetTagBySlugAsync(page.Id, segments[n]).ConfigureAwait(false))?.Id;
+
+                                        if (tagId.HasValue)
+                                        {
+                                            query.Append("&tag=");
+                                            query.Append(tagId);
+                                        }
+                                    }
+                                    finally
+                                    {
+                                        foundTag = false;
                                     }
                                 }
-                                finally
-                                {
-                                    foundTag = false;
-                                }
-                            }
 
-                            if (foundPage)
-                            {
-                                try
+                                if (foundPage)
                                 {
-                                    var pageNum = Convert.ToInt32(segments[n]);
-                                    query.Append("&page=");
-                                    query.Append(pageNum);
-                                    query.Append("&pagenum=");
-                                    query.Append(pageNum);
-                                }
-                                catch
-                                {
-                                    // We don't care about the exception, we just
-                                    // discard malformed input
-                                }
-                                // Page number should always be last, break the loop
-                                break;
-                            }
-
-                            if (!year.HasValue)
-                            {
-                                try
-                                {
-                                    year = Convert.ToInt32(segments[n]);
-
-                                    if (year.Value > DateTime.Now.Year)
+                                    try
                                     {
-                                        year = DateTime.Now.Year;
+                                        var pageNum = Convert.ToInt32(segments[n]);
+                                        query.Append("&page=");
+                                        query.Append(pageNum);
+                                        query.Append("&pagenum=");
+                                        query.Append(pageNum);
                                     }
-                                    query.Append("&year=");
-                                    query.Append(year);
+                                    catch
+                                    {
+                                        // We don't care about the exception, we just
+                                        // discard malformed input
+                                    }
+                                    // Page number should always be last, break the loop
+                                    break;
                                 }
-                                catch
+
+                                if (!year.HasValue)
                                 {
-                                    // We don't care about the exception, we just
-                                    // discard malformed input
+                                    try
+                                    {
+                                        year = Convert.ToInt32(segments[n]);
+
+                                        if (year.Value > DateTime.Now.Year)
+                                        {
+                                            year = DateTime.Now.Year;
+                                        }
+                                        query.Append("&year=");
+                                        query.Append(year);
+                                    }
+                                    catch
+                                    {
+                                        // We don't care about the exception, we just
+                                        // discard malformed input
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                try
+                                else
                                 {
-                                    var month = Math.Max(Math.Min(Convert.ToInt32(segments[n]), 12), 1);
-                                    query.Append("&month=");
-                                    query.Append(month);
-                                }
-                                catch
-                                {
-                                    // We don't care about the exception, we just
-                                    // discard malformed input
+                                    try
+                                    {
+                                        var month = Math.Max(Math.Min(Convert.ToInt32(segments[n]), 12), 1);
+                                        query.Append("&month=");
+                                        query.Append(month);
+                                    }
+                                    catch
+                                    {
+                                        // We don't care about the exception, we just
+                                        // discard malformed input
+                                    }
                                 }
                             }
                         }
+                    }
+                    else
+                    {
+                        _logger?.LogDebug($"Setting redirect: [{ page.RedirectUrl }]");
+
+                        context.Response.Redirect(page.RedirectUrl, page.RedirectType == RedirectType.Permanent);
+                        return;
                     }
                 }
 
@@ -345,10 +383,8 @@ namespace Piranha.AspNetCore
                     var strRoute = route.ToString();
                     var strQuery = query.ToString();
 
-#if DEBUG
-                    _logger?.LogInformation($"SETTING ROUTE: [{ strRoute }]");
-                    _logger?.LogInformation($"SETTING QUERY: [{ strQuery }]");
-#endif
+                    _logger?.LogDebug($"Setting Route: [{ strRoute }]");
+                    _logger?.LogDebug($"Setting Query: [{ strQuery }]");
 
                     context.Request.Path = new PathString(strRoute);
                     if (context.Request.QueryString.HasValue)
