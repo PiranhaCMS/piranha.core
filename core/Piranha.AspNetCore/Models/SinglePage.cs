@@ -16,7 +16,17 @@ using Piranha.Models;
 
 namespace Piranha.AspNetCore.Models
 {
-    public class SinglePostModel<T> : Microsoft.AspNetCore.Mvc.RazorPages.PageModel where T : PostBase
+    [Obsolete("SinglePageModel<T> has been renamed to SinglePage<T>")]
+    public class SinglePageModel<T> : SinglePage<T> where T : PageBase
+    {
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        /// <param name="api">The current api</param>
+        public SinglePageModel(IApi api, IModelLoader loader) : base(api, loader) { }
+    }
+
+    public class SinglePage<T> : Microsoft.AspNetCore.Mvc.RazorPages.PageModel where T : PageBase
     {
         protected readonly IApi _api;
         protected readonly IModelLoader _loader;
@@ -30,7 +40,7 @@ namespace Piranha.AspNetCore.Models
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public SinglePostModel(IApi api, IModelLoader loader)
+        public SinglePage(IApi api, IModelLoader loader)
         {
             _api = api;
             _loader = loader;
@@ -43,7 +53,7 @@ namespace Piranha.AspNetCore.Models
         /// <param name="draft">If the draft should be fetched</param>
         public virtual async Task<IActionResult> OnGet(Guid id, bool draft = false)
         {
-            Data = await _loader.GetPost<T>(id, HttpContext.User, draft);
+            Data = await _loader.GetPageAsync<T>(id, HttpContext.User, draft);
 
             if (Data == null)
             {

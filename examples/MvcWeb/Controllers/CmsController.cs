@@ -51,7 +51,7 @@ namespace MvcWeb.Controllers
         [Route("page")]
         public async Task<IActionResult> Page(Guid id, bool draft = false)
         {
-            var model = await _loader.GetPage<Models.StandardPage>(id, HttpContext.User, draft);
+            var model = await _loader.GetPageAsync<Models.StandardPage>(id, HttpContext.User, draft);
 
             return View(model);
         }
@@ -63,7 +63,7 @@ namespace MvcWeb.Controllers
         [Route("pagewide")]
         public async Task<IActionResult> PageWide(Guid id, bool draft = false)
         {
-            var model = await _loader.GetPage<Models.StandardPage>(id, HttpContext.User, draft);
+            var model = await _loader.GetPageAsync<Models.StandardPage>(id, HttpContext.User, draft);
 
             return View(model);
         }
@@ -76,7 +76,7 @@ namespace MvcWeb.Controllers
         [Route("post")]
         public async Task<IActionResult> Post(Guid id, bool draft = false)
         {
-            var model = await _loader.GetPost<Models.BlogPost>(id, HttpContext.User, draft);
+            var model = await _loader.GetPostAsync<Models.BlogPost>(id, HttpContext.User, draft);
 
             return View(model);
         }
@@ -89,7 +89,7 @@ namespace MvcWeb.Controllers
         [Route("teaserpage")]
         public async Task<IActionResult> TeaserPage(Guid id, bool startpage = false, bool draft = false)
         {
-            var model = await _loader.GetPage<Models.TeaserPage>(id, HttpContext.User, draft);
+            var model = await _loader.GetPageAsync<Models.TeaserPage>(id, HttpContext.User, draft);
 
             if (startpage)
             {

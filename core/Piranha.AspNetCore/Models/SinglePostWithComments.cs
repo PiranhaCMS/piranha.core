@@ -11,13 +11,14 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Piranha.AspNetCore.Services;
 using Piranha.Models;
 
 namespace Piranha.AspNetCore.Models
 {
-    public class SinglePostWithCommentsModel<T> : SinglePostModel<T> where T : PostBase
+    public class SinglePostWithComments<T> : SinglePost<T> where T : PostBase
     {
         /// <summary>
         /// Gets/sets the available comments.
@@ -40,7 +41,7 @@ namespace Piranha.AspNetCore.Models
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public SinglePostWithCommentsModel(IApi api, IModelLoader loader) : base(api, loader) { }
+        public SinglePostWithComments(IApi api, IModelLoader loader) : base(api, loader) { }
 
         /// <summary>
         /// Gets the model data.
@@ -68,8 +69,11 @@ namespace Piranha.AspNetCore.Models
         {
             if (action.ToLower() == "comment")
             {
+                // Create the comment
                 var comment = new Comment
                 {
+                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString(),
+                    UserAgent = Request.Headers.ContainsKey("User-Agent") ? Request.Headers["User-Agent"].ToString() : "",
                     Author = CommentAuthor,
                     Email = CommentEmail,
                     Url = CommentUrl,
@@ -78,7 +82,7 @@ namespace Piranha.AspNetCore.Models
 
                 await _api.Posts.SaveCommentAsync(id, comment);
             }
-            Data = await _loader.GetPost<T>(id, HttpContext.User, draft);
+            Data = await _loader.GetPostAsync<T>(id, HttpContext.User, draft);
 
             return Redirect(Data.Permalink + "#comments");
         }
