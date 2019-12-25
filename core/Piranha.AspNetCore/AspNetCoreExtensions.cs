@@ -8,13 +8,9 @@
  *
  */
 
-using System;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Piranha;
-using Piranha.AspNetCore;
 using Piranha.Extend;
 using Piranha.Security;
 

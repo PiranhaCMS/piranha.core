@@ -20,6 +20,8 @@ namespace RazorWeb
             //
             services.AddPiranha(options =>
             {
+                options.AddRazorRuntimeCompilation = true;
+
                 options.UseFileStorage();
                 options.UseImageSharp();
                 options.UseManager();
