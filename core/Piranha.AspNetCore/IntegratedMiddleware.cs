@@ -15,8 +15,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Net.Http.Headers;
 using Piranha.AspNetCore.Services;
 using Piranha.Models;
+using Piranha.Services;
 
 namespace Piranha.AspNetCore
 {
@@ -42,6 +44,8 @@ namespace Piranha.AspNetCore
         /// <returns>An async task</returns>
         public override async Task Invoke(HttpContext context, IApi api, IApplicationService service)
         {
+            var appConfig = new Config(api);
+
             if (!IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/"))
             {
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
@@ -208,6 +212,13 @@ namespace Piranha.AspNetCore
                 {
                     if (string.IsNullOrWhiteSpace(post.RedirectUrl))
                     {
+                        // Handle HTTP caching
+                        if (HandleCache(context, site, post, appConfig.CacheExpiresPosts))
+                        {
+                            // Client has latest version
+                            return;
+                        }
+
                         route.Append(post.Route ?? "/post");
                         for (var n = pos; n < segments.Length; n++)
                         {
@@ -243,6 +254,12 @@ namespace Piranha.AspNetCore
 
                         if (!pageType.IsArchive)
                         {
+                            if (HandleCache(context, site, page, appConfig.CacheExpiresPages))
+                            {
+                                // Client has latest version.
+                                return;
+                            }
+
                             // This is a regular page, append trailing segments
                             for (var n = pos; n < segments.Length; n++)
                             {
@@ -399,6 +416,55 @@ namespace Piranha.AspNetCore
                 }
             }
             await _next.Invoke(context);
+        }
+
+        /// <summary>
+        /// Handles HTTP Caching Headers and checks if the client has the
+        /// latest version in cache.
+        /// </summary>
+        /// <param name="context">The HTTP Cache</param>
+        /// <param name="site">The current site</param>
+        /// <param name="content">The current content</param>
+        /// <param name="expires">How many minutes the cache should be valid</param>
+        /// <returns>If the client has the latest version</returns>
+        public bool HandleCache(HttpContext context, Site site, RoutedContent content, int expires)
+        {
+            var headers = context.Response.GetTypedHeaders();
+
+            if (expires > 0 && content.Published.HasValue)
+            {
+                _logger?.LogDebug($"Setting HTTP Cache for [{ content.Slug }]");
+
+                var lastModified = !site.ContentLastModified.HasValue || content.LastModified > site.ContentLastModified
+                    ? content.LastModified : site.ContentLastModified.Value;
+                var etag = Utils.GenerateETag(content.Id.ToString(), lastModified);
+
+                headers.CacheControl = new CacheControlHeaderValue
+                {
+                    Public = true,
+                    MaxAge = TimeSpan.FromMinutes(expires),
+                };
+                headers.ETag = new EntityTagHeaderValue(etag);
+                headers.LastModified = lastModified;
+
+                if (HttpCaching.IsCached(context, etag, lastModified))
+                {
+                    _logger?.LogInformation("Client has current version. Setting NotModified");
+                    context.Response.StatusCode = 304;
+
+                    return true;
+                }
+            }
+            else
+            {
+                _logger?.LogDebug($"Setting HTTP NoCache for [{ content.Slug }]");
+
+                headers.CacheControl = new CacheControlHeaderValue
+                {
+                    NoCache = true
+                };
+            }
+            return false;
         }
     }
 }
