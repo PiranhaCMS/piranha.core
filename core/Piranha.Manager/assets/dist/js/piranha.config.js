@@ -14,7 +14,9 @@ piranha.config = new Vue({
             postsExpires: null,
             mediaCDN: null,
             pageRevisions: null,
-            postRevisions: null
+            postRevisions: null,
+            defaultCollapsedBlocks: false,
+            defaultCollapsedBlockGroupHeaders: false
         }
     },
     methods: {
@@ -32,6 +34,8 @@ piranha.config = new Vue({
                     self.model.mediaCDN = result.mediaCDN;
                     self.model.pageRevisions = result.pageRevisions;
                     self.model.postRevisions = result.postRevisions;
+                    self.model.defaultCollapsedBlocks = result.defaultCollapsedBlocks;
+                    self.model.defaultCollapsedBlockGroupHeaders = result.defaultCollapsedBlockGroupHeaders;
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },
@@ -51,7 +55,9 @@ piranha.config = new Vue({
                         postsExpires: self.model.postsExpires,
                         mediaCDN: self.model.mediaCDN,
                         pageRevisions: self.model.pageRevisions,
-                        postRevisions: self.model.postRevisions
+                        postRevisions: self.model.postRevisions,
+                        defaultCollapsedBlocks: self.model.defaultCollapsedBlocks,
+                        defaultCollapsedBlockGroupHeaders: self.model.defaultCollapsedBlockGroupHeaders
                     })
                 })
                 .then(function (response) { return response.json(); })

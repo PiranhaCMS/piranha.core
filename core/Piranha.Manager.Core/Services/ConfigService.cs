@@ -42,7 +42,9 @@ namespace Piranha.Manager.Services
                     PostsExpires = config.CacheExpiresPosts,
                     MediaCDN = config.MediaCDN,
                     PageRevisions = config.PageRevisions,
-                    PostRevisions = config.PostRevisions
+                    PostRevisions = config.PostRevisions,
+                    DefaultCollapsedBlocks = config.ManagerDefaultCollapsedBlocks,
+                    DefaultCollapsedBlockGroupHeaders = config.ManagerDefaultCollapsedBlockGroupHeaders
                 };
             }
         }
@@ -57,6 +59,8 @@ namespace Piranha.Manager.Services
             {
                 config.HierarchicalPageSlugs = model.HierarchicalPageSlugs;
                 config.ManagerExpandedSitemapLevels = model.ExpandedSitemapLevels;
+                config.ManagerDefaultCollapsedBlocks = model.DefaultCollapsedBlocks;
+                config.ManagerDefaultCollapsedBlockGroupHeaders = model.DefaultCollapsedBlockGroupHeaders;
                 config.ArchivePageSize = model.ArchivePageSize;
                 config.CacheExpiresPages = model.PagesExpires;
                 config.CacheExpiresPosts = model.PostsExpires;

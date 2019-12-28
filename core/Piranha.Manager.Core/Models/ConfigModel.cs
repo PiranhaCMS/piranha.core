@@ -23,5 +23,7 @@ namespace Piranha.Manager.Models
         public string MediaCDN { get; set; }
         public int PageRevisions { get; set; }
         public int PostRevisions { get; set; }
+        public bool DefaultCollapsedBlocks { get; set; }
+        public bool DefaultCollapsedBlockGroupHeaders { get; set; }
     }
 }
