@@ -38,6 +38,8 @@ namespace Piranha.Manager.Services
                     HierarchicalPageSlugs = config.HierarchicalPageSlugs,
                     ExpandedSitemapLevels = config.ManagerExpandedSitemapLevels,
                     ArchivePageSize = config.ArchivePageSize,
+                    CommentsApprove = config.CommentsApprove,
+                    CommentsPageSize = config.CommentsPageSize,
                     PagesExpires = config.CacheExpiresPages,
                     PostsExpires = config.CacheExpiresPosts,
                     MediaCDN = config.MediaCDN,
@@ -62,6 +64,8 @@ namespace Piranha.Manager.Services
                 config.ManagerDefaultCollapsedBlocks = model.DefaultCollapsedBlocks;
                 config.ManagerDefaultCollapsedBlockGroupHeaders = model.DefaultCollapsedBlockGroupHeaders;
                 config.ArchivePageSize = model.ArchivePageSize;
+                config.CommentsApprove = model.CommentsApprove;
+                config.CommentsPageSize = model.CommentsPageSize;
                 config.CacheExpiresPages = model.PagesExpires;
                 config.CacheExpiresPosts = model.PostsExpires;
                 config.MediaCDN = model.MediaCDN;

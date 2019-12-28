@@ -170,11 +170,19 @@ namespace Piranha.Repositories
                 query = query.Where(c => c.IsApproved);
             }
 
+            // Order the comments by date
+            query = query.OrderByDescending(c => c.Created);
+
+            // Check if this is a paged query
+            if (pageSize > 0)
+            {
+                query = query
+                    .Skip(page * pageSize)
+                    .Take(pageSize);
+            }
+
             // Get the comments
             return await query
-                .OrderByDescending(c => c.Created)
-                .Skip(page * pageSize)
-                .Take(pageSize)
                 .Select(c => new Models.Comment
                 {
                     Id = c.Id,

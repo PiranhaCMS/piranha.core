@@ -134,7 +134,7 @@
                                 </span>
                             </div>
                             <div class="col-md-4">
-                                <input v-model="model.archivePageSize" class="form-control" type="number">
+                                <input v-model="model.commentsPageSize" class="form-control" type="number">
                             </div>
                         </div>
                     </li>
@@ -149,7 +149,7 @@
                             <div class="col-md-4">
                                 <div class="checkbox">
                                     <label>
-                                        <input v-model="model.hierarchicalPageSlugs" type="checkbox">
+                                        <input v-model="model.commentsApprove" type="checkbox">
                                         @Localizer.Config["If comments should be approved by default."]
                                     </label>
                                 </div>

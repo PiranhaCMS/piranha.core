@@ -228,7 +228,7 @@ namespace Piranha.Services
             {
                 using (var config = new Config(_paramService))
                 {
-                    pageSize = config.ArchivePageSize;
+                    pageSize = config.CommentsPageSize;
                 }
             }
 
@@ -538,6 +538,12 @@ namespace Piranha.Services
                 // Validate model
                 var context = new ValidationContext(model);
                 Validator.ValidateObject(model, context, true);
+
+                // Set approved according to config
+                using (var config = new Config(_paramService))
+                {
+                    model.IsApproved = config.CommentsApprove;
+                }
 
                 // Call hooks & save
                 App.Hooks.OnBeforeSave<Comment>(model);

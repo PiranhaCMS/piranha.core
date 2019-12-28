@@ -10,6 +10,8 @@ piranha.config = new Vue({
             hierarchicalPageSlugs: null,
             expandedSitemapLevels: null,
             archivePageSize: null,
+            commentsApprove: null,
+            commentsPageSize: null,
             pagesExpires: null,
             postsExpires: null,
             mediaCDN: null,
@@ -29,6 +31,8 @@ piranha.config = new Vue({
                     self.model.hierarchicalPageSlugs = result.hierarchicalPageSlugs;
                     self.model.expandedSitemapLevels = result.expandedSitemapLevels;
                     self.model.archivePageSize = result.archivePageSize;
+                    self.model.commentsApprove = result.commentsApprove;
+                    self.model.commentsPageSize = result.commentsPageSize;
                     self.model.pagesExpires = result.pagesExpires;
                     self.model.postsExpires = result.postsExpires;
                     self.model.mediaCDN = result.mediaCDN;
@@ -51,6 +55,8 @@ piranha.config = new Vue({
                         hierarchicalPageSlugs: self.model.hierarchicalPageSlugs,
                         expandedSitemapLevels: self.model.expandedSitemapLevels,
                         archivePageSize: self.model.archivePageSize,
+                        commentsApprove: self.model.commentsApprove,
+                        commentsPageSize: self.model.commentsPageSize,
                         pagesExpires: self.model.pagesExpires,
                         postsExpires: self.model.postsExpires,
                         mediaCDN: self.model.mediaCDN,

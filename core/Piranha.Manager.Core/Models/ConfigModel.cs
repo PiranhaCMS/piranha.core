@@ -18,6 +18,8 @@ namespace Piranha.Manager.Models
         public bool HierarchicalPageSlugs { get; set; }
         public int ExpandedSitemapLevels { get; set; }
         public int ArchivePageSize { get; set; }
+        public bool CommentsApprove { get; set; }
+        public int CommentsPageSize { get; set; }
         public int PagesExpires { get; set; }
         public int PostsExpires { get; set; }
         public string MediaCDN { get; set; }
