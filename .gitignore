@@ -256,3 +256,6 @@ _Pvt_Extensions
 /examples/CoreWeb/wwwroot/uploads/42be9216-67da-4ff6-a513-d77d2961e231-platform.png
 /examples/CoreWeb/wwwroot/uploads/d9d8a31b-2866-4344-b94c-20b7142f23b6-github.png
 /examples/MvcWeb/Properties/launchSettings.json
+
+# Rider generated files
+.idea
