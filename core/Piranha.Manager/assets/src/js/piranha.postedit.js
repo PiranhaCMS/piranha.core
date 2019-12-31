@@ -48,6 +48,12 @@ piranha.postedit = new Vue({
             });
         },
     },
+    mounted() {
+        document.addEventListener("keydown", this.doHotKeys);
+    },
+    beforeDestroy() {
+        document.removeEventListener("keydown", this.doHotKeys);
+    },
     methods: {
         bind: function (model) {
             this.id = model.id;
@@ -105,6 +111,15 @@ piranha.postedit = new Vue({
                 })
                 .catch(function (error) { console.log("error:", error );
             });
+        },
+        doHotKeys(e)
+        {
+            // CTRL + S
+            if (e.keyCode === 83 && e.ctrlKey)
+            {
+                e.preventDefault();
+                this.saveDraft();
+            }
         },
         save: function ()
         {
