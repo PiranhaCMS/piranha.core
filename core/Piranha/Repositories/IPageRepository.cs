@@ -95,6 +95,13 @@ namespace Piranha.Repositories
         Task<IEnumerable<Guid>> Move<T>(T model, Guid? parentId, int sortOrder) where T : PageBase;
 
         /// <summary>
+        /// Gets the comment with the given id.
+        /// </summary>
+        /// <param name="id">The comment id</param>
+        /// <returns>The model</returns>
+        Task<Comment> GetCommentById(Guid id);
+
+        /// <summary>
         /// Saves the given page model
         /// </summary>
         /// <param name="model">The page model</param>

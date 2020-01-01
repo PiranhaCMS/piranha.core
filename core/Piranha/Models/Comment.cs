@@ -22,6 +22,12 @@ namespace Piranha.Models
         public Guid Id { get; set; }
 
         /// <summary>
+        /// Gets/sets the id of the content this comment
+        /// is in response to.
+        /// </summary>
+        public Guid ContentId { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional user id.
         /// </summary>
         [StringLength(128)]

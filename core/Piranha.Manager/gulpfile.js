@@ -88,6 +88,12 @@ var js = [
         ]
     },
     {
+        name: "piranha.comment.js",
+        items: [
+            "assets/src/js/piranha.comment.js"
+        ]
+    },
+    {
         name: "piranha.config.js",
         items: [
             "assets/src/js/piranha.config.js"

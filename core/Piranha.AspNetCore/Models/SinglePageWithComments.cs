@@ -18,7 +18,7 @@ using Piranha.Models;
 
 namespace Piranha.AspNetCore.Models
 {
-    public class SinglePostWithComments<T> : SinglePost<T> where T : PostBase
+    public class SinglePageWithComments<T> : SinglePage<T> where T : PageBase
     {
         /// <summary>
         /// Gets/sets the available comments.
@@ -41,7 +41,7 @@ namespace Piranha.AspNetCore.Models
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public SinglePostWithComments(IApi api, IModelLoader loader) : base(api, loader) { }
+        public SinglePageWithComments(IApi api, IModelLoader loader) : base(api, loader) { }
 
         /// <summary>
         /// Gets the model data.
@@ -54,7 +54,7 @@ namespace Piranha.AspNetCore.Models
 
             if (Data != null)
             {
-                Comments = await _api.Posts.GetAllCommentsAsync(Data.Id);
+                Comments = await _api.Pages.GetAllCommentsAsync(Data.Id);
             }
             return result;
         }
@@ -80,9 +80,9 @@ namespace Piranha.AspNetCore.Models
                     Body = CommentBody
                 };
 
-                await _api.Posts.SaveCommentAndVerifyAsync(id, comment);
+                await _api.Pages.SaveCommentAndVerifyAsync(id, comment);
             }
-            Data = await _loader.GetPostAsync<T>(id, HttpContext.User, draft);
+            Data = await _loader.GetPageAsync<T>(id, HttpContext.User, draft);
 
             return Redirect(Data.Permalink + "#comments");
         }

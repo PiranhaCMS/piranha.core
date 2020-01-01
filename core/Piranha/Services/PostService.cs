@@ -494,6 +494,16 @@ namespace Piranha.Services
         }
 
         /// <summary>
+        /// Gets the comment with the given id.
+        /// </summary>
+        /// <param name="id">The comment id</param>
+        /// <returns>The model</returns>
+        public Task<Comment> GetCommentByIdAsync(Guid id)
+        {
+            return _repo.GetCommentById(id);
+        }
+
+        /// <summary>
         /// Saves the given post model
         /// </summary>
         /// <param name="model">The post model</param>
@@ -516,7 +526,22 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="model">The comment model</param>
         /// <param name="postId">The unique post id</param>
-        public async Task SaveCommentAsync(Guid postId, Comment model)
+        public Task SaveCommentAsync(Guid postId, Comment model)
+        {
+            return SaveCommentAsync(postId, model, false);
+        }
+
+        /// <summary>
+        /// Saves the comment and verifies if should be approved or not.
+        /// </summary>
+        /// <param name="model">The comment model</param>
+        /// <param name="postId">The unique post id</param>
+        public Task SaveCommentAndVerifyAsync(Guid postId, Comment model)
+        {
+            return SaveCommentAsync(postId, model, true);
+        }
+
+        private async Task SaveCommentAsync(Guid postId, Comment model, bool verify)
         {
             // Make sure we have a post
             var post = await GetByIdAsync<PostInfo>(postId);
@@ -539,10 +564,13 @@ namespace Piranha.Services
                 var context = new ValidationContext(model);
                 Validator.ValidateObject(model, context, true);
 
-                // Set approved according to config
-                using (var config = new Config(_paramService))
+                // Set approved according to config if we should verify
+                if (verify)
                 {
-                    model.IsApproved = config.CommentsApprove;
+                    using (var config = new Config(_paramService))
+                    {
+                        model.IsApproved = config.CommentsApprove;
+                    }
                 }
 
                 // Call hooks & save

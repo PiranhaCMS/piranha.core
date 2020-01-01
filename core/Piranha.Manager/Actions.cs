@@ -45,6 +45,11 @@ namespace Piranha.Manager
             };
 
             /// <summary>
+            /// Gets the available actions for the comments view.
+            /// </summary>
+            public ActionList<ToolbarAction> CommentList { get; private set; } = new ActionList<ToolbarAction>();
+
+            /// <summary>
             /// Gets the available actions for the config view.
             /// </summary>
             public ActionList<ToolbarAction> ConfigEdit { get; private set; } = new ActionList<ToolbarAction>

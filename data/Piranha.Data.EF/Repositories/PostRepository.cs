@@ -186,6 +186,7 @@ namespace Piranha.Repositories
                 .Select(c => new Models.Comment
                 {
                     Id = c.Id,
+                    ContentId = c.PostId,
                     UserId = c.UserId,
                     Author = c.Author,
                     Email = c.Email,
@@ -346,6 +347,29 @@ namespace Piranha.Repositories
                     Id = t.Id,
                     Title = t.Title,
                     Slug = t.Slug
+                }).FirstOrDefaultAsync();
+        }
+
+        /// <summary>
+        /// Gets the comment with the given id.
+        /// </summary>
+        /// <param name="id">The comment id</param>
+        /// <returns>The model</returns>
+        public Task<Models.Comment> GetCommentById(Guid id)
+        {
+            return _db.PostComments
+                .Where(c => c.Id == id)
+                .Select(c => new Models.Comment
+                {
+                    Id = c.Id,
+                    ContentId = c.PostId,
+                    UserId = c.UserId,
+                    Author = c.Author,
+                    Email = c.Email,
+                    Url = c.Url,
+                    IsApproved = c.IsApproved,
+                    Body = c.Body,
+                    Created = c.Created
                 }).FirstOrDefaultAsync();
         }
 

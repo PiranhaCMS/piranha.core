@@ -1,0 +1,83 @@
+@page "~/manager/comments"
+@inject ManagerLocalizer Localizer
+@inject Piranha.IApi Api
+@{
+    ViewBag.Title = Localizer.Alias["Comments"];
+    ViewBag.MenuItem = "Comments";
+}
+@section script
+{
+    <script src="~/manager/assets/js/piranha.comment.min.js"></script>
+    <script>
+        piranha.permissions.load(function () {
+            piranha.comment.load();
+        });
+    </script>
+}
+
+<div id="comments">
+    <div class="top">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
+                <li class="breadcrumb-item active" aria-current="page">@Localizer.Menu["Comments"]</li>
+            </ol>
+        </nav>
+
+        <div class="container-fluid">
+            <div class="top-nav">
+                @foreach (var action in Piranha.Manager.Actions.Toolbars.CommentList)
+                {
+                    <partial name="@action.ActionView" />
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="app" :class="{ ready: !loading }">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <div class="btn-group">
+                        <button class="btn btn-sm btn-primary">@Localizer.General["All"]</button>
+                        <button class="btn btn-sm btn-link">Pending</button>
+                        <button class="btn btn-sm btn-link">Approved</button>
+                    </div>
+                    <table class="table table-borderless table-comments">
+                        <thead>
+                            <tr>
+                                <th>Author</th>
+                                <th>Comment</th>
+                                <th class="text-nowrap">Response To</th>
+                                <th>Approved</th>
+                                <th>Created</th>
+                                <th class="actions three"></th>
+                            </tr>
+                        </thead>
+                        <tbody v-for="comment in items">
+                            <tr>
+                                <td class="text-nowrap align-middle">
+                                    <img class="rounded mr-2" :src="comment.authorImage" :alt="comment.author">
+                                    <a class="mr-3" :href="'mailto:' + comment.email">{{ comment.author }}</a>
+                                </td>
+                                <td>{{ comment.body }}</td>
+                                <td class="align-middle">
+                                    <a v-if="comment.articleTitle" class="author" :href="piranha.baseUrl + comment.articleUrl" target="_blank">{{ comment.articleTitle }}</a>
+                                </td>
+                                <td class="text-center align-middle">
+                                    <i v-if="comment.isApproved" class="fas fa-check"></i>
+                                </td>
+                                <td class="align-middle">{{ comment.created }}</td>
+                                <td class="actions three align-middle">
+                                    <a v-on:click.prevent="approve(comment.id)" href="#" title="Approve"><i class="fas fa-check"></i></a>
+                                    <a v-on:click.prevent="unapprove(comment.id)" href="#" title="Unapprove"><i class="fas fa-times"></i></a>
+                                    <a v-on:click.prevent="remove(comment.id)" href="#" title="Delete" class="danger"><i class="fas fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

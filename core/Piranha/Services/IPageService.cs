@@ -169,6 +169,13 @@ namespace Piranha.Services
         Task MoveAsync<T>(T model, Guid? parentId, int sortOrder) where T : Models.PageBase;
 
         /// <summary>
+        /// Gets the comment with the given id.
+        /// </summary>
+        /// <param name="id">The comment id</param>
+        /// <returns>The model</returns>
+        Task<Comment> GetCommentByIdAsync(Guid id);
+
+        /// <summary>
         /// Saves the given page model
         /// </summary>
         /// <param name="model">The page model</param>
@@ -186,6 +193,13 @@ namespace Piranha.Services
         /// <param name="pageId">The unique page id</param>
         /// <param name="model">The comment model</param>
         Task SaveCommentAsync(Guid pageId, Comment model);
+
+        /// <summary>
+        /// Saves the comment and verifies if should be approved or not.
+        /// </summary>
+        /// <param name="pageId">The unique page id</param>
+        /// <param name="model">The comment model</param>
+        Task SaveCommentAndVerifyAsync(Guid pageId, Comment model);
 
         /// <summary>
         /// Deletes the model with the specified id.

@@ -206,6 +206,13 @@ namespace Piranha.Services
         Task<Taxonomy> GetTagBySlugAsync(Guid blogId, string slug);
 
         /// <summary>
+        /// Gets the comment with the given id.
+        /// </summary>
+        /// <param name="id">The comment id</param>
+        /// <returns>The model</returns>
+        Task<Comment> GetCommentByIdAsync(Guid id);
+
+        /// <summary>
         /// Saves the given post model.
         /// </summary>
         /// <param name="model">The post model</param>
@@ -223,6 +230,13 @@ namespace Piranha.Services
         /// <param name="model">The comment model</param>
         /// <param name="postId">The unique post id</param>
         Task SaveCommentAsync(Guid postId, Comment model);
+
+        /// <summary>
+        /// Saves the comment and verifies if should be approved or not.
+        /// </summary>
+        /// <param name="model">The comment model</param>
+        /// <param name="postId">The unique post id</param>
+        Task SaveCommentAndVerifyAsync(Guid postId, Comment model);
 
         /// <summary>
         /// Deletes the model with the specified id.

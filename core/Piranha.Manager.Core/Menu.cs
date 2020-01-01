@@ -31,6 +31,10 @@ namespace Piranha.Manager
                     new MenuItem
                     {
                         InternalId = "Media", Name = "Media", Route = "~/manager/media", Policy = Permission.Media, Css = "fas fa-images"
+                    },
+                    new MenuItem
+                    {
+                        InternalId = "Comments", Name = "Comments", Route = "~/manager/comments", Css = "fas fa-comments"
                     }
                 }
             },

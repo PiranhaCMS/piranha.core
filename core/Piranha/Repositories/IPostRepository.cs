@@ -127,6 +127,13 @@ namespace Piranha.Repositories
         Task<Taxonomy> GetTagBySlug(Guid blogId, string slug);
 
         /// <summary>
+        /// Gets the comment with the given id.
+        /// </summary>
+        /// <param name="id">The comment id</param>
+        /// <returns>The model</returns>
+        Task<Comment> GetCommentById(Guid id);
+
+        /// <summary>
         /// Saves the given post model
         /// </summary>
         /// <param name="model">The post model</param>
