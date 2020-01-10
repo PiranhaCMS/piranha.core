@@ -15,6 +15,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Piranha.Extend;
 using Piranha.Models;
 
 namespace Piranha.Services
@@ -48,10 +49,8 @@ namespace Piranha.Services
             {
                 return CreateDynamicModel<T>(type);
             }
-            else
-            {
-                return CreateModel<T>(type);
-            }
+
+            return CreateModel<T>(type);
         }
 
         /// <summary>
@@ -240,16 +239,15 @@ namespace Piranha.Services
                     }
                 }
 
-                if (model is IBlockModel)
+                if (model is IBlockModel blockModel)
                 {
-                    foreach (var block in ((IBlockModel)model).Blocks)
+                    foreach (var block in blockModel.Blocks)
                     {
                         InitBlock(scope, block);
 
-
-                        if (block is Extend.BlockGroup)
+                        if (block is BlockGroup blockGroup)
                         {
-                            foreach (var child in ((Extend.BlockGroup)block).Items)
+                            foreach (var child in blockGroup.Items)
                             {
                                 InitBlock(scope, child);
                             }

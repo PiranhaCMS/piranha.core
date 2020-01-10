@@ -32,7 +32,7 @@ namespace Piranha.Tests
         [FieldType(Name = "Third")]
         public class MyThirdField : Extend.Fields.SimpleField<string> { }
 
-        private AppFieldList fields = new AppFieldList();
+        private readonly AppFieldList fields = new AppFieldList();
 
         public enum MyEnum {
             Value1,
@@ -278,7 +278,8 @@ namespace Piranha.Tests
 
         [Fact]
         public void ImageFieldConversions() {
-            var media = new Media() {
+            var media = new Media
+            {
                 Id = Guid.NewGuid()
             };
 
@@ -329,7 +330,8 @@ namespace Piranha.Tests
 
         [Fact]
         public void DocumentFieldConversions() {
-            var media = new Media() {
+            var media = new Media
+            {
                 Id = Guid.NewGuid()
             };
 
@@ -380,7 +382,8 @@ namespace Piranha.Tests
 
         [Fact]
         public void VideoFieldConversions() {
-            var media = new Media() {
+            var media = new Media
+            {
                 Id = Guid.NewGuid()
             };
 
@@ -493,7 +496,8 @@ namespace Piranha.Tests
 
         [Fact]
         public void MediaFieldConversions() {
-            var media = new Media() {
+            var media = new Media
+            {
                 Id = Guid.NewGuid()
             };
 

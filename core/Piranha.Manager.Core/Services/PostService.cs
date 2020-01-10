@@ -16,6 +16,8 @@ using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Piranha.Extend;
+using Piranha.Manager.Extensions;
 using Piranha.Models;
 using Piranha.Manager.Models;
 using Piranha.Manager.Models.Content;
@@ -78,7 +80,7 @@ namespace Piranha.Manager.Services
                 .OrderBy(p => p.Title)
                 .ToList();
 
-            if (model.Archives.Count() > 0)
+            if (model.Archives.Any())
             {
                 if (!archiveId.HasValue)
                 {
@@ -101,7 +103,7 @@ namespace Piranha.Manager.Services
                         Id = p.Id,
                         Title = p.Title,
                         Permalink = "/" + model.ArchiveSlug + "/" + p.Slug,
-                        Published = p.Published.HasValue ? p.Published.Value.ToString("yyyy-MM-dd HH:mm") : null
+                        Published = p.Published?.ToString("yyyy-MM-dd HH:mm")
                     }).ToList();
 
                 // Sort so we show unpublished drafts first
@@ -158,8 +160,8 @@ namespace Piranha.Manager.Services
                     Title = p.Title,
                     TypeName = model.PostTypes.First(t => t.Id == p.TypeId).Title,
                     Category = p.Category.Title,
-                    Published = p.Published.HasValue ? p.Published.Value.ToString("yyyy-MM-dd HH:mm") : null,
-                    Status = GetState(p, drafts.Contains(p.Id)),
+                    Published = p.Published?.ToString("yyyy-MM-dd HH:mm"),
+                    Status = p.GetState(drafts.Contains(p.Id)),
                     isScheduled = p.Published.HasValue && p.Published.Value > DateTime.Now,
                     EditUrl = "manager/post/edit/"
                 }).ToList();
@@ -406,10 +408,10 @@ namespace Piranha.Manager.Services
                 Slug = post.Slug,
                 MetaKeywords = post.MetaKeywords,
                 MetaDescription = post.MetaDescription,
-                Published = post.Published.HasValue ? post.Published.Value.ToString("yyyy-MM-dd HH:mm") : null,
+                Published = post.Published?.ToString("yyyy-MM-dd HH:mm"),
                 RedirectUrl = post.RedirectUrl,
                 RedirectType = post.RedirectType.ToString(),
-                State = GetState(post, isDraft),
+                State = post.GetState(isDraft),
                 UseBlocks = type.UseBlocks,
                 SelectedRoute = route == null ? null : new RouteModel
                 {
@@ -513,7 +515,7 @@ namespace Piranha.Manager.Services
             {
                 var blockType = App.Blocks.GetByType(block.Type);
 
-                if (block is Extend.BlockGroup)
+                if (block is BlockGroup blockGroup)
                 {
                     var group = new BlockGroupModel
                     {
@@ -581,7 +583,7 @@ namespace Piranha.Manager.Services
                     }
 
                     bool firstChild = true;
-                    foreach (var child in ((Extend.BlockGroup)block).Items)
+                    foreach (var child in blockGroup.Items)
                     {
                         blockType = App.Blocks.GetByType(child.Type);
 
@@ -629,26 +631,6 @@ namespace Piranha.Manager.Services
                 });
             }
             return model;
-        }
-
-        private string GetState(PostBase post, bool isDraft)
-        {
-            if (post.Created != DateTime.MinValue)
-            {
-                if (post.Published.HasValue)
-                {
-                    if (isDraft)
-                    {
-                        return ContentState.Draft;
-                    }
-                    return ContentState.Published;
-                }
-                else
-                {
-                    return ContentState.Unpublished;
-                }
-            }
-            return ContentState.New;
         }
     }
 }

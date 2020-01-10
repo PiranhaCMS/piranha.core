@@ -42,7 +42,7 @@ namespace Piranha.Tests.Repositories
         private const string SITE_1_HOSTS = "mysite.com";
         protected ICache cache;
 
-        private Guid SITE_1_ID = Guid.NewGuid();
+        private readonly Guid SITE_1_ID = Guid.NewGuid();
 
         [PageType(Title = "PageType")]
         public class MyPage : Models.Page<MyPage>
@@ -73,7 +73,8 @@ namespace Piranha.Tests.Repositories
                     .AddType(typeof(MySiteContent));
                 siteBuilder.Build();
 
-                api.Sites.Save(new Site() {
+                api.Sites.Save(new Site
+                {
                     Id = SITE_1_ID,
                     SiteTypeId = "MySiteContent",
                     InternalId = SITE_1,
@@ -82,15 +83,18 @@ namespace Piranha.Tests.Repositories
                     IsDefault = true
                 });
 
-                api.Sites.Save(new Site() {
+                api.Sites.Save(new Site
+                {
                     InternalId = SITE_4,
                     Title = SITE_4
                 });
-                api.Sites.Save(new Site() {
+                api.Sites.Save(new Site
+                {
                     InternalId = SITE_5,
                     Title = SITE_5
                 });
-                api.Sites.Save(new Site() {
+                api.Sites.Save(new Site
+                {
                     InternalId = SITE_6,
                     Title = SITE_6
                 });
@@ -177,7 +181,8 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void Add() {
             using (var api = CreateApi()) {
-                api.Sites.Save(new Site() {
+                api.Sites.Save(new Site
+                {
                     InternalId = SITE_2,
                     Title = SITE_2
                 });
@@ -188,7 +193,8 @@ namespace Piranha.Tests.Repositories
         public void AddDuplicateKey() {
             using (var api = CreateApi()) {
                 Assert.ThrowsAny<ValidationException>(() =>
-                    api.Sites.Save(new Site() {
+                    api.Sites.Save(new Site
+                    {
                         InternalId = SITE_1,
                         Title = SITE_1
                     }));
@@ -208,7 +214,8 @@ namespace Piranha.Tests.Repositories
             var id = Guid.NewGuid();
 
             using (var api = CreateApi()) {
-                api.Sites.Save(new Site() {
+                api.Sites.Save(new Site
+                {
                     Id = id,
                     Title = "Generate internal id"
                 });

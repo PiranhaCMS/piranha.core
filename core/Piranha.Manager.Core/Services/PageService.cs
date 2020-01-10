@@ -16,6 +16,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Piranha.Manager.Extensions;
 using Piranha.Models;
 using Piranha.Manager.Models;
 using Piranha.Manager.Models.Content;
@@ -65,10 +66,8 @@ namespace Piranha.Manager.Services
                 }).ToList()
             };
 
-            var expandedLevels = 0;
-            using (var config = new Config(_api))
+            using (new Config(_api))
             {
-                expandedLevels = config.ManagerExpandedSitemapLevels;
             }
 
             foreach (var site in model.Sites)
@@ -485,7 +484,7 @@ namespace Piranha.Manager.Services
                 Published = page.Published.HasValue ? page.Published.Value.ToString("yyyy-MM-dd HH:mm") : null,
                 RedirectUrl = page.RedirectUrl,
                 RedirectType = page.RedirectType.ToString(),
-                State = GetState(page, isDraft),
+                State = page.GetState(isDraft),
                 UseBlocks = type.UseBlocks,
                 SelectedRoute = route == null ? null : new RouteModel
                 {
@@ -706,26 +705,6 @@ namespace Piranha.Manager.Services
                 });
             }
             return model;
-        }
-
-        private string GetState(DynamicPage page, bool isDraft)
-        {
-            if (page.Created != DateTime.MinValue)
-            {
-                if (page.Published.HasValue)
-                {
-                    if (isDraft)
-                    {
-                        return ContentState.Draft;
-                    }
-                    return ContentState.Published;
-                }
-                else
-                {
-                    return ContentState.Unpublished;
-                }
-            }
-            return ContentState.New;
         }
     }
 }

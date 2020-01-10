@@ -18,7 +18,7 @@ namespace Piranha.Manager
         /// <summary>
         /// The basic manager menu.
         /// </summary>
-        public static MenuItemList Items = new MenuItemList
+        public static MenuItemList Items { get; } = new MenuItemList
         {
             new MenuItem
             {
@@ -26,11 +26,13 @@ namespace Piranha.Manager
                 {
                     new MenuItem
                     {
-                        InternalId = "Pages", Name = "Pages", Route = "~/manager/pages", Policy = Permission.Pages, Css = "fas fa-copy"
+                        InternalId = "Pages", Name = "Pages", Route = "~/manager/pages", Policy = Permission.Pages,
+                        Css = "fas fa-copy"
                     },
                     new MenuItem
                     {
-                        InternalId = "Media", Name = "Media", Route = "~/manager/media", Policy = Permission.Media, Css = "fas fa-images"
+                        InternalId = "Media", Name = "Media", Route = "~/manager/media", Policy = Permission.Media,
+                        Css = "fas fa-images"
                     }
                 }
             },
@@ -40,7 +42,8 @@ namespace Piranha.Manager
                 {
                     new MenuItem
                     {
-                        InternalId = "Aliases", Name = "Aliases", Route = "~/manager/aliases", Policy = Permission.Aliases, Css = "fas fa-random"
+                        InternalId = "Aliases", Name = "Aliases", Route = "~/manager/aliases",
+                        Policy = Permission.Aliases, Css = "fas fa-random"
                     }
                 }
             },
@@ -50,11 +53,13 @@ namespace Piranha.Manager
                 {
                     new MenuItem
                     {
-                        InternalId = "Config", Name = "Config", Route = "~/manager/config", Policy = Permission.Config, Css = "fas fa-cogs"
+                        InternalId = "Config", Name = "Config", Route = "~/manager/config", Policy = Permission.Config,
+                        Css = "fas fa-cogs"
                     },
                     new MenuItem
                     {
-                        InternalId = "Modules", Name = "Modules", Route = "~/manager/modules", Policy = Permission.Modules, Css = "fas fa-code-branch"
+                        InternalId = "Modules", Name = "Modules", Route = "~/manager/modules",
+                        Policy = Permission.Modules, Css = "fas fa-code-branch"
                     }
                 }
             }

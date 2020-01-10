@@ -123,7 +123,8 @@ namespace Piranha.Tests.Repositories
                 postTypeBuilder.Build();
 
                 // Add site
-                var site = new Site() {
+                var site = new Site
+                {
                     Id = SITE_ID,
                     Title = "Post Site",
                     InternalId = "PostSite",
@@ -138,7 +139,8 @@ namespace Piranha.Tests.Repositories
                 page.Title = "Blog";
                 api.Pages.Save(page);
 
-                var category = new Models.Taxonomy() {
+                var category = new Models.Taxonomy
+                {
                     Id = CAT_1_ID,
                     Title = "My category"
                 };
@@ -180,13 +182,16 @@ namespace Piranha.Tests.Repositories
                 post4.BlogId = BLOG_ID;
                 post4.Category = category;
                 post4.Title = "My collection post";
-                post4.Texts.Add(new TextField() {
+                post4.Texts.Add(new TextField
+                {
                     Value = "First text"
                 });
-                post4.Texts.Add(new TextField() {
+                post4.Texts.Add(new TextField
+                {
                     Value = "Second text"
                 });
-                post4.Texts.Add(new TextField() {
+                post4.Texts.Add(new TextField
+                {
                     Value = "Third text"
                 });
                 api.Posts.Save(post4);

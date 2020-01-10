@@ -29,10 +29,8 @@ namespace Piranha.Extend.Blocks
             {
                 return Body.Media.Filename;
             }
-            else
-            {
-                return "No video selected";
-            }
+
+            return "No video selected";
         }
     }
 }

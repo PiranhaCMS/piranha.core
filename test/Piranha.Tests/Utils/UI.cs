@@ -8,7 +8,6 @@
  *
  */
 
-using System;
 using Xunit;
 using Piranha.Repositories;
 using Piranha.Services;

@@ -43,7 +43,7 @@ namespace Piranha.Runtime
         /// </summary>
         public class MediaTypeList : List<MediaTypeItem>
         {
-            private bool _allowProcessing = false;
+            private readonly bool _allowProcessing;
 
             /// <summary>
             /// Default constructor
@@ -135,22 +135,24 @@ namespace Piranha.Runtime
             {
                 return MediaType.Document;
             }
-            else if (Images.ContainsExtension(extension))
+
+            if (Images.ContainsExtension(extension))
             {
                 return MediaType.Image;
             }
-            else if (Videos.ContainsExtension(extension))
+            if (Videos.ContainsExtension(extension))
             {
                 return MediaType.Video;
             }
-            else if (Audio.ContainsExtension(extension))
+            if (Audio.ContainsExtension(extension))
             {
                 return MediaType.Audio;
             }
-            else if (Resources.ContainsExtension(extension))
+            if (Resources.ContainsExtension(extension))
             {
                 return MediaType.Resource;
             }
+
             return MediaType.Unknown;
         }
 
@@ -169,19 +171,20 @@ namespace Piranha.Runtime
             {
                 return item.ContentType;
             }
-            else if ((item = Images.SingleOrDefault(t => t.Extension == extension)) != null)
+
+            if ((item = Images.SingleOrDefault(t => t.Extension == extension)) != null)
             {
                 return item.ContentType;
             }
-            else if ((item = Videos.SingleOrDefault(t => t.Extension == extension)) != null)
+            if ((item = Videos.SingleOrDefault(t => t.Extension == extension)) != null)
             {
                 return item.ContentType;
             }
-            else if ((item = Audio.SingleOrDefault(t => t.Extension == extension)) != null)
+            if ((item = Audio.SingleOrDefault(t => t.Extension == extension)) != null)
             {
                 return item.ContentType;
             }
-            else if ((item = Resources.SingleOrDefault(t => t.Extension == extension)) != null)
+            if ((item = Resources.SingleOrDefault(t => t.Extension == extension)) != null)
             {
                 return item.ContentType;
             }
@@ -203,22 +206,24 @@ namespace Piranha.Runtime
             {
                 return item;
             }
-            else if ((item = Images.SingleOrDefault(t => t.Extension == extension)) != null)
+
+            if ((item = Images.SingleOrDefault(t => t.Extension == extension)) != null)
             {
                 return item;
             }
-            else if ((item = Videos.SingleOrDefault(t => t.Extension == extension)) != null)
+            if ((item = Videos.SingleOrDefault(t => t.Extension == extension)) != null)
             {
                 return item;
             }
-            else if ((item = Audio.SingleOrDefault(t => t.Extension == extension)) != null)
+            if ((item = Audio.SingleOrDefault(t => t.Extension == extension)) != null)
             {
                 return item;
             }
-            else if ((item = Resources.SingleOrDefault(t => t.Extension == extension)) != null)
+            if ((item = Resources.SingleOrDefault(t => t.Extension == extension)) != null)
             {
                 return item;
             }
+
             return null;
         }
     }

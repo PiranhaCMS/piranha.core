@@ -72,15 +72,13 @@ namespace Piranha.Web
                                 }
                             };
                         }
-                        else
+
+                        return new RouteResponse
                         {
-                            return new RouteResponse
-                            {
-                                IsPublished = page.Published.HasValue && page.Published.Value <= DateTime.Now,
-                                RedirectUrl = page.RedirectUrl,
-                                RedirectType = page.RedirectType
-                            };
-                        }
+                            IsPublished = page.Published.HasValue && page.Published.Value <= DateTime.Now,
+                            RedirectUrl = page.RedirectUrl,
+                            RedirectType = page.RedirectType
+                        };
                     }
                 }
             }

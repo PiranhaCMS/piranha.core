@@ -70,9 +70,9 @@ namespace Piranha.Services
             Validator.ValidateObject(model, context, true);
 
             // Call hooks & save
-            App.Hooks.OnBeforeSave<SiteType>(model);
+            App.Hooks.OnBeforeSave(model);
             await _repo.Save(model).ConfigureAwait(false);
-            App.Hooks.OnAfterSave<SiteType>(model);
+            App.Hooks.OnAfterSave(model);
 
             // Clear cache
             _cache?.Remove("Piranha_SiteTypes");
@@ -99,9 +99,9 @@ namespace Piranha.Services
         public async Task DeleteAsync(SiteType model)
         {
             // Call hooks & delete
-            App.Hooks.OnBeforeDelete<SiteType>(model);
+            App.Hooks.OnBeforeDelete(model);
             await _repo.Delete(model.Id).ConfigureAwait(false);
-            App.Hooks.OnAfterDelete<SiteType>(model);
+            App.Hooks.OnAfterDelete(model);
 
             // Clear cache
             _cache?.Remove("Piranha_SiteTypes");

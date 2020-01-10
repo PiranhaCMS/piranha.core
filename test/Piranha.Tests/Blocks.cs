@@ -44,7 +44,8 @@ namespace Piranha.Tests
 
                 // Add media
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png")) {
-                    var image1 = new Models.StreamMediaContent() {
+                    var image1 = new Models.StreamMediaContent
+                    {
                         Filename = "HLD_Screenshot_01_mech_1080.png",
                         Data = stream
                     };
@@ -72,10 +73,13 @@ namespace Piranha.Tests
         [Fact]
         public void DeserializeHtmlBlock() {
             var blocks = new List<Block>();
-            blocks.Add(new Block() {
+            blocks.Add(new Block
+            {
                 CLRType = typeof(Extend.Blocks.HtmlBlock).FullName,
-                Fields = new List<BlockField>() {
-                    new BlockField() {
+                Fields = new List<BlockField>
+                {
+                    new BlockField
+                    {
                         CLRType = typeof(Extend.Fields.HtmlField).FullName,
                         FieldId = "Body",
                         Value = "<p>Lorem ipsum</p>"
@@ -97,8 +101,10 @@ namespace Piranha.Tests
         [Fact]
         public void SerializeHtmlBlock() {
             var models = new List<Extend.Block>();
-            models.Add(new Extend.Blocks.HtmlBlock() {
-                Body = new Extend.Fields.HtmlField() {
+            models.Add(new Extend.Blocks.HtmlBlock
+            {
+                Body = new Extend.Fields.HtmlField
+                {
                     Value = "<p>Lorem ipsum</p>"
                 }
             });
@@ -174,10 +180,13 @@ namespace Piranha.Tests
         [Fact]
         public void DeserializeImageBlock() {
             var blocks = new List<Block>();
-            blocks.Add(new Block() {
+            blocks.Add(new Block
+            {
                 CLRType = typeof(Extend.Blocks.ImageBlock).FullName,
-                Fields = new List<BlockField>() {
-                    new BlockField() {
+                Fields = new List<BlockField>
+                {
+                    new BlockField
+                    {
                         CLRType = typeof(Extend.Fields.ImageField).FullName,
                         FieldId = "Body",
                         Value = image1Id.ToString()
@@ -201,8 +210,10 @@ namespace Piranha.Tests
         [Fact]
         public void SerializeImageBlock() {
             var models = new List<Extend.Block>();
-            models.Add(new Extend.Blocks.ImageBlock() {
-                Body = new Extend.Fields.ImageField() {
+            models.Add(new Extend.Blocks.ImageBlock
+            {
+                Body = new Extend.Fields.ImageField
+                {
                     Id = image1Id
                 }
             });
@@ -220,10 +231,13 @@ namespace Piranha.Tests
         [Fact]
         public void DeserializeTextBlock() {
             var blocks = new List<Block>();
-            blocks.Add(new Block() {
+            blocks.Add(new Block
+            {
                 CLRType = typeof(Extend.Blocks.TextBlock).FullName,
-                Fields = new List<BlockField>() {
-                    new BlockField() {
+                Fields = new List<BlockField>
+                {
+                    new BlockField
+                    {
                         CLRType = typeof(Extend.Fields.TextField).FullName,
                         FieldId = "Body",
                         Value = "Lorem ipsum"
@@ -245,8 +259,10 @@ namespace Piranha.Tests
         [Fact]
         public void SerializeTextBlock() {
             var models = new List<Extend.Block>();
-            models.Add(new Extend.Blocks.TextBlock() {
-                Body = new Extend.Fields.TextField() {
+            models.Add(new Extend.Blocks.TextBlock
+            {
+                Body = new Extend.Fields.TextField
+                {
                     Value = "Lorem ipsum"
                 }
             });
@@ -264,10 +280,13 @@ namespace Piranha.Tests
         [Fact]
         public void DeserializeQuoteBlock() {
             var blocks = new List<Block>();
-            blocks.Add(new Block() {
+            blocks.Add(new Block
+            {
                 CLRType = typeof(Extend.Blocks.QuoteBlock).FullName,
-                Fields = new List<BlockField>() {
-                    new BlockField() {
+                Fields = new List<BlockField>
+                {
+                    new BlockField
+                    {
                         CLRType = typeof(Extend.Fields.TextField).FullName,
                         FieldId = "Body",
                         Value = "Lorem ipsum"
@@ -289,8 +308,10 @@ namespace Piranha.Tests
         [Fact]
         public void SerializeQuoteBlock() {
             var models = new List<Extend.Block>();
-            models.Add(new Extend.Blocks.QuoteBlock() {
-                Body = new Extend.Fields.TextField() {
+            models.Add(new Extend.Blocks.QuoteBlock
+            {
+                Body = new Extend.Fields.TextField
+                {
                     Value = "Lorem ipsum"
                 }
             });

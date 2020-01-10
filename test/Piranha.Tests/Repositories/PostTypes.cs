@@ -9,7 +9,6 @@
  */
 
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 using Piranha.Models;
 using Piranha.Repositories;
@@ -32,14 +31,20 @@ namespace Piranha.Tests.Repositories
     {
         #region Members
         protected ICache cache;
-        private List<PostType> postTypes = new List<PostType>() {
-            new PostType() {
+        private readonly List<PostType> postTypes = new List<PostType>
+        {
+            new PostType
+            {
                 Id = "MyFirstType",
-                Regions = new List<RegionType>() {
-                    new RegionType() {
+                Regions = new List<RegionType>
+                {
+                    new RegionType
+                    {
                         Id = "Body",
-                        Fields = new List<FieldType>() {
-                            new FieldType() {
+                        Fields = new List<FieldType>
+                        {
+                            new FieldType
+                            {
                                 Id = "Default",
                                 Type = "Html"
                             }
@@ -47,13 +52,18 @@ namespace Piranha.Tests.Repositories
                     }
                 }
             },
-            new PostType() {
+            new PostType
+            {
                 Id = "MySecondType",
-                Regions = new List<RegionType>() {
-                    new RegionType() {
+                Regions = new List<RegionType>
+                {
+                    new RegionType
+                    {
                         Id = "Body",
-                        Fields = new List<FieldType>() {
-                            new FieldType() {
+                        Fields = new List<FieldType>
+                        {
+                            new FieldType
+                            {
                                 Id = "Default",
                                 Type = "Text"
                             }
@@ -61,13 +71,18 @@ namespace Piranha.Tests.Repositories
                     }
                 }
             },
-            new PostType() {
+            new PostType
+            {
                 Id = "MyThirdType",
-                Regions = new List<RegionType>() {
-                    new RegionType() {
+                Regions = new List<RegionType>
+                {
+                    new RegionType
+                    {
                         Id = "Body",
-                        Fields = new List<FieldType>() {
-                            new FieldType() {
+                        Fields = new List<FieldType>
+                        {
+                            new FieldType
+                            {
                                 Id = "Default",
                                 Type = "Image"
                             }
@@ -75,13 +90,18 @@ namespace Piranha.Tests.Repositories
                     }
                 }
             },
-            new PostType() {
+            new PostType
+            {
                 Id = "MyFourthType",
-                Regions = new List<RegionType>() {
-                    new RegionType() {
+                Regions = new List<RegionType>
+                {
+                    new RegionType
+                    {
                         Id = "Body",
-                        Fields = new List<FieldType>() {
-                            new FieldType() {
+                        Fields = new List<FieldType>
+                        {
+                            new FieldType
+                            {
                                 Id = "Default",
                                 Type = "String"
                             }
@@ -89,13 +109,18 @@ namespace Piranha.Tests.Repositories
                     }
                 }
             },
-            new PostType() {
+            new PostType
+            {
                 Id = "MyFifthType",
-                Regions = new List<RegionType>() {
-                    new RegionType() {
+                Regions = new List<RegionType>
+                {
+                    new RegionType
+                    {
                         Id = "Body",
-                        Fields = new List<FieldType>() {
-                            new FieldType() {
+                        Fields = new List<FieldType>
+                        {
+                            new FieldType
+                            {
                                 Id = "Default",
                                 Type = "Text"
                             }

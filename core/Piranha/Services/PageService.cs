@@ -249,7 +249,7 @@ namespace Piranha.Services
 
             if (model != null && model is T)
             {
-                return await MapOriginalAsync<T>((T)model).ConfigureAwait(false);
+                return await MapOriginalAsync((T)model).ConfigureAwait(false);
             }
             return null;
         }
@@ -296,7 +296,7 @@ namespace Piranha.Services
 
             if (model != null && model is T)
             {
-                return await MapOriginalAsync<T>((T)model).ConfigureAwait(false);
+                return await MapOriginalAsync((T)model).ConfigureAwait(false);
             }
             return null;
         }
@@ -353,7 +353,7 @@ namespace Piranha.Services
 
             if (model != null && model is T)
             {
-                return await MapOriginalAsync<T>((T)model).ConfigureAwait(false);
+                return await MapOriginalAsync((T)model).ConfigureAwait(false);
             }
             return null;
         }
@@ -641,7 +641,7 @@ namespace Piranha.Services
                 {
                     // Clone the original in case we are caching in system
                     // memory, otherwise we'll destroy the original.
-                    copy = Utils.DeepClone<T>(original);
+                    copy = Utils.DeepClone(original);
 
                     // Initialize all blocks & regions
                     _factory.Init(copy, App.PageTypes.GetById(copy.TypeId));
@@ -707,7 +707,7 @@ namespace Piranha.Services
                     _factory.Init(model, App.PageTypes.GetById(model.TypeId));
                 }
 
-                App.Hooks.OnLoad<PageBase>(model);
+                App.Hooks.OnLoad(model);
 
                 // Never cache drafts, dynamic or simple instances
                 if (!isDraft && _cache != null && !(model is DynamicPage))

@@ -18,7 +18,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using Piranha.AspNetCore.Services;
 using Piranha.Models;
-using Piranha.Services;
 
 namespace Piranha.AspNetCore
 {
@@ -108,7 +107,7 @@ namespace Piranha.AspNetCore
                 }
 
                 //
-                // Check if we shouldn't handle empty requests for startpage
+                // Check if we shouldn't handle empty requests for start page
                 //
                 if (segments.Length == 0 && !_config.UseStartpageRouting)
                 {
@@ -119,7 +118,7 @@ namespace Piranha.AspNetCore
                 //
                 // 3: Check for alias
                 //
-                if (_config.UseAliasRouting && segments != null && segments.Length > pos)
+                if (_config.UseAliasRouting && segments.Length > pos)
                 {
                     var alias = await api.Aliases.GetByAliasUrlAsync($"/{ string.Join("/", segments.Subset(pos)) }", service.Site.Id);
 
@@ -136,7 +135,7 @@ namespace Piranha.AspNetCore
                 PageBase page = null;
                 PageType pageType = null;
 
-                if (segments != null && segments.Length > pos)
+                if (segments.Length > pos)
                 {
                     // Scan for the most unique slug
                     for (var n = segments.Length; n > pos; n--)
@@ -169,7 +168,6 @@ namespace Piranha.AspNetCore
                 // 5: Get the current post
                 //
                 PostBase post = null;
-                PostType postType = null;
 
                 if (_config.UsePostRouting)
                 {
@@ -186,7 +184,7 @@ namespace Piranha.AspNetCore
 
                     if (post != null)
                     {
-                        postType = App.PostTypes.GetById(post.TypeId);
+                        App.PostTypes.GetById(post.TypeId);
                         service.CurrentPost = post;
                     }
                 }

@@ -54,10 +54,8 @@ namespace Piranha.Web
                                 }
                             };
                         }
-                        else
-                        {
-                            return await ArchiveRouter.InvokeAsync(api, $"/{page.Slug}", siteId).ConfigureAwait(false);
-                        }
+
+                        return await ArchiveRouter.InvokeAsync(api, $"/{page.Slug}", siteId).ConfigureAwait(false);
                     }
                 }
             }

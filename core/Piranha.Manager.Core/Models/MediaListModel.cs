@@ -18,8 +18,8 @@ namespace Piranha.Manager.Models
     /// </summary>
     public class MediaListModel
     {
-        public static string ListView = "list";
-        public static string GalleryView = "gallery";
+        public static string ListView { get; } = "list";
+        public static string GalleryView { get; } = "gallery";
 
         /// <summary>
         /// A folder item in the list view.

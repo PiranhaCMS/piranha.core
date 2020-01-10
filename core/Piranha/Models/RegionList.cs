@@ -45,7 +45,10 @@ namespace Piranha.Models
             {
                 base.Add((T)item);
             }
-            else throw new ArgumentException("Item type does not match the list");
+            else
+            {
+                throw new ArgumentException("Item type does not match the list");
+            }
         }
     }
 }
