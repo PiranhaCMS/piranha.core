@@ -98,9 +98,16 @@ namespace Piranha.Runtime
         /// <summary>
         /// Delegate for generating a slug.
         /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
+        /// <param name="str">The input string</param>
+        /// <returns>The generated slug</returns>
         public delegate string SlugDelegate(string str);
+
+        /// <summary>
+        /// Delegate for generating the public sitemap.
+        /// </summary>
+        /// <param name="sitemap">The default sitemap</param>
+        /// <returns>The updated sitemap</returns>
+        public delegate Sitemap SitemapDelegate(Sitemap sitemap);
 
         /// <summary>
         /// Gets the hooks available for aliases.
@@ -146,6 +153,11 @@ namespace Piranha.Runtime
         /// Gets the hook for slug generation.
         /// </summary>
         public SlugDelegate OnGenerateSlug;
+
+        /// <summary>
+        /// Gets the hook for generating the public sitemap.
+        /// </summary>
+        public SitemapDelegate OnGenerateSitemap;
 
         /// <summary>
         /// Removes all hooks for the specified model type.

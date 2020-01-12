@@ -59,6 +59,13 @@ namespace Piranha.AspNetCore
                     // Get the sitemap for the site
                     var pages = await api.Sites.GetSitemapAsync(siteId);
 
+                    if (App.Hooks.OnGenerateSitemap != null)
+                    {
+                        // We need to clone the sitemap as it might be cached
+                        // if we're going to modify it.
+                        pages = App.Hooks.OnGenerateSitemap(Utils.DeepClone(pages));
+                    }
+
                     // Generate sitemap.xml
                     var sitemap = new Sitemap();
 
