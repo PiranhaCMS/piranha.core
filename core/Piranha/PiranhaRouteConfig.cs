@@ -38,6 +38,11 @@ namespace Piranha
         public bool UseSiteRouting { get; set; } = true;
 
         /// <summary>
+        /// Gets/sets if sitemap routing should be used.
+        /// </summary>
+        public bool UseSitemapRouting { get; set; } = true;
+
+        /// <summary>
         /// Gets/sets if startpage routing for empty URL's
         /// should be used.
         /// </summary>

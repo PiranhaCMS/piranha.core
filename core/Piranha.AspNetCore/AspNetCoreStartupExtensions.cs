@@ -34,6 +34,7 @@ public static class AspNetCoreStartupExtensions
             UsePageRouting = serviceBuilder.UsePageRouting,
             UsePostRouting = serviceBuilder.UsePostRouting,
             UseSiteRouting = serviceBuilder.UseSiteRouting,
+            UseSitemapRouting = serviceBuilder.UseSitemapRouting,
             UseStartpageRouting = serviceBuilder.UseStartpageRouting
         };
         services.AddSingleton<PiranhaRouteConfig>(config);
@@ -46,7 +47,6 @@ public static class AspNetCoreStartupExtensions
         }
         services.AddPiranha();
         services.AddPiranhaApplication();
-
 
         return serviceBuilder.Services;
     }
