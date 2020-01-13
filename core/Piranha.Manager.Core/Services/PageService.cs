@@ -66,10 +66,6 @@ namespace Piranha.Manager.Services
                 }).ToList()
             };
 
-            using (new Config(_api))
-            {
-            }
-
             foreach (var site in model.Sites)
             {
                 site.Pages.AddRange(await GetPageStructure(site.Id));
@@ -192,10 +188,7 @@ namespace Piranha.Manager.Services
                     page.ParentId = after ? relative.ParentId : relative.Id;
                     page.SortOrder = after ? relative.SortOrder + 1 : 0;
 
-                    if (page != null)
-                    {
-                        return Transform(page, false);
-                    }
+                    return Transform(page, false);
                 }
             }
             return null;

@@ -158,8 +158,8 @@ namespace Piranha.Extend.Fields
 
         /// <summary>
         /// Gets the display title for the given enum. If the DisplayAttribute
-        /// is present it's description is returned, otherwise the string r
-        /// epresentation of the enum.
+        /// is present it's description is returned, otherwise the string 
+        /// representation of the enum.
         /// </summary>
         /// <param name="val">The enum value</param>
         /// <returns>The display title</returns>

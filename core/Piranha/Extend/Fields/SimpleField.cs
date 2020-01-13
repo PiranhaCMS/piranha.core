@@ -30,7 +30,10 @@ namespace Piranha.Extend.Fields
         /// </summary>
         public override string GetTitle()
         {
-            if (Value.Equals(default(T))) return null;
+            if (Value.Equals(default(T)))
+            {
+                return null;
+            }
 
             var title = Value.ToString();
 

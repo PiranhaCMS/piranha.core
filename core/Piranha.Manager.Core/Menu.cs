@@ -22,23 +22,35 @@ namespace Piranha.Manager
         {
             new MenuItem
             {
-                InternalId = "Content", Name = "Content", Css = "fas fa-pencil-alt", Items = new MenuItemList
+                InternalId = "Content", 
+                Name = "Content",
+                Css = "fas fa-pencil-alt",
+                Items = new MenuItemList
                 {
                     new MenuItem
                     {
-                        InternalId = "Pages", Name = "Pages", Route = "~/manager/pages", Policy = Permission.Pages,
+                        InternalId = "Pages",
+                        Name = "Pages",
+                        Route = "~/manager/pages",
+                        Policy = Permission.Pages,
                         Css = "fas fa-copy"
                     },
                     new MenuItem
                     {
-                        InternalId = "Media", Name = "Media", Route = "~/manager/media", Policy = Permission.Media,
+                        InternalId = "Media",
+                        Name = "Media",
+                        Route = "~/manager/media",
+                        Policy = Permission.Media,
                         Css = "fas fa-images"
                     }
                 }
             },
             new MenuItem
             {
-                InternalId = "Settings", Name = "Settings", Css = "fas fa-wrench", Items = new MenuItemList
+                InternalId = "Settings", 
+                Name = "Settings",
+                Css = "fas fa-wrench",
+                Items = new MenuItemList
                 {
                     new MenuItem
                     {
@@ -49,17 +61,26 @@ namespace Piranha.Manager
             },
             new MenuItem
             {
-                InternalId = "System", Name = "System", Css = "fas fa-cog", Items = new MenuItemList
+                InternalId = "System",
+                Name = "System", 
+                Css = "fas fa-cog", 
+                Items = new MenuItemList
                 {
                     new MenuItem
                     {
-                        InternalId = "Config", Name = "Config", Route = "~/manager/config", Policy = Permission.Config,
+                        InternalId = "Config",
+                        Name = "Config",
+                        Route = "~/manager/config",
+                        Policy = Permission.Config,
                         Css = "fas fa-cogs"
                     },
                     new MenuItem
                     {
-                        InternalId = "Modules", Name = "Modules", Route = "~/manager/modules",
-                        Policy = Permission.Modules, Css = "fas fa-code-branch"
+                        InternalId = "Modules",
+                        Name = "Modules",
+                        Route = "~/manager/modules",
+                        Policy = Permission.Modules, 
+                        Css = "fas fa-code-branch"
                     }
                 }
             }

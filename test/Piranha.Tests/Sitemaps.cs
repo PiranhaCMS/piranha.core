@@ -40,7 +40,10 @@ namespace Piranha.Tests
             });
         }
 
-        protected override void Cleanup() {}
+        protected override void Cleanup()
+        {
+            //No need to clean up
+        }
 
         [Fact]
         public void GetNoNavigationTitle() {

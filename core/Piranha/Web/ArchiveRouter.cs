@@ -24,7 +24,10 @@ namespace Piranha.Web
         /// <returns>The piranha response, null if no matching page was found</returns>
         public static async Task<IRouteResponse> InvokeAsync(IApi api, string url, Guid siteId)
         {
-            if (string.IsNullOrWhiteSpace(url) || url.Length <= 1) return null;
+            if (string.IsNullOrWhiteSpace(url) || url.Length <= 1)
+            {
+                return null;
+            }
 
             var segments = url.Substring(1).Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 

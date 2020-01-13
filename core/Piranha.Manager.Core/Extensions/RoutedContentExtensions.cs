@@ -10,7 +10,10 @@ namespace Piranha.Manager.Extensions
     {
         public static string GetState(this RoutedContent post, bool isDraft)
         {
-            if (post.Created == DateTime.MinValue) return ContentState.New;
+            if (post.Created == DateTime.MinValue)
+            {
+                return ContentState.New;
+            }
 
             if (post.Published.HasValue)
             {
