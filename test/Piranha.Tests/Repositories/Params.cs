@@ -10,8 +10,6 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Data.SqlClient;
-using System.Linq;
 using Xunit;
 using Piranha.Models;
 using Piranha.Repositories;
@@ -38,23 +36,26 @@ namespace Piranha.Tests.Repositories
         private const string PARAM_4 = "MyFourthParam";
         private const string PARAM_5 = "MyFifthParam";
 
-        private Guid PARAM_1_ID = Guid.NewGuid();
-        private string PARAM_1_VALUE = "My first value";
+        private readonly Guid PARAM_1_ID = Guid.NewGuid();
+        private readonly string PARAM_1_VALUE = "My first value";
         protected ICache cache;
         #endregion
 
         protected override void Init() {
             using (var api = CreateApi()) {
-                api.Params.Save(new Param() {
+                api.Params.Save(new Param
+                {
                     Id = PARAM_1_ID,
                     Key = PARAM_1,
                     Value = PARAM_1_VALUE
                 });
 
-                api.Params.Save(new Param() {
+                api.Params.Save(new Param
+                {
                     Key = PARAM_4,
                 });
-                api.Params.Save(new Param() {
+                api.Params.Save(new Param
+                {
                     Key = PARAM_5,
                 });
             }
@@ -79,7 +80,8 @@ namespace Piranha.Tests.Repositories
         [Fact]
         public void Add() {
             using (var api = CreateApi()) {
-                api.Params.Save(new Param() {
+                api.Params.Save(new Param
+                {
                     Key = PARAM_2,
                     Value = "My second value"
                 });
@@ -90,7 +92,8 @@ namespace Piranha.Tests.Repositories
         public void AddDuplicateKey() {
             using (var api = CreateApi()) {
                 Assert.Throws<ValidationException>(() =>
-                    api.Params.Save(new Param() {
+                    api.Params.Save(new Param
+                    {
                         Key = PARAM_1,
                         Value = "My duplicate value"
                     }));

@@ -23,11 +23,11 @@ namespace Piranha.Tests.Routers
     [Collection("Integration tests")]
     public class Pages : BaseTests
     {
-        private Guid SITE1_ID = Guid.NewGuid();
-        private Guid SITE2_ID = Guid.NewGuid();
-        private Guid PAGE1_ID = Guid.NewGuid();
-        private Guid PAGE2_ID = Guid.NewGuid();
-        private Guid PAGE3_ID = Guid.NewGuid();
+        private readonly Guid SITE1_ID = Guid.NewGuid();
+        private readonly Guid SITE2_ID = Guid.NewGuid();
+        private readonly Guid PAGE1_ID = Guid.NewGuid();
+        private readonly Guid PAGE2_ID = Guid.NewGuid();
+        private readonly Guid PAGE3_ID = Guid.NewGuid();
 
         [PageType(Title = "My PageType")]
         public class MyPage : Models.Page<MyPage>
@@ -45,7 +45,8 @@ namespace Piranha.Tests.Routers
                 builder.Build();
 
                 // Add site
-                var site1 = new Site() {
+                var site1 = new Site
+                {
                     Id = SITE1_ID,
                     Title = "Page Site",
                     InternalId = "PageSite",
@@ -53,7 +54,8 @@ namespace Piranha.Tests.Routers
                 };
                 api.Sites.Save(site1);
 
-                var site2 = new Site() {
+                var site2 = new Site
+                {
                     Id = SITE2_ID,
                     Title = "Page Site 2",
                     InternalId = "PageSite2",

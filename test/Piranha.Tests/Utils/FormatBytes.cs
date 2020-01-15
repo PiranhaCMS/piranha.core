@@ -8,7 +8,6 @@
  * 
  */
 
-using System;
 using System.Globalization;
 using Xunit;
 
@@ -16,7 +15,7 @@ namespace Piranha.Tests.Utils
 {
     public class FormatBytes
     {
-        private string separator;
+        private readonly string separator;
 
         public FormatBytes() {
             separator = CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator;

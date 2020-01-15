@@ -8,9 +8,7 @@
  *
  */
 
-using System.Linq;
 using Xunit;
-using Piranha.Extend;
 using Piranha.Repositories;
 using Piranha.Services;
 

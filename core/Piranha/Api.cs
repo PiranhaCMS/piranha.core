@@ -27,53 +27,53 @@ namespace Piranha
         /// <summary>
         /// Gets/sets the alias service.
         /// </summary>
-        public IAliasService Aliases { get; private set; }
+        public IAliasService Aliases { get; }
 
         /// <summary>
         /// Gets/sets the archive service.
         /// </summary>
-        public IArchiveService Archives { get; private set; }
+        public IArchiveService Archives { get; }
 
         /// <summary>
         /// Gets the media service.
         /// </summary>
         /// <returns></returns>
-        public IMediaService Media { get; private set; }
+        public IMediaService Media { get; }
 
         /// <summary>
         /// Gets the page service.
         /// </summary>
-        public IPageService Pages { get; private set; }
+        public IPageService Pages { get; }
 
         /// <summary>
         /// Gets the page type service.
         /// </summary>
-        public IPageTypeService PageTypes { get; private set; }
+        public IPageTypeService PageTypes { get; }
 
         /// <summary>
         /// Gets the param service.
         /// </summary>
-        public IParamService Params { get; private set; }
+        public IParamService Params { get; }
 
         /// <summary>
         /// Gets the post service.
         /// </summary>
-        public IPostService Posts { get; private set; }
+        public IPostService Posts { get; }
 
         /// <summary>
         /// Gets the post type service.
         /// </summary>
-        public IPostTypeService PostTypes { get; private set; }
+        public IPostTypeService PostTypes { get; }
 
         /// <summary>
         /// Gets the site service.
         /// </summary>
-        public ISiteService Sites { get; private set; }
+        public ISiteService Sites { get; }
 
         /// <summary>
         /// Gets the site type service.
         /// </summary>
-        public ISiteTypeService SiteTypes { get; private set; }
+        public ISiteTypeService SiteTypes { get; }
 
         /// <summary>
         /// Gets if the current repository has caching enabled or not.

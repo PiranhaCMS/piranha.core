@@ -154,7 +154,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the default side.
         /// </summary>
-        /// <returns>The modell, or NULL if it doesnt exist</returns>
+        /// <returns>The model, or NULL if it does not exist</returns>
         public async Task<Site> GetDefaultAsync()
         {
             var model = _cache?.Get<Site>($"Site_{Guid.Empty}");
@@ -238,9 +238,9 @@ namespace Piranha.Services
                 {
                     sitemap = await _repo.GetSitemap(id.Value, onlyPublished).ConfigureAwait(false);
 
-                    if (onlyPublished && _cache != null)
+                    if (onlyPublished)
                     {
-                        _cache.Set($"Sitemap_{id}", sitemap);
+                        _cache?.Set($"Sitemap_{id}", sitemap);
                     }
                 }
                 return sitemap;
@@ -298,9 +298,9 @@ namespace Piranha.Services
                     model.IsDefault = true;
             }
             // Call hooks & save
-            App.Hooks.OnBeforeSave<Site>(model);
+            App.Hooks.OnBeforeSave(model);
             await _repo.Save(model).ConfigureAwait(false);
-            App.Hooks.OnAfterSave<Site>(model);
+            App.Hooks.OnAfterSave(model);
 
             // Remove from cache
             RemoveFromCache(model);
@@ -400,9 +400,9 @@ namespace Piranha.Services
         public async Task DeleteAsync(Site model)
         {
             // Call hooks & delete
-            App.Hooks.OnBeforeDelete<Site>(model);
+            App.Hooks.OnBeforeDelete(model);
             await _repo.Delete(model.Id).ConfigureAwait(false);
-            App.Hooks.OnAfterDelete<Site>(model);
+            App.Hooks.OnAfterDelete(model);
 
             // Remove from cache
             RemoveFromCache(model);
@@ -433,7 +433,7 @@ namespace Piranha.Services
         {
             if (model != null)
             {
-                App.Hooks.OnLoad<Site>(model);
+                App.Hooks.OnLoad(model);
 
                 if (_cache != null)
                 {
@@ -456,7 +456,7 @@ namespace Piranha.Services
             if (model != null)
             {
                 // Initialize model
-                if (typeof(Models.IDynamicModel).IsAssignableFrom(model.GetType()))
+                if (model is IDynamicModel)
                 {
                     _factory.InitDynamic((Models.DynamicSiteContent)model, App.SiteTypes.GetById(model.TypeId));
                 }
@@ -465,7 +465,7 @@ namespace Piranha.Services
                     _factory.Init(model, App.SiteTypes.GetById(model.TypeId));
                 }
 
-                App.Hooks.OnLoad<Models.SiteContentBase>(model);
+                App.Hooks.OnLoad(model);
 
                 if (_cache != null && !(model is DynamicSiteContent))
                 {

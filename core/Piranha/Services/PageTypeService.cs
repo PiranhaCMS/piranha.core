@@ -70,9 +70,9 @@ namespace Piranha.Services
             Validator.ValidateObject(model, context, true);
 
             // Call hooks & save
-            App.Hooks.OnBeforeSave<PageType>(model);
+            App.Hooks.OnBeforeSave(model);
             await _repo.Save(model).ConfigureAwait(false);
-            App.Hooks.OnAfterSave<PageType>(model);
+            App.Hooks.OnAfterSave(model);
 
             // Clear cache
             _cache?.Remove("Piranha_PageTypes");
@@ -99,9 +99,9 @@ namespace Piranha.Services
         public async Task DeleteAsync(PageType model)
         {
             // Call hooks & delete
-            App.Hooks.OnBeforeDelete<PageType>(model);
+            App.Hooks.OnBeforeDelete(model);
             await _repo.Delete(model.Id).ConfigureAwait(false);
-            App.Hooks.OnAfterDelete<PageType>(model);
+            App.Hooks.OnAfterDelete(model);
 
             // Clear cache
             _cache?.Remove("Piranha_PageTypes");

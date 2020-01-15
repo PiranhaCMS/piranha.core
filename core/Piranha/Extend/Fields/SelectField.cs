@@ -23,17 +23,17 @@ namespace Piranha.Extend.Fields
         /// <summary>
         /// The static list of available items.
         /// </summary>
-        private static List<SelectFieldItem> _items = new List<SelectFieldItem>();
+        private static readonly List<SelectFieldItem> _items = new List<SelectFieldItem>();
 
         /// <summary>
         /// Initialization mutex.
         /// </summary>
-        private static object Mutex = new object();
+        private static readonly object Mutex = new object();
 
         /// <summary>
         /// The initialization state.
         /// </summary>
-        private static bool IsInitialized = false;
+        private static bool IsInitialized;
 
         /// <summary>
         /// Gets/sets the selected value.
@@ -137,7 +137,8 @@ namespace Piranha.Extend.Fields
             {
                 return field1.Equals(field2);
             }
-            else if ((object)field1 == null && (object)field2 == null)
+
+            if ((object)field1 == null && (object)field2 == null)
             {
                 return true;
             }
@@ -157,8 +158,8 @@ namespace Piranha.Extend.Fields
 
         /// <summary>
         /// Gets the display title for the given enum. If the DisplayAttribute
-        /// is present it's description is returned, otherwise the string r
-        /// epresentation of the enum.
+        /// is present it's description is returned, otherwise the string 
+        /// representation of the enum.
         /// </summary>
         /// <param name="val">The enum value</param>
         /// <returns>The display title</returns>

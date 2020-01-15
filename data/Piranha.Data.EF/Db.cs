@@ -25,7 +25,7 @@ namespace Piranha
         /// <summary>
         /// The object mutext used for initializing the context.
         /// </summary>
-        private static object Mutex = new object();
+        private static readonly object Mutex = new object();
 
         /// <summary>
         /// Gets/sets the alias set.

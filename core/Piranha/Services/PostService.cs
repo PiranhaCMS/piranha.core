@@ -705,7 +705,7 @@ namespace Piranha.Services
                     _factory.Init(model, App.PostTypes.GetById(model.TypeId));
                 }
 
-                App.Hooks.OnLoad<PostBase>(model);
+                App.Hooks.OnLoad(model);
 
                 // Never cache drafts, dynamic or simple instances
                 if (!isDraft && _cache != null && !(model is DynamicPost))

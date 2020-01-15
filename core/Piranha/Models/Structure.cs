@@ -61,16 +61,14 @@ namespace Piranha.Models
             {
                 if (item.Id == id)
                 {
-                    return (TThis)item.Items;
+                    return item.Items;
                 }
-                else
-                {
-                    var partial = GetPartialRecursive(item.Items, id);
 
-                    if (partial != null)
-                    {
-                        return (TThis)partial;
-                    }
+                var partial = GetPartialRecursive(item.Items, id);
+
+                if (partial != null)
+                {
+                    return partial;
                 }
             }
             return null;
@@ -93,16 +91,14 @@ namespace Piranha.Models
                         item
                     };
                 }
-                else
+
+                var crumb = GetBreadcrumbRecursive(item.Items, id);
+
+                if (crumb != null)
                 {
-                    var crumb = GetBreadcrumbRecursive(item.Items, id);
+                    crumb.Insert(0, item);
 
-                    if (crumb != null)
-                    {
-                        crumb.Insert(0, item);
-
-                        return crumb;
-                    }
+                    return crumb;
                 }
             }
             return null;

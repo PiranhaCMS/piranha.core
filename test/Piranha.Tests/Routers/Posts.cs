@@ -23,16 +23,16 @@ namespace Piranha.Tests.Routers
     [Collection("Integration tests")]
     public class Posts : BaseTests
     {
-        private Guid SITE1_ID = Guid.NewGuid();
-        private Guid SITE2_ID = Guid.NewGuid();
-        private Guid PAGE1_ID = Guid.NewGuid();
-        private Guid CATEGORY1_ID = Guid.NewGuid();
-        private Guid POST1_ID = Guid.NewGuid();
-        private Guid PAGE2_ID = Guid.NewGuid();
-        private Guid CATEGORY2_ID = Guid.NewGuid();
-        private Guid POST2_ID = Guid.NewGuid();
-        private Guid TAG1_ID = Guid.NewGuid();
-        private Guid TAG2_ID = Guid.NewGuid();
+        private readonly Guid SITE1_ID = Guid.NewGuid();
+        private readonly Guid SITE2_ID = Guid.NewGuid();
+        private readonly Guid PAGE1_ID = Guid.NewGuid();
+        private readonly Guid CATEGORY1_ID = Guid.NewGuid();
+        private readonly Guid POST1_ID = Guid.NewGuid();
+        private readonly Guid PAGE2_ID = Guid.NewGuid();
+        private readonly Guid CATEGORY2_ID = Guid.NewGuid();
+        private readonly Guid POST2_ID = Guid.NewGuid();
+        private readonly Guid TAG1_ID = Guid.NewGuid();
+        private readonly Guid TAG2_ID = Guid.NewGuid();
 
         [PageType(Title = "My PageType", IsArchive = true)]
         public class MyPage : Models.Page<MyPage>
@@ -59,7 +59,8 @@ namespace Piranha.Tests.Routers
                 postBuilder.Build();
 
                 // Add site
-                var site1 = new Site() {
+                var site1 = new Site
+                {
                     Id = SITE1_ID,
                     Title = "Page Site",
                     InternalId = "PostSite",
@@ -67,7 +68,8 @@ namespace Piranha.Tests.Routers
                 };
                 api.Sites.Save(site1);
 
-                var site2 = new Site() {
+                var site2 = new Site
+                {
                     Id = SITE2_ID,
                     Title = "Page Site 2",
                     InternalId = "PostSite2",
@@ -92,12 +94,14 @@ namespace Piranha.Tests.Routers
                 api.Pages.Save(page2);
 
                 // Add categories
-                var category1 = new Models.Taxonomy() {
+                var category1 = new Models.Taxonomy
+                {
                     Id = CATEGORY1_ID,
                     Title = "Default category"
                 };
 
-                var category2 = new Models.Taxonomy() {
+                var category2 = new Models.Taxonomy
+                {
                     Id = CATEGORY2_ID,
                     Title = "Default category"
                 };

@@ -8,15 +8,13 @@
  * 
  */
 
-using System;
-using System.Linq;
 using Xunit;
 
 namespace Piranha.Tests
 {
     public class Permissions
     {
-        private Piranha.Security.PermissionManager mgr;
+        private readonly Piranha.Security.PermissionManager mgr;
 
         public Permissions() {
             mgr = new Piranha.Security.PermissionManager();

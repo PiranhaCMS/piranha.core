@@ -9,7 +9,6 @@
  */
 
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 using Piranha.Models;
 using Piranha.Repositories;

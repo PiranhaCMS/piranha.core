@@ -86,19 +86,17 @@ namespace Piranha.Cache
                     formatter.Serialize(stream, obj);
                     return stream.ToArray();
                 }
-                else
-                {
-                    // First, serialize the object to JSON.
-                    var settings = new JsonSerializerSettings
-                    {
-                        TypeNameHandling = TypeNameHandling.All
-                    };
-                    var json = JsonConvert.SerializeObject(obj, settings);
 
-                    // Next lets convert the json to a byte array
-                    formatter.Serialize(stream, json);
-                    return stream.ToArray();
-                }
+                // First, serialize the object to JSON.
+                var settings = new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.All
+                };
+                var json = JsonConvert.SerializeObject(obj, settings);
+
+                // Next lets convert the json to a byte array
+                formatter.Serialize(stream, json);
+                return stream.ToArray();
             }
         }
 
@@ -122,18 +120,16 @@ namespace Piranha.Cache
                 {
                     return (T)formatter.Deserialize(stream);
                 }
-                else
-                {
-                    // First lets decode the byte array into a string
-                    var json = (string)formatter.Deserialize(stream);
 
-                    // Next deserialize the json into an object
-                    var settings = new JsonSerializerSettings
-                    {
-                        TypeNameHandling = TypeNameHandling.All
-                    };
-                    return JsonConvert.DeserializeObject<T>(json, settings);
-                }
+                // First lets decode the byte array into a string
+                var json = (string)formatter.Deserialize(stream);
+
+                // Next deserialize the json into an object
+                var settings = new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.All
+                };
+                return JsonConvert.DeserializeObject<T>(json, settings);
             }
         }
 
@@ -143,13 +139,11 @@ namespace Piranha.Cache
             {
                 return serializable;
             }
-            else
-            {
-                var attr = type.GetCustomAttribute<SerializableAttribute>();
-                _types[type] = attr != null;
 
-                return attr != null;
-            }
+            var attr = type.GetCustomAttribute<SerializableAttribute>();
+            _types[type] = attr != null;
+
+            return attr != null;
         }
     }
 }

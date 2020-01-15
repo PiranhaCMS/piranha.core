@@ -21,7 +21,7 @@ namespace Piranha.Azure
         /// <summary>
         /// The container in which to store media.
         /// </summary>
-        private CloudBlobContainer _container;
+        private readonly CloudBlobContainer _container;
 
         /// <summary>
         /// Default constructor.

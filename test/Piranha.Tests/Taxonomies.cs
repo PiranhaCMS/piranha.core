@@ -9,10 +9,6 @@
  */
 
 using System;
-using Piranha.Extend;
-using Piranha.Extend.Fields;
-using Piranha.Extend.Serializers;
-using Piranha.Runtime;
 using Xunit;
 
 namespace Piranha.Tests

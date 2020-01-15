@@ -36,7 +36,7 @@ namespace Piranha
         /// <summary>
         /// If the app has been initialized.
         /// </summary>
-        private static volatile bool _isInitialized = false;
+        private static volatile bool _isInitialized;
 
         /// <summary>
         /// The currently registered blocks.
@@ -109,7 +109,7 @@ namespace Piranha
         public static AppFieldList Fields => Instance._fields;
 
         /// <summary>
-        /// Gets the currently registred modules.
+        /// Gets the currently registered modules.
         /// </summary>
         public static AppModuleList Modules => Instance._modules;
 
@@ -150,8 +150,8 @@ namespace Piranha
         /// </summary>
         public static Cache.CacheLevel CacheLevel
         {
-            get { return Instance._cacheLevel; }
-            set { Instance._cacheLevel = value; }
+            get => Instance._cacheLevel;
+            set => Instance._cacheLevel = value;
         }
 
         /// <summary>

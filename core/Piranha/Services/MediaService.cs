@@ -266,9 +266,9 @@ namespace Piranha.Services
                 }
             }
 
-            App.Hooks.OnBeforeSave<Media>(model);
+            App.Hooks.OnBeforeSave(model);
             await _repo.Save(model).ConfigureAwait(false);
-            App.Hooks.OnAfterSave<Media>(model);
+            App.Hooks.OnAfterSave(model);
 
             RemoveFromCache(model);
         }
@@ -291,9 +291,9 @@ namespace Piranha.Services
             Validator.ValidateObject(model, context, true);
 
             // Call hooks & save
-            App.Hooks.OnBeforeSave<MediaFolder>(model);
+            App.Hooks.OnBeforeSave(model);
             await _repo.SaveFolder(model).ConfigureAwait(false);
-            App.Hooks.OnAfterSave<MediaFolder>(model);
+            App.Hooks.OnAfterSave(model);
 
             RemoveFromCache(model);
             RemoveStructureFromCache();
@@ -457,10 +457,10 @@ namespace Piranha.Services
                     }
 
                     // Call hooks & save
-                    App.Hooks.OnBeforeDelete<Media>(media);
+                    App.Hooks.OnBeforeDelete(media);
                     await _repo.Delete(id).ConfigureAwait(false);
                     await session.DeleteAsync(media.Id + "-" + media.Filename).ConfigureAwait(false);
-                    App.Hooks.OnAfterDelete<Media>(media);
+                    App.Hooks.OnAfterDelete(media);
                 }
                 RemoveFromCache(media);
             }
@@ -495,9 +495,9 @@ namespace Piranha.Services
                 // {
 
                 // Call hooks & delete
-                App.Hooks.OnBeforeDelete<MediaFolder>(folder);
+                App.Hooks.OnBeforeDelete(folder);
                 await _repo.DeleteFolder(id).ConfigureAwait(false);
-                App.Hooks.OnAfterDelete<MediaFolder>(folder);
+                App.Hooks.OnAfterDelete(folder);
 
                 RemoveFromCache(folder);
                 //}
@@ -524,7 +524,7 @@ namespace Piranha.Services
                 // Get public url
                 model.PublicUrl = GetPublicUrl(model);
 
-                App.Hooks.OnLoad<Media>(model);
+                App.Hooks.OnLoad(model);
 
                 _cache?.Set(model.Id.ToString(), model);
             }
@@ -538,7 +538,7 @@ namespace Piranha.Services
         {
             if (model != null)
             {
-                App.Hooks.OnLoad<MediaFolder>(model);
+                App.Hooks.OnLoad(model);
 
                 _cache?.Set(model.Id.ToString(), model);
             }

@@ -29,7 +29,7 @@ namespace Piranha.Runtime
             /// <param name="hook">The hook</param>
             public void RegisterOnLoad(ModelDelegate<T> hook)
             {
-                App.Hooks.RegisterOnLoad<T>(hook);
+                App.Hooks.RegisterOnLoad(hook);
             }
 
             /// <summary>
@@ -39,7 +39,7 @@ namespace Piranha.Runtime
             /// <param name="hook">The hook</param>
             public void RegisterOnBeforeSave(ModelDelegate<T> hook)
             {
-                App.Hooks.RegisterOnBeforeSave<T>(hook);
+                App.Hooks.RegisterOnBeforeSave(hook);
             }
 
             /// <summary>
@@ -49,7 +49,7 @@ namespace Piranha.Runtime
             /// <param name="hook">The hook</param>
             public void RegisterOnAfterSave(ModelDelegate<T> hook)
             {
-                App.Hooks.RegisterOnAfterSave<T>(hook);
+                App.Hooks.RegisterOnAfterSave(hook);
             }
 
             /// <summary>
@@ -59,7 +59,7 @@ namespace Piranha.Runtime
             /// <param name="hook">The hook</param>
             public void RegisterOnBeforeDelete(ModelDelegate<T> hook)
             {
-                App.Hooks.RegisterOnBeforeDelete<T>(hook);
+                App.Hooks.RegisterOnBeforeDelete(hook);
             }
 
             /// <summary>
@@ -69,7 +69,7 @@ namespace Piranha.Runtime
             /// <param name="hook">The hook</param>
             public void RegisterOnAfterDelete(ModelDelegate<T> hook)
             {
-                App.Hooks.RegisterOnAfterDelete<T>(hook);
+                App.Hooks.RegisterOnAfterDelete(hook);
             }
 
             /// <summary>
@@ -112,47 +112,47 @@ namespace Piranha.Runtime
         /// <summary>
         /// Gets the hooks available for aliases.
         /// </summary>
-        public RepositoryHooks<Alias> Alias { get; private set; } = new RepositoryHooks<Alias>();
+        public RepositoryHooks<Alias> Alias { get; } = new RepositoryHooks<Alias>();
 
         /// <summary>
         /// Gets the hooks available for media.
         /// </summary>
-        public RepositoryHooks<Media> Media { get; private set; } = new RepositoryHooks<Media>();
+        public RepositoryHooks<Media> Media { get; } = new RepositoryHooks<Media>();
 
         /// <summary>
         /// Gets the hooks available for media folders.
         /// </summary>
-        public RepositoryHooks<MediaFolder> MediaFolder { get; private set; } = new RepositoryHooks<MediaFolder>();
+        public RepositoryHooks<MediaFolder> MediaFolder { get; } = new RepositoryHooks<MediaFolder>();
 
         /// <summary>
         /// Gets the hooks available for pages.
         /// </summary>
-        public RepositoryHooks<PageBase> Pages { get; private set; } = new RepositoryHooks<PageBase>();
+        public RepositoryHooks<PageBase> Pages { get; } = new RepositoryHooks<PageBase>();
 
         /// <summary>
         /// Gets the hooks available for params.
         /// </summary>
-        public RepositoryHooks<Param> Param { get; private set; } = new RepositoryHooks<Param>();
+        public RepositoryHooks<Param> Param { get; } = new RepositoryHooks<Param>();
 
         /// <summary>
         /// Gets the hooks available for posts.
         /// </summary>
-        public RepositoryHooks<PostBase> Posts { get; private set; } = new RepositoryHooks<PostBase>();
+        public RepositoryHooks<PostBase> Posts { get; } = new RepositoryHooks<PostBase>();
 
         /// <summary>
         /// Gets the hooks available for sites.
         /// </summary>
-        public RepositoryHooks<Site> Site { get; private set; } = new RepositoryHooks<Site>();
+        public RepositoryHooks<Site> Site { get; } = new RepositoryHooks<Site>();
 
         /// <summary>
         /// Gets the hooks available for sites.
         /// </summary>
-        public RepositoryHooks<SiteContentBase> SiteContent { get; private set; } = new RepositoryHooks<SiteContentBase>();
+        public RepositoryHooks<SiteContentBase> SiteContent { get; } = new RepositoryHooks<SiteContentBase>();
 
         /// <summary>
         /// Gets the hook for slug generation.
         /// </summary>
-        public SlugDelegate OnGenerateSlug;
+        public SlugDelegate OnGenerateSlug { get; }
 
         /// <summary>
         /// Gets the hook for generating the public sitemap.

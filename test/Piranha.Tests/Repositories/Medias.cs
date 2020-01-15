@@ -43,7 +43,8 @@ namespace Piranha.Tests.Repositories
                 Piranha.App.Init(api);
 
                 // Add media folders
-                var folder1 = new MediaFolder() {
+                var folder1 = new MediaFolder
+                {
                     Name = "Images"
                 };
                 api.Media.SaveFolder(folder1);
@@ -51,7 +52,8 @@ namespace Piranha.Tests.Repositories
 
                 // Add media
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png")) {
-                    var image1 = new Models.StreamMediaContent() {
+                    var image1 = new Models.StreamMediaContent
+                    {
                         Filename = "HLD_Screenshot_01_mech_1080.png",
                         Data = stream
                     };
@@ -61,7 +63,8 @@ namespace Piranha.Tests.Repositories
                 }
 
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_rise_1080.png")) {
-                    var image2 = new Models.StreamMediaContent() {
+                    var image2 = new Models.StreamMediaContent
+                    {
                         FolderId = folder1Id,
                         Filename = "HLD_Screenshot_01_rise_1080.png",
                         Data = stream
@@ -72,7 +75,8 @@ namespace Piranha.Tests.Repositories
                 }
 
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_robot_1080.png")) {
-                    var image3 = new Models.StreamMediaContent() {
+                    var image3 = new Models.StreamMediaContent
+                    {
                         Filename = "HLD_Screenshot_01_robot_1080.png",
                         Data = stream
                     };
@@ -162,7 +166,8 @@ namespace Piranha.Tests.Repositories
         public void Insert() {
             using (var api = CreateApi()) {
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_BETA_entrance.png")) {
-                    var image = new Models.StreamMediaContent() {
+                    var image = new Models.StreamMediaContent
+                    {
                         Filename = "HLD_Screenshot_BETA_entrance.png",
                         Data = stream
                     };

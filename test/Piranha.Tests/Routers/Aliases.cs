@@ -9,7 +9,6 @@
  */
 
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Piranha.Models;
@@ -21,13 +20,14 @@ namespace Piranha.Tests.Routers
     [Collection("Integration tests")]
     public class Aliases : BaseTests
     {
-        private Guid SITE1_ID = Guid.NewGuid();
-        private Guid SITE2_ID = Guid.NewGuid();
+        private readonly Guid SITE1_ID = Guid.NewGuid();
+        private readonly Guid SITE2_ID = Guid.NewGuid();
 
         protected override void Init() {
             using (var api = CreateApi()) {
                 // Add site
-                var site1 = new Site() {
+                var site1 = new Site
+                {
                     Id = SITE1_ID,
                     Title = "Alias Site",
                     InternalId = "AliasSite",
@@ -35,7 +35,8 @@ namespace Piranha.Tests.Routers
                 };
                 api.Sites.Save(site1);
 
-                var site2 = new Site() {
+                var site2 = new Site
+                {
                     Id = SITE2_ID,
                     Title = "Alias Site 2",
                     InternalId = "AliasSite2",
@@ -45,13 +46,15 @@ namespace Piranha.Tests.Routers
                 api.Sites.Save(site2);
 
                 // Add aliases
-                api.Aliases.Save(new Alias() {
+                api.Aliases.Save(new Alias
+                {
                     Id = Guid.NewGuid(),
                     SiteId = SITE1_ID,
                     AliasUrl = "/old-url",
                     RedirectUrl = "/new-url"
                 });
-                api.Aliases.Save(new Alias() {
+                api.Aliases.Save(new Alias
+                {
                     Id = Guid.NewGuid(),
                     SiteId = SITE2_ID,
                     AliasUrl = "/old-url",

@@ -58,45 +58,43 @@ namespace Piranha
                 // Call the registered slug generation
                 return App.Hooks.OnGenerateSlug(str);
             }
-            else
-            {
-                // Trim & make lower case
-                var slug = str.Trim().ToLower();
 
-                // Convert culture specific characters
-                slug = slug
-                    .Replace("å", "a")
-                    .Replace("ä", "a")
-                    .Replace("á", "a")
-                    .Replace("à", "a")
-                    .Replace("ö", "o")
-                    .Replace("ó", "o")
-                    .Replace("ò", "o")
-                    .Replace("é", "e")
-                    .Replace("è", "e")
-                    .Replace("í", "i")
-                    .Replace("ì", "i");
+            // Trim & make lower case
+            var slug = str.Trim().ToLower();
 
-                // Remove special characters
-                slug = Regex.Replace(slug, @"[^a-z0-9-/ ]", "").Replace("--", "-");
+            // Convert culture specific characters
+            slug = slug
+                .Replace("å", "a")
+                .Replace("ä", "a")
+                .Replace("á", "a")
+                .Replace("à", "a")
+                .Replace("ö", "o")
+                .Replace("ó", "o")
+                .Replace("ò", "o")
+                .Replace("é", "e")
+                .Replace("è", "e")
+                .Replace("í", "i")
+                .Replace("ì", "i");
 
-                // Remove whitespaces
-                slug = Regex.Replace(slug.Replace("-", " "), @"\s+", " ").Replace(" ", "-");
+            // Remove special characters
+            slug = Regex.Replace(slug, @"[^a-z0-9-/ ]", "").Replace("--", "-");
 
-                // Remove slash if non-hierarchical
-                if (!hierarchical)
-                    slug = slug.Replace("/", "-");
+            // Remove whitespaces
+            slug = Regex.Replace(slug.Replace("-", " "), @"\s+", " ").Replace(" ", "-");
 
-                // Remove multiple dashes
-                slug = Regex.Replace(slug, @"[-]+", "-");
+            // Remove slash if non-hierarchical
+            if (!hierarchical)
+                slug = slug.Replace("/", "-");
 
-                // Remove leading & trailing dashes
-                if (slug.EndsWith("-"))
-                    slug = slug.Substring(0, slug.LastIndexOf("-"));
-                if (slug.StartsWith("-"))
-                    slug = slug.Substring(Math.Min(slug.IndexOf("-") + 1, slug.Length));
-                return slug;
-            }
+            // Remove multiple dashes
+            slug = Regex.Replace(slug, @"[-]+", "-");
+
+            // Remove leading & trailing dashes
+            if (slug.EndsWith("-"))
+                slug = slug.Substring(0, slug.LastIndexOf("-"));
+            if (slug.StartsWith("-"))
+                slug = slug.Substring(Math.Min(slug.IndexOf("-") + 1, slug.Length));
+            return slug;
         }
 
         /// <summary>

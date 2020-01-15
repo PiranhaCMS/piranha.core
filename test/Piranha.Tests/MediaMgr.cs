@@ -8,19 +8,14 @@
  *
  */
 
-using Piranha.Extend;
 using Piranha.Runtime;
-using Piranha.Services;
-using System;
-using System.Linq;
-using System.Text;
 using Xunit;
 
 namespace Piranha.Tests
 {
     public class MediaMgr : BaseTests
     {
-        private MediaManager mgr = new MediaManager();
+        private readonly MediaManager mgr = new MediaManager();
 
         /// <summary>
         /// Sets up & initializes the tests.

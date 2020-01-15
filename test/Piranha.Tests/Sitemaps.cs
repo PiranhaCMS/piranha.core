@@ -10,7 +10,6 @@
 
 using Piranha.Models;
 using System;
-using System.Linq;
 using Xunit;
 
 namespace Piranha.Tests
@@ -18,27 +17,33 @@ namespace Piranha.Tests
     public class Sitemaps : BaseTests
     {
         private Sitemap sitemap;
-        private Guid id_1 = Guid.NewGuid();
-        private Guid id_2 = Guid.NewGuid();
+        private readonly Guid id_1 = Guid.NewGuid();
+        private readonly Guid id_2 = Guid.NewGuid();
 
         protected override void Init() {
             sitemap = new Sitemap();
 
-            sitemap.Add(new SitemapItem() {
+            sitemap.Add(new SitemapItem
+            {
                 Id = id_1,
                 Title = "No navigation title"
             });
-            sitemap[0].Items.Add(new SitemapItem() {
+            sitemap[0].Items.Add(new SitemapItem
+            {
                 Id = id_2,
                 Title = "Has navigation title",
                 NavigationTitle = "Navigation title"
             });
-            sitemap[0].Items.Add(new SitemapItem() {
+            sitemap[0].Items.Add(new SitemapItem
+            {
                 Id = Guid.NewGuid()
             });
         }
 
-        protected override void Cleanup() {}
+        protected override void Cleanup()
+        {
+            //No need to clean up
+        }
 
         [Fact]
         public void GetNoNavigationTitle() {

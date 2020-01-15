@@ -9,8 +9,6 @@
  */
 
 using System;
-using System.Data.SqlClient;
-using System.Linq;
 using Xunit;
 using Piranha.Models;
 using Piranha.Repositories;
@@ -38,7 +36,7 @@ namespace Piranha.Tests.Hooks
                 Piranha.App.Init(api);
 
                 // Create test param
-                api.Sites.Save(new Site()
+                api.Sites.Save(new Site
                 {
                     Id = ID,
                     Title = TITLE

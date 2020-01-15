@@ -27,7 +27,7 @@ namespace Piranha.Cache
         /// <summary>
         /// If returned objects should be cloned.
         /// </summary>
-        private readonly bool _clone = false;
+        private readonly bool _clone;
 
         /// <summary>
         /// Gets the model with the specified key from cache.
@@ -45,7 +45,7 @@ namespace Piranha.Cache
                 {
                     return (T)value;
                 }
-                return Utils.DeepClone<T>((T)value);
+                return Utils.DeepClone((T)value);
             }
             return default(T);
         }

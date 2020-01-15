@@ -111,9 +111,9 @@ namespace Piranha.Services
             }
 
             // Call hooks & save
-            App.Hooks.OnBeforeSave<Param>(model);
+            App.Hooks.OnBeforeSave(model);
             await _repo.Save(model).ConfigureAwait(false);
-            App.Hooks.OnAfterSave<Param>(model);
+            App.Hooks.OnAfterSave(model);
 
             // Remove from cache
             RemoveFromCache(model);
@@ -140,9 +140,9 @@ namespace Piranha.Services
         public async Task DeleteAsync(Param model)
         {
             // Call hooks & delete
-            App.Hooks.OnBeforeDelete<Param>(model);
+            App.Hooks.OnBeforeDelete(model);
             await _repo.Delete(model.Id).ConfigureAwait(false);
-            App.Hooks.OnAfterDelete<Param>(model);
+            App.Hooks.OnAfterDelete(model);
 
             // Remove from cache
             RemoveFromCache(model);
@@ -156,7 +156,7 @@ namespace Piranha.Services
         {
             if (model != null)
             {
-                App.Hooks.OnLoad<Param>(model);
+                App.Hooks.OnLoad(model);
 
                 if (_cache != null)
                 {

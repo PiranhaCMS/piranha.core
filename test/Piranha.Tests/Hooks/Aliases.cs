@@ -9,8 +9,6 @@
  */
 
 using System;
-using System.Data.SqlClient;
-using System.Linq;
 using Xunit;
 using Piranha.Models;
 using Piranha.Repositories;
