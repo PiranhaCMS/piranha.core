@@ -122,17 +122,17 @@ namespace Piranha.AspNetCore.Services
         public IMediaHelper Media { get; internal set; }
 
         /// <summary>
-        /// Gets the currently requested URL.
+        /// Gets/sets the currently requested URL.
         /// </summary>
         public string Url { get; set; }
 
         /// <summary>
-        /// Gets the requested hostname
+        /// Gets/sets the requested hostname
         /// </summary>
         public string Hostname { get; set; }
 
         /// <summary>
-        /// Gets the id of the currently requested page.
+        /// Gets/sets the id of the currently requested page.
         /// </summary>
         public Guid PageId { get; set; }
 

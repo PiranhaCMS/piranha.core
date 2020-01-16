@@ -33,17 +33,17 @@ namespace Piranha.AspNetCore.Services
         IMediaHelper Media { get; }
 
         /// <summary>
-        /// Gets the currently requested URL.
+        /// Gets/sets the currently requested URL.
         /// </summary>
         string Url { get; set; }
 
         /// <summary>
-        /// Gets the requested hostname
+        /// Gets/sets the requested hostname
         /// </summary>
         string Hostname { get; set; }
 
         /// <summary>
-        /// Gets the id of the currently requested page.
+        /// Gets/sets the id of the currently requested page.
         /// </summary>
         Guid PageId { get; set; }
 
