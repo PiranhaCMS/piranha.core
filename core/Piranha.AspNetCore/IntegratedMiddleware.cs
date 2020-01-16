@@ -61,17 +61,21 @@ namespace Piranha.AspNetCore
                 //
                 Site site = null;
 
+                var hostname = context.Request.Host.Host;
+
                 if (_config.UseSiteRouting)
                 {
                     // Try to get the requested site by hostname & prefix
                     if (segments.Length > 0)
                     {
-                        site = await api.Sites.GetByHostnameAsync($"{context.Request.Host.Host}/{segments[0]}")
+                        var prefixedHostname = $"{hostname}/{segments[0]}";
+                        site = await api.Sites.GetByHostnameAsync(prefixedHostname)
                             .ConfigureAwait(false);
 
                         if (site != null)
                         {
                             context.Request.Path = "/" + string.Join("/", segments.Skip(1));
+                            hostname = prefixedHostname;
                             pos = 1;
                         }
                     }
@@ -105,6 +109,9 @@ namespace Piranha.AspNetCore
                         CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = cultureInfo;
                     }
                 }
+
+                // Store hostname
+                service.Hostname = hostname;
 
                 //
                 // Check if we shouldn't handle empty requests for start page
