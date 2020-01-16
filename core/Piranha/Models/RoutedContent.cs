@@ -52,5 +52,10 @@ namespace Piranha.Models
         /// Gets/sets the published date.
         /// </summary>
         public DateTime? Published { get; set; }
+
+        /// <summary>
+        /// Checks of the current content is published.
+        /// </summary>
+        public bool IsPublished => Published.HasValue && Published.Value <= DateTime.Now;
     }
 }

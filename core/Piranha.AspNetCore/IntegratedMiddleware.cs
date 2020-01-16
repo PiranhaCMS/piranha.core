@@ -161,7 +161,12 @@ namespace Piranha.AspNetCore
                 {
                     pageType = App.PageTypes.GetById(page.TypeId);
                     service.PageId = page.Id;
-                    service.CurrentPage = page;
+
+                    // Only cache published pages
+                    if (page.IsPublished)
+                    {
+                        service.CurrentPage = page;
+                    }
                 }
 
                 //
@@ -185,7 +190,12 @@ namespace Piranha.AspNetCore
                     if (post != null)
                     {
                         App.PostTypes.GetById(post.TypeId);
-                        service.CurrentPost = post;
+
+                        // Onlyc cache published posts
+                        if (post.IsPublished)
+                        {
+                            service.CurrentPost = post;
+                        }
                     }
                 }
 
