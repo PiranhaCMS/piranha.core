@@ -152,12 +152,12 @@ namespace Piranha.Runtime
         /// <summary>
         /// Gets the hook for slug generation.
         /// </summary>
-        public SlugDelegate OnGenerateSlug { get; }
+        public SlugDelegate OnGenerateSlug { get; set; }
 
         /// <summary>
         /// Gets the hook for generating the public sitemap.
         /// </summary>
-        public SitemapDelegate OnGenerateSitemap;
+        public SitemapDelegate OnGenerateSitemap { get; set; }
 
         /// <summary>
         /// Removes all hooks for the specified model type.
