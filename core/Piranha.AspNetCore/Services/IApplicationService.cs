@@ -38,6 +38,11 @@ namespace Piranha.AspNetCore.Services
         string Url { get; set; }
 
         /// <summary>
+        /// Gets the requested hostname
+        /// </summary>
+        string Hostname { get; set; }
+
+        /// <summary>
         /// Gets the id of the currently requested page.
         /// </summary>
         Guid PageId { get; set; }
