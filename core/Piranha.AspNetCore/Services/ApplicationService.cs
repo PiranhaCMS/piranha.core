@@ -122,12 +122,17 @@ namespace Piranha.AspNetCore.Services
         public IMediaHelper Media { get; internal set; }
 
         /// <summary>
-        /// Gets the currently requested URL.
+        /// Gets/sets the currently requested URL.
         /// </summary>
         public string Url { get; set; }
 
         /// <summary>
-        /// Gets the id of the currently requested page.
+        /// Gets/sets the requested hostname
+        /// </summary>
+        public string Hostname { get; set; }
+
+        /// <summary>
+        /// Gets/sets the id of the currently requested page.
         /// </summary>
         public Guid PageId { get; set; }
 
@@ -158,6 +163,8 @@ namespace Piranha.AspNetCore.Services
         /// </summary>
         public async Task InitAsync(HttpContext context)
         {
+            var hostname = context.Request.Host.Host;
+
             // Gets the current site info
             if (!context.Request.Path.Value.StartsWith("/manager/"))
             {
@@ -168,10 +175,14 @@ namespace Piranha.AspNetCore.Services
                 if (!string.IsNullOrEmpty(url) && url.Length > 1)
                 {
                     var segments = url.Substring(1).Split(new char[] { '/' });
-                    site = await Api.Sites.GetByHostnameAsync($"{context.Request.Host.Host}/{segments[0]}");
+                    var prefixedHostname = $"{context.Request.Host.Host}/{segments[0]}";
+                    site = await Api.Sites.GetByHostnameAsync(prefixedHostname);
 
                     if (site != null)
+                    {
                         context.Request.Path = "/" + string.Join("/", segments.Skip(1));
+                        hostname = prefixedHostname;
+                    }
                 }
 
                 // Try to get the requested site by hostname
@@ -193,6 +204,7 @@ namespace Piranha.AspNetCore.Services
 
             // Get the current url
             Url = context.Request.Path.Value;
+            Hostname = hostname;
         }
     }
 }
