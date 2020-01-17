@@ -29,12 +29,12 @@ Piranha is currently built for `NetStandard 2.0` and `NetCoreApp 3.1` and uses i
 
 ## Getting started
 
-#### Prerequisites
+### Prerequisites
 
 * [.NET Core SDK 3.1.100](https://dotnet.microsoft.com/download/dotnet-core/3.1)
 * An IDE or Editor of your choice
 
-#### Get the latest source code and get going
+### Get the latest source code and get going
 
     > git clone https://github.com/PiranhaCMS/piranha.core.git
     > cd piranha.core
@@ -43,18 +43,17 @@ Piranha is currently built for `NetStandard 2.0` and `NetCoreApp 3.1` and uses i
     > cd examples/MvcWeb
     > dotnet run
 
-#### Log into the Manager
+### Log into the Manager
 
-The default credentials for the example projects as
-well as the templates are:
+The manager interface can be found at the URL `~/manager` with the default credentials:
 
     admin / password
 
-For production scenarios we advice you to remove this
-user, or change the password **and** update the password
-strength policy.
+For production scenarios we advice you to remove this user, or change the password 
+**and** update the password strength policy. More information on this can be found in
+the official documentation [here](http://piranhacms.org/docs/architecture/authentication/identity).
 
-#### Build and update javascript/css assets
+### Build and update javascript/css assets
 
     > cd piranha.core/core/Piranha.Manager
     > npm install
@@ -63,7 +62,7 @@ strength policy.
     > npm install
     > bower install
 
-#### Visual Studio users
+### Visual Studio users
 
 For people running Visual Studio 2017 almost all of the above steps will be handled by the IDE. Just get the source code, open the `.sln` file and you're good to go.
 
