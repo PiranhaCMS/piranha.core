@@ -119,6 +119,11 @@ namespace Piranha.Manager.Models
         public Guid? CurrentFolderId { get; set; }
 
         /// <summary>
+        /// Gets/sets the optinal folder name
+        /// </summary>
+        public string CurrentFolderName { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional parent id.
         /// </summary>
         public Guid? ParentFolderId { get; set; }

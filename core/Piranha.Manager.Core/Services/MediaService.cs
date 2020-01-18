@@ -75,6 +75,7 @@ namespace Piranha.Manager.Services
                 var folder = await _api.Media.GetFolderByIdAsync(folderId.Value);
                 if (folder != null)
                 {
+                    model.CurrentFolderName = folder.Name;
                     model.ParentFolderId = folder.ParentId;
                 }
             }
