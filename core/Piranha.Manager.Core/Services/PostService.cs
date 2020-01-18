@@ -440,6 +440,7 @@ namespace Piranha.Manager.Services
                         Description = regionType.Description,
                         Placeholder = regionType.ListTitlePlaceholder,
                         IsCollection = regionType.Collection,
+                        Expanded = regionType.ListExpand,
                         Icon = regionType.Icon,
                         Display = regionType.Display.ToString().ToLower()
                     }
