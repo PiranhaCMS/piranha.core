@@ -42,9 +42,9 @@
                                 <input type="text" v-model="redirectUrl" maxlength="256" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label>@Localizer.General["Comments"]</label>
+                                <label for="enableComments">@Localizer.General["Comments"]</label>
                                 <div class="form-switch">
-                                    <button v-on:click.prevent="enableComments = !enableComments" class="switch" :aria-pressed="enableComments"><span></span></button>
+                                    <button id="enableComments" v-on:click.prevent="enableComments = !enableComments" class="switch" :aria-pressed="enableComments"><span></span></button>
                                     <label for="enableComments" class="form-check-label">@Localizer.Page["If comments should be enabled for this page"]</label>
                                 </div>
                             </div>
@@ -55,9 +55,9 @@
                                 <datepicker v-model="published" :format="'yyyy-MM-dd'" :monday-first="true" :typeable="true" :bootstrap-styling="true"></datepicker>
                             </div>
                             <div class="form-group">
-                                <label>@Localizer.Page["Hidden"]</label>
+                                <label for="isHidden">@Localizer.Page["Hidden"]</label>
                                 <div class="form-switch">
-                                    <button v-on:click.prevent="isHidden = !isHidden" class="switch" :aria-pressed="isHidden"><span></span></button>
+                                    <button id="isHidden" v-on:click.prevent="isHidden = !isHidden" class="switch" :aria-pressed="isHidden"><span></span></button>
                                     <label for="isHidden" class="form-check-label">@Localizer.Page["If the page should be hidden in the sitemap"]</label>
                                 </div>
                             </div>

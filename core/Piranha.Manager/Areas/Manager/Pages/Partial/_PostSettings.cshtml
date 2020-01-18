@@ -38,9 +38,9 @@
                                 <input type="text" v-model="redirectUrl" maxlength="256" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label>@Localizer.General["Comments"]</label>
+                                <label for="enableComments">@Localizer.General["Comments"]</label>
                                 <div class="form-switch">
-                                    <button v-on:click.prevent="enableComments = !enableComments" class="switch" :aria-pressed="enableComments"><span></span></button>
+                                    <button id="enableComments" v-on:click.prevent="enableComments = !enableComments" class="switch" :aria-pressed="enableComments"><span></span></button>
                                     <label for="enableComments" class="form-check-label">@Localizer.Post["If comments should be enabled for this post"]</label>
                                 </div>
                             </div>
