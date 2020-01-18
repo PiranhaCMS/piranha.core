@@ -10,6 +10,7 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Piranha.AttributeBuilder;
@@ -59,6 +60,7 @@ namespace Piranha.Tests.Repositories
                 blog.Id = BLOG_ID;
                 blog.SiteId = SITE_ID;
                 blog.Title = "Blog";
+                blog.EnableComments = true;
                 blog.Published = DateTime.Now;
                 api.Pages.Save(blog);
 
@@ -66,6 +68,7 @@ namespace Piranha.Tests.Repositories
                 news.Id = NEWS_ID;
                 news.SiteId = SITE_ID;
                 news.Title = "News";
+                blog.EnableComments = true;
                 news.Published = DateTime.Now;
                 api.Pages.Save(news);
 
@@ -90,6 +93,18 @@ namespace Piranha.Tests.Repositories
 
         protected override void Cleanup() {
             using (var api = CreateApi()) {
+                var posts = api.Posts.GetAll(BLOG_ID);
+                foreach (var p in posts)
+                    api.Posts.Delete(p);
+
+                posts = api.Posts.GetAll(NEWS_ID);
+                foreach (var p in posts)
+                    api.Posts.Delete(p);
+
+                var pages = api.Pages.GetAll(SITE_ID);
+                foreach (var p in pages)
+                    api.Pages.Delete(p);
+
                 var sites = api.Sites.GetAll();
                 foreach (var s in sites)
                     api.Sites.Delete(s);

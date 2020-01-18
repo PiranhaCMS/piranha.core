@@ -831,7 +831,7 @@ namespace Piranha.Repositories
             model.EnableComments = page.EnableComments;
             if (model.EnableComments)
             {
-                model.CommentCount = await _db.PageComments.CountAsync(c => c.PageId == model.Id);
+                model.CommentCount = await _db.PageComments.CountAsync(c => c.PageId == model.Id).ConfigureAwait(false);
             }
             model.CloseCommentsAfterDays = page.CloseCommentsAfterDays;
 
