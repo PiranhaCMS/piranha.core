@@ -66,6 +66,11 @@ namespace Piranha
         DbSet<Data.PageBlock> PageBlocks { get; set; }
 
         /// <summary>
+        /// Gets/sets the page comments.
+        /// </summary>
+        DbSet<Data.PageComment> PageComments { get; set; }
+
+        /// <summary>
         /// Gets/sets the page field set.
         /// </summary>
         DbSet<Data.PageField> PageFields { get; set; }
@@ -94,6 +99,11 @@ namespace Piranha
         /// Gets/sets the post block set.
         /// </summary>
         DbSet<Data.PostBlock> PostBlocks { get; set; }
+
+        /// <summary>
+        /// Gets/sets the post comments.
+        /// </summary>
+        DbSet<Data.PostComment> PostComments { get; set; }
 
         /// <summary>
         /// Gets/sets the post field set.

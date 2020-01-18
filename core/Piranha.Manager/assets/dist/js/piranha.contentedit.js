@@ -76,6 +76,7 @@ Vue.component("region", {
         "          <div class='row'>" +
         "            <div class='form-group' :class='{ \"col-sm-6\": field.meta.isHalfWidth, \"col-sm-12\": !field.meta.isHalfWidth }' v-for='field in item.fields'>" +
         "              <label>{{ field.meta.name }}</label>" +
+        "              <div v-if='field.meta.description != null' v-html='field.meta.description' class='field-description small text-muted'></div>" +
         "              <div class='field-body'>" +
         "                <div :id='\"tb-\" + field.meta.uid' class='component-toolbar'></div>" +
         "                <component v-if='field.model != null' v-bind:is='field.meta.component' v-bind:uid='item.uid' v-bind:meta='field.meta' v-bind:toolbar='\"tb-\" + field.meta.uid' v-bind:model='field.model' v-on:update-title='updateTitle($event)'></component>" +

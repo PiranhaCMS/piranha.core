@@ -19,7 +19,7 @@ namespace Piranha.Runtime
         /// <summary>
         /// The standard repository hooks for a data model.
         /// </summary>
-        public sealed class RepositoryHooks<T>
+        public class ServiceHooks<T>
         {
             /// <summary>
             /// Registers a new hook to be executed after the model
@@ -81,11 +81,28 @@ namespace Piranha.Runtime
             }
         }
 
+        public class ValidationServiceHooks<T> : ServiceHooks<T>
+        {
+            /// <summary>
+            /// Registers a new hook to be executed after the OnBeforeSave
+            /// hook as been executed but before the model is saved to the
+            /// database. This hook should be used to extend default model
+            /// validation.
+            /// </summary>
+            /// <param name="hook">The hook</param>
+            public void RegisterOnValidate(ModelDelegate<T> hook)
+            {
+                App.Hooks.RegisterOnLoad<T>(hook);
+            }
+
+        }
+
         //
         // Private hook collections.
         //
         private readonly Dictionary<Type, object> _onLoad = new Dictionary<Type, object>();
         private readonly Dictionary<Type, object> _onBeforeSave = new Dictionary<Type, object>();
+        private readonly Dictionary<Type, object> _onValidate = new Dictionary<Type, object>();
         private readonly Dictionary<Type, object> _onAfterSave = new Dictionary<Type, object>();
         private readonly Dictionary<Type, object> _onBeforeDelete = new Dictionary<Type, object>();
         private readonly Dictionary<Type, object> _onAfterDelete = new Dictionary<Type, object>();
@@ -112,42 +129,47 @@ namespace Piranha.Runtime
         /// <summary>
         /// Gets the hooks available for aliases.
         /// </summary>
-        public RepositoryHooks<Alias> Alias { get; } = new RepositoryHooks<Alias>();
+        public ServiceHooks<Alias> Alias { get; } = new ServiceHooks<Alias>();
+
+        /// <summary>
+        /// Gets the hooks available for comments.
+        /// </summary>
+        public ValidationServiceHooks<Comment> Comments { get; } = new ValidationServiceHooks<Comment>();
 
         /// <summary>
         /// Gets the hooks available for media.
         /// </summary>
-        public RepositoryHooks<Media> Media { get; } = new RepositoryHooks<Media>();
+        public ServiceHooks<Media> Media { get; } = new ServiceHooks<Media>();
 
         /// <summary>
         /// Gets the hooks available for media folders.
         /// </summary>
-        public RepositoryHooks<MediaFolder> MediaFolder { get; } = new RepositoryHooks<MediaFolder>();
+        public ServiceHooks<MediaFolder> MediaFolder { get; } = new ServiceHooks<MediaFolder>();
 
         /// <summary>
         /// Gets the hooks available for pages.
         /// </summary>
-        public RepositoryHooks<PageBase> Pages { get; } = new RepositoryHooks<PageBase>();
+        public ServiceHooks<PageBase> Pages { get; } = new ServiceHooks<PageBase>();
 
         /// <summary>
         /// Gets the hooks available for params.
         /// </summary>
-        public RepositoryHooks<Param> Param { get; } = new RepositoryHooks<Param>();
+        public ServiceHooks<Param> Param { get; } = new ServiceHooks<Param>();
 
         /// <summary>
         /// Gets the hooks available for posts.
         /// </summary>
-        public RepositoryHooks<PostBase> Posts { get; } = new RepositoryHooks<PostBase>();
+        public ServiceHooks<PostBase> Posts { get; } = new ServiceHooks<PostBase>();
 
         /// <summary>
         /// Gets the hooks available for sites.
         /// </summary>
-        public RepositoryHooks<Site> Site { get; } = new RepositoryHooks<Site>();
+        public ServiceHooks<Site> Site { get; } = new ServiceHooks<Site>();
 
         /// <summary>
         /// Gets the hooks available for sites.
         /// </summary>
-        public RepositoryHooks<SiteContentBase> SiteContent { get; } = new RepositoryHooks<SiteContentBase>();
+        public ServiceHooks<SiteContentBase> SiteContent { get; } = new ServiceHooks<SiteContentBase>();
 
         /// <summary>
         /// Gets the hook for slug generation.
@@ -171,6 +193,10 @@ namespace Piranha.Runtime
             if (_onBeforeSave.ContainsKey(typeof(T)))
             {
                 _onBeforeSave.Remove(typeof(T));
+            }
+            if (_onValidate.ContainsKey(typeof(T)))
+            {
+                _onValidate.Remove(typeof(T));
             }
             if (_onAfterSave.ContainsKey(typeof(T)))
             {
@@ -213,6 +239,20 @@ namespace Piranha.Runtime
                 _onBeforeSave[typeof(T)] = new List<ModelDelegate<T>>();
             }
             ((List<ModelDelegate<T>>)_onBeforeSave[typeof(T)]).Add(hook);
+        }
+
+        /// <summary>
+        /// Registers a new hook to be executed before the model
+        /// is saved to the database.
+        /// </summary>
+        /// <param name="hook">The hook</param>
+        internal void RegisterOnValidate<T>(ModelDelegate<T> hook)
+        {
+            if (!_onValidate.ContainsKey(typeof(T)))
+            {
+                _onValidate[typeof(T)] = new List<ModelDelegate<T>>();
+            }
+            ((List<ModelDelegate<T>>)_onValidate[typeof(T)]).Add(hook);
         }
 
         /// <summary>
@@ -283,6 +323,23 @@ namespace Piranha.Runtime
             if (_onBeforeSave.ContainsKey(typeof(T)))
             {
                 var hooks = (List<ModelDelegate<T>>)_onBeforeSave[typeof(T)];
+
+                foreach (var hook in hooks)
+                {
+                    hook.Invoke(model);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Executes the registered hooks on the given model.
+        /// </summary>
+        /// <param name="model">The model</param>
+        public void OnValidate<T>(T model)
+        {
+            if (_onValidate.ContainsKey(typeof(T)))
+            {
+                var hooks = (List<ModelDelegate<T>>)_onValidate[typeof(T)];
 
                 foreach (var hook in hooks)
                 {

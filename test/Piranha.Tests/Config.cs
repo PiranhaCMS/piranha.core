@@ -25,8 +25,11 @@ namespace Piranha.Tests
                 Piranha.App.Init(api);
 
                 using (var config = new Piranha.Config(api)) {
+                    config.ArchivePageSize = 0;
                     config.CacheExpiresPages = 0;
                     config.CacheExpiresPosts = 0;
+                    config.CommentsApprove = true;
+                    config.CommentsPageSize = 0;
                     config.HierarchicalPageSlugs = true;
                     config.ManagerExpandedSitemapLevels = 0;
                 }
@@ -38,6 +41,19 @@ namespace Piranha.Tests
         /// created by the test.
         /// </summary>
         protected override void Cleanup() { }
+
+        [Fact]
+        public void ArchivePageSize() {
+            using (var api = CreateApi()) {
+                using (var config = new Piranha.Config(api)) {
+                    Assert.Equal(0, config.ArchivePageSize);
+
+                    config.ArchivePageSize = 5;
+
+                    Assert.Equal(5, config.ArchivePageSize);
+                }
+            }
+        }
 
         [Fact]
         public void CacheExpiresPages() {
@@ -61,6 +77,32 @@ namespace Piranha.Tests
                     config.CacheExpiresPosts = 30;
 
                     Assert.Equal(30, config.CacheExpiresPosts);
+                }
+            }
+        }
+
+        [Fact]
+        public void CommentsApprove() {
+            using (var api = CreateApi()) {
+                using (var config = new Piranha.Config(api)) {
+                    Assert.True(config.CommentsApprove);
+
+                    config.CommentsApprove = false;
+
+                    Assert.False(config.CommentsApprove);
+                }
+            }
+        }
+
+        [Fact]
+        public void CommentsPageSize() {
+            using (var api = CreateApi()) {
+                using (var config = new Piranha.Config(api)) {
+                    Assert.Equal(0, config.CommentsPageSize);
+
+                    config.CommentsPageSize = 5;
+
+                    Assert.Equal(5, config.CommentsPageSize);
                 }
             }
         }

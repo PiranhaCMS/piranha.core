@@ -1,3 +1,49 @@
+@import "variables";
+
+button {
+    &.switch {
+        background-color: $gray-300;
+        padding: 0;
+        border: 0;
+        width: 2rem;
+        border-radius: .75rem;
+        padding: .1rem;
+        transition: background-color ease-in-out .2s;
+
+        span {
+            background: #fff;
+            display: block;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            transition: transform ease-in-out .2s;
+        }
+
+        &[aria-pressed="true"] {
+            background-color: $green;
+
+            span {
+                transform: translateX(.8rem);
+            }
+        }
+
+        &.switch-lg {
+            width: 2.4rem;
+
+            span {
+                width: 1.3rem;
+                height: 1.3rem;
+            }
+
+            &[aria-pressed="true"] {
+                span {
+                    transform: translateX(.9rem);
+                }
+            }
+        }
+    }
+}
+
 .btn {
     transition: background-color ease-in-out .15s, border-color ease-in-out .15s;
 

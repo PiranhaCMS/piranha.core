@@ -65,7 +65,14 @@ namespace Piranha.Services
 
             if (type != null)
             {
-                return _factory.Create<T>(type);
+                var model = _factory.Create<T>(type);
+
+                using (var config = new Config(_paramService))
+                {
+                    model.EnableComments = config.CommentsEnabledForPosts;
+                    model.CloseCommentsAfterDays = config.CommentsCloseAfterDays;
+                }
+                return model;
             }
             return null;
         }
@@ -204,6 +211,43 @@ namespace Piranha.Services
         public Task<IEnumerable<Guid>> GetAllDraftsAsync(Guid blogId)
         {
             return _repo.GetAllDrafts(blogId);
+        }
+
+        /// <summary>
+        /// Gets the comments available for the post with the specified id.
+        /// </summary>
+        /// <param name="postId">The unique post id</param>
+        /// <param name="onlyApproved">If only approved comments should be fetched</param>
+        /// <param name="page">The optional page number</param>
+        /// <param name="pageSize">The optional page size</param>
+        /// <returns>The available comments</returns>
+        public async Task<IEnumerable<Comment>> GetAllCommentsAsync(Guid? postId = null, bool onlyApproved = true,
+            int? page = null, int? pageSize = null)
+        {
+            // Ensure page number
+            if (!page.HasValue)
+            {
+                page = 0;
+            }
+
+            // Ensure page size
+            if (!pageSize.HasValue)
+            {
+                using (var config = new Config(_paramService))
+                {
+                    pageSize = config.CommentsPageSize;
+                }
+            }
+
+            // Get the comments
+            var comments = await _repo.GetAllComments(postId, onlyApproved, page.Value, pageSize.Value).ConfigureAwait(false);
+
+            // Execute hook
+            foreach (var comment in comments)
+            {
+                App.Hooks.OnLoad<Comment>(comment);
+            }
+            return comments;
         }
 
         /// <summary>
@@ -457,6 +501,16 @@ namespace Piranha.Services
         }
 
         /// <summary>
+        /// Gets the comment with the given id.
+        /// </summary>
+        /// <param name="id">The comment id</param>
+        /// <returns>The model</returns>
+        public Task<Comment> GetCommentByIdAsync(Guid id)
+        {
+            return _repo.GetCommentById(id);
+        }
+
+        /// <summary>
         /// Saves the given post model
         /// </summary>
         /// <param name="model">The post model</param>
@@ -472,6 +526,81 @@ namespace Piranha.Services
         public Task SaveDraftAsync<T>(T model) where T : PostBase
         {
             return SaveAsync(model, true);
+        }
+
+        /// <summary>
+        /// Saves the comment.
+        /// </summary>
+        /// <param name="model">The comment model</param>
+        /// <param name="postId">The unique post id</param>
+        public Task SaveCommentAsync(Guid postId, Comment model)
+        {
+            return SaveCommentAsync(postId, model, false);
+        }
+
+        /// <summary>
+        /// Saves the comment and verifies if should be approved or not.
+        /// </summary>
+        /// <param name="model">The comment model</param>
+        /// <param name="postId">The unique post id</param>
+        public Task SaveCommentAndVerifyAsync(Guid postId, Comment model)
+        {
+            return SaveCommentAsync(postId, model, true);
+        }
+
+        /// <summary>
+        /// Saves the comment.
+        /// </summary>
+        /// <param name="model">The comment model</param>
+        /// <param name="postId">The unique post id</param>
+        /// <param name="verify">If default moderation settings should be applied</param>
+        private async Task SaveCommentAsync(Guid postId, Comment model, bool verify)
+        {
+            // Make sure we have a post
+            var post = await GetByIdAsync<PostInfo>(postId).ConfigureAwait(false);
+
+            if (post != null)
+            {
+                // Ensure id
+                if (model.Id == Guid.Empty)
+                {
+                    model.Id = Guid.NewGuid();
+                }
+
+                // Ensure created date
+                if (model.Created == DateTime.MinValue)
+                {
+                    model.Created = DateTime.Now;
+                }
+
+                // Validate model
+                var context = new ValidationContext(model);
+                Validator.ValidateObject(model, context, true);
+
+                // Set approved according to config if we should verify
+                if (verify)
+                {
+                    using (var config = new Config(_paramService))
+                    {
+                        model.IsApproved = config.CommentsApprove;
+                    }
+                    App.Hooks.OnValidate<Comment>(model);
+                }
+
+                // Call hooks & save
+                App.Hooks.OnBeforeSave<Comment>(model);
+
+                await _repo.SaveComment(postId, model).ConfigureAwait(false);
+
+                App.Hooks.OnAfterSave<Comment>(model);
+
+                // Invalidate parent post from cache
+                RemoveFromCache(post);
+            }
+            else
+            {
+                throw new ArgumentException($"Could not find post with id { postId.ToString() }");
+            }
         }
 
         /// <summary>
@@ -610,6 +739,45 @@ namespace Piranha.Services
 
             // Remove from cache & invalidate sitemap
             RemoveFromCache(model);
+        }
+
+
+        /// <summary>
+        /// Deletes the comment with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        public async Task DeleteCommentAsync(Guid id)
+        {
+            var model = await GetCommentByIdAsync(id);
+
+            if (model != null)
+            {
+                await DeleteCommentAsync(model).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Deletes the given comment.
+        /// </summary>
+        /// <param name="model">The comment</param>
+        public async Task DeleteCommentAsync(Comment model)
+        {
+            var post = await GetByIdAsync<PostInfo>(model.ContentId).ConfigureAwait(false);
+
+            if (post != null)
+            {
+                // Call hooks & delete
+                App.Hooks.OnBeforeDelete<Comment>(model);
+
+                App.Hooks.OnAfterDelete<Comment>(model);
+
+                // Remove parent post from cache
+                RemoveFromCache(post);
+            }
+            else
+            {
+                throw new ArgumentException($"Could not find post with id { model.ContentId.ToString() }");
+            }
         }
 
         /// <summary>

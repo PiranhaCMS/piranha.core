@@ -22,7 +22,7 @@ namespace Piranha.Manager
         {
             new MenuItem
             {
-                InternalId = "Content", 
+                InternalId = "Content",
                 Name = "Content",
                 Css = "fas fa-pencil-alt",
                 Items = new MenuItemList
@@ -42,12 +42,19 @@ namespace Piranha.Manager
                         Route = "~/manager/media",
                         Policy = Permission.Media,
                         Css = "fas fa-images"
+                    },
+                    new MenuItem
+                    {
+                        InternalId = "Comments",
+                        Name = "Comments",
+                        Route = "~/manager/comments",
+                        Css = "fas fa-comments"
                     }
                 }
             },
             new MenuItem
             {
-                InternalId = "Settings", 
+                InternalId = "Settings",
                 Name = "Settings",
                 Css = "fas fa-wrench",
                 Items = new MenuItemList
@@ -62,8 +69,8 @@ namespace Piranha.Manager
             new MenuItem
             {
                 InternalId = "System",
-                Name = "System", 
-                Css = "fas fa-cog", 
+                Name = "System",
+                Css = "fas fa-cog",
                 Items = new MenuItemList
                 {
                     new MenuItem
@@ -79,7 +86,7 @@ namespace Piranha.Manager
                         InternalId = "Modules",
                         Name = "Modules",
                         Route = "~/manager/modules",
-                        Policy = Permission.Modules, 
+                        Policy = Permission.Modules,
                         Css = "fas fa-code-branch"
                     }
                 }

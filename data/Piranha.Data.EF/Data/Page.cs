@@ -68,6 +68,18 @@ namespace Piranha.Data
         public Models.RedirectType RedirectType { get; set; } = Models.RedirectType.Temporary;
 
         /// <summary>
+        /// Gets/sets if comments should be enabled.
+        /// </summary>
+        /// <value></value>
+        public bool EnableComments { get; set; }
+
+        /// <summary>
+        /// Gets/sets after how many days after publish date comments
+        /// should be closed. A value of 0 means never.
+        /// </summary>
+        public int CloseCommentsAfterDays { get; set; }
+
+        /// <summary>
         /// Gets/sets the site.
         /// </summary>
         public Site Site { get; set; }

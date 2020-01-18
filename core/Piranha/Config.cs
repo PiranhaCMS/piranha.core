@@ -30,6 +30,11 @@ namespace Piranha
         public static readonly string ARCHIVE_PAGE_SIZE = "ArchivePageSize";
         public static readonly string CACHE_EXPIRES_PAGES = "CacheExpiresPages";
         public static readonly string CACHE_EXPIRES_POSTS = "CacheExpiresPosts";
+        public static readonly string COMMENTS_PAGE_SIZE = "CommentsPageSize";
+        public static readonly string COMMENTS_APPROVE = "CommentsApprove";
+        public static readonly string COMMENTS_POSTS_ENABLED = "CommentsPostsEnabled";
+        public static readonly string COMMENTS_PAGES_ENABLED = "CommentsPagesEnabled";
+        public static readonly string COMMENTS_CLOSE_AFTER_DAYS = "CommentsCloseAfterDays";
         public static readonly string PAGES_HIERARCHICAL_SLUGS = "HierarchicalPageSlugs";
         public static readonly string MEDIA_CDN_URL = "MediaCdnUrl";
         public static readonly string MANAGER_EXPANDED_SITEMAP_LEVELS = "ManagerExpandedSitemapLevels";
@@ -105,6 +110,129 @@ namespace Piranha
                     param = new Param
                     {
                         Key = CACHE_EXPIRES_POSTS
+                    };
+                }
+                param.Value = value.ToString();
+                _service.SaveAsync(param).GetAwaiter().GetResult();
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets if comments should be approved by default.
+        /// </summary>
+        public bool CommentsApprove {
+            get {
+                var param = _service.GetByKeyAsync(COMMENTS_APPROVE).GetAwaiter().GetResult();
+                if (param != null)
+                    return Convert.ToBoolean(param.Value);
+                return true;
+            }
+            set {
+                var param = _service.GetByKeyAsync(COMMENTS_APPROVE).GetAwaiter().GetResult();
+                if (param == null)
+                {
+                    param = new Param
+                    {
+                        Key = COMMENTS_APPROVE
+                    };
+                }
+                param.Value = value.ToString();
+                _service.SaveAsync(param).GetAwaiter().GetResult();
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the number of days commenting should be open after publish
+        /// date. A value of 0 means forever.
+        /// </summary>
+        public int CommentsCloseAfterDays {
+            get {
+                var param = _service.GetByKeyAsync(COMMENTS_CLOSE_AFTER_DAYS).GetAwaiter().GetResult();
+                if (param != null)
+                    return Convert.ToInt32(param.Value);
+                return 0;
+            }
+            set {
+                var param = _service.GetByKeyAsync(COMMENTS_CLOSE_AFTER_DAYS).GetAwaiter().GetResult();
+                if (param == null)
+                {
+                    param = new Param
+                    {
+                        Key = COMMENTS_CLOSE_AFTER_DAYS
+                    };
+                }
+                param.Value = value.ToString();
+                _service.SaveAsync(param).GetAwaiter().GetResult();
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets if comments should be enabled by default for posts. The
+        /// default value is true.
+        /// </summary>
+        public bool CommentsEnabledForPosts {
+            get {
+                var param = _service.GetByKeyAsync(COMMENTS_POSTS_ENABLED).GetAwaiter().GetResult();
+                if (param != null)
+                    return Convert.ToBoolean(param.Value);
+                return true;
+            }
+            set {
+                var param = _service.GetByKeyAsync(COMMENTS_POSTS_ENABLED).GetAwaiter().GetResult();
+                if (param == null)
+                {
+                    param = new Param
+                    {
+                        Key = COMMENTS_POSTS_ENABLED
+                    };
+                }
+                param.Value = value.ToString();
+                _service.SaveAsync(param).GetAwaiter().GetResult();
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets if comments should be enabled by default for pages. The
+        /// default value is true.
+        /// </summary>
+        public bool CommentsEnabledForPages {
+            get {
+                var param = _service.GetByKeyAsync(COMMENTS_PAGES_ENABLED).GetAwaiter().GetResult();
+                if (param != null)
+                    return Convert.ToBoolean(param.Value);
+                return false;
+            }
+            set {
+                var param = _service.GetByKeyAsync(COMMENTS_PAGES_ENABLED).GetAwaiter().GetResult();
+                if (param == null)
+                {
+                    param = new Param
+                    {
+                        Key = COMMENTS_PAGES_ENABLED
+                    };
+                }
+                param.Value = value.ToString();
+                _service.SaveAsync(param).GetAwaiter().GetResult();
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the currently configured page size for comments.
+        /// </summary>
+        public int CommentsPageSize {
+            get {
+                var param = _service.GetByKeyAsync(COMMENTS_PAGE_SIZE).GetAwaiter().GetResult();
+                if (param != null)
+                    return Convert.ToInt32(param.Value);
+                return 0;
+            }
+            set {
+                var param = _service.GetByKeyAsync(COMMENTS_PAGE_SIZE).GetAwaiter().GetResult();
+                if (param == null)
+                {
+                    param = new Param
+                    {
+                        Key = COMMENTS_PAGE_SIZE
                     };
                 }
                 param.Value = value.ToString();

@@ -143,6 +143,61 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Gets the comments available for the post with the specified id. If no post id
+        /// is provided all comments are fetched.
+        /// </summary>
+        /// <param name="postId">The unique post id</param>
+        /// <param name="onlyApproved">If only approved comments should be fetched</param>
+        /// <param name="page">The page number</param>
+        /// <param name="pageSize">The page size</param>
+        /// <returns>The available comments</returns>
+        public async Task<IEnumerable<Models.Comment>> GetAllComments(Guid? postId, bool onlyApproved,
+            int page, int pageSize)
+        {
+            // Create base query
+            IQueryable<PostComment> query = _db.PostComments
+                .AsNoTracking();
+
+            // Check if only should include a comments for a certain post
+            if (postId.HasValue)
+            {
+                query = query.Where(c => c.PostId == postId.Value);
+            }
+
+            // Check if we should only include approved
+            if (onlyApproved)
+            {
+                query = query.Where(c => c.IsApproved);
+            }
+
+            // Order the comments by date
+            query = query.OrderByDescending(c => c.Created);
+
+            // Check if this is a paged query
+            if (pageSize > 0)
+            {
+                query = query
+                    .Skip(page * pageSize)
+                    .Take(pageSize);
+            }
+
+            // Get the comments
+            return await query
+                .Select(c => new Models.Comment
+                {
+                    Id = c.Id,
+                    ContentId = c.PostId,
+                    UserId = c.UserId,
+                    Author = c.Author,
+                    Email = c.Email,
+                    Url = c.Url,
+                    IsApproved = c.IsApproved,
+                    Body = c.Body,
+                    Created = c.Created
+                }).ToListAsync().ConfigureAwait(false);
+        }
+
+        /// <summary>
         /// Gets the post model with the specified id.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
@@ -296,6 +351,29 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Gets the comment with the given id.
+        /// </summary>
+        /// <param name="id">The comment id</param>
+        /// <returns>The model</returns>
+        public Task<Models.Comment> GetCommentById(Guid id)
+        {
+            return _db.PostComments
+                .Where(c => c.Id == id)
+                .Select(c => new Models.Comment
+                {
+                    Id = c.Id,
+                    ContentId = c.PostId,
+                    UserId = c.UserId,
+                    Author = c.Author,
+                    Email = c.Email,
+                    Url = c.Url,
+                    IsApproved = c.IsApproved,
+                    Body = c.Body,
+                    Created = c.Created
+                }).FirstOrDefaultAsync();
+        }
+
+        /// <summary>
         /// Saves the given post model
         /// </summary>
         /// <param name="model">The post model</param>
@@ -311,6 +389,37 @@ namespace Piranha.Repositories
         public Task SaveDraft<T>(T model) where T : Models.PostBase
         {
             return Save<T>(model, true);
+        }
+
+        /// <summary>
+        /// Saves the comment.
+        /// </summary>
+        /// <param name="postId">The unique post id</param>
+        /// <param name="model">The comment model</param>
+        public async Task SaveComment(Guid postId, Models.Comment model)
+        {
+            var comment = await _db.PostComments
+                .FirstOrDefaultAsync(c => c.Id == model.Id);
+
+            if (comment == null)
+            {
+                comment = new PostComment
+                {
+                    Id = model.Id
+                };
+                await _db.PostComments.AddAsync(comment);
+            }
+
+            comment.UserId = model.UserId;
+            comment.PostId = postId;
+            comment.Author = model.Author;
+            comment.Email = model.Email;
+            comment.Url = model.Url;
+            comment.IsApproved = model.IsApproved;
+            comment.Body = model.Body;
+            comment.Created = model.Created;
+
+            await _db.SaveChangesAsync();
         }
 
         /// <summary>
@@ -434,6 +543,23 @@ namespace Piranha.Repositories
 
                     await _db.SaveChangesAsync().ConfigureAwait(false);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Deletes the comment with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        public async Task DeleteComment(Guid id)
+        {
+            var comment = await _db.PostComments
+                .FirstOrDefaultAsync(c => c.Id == id)
+                .ConfigureAwait(false);
+
+            if (comment != null)
+            {
+                _db.PostComments.Remove(comment);
+                await _db.SaveChangesAsync().ConfigureAwait(false);
             }
         }
 
@@ -571,6 +697,10 @@ namespace Piranha.Repositories
                     post.LastModified = DateTime.Now;
                 }
                 post = _contentService.Transform<T>(model, type, post);
+
+                // Set if comments should be enabled
+                post.EnableComments = model.EnableComments;
+                post.CloseCommentsAfterDays = model.CloseCommentsAfterDays;
 
                 // Make sure foreign key is set for fields
                 if (!isDraft)
@@ -876,8 +1006,15 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="post">The source post</param>
         /// <param name="model">The targe model</param>
-        private void Process<T>(Data.Post post, T model) where T : Models.PostBase
+        private async void Process<T>(Data.Post post, T model) where T : Models.PostBase
         {
+            model.EnableComments = post.EnableComments;
+            if (model.EnableComments)
+            {
+                model.CommentCount = await _db.PostComments.CountAsync(c => c.PostId == model.Id).ConfigureAwait(false);
+            }
+            model.CloseCommentsAfterDays = post.CloseCommentsAfterDays;
+
             if (!(model is Models.IContentInfo))
             {
                 if (post.Blocks.Count > 0)

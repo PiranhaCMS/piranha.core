@@ -260,6 +260,8 @@ namespace Piranha.Manager.Services
                 page.Published = !string.IsNullOrEmpty(model.Published) ? DateTime.Parse(model.Published) : (DateTime?)null;
                 page.RedirectUrl = model.RedirectUrl;
                 page.RedirectType = (RedirectType)Enum.Parse(typeof(RedirectType), model.RedirectType);
+                page.EnableComments = model.EnableComments;
+                page.CloseCommentsAfterDays = model.CloseCommentsAfterDays;
 
                 if (pageType.Routes.Count > 1)
                 {
@@ -477,6 +479,8 @@ namespace Piranha.Manager.Services
                 Published = page.Published.HasValue ? page.Published.Value.ToString("yyyy-MM-dd HH:mm") : null,
                 RedirectUrl = page.RedirectUrl,
                 RedirectType = page.RedirectType.ToString(),
+                EnableComments = page.EnableComments,
+                CloseCommentsAfterDays = page.CloseCommentsAfterDays,
                 State = page.GetState(isDraft),
                 UseBlocks = type.UseBlocks,
                 SelectedRoute = route == null ? null : new RouteModel

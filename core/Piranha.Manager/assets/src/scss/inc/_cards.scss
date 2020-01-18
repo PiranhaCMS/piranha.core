@@ -28,3 +28,17 @@
         }
     }
 }
+
+#config {
+    .card-body {
+        padding: 0;
+
+        .list-group {
+            padding: .75rem 0;
+
+            .list-group-item {
+                border-color: $body-bg;
+            }
+        }
+    }
+}

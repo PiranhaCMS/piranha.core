@@ -25,6 +25,6 @@ The heart and soul of Piranha is about **structuring content** and **editing** i
 
 @
 
-## More Resource
+## More Resources
 
 For more information about Piranha, please check out our official site at [http://piranhacms.org](http://piranhacms.org) and our **documentation** section at [http://piranhacms.org/docs](http://piranhacms.org/docs).

@@ -54,6 +54,17 @@ namespace Piranha.Repositories
         Task<IEnumerable<Guid>> GetAllDrafts(Guid blogId);
 
         /// <summary>
+        /// Gets the comments available for the post with the specified id.
+        /// </summary>
+        /// <param name="postId">The unique post id</param>
+        /// <param name="onlyApproved">If only approved comments should be fetched</param>
+        /// <param name="page">The page number</param>
+        /// <param name="pageSize">The page size</param>
+        /// <returns>The available comments</returns>
+        Task<IEnumerable<Comment>> GetAllComments(Guid? postId, bool onlyApproved,
+            int page, int pageSize);
+
+        /// <summary>
         /// Gets the post model with the specified id.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
@@ -116,6 +127,13 @@ namespace Piranha.Repositories
         Task<Taxonomy> GetTagBySlug(Guid blogId, string slug);
 
         /// <summary>
+        /// Gets the comment with the given id.
+        /// </summary>
+        /// <param name="id">The comment id</param>
+        /// <returns>The model</returns>
+        Task<Comment> GetCommentById(Guid id);
+
+        /// <summary>
         /// Saves the given post model
         /// </summary>
         /// <param name="model">The post model</param>
@@ -126,6 +144,13 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="model">The post model</param>
         Task SaveDraft<T>(T model) where T : PostBase;
+
+        /// <summary>
+        /// Saves the comment.
+        /// </summary>
+        /// <param name="postId">The unique post id</param>
+        /// <param name="model">The comment model</param>
+        Task SaveComment(Guid postId, Comment model);
 
         /// <summary>
         /// Creates a revision from the current version
@@ -147,5 +172,11 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique id</param>
         Task DeleteDraft(Guid id);
+
+        /// <summary>
+        /// Deletes the comment with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        Task DeleteComment(Guid id);
     }
 }

@@ -78,6 +78,18 @@ namespace Piranha.Services
         Task<IEnumerable<Guid>> GetAllDraftsAsync(Guid? siteId = null);
 
         /// <summary>
+        /// Gets the comments available for the page with the specified id. If no page id
+        /// is provided all comments are fetched.
+        /// </summary>
+        /// <param name="pageId">The unique page id</param>
+        /// <param name="onlyApproved">If only approved comments should be fetched</param>
+        /// <param name="page">The optional page number</param>
+        /// <param name="pageSize">The optional page size</param>
+        /// <returns>The available comments</returns>
+        Task<IEnumerable<Comment>> GetAllCommentsAsync(Guid? pageId = null, bool onlyApproved = true,
+            int? page = null, int? pageSize = null);
+
+        /// <summary>
         /// Gets the site startpage.
         /// </summary>
         /// <param name="siteId">The optional site id</param>
@@ -157,6 +169,13 @@ namespace Piranha.Services
         Task MoveAsync<T>(T model, Guid? parentId, int sortOrder) where T : Models.PageBase;
 
         /// <summary>
+        /// Gets the comment with the given id.
+        /// </summary>
+        /// <param name="id">The comment id</param>
+        /// <returns>The model</returns>
+        Task<Comment> GetCommentByIdAsync(Guid id);
+
+        /// <summary>
         /// Saves the given page model
         /// </summary>
         /// <param name="model">The page model</param>
@@ -167,6 +186,20 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="model">The page model</param>
         Task SaveDraftAsync<T>(T model) where T : PageBase;
+
+        /// <summary>
+        /// Saves the comment.
+        /// </summary>
+        /// <param name="pageId">The unique page id</param>
+        /// <param name="model">The comment model</param>
+        Task SaveCommentAsync(Guid pageId, Comment model);
+
+        /// <summary>
+        /// Saves the comment and verifies if should be approved or not.
+        /// </summary>
+        /// <param name="pageId">The unique page id</param>
+        /// <param name="model">The comment model</param>
+        Task SaveCommentAndVerifyAsync(Guid pageId, Comment model);
 
         /// <summary>
         /// Deletes the model with the specified id.

@@ -51,6 +51,11 @@
                         }
                         <span class="sep">&#9670;</span>
                         <strong>Published</strong> @post.Published.Value.ToString("yyyy-MM-dd")
+                        @if (post.EnableComments && post.CommentCount > 0)
+                        {
+                            <span class="sep">&#9670;</span>
+                            <a href="@post.Permalink#comments">@post.CommentCount @(post.CommentCount == 1 ? "comment" : "comments")</a>
+                        }
                     </p>
                     @if (post.Regions.Hero.PrimaryImage.Media != null)
                     {

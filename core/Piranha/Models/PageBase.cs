@@ -18,7 +18,7 @@ namespace Piranha.Models
     /// Base class for page models.
     /// </summary>
     [Serializable]
-    public abstract class PageBase : RoutedContent, IBlockModel, IMeta
+    public abstract class PageBase : RoutedContent, IBlockModel, IMeta, ICommentModel
     {
         /// <summary>
         /// Gets/sets the site id.
@@ -67,5 +67,27 @@ namespace Piranha.Models
         /// Gets/sets the available blocks.
         /// </summary>
         public IList<Extend.Block> Blocks { get; set; } = new List<Extend.Block>();
+
+        /// <summary>
+        /// Gets/sets if comments should be enabled.
+        /// </summary>
+        /// <value></value>
+        public bool EnableComments { get; set; } = false;
+
+        /// <summary>
+        /// Gets/sets after how many days after publish date comments
+        /// should be closed. A value of 0 means never.
+        /// </summary>
+        public int CloseCommentsAfterDays { get; set; }
+
+        /// <summary>
+        /// Gets/sets the comment count.
+        /// </summary>
+        public int CommentCount { get; set; }
+
+        /// <summary>
+        /// Checks if comments are open for this page.
+        /// </summary>
+        public bool isCommentsOpen => EnableComments && Published.HasValue && (CloseCommentsAfterDays == 0 || Published.Value.AddDays(CloseCommentsAfterDays) > DateTime.Now);
     }
 }

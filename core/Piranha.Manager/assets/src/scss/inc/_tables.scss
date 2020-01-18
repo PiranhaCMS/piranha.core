@@ -15,6 +15,9 @@
                 &.one {
                     width: 3.5rem;
                 }
+                &.three {
+                    width: 7.5rem;
+                }
             }
 
             &.td-small {
@@ -72,6 +75,16 @@
         i {
             width: 26px;
             text-align: center;
+        }
+    }
+
+    &.table-comments {
+        .author {
+            display: block;
+            width: 140px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 

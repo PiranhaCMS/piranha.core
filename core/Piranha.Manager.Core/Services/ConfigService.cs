@@ -38,11 +38,18 @@ namespace Piranha.Manager.Services
                     HierarchicalPageSlugs = config.HierarchicalPageSlugs,
                     ExpandedSitemapLevels = config.ManagerExpandedSitemapLevels,
                     ArchivePageSize = config.ArchivePageSize,
+                    CommentsApprove = config.CommentsApprove,
+                    CommentsCloseAfterDays = config.CommentsCloseAfterDays,
+                    CommentsEnabledForPages = config.CommentsEnabledForPages,
+                    CommentsEnabledForPosts = config.CommentsEnabledForPosts,
+                    CommentsPageSize = config.CommentsPageSize,
                     PagesExpires = config.CacheExpiresPages,
                     PostsExpires = config.CacheExpiresPosts,
                     MediaCDN = config.MediaCDN,
                     PageRevisions = config.PageRevisions,
-                    PostRevisions = config.PostRevisions
+                    PostRevisions = config.PostRevisions,
+                    DefaultCollapsedBlocks = config.ManagerDefaultCollapsedBlocks,
+                    DefaultCollapsedBlockGroupHeaders = config.ManagerDefaultCollapsedBlockGroupHeaders
                 };
             }
         }
@@ -57,7 +64,14 @@ namespace Piranha.Manager.Services
             {
                 config.HierarchicalPageSlugs = model.HierarchicalPageSlugs;
                 config.ManagerExpandedSitemapLevels = model.ExpandedSitemapLevels;
+                config.ManagerDefaultCollapsedBlocks = model.DefaultCollapsedBlocks;
+                config.ManagerDefaultCollapsedBlockGroupHeaders = model.DefaultCollapsedBlockGroupHeaders;
                 config.ArchivePageSize = model.ArchivePageSize;
+                config.CommentsApprove = model.CommentsApprove;
+                config.CommentsCloseAfterDays = model.CommentsCloseAfterDays;
+                config.CommentsEnabledForPages = model.CommentsEnabledForPages;
+                config.CommentsEnabledForPosts = model.CommentsEnabledForPosts;
+                config.CommentsPageSize = model.CommentsPageSize;
                 config.CacheExpiresPages = model.PagesExpires;
                 config.CacheExpiresPosts = model.PostsExpires;
                 config.MediaCDN = model.MediaCDN;

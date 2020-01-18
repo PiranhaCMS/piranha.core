@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Piranha;
@@ -12,7 +11,7 @@ using RazorWeb.Models;
 
 namespace RazorWeb.Pages
 {
-    public class TeaserPageModel : SinglePageModel<TeaserPage>
+    public class TeaserPageModel : SinglePage<TeaserPage>
     {
         private readonly IDb _db;
 

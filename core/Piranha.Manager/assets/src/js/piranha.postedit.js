@@ -16,6 +16,8 @@ piranha.postedit = new Vue({
         published: null,
         redirectUrl: null,
         redirectType: null,
+        enableComments: null,
+        closeCommentsAfterDays: null,
         state: "new",
         categories: [],
         tags: [],
@@ -66,6 +68,8 @@ piranha.postedit = new Vue({
             this.published = model.published;
             this.redirectUrl = model.redirectUrl;
             this.redirectType = model.redirectType;
+            this.enableComments = model.enableComments;
+            this.closeCommentsAfterDays = model.closeCommentsAfterDays;
             this.state = model.state;
             this.blocks = model.blocks;
             this.regions = model.regions;
@@ -150,6 +154,8 @@ piranha.postedit = new Vue({
                 published: self.published,
                 redirectUrl: self.redirectUrl,
                 redirectType: self.redirectType,
+                enableComments: self.enableComments,
+                closeCommentsAfterDays: self.closeCommentsAfterDays,
                 blocks: JSON.parse(JSON.stringify(self.blocks)),
                 regions: JSON.parse(JSON.stringify(self.regions)),
                 selectedCategory: self.selectedCategory,
@@ -270,6 +276,18 @@ piranha.postedit = new Vue({
         },
         selectSetting: function (uid) {
             this.selectedSetting = uid;
+        },
+        isCommentsOpen: function () {
+            var date = new Date(this.published);
+            date = date.addDays(this.closeCommentsAfterDays);
+
+            return date > new Date();
+        },
+        commentsClosedDate: function () {
+            var date = new Date(this.published);
+            date = date.addDays(this.closeCommentsAfterDays);
+
+            return date.toDateString();
         }
     },
     created: function () {
