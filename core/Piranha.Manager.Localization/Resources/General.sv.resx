@@ -145,7 +145,7 @@
     <value>Publiceringsdatum</value>
   </data>
   <data name="Redirect" xml:space="preserve">
-    <value>Hänvisning</value>
+    <value>Omdirigering</value>
   </data>
   <data name="Redirect Type" xml:space="preserve">
     <value>Typ av omdirigering</value>
