@@ -584,6 +584,7 @@ namespace Piranha.Services
                     {
                         model.IsApproved = config.CommentsApprove;
                     }
+                    App.Hooks.OnValidate<Comment>(model);
                 }
 
                 // Call hooks & save
