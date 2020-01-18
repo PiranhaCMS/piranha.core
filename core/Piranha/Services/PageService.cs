@@ -64,6 +64,7 @@ namespace Piranha.Services
                 using (var config = new Config(_paramService))
                 {
                     model.EnableComments = config.CommentsEnabledForPages;
+                    model.CloseCommentsAfterDays = config.CommentsCloseAfterDays;
                 }
                 return model;
             }

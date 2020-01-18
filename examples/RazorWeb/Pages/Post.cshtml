@@ -50,37 +50,40 @@
     {
         <div class="row justify-content-center comments">
             <div id="comments" class="col col-lg-8 col-md-10">
-                <div class="alert alert-warning mt-2 mb-5">
-                    <form method="post" action="@Model.Data.Permalink?action=comment">
-                        @Html.AntiForgeryToken()
+                @if (Model.Data.isCommentsOpen)
+                {
+                    <div class="alert alert-warning mt-2 mb-5">
+                        <form method="post" action="@Model.Data.Permalink?action=comment">
+                            @Html.AntiForgeryToken()
 
-                        <h4 class="mb-3">Leave a comment</h4>
-                        <p class="mb-4"><small>
-                            Please note that we won't show your email to others, or use it for sending
-                            unwanted emails. We will only use it to render your Gravatar image and to
-                            validate you as a real person.
-                        </small></p>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <input name="CommentAuthor" type="text" class="form-control form-control-sm" placeholder="Your name">
+                            <h4 class="mb-3">Leave a comment</h4>
+                            <p class="mb-4"><small>
+                                Please note that we won't show your email to others, or use it for sending
+                                unwanted emails. We will only use it to render your Gravatar image and to
+                                validate you as a real person.
+                            </small></p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input name="CommentAuthor" type="text" class="form-control form-control-sm" placeholder="Your name">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <input name="CommentEmail" type="text" class="form-control form-control-sm" placeholder="Your email address">
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <input name="CommentEmail" type="text" class="form-control form-control-sm" placeholder="Your email address">
+                            <div class="form-group">
+                                <input name="CommentUrl" type="text" class="form-control form-control-sm" placeholder="An (optional) URL to your website">
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <input name="CommentUrl" type="text" class="form-control form-control-sm" placeholder="An (optional) URL to your website">
-                        </div>
-                        <div class="form-group">
-                            <textarea name="CommentBody" rows="6" class="form-control form-control-sm" placeholder="Your awesome comment"></textarea>
-                        </div>
-                        <div class="form-group text-left">
-                            <button class="btn btn-sm btn-success">Post Comment</button>
+                            <div class="form-group">
+                                <textarea name="CommentBody" rows="6" class="form-control form-control-sm" placeholder="Your awesome comment"></textarea>
+                            </div>
+                            <div class="form-group text-left">
+                                <button class="btn btn-sm btn-success">Post Comment</button>
+                            </div>
+                        </form>
                     </div>
-                    </form>
-                </div>
+                }
                 @Html.DisplayFor(m => m.Comments)
             </div>
         </div>

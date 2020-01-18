@@ -71,11 +71,22 @@ namespace Piranha.Models
         /// Gets/sets if comments should be enabled.
         /// </summary>
         /// <value></value>
-        public bool EnableComments { get; set; } = true;
+        public bool EnableComments { get; set; } = false;
+
+        /// <summary>
+        /// Gets/sets after how many days after publish date comments
+        /// should be closed. A value of 0 means never.
+        /// </summary>
+        public int CloseCommentsAfterDays { get; set; }
 
         /// <summary>
         /// Gets/sets the comment count.
         /// </summary>
         public int CommentCount { get; set; }
+
+        /// <summary>
+        /// Checks if comments are open for this page.
+        /// </summary>
+        public bool isCommentsOpen => EnableComments && Published.HasValue && (CloseCommentsAfterDays == 0 || Published.Value.AddDays(CloseCommentsAfterDays) > DateTime.Now);
     }
 }

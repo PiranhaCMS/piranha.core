@@ -700,6 +700,7 @@ namespace Piranha.Repositories
 
                 // Set if comments should be enabled
                 post.EnableComments = model.EnableComments;
+                post.CloseCommentsAfterDays = model.CloseCommentsAfterDays;
 
                 // Make sure foreign key is set for fields
                 if (!isDraft)
@@ -1012,6 +1013,7 @@ namespace Piranha.Repositories
             {
                 model.CommentCount = await _db.PostComments.CountAsync(c => c.PostId == model.Id).ConfigureAwait(false);
             }
+            model.CloseCommentsAfterDays = post.CloseCommentsAfterDays;
 
             if (!(model is Models.IContentInfo))
             {

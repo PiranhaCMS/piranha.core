@@ -74,6 +74,12 @@ namespace Piranha.Data
         public bool EnableComments { get; set; }
 
         /// <summary>
+        /// Gets/sets after how many days after publish date comments
+        /// should be closed. A value of 0 means never.
+        /// </summary>
+        public int CloseCommentsAfterDays { get; set; }
+
+        /// <summary>
         /// Gets/sets the site.
         /// </summary>
         public Site Site { get; set; }

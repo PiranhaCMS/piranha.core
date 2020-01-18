@@ -256,6 +256,7 @@ namespace Piranha.Manager.Services
                 post.RedirectUrl = model.RedirectUrl;
                 post.RedirectType = (RedirectType)Enum.Parse(typeof(RedirectType), model.RedirectType);
                 post.EnableComments = model.EnableComments;
+                post.CloseCommentsAfterDays = model.CloseCommentsAfterDays;
 
                 if (postType.Routes.Count > 1)
                 {
@@ -411,6 +412,7 @@ namespace Piranha.Manager.Services
                 RedirectUrl = post.RedirectUrl,
                 RedirectType = post.RedirectType.ToString(),
                 EnableComments = post.EnableComments,
+                CloseCommentsAfterDays = post.CloseCommentsAfterDays,
                 State = GetState(post, isDraft),
                 UseBlocks = type.UseBlocks,
                 SelectedRoute = route == null ? null : new RouteModel
