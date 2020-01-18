@@ -17,7 +17,7 @@ namespace Piranha.Models
     /// <summary>
     /// Base class for post models.
     /// </summary>
-    public abstract class PostBase : RoutedContent, IBlockModel, IMeta
+    public abstract class PostBase : RoutedContent, IBlockModel, IMeta, ICommentModel
     {
         /// <summary>
         /// Gets/sets the blog page id.
@@ -51,6 +51,12 @@ namespace Piranha.Models
         /// Gets/sets the available blocks.
         /// </summary>
         public IList<Extend.Block> Blocks { get; set; } = new List<Extend.Block>();
+
+        /// <summary>
+        /// Gets/sets if comments should be enabled.
+        /// </summary>
+        /// <value></value>
+        public bool EnableComments { get; set; } = true;
 
         /// <summary>
         /// Gets/sets the comment count.

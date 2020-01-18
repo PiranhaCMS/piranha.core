@@ -39,6 +39,9 @@ namespace Piranha.Manager.Services
                     ExpandedSitemapLevels = config.ManagerExpandedSitemapLevels,
                     ArchivePageSize = config.ArchivePageSize,
                     CommentsApprove = config.CommentsApprove,
+                    CommentsCloseAfterDays = config.CommentsCloseAfterDays,
+                    CommentsEnabledForPages = config.CommentsEnabledForPages,
+                    CommentsEnabledForPosts = config.CommentsEnabledForPosts,
                     CommentsPageSize = config.CommentsPageSize,
                     PagesExpires = config.CacheExpiresPages,
                     PostsExpires = config.CacheExpiresPosts,
@@ -65,6 +68,9 @@ namespace Piranha.Manager.Services
                 config.ManagerDefaultCollapsedBlockGroupHeaders = model.DefaultCollapsedBlockGroupHeaders;
                 config.ArchivePageSize = model.ArchivePageSize;
                 config.CommentsApprove = model.CommentsApprove;
+                config.CommentsCloseAfterDays = model.CommentsCloseAfterDays;
+                config.CommentsEnabledForPages = model.CommentsEnabledForPages;
+                config.CommentsEnabledForPosts = model.CommentsEnabledForPosts;
                 config.CommentsPageSize = model.CommentsPageSize;
                 config.CacheExpiresPages = model.PagesExpires;
                 config.CacheExpiresPosts = model.PostsExpires;

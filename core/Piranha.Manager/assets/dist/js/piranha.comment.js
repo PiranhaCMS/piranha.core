@@ -47,6 +47,15 @@ piranha.comment = new Vue({
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },
+        toggleApproved: function (item) {
+            item.isApproved = !item.isApproved;
+
+            if (item.isApproved) {
+                this.approve(item.id);
+            } else {
+                this.unapprove(item.id);
+            }
+        },
         remove: function (id) {
             var self = this;
             console.log("remove");

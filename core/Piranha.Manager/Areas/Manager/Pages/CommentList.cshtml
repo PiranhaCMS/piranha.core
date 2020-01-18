@@ -51,7 +51,7 @@
                                 <th class="text-nowrap">Response To</th>
                                 <th>Approved</th>
                                 <th>Created</th>
-                                <th class="actions three"></th>
+                                <th class="actions one"></th>
                             </tr>
                         </thead>
                         <tbody v-for="comment in items">
@@ -64,13 +64,11 @@
                                 <td class="align-middle">
                                     <a v-if="comment.articleTitle" class="author" :href="piranha.baseUrl + comment.articleUrl" target="_blank">{{ comment.articleTitle }}</a>
                                 </td>
-                                <td class="text-center align-middle">
-                                    <i v-if="comment.isApproved" class="fas fa-check"></i>
+                                <td class="text-center text-success align-middle">
+                                    <button v-on:click.prevent="toggleApproved(comment)" class="switch" :aria-pressed="comment.isApproved"><span></span></button>
                                 </td>
                                 <td class="align-middle">{{ comment.created }}</td>
-                                <td class="actions three align-middle">
-                                    <a v-on:click.prevent="approve(comment.id)" href="#" title="Approve"><i class="fas fa-check"></i></a>
-                                    <a v-on:click.prevent="unapprove(comment.id)" href="#" title="Unapprove"><i class="fas fa-times"></i></a>
+                                <td class="actions one align-middle">
                                     <a v-on:click.prevent="remove(comment.id)" href="#" title="Delete" class="danger"><i class="fas fa-trash"></i></a>
                                 </td>
                             </tr>

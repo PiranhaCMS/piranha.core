@@ -19,6 +19,9 @@ namespace Piranha.Manager.Models
         public int ExpandedSitemapLevels { get; set; }
         public int ArchivePageSize { get; set; }
         public bool CommentsApprove { get; set; }
+        public int CommentsCloseAfterDays { get; set; }
+        public bool CommentsEnabledForPosts { get; set; }
+        public bool CommentsEnabledForPages { get; set; }
         public int CommentsPageSize { get; set; }
         public int PagesExpires { get; set; }
         public int PostsExpires { get; set; }

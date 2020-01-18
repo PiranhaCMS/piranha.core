@@ -81,6 +81,11 @@ namespace Piranha.Manager.Models
         public string RedirectType { get; set; } = "permanent";
 
         /// <summary>
+        /// Gets/sets if comments should be enabled.
+        /// </summary>
+        public bool EnableComments { get; set; }
+
+        /// <summary>
         /// Gets/sets the content status.
         /// </summary>
         public string State { get; set; }
@@ -94,7 +99,7 @@ namespace Piranha.Manager.Models
         /// Gets/sets the available routes.
         /// </summary>
         public List<RouteModel> Routes { get; set; } = new List<RouteModel>();
-        
+
         /// <summary>
         /// Gets/sets the selected route.
         /// </summary>

@@ -19,7 +19,7 @@ namespace Piranha.Runtime
         /// <summary>
         /// The standard repository hooks for a data model.
         /// </summary>
-        public sealed class ServiceHooks<T>
+        public class ServiceHooks<T>
         {
             /// <summary>
             /// Registers a new hook to be executed after the model
@@ -81,11 +81,28 @@ namespace Piranha.Runtime
             }
         }
 
+        public class ValidationServiceHooks<T> : ServiceHooks<T>
+        {
+            /// <summary>
+            /// Registers a new hook to be executed after the OnBeforeSave
+            /// hook as been executed but before the model is saved to the
+            /// database. This hook should be used to extend default model
+            /// validation.
+            /// </summary>
+            /// <param name="hook">The hook</param>
+            public void RegisterOnValidate(ModelDelegate<T> hook)
+            {
+                App.Hooks.RegisterOnLoad<T>(hook);
+            }
+
+        }
+
         //
         // Private hook collections.
         //
         private readonly Dictionary<Type, object> _onLoad = new Dictionary<Type, object>();
         private readonly Dictionary<Type, object> _onBeforeSave = new Dictionary<Type, object>();
+        private readonly Dictionary<Type, object> _onValidate = new Dictionary<Type, object>();
         private readonly Dictionary<Type, object> _onAfterSave = new Dictionary<Type, object>();
         private readonly Dictionary<Type, object> _onBeforeDelete = new Dictionary<Type, object>();
         private readonly Dictionary<Type, object> _onAfterDelete = new Dictionary<Type, object>();
@@ -110,7 +127,7 @@ namespace Piranha.Runtime
         /// <summary>
         /// Gets the hooks available for comments.
         /// </summary>
-        public ServiceHooks<Comment> Comments { get; private set; } = new ServiceHooks<Comment>();
+        public ValidationServiceHooks<Comment> Comments { get; private set; } = new ValidationServiceHooks<Comment>();
 
         /// <summary>
         /// Gets the hooks available for media.
@@ -165,6 +182,10 @@ namespace Piranha.Runtime
             {
                 _onBeforeSave.Remove(typeof(T));
             }
+            if (_onValidate.ContainsKey(typeof(T)))
+            {
+                _onValidate.Remove(typeof(T));
+            }
             if (_onAfterSave.ContainsKey(typeof(T)))
             {
                 _onAfterSave.Remove(typeof(T));
@@ -206,6 +227,20 @@ namespace Piranha.Runtime
                 _onBeforeSave[typeof(T)] = new List<ModelDelegate<T>>();
             }
             ((List<ModelDelegate<T>>)_onBeforeSave[typeof(T)]).Add(hook);
+        }
+
+        /// <summary>
+        /// Registers a new hook to be executed before the model
+        /// is saved to the database.
+        /// </summary>
+        /// <param name="hook">The hook</param>
+        internal void RegisterOnValidate<T>(ModelDelegate<T> hook)
+        {
+            if (!_onValidate.ContainsKey(typeof(T)))
+            {
+                _onValidate[typeof(T)] = new List<ModelDelegate<T>>();
+            }
+            ((List<ModelDelegate<T>>)_onValidate[typeof(T)]).Add(hook);
         }
 
         /// <summary>
@@ -276,6 +311,23 @@ namespace Piranha.Runtime
             if (_onBeforeSave.ContainsKey(typeof(T)))
             {
                 var hooks = (List<ModelDelegate<T>>)_onBeforeSave[typeof(T)];
+
+                foreach (var hook in hooks)
+                {
+                    hook.Invoke(model);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Executes the registered hooks on the given model.
+        /// </summary>
+        /// <param name="model">The model</param>
+        public void OnValidate<T>(T model)
+        {
+            if (_onValidate.ContainsKey(typeof(T)))
+            {
+                var hooks = (List<ModelDelegate<T>>)_onValidate[typeof(T)];
 
                 foreach (var hook in hooks)
                 {

@@ -164,6 +164,60 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
+        public async Task AddPostCommentAutoApprove()
+        {
+            using (var api = CreateApi())
+            {
+                using (var config = new Piranha.Config(api))
+                {
+                    config.CommentsApprove = true;
+                }
+
+                var id = Guid.NewGuid();
+
+                await api.Posts.SaveCommentAndVerifyAsync(BLOGPOST_ID, new Comment
+                {
+                    Id = id,
+                    Author = "John Doe",
+                    Email = "john@doe.com",
+                    Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
+                });
+
+                var comment = await api.Posts.GetCommentByIdAsync(id);
+
+                Assert.NotNull(comment);
+                Assert.True(comment.IsApproved);
+            }
+        }
+
+        [Fact]
+        public async Task AddPostCommentAutoUnApprove()
+        {
+            using (var api = CreateApi())
+            {
+                using (var config = new Piranha.Config(api))
+                {
+                    config.CommentsApprove = false;
+                }
+
+                var id = Guid.NewGuid();
+
+                await api.Posts.SaveCommentAndVerifyAsync(BLOGPOST_ID, new Comment
+                {
+                    Id = id,
+                    Author = "John Doe",
+                    Email = "john@doe.com",
+                    Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
+                });
+
+                var comment = await api.Posts.GetCommentByIdAsync(id);
+
+                Assert.NotNull(comment);
+                Assert.False(comment.IsApproved);
+            }
+        }
+
+        [Fact]
         public async Task AddPageComment()
         {
             using (var api = CreateApi())
@@ -227,6 +281,60 @@ namespace Piranha.Tests.Repositories
                         Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
                     });
                 });
+            }
+        }
+
+        [Fact]
+        public async Task AddPageCommentAutoApprove()
+        {
+            using (var api = CreateApi())
+            {
+                using (var config = new Piranha.Config(api))
+                {
+                    config.CommentsApprove = true;
+                }
+
+                var id = Guid.NewGuid();
+
+                await api.Pages.SaveCommentAndVerifyAsync(BLOG_ID, new Comment
+                {
+                    Id = id,
+                    Author = "John Doe",
+                    Email = "john@doe.com",
+                    Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
+                });
+
+                var comment = await api.Pages.GetCommentByIdAsync(id);
+
+                Assert.NotNull(comment);
+                Assert.True(comment.IsApproved);
+            }
+        }
+
+        [Fact]
+        public async Task AddPageCommentAutoUnApprove()
+        {
+            using (var api = CreateApi())
+            {
+                using (var config = new Piranha.Config(api))
+                {
+                    config.CommentsApprove = false;
+                }
+
+                var id = Guid.NewGuid();
+
+                await api.Pages.SaveCommentAndVerifyAsync(BLOG_ID, new Comment
+                {
+                    Id = id,
+                    Author = "John Doe",
+                    Email = "john@doe.com",
+                    Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
+                });
+
+                var comment = await api.Pages.GetCommentByIdAsync(id);
+
+                Assert.NotNull(comment);
+                Assert.False(comment.IsApproved);
             }
         }
 

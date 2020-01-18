@@ -172,5 +172,11 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique id</param>
         Task DeleteDraft(Guid id);
+
+        /// <summary>
+        /// Deletes the comment with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        Task DeleteComment(Guid id);
     }
 }

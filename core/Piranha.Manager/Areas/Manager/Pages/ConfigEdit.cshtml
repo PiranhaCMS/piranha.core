@@ -40,18 +40,26 @@
                     <li class="list-group-item">
                         <div class="row align-items-end">
                             <div class="col-md-8">
+                                <strong class="d-block">@Localizer.Config["Expanded levels in the sitemap"]</strong>
+                                <span class="text-secondary">
+                                    @Localizer.Config["The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps."]
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <input v-model="model.expandedSitemapLevels" class="form-control" type="number">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row align-items-end">
+                            <div class="col-md-8">
                                 <strong class="d-block">@Localizer.Config["Hierarchical page slugs"]</strong>
                                 <span class="text-secondary">
                                     @Localizer.Config["If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps."]
                                 </span>
                             </div>
                             <div class="col-md-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input v-model="model.hierarchicalPageSlugs" type="checkbox">
-                                        @Localizer.Config["If page slugs should include the parent slug."]
-                                    </label>
-                                </div>
+                                <button v-on:click.prevent="model.hierarchicalPageSlugs = !model.hierarchicalPageSlugs" class="switch switch-lg" :aria-pressed="model.hierarchicalPageSlugs"><span></span></button>
                             </div>
                         </div>
                     </li>
@@ -64,12 +72,7 @@
                                 </span>
                             </div>
                             <div class="col-md-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input v-model="model.defaultCollapsedBlocks" type="checkbox">
-                                        @Localizer.Config["If blocks should be collapsed by default."]
-                                    </label>
-                                </div>
+                                <button v-on:click.prevent="model.defaultCollapsedBlocks = !model.defaultCollapsedBlocks" class="switch switch-lg" :aria-pressed="model.defaultCollapsedBlocks"><span></span></button>
                             </div>
                         </div>
                     </li>
@@ -80,25 +83,7 @@
                                 <span class="text-secondary">@Localizer.Config["If block group headers should be collapsed by default when opening a page or post in the manager."]</span>
                             </div>
                             <div class="col-md-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input v-model="model.defaultCollapsedBlockGroupHeaders" type="checkbox">
-                                        @Localizer.Config["If block headers should be collapsed by default."]
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row align-items-end">
-                            <div class="col-md-8">
-                                <strong class="d-block">@Localizer.Config["Expanded levels in the sitemap"]</strong>
-                                <span class="text-secondary">
-                                    @Localizer.Config["The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps."]
-                                </span>
-                            </div>
-                            <div class="col-md-4">
-                                <input v-model="model.expandedSitemapLevels" class="form-control" type="number">
+                                <button v-on:click.prevent="model.defaultCollapsedBlockGroupHeaders = !model.defaultCollapsedBlockGroupHeaders" class="switch switch-lg" :aria-pressed="model.defaultCollapsedBlockGroupHeaders"><span></span></button>
                             </div>
                         </div>
                     </li>
@@ -108,7 +93,7 @@
 
         <div class="card">
             <div class="card-header">
-                <span class="title">@Localizer.General["Blogging"]</span>
+                <span class="title">@Localizer.General["Archives and Comments"]</span>
             </div>
             <div class="card-body">
                 <ul class="list-group list-group-flush">
@@ -128,6 +113,19 @@
                     <li class="list-group-item">
                         <div class="row align-items-end">
                             <div class="col-md-8">
+                                <strong class="d-block">@Localizer.Config["Close comments after"]</strong>
+                                <span class="text-secondary">
+                                    @Localizer.Config["The number of days commenting should be open after publish date. A value of 0 means forever."]
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <input v-model="model.commentsCloseAfterDays" class="form-control" type="number">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row align-items-end">
+                            <div class="col-md-8">
                                 <strong class="d-block">@Localizer.Config["Comments page size"]</strong>
                                 <span class="text-secondary">
                                     @Localizer.Config["The default page size when loading comments. Please note that this this can be overridden for specific pages."]
@@ -141,18 +139,39 @@
                     <li class="list-group-item">
                         <div class="row align-items-end">
                             <div class="col-md-8">
+                                <strong class="d-block">@Localizer.Config["Enable post comments"]</strong>
+                                <span class="text-secondary">
+                                    @Localizer.Config["If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts."]
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <button v-on:click.prevent="model.commentsEnabledForPosts = !model.commentsEnabledForPosts" class="switch switch-lg" :aria-pressed="model.commentsEnabledForPosts"><span></span></button>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row align-items-end">
+                            <div class="col-md-8">
+                                <strong class="d-block">@Localizer.Config["Enable page comments"]</strong>
+                                <span class="text-secondary">
+                                    @Localizer.Config["If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages."]
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <button v-on:click.prevent="model.commentsEnabledForPages = !model.commentsEnabledForPages" class="switch switch-lg" :aria-pressed="model.commentsEnabledForPages"><span></span></button>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row align-items-end">
+                            <div class="col-md-8">
                                 <strong class="d-block">@Localizer.Config["Approve comments"]</strong>
                                 <span class="text-secondary">
                                     @Localizer.Config["If comments should be approved by default. Please note that this can be overridden by third party moderation services."]
                                 </span>
                             </div>
                             <div class="col-md-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input v-model="model.commentsApprove" type="checkbox">
-                                        @Localizer.Config["If comments should be approved by default."]
-                                    </label>
-                                </div>
+                                <button v-on:click.prevent="model.commentsApprove = !model.commentsApprove" class="switch switch-lg" :aria-pressed="model.commentsApprove"><span></span></button>
                             </div>
                         </div>
                     </li>

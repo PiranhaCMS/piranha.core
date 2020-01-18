@@ -23,6 +23,16 @@
     }
 }
 
+.form-switch {
+    .switch {
+        float: left;
+        margin-right: .5rem;
+    }
+    >label {
+        font-weight: 400;
+    }
+}
+
 [contenteditable]:focus {
     outline: 0px solid transparent;
 }

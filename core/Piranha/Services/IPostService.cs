@@ -249,5 +249,17 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="model">The model</param>
         Task DeleteAsync<T>(T model) where T : PostBase;
+
+        /// <summary>
+        /// Deletes the comment with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        Task DeleteCommentAsync(Guid id);
+
+        /// <summary>
+        /// Deletes the given comment.
+        /// </summary>
+        /// <param name="model">The comment</param>
+        Task DeleteCommentAsync(Comment model);
     }
 }

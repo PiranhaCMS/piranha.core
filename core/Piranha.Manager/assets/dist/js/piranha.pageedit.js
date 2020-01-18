@@ -21,6 +21,7 @@ piranha.pageedit = new Vue({
         published: null,
         redirectUrl: null,
         redirectType: null,
+        enableComments: null,
         state: "new",
         blocks: [],
         regions: [],
@@ -67,6 +68,7 @@ piranha.pageedit = new Vue({
             this.published = model.published;
             this.redirectUrl = model.redirectUrl;
             this.redirectType = model.redirectType;
+            this.enableComments = model.enableComments;
             this.state = model.state;
             this.blocks = model.blocks;
             this.regions = model.regions;
@@ -172,6 +174,7 @@ piranha.pageedit = new Vue({
                 published: self.published,
                 redirectUrl: self.redirectUrl,
                 redirectType: self.redirectType,
+                enableComments: self.enableComments,
                 isCopy: self.isCopy,
                 blocks: JSON.parse(JSON.stringify(self.blocks)),
                 regions: JSON.parse(JSON.stringify(self.regions)),

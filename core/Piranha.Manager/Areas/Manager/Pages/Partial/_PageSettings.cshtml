@@ -12,9 +12,12 @@
             </div>
 
             <!-- Tabs -->
-            <ul class="nav nav-tabs" v-if="settingRegions.length > 0" role="tablist">
+            <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item">
                     <a href="#" class="nav-link" :class="{ active: selectedSetting === 'uid-settings' }" v-on:click.prevent="selectSetting('uid-settings')">@Localizer.General["General"]</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" :class="{ active: selectedSetting === 'uid-seo' }" v-on:click.prevent="selectSetting('uid-seo')">@Localizer.General["SEO"]</a>
                 </li>
                 <li class="nav-item" v-for="region in settingRegions">
                     <a href="#" class="nav-link" :class="{ active: selectedSetting === region.meta.uid }" v-on:click.prevent="selectSetting(region.meta.uid)">{{ region.meta.name }}</a>
@@ -27,32 +30,36 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>@Localizer.Page["Navigation title"]</label>
-                                <input v-model="navigationTitle" type="text" maxlength="128" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
                                 <label>@Localizer.General["Slug"]</label>
                                 <input v-model="slug" type="text" maxlength="128" class="form-control">
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
                             <div class="form-group">
-                                <label>@Localizer.Page["Meta keywords"]</label>
-                                <input v-model="metaKeywords" type="text" maxlength="128" class="form-control">
+                                <label>@Localizer.Page["Navigation title"]</label>
+                                <input v-model="navigationTitle" type="text" maxlength="128" class="form-control">
                             </div>
-                            <div class="form-group">
-                                <label>@Localizer.Page["Meta description"]</label>
-                                <textarea v-model="metaDescription" rows="5" maxlength="256" class="form-control"></textarea>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
                             <div class="form-group">
                                 <label>@Localizer.General["Redirect"]</label>
                                 <input type="text" v-model="redirectUrl" maxlength="256" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>@Localizer.General["Comments"]</label>
+                                <div class="form-switch">
+                                    <button v-on:click.prevent="enableComments = !enableComments" class="switch" :aria-pressed="enableComments"><span></span></button>
+                                    <label for="enableComments" class="form-check-label">@Localizer.Page["If comments should be enabled for this page"]</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>@Localizer.General["Publish date"]</label>
+                                <datepicker v-model="published" :format="'yyyy-MM-dd'" :monday-first="true" :typeable="true" :bootstrap-styling="true"></datepicker>
+                            </div>
+                            <div class="form-group">
+                                <label>@Localizer.Page["Hidden"]</label>
+                                <div class="form-switch">
+                                    <button v-on:click.prevent="isHidden = !isHidden" class="switch" :aria-pressed="isHidden"><span></span></button>
+                                    <label for="isHidden" class="form-check-label">@Localizer.Page["If the page should be hidden in the sitemap"]</label>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label>@Localizer.General["Redirect Type"]</label>
@@ -67,22 +74,18 @@
                                     <option :value="route" v-for="route in routes">{{ route.title }}</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label>@Localizer.Page["Hidden"]</label>
-                                <div class="form-group form-check">
-                                    <input id="isHidden" v-model="isHidden" type="checkbox" class="form-check-input">
-                                    <label for="isHidden" class="form-check-label">@Localizer.Page["If the page should be hidden in the sitemap"]</label>
-                                </div>
-                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>@Localizer.General["Publish date"]</label>
-                                <datepicker v-model="published" :format="'yyyy-MM-dd'" :monday-first="true" :typeable="true" :bootstrap-styling="true"></datepicker>
-                            </div>
-                        </div>
+                </div>
+
+                <div :class="{ 'd-none': selectedSetting != 'uid-seo' }">
+                    <div class="form-group">
+                        <label>@Localizer.Page["Meta keywords"]</label>
+                        <input v-model="metaKeywords" type="text" maxlength="128" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>@Localizer.Page["Meta description"]</label>
+                        <textarea v-model="metaDescription" rows="5" maxlength="256" class="form-control"></textarea>
                     </div>
                 </div>
 

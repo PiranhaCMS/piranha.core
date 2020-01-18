@@ -59,7 +59,13 @@ namespace Piranha.Services
 
             if (type != null)
             {
-                return _factory.Create<T>(type);
+                var model = _factory.Create<T>(type);
+
+                using (var config = new Config(_paramService))
+                {
+                    model.EnableComments = config.CommentsEnabledForPages;
+                }
+                return model;
             }
             return null;
         }
@@ -233,7 +239,7 @@ namespace Piranha.Services
             }
 
             // Get the comments
-            var comments = await _repo.GetAllComments(pageId, onlyApproved, page.Value, pageSize.Value);
+            var comments = await _repo.GetAllComments(pageId, onlyApproved, page.Value, pageSize.Value).ConfigureAwait(false);
 
             // Execute hook
             foreach (var comment in comments)
@@ -658,7 +664,7 @@ namespace Piranha.Services
         private async Task SaveCommentAsync(Guid pageId, Comment model, bool verify)
         {
             // Make sure we have a post
-            var page = await GetByIdAsync<PageInfo>(pageId);
+            var page = await GetByIdAsync<PageInfo>(pageId).ConfigureAwait(false);
 
             if (page != null)
             {
@@ -690,12 +696,12 @@ namespace Piranha.Services
                 // Call hooks & save
                 App.Hooks.OnBeforeSave<Comment>(model);
 
-                await _repo.SaveComment(pageId, model);
+                await _repo.SaveComment(pageId, model).ConfigureAwait(false);
 
                 App.Hooks.OnAfterSave<Comment>(model);
 
                 // Invalidate parent post from cache
-                await RemoveFromCache(page);
+                await RemoveFromCache(page).ConfigureAwait(false);
             }
             else
             {

@@ -648,6 +648,9 @@ namespace Piranha.Repositories
                 page = _contentService.Transform<T>(model, type, page);
                 page.ContentType = type.IsArchive ? "Blog" : "Page";
 
+                // Set if comments should be enabled
+                page.EnableComments = model.EnableComments;
+
                 // Make sure foreign key is set for fields
                 if (!isDraft)
                 {
@@ -824,7 +827,11 @@ namespace Piranha.Repositories
         /// <param name="model">The targe model</param>
         private async void Process<T>(Data.Page page, T model) where T : Models.PageBase
         {
-            model.CommentCount = await _db.PageComments.CountAsync(c => c.PageId == model.Id);
+            model.EnableComments = page.EnableComments;
+            if (model.EnableComments)
+            {
+                model.CommentCount = await _db.PageComments.CountAsync(c => c.PageId == model.Id);
+            }
 
             if (!(model is Models.IContentInfo))
             {

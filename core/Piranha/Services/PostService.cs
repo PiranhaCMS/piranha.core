@@ -65,7 +65,13 @@ namespace Piranha.Services
 
             if (type != null)
             {
-                return _factory.Create<T>(type);
+                var model = _factory.Create<T>(type);
+
+                using (var config = new Config(_paramService))
+                {
+                    model.EnableComments = config.CommentsEnabledForPosts;
+                }
+                return model;
             }
             return null;
         }
@@ -233,7 +239,7 @@ namespace Piranha.Services
             }
 
             // Get the comments
-            var comments = await _repo.GetAllComments(postId, onlyApproved, page.Value, pageSize.Value);
+            var comments = await _repo.GetAllComments(postId, onlyApproved, page.Value, pageSize.Value).ConfigureAwait(false);
 
             // Execute hook
             foreach (var comment in comments)
@@ -541,10 +547,16 @@ namespace Piranha.Services
             return SaveCommentAsync(postId, model, true);
         }
 
+        /// <summary>
+        /// Saves the comment.
+        /// </summary>
+        /// <param name="model">The comment model</param>
+        /// <param name="postId">The unique post id</param>
+        /// <param name="verify">If default moderation settings should be applied</param>
         private async Task SaveCommentAsync(Guid postId, Comment model, bool verify)
         {
             // Make sure we have a post
-            var post = await GetByIdAsync<PostInfo>(postId);
+            var post = await GetByIdAsync<PostInfo>(postId).ConfigureAwait(false);
 
             if (post != null)
             {
@@ -576,7 +588,7 @@ namespace Piranha.Services
                 // Call hooks & save
                 App.Hooks.OnBeforeSave<Comment>(model);
 
-                await _repo.SaveComment(postId, model);
+                await _repo.SaveComment(postId, model).ConfigureAwait(false);
 
                 App.Hooks.OnAfterSave<Comment>(model);
 
@@ -725,6 +737,45 @@ namespace Piranha.Services
 
             // Remove from cache & invalidate sitemap
             RemoveFromCache(model);
+        }
+
+
+        /// <summary>
+        /// Deletes the comment with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        public async Task DeleteCommentAsync(Guid id)
+        {
+            var model = await GetCommentByIdAsync(id);
+
+            if (model != null)
+            {
+                await DeleteCommentAsync(model).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Deletes the given comment.
+        /// </summary>
+        /// <param name="model">The comment</param>
+        public async Task DeleteCommentAsync(Comment model)
+        {
+            var post = await GetByIdAsync<PostInfo>(model.ContentId).ConfigureAwait(false);
+
+            if (post != null)
+            {
+                // Call hooks & delete
+                App.Hooks.OnBeforeDelete<Comment>(model);
+
+                App.Hooks.OnAfterDelete<Comment>(model);
+
+                // Remove parent post from cache
+                RemoveFromCache(post);
+            }
+            else
+            {
+                throw new ArgumentException($"Could not find post with id { model.ContentId.ToString() }");
+            }
         }
 
         /// <summary>

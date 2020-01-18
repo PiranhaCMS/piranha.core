@@ -11,6 +11,9 @@ piranha.config = new Vue({
             expandedSitemapLevels: null,
             archivePageSize: null,
             commentsApprove: null,
+            commentsCloseAfterDays: null,
+            commentsEnabledForPages: null,
+            commentsEnabledForPosts: null,
             commentsPageSize: null,
             pagesExpires: null,
             postsExpires: null,
@@ -32,6 +35,9 @@ piranha.config = new Vue({
                     self.model.expandedSitemapLevels = result.expandedSitemapLevels;
                     self.model.archivePageSize = result.archivePageSize;
                     self.model.commentsApprove = result.commentsApprove;
+                    self.model.commentsCloseAfterDays = result.commentsCloseAfterDays;
+                    self.model.commentsEnabledForPages = result.commentsEnabledForPages;
+                    self.model.commentsEnabledForPosts = result.commentsEnabledForPosts;
                     self.model.commentsPageSize = result.commentsPageSize;
                     self.model.pagesExpires = result.pagesExpires;
                     self.model.postsExpires = result.postsExpires;
@@ -56,6 +62,9 @@ piranha.config = new Vue({
                         expandedSitemapLevels: self.model.expandedSitemapLevels,
                         archivePageSize: self.model.archivePageSize,
                         commentsApprove: self.model.commentsApprove,
+                        commentsCloseAfterDays: self.model.commentsCloseAfterDays,
+                        commentsEnabledForPages: self.model.commentsEnabledForPages,
+                        commentsEnabledForPosts: self.model.commentsEnabledForPosts,
                         commentsPageSize: self.model.commentsPageSize,
                         pagesExpires: self.model.pagesExpires,
                         postsExpires: self.model.postsExpires,

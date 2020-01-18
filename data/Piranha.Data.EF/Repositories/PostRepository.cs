@@ -194,7 +194,7 @@ namespace Piranha.Repositories
                     IsApproved = c.IsApproved,
                     Body = c.Body,
                     Created = c.Created
-                }).ToListAsync();
+                }).ToListAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -547,6 +547,23 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Deletes the comment with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        public async Task DeleteComment(Guid id)
+        {
+            var comment = await _db.PostComments
+                .FirstOrDefaultAsync(c => c.Id == id)
+                .ConfigureAwait(false);
+
+            if (comment != null)
+            {
+                _db.PostComments.Remove(comment);
+                await _db.SaveChangesAsync().ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
         /// Saves the given post model
         /// </summary>
         /// <param name="model">The post model</param>
@@ -680,6 +697,9 @@ namespace Piranha.Repositories
                     post.LastModified = DateTime.Now;
                 }
                 post = _contentService.Transform<T>(model, type, post);
+
+                // Set if comments should be enabled
+                post.EnableComments = model.EnableComments;
 
                 // Make sure foreign key is set for fields
                 if (!isDraft)
@@ -987,7 +1007,11 @@ namespace Piranha.Repositories
         /// <param name="model">The targe model</param>
         private async void Process<T>(Data.Post post, T model) where T : Models.PostBase
         {
-            model.CommentCount = await _db.PostComments.CountAsync(c => c.PostId == model.Id);
+            model.EnableComments = post.EnableComments;
+            if (model.EnableComments)
+            {
+                model.CommentCount = await _db.PostComments.CountAsync(c => c.PostId == model.Id).ConfigureAwait(false);
+            }
 
             if (!(model is Models.IContentInfo))
             {

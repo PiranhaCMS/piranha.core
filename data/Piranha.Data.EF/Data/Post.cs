@@ -45,6 +45,12 @@ namespace Piranha.Data
         public Models.RedirectType RedirectType { get; set; }
 
         /// <summary>
+        /// Gets/sets if comments should be enabled.
+        /// </summary>
+        /// <value></value>
+        public bool EnableComments { get; set; }
+
+        /// <summary>
         /// Gets/sets the associated post type.
         /// </summary>
         public PostType PostType { get; set; }

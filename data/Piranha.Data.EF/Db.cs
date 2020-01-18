@@ -221,6 +221,7 @@ namespace Piranha
             mb.Entity<Data.Page>().Property(p => p.MetaDescription).HasMaxLength(256);
             mb.Entity<Data.Page>().Property(p => p.Route).HasMaxLength(256);
             mb.Entity<Data.Page>().Property(p => p.RedirectUrl).HasMaxLength(256);
+            mb.Entity<Data.Page>().Property(p => p.EnableComments).HasDefaultValue(false);
             mb.Entity<Data.Page>().HasIndex(p => new { p.SiteId, p.Slug }).IsUnique();
 
             mb.Entity<Data.PageBlock>().ToTable("Piranha_PageBlocks");
@@ -257,6 +258,7 @@ namespace Piranha
             mb.Entity<Data.Post>().Property(p => p.MetaDescription).HasMaxLength(256);
             mb.Entity<Data.Post>().Property(p => p.Route).HasMaxLength(256);
             mb.Entity<Data.Post>().Property(p => p.RedirectUrl).HasMaxLength(256);
+            mb.Entity<Data.Post>().Property(p => p.EnableComments).HasDefaultValue(true);
             mb.Entity<Data.Post>().HasOne(p => p.Category).WithMany().IsRequired().OnDelete(DeleteBehavior.Restrict);
             mb.Entity<Data.Post>().HasIndex(p => new { p.BlogId, p.Slug }).IsUnique();
 
