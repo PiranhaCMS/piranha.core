@@ -8,6 +8,7 @@ piranha.media = new Vue({
         loading: true,
         listView: true,
         currentFolderId: null,
+        currentFolderName: null,
         parentFolderId: null,
         folders: [],
         items: [],
@@ -63,17 +64,24 @@ piranha.media = new Vue({
         showGallery: function () {
             this.listView = false;
         },
-        load: function (id) {
+        load: function (id, skipState) {
             var self = this;
+
+            if (!skipState) {
+                history.pushState({ folderId: id }, "", piranha.baseUrl + "manager/media" + (id ? "/" + id : ""));
+            }
 
             fetch(piranha.baseUrl + "manager/api/media/list" + (id ? "/" + id : "") + "/?width=210&height=160")
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.currentFolderId = result.currentFolderId;
+                    self.currentFolderName = result.currentFolderName;
                     self.parentFolderId = result.parentFolderId;
                     self.folders = result.folders;
                     self.items = result.media;
                     self.listView = result.viewMode === "list";
+
+                    document.title = result.currentFolderName ? result.currentFolderName : "Media";
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },
@@ -165,6 +173,13 @@ piranha.media = new Vue({
             }
 
             this.loading = false;
+        }
+    },
+    mounted: function () {
+        var self = this;
+
+        window.onpopstate = function (event) {
+            self.load(event.state && event.state.folderId ? event.state.folderId : "", true);
         }
     }
 });
