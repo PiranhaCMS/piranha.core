@@ -26,7 +26,7 @@ namespace Piranha.Manager.Models.Content
         public bool IsCollection { get; set; }
 
         /// <summary>
-        /// Gets/sets if the items ion the collection should be expanded
+        /// Gets/sets if the items in the collection should be expanded
         /// </summary>
         public bool Expanded { get; set; }
 
