@@ -148,7 +148,7 @@
     <value>Hänvisning</value>
   </data>
   <data name="Redirect Type" xml:space="preserve">
-    <value>Typ</value>
+    <value>Typ av omdirigering</value>
   </data>
   <data name="Revert" xml:space="preserve">
     <value>Återgå</value>
