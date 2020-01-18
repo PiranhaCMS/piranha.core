@@ -22,7 +22,7 @@ public static class PiranhaSearchExtensions
     /// <returns>The services</returns>
     public static PiranhaServiceBuilder UseAzureSearch(this PiranhaServiceBuilder serviceBuilder)
     {
-        serviceBuilder.AddPiranhaAzureSearch.AddPiranhaAzureSearch();
+        serviceBuilder.Services.AddPiranhaAzureSearch();
 
         return serviceBuilder;
     }
