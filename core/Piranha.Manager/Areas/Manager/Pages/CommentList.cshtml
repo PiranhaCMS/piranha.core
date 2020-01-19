@@ -39,9 +39,9 @@
             <div class="row">
                 <div class="col">
                     <div class="btn-group">
-                        <button class="btn btn-sm btn-primary">@Localizer.General["All"]</button>
-                        <button class="btn btn-sm btn-link">Pending</button>
-                        <button class="btn btn-sm btn-link">Approved</button>
+                        <button v-on:click.prevent="setStatus('all')" class="btn btn-sm" :class="{ 'btn-primary': state === 'all', 'btn-light': state !== 'all' }">@Localizer.General["All"]</button>
+                        <button v-on:click.prevent="setStatus('pending')" class="btn btn-sm" :class="{ 'btn-primary': state === 'pending', 'btn-light': state !== 'pending' }">Pending</button>
+                        <button v-on:click.prevent="setStatus('approved')" class="btn btn-sm" :class="{ 'btn-primary': state === 'approved', 'btn-light': state !== 'approved' }">Approved</button>
                     </div>
                     <table class="table table-borderless table-comments">
                         <thead>
@@ -49,12 +49,12 @@
                                 <th>Author</th>
                                 <th>Comment</th>
                                 <th class="text-nowrap">Response To</th>
-                                <th>Approved</th>
+                                <th class="text-center">Approved</th>
                                 <th>Created</th>
                                 <th class="actions one"></th>
                             </tr>
                         </thead>
-                        <tbody v-for="comment in items">
+                        <tbody v-for="comment in filteredItems">
                             <tr>
                                 <td class="text-nowrap align-middle">
                                     <img class="rounded mr-2" :src="comment.authorImage" :alt="comment.author">

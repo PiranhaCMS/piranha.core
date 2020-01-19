@@ -6,7 +6,23 @@ piranha.comment = new Vue({
     el: "#comments",
     data: {
         loading: true,
-        items: []
+        items: [],
+        state: "all"
+    },
+    computed: {
+        filteredItems: function () {
+            var self = this;
+
+            return this.items.filter(function (item) {
+                if (self.state === "all") {
+                    return true;
+                } else if (self.state === "pending") {
+                    return !item.isApproved;
+                } else {
+                    return item.isApproved;
+                }
+            });
+        }
     },
     methods: {
         load: function () {
@@ -69,6 +85,9 @@ piranha.comment = new Vue({
                     self.load();
                 })
                 .catch(function (error) { console.log("error:", error ); });
+        },
+        setStatus: function (status) {
+            this.state = status;
         }
     },
     updated: function () {

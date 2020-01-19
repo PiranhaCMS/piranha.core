@@ -84,6 +84,18 @@ button {
             margin-top: -1px;
         }
     }
+
+    &.btn-light {
+        background: #fff;
+    }
+}
+
+.card-body {
+    .btn {
+        &.btn-light {
+            background: $gray-100;
+        }
+    }
 }
 
 .btn-group {
