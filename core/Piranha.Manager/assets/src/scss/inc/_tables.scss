@@ -1,5 +1,9 @@
 @import "variables";
 
+.w-20 {
+    width: 20% !important;
+}
+
 .table {
     tr {
         &.droppable {
