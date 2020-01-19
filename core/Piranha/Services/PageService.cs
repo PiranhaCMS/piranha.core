@@ -697,9 +697,7 @@ namespace Piranha.Services
 
                 // Call hooks & save
                 App.Hooks.OnBeforeSave<Comment>(model);
-
                 await _repo.SaveComment(pageId, model).ConfigureAwait(false);
-
                 App.Hooks.OnAfterSave<Comment>(model);
 
                 // Invalidate parent post from cache
@@ -740,6 +738,44 @@ namespace Piranha.Services
             await RemoveFromCache(model).ConfigureAwait(false);
 
             await _siteService.InvalidateSitemapAsync(model.SiteId).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Deletes the comment with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        public async Task DeleteCommentAsync(Guid id)
+        {
+            var model = await GetCommentByIdAsync(id);
+
+            if (model != null)
+            {
+                await DeleteCommentAsync(model).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Deletes the given comment.
+        /// </summary>
+        /// <param name="model">The comment</param>
+        public async Task DeleteCommentAsync(Comment model)
+        {
+            var page = await GetByIdAsync<PageInfo>(model.ContentId).ConfigureAwait(false);
+
+            if (page != null)
+            {
+                // Call hooks & delete
+                App.Hooks.OnBeforeDelete<Comment>(model);
+                await _repo.DeleteComment(model.Id);
+                App.Hooks.OnAfterDelete<Comment>(model);
+
+                // Remove parent post from cache
+                await RemoveFromCache(page);
+            }
+            else
+            {
+                throw new ArgumentException($"Could not find page with id { model.ContentId.ToString() }");
+            }
         }
 
         /// <summary>

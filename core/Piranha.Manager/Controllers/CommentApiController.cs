@@ -81,5 +81,19 @@ namespace Piranha.Manager.Controllers
             };
             return result;
         }
+
+        [Route("delete/{id}")]
+        [HttpGet]
+        public async Task<StatusMessage> Delete(Guid id)
+        {
+            await _service.DeleteAsync(id);
+
+            var result = new StatusMessage
+            {
+                Type = StatusMessage.Success,
+                Body = "The comment was successfully deleted"
+            };
+            return result;
+        }
     }
 }

@@ -589,9 +589,7 @@ namespace Piranha.Services
 
                 // Call hooks & save
                 App.Hooks.OnBeforeSave<Comment>(model);
-
                 await _repo.SaveComment(postId, model).ConfigureAwait(false);
-
                 App.Hooks.OnAfterSave<Comment>(model);
 
                 // Invalidate parent post from cache
@@ -768,7 +766,7 @@ namespace Piranha.Services
             {
                 // Call hooks & delete
                 App.Hooks.OnBeforeDelete<Comment>(model);
-
+                await _repo.DeleteComment(model.Id);
                 App.Hooks.OnAfterDelete<Comment>(model);
 
                 // Remove parent post from cache

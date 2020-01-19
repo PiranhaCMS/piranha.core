@@ -468,6 +468,23 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Deletes the comment with the specified id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        public async Task DeleteComment(Guid id)
+        {
+            var comment = await _db.PageComments
+                .FirstOrDefaultAsync(c => c.Id == id)
+                .ConfigureAwait(false);
+
+            if (comment != null)
+            {
+                _db.PageComments.Remove(comment);
+                await _db.SaveChangesAsync().ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
         /// Saves the given page model
         /// </summary>
         /// <param name="model">The page model</param>

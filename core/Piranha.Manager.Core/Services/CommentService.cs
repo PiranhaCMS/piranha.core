@@ -89,15 +89,20 @@ namespace Piranha.Manager.Services
         {
             var comment = await _api.Posts.GetCommentByIdAsync(id);
 
-            if (comment == null)
-            {
-                comment = await _api.Pages.GetCommentByIdAsync(id);
-            }
-
             if (comment != null)
             {
                 comment.IsApproved = true;
                 await _api.Posts.SaveCommentAsync(comment.ContentId, comment);
+            }
+            else
+            {
+                comment = await _api.Pages.GetCommentByIdAsync(id);
+
+                if (comment != null)
+                {
+                    comment.IsApproved = true;
+                    await _api.Pages.SaveCommentAsync(comment.ContentId, comment);
+                }
             }
         }
 
@@ -105,15 +110,39 @@ namespace Piranha.Manager.Services
         {
             var comment = await _api.Posts.GetCommentByIdAsync(id);
 
-            if (comment == null)
-            {
-                comment = await _api.Pages.GetCommentByIdAsync(id);
-            }
-
             if (comment != null)
             {
                 comment.IsApproved = false;
                 await _api.Posts.SaveCommentAsync(comment.ContentId, comment);
+            }
+            else
+            {
+                comment = await _api.Pages.GetCommentByIdAsync(id);
+
+                if (comment != null)
+                {
+                    comment.IsApproved = false;
+                    await _api.Pages.SaveCommentAsync(comment.ContentId, comment);
+                }
+            }
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var comment = await _api.Posts.GetCommentByIdAsync(id);
+
+            if (comment != null)
+            {
+                await _api.Posts.DeleteCommentAsync(id);
+            }
+            else
+            {
+                comment = await _api.Pages.GetCommentByIdAsync(id);
+
+                if (comment != null)
+                {
+                    await _api.Pages.DeleteCommentAsync(id);
+                }
             }
         }
     }

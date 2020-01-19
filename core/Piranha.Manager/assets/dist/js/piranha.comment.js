@@ -58,7 +58,17 @@ piranha.comment = new Vue({
         },
         remove: function (id) {
             var self = this;
-            console.log("remove");
+
+            fetch(piranha.baseUrl + "manager/api/comment/delete/" + id)
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    // Push status to notification hub
+                    piranha.notifications.push(result);
+
+                    // Refresh the list
+                    self.load();
+                })
+                .catch(function (error) { console.log("error:", error ); });
         }
     },
     updated: function () {
