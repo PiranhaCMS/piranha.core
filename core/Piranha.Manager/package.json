@@ -17,7 +17,7 @@
     "gulp-uglify": "3.0.2",
     "uglify-es": "3.3.10",
     "@aspnet/signalr": "1.1.0",
-    "bootstrap": "4.3.0",
+    "bootstrap": "4.4.1",
     "@fortawesome/fontawesome-free": "5.8.1",
     "jquery": "3.3.1",
     "popper.js": "1.14.7",
