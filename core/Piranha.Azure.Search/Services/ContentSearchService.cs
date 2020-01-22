@@ -17,17 +17,28 @@ using Microsoft.Azure.Search.Models;
 using Piranha.Extend.Blocks;
 using Piranha.Models;
 
-namespace Piranha.Azure.Search
+namespace Piranha.Azure.Search.Services
 {
     /// <summary>
     /// The identity module.
     /// </summary>
-    public static class ContentSearch
+    public class ContentSearchService
     {
-        private static string searchServiceName = "";
-        private static string adminApiKey = "";
+        private readonly string _serviceName = "";
+        private readonly string _apiKey = "";
 
-        public static void CreateIndexes()
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        /// <param name="serviceName">The search service name</param>
+        /// <param name="apiKey">The admin api key</param>
+        public ContentSearchService(string serviceName, string apiKey)
+        {
+            _serviceName = serviceName;
+            _apiKey = apiKey;
+        }
+
+        public void CreateIndexes()
         {
             using (var client = CreateClient())
             {
@@ -40,7 +51,7 @@ namespace Piranha.Azure.Search
             }
         }
 
-        public static void PageSave(PageBase page)
+        public void PageSave(PageBase page)
         {
             using (var client = CreateClient())
             {
@@ -84,12 +95,12 @@ namespace Piranha.Azure.Search
             }
         }
 
-        public static void PageDelete(PageBase page)
+        public void PageDelete(PageBase page)
         {
 
         }
 
-        public static void PostSave(PostBase post)
+        public void PostSave(PostBase post)
         {
             using (var client = CreateClient())
             {
@@ -135,14 +146,14 @@ namespace Piranha.Azure.Search
             }
         }
 
-        public static void PostDelete(PostBase post)
+        public void PostDelete(PostBase post)
         {
 
         }
 
-        private static SearchServiceClient CreateClient()
+        private SearchServiceClient CreateClient()
         {
-            return new SearchServiceClient(searchServiceName, new SearchCredentials(adminApiKey));
+            return new SearchServiceClient(_serviceName, new SearchCredentials(_apiKey));
         }
     }
 }

@@ -12,6 +12,7 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;
 using Piranha.Azure.Search;
+using Piranha.Azure.Search.Services;
 
 public static class PiranhaSearchExtensions
 {
@@ -20,9 +21,10 @@ public static class PiranhaSearchExtensions
     /// </summary>
     /// <param name="services">The current service collection</param>
     /// <returns>The services</returns>
-    public static PiranhaServiceBuilder UseAzureSearch(this PiranhaServiceBuilder serviceBuilder)
+    public static PiranhaServiceBuilder UseAzureSearch(this PiranhaServiceBuilder serviceBuilder,
+        string serviceName, string apiKey)
     {
-        serviceBuilder.Services.AddPiranhaAzureSearch();
+        serviceBuilder.Services.AddPiranhaAzureSearch(serviceName, apiKey);
 
         return serviceBuilder;
     }
@@ -32,10 +34,13 @@ public static class PiranhaSearchExtensions
     /// </summary>
     /// <param name="services">The current service collection</param>
     /// <returns>The services</returns>
-    public static IServiceCollection AddPiranhaAzureSearch(this IServiceCollection services)
+    public static IServiceCollection AddPiranhaAzureSearch(this IServiceCollection services,
+        string serviceName, string apiKey)
     {
         // Add the identity module
         App.Modules.Register<Module>();
+
+        services.AddSingleton(new ContentSearchService(serviceName, apiKey));
 
         return services;
     }
