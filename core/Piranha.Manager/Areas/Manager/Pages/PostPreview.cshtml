@@ -33,12 +33,13 @@
         window.piranha = piranha;
         piranha.baseUrl = "@Url.Content("~/")";
     </script>
-    <environment include="Development">
-        <script type="text/javascript" src="~/manager/assets/js/piranha-dev.js"></script>
-    </environment>
-    <environment exclude="Development">
-        <script type="text/javascript" src="~/manager/assets/js/piranha.min.js"></script>
-    </environment>
+<environment include="Development">
+    <script type="text/javascript" src="~/manager/assets/js/piranha-deps-dev.js"></script>
+</environment>
+<environment exclude="Development">
+    <script type="text/javascript" src="~/manager/assets/js/piranha-deps.min.js"></script>
+</environment>
+    <script type="text/javascript" src="~/manager/assets/js/piranha.min.js"></script>
     <script type="text/javascript">
         Vue.prototype.piranha = window.piranha;
     </script>
