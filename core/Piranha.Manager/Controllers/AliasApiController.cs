@@ -45,12 +45,12 @@ namespace Piranha.Manager.Controllers
         /// Gets the list model.
         /// </summary>
         /// <returns>The list model</returns>
-        [Route("list")]
+        [Route("list/{siteId?}")]
         [HttpGet]
         [Authorize(Policy = Permission.Aliases)]
-        public async Task<AliasListModel> List()
+        public async Task<AliasListModel> List(Guid? siteId = null)
         {
-            return await _service.GetList();
+            return await _service.GetList(siteId);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Piranha.Manager.Controllers
             {
                 await _service.Save(model);
 
-                var result = await _service.GetList();
+                var result = await _service.GetList(model.SiteId);
 
                 result.Status = new StatusMessage
                 {

@@ -7,6 +7,8 @@
     data: {
         loading: true,
         siteId: null,
+        siteTitle: null,
+        sites: [],
         items: [],
         model: {
             id: null,
@@ -16,12 +18,20 @@
         }
     },
     methods: {
-        load: function () {
-            fetch(piranha.baseUrl + "manager/api/alias/list")
+        load: function (siteId) {
+            var self = this;
+
+            if (!siteId) {
+                siteId = "";
+            }
+
+            fetch(piranha.baseUrl + "manager/api/alias/list/" + siteId)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    piranha.alias.siteId = result.siteId;
-                    piranha.alias.items = result.items;
+                    self.siteId = result.siteId;
+                    self.siteTitle = result.siteTitle;
+                    self.sites = result.sites;
+                    self.items = result.items;
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },

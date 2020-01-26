@@ -37,21 +37,36 @@ namespace Piranha.Manager.Services
         /// <returns>The list model</returns>
         public async Task<AliasListModel> GetList(Guid? siteId = null)
         {
+            Site site = null;
+
             // Ensure that we have a site id
             if (!siteId.HasValue)
             {
-                var site = await _api.Sites.GetDefaultAsync();
+                site = await _api.Sites.GetDefaultAsync();
                 siteId = site.Id;
+            }
+
+            if (site == null)
+            {
+                site = await _api.Sites.GetByIdAsync(siteId.Value);
             }
 
             var model = new AliasListModel
             {
-                SiteId = siteId.Value
+                SiteId = siteId.Value,
+                SiteTitle = site.Title
             };
+
+            // Get all available sites
+            var sites = await _api.Sites.GetAllAsync();
+            model.Sites = sites.Select(s => new AliasListModel.SiteItem
+            {
+                Id = s.Id,
+                Title = s.Title
+            }).ToList();
 
             // Get all available aliases for the current site
             var aliases = await _api.Aliases.GetAllAsync(siteId.Value);
-
             model.Items = aliases.Select(a => new AliasListModel.ListItem
             {
                 Id = a.Id,
