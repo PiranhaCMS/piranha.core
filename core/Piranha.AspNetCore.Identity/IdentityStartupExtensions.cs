@@ -59,6 +59,28 @@ public static class IdentityStartupExtensions
     }
 
     /// <summary>
+    /// Extensions method for simplified setup.
+    /// </summary>
+    /// <param name="serviceBuilder">The current service builder</param>
+    /// <param name="dbOptions">The db options</param>
+    /// <param name="identityOptions">The optional identity options</param>
+    /// <param name="cookieOptions">The optional cookie options</param>
+    /// <typeparam name="T">The DbContext type</typeparam>
+    /// <typeparam name="TSeed">The seed type</typeparam>
+    /// <returns>The builder</returns>
+    public static PiranhaServiceBuilder UseIdentityWithSeed<T, TSeed>(this PiranhaServiceBuilder serviceBuilder,
+        Action<DbContextOptionsBuilder> dbOptions,
+        Action<IdentityOptions> identityOptions = null,
+        Action<CookieAuthenticationOptions> cookieOptions = null)
+        where T : Db<T>
+        where TSeed : class, IIdentitySeed
+    {
+        serviceBuilder.Services.AddPiranhaIdentityWithSeed<T, TSeed>(dbOptions, identityOptions, cookieOptions);
+
+        return serviceBuilder;
+    }
+
+    /// <summary>
     /// Uses the Piranha identity module.
     /// </summary>
     /// <param name="builder">The current application builder</param>
