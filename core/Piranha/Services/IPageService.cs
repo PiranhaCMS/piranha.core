@@ -90,6 +90,17 @@ namespace Piranha.Services
             int? page = null, int? pageSize = null);
 
         /// <summary>
+        /// Gets the pending comments available for the page with the specified id. If no page id
+        /// is provided all comments are fetched.
+        /// </summary>
+        /// <param name="pageID">The unique page id</param>
+        /// <param name="page">The optional page number</param>
+        /// <param name="pageSize">The optional page size</param>
+        /// <returns>The available comments</returns>
+        Task<IEnumerable<Comment>> GetAllPendingCommentsAsync(Guid? pageId = null,
+            int? page = null, int? pageSize = null);
+
+        /// <summary>
         /// Gets the site startpage.
         /// </summary>
         /// <param name="siteId">The optional site id</param>

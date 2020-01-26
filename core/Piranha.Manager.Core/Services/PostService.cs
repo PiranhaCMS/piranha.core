@@ -190,12 +190,14 @@ namespace Piranha.Manager.Services
 
             if (post != null)
             {
-                var postModel =  Transform(post, isDraft);
+                var postModel = Transform(post, isDraft);
 
                 postModel.Categories = (await _api.Posts.GetAllCategoriesAsync(post.BlogId))
                     .Select(c => c.Title).ToList();
                 postModel.Tags = (await _api.Posts.GetAllTagsAsync(post.BlogId))
                     .Select(t => t.Title).ToList();
+                postModel.PendingCommentCount = (await _api.Posts.GetAllPendingCommentsAsync(id))
+                    .Count();
 
                 postModel.SelectedCategory = post.Category.Title;
                 postModel.SelectedTags = post.Tags.Select(t => t.Title).ToList();
@@ -415,6 +417,7 @@ namespace Piranha.Manager.Services
                 RedirectType = post.RedirectType.ToString(),
                 EnableComments = post.EnableComments,
                 CloseCommentsAfterDays = post.CloseCommentsAfterDays,
+                CommentCount = post.CommentCount,
                 State = post.GetState(isDraft),
                 UseBlocks = type.UseBlocks,
                 SelectedRoute = route == null ? null : new RouteModel

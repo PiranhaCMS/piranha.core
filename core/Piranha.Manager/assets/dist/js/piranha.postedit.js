@@ -18,6 +18,8 @@ piranha.postedit = new Vue({
         redirectType: null,
         enableComments: null,
         closeCommentsAfterDays: null,
+        commentCount: null,
+        pendingCommentCount: 0,
         state: "new",
         categories: [],
         tags: [],
@@ -70,6 +72,8 @@ piranha.postedit = new Vue({
             this.redirectType = model.redirectType;
             this.enableComments = model.enableComments;
             this.closeCommentsAfterDays = model.closeCommentsAfterDays;
+            this.commentCount = model.commentCount;
+            this.pendingCommentCount = model.pendingCommentCount;
             this.state = model.state;
             this.blocks = model.blocks;
             this.regions = model.regions;

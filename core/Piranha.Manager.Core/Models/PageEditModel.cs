@@ -92,6 +92,17 @@ namespace Piranha.Manager.Models
         public int CloseCommentsAfterDays { get; set; }
 
         /// <summary>
+        /// Gets/sets the total comment count.
+        /// </summary>
+        public int CommentCount { get; set; }
+
+        /// <summary>
+        /// Gets/sets the number of pending comments.
+        /// </summary>
+        /// <value></value>
+        public int PendingCommentCount { get; set; }
+
+        /// <summary>
         /// Gets/sets the content status.
         /// </summary>
         public string State { get; set; }

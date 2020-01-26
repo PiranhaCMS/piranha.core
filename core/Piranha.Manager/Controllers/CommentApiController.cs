@@ -42,12 +42,12 @@ namespace Piranha.Manager.Controllers
         /// Gets the list model.
         /// </summary>
         /// <returns>The list model</returns>
-        [Route("")]
+        [Route("{id:Guid?}")]
         [HttpGet]
         //[Authorize(Policy = Permission.Config)]
-        public Task<CommentListModel> List()
+        public Task<CommentListModel> List(Guid? id = null)
         {
-            return _service.Get();
+            return _service.Get(id);
         }
 
         [Route("approve/{id}")]

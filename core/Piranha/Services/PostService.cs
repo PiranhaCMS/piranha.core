@@ -221,33 +221,24 @@ namespace Piranha.Services
         /// <param name="page">The optional page number</param>
         /// <param name="pageSize">The optional page size</param>
         /// <returns>The available comments</returns>
-        public async Task<IEnumerable<Comment>> GetAllCommentsAsync(Guid? postId = null, bool onlyApproved = true,
+        public Task<IEnumerable<Comment>> GetAllCommentsAsync(Guid? postId = null, bool onlyApproved = true,
             int? page = null, int? pageSize = null)
         {
-            // Ensure page number
-            if (!page.HasValue)
-            {
-                page = 0;
-            }
+            return GetAllCommentsAsync(postId, onlyApproved, false, page, pageSize);
+        }
 
-            // Ensure page size
-            if (!pageSize.HasValue)
-            {
-                using (var config = new Config(_paramService))
-                {
-                    pageSize = config.CommentsPageSize;
-                }
-            }
-
-            // Get the comments
-            var comments = await _repo.GetAllComments(postId, onlyApproved, page.Value, pageSize.Value).ConfigureAwait(false);
-
-            // Execute hook
-            foreach (var comment in comments)
-            {
-                App.Hooks.OnLoad<Comment>(comment);
-            }
-            return comments;
+        /// <summary>
+        /// Gets the pending comments available for the post with the specified id. If no post id
+        /// is provided all comments are fetched.
+        /// </summary>
+        /// <param name="postId">The unique post id</param>
+        /// <param name="page">The optional page number</param>
+        /// <param name="pageSize">The optional page size</param>
+        /// <returns>The available comments</returns>
+        public Task<IEnumerable<Comment>> GetAllPendingCommentsAsync(Guid? postId = null,
+            int? page = null, int? pageSize = null)
+        {
+            return GetAllCommentsAsync(postId, false, true, page, pageSize);
         }
 
         /// <summary>
@@ -546,6 +537,53 @@ namespace Piranha.Services
         public Task SaveCommentAndVerifyAsync(Guid postId, Comment model)
         {
             return SaveCommentAsync(postId, model, true);
+        }
+
+        /// <summary>
+        /// Gets the comments available for the post with the specified id.
+        /// </summary>
+        /// <param name="postId">The unique post id</param>
+        /// <param name="onlyApproved">If only approved comments should be fetched</param>
+        /// <param name="onlyPending">If only pending comments should be fetched</param>
+        /// <param name="page">The optional page number</param>
+        /// <param name="pageSize">The optional page size</param>
+        /// <returns>The available comments</returns>
+        private async Task<IEnumerable<Comment>> GetAllCommentsAsync(Guid? postId = null, bool onlyApproved = true,
+            bool onlyPending = false, int? page = null, int? pageSize = null)
+        {
+            // Ensure page number
+            if (!page.HasValue)
+            {
+                page = 0;
+            }
+
+            // Ensure page size
+            if (!pageSize.HasValue)
+            {
+                using (var config = new Config(_paramService))
+                {
+                    pageSize = config.CommentsPageSize;
+                }
+            }
+
+            // Get the comments
+            IEnumerable<Comment> comments = null;
+
+            if (onlyPending)
+            {
+                comments = await _repo.GetAllPendingComments(postId, page.Value, pageSize.Value).ConfigureAwait(false);
+            }
+            else
+            {
+                comments = await _repo.GetAllComments(postId, onlyApproved, page.Value, pageSize.Value).ConfigureAwait(false);
+            }
+
+            // Execute hook
+            foreach (var comment in comments)
+            {
+                App.Hooks.OnLoad<Comment>(comment);
+            }
+            return comments;
         }
 
         /// <summary>
