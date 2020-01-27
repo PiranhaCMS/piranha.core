@@ -37,10 +37,10 @@
     <value>Êtes-vous sûr de vouloir supprimer cet alias ?</value>
   </data>
   <data name="If the redirect should be permanent" xml:space="preserve">
-    <value>If the redirect should be permanent</value>
+    <value>Si la redirection doit être permanente</value>
   </data>
   <data name="The alias was successfully added to the list" xml:space="preserve">
-    <value>The alias was successfully added to the list</value>
+    <value>L'alias a été ajouté avec succès à la liste</value>
   </data>
   <data name="The alias was successfully deleted" xml:space="preserve">
     <value>The alias was successfully deleted</value>
