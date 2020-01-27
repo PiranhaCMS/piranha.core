@@ -238,45 +238,7 @@ namespace Piranha.Manager.Services
                             "block-group-horizontal" : "block-group-vertical";
                     }
 
-                    foreach (var prop in block.GetType().GetProperties(App.PropertyBindings))
-                    {
-                        if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
-                        {
-                            var fieldType = App.Fields.GetByType(prop.PropertyType);
-
-                            // Create the block field
-                            var field = new FieldModel
-                            {
-                                Model = (Extend.IField)prop.GetValue(block),
-                                Meta = new FieldMeta
-                                {
-                                    Id = prop.Name,
-                                    Name = prop.Name,
-                                    Component = fieldType.Component,
-                                }
-                            };
-
-                            PopulateFieldOptions(fieldType, field);
-
-                            // Check if we have field meta-data available
-                            var attr = prop.GetCustomAttribute<Extend.FieldAttribute>();
-                            if (attr != null)
-                            {
-                                field.Meta.Name = !string.IsNullOrWhiteSpace(attr.Title) ? attr.Title : field.Meta.Name;
-                                field.Meta.Placeholder = attr.Placeholder;
-                                field.Meta.IsHalfWidth = attr.Options.HasFlag(FieldOption.HalfWidth);
-                            }
-
-                            // Check if we have field description meta-data available
-                            var descAttr = prop.GetCustomAttribute<Extend.FieldDescriptionAttribute>();
-                            if (descAttr != null)
-                            {
-                                field.Meta.Description = descAttr.Text;
-                            }
-
-                            item.Fields.Add(field);
-                        }
-                    }
+                    item.Fields = ContentUtils.GetBlockFields(block);
 
                     return new AsyncResult<BlockModel>
                     {
@@ -285,20 +247,43 @@ namespace Piranha.Manager.Services
                 }
                 else
                 {
-                    return new AsyncResult<BlockModel>
+                    if (!blockType.IsGeneric)
                     {
-                        Body = new BlockItemModel
+                        // Regular block model
+                        return new AsyncResult<BlockModel>
                         {
-                            Model = block,
-                            Meta = new BlockMeta
+                            Body = new BlockItemModel
                             {
-                                Name = blockType.Name,
-                                Title = block.GetTitle(),
-                                Icon = blockType.Icon,
-                                Component = blockType.Component
+                                Model = block,
+                                Meta = new BlockMeta
+                                {
+                                    Name = blockType.Name,
+                                    Title = block.GetTitle(),
+                                    Icon = blockType.Icon,
+                                    Component = blockType.Component
+                                }
                             }
-                        }
-                    };
+                        };
+                    }
+                    else
+                    {
+                        // Generic block model
+                        return new AsyncResult<BlockModel>
+                        {
+                            Body = new BlockGenericModel
+                            {
+                                Model = ContentUtils.GetBlockFields(block),
+                                Type = block.Type,
+                                Meta = new BlockMeta
+                                {
+                                    Name = blockType.Name,
+                                    Title = block.GetTitle(),
+                                    Icon = blockType.Icon,
+                                    Component = blockType.Component
+                                }
+                            }
+                        };
+                    }
                 }
             }
             return null;
