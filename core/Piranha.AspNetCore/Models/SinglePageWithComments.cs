@@ -18,6 +18,10 @@ using Piranha.Models;
 
 namespace Piranha.AspNetCore.Models
 {
+    /// <summary>
+    /// Razor Page model for a single page with comment helpers.
+    /// </summary>
+    /// <typeparam name="T">The page type</typeparam>
     public class SinglePageWithComments<T> : SinglePage<T> where T : PageBase
     {
         /// <summary>

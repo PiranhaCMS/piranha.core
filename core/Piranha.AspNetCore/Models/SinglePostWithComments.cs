@@ -18,6 +18,10 @@ using Piranha.Models;
 
 namespace Piranha.AspNetCore.Models
 {
+    /// <summary>
+    /// Razor Page model for a single post with comment helpers.
+    /// </summary>
+    /// <typeparam name="T">The post type</typeparam>
     public class SinglePostWithComments<T> : SinglePost<T> where T : PostBase
     {
         /// <summary>

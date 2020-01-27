@@ -44,7 +44,7 @@ namespace Piranha.Manager.Controllers
         /// <returns>The list model</returns>
         [Route("{id:Guid?}")]
         [HttpGet]
-        //[Authorize(Policy = Permission.Config)]
+        [Authorize(Policy = Permission.Comments)]
         public Task<CommentListModel> List(Guid? id = null)
         {
             return _service.Get(id);
@@ -52,6 +52,7 @@ namespace Piranha.Manager.Controllers
 
         [Route("approve/{id}")]
         [HttpGet]
+        [Authorize(Policy = Permission.CommentsApprove)]
         public async Task<CommentListModel> Approve(Guid id)
         {
             await _service.ApproveAsync(id);
@@ -68,6 +69,7 @@ namespace Piranha.Manager.Controllers
 
         [Route("unapprove/{id}")]
         [HttpGet]
+        [Authorize(Policy = Permission.CommentsApprove)]
         public async Task<CommentListModel> UnApprove(Guid id)
         {
             await _service.UnApproveAsync(id);
@@ -84,6 +86,7 @@ namespace Piranha.Manager.Controllers
 
         [Route("delete/{id}")]
         [HttpGet]
+        [Authorize(Policy = Permission.CommentsDelete)]
         public async Task<StatusMessage> Delete(Guid id)
         {
             await _service.DeleteAsync(id);

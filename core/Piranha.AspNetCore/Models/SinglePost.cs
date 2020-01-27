@@ -26,6 +26,10 @@ namespace Piranha.AspNetCore.Models
         public SinglePostModel(IApi api, IModelLoader loader) : base(api, loader) { }
     }
 
+    /// <summary>
+    /// Razor Page model for a single post.
+    /// </summary>
+    /// <typeparam name="T">The post type</typeparam>
     public class SinglePost<T> : Microsoft.AspNetCore.Mvc.RazorPages.PageModel where T : PostBase
     {
         protected readonly IApi _api;
