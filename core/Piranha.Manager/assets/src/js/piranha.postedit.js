@@ -187,6 +187,8 @@ piranha.postedit = new Vue({
 
                 self.saving = false;
                 self.savingDraft = false;
+
+                self.eventBus.$emit("onSaved", self.state)
             })
             .catch(function (error) {
                 console.log("error:", error);
