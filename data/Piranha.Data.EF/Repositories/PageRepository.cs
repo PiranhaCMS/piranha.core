@@ -95,50 +95,23 @@ namespace Piranha.Repositories
         /// <param name="page">The page number</param>
         /// <param name="pageSize">The page size</param>
         /// <returns>The available comments</returns>
-        public async Task<IEnumerable<Models.Comment>> GetAllComments(Guid? pageId, bool onlyApproved,
+        public Task<IEnumerable<Models.Comment>> GetAllComments(Guid? pageId, bool onlyApproved,
             int page, int pageSize)
         {
-            // Create base query
-            IQueryable<PageComment> query = _db.PageComments
-                .AsNoTracking();
+            return GetAllComments(pageId, onlyApproved, false, page, pageSize);
+        }
 
-            // Check if only should include a comments for a certain page
-            if (pageId.HasValue)
-            {
-                query = query.Where(c => c.PageId == pageId.Value);
-            }
-
-            // Check if we should only include approved
-            if (onlyApproved)
-            {
-                query = query.Where(c => c.IsApproved);
-            }
-
-            // Order the comments by date
-            query = query.OrderByDescending(c => c.Created);
-
-            // Check if this is a paged query
-            if (pageSize > 0)
-            {
-                query = query
-                    .Skip(page * pageSize)
-                    .Take(pageSize);
-            }
-
-            // Get the comments
-            return await query
-                .Select(c => new Models.Comment
-                {
-                    Id = c.Id,
-                    ContentId = c.PageId,
-                    UserId = c.UserId,
-                    Author = c.Author,
-                    Email = c.Email,
-                    Url = c.Url,
-                    IsApproved = c.IsApproved,
-                    Body = c.Body,
-                    Created = c.Created
-                }).ToListAsync();
+        /// <summary>
+        /// Gets the pending comments available for the page with the specified id.
+        /// </summary>
+        /// <param name="pageId">The unique page id</param>
+        /// <param name="page">The page number</param>
+        /// <param name="pageSize">The page size</param>
+        /// <returns>The available comments</returns>
+        public Task<IEnumerable<Models.Comment>> GetAllPendingComments(Guid? pageId,
+            int page, int pageSize)
+        {
+            return GetAllComments(pageId, false, true, page, pageSize);
         }
 
         /// <summary>
@@ -482,6 +455,65 @@ namespace Piranha.Repositories
                 _db.PageComments.Remove(comment);
                 await _db.SaveChangesAsync().ConfigureAwait(false);
             }
+        }
+
+        /// <summary>
+        /// Gets the comments available for the page with the specified id. If no page id
+        /// is provided all comments are fetched.
+        /// </summary>
+        /// <param name="pageId">The unique page id</param>
+        /// <param name="onlyApproved">If only approved comments should be fetched</param>
+        /// <param name="page">The page number</param>
+        /// <param name="pageSize">The page size</param>
+        /// <returns>The available comments</returns>
+        public async Task<IEnumerable<Models.Comment>> GetAllComments(Guid? pageId, bool onlyApproved,
+            bool onlyPending, int page, int pageSize)
+        {
+            // Create base query
+            IQueryable<PageComment> query = _db.PageComments
+                .AsNoTracking();
+
+            // Check if only should include a comments for a certain post
+            if (pageId.HasValue)
+            {
+                query = query.Where(c => c.PageId == pageId.Value);
+            }
+
+            // Check if we should only include approved
+            if (onlyPending)
+            {
+                query = query.Where(c => !c.IsApproved);
+            }
+            else if (onlyApproved)
+            {
+                query = query.Where(c => c.IsApproved);
+            }
+
+            // Order the comments by date
+            query = query.OrderByDescending(c => c.Created);
+
+            // Check if this is a paged query
+            if (pageSize > 0)
+            {
+                query = query
+                    .Skip(page * pageSize)
+                    .Take(pageSize);
+            }
+
+            // Get the comments
+            return await query
+                .Select(c => new Models.Comment
+                {
+                    Id = c.Id,
+                    ContentId = c.PageId,
+                    UserId = c.UserId,
+                    Author = c.Author,
+                    Email = c.Email,
+                    Url = c.Url,
+                    IsApproved = c.IsApproved,
+                    Body = c.Body,
+                    Created = c.Created
+                }).ToListAsync().ConfigureAwait(false);
         }
 
         /// <summary>

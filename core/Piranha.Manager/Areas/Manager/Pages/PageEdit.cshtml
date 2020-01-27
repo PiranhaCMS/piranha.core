@@ -59,7 +59,7 @@
                 <li class="breadcrumb-item"><a href="~/manager/pages">@Localizer.Menu["Pages"]</a></li>
                 <li class="breadcrumb-item active" aria-current="page">@Localizer.General["Edit"]</li>
                 <li v-if="isCopy" class="badge-item"><span class="badge badge-warning">@Localizer.General["Copy"]</span></li>
-                <li v-if="state === 'draft'" class="badge-item"><span class="badge badge-info"><i class="fas fa-pen"></i> @Localizer.General["Draft"]</span></li>
+                <li v-if="state === 'draft'" class="badge-item app" :class="{ ready: !loading }"><span class="badge badge-info"><i class="fas fa-pen"></i> @Localizer.General["Draft"]</span></li>
             </ol>
         </nav>
 
@@ -93,7 +93,7 @@
         </div>
 
         <!-- Content navigation -->
-        <ul v-if="(useBlocks && (editors.length + contentRegions.length > 0)) || editors.length + contentRegions.length > 1" class="nav nav-pills nav-pills-card justify-content-center">
+        <ul v-if="(useBlocks && (editors.length + contentRegions.length > 0)) || editors.length + contentRegions.length > 1 || (enableComments && (commentCount > 0 || pendingCommentCount > 0))" class="nav nav-pills nav-pills-card justify-content-center">
             <li v-if="useBlocks" class="nav-item">
                 <a class="nav-link" v-on:click.prevent="selectRegion({ uid: 'uid-blocks' })" :class="{ active: selectedRegion.uid === 'uid-blocks' }" href="#">
                     <i class="fas fa-pen-alt"></i>@Localizer.General["Main content"]
@@ -107,6 +107,12 @@
             <li v-for="region in contentRegions" class="nav-item">
                 <a class="nav-link" v-on:click.prevent="selectRegion(region.meta)" :class="{ active: selectedRegion.uid == region.meta.uid }" href="#">
                     <i :class="region.meta.icon"></i>{{ region.meta.name }}
+                </a>
+            </li>
+            <li v-if="enableComments && (commentCount > 0 || pendingCommentCount > 0)" class="nav-item">
+                <a :href="piranha.baseUrl + 'manager/comments/' + id" target="comments" class="nav-link">
+                    <i class="fas fa-comments"></i>@Localizer.General["Comments"]
+                    <span v-if="pendingCommentCount > 0" class="badge badge-danger">{{ pendingCommentCount }}</span>
                 </a>
             </li>
         </ul>

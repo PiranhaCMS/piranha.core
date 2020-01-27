@@ -207,7 +207,12 @@ namespace Piranha.Manager.Services
 
             if (page != null)
             {
-                return Transform(page, isDraft);
+                var model = Transform(page, isDraft);
+
+                model.PendingCommentCount = (await _api.Pages.GetAllPendingCommentsAsync())
+                    .Count();
+
+                return model;
             }
             return null;
         }
@@ -497,6 +502,7 @@ namespace Piranha.Manager.Services
                 RedirectType = page.RedirectType.ToString(),
                 EnableComments = page.EnableComments,
                 CloseCommentsAfterDays = page.CloseCommentsAfterDays,
+                CommentCount = page.CommentCount,
                 State = page.GetState(isDraft),
                 UseBlocks = type.UseBlocks,
                 SelectedRoute = route == null ? null : new RouteModel
