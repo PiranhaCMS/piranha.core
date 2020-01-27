@@ -136,90 +136,90 @@
     <value>Pixels</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Preview</value>
+    <value>Aperçu</value>
   </data>
   <data name="Publish" xml:space="preserve">
-    <value>Publish</value>
+    <value>Publier</value>
   </data>
   <data name="Publish date" xml:space="preserve">
-    <value>Publish date</value>
+    <value>Date de publication</value>
   </data>
   <data name="Redirect" xml:space="preserve">
-    <value>Redirect</value>
+    <value>Redirection</value>
   </data>
   <data name="Redirect Type" xml:space="preserve">
-    <value>Redirect Type</value>
+    <value>Type de redirection</value>
   </data>
   <data name="Revert" xml:space="preserve">
-    <value>Revert</value>
+    <value>Revenir</value>
   </data>
   <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
+    <value>Rôles</value>
   </data>
   <data name="Route" xml:space="preserve">
     <value>Route</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>Enregistrer</value>
   </data>
   <data name="Scheduled" xml:space="preserve">
-    <value>Scheduled</value>
+    <value>Planifié</value>
   </data>
   <data name="Search..." xml:space="preserve">
-    <value>Search...</value>
+    <value>Rechercher...</value>
   </data>
   <data name="Select block" xml:space="preserve">
-    <value>Select block</value>
+    <value>Selectionner un bloc</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Paramètres</value>
   </data>
   <data name="Size" xml:space="preserve">
-    <value>Size</value>
+    <value>Taille</value>
   </data>
   <data name="Slug" xml:space="preserve">
     <value>Slug</value>
   </data>
   <data name="System" xml:space="preserve">
-    <value>System</value>
+    <value>Système</value>
   </data>
   <data name="Temporary" xml:space="preserve">
-    <value>Temporary</value>
+    <value>Temporaire</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Titre</value>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Update</value>
+    <value>Mettre à jour</value>
   </data>
   <data name="Update password" xml:space="preserve">
-    <value>Update password</value>
+    <value>Mise à jour du mot de passe</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Username</value>
+    <value>Nom d'utilisateur</value>
   </data>
   <data name="Username is mandatory." xml:space="preserve">
-    <value>Username is mandatory.</value>
+    <value>Le nom d'utilisateur est obligatoire.</value>
   </data>
   <data name="Title is mandatory." xml:space="preserve">
-    <value>Title is mandatory.</value>
+    <value>Le titre est obligatoire.</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Type</value>
   </data>
   <data name="Unpublish" xml:space="preserve">
-    <value>Unpublish</value>
+    <value>Mettre hors ligne</value>
   </data>
   <data name="Unpublished" xml:space="preserve">
-    <value>Unpublished</value>
+    <value>Mis hors ligne</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>Utilisateurs</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Version</value>
   </data>
   <data name="Width" xml:space="preserve">
-    <value>Width</value>
+    <value>Largeur</value>
   </data>
 </root>
