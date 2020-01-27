@@ -253,14 +253,19 @@ namespace RazorWeb
                 await api.Posts.SaveAsync(blogpost);
 
                 // Add some comments
-                await api.Posts.SaveCommentAsync(blogpost.Id, new Piranha.Models.Comment
+                var comment =  new Piranha.Models.Comment
                 {
                     Author = "Håkan Edling",
                     Email = "hakan@tidyui.com",
                     Url = "http://piranhacms.org",
                     Body = "Awesome to see that the project is up and running! Now maybe it's time to start customizing it to your needs. You can find a lot of information in the official docs.",
                     IsApproved = true
-                });
+                };
+                await api.Posts.SaveCommentAsync(blogpost.Id, comment);
+
+                comment.IsApproved = false;
+
+                await api.Pages.SaveCommentAsync(featurespage.Id, comment);
 
                 // Unpublished Post
                 blogpost = Models.BlogPost.Create(api);

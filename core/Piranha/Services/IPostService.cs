@@ -102,6 +102,17 @@ namespace Piranha.Services
             int? page = null, int? pageSize = null);
 
         /// <summary>
+        /// Gets the pending comments available for the post with the specified id. If no post id
+        /// is provided all comments are fetched.
+        /// </summary>
+        /// <param name="postId">The unique post id</param>
+        /// <param name="page">The optional page number</param>
+        /// <param name="pageSize">The optional page size</param>
+        /// <returns>The available comments</returns>
+        Task<IEnumerable<Comment>> GetAllPendingCommentsAsync(Guid? postId = null,
+            int? page = null, int? pageSize = null);
+
+        /// <summary>
         /// Gets the number of available posts in the specified archive.
         /// </summary>
         /// <param name="archiveId">The archive id</param>

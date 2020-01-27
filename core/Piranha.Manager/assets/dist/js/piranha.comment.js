@@ -25,10 +25,14 @@ piranha.comment = new Vue({
         }
     },
     methods: {
-        load: function () {
+        load: function (id) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/comment")
+            if (!id) {
+                id = "";
+            }
+
+            fetch(piranha.baseUrl + "manager/api/comment/" + id)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.items = result.comments;

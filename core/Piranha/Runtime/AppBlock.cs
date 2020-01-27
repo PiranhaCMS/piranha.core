@@ -38,6 +38,12 @@ namespace Piranha.Runtime
         public bool IsUnlisted { get; set; }
 
         /// <summary>
+        /// Gets/sets if the block should use a generic model
+        /// when rendered in the manager interface.
+        /// </summary>
+        public bool IsGeneric { get; set; }
+
+        /// <summary>
         /// Gets/sets the name of the component that should be
         /// used to render the block in the manager interface.
         /// </summary>

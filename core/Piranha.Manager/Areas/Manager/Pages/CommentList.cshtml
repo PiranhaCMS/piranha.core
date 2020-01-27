@@ -1,4 +1,4 @@
-@page "~/manager/comments"
+@page "~/manager/comments/{id:Guid?}"
 @inject ManagerLocalizer Localizer
 @inject Piranha.IApi Api
 @{
@@ -10,7 +10,7 @@
     <script src="~/manager/assets/js/piranha.comment.min.js"></script>
     <script>
         piranha.permissions.load(function () {
-            piranha.comment.load();
+            piranha.comment.load("@RouteData.Values["id"]");
         });
     </script>
 }

@@ -190,12 +190,14 @@ namespace Piranha.Manager.Services
 
             if (post != null)
             {
-                var postModel =  Transform(post, isDraft);
+                var postModel = Transform(post, isDraft);
 
                 postModel.Categories = (await _api.Posts.GetAllCategoriesAsync(post.BlogId))
                     .Select(c => c.Title).ToList();
                 postModel.Tags = (await _api.Posts.GetAllTagsAsync(post.BlogId))
                     .Select(t => t.Title).ToList();
+                postModel.PendingCommentCount = (await _api.Posts.GetAllPendingCommentsAsync(id))
+                    .Count();
 
                 postModel.SelectedCategory = post.Category.Title;
                 postModel.SelectedTags = post.Tags.Select(t => t.Title).ToList();
@@ -368,6 +370,22 @@ namespace Piranha.Manager.Services
                     {
                         post.Blocks.Add(blockItem.Model);
                     }
+                    else if (block is BlockGenericModel blockGeneric)
+                    {
+                        var blockType = App.Blocks.GetByType(blockGeneric.Type);
+
+                        if (blockType != null)
+                        {
+                            var postBlock = (Extend.Block)Activator.CreateInstance(blockType.Type);
+
+                            foreach (var field in blockGeneric.Model)
+                            {
+                                var prop = postBlock.GetType().GetProperty(field.Meta.Id, App.PropertyBindings);
+                                prop.SetValue(postBlock, field.Model);
+                            }
+                            post.Blocks.Add(postBlock);
+                        }
+                    }
                 }
 
                 // Save post
@@ -415,6 +433,7 @@ namespace Piranha.Manager.Services
                 RedirectType = post.RedirectType.ToString(),
                 EnableComments = post.EnableComments,
                 CloseCommentsAfterDays = post.CloseCommentsAfterDays,
+                CommentCount = post.CommentCount,
                 State = post.GetState(isDraft),
                 UseBlocks = type.UseBlocks,
                 SelectedRoute = route == null ? null : new RouteModel
@@ -543,49 +562,7 @@ namespace Piranha.Manager.Services
                             "block-group-horizontal" : "block-group-vertical";
                     }
 
-                    foreach (var prop in block.GetType().GetProperties(App.PropertyBindings))
-                    {
-                        if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
-                        {
-                            var fieldType = App.Fields.GetByType(prop.PropertyType);
-                            var field = new FieldModel
-                            {
-                                Model = (Extend.IField)prop.GetValue(block),
-                                Meta = new FieldMeta
-                                {
-                                    Id = prop.Name,
-                                    Name = prop.Name,
-                                    Component = fieldType.Component,
-                                }
-                            };
-
-                            // Check if this is a select field
-                            if (typeof(Extend.Fields.SelectFieldBase).IsAssignableFrom(fieldType.Type))
-                            {
-                                foreach(var item in ((Extend.Fields.SelectFieldBase)Activator.CreateInstance(fieldType.Type)).Items)
-                                {
-                                    field.Meta.Options.Add(Convert.ToInt32(item.Value), item.Title);
-                                }
-                            }
-
-                            // Check if we have field meta-data available
-                            var attr = prop.GetCustomAttribute<Extend.FieldAttribute>();
-                            if (attr != null)
-                            {
-                                field.Meta.Name = !string.IsNullOrWhiteSpace(attr.Title) ? attr.Title : field.Meta.Name;
-                                field.Meta.Placeholder = attr.Placeholder;
-                                field.Meta.IsHalfWidth = attr.Options.HasFlag(FieldOption.HalfWidth);
-                            }
-
-                            // Check if we have field description meta-data available
-                            var descAttr = prop.GetCustomAttribute<Extend.FieldDescriptionAttribute>();
-                            if (descAttr != null)
-                            {
-                                field.Meta.Description = descAttr.Text;
-                            }
-                            group.Fields.Add(field);
-                        }
-                    }
+                    group.Fields = ContentUtils.GetBlockFields(block);
 
                     bool firstChild = true;
                     foreach (var child in blockGroup.Items)
@@ -610,18 +587,39 @@ namespace Piranha.Manager.Services
                 }
                 else
                 {
-                    model.Blocks.Add(new BlockItemModel
+                    if (!blockType.IsGeneric)
                     {
-                        Model = block,
-                        Meta = new BlockMeta
+                        // Regular block item model
+                        model.Blocks.Add(new BlockItemModel
                         {
-                            Name = blockType.Name,
-                            Title = block.GetTitle(),
-                            Icon = blockType.Icon,
-                            Component = blockType.Component,
-                            isCollapsed = config.ManagerDefaultCollapsedBlocks
-                        }
-                    });
+                            Model = block,
+                            Meta = new BlockMeta
+                            {
+                                Name = blockType.Name,
+                                Title = block.GetTitle(),
+                                Icon = blockType.Icon,
+                                Component = blockType.Component,
+                                isCollapsed = config.ManagerDefaultCollapsedBlocks
+                            }
+                        });
+                    }
+                    else
+                    {
+                        // Generic block item model
+                        model.Blocks.Add(new BlockGenericModel
+                        {
+                            Model = ContentUtils.GetBlockFields(block),
+                            Type = block.Type,
+                            Meta = new BlockMeta
+                            {
+                                Name = blockType.Name,
+                                Title = block.GetTitle(),
+                                Icon = blockType.Icon,
+                                Component = blockType.Component,
+                                isCollapsed = config.ManagerDefaultCollapsedBlocks
+                            }
+                        });
+                    }
                 }
             }
 

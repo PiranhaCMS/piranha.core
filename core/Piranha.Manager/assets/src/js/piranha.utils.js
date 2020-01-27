@@ -11,6 +11,9 @@ piranha.utils = {
     },
     isEmptyText: function (str) {
         return str == null || str.replace(/\s/g, "") == "" || str.replace(/\s/g, "") == "<br>";
+    },
+    strLength: function (str) {
+        return str != null ? str.length : 0;
     }
 };
 

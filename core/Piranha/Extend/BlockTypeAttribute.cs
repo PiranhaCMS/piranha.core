@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -35,6 +35,12 @@ namespace Piranha.Extend
         /// where specified explicitly.
         /// </summary>
         public bool IsUnlisted { get; set; }
+
+        /// <summary>
+        /// Gets/sets if the block should use a generic model
+        /// when rendered in the manager interface.
+        /// </summary>
+        public bool IsGeneric { get; set; }
 
         /// <summary>
         /// Gets/sets the name of the component that should be
