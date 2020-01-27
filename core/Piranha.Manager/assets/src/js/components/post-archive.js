@@ -100,12 +100,17 @@ Vue.component("post-archive", {
         },
         selectCategory: function (category) {
             this.category = category;
+        },
+        onSaved: function (state) {
+            this.load(this.index);
         }
     },
     mounted: function () {
         this.load();
+        this.eventBus.$on("onSaved", this.onSaved);
     },
     beforeDestroy: function () {
+        this.eventBus.$off("onSaved");
     },
     template:
         "<div :id='uid'>" +
