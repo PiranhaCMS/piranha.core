@@ -43,6 +43,6 @@
     <value>L'alias a été ajouté avec succès à la liste</value>
   </data>
   <data name="The alias was successfully deleted" xml:space="preserve">
-    <value>The alias was successfully deleted</value>
+    <value>L'alias a été supprimé avec succès</value>
   </data>
 </root>
