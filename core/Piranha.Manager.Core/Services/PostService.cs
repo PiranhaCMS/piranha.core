@@ -118,6 +118,11 @@ namespace Piranha.Manager.Services
         public async Task<PostListModel> GetList(Guid archiveId, int index = 0)
         {
             var page = await _api.Pages.GetByIdAsync<PageInfo>(archiveId);
+            if (page == null)
+            {
+                return new PostListModel();
+            }
+
             var pageType = App.PageTypes.GetById(page.TypeId);
             var pageSize = 0;
 
