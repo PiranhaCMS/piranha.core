@@ -72,13 +72,13 @@
   </data>
 
   <data name="Approve comments" xml:space="preserve">
-    <value>Approve comments</value>
+    <value>Kommentar genehmigen</value>
   </data>
   <data name="Close comments after" xml:space="preserve">
     <value>Close comments after</value>
   </data>
   <data name="Collapse block headers" xml:space="preserve">
-    <value>Collapse block headers</value>
+    <value>Block-Header einklappen</value>
   </data>
   <data name="Collapse blocks" xml:space="preserve">
     <value>Collapse blocks</value>
