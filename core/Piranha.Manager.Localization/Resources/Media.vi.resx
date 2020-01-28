@@ -45,4 +45,7 @@
   <data name="Your browser does not support the video tag." xml:space="preserve">
     <value>Trình duyệt của bạn không hỗ trợ thẻ video.</value>
   </data>
+  <data name="List" xml:space="preserve">
+    <value>List</value>
+  </data>
 </root>
