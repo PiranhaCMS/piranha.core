@@ -16,7 +16,7 @@
     <value>Configuration</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>Hiérachie des slugs de pages</value>
+    <value>Hiérarchie des slugs de pages</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
     <value>Si les slugs de pages doivent inclure le slug du parent.</value>
@@ -78,39 +78,39 @@
     <value>Fermer les commentaires après</value>
   </data>
   <data name="Collapse block headers" xml:space="preserve">
-    <value>Collapse block headers</value>
+    <value>Réduction des en-têtes des groupes de blocs</value>
   </data>
   <data name="Collapse blocks" xml:space="preserve">
-    <value>Collapse blocks</value>
+    <value>Réduction des blocs</value>
   </data>
   <data name="Comments page size" xml:space="preserve">
-    <value>Comments page size</value>
+    <value>Taille des pages de commentaires</value>
   </data>
   <data name="Enable page comments" xml:space="preserve">
-    <value>Enable page comments</value>
+    <value>Activer les commentaires sur les pages</value>
   </data>
   <data name="Enable post comments" xml:space="preserve">
-    <value>Enable post comments</value>
+    <value>Activer les commentaires sur les billets</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If block group headers should be collapsed by default when opening a page or post in the manager.</value>
+    <value>Si les en-têtes des groupes de blocs doivent être repliés par défaut lors de l'ouverture d'une page ou d'un message dans le gestionnaire.</value>
   </data>
   <data name="If blocks should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If blocks should be collapsed by default when opening a page or post in the manager.</value>
+    <value>Si les blocs doivent être repliés par défaut lors de l'ouverture d'une page ou d'un message dans le gestionnaire.</value>
   </data>
   <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
-    <value>If comments should be approved by default. Please note that this can be overridden by third party moderation services.</value>
+    <value>Si les commentaires doivent être approuvés par défaut. Veuillez noter que des services de modération tiers peuvent passer outre à cette règle.</value>
   </data>
   <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages.</value>
+    <value>Si les commentaires doivent être activés par défaut pour les pages. Veuillez noter qu'il est possible de passer outre cette option pour des pages spécifiques.</value>
   </data>
   <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
-    <value>If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts.</value>
+    <value>Si les commentaires doivent être activés par défaut pour les billets. Veuillez noter qu'il est possible de passer outre cette option pour des billets spécifiques.</value>
   </data>
   <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>The default page size when loading comments. Please note that this this can be overridden for specific pages.</value>
+    <value>La taille de page par défaut lors du chargement des commentaires. Veuillez noter qu'il est possible de modifier cette valeur pour des pages spécifiques.</value>
   </data>
   <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
-    <value>The number of days commenting should be open after publish date. A value of 0 means forever.</value>
+    <value>Le nombre de jours après la date de publication pendant lesquels les commentaires sont possibles. Une valeur de 0 signifie pour toujours.</value>
   </data>
 </root>
