@@ -75,4 +75,7 @@
   <data name="Your page title" xml:space="preserve">
     <value>Tytuł twojej strony</value>
   </data>
+  <data name="If comments should be enabled for this page" xml:space="preserve">
+    <value>If comments should be enabled for this page</value>
+  </data>
 </root>

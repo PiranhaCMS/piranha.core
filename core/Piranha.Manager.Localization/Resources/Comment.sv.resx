@@ -16,13 +16,16 @@
   <data name="Approved" xml:space="preserve">
     <value>Godkända</value>
   </data>
+  <data name="ApprovedSingle" xml:space="preserve">
+    <value>Godkänd</value>
+  </data>
   <data name="Pending" xml:space="preserve">
     <value>Väntande</value>
   </data>
   <data name="Comment" xml:space="preserve">
     <value>Kommentar</value>
   </data>
-  <data name="Rensponse to" xml:space="preserve">
+  <data name="Response to" xml:space="preserve">
     <value>Svar på</value>
   </data>
   <data name="The comment was successfully approved" xml:space="preserve">
@@ -33,5 +36,20 @@
   </data>
   <data name="The comment was successfully deleted" xml:space="preserve">
     <value>Kommentaren har raderats</value>
+  </data>
+  <data name="Days allowed for commenting" xml:space="preserve">
+    <value>Dagar tillåtna för att kommentera</value>
+  </data>
+  <data name="Comments are not allowed." xml:space="preserve">
+    <value>Kommentarer är inte tillåtna.</value>
+  </data>
+  <data name="Comments are not allowed for unpublished content." xml:space="preserve">
+    <value>Kommentarer är inte tillåtna för opublicerat innehåll.</value>
+  </data>
+  <data name="Comments are currently open." xml:space="preserve">
+    <value>Kommentarer är för närvarande öppna.</value>
+  </data>
+  <data name="Comments were closed" xml:space="preserve">
+    <value>Kommentarer stängdes</value>
   </data>
 </root>

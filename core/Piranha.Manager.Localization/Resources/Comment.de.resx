@@ -14,24 +14,42 @@
   </resheader>
 
   <data name="Approved" xml:space="preserve">
-    <value>Approved</value>
+    <value>Freigegeben</value>
+  </data>
+  <data name="ApprovedSingle" xml:space="preserve">
+    <value>Freigegeben</value>
   </data>
   <data name="Pending" xml:space="preserve">
-    <value>Pending</value>
+    <value>Ausstehend</value>
   </data>
   <data name="Comment" xml:space="preserve">
-    <value>Comment</value>
+    <value>Kommentar</value>
   </data>
-  <data name="Rensponse to" xml:space="preserve">
-    <value>Response to</value>
+  <data name="Response to" xml:space="preserve">
+    <value>Antworten</value>
   </data>
   <data name="The comment was successfully approved" xml:space="preserve">
-    <value>The comment was successfully approved</value>
+    <value>Der Kommentar wurde erfolgreich freigegeben</value>
   </data>
   <data name="The comment was successfully unapproved" xml:space="preserve">
-    <value>The comment was successfully unapproved</value>
+    <value>Der Kommentar wurde erfolgreich nicht genehmigt</value>
   </data>
   <data name="The comment was successfully deleted" xml:space="preserve">
-    <value>The comment was successfully deleted</value>
+    <value>Der Kommentar wurde erfolgreich gelöscht</value>
+  </data>
+  <data name="Days allowed for commenting" xml:space="preserve">
+    <value>Days allowed for commenting</value>
+  </data>
+  <data name="Comments are not allowed." xml:space="preserve">
+    <value>Kommentare sind nicht aktiviert.</value>
+  </data>
+  <data name="Comments are not allowed for unpublished content." xml:space="preserve">
+    <value>Kommentare sind für unveröffentlichte Inhalte nicht erlaubt.</value>
+  </data>
+  <data name="Comments are currently open." xml:space="preserve">
+    <value>Kommentare sind derzeit erlaubt.</value>
+  </data>
+  <data name="Comments were closed" xml:space="preserve">
+    <value>Kommentare sind geschlossen</value>
   </data>
 </root>
