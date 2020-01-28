@@ -17,7 +17,7 @@
     <value>Approuvé</value>
   </data>
   <data name="ApprovedSingle" xml:space="preserve">
-    <value>Approved</value>
+    <value>Approuvé</value>
   </data>
   <data name="Pending" xml:space="preserve">
     <value>En attente</value>
@@ -26,7 +26,7 @@
     <value>Commentaire</value>
   </data>
   <data name="Response to" xml:space="preserve">
-    <value>Response to</value>
+    <value>Réponse à</value>
   </data>
   <data name="The comment was successfully approved" xml:space="preserve">
     <value>Le commentaire a été approuvé avec succès</value>
@@ -38,18 +38,18 @@
     <value>Le commentaire a été supprimé avec succès</value>
   </data>
   <data name="Days allowed for commenting" xml:space="preserve">
-    <value>Days allowed for commenting</value>
+    <value>Jours autorisés pour commenter</value>
   </data>
   <data name="Comments are not allowed." xml:space="preserve">
-    <value>Comments are not allowed.</value>
+    <value>Les commentaires ne sont pas autorisés.</value>
   </data>
   <data name="Comments are not allowed for unpublished content." xml:space="preserve">
-    <value>Comments are not allowed for unpublished content.</value>
+    <value>Les commentaires ne sont pas autorisés pour le contenu hors ligne.</value>
   </data>
   <data name="Comments are currently open." xml:space="preserve">
-    <value>Comments are currently open.</value>
+    <value>Les commentaires sont actuellement ouverts.</value>
   </data>
   <data name="Comments were closed" xml:space="preserve">
-    <value>Comments were closed</value>
+    <value>Les commentaires sont fermés</value>
   </data>
 </root>
