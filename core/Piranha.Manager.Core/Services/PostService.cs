@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) 2019-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Piranha.Extend;
 using Piranha.Manager.Extensions;
@@ -128,7 +127,7 @@ namespace Piranha.Manager.Services
 
             using (var config = new Config(_api))
             {
-                pageSize = config.ArchivePageSize;
+                pageSize = config.ManagerPageSize;
             }
 
             var model = new PostListModel

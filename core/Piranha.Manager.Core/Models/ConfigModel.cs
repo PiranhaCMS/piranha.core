@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) 2019-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -17,6 +17,7 @@ namespace Piranha.Manager.Models
     {
         public bool HierarchicalPageSlugs { get; set; }
         public int ExpandedSitemapLevels { get; set; }
+        public int ManagerPageSize { get; set; }
         public int ArchivePageSize { get; set; }
         public bool CommentsApprove { get; set; }
         public int CommentsCloseAfterDays { get; set; }

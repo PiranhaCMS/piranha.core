@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2017-2019 Håkan Edling
+ * Copyright (c) 2017-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -38,6 +38,7 @@ namespace Piranha
         public static readonly string PAGES_HIERARCHICAL_SLUGS = "HierarchicalPageSlugs";
         public static readonly string MEDIA_CDN_URL = "MediaCdnUrl";
         public static readonly string MANAGER_EXPANDED_SITEMAP_LEVELS = "ManagerExpandedSitemapLevels";
+        public static readonly string MANAGER_PAGE_SIZE = "ManagerPageSize";
         public static readonly string MANAGER_DEFAULT_COLLAPSED_BLOCKS = "ManagerDefaultCollapsedBlocks";
         public static readonly string MANAGER_DEFAULT_COLLAPSED_BLOCKGROUPHEADERS = "ManagerDefaultCollapsedBlockGroupHeaders";
         public static readonly string PAGE_REVISIONS = "PageRevisions";
@@ -283,6 +284,30 @@ namespace Piranha
                     param = new Param
                     {
                         Key = MANAGER_EXPANDED_SITEMAP_LEVELS
+                    };
+                }
+                param.Value = value.ToString();
+                _service.SaveAsync(param).GetAwaiter().GetResult();
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the page size that should be used for paged lists in the manager.
+        /// </summary>
+        public int ManagerPageSize {
+            get {
+                var param = _service.GetByKeyAsync(MANAGER_PAGE_SIZE).GetAwaiter().GetResult();
+                if (param != null)
+                    return Convert.ToInt32(param.Value);
+                return 15;
+            }
+            set {
+                var param = _service.GetByKeyAsync(MANAGER_PAGE_SIZE).GetAwaiter().GetResult();
+                if (param == null)
+                {
+                    param = new Param
+                    {
+                        Key = MANAGER_PAGE_SIZE
                     };
                 }
                 param.Value = value.ToString();

@@ -9,6 +9,7 @@ piranha.config = new Vue({
         model: {
             hierarchicalPageSlugs: null,
             expandedSitemapLevels: null,
+            managerPageSize: null,
             archivePageSize: null,
             commentsApprove: null,
             commentsCloseAfterDays: null,
@@ -33,6 +34,7 @@ piranha.config = new Vue({
                 .then(function (result) {
                     self.model.hierarchicalPageSlugs = result.hierarchicalPageSlugs;
                     self.model.expandedSitemapLevels = result.expandedSitemapLevels;
+                    self.model.managerPageSize = result.managerPageSize;
                     self.model.archivePageSize = result.archivePageSize;
                     self.model.commentsApprove = result.commentsApprove;
                     self.model.commentsCloseAfterDays = result.commentsCloseAfterDays;
@@ -60,6 +62,7 @@ piranha.config = new Vue({
                     body: JSON.stringify({
                         hierarchicalPageSlugs: self.model.hierarchicalPageSlugs,
                         expandedSitemapLevels: self.model.expandedSitemapLevels,
+                        managerPageSize: self.model.managerPageSize,
                         archivePageSize: self.model.archivePageSize,
                         commentsApprove: self.model.commentsApprove,
                         commentsCloseAfterDays: self.model.commentsCloseAfterDays,

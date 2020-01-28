@@ -53,6 +53,19 @@
                     <li class="list-group-item">
                         <div class="row align-items-end">
                             <div class="col-md-8">
+                                <strong class="d-block">@Localizer.Config["Manager list size"]</strong>
+                                <span class="text-secondary">
+                                    @Localizer.Config["The page size for lists within the manager interface."]
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <input v-model="model.managerPageSize" class="form-control" type="number">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row align-items-end">
+                            <div class="col-md-8">
                                 <strong class="d-block">@Localizer.Config["Hierarchical page slugs"]</strong>
                                 <span class="text-secondary">
                                     @Localizer.Config["If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps."]

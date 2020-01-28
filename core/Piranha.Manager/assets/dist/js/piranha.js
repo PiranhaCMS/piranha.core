@@ -1,3 +1,9 @@
+
+//
+// Setting up a common event bus
+// for all Vue apps in Piranha
+//
+Vue.prototype.eventBus = new Vue();
 /*global
     piranha
 */
@@ -210,6 +216,10 @@ piranha.permissions = {
         edit: false,
         delete: false
     },
+    comments: {
+        approve: false,
+        delete: false
+    },
     media: {
         add: false,
         addFolder: false,
@@ -248,6 +258,7 @@ piranha.permissions = {
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.aliases = result.aliases;
+                    self.comments = result.comments;
                     self.media = result.media;
                     self.pages = result.pages;
                     self.posts = result.posts;

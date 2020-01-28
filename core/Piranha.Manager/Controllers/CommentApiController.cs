@@ -62,7 +62,7 @@ namespace Piranha.Manager.Controllers
             result.Status = new StatusMessage
             {
                 Type = StatusMessage.Success,
-                Body = "The comment was successfully approved"
+                Body = _localizer.Comment["The comment was successfully approved"]
             };
             return result;
         }
@@ -79,7 +79,7 @@ namespace Piranha.Manager.Controllers
             result.Status = new StatusMessage
             {
                 Type = StatusMessage.Success,
-                Body = "The comment was successfully unapproved"
+                Body = _localizer.Comment["The comment was successfully unapproved"]
             };
             return result;
         }
@@ -94,7 +94,7 @@ namespace Piranha.Manager.Controllers
             var result = new StatusMessage
             {
                 Type = StatusMessage.Success,
-                Body = "The comment was successfully deleted"
+                Body = _localizer.Comment["The comment was successfully deleted"]
             };
             return result;
         }

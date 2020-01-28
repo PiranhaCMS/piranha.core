@@ -147,12 +147,13 @@ Vue.component("post-archive", {
         "  </div>" +
         "  <table class='table'>" +
         "    <tbody>" +
-        "      <tr v-if='isSelected(post)' v-for='post in items' :class='post.status'>" +
+        "      <tr v-if='isSelected(post)' v-for='post in items' :class='{ unpublished: post.status === \"unpublished\" || post.isScheduled }'>" +
         "        <td>" +
         "          <a :href='piranha.baseUrl + post.editUrl + post.id'>{{ post.title }}</a> " +
-        "          <small v-if='post.status === \"published\" || post.status === \"draft\"' class='text-muted'>| Published: {{ post.published }}</small>" +
+        "          <small v-if='post.status === \"published\" || post.status === \"draft\"' class='text-muted'>| {{ post.published }}</small>" +
         "          <small v-else-if='post.status === \"unpublished\"' class='text-muted'>| Unpublished</small>" +
         "          <span v-if='post.status === \"draft\"' class='badge badge-info float-right'>{{ piranha.resources.texts.draft }}</span>" +
+        "          <span v-if='post.isScheduled' class='badge badge-info float-right'>{{ piranha.resources.texts.scheduled }}</span>" +
         "        </td>" +
         "        <td>" +
         "          {{ post.typeName }}" +
