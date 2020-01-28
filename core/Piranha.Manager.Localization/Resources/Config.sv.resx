@@ -92,6 +92,9 @@
   <data name="Enable post comments" xml:space="preserve">
     <value>Aktivera kommentarer för artiklar</value>
   </data>
+  <data name="Manager list size" xml:space="preserve">
+    <value>Manager list size</value>
+  </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
     <value>Om rubriker för blockgrupper ska vara ihopfällda som standard när du redigerar en sida eller artikel.</value>
   </data>
@@ -112,5 +115,8 @@
   </data>
   <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
     <value>Antalet dagar som kommentering är öppet efter publiceringsdatum. Värdet 0 betyder att kommentering alltid är öppen.</value>
+  </data>
+  <data name="The page size for lists within the manager interface." xml:space="preserve">
+    <value>The page size for lists within the manager interface.</value>
   </data>
 </root>
