@@ -14,28 +14,28 @@
   </resheader>
 
   <data name="Approved" xml:space="preserve">
-    <value>Approved</value>
+    <value>Freigegeben</value>
   </data>
   <data name="ApprovedSingle" xml:space="preserve">
     <value>Freigegeben</value>
   </data>
   <data name="Pending" xml:space="preserve">
-    <value>Pending</value>
+    <value>Ausstehend</value>
   </data>
   <data name="Comment" xml:space="preserve">
-    <value>Comment</value>
+    <value>Kommentar</value>
   </data>
   <data name="Response to" xml:space="preserve">
-    <value>Antwort auf</value>
+    <value>Antworten</value>
   </data>
   <data name="The comment was successfully approved" xml:space="preserve">
-    <value>The comment was successfully approved</value>
+    <value>Der Kommentar wurde erfolgreich freigegeben</value>
   </data>
   <data name="The comment was successfully unapproved" xml:space="preserve">
-    <value>The comment was successfully unapproved</value>
+    <value>Der Kommentar wurde erfolgreich nicht genehmigt</value>
   </data>
   <data name="The comment was successfully deleted" xml:space="preserve">
-    <value>The comment was successfully deleted</value>
+    <value>Der Kommentar wurde erfolgreich gelöscht</value>
   </data>
   <data name="Days allowed for commenting" xml:space="preserve">
     <value>Days allowed for commenting</value>
