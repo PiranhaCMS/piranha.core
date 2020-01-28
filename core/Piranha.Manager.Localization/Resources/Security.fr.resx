@@ -45,4 +45,11 @@
   <data name="Can't delete yourself." xml:space="preserve">
     <value>Vous ne pouvez pas supprimer votre propre compte.</value>
   </data>
+
+  <data name="New password" xml:space="preserve">
+    <value>Nouveau mot de passe</value>
+  </data>
+  <data name="Confirm password" xml:space="preserve">
+    <value>Confirmation du mot de passe</value>
+  </data>
 </root>
