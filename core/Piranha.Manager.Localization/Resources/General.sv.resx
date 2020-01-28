@@ -222,4 +222,7 @@
   <data name="Width" xml:space="preserve">
     <value>Bredd</value>
   </data>
+  <data name="Archives and Comments" xml:space="preserve">
+    <value>Arkiv och Kommentarer</value>
+  </data>
 </root>
