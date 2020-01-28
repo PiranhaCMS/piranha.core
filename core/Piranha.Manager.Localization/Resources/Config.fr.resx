@@ -92,9 +92,6 @@
   <data name="Enable post comments" xml:space="preserve">
     <value>Activer les commentaires sur les billets</value>
   </data>
-  <data name="Manager list size" xml:space="preserve">
-    <value>Taille des listes du gestionnaire</value>
-  </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
     <value>Si les en-têtes des groupes de blocs doivent être repliés par défaut lors de l'ouverture d'une page ou d'un message dans le gestionnaire.</value>
   </data>
@@ -115,8 +112,5 @@
   </data>
   <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
     <value>Le nombre de jours après la date de publication pendant lesquels les commentaires sont possibles. Une valeur de 0 signifie pour toujours.</value>
-  </data>
-  <data name="The page size for lists within the manager interface." xml:space="preserve">
-    <value>La taille de page des listes au sein de l'interface du gestionnaire.</value>
   </data>
 </root>
