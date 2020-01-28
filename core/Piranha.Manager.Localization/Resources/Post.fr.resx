@@ -46,6 +46,6 @@
     <value>Le titre de votre billet</value>
   </data>
   <data name="If comments should be enabled for this post" xml:space="preserve">
-    <value>If comments should be enabled for this post</value>
+    <value>Si les commentaires doivent être activés pour ce billet</value>
   </data>
 </root>
