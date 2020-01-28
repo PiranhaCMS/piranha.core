@@ -92,6 +92,9 @@
   <data name="Enable post comments" xml:space="preserve">
     <value>Enable post comments</value>
   </data>
+  <data name="Manager list size" xml:space="preserve">
+    <value>Manager list size</value>
+  </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
     <value>If block group headers should be collapsed by default when opening a page or post in the manager.</value>
   </data>
@@ -112,5 +115,8 @@
   </data>
   <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
     <value>The number of days commenting should be open after publish date. A value of 0 means forever.</value>
+  </data>
+  <data name="The page size for lists within the manager interface." xml:space="preserve">
+    <value>The page size for lists within the manager interface.</value>
   </data>
 </root>
