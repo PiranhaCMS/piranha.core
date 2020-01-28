@@ -45,4 +45,7 @@
   <data name="Your post title" xml:space="preserve">
     <value>Jouw artikel titel</value>
   </data>
+  <data name="If comments should be enabled for this post" xml:space="preserve">
+    <value>If comments should be enabled for this post</value>
+  </data>
 </root>

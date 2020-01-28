@@ -75,4 +75,7 @@
   <data name="Your page title" xml:space="preserve">
     <value>Din sidtitel</value>
   </data>
+  <data name="If comments should be enabled for this page" xml:space="preserve">
+    <value>Om kommentarer ska aktiveras för den här sidan</value>
+  </data>
 </root>

@@ -223,6 +223,15 @@
     <value>Breite</value>
   </data>
   <data name="Archives and Comments" xml:space="preserve">
-    <value>Archives and Comments</value>
+    <value>Archive und Kommentare</value>
+  </data>
+  <data name="Author" xml:space="preserve">
+    <value>Autor</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>Kommentare</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Erstellt am</value>
   </data>
 </root>

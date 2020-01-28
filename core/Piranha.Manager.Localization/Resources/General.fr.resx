@@ -225,4 +225,13 @@
   <data name="Archives and Comments" xml:space="preserve">
     <value>Archives et Commentaires</value>
   </data>
+  <data name="Author" xml:space="preserve">
+    <value>Auteur</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>Commentaires</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Créé</value>
+  </data>
 </root>
