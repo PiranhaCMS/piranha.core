@@ -42,4 +42,13 @@
   <data name="Logout" xml:space="preserve">
     <value>Đăng xuất</value>
   </data>
+  <data name="Comments" xml:space="preserve">
+    <value>Comments</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Users</value>
+  </data>
 </root>
