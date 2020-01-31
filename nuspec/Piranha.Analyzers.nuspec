@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Piranha.Analyzers</id>
+		<title>Piranha.Analyzers</title>
+    <version>8.0.2</version>
+    <authors>Håkan Edling</authors>
+    <owners>Håkan Edling</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Analyzers for Piranha CMS for .NET Core.</description>
+    <copyright>Copyright 2020 (c) Håkan Edling</copyright>
+    <tags>cms mvc aspnetcore netstandard</tags>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/piranhacms/piranha.core</projectUrl>
+    <iconUrl>http://piranhacms.org/assets/twitter-shield.png</iconUrl>
+    <developmentDependency>true</developmentDependency>
+    <releaseNotes>See the changelog available at:
+https://github.com/piranhacms/piranha.core/wiki/changelog
+    </releaseNotes>
+    <dependencies>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Piranha" version="[8.0.0,9.0.0)" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\analyzers\Piranha.Analyzers\bin\Release\netstandard2.0\Piranha.Analyzers.dll" target="analyzers\dotnet\cs" />
+    <file src="tools\*.ps1" target="tools\" />
+  </files>
+</package>

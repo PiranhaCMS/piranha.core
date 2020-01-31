@@ -29,6 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Local.FileStorage",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuspec", ".nuspec", "{A1B6ED88-8C91-45B0-9585-036E8A1C4A3C}"
 	ProjectSection(SolutionItems) = preProject
+		nuspec\Piranha.Analyzers.nuspec = nuspec\Piranha.Analyzers.nuspec
 		nuspec\Piranha.AspNetCore.Identity.nuspec = nuspec\Piranha.AspNetCore.Identity.nuspec
 		nuspec\Piranha.AspNetCore.Identity.SQLite.nuspec = nuspec\Piranha.AspNetCore.Identity.SQLite.nuspec
 		nuspec\Piranha.AspNetCore.Identity.SQLServer.nuspec = nuspec\Piranha.AspNetCore.Identity.SQLServer.nuspec
@@ -83,6 +84,14 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Manager.TinyMCE", "core\Piranha.Manager.TinyMCE\Piranha.Manager.TinyMCE.csproj", "{A52B0CDE-AD56-4B85-9DD1-01B7494D17C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Manager.Tests", "test\Piranha.Manager.Tests\Piranha.Manager.Tests.csproj", "{497CBEC0-6D71-43ED-9E8C-6A0DB605AA47}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Analyzers", "analyzers\Piranha.Analyzers\Piranha.Analyzers.csproj", "{C1DDAEDE-B797-4CF6-B512-089C2833F72E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Analyzers.Vsix", "analyzers\Piranha.Analyzers.Vsix\Piranha.Analyzers.Vsix.csproj", "{16F6006A-1AC1-4876-BD87-41590AA40568}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Analyzers.Test", "test\Piranha.Analyzers.Test\Piranha.Analyzers.Test.csproj", "{72718CA9-0B58-4F3B-AA6B-F09F8CF609A3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "analyzers", "analyzers", "{2E05EF12-8581-4FB4-A95E-3CB1955076A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -186,6 +195,18 @@ Global
 		{497CBEC0-6D71-43ED-9E8C-6A0DB605AA47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{497CBEC0-6D71-43ED-9E8C-6A0DB605AA47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{497CBEC0-6D71-43ED-9E8C-6A0DB605AA47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1DDAEDE-B797-4CF6-B512-089C2833F72E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1DDAEDE-B797-4CF6-B512-089C2833F72E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1DDAEDE-B797-4CF6-B512-089C2833F72E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1DDAEDE-B797-4CF6-B512-089C2833F72E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16F6006A-1AC1-4876-BD87-41590AA40568}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16F6006A-1AC1-4876-BD87-41590AA40568}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16F6006A-1AC1-4876-BD87-41590AA40568}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16F6006A-1AC1-4876-BD87-41590AA40568}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72718CA9-0B58-4F3B-AA6B-F09F8CF609A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72718CA9-0B58-4F3B-AA6B-F09F8CF609A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72718CA9-0B58-4F3B-AA6B-F09F8CF609A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72718CA9-0B58-4F3B-AA6B-F09F8CF609A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -215,6 +236,9 @@ Global
 		{4A1E96A1-B7FD-4A8E-8440-924D63911770} = {A82A5922-BF05-4DD7-A2C1-DD22F1AD6A57}
 		{A52B0CDE-AD56-4B85-9DD1-01B7494D17C9} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 		{497CBEC0-6D71-43ED-9E8C-6A0DB605AA47} = {DE1913AC-4AA3-4F66-83F1-615710D8367B}
+		{C1DDAEDE-B797-4CF6-B512-089C2833F72E} = {2E05EF12-8581-4FB4-A95E-3CB1955076A9}
+		{16F6006A-1AC1-4876-BD87-41590AA40568} = {2E05EF12-8581-4FB4-A95E-3CB1955076A9}
+		{72718CA9-0B58-4F3B-AA6B-F09F8CF609A3} = {DE1913AC-4AA3-4F66-83F1-615710D8367B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF88AA05-D127-4707-8214-A230F0DA569B}
