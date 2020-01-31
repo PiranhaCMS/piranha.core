@@ -44,7 +44,7 @@ namespace Piranha.Manager.Models
 
             if (await _service.SignIn(HttpContext, model.Username, model.Password))
             {
-                return new RedirectToPageResult("PageList");
+                return new RedirectToPageResult("Index");
             }
             return Page();
         }
