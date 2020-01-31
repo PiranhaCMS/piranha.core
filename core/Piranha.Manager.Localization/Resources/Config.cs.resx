@@ -111,12 +111,12 @@
     <value>If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts.</value>
   </data>
   <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>The default page size when loading comments. Please note that this this can be overridden for specific pages.</value>
+    <value>Výchozí velikost stránky při načítání komentářů. Vezměte prosím na vědomí, že toto může být přepsáno u jednotlivých stránek.</value>
   </data>
   <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
-    <value>The number of days commenting should be open after publish date. A value of 0 means forever.</value>
+    <value>Počet dní kdy budou otevřené komentáře po datu zveřejnení. Hodnota 0 znamená navždy.</value>
   </data>
   <data name="The page size for lists within the manager interface." xml:space="preserve">
-    <value>The page size for lists within the manager interface.</value>
+    <value>Velikost stránky pro seznamy v rámci správce obsahu.</value>
   </data>
 </root>
