@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) 2019-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -49,6 +49,10 @@ namespace Piranha.Manager.Services
                 Filename = media.Filename,
                 PublicUrl = media.PublicUrl.Replace("~", ""),
                 ContentType = media.ContentType,
+                Title = media.Title,
+                AltText = media.AltText,
+                Description = media.Description,
+                Properties = media.Properties.ToArray().OrderBy(p => p.Key).ToList(),
                 Size = Utils.FormatByteSize(media.Size),
                 Width = media.Width,
                 Height = media.Height,
@@ -94,6 +98,10 @@ namespace Piranha.Manager.Services
                     Filename = m.Filename,
                     PublicUrl = m.PublicUrl.TrimStart('~'), //Will only enumerate the start of the string, probably a faster operation.
                     ContentType = m.ContentType,
+                    Title = m.Title,
+                    AltText = m.AltText,
+                    Description = m.Description,
+                    Properties = m.Properties.ToArray().OrderBy(p => p.Key).ToList(),
                     Size = Utils.FormatByteSize(m.Size),
                     Width = m.Width,
                     Height = m.Height,
@@ -175,6 +183,34 @@ namespace Piranha.Manager.Services
                 }
             }
             return uploaded;
+        }
+
+        /// <summary>
+        /// Saves the updated meta information for the given media asset.
+        /// </summary>
+        /// <param name="media">The media asset</param>
+        /// <returns>If the meta information was updated successful</returns>
+        public async Task<bool> SaveMeta(MediaListModel.MediaItem media)
+        {
+            var model = await _api.Media.GetByIdAsync(media.Id);
+
+            if (model != null)
+            {
+                // Only update the meta fields
+                model.Title = media.Title;
+                model.AltText = media.AltText;
+                model.Description = media.Description;
+
+                foreach (var property in media.Properties)
+                {
+                    model.Properties[property.Key] = property.Value;
+                }
+
+                await _api.Media.SaveAsync(model);
+
+                return true;
+            }
+            return false;
         }
 
         public async Task<Guid?> DeleteMedia(Guid id)

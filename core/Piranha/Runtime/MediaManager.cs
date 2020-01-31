@@ -106,6 +106,11 @@ namespace Piranha.Runtime
         public MediaTypeList Resources { get; set; } = new MediaTypeList();
 
         /// <summary>
+        /// Gets/sets the currently registered meta properties for media.
+        /// </summary>
+        public IList<string> MetaProperties { get; set; } = new List<string>();
+
+        /// <summary>
         /// Checks if the given filename has a supported extension.
         /// </summary>
         /// <param name="filename">The path or filename</param>

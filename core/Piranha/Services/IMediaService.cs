@@ -67,6 +67,12 @@ namespace Piranha.Services
         Task<MediaStructure> GetStructureAsync();
 
         /// <summary>
+        /// Updates the meta data for the given media model.
+        /// </summary>
+        /// <param name="model">The model</param>
+        Task SaveAsync(Media model);
+
+        /// <summary>
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>

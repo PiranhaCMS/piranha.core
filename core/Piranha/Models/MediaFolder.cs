@@ -34,6 +34,12 @@ namespace Piranha.Models
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional description.
+        /// </summary>
+        [StringLength(512)]
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets/sets the created date.
         /// </summary>
         public DateTime Created { get; set; }

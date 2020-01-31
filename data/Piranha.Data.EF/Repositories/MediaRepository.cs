@@ -148,6 +148,10 @@ namespace Piranha.Repositories
             media.Width = model.Width;
             media.Height = model.Height;
             media.ContentType = model.ContentType;
+            media.Title = model.Title;
+            media.AltText = model.AltText;
+            media.Description = model.Description;
+            media.Properties = Media.SerializeProperties(model.Properties);
             media.LastModified = DateTime.Now;
 
             // Delete removed versions

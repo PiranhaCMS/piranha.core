@@ -27,6 +27,9 @@
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="pill" href="#pills-details"><i class="fas fa-info-circle"></i> @Localizer.General["Details"]</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#pills-meta"><i class="fas fa-th-list"></i> @Localizer.General["Meta"]</a>
+                </li>
                 @if ((await Auth.AuthorizeAsync(User, Permission.MediaEdit)).Succeeded)
                 {
                 <li class="nav-item">
@@ -67,6 +70,7 @@
                             </div>
                         </template>
                     </div>
+
                     <div class="tab-pane fade" id="pills-details">
                         <table class="table table-borderless m-0">
                             <tbody>
@@ -111,6 +115,37 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <div class="tab-pane fade" id="pills-meta">
+                        <table class="table table-borderless m-0">
+                            <tbody>
+                                <tr>
+                                    <th><span class="d-block mt-1">@Localizer.General["Title"]</span></th>
+                                    <td><input type="text" class="form-control form-control-sm" v-model="media.title"></td>
+                                </tr>
+                                <tr>
+                                    <th><span class="d-block mt-1">@Localizer.General["Alt text"]</span></th>
+                                    <td><input type="text" class="form-control form-control-sm" v-model="media.altText"></td>
+                                </tr>
+                                <tr>
+                                    <th><span class="d-block mt-1">@Localizer.General["Description"]</span></th>
+                                    <td><textarea rows="5" class="form-control form-control-sm" v-model="media.description"></textarea></td>
+                                </tr>
+                                <tr v-for="property in media.properties">
+                                    <th><span class="d-block mt-1">{{ property.key }}</span></th>
+                                    <td><input type="text"class="form-control form-control-sm" v-model="property.value"></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right" colspan="2">
+                                        <button v-on:click.prevent="saveMeta(media)" class="btn btn-sm btn-success btn-labeled">
+                                            <i class="fas fa-check"></i>@Localizer.General["Save"]
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
                     <div class="tab-pane fade" id="pills-update">
                         <div id="media-update-container" class="dropzone-container">
                             <form action="@Url.Action("Upload", "MediaApi")" class="dropzone needsclick dz-clickable" enctype="multipart/form-data">
@@ -125,6 +160,7 @@
                             <ul class="media-list list-unstyled"></ul>
                         </div>
                     </div>
+
                     @foreach (var action in Piranha.Manager.Actions.Modals.MediaPreview)
                     {
                         <div class="tab-pane fade" id="@action.Uid">

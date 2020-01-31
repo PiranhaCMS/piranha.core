@@ -203,9 +203,13 @@ namespace Piranha
             mb.Entity<Data.Media>().ToTable("Piranha_Media");
             mb.Entity<Data.Media>().Property(m => m.Filename).HasMaxLength(128).IsRequired();
             mb.Entity<Data.Media>().Property(m => m.ContentType).HasMaxLength(256).IsRequired();
+            mb.Entity<Data.Media>().Property(m => m.Title).HasMaxLength(128);
+            mb.Entity<Data.Media>().Property(m => m.AltText).HasMaxLength(128);
+            mb.Entity<Data.Media>().Property(m => m.Description).HasMaxLength(512);
 
             mb.Entity<Data.MediaFolder>().ToTable("Piranha_MediaFolders");
             mb.Entity<Data.MediaFolder>().Property(f => f.Name).HasMaxLength(128).IsRequired();
+            mb.Entity<Data.MediaFolder>().Property(f => f.Description).HasMaxLength(512);
 
             mb.Entity<Data.MediaVersion>().ToTable("Piranha_MediaVersions");
             mb.Entity<Data.MediaVersion>().Property(v => v.FileExtension).HasMaxLength(8);
