@@ -96,19 +96,19 @@
     <value>Velikost stránky ve správci</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If block group headers should be collapsed by default when opening a page or post in the manager.</value>
+    <value>Pokud by měly být sbaleny hlavičky bloků ve výchozím nastavení při otevření stránky nebo příspěvku ve správci.</value>
   </data>
   <data name="If blocks should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If blocks should be collapsed by default when opening a page or post in the manager.</value>
+    <value>Pokud by měly být sbaleny bloky ve výchozím nastavení při otevření stránky nebo příspěvku ve správci.</value>
   </data>
   <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
-    <value>If comments should be approved by default. Please note that this can be overridden by third party moderation services.</value>
+    <value>Pokud by měly být komentáře ve výchozím nastavení schváleny. Vezměte prosím na vědomí, že nastavení může být přepsáno službami třetích stran.</value>
   </data>
   <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages.</value>
+    <value>Pokud by měly být komentáře u stránek ve výchozím nastavení povoleny. Vezměte prosím na vědomí, že nastavení může být u jednotlivých stránek přepsáno.</value>
   </data>
   <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
-    <value>If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts.</value>
+    <value>Pokud by měly být komentáře u příspěvků ve výchozím nastavení povoleny. Vezměte prosím na vědomí, že nastavení může být u jednotlivých příspěvků přepsáno.</value>
   </data>
   <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
     <value>Výchozí velikost stránky při načítání komentářů. Vezměte prosím na vědomí, že toto může být přepsáno u jednotlivých stránek.</value>
