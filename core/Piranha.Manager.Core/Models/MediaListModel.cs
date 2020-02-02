@@ -123,6 +123,11 @@ namespace Piranha.Manager.Models
         public Guid? ParentFolderId { get; set; }
 
         /// <summary>
+        /// Gets/sets if the current folder can be deleted.
+        /// </summary>
+        public bool CanDelete { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional status message from the last operation.
         /// </summary>
         public StatusMessage Status { get; set; }

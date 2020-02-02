@@ -47,7 +47,7 @@
                             <button class="btn btn-sm btn-primary btn-labeled mr-1" :disabled="currentFolderId === null" data-toggle="collapse" href="#folderEdit" aria-expanded="false" aria-controls="folderEdit">
                                 <i class="fas fa-pen"></i>@Localizer.General["Edit"]
                             </button>
-                            <button v-on:click.prevent="removeFolder(currentFolderId)" class="btn btn-sm btn-danger btn-labeled" :disabled="currentFolderId === null">
+                            <button v-on:click.prevent="removeFolder(currentFolderId)" class="btn btn-sm btn-danger btn-labeled" :disabled="currentFolderId === null || !canDelete">
                                 <i class="fas fa-trash"></i><span>@Localizer.General["Delete"]</span>
                             </button>
                         </div>
@@ -81,12 +81,6 @@
                         </div>
                     </div>
                     <ol class="folders">
-                        <li>
-                            <a href="#">
-                                <i class="fas fa-folder"></i>All files
-                                <span class="badge badge-light float-right">{{ totalCount }}</span>
-                            </a>
-                        </li>
                         <li class="droppable" :class="{ active: currentFolderId === null }" v-on:dragover="dragover" v-on:dragleave="dragleave" v-on:drop="drop($event, null)">
                             <a v-on:click.prevent="load()" href="#">
                                 <i class="fas fa-hdd"></i>Unorganized

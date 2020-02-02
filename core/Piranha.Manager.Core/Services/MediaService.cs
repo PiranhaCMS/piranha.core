@@ -79,6 +79,16 @@ namespace Piranha.Manager.Services
 
             if (folderId.HasValue)
             {
+                var partial = model.Structure.GetPartial(folderId, true);
+
+                if (partial.FirstOrDefault()?.MediaCount == 0 && partial.FirstOrDefault()?.FolderCount == 0)
+                {
+                    model.CanDelete = true;
+                }
+            }
+
+            if (folderId.HasValue)
+            {
                 var folder = await _api.Media.GetFolderByIdAsync(folderId.Value);
                 if (folder != null)
                 {

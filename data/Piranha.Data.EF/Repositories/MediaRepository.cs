@@ -307,6 +307,7 @@ namespace Piranha.Repositories
 
                 item.Level = level;
                 item.Items = Sort(mediaFolders, count, folder.Id, level + 1);
+                item.FolderCount = folders.Count(f => f.ParentId == item.Id);
                 item.MediaCount = folderCount.HasValue ? folderCount.Value : 0;
 
                 result.Add(item);

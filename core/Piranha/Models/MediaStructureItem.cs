@@ -21,6 +21,11 @@ namespace Piranha.Models
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets/sets the number of child folders in the folder.
+        /// </summary>
+        public int FolderCount { get; set; }
+
+        /// <summary>
         /// Gets/sets the number of media items in the folder.
         /// </summary>
         public int MediaCount { get; set; }

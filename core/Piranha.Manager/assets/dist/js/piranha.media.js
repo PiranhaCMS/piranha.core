@@ -37,6 +37,7 @@ piranha.media = new Vue({
         structure: [],
         rootCount: null,
         totalCount: null,
+        canDelete: false,
         folder: {
             name: null
         },
@@ -51,6 +52,7 @@ piranha.media = new Vue({
             this.structure = result.structure;
             this.rootCount = result.rootCount;
             this.totalCount = result.totalCount;
+            this.canDelete = result.canDelete;
             this.listView = result.viewMode === "list";
         },
         drag: function (event, item) {
