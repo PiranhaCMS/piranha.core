@@ -22,27 +22,6 @@ namespace Piranha.Manager.Models
         public static string GalleryView { get; } = "gallery";
 
         /// <summary>
-        /// A folder item in the list view.
-        /// </summary>
-        public class FolderItem
-        {
-            /// <summary>
-            /// Gets/sets the unique id.
-            /// </summary>
-            public Guid Id { get; set; }
-
-            /// <summary>
-            /// Gets/sets the name.
-            /// </summary>
-            public string Name { get; set; }
-
-            /// <summary>
-            /// Gets/sets the item count in the folder.
-            /// </summary>
-            public int ItemCount { get; set; }
-        }
-
-        /// <summary>
         /// A media item in the list view.
         /// </summary>
         public class MediaItem
@@ -124,11 +103,6 @@ namespace Piranha.Manager.Models
         }
 
         /// <summary>
-        /// Gets/sets the available folders.
-        /// </summary>
-        public IList<FolderItem> Folders { get; set; } = new List<FolderItem>();
-
-        /// <summary>
         /// Gets/sets the available media items.
         /// </summary>
         public IList<MediaItem> Media { get; set; } = new List<MediaItem>();
@@ -157,5 +131,20 @@ namespace Piranha.Manager.Models
         /// Gets/sets the recommended view mode for the folder.
         /// </summary>
         public string ViewMode { get; set; }
+
+        /// <summary>
+        /// Gets/sets the media folder structure.
+        /// </summary>
+        public Piranha.Models.MediaStructure Structure { get; set; }
+
+        /// <summary>
+        /// Gets/sets the amount of media files at root level.
+        /// </summary>
+        public int RootCount { get; set; }
+
+        /// <summary>
+        /// Gets/sets the total amount of media files.
+        /// </summary>
+        public int TotalCount { get; set; }
     }
 }

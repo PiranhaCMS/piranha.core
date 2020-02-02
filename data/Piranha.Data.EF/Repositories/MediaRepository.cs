@@ -20,6 +20,12 @@ namespace Piranha.Repositories
 {
     public class MediaRepository : IMediaRepository
     {
+        class FolderCount
+        {
+            public Guid? FolderId { get; set; }
+            public int Count { get; set; }
+        }
+
         private readonly IDb _db;
 
         /// <summary>
@@ -116,7 +122,18 @@ namespace Piranha.Repositories
                 .ToListAsync()
                 .ConfigureAwait(false);
 
-            return Sort(folders);
+            var count = await _db.Media
+                .AsNoTracking()
+                .GroupBy(m => m.FolderId)
+                .Select(m => new FolderCount
+                {
+                    FolderId = m.Key,
+                    Count = m.Count()
+                })
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            return Sort(folders, count);
         }
 
         /// <summary>
@@ -272,17 +289,25 @@ namespace Piranha.Repositories
         /// <param name="folders">The full folder list</param>
         /// <param name="parentId">The current parent id</param>
         /// <returns>The structure</returns>
-        private Models.MediaStructure Sort(IEnumerable<MediaFolder> folders, Guid? parentId = null, int level = 0)
+        private Models.MediaStructure Sort(IEnumerable<MediaFolder> folders, IList<FolderCount> count, Guid? parentId = null, int level = 0)
         {
-            var result = new Models.MediaStructure();
+            var rootCount = count.FirstOrDefault(c => c.FolderId == null)?.Count;
+            var totalCount = count.Sum(c => c.Count);
+            var result = new Models.MediaStructure
+            {
+                MediaCount = rootCount.HasValue ? rootCount.Value : 0,
+                TotalCount = totalCount
+            };
 
             var mediaFolders = folders as MediaFolder[] ?? folders.ToArray();
             foreach (var folder in mediaFolders.Where(f => f.ParentId == parentId).OrderBy(f => f.Name))
             {
                 var item = Module.Mapper.Map<MediaFolder, Models.MediaStructureItem>(folder);
+                var folderCount = count.FirstOrDefault(c => c.FolderId == folder.Id)?.Count;
 
                 item.Level = level;
-                item.Items = Sort(mediaFolders, folder.Id, level + 1);
+                item.Items = Sort(mediaFolders, count, folder.Id, level + 1);
+                item.MediaCount = folderCount.HasValue ? folderCount.Value : 0;
 
                 result.Add(item);
             }

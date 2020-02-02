@@ -103,6 +103,7 @@ var js = [
     {
         name: "piranha.media.js",
         items: [
+            "assets/src/js/components/folder-item.js",
             "assets/src/js/piranha.media.js"
         ]
     },

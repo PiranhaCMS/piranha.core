@@ -50,8 +50,8 @@ button {
     &.btn-labeled {
         i {
             padding-right: .5rem;
-            border-right: solid 1px rgba(255,255,255,0.3);
-            margin-right: .5rem;
+            //border-right: solid 1px rgba(255,255,255,0.3);
+            //margin-right: .5rem;
         }
 
         span {
@@ -101,6 +101,12 @@ button {
 .btn-group {
     .dropdown-menu {
         min-width: 100%;
+    }
+
+    .btn-labeled {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }
 

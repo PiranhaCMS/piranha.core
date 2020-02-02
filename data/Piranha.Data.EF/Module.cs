@@ -72,6 +72,7 @@ namespace Piranha.Data.EF
                     .ForMember(f => f.Media, o => o.Ignore());
                 cfg.CreateMap<Data.MediaFolder, Models.MediaStructureItem>()
                     .ForMember(f => f.Level, o => o.Ignore())
+                    .ForMember(f => f.MediaCount, o => o.Ignore())
                     .ForMember(f => f.Items, o => o.Ignore());
                 cfg.CreateMap<Data.Page, Models.PageBase>()
                     .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PageTypeId))
