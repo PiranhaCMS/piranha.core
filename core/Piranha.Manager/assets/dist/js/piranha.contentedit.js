@@ -685,7 +685,7 @@ Vue.component("html-column-block", {
         piranha.editor.remove(this.uid + 2);
     },
     template:
-        "<div class='block-body' class='row'>" +
+        "<div class='row block-body'>" +
         "  <div class='col-md-6'>" +
         "    <div :class='{ empty: isEmpty1 }'>" +
         "      <div :id='uid + 1' contenteditable='true' spellcheck='false' v-html='column1' v-on:blur='onBlurCol1'></div>" +
@@ -810,7 +810,7 @@ Vue.component("quote-block", {
     template:
         "<div class='block-body' :class='{ empty: isEmpty }'>" +
         "  <i class='fas fa-quote-right quote'></i>" +
-        "  <p class='lead' contenteditable='true' spellcheck='false' v-html='model.body.value' v-on:blur='onBlur'></pre>" +
+        "  <p class='lead' contenteditable='true' spellcheck='false' v-html='model.body.value' v-on:blur='onBlur'></p>" +
         "</div>"
 });
 

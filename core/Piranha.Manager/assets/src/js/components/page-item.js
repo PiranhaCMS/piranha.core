@@ -25,7 +25,7 @@ Vue.component("page-item", {
         "      {{ item.typeName }}" +
         "    </div>" +
         "  </div>" +
-        "  <ol class='dd-list' v-if='item.items.length > 0' class='dd-list'>" +
+        "  <ol class='dd-list' v-if='item.items.length > 0'>" +
         "    <page-item v-for='child in item.items' v-bind:key='child.id' v-bind:item='child'>" +
         "    </page-item>" +
         "  </ol>" +
