@@ -57,13 +57,20 @@ namespace Piranha.AspNetCore.Models
         /// <param name="draft">If the draft should be fetched</param>
         public virtual async Task<IActionResult> OnGet(Guid id, bool draft = false)
         {
-            Data = await _loader.GetPageAsync<T>(id, HttpContext.User, draft);
-
-            if (Data == null)
+            try
             {
-                return NotFound();
+                Data = await _loader.GetPageAsync<T>(id, HttpContext.User, draft);
+
+                if (Data == null)
+                {
+                    return NotFound();
+                }
+                return Page();
             }
-            return Page();
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized();
+            }
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2019 Håkan Edling
+ * Copyright (c) 2016-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Piranha.Models
@@ -37,6 +38,11 @@ namespace Piranha.Models
         //[Required]
         [StringLength(128)]
         public string Title { get; set; }
+
+        /// <summary>
+        /// Gets/sets the permissions needed to access the page.
+        /// </summary>
+        public IList<string> Permissions { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets/sets the created date.

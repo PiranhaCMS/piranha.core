@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -22,16 +22,16 @@ namespace Piranha.AspNetCore.Identity
     {
         private readonly List<PermissionItem> _permissions = new List<PermissionItem>
         {
-            new PermissionItem {Name = Permissions.Roles, Title = "List Roles", Category = "Roles"},
-            new PermissionItem {Name = Permissions.RolesAdd, Title = "Add Roles", Category = "Roles"},
-            new PermissionItem {Name = Permissions.RolesDelete, Title = "Delete Roles", Category = "Roles"},
-            new PermissionItem {Name = Permissions.RolesEdit, Title = "Edit Roles", Category = "Roles"},
-            new PermissionItem {Name = Permissions.RolesSave, Title = "Save Roles", Category = "Roles"},
-            new PermissionItem {Name = Permissions.Users, Title = "List Users", Category = "Users"},
-            new PermissionItem {Name = Permissions.UsersAdd, Title = "Add Users", Category = "Users"},
-            new PermissionItem {Name = Permissions.UsersDelete, Title = "Delete Users", Category = "Users"},
-            new PermissionItem {Name = Permissions.UsersEdit, Title = "Edit Users", Category = "Users"},
-            new PermissionItem {Name = Permissions.UsersSave, Title = "Save Users", Category = "Users"}
+            new PermissionItem { Name = Permissions.Roles, Title = "List Roles", Category = "Roles", IsInternal = true },
+            new PermissionItem { Name = Permissions.RolesAdd, Title = "Add Roles", Category = "Roles", IsInternal = true },
+            new PermissionItem { Name = Permissions.RolesDelete, Title = "Delete Roles", Category = "Roles", IsInternal = true },
+            new PermissionItem { Name = Permissions.RolesEdit, Title = "Edit Roles", Category = "Roles", IsInternal = true },
+            new PermissionItem { Name = Permissions.RolesSave, Title = "Save Roles", Category = "Roles", IsInternal = true },
+            new PermissionItem { Name = Permissions.Users, Title = "List Users", Category = "Users", IsInternal = true },
+            new PermissionItem { Name = Permissions.UsersAdd, Title = "Add Users", Category = "Users", IsInternal = true },
+            new PermissionItem { Name = Permissions.UsersDelete, Title = "Delete Users", Category = "Users", IsInternal = true },
+            new PermissionItem { Name = Permissions.UsersEdit, Title = "Edit Users", Category = "Users", IsInternal = true },
+            new PermissionItem { Name = Permissions.UsersSave, Title = "Save Users", Category = "Users", IsInternal = true }
         };
 
         /// <summary>

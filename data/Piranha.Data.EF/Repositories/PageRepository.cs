@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2019 Håkan Edling
+ * Copyright (c) 2016-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -536,6 +536,7 @@ namespace Piranha.Repositories
                 }
 
                 var page = await pageQuery
+                    .Include(p => p.Permissions)
                     .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                     .Include(p => p.Fields)
                     .FirstOrDefaultAsync(p => p.Id == model.Id)
@@ -617,6 +618,16 @@ namespace Piranha.Repositories
                     page.Route = model.Route;
                     page.Published = model.Published;
                     page.LastModified = DateTime.Now;
+
+                    page.Permissions.Clear();
+                    foreach (var permission in model.Permissions)
+                    {
+                        page.Permissions.Add(new PagePermission
+                        {
+                            PageId = page.Id,
+                            Permission = permission
+                        });
+                    }
 
                     if (!isDraft)
                     {
@@ -700,6 +711,17 @@ namespace Piranha.Repositories
                 // Set if comments should be enabled
                 page.EnableComments = model.EnableComments;
                 page.CloseCommentsAfterDays = model.CloseCommentsAfterDays;
+
+                // Update permissions
+                page.Permissions.Clear();
+                foreach (var permission in model.Permissions)
+                {
+                    page.Permissions.Add(new PagePermission
+                    {
+                        PageId = page.Id,
+                        Permission = permission
+                    });
+                }
 
                 // Make sure foreign key is set for fields
                 if (!isDraft)
@@ -858,8 +880,9 @@ namespace Piranha.Repositories
         {
             var loadRelated = !typeof(Models.IContentInfo).IsAssignableFrom(typeof(T));
 
-            var query = _db.Pages
-                .AsNoTracking();
+            IQueryable<Page> query = _db.Pages
+                .AsNoTracking()
+                .Include(p => p.Permissions);
 
             if (loadRelated)
             {
@@ -877,6 +900,13 @@ namespace Piranha.Repositories
         /// <param name="model">The targe model</param>
         private async void Process<T>(Data.Page page, T model) where T : Models.PageBase
         {
+            // Permissions
+            foreach (var permission in page.Permissions)
+            {
+                model.Permissions.Add(permission.Permission);
+            }
+
+            // Comments
             model.EnableComments = page.EnableComments;
             if (model.EnableComments)
             {
@@ -884,6 +914,7 @@ namespace Piranha.Repositories
             }
             model.CloseCommentsAfterDays = page.CloseCommentsAfterDays;
 
+            // Blocks
             if (!(model is Models.IContentInfo))
             {
                 if (page.Blocks.Count > 0)

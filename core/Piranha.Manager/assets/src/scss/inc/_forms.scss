@@ -54,6 +54,14 @@
     }
 }
 
+.list-group {
+    .checkbox {
+        input[type="checkbox"] {
+            margin-right: .25rem;
+        }
+    }
+}
+
 [contenteditable]:focus {
     outline: 0px solid transparent;
 }

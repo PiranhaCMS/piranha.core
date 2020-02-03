@@ -78,6 +78,7 @@ namespace Piranha.Data.EF
                 cfg.CreateMap<Data.Page, Models.PageBase>()
                     .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PageTypeId))
                     .ForMember(p => p.Permalink, o => o.MapFrom(m => "/" + m.Slug))
+                    .ForMember(p => p.Permissions, o => o.Ignore())
                     .ForMember(p => p.Blocks, o => o.Ignore())
                     .ForMember(p => p.CommentCount, o => o.Ignore());
                 cfg.CreateMap<Models.PageBase, Data.Page>()
@@ -87,6 +88,7 @@ namespace Piranha.Data.EF
                     .ForMember(p => p.Fields, o => o.Ignore())
                     .ForMember(p => p.Created, o => o.Ignore())
                     .ForMember(p => p.LastModified, o => o.Ignore())
+                    .ForMember(p => p.Permissions, o => o.Ignore())
                     .ForMember(p => p.PageType, o => o.Ignore())
                     .ForMember(p => p.Site, o => o.Ignore())
                     .ForMember(p => p.Parent, o => o.Ignore());
@@ -102,6 +104,7 @@ namespace Piranha.Data.EF
                 cfg.CreateMap<Data.Post, Models.PostBase>()
                     .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PostTypeId))
                     .ForMember(p => p.Permalink, o => o.Ignore())
+                    .ForMember(p => p.Permissions, o => o.Ignore())
                     .ForMember(p => p.Blocks, o => o.Ignore())
                     .ForMember(p => p.CommentCount, o => o.Ignore());
                 cfg.CreateMap<Data.PostTag, Models.Taxonomy>()
@@ -115,6 +118,7 @@ namespace Piranha.Data.EF
                     .ForMember(p => p.Fields, o => o.Ignore())
                     .ForMember(p => p.Created, o => o.Ignore())
                     .ForMember(p => p.LastModified, o => o.Ignore())
+                    .ForMember(p => p.Permissions, o => o.Ignore())
                     .ForMember(p => p.PostType, o => o.Ignore())
                     .ForMember(p => p.Blog, o => o.Ignore())
                     .ForMember(p => p.Category, o => o.Ignore())
@@ -123,7 +127,8 @@ namespace Piranha.Data.EF
                     .ForMember(s => s.Id, o => o.Ignore())
                     .ForMember(s => s.Created, o => o.Ignore());
                 cfg.CreateMap<Data.Site, Models.SiteContentBase>()
-                    .ForMember(s => s.TypeId, o => o.MapFrom(m => m.SiteTypeId));
+                    .ForMember(s => s.TypeId, o => o.MapFrom(m => m.SiteTypeId))
+                    .ForMember(s => s.Permissions, o => o.Ignore());
                 cfg.CreateMap<Models.SiteContentBase, Data.Site>()
                     .ForMember(s => s.SiteTypeId, o => o.Ignore())
                     .ForMember(s => s.InternalId, o => o.Ignore())
