@@ -72,43 +72,43 @@
   </data>
 
   <data name="Approve comments" xml:space="preserve">
-    <value>Approve comments</value>
+    <value>Aprobar comentarios</value>
   </data>
   <data name="Close comments after" xml:space="preserve">
-    <value>Close comments after</value>
+    <value>Cerrar comentarios después de</value>
   </data>
   <data name="Collapse block headers" xml:space="preserve">
-    <value>Collapse block headers</value>
+    <value>Colapsar cabeceras de bloque</value>
   </data>
   <data name="Collapse blocks" xml:space="preserve">
-    <value>Collapse blocks</value>
+    <value>Colapsar bloques</value>
   </data>
   <data name="Comments page size" xml:space="preserve">
-    <value>Comments page size</value>
+    <value>Tamaño de página de comentarios</value>
   </data>
   <data name="Enable page comments" xml:space="preserve">
-    <value>Enable page comments</value>
+    <value>Habilitar comentarios de página</value>
   </data>
   <data name="Enable post comments" xml:space="preserve">
-    <value>Enable post comments</value>
+    <value>Habilitar comentarios de post</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
     <value>Manager list size</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If block group headers should be collapsed by default when opening a page or post in the manager.</value>
+    <value>Si los encabezados de grupo de bloques deben ser colapsados por defecto al abrir una página o publicar en el administrador.</value>
   </data>
   <data name="If blocks should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If blocks should be collapsed by default when opening a page or post in the manager.</value>
+    <value>Si los bloques deben estar colapsados por defecto al abrir una página o publicar en el administrador.</value>
   </data>
   <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
-    <value>If comments should be approved by default. Please note that this can be overridden by third party moderation services.</value>
+    <value>Si los comentarios deben ser aprobados por defecto. Tenga en cuenta que esto puede ser anulado por servicios de moderación de terceros.</value>
   </data>
   <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages.</value>
+    <value>Si los comentarios deben estar habilitados para las páginas por defecto. Tenga en cuenta que esto puede ser anulado para páginas específicas.</value>
   </data>
   <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
-    <value>If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts.</value>
+    <value>Si los comentarios deben estar habilitados para las publicaciones por defecto. Tenga en cuenta que esto puede ser anulado para publicaciones específicas.</value>
   </data>
   <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
     <value>The default page size when loading comments. Please note that this this can be overridden for specific pages.</value>
