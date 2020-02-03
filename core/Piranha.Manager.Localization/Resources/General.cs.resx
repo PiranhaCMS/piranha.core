@@ -223,15 +223,15 @@
     <value>Šířka</value>
   </data>
   <data name="Archives and Comments" xml:space="preserve">
-    <value>Archives and Comments</value>
+    <value>Archivy a komentáře</value>
   </data>
   <data name="Author" xml:space="preserve">
-    <value>Author</value>
+    <value>Autor</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>Comments</value>
+    <value>Komentáře</value>
   </data>
   <data name="Created" xml:space="preserve">
-    <value>Created</value>
+    <value>Vytvořeno</value>
   </data>
 </root>
