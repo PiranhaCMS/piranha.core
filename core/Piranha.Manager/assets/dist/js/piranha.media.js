@@ -158,25 +158,27 @@ piranha.media = new Vue({
             piranha.media.load(piranha.media.currentFolderId);
         },
         addFolder: function () {
-            this.saveFolder("#folderAdd", "folderAddForm", {
+            this.saveFolder("#mediaFolderModal", "mediaFolderForm", {
                 parentId: this.currentFolderId,
                 name: this.folder.name
             });
         },
         updateFolder: function () {
-            this.saveFolder("#folderEdit", "folderEditForm", {
+            this.saveFolder(null, null, {
                 id: this.currentFolderId,
                 name: this.currentFolderName
             });
         },
-        saveFolder: function (panel, form, folder) {
+        saveFolder: function (modal, form, folder) {
             var self = this;
 
             // Validate form
-            var form = document.getElementById(form);
-            if (form.checkValidity() === false) {
-                form.classList.add("was-validated");
-                return;
+            if (form != null) {
+                var form = document.getElementById(form);
+                if (form.checkValidity() === false) {
+                    form.classList.add("was-validated");
+                    return;
+                }
             }
 
             fetch(piranha.baseUrl + "manager/api/media/folder/save", {
@@ -191,7 +193,9 @@ piranha.media = new Vue({
                 if (result.status.type === "success")
                 {
                     // Close modal
-                    $(panel).collapse('hide')
+                    if (modal != null) {
+                        $(modal).modal('hide')
+                    }
 
                     // Clear modal
                     self.folder.name = null;

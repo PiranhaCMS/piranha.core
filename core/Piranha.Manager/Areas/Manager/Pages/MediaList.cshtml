@@ -40,7 +40,7 @@
             <div class="row">
                 <div class="col-lg-3 col-4">
                     <div class="mb-3">
-                        <button class="btn btn-sm btn-primary" data-toggle="collapse" href="#folderAdd" aria-expanded="false" aria-controls="folderAdd">
+                        <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#mediaFolderModal">
                             <i class="fas fa-plus"></i>
                         </button>
                         <button v-if="currentFolderId != null" v-on:click="editFolder()" class="btn btn-sm btn-primary">
@@ -49,30 +49,6 @@
                         <button v-if="currentFolderId != null && canDelete" class="btn btn-sm btn-danger" v-on:click.prevent="removeFolder(currentFolderId)">
                             <i class="fas fa-trash"></i>
                         </button>
-                        <div id="folderAdd" class="collapse">
-                            <form id="folderAddForm" action="post" v-on:submit.prevent="addFolder()" novalidate>
-                                <div class="form-group">
-                                    <label>@Localizer.Media["Folder name"]</label>
-                                    <input v-model="folder.name" id="mediaFolderName" type="text" class="form-control" required>
-                                    <div class="invalid-feedback">
-                                        @Localizer.Media["Folder name is mandatory."]
-                                    </div>
-                                </div>
-                                <button class="btn btn-sm btn-success btn-labeled float-right" type="submit"><i class="fas fa-check"></i>@Localizer.General["Save"]</button>
-                            </form>
-                        </div>
-                        <div id="folderEdit" class="collapse">
-                            <form id="folderEditForm" action="post" v-on:submit.prevent="updateFolder()" novalidate>
-                                <div class="form-group">
-                                    <label>@Localizer.Media["Folder name"]</label>
-                                    <input v-model="currentFolderName" id="mediaFolderName" type="text" class="form-control" required>
-                                    <div class="invalid-feedback">
-                                        @Localizer.Media["Folder name is mandatory."]
-                                    </div>
-                                </div>
-                                <button class="btn btn-sm btn-success btn-labeled float-right" type="submit"><i class="fas fa-check"></i>@Localizer.General["Save"]</button>
-                            </form>
-                        </div>
                     </div>
                     <ol class="folders">
                         <li>
@@ -126,4 +102,5 @@
             </div>
         </div>
     </div>
+    <partial name="Partial/_MediaFolderModal" />
 </div>

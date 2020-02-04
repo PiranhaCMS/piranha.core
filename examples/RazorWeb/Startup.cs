@@ -56,10 +56,6 @@ namespace RazorWeb
             // Configure editor
             Piranha.Manager.Editor.EditorConfig.FromFile("editorconfig.json");
 
-            // Add meta properties for media
-            App.MediaTypes.MetaProperties.Add("External Id");
-            App.MediaTypes.MetaProperties.Add("External Url");
-
             /**
              *
              * Test another culture in the UI
