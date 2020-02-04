@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019 Håkan Edling
+ * Copyright (c) 2016-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -702,6 +702,7 @@ namespace Piranha.Repositories
                 }
 
                 var post = await postQuery
+                    .Include(p => p.Permissions)
                     .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                     .Include(p => p.Fields)
                     .Include(p => p.Tags).ThenInclude(t => t.Tag)
@@ -733,6 +734,17 @@ namespace Piranha.Repositories
                 // Set if comments should be enabled
                 post.EnableComments = model.EnableComments;
                 post.CloseCommentsAfterDays = model.CloseCommentsAfterDays;
+
+                // Update permissions
+                post.Permissions.Clear();
+                foreach (var permission in model.Permissions)
+                {
+                    post.Permissions.Add(new PostPermission
+                    {
+                        PostId = post.Id,
+                        Permission = permission
+                    });
+                }
 
                 // Make sure foreign key is set for fields
                 if (!isDraft)
@@ -1021,6 +1033,7 @@ namespace Piranha.Repositories
 
             IQueryable<Post> query = _db.Posts
                 .AsNoTracking()
+                .Include(p => p.Permissions)
                 .Include(p => p.Category)
                 .Include(p => p.Tags).ThenInclude(t => t.Tag);
 
@@ -1040,6 +1053,13 @@ namespace Piranha.Repositories
         /// <param name="model">The targe model</param>
         private async void Process<T>(Data.Post post, T model) where T : Models.PostBase
         {
+            // Permissions
+            foreach (var permission in post.Permissions)
+            {
+                model.Permissions.Add(permission.Permission);
+            }
+
+            // Comments
             model.EnableComments = post.EnableComments;
             if (model.EnableComments)
             {
@@ -1047,6 +1067,7 @@ namespace Piranha.Repositories
             }
             model.CloseCommentsAfterDays = post.CloseCommentsAfterDays;
 
+            // Blocks
             if (!(model is Models.IContentInfo))
             {
                 if (post.Blocks.Count > 0)

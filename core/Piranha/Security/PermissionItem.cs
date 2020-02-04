@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 namespace Piranha.Security
@@ -24,10 +24,16 @@ namespace Piranha.Security
         /// The display title.
         /// </summary>
         public string Title { get; set; }
-        
+
         /// <summary>
         /// Gets/sets the optional category for grouping.
         /// </summary>
         public string Category { get; set; }
+
+        /// <summary>
+        /// Gets/sets if this is an internal permissions used
+        /// by Piranha.
+        /// </summary>
+        public bool IsInternal { get; set; }
     }
 }

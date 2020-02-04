@@ -1,58 +1,52 @@
 @inject ManagerLocalizer Localizer
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col">
-            <table class="table table-borderless table-media">
-                <thead>
-                    <tr>
-                        <th>@Localizer.General["Name"]</th>
-                        <th class="td-medium">@Localizer.General["Type"]</th>
-                        <th class="td-medium">@Localizer.General["Size"]</th>
-                        <th class="td-small">@Localizer.General["Modified"]</th>
-                        <th class="actions one"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="droppable" v-if="currentFolderId != null" v-on:dragover="dragover" v-on:dragleave="dragleave" v-on:drop="drop($event, parentFolderId)">
-                        <td>
-                            <a href="#" v-on:click.prevent="load(parentFolderId)"><i class="fas fa-folder-open"></i>...</a>
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td class="actions one"></td>
-                    </tr>
-                    <tr class="droppable" v-for="folder in folders" draggable="true" v-on:dragstart="drag($event, folder)" v-on:dragover="dragover" v-on:dragleave="dragleave" v-on:drop="drop($event, folder.id)">
-                        <td>
-                            <a href="#" v-on:click.prevent="load(folder.id)"><i class="fas fa-folder-open"></i>{{ folder.name }}</a>
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td>{{ folder.itemCount + (folder.itemCount == 1 ? " @Localizer.General["item"]" : " @Localizer.General["items"]") }}</td>
-                        <td class="actions one">
-                            <a href="#" class="danger" v-if="folder.itemCount === 0" v-on:click.prevent="removeFolder(folder.id)"><i class="fas fa-trash"></i></a>
-                        </td>
-                    </tr>
-                    <tr v-for="item in items" draggable="true" v-on:dragstart="drag($event, item)">
-                        <td>
-                            <a href="#" v-on:click.prevent="piranha.preview.open(item.id)">
-                            <i v-if="item.type === 'Audio'" class="fas fa-volume-up"></i>
-                            <i v-if="item.type === 'Document'" class="fas fa-file-alt"></i>
-                            <i v-if="item.type === 'Image'" class="fas fa-image"></i>
-                            <i v-if="item.type === 'Video'" class="fas fa-video"></i>
-                            <i v-if="item.type === 'Resource'" class="fas fa-box-open"></i>
-                            {{ item.filename }}</a>
-                        </td>
-                        <td>{{ item.contentType }}</td>
-                        <td>{{ item.size }}</td>
-                        <td>{{ item.lastModified }}</td>
-                        <td class="actions one">
-                            <a href="#" class="danger" v-on:click.prevent="remove(item.id)"><i class="fas fa-trash"></i></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+<table v-if="listView" class="table table-borderless table-media">
+    <thead>
+        <tr>
+            <th>@Localizer.General["Name"]</th>
+            <th class="td-medium">@Localizer.General["Type"]</th>
+            <th class="td-medium">@Localizer.General["Size"]</th>
+            <th class="td-small">@Localizer.General["Modified"]</th>
+            <th class="actions one"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="droppable" v-if="currentFolderId != null" v-on:dragover="dragover" v-on:dragleave="dragleave" v-on:drop="drop($event, parentFolderId)">
+            <td>
+                <a href="#" v-on:click.prevent="load(parentFolderId)"><i class="fas fa-folder-open"></i>...</a>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="actions one"></td>
+        </tr>
+        <tr class="droppable" v-for="folder in folders" draggable="true" v-on:dragstart="drag($event, folder)" v-on:dragover="dragover" v-on:dragleave="dragleave" v-on:drop="drop($event, folder.id)">
+            <td>
+                <a href="#" v-on:click.prevent="load(folder.id)"><i class="fas fa-folder"></i>{{ folder.name }}</a>
+            </td>
+            <td></td>
+            <td></td>
+            <td>{{ folder.itemCount + (folder.itemCount == 1 ? " @Localizer.General["item"]" : " @Localizer.General["items"]") }}</td>
+            <td class="actions one">
+                <a href="#" class="danger" v-if="folder.itemCount === 0" v-on:click.prevent="removeFolder(folder.id)"><i class="fas fa-trash"></i></a>
+            </td>
+        </tr>
+        <tr v-for="item in items" draggable="true" v-on:dragstart="drag($event, item)">
+            <td>
+                <a href="#" v-on:click.prevent="piranha.preview.open(item.id)">
+                <i v-if="item.type === 'Audio'" class="fas fa-volume-up"></i>
+                <i v-if="item.type === 'Document'" class="fas fa-file-alt"></i>
+                <i v-if="item.type === 'Image'" class="fas fa-image"></i>
+                <i v-if="item.type === 'Video'" class="fas fa-video"></i>
+                <i v-if="item.type === 'Resource'" class="fas fa-box-open"></i>
+                {{ item.filename }}</a>
+            </td>
+            <td>{{ item.contentType }}</td>
+            <td>{{ item.size }}</td>
+            <td>{{ item.lastModified }}</td>
+            <td class="actions one">
+                <a href="#" class="danger" v-on:click.prevent="remove(item.id)"><i class="fas fa-trash"></i></a>
+            </td>
+        </tr>
+    </tbody>
+</table>

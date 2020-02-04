@@ -27,6 +27,8 @@ piranha.postedit = new Vue({
         regions: [],
         editors: [],
         useBlocks: true,
+        permissions: [],
+        selectedPermissions: [],
         saving: false,
         savingDraft: false,
         selectedRegion: {
@@ -85,6 +87,8 @@ piranha.postedit = new Vue({
             this.selectedTags = model.selectedTags;
             this.selectedRoute = model.selectedRoute;
             this.routes = model.routes;
+            this.permissions = model.permissions;
+            this.selectedPermissions = model.selectedPermissions;
 
             if (!this.useBlocks) {
                 // First choice, select the first custom editor
@@ -164,7 +168,8 @@ piranha.postedit = new Vue({
                 regions: JSON.parse(JSON.stringify(self.regions)),
                 selectedCategory: self.selectedCategory,
                 selectedTags: JSON.parse(JSON.stringify(self.selectedTags)),
-                selectedRoute: self.selectedRoute
+                selectedRoute: self.selectedRoute,
+                selectedPermissions: self.selectedPermissions
             };
 
             fetch(route, {

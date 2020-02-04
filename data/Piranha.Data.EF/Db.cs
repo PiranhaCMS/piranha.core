@@ -83,6 +83,11 @@ namespace Piranha
         public DbSet<Data.PageField> PageFields { get; set; }
 
         /// <summary>
+        /// Gets/sets the page permission set.
+        /// </summary>
+        public DbSet<Data.PagePermission> PagePermissions { get; set; }
+
+        /// <summary>
         /// Gets/sets the page revision set.
         /// </summary>
         public DbSet<Data.PageRevision> PageRevisions { get; set; }
@@ -116,6 +121,11 @@ namespace Piranha
         /// Gets/sets the post field set.
         /// </summary>
         public DbSet<Data.PostField> PostFields { get; set; }
+
+        /// <summary>
+        /// Gets/sets the post permission set.
+        /// </summary>
+        public DbSet<Data.PostPermission> PostPermissions { get; set; }
 
         /// <summary>
         /// Gets/sets the post revision set.
@@ -243,6 +253,9 @@ namespace Piranha
             mb.Entity<Data.PageField>().Property(f => f.CLRType).HasMaxLength(256).IsRequired();
             mb.Entity<Data.PageField>().HasIndex(f => new { f.PageId, f.RegionId, f.FieldId, f.SortOrder });
 
+            mb.Entity<Data.PagePermission>().ToTable("Piranha_PagePermissions");
+            mb.Entity<Data.PagePermission>().HasKey(p => new { p.PageId, p.Permission });
+
             mb.Entity<Data.PageRevision>().ToTable("Piranha_PageRevisions");
 
             mb.Entity<Data.PageType>().ToTable("Piranha_PageTypes");
@@ -280,6 +293,9 @@ namespace Piranha
             mb.Entity<Data.PostField>().Property(f => f.FieldId).HasMaxLength(64).IsRequired();
             mb.Entity<Data.PostField>().Property(f => f.CLRType).HasMaxLength(256).IsRequired();
             mb.Entity<Data.PostField>().HasIndex(f => new { f.PostId, f.RegionId, f.FieldId, f.SortOrder });
+
+            mb.Entity<Data.PostPermission>().ToTable("Piranha_PostPermissions");
+            mb.Entity<Data.PostPermission>().HasKey(p => new { p.PostId, p.Permission });
 
             mb.Entity<Data.PostRevision>().ToTable("Piranha_PostRevisions");
 

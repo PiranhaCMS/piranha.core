@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) 2019-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -186,6 +186,7 @@ namespace Piranha.Services
                 App.Hooks.OnAfterSave(model);
 
                 RemoveFromCache(model);
+                RemoveStructureFromCache();
             }
             else
             {
@@ -299,6 +300,7 @@ namespace Piranha.Services
             App.Hooks.OnAfterSave(model);
 
             RemoveFromCache(model);
+            RemoveStructureFromCache();
         }
 
         /// <summary>
@@ -336,6 +338,7 @@ namespace Piranha.Services
         {
             await _repo.Move(model, folderId).ConfigureAwait(false);
             RemoveFromCache(model);
+            RemoveStructureFromCache();
         }
 
         /// <summary>
@@ -491,6 +494,7 @@ namespace Piranha.Services
                     App.Hooks.OnAfterDelete(media);
                 }
                 RemoveFromCache(media);
+                RemoveStructureFromCache();
             }
         }
 

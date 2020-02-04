@@ -7,17 +7,61 @@ piranha.media = new Vue({
     data: {
         loading: true,
         listView: true,
+        currentFolder: null,
         currentFolderId: null,
         currentFolderName: null,
         parentFolderId: null,
         folders: [],
         items: [],
+        structure: [],
+        rootCount: null,
+        totalCount: null,
+        canDelete: false,
         folder: {
             name: null
         },
         dropzone: null
     },
     methods: {
+        bind: function (result) {
+            this.currentFolderId = result.currentFolderId;
+            this.currentFolderName = result.currentFolderName;
+            this.parentFolderId = result.parentFolderId;
+
+            this.initFolders(result.structure);
+
+            this.folders = result.folders;
+            this.items = result.media;
+            this.structure = result.structure;
+            this.rootCount = result.rootCount;
+            this.totalCount = result.totalCount;
+            this.canDelete = result.canDelete;
+            this.listView = result.viewMode === "list";
+        },
+        initFolders: function (folders) {
+            for (var n = 0; n < folders.length; n++) {
+                folders[n].edit = false;
+
+                if (folders[n].id === this.currentFolderId) {
+                    this.currentFolder = folders[n];
+                }
+
+                if (folders[n].items.length > 0) {
+                    this.initFolders(folders[n].items);
+                }
+            }
+        },
+        editFolder: function () {
+            this.currentFolder.edit = true;
+
+            this.$nextTick(function () {
+                document.getElementById("folder-" + this.currentFolderId).focus();
+            });
+        },
+        cancelEditFolder: function () {
+            this.currentFolder.edit = false;
+            this.currentFolderName = this.currentFolder.name;
+        },
         drag: function (event, item) {
             event.dataTransfer.setData("mediaId", item.id);
         },
@@ -74,12 +118,7 @@ piranha.media = new Vue({
             fetch(piranha.baseUrl + "manager/api/media/list" + (id ? "/" + id : "") + "/?width=210&height=160")
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    self.currentFolderId = result.currentFolderId;
-                    self.currentFolderName = result.currentFolderName;
-                    self.parentFolderId = result.parentFolderId;
-                    self.folders = result.folders;
-                    self.items = result.media;
-                    self.listView = result.viewMode === "list";
+                    self.bind(result);
 
                     document.title = result.currentFolderName ? result.currentFolderName : "Media";
                 })
@@ -91,12 +130,28 @@ piranha.media = new Vue({
         refresh: function () {
             piranha.media.load(piranha.media.currentFolderId);
         },
-        savefolder: function () {
+        addFolder: function () {
+            this.saveFolder("#mediaFolderModal", "mediaFolderForm", {
+                parentId: this.currentFolderId,
+                name: this.folder.name
+            });
+        },
+        updateFolder: function () {
+            this.saveFolder(null, null, {
+                id: this.currentFolderId,
+                name: this.currentFolderName
+            });
+        },
+        saveFolder: function (modal, form, folder) {
+            var self = this;
+
             // Validate form
-            var form = document.getElementById("mediaFolderForm");
-            if (form.checkValidity() === false) {
-                form.classList.add("was-validated");
-                return;
+            if (form != null) {
+                var form = document.getElementById(form);
+                if (form.checkValidity() === false) {
+                    form.classList.add("was-validated");
+                    return;
+                }
             }
 
             fetch(piranha.baseUrl + "manager/api/media/folder/save", {
@@ -104,23 +159,23 @@ piranha.media = new Vue({
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({
-                    parentId: piranha.media.currentFolderId,
-                    name: piranha.media.folder.name
-                })
+                body: JSON.stringify(folder)
             })
             .then(function (response) { return response.json(); })
             .then(function (result) {
                 if (result.status.type === "success")
                 {
                     // Close modal
-                    $("#mediaFolderModal").modal("hide");
+                    if (modal != null) {
+                        $(modal).modal('hide')
+                    }
 
                     // Clear modal
-                    piranha.media.folder.name = null;
+                    self.folder.name = null;
+                    self.items = result.media;
 
-                    piranha.media.folders = result.folders;
-                    piranha.media.items = result.media;
+                    // Refresh
+                    self.refresh();
                 }
 
                 // Push status to notification hub
@@ -131,11 +186,12 @@ piranha.media = new Vue({
             });
         },
         remove: function (id) {
+            var self = this;
+
             fetch(piranha.baseUrl + "manager/api/media/delete/" + id)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    piranha.media.folders = result.folders;
-                    piranha.media.items = result.media;
+                    self.bind(result);
 
                     // Push status to notification hub
                     piranha.notifications.push(result.status);
@@ -143,10 +199,15 @@ piranha.media = new Vue({
                 .catch(function (error) { console.log("error:", error ); });
         },
         removeFolder: function (id) {
+            var self = this;
+
             fetch(piranha.baseUrl + "manager/api/media/folder/delete/" + id)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    piranha.media.folders = result.folders;
+                    self.bind(result);
+
+                    history.pushState({ folderId: id }, "", piranha.baseUrl + "manager/media" + (id ? "/" + id : ""));
+                    document.title = result.currentFolderName ? result.currentFolderName : "Media";
 
                     // Push status to notification hub
                     piranha.notifications.push(result.status);

@@ -76,6 +76,11 @@ namespace Piranha
         DbSet<Data.PageField> PageFields { get; set; }
 
         /// <summary>
+        /// Gets/sets the page permission set.
+        /// </summary>
+        DbSet<Data.PagePermission> PagePermissions { get; set; }
+
+        /// <summary>
         /// Gets/sets the page revision set.
         /// </summary>
         DbSet<Data.PageRevision> PageRevisions { get; set; }
@@ -109,6 +114,11 @@ namespace Piranha
         /// Gets/sets the post field set.
         /// </summary>
         DbSet<Data.PostField> PostFields { get; set; }
+
+        /// <summary>
+        /// Gets/sets the post permission set.
+        /// </summary>
+        DbSet<Data.PostPermission> PostPermissions { get; set; }
 
         /// <summary>
         /// Gets/sets the post revision set.

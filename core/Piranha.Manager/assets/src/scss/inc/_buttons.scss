@@ -2,7 +2,7 @@
 
 button {
     &.switch {
-        background-color: $gray-300;
+        background-color: $gray-400;
         padding: 0;
         border: 0;
         width: 2rem;
@@ -50,8 +50,8 @@ button {
     &.btn-labeled {
         i {
             padding-right: .5rem;
-            border-right: solid 1px rgba(255,255,255,0.3);
-            margin-right: .5rem;
+            //border-right: solid 1px rgba(255,255,255,0.3);
+            //margin-right: .5rem;
         }
 
         span {
@@ -101,6 +101,12 @@ button {
 .btn-group {
     .dropdown-menu {
         min-width: 100%;
+    }
+
+    .btn-labeled {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }
 

@@ -109,5 +109,15 @@ namespace Piranha.Manager.Models
         /// Gets/sets the selected route.
         /// </summary>
         public RouteModel SelectedRoute { get; set; }
+
+        /// <summary>
+        /// Gets/sets the currently selected permissions.
+        /// </summary>
+        public IList<string> SelectedPermissions { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Gets/sets all of the available permissions.
+        /// </summary>
+        public IList<KeyValuePair<string, string>> Permissions { get; set; } = new List<KeyValuePair<string, string>>();
     }
 }

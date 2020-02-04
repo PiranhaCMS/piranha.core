@@ -71,8 +71,21 @@ namespace Piranha.Manager.Services
             var model = new MediaListModel
             {
                 CurrentFolderId = folderId,
-                ParentFolderId = null
+                ParentFolderId = null,
+                Structure = await _api.Media.GetStructureAsync()
             };
+            model.RootCount = model.Structure.MediaCount;
+            model.TotalCount = model.Structure.TotalCount;
+
+            if (folderId.HasValue)
+            {
+                var partial = model.Structure.GetPartial(folderId, true);
+
+                if (partial.FirstOrDefault()?.MediaCount == 0 && partial.FirstOrDefault()?.FolderCount == 0)
+                {
+                    model.CanDelete = true;
+                }
+            }
 
             if (folderId.HasValue)
             {
@@ -108,25 +121,25 @@ namespace Piranha.Manager.Services
                     LastModified = m.LastModified.ToString("yyyy-MM-dd")
                 }}).ToArray();
 
-            var structure = await _api.Media.GetStructureAsync();
-            model.Folders = structure.GetPartial(folderId)
+            model.Folders = model.Structure.GetPartial(folderId)
                 .Select(f => new MediaListModel.FolderItem
                 {
                     Id = f.Id,
                     Name = f.Name
                 }).ToList();
 
-            foreach (var folder in model.Folders)
-                folder.ItemCount = await _api.Media.CountFolderItemsAsync(folder.Id) +
-                                   structure.GetPartial(folder.Id).Count;
             if (width.HasValue)
+            {
                 foreach (var mp in pairMedia.Where(m => m.media.Type == MediaType.Image))
                 {
                     if (mp.media.Versions.Any(v => v.Width == width && v.Height == height))
+                    {
                         mp.mediaItem.AltVersionUrl =
                             (await _api.Media.EnsureVersionAsync(mp.media, width.Value, height).ConfigureAwait(false))
                             .TrimStart('~');
+                    }
                 }
+            }
 
             model.Media = pairMedia.Select(m => m.mediaItem).ToList();
             model.ViewMode = model.Media.Count(m => m.Type == "Image") > model.Media.Count / 2 ? MediaListModel.GalleryView : MediaListModel.ListView;
@@ -136,11 +149,21 @@ namespace Piranha.Manager.Services
 
         public async Task SaveFolder(MediaFolderModel model)
         {
-            await _api.Media.SaveFolderAsync(new MediaFolder
+            if (model.Id.HasValue)
             {
-                ParentId = model.ParentId,
-                Name = model.Name
-            });
+                var folder = await _api.Media.GetFolderByIdAsync(model.Id.Value);
+                folder.Name = model.Name;
+
+                await _api.Media.SaveFolderAsync(folder);
+            }
+            else
+            {
+                await _api.Media.SaveFolderAsync(new MediaFolder
+                {
+                    ParentId = model.ParentId,
+                    Name = model.Name
+                });
+            }
         }
 
         public async Task<Guid?> DeleteFolder(Guid id)

@@ -266,6 +266,7 @@ namespace Piranha.Manager.Services
                 page.RedirectType = (RedirectType)Enum.Parse(typeof(RedirectType), model.RedirectType);
                 page.EnableComments = model.EnableComments;
                 page.CloseCommentsAfterDays = model.CloseCommentsAfterDays;
+                page.Permissions = model.SelectedPermissions;
 
                 if (pageType.Routes.Count > 1)
                 {
@@ -508,7 +509,12 @@ namespace Piranha.Manager.Services
                 {
                     Title = route.Title,
                     Route = route.Route
-                }
+                },
+                Permissions = App.Permissions
+                    .GetPublicPermissions()
+                    .Select(p => new KeyValuePair<string, string>(p.Name, p.Title))
+                    .ToList(),
+                SelectedPermissions = page.Permissions
             };
 
             foreach (var r in type.Routes)

@@ -64,14 +64,7 @@ namespace Piranha.Manager
             /// <summary>
             /// Gets the available actions for media list view.
             /// </summary>
-            public ActionList<ToolbarAction> MediaList { get; private set; } = new ActionList<ToolbarAction>
-            {
-                new ToolbarAction
-                {
-                    InternalId = "AddFolder",
-                    ActionView = "Partial/Actions/_MediaAddFolder"
-                }
-            };
+            public ActionList<ToolbarAction> MediaList { get; private set; } = new ActionList<ToolbarAction>();
 
             /// <summary>
             /// Gets the available actions for the module list view.

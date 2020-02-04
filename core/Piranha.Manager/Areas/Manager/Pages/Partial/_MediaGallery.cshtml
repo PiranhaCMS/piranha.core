@@ -1,72 +1,62 @@
 @inject ManagerLocalizer Localizer
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col">
-            <div class="gallery gallery-sm">
-                <div class="gallery-header">
-                    @Localizer.Media["Gallery"]
-                </div>
-
-                <a href="#" class="thumbnail droppable" v-if="currentFolderId != null" v-on:click.prevent="load(parentFolderId)" v-on:dragover="dragover" v-on:dragleave="dragleave" v-on:drop="drop($event, parentFolderId)">
-                    <img src="~/manager/assets/img/media-placeholder.png">
-                    <div class="thumbnail-icon">
-                        <i class="fas fa-folder-open fa-3x"></i>
-                    </div>
-                    <p class="thumbnail-text">...</p>
-                </a>
-
-                <a href="#" class="thumbnail droppable" v-for="folder in folders" v-on:click.prevent="load(folder.id)" draggable="true" v-on:dragstart="drag($event, folder)" v-on:dragover="dragover" v-on:dragleave="dragleave" v-on:drop="drop($event, folder.id)">
-                    <button v-if="piranha.permissions.media.deleteFolder && folder.itemCount === 0" class="btn btn-danger media-delete" v-on:click.stop.prevent="removeFolder(folder.id)"><i class="fas fa-trash"></i></button>
-                    <img src="~/manager/assets/img/media-placeholder.png">
-                    <div class="thumbnail-icon">
-                        <i class="fas fa-folder fa-3x"></i>
-                    </div>
-                    <p class="thumbnail-text">{{ folder.name }}</p>
-                </a>
-
-                <template v-for="item in items">
-                    <a href="#" class="thumbnail" v-on:click.prevent="piranha.preview.openItem(item)" draggable="true" v-on:dragstart="drag($event, item)">
-                        <button v-if="piranha.permissions.media.delete" class="btn btn-danger media-delete" v-on:click.stop.prevent="remove(item.id)"><i class="fas fa-trash"></i></button>
-
-                        <template v-if="item.type === 'Image'">
-                            <img src="~/manager/assets/img/media-placeholder.png">
-                            <img class="thumbnail-image" :src="getThumbnailUrl(item)">
-                        </template>
-
-                        <template v-else-if="item.type === 'Document'">
-                            <img src="~/manager/assets/img/media-placeholder.png">
-                            <div class="thumbnail-icon">
-                                <i class="fas fa-file-alt fa-3x"></i>
-                            </div>
-                        </template>
-
-                        <template v-else-if="item.type === 'Video'">
-                            <img src="~/manager/assets/img/media-placeholder.png">
-                            <div class="thumbnail-icon">
-                                <i class="fas fa-film fa-3x"></i>
-                            </div>
-                        </template>
-
-                        <template v-else-if="item.type === 'Resource'">
-                            <img src="~/manager/assets/img/media-placeholder.png">
-                            <div class="thumbnail-icon">
-                                <i class="fas fa-box-open fa-3x"></i>
-                            </div>
-                        </template>
-
-                        <template v-else>
-                            <img src="~/manager/assets/img/media-placeholder.png">
-                            <div class="thumbnail-icon">
-                                <i class="fas fa-file"></i>
-                                <i class="fas fa-file fa-3x"></i>
-                            </div>
-                        </template>
-
-                        <p class="thumbnail-text">{{ item.filename }}</p>
-                    </a>
-                </template>
-            </div>
+<div v-if="!listView" class="gallery gallery-sm">
+    <a href="#" class="thumbnail droppable" v-if="currentFolderId != null" v-on:click.prevent="load(parentFolderId)" v-on:dragover="dragover" v-on:dragleave="dragleave" v-on:drop="drop($event, parentFolderId)">
+        <img src="~/manager/assets/img/media-placeholder.png">
+        <div class="thumbnail-icon">
+            <i class="fas fa-folder-open fa-3x"></i>
         </div>
-    </div>
+        <p class="thumbnail-text">...</p>
+    </a>
+
+    <a href="#" class="thumbnail droppable" v-for="folder in folders" v-on:click.prevent="load(folder.id)" draggable="true" v-on:dragstart="drag($event, folder)" v-on:dragover="dragover" v-on:dragleave="dragleave" v-on:drop="drop($event, folder.id)">
+        <button v-if="piranha.permissions.media.deleteFolder && folder.itemCount === 0" class="btn btn-danger media-delete" v-on:click.stop.prevent="removeFolder(folder.id)"><i class="fas fa-trash"></i></button>
+        <img src="~/manager/assets/img/media-placeholder.png">
+        <div class="thumbnail-icon">
+            <i class="fas fa-folder fa-3x"></i>
+        </div>
+        <p class="thumbnail-text">{{ folder.name }}</p>
+    </a>
+
+    <template v-for="item in items">
+        <a href="#" class="thumbnail" v-on:click.prevent="piranha.preview.openItem(item)" draggable="true" v-on:dragstart="drag($event, item)">
+            <button v-if="piranha.permissions.media.delete" class="btn btn-danger media-delete" v-on:click.stop.prevent="remove(item.id)"><i class="fas fa-trash"></i></button>
+
+            <template v-if="item.type === 'Image'">
+                <img src="~/manager/assets/img/media-placeholder.png">
+                <img class="thumbnail-image" :src="getThumbnailUrl(item)">
+            </template>
+
+            <template v-else-if="item.type === 'Document'">
+                <img src="~/manager/assets/img/media-placeholder.png">
+                <div class="thumbnail-icon">
+                    <i class="fas fa-file-alt fa-3x"></i>
+                </div>
+            </template>
+
+            <template v-else-if="item.type === 'Video'">
+                <img src="~/manager/assets/img/media-placeholder.png">
+                <div class="thumbnail-icon">
+                    <i class="fas fa-film fa-3x"></i>
+                </div>
+            </template>
+
+            <template v-else-if="item.type === 'Resource'">
+                <img src="~/manager/assets/img/media-placeholder.png">
+                <div class="thumbnail-icon">
+                    <i class="fas fa-box-open fa-3x"></i>
+                </div>
+            </template>
+
+            <template v-else>
+                <img src="~/manager/assets/img/media-placeholder.png">
+                <div class="thumbnail-icon">
+                    <i class="fas fa-file"></i>
+                    <i class="fas fa-file fa-3x"></i>
+                </div>
+            </template>
+
+            <p class="thumbnail-text">{{ item.filename }}</p>
+        </a>
+    </template>
 </div>
