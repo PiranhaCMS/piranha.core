@@ -121,7 +121,12 @@ namespace Piranha.Manager.Services
                     LastModified = m.LastModified.ToString("yyyy-MM-dd")
                 }}).ToArray();
 
-            var structure = await _api.Media.GetStructureAsync();
+            model.Folders = model.Structure.GetPartial(folderId)
+                .Select(f => new MediaListModel.FolderItem
+                {
+                    Id = f.Id,
+                    Name = f.Name
+                }).ToList();
 
             if (width.HasValue)
             {

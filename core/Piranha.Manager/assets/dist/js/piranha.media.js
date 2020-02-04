@@ -11,10 +11,14 @@ Vue.component("folder-item", {
     },
     template:
         "<li class='dd-item expanded' :class='{ active: item.id === selected, expanded: item.isExpanded || item.items.length === 0 }' :data-id='item.id'>" +
-        "  <a class='droppable' v-on:click.prevent='piranha.media.load(item.id)' href='#' v-on:dragover='piranha.media.dragover' v-on:dragleave='piranha.media.dragleave' v-on:drop='piranha.media.drop($event, item.id)'>" +
+        "  <a v-if='!item.edit' class='droppable' v-on:click.prevent='piranha.media.load(item.id)' href='#' draggable='true' v-on:dragstart='piranha.media.drag($event, item)' v-on:dragover='piranha.media.dragover' v-on:dragleave='piranha.media.dragleave' v-on:drop='piranha.media.drop($event, item.id)'>" +
         "    <i class='fas fa-folder'></i>{{ item.name }}" +
         "    <span class='badge badge-light float-right'>{{ item.mediaCount }}</span>" +
         "  </a>" +
+        "  <form v-else v-on:submit.prevent='piranha.media.updateFolder()' class='d-inline-block'>" +
+        "    <i class='fas fa-folder'></i>" +
+        "    <input :id='\"folder-\" + item.id' type='text' v-on:keyup.esc='piranha.media.cancelEditFolder()' v-model='piranha.media.currentFolderName' class='form-control form-control-sm d-inline-block w-auto'>" +
+        "  </form>" +
         "  <ol v-if='item.items.length > 0' class='dd-list'>" +
         "    <folder-item v-for='child in item.items' v-bind:key='child.id' v-bind:selected='selected' v-bind:item='child'></folder-item>" +
         "  </ol>" +
@@ -30,9 +34,11 @@ piranha.media = new Vue({
     data: {
         loading: true,
         listView: true,
+        currentFolder: null,
         currentFolderId: null,
         currentFolderName: null,
         parentFolderId: null,
+        folders: [],
         items: [],
         structure: [],
         rootCount: null,
@@ -48,12 +54,40 @@ piranha.media = new Vue({
             this.currentFolderId = result.currentFolderId;
             this.currentFolderName = result.currentFolderName;
             this.parentFolderId = result.parentFolderId;
+
+            this.initFolders(result.structure);
+
+            this.folders = result.folders;
             this.items = result.media;
             this.structure = result.structure;
             this.rootCount = result.rootCount;
             this.totalCount = result.totalCount;
             this.canDelete = result.canDelete;
             this.listView = result.viewMode === "list";
+        },
+        initFolders: function (folders) {
+            for (var n = 0; n < folders.length; n++) {
+                folders[n].edit = false;
+
+                if (folders[n].id === this.currentFolderId) {
+                    this.currentFolder = folders[n];
+                }
+
+                if (folders[n].items.length > 0) {
+                    this.initFolders(folders[n].items);
+                }
+            }
+        },
+        editFolder: function () {
+            this.currentFolder.edit = true;
+
+            this.$nextTick(function () {
+                document.getElementById("folder-" + this.currentFolderId).focus();
+            });
+        },
+        cancelEditFolder: function () {
+            this.currentFolder.edit = false;
+            this.currentFolderName = this.currentFolder.name;
         },
         drag: function (event, item) {
             event.dataTransfer.setData("mediaId", item.id);

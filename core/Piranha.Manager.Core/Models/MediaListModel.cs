@@ -22,6 +22,27 @@ namespace Piranha.Manager.Models
         public static string GalleryView { get; } = "gallery";
 
         /// <summary>
+        /// A folder item in the list view.
+        /// </summary>
+        public class FolderItem
+        {
+            /// <summary>
+            /// Gets/sets the unique id.
+            /// </summary>
+            public Guid Id { get; set; }
+
+            /// <summary>
+            /// Gets/sets the name.
+            /// </summary>
+            public string Name { get; set; }
+
+            /// <summary>
+            /// Gets/sets the item count in the folder.
+            /// </summary>
+            public int ItemCount { get; set; }
+        }
+
+        /// <summary>
         /// A media item in the list view.
         /// </summary>
         public class MediaItem
@@ -101,6 +122,11 @@ namespace Piranha.Manager.Models
             /// </summary>
             public string LastModified { get; set; }
         }
+
+        /// <summary>
+        /// Gets/sets the available folders.
+        /// </summary>
+        public IList<FolderItem> Folders { get; set; } = new List<FolderItem>();
 
         /// <summary>
         /// Gets/sets the available media items.

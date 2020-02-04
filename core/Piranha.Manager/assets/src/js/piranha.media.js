@@ -7,9 +7,11 @@ piranha.media = new Vue({
     data: {
         loading: true,
         listView: true,
+        currentFolder: null,
         currentFolderId: null,
         currentFolderName: null,
         parentFolderId: null,
+        folders: [],
         items: [],
         structure: [],
         rootCount: null,
@@ -25,12 +27,40 @@ piranha.media = new Vue({
             this.currentFolderId = result.currentFolderId;
             this.currentFolderName = result.currentFolderName;
             this.parentFolderId = result.parentFolderId;
+
+            this.initFolders(result.structure);
+
+            this.folders = result.folders;
             this.items = result.media;
             this.structure = result.structure;
             this.rootCount = result.rootCount;
             this.totalCount = result.totalCount;
             this.canDelete = result.canDelete;
             this.listView = result.viewMode === "list";
+        },
+        initFolders: function (folders) {
+            for (var n = 0; n < folders.length; n++) {
+                folders[n].edit = false;
+
+                if (folders[n].id === this.currentFolderId) {
+                    this.currentFolder = folders[n];
+                }
+
+                if (folders[n].items.length > 0) {
+                    this.initFolders(folders[n].items);
+                }
+            }
+        },
+        editFolder: function () {
+            this.currentFolder.edit = true;
+
+            this.$nextTick(function () {
+                document.getElementById("folder-" + this.currentFolderId).focus();
+            });
+        },
+        cancelEditFolder: function () {
+            this.currentFolder.edit = false;
+            this.currentFolderName = this.currentFolder.name;
         },
         drag: function (event, item) {
             event.dataTransfer.setData("mediaId", item.id);

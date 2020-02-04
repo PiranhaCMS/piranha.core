@@ -11,15 +11,19 @@
     li {
         list-style-type: none;
 
+        i {
+            color: $gray-600;
+            font-size: 1.1rem;
+            margin-right: .5rem;
+        }
+
         a {
             color: $gray-700;
             display: block;
-            padding: .25rem;
+            padding: .35rem .25rem;
 
             i {
                 color: $gray-600;
-                font-size: 1.1rem;
-                margin-right: .5rem;
             }
 
             .badge {
@@ -34,6 +38,10 @@
             }
         }
 
+        form {
+            padding: .15rem .25rem .09rem;
+        }
+
         &.active {
             > a {
                 background: $gray-300;
@@ -45,6 +53,6 @@
     }
 
     .dd-list {
-        padding-left: 1.8rem;
+        padding-left: 1.7rem;
     }
 }

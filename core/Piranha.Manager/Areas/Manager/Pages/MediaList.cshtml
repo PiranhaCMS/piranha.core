@@ -39,71 +39,71 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-3 col-4">
-                    <div class="card card-sm mb-3">
-                        <div class="card-body btn-group">
-                            <button class="btn btn-sm btn-primary btn-labeled mr-1" data-toggle="collapse" href="#folderAdd" aria-expanded="false" aria-controls="folderAdd">
-                                <i class="far fa-folder"></i>@Localizer.General["Add"]
-                            </button>
-                            <button class="btn btn-sm btn-primary btn-labeled mr-1" :disabled="currentFolderId === null" data-toggle="collapse" href="#folderEdit" aria-expanded="false" aria-controls="folderEdit">
-                                <i class="fas fa-pen"></i>@Localizer.General["Edit"]
-                            </button>
-                            <button v-on:click.prevent="removeFolder(currentFolderId)" class="btn btn-sm btn-danger btn-labeled" :disabled="currentFolderId === null || !canDelete">
-                                <i class="fas fa-trash"></i><span>@Localizer.General["Delete"]</span>
-                            </button>
-                        </div>
+                    <div class="mb-3">
+                        <button class="btn btn-sm btn-primary" data-toggle="collapse" href="#folderAdd" aria-expanded="false" aria-controls="folderAdd">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button v-if="currentFolderId != null" v-on:click="editFolder()" class="btn btn-sm btn-primary">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <button v-if="currentFolderId != null && canDelete" class="btn btn-sm btn-danger" v-on:click.prevent="removeFolder(currentFolderId)">
+                            <i class="fas fa-trash"></i>
+                        </button>
                         <div id="folderAdd" class="collapse">
-                            <div class="card-body clearfix">
-                                <form id="folderAddForm" action="post" v-on:submit.prevent="addFolder()" novalidate>
-                                    <div class="form-group">
-                                        <label>@Localizer.Media["Folder name"]</label>
-                                        <input v-model="folder.name" id="mediaFolderName" type="text" class="form-control" required>
-                                        <div class="invalid-feedback">
-                                            @Localizer.Media["Folder name is mandatory."]
-                                        </div>
+                            <form id="folderAddForm" action="post" v-on:submit.prevent="addFolder()" novalidate>
+                                <div class="form-group">
+                                    <label>@Localizer.Media["Folder name"]</label>
+                                    <input v-model="folder.name" id="mediaFolderName" type="text" class="form-control" required>
+                                    <div class="invalid-feedback">
+                                        @Localizer.Media["Folder name is mandatory."]
                                     </div>
-                                    <button class="btn btn-sm btn-success btn-labeled float-right" type="submit"><i class="fas fa-check"></i>@Localizer.General["Save"]</button>
-                                </form>
-                            </div>
+                                </div>
+                                <button class="btn btn-sm btn-success btn-labeled float-right" type="submit"><i class="fas fa-check"></i>@Localizer.General["Save"]</button>
+                            </form>
                         </div>
                         <div id="folderEdit" class="collapse">
-                            <div class="card-body clearfix">
-                                <form id="folderEditForm" action="post" v-on:submit.prevent="updateFolder()" novalidate>
-                                    <div class="form-group">
-                                        <label>@Localizer.Media["Folder name"]</label>
-                                        <input v-model="currentFolderName" id="mediaFolderName" type="text" class="form-control" required>
-                                        <div class="invalid-feedback">
-                                            @Localizer.Media["Folder name is mandatory."]
-                                        </div>
+                            <form id="folderEditForm" action="post" v-on:submit.prevent="updateFolder()" novalidate>
+                                <div class="form-group">
+                                    <label>@Localizer.Media["Folder name"]</label>
+                                    <input v-model="currentFolderName" id="mediaFolderName" type="text" class="form-control" required>
+                                    <div class="invalid-feedback">
+                                        @Localizer.Media["Folder name is mandatory."]
                                     </div>
-                                    <button class="btn btn-sm btn-success btn-labeled float-right" type="submit"><i class="fas fa-check"></i>@Localizer.General["Save"]</button>
-                                </form>
-                            </div>
+                                </div>
+                                <button class="btn btn-sm btn-success btn-labeled float-right" type="submit"><i class="fas fa-check"></i>@Localizer.General["Save"]</button>
+                            </form>
                         </div>
                     </div>
                     <ol class="folders">
-                        <li class="droppable" :class="{ active: currentFolderId === null }" v-on:dragover="dragover" v-on:dragleave="dragleave" v-on:drop="drop($event, null)">
+                        <li>
                             <a v-on:click.prevent="load()" href="#">
-                                <i class="fas fa-hdd"></i>Unorganized
-                                <span class="badge badge-light float-right">{{ rootCount }}</span>
+                                <i class="fas fa-hdd"></i>@Localizer.Media["All files"]
+                                <span class="badge badge-light float-right">{{ totalCount }}</span>
                             </a>
                         </li>
                     </ol>
                     <div class="dd folder-container">
                         <ol class="folders dd-list">
-                            <folder-item v-for="item in structure" v-bind:key="item.id" v-bind:selected="currentFolderId" v-bind:item="item"></folder-item>
+                            <li class="droppable" :class="{ active: currentFolderId === null }" v-on:dragover="dragover" v-on:dragleave="dragleave" v-on:drop="drop($event, null)">
+                                <a v-on:click.prevent="load()" href="#">
+                                    <i class="fas fa-hdd"></i>@Localizer.Media["Media library"]
+                                    <span class="badge badge-light float-right">{{ rootCount }}</span>
+                                </a>
+                            </li>
+                            <ol class="dd-list">
+                                <folder-item v-for="item in structure" v-bind:key="item.id" v-bind:selected="currentFolderId" v-bind:item="item"></folder-item>
+                            </ol>
                         </ol>
                     </div>
                 </div>
                 <div class="col-lg-9 col-8">
-                    <div class="card card-sm mb-3">
-                        <div class="card-body">
-                            <button v-on:click="showGallery()" class="btn btn-sm" :class="{ 'btn-light': !listView, 'btn-white': listView }">
-                                <i class="fas fa-table"></i>
-                            </button>
-                            <button v-on:click="showList()" class="btn btn-sm" :class="{ 'btn-light': listView, 'btn-white': !listView }">
-                                <i class="fas fa-list"></i>
-                            </button>
-                        </div>
+                    <div class="mb-3">
+                        <button v-on:click="showGallery()" class="btn btn-sm" :class="{ 'btn-light': !listView, 'btn-white': listView }">
+                            <i class="fas fa-table"></i>
+                        </button>
+                        <button v-on:click="showList()" class="btn btn-sm" :class="{ 'btn-light': listView, 'btn-white': !listView }">
+                            <i class="fas fa-list"></i>
+                        </button>
                     </div>
                     @if ((await Auth.AuthorizeAsync(User, Permission.MediaAdd)).Succeeded)
                     {
