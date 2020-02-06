@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.WebApi</id>
     <title>Piranha WebApi</title>
-    <version>8.0.0</version>
+    <version>8.1.0-beta2</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -18,7 +18,7 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework="netcoreapp3.1">
-        <dependency id="Piranha" version="[8.0.0,9.0.0)" />
+        <dependency id="Piranha" version="[8.1.0-beta2,9.0.0)" />
       </group>
     </dependencies>
   </metadata>

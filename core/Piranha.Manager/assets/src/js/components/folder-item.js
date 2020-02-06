@@ -19,6 +19,11 @@ Vue.component("folder-item", {
         "    <i class='fas fa-folder'></i>" +
         "    <input :id='\"folder-\" + item.id' type='text' v-on:keyup.esc='piranha.media.cancelEditFolder()' v-model='piranha.media.currentFolderName' class='form-control form-control-sm d-inline-block w-auto'>" +
         "  </form>" +
+        "  <ol v-if='selected === item.id && piranha.media.isAdding' class='dd-list'>" +
+        "    <form v-on:submit.prevent='piranha.media.addFolder()' class='d-inline-block'>" +
+        "      <i class='fas fa-folder'></i><input id='add-folder' type='text' v-on:keyup.esc='piranha.media.isAdding = false' v-model='piranha.media.newFolderName' class='form-control form-control-sm d-inline-block w-auto'>" +
+        "    </form>" +
+        "  </ol>" +
         "  <ol v-if='item.items.length > 0' class='dd-list'>" +
         "    <folder-item v-for='child in item.items' v-bind:key='child.id' v-bind:selected='selected' v-bind:item='child'></folder-item>" +
         "  </ol>" +

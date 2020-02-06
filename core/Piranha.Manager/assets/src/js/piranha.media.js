@@ -17,6 +17,8 @@ piranha.media = new Vue({
         rootCount: null,
         totalCount: null,
         canDelete: false,
+        isAdding: false,
+        newFolderName: null,
         folder: {
             name: null
         },
