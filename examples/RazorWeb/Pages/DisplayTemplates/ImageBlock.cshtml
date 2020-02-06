@@ -1,5 +1,5 @@
 @model Piranha.Extend.Blocks.ImageBlock
 
 <div class="block image-block">
-    <img src="@Url.Content(Model.Body)">
+    <img src="@Url.Content(Model.Body)" alt="@Model.Body.Media.AltText" title="@Model.Body.Media.Title">
 </div>
