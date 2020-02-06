@@ -30,7 +30,7 @@ namespace Piranha.Data.EF.SQLServer
         public SQLServerDb CreateDbContext(string[] args)
         {
             var builder = new DbContextOptionsBuilder<SQLServerDb>();
-            builder.UseSqlServer("");
+            builder.UseSqlServer("data source=.\\sqlexpress;initial catalog=piranha.dev;integrated security=true;multipleactiveresultsets=true;");
             return new SQLServerDb(builder.Options);
         }
     }
