@@ -14,6 +14,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
+using Piranha.Data.EF.SQLite;
 using Piranha.Extend;
 using Piranha.Repositories;
 using Piranha.Services;
@@ -201,11 +202,11 @@ namespace Piranha.AttributeBuilder.Tests
         /// Gets the test context.
         /// </summary>
         private IDb GetDb() {
-            var builder = new DbContextOptionsBuilder<Db>();
+            var builder = new DbContextOptionsBuilder<SQLiteDb>();
 
             builder.UseSqlite("Filename=./piranha.tests.db");
 
-            return new Db(builder.Options);
+            return new SQLiteDb(builder.Options);
         }
 
         private IApi CreateApi()

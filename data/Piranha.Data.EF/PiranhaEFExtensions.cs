@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) 2019-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -17,31 +17,12 @@ using System;
 
 public static class PiranhaEFExtensions
 {
-    public static PiranhaServiceBuilder UseEF(this PiranhaServiceBuilder serviceBuilder, Action<DbContextOptionsBuilder> dboptions,
-        ServiceLifetime scope = ServiceLifetime.Scoped)
-    {
-        return serviceBuilder.UseEF<Db>(dboptions, scope);
-    }
-
     public static PiranhaServiceBuilder UseEF<T>(this PiranhaServiceBuilder serviceBuilder, Action<DbContextOptionsBuilder> dboptions,
         ServiceLifetime scope = ServiceLifetime.Scoped) where T : DbContext, IDb
     {
         serviceBuilder.Services.AddPiranhaEF<T>(dboptions, scope);
 
         return serviceBuilder;
-    }
-
-    /// <summary>
-    /// Adds the default services needed to run Piranha over
-    /// Entity Framework Core.
-    /// </summary>
-    /// <param name="services">The current service collection</param>
-    /// <param name="scope">The optional lifetime</param>
-    /// <returns>The updated service collection</returns>
-    public static IServiceCollection AddPiranhaEF(this IServiceCollection services,
-        ServiceLifetime scope = ServiceLifetime.Scoped)
-    {
-        return AddPiranhaEF<Db>(services, scope);
     }
 
     /// <summary>
@@ -76,21 +57,6 @@ public static class PiranhaEFExtensions
         services.Add(new ServiceDescriptor(typeof(IDb), typeof(T), scope));
 
         return services;
-    }
-
-    /// <summary>
-    /// Adds the DbContext and the default services needed to run
-    /// Piranha over Entity Framework Core.
-    /// </summary>
-    /// <param name="services">The current service collection</param>
-    /// <param name="dboptions">The DbContext options builder</param>
-    /// <param name="scope">The optional lifetime</param>
-    /// <returns>The updated service collection</returns>
-    public static IServiceCollection AddPiranhaEF(this IServiceCollection services,
-        Action<DbContextOptionsBuilder> dboptions,
-        ServiceLifetime scope = ServiceLifetime.Scoped)
-    {
-        return AddPiranhaEF<Db>(services, dboptions, scope);
     }
 
     /// <summary>

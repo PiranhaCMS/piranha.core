@@ -8,7 +8,7 @@
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Library for storing media assets on disc.</description>
-    <copyright>Copyright 2017-2019 (c) Håkan Edling</copyright>
+    <copyright>Copyright 2017-2020 (c) Håkan Edling</copyright>
     <tags>cms mvc aspnetcore netstandard</tags>
     <license type="expression">MIT</license>
     <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>

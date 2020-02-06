@@ -3,14 +3,15 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
+using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
+using Piranha.Data.EF.SQLite;
 
 namespace Piranha.Tests
 {
@@ -52,11 +53,11 @@ namespace Piranha.Tests
         /// Gets the test context.
         /// </summary>
         protected IDb GetDb() {
-            var builder = new DbContextOptionsBuilder<Db>();
+            var builder = new DbContextOptionsBuilder<SQLiteDb>();
 
             builder.UseSqlite("Filename=./piranha.tests.db");
 
-            return new Db(builder.Options);
+            return new SQLiteDb(builder.Options);
         }
     }
 }
