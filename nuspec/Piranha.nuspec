@@ -3,15 +3,16 @@
   <metadata>
     <id>Piranha</id>
 		<title>Piranha</title>
-    <version>8.1.0-beta2</version>
+    <version>8.1.0-beta3</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Core package for Piranha CMS for .NET Core.</description>
-    <copyright>Copyright 2017-2019 (c) Håkan Edling</copyright>
+    <copyright>Copyright 2017-2020 (c) Håkan Edling</copyright>
     <tags>cms mvc aspnetcore netstandard</tags>
     <license type="expression">MIT</license>
     <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
+    <repository type="git" url="http://github.com/piranhacms/piranha.core" />
     <iconUrl>http://piranhacms.org/assets/twitter-shield.png</iconUrl>
     <releaseNotes>See the changelog available at:
 https://github.com/piranhacms/piranha.core/wiki/changelog

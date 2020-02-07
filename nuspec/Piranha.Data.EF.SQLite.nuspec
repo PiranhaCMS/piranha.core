@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Piranha.Data.EF.SQLite</id>
+    <title>Piranha Data SQLite</title>
+    <version>8.1.0-beta3</version>
+    <authors>Håkan Edling</authors>
+    <owners>Håkan Edling</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Entity Framework Core migration package for SQLite</description>
+    <copyright>Copyright 2020 (c) Håkan Edling</copyright>
+    <tags>cms mvc aspnetcore netstandard</tags>
+    <license type="expression">MIT</license>
+    <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
+    <iconUrl>http://piranhacms.org/assets/twitter-shield.png</iconUrl>
+		<releaseNotes>See the changelog available at:
+https://github.com/piranhacms/piranha.core/wiki/changelog
+    </releaseNotes>
+    <dependencies>
+      <group targetFramework="netstandard2.1">
+        <dependency id="Piranha" version="[8.1.0-beta3,9.0.0)" />
+        <dependency id="Piranha.Data.EF" version="[8.1.0-beta3,9.0.0)" />
+        <dependency id="AutoMapper" version="[9.0.0]" />
+        <dependency id="Microsoft.EntityFrameworkCore.Sqlite" version="3.1.0" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\data\Piranha.Data.EF.SQLite\bin\Release\netstandard2.1\Piranha.Data.EF.SQLite.dll" target="lib\netstandard2.1\Piranha.Data.EF.SQLite.dll" />
+  </files>
+</package>

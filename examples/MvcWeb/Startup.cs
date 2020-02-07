@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Piranha;
+using Piranha.Data.EF.SQLite;
 using Piranha.AspNetCore.Identity.SQLite;
 
 namespace MvcWeb
@@ -29,7 +30,7 @@ namespace MvcWeb
             services.AddPiranhaTinyMCE();
             services.AddPiranhaApi();
 
-            services.AddPiranhaEF(options =>
+            services.AddPiranhaEF<SQLiteDb>(options =>
                 options.UseSqlite("Filename=./piranha.mvcweb.db"));
             services.AddPiranhaIdentityWithSeed<IdentitySQLiteDb>(options =>
                 options.UseSqlite("Filename=./piranha.mvcweb.db"));

@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
+using Piranha.Data.EF.SQLite;
 
 namespace Piranha.Tests
 {
@@ -32,11 +33,11 @@ namespace Piranha.Tests
         /// Gets the test context.
         /// </summary>
         protected IDb GetDb() {
-            var builder = new DbContextOptionsBuilder<Db>();
+            var builder = new DbContextOptionsBuilder<SQLiteDb>();
 
             builder.UseSqlite("Filename=./piranha.tests.db");
 
-            return new Db(builder.Options);
+            return new SQLiteDb(builder.Options);
         }
     }
 }

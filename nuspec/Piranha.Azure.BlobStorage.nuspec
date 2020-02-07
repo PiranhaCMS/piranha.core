@@ -3,12 +3,12 @@
   <metadata>
     <id>Piranha.Azure.BlobStorage</id>
     <title>Piranha Azure BlobStorage</title>
-    <version>8.1.0-beta2</version>
+    <version>8.1.0-beta3</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Library for storing media assets on Azure Blob Storage.</description>
-    <copyright>Copyright 2018-2019 (c) Håkan Edling</copyright>
+    <copyright>Copyright 2018-2020 (c) Håkan Edling</copyright>
     <tags>cms mvc aspnetcore netstandard</tags>
     <license type="expression">MIT</license>
     <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
@@ -18,7 +18,7 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework="netstandard2.0">
-        <dependency id="Piranha" version="[8.1.0-beta2,9.0.0)" />
+        <dependency id="Piranha" version="[8.1.0-beta3,9.0.0)" />
         <dependency id="Microsoft.Azure.KeyVault.Core" version="3.0.4" />
         <dependency id="Microsoft.Azure.Storage.Blob" version="11.1.0" />
       </group>

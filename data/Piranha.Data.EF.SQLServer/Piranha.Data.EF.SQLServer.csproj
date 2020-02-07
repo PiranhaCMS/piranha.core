@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Version>8.1.0-beta3</Version>
+    <Company>Piranha CMS</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Piranha.Data.EF\Piranha.Data.EF.csproj" />
+    <ProjectReference Include="..\..\core\Piranha\Piranha.csproj" />
+  </ItemGroup>
+
+</Project>

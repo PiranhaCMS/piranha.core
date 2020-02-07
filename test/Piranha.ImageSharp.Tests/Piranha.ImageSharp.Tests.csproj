@@ -18,6 +18,7 @@
     <ProjectReference Include="..\..\core\Piranha.Local.FileStorage\Piranha.Local.FileStorage.csproj" />
     <ProjectReference Include="..\..\core\Piranha\Piranha.csproj" />
     <ProjectReference Include="..\..\data\Piranha.Data.EF\Piranha.Data.EF.csproj" />
+    <ProjectReference Include="..\..\data\Piranha.Data.EF.SQLite\Piranha.Data.EF.SQLite.csproj" />
   </ItemGroup>
 
 </Project>

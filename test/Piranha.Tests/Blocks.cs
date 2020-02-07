@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Piranha.Data;
+using Piranha.Data.EF.SQLite;
 using Piranha.Repositories;
 using Piranha.Services;
 
@@ -31,9 +32,9 @@ namespace Piranha.Tests
         /// </summary>
         protected override void Init() {
             services = new ServiceCollection()
-                .AddDbContext<Db>(options =>
+                .AddDbContext<SQLiteDb>(options =>
                     options.UseSqlite("Filename=./piranha.tests.db"))
-                .AddPiranhaEF()
+                .AddPiranhaEF<SQLiteDb>()
                 .AddSingleton<IStorage, Local.FileStorage>()
                 .BuildServiceProvider();
 

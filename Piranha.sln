@@ -82,7 +82,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazorWeb", "examples\RazorW
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Manager.TinyMCE", "core\Piranha.Manager.TinyMCE\Piranha.Manager.TinyMCE.csproj", "{A52B0CDE-AD56-4B85-9DD1-01B7494D17C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Manager.Tests", "test\Piranha.Manager.Tests\Piranha.Manager.Tests.csproj", "{497CBEC0-6D71-43ED-9E8C-6A0DB605AA47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Manager.Tests", "test\Piranha.Manager.Tests\Piranha.Manager.Tests.csproj", "{497CBEC0-6D71-43ED-9E8C-6A0DB605AA47}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Data.EF.SQLite", "data\Piranha.Data.EF.SQLite\Piranha.Data.EF.SQLite.csproj", "{A9C23685-EC2E-4C57-90EB-069054796F5C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Data.EF.SQLServer", "data\Piranha.Data.EF.SQLServer\Piranha.Data.EF.SQLServer.csproj", "{538596A9-6085-4535-96ED-508A0C30DF32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -186,6 +190,14 @@ Global
 		{497CBEC0-6D71-43ED-9E8C-6A0DB605AA47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{497CBEC0-6D71-43ED-9E8C-6A0DB605AA47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{497CBEC0-6D71-43ED-9E8C-6A0DB605AA47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9C23685-EC2E-4C57-90EB-069054796F5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9C23685-EC2E-4C57-90EB-069054796F5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9C23685-EC2E-4C57-90EB-069054796F5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9C23685-EC2E-4C57-90EB-069054796F5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{538596A9-6085-4535-96ED-508A0C30DF32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{538596A9-6085-4535-96ED-508A0C30DF32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{538596A9-6085-4535-96ED-508A0C30DF32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{538596A9-6085-4535-96ED-508A0C30DF32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -215,6 +227,8 @@ Global
 		{4A1E96A1-B7FD-4A8E-8440-924D63911770} = {A82A5922-BF05-4DD7-A2C1-DD22F1AD6A57}
 		{A52B0CDE-AD56-4B85-9DD1-01B7494D17C9} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 		{497CBEC0-6D71-43ED-9E8C-6A0DB605AA47} = {DE1913AC-4AA3-4F66-83F1-615710D8367B}
+		{A9C23685-EC2E-4C57-90EB-069054796F5C} = {DCC52317-BC88-4F0A-923F-C9D9F6D952ED}
+		{538596A9-6085-4535-96ED-508A0C30DF32} = {DCC52317-BC88-4F0A-923F-C9D9F6D952ED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF88AA05-D127-4707-8214-A230F0DA569B}

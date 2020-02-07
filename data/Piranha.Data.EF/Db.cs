@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2018 Håkan Edling
+ * Copyright (c) 2017-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace Piranha
 {
-    public sealed class Db : DbContext, IDb
+    public abstract class Db<T> : DbContext, IDb where T : Db<T>
     {
         /// <summary>
         /// Gets/sets whether the db context as been initialized. This
@@ -166,7 +166,7 @@ namespace Piranha
         /// Default constructor.
         /// </summary>
         /// <param name="options">Configuration options</param>
-        public Db(DbContextOptions<Db> options) : base(options)
+        public Db(DbContextOptions<T> options) : base(options)
         {
             if (!IsInitialized)
             {
