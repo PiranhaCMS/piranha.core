@@ -100,13 +100,13 @@
     <value>登出</value>
   </data>
   <data name="Looks like there's no items here. Click on the button above to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button above to get started!</value>
+    <value>目前沒有內容，請點擊上面的按鍵進行操作！</value>
   </data>
   <data name="Looks like there's no items here. Click on the button below to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button below to get started!</value>
+    <value>目前沒有內容，請點擊下面的按鍵進行操作！</value>
   </data>
   <data name="Looks like there's no items here. Click on the button to the left to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button to the left to get started!</value>
+    <value>目前沒有內容，請點擊左邊的按鍵進行操作！</value>
   </data>
   <data name="Main content" xml:space="preserve">
     <value>主要內容</value>
@@ -217,21 +217,21 @@
     <value>使用者</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Version</value>
+    <value>版本</value>
   </data>
   <data name="Width" xml:space="preserve">
-    <value>Width</value>
+    <value>寬度</value>
   </data>
   <data name="Archives and Comments" xml:space="preserve">
-    <value>Archives and Comments</value>
+    <value>回覆及評論</value>
   </data>
   <data name="Author" xml:space="preserve">
-    <value>Author</value>
+    <value>作者</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>Comments</value>
+    <value>評論</value>
   </data>
   <data name="Created" xml:space="preserve">
-    <value>Created</value>
+    <value>建立</value>
   </data>
 </root>
