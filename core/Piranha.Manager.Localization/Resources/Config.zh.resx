@@ -16,16 +16,16 @@
     <value>設置</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>Hierarchical page slugs</value>
+    <value>分層副標</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>If page slugs should include the parent slug.</value>
+    <value>頁面副標應該包含上層副標</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
-    <value>Expanded levels in the sitemap</value>
+    <value>展開網站地圖</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
-    <value>Archive page size</value>
+    <value>存檔頁面大小</value>
   </data>
   <data name="Caching" xml:space="preserve">
     <value>快取</value>
@@ -40,10 +40,10 @@
     <value>文章快取失效（分鐘）</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
-    <value>Post revisions</value>
+    <value>文章修訂</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
-    <value>Media CDN</value>
+    <value>媒體檔案公網快取</value>
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
