@@ -32,7 +32,7 @@
     "through2": "^3.0.1",
     "uglify-es": "3.3.10",
     "vue": "2.6.10",
-    "vue-template-compiler": "^2.6.10",
+    "vue-template-compiler": "2.6.10",
     "vuejs-datepicker": "1.6.2"
   }
 }
