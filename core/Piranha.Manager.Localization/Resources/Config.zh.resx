@@ -16,10 +16,10 @@
     <value>設置</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>分層副標</value>
+    <value>分層網址後綴</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>頁面副標應該包含上層副標</value>
+    <value>頁面網址後綴應該包含上層副標</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
     <value>展開網站地圖</value>
@@ -31,13 +31,13 @@
     <value>快取</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>頁面快取失效（分鐘）</value>
+    <value>頁面快取期效（分鐘）</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
     <value>頁面修訂</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>文章快取失效（分鐘）</value>
+    <value>文章快取效期（分鐘）</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
     <value>文章修訂</value>
