@@ -46,6 +46,6 @@
     <value>文章標題</value>
   </data>
   <data name="If comments should be enabled for this post" xml:space="preserve">
-    <value>本文章是否啟用評論功能</value>
+    <value>啟用本文章評論功能</value>
   </data>
 </root>
