@@ -37,7 +37,7 @@
     <value>是否確定要刪除此別名？</value>
   </data>
   <data name="If the redirect should be permanent" xml:space="preserve">
-    <value>這個轉導網址應該是強制的</value>
+    <value>這個轉向網址應該是強制的</value>
   </data>
   <data name="The alias was successfully added to the list" xml:space="preserve">
     <value>該別名已加入列表中</value>

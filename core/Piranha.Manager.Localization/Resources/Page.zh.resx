@@ -31,19 +31,19 @@
     <value>隱藏</value>
   </data>
   <data name="If the page should be hidden in the sitemap" xml:space="preserve">
-    <value>是否在網站地圖中隱藏本面頁</value>
+    <value>在網站地圖中隱藏本面頁</value>
   </data>
   <data name="Meta keywords" xml:space="preserve">
-    <value>內容關鍵字，提供搜尋引擎抓取</value>
+    <value>Meta 關鍵字（提供搜尋引擎抓取）</value>
   </data>
   <data name="Meta description" xml:space="preserve">
-    <value>內容描述，提供搜尋引擎抓取</value>
+    <value>Meta 說明（提供搜尋引擎抓取）</value>
   </data>
   <data name="Navigation title" xml:space="preserve">
     <value>導航欄標題</value>
   </data>
   <data name="Are you sure you want to delete this page?" xml:space="preserve">
-    <value>是否確定要刪除這個頁面？</value>
+    <value>是否確定要刪除本頁面？</value>
   </data>
   <data name="Pages" xml:space="preserve">
     <value>頁面</value>
@@ -76,6 +76,6 @@
     <value>頁面標題</value>
   </data>
   <data name="If comments should be enabled for this page" xml:space="preserve">
-    <value>是否啟用本面頁評論功能</value>
+    <value>啟用本面頁評論功能</value>
   </data>
 </root>
