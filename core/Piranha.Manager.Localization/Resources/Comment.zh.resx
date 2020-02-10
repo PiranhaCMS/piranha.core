@@ -41,13 +41,13 @@
     <value>允許評論</value>
   </data>
   <data name="Comments are not allowed." xml:space="preserve">
-    <value>不允許評論。</value>
+    <value>評論功能已關閉。</value>
   </data>
   <data name="Comments are not allowed for unpublished content." xml:space="preserve">
     <value>未發佈的內容不允許評論。</value>
   </data>
   <data name="Comments are currently open." xml:space="preserve">
-    <value>評論功能已開啟</value>
+    <value>評論功能已開啟。</value>
   </data>
   <data name="Comments were closed" xml:space="preserve">
     <value>評論功能已關閉</value>
