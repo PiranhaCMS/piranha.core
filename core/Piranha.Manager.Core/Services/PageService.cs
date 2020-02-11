@@ -356,7 +356,19 @@ namespace Piranha.Manager.Services
 
                                 foreach (var item in blockGroup.Items)
                                 {
-                                    pageBlock.Items.Add(item.Model);
+                                    if (item is BlockItemModel blockItem)
+                                    {
+                                        pageBlock.Items.Add(blockItem.Model);
+                                    }
+                                    else if (item is BlockGenericModel blockGeneric)
+                                    {
+                                        var transformed = ContentUtils.TransformGenericBlock(blockGeneric);
+
+                                        if (transformed != null)
+                                        {
+                                            pageBlock.Items.Add(transformed);
+                                        }
+                                    }
                                 }
                                 page.Blocks.Add(pageBlock);
                             }
@@ -367,18 +379,11 @@ namespace Piranha.Manager.Services
                         }
                         else if (block is BlockGenericModel blockGeneric)
                         {
-                            var blockType = App.Blocks.GetByType(blockGeneric.Type);
+                            var transformed = ContentUtils.TransformGenericBlock(blockGeneric);
 
-                            if (blockType != null)
+                            if (transformed != null)
                             {
-                                var pageBlock = (Extend.Block)Activator.CreateInstance(blockType.Type);
-
-                                foreach (var field in blockGeneric.Model)
-                                {
-                                    var prop = pageBlock.GetType().GetProperty(field.Meta.Id, App.PropertyBindings);
-                                    prop.SetValue(pageBlock, field.Model);
-                                }
-                                page.Blocks.Add(pageBlock);
+                                page.Blocks.Add(transformed);
                             }
                         }
                     }
@@ -643,18 +648,39 @@ namespace Piranha.Manager.Services
                     {
                         blockType = App.Blocks.GetByType(child.Type);
 
-                        group.Items.Add(new BlockItemModel
+                        if (!blockType.IsGeneric)
                         {
-                            IsActive = firstChild,
-                            Model = child,
-                            Meta = new BlockMeta
+                            // Regular block item model
+                            group.Items.Add(new BlockItemModel
                             {
-                                Name = blockType.Name,
-                                Title = child.GetTitle(),
-                                Icon = blockType.Icon,
-                                Component = blockType.Component
-                            }
-                        });
+                                IsActive = firstChild,
+                                Model = child,
+                                Meta = new BlockMeta
+                                {
+                                    Name = blockType.Name,
+                                    Title = child.GetTitle(),
+                                    Icon = blockType.Icon,
+                                    Component = blockType.Component
+                                }
+                            });
+                        }
+                        else
+                        {
+                            // Generic block item model
+                            group.Items.Add(new BlockGenericModel
+                            {
+                                IsActive = firstChild,
+                                Model = ContentUtils.GetBlockFields(child),
+                                Type = child.Type,
+                                Meta = new BlockMeta
+                                {
+                                    Name = blockType.Name,
+                                    Title = child.GetTitle(),
+                                    Icon = blockType.Icon,
+                                    Component = blockType.Component,
+                                }
+                            });
+                        }
                         firstChild = false;
                     }
                     model.Blocks.Add(group);

@@ -72,5 +72,23 @@ namespace Piranha.Manager.Services
             }
             return fields;
         }
+
+        public static Extend.Block TransformGenericBlock(BlockGenericModel blockGeneric)
+        {
+            var blockType = App.Blocks.GetByType(blockGeneric.Type);
+
+            if (blockType != null)
+            {
+                var pageBlock = (Extend.Block)Activator.CreateInstance(blockType.Type);
+
+                foreach (var field in blockGeneric.Model)
+                {
+                    var prop = pageBlock.GetType().GetProperty(field.Meta.Id, App.PropertyBindings);
+                    prop.SetValue(pageBlock, field.Model);
+                }
+                return pageBlock;
+            }
+            return null;
+        }
     }
 }

@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using Markdig;
@@ -18,6 +18,12 @@ namespace Piranha.Extend
     public class DefaultMarkdown : IMarkdown
     {
         /// <summary>
+        /// Gets/sets the additional pipeline to use
+        /// for markdown transformation.
+        /// </summary>
+        public MarkdownPipeline _pipeline;
+
+        /// <summary>
         /// Transforms the given markdown string to html.
         /// </summary>
         /// <param name="md">The markdown</param>
@@ -26,7 +32,7 @@ namespace Piranha.Extend
         {
             if (!string.IsNullOrEmpty(md))
             {
-                return Markdown.ToHtml(md);
+                return Markdown.ToHtml(md, _pipeline);
             }
             return md;
         }

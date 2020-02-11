@@ -31,7 +31,7 @@ namespace Piranha.Manager.Models.Content
         /// <summary>
         /// Gets/sets the available child items in the group.
         /// </summary>
-        public IList<BlockItemModel> Items { get; set; } = new List<BlockItemModel>();
+        public IList<BlockModel> Items { get; set; } = new List<BlockModel>();
 
         /// <summary>
         /// Gets/sets the available global group fields.
