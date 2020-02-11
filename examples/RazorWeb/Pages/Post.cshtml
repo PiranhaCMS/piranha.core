@@ -53,8 +53,9 @@
                 @if (Model.Data.isCommentsOpen)
                 {
                     <div class="alert alert-warning mt-2 mb-5">
-                        <form method="post" action="@Model.Data.Permalink?action=comment">
+                        <form asp-page-handler="SaveComment" method="post">
                             @Html.AntiForgeryToken()
+                            @Html.Hidden("Id", Model.Data.Id)
 
                             <h4 class="mb-3">Leave a comment</h4>
                             <p class="mb-4"><small>

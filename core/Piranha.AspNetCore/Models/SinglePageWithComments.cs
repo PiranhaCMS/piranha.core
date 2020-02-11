@@ -67,25 +67,22 @@ namespace Piranha.AspNetCore.Models
         /// Gets the model data.
         /// </summary>
         /// <param name="id">The requested model id</param>
-        /// <param name="action">Optional page action</param>
         /// <param name="draft">If the draft should be fetched</param>
-        public virtual async Task<IActionResult> OnPost(Guid id, string action = null, bool draft = false)
+        public virtual async Task<IActionResult> OnPostSaveComment(Guid id, bool draft = false)
         {
-            if (action.ToLower() == "comment")
+            // Create the comment
+            var comment = new Comment
             {
-                // Create the comment
-                var comment = new Comment
-                {
-                    IpAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString(),
-                    UserAgent = Request.Headers.ContainsKey("User-Agent") ? Request.Headers["User-Agent"].ToString() : "",
-                    Author = CommentAuthor,
-                    Email = CommentEmail,
-                    Url = CommentUrl,
-                    Body = CommentBody
-                };
+                IpAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString(),
+                UserAgent = Request.Headers.ContainsKey("User-Agent") ? Request.Headers["User-Agent"].ToString() : "",
+                Author = CommentAuthor,
+                Email = CommentEmail,
+                Url = CommentUrl,
+                Body = CommentBody
+            };
 
-                await _api.Pages.SaveCommentAndVerifyAsync(id, comment);
-            }
+            await _api.Pages.SaveCommentAndVerifyAsync(id, comment);
+
             Data = await _loader.GetPageAsync<T>(id, HttpContext.User, draft);
 
             return Redirect(Data.Permalink + "#comments");
