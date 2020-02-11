@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) 2019-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -123,7 +123,7 @@ namespace Piranha.Manager.Services
 
                 if (site == null)
                 {
-                    site = _factory.Create<DynamicSiteContent>(siteType);
+                    site = await _factory.CreateAsync<DynamicSiteContent>(siteType);
                     site.Id = model.Id;
                 }
 

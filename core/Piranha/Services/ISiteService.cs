@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) 2019-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -93,7 +93,7 @@ namespace Piranha.Services
         /// Creates and initializes a new site content model of the specified type.
         /// </summary>
         /// <returns>The created site content</returns>
-        T CreateContent<T>(string typeId = null) where T : SiteContentBase;
+        Task<T> CreateContentAsync<T>(string typeId = null) where T : SiteContentBase;
 
         /// <summary>
         /// Invalidates the cached version of the sitemap with the

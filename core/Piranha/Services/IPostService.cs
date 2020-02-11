@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) 2019-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -21,7 +21,7 @@ namespace Piranha.Services
         /// Creates and initializes a new post of the specified type.
         /// </summary>
         /// <returns>The created post</returns>
-        T Create<T>(string typeId = null) where T : PostBase;
+        Task<T> CreateAsync<T>(string typeId = null) where T : PostBase;
 
         /// <summary>
         /// Gets the available posts for the specified blog.

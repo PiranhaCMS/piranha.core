@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) 2019-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -54,7 +54,7 @@ namespace Piranha.Services
         /// Creates and initializes a new post of the specified type.
         /// </summary>
         /// <returns>The created post</returns>
-        public T Create<T>(string typeId = null) where T : PostBase
+        public async Task<T> CreateAsync<T>(string typeId = null) where T : PostBase
         {
             if (string.IsNullOrEmpty(typeId))
             {
@@ -65,7 +65,7 @@ namespace Piranha.Services
 
             if (type != null)
             {
-                var model = _factory.Create<T>(type);
+                var model = await _factory.CreateAsync<T>(type).ConfigureAwait(false);
 
                 using (var config = new Config(_paramService))
                 {
@@ -350,7 +350,7 @@ namespace Piranha.Services
                 {
                     var blog = await _pageService.GetByIdAsync<PageInfo>(model.BlogId).ConfigureAwait(false);
 
-                    OnLoad(model, blog);
+                    await OnLoadAsync(model, blog).ConfigureAwait(false);
                 }
             }
 
@@ -386,7 +386,7 @@ namespace Piranha.Services
             {
                 var blog = await _pageService.GetByIdAsync<PageInfo>(draft.BlogId).ConfigureAwait(false);
 
-                OnLoad(draft, blog, true);
+                await OnLoadAsync(draft, blog, true);
             }
             return draft;
         }
@@ -837,7 +837,7 @@ namespace Piranha.Services
 
                 if (model != null)
                 {
-                    _factory.Init(model, App.PostTypes.GetById(model.TypeId));
+                    await _factory.InitAsync(model, App.PostTypes.GetById(model.TypeId));
                 }
             }
 
@@ -855,7 +855,7 @@ namespace Piranha.Services
                         blogPages.Add(blog);
                     }
 
-                    OnLoad(model, blog);
+                    await OnLoadAsync(model, blog);
                 }
             }
 
@@ -892,7 +892,7 @@ namespace Piranha.Services
         /// <param name="model">The model</param>
         /// <param name="blog">The blog page the post belongs to</param>
         /// <param name="isDraft">If this is a draft</param>
-        private void OnLoad(PostBase model, PageInfo blog, bool isDraft = false)
+        private async Task OnLoadAsync(PostBase model, PageInfo blog, bool isDraft = false)
         {
             if (model != null)
             {
@@ -902,11 +902,11 @@ namespace Piranha.Services
                 // Initialize model
                 if (typeof(IDynamicModel).IsAssignableFrom(model.GetType()))
                 {
-                    _factory.InitDynamic((DynamicPost)model, App.PostTypes.GetById(model.TypeId));
+                    await _factory.InitDynamicAsync((DynamicPost)model, App.PostTypes.GetById(model.TypeId));
                 }
                 else
                 {
-                    _factory.Init(model, App.PostTypes.GetById(model.TypeId));
+                    await _factory.InitAsync(model, App.PostTypes.GetById(model.TypeId));
                 }
 
                 App.Hooks.OnLoad(model);

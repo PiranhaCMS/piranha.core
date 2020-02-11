@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Håkan Edling
+ * Copyright (c) 2018-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -13,6 +13,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Piranha.Data;
 using Piranha.Models;
@@ -46,7 +47,7 @@ namespace Piranha.Services
         /// <param name="content">The content entity</param>
         /// <param name="type">The content type</param>
         /// <returns>The page model</returns>
-        public T Transform<T>(TContent content, Models.ContentType type, Action<TContent, T> process = null)
+        public async Task<T> TransformAsync<T>(TContent content, Models.ContentType type, Action<TContent, T> process = null)
             where T : Models.Content, TModelBase
         {
             if (type != null)
@@ -62,7 +63,7 @@ namespace Piranha.Services
                 }
 
                 // Create an initialized model
-                var model = _factory.Create<T>(type);
+                var model = await _factory.CreateAsync<T>(type);
 
                 // Map basic fields
                 _mapper.Map<TContent, TModelBase>(content, model);
@@ -121,7 +122,7 @@ namespace Piranha.Services
                                 }
                                 else
                                 {
-                                    AddComplexValue(model, type, regionKey, fields.Where(f => f.SortOrder == sortOrder).ToList());
+                                    await AddComplexValueAsync(model, type, regionKey, fields.Where(f => f.SortOrder == sortOrder).ToList());
                                 }
                                 sortOrder++;
                             }
@@ -551,14 +552,14 @@ namespace Piranha.Services
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <param name="fields">The field</param>
-        private void AddComplexValue<T>(T model, Models.ContentType contentType, string regionId, IList<TField> fields) where T : Models.Content
+        private async Task AddComplexValueAsync<T>(T model, Models.ContentType contentType, string regionId, IList<TField> fields) where T : Models.Content
         {
             if (fields.Count > 0)
             {
                 if (model is Models.IDynamicModel)
                 {
                     var list = (IList)((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId];
-                    var obj = _factory.CreateDynamicRegion(contentType, regionId);
+                    var obj = await _factory.CreateDynamicRegionAsync(contentType, regionId);
 
                     foreach (var field in fields)
                     {

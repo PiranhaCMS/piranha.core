@@ -184,7 +184,7 @@ namespace Piranha.Repositories
 
             if (post != null)
             {
-                return _contentService.Transform<T>(post, App.PostTypes.GetById(post.PostTypeId), Process);
+                return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), Process);
             }
             return null;
         }
@@ -205,7 +205,7 @@ namespace Piranha.Repositories
 
             if (post != null)
             {
-                return _contentService.Transform<T>(post, App.PostTypes.GetById(post.PostTypeId), Process);
+                return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), Process);
             }
             return null;
         }
@@ -235,7 +235,7 @@ namespace Piranha.Repositories
                     // Transform data model
                     var post = JsonConvert.DeserializeObject<Post>(draft.Data);
 
-                    return _contentService.Transform<T>(post, App.PostTypes.GetById(post.PostTypeId), Process);
+                    return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), Process);
                 }
             }
             return null;

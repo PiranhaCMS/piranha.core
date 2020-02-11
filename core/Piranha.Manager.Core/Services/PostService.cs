@@ -213,7 +213,7 @@ namespace Piranha.Manager.Services
 
         public async Task<PostEditModel> Create(Guid archiveId, string typeId)
         {
-            var post = _api.Posts.Create<DynamicPost>(typeId);
+            var post = await _api.Posts.CreateAsync<DynamicPost>(typeId);
 
             if (post != null)
             {
@@ -250,7 +250,7 @@ namespace Piranha.Manager.Services
 
                 if (post == null)
                 {
-                    post = _factory.Create<DynamicPost>(postType);
+                    post = await _factory.CreateAsync<DynamicPost>(postType);
                     post.Id = model.Id;
                 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Håkan Edling
+ * Copyright (c) 2018-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -21,7 +21,7 @@ using Piranha.Services;
 namespace Piranha.Tests.Repositories
 {
     [Collection("Integration tests")]
-    public class Comments : BaseTests
+    public class Comments : BaseTestsAsync
     {
         private Guid SITE_ID = Guid.NewGuid();
         private Guid PAGE_ID = Guid.NewGuid();
@@ -36,8 +36,10 @@ namespace Piranha.Tests.Repositories
         [PostType(Title = "Blog Post")]
         public class BlogPost : Post<BlogPost> {}
 
-        protected override void Init() {
-            using (var api = CreateApi()) {
+        public override async Task InitializeAsync()
+        {
+            using (var api = CreateApi())
+            {
                 // Import content types
                 new PageTypeBuilder(api)
                     .AddType(typeof(BlogArchive))
@@ -47,67 +49,78 @@ namespace Piranha.Tests.Repositories
                     .Build();
 
                 // Add site
-                var site = new Site() {
+                var site = new Site
+                {
                     Id = SITE_ID,
                     Title = "Comment Site",
                     InternalId = "CommentSite",
                     IsDefault = true
                 };
-                api.Sites.Save(site);
+                await api.Sites.SaveAsync(site);
 
                 // Add archive
-                var blog = BlogArchive.Create(api);
+                var blog = await BlogArchive.CreateAsync(api);
                 blog.Id = BLOG_ID;
                 blog.SiteId = SITE_ID;
                 blog.Title = "Blog";
                 blog.EnableComments = true;
                 blog.Published = DateTime.Now;
-                api.Pages.Save(blog);
+                await api.Pages.SaveAsync(blog);
 
-                var news = BlogArchive.Create(api);
+                var news = await BlogArchive.CreateAsync(api);
                 news.Id = NEWS_ID;
                 news.SiteId = SITE_ID;
                 news.Title = "News";
                 blog.EnableComments = true;
                 news.Published = DateTime.Now;
-                api.Pages.Save(news);
+                await api.Pages.SaveAsync(news);
 
                 // Add posts
-                var blogPost = BlogPost.Create(api);
+                var blogPost = await BlogPost.CreateAsync(api);
                 blogPost.Id = BLOGPOST_ID;
                 blogPost.BlogId = BLOG_ID;
                 blogPost.Category = "The Category";
                 blogPost.Title = "Welcome To The Blog";
                 blogPost.Published = DateTime.Now;
-                api.Posts.Save(blogPost);
+                await api.Posts.SaveAsync(blogPost);
 
-                var newsPost = BlogPost.Create(api);
+                var newsPost = await BlogPost.CreateAsync(api);
                 newsPost.Id = NEWSPOST_ID;
                 newsPost.BlogId = NEWS_ID;
                 newsPost.Category = "The Category";
                 newsPost.Title = "Welcome To The News";
                 newsPost.Published = DateTime.Now;
-                api.Posts.Save(newsPost);
+                await api.Posts.SaveAsync(newsPost);
             }
         }
 
-        protected override void Cleanup() {
-            using (var api = CreateApi()) {
-                var posts = api.Posts.GetAll(BLOG_ID);
+        public override async Task DisposeAsync()
+        {
+            using (var api = CreateApi())
+            {
+                var posts = await api.Posts.GetAllAsync(BLOG_ID);
                 foreach (var p in posts)
-                    api.Posts.Delete(p);
+                {
+                    await api.Posts.DeleteAsync(p);
+                }
 
-                posts = api.Posts.GetAll(NEWS_ID);
+                posts = await api.Posts.GetAllAsync(NEWS_ID);
                 foreach (var p in posts)
-                    api.Posts.Delete(p);
+                {
+                    await api.Posts.DeleteAsync(p);
+                }
 
-                var pages = api.Pages.GetAll(SITE_ID);
+                var pages = await api.Pages.GetAllAsync(SITE_ID);
                 foreach (var p in pages)
-                    api.Pages.Delete(p);
+                {
+                    await api.Pages.DeleteAsync(p);
+                }
 
-                var sites = api.Sites.GetAll();
+                var sites = await api.Sites.GetAllAsync();
                 foreach (var s in sites)
-                    api.Sites.Delete(s);
+                {
+                    await api.Sites.DeleteAsync(s);
+                }
             }
         }
 
