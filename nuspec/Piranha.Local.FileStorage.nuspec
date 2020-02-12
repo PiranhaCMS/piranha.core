@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.Local.FileStorage</id>
     <title>Piranha Local FileStorage</title>
-    <version>8.1.0-beta3</version>
+    <version>8.1.0-beta4</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,17 +12,19 @@
     <tags>cms mvc aspnetcore netstandard</tags>
     <license type="expression">MIT</license>
     <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
+    <icon>images\piranha.png</icon>
     <iconUrl>http://piranhacms.org/assets/twitter-shield.png</iconUrl>
     <releaseNotes>See the changelog available at:
 https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework="netstandard2.0">
-        <dependency id="Piranha" version="[8.1.0-beta3,9.0.0)" />
+        <dependency id="Piranha" version="[8.1.0-beta4,9.0.0)" />
       </group>
     </dependencies>
   </metadata>
   <files>
+    <file src="piranha.png" target="images\" />
     <file src="..\core\Piranha.Local.FileStorage\bin\Release\netstandard2.0\Piranha.Local.FileStorage.dll" target="lib\netstandard2.0\Piranha.Local.FileStorage.dll" />
   </files>
 </package>
