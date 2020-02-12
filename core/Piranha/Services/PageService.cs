@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Håkan Edling
+ * Copyright (c) 2018-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -48,7 +48,7 @@ namespace Piranha.Services
         /// Creates and initializes a new page of the specified type.
         /// </summary>
         /// <returns>The created page</returns>
-        public T Create<T>(string typeId = null) where T : Models.PageBase
+        public async Task<T> CreateAsync<T>(string typeId = null) where T : Models.PageBase
         {
             if (string.IsNullOrEmpty(typeId))
             {
@@ -59,7 +59,7 @@ namespace Piranha.Services
 
             if (type != null)
             {
-                var model = _factory.Create<T>(type);
+                var model = await _factory.CreateAsync<T>(type).ConfigureAwait(false);
 
                 using (var config = new Config(_paramService))
                 {
@@ -69,20 +69,6 @@ namespace Piranha.Services
                 return model;
             }
             return null;
-        }
-
-        /// <summary>
-        /// Creates and initializes a copy of the given page.
-        /// </summary>
-        /// <param name="originalPage">The orginal page</param>
-        /// <returns>The created copy</returns>
-        public T Copy<T>(T originalPage) where T : Models.PageBase
-        {
-            var model = Create<T>(originalPage.TypeId);
-            model.OriginalPageId = originalPage.Id;
-            model.Slug = null;
-
-            return model;
         }
 
         /// <summary>
@@ -272,7 +258,7 @@ namespace Piranha.Services
 
                 if (model != null)
                 {
-                    _factory.Init(model, App.PageTypes.GetById(model.TypeId));
+                    await _factory.InitAsync(model, App.PageTypes.GetById(model.TypeId)).ConfigureAwait(false);
                 }
             }
 
@@ -280,7 +266,7 @@ namespace Piranha.Services
             {
                 model = await _repo.GetStartpage<T>(siteId.Value).ConfigureAwait(false);
 
-                OnLoad(model);
+                await OnLoadAsync(model).ConfigureAwait(false);
             }
 
             if (model != null && model is T)
@@ -319,7 +305,7 @@ namespace Piranha.Services
 
                 if (model != null)
                 {
-                    _factory.Init(model, App.PageTypes.GetById(model.TypeId));
+                    await _factory.InitAsync(model, App.PageTypes.GetById(model.TypeId)).ConfigureAwait(false);
                 }
             }
 
@@ -327,7 +313,7 @@ namespace Piranha.Services
             {
                 model = await _repo.GetById<T>(id).ConfigureAwait(false);
 
-                OnLoad(model);
+                await OnLoadAsync(model).ConfigureAwait(false);
             }
 
             if (model != null && model is T)
@@ -375,7 +361,7 @@ namespace Piranha.Services
 
                     if (model != null)
                     {
-                        _factory.Init(model, App.PageTypes.GetById(model.TypeId));
+                        await _factory.InitAsync(model, App.PageTypes.GetById(model.TypeId)).ConfigureAwait(false);
                     }
                 }
             }
@@ -384,7 +370,7 @@ namespace Piranha.Services
             {
                 model = await _repo.GetBySlug<T>(slug, siteId.Value).ConfigureAwait(false);
 
-                OnLoad(model);
+                await OnLoadAsync(model).ConfigureAwait(false);
             }
 
             if (model != null && model is T)
@@ -440,7 +426,7 @@ namespace Piranha.Services
         {
             var draft = await _repo.GetDraftById<T>(id).ConfigureAwait(false);
 
-            OnLoad(draft, true);
+            await OnLoadAsync(draft, true).ConfigureAwait(false);
 
             return draft;
         }
@@ -784,7 +770,7 @@ namespace Piranha.Services
         /// <param name="id">The unique id</param>
         public async Task DeleteCommentAsync(Guid id)
         {
-            var model = await GetCommentByIdAsync(id);
+            var model = await GetCommentByIdAsync(id).ConfigureAwait(false);
 
             if (model != null)
             {
@@ -804,11 +790,11 @@ namespace Piranha.Services
             {
                 // Call hooks & delete
                 App.Hooks.OnBeforeDelete<Comment>(model);
-                await _repo.DeleteComment(model.Id);
+                await _repo.DeleteComment(model.Id).ConfigureAwait(false);
                 App.Hooks.OnAfterDelete<Comment>(model);
 
                 // Remove parent post from cache
-                await RemoveFromCache(page);
+                await RemoveFromCache(page).ConfigureAwait(false);
             }
             else
             {
@@ -848,7 +834,7 @@ namespace Piranha.Services
                     copy = Utils.DeepClone(original);
 
                     // Initialize all blocks & regions
-                    _factory.Init(copy, App.PageTypes.GetById(copy.TypeId));
+                    await _factory.InitAsync(copy, App.PageTypes.GetById(copy.TypeId)).ConfigureAwait(false);
                 }
 
                 // Now let's move over the fields we want to the
@@ -897,18 +883,18 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="model">The model</param>
         /// <param name="isDraft">If this is a draft</param>
-        private void OnLoad(PageBase model, bool isDraft = false)
+        private async Task OnLoadAsync(PageBase model, bool isDraft = false)
         {
             if (model != null)
             {
                 // Initialize model
                 if (typeof(IDynamicModel).IsAssignableFrom(model.GetType()))
                 {
-                    _factory.InitDynamic((DynamicPage)model, App.PageTypes.GetById(model.TypeId));
+                    await _factory.InitDynamicAsync((DynamicPage)model, App.PageTypes.GetById(model.TypeId)).ConfigureAwait(false);
                 }
                 else
                 {
-                    _factory.Init(model, App.PageTypes.GetById(model.TypeId));
+                    await _factory.InitAsync(model, App.PageTypes.GetById(model.TypeId)).ConfigureAwait(false);
                 }
 
                 App.Hooks.OnLoad(model);

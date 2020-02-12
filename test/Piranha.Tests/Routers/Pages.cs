@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Håkan Edling
+ * Copyright (c) 2018-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -21,7 +21,7 @@ using Piranha.Services;
 namespace Piranha.Tests.Routers
 {
     [Collection("Integration tests")]
-    public class Pages : BaseTests
+    public class Pages : BaseTestsAsync
     {
         private readonly Guid SITE1_ID = Guid.NewGuid();
         private readonly Guid SITE2_ID = Guid.NewGuid();
@@ -36,8 +36,10 @@ namespace Piranha.Tests.Routers
             public TextField Body { get; set; }
         }
 
-        protected override void Init() {
-            using (var api = CreateApi()) {
+        public override async Task InitializeAsync()
+        {
+            using (var api = CreateApi())
+            {
                 Piranha.App.Init(api);
 
                 var builder = new PageTypeBuilder(api)
@@ -52,7 +54,7 @@ namespace Piranha.Tests.Routers
                     InternalId = "PageSite",
                     IsDefault = true
                 };
-                api.Sites.Save(site1);
+                await api.Sites.SaveAsync(site1);
 
                 var site2 = new Site
                 {
@@ -62,26 +64,26 @@ namespace Piranha.Tests.Routers
                     Hostnames = "www.myothersite.com",
                     IsDefault = false
                 };
-                api.Sites.Save(site2);
+                await api.Sites.SaveAsync(site2);
 
                 // Add pages
-                var page1 = MyPage.Create(api);
+                var page1 = await MyPage.CreateAsync(api);
                 page1.Id = PAGE1_ID;
                 page1.SiteId = SITE1_ID;
                 page1.Title = "My first page";
                 page1.Body = "My first body";
                 page1.Published = DateTime.Now;
-                api.Pages.Save(page1);
+                await api.Pages.SaveAsync(page1);
 
-                var page2 = MyPage.Create(api);
+                var page2 = await MyPage.CreateAsync(api);
                 page2.Id = PAGE2_ID;
                 page2.SiteId = SITE2_ID;
                 page2.Title = "My second page";
                 page2.Body = "My second body";
                 page2.Published = DateTime.Now;
-                api.Pages.Save(page2);
+                await api.Pages.SaveAsync(page2);
 
-                var page3 = MyPage.Create(api);
+                var page3 = await MyPage.CreateAsync(api);
                 page3.Id = PAGE3_ID;
                 page3.SiteId = SITE1_ID;
                 page3.SortOrder = 1;
@@ -89,29 +91,39 @@ namespace Piranha.Tests.Routers
                 page3.Published = DateTime.Now;
                 page3.RedirectUrl = "http://www.redirect.com";
                 page3.RedirectType = Models.RedirectType.Temporary;
-                api.Pages.Save(page3);
+                await api.Pages.SaveAsync(page3);
             }
         }
 
-        protected override void Cleanup() {
-            using (var api = CreateApi()) {
-                var pages = api.Pages.GetAll();
+        public override async Task DisposeAsync()
+        {
+            using (var api = CreateApi())
+            {
+                var pages = await api.Pages.GetAllAsync();
                 foreach (var p in pages)
-                    api.Pages.Delete(p);
+                {
+                    await api.Pages.DeleteAsync(p);
+                }
 
-                var types = api.PageTypes.GetAll();
+                var types = await api.PageTypes.GetAllAsync();
                 foreach (var t in types)
-                    api.PageTypes.Delete(t);
+                {
+                    await api.PageTypes.DeleteAsync(t);
+                }
 
-                var sites = api.Sites.GetAll();
+                var sites = await api.Sites.GetAllAsync();
                 foreach (var s in sites)
-                    api.Sites.Delete(s);
+                {
+                    await api.Sites.DeleteAsync(s);
+                }
             }
         }
 
         [Fact]
-        public async Task GetPageByUrlDefaultSite() {
-            using (var api = CreateApi()) {
+        public async Task GetPageByUrlDefaultSite()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.PageRouter.InvokeAsync(api, "/my-first-page", SITE1_ID);
 
                 Assert.NotNull(response);
@@ -122,8 +134,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetPageByUrlDefaultSiteWithAction() {
-            using (var api = CreateApi()) {
+        public async Task GetPageByUrlDefaultSiteWithAction()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.PageRouter.InvokeAsync(api, "/my-first-page/action", SITE1_ID);
 
                 Assert.NotNull(response);
@@ -134,8 +148,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetPageByUrlDefaultSiteWithRedirect() {
-            using (var api = CreateApi()) {
+        public async Task GetPageByUrlDefaultSiteWithRedirect()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.PageRouter.InvokeAsync(api, "/my-third-page", SITE1_ID);
 
                 Assert.NotNull(response);
@@ -145,8 +161,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetStartpageDefaultSite() {
-            using (var api = CreateApi()) {
+        public async Task GetStartpageDefaultSite()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.StartPageRouter.InvokeAsync(api, "/", SITE1_ID);
 
                 Assert.NotNull(response);
@@ -157,8 +175,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetPageByUrlNoneDefaultSite() {
-            using (var api = CreateApi()) {
+        public async Task GetPageByUrlNoneDefaultSite()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.PageRouter.InvokeAsync(api, "/my-second-page", SITE1_ID);
 
                 Assert.Null(response);
@@ -166,8 +186,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetStartpageDefaultSiteNone() {
-            using (var api = CreateApi()) {
+        public async Task GetStartpageDefaultSiteNone()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.StartPageRouter.InvokeAsync(api, "/slug", SITE1_ID);
 
                 Assert.Null(response);
@@ -175,8 +197,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetPageByUrlOtherSite() {
-            using (var api = CreateApi()) {
+        public async Task GetPageByUrlOtherSite()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.PageRouter.InvokeAsync(api, "/my-second-page", SITE2_ID);
 
                 Assert.NotNull(response);
@@ -187,8 +211,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetPageByUrlOtherSiteWithAction() {
-            using (var api = CreateApi()) {
+        public async Task GetPageByUrlOtherSiteWithAction()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.PageRouter.InvokeAsync(api, "/my-second-page/action", SITE2_ID);
 
                 Assert.NotNull(response);
@@ -199,8 +225,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetStartpageOtherSite() {
-            using (var api = CreateApi()) {
+        public async Task GetStartpageOtherSite()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.StartPageRouter.InvokeAsync(api, "/", SITE2_ID);
 
                 Assert.NotNull(response);
@@ -211,8 +239,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetPageByUrlNoneOtherSite() {
-            using (var api = CreateApi()) {
+        public async Task GetPageByUrlNoneOtherSite()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.PageRouter.InvokeAsync(api, "/my-first-page", SITE2_ID);
 
                 Assert.Null(response);
@@ -220,8 +250,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetStartpageOtherSiteNone() {
-            using (var api = CreateApi()) {
+        public async Task GetStartpageOtherSiteNone()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.StartPageRouter.InvokeAsync(api, "/slug", SITE2_ID);
 
                 Assert.Null(response);

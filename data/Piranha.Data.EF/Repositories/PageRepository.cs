@@ -128,7 +128,7 @@ namespace Piranha.Repositories
 
             if (page != null)
             {
-                return _contentService.Transform<T>(page, App.PageTypes.GetById(page.PageTypeId), Process);
+                return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), Process);
             }
             return null;
         }
@@ -147,7 +147,7 @@ namespace Piranha.Repositories
 
             if (page != null)
             {
-                return _contentService.Transform<T>(page, App.PageTypes.GetById(page.PageTypeId), Process);
+                return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), Process);
             }
             return null;
         }
@@ -167,7 +167,7 @@ namespace Piranha.Repositories
 
             if (page != null)
             {
-                return _contentService.Transform<T>(page, App.PageTypes.GetById(page.PageTypeId), Process);
+                return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), Process);
             }
             return null;
         }
@@ -197,7 +197,7 @@ namespace Piranha.Repositories
                     // Transform data model
                     var page = JsonConvert.DeserializeObject<Page>(draft.Data);
 
-                    return _contentService.Transform<T>(page, App.PageTypes.GetById(page.PageTypeId), Process);
+                    return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), Process);
                 }
             }
             return null;

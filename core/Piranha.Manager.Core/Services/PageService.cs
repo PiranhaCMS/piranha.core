@@ -137,7 +137,7 @@ namespace Piranha.Manager.Services
 
         public async Task<PageEditModel> Create(Guid siteId, string typeId)
         {
-            var page = _api.Pages.Create<DynamicPage>(typeId);
+            var page = await _api.Pages.CreateAsync<DynamicPage>(typeId);
 
             page.Id = Guid.NewGuid();
             page.SiteId = siteId;
@@ -156,7 +156,7 @@ namespace Piranha.Manager.Services
 
             if (relative != null)
             {
-                var page = _api.Pages.Create<DynamicPage>(typeId);
+                var page = await _api.Pages.CreateAsync<DynamicPage>(typeId);
 
                 page.Id = Guid.NewGuid();
                 page.SiteId = relative.SiteId;
@@ -246,7 +246,7 @@ namespace Piranha.Manager.Services
 
                 if (page == null)
                 {
-                    page = _factory.Create<DynamicPage>(pageType);
+                    page = await _factory.CreateAsync<DynamicPage>(pageType);
                     page.Id = model.Id;
                 }
 

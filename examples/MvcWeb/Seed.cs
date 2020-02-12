@@ -49,7 +49,7 @@ namespace MvcWeb
                 }
 
                 // Create the start page
-                var startpage = Models.TeaserPage.Create(api);
+                var startpage = await Models.TeaserPage.CreateAsync(api);
                 startpage.SiteId = siteId;
                 startpage.Title = "Piranha CMS - Open Source, Cross Platform Asp.NET Core CMS";
                 startpage.NavigationTitle = "Home";
@@ -148,7 +148,7 @@ namespace MvcWeb
                 await api.Pages.SaveAsync(startpage);
 
                 // Features page
-                var featurespage = Models.StandardPage.Create(api);
+                var featurespage = await Models.StandardPage.CreateAsync(api);
                 featurespage.SiteId = siteId;
                 featurespage.Title = "Features";
                 featurespage.Route = "/pagewide";
@@ -210,7 +210,7 @@ namespace MvcWeb
                 await api.Pages.SaveAsync(featurespage);
 
                 // Blog Archive
-                var blogpage = Models.BlogArchive.Create(api);
+                var blogpage = await Models.BlogArchive.CreateAsync(api);
                 blogpage.Id = Guid.NewGuid();
                 blogpage.SiteId = siteId;
                 blogpage.Title = "Blog Archive";
@@ -227,7 +227,7 @@ namespace MvcWeb
                 await api.Pages.SaveAsync(blogpage);
 
                 // Blog Post
-                var blogpost = Models.BlogPost.Create(api);
+                var blogpost = await Models.BlogPost.CreateAsync(api);
                 blogpost.BlogId = blogpage.Id;
                 blogpost.Title = "What is Piranha";
                 blogpost.Category = "Piranha CMS";
@@ -252,7 +252,7 @@ namespace MvcWeb
                 await api.Posts.SaveAsync(blogpost);
 
                 // Unpublished Post
-                blogpost = Models.BlogPost.Create(api);
+                blogpost = await Models.BlogPost.CreateAsync(api);
                 blogpost.BlogId = blogpage.Id;
                 blogpost.Title = "What is Piranha unpublished";
                 blogpost.Category = "Piranha CMS";
@@ -276,7 +276,7 @@ namespace MvcWeb
                 await api.Posts.SaveAsync(blogpost);
 
                 // Scheduled Post
-                blogpost = Models.BlogPost.Create(api);
+                blogpost = await Models.BlogPost.CreateAsync(api);
                 blogpost.BlogId = blogpage.Id;
                 blogpost.Title = "What is Piranha scheduled";
                 blogpost.Category = "Another category";

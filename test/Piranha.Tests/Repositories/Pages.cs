@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2017-2019 Håkan Edling
+ * Copyright (c) 2017-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -26,7 +26,8 @@ namespace Piranha.Tests.Repositories
     [Collection("Integration tests")]
     public class PagesCached : Pages
     {
-        public override async Task InitializeAsync() {
+        public override async Task InitializeAsync()
+        {
             cache = new Cache.SimpleCache();
 
             await base.InitializeAsync();
@@ -46,21 +47,21 @@ namespace Piranha.Tests.Repositories
         public readonly Guid PAGE_DI_ID = Guid.NewGuid();
         protected ICache cache;
 
-        public interface IMyService {
+        public interface IMyService
+        {
             string Value { get; }
         }
 
-        public class MyService : IMyService {
-            public string Value { get; private set; }
-
-            public MyService() {
-                Value = "My service value";
-            }
+        public class MyService : IMyService
+        {
+            public string Value { get; private set; } = "My service value";
         }
 
         [Piranha.Extend.FieldType(Name = "Fourth")]
-        public class MyFourthField : Extend.Fields.SimpleField<string> {
-            public void Init(IMyService myService) {
+        public class MyFourthField : Extend.Fields.SimpleField<string>
+        {
+            public void Init(IMyService myService)
+            {
                 Value = myService.Value;
             }
         }
@@ -104,14 +105,9 @@ namespace Piranha.Tests.Repositories
         public class MyCollectionPage : Models.Page<MyCollectionPage>
         {
             [Region]
-            public IList<TextField> Texts { get; set; }
+            public IList<TextField> Texts { get; set; } = new List<TextField>();
             [Region]
-            public IList<ComplexRegion> Teasers { get; set; }
-
-            public MyCollectionPage() {
-                Texts = new List<TextField>();
-                Teasers = new List<ComplexRegion>();
-            }
+            public IList<ComplexRegion> Teasers { get; set; } = new List<ComplexRegion>();
         }
 
         [PageType(Title = "Injection PageType")]
@@ -121,12 +117,14 @@ namespace Piranha.Tests.Repositories
             public MyFourthField Body { get; set; }
         }
 
-        public override async Task InitializeAsync() {
+        public override async Task InitializeAsync()
+        {
             services = new ServiceCollection()
                 .AddSingleton<IMyService, MyService>()
                 .BuildServiceProvider();
 
-            using (var api = CreateApi()) {
+            using (var api = CreateApi())
+            {
                 Piranha.App.Init(api);
 
                 Piranha.App.Fields.Register<MyFourthField>();
@@ -139,7 +137,8 @@ namespace Piranha.Tests.Repositories
                     .AddType(typeof(MyDIPage));
                 builder.Build();
 
-                var site = new Site {
+                var site = new Site
+                {
                     Id = SITE_ID,
                     Title = "My Test Site",
                     InternalId = "MyTestSite",
@@ -147,22 +146,24 @@ namespace Piranha.Tests.Repositories
                 };
                 await api.Sites.SaveAsync(site);
 
-                var page1 = MyPage.Create(api);
+                var page1 = await MyPage.CreateAsync(api);
                 page1.Id = PAGE_1_ID;
                 page1.SiteId = SITE_ID;
                 page1.Title = "My first page";
                 page1.Ingress = "My first ingress";
                 page1.Body = "My first body";
-                page1.Blocks.Add(new Extend.Blocks.TextBlock {
+                page1.Blocks.Add(new Extend.Blocks.TextBlock
+                {
                     Body = "Sollicitudin Aenean"
                 });
-                page1.Blocks.Add(new Extend.Blocks.TextBlock {
+                page1.Blocks.Add(new Extend.Blocks.TextBlock
+                {
                     Body = "Ipsum Elit"
                 });
                 page1.Published = DateTime.Now;
                 await api.Pages.SaveAsync(page1);
 
-                var page2 = MyPage.Create(api);
+                var page2 = await MyPage.CreateAsync(api);
                 page2.Id = PAGE_2_ID;
                 page2.SiteId = SITE_ID;
                 page2.Title = "My second page";
@@ -170,7 +171,7 @@ namespace Piranha.Tests.Repositories
                 page2.Body = "My second body";
                 await api.Pages.SaveAsync(page2);
 
-                var page3 = MyPage.Create(api);
+                var page3 = await MyPage.CreateAsync(api);
                 page3.Id = PAGE_3_ID;
                 page3.SiteId = SITE_ID;
                 page3.Title = "My third page";
@@ -178,33 +179,36 @@ namespace Piranha.Tests.Repositories
                 page3.Body = "My third body";
                 await api.Pages.SaveAsync(page3);
 
-                var page4 = MyCollectionPage.Create(api);
+                var page4 = await MyCollectionPage.CreateAsync(api);
                 page4.SiteId = SITE_ID;
                 page4.Title = "My collection page";
                 page4.SortOrder = 1;
-                page4.Texts.Add(new TextField {
+                page4.Texts.Add(new TextField
+                {
                     Value = "First text"
                 });
-                page4.Texts.Add(new TextField {
+                page4.Texts.Add(new TextField
+                {
                     Value = "Second text"
                 });
-                page4.Texts.Add(new TextField {
+                page4.Texts.Add(new TextField
+                {
                     Value = "Third text"
                 });
                 await api.Pages.SaveAsync(page4);
 
-                var page5 = MyBlogPage.Create(api);
+                var page5 = await MyBlogPage.CreateAsync(api);
                 page5.SiteId = SITE_ID;
                 page5.Title = "Blog Archive";
                 await api.Pages.SaveAsync(page5);
 
-                var page6 = MyDIPage.Create(api);
+                var page6 = await MyDIPage.CreateAsync(api);
                 page6.Id = PAGE_DI_ID;
                 page6.SiteId = SITE_ID;
                 page6.Title = "My Injection Page";
                 await api.Pages.SaveAsync(page6);
 
-                var page7 = MyPage.Create(api);
+                var page7 = await MyPage.CreateAsync(api);
                 page7.Id = PAGE_7_ID;
                 page7.SiteId = SITE_ID;
                 page7.Title = "My base page";
@@ -214,7 +218,7 @@ namespace Piranha.Tests.Repositories
                 page7.SortOrder = 1;
                 await api.Pages.SaveAsync(page7);
 
-                var page8 = MyPage.Create(api);
+                var page8 = await MyPage.CreateAsync(api);
                 page8.OriginalPageId = PAGE_7_ID;
                 page8.Id = PAGE_8_ID;
                 page8.SiteId = SITE_ID;
@@ -228,7 +232,8 @@ namespace Piranha.Tests.Repositories
             }
         }
 
-        public override async Task DisposeAsync() {
+        public override async Task DisposeAsync()
+        {
             using (var api = CreateApi())
             {
                 var pages = await api.Pages.GetAllAsync(SITE_ID);
@@ -612,7 +617,7 @@ namespace Piranha.Tests.Repositories
         {
             using (var api = CreateApi())
             {
-                var page = MyCollectionPage.Create(api);
+                var page = await MyCollectionPage.CreateAsync(api);
 
                 Assert.Equal(0, page.Texts.Count);
 
@@ -632,7 +637,7 @@ namespace Piranha.Tests.Repositories
         {
             using (var api = CreateApi())
             {
-                var page = Piranha.Models.DynamicPage.Create(api, "MyCollectionPage");
+                var page = await Piranha.Models.DynamicPage.CreateAsync(api, "MyCollectionPage");
 
                 Assert.Equal(0, page.Regions.Texts.Count);
 
@@ -652,7 +657,7 @@ namespace Piranha.Tests.Repositories
         {
             using (var api = CreateApi())
             {
-                var page = MyCollectionPage.Create(api);
+                var page = await MyCollectionPage.CreateAsync(api);
 
                 Assert.Equal(0, page.Teasers.Count);
 
@@ -672,7 +677,7 @@ namespace Piranha.Tests.Repositories
         {
             using (var api = CreateApi())
             {
-                var page = Piranha.Models.DynamicPage.Create(api, "MyCollectionPage");
+                var page = await Piranha.Models.DynamicPage.CreateAsync(api, "MyCollectionPage");
 
                 Assert.Equal(0, page.Regions.Teasers.Count);
 
@@ -693,7 +698,7 @@ namespace Piranha.Tests.Repositories
             using (var api = CreateApi())
             {
                 var count = (await api.Pages.GetAllAsync(SITE_ID)).Count();
-                var page = MyPage.Create(api, "MyPage");
+                var page = await MyPage.CreateAsync(api, "MyPage");
                 page.SiteId = SITE_ID;
                 page.Title = "My fourth page";
                 page.Ingress = "My fourth ingress";
@@ -715,7 +720,7 @@ namespace Piranha.Tests.Repositories
                     config.HierarchicalPageSlugs = true;
                 }
 
-                var page = MyPage.Create(api, "MyPage");
+                var page = await MyPage.CreateAsync(api, "MyPage");
                 page.Id = Guid.NewGuid();
                 page.ParentId = PAGE_1_ID;
                 page.SiteId = SITE_ID;
@@ -745,7 +750,7 @@ namespace Piranha.Tests.Repositories
                     config.HierarchicalPageSlugs = false;
                 }
 
-                var page = MyPage.Create(api, "MyPage");
+                var page = await MyPage.CreateAsync(api, "MyPage");
                 page.Id = Guid.NewGuid();
                 page.ParentId = PAGE_1_ID;
                 page.SiteId = SITE_ID;
@@ -908,11 +913,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void CreateDIGeneric()
+        public async Task CreateDIGeneric()
         {
             using (var api = CreateApi())
             {
-                var page = MyDIPage.Create(api);
+                var page = await MyDIPage.CreateAsync(api);
 
                 Assert.NotNull(page);
                 Assert.Equal("My service value", page.Body.Value);
@@ -920,11 +925,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void CreateDIDynamic()
+        public async Task CreateDIDynamic()
         {
             using (var api = CreateApi())
             {
-                var page = Models.DynamicPage.Create(api, nameof(MyDIPage));
+                var page = await Models.DynamicPage.CreateAsync(api, nameof(MyDIPage));
 
                 Assert.NotNull(page);
                 Assert.Equal("My service value", page.Regions.Body.Value);
@@ -995,7 +1000,7 @@ namespace Piranha.Tests.Repositories
         {
             using (var api = CreateApi())
             {
-                var page = MyPage.Create(api);
+                var page = await MyPage.CreateAsync(api);
                 page.Title = "New title";
                 page.OriginalPageId = PAGE_8_ID; // PAGE_8 is an copy of PAGE_7
 
@@ -1013,7 +1018,7 @@ namespace Piranha.Tests.Repositories
         {
             using (var api = CreateApi())
             {
-                var page = MissingPage.Create(api);
+                var page = await MissingPage.CreateAsync(api);
                 page.Title = "New title";
                 page.OriginalPageId = PAGE_7_ID;
 

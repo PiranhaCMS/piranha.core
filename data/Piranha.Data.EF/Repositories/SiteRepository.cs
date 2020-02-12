@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2017-2019 Håkan Edling
+ * Copyright (c) 2017-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -175,7 +175,7 @@ namespace Piranha.Repositories
             if (type == null)
                 return null;
 
-            return _contentService.Transform<T>(site, type);
+            return await _contentService.TransformAsync<T>(site, type);
         }
 
         /// <summary>

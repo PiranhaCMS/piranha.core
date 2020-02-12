@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) 2019-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -8,6 +8,7 @@
  *
  */
 
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Piranha.Manager.Models;
@@ -53,9 +54,9 @@ namespace Piranha.Manager.Controllers
         /// <returns>The new block</returns>
         [Route("block/{type}")]
         [HttpGet]
-        public IActionResult CreateBlock(string type)
+        public async Task<IActionResult> CreateBlockAsync(string type)
         {
-            var block = _service.CreateBlock(type);
+            var block = await _service.CreateBlockAsync(type);
 
             if (block != null)
             {
@@ -73,19 +74,19 @@ namespace Piranha.Manager.Controllers
         /// <returns>The new region model</returns>
         [Route("region/{content}/{type}/{region}")]
         [HttpGet]
-        public IActionResult CreateRegion(string content, string type, string region)
+        public async Task<IActionResult> CreateRegionAsync(string content, string type, string region)
         {
             if (content == "page")
             {
-                return Ok(_service.CreatePageRegion(type, region));
+                return Ok(await _service.CreatePageRegionAsync(type, region));
             }
             else if (content == "post")
             {
-                return Ok(_service.CreatePostRegion(type, region));
+                return Ok(await _service.CreatePostRegionAsync(type, region));
             }
             else if (content == "site")
             {
-                return Ok(_service.CreateSiteRegion(type, region));
+                return Ok(await _service.CreateSiteRegionAsync(type, region));
             }
             return NotFound();
         }

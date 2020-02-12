@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Piranha.Services
 {
@@ -25,7 +26,7 @@ namespace Piranha.Services
         /// <param name="content">The content entity</param>
         /// <param name="type">The content type</param>
         /// <returns>The page model</returns>
-        T Transform<T>(TContent content, Models.ContentType type, Action<TContent, T> process = null)
+        Task<T> TransformAsync<T>(TContent content, Models.ContentType type, Action<TContent, T> process = null)
             where T : Models.Content, TModelBase;
 
         /// <summary>

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2017-2019 Håkan Edling
+ * Copyright (c) 2017-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Piranha.AttributeBuilder;
@@ -25,15 +26,16 @@ namespace Piranha.Tests.Repositories
     [Collection("Integration tests")]
     public class PostsCached : Posts
     {
-        protected override void Init() {
+        public override async Task InitializeAsync()
+        {
             cache = new Cache.SimpleCache();
 
-            base.Init();
+            await base.InitializeAsync();
         }
     }
 
     [Collection("Integration tests")]
-    public class Posts : BaseTests
+    public class Posts : BaseTestsAsync
     {
         private readonly Guid SITE_ID = Guid.NewGuid();
         private readonly Guid BLOG_ID = Guid.NewGuid();
@@ -44,21 +46,21 @@ namespace Piranha.Tests.Repositories
         private readonly Guid POST_DI_ID = Guid.NewGuid();
         protected ICache cache;
 
-        public interface IMyService {
+        public interface IMyService
+        {
             string Value { get; }
         }
 
-        public class MyService : IMyService {
-            public string Value { get; private set; }
-
-            public MyService() {
-                Value = "My service value";
-            }
+        public class MyService : IMyService
+        {
+            public string Value { get; private set; } = "My service value";
         }
 
         [Piranha.Extend.FieldType(Name = "Fourth")]
-        public class MyFourthField : Extend.Fields.SimpleField<string> {
-            public void Init(IMyService myService) {
+        public class MyFourthField : Extend.Fields.SimpleField<string>
+        {
+            public void Init(IMyService myService)
+            {
                 Value = myService.Value;
             }
         }
@@ -88,11 +90,7 @@ namespace Piranha.Tests.Repositories
         public class MyCollectionPost : Models.Post<MyCollectionPost>
         {
             [Region]
-            public IList<TextField> Texts { get; set; }
-
-            public MyCollectionPost() {
-                Texts = new List<TextField>();
-            }
+            public IList<TextField> Texts { get; set; } = new List<TextField>();
         }
 
         [PostType(Title = "Injection PostType")]
@@ -102,12 +100,14 @@ namespace Piranha.Tests.Repositories
             public MyFourthField Body { get; set; }
         }
 
-        protected override void Init() {
+        public override async Task InitializeAsync()
+        {
             services = new ServiceCollection()
                 .AddSingleton<IMyService, MyService>()
                 .BuildServiceProvider();
 
-            using (var api = CreateApi()) {
+            using (var api = CreateApi())
+            {
                 Piranha.App.Init(api);
 
                 Piranha.App.Fields.Register<MyFourthField>();
@@ -133,11 +133,11 @@ namespace Piranha.Tests.Repositories
                 api.Sites.Save(site);
 
                 // Add blog page
-                var page = BlogPage.Create(api);
+                var page = await BlogPage.CreateAsync(api);
                 page.Id = BLOG_ID;
                 page.SiteId = SITE_ID;
                 page.Title = "Blog";
-                api.Pages.Save(page);
+                await api.Pages.SaveAsync(page);
 
                 var category = new Models.Taxonomy
                 {
@@ -145,40 +145,42 @@ namespace Piranha.Tests.Repositories
                     Title = "My category"
                 };
 
-                var post1 = MyPost.Create(api);
+                var post1 = await MyPost.CreateAsync(api);
                 post1.Id = POST_1_ID;
                 post1.BlogId = BLOG_ID;
                 post1.Category = category;
                 post1.Title = "My first post";
                 post1.Ingress = "My first ingress";
                 post1.Body = "My first body";
-                post1.Blocks.Add(new Extend.Blocks.TextBlock {
+                post1.Blocks.Add(new Extend.Blocks.TextBlock
+                {
                     Body = "Sollicitudin Aenean"
                 });
-                post1.Blocks.Add(new Extend.Blocks.TextBlock {
+                post1.Blocks.Add(new Extend.Blocks.TextBlock
+                {
                     Body = "Ipsum Elit"
                 });
-                api.Posts.Save(post1);
+                await api.Posts.SaveAsync(post1);
 
-                var post2 = MyPost.Create(api);
+                var post2 = await MyPost.CreateAsync(api);
                 post2.Id = POST_2_ID;
                 post2.BlogId = BLOG_ID;
                 post2.Category = category;
                 post2.Title = "My second post";
                 post2.Ingress = "My second ingress";
                 post2.Body = "My second body";
-                api.Posts.Save(post2);
+                await api.Posts.SaveAsync(post2);
 
-                var post3 = MyPost.Create(api);
+                var post3 = await MyPost.CreateAsync(api);
                 post3.Id = POST_3_ID;
                 post3.BlogId = BLOG_ID;
                 post3.Category = category;
                 post3.Title = "My third post";
                 post3.Ingress = "My third ingress";
                 post3.Body = "My third body";
-                api.Posts.Save(post3);
+                await api.Posts.SaveAsync(post3);
 
-                var post4 = MyCollectionPost.Create(api);
+                var post4 = await MyCollectionPost.CreateAsync(api);
                 post4.BlogId = BLOG_ID;
                 post4.Category = category;
                 post4.Title = "My collection post";
@@ -194,97 +196,115 @@ namespace Piranha.Tests.Repositories
                 {
                     Value = "Third text"
                 });
-                api.Posts.Save(post4);
+                await api.Posts.SaveAsync(post4);
 
-                var post6 = MyDIPost.Create(api);
+                var post6 = await MyDIPost.CreateAsync(api);
                 post6.Id = POST_DI_ID;
                 post6.BlogId = BLOG_ID;
                 post6.Category = category;
                 post6.Title = "My Injection Post";
-                api.Posts.Save(post6);
+                await api.Posts.SaveAsync(post6);
             }
         }
 
-        protected override void Cleanup() {
-            using (var api = CreateApi()) {
-                var posts = api.Posts.GetAll(BLOG_ID);
+        public override async Task DisposeAsync()
+        {
+            using (var api = CreateApi())
+            {
+                var posts = await api.Posts.GetAllAsync(BLOG_ID);
                 foreach (var post in posts)
-                    api.Posts.Delete(post);
+                {
+                    await api.Posts.DeleteAsync(post);
+                }
 
-                var types = api.PostTypes.GetAll();
+                var types = await api.PostTypes.GetAllAsync();
                 foreach (var t in types)
-                    api.PostTypes.Delete(t);
+                {
+                    await api.PostTypes.DeleteAsync(t);
+                }
 
-                //var tags = api.Tags.GetAll(BLOG_ID);
-                //foreach (var tag in tags)
-                //    api.Tags.Delete(tag);
+                await api.Pages.DeleteAsync(BLOG_ID);
 
-                api.Pages.Delete(BLOG_ID);
-
-                var pageTypes = api.PageTypes.GetAll();
+                var pageTypes = await api.PageTypes.GetAllAsync();
                 foreach (var t in pageTypes)
-                    api.PageTypes.Delete(t);
+                {
+                    await api.PageTypes.DeleteAsync(t);
+                }
 
-                api.Sites.Delete(SITE_ID);
+                await api.Sites.DeleteAsync(SITE_ID);
             }
         }
 
         [Fact]
-        public void IsCached() {
-            using (var api = CreateApi()) {
+        public void IsCached()
+        {
+            using (var api = CreateApi())
+            {
                 Assert.Equal(this.GetType() == typeof(PostsCached), ((Api)api).IsCached);
             }
         }
 
         [Fact]
-        public void GetNoneById() {
-            using (var api = CreateApi()) {
-                var none = api.Posts.GetById(Guid.NewGuid());
+        public async Task GetNoneById()
+        {
+            using (var api = CreateApi())
+            {
+                var none = await api.Posts.GetByIdAsync(Guid.NewGuid());
 
                 Assert.Null(none);
             }
         }
 
         [Fact]
-        public void GetNoneBySlug() {
-            using (var api = CreateApi()) {
-                var none = api.Posts.GetBySlug("blog", "none-existing-slug");
+        public async Task GetNoneBySlug()
+        {
+            using (var api = CreateApi())
+            {
+                var none = await api.Posts.GetBySlugAsync("blog", "none-existing-slug");
 
                 Assert.Null(none);
             }
         }
 
         [Fact]
-        public void GetNoneBySlugId() {
-            using (var api = CreateApi()) {
-                var none = api.Posts.GetBySlug(BLOG_ID, "none-existing-slug");
+        public async Task GetNoneBySlugId()
+        {
+            using (var api = CreateApi())
+            {
+                var none = await api.Posts.GetBySlugAsync(BLOG_ID, "none-existing-slug");
 
                 Assert.Null(none);
             }
         }
 
         [Fact]
-        public void GetNoneBySlugBlog() {
-            using (var api = CreateApi()) {
-                var none = api.Posts.GetBySlug("no-blog", "none-existing-slug");
+        public async Task GetNoneBySlugBlog()
+        {
+            using (var api = CreateApi())
+            {
+                var none = await api.Posts.GetBySlugAsync("no-blog", "none-existing-slug");
 
                 Assert.Null(none);
             }
         }
 
         [Fact]
-        public void GetNoneBySlugBlogId() {
-            using (var api = CreateApi()) {
-                var none = api.Posts.GetBySlug(Guid.NewGuid(), "none-existing-slug");
+        public async Task GetNoneBySlugBlogId()
+        {
+            using (var api = CreateApi())
+            {
+                var none = await api.Posts.GetBySlugAsync(Guid.NewGuid(), "none-existing-slug");
 
                 Assert.Null(none);
             }
         }
 
         [Fact]
-        public void GetAll() {
-            using (var api = CreateApi()) {
-                var posts = api.Posts.GetAllBySiteId();
+        public async Task GetAll()
+        {
+            using (var api = CreateApi())
+            {
+                var posts = await api.Posts.GetAllBySiteIdAsync();
 
                 Assert.NotNull(posts);
                 Assert.NotEmpty(posts);
@@ -292,9 +312,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetAllBaseClass() {
-            using (var api = CreateApi()) {
-                var posts = api.Posts.GetAllBySiteId<Models.PostBase>();
+        public async Task GetAllBaseClass()
+        {
+            using (var api = CreateApi())
+            {
+                var posts = await api.Posts.GetAllBySiteIdAsync<Models.PostBase>();
 
                 Assert.NotNull(posts);
                 Assert.NotEmpty(posts);
@@ -573,11 +595,13 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void Add() {
-            using (var api = CreateApi()) {
+        public async Task Add()
+        {
+            using (var api = CreateApi())
+            {
                 var count = api.Posts.GetAll(BLOG_ID).Count();
                 var catCount = api.Posts.GetAllCategories(BLOG_ID).Count();
-                var post = MyPost.Create(api, "MyPost");
+                var post = await MyPost.CreateAsync(api, "MyPost");
                 post.BlogId = BLOG_ID;
                 post.Category = "My category";
                 post.Title = "My fourth post";
@@ -592,13 +616,15 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void AddWithTags() {
-            using (var api = CreateApi()) {
+        public async Task AddWithTags()
+        {
+            using (var api = CreateApi())
+            {
                 var count = api.Posts.GetAll(BLOG_ID).Count();
                 var catCount = api.Posts.GetAllCategories(BLOG_ID).Count();
                 var tagCount = api.Posts.GetAllTags(BLOG_ID).Count();
 
-                var post = MyPost.Create(api, "MyPost");
+                var post = await MyPost.CreateAsync(api, "MyPost");
                 post.BlogId = BLOG_ID;
                 post.Category = "My category";
                 post.Tags.Add("Testing", "Trying", "Adding");
