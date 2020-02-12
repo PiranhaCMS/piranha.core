@@ -21,7 +21,7 @@ Vue.component("folder-item", {
         "  </form>" +
         "  <ol v-if='selected === item.id && piranha.media.isAdding' class='dd-list'>" +
         "    <form v-on:submit.prevent='piranha.media.addFolder()' class='d-inline-block'>" +
-        "      <i class='fas fa-folder'></i><input id='add-folder' type='text' v-on:keyup.esc='piranha.media.isAdding = false' v-model='piranha.media.newFolderName' class='form-control form-control-sm d-inline-block w-auto'>" +
+        "      <i class='fas fa-folder'></i><input id='add-folder' type='text' v-on:keyup.esc='piranha.media.isAdding = false' v-model='piranha.media.folder.name' class='form-control form-control-sm d-inline-block w-auto'>" +
         "    </form>" +
         "  </ol>" +
         "  <ol v-if='item.items.length > 0' class='dd-list'>" +
@@ -165,10 +165,12 @@ piranha.media = new Vue({
             piranha.media.load(piranha.media.currentFolderId);
         },
         addFolder: function () {
-            this.saveFolder("#mediaFolderModal", "mediaFolderForm", {
+            //this.saveFolder("#mediaFolderModal", "mediaFolderForm", {
+            this.saveFolder(null, null, {
                 parentId: this.currentFolderId,
                 name: this.folder.name
             });
+            this.isAdding = false;
         },
         updateFolder: function () {
             this.saveFolder(null, null, {

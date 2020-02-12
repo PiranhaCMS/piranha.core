@@ -133,10 +133,12 @@ piranha.media = new Vue({
             piranha.media.load(piranha.media.currentFolderId);
         },
         addFolder: function () {
-            this.saveFolder("#mediaFolderModal", "mediaFolderForm", {
+            //this.saveFolder("#mediaFolderModal", "mediaFolderForm", {
+            this.saveFolder(null, null, {
                 parentId: this.currentFolderId,
                 name: this.folder.name
             });
+            this.isAdding = false;
         },
         updateFolder: function () {
             this.saveFolder(null, null, {

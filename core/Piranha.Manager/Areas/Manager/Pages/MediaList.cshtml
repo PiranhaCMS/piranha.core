@@ -40,7 +40,7 @@
             <div class="row">
                 <div class="col-lg-3 col-4">
                     <div class="mb-3">
-                        <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#mediaFolderModal">
+                        <button class="btn btn-sm btn-primary" v-on:click="isAdding = true">
                             <i class="fas fa-plus"></i>
                         </button>
                         <button v-if="currentFolderId != null" v-on:click="editFolder()" class="btn btn-sm btn-primary">
@@ -50,21 +50,18 @@
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
-                    <ol class="folders">
-                        <li>
-                            <a v-on:click.prevent="load()" href="#">
-                                <i class="fas fa-hdd"></i>@Localizer.Media["All files"]
-                                <span class="badge badge-light float-right">{{ totalCount }}</span>
-                            </a>
-                        </li>
-                    </ol>
                     <div class="dd folder-container">
                         <ol class="folders dd-list">
                             <li class="droppable" :class="{ active: currentFolderId === null }" v-on:dragover="dragover" v-on:dragleave="dragleave" v-on:drop="drop($event, null)">
                                 <a v-on:click.prevent="load()" href="#">
-                                    <i class="fas fa-hdd"></i>@Localizer.Media["Media library"]
+                                    <i class="fas fa-hdd"></i>@Localizer.Media["Media"]
                                     <span class="badge badge-light float-right">{{ rootCount }}</span>
                                 </a>
+                                <ol v-if="currentFolderId === null && isAdding" class="dd-list">
+                                    <form v-on:submit.prevent="addFolder()" class="d-inline-block">
+                                        <i class="fas fa-folder"></i><input id="add-folder" type="text" v-on:keyup.esc="isAdding = false" v-model="folder.name" class="form-control form-control-sm d-inline-block w-auto">
+                                    </form>
+                                </ol>
                             </li>
                             <ol class="dd-list">
                                 <folder-item v-for="item in structure" v-bind:key="item.id" v-bind:selected="currentFolderId" v-bind:item="item"></folder-item>
