@@ -208,7 +208,7 @@ namespace Piranha.Manager.Services
             {
                 var model = Transform(page, isDraft);
 
-                model.PendingCommentCount = (await _api.Pages.GetAllPendingCommentsAsync())
+                model.PendingCommentCount = (await _api.Pages.GetAllPendingCommentsAsync(id))
                     .Count();
 
                 return model;

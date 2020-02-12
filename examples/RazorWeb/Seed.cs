@@ -263,6 +263,7 @@ namespace RazorWeb
                 };
                 await api.Posts.SaveCommentAsync(blogpost.Id, comment);
 
+                comment.Id = Guid.Empty;
                 comment.IsApproved = false;
 
                 await api.Pages.SaveCommentAsync(featurespage.Id, comment);

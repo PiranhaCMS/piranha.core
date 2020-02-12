@@ -36,7 +36,10 @@ namespace Piranha.Manager.Services
         /// <returns>The model</returns>
         public async Task<CommentListModel> Get(Guid? id = null)
         {
-            var model = new CommentListModel();
+            var model = new CommentListModel
+            {
+                ContentId = id
+            };
 
             var postComments = await _api.Posts.GetAllCommentsAsync(id, onlyApproved: false, pageSize: 0);
             var pageComments = await _api.Pages.GetAllCommentsAsync(id, onlyApproved: false, pageSize: 0);

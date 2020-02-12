@@ -50,14 +50,14 @@ namespace Piranha.Manager.Controllers
             return _service.Get(id);
         }
 
-        [Route("approve/{id}")]
+        [Route("approve/{id}/{parentId?}")]
         [HttpGet]
         [Authorize(Policy = Permission.CommentsApprove)]
-        public async Task<CommentListModel> Approve(Guid id)
+        public async Task<CommentListModel> Approve(Guid id, Guid? parentId = null)
         {
             await _service.ApproveAsync(id);
 
-            var result = await List();
+            var result = await List(parentId);
 
             result.Status = new StatusMessage
             {
@@ -67,14 +67,14 @@ namespace Piranha.Manager.Controllers
             return result;
         }
 
-        [Route("unapprove/{id}")]
+        [Route("unapprove/{id}/{parentId?}")]
         [HttpGet]
         [Authorize(Policy = Permission.CommentsApprove)]
-        public async Task<CommentListModel> UnApprove(Guid id)
+        public async Task<CommentListModel> UnApprove(Guid id, Guid? parentId = null)
         {
             await _service.UnApproveAsync(id);
 
-            var result = await List();
+            var result = await List(parentId);
 
             result.Status = new StatusMessage
             {
