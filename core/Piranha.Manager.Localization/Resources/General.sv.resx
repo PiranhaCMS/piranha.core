@@ -235,6 +235,6 @@
     <value>Skapad</value>
   </data>
   <data name="Username and/or password are incorrect." xml:space="preserve">
-    <value>Username and/or password are incorrect.</value>
+    <value>Användarnamn och/eller lösenord är felaktigt.</value>
   </data>
 </root>
