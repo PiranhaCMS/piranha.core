@@ -21,6 +21,8 @@ namespace Piranha.Manager.Models
     {
         private readonly ISecurity _service;
 
+        public bool SignInFailed { get; set; }
+
         public LoginModel(ISecurity service)
         {
             _service = service;
@@ -36,16 +38,11 @@ namespace Piranha.Manager.Models
         }
 
         public async Task<IActionResult> OnPostAsync(InputModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            if (await _service.SignIn(HttpContext, model.Username, model.Password))
-            {
+        {            
+            if (ModelState.IsValid && await _service.SignIn(HttpContext, model.Username, model.Password))
                 return new RedirectToPageResult("Index");
-            }
+
+            SignInFailed = true;
             return Page();
         }
     }
