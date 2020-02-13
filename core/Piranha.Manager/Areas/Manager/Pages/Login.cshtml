@@ -1,4 +1,4 @@
-@page "~/manager/login"
+﻿@page "~/manager/login"
 @model LoginModel
 @inject ManagerLocalizer Localizer
 @{
@@ -40,10 +40,13 @@
                     </p>
                 </div>
                 <div class="card-body card-body-form">
+                    <div asp-validation-summary="All"></div>
                     <div class="form-group">
+                        <label for="username" class="col-form-label col-form-label-lg">@Localizer.General["Username"].Value</label>
                         <input id="username" name="username" type="text" class="form-control form-control-lg text-center" placeholder="@Localizer.General["Username"].Value.ToLower()">
                     </div>
                     <div class="form-group">
+                        <label for="password" class="col-form-label col-form-label-lg">@Localizer.General["Password"].Value</label>
                         <input name="password" type="password" class="form-control form-control-lg text-center" placeholder="@Localizer.General["Password"].Value.ToLower()">
                     </div>
                     <button class="btn btn-lg btn-block btn-primary" type="submit">

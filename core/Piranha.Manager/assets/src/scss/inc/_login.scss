@@ -39,6 +39,26 @@
         }
 
         &.card-body-form {
+            .validation-summary-errors {
+                position: relative;
+                padding: $alert-padding-y $alert-padding-x;
+                margin-bottom: 2rem;
+                border: $alert-border-width solid transparent;
+                @include border-radius($alert-border-radius);
+                color: theme-color-level('danger', $alert-color-level);
+                @include gradient-bg(theme-color-level('danger', $alert-bg-level));
+                border-color: theme-color-level('danger', $alert-border-level);
+
+                & > ul {
+                    @include list-unstyled();
+                    margin-bottom: 0;
+                }
+            }
+
+            .col-form-label {
+                @include sr-only();
+            }
+
             .form-control {
                 //background: $gray-100;
                 border: 0;

@@ -20,23 +20,28 @@ namespace Piranha.Manager.Models
     public class LoginModel : PageModel
     {
         private readonly ISecurity _service;
+        private readonly ManagerLocalizer _localizer;
 
-        public LoginModel(ISecurity service)
+        public LoginModel(ISecurity service, ManagerLocalizer localizer)
         {
             _service = service;
+            _localizer = localizer;
         }
 
         public class InputModel
         {
-            [Required]
             public string Username { get; set; }
 
-            [Required]
             public string Password { get; set; }
         }
 
         public async Task<IActionResult> OnPostAsync(InputModel model)
         {
+            if (string.IsNullOrEmpty(model.Password))
+                ModelState.AddModelError("Password", _localizer.General["The password is required."].Value);
+            if (string.IsNullOrEmpty(model.Username))
+                ModelState.AddModelError("Username", _localizer.General["The username is required."].Value);
+
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -46,6 +51,7 @@ namespace Piranha.Manager.Models
             {
                 return new RedirectToPageResult("Index");
             }
+            ModelState.AddModelError(string.Empty, _localizer.General["Invalid login attempt."].Value);
             return Page();
         }
     }
