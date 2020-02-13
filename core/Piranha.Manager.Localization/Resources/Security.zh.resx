@@ -13,43 +13,43 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Username is used by another user." xml:space="preserve">
-    <value>Username is used by another user.</value>
+    <value>使用者名稱已被使用。</value>
   </data>
   <data name="Email address is used by another user." xml:space="preserve">
-    <value>Email address is used by another user.</value>
+    <value>電子郵件已被使用。</value>
   </data>
   <data name="The user could not be found." xml:space="preserve">
-    <value>The user could not be found.</value>
+    <value>找不到該使用者。</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>電子郵件是必填項。</value>
   </data>
   <data name="The new passwords does not match." xml:space="preserve">
-    <value>The new passwords does not match.</value>
+    <value>輸入的密碼不一致。</value>
   </data>
   <data name="Password is mandatory when creating a new user." xml:space="preserve">
-    <value>Password is mandatory when creating a new user.</value>
+    <value>建立新使用者時密碼為必填項。</value>
   </data>
   <data name="The user could not be saved." xml:space="preserve">
-    <value>The user could not be saved.</value>
+    <value>使用者儲存失敗。</value>
   </data>
   <data name="User is saved." xml:space="preserve">
-    <value>User is saved.</value>
+    <value>使用者已儲存。</value>
   </data>
   <data name="Are you sure you want to delete this user?" xml:space="preserve">
-    <value>Are you sure you want to delete this user?</value>
+    <value>是否確定刪除該使用者？</value>
   </data>
   <data name="The user has been deleted." xml:space="preserve">
-    <value>The user has been deleted.</value>
+    <value>該使用者已被刪除。</value>
   </data>
   <data name="Can't delete yourself." xml:space="preserve">
-    <value>Can't delete yourself.</value>
+    <value>不能刪除自己。</value>
   </data>
 
   <data name="New password" xml:space="preserve">
-    <value>New password</value>
+    <value>新的密碼</value>
   </data>
   <data name="Confirm password" xml:space="preserve">
-    <value>Confirm password</value>
+    <value>確認密碼</value>
   </data>
 </root>
