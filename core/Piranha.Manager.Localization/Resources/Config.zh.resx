@@ -25,7 +25,7 @@
     <value>展開網站地圖</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
-    <value>存檔頁面大小</value>
+    <value>歸檔頁面大小</value>
   </data>
   <data name="Caching" xml:space="preserve">
     <value>快取</value>
@@ -53,7 +53,7 @@
     <value>網站地圖預設展開的層級。（適用於小型網站地圖）</value>
   </data>
   <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
-    <value>預設存檔頁面的數量，請記得該功能依然可以被特定存檔功能覆寫。</value>
+    <value>預設歸檔頁面的數量，請記得該功能依然可以被特定存檔功能覆寫。</value>
   </data>
   <data name="The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation." xml:space="preserve">
     <value>每個頁面最大修訂版本數量。（設定為 0 時表示不限制）</value>
