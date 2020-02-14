@@ -235,6 +235,6 @@
     <value>Créé</value>
   </data>
   <data name="Username and/or password are incorrect." xml:space="preserve">
-    <value>Username and/or password are incorrect.</value>
+    <value>L'identifiant ou le mot de passe sont incorrects.</value>
   </data>
 </root>
