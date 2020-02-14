@@ -234,4 +234,7 @@
   <data name="Created" xml:space="preserve">
     <value>Created</value>
   </data>
+  <data name="Username and/or password are incorrect." xml:space="preserve">
+    <value>Потребителското име и/или паролата са невалидни.</value>
+  </data>
 </root>
