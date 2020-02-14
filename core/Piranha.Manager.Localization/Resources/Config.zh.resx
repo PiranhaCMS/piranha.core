@@ -102,19 +102,19 @@
     <value>If blocks should be collapsed by default when opening a page or post in the manager.</value>
   </data>
   <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
-    <value>If comments should be approved by default. Please note that this can be overridden by third party moderation services.</value>
+    <value>若評論預為自動審核時，請記得該評論依然可以被第三方服務進行覆寫。</value>
   </data>
   <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages.</value>
+    <value>若在頁面中評論功能預設為啟用時，請記得該功能依然可以被特定頁面覆寫。</value>
   </data>
   <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
-    <value>If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts.</value>
+    <value>若在文章中評論功能預設為啟用時，請記得該功能依然可以被特定文章覆寫。</value>
   </data>
   <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>The default page size when loading comments. Please note that this this can be overridden for specific pages.</value>
+    <value>在預設頁面中評論載入的數量，請記得該功能依然可以被特定頁面覆寫。</value>
   </data>
   <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
-    <value>The number of days commenting should be open after publish date. A value of 0 means forever.</value>
+    <value>於發佈日期後毎天評論被開啟的次數。（設為 0 時表示為永久）</value>
   </data>
   <data name="The page size for lists within the manager interface." xml:space="preserve">
     <value>在管理介面中頁面列表毎頁呈現數量。</value>
