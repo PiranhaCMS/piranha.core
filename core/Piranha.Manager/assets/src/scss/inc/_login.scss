@@ -1,10 +1,70 @@
 @import "variables";
 
-#login {
-    background: #042A36 url("../img/login.png");
-    background-size: cover;
-    margin-left: 0;
+@keyframes shake-box {
+    0% {
+        top: -21px;
+    }
 
+    10%, 90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+
+    20%, 80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%, 50%, 70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%, 60% {
+        transform: translate3d(4px, 0, 0);
+    }
+
+    100% {
+        top: 0px;
+    }
+}
+
+@keyframes shake-message {
+    0% {
+        opacity: 0;
+        transform: scale(.7);
+    }
+
+    10%, 90% {
+        transform: translate3d(-2px, 0, 0);
+    }
+
+    20%, 80% {
+        transform: translate3d(4px, 0, 0);
+    }
+
+    30%, 50%, 70% {
+        transform: translate3d(-8px, 0, 0);
+    }
+
+    40%, 60% {
+        transform: translate3d(8px, 0, 0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+#login {
+    background: #0C3C50 url("../img/login.png");
+    background-size: cover;
+    margin: 0;
+    /*.error-message {
+        margin: 0;
+        color: $red-bright;
+        text-align: center;
+        opacity: 0;
+        animation-delay: 1s;
+    }*/
     .container {
         max-width: 360px;
         margin-top: 6rem;
@@ -38,29 +98,32 @@
             }
         }
 
-        &.card-body-form {
-            .validation-summary-errors {
-                position: relative;
-                padding: $alert-padding-y $alert-padding-x;
-                margin-bottom: 2rem;
-                border: $alert-border-width solid transparent;
-                @include border-radius($alert-border-radius);
-                color: theme-color-level('danger', $alert-color-level);
-                @include gradient-bg(theme-color-level('danger', $alert-bg-level));
-                border-color: theme-color-level('danger', $alert-border-level);
+        &.validation-summary-errors {
+            position: relative;
+            text-align: center;
+            color: saturate(lighten(theme-color-level('danger', $alert-color-level), 25%), 20%);
 
-                & > ul {
-                    @include list-unstyled();
-                    margin-bottom: 0;
-                }
+            & > ul {
+                animation: shake-message 1s cubic-bezier(.36,.07,.19,.97) both;
+                opacity: 0;
+                @include list-unstyled();
+                margin-bottom: 0;
             }
+
+            & + .card-body-form {
+                animation: shake-box 0.75s cubic-bezier(.36,.07,.19,.97) both;
+            }
+        }
+
+        &.card-body-form {
+            position: relative;
+            background-color: transparent;
 
             .col-form-label {
                 @include sr-only();
             }
 
             .form-control {
-                //background: $gray-100;
                 border: 0;
                 font-weight: 300;
             }

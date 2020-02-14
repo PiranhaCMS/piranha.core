@@ -30,29 +30,23 @@ namespace Piranha.Manager.Models
 
         public class InputModel
         {
+            [Required]
             public string Username { get; set; }
 
+            [Required]
             public string Password { get; set; }
         }
 
         public async Task<IActionResult> OnPostAsync(InputModel model)
         {
-            if (string.IsNullOrEmpty(model.Password))
-                ModelState.AddModelError("Password", _localizer.General["The password is required."].Value);
-            if (string.IsNullOrEmpty(model.Username))
-                ModelState.AddModelError("Username", _localizer.General["The username is required."].Value);
-
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || await _service.SignIn(HttpContext, model.Username, model.Password))
             {
+                ModelState.Clear();
+                ModelState.AddModelError(string.Empty, _localizer.General["Username and/or password are incorrect."].Value);
                 return Page();
             }
 
-            if (await _service.SignIn(HttpContext, model.Username, model.Password))
-            {
-                return new RedirectToPageResult("Index");
-            }
-            ModelState.AddModelError(string.Empty, _localizer.General["Invalid login attempt."].Value);
-            return Page();
+            return new RedirectToPageResult("Index");
         }
     }
 }
