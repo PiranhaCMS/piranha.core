@@ -47,10 +47,10 @@
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
-    <value>If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps.</value>
+    <value>若頁面的網址後綴會依上層級自動產生。（適用於大型網站地圖）</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
-    <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
+    <value>網站地圖預設展開的層級。（適用於小型網站地圖）</value>
   </data>
   <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
     <value>預設存檔頁面的數量，請記得該功能依然可以被特定存檔功能覆寫。</value>
@@ -62,10 +62,10 @@
     <value>每個文章最大修訂版本數量。（設定為 0 時表示不限制）</value>
   </data>
   <data name="The time in minutes that web browsers can use pages before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use pages before asking the server for new updates.</value>
+    <value>網頁請求面頁是否有更新時，相隔的時間（分鐘）。</value>
   </data>
   <data name="The time in minutes that web browsers can use posts before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use posts before asking the server for new updates.</value>
+    <value>網頁請求文章是否有更新時，相隔的時間（分鐘）。</value>
   </data>
   <data name="The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL." xml:space="preserve">
     <value>The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL.</value>
@@ -96,10 +96,10 @@
     <value>管理列表大小</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If block group headers should be collapsed by default when opening a page or post in the manager.</value>
+    <value>在管理介面中當開啟頁面或文件時，預設內容群組應該是收合的。</value>
   </data>
   <data name="If blocks should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If blocks should be collapsed by default when opening a page or post in the manager.</value>
+    <value>在管理介面中當開啟頁面或文件時，預設內容區塊應該是收合的。</value>
   </data>
   <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
     <value>若評論預為自動審核時，請記得該評論依然可以被第三方服務進行覆寫。</value>
