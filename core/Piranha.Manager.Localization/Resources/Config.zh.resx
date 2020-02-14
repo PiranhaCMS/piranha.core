@@ -53,7 +53,7 @@
     <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
   </data>
   <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
-    <value>The default page size for archive pages. Please note that this this can be overridden for specific archives.</value>
+    <value>預設存檔頁面的數量，請記得該功能依然可以被特定存檔功能覆寫。</value>
   </data>
   <data name="The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation." xml:space="preserve">
     <value>每個頁面最大修訂版本數量。（設定為 0 時表示不限制）</value>
@@ -105,10 +105,10 @@
     <value>若評論預為自動審核時，請記得該評論依然可以被第三方服務進行覆寫。</value>
   </data>
   <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>若在頁面中評論功能預設為啟用時，請記得該功能依然可以被特定頁面覆寫。</value>
+    <value>若頁面中評論功能預設為啟用時，請記得該功能依然可以被特定頁面功能覆寫。</value>
   </data>
   <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
-    <value>若在文章中評論功能預設為啟用時，請記得該功能依然可以被特定文章覆寫。</value>
+    <value>若文章中評論功能預設為啟用時，請記得該功能依然可以被特定文章功能覆寫。</value>
   </data>
   <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
     <value>在預設頁面中評論載入的數量，請記得該功能依然可以被特定頁面覆寫。</value>
