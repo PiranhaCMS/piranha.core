@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.Data.EF.SQLServer</id>
     <title>Piranha Data SQLServer</title>
-    <version>8.1.0-beta4</version>
+    <version>8.1.0</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -19,8 +19,8 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework="netstandard2.1">
-        <dependency id="Piranha" version="[8.1.0-beta4,9.0.0)" />
-        <dependency id="Piranha.Data.EF" version="[8.1.0-beta4,9.0.0)" />
+        <dependency id="Piranha" version="[8.1.0,9.0.0)" />
+        <dependency id="Piranha.Data.EF" version="[8.1.0,9.0.0)" />
         <dependency id="AutoMapper" version="[9.0.0]" />
         <dependency id="Microsoft.EntityFrameworkCore.SqlServer" version="3.1.0" />
       </group>
@@ -28,6 +28,6 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
   </metadata>
   <files>
     <file src="piranha.png" target="images\" />
-    <file src="..\data\Piranha.Data.EF.SQLServer\bin\Release\netstandard2.1\Piranha.Data.EF.SQLServer.dll" target="lib\netstandard2.1\Piranha.Data.EF.SQLServer.dll" />
+    <file src="..\data\Piranha.Data.EF.SQLServer\bin\Release\netstandard2.0\Piranha.Data.EF.SQLServer.dll" target="lib\netstandard2.0\Piranha.Data.EF.SQLServer.dll" />
   </files>
 </package>

@@ -35,13 +35,13 @@
                     <div class="logo"></div>
                     <p class="banner">
                         Piranha CMS
-                        <small>@Localizer.General["Version"] @Piranha.Utils.GetAssemblyVersion(typeof(Piranha.Manager.Module).Assembly)-beta4</small>
+                        <small>@Localizer.General["Version"] @Piranha.Utils.GetAssemblyVersion(typeof(Piranha.Manager.Module).Assembly)</small>
                     </p>
                 </div>
 
                 @if (Model.SignInFailed)
                 {
-                    <p class="error-message">@Localizer.General["Username and/or password are incorrect."]</p>                       
+                    <p class="error-message">@Localizer.General["Username and/or password are incorrect."]</p>
                 }
 
                 <div class="card-body card-body-form">
