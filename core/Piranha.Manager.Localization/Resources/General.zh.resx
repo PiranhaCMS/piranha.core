@@ -70,7 +70,7 @@
     <value>檔案名稱</value>
   </data>
   <data name="Height" xml:space="preserve">
-    <value>高</value>
+    <value>高度</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>編輯</value>
@@ -88,10 +88,10 @@
     <value>歷史紀錄</value>
   </data>
   <data name="Internal id" xml:space="preserve">
-    <value>內部編號</value>
+    <value>系統編號</value>
   </data>
   <data name="Is default" xml:space="preserve">
-    <value>是預設</value>
+    <value>預設網站</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>登入</value>
@@ -118,7 +118,7 @@
     <value>名稱</value>
   </data>
   <data name="Name is mandatory." xml:space="preserve">
-    <value>名稱為必填項</value>
+    <value>用戶名稱為必填項</value>
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
     <value>於新分頁開啟自訂網址</value>
@@ -196,13 +196,13 @@
     <value>更新密碼</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>名稱</value>
+    <value>用戶名稱</value>
   </data>
   <data name="Username is mandatory." xml:space="preserve">
-    <value>名稱為必填項</value>
+    <value>用戶名稱為必填項。</value>
   </data>
   <data name="Title is mandatory." xml:space="preserve">
-    <value>標題為必填項</value>
+    <value>標題為必填項。</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>類型</value>
@@ -211,10 +211,10 @@
     <value>未發佈</value>
   </data>
   <data name="Unpublished" xml:space="preserve">
-    <value>取消發布</value>
+    <value>取消發佈</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>使用者</value>
+    <value>用戶</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>版本</value>
@@ -223,7 +223,7 @@
     <value>寬度</value>
   </data>
   <data name="Archives and Comments" xml:space="preserve">
-    <value>回覆及評論</value>
+    <value>歸檔及評論</value>
   </data>
   <data name="Author" xml:space="preserve">
     <value>作者</value>
@@ -233,5 +233,8 @@
   </data>
   <data name="Created" xml:space="preserve">
     <value>建立</value>
+  </data>
+  <data name="Username and/or password are incorrect." xml:space="preserve">
+    <value>用戶名稱或密碼不正確</value>
   </data>
 </root>

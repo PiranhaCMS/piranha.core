@@ -234,4 +234,7 @@
   <data name="Created" xml:space="preserve">
     <value>Vytvořeno</value>
   </data>
+  <data name="Username and/or password are incorrect." xml:space="preserve">
+    <value>Username and/or password are incorrect.</value>
+  </data>
 </root>
