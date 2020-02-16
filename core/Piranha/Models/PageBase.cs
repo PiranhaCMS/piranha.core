@@ -88,6 +88,6 @@ namespace Piranha.Models
         /// <summary>
         /// Checks if comments are open for this page.
         /// </summary>
-        public bool isCommentsOpen => EnableComments && Published.HasValue && (CloseCommentsAfterDays == 0 || Published.Value.AddDays(CloseCommentsAfterDays) > DateTime.Now);
+        public bool IsCommentsOpen => EnableComments && Published.HasValue && (CloseCommentsAfterDays == 0 || Published.Value.AddDays(CloseCommentsAfterDays) > DateTime.Now);
     }
 }
