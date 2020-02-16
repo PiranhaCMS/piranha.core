@@ -18,7 +18,7 @@
 https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
-      <group targetFramework="netstandard2.1">
+      <group targetFramework="netstandard2.0">
         <dependency id="Piranha" version="[8.1.0,9.0.0)" />
         <dependency id="Piranha.Data.EF" version="[8.1.0,9.0.0)" />
         <dependency id="AutoMapper" version="[9.0.0]" />
