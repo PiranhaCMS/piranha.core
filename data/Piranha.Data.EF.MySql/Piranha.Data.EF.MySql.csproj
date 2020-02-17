@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>8.1.0</Version>
+    <Company>Piranha CMS</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Piranha.Data.EF\Piranha.Data.EF.csproj" />
+    <ProjectReference Include="..\..\core\Piranha\Piranha.csproj" />
+  </ItemGroup>
+
+</Project>
