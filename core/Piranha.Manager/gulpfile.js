@@ -158,7 +158,7 @@ var js = [
             "assets/src/js/piranha.preview.js",
             "assets/src/js/piranha.resources.js",
             "assets/src/js/piranha.editor.js",
-            "assets/src/js/components/page-item.js"
+            "assets/src/js/components/page-item.vue"
         ]
     },
     {
@@ -182,7 +182,7 @@ var js = [
     {
         name: "piranha.media.js",
         items: [
-            "assets/src/js/components/folder-item.js",
+            "assets/src/js/components/folder-item.vue",
             "assets/src/js/piranha.media.js"
         ]
     },
@@ -195,40 +195,40 @@ var js = [
     {
         name: "piranha.contentedit.js",
         items: [
-            "assets/src/js/components/region.js",
-            "assets/src/js/components/post-archive.js",
-            "assets/src/js/components/block-group.js",
-            "assets/src/js/components/block-group-horizontal.js",
-            "assets/src/js/components/block-group-vertical.js",
-            "assets/src/js/components/generic-block.js",
+            "assets/src/js/components/region.vue",
+            "assets/src/js/components/post-archive.vue",
+            "assets/src/js/components/block-group.vue",
+            "assets/src/js/components/block-group-horizontal.vue",
+            "assets/src/js/components/block-group-vertical.vue",
+            "assets/src/js/components/generic-block.vue",
 
-            "assets/src/js/components/blocks/html-block.js",
-            "assets/src/js/components/blocks/html-column-block.js",
-            "assets/src/js/components/blocks/image-block.js",
-            "assets/src/js/components/blocks/quote-block.js",
-            "assets/src/js/components/blocks/separator-block.js",
-            "assets/src/js/components/blocks/text-block.js",
-            "assets/src/js/components/blocks/missing-block.js",
-            "assets/src/js/components/blocks/audio-block.js",
-            "assets/src/js/components/blocks/video-block.js",
+            "assets/src/js/components/blocks/audio-block.vue",
+            "assets/src/js/components/blocks/html-block.vue",
+            "assets/src/js/components/blocks/html-column-block.vue",
+            "assets/src/js/components/blocks/image-block.vue",
+            "assets/src/js/components/blocks/missing-block.vue",
+            "assets/src/js/components/blocks/quote-block.vue",
+            "assets/src/js/components/blocks/separator-block.vue",
+            "assets/src/js/components/blocks/text-block.vue",
+            "assets/src/js/components/blocks/video-block.vue",
 
-            "assets/src/js/components/fields/audio-field.js",
-            "assets/src/js/components/fields/checkbox-field.js",
-            "assets/src/js/components/fields/date-field.js",
-            "assets/src/js/components/fields/document-field.js",
-            "assets/src/js/components/fields/html-field.js",
-            "assets/src/js/components/fields/image-field.js",
-            "assets/src/js/components/fields/markdown-field.js",
-            "assets/src/js/components/fields/media-field.js",
-            "assets/src/js/components/fields/missing-field.js",
-            "assets/src/js/components/fields/number-field.js",
-            "assets/src/js/components/fields/page-field.js",
-            "assets/src/js/components/fields/post-field.js",
-            "assets/src/js/components/fields/readonly-field.js",
-            "assets/src/js/components/fields/string-field.js",
-            "assets/src/js/components/fields/text-field.js",
-            "assets/src/js/components/fields/video-field.js",
-            "assets/src/js/components/fields/select-field.js",
+            "assets/src/js/components/fields/audio-field.vue",
+            "assets/src/js/components/fields/checkbox-field.vue",
+            "assets/src/js/components/fields/date-field.vue",
+            "assets/src/js/components/fields/document-field.vue",
+            "assets/src/js/components/fields/html-field.vue",
+            "assets/src/js/components/fields/image-field.vue",
+            "assets/src/js/components/fields/markdown-field.vue",
+            "assets/src/js/components/fields/media-field.vue",
+            "assets/src/js/components/fields/missing-field.vue",
+            "assets/src/js/components/fields/number-field.vue",
+            "assets/src/js/components/fields/page-field.vue",
+            "assets/src/js/components/fields/post-field.vue",
+            "assets/src/js/components/fields/readonly-field.vue",
+            "assets/src/js/components/fields/select-field.vue",
+            "assets/src/js/components/fields/string-field.vue",
+            "assets/src/js/components/fields/text-field.vue",
+            "assets/src/js/components/fields/video-field.vue",
         ]
     },
     {
@@ -240,8 +240,8 @@ var js = [
     {
         name: "piranha.pagelist.js",
         items: [
-            "assets/src/js/components/pagecopy-item.js",
-            "assets/src/js/components/sitemap-item.js",
+            "assets/src/js/components/pagecopy-item.vue",
+            "assets/src/js/components/sitemap-item.vue",
             "assets/src/js/piranha.pagelist.js"
         ]
     },
