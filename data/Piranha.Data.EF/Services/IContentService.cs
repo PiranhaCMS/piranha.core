@@ -26,7 +26,7 @@ namespace Piranha.Services
         /// <param name="content">The content entity</param>
         /// <param name="type">The content type</param>
         /// <returns>The page model</returns>
-        Task<T> TransformAsync<T>(TContent content, Models.ContentType type, Action<TContent, T> process = null)
+        Task<T> TransformAsync<T>(TContent content, Models.ContentType type, Func<TContent, T, Task> process = null)
             where T : Models.Content, TModelBase;
 
         /// <summary>
