@@ -128,7 +128,7 @@ namespace Piranha.Repositories
 
             if (page != null)
             {
-                return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), Process);
+                return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync);
             }
             return null;
         }
@@ -147,7 +147,7 @@ namespace Piranha.Repositories
 
             if (page != null)
             {
-                return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), Process);
+                return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync);
             }
             return null;
         }
@@ -167,7 +167,7 @@ namespace Piranha.Repositories
 
             if (page != null)
             {
-                return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), Process);
+                return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync);
             }
             return null;
         }
@@ -197,7 +197,7 @@ namespace Piranha.Repositories
                     // Transform data model
                     var page = JsonConvert.DeserializeObject<Page>(draft.Data);
 
-                    return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), Process);
+                    return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync);
                 }
             }
             return null;
@@ -898,7 +898,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="page">The source page</param>
         /// <param name="model">The targe model</param>
-        private async void Process<T>(Data.Page page, T model) where T : Models.PageBase
+        private async Task ProcessAsync<T>(Data.Page page, T model) where T : Models.PageBase
         {
             // Permissions
             foreach (var permission in page.Permissions)
