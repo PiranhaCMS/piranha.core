@@ -184,7 +184,7 @@ namespace Piranha.Repositories
 
             if (post != null)
             {
-                return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), Process);
+                return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), ProcessAsync);
             }
             return null;
         }
@@ -205,7 +205,7 @@ namespace Piranha.Repositories
 
             if (post != null)
             {
-                return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), Process);
+                return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), ProcessAsync);
             }
             return null;
         }
@@ -235,7 +235,7 @@ namespace Piranha.Repositories
                     // Transform data model
                     var post = JsonConvert.DeserializeObject<Post>(draft.Data);
 
-                    return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), Process);
+                    return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), ProcessAsync);
                 }
             }
             return null;
@@ -1051,7 +1051,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="post">The source post</param>
         /// <param name="model">The targe model</param>
-        private async void Process<T>(Data.Post post, T model) where T : Models.PostBase
+        private async Task ProcessAsync<T>(Data.Post post, T model) where T : Models.PostBase
         {
             // Permissions
             foreach (var permission in post.Permissions)
