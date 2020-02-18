@@ -49,22 +49,22 @@
     <value>頁面</value>
   </data>
   <data name="The page was successfully deleted" xml:space="preserve">
-    <value>本頁面已刪除成功</value>
+    <value>本頁面已刪除成功。</value>
   </data>
   <data name="The page was successfully detached from the original" xml:space="preserve">
-    <value>本頁面已成功從原始頁面中進行分割</value>
+    <value>本頁面已成功從原始頁面中進行分割。</value>
   </data>
   <data name="The page was successfully published" xml:space="preserve">
-    <value>本頁面已發佈成功</value>
+    <value>本頁面已發布成功。</value>
   </data>
   <data name="The page was successfully unpublished" xml:space="preserve">
-    <value>本頁面已撤銷發佈成功</value>
+    <value>本頁面已取消發佈成功。</value>
   </data>
   <data name="The page was successfully saved" xml:space="preserve">
-    <value>本頁面已儲存成功</value>
+    <value>本頁面已儲存成功。</value>
   </data>
   <data name="The page was successfully reverted to its previous state" xml:space="preserve">
-    <value>本頁面已成功回復到先前狀態</value>
+    <value>本頁面已成功回復到先前狀態。</value>
   </data>
   <data name="This is a copy. In order to edit the content of the page you first need to detach it from the original. If you want to keep the page as a copy you should edit the content of the original page." xml:space="preserve">
     <value>這是一個複製頁面，若您要編輯本頁面的內容時請記得先進行『分割面頁』；若您想要保持與原始頁面內容相同，請記得『編輯原始頁面』。</value>

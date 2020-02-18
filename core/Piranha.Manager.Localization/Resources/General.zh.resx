@@ -46,10 +46,10 @@
     <value>說明</value>
   </data>
   <data name="Details" xml:space="preserve">
-    <value>明細</value>
+    <value>詳細資料</value>
   </data>
   <data name="Dimensions" xml:space="preserve">
-    <value>規格</value>
+    <value>尺寸</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>下載</value>
@@ -64,7 +64,7 @@
     <value>電子郵件</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>電子郵件是必填項</value>
+    <value>電子郵件是必填項。</value>
   </data>
   <data name="Filename" xml:space="preserve">
     <value>檔案名稱</value>
@@ -76,7 +76,7 @@
     <value>編輯</value>
   </data>
   <data name="Empty" xml:space="preserve">
-    <value>空</value>
+    <value>空值</value>
   </data>
   <data name="General" xml:space="preserve">
     <value>一般</value>
@@ -88,7 +88,7 @@
     <value>歷史紀錄</value>
   </data>
   <data name="Internal id" xml:space="preserve">
-    <value>系統編號</value>
+    <value>內部編號</value>
   </data>
   <data name="Is default" xml:space="preserve">
     <value>預設網站</value>
@@ -112,13 +112,13 @@
     <value>主要內容</value>
   </data>
   <data name="Modified" xml:space="preserve">
-    <value>修改</value>
+    <value>修改日期</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>名稱</value>
+    <value>用戶名稱</value>
   </data>
   <data name="Name is mandatory." xml:space="preserve">
-    <value>用戶名稱為必填項</value>
+    <value>用戶名稱為必填項。</value>
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
     <value>於新分頁開啟自訂網址</value>
@@ -139,10 +139,10 @@
     <value>預覽</value>
   </data>
   <data name="Publish" xml:space="preserve">
-    <value>發佈</value>
+    <value>發布</value>
   </data>
   <data name="Publish date" xml:space="preserve">
-    <value>發佈日期</value>
+    <value>發布日期</value>
   </data>
   <data name="Redirect" xml:space="preserve">
     <value>導向</value>
@@ -163,7 +163,7 @@
     <value>儲存</value>
   </data>
   <data name="Scheduled" xml:space="preserve">
-    <value>排程</value>
+    <value>排程日期</value>
   </data>
   <data name="Search..." xml:space="preserve">
     <value>搜尋 ...</value>
@@ -208,10 +208,10 @@
     <value>類型</value>
   </data>
   <data name="Unpublish" xml:space="preserve">
-    <value>未發佈</value>
+    <value>取消發布</value>
   </data>
   <data name="Unpublished" xml:space="preserve">
-    <value>取消發佈</value>
+    <value>取消發布</value>
   </data>
   <data name="Users" xml:space="preserve">
     <value>用戶</value>
@@ -223,7 +223,7 @@
     <value>寬度</value>
   </data>
   <data name="Archives and Comments" xml:space="preserve">
-    <value>歸檔及評論</value>
+    <value>存檔及評論</value>
   </data>
   <data name="Author" xml:space="preserve">
     <value>作者</value>
@@ -232,7 +232,7 @@
     <value>評論</value>
   </data>
   <data name="Created" xml:space="preserve">
-    <value>建立</value>
+    <value>建立日期</value>
   </data>
   <data name="Username and/or password are incorrect." xml:space="preserve">
     <value>用戶名稱或密碼不正確</value>
