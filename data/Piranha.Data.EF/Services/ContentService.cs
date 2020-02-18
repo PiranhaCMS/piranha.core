@@ -129,7 +129,10 @@ namespace Piranha.Services
                         }
                     }
                 }
-                await process?.Invoke(content, model);
+                if (process != null)
+                {
+                    await process(content, model);
+                }
 
                 return model;
             }
