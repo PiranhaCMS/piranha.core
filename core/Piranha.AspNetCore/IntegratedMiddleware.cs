@@ -109,6 +109,12 @@ namespace Piranha.AspNetCore
                         CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = cultureInfo;
                     }
                 }
+                else
+                {
+                    // There's no sites available, let the application finish
+                    await _next.Invoke(context);
+                    return;
+                }
 
                 // Store hostname
                 service.Hostname = hostname;

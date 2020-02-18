@@ -15,9 +15,9 @@ namespace Piranha.Manager.Models
     /// </summary>
     public static class ContentState
     {
-        public static string New = "new";
-        public static string Unpublished = "unpublished";
-        public static string Published = "published";
-        public static string Draft = "draft";
+        public static string New { get; } = "new";
+        public static string Unpublished { get; } = "unpublished";
+        public static string Published { get; } = "published";
+        public static string Draft { get; } = "draft";
     }
 }
