@@ -11,6 +11,9 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Npgsql;
+using Npgsql.EntityFrameworkCore;
+
 
 namespace Piranha.Data.EF.PostgreSql
 {
@@ -29,8 +32,7 @@ namespace Piranha.Data.EF.PostgreSql
         public PostgreSqlDb CreateDbContext(string[] args)
         {
             var builder = new DbContextOptionsBuilder<PostgreSqlDb>();
-            // TODO: Configure connection string for dev database here
-            // builder.UsePostgreSql("Server=localhost;Port=8889;Database=piranha;User=root;Password=root;");
+            builder.UseNpgsql("Server=localhost;Port=5432;Database=piranha;User ID=piranha;Password=piranha;");
             return new PostgreSqlDb(builder.Options);
         }
     }
