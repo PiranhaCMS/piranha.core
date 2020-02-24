@@ -50,7 +50,7 @@ The manager interface can be found at the URL `~/manager` with the default crede
 
     admin / password
 
-For production scenarios we advice you to remove this user, or change the password 
+For production scenarios we advise you to remove this user, or change the password 
 **and** update the password strength policy. More information on this can be found in
 the official documentation [here](http://piranhacms.org/docs/architecture/authentication/identity).
 
