@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -8,6 +8,7 @@
  *
  */
 
+using System.Text;
 using Piranha.Extend.Fields;
 
 namespace Piranha.Extend.Blocks
@@ -16,7 +17,7 @@ namespace Piranha.Extend.Blocks
     /// Two column HTML block.
     /// </summary>
     [BlockType(Name = "Two Cols", Category = "Content", Icon = "fab fa-html5", Component = "html-column-block", IsUnlisted = true)]
-    public class HtmlColumnBlock : Block
+    public class HtmlColumnBlock : Block, ISearchable
     {
         /// <summary>
         /// Gets/sets the first column.
@@ -27,5 +28,26 @@ namespace Piranha.Extend.Blocks
         /// Gets/sets the second column.
         /// </summary>
         public HtmlField Column2 { get; set; }
+
+        /// <summary>
+        /// Gets the content that should be indexed for searching.
+        /// </summary>
+        public string GetIndexedContent()
+        {
+            var content = new StringBuilder();
+
+            // Add first column
+            if (!string.IsNullOrEmpty(Column1.Value))
+            {
+                content.AppendLine(Column1.Value);
+            }
+            // Add second column
+            if (!string.IsNullOrEmpty(Column2.Value))
+            {
+                content.AppendLine(Column2.Value);
+            }
+            return content.ToString();
+        }
+
     }
 }

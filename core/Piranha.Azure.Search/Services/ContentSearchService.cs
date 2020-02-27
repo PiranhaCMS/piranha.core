@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) 2019-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -9,25 +9,42 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Microsoft.Azure.Search;
 using Microsoft.Azure.Search.Models;
+using Piranha.Extend;
 using Piranha.Extend.Blocks;
 using Piranha.Models;
 
-namespace Piranha.Azure.Search
+namespace Piranha.Azure.Search.Services
 {
     /// <summary>
     /// The identity module.
     /// </summary>
-    public static class ContentSearch
+    public class ContentSearchService
     {
-        private static string searchServiceName = "";
-        private static string adminApiKey = "";
+        private readonly string _serviceName = "";
+        private readonly string _apiKey = "";
 
-        public static void CreateIndexes()
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        /// <param name="serviceName">The search service name</param>
+        /// <param name="apiKey">The admin api key</param>
+        public ContentSearchService(string serviceName, string apiKey)
+        {
+            _serviceName = serviceName;
+            _apiKey = apiKey;
+        }
+
+        /// <summary>
+        /// Creates the main search indexes.
+        /// </summary>
+        public void CreateIndexes()
         {
             using (var client = CreateClient())
             {
@@ -36,12 +53,16 @@ namespace Piranha.Azure.Search
                     Name = "content",
                     Fields = FieldBuilder.BuildForType<Content>()
                 };
-
                 client.Indexes.CreateOrUpdate(contentIndex);
             }
         }
 
-        public static void PageSave(PageBase page)
+        /// <summary>
+        /// Creates or updates the searchable content for the
+        /// given page.
+        /// </summary>
+        /// <param name="page">The page</param>
+        public Task PageSaveAsync(PageBase page)
         {
             using (var client = CreateClient())
             {
@@ -50,14 +71,9 @@ namespace Piranha.Azure.Search
 
                 foreach (var block in page.Blocks)
                 {
-                    if (block is HtmlBlock htmlBlock)
+                    if (block is ISearchable searchableBlock)
                     {
-                        body.AppendLine(htmlBlock.Body.Value);
-                    }
-                    else if (block is HtmlColumnBlock columnBlock)
-                    {
-                        body.AppendLine(columnBlock.Column1.Value);
-                        body.AppendLine(columnBlock.Column2.Value);
+                        body.AppendLine(searchableBlock.GetIndexedContent());
                     }
                 }
 
@@ -81,16 +97,32 @@ namespace Piranha.Azure.Search
                 };
                 var batch = IndexBatch.New(actions);
 
-                indexClient.Documents.Index(batch);
+                return indexClient.Documents.IndexAsync(batch);
             }
         }
 
-        public static void PageDelete(PageBase page)
+        /// <summary>
+        /// Deletes the given page from the search index.
+        /// </summary>
+        /// <param name="page">The page to delete</param>
+        public Task PageDeleteAsync(PageBase page)
         {
+            using (var client = CreateClient())
+            {
+                var indexClient = client.Indexes.GetClient("content");
 
+                var batch = IndexBatch.Delete("content", new List<string> { page.Id.ToString() });
+
+                return indexClient.Documents.IndexAsync(batch);
+            }
         }
 
-        public static void PostSave(PostBase post)
+        /// <summary>
+        /// Creates or updates the searchable content for the
+        /// given post.
+        /// </summary>
+        /// <param name="post">The post</param>
+        public Task PostSaveAsync(PostBase post)
         {
             using (var client = CreateClient())
             {
@@ -99,14 +131,9 @@ namespace Piranha.Azure.Search
 
                 foreach (var block in post.Blocks)
                 {
-                    if (block is HtmlBlock htmlBlock)
+                    if (block is ISearchable searchableBlock)
                     {
-                        body.AppendLine(htmlBlock.Body.Value);
-                    }
-                    else if (block is HtmlColumnBlock columnBlock)
-                    {
-                        body.AppendLine(columnBlock.Column1.Value);
-                        body.AppendLine(columnBlock.Column2.Value);
+                        body.AppendLine(searchableBlock.GetIndexedContent());
                     }
                 }
 
@@ -132,18 +159,32 @@ namespace Piranha.Azure.Search
                 };
                 var batch = IndexBatch.New(actions);
 
-                indexClient.Documents.Index(batch);
+                return indexClient.Documents.IndexAsync(batch);
             }
         }
 
-        public static void PostDelete(PostBase post)
+        /// <summary>
+        /// Deletes the given post from the search index.
+        /// </summary>
+        /// <param name="post">The post to delete</param>
+        public Task PostDeleteAsync(PostBase post)
         {
+            using (var client = CreateClient())
+            {
+                var indexClient = client.Indexes.GetClient("content");
 
+                var batch = IndexBatch.Delete("content", new List<string> { post.Id.ToString() });
+
+                return indexClient.Documents.IndexAsync(batch);
+            }
         }
 
-        private static SearchServiceClient CreateClient()
+        /// <summary>
+        /// Creates the search client.
+        /// </summary>
+        private SearchServiceClient CreateClient()
         {
-            return new SearchServiceClient(searchServiceName, new SearchCredentials(adminApiKey));
+            return new SearchServiceClient(_serviceName, new SearchCredentials(_apiKey));
         }
     }
 }
