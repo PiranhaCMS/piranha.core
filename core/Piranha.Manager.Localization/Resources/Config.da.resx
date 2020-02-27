@@ -93,7 +93,7 @@
     <value>Aktiver opslagskommentarer</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
-    <value>Manager list size</value>
+    <value>Sidestørrelse i manager</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
     <value>If block group headers should be collapsed by default when opening a page or post in the manager.</value>
@@ -102,7 +102,7 @@
     <value>If blocks should be collapsed by default when opening a page or post in the manager.</value>
   </data>
   <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
-    <value>If comments should be approved by default. Please note that this can be overridden by third party moderation services.</value>
+    <value>Angiver om kommentarer skal godkendes som standard. Bemærk at dette kan omgås af tredjeparts modereringstjenester.</value>
   </data>
   <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
     <value>Afgør om kommentarer er aktiveret på nye sider. Bemærk at dette kan overskrives på den enkelte side.</value>
@@ -111,12 +111,12 @@
     <value>Afgør om kommentarer er aktiveret på nye opslag. Bemærk at dette kan overskrives på det enkelte opslag.</value>
   </data>
   <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>The default page size when loading comments. Please note that this this can be overridden for specific pages.</value>
+    <value>Standardsidestørrelsen for kommentarer. Bemærk at dette kan konfigureres på den enkelte side.</value>
   </data>
   <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
     <value>Antal dage kommentarsporet er åbent efter udgivelse. Angiv 0 hvis du ikke ønsker at lukke kommentarsporet.</value>
   </data>
   <data name="The page size for lists within the manager interface." xml:space="preserve">
-    <value>The page size for lists within the manager interface.</value>
+    <value>Sidestørrelsen på lister i manager grænsefladen.</value>
   </data>
 </root>
