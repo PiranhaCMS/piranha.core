@@ -43,7 +43,7 @@
     <value>Opslagshistorik</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
-    <value>Media CDN</value>
+    <value>Medie CDN</value>
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
@@ -68,7 +68,7 @@
     <value>Antal minutter browsere kan cache opslag uden at de genindlæses fra serveren.</value>
   </data>
   <data name="The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL." xml:space="preserve">
-    <value>The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL.</value>
+    <value>Den komplette URL (inklusiv sti) til CDN'en der bruges til uploadet indhold. Lad feltet være tomt, hvis du ikke bruger CDN.</value>
   </data>
 
   <data name="Approve comments" xml:space="preserve">
