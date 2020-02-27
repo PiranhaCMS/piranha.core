@@ -19,38 +19,38 @@
     <value>Hierarkiske sidestier</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>If page slugs should include the parent slug.</value>
+    <value>Aktivér for at inkludere forælderens sidesti.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
-    <value>Expanded levels in the sitemap</value>
+    <value>Antal udvidede niveauer i sitemap</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
     <value>Sidestørrelse for samlinger</value>
   </data>
   <data name="Caching" xml:space="preserve">
-    <value>Caching</value>
+    <value>Cachelagring</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Page cache expiration (minutes)</value>
+    <value>Cachelagring af sider (i minutter)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
-    <value>Page revisions</value>
+    <value>Sidehistorik</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Post cache expiration (minutes)</value>
+    <value>Cachelagring af opslag (i minutter)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
-    <value>Post revisions</value>
+    <value>Opslagshistorik</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
     <value>Media CDN</value>
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
-    <value>If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps.</value>
+    <value>Afgør om sidestier bygger videre på forælderens sidesti når de genereres. Dette anbefales før større sitemaps.</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
-    <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
+    <value>Det antal niveauer der er udvidet i sitemap når det åbnes. Dette er mest brugbart til små sitemaps.</value>
   </data>
   <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
     <value>The default page size for archive pages. Please note that this this can be overridden for specific archives.</value>
