@@ -28,6 +28,7 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
   <files>
     <file src="piranha.png" target="images\" />
     <file src="..\core\Piranha.AspNetCore.Identity\bin\Release\netcoreapp3.1\Piranha.AspNetCore.Identity.dll" target="lib\netcoreapp3.1\Piranha.AspNetCore.Identity.dll" />
+    <file src="..\core\Piranha.AspNetCore.Identity\bin\Release\netcoreapp3.1\Piranha.AspNetCore.Identity.xml" target="lib\netcoreapp3.1\Piranha.AspNetCore.Identity.xml" />
     <file src="..\core\Piranha.AspNetCore.Identity\bin\Release\netcoreapp3.1\Piranha.AspNetCore.Identity.Views.dll" target="lib\netcoreapp3.1\Piranha.AspNetCore.Identity.Views.dll" />
   </files>
 </package>

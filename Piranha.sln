@@ -37,9 +37,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuspec", ".nuspec", "{A1B6
 		nuspec\Piranha.AttributeBuilder.nuspec = nuspec\Piranha.AttributeBuilder.nuspec
 		nuspec\Piranha.Azure.BlobStorage.nuspec = nuspec\Piranha.Azure.BlobStorage.nuspec
 		nuspec\Piranha.Data.EF.nuspec = nuspec\Piranha.Data.EF.nuspec
+		nuspec\Piranha.Data.EF.PostgreSql.nuspec = nuspec\Piranha.Data.EF.PostgreSql.nuspec
 		nuspec\Piranha.Extensions.Sync.nuspec = nuspec\Piranha.Extensions.Sync.nuspec
 		nuspec\Piranha.ImageSharp.nuspec = nuspec\Piranha.ImageSharp.nuspec
 		nuspec\Piranha.Local.FileStorage.nuspec = nuspec\Piranha.Local.FileStorage.nuspec
+		nuspec\Piranha.Manager.Localization.nuspec = nuspec\Piranha.Manager.Localization.nuspec
 		nuspec\Piranha.Manager.nuspec = nuspec\Piranha.Manager.nuspec
 		nuspec\Piranha.nuspec = nuspec\Piranha.nuspec
 		nuspec\Piranha.Data.EF.MySql.nuspec = nuspec\Piranha.Data.EF.MySql.nuspec
@@ -47,6 +49,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuspec", ".nuspec", "{A1B6
 		nuspec\Piranha.Data.EF.SQLServer.nuspec = nuspec\Piranha.Data.EF.SQLServer.nuspec
 		nuspec\Piranha.Manager.Summernote.nuspec = nuspec\Piranha.Manager.Summernote.nuspec
 		nuspec\Piranha.Manager.TinyMCE.nuspec = nuspec\Piranha.Manager.TinyMCE.nuspec
+		nuspec\Piranha.WebApi.nuspec = nuspec\Piranha.WebApi.nuspec
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AspNetCore.SimpleSecurity", "core\Piranha.AspNetCore.SimpleSecurity\Piranha.AspNetCore.SimpleSecurity.csproj", "{DAE71F77-F4C7-4727-83D3-3AFC7362886D}"

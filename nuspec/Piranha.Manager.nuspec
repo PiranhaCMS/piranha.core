@@ -29,7 +29,9 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
   <files>
     <file src="piranha.png" target="images\" />
     <file src="..\core\Piranha.Manager\bin\Release\netcoreapp3.1\Piranha.Manager.Core.dll" target="lib\netcoreapp3.1\Piranha.Manager.Core.dll" />
+    <file src="..\core\Piranha.Manager\bin\Release\netcoreapp3.1\Piranha.Manager.Core.xml" target="lib\netcoreapp3.1\Piranha.Manager.Core.xml" />
     <file src="..\core\Piranha.Manager\bin\Release\netcoreapp3.1\Piranha.Manager.dll" target="lib\netcoreapp3.1\Piranha.Manager.dll" />
+    <file src="..\core\Piranha.Manager\bin\Release\netcoreapp3.1\Piranha.Manager.xml" target="lib\netcoreapp3.1\Piranha.Manager.xml" />
     <file src="..\core\Piranha.Manager\bin\Release\netcoreapp3.1\Piranha.Manager.views.dll" target="lib\netcoreapp3.1\Piranha.Manager.views.dll" />
   </files>
 </package>

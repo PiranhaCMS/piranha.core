@@ -26,5 +26,6 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
   <files>
     <file src="piranha.png" target="images\" />
     <file src="..\core\Piranha.AttributeBuilder\bin\Release\netstandard2.0\Piranha.AttributeBuilder.dll" target="lib\netstandard2.0\Piranha.AttributeBuilder.dll" />
+    <file src="..\core\Piranha.AttributeBuilder\bin\Release\netstandard2.0\Piranha.AttributeBuilder.xml" target="lib\netstandard2.0\Piranha.AttributeBuilder.xml" />
   </files>
 </package>

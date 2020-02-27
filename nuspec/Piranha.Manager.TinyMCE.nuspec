@@ -26,5 +26,6 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
   <files>
     <file src="piranha.png" target="images\" />
     <file src="..\core\Piranha.Manager.TinyMCE\bin\Release\netcoreapp3.1\Piranha.Manager.TinyMCE.dll" target="lib\netcoreapp3.1\Piranha.Manager.TinyMCE.dll" />
+    <file src="..\core\Piranha.Manager.TinyMCE\bin\Release\netcoreapp3.1\Piranha.Manager.TinyMCE.xml" target="lib\netcoreapp3.1\Piranha.Manager.TinyMCE.xml" />
   </files>
 </package>

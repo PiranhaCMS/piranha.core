@@ -27,5 +27,6 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
   <files>
     <file src="piranha.png" target="images\" />
     <file src="..\core\Piranha.ImageSharp\bin\Release\netstandard2.0\Piranha.ImageSharp.dll" target="lib\netstandard2.0\Piranha.ImageSharp.dll" />
+    <file src="..\core\Piranha.ImageSharp\bin\Release\netstandard2.0\Piranha.ImageSharp.xml" target="lib\netstandard2.0\Piranha.ImageSharp.xml" />
   </files>
 </package>

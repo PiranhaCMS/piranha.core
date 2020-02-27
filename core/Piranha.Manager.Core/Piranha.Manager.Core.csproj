@@ -5,6 +5,8 @@
     <Version>8.1.0</Version>
     <Company>Piranha CMS</Company>
     <RootNamespace>Piranha.Manager</RootNamespace>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
