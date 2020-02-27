@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019 Håkan Edling
+ * Copyright (c) 2016-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -151,50 +151,23 @@ namespace Piranha.Repositories
         /// <param name="page">The page number</param>
         /// <param name="pageSize">The page size</param>
         /// <returns>The available comments</returns>
-        public async Task<IEnumerable<Models.Comment>> GetAllComments(Guid? postId, bool onlyApproved,
+        public Task<IEnumerable<Models.Comment>> GetAllComments(Guid? postId, bool onlyApproved,
             int page, int pageSize)
         {
-            // Create base query
-            IQueryable<PostComment> query = _db.PostComments
-                .AsNoTracking();
+            return GetAllComments(postId, onlyApproved, false, page, pageSize);
+        }
 
-            // Check if only should include a comments for a certain post
-            if (postId.HasValue)
-            {
-                query = query.Where(c => c.PostId == postId.Value);
-            }
-
-            // Check if we should only include approved
-            if (onlyApproved)
-            {
-                query = query.Where(c => c.IsApproved);
-            }
-
-            // Order the comments by date
-            query = query.OrderByDescending(c => c.Created);
-
-            // Check if this is a paged query
-            if (pageSize > 0)
-            {
-                query = query
-                    .Skip(page * pageSize)
-                    .Take(pageSize);
-            }
-
-            // Get the comments
-            return await query
-                .Select(c => new Models.Comment
-                {
-                    Id = c.Id,
-                    ContentId = c.PostId,
-                    UserId = c.UserId,
-                    Author = c.Author,
-                    Email = c.Email,
-                    Url = c.Url,
-                    IsApproved = c.IsApproved,
-                    Body = c.Body,
-                    Created = c.Created
-                }).ToListAsync().ConfigureAwait(false);
+        /// <summary>
+        /// Gets the pending comments available for the post with the specified id.
+        /// </summary>
+        /// <param name="postId">The unique post id</param>
+        /// <param name="page">The page number</param>
+        /// <param name="pageSize">The page size</param>
+        /// <returns>The available comments</returns>
+        public Task<IEnumerable<Models.Comment>> GetAllPendingComments(Guid? postId,
+            int page, int pageSize)
+        {
+            return GetAllComments(postId, false, true, page, pageSize);
         }
 
         /// <summary>
@@ -211,7 +184,7 @@ namespace Piranha.Repositories
 
             if (post != null)
             {
-                return _contentService.Transform<T>(post, App.PostTypes.GetById(post.PostTypeId), Process);
+                return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), ProcessAsync);
             }
             return null;
         }
@@ -232,7 +205,7 @@ namespace Piranha.Repositories
 
             if (post != null)
             {
-                return _contentService.Transform<T>(post, App.PostTypes.GetById(post.PostTypeId), Process);
+                return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), ProcessAsync);
             }
             return null;
         }
@@ -262,7 +235,7 @@ namespace Piranha.Repositories
                     // Transform data model
                     var post = JsonConvert.DeserializeObject<Post>(draft.Data);
 
-                    return _contentService.Transform<T>(post, App.PostTypes.GetById(post.PostTypeId), Process);
+                    return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), ProcessAsync);
                 }
             }
             return null;
@@ -564,6 +537,65 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Gets the comments available for the post with the specified id. If no post id
+        /// is provided all comments are fetched.
+        /// </summary>
+        /// <param name="postId">The unique post id</param>
+        /// <param name="onlyApproved">If only approved comments should be fetched</param>
+        /// <param name="page">The page number</param>
+        /// <param name="pageSize">The page size</param>
+        /// <returns>The available comments</returns>
+        public async Task<IEnumerable<Models.Comment>> GetAllComments(Guid? postId, bool onlyApproved,
+            bool onlyPending, int page, int pageSize)
+        {
+            // Create base query
+            IQueryable<PostComment> query = _db.PostComments
+                .AsNoTracking();
+
+            // Check if only should include a comments for a certain post
+            if (postId.HasValue)
+            {
+                query = query.Where(c => c.PostId == postId.Value);
+            }
+
+            // Check if we should only include approved
+            if (onlyPending)
+            {
+                query = query.Where(c => !c.IsApproved);
+            }
+            else if (onlyApproved)
+            {
+                query = query.Where(c => c.IsApproved);
+            }
+
+            // Order the comments by date
+            query = query.OrderByDescending(c => c.Created);
+
+            // Check if this is a paged query
+            if (pageSize > 0)
+            {
+                query = query
+                    .Skip(page * pageSize)
+                    .Take(pageSize);
+            }
+
+            // Get the comments
+            return await query
+                .Select(c => new Models.Comment
+                {
+                    Id = c.Id,
+                    ContentId = c.PostId,
+                    UserId = c.UserId,
+                    Author = c.Author,
+                    Email = c.Email,
+                    Url = c.Url,
+                    IsApproved = c.IsApproved,
+                    Body = c.Body,
+                    Created = c.Created
+                }).ToListAsync().ConfigureAwait(false);
+        }
+
+        /// <summary>
         /// Saves the given post model
         /// </summary>
         /// <param name="model">The post model</param>
@@ -670,6 +702,7 @@ namespace Piranha.Repositories
                 }
 
                 var post = await postQuery
+                    .Include(p => p.Permissions)
                     .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                     .Include(p => p.Fields)
                     .Include(p => p.Tags).ThenInclude(t => t.Tag)
@@ -701,6 +734,17 @@ namespace Piranha.Repositories
                 // Set if comments should be enabled
                 post.EnableComments = model.EnableComments;
                 post.CloseCommentsAfterDays = model.CloseCommentsAfterDays;
+
+                // Update permissions
+                post.Permissions.Clear();
+                foreach (var permission in model.Permissions)
+                {
+                    post.Permissions.Add(new PostPermission
+                    {
+                        PostId = post.Id,
+                        Permission = permission
+                    });
+                }
 
                 // Make sure foreign key is set for fields
                 if (!isDraft)
@@ -989,6 +1033,7 @@ namespace Piranha.Repositories
 
             IQueryable<Post> query = _db.Posts
                 .AsNoTracking()
+                .Include(p => p.Permissions)
                 .Include(p => p.Category)
                 .Include(p => p.Tags).ThenInclude(t => t.Tag);
 
@@ -1006,8 +1051,15 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="post">The source post</param>
         /// <param name="model">The targe model</param>
-        private async void Process<T>(Data.Post post, T model) where T : Models.PostBase
+        private async Task ProcessAsync<T>(Data.Post post, T model) where T : Models.PostBase
         {
+            // Permissions
+            foreach (var permission in post.Permissions)
+            {
+                model.Permissions.Add(permission.Permission);
+            }
+
+            // Comments
             model.EnableComments = post.EnableComments;
             if (model.EnableComments)
             {
@@ -1015,6 +1067,7 @@ namespace Piranha.Repositories
             }
             model.CloseCommentsAfterDays = post.CloseCommentsAfterDays;
 
+            // Blocks
             if (!(model is Models.IContentInfo))
             {
                 if (post.Blocks.Count > 0)

@@ -19,6 +19,9 @@ namespace Piranha.Manager
         public const string Aliases = "PiranhaAliases";
         public const string AliasesDelete = "PiranhaAliasesDelete";
         public const string AliasesEdit = "PiranhaAliasesEdit";
+        public const string Comments = "PiranhaComments";
+        public const string CommentsApprove = "PiranhaCommentsApprove";
+        public const string CommentsDelete = "PiranhaCommentsDelete";
         public const string Config = "PiranhaConfig";
         public const string ConfigEdit = "PiranhaConfigEdit";
         public const string Media = "PiranhaMedia";
@@ -52,6 +55,9 @@ namespace Piranha.Manager
                 Aliases,
                 AliasesDelete,
                 AliasesEdit,
+                Comments,
+                CommentsApprove,
+                CommentsDelete,
                 Config,
                 ConfigEdit,
                 Media,

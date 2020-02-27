@@ -45,4 +45,11 @@
   <data name="Can't delete yourself." xml:space="preserve">
     <value>Nelze smazat sám sebe.</value>
   </data>
+
+  <data name="New password" xml:space="preserve">
+    <value>Nové heslo</value>
+  </data>
+  <data name="Confirm password" xml:space="preserve">
+    <value>Potvrzení hesla</value>
+  </data>
 </root>

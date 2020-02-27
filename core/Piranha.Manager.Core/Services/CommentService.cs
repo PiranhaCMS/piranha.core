@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) 2019-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -32,13 +32,17 @@ namespace Piranha.Manager.Services
         /// <summary>
         /// Gets the comment model.
         /// </summary>
+        /// <param name="id">The optional content id</param>
         /// <returns>The model</returns>
-        public async Task<CommentListModel> Get()
+        public async Task<CommentListModel> Get(Guid? id = null)
         {
-            var model = new CommentListModel();
+            var model = new CommentListModel
+            {
+                ContentId = id
+            };
 
-            var postComments = await _api.Posts.GetAllCommentsAsync(onlyApproved: false, pageSize: 0);
-            var pageComments = await _api.Pages.GetAllCommentsAsync(onlyApproved: false, pageSize: 0);
+            var postComments = await _api.Posts.GetAllCommentsAsync(id, onlyApproved: false, pageSize: 0);
+            var pageComments = await _api.Pages.GetAllCommentsAsync(id, onlyApproved: false, pageSize: 0);
 
             foreach (var postComment in postComments)
             {

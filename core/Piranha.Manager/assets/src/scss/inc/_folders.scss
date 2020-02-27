@@ -1,0 +1,58 @@
+@import "variables";
+
+.folder-container {
+    border-top: solid 1px $gray-300;
+    padding-top: 1rem;
+}
+
+.folders {
+    padding-left: 0;
+
+    li {
+        list-style-type: none;
+
+        i {
+            color: $gray-600;
+            font-size: 1.1rem;
+            margin-right: .5rem;
+        }
+
+        a {
+            color: $gray-700;
+            display: block;
+            padding: .35rem .25rem;
+
+            i {
+                color: $gray-600;
+            }
+
+            .badge {
+                margin-top: .125rem;
+            }
+
+            &.active {
+                background: $gray-300;
+                color: $gray-900;
+                font-weight: bold;
+                border-radius: .125rem;
+            }
+        }
+
+        form {
+            padding: .15rem .25rem .09rem;
+        }
+
+        &.active {
+            > a {
+                background: $gray-300;
+                color: $gray-900;
+                font-weight: bold;
+                border-radius: .125rem;
+            }
+        }
+    }
+
+    .dd-list {
+        padding-left: 1.7rem;
+    }
+}

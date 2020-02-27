@@ -31,11 +31,25 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>@Localizer.General["Slug"]</label>
-                                <input v-model="slug" type="text" maxlength="128" class="form-control">
+                                <div class="input-group">
+                                    <input v-model="slug" type="text" maxlength="128" class="form-control">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text text-muted">
+                                            {{ piranha.utils.strLength(slug) + "/128" }}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label>@Localizer.General["Redirect"]</label>
-                                <input type="text" v-model="redirectUrl" maxlength="256" class="form-control">
+                                <div class="input-group">
+                                    <input v-model="redirectUrl" type="text" maxlength="256" class="form-control">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text text-muted">
+                                            {{ piranha.utils.strLength(redirectUrl) + "/256" }}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="enableComments">@Localizer.General["Comments"]</label>
@@ -64,20 +78,43 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>@Localizer.General["Days allowed for commenting"]</label>
+                                <label>@Localizer.Comment["Days allowed for commenting"]</label>
                                 <input type="number" v-model.number="closeCommentsAfterDays" class="form-control">
                                 <span v-if="enableComments === false" class="field-description small text-muted">
-                                    @Localizer.General["Comments are not allowed."]
+                                    @Localizer.Comment["Comments are not allowed."]
                                 </span>
                                 <span v-else-if="published === null" class="field-description small text-muted">
-                                    @Localizer.General["Comments are not allowed for unpublished content."]
+                                    @Localizer.Comment["Comments are not allowed for unpublished content."]
                                 </span>
                                 <span v-else-if="closeCommentsAfterDays === 0 || isCommentsOpen()" class="field-description small text-muted">
-                                    @Localizer.General["Comments are currently open."]
+                                    @Localizer.Comment["Comments are currently open."]
                                 </span>
                                 <span v-else class="field-description small text-muted">
-                                    @Localizer.General["Comments were closed"] {{ commentsClosedDate() }}.
+                                    @Localizer.Comment["Comments were closed"] {{ commentsClosedDate() }}.
                                 </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="permissions.length > 0" class="row">
+                        <div class="col">
+                            <div class="form-group">
+                            <label>@Localizer.General["Permissions"]</label>
+                                <span v-if="selectedPermissions.length > 0" class="field-description small text-muted d-block">
+                                    @Localizer.Post["By specifying one or more permissions only authenticated users will have access to the post."]
+                                </span>
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div v-for="permission in permissions" class="col-sm-4">
+                                                <div class="checkbox">
+                                                    <label class="mb-0">
+                                                        <input v-model="selectedPermissions" type="checkbox" :value="permission.key"> {{ permission.value }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -86,11 +123,25 @@
                 <div :class="{ 'd-none': selectedSetting != 'uid-seo' }">
                     <div class="form-group">
                         <label>@Localizer.Page["Meta keywords"]</label>
-                        <input v-model="metaKeywords" type="text" maxlength="128" class="form-control">
+                        <div class="input-group">
+                            <input v-model="metaKeywords" type="text" maxlength="128" class="form-control">
+                            <div class="input-group-append">
+                                <div class="input-group-text text-muted">
+                                    {{ piranha.utils.strLength(metaKeywords) + "/128" }}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>@Localizer.Page["Meta description"]</label>
-                        <textarea v-model="metaDescription" rows="5" maxlength="256" class="form-control"></textarea>
+                        <div class="input-group">
+                            <textarea v-model="metaDescription" rows="5" maxlength="255" class="form-control"></textarea>
+                            <div class="input-group-append">
+                                <div class="input-group-text text-muted">
+                                    {{ piranha.utils.strLength(metaDescription) + "/255" }}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

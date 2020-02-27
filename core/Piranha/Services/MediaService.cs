@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) 2019-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -166,6 +166,35 @@ namespace Piranha.Services
         }
 
         /// <summary>
+        /// Updates the meta data for the given media model.
+        /// </summary>
+        /// <param name="model">The model</param>
+        public async Task SaveAsync(Media model)
+        {
+            // Make sure we have an existing media model with this id.
+            var current = await GetByIdAsync(model.Id);
+
+            if (current != null)
+            {
+                // Validate model
+                var context = new ValidationContext(model);
+                Validator.ValidateObject(model, context, true);
+
+                // Call hooks & save
+                App.Hooks.OnBeforeSave(model);
+                await _repo.Save(model).ConfigureAwait(false);
+                App.Hooks.OnAfterSave(model);
+
+                RemoveFromCache(model);
+                RemoveStructureFromCache();
+            }
+            else
+            {
+                throw new FileNotFoundException("You can only update meta data for an existing media object");
+            }
+        }
+
+        /// <summary>
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>
@@ -271,6 +300,7 @@ namespace Piranha.Services
             App.Hooks.OnAfterSave(model);
 
             RemoveFromCache(model);
+            RemoveStructureFromCache();
         }
 
         /// <summary>
@@ -308,6 +338,7 @@ namespace Piranha.Services
         {
             await _repo.Move(model, folderId).ConfigureAwait(false);
             RemoveFromCache(model);
+            RemoveStructureFromCache();
         }
 
         /// <summary>
@@ -463,6 +494,7 @@ namespace Piranha.Services
                     App.Hooks.OnAfterDelete(media);
                 }
                 RemoveFromCache(media);
+                RemoveStructureFromCache();
             }
         }
 
@@ -523,6 +555,15 @@ namespace Piranha.Services
             {
                 // Get public url
                 model.PublicUrl = GetPublicUrl(model);
+
+                // Create missing properties
+                foreach (var key in App.MediaTypes.MetaProperties)
+                {
+                    if (!model.Properties.Any(p => p.Key == key))
+                    {
+                        model.Properties.Add(key, null);
+                    }
+                }
 
                 App.Hooks.OnLoad(model);
 

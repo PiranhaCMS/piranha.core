@@ -70,4 +70,53 @@
   <data name="The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL." xml:space="preserve">
     <value>Pełny adres URL (włącznie z nazwą folderu) do CDN który dostarcza pliki multimedialne. Zostaw puste aby użyć domyślnego adresu URL.</value>
   </data>
+
+  <data name="Approve comments" xml:space="preserve">
+    <value>Zatwierdź komentarze</value>
+  </data>
+  <data name="Close comments after" xml:space="preserve">
+    <value>Zamknij komentarze po</value>
+  </data>
+  <data name="Collapse block headers" xml:space="preserve">
+    <value>Zwiń nagłówki bloków</value>
+  </data>
+  <data name="Collapse blocks" xml:space="preserve">
+    <value>Zwiń bloki</value>
+  </data>
+  <data name="Comments page size" xml:space="preserve">
+    <value>Rozmiar strony komentarzy</value>
+  </data>
+  <data name="Enable page comments" xml:space="preserve">
+    <value>Włącz komentarze do strony</value>
+  </data>
+  <data name="Enable post comments" xml:space="preserve">
+    <value>Włącz komentarze postów</value>
+  </data>
+  <data name="Manager list size" xml:space="preserve">
+    <value>Manager list size</value>
+  </data>
+  <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
+    <value>Czy nagłówki grupy bloków powinny być domyślnie zwinięte podczas otwierania strony lub postu w menedżerze.</value>
+  </data>
+  <data name="If blocks should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
+    <value>Czy bloki powinny być domyślnie zwinięte podczas otwierania strony lub postu w menedżerze.</value>
+  </data>
+  <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
+    <value>Czy komentarze powinny być zatwierdzone domyślnie. Pamiętaj, że może być to nadpisane przez inne serwisy moderacyjne.</value>
+  </data>
+  <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
+    <value>Czy komentarze powinny być domyślnie włączone dla stron. Pamiętaj, że to może być nadpisane dla określonych stron.</value>
+  </data>
+  <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
+    <value>Czy komentarze powinny być domyślnie włączone. Pamiętaj, że to może być nadpisane dla konkretnych wpisów.</value>
+  </data>
+  <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
+    <value>Domyślny rozmiar strony podczas ładowania komentarzy. Pamiętaj, że to może być nadpisane dla określonych stron.</value>
+  </data>
+  <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
+    <value>Liczba dni od publikacji w ciągu których komentowanie jest dozwolone. Wartość 0 oznacza na zawsze.</value>
+  </data>
+  <data name="The page size for lists within the manager interface." xml:space="preserve">
+    <value>The page size for lists within the manager interface.</value>
+  </data>
 </root>

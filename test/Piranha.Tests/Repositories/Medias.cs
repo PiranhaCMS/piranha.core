@@ -60,6 +60,15 @@ namespace Piranha.Tests.Repositories
                     api.Media.Save(image1);
 
                     image1Id = image1.Id.Value;
+
+                    // Add some additional meta data
+                    var image = api.Media.GetById(image1Id);
+                    image.Title = "Screenshot";
+                    image.AltText = "This is a screenshot";
+                    image.Description = "Screenshot from Hyper Light Drifter";
+                    image.Properties["Game"] = "Hyper Light Drifter";
+
+                    api.Media.SaveAsync(image).GetAwaiter().GetResult();
                 }
 
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_rise_1080.png")) {
@@ -143,6 +152,49 @@ namespace Piranha.Tests.Repositories
 
                 Assert.NotEmpty(media);
                 Assert.Equal("HLD_Screenshot_01_rise_1080.png", media[0].Filename);
+            }
+        }
+
+        [Fact]
+        public void TitleNotNull()
+        {
+            using (var api = CreateApi()) {
+                var media = api.Media.GetById(image1Id);
+
+                Assert.NotNull(media.Title);
+                Assert.Equal("Screenshot", media.Title);
+            }
+        }
+
+        [Fact]
+        public void AltTextNotNull()
+        {
+            using (var api = CreateApi()) {
+                var media = api.Media.GetById(image1Id);
+
+                Assert.NotNull(media.AltText);
+                Assert.Equal("This is a screenshot", media.AltText);
+            }
+        }
+
+        [Fact]
+        public void DescriptionNotNull()
+        {
+            using (var api = CreateApi()) {
+                var media = api.Media.GetById(image1Id);
+
+                Assert.NotNull(media.Description);
+                Assert.Equal("Screenshot from Hyper Light Drifter", media.Description);
+            }
+        }
+
+        [Fact]
+        public void HasProperty()
+        {
+            using (var api = CreateApi()) {
+                var media = api.Media.GetById(image1Id);
+
+                Assert.Equal("Hyper Light Drifter", media.Properties["Game"]);
             }
         }
 

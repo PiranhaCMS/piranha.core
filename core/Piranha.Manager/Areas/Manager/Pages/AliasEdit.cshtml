@@ -27,6 +27,17 @@
 
         <div class="container-fluid">
             <div class="top-nav">
+                <div v-if="sites.length > 1" class="dropdown d-inline" v-if="sites.length > 1">
+                    <button class="btn btn-primary btn-labeled dropdown-toggle" type="button" data-toggle="dropdown">
+                        <span class="btn-label">
+                            <i class="fas fa-globe"></i>
+                        </span>
+                        {{ siteTitle }}
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#" li v-for="site in sites" v-on:click.prevent="load(site.id)">{{ site.title }}</a>
+                    </div>
+                </div>
                 @foreach (var action in Piranha.Manager.Actions.Toolbars.AliasEdit)
                 {
                     <partial name="@action.ActionView" />

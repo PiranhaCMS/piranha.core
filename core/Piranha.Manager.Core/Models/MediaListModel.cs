@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) 2019-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -73,6 +73,26 @@ namespace Piranha.Manager.Models
             public string ContentType { get; set; }
 
             /// <summary>
+            /// Gets/sets the optional title.
+            /// </summary>
+            public string Title { get; set; }
+
+            /// <summary>
+            /// Gets/sets the optional alt text.
+            /// </summary>
+            public string AltText { get; set; }
+
+            /// <summary>
+            /// Gets/sets the optional description.
+            /// </summary>
+            public string Description { get; set; }
+
+            /// <summary>
+            /// Gets/sets the optional properties.
+            /// </summary>
+            public IList<KeyValuePair<string, string>> Properties { get; set; } = new List<KeyValuePair<string, string>>();
+
+            /// <summary>
             /// Gets/sets the public url used to access the uploaded media.
             /// </summary>
             public string PublicUrl { get; set; }
@@ -129,6 +149,11 @@ namespace Piranha.Manager.Models
         public Guid? ParentFolderId { get; set; }
 
         /// <summary>
+        /// Gets/sets if the current folder can be deleted.
+        /// </summary>
+        public bool CanDelete { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional status message from the last operation.
         /// </summary>
         public StatusMessage Status { get; set; }
@@ -137,5 +162,20 @@ namespace Piranha.Manager.Models
         /// Gets/sets the recommended view mode for the folder.
         /// </summary>
         public string ViewMode { get; set; }
+
+        /// <summary>
+        /// Gets/sets the media folder structure.
+        /// </summary>
+        public Piranha.Models.MediaStructure Structure { get; set; }
+
+        /// <summary>
+        /// Gets/sets the amount of media files at root level.
+        /// </summary>
+        public int RootCount { get; set; }
+
+        /// <summary>
+        /// Gets/sets the total amount of media files.
+        /// </summary>
+        public int TotalCount { get; set; }
     }
 }

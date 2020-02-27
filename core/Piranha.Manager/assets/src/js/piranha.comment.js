@@ -6,6 +6,7 @@ piranha.comment = new Vue({
     el: "#comments",
     data: {
         loading: true,
+        contentId: null,
         items: [],
         state: "all"
     },
@@ -25,12 +26,17 @@ piranha.comment = new Vue({
         }
     },
     methods: {
-        load: function () {
+        load: function (id) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/comment")
+            if (!id) {
+                id = "";
+            }
+
+            fetch(piranha.baseUrl + "manager/api/comment/" + id)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
+                    self.contentId = result.contentId;
                     self.items = result.comments;
                 })
                 .catch(function (error) { console.log("error:", error ); });
@@ -38,13 +44,14 @@ piranha.comment = new Vue({
         approve: function (id) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/comment/approve/" + id)
+            fetch(piranha.baseUrl + "manager/api/comment/approve/" + id + (self.contentId != null ? "/" + self.contentId : ""))
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     if (result.status) {
                         // Push status to notification hub
                         piranha.notifications.push(result.status);
                     }
+                    self.contentId = result.contentId;
                     self.items = result.comments;
                 })
                 .catch(function (error) { console.log("error:", error ); });
@@ -52,13 +59,14 @@ piranha.comment = new Vue({
         unapprove: function (id) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/comment/unapprove/" + id)
+            fetch(piranha.baseUrl + "manager/api/comment/unapprove/" + id + (self.contentId != null ? "/" + self.contentId : ""))
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     if (result.status) {
                         // Push status to notification hub
                         piranha.notifications.push(result.status);
                     }
+                    self.contentId = result.contentId;
                     self.items = result.comments;
                 })
                 .catch(function (error) { console.log("error:", error ); });
@@ -75,14 +83,14 @@ piranha.comment = new Vue({
         remove: function (id) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/comment/delete/" + id)
+            fetch(piranha.baseUrl + "manager/api/comment/delete/" + id + "/" + self.contentId)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     // Push status to notification hub
                     piranha.notifications.push(result);
 
                     // Refresh the list
-                    self.load();
+                    self.load(self.contentId);
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },

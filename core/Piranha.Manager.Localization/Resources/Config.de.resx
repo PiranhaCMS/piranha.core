@@ -70,4 +70,53 @@
   <data name="The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL." xml:space="preserve">
     <value>Die vollständige URL (einschließlich eines Ordnernamen) an die CDN, die zum Hochladen von Medien verwendet wird. Leer lassen, um die Standard-Speicheradresse zu verwenden.</value>
   </data>
+
+  <data name="Approve comments" xml:space="preserve">
+    <value>Kommentar genehmigen</value>
+  </data>
+  <data name="Close comments after" xml:space="preserve">
+    <value>Close comments after</value>
+  </data>
+  <data name="Collapse block headers" xml:space="preserve">
+    <value>Block-Header einklappen</value>
+  </data>
+  <data name="Collapse blocks" xml:space="preserve">
+    <value>Block minimieren</value>
+  </data>
+  <data name="Comments page size" xml:space="preserve">
+    <value>Comments page size</value>
+  </data>
+  <data name="Enable page comments" xml:space="preserve">
+    <value>Seitenkommentare aktivieren</value>
+  </data>
+  <data name="Enable post comments" xml:space="preserve">
+    <value>Beitragskommentare aktivieren</value>
+  </data>
+  <data name="Manager list size" xml:space="preserve">
+    <value>Manager list size</value>
+  </data>
+  <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
+    <value>If block group headers should be collapsed by default when opening a page or post in the manager.</value>
+  </data>
+  <data name="If blocks should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
+    <value>If blocks should be collapsed by default when opening a page or post in the manager.</value>
+  </data>
+  <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
+    <value>If comments should be approved by default. Please note that this can be overridden by third party moderation services.</value>
+  </data>
+  <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
+    <value>If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages.</value>
+  </data>
+  <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
+    <value>If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts.</value>
+  </data>
+  <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
+    <value>The default page size when loading comments. Please note that this this can be overridden for specific pages.</value>
+  </data>
+  <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
+    <value>The number of days commenting should be open after publish date. A value of 0 means forever.</value>
+  </data>
+  <data name="The page size for lists within the manager interface." xml:space="preserve">
+    <value>The page size for lists within the manager interface.</value>
+  </data>
 </root>

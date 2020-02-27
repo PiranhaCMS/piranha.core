@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using System.Collections.Generic;
@@ -23,9 +23,9 @@ namespace Piranha.Security
         /// <summary>
         /// Gets the permission items for the given module.
         /// </summary>
-        public IList<PermissionItem> this[string module] 
+        public IList<PermissionItem> this[string module]
         {
-            get 
+            get
             {
                 if (!_modules.TryGetValue(module, out var items))
                 {
@@ -65,6 +65,24 @@ namespace Piranha.Security
             foreach (var module in GetModules())
             {
                 foreach (var permission in GetPermissions(module))
+                {
+                    all[permission.Name] = permission;
+                }
+            }
+            return all.Values.OrderBy(k => k.Name).ToList();
+        }
+
+        /// <summary>
+        /// Gets all of available permissions that is not internal.
+        /// </summary>
+        /// <returns>The available permissions</returns>
+        public IList<PermissionItem> GetPublicPermissions()
+        {
+            var all = new Dictionary<string, PermissionItem>();
+
+            foreach (var module in GetModules())
+            {
+                foreach (var permission in GetPermissions(module).Where(p => !p.IsInternal))
                 {
                     all[permission.Name] = permission;
                 }

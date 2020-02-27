@@ -23,11 +23,15 @@ piranha.pageedit = new Vue({
         redirectType: null,
         enableComments: null,
         closeCommentsAfterDays: null,
+        commentCount: null,
+        pendingCommentCount: 0,
         state: "new",
         blocks: [],
         regions: [],
         editors: [],
         useBlocks: true,
+        permissions: [],
+        selectedPermissions: [],
         isCopy: false,
         saving: false,
         savingDraft: false,
@@ -77,6 +81,8 @@ piranha.pageedit = new Vue({
             this.redirectType = model.redirectType;
             this.enableComments = model.enableComments;
             this.closeCommentsAfterDays = model.closeCommentsAfterDays;
+            this.commentCount = model.commentCount;
+            this.pendingCommentCount = model.pendingCommentCount;
             this.state = model.state;
             this.blocks = model.blocks;
             this.regions = model.regions;
@@ -85,6 +91,8 @@ piranha.pageedit = new Vue({
             this.isCopy = model.isCopy;
             this.selectedRoute = model.selectedRoute;
             this.routes = model.routes;
+            this.permissions = model.permissions;
+            this.selectedPermissions = model.selectedPermissions;
 
             if (!this.useBlocks) {
                 // First choice, select the first custom editor
@@ -196,7 +204,8 @@ piranha.pageedit = new Vue({
                 isCopy: self.isCopy,
                 blocks: JSON.parse(JSON.stringify(self.blocks)),
                 regions: JSON.parse(JSON.stringify(self.regions)),
-                selectedRoute: self.selectedRoute
+                selectedRoute: self.selectedRoute,
+                selectedPermissions: self.selectedPermissions
             };
 
             fetch(route, {
@@ -224,6 +233,8 @@ piranha.pageedit = new Vue({
 
                 self.saving = false;
                 self.savingDraft = false;
+
+                self.eventBus.$emit("onSaved", self.state)
             })
             .catch(function (error) {
                 console.log("error:", error);

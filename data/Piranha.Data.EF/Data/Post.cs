@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2011-2019 Håkan Edling
+ * Copyright (c) 2011-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -80,5 +80,10 @@ namespace Piranha.Data
         /// Gets/sets the available post blocks.
         /// </summary>
         public IList<PostBlock> Blocks { get; set; } = new List<PostBlock>();
+
+        /// <summary>
+        /// Gets/sets the available permissions.
+        /// </summary>
+        public IList<PostPermission> Permissions { get; set; } = new List<PostPermission>();
     }
 }

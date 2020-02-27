@@ -48,6 +48,7 @@ namespace Piranha.Manager
                         InternalId = "Comments",
                         Name = "Comments",
                         Route = "~/manager/comments",
+                        Policy = Permission.Comments,
                         Css = "fas fa-comments"
                     }
                 }

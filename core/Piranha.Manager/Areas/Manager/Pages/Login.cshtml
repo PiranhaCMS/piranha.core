@@ -1,4 +1,4 @@
-@page "~/manager/login"
+﻿@page "~/manager/login"
 @model LoginModel
 @inject ManagerLocalizer Localizer
 @{
@@ -27,24 +27,35 @@
 
     <title>@Localizer.General["Login"]</title>
 </head>
-<body id="login">
+<body id="login" >
     <div class="container">
         <form method="post">
-            <div class="card card-login">
+            <div class="card card-login @(Model.SignInFailed ? "has-error" : "")">
                 <div class="card-body card-body-logo">
-                    <div class="logo">
-                    </div>
+                    <div class="logo"></div>
                     <p class="banner">
                         Piranha CMS
                         <small>@Localizer.General["Version"] @Piranha.Utils.GetAssemblyVersion(typeof(Piranha.Manager.Module).Assembly)</small>
                     </p>
                 </div>
+
+                @if (Model.SignInFailed)
+                {
+                    <p class="error-message">@Localizer.General["Username and/or password are incorrect."]</p>
+                }
+
                 <div class="card-body card-body-form">
                     <div class="form-group">
                         <input id="username" name="username" type="text" class="form-control form-control-lg text-center" placeholder="@Localizer.General["Username"].Value.ToLower()">
+                        <div class="invalid-feedback">
+                            Please choose a username.
+                        </div>
                     </div>
                     <div class="form-group">
                         <input name="password" type="password" class="form-control form-control-lg text-center" placeholder="@Localizer.General["Password"].Value.ToLower()">
+                        <div class="invalid-feedback">
+                            Please choose a password.
+                        </div>
                     </div>
                     <button class="btn btn-lg btn-block btn-primary" type="submit">
                         <i class="fas fa-check"></i>

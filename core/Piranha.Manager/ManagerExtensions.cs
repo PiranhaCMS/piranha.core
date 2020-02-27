@@ -71,6 +71,22 @@ public static class ManagerModuleExtensions
                 policy.RequireClaim(Permission.AliasesEdit, Permission.AliasesEdit);
             });
 
+            // Comment policies
+            o.AddPolicy(Permission.Comments, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Comments, Permission.Comments);
+            });
+            o.AddPolicy(Permission.CommentsApprove, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Comments, Permission.Comments);
+                policy.RequireClaim(Permission.CommentsApprove, Permission.CommentsApprove);
+            });
+            o.AddPolicy(Permission.CommentsDelete, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Comments, Permission.Comments);
+                policy.RequireClaim(Permission.CommentsDelete, Permission.CommentsDelete);
+            });
+
             // Config policies
             o.AddPolicy(Permission.Config, policy => {
                 policy.RequireClaim(Permission.Admin, Permission.Admin);

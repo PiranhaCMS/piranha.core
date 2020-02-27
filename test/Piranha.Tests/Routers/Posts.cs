@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Håkan Edling
+ * Copyright (c) 2018-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -21,7 +21,7 @@ using Piranha.Services;
 namespace Piranha.Tests.Routers
 {
     [Collection("Integration tests")]
-    public class Posts : BaseTests
+    public class Posts : BaseTestsAsync
     {
         private readonly Guid SITE1_ID = Guid.NewGuid();
         private readonly Guid SITE2_ID = Guid.NewGuid();
@@ -46,8 +46,10 @@ namespace Piranha.Tests.Routers
             public TextField Body { get; set; }
         }
 
-        protected override void Init() {
-            using (var api = CreateApi()) {
+        public override async Task InitializeAsync()
+        {
+            using (var api = CreateApi())
+            {
                 Piranha.App.Init(api);
 
                 var pageBuilder = new PageTypeBuilder(api)
@@ -66,7 +68,7 @@ namespace Piranha.Tests.Routers
                     InternalId = "PostSite",
                     IsDefault = true
                 };
-                api.Sites.Save(site1);
+                await api.Sites.SaveAsync(site1);
 
                 var site2 = new Site
                 {
@@ -76,22 +78,22 @@ namespace Piranha.Tests.Routers
                     Hostnames = "www.myothersite.com",
                     IsDefault = false
                 };
-                api.Sites.Save(site2);
+                await api.Sites.SaveAsync(site2);
 
                 // Add pages
-                var page1 = MyPage.Create(api);
+                var page1 = await MyPage.CreateAsync(api);
                 page1.Id = PAGE1_ID;
                 page1.SiteId = SITE1_ID;
                 page1.Title = "Blog";
                 page1.Published = DateTime.Now;
-                api.Pages.Save(page1);
+                await api.Pages.SaveAsync(page1);
 
-                var page2 = MyPage.Create(api);
+                var page2 = await MyPage.CreateAsync(api);
                 page2.Id = PAGE2_ID;
                 page2.SiteId = SITE2_ID;
                 page2.Title = "News";
                 page2.Published = DateTime.Now;
-                api.Pages.Save(page2);
+                await api.Pages.SaveAsync(page2);
 
                 // Add categories
                 var category1 = new Models.Taxonomy
@@ -107,7 +109,7 @@ namespace Piranha.Tests.Routers
                 };
 
                 // Add posts
-                var post1 = MyPost.Create(api);
+                var post1 = await MyPost.CreateAsync(api);
                 post1.Id = POST1_ID;
                 post1.BlogId = page1.Id;
                 post1.Category = category1;
@@ -119,9 +121,9 @@ namespace Piranha.Tests.Routers
                     Title = "My tag"
                 });
                 post1.Published = DateTime.Now;
-                api.Posts.Save(post1);
+                await api.Posts.SaveAsync(post1);
 
-                var post2 = MyPost.Create(api);
+                var post2 = await MyPost.CreateAsync(api);
                 post2.Id = POST2_ID;
                 post2.BlogId = page2.Id;
                 post2.Category = category2;
@@ -133,33 +135,45 @@ namespace Piranha.Tests.Routers
                     Title = "My other tag"
                 });
                 post2.Published = DateTime.Now;
-                api.Posts.Save(post2);
+                await api.Posts.SaveAsync(post2);
             }
         }
 
-        protected override void Cleanup() {
-            using (var api = CreateApi()) {
-                var pages = api.Pages.GetAll();
+        public override async Task DisposeAsync()
+        {
+            using (var api = CreateApi())
+            {
+                var pages = await api.Pages.GetAllAsync();
                 foreach (var p in pages)
-                    api.Pages.Delete(p);
+                {
+                    await api.Pages.DeleteAsync(p);
+                }
 
-                var pageTypes = api.PageTypes.GetAll();
+                var pageTypes = await api.PageTypes.GetAllAsync();
                 foreach (var t in pageTypes)
-                    api.PageTypes.Delete(t);
+                {
+                    await api.PageTypes.DeleteAsync(t);
+                }
 
-                var postTypes = api.PostTypes.GetAll();
+                var postTypes = await api.PostTypes.GetAllAsync();
                 foreach (var t in postTypes)
-                    api.PostTypes.Delete(t);
+                {
+                    await api.PostTypes.DeleteAsync(t);
+                }
 
-                var sites = api.Sites.GetAll();
+                var sites = await api.Sites.GetAllAsync();
                 foreach (var s in sites)
-                    api.Sites.Delete(s);
+                {
+                    await api.Sites.DeleteAsync(s);
+                }
             }
         }
 
         [Fact]
-        public async Task GetPostByUrlDefaultSite() {
-            using (var api = CreateApi()) {
+        public async Task GetPostByUrlDefaultSite()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.PostRouter.InvokeAsync(api, "/blog/my-first-post", SITE1_ID);
 
                 Assert.NotNull(response);
@@ -170,8 +184,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetPostByUrlDefaultSiteWithAction() {
-            using (var api = CreateApi()) {
+        public async Task GetPostByUrlDefaultSiteWithAction()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.PostRouter.InvokeAsync(api, "/blog/my-first-post/action", SITE1_ID);
 
                 Assert.NotNull(response);
@@ -182,8 +198,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetPostByUrlNoneDefaultSite() {
-            using (var api = CreateApi()) {
+        public async Task GetPostByUrlNoneDefaultSite()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.PostRouter.InvokeAsync(api, "/news/my-second-page", SITE1_ID);
 
                 Assert.Null(response);
@@ -191,8 +209,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetArchiveDefaultSite() {
-            using (var api = CreateApi()) {
+        public async Task GetArchiveDefaultSite()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/blog", SITE1_ID);
 
                 Assert.NotNull(response);
@@ -202,8 +222,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetArchiveYearDefaultSite() {
-            using (var api = CreateApi()) {
+        public async Task GetArchiveYearDefaultSite()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/blog/2018", SITE1_ID);
 
                 Assert.NotNull(response);
@@ -213,8 +235,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetArchiveYearMonthDefaultSite() {
-            using (var api = CreateApi()) {
+        public async Task GetArchiveYearMonthDefaultSite()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/blog/2018/2", SITE1_ID);
 
                 Assert.NotNull(response);
@@ -224,8 +248,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetArchiveYearMonthPageDefaultSite() {
-            using (var api = CreateApi()) {
+        public async Task GetArchiveYearMonthPageDefaultSite()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/blog/2018/2/page/1", SITE1_ID);
 
                 Assert.NotNull(response);
@@ -235,8 +261,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetArchiveYearMonthPageCategoryDefaultSite() {
-            using (var api = CreateApi()) {
+        public async Task GetArchiveYearMonthPageCategoryDefaultSite()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/blog/category/default-category/2018/2/page/1", SITE1_ID);
 
                 Assert.NotNull(response);
@@ -246,8 +274,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetArchiveCategoryDefaultSite() {
-            using (var api = CreateApi()) {
+        public async Task GetArchiveCategoryDefaultSite()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/blog/category/default-category", SITE1_ID);
 
                 Assert.NotNull(response);
@@ -257,8 +287,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetArchiveMissingCategoryDefaultSite() {
-            using (var api = CreateApi()) {
+        public async Task GetArchiveMissingCategoryDefaultSite()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/blog/category/missing-category", SITE1_ID);
 
                 Assert.NotNull(response);
@@ -268,8 +300,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetArchiveTagDefaultSite() {
-            using (var api = CreateApi()) {
+        public async Task GetArchiveTagDefaultSite()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/blog/tag/my-tag", SITE1_ID);
 
                 Assert.NotNull(response);
@@ -290,8 +324,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetArchivePageDefaultSite() {
-            using (var api = CreateApi()) {
+        public async Task GetArchivePageDefaultSite()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/blog/page/1", SITE1_ID);
 
                 Assert.NotNull(response);
@@ -301,8 +337,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetArchiveNoneDefaultSite() {
-            using (var api = CreateApi()) {
+        public async Task GetArchiveNoneDefaultSite()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/news", SITE1_ID);
 
                 Assert.Null(response);
@@ -310,8 +348,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetPostByUrlOtherSite() {
-            using (var api = CreateApi()) {
+        public async Task GetPostByUrlOtherSite()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.PostRouter.InvokeAsync(api, "/news/my-second-post", SITE2_ID);
 
                 Assert.NotNull(response);
@@ -322,8 +362,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetPostByUrlOtherSiteAction() {
-            using (var api = CreateApi()) {
+        public async Task GetPostByUrlOtherSiteAction()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.PostRouter.InvokeAsync(api, "/news/my-second-post/action", SITE2_ID);
 
                 Assert.NotNull(response);
@@ -334,8 +376,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetPostByUrlNoneOtherSite() {
-            using (var api = CreateApi()) {
+        public async Task GetPostByUrlNoneOtherSite()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.PostRouter.InvokeAsync(api, "/blog/my-first-post", SITE2_ID);
 
                 Assert.Null(response);
@@ -343,8 +387,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetArchiveOtherSite() {
-            using (var api = CreateApi()) {
+        public async Task GetArchiveOtherSite()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/news", SITE2_ID);
 
                 Assert.NotNull(response);
@@ -354,8 +400,10 @@ namespace Piranha.Tests.Routers
         }
 
         [Fact]
-        public async Task GetArchiveNoneOtherSite() {
-            using (var api = CreateApi()) {
+        public async Task GetArchiveNoneOtherSite()
+        {
+            using (var api = CreateApi())
+            {
                 var response = await Piranha.Web.ArchiveRouter.InvokeAsync(api, "/blog", SITE2_ID);
 
                 Assert.Null(response);

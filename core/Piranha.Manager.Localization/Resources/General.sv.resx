@@ -145,7 +145,7 @@
     <value>Publiceringsdatum</value>
   </data>
   <data name="Redirect" xml:space="preserve">
-    <value>Hänvisning</value>
+    <value>Omdirigering</value>
   </data>
   <data name="Redirect Type" xml:space="preserve">
     <value>Typ av omdirigering</value>
@@ -221,5 +221,20 @@
   </data>
   <data name="Width" xml:space="preserve">
     <value>Bredd</value>
+  </data>
+  <data name="Archives and Comments" xml:space="preserve">
+    <value>Arkiv och Kommentarer</value>
+  </data>
+  <data name="Author" xml:space="preserve">
+    <value>Författare</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>Kommentarer</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Skapad</value>
+  </data>
+  <data name="Username and/or password are incorrect." xml:space="preserve">
+    <value>Användarnamn och/eller lösenord är felaktigt.</value>
   </data>
 </root>

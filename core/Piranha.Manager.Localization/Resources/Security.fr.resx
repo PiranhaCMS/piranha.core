@@ -13,36 +13,43 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Username is used by another user." xml:space="preserve">
-    <value>Username is used by another user.</value>
+    <value>Le nom d'utilisateur est utilisé par un autre utilisateur.</value>
   </data>
   <data name="Email address is used by another user." xml:space="preserve">
-    <value>Email address is used by another user.</value>
+    <value>L'adresse électronique est utilisée par un autre utilisateur.</value>
   </data>
   <data name="The user could not be found." xml:space="preserve">
-    <value>The user could not be found.</value>
+    <value>L'utilisateur n'a pas pu être trouvé.</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>L'adresse électronique est obligatoire.</value>
   </data>
   <data name="The new passwords does not match." xml:space="preserve">
-    <value>The new passwords does not match.</value>
+    <value>Le mot de passe et sa confirmation ne correspondent pas.</value>
   </data>
   <data name="Password is mandatory when creating a new user." xml:space="preserve">
-    <value>Password is mandatory when creating a new user.</value>
+    <value>Le mot de passe est obligatoire lors de la création d'un nouvel utilisateur.</value>
   </data>
   <data name="The user could not be saved." xml:space="preserve">
-    <value>The user could not be saved.</value>
+    <value>L'utilisateur n'a pas pu être enregistré.</value>
   </data>
   <data name="User is saved." xml:space="preserve">
-    <value>User is saved.</value>
+    <value>L'utilisateur est enregistré.</value>
   </data>
   <data name="Are you sure you want to delete this user?" xml:space="preserve">
-    <value>Are you sure you want to delete this user?</value>
+    <value>Êtes-vous sûr de vouloir supprimer cet utilisateur ?</value>
   </data>
   <data name="The user has been deleted." xml:space="preserve">
-    <value>The user has been deleted.</value>
+    <value>L'utilisateur a été supprimé.</value>
   </data>
   <data name="Can't delete yourself." xml:space="preserve">
-    <value>Can't delete yourself.</value>
+    <value>Vous ne pouvez pas supprimer votre propre compte.</value>
+  </data>
+
+  <data name="New password" xml:space="preserve">
+    <value>Nouveau mot de passe</value>
+  </data>
+  <data name="Confirm password" xml:space="preserve">
+    <value>Confirmation du mot de passe</value>
   </data>
 </root>

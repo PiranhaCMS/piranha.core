@@ -10,7 +10,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="mediaFolderForm" action="post" v-on:submit.prevent="savefolder()" novalidate>
+                <form id="mediaFolderForm" action="post" v-on:submit.prevent="addFolder()" novalidate>
                     <div class="form-group">
                         <label>@Localizer.Media["Folder name"]</label>
                         <input v-model="folder.name" id="mediaFolderName" type="text" class="form-control" required>

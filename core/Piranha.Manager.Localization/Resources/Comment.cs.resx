@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="Approved" xml:space="preserve">
+    <value>Schváleno</value>
+  </data>
+  <data name="ApprovedSingle" xml:space="preserve">
+    <value>Schváleno</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>Čeká na schválení</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Komentář</value>
+  </data>
+  <data name="Response to" xml:space="preserve">
+    <value>Odpověď na</value>
+  </data>
+  <data name="The comment was successfully approved" xml:space="preserve">
+    <value>Komentář byl úspěšně schválen</value>
+  </data>
+  <data name="The comment was successfully unapproved" xml:space="preserve">
+    <value>Komentář by úspěšně označen jako neschválen</value>
+  </data>
+  <data name="The comment was successfully deleted" xml:space="preserve">
+    <value>Komentář byl úspěšně odstraněn</value>
+  </data>
+  <data name="Days allowed for commenting" xml:space="preserve">
+    <value>Dny povolené pro komentování</value>
+  </data>
+  <data name="Comments are not allowed." xml:space="preserve">
+    <value>Komentáře nejsou povoleny.</value>
+  </data>
+  <data name="Comments are not allowed for unpublished content." xml:space="preserve">
+    <value>Komentáře nejsou povoleny pro nezveřejněný obsah.</value>
+  </data>
+  <data name="Comments are currently open." xml:space="preserve">
+    <value>Komentáře jsou nyní otevřeny.</value>
+  </data>
+  <data name="Comments were closed" xml:space="preserve">
+    <value>Komentáře jsou uzavřeny</value>
+  </data>
+</root>

@@ -22,6 +22,10 @@ nuget pack nuspec/Piranha.AspNetCore.SimpleSecurity.nuspec -OutputDirectory $OUT
 nuget pack nuspec/Piranha.AttributeBuilder.nuspec -OutputDirectory $OUTPUT_DIR
 nuget pack nuspec/Piranha.Azure.BlobStorage.nuspec -OutputDirectory $OUTPUT_DIR
 nuget pack nuspec/Piranha.Data.EF.nuspec -OutputDirectory $OUTPUT_DIR
+nuget pack nuspec/Piranha.Data.EF.MySql.nuspec -OutputDirectory $OUTPUT_DIR
+nuget pack nuspec/Piranha.Data.EF.PostgreSql.nuspec -OutputDirectory $OUTPUT_DIR
+nuget pack nuspec/Piranha.Data.EF.SQLite.nuspec -OutputDirectory $OUTPUT_DIR
+nuget pack nuspec/Piranha.Data.EF.SQLServer.nuspec -OutputDirectory $OUTPUT_DIR
 nuget pack nuspec/Piranha.Extensions.Sync.nuspec -OutputDirectory $OUTPUT_DIR
 nuget pack nuspec/Piranha.ImageSharp.nuspec -OutputDirectory $OUTPUT_DIR
 nuget pack nuspec/Piranha.Local.FileStorage.nuspec -OutputDirectory $OUTPUT_DIR

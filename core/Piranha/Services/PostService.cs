@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) 2019-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -54,7 +54,7 @@ namespace Piranha.Services
         /// Creates and initializes a new post of the specified type.
         /// </summary>
         /// <returns>The created post</returns>
-        public T Create<T>(string typeId = null) where T : PostBase
+        public async Task<T> CreateAsync<T>(string typeId = null) where T : PostBase
         {
             if (string.IsNullOrEmpty(typeId))
             {
@@ -65,7 +65,7 @@ namespace Piranha.Services
 
             if (type != null)
             {
-                var model = _factory.Create<T>(type);
+                var model = await _factory.CreateAsync<T>(type).ConfigureAwait(false);
 
                 using (var config = new Config(_paramService))
                 {
@@ -221,33 +221,24 @@ namespace Piranha.Services
         /// <param name="page">The optional page number</param>
         /// <param name="pageSize">The optional page size</param>
         /// <returns>The available comments</returns>
-        public async Task<IEnumerable<Comment>> GetAllCommentsAsync(Guid? postId = null, bool onlyApproved = true,
+        public Task<IEnumerable<Comment>> GetAllCommentsAsync(Guid? postId = null, bool onlyApproved = true,
             int? page = null, int? pageSize = null)
         {
-            // Ensure page number
-            if (!page.HasValue)
-            {
-                page = 0;
-            }
+            return GetAllCommentsAsync(postId, onlyApproved, false, page, pageSize);
+        }
 
-            // Ensure page size
-            if (!pageSize.HasValue)
-            {
-                using (var config = new Config(_paramService))
-                {
-                    pageSize = config.CommentsPageSize;
-                }
-            }
-
-            // Get the comments
-            var comments = await _repo.GetAllComments(postId, onlyApproved, page.Value, pageSize.Value).ConfigureAwait(false);
-
-            // Execute hook
-            foreach (var comment in comments)
-            {
-                App.Hooks.OnLoad<Comment>(comment);
-            }
-            return comments;
+        /// <summary>
+        /// Gets the pending comments available for the post with the specified id. If no post id
+        /// is provided all comments are fetched.
+        /// </summary>
+        /// <param name="postId">The unique post id</param>
+        /// <param name="page">The optional page number</param>
+        /// <param name="pageSize">The optional page size</param>
+        /// <returns>The available comments</returns>
+        public Task<IEnumerable<Comment>> GetAllPendingCommentsAsync(Guid? postId = null,
+            int? page = null, int? pageSize = null)
+        {
+            return GetAllCommentsAsync(postId, false, true, page, pageSize);
         }
 
         /// <summary>
@@ -359,7 +350,7 @@ namespace Piranha.Services
                 {
                     var blog = await _pageService.GetByIdAsync<PageInfo>(model.BlogId).ConfigureAwait(false);
 
-                    OnLoad(model, blog);
+                    await OnLoadAsync(model, blog).ConfigureAwait(false);
                 }
             }
 
@@ -395,7 +386,7 @@ namespace Piranha.Services
             {
                 var blog = await _pageService.GetByIdAsync<PageInfo>(draft.BlogId).ConfigureAwait(false);
 
-                OnLoad(draft, blog, true);
+                await OnLoadAsync(draft, blog, true);
             }
             return draft;
         }
@@ -546,6 +537,53 @@ namespace Piranha.Services
         public Task SaveCommentAndVerifyAsync(Guid postId, Comment model)
         {
             return SaveCommentAsync(postId, model, true);
+        }
+
+        /// <summary>
+        /// Gets the comments available for the post with the specified id.
+        /// </summary>
+        /// <param name="postId">The unique post id</param>
+        /// <param name="onlyApproved">If only approved comments should be fetched</param>
+        /// <param name="onlyPending">If only pending comments should be fetched</param>
+        /// <param name="page">The optional page number</param>
+        /// <param name="pageSize">The optional page size</param>
+        /// <returns>The available comments</returns>
+        private async Task<IEnumerable<Comment>> GetAllCommentsAsync(Guid? postId = null, bool onlyApproved = true,
+            bool onlyPending = false, int? page = null, int? pageSize = null)
+        {
+            // Ensure page number
+            if (!page.HasValue)
+            {
+                page = 0;
+            }
+
+            // Ensure page size
+            if (!pageSize.HasValue)
+            {
+                using (var config = new Config(_paramService))
+                {
+                    pageSize = config.CommentsPageSize;
+                }
+            }
+
+            // Get the comments
+            IEnumerable<Comment> comments = null;
+
+            if (onlyPending)
+            {
+                comments = await _repo.GetAllPendingComments(postId, page.Value, pageSize.Value).ConfigureAwait(false);
+            }
+            else
+            {
+                comments = await _repo.GetAllComments(postId, onlyApproved, page.Value, pageSize.Value).ConfigureAwait(false);
+            }
+
+            // Execute hook
+            foreach (var comment in comments)
+            {
+                App.Hooks.OnLoad<Comment>(comment);
+            }
+            return comments;
         }
 
         /// <summary>
@@ -799,7 +837,7 @@ namespace Piranha.Services
 
                 if (model != null)
                 {
-                    _factory.Init(model, App.PostTypes.GetById(model.TypeId));
+                    await _factory.InitAsync(model, App.PostTypes.GetById(model.TypeId));
                 }
             }
 
@@ -817,7 +855,7 @@ namespace Piranha.Services
                         blogPages.Add(blog);
                     }
 
-                    OnLoad(model, blog);
+                    await OnLoadAsync(model, blog);
                 }
             }
 
@@ -854,7 +892,7 @@ namespace Piranha.Services
         /// <param name="model">The model</param>
         /// <param name="blog">The blog page the post belongs to</param>
         /// <param name="isDraft">If this is a draft</param>
-        private void OnLoad(PostBase model, PageInfo blog, bool isDraft = false)
+        private async Task OnLoadAsync(PostBase model, PageInfo blog, bool isDraft = false)
         {
             if (model != null)
             {
@@ -864,11 +902,11 @@ namespace Piranha.Services
                 // Initialize model
                 if (typeof(IDynamicModel).IsAssignableFrom(model.GetType()))
                 {
-                    _factory.InitDynamic((DynamicPost)model, App.PostTypes.GetById(model.TypeId));
+                    await _factory.InitDynamicAsync((DynamicPost)model, App.PostTypes.GetById(model.TypeId));
                 }
                 else
                 {
-                    _factory.Init(model, App.PostTypes.GetById(model.TypeId));
+                    await _factory.InitAsync(model, App.PostTypes.GetById(model.TypeId));
                 }
 
                 App.Hooks.OnLoad(model);

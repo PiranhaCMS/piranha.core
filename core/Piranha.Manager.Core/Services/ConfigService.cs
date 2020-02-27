@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) 2019-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -37,6 +37,9 @@ namespace Piranha.Manager.Services
                 {
                     HierarchicalPageSlugs = config.HierarchicalPageSlugs,
                     ExpandedSitemapLevels = config.ManagerExpandedSitemapLevels,
+                    ManagerPageSize = config.ManagerPageSize,
+                    DefaultCollapsedBlocks = config.ManagerDefaultCollapsedBlocks,
+                    DefaultCollapsedBlockGroupHeaders = config.ManagerDefaultCollapsedBlockGroupHeaders,
                     ArchivePageSize = config.ArchivePageSize,
                     CommentsApprove = config.CommentsApprove,
                     CommentsCloseAfterDays = config.CommentsCloseAfterDays,
@@ -47,9 +50,7 @@ namespace Piranha.Manager.Services
                     PostsExpires = config.CacheExpiresPosts,
                     MediaCDN = config.MediaCDN,
                     PageRevisions = config.PageRevisions,
-                    PostRevisions = config.PostRevisions,
-                    DefaultCollapsedBlocks = config.ManagerDefaultCollapsedBlocks,
-                    DefaultCollapsedBlockGroupHeaders = config.ManagerDefaultCollapsedBlockGroupHeaders
+                    PostRevisions = config.PostRevisions
                 };
             }
         }
@@ -64,6 +65,7 @@ namespace Piranha.Manager.Services
             {
                 config.HierarchicalPageSlugs = model.HierarchicalPageSlugs;
                 config.ManagerExpandedSitemapLevels = model.ExpandedSitemapLevels;
+                config.ManagerPageSize = model.ManagerPageSize;
                 config.ManagerDefaultCollapsedBlocks = model.DefaultCollapsedBlocks;
                 config.ManagerDefaultCollapsedBlockGroupHeaders = model.DefaultCollapsedBlockGroupHeaders;
                 config.ArchivePageSize = model.ArchivePageSize;

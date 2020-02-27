@@ -70,4 +70,53 @@
   <data name="The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL." xml:space="preserve">
     <value>Den fulla URL:en (inklusive potentiella kataloger) till det CDN som ska användas för uppladdad media. Lämna blank för att inte använda CDN.</value>
   </data>
+
+  <data name="Approve comments" xml:space="preserve">
+    <value>Godkänn kommentarer</value>
+  </data>
+  <data name="Close comments after" xml:space="preserve">
+    <value>Stäng kommentarer efter</value>
+  </data>
+  <data name="Collapse block headers" xml:space="preserve">
+    <value>Fäll ihop blockrubriker</value>
+  </data>
+  <data name="Collapse blocks" xml:space="preserve">
+    <value>Fäll ihop block</value>
+  </data>
+  <data name="Comments page size" xml:space="preserve">
+    <value>Sidstorlek för kommentarer</value>
+  </data>
+  <data name="Enable page comments" xml:space="preserve">
+    <value>Aktivera kommentarer för sidor</value>
+  </data>
+  <data name="Enable post comments" xml:space="preserve">
+    <value>Aktivera kommentarer för artiklar</value>
+  </data>
+  <data name="Manager list size" xml:space="preserve">
+    <value>List storlek</value>
+  </data>
+  <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
+    <value>Om rubriker för blockgrupper ska vara ihopfällda som standard när du redigerar en sida eller artikel.</value>
+  </data>
+  <data name="If blocks should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
+    <value>Om block ska vara ihopfällda som standard när du redigerar en sida eller artikel.</value>
+  </data>
+  <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
+    <value>Om kommentarer ska godkännas automatiskt. Observera att detta kan åsidosättas av modereringstjänster från tredje part.</value>
+  </data>
+  <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
+    <value>Om kommentarer ska användas för sidor. Observera att detta kan åsidosättas för specifika sidor.</value>
+  </data>
+  <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
+    <value>Om kommentarer ska användas för artiklar. Observera att detta kan åsidosättas för specifika artiklar.</value>
+  </data>
+  <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
+    <value>Hur många artiklar som ska laddas som standard i ett arkiv. Notera att detta kan åsidosättas av specifika arkiv.</value>
+  </data>
+  <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
+    <value>Antalet dagar som kommentering är öppet efter publiceringsdatum. Värdet 0 betyder att kommentering alltid är öppen.</value>
+  </data>
+  <data name="The page size for lists within the manager interface." xml:space="preserve">
+    <value>Sidstorleken för listor som visas i administratörs gränssnittet.</value>
+  </data>
 </root>

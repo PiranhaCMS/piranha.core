@@ -13,61 +13,110 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Config" xml:space="preserve">
-    <value>Config</value>
+    <value>Configuration</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>Hierarchical page slugs</value>
+    <value>Hiérarchie des slugs de pages</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>If page slugs should include the parent slug.</value>
+    <value>Si les slugs de pages doivent inclure le slug du parent.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
-    <value>Expanded levels in the sitemap</value>
+    <value>Niveaux développés dans le sitemap</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
-    <value>Archive page size</value>
+    <value>Taille des pages d'archives</value>
   </data>
   <data name="Caching" xml:space="preserve">
-    <value>Caching</value>
+    <value>Mise en cache</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Page cache expiration (minutes)</value>
+    <value>Expiration du cache des pages (minutes)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
-    <value>Page revisions</value>
+    <value>Révision des pages</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Post cache expiration (minutes)</value>
+    <value>Expiration du cache des billets (minutes)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
-    <value>Post revisions</value>
+    <value>Révision des billets</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
-    <value>Media CDN</value>
+    <value>CDN des médias</value>
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
-    <value>If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps.</value>
+    <value>Si les slugs de page doivent prendre en compte le slug du parent lors de leur génération. Cette méthode est préférable pour les sitemaps plus volumineux.</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
-    <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
+    <value>Le nombre de niveaux par défaut qui doit être développés dans le sitemap. Ceci est utile pour les sitemaps plus petits.</value>
   </data>
   <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
-    <value>The default page size for archive pages. Please note that this this can be overridden for specific archives.</value>
+    <value>La taille de page par défaut pour les pages d'archives. Veuillez noter qu'il est possible d'y déroger pour des archives spécifiques.</value>
   </data>
   <data name="The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation." xml:space="preserve">
-    <value>The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation.</value>
+    <value>Le nombre maximum de révisions de pages qui doivent être stockées pour chaque page. Une valeur de 0 signifie qu'il n'y a pas de limitation.</value>
   </data>
   <data name="The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation." xml:space="preserve">
-    <value>The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation.</value>
+    <value>Le nombre maximum de révisions de billet qui doivent être stockées pour chaque billet. Une valeur de 0 signifie qu'il n'y a pas de limitation.</value>
   </data>
   <data name="The time in minutes that web browsers can use pages before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use pages before asking the server for new updates.</value>
+    <value>La durée en minutes que les navigateurs web peuvent utiliser les pages avant de demander au serveur les nouvelles mises à jour.</value>
   </data>
   <data name="The time in minutes that web browsers can use posts before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use posts before asking the server for new updates.</value>
+    <value>La durée en minutes que les navigateurs web peuvent utiliser les billets avant de demander au serveur les nouvelles mises à jour.</value>
   </data>
   <data name="The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL." xml:space="preserve">
-    <value>The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL.</value>
+    <value>L'URL complète (y compris le nom du dossier) du CDN utilisé pour servir les médias téléchargés. Laisser en blanc pour utiliser l'URL de stockage par défaut.</value>
+  </data>
+
+  <data name="Approve comments" xml:space="preserve">
+    <value>Approuver les commentaires</value>
+  </data>
+  <data name="Close comments after" xml:space="preserve">
+    <value>Fermer les commentaires après</value>
+  </data>
+  <data name="Collapse block headers" xml:space="preserve">
+    <value>Réduction des en-têtes des groupes de blocs</value>
+  </data>
+  <data name="Collapse blocks" xml:space="preserve">
+    <value>Réduction des blocs</value>
+  </data>
+  <data name="Comments page size" xml:space="preserve">
+    <value>Taille des pages de commentaires</value>
+  </data>
+  <data name="Enable page comments" xml:space="preserve">
+    <value>Activer les commentaires sur les pages</value>
+  </data>
+  <data name="Enable post comments" xml:space="preserve">
+    <value>Activer les commentaires sur les billets</value>
+  </data>
+  <data name="Manager list size" xml:space="preserve">
+    <value>Taille des listes du gestionnaire</value>
+  </data>
+  <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
+    <value>Si les en-têtes des groupes de blocs doivent être repliés par défaut lors de l'ouverture d'une page ou d'un message dans le gestionnaire.</value>
+  </data>
+  <data name="If blocks should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
+    <value>Si les blocs doivent être repliés par défaut lors de l'ouverture d'une page ou d'un message dans le gestionnaire.</value>
+  </data>
+  <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
+    <value>Si les commentaires doivent être approuvés par défaut. Veuillez noter que des services de modération tiers peuvent passer outre à cette règle.</value>
+  </data>
+  <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
+    <value>Si les commentaires doivent être activés par défaut pour les pages. Veuillez noter qu'il est possible de passer outre cette option pour des pages spécifiques.</value>
+  </data>
+  <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
+    <value>Si les commentaires doivent être activés par défaut pour les billets. Veuillez noter qu'il est possible de passer outre cette option pour des billets spécifiques.</value>
+  </data>
+  <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
+    <value>La taille de page par défaut lors du chargement des commentaires. Veuillez noter qu'il est possible de modifier cette valeur pour des pages spécifiques.</value>
+  </data>
+  <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
+    <value>Le nombre de jours après la date de publication pendant lesquels les commentaires sont possibles. Une valeur de 0 signifie pour toujours.</value>
+  </data>
+  <data name="The page size for lists within the manager interface." xml:space="preserve">
+    <value>La taille de page des listes au sein de l'interface du gestionnaire.</value>
   </data>
 </root>

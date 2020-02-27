@@ -42,48 +42,51 @@ namespace Piranha.Manager.Controllers
         /// Gets the list model.
         /// </summary>
         /// <returns>The list model</returns>
-        [Route("")]
+        [Route("{id:Guid?}")]
         [HttpGet]
-        //[Authorize(Policy = Permission.Config)]
-        public Task<CommentListModel> List()
+        [Authorize(Policy = Permission.Comments)]
+        public Task<CommentListModel> List(Guid? id = null)
         {
-            return _service.Get();
+            return _service.Get(id);
         }
 
-        [Route("approve/{id}")]
+        [Route("approve/{id}/{parentId?}")]
         [HttpGet]
-        public async Task<CommentListModel> Approve(Guid id)
+        [Authorize(Policy = Permission.CommentsApprove)]
+        public async Task<CommentListModel> Approve(Guid id, Guid? parentId = null)
         {
             await _service.ApproveAsync(id);
 
-            var result = await List();
+            var result = await List(parentId);
 
             result.Status = new StatusMessage
             {
                 Type = StatusMessage.Success,
-                Body = "The comment was successfully approved"
+                Body = _localizer.Comment["The comment was successfully approved"]
             };
             return result;
         }
 
-        [Route("unapprove/{id}")]
+        [Route("unapprove/{id}/{parentId?}")]
         [HttpGet]
-        public async Task<CommentListModel> UnApprove(Guid id)
+        [Authorize(Policy = Permission.CommentsApprove)]
+        public async Task<CommentListModel> UnApprove(Guid id, Guid? parentId = null)
         {
             await _service.UnApproveAsync(id);
 
-            var result = await List();
+            var result = await List(parentId);
 
             result.Status = new StatusMessage
             {
                 Type = StatusMessage.Success,
-                Body = "The comment was successfully unapproved"
+                Body = _localizer.Comment["The comment was successfully unapproved"]
             };
             return result;
         }
 
         [Route("delete/{id}")]
         [HttpGet]
+        [Authorize(Policy = Permission.CommentsDelete)]
         public async Task<StatusMessage> Delete(Guid id)
         {
             await _service.DeleteAsync(id);
@@ -91,7 +94,7 @@ namespace Piranha.Manager.Controllers
             var result = new StatusMessage
             {
                 Type = StatusMessage.Success,
-                Body = "The comment was successfully deleted"
+                Body = _localizer.Comment["The comment was successfully deleted"]
             };
             return result;
         }

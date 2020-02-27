@@ -42,4 +42,13 @@
   <data name="Logout" xml:space="preserve">
     <value>Odhlásit se</value>
   </data>
+  <data name="Comments" xml:space="preserve">
+    <value>Komentáře</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Uživatelé</value>
+  </data>
 </root>

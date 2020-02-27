@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) 2019-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -21,7 +21,7 @@ namespace Piranha.Services
         /// Creates and initializes a new post of the specified type.
         /// </summary>
         /// <returns>The created post</returns>
-        T Create<T>(string typeId = null) where T : PostBase;
+        Task<T> CreateAsync<T>(string typeId = null) where T : PostBase;
 
         /// <summary>
         /// Gets the available posts for the specified blog.
@@ -99,6 +99,17 @@ namespace Piranha.Services
         /// <param name="pageSize">The optional page size</param>
         /// <returns>The available comments</returns>
         Task<IEnumerable<Comment>> GetAllCommentsAsync(Guid? postId = null, bool onlyApproved = true,
+            int? page = null, int? pageSize = null);
+
+        /// <summary>
+        /// Gets the pending comments available for the post with the specified id. If no post id
+        /// is provided all comments are fetched.
+        /// </summary>
+        /// <param name="postId">The unique post id</param>
+        /// <param name="page">The optional page number</param>
+        /// <param name="pageSize">The optional page size</param>
+        /// <returns>The available comments</returns>
+        Task<IEnumerable<Comment>> GetAllPendingCommentsAsync(Guid? postId = null,
             int? page = null, int? pageSize = null);
 
         /// <summary>

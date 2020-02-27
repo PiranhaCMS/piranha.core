@@ -1,3 +1,9 @@
+
+//
+// Setting up a common event bus
+// for all Vue apps in Piranha
+//
+Vue.prototype.eventBus = new Vue();
 /*global
     piranha
 */
@@ -210,6 +216,10 @@ piranha.permissions = {
         edit: false,
         delete: false
     },
+    comments: {
+        approve: false,
+        delete: false
+    },
     media: {
         add: false,
         addFolder: false,
@@ -248,6 +258,7 @@ piranha.permissions = {
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.aliases = result.aliases;
+                    self.comments = result.comments;
                     self.media = result.media;
                     self.pages = result.pages;
                     self.posts = result.posts;
@@ -282,6 +293,9 @@ piranha.utils = {
     },
     isEmptyText: function (str) {
         return str == null || str.replace(/\s/g, "") == "" || str.replace(/\s/g, "") == "<br>";
+    },
+    strLength: function (str) {
+        return str != null ? str.length : 0;
     }
 };
 
@@ -812,6 +826,9 @@ piranha.preview = new Vue({
             size:         null,
             width:        null,
             height:       null,
+            title:        null,
+            altText:      null,
+            description:  null,
             lastModified: null
         },
         media: null,
@@ -828,12 +845,44 @@ piranha.preview = new Vue({
             piranha.preview.show();
         },
         load: function (mediaId) {
+            var self = this;
+
             fetch(piranha.baseUrl + "manager/api/media/" + mediaId)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    piranha.preview.media = result;
+                    self.media = result;
                 })
                 .catch(function (error) { console.log("error:", error ); });
+        },
+        saveMeta: function (media) {
+            var self = this;
+
+            var model = {
+                id: media.id,
+                title: media.title,
+                altText: media.altText,
+                description: media.description,
+                properties: media.properties
+            };
+
+            fetch(piranha.baseUrl + "manager/api/media/meta/save", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(model)
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                piranha.notifications.push(result);
+
+                if (result.type === "success") {
+                    self.close();
+                }
+            })
+            .catch(function (error) {
+                console.log("error:", error);
+            });
         },
         show: function () {
             $("#previewModal").modal("show");
@@ -841,7 +890,7 @@ piranha.preview = new Vue({
         close: function () {
             $("#previewModal").modal("hide");
             setTimeout(function () {
-                piranha.preview.clear();            
+                piranha.preview.clear();
             }, 300)
         },
         clear: function () {
@@ -854,7 +903,7 @@ piranha.preview = new Vue({
     mounted: function () {
         this.dropzone = piranha.dropzone.init("#media-update-container", {
             uploadMultiple: false
-        }); 
+        });
         this.dropzone.on("complete", function (file) {
             setTimeout(function () {
                 piranha.preview.dropzone.removeFile(file);
@@ -863,7 +912,7 @@ piranha.preview = new Vue({
         this.dropzone.on("queuecomplete", function () {
             piranha.preview.load(piranha.preview.media.id);
             piranha.media.refresh();
-        })     
+        })
     }
 });
 
@@ -974,36 +1023,12 @@ $(document).on('focusin', function (e) {
         e.stopImmediatePropagation();
     }
 });
-/*global
-    piranha
-*/
-
 Vue.component("page-item", {
-    props: ["item"],
-    methods: {
-        toggleItem: function (item) {
-            item.isExpanded = !item.isExpanded;
-        }
-    },
-    template:
-        "<li :data-id='item.id' class='dd-item' :class='{ expanded: item.isExpanded || item.items.length === 0 }'>" +
-        "  <div class='sitemap-item expanded'>" +
-        "    <div class='link'>" +
-        "      <span class='actions'>" +
-        "        <a v-if='item.items.length > 0 && item.isExpanded' v-on:click.prevent='toggleItem(item)' class='expand' href='#'><i class='fas fa-minus'></i></a>" +
-        "        <a v-if='item.items.length > 0 && !item.isExpanded' v-on:click.prevent='toggleItem(item)' class='expand' href='#'><i class='fas fa-plus'></i></a>" +
-        "      </span>" +
-        "      <a href='#' v-on:click.prevent='piranha.pagepicker.select(item)'>" +
-        "        {{ item.title }}" +
-        "      </a>" +
-        "    </div>" +
-        "    <div class='type d-none d-md-block'>" +
-        "      {{ item.typeName }}" +
-        "    </div>" +
-        "  </div>" +
-        "  <ol class='dd-list' v-if='item.items.length > 0' class='dd-list'>" +
-        "    <page-item v-for='child in item.items' v-bind:key='child.id' v-bind:item='child'>" +
-        "    </page-item>" +
-        "  </ol>" +
-        "</li>"
+  props: ["item"],
+  methods: {
+    toggleItem: function (item) {
+      item.isExpanded = !item.isExpanded;
+    }
+  },
+  template: "\n<li :data-id=\"item.id\" class=\"dd-item\" :class=\"{ expanded: item.isExpanded || item.items.length === 0 }\">\n    <div class=\"sitemap-item expanded\">\n        <div class=\"link\">\n            <span class=\"actions\">\n                <a v-if=\"item.items.length > 0 && item.isExpanded\" v-on:click.prevent=\"toggleItem(item)\" class=\"expand\" href=\"#\"><i class=\"fas fa-minus\"></i></a>\n                <a v-if=\"item.items.length > 0 && !item.isExpanded\" v-on:click.prevent=\"toggleItem(item)\" class=\"expand\" href=\"#\"><i class=\"fas fa-plus\"></i></a>\n            </span>\n            <a href=\"#\" v-on:click.prevent=\"piranha.pagepicker.select(item)\">\n                {{ item.title }}\n            </a>\n        </div>\n        <div class=\"type d-none d-md-block\">\n            {{ item.typeName }}\n        </div>\n    </div>\n    <ol class=\"dd-list\" v-if=\"item.items.length > 0\">\n        <page-item v-for=\"child in item.items\" v-bind:key=\"child.id\" v-bind:item=\"child\">\n        </page-item>\n    </ol>\n</li>\n"
 });

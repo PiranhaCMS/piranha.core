@@ -3,15 +3,16 @@
   <metadata>
     <id>Piranha.AspNetCore</id>
     <title>Piranha AspNetCore</title>
-    <version>8.0.2</version>
+    <version>8.1.0</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Piranha CMS middleware components for AspNetCore</description>
-    <copyright>Copyright 2017-2019 (c) Håkan Edling</copyright>
+    <copyright>Copyright 2017-2020 (c) Håkan Edling</copyright>
     <tags>cms mvc aspnetcore netstandard</tags>
     <license type="expression">MIT</license>
     <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
+    <icon>images\piranha.png</icon>
     <iconUrl>http://piranhacms.org/assets/twitter-shield.png</iconUrl>
 		<releaseNotes>See the changelog available at:
 https://github.com/piranhacms/piranha.core/wiki/changelog
@@ -19,12 +20,13 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     <dependencies>
       <group targetFramework="netcoreapp3.1">
         <dependency id="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" version="3.1.0" />
-        <dependency id="Piranha" version="[8.0.2,9.0.0)" />
+        <dependency id="Piranha" version="[8.1.0,9.0.0)" />
         <dependency id="XSitemap" version="2.0.7" />
       </group>
     </dependencies>
   </metadata>
   <files>
+    <file src="piranha.png" target="images\" />
     <file src="..\core\Piranha.AspNetCore\bin\Release\netcoreapp3.1\Piranha.AspNetCore.dll" target="lib\netcoreapp3.1\Piranha.AspNetCore.dll" />
   </files>
 </package>

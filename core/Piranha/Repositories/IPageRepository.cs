@@ -52,6 +52,16 @@ namespace Piranha.Repositories
             int page, int pageSize);
 
         /// <summary>
+        /// Gets the pending comments available for the page with the specified id.
+        /// </summary>
+        /// <param name="pageId">The unique page id</param>
+        /// <param name="page">The page number</param>
+        /// <param name="pageSize">The page size</param>
+        /// <returns>The available comments</returns>
+        Task<IEnumerable<Comment>> GetAllPendingComments(Guid? pageId,
+            int page, int pageSize);
+
+        /// <summary>
         /// Gets the site startpage.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>

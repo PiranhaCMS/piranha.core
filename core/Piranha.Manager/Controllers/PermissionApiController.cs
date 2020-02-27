@@ -44,6 +44,10 @@ namespace Piranha.Manager.Controllers
             model.Aliases.Edit = (await _auth.AuthorizeAsync(User, Permission.AliasesEdit)).Succeeded;
             model.Aliases.Delete = (await _auth.AuthorizeAsync(User, Permission.AliasesDelete)).Succeeded;
 
+            // Comment permissions
+            model.Comments.Approve = (await _auth.AuthorizeAsync(User, Permission.CommentsApprove)).Succeeded;
+            model.Comments.Delete = (await _auth.AuthorizeAsync(User, Permission.CommentsDelete)).Succeeded;
+
             // Media permissions
             model.Media.Add = (await _auth.AuthorizeAsync(User, Permission.MediaAdd)).Succeeded;
             model.Media.AddFolder = (await _auth.AuthorizeAsync(User, Permission.MediaAddFolder)).Succeeded;

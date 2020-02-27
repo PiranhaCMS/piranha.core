@@ -15,7 +15,7 @@
     }
     ViewBag.MenuItem = "Users";
 }
-@section script { 
+@section script {
     <script src="~/manager/identity/piranha.useredit.js"></script>
     <script type="text/javascript">
         piranha.useredit.currentUserName = "@User.Identity.Name";
@@ -63,7 +63,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>@Localizer.General["Username"]</label>
-                                <input v-model="userModel.user.userName" class="form-control small" maxlength="128" placeholder="Användarnamn som används vid inloggning" required />
+                                <input v-model="userModel.user.userName" class="form-control small" maxlength="128" required />
                                 <div class="invalid-feedback">
                                     @Localizer.General["Username is mandatory."]
                                 </div>
@@ -72,7 +72,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>@Localizer.General["Email address"]</label>
-                                <input type="email" v-model="userModel.user.email" class="form-control small" maxlength="128" placeholder="E-postadress" required />
+                                <input type="email" v-model="userModel.user.email" class="form-control small" maxlength="128" required />
                                 <div class="invalid-feedback">
                                     @Localizer.General["Email address is mandatory."]
                                 </div>
@@ -82,7 +82,7 @@
                     <div class="form-group">
                         <label>@Localizer.General["Roles"]</label>
                         <ul class="list-group">
-                        
+
                             <li class="list-group-item" v-for="roleRow in getRoleRows()">
                                 <div class="row">
                                     <div class="col-sm-4" v-for="role in roleRow">
@@ -94,7 +94,7 @@
                                     </div>
                                 </div>
                             </li>
-                        
+
                         </ul>
                     </div>
                 </div>
@@ -109,13 +109,13 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>@Localizer.General["Password"]</label>
-                                <input type="password" v-model="userModel.password" class="form-control small" maxlength="128" placeholder="Nytt lösenord" />
+                                <input type="password" v-model="userModel.password" class="form-control small" maxlength="128" placeholder="@Localizer.Security["New password"]" />
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>&nbsp;</label>
-                                <input type="password" v-model="userModel.passwordConfirm" class="form-control small" maxlength="128" placeholder="Bekräfta nytt lösenord" />
+                                <input type="password" v-model="userModel.passwordConfirm" class="form-control small" maxlength="128" placeholder="@Localizer.Security["Confirm password"]" />
                             </div>
                         </div>
                     </div>

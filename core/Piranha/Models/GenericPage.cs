@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2019 Håkan Edling
+ * Copyright (c) 2016-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 
 namespace Piranha.Models
 {
@@ -32,9 +33,9 @@ namespace Piranha.Models
         /// <param name="api">The current api</param>
         /// <param name="typeId">The unique page type id</param>
         /// <returns>The new model</returns>
-        public static T Create(IApi api, string typeId = null)
+        public static Task<T> CreateAsync(IApi api, string typeId = null)
         {
-            return api.Pages.Create<T>(typeId);
+            return api.Pages.CreateAsync<T>(typeId);
         }
     }
 }

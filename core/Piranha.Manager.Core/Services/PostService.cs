@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) 2019-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Piranha.Extend;
 using Piranha.Manager.Extensions;
@@ -118,12 +117,17 @@ namespace Piranha.Manager.Services
         public async Task<PostListModel> GetList(Guid archiveId, int index = 0)
         {
             var page = await _api.Pages.GetByIdAsync<PageInfo>(archiveId);
+            if (page == null)
+            {
+                return new PostListModel();
+            }
+
             var pageType = App.PageTypes.GetById(page.TypeId);
             var pageSize = 0;
 
             using (var config = new Config(_api))
             {
-                pageSize = config.ArchivePageSize;
+                pageSize = config.ManagerPageSize;
             }
 
             var model = new PostListModel
@@ -190,12 +194,14 @@ namespace Piranha.Manager.Services
 
             if (post != null)
             {
-                var postModel =  Transform(post, isDraft);
+                var postModel = Transform(post, isDraft);
 
                 postModel.Categories = (await _api.Posts.GetAllCategoriesAsync(post.BlogId))
                     .Select(c => c.Title).ToList();
                 postModel.Tags = (await _api.Posts.GetAllTagsAsync(post.BlogId))
                     .Select(t => t.Title).ToList();
+                postModel.PendingCommentCount = (await _api.Posts.GetAllPendingCommentsAsync(id))
+                    .Count();
 
                 postModel.SelectedCategory = post.Category.Title;
                 postModel.SelectedTags = post.Tags.Select(t => t.Title).ToList();
@@ -207,7 +213,7 @@ namespace Piranha.Manager.Services
 
         public async Task<PostEditModel> Create(Guid archiveId, string typeId)
         {
-            var post = _api.Posts.Create<DynamicPost>(typeId);
+            var post = await _api.Posts.CreateAsync<DynamicPost>(typeId);
 
             if (post != null)
             {
@@ -244,7 +250,7 @@ namespace Piranha.Manager.Services
 
                 if (post == null)
                 {
-                    post = _factory.Create<DynamicPost>(postType);
+                    post = await _factory.CreateAsync<DynamicPost>(postType);
                     post.Id = model.Id;
                 }
 
@@ -259,6 +265,7 @@ namespace Piranha.Manager.Services
                 post.RedirectType = (RedirectType)Enum.Parse(typeof(RedirectType), model.RedirectType);
                 post.EnableComments = model.EnableComments;
                 post.CloseCommentsAfterDays = model.CloseCommentsAfterDays;
+                post.Permissions = model.SelectedPermissions;
 
                 if (postType.Routes.Count > 1)
                 {
@@ -359,7 +366,19 @@ namespace Piranha.Manager.Services
 
                             foreach (var item in blockGroup.Items)
                             {
-                                postBlock.Items.Add(item.Model);
+                                if (item is BlockItemModel blockItem)
+                                {
+                                    postBlock.Items.Add(blockItem.Model);
+                                }
+                                else if (item is BlockGenericModel blockGeneric)
+                                {
+                                    var transformed = ContentUtils.TransformGenericBlock(blockGeneric);
+
+                                    if (transformed != null)
+                                    {
+                                        postBlock.Items.Add(transformed);
+                                    }
+                                }
                             }
                             post.Blocks.Add(postBlock);
                         }
@@ -367,6 +386,15 @@ namespace Piranha.Manager.Services
                     else if (block is BlockItemModel blockItem)
                     {
                         post.Blocks.Add(blockItem.Model);
+                    }
+                    else if (block is BlockGenericModel blockGeneric)
+                    {
+                        var transformed = ContentUtils.TransformGenericBlock(blockGeneric);
+
+                        if (transformed != null)
+                        {
+                            post.Blocks.Add(transformed);
+                        }
                     }
                 }
 
@@ -415,13 +443,19 @@ namespace Piranha.Manager.Services
                 RedirectType = post.RedirectType.ToString(),
                 EnableComments = post.EnableComments,
                 CloseCommentsAfterDays = post.CloseCommentsAfterDays,
+                CommentCount = post.CommentCount,
                 State = post.GetState(isDraft),
                 UseBlocks = type.UseBlocks,
                 SelectedRoute = route == null ? null : new RouteModel
                 {
                     Title = route.Title,
                     Route = route.Route
-                }
+                },
+                Permissions = App.Permissions
+                    .GetPublicPermissions()
+                    .Select(p => new KeyValuePair<string, string>(p.Name, p.Title))
+                    .ToList(),
+                SelectedPermissions = post.Permissions
             };
 
             foreach (var r in type.Routes)
@@ -444,6 +478,7 @@ namespace Piranha.Manager.Services
                         Description = regionType.Description,
                         Placeholder = regionType.ListTitlePlaceholder,
                         IsCollection = regionType.Collection,
+                        Expanded = regionType.ListExpand,
                         Icon = regionType.Icon,
                         Display = regionType.Display.ToString().ToLower()
                     }
@@ -542,85 +577,84 @@ namespace Piranha.Manager.Services
                             "block-group-horizontal" : "block-group-vertical";
                     }
 
-                    foreach (var prop in block.GetType().GetProperties(App.PropertyBindings))
-                    {
-                        if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
-                        {
-                            var fieldType = App.Fields.GetByType(prop.PropertyType);
-                            var field = new FieldModel
-                            {
-                                Model = (Extend.IField)prop.GetValue(block),
-                                Meta = new FieldMeta
-                                {
-                                    Id = prop.Name,
-                                    Name = prop.Name,
-                                    Component = fieldType.Component,
-                                }
-                            };
-
-                            // Check if this is a select field
-                            if (typeof(Extend.Fields.SelectFieldBase).IsAssignableFrom(fieldType.Type))
-                            {
-                                foreach(var item in ((Extend.Fields.SelectFieldBase)Activator.CreateInstance(fieldType.Type)).Items)
-                                {
-                                    field.Meta.Options.Add(Convert.ToInt32(item.Value), item.Title);
-                                }
-                            }
-
-                            // Check if we have field meta-data available
-                            var attr = prop.GetCustomAttribute<Extend.FieldAttribute>();
-                            if (attr != null)
-                            {
-                                field.Meta.Name = !string.IsNullOrWhiteSpace(attr.Title) ? attr.Title : field.Meta.Name;
-                                field.Meta.Placeholder = attr.Placeholder;
-                                field.Meta.IsHalfWidth = attr.Options.HasFlag(FieldOption.HalfWidth);
-                            }
-
-                            // Check if we have field description meta-data available
-                            var descAttr = prop.GetCustomAttribute<Extend.FieldDescriptionAttribute>();
-                            if (descAttr != null)
-                            {
-                                field.Meta.Description = descAttr.Text;
-                            }
-                            group.Fields.Add(field);
-                        }
-                    }
+                    group.Fields = ContentUtils.GetBlockFields(block);
 
                     bool firstChild = true;
                     foreach (var child in blockGroup.Items)
                     {
                         blockType = App.Blocks.GetByType(child.Type);
 
-                        group.Items.Add(new BlockItemModel
+                        if (!blockType.IsGeneric)
                         {
-                            IsActive = firstChild,
-                            Model = child,
-                            Meta = new BlockMeta
+                            group.Items.Add(new BlockItemModel
                             {
-                                Name = blockType.Name,
-                                Title = child.GetTitle(),
-                                Icon = blockType.Icon,
-                                Component = blockType.Component
-                            }
-                        });
+                                IsActive = firstChild,
+                                Model = child,
+                                Meta = new BlockMeta
+                                {
+                                    Name = blockType.Name,
+                                    Title = child.GetTitle(),
+                                    Icon = blockType.Icon,
+                                    Component = blockType.Component
+                                }
+                            });
+                        }
+                        else
+                        {
+                            // Generic block item model
+                            group.Items.Add(new BlockGenericModel
+                            {
+                                IsActive = firstChild,
+                                Model = ContentUtils.GetBlockFields(child),
+                                Type = child.Type,
+                                Meta = new BlockMeta
+                                {
+                                    Name = blockType.Name,
+                                    Title = child.GetTitle(),
+                                    Icon = blockType.Icon,
+                                    Component = blockType.Component,
+                                }
+                            });
+                        }
                         firstChild = false;
                     }
                     model.Blocks.Add(group);
                 }
                 else
                 {
-                    model.Blocks.Add(new BlockItemModel
+                    if (!blockType.IsGeneric)
                     {
-                        Model = block,
-                        Meta = new BlockMeta
+                        // Regular block item model
+                        model.Blocks.Add(new BlockItemModel
                         {
-                            Name = blockType.Name,
-                            Title = block.GetTitle(),
-                            Icon = blockType.Icon,
-                            Component = blockType.Component,
-                            isCollapsed = config.ManagerDefaultCollapsedBlocks
-                        }
-                    });
+                            Model = block,
+                            Meta = new BlockMeta
+                            {
+                                Name = blockType.Name,
+                                Title = block.GetTitle(),
+                                Icon = blockType.Icon,
+                                Component = blockType.Component,
+                                isCollapsed = config.ManagerDefaultCollapsedBlocks
+                            }
+                        });
+                    }
+                    else
+                    {
+                        // Generic block item model
+                        model.Blocks.Add(new BlockGenericModel
+                        {
+                            Model = ContentUtils.GetBlockFields(block),
+                            Type = block.Type,
+                            Meta = new BlockMeta
+                            {
+                                Name = blockType.Name,
+                                Title = block.GetTitle(),
+                                Icon = blockType.Icon,
+                                Component = blockType.Component,
+                                isCollapsed = config.ManagerDefaultCollapsedBlocks
+                            }
+                        });
+                    }
                 }
             }
 

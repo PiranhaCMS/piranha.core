@@ -222,4 +222,19 @@
   <data name="Width" xml:space="preserve">
     <value>Breedte</value>
   </data>
+  <data name="Archives and Comments" xml:space="preserve">
+    <value>Archives and Comments</value>
+  </data>
+  <data name="Author" xml:space="preserve">
+    <value>Author</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>Comments</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="Username and/or password are incorrect." xml:space="preserve">
+    <value>Username and/or password are incorrect.</value>
+  </data>
 </root>

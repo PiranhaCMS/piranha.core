@@ -65,6 +65,17 @@ namespace Piranha.Manager.Models
         public int CloseCommentsAfterDays { get; set; }
 
         /// <summary>
+        /// Gets/sets the total comment count.
+        /// </summary>
+        public int CommentCount { get; set; }
+
+        /// <summary>
+        /// Gets/sets the number of pending comments.
+        /// </summary>
+        /// <value></value>
+        public int PendingCommentCount { get; set; }
+
+        /// <summary>
         /// Gets/sets the content status.
         /// </summary>
         public string State { get; set; }
@@ -98,5 +109,15 @@ namespace Piranha.Manager.Models
         /// Gets/sets the selected route.
         /// </summary>
         public RouteModel SelectedRoute { get; set; }
+
+        /// <summary>
+        /// Gets/sets the currently selected permissions.
+        /// </summary>
+        public IList<string> SelectedPermissions { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Gets/sets all of the available permissions.
+        /// </summary>
+        public IList<KeyValuePair<string, string>> Permissions { get; set; } = new List<KeyValuePair<string, string>>();
     }
 }

@@ -1,14 +1,16 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Piranha.AspNetCore.Identity.Data;
@@ -57,5 +59,10 @@ namespace Piranha.AspNetCore.Identity
         /// </summary>
         /// <returns></returns>
         int SaveChanges();
+
+        /// <summary>
+        /// Saves the changes made to the context.
+        /// </summary>
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

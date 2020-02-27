@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2017-2019 Håkan Edling
+ * Copyright (c) 2017-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -11,6 +11,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 using Piranha.AttributeBuilder;
 using Piranha.Extend;
@@ -24,15 +25,16 @@ namespace Piranha.Tests.Repositories
     [Collection("Integration tests")]
     public class SitesCached : Sites
     {
-        protected override void Init() {
+        public override async Task InitializeAsync()
+        {
             cache = new Cache.SimpleCache();
 
-            base.Init();
+            await base.InitializeAsync();
         }
     }
 
     [Collection("Integration tests")]
-    public class Sites : BaseTests
+    public class Sites : BaseTestsAsync
     {
         private const string SITE_1 = "MyFirstSite";
         private const string SITE_2 = "MySecondSite";
@@ -61,8 +63,10 @@ namespace Piranha.Tests.Repositories
             public HtmlField Footer { get; set; }
         }
 
-        protected override void Init() {
-            using (var api = CreateApi()) {
+        public override async Task InitializeAsync()
+        {
+            using (var api = CreateApi())
+            {
                 Piranha.App.Init(api);
 
                 var builder = new PageTypeBuilder(api)
@@ -73,7 +77,7 @@ namespace Piranha.Tests.Repositories
                     .AddType(typeof(MySiteContent));
                 siteBuilder.Build();
 
-                api.Sites.Save(new Site
+                await api.Sites.SaveAsync(new Site
                 {
                     Id = SITE_1_ID,
                     SiteTypeId = "MySiteContent",
@@ -83,105 +87,120 @@ namespace Piranha.Tests.Repositories
                     IsDefault = true
                 });
 
-                api.Sites.Save(new Site
+                await api.Sites.SaveAsync(new Site
                 {
                     InternalId = SITE_4,
                     Title = SITE_4
                 });
-                api.Sites.Save(new Site
+                await api.Sites.SaveAsync(new Site
                 {
                     InternalId = SITE_5,
                     Title = SITE_5
                 });
-                api.Sites.Save(new Site
+                await api.Sites.SaveAsync(new Site
                 {
                     InternalId = SITE_6,
                     Title = SITE_6
                 });
 
                 // Sites for testing hostname routing
-                api.Sites.Save(new Site
+                await api.Sites.SaveAsync(new Site
                 {
                     InternalId = "RoutingTest1",
                     Title = "RoutingTest1",
                     Hostnames = "mydomain.com,localhost"
                 });
-                api.Sites.Save(new Site
+                await api.Sites.SaveAsync(new Site
                 {
                     InternalId = "RoutingTest2",
                     Title = "RoutingTest2",
                     Hostnames = " mydomain.com/en"
                 });
-                api.Sites.Save(new Site
+                await api.Sites.SaveAsync(new Site
                 {
                     InternalId = "RoutingTest3",
                     Title = "RoutingTest3",
                     Hostnames = "sub.mydomain.com , sub2.localhost"
                 });
 
-                var content = MySiteContent.Create(api);
+                var content = await MySiteContent.CreateAsync(api);
                 content.Header = "<p>Lorem ipsum</p>";
                 content.Footer = "<p>Tellus Ligula</p>";
-                api.Sites.SaveContent(SITE_1_ID, content);
+                await api.Sites.SaveContentAsync(SITE_1_ID, content);
 
-                var page1 = MyPage.Create(api);
+                var page1 = await MyPage.CreateAsync(api);
                 page1.SiteId = SITE_1_ID;
                 page1.Title = "Startpage";
                 page1.Text = "Welcome";
                 page1.IsHidden = true;
                 page1.Published = DateTime.Now;
-                api.Pages.Save(page1);
+                await api.Pages.SaveAsync(page1);
 
-                var page2 = MyPage.Create(api);
+                var page2 = await MyPage.CreateAsync(api);
                 page2.SiteId = SITE_1_ID;
                 page2.SortOrder = 1;
                 page2.Title = "Second page";
                 page2.Text = "The second page";
-                api.Pages.Save(page2);
+                await api.Pages.SaveAsync(page2);
 
-                var page3 = MyPage.Create(api);
+                var page3 = await MyPage.CreateAsync(api);
                 page3.SiteId = SITE_1_ID;
                 page3.ParentId = page2.Id;
                 page3.Title = "Subpage";
                 page3.Text = "The subpage";
                 page3.Published = DateTime.Now;
-                api.Pages.Save(page3);
+                await api.Pages.SaveAsync(page3);
             }
         }
 
-        protected override void Cleanup() {
-            using (var api = CreateApi()) {
-                var pages = api.Pages.GetAll(SITE_1_ID);
+        public override async Task DisposeAsync()
+        {
+            using (var api = CreateApi())
+            {
+                var pages = await api.Pages.GetAllAsync(SITE_1_ID);
                 foreach (var page in pages.Where(p => p.ParentId.HasValue))
-                    api.Pages.Delete(page);
+                {
+                    await api.Pages.DeleteAsync(page);
+                }
                 foreach (var page in pages.Where(p => !p.ParentId.HasValue))
-                    api.Pages.Delete(page);
+                {
+                    await api.Pages.DeleteAsync(page);
+                }
 
-                var types = api.PageTypes.GetAll();
+                var types = await api.PageTypes.GetAllAsync();
                 foreach (var t in types)
-                    api.PageTypes.Delete(t);
+                {
+                    await api.PageTypes.DeleteAsync(t);
+                }
 
-                var sites = api.Sites.GetAll();
+                var sites = await api.Sites.GetAllAsync();
                 foreach (var site in sites)
-                    api.Sites.Delete(site);
+                {
+                    await api.Sites.DeleteAsync(site);
+                }
 
-                var siteTypes = api.SiteTypes.GetAll();
+                var siteTypes = await api.SiteTypes.GetAllAsync();
                 foreach (var t in siteTypes)
-                    api.SiteTypes.Delete(t);
+                {
+                    await api.SiteTypes.DeleteAsync(t);
+                }
             }
         }
 
         [Fact]
-        public void IsCached() {
+        public void IsCached()
+        {
             using (var api = CreateApi()) {
                 Assert.Equal(this.GetType() == typeof(SitesCached), ((Api)api).IsCached);
             }
         }
 
         [Fact]
-        public void Add() {
-            using (var api = CreateApi()) {
-                api.Sites.Save(new Site
+        public async Task Add()
+        {
+            using (var api = CreateApi())
+            {
+                await api.Sites.SaveAsync(new Site
                 {
                     InternalId = SITE_2,
                     Title = SITE_2
@@ -190,10 +209,12 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void AddDuplicateKey() {
-            using (var api = CreateApi()) {
-                Assert.ThrowsAny<ValidationException>(() =>
-                    api.Sites.Save(new Site
+        public async Task AddDuplicateKey()
+        {
+            using (var api = CreateApi())
+            {
+                await Assert.ThrowsAnyAsync<ValidationException>(async () =>
+                    await api.Sites.SaveAsync(new Site
                     {
                         InternalId = SITE_1,
                         Title = SITE_1
@@ -202,25 +223,29 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void AddEmptyFailure() {
-            using (var api = CreateApi()) {
-                Assert.ThrowsAny<ValidationException>(() =>
-                    api.Sites.Save(new Site()));
+        public async Task AddEmptyFailure()
+        {
+            using (var api = CreateApi())
+            {
+                await Assert.ThrowsAnyAsync<ValidationException>(async () =>
+                    await api.Sites.SaveAsync(new Site()));
             }
         }
 
         [Fact]
-        public void AddAndGenerateInternalId() {
+        public async Task AddAndGenerateInternalId()
+        {
             var id = Guid.NewGuid();
 
-            using (var api = CreateApi()) {
-                api.Sites.Save(new Site
+            using (var api = CreateApi())
+            {
+                await api.Sites.SaveAsync(new Site
                 {
                     Id = id,
                     Title = "Generate internal id"
                 });
 
-                var site = api.Sites.GetById(id);
+                var site = await api.Sites.GetByIdAsync(id);
 
                 Assert.NotNull(site);
                 Assert.Equal("GenerateInternalId", site.InternalId);
@@ -228,9 +253,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetAll() {
-            using (var api = CreateApi()) {
-                var models = api.Sites.GetAll();
+        public async Task GetAll()
+        {
+            using (var api = CreateApi())
+            {
+                var models = await api.Sites.GetAllAsync();
 
                 Assert.NotNull(models);
                 Assert.NotEmpty(models);
@@ -238,27 +265,33 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetNoneById() {
-            using (var api = CreateApi()) {
-                var none = api.Sites.GetById(Guid.NewGuid());
+        public async Task GetNoneById()
+        {
+            using (var api = CreateApi())
+            {
+                var none = await api.Sites.GetByIdAsync(Guid.NewGuid());
 
                 Assert.Null(none);
             }
         }
 
         [Fact]
-        public void GetNoneByInternalId() {
-            using (var api = CreateApi()) {
-                var none = api.Sites.GetByInternalId("none-existing-id");
+        public async Task GetNoneByInternalId()
+        {
+            using (var api = CreateApi())
+            {
+                var none = await api.Sites.GetByInternalIdAsync("none-existing-id");
 
                 Assert.Null(none);
             }
         }
 
         [Fact]
-        public void GetById() {
-            using (var api = CreateApi()) {
-                var model = api.Sites.GetById(SITE_1_ID);
+        public async Task GetById()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Sites.GetByIdAsync(SITE_1_ID);
 
                 Assert.NotNull(model);
                 Assert.Equal(SITE_1, model.InternalId);
@@ -266,9 +299,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetByInternalId() {
-            using (var api = CreateApi()) {
-                var model = api.Sites.GetByInternalId(SITE_1);
+        public async Task GetByInternalId()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Sites.GetByInternalIdAsync(SITE_1);
 
                 Assert.NotNull(model);
                 Assert.Equal(SITE_1, model.InternalId);
@@ -276,9 +311,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetDefault() {
-            using (var api = CreateApi()) {
-                var model = api.Sites.GetDefault();
+        public async Task GetDefault()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Sites.GetDefaultAsync();
 
                 Assert.NotNull(model);
                 Assert.Equal(SITE_1, model.InternalId);
@@ -286,9 +323,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetSitemap() {
-            using (var api = CreateApi()) {
-                var sitemap = api.Sites.GetSitemap();
+        public async Task GetSitemap()
+        {
+            using (var api = CreateApi())
+            {
+                var sitemap = await api.Sites.GetSitemapAsync();
 
                 Assert.NotNull(sitemap);
                 Assert.NotEmpty(sitemap);
@@ -297,9 +336,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetSitemapById() {
-            using (var api = CreateApi()) {
-                var sitemap = api.Sites.GetSitemap(SITE_1_ID);
+        public async Task GetSitemapById()
+        {
+            using (var api = CreateApi())
+            {
+                var sitemap = await api.Sites.GetSitemapAsync(SITE_1_ID);
 
                 Assert.NotNull(sitemap);
                 Assert.NotEmpty(sitemap);
@@ -308,11 +349,14 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void CheckPermlinkSyntax() {
-            using (var api = CreateApi()) {
-                var sitemap = api.Sites.GetSitemap();
+        public async Task CheckPermlinkSyntax()
+        {
+            using (var api = CreateApi())
+            {
+                var sitemap = await api.Sites.GetSitemapAsync();
 
-                foreach (var item in sitemap) {
+                foreach (var item in sitemap)
+                {
                     Assert.NotNull(item.Permalink);
                     Assert.StartsWith("/", item.Permalink);
                 }
@@ -320,9 +364,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetUnpublishedSitemap() {
-            using (var api = CreateApi()) {
-                var sitemap = api.Sites.GetSitemap(onlyPublished: false);
+        public async Task GetUnpublishedSitemap()
+        {
+            using (var api = CreateApi())
+            {
+                var sitemap = await api.Sites.GetSitemapAsync(onlyPublished: false);
 
                 Assert.NotNull(sitemap);
                 Assert.Equal(2, sitemap.Count);
@@ -333,50 +379,58 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void CheckHiddenSitemapItems() {
-            using (var api = CreateApi()) {
-                var sitemap = api.Sites.GetSitemap();
+        public async Task CheckHiddenSitemapItems()
+        {
+            using (var api = CreateApi())
+            {
+                var sitemap = await api.Sites.GetSitemapAsync();
 
                 Assert.Equal(1, sitemap.Count(s => s.IsHidden));
             }
         }
 
         [Fact]
-        public void ChangeDefaultSite() {
-            using (var api = CreateApi()) {
-                var site6 = api.Sites.GetByInternalId(SITE_6);
+        public async Task ChangeDefaultSite()
+        {
+            using (var api = CreateApi())
+            {
+                var site6 = await api.Sites.GetByInternalIdAsync(SITE_6);
 
                 Assert.False(site6.IsDefault);
                 site6.IsDefault = true;
-                api.Sites.Save(site6);
+                await api.Sites.SaveAsync(site6);
 
-                var site1 = api.Sites.GetById(SITE_1_ID);
+                var site1 = await api.Sites.GetByIdAsync(SITE_1_ID);
 
                 Assert.False(site1.IsDefault);
                 site1.IsDefault = true;
-                api.Sites.Save(site1);
+                await api.Sites.SaveAsync(site1);
             }
         }
 
         [Fact]
-        public void CantRemoveDefault() {
-            using (var api = CreateApi()) {
-                var site1 = api.Sites.GetById(SITE_1_ID);
+        public async Task CantRemoveDefault()
+        {
+            using (var api = CreateApi())
+            {
+                var site1 = await api.Sites.GetByIdAsync(SITE_1_ID);
 
                 Assert.True(site1.IsDefault);
                 site1.IsDefault = false;
                 api.Sites.Save(site1);
 
-                site1 = api.Sites.GetById(SITE_1_ID);
+                site1 = await api.Sites.GetByIdAsync(SITE_1_ID);
 
                 Assert.True(site1.IsDefault);
             }
         }
 
         [Fact]
-        public void GetUnpublishedSitemapById() {
-            using (var api = CreateApi()) {
-                var sitemap = api.Sites.GetSitemap(SITE_1_ID, onlyPublished: false);
+        public async Task GetUnpublishedSitemapById()
+        {
+            using (var api = CreateApi())
+            {
+                var sitemap = await api.Sites.GetSitemapAsync(SITE_1_ID, onlyPublished: false);
 
                 Assert.NotNull(sitemap);
                 Assert.Equal(2, sitemap.Count);
@@ -387,44 +441,52 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void Update() {
-            using (var api = CreateApi()) {
-                var model = api.Sites.GetById(SITE_1_ID);
+        public async Task Update()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Sites.GetByIdAsync(SITE_1_ID);
 
                 Assert.Equal(SITE_1_HOSTS, model.Hostnames);
 
                 model.Hostnames = "Updated";
 
-                api.Sites.Save(model);
+                await api.Sites.SaveAsync(model);
             }
         }
 
         [Fact]
-        public void Delete() {
-            using (var api = CreateApi()) {
-                var model = api.Sites.GetByInternalId(SITE_4);
+        public async Task Delete()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Sites.GetByInternalIdAsync(SITE_4);
 
                 Assert.NotNull(model);
 
-                api.Sites.Delete(model);
+                await api.Sites.DeleteAsync(model);
             }
         }
 
         [Fact]
-        public void DeleteById() {
-            using (var api = CreateApi()) {
-                var model = api.Sites.GetByInternalId(SITE_5);
+        public async Task DeleteById()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Sites.GetByInternalIdAsync(SITE_5);
 
                 Assert.NotNull(model);
 
-                api.Sites.Delete(model.Id);
+                await api.Sites.DeleteAsync(model.Id);
             }
         }
 
         [Fact]
-        public void GetSiteContent() {
-            using (var api = CreateApi()) {
-                var model = api.Sites.GetContentById<MySiteContent>(SITE_1_ID);
+        public async Task GetSiteContent()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Sites.GetContentByIdAsync<MySiteContent>(SITE_1_ID);
 
                 Assert.NotNull(model);
                 Assert.Equal("<p>Lorem ipsum</p>", model.Header.Value);
@@ -432,24 +494,28 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void UpdateSiteContent() {
-            using (var api = CreateApi()) {
-                var model = api.Sites.GetContentById<MySiteContent>(SITE_1_ID);
+        public async Task UpdateSiteContent()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Sites.GetContentByIdAsync<MySiteContent>(SITE_1_ID);
 
                 Assert.NotNull(model);
                 model.Footer = "<p>Fusce Parturient</p>";
-                api.Sites.SaveContent(SITE_1_ID, model);
+                await api.Sites.SaveContentAsync(SITE_1_ID, model);
 
-                model = api.Sites.GetContentById<MySiteContent>(SITE_1_ID);
+                model = await api.Sites.GetContentByIdAsync<MySiteContent>(SITE_1_ID);
                 Assert.NotNull(model);
                 Assert.Equal("<p>Fusce Parturient</p>", model.Footer.Value);
             }
         }
 
         [Fact]
-        public void GetDynamicSiteContent() {
-            using (var api = CreateApi()) {
-                var model = api.Sites.GetContentById(SITE_1_ID);
+        public async Task GetDynamicSiteContent()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Sites.GetContentByIdAsync(SITE_1_ID);
 
                 Assert.NotNull(model);
                 Assert.Equal("<p>Lorem ipsum</p>", model.Regions.Header.Value);
@@ -457,25 +523,28 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void UpdateDynamicSiteContent() {
-            using (var api = CreateApi()) {
-                var model = api.Sites.GetContentById(SITE_1_ID);
+        public async Task UpdateDynamicSiteContent()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Sites.GetContentByIdAsync(SITE_1_ID);
 
                 Assert.NotNull(model);
                 model.Regions.Footer.Value = "<p>Purus Sit</p>";
-                api.Sites.SaveContent(SITE_1_ID, model);
+                await api.Sites.SaveContentAsync(SITE_1_ID, model);
 
-                model = api.Sites.GetContentById(SITE_1_ID);
+                model = await api.Sites.GetContentByIdAsync(SITE_1_ID);
                 Assert.NotNull(model);
                 Assert.Equal("<p>Purus Sit</p>", model.Regions.Footer.Value);
             }
         }
 
         [Fact]
-        public void GetByHostname()
+        public async Task GetByHostname()
         {
-            using (var api = CreateApi()) {
-                var model = api.Sites.GetByHostname("mydomain.com");
+            using (var api = CreateApi())
+            {
+                var model = await api.Sites.GetByHostnameAsync("mydomain.com");
 
                 Assert.NotNull(model);
                 Assert.Equal("RoutingTest1", model.InternalId);
@@ -483,10 +552,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetByHostnameSecond()
+        public async Task GetByHostnameSecond()
         {
-            using (var api = CreateApi()) {
-                var model = api.Sites.GetByHostname("localhost");
+            using (var api = CreateApi())
+            {
+                var model = await api.Sites.GetByHostnameAsync("localhost");
 
                 Assert.NotNull(model);
                 Assert.Equal("RoutingTest1", model.InternalId);
@@ -494,10 +564,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetByHostnameSuffix()
+        public async Task GetByHostnameSuffix()
         {
-            using (var api = CreateApi()) {
-                var model = api.Sites.GetByHostname("mydomain.com/en");
+            using (var api = CreateApi())
+            {
+                var model = await api.Sites.GetByHostnameAsync("mydomain.com/en");
 
                 Assert.NotNull(model);
                 Assert.Equal("RoutingTest2", model.InternalId);
@@ -505,10 +576,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetByHostnameSubdomain()
+        public async Task GetByHostnameSubdomain()
         {
-            using (var api = CreateApi()) {
-                var model = api.Sites.GetByHostname("sub.mydomain.com");
+            using (var api = CreateApi())
+            {
+                var model = await api.Sites.GetByHostnameAsync("sub.mydomain.com");
 
                 Assert.NotNull(model);
                 Assert.Equal("RoutingTest3", model.InternalId);
@@ -516,10 +588,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetByHostnameSubdomainSecond()
+        public async Task GetByHostnameSubdomainSecond()
         {
-            using (var api = CreateApi()) {
-                var model = api.Sites.GetByHostname("sub2.localhost");
+            using (var api = CreateApi())
+            {
+                var model = await api.Sites.GetByHostnameAsync("sub2.localhost");
 
                 Assert.NotNull(model);
                 Assert.Equal("RoutingTest3", model.InternalId);
@@ -527,10 +600,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetByHostnameMissing()
+        public async Task GetByHostnameMissing()
         {
-            using (var api = CreateApi()) {
-                var model = api.Sites.GetByHostname("nosite.com");
+            using (var api = CreateApi())
+            {
+                var model = await api.Sites.GetByHostnameAsync("nosite.com");
 
                 Assert.Null(model);
             }

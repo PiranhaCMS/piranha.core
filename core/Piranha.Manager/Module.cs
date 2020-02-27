@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2019 Håkan Edling
+ * Copyright (c) 2016-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -25,6 +25,9 @@ namespace Piranha.Manager
             new PermissionItem { Name = Permission.Aliases, Title = "List Aliases", Category = "Aliases" },
             new PermissionItem { Name = Permission.AliasesDelete, Title = "Delete Aliases", Category = "Aliases" },
             new PermissionItem { Name = Permission.AliasesEdit, Title = "Edit Aliases", Category = "Aliases" },
+            new PermissionItem { Name = Permission.Comments, Title = "List Comments", Category = "Comments" },
+            new PermissionItem { Name = Permission.CommentsApprove, Title = "Approve Comments", Category = "Comments" },
+            new PermissionItem { Name = Permission.CommentsDelete, Title = "Delete Comments", Category = "Comments" },
             new PermissionItem { Name = Permission.Config, Title = "View Config", Category = "Config" },
             new PermissionItem { Name = Permission.ConfigEdit, Title = "Edit Config", Category = "Config" },
             new PermissionItem { Name = Permission.Media, Title = "List Media", Category = "Media" },
@@ -151,6 +154,10 @@ namespace Piranha.Manager
             // Register permissions
             foreach (var permission in _permissions)
             {
+                // Set the permission to internal
+                permission.IsInternal = true;
+
+                // Add to the global permission collection
                 App.Permissions["Manager"].Add(permission);
             }
         }

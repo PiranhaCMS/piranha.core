@@ -30,6 +30,11 @@ namespace Piranha.Manager.Models
         }
 
         /// <summary>
+        /// Gets/sets the optionally select content id.
+        /// </summary>
+        public Guid? ContentId { get; set; }
+
+        /// <summary>
         /// Gets/sets the available comments.
         /// </summary>
         public IList<ListItem> Comments { get; set; } = new List<ListItem>();

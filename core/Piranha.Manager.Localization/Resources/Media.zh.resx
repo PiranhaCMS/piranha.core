@@ -13,36 +13,39 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add folder" xml:space="preserve">
-    <value>Add folder</value>
+    <value>新增檔案夾</value>
   </data>
   <data name="Drop files here or click to upload." xml:space="preserve">
-    <value>Drop files here or click to upload.</value>
+    <value>將檔案拖至此處，或點擊這裡進行上傳。</value>
   </data>
   <data name="Download media" xml:space="preserve">
-    <value>Download media</value>
+    <value>下載媒體檔案</value>
   </data>
   <data name="Folder name" xml:space="preserve">
-    <value>Folder name</value>
+    <value>資料夾名稱</value>
   </data>
   <data name="Folder name is mandatory." xml:space="preserve">
-    <value>Folder name is mandatory.</value>
+    <value>名稱為必填項</value>
   </data>
   <data name="Gallery" xml:space="preserve">
-    <value>Gallery</value>
+    <value>圖庫</value>
   </data>
   <data name="Media" xml:space="preserve">
-    <value>Media</value>
+    <value>媒體</value>
   </data>
   <data name="Media preview is not available" xml:space="preserve">
-    <value>Media preview is not available</value>
+    <value>媒體預覽功能未啟用</value>
   </data>
   <data name="Open media in new tab" xml:space="preserve">
-    <value>Open media in new tab</value>
+    <value>新標簽打開鏈接</value>
   </data>
   <data name="Select media" xml:space="preserve">
-    <value>Select media</value>
+    <value>選取媒體</value>
   </data>
   <data name="Your browser does not support the video tag." xml:space="preserve">
-    <value>Your browser does not support the video tag.</value>
+    <value>您的瀏覽器不支援 HTML5 影片播放標籤。</value>
+  </data>
+  <data name="List" xml:space="preserve">
+    <value>列表</value>
   </data>
 </root>

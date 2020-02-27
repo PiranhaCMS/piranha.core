@@ -15,7 +15,10 @@
         @foreach (var item in Model.Items)
         {
             <div class="carousel-item @(item == Model.Items.First() ? "active" : "")">
-                <img src="@Url.Content(WebApp.Media.ResizeImage(((ImageBlock)item).Body.Media, 890, 482))" class="d-block w-100">
+                @{
+                    var image = ((ImageBlock) item).Body.Media;
+                }
+                <img src="@Url.Content(WebApp.Media.ResizeImage(image, 890, 482))" class="d-block w-100" alt="@image.AltText" title="@image.Title">
             </div>
         }
     </div>

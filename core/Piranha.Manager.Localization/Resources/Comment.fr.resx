@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="Approved" xml:space="preserve">
+    <value>Approuvé</value>
+  </data>
+  <data name="ApprovedSingle" xml:space="preserve">
+    <value>Approuvé</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>En attente</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Commentaire</value>
+  </data>
+  <data name="Response to" xml:space="preserve">
+    <value>Réponse à</value>
+  </data>
+  <data name="The comment was successfully approved" xml:space="preserve">
+    <value>Le commentaire a été approuvé avec succès</value>
+  </data>
+  <data name="The comment was successfully unapproved" xml:space="preserve">
+    <value>L'approbation du commentaire a été supprimée avec succès</value>
+  </data>
+  <data name="The comment was successfully deleted" xml:space="preserve">
+    <value>Le commentaire a été supprimé avec succès</value>
+  </data>
+  <data name="Days allowed for commenting" xml:space="preserve">
+    <value>Jours autorisés pour commenter</value>
+  </data>
+  <data name="Comments are not allowed." xml:space="preserve">
+    <value>Les commentaires ne sont pas autorisés.</value>
+  </data>
+  <data name="Comments are not allowed for unpublished content." xml:space="preserve">
+    <value>Les commentaires ne sont pas autorisés pour le contenu hors ligne.</value>
+  </data>
+  <data name="Comments are currently open." xml:space="preserve">
+    <value>Les commentaires sont actuellement ouverts.</value>
+  </data>
+  <data name="Comments were closed" xml:space="preserve">
+    <value>Les commentaires sont fermés</value>
+  </data>
+</root>
