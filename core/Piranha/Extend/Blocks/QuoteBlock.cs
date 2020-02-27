@@ -17,13 +17,16 @@ namespace Piranha.Extend.Blocks
     /// Single column quote block.
     /// </summary>
     [BlockType(Name = "Quote", Category = "Content", Icon = "fas fa-quote-right", Component = "quote-block")]
-    public class QuoteBlock : Block
+    public class QuoteBlock : Block, ISearchable
     {
         /// <summary>
         /// Gets/sets the text body.
         /// </summary>
         public TextField Body { get; set; }
 
+        /// <summary>
+        /// Gets the content that should be indexed for searching.
+        /// </summary>
         public override string GetTitle()
         {
             if (Body.Value != null)
@@ -31,6 +34,14 @@ namespace Piranha.Extend.Blocks
                 return Body.Value;
             }
             return "Empty";
+        }
+
+        /// <summary>
+        /// Gets the content that should be indexed for searching.
+        /// </summary>
+        public string GetIndexedContent()
+        {
+            return !string.IsNullOrEmpty(Body.Value) ? Body.Value : "";
         }
     }
 }
