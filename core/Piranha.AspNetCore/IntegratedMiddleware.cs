@@ -448,7 +448,7 @@ namespace Piranha.AspNetCore
         /// <param name="content">The current content</param>
         /// <param name="expires">How many minutes the cache should be valid</param>
         /// <returns>If the client has the latest version</returns>
-        public bool HandleCache(HttpContext context, Site site, RoutedContent content, int expires)
+        public bool HandleCache(HttpContext context, Site site, RoutedContentBase content, int expires)
         {
             var headers = context.Response.GetTypedHeaders();
 

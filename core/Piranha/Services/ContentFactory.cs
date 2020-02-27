@@ -43,7 +43,7 @@ namespace Piranha.Services
         /// <param name="type">The content type</param>
         /// <typeparam name="T">The model type</typeparam>
         /// <returns>The new model</returns>
-        public Task<T> CreateAsync<T>(ContentType type) where T : Content
+        public Task<T> CreateAsync<T>(ContentTypeBase type) where T : ContentBase
         {
             if (typeof(IDynamicModel).IsAssignableFrom(typeof(T)))
             {
@@ -58,7 +58,7 @@ namespace Piranha.Services
         /// <param name="type">The content type</param>
         /// <param name="regionId">The region id</param>
         /// <returns>The new region value</returns>
-        public Task<object> CreateDynamicRegionAsync(ContentType type, string regionId)
+        public Task<object> CreateDynamicRegionAsync(ContentTypeBase type, string regionId)
         {
             using (var scope = _services.CreateScope())
             {
@@ -109,7 +109,7 @@ namespace Piranha.Services
         /// <param name="type">The content type</param>
         /// <typeparam name="T">The model type</typeparam>
         /// <returns>The new model</returns>
-        private async Task<T> CreateDynamicModelAsync<T>(ContentType type) where T : Content
+        private async Task<T> CreateDynamicModelAsync<T>(ContentTypeBase type) where T : ContentBase
         {
             using (var scope = _services.CreateScope())
             {
@@ -157,7 +157,7 @@ namespace Piranha.Services
         /// <param name="type">The content type</param>
         /// <typeparam name="T">The model type</typeparam>
         /// <returns>The new model</returns>
-        private async Task<T> CreateModelAsync<T>(ContentType type) where T : Content
+        private async Task<T> CreateModelAsync<T>(ContentTypeBase type) where T : ContentBase
         {
             using (var scope = _services.CreateScope())
             {
@@ -213,7 +213,7 @@ namespace Piranha.Services
         /// <param name="type">The content type</param>
         /// <typeparam name="T">The model type</typeparam>
         /// <returns>The initialized model</returns>
-        public async Task<T> InitDynamicAsync<T>(T model, ContentType type) where T : IDynamicModel
+        public async Task<T> InitDynamicAsync<T>(T model, ContentTypeBase type) where T : IDynamicModel
         {
             using (var scope = _services.CreateScope())
             {
@@ -264,7 +264,7 @@ namespace Piranha.Services
         /// <param name="type">The content type</param>
         /// <typeparam name="T">The model type</typeparam>
         /// <returns>The initialized model</returns>
-        public async Task<T> InitAsync<T>(T model, ContentType type) where T : Content
+        public async Task<T> InitAsync<T>(T model, ContentTypeBase type) where T : ContentBase
         {
             if (model is IDynamicModel)
             {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -20,9 +20,9 @@ namespace Piranha.Services
         /// <param name="mapper">The AutoMapper instance to use for transformation</param>
         /// <returns>The content service</returns>
         IContentService<TContent, TField, TModelBase> Create<TContent, TField, TModelBase>(IMapper mapper)
-            where TContent : Data.Content<TField>
-            where TField : Data.ContentField
-            where TModelBase : Models.Content;
+            where TContent : Data.ContentBase<TField>
+            where TField : Data.ContentFieldBase
+            where TModelBase : Models.ContentBase;
 
         /// <summary>
         /// Creates a new page content service.

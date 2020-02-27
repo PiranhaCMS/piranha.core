@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2019 Håkan Edling
+ * Copyright (c) 2016-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -113,7 +113,7 @@ namespace Piranha.AttributeBuilder
     /// <typeparam name="TAttr">The attribute type</typeparam>
     public abstract class ContentTypeBuilder<T, TType>
         where T : ContentTypeBuilder<T, TType>
-        where TType : ContentType
+        where TType : ContentTypeBase
     {
         protected readonly List<Type> _types = new List<Type>();
 

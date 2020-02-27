@@ -15,9 +15,9 @@ using System.Threading.Tasks;
 namespace Piranha.Services
 {
     public interface IContentService<TContent, TField, TModelBase>
-        where TContent : Data.Content<TField>
-        where TField : Data.ContentField
-        where TModelBase : Models.Content
+        where TContent : Data.ContentBase<TField>
+        where TField : Data.ContentFieldBase
+        where TModelBase : Models.ContentBase
     {
         /// <summary>
         /// Transforms the given data into a new model.
@@ -26,8 +26,8 @@ namespace Piranha.Services
         /// <param name="content">The content entity</param>
         /// <param name="type">The content type</param>
         /// <returns>The page model</returns>
-        Task<T> TransformAsync<T>(TContent content, Models.ContentType type, Func<TContent, T, Task> process = null)
-            where T : Models.Content, TModelBase;
+        Task<T> TransformAsync<T>(TContent content, Models.ContentTypeBase type, Func<TContent, T, Task> process = null)
+            where T : Models.ContentBase, TModelBase;
 
         /// <summary>
         /// Transforms the given model into content data.
@@ -36,8 +36,8 @@ namespace Piranha.Services
         /// <param name="type">The conten type</param>
         /// <param name="dest">The optional dest object</param>
         /// <returns>The content data</returns>
-        TContent Transform<T>(T model, Models.ContentType type, TContent dest = null)
-            where T : Models.Content, TModelBase;
+        TContent Transform<T>(T model, Models.ContentTypeBase type, TContent dest = null)
+            where T : Models.ContentBase, TModelBase;
 
         /// <summary>
         /// Transforms the given block data into block models.

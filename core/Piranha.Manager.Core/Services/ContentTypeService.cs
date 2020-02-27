@@ -161,7 +161,7 @@ namespace Piranha.Manager.Services
         /// <param name="type">The content type</param>
         /// <param name="region">The region id</param>
         /// <returns>The new region item</returns>
-        private async Task<RegionItemModel> CreateRegionAsync(ContentType type, string region)
+        private async Task<RegionItemModel> CreateRegionAsync(ContentTypeBase type, string region)
         {
             var regionType = type.Regions.First(r => r.Id == region);
             var regionModel = await _factory.CreateDynamicRegionAsync(type, region);

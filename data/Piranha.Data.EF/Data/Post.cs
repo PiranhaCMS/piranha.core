@@ -14,7 +14,7 @@ using System.Collections.Generic;
 namespace Piranha.Data
 {
     [Serializable]
-    public sealed class Post : RoutedContent<PostField>
+    public sealed class Post : RoutedContentBase<PostField>
     {
         /// <summary>
         /// Gets/sets the post type id.

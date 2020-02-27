@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) 2018-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using System;
@@ -13,7 +13,7 @@ using System;
 namespace Piranha.Data
 {
     [Serializable]
-    public abstract class RoutedContent<T> : Content<T> where T : ContentField
+    public abstract class RoutedContentBase<T> : ContentBase<T> where T : ContentFieldBase
     {
         /// <summary>
         /// Gets/sets the unique slug.

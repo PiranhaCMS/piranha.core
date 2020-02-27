@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2018 Håkan Edling
+ * Copyright (c) 2016-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -15,7 +15,7 @@ using System.Linq;
 namespace Piranha.Models
 {
     [Serializable]
-    public sealed class PageType : ContentType
+    public sealed class PageType : ContentTypeBase
     {
         /// <summary>
         /// Gets/sets if the page type should use the block editor
