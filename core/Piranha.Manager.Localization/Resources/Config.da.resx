@@ -87,10 +87,10 @@
     <value>Antal kommentarer pr. side</value>
   </data>
   <data name="Enable page comments" xml:space="preserve">
-    <value>Enable page comments</value>
+    <value>Aktiver sidekommentarer</value>
   </data>
   <data name="Enable post comments" xml:space="preserve">
-    <value>Enable post comments</value>
+    <value>Aktiver opslagskommentarer</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
     <value>Manager list size</value>
@@ -105,10 +105,10 @@
     <value>If comments should be approved by default. Please note that this can be overridden by third party moderation services.</value>
   </data>
   <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages.</value>
+    <value>Afgør om kommentarer er aktiveret på nye sider. Bemærk at dette kan overskrives på den enkelte side.</value>
   </data>
   <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
-    <value>If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts.</value>
+    <value>Afgør om kommentarer er aktiveret på nye opslag. Bemærk at dette kan overskrives på det enkelte opslag.</value>
   </data>
   <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
     <value>The default page size when loading comments. Please note that this this can be overridden for specific pages.</value>
