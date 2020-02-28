@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) 2019-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -8,7 +8,6 @@
  *
  */
 
-using System;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;
 using Piranha.Azure.Search;
@@ -40,7 +39,8 @@ public static class PiranhaSearchExtensions
         // Add the identity module
         App.Modules.Register<Module>();
 
-        services.AddSingleton(new ContentSearchService(serviceName, apiKey));
+        // Register the search service
+        services.AddSingleton<ISearch>(new AzureSearchService(serviceName, apiKey));
 
         return services;
     }

@@ -25,18 +25,25 @@ namespace Piranha.Services
         private readonly ISiteService _siteService;
         private readonly IParamService _paramService;
         private readonly ICache _cache;
+        private readonly ISearch _search;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="repo">The main repository</param>
+        /// <param name="factory">The content facory</param>
+        /// <param name="siteService">The site service</param>
+        /// <param name="paramService">The param service</param>
         /// <param name="cache">The optional model cache</param>
-        public PageService(IPageRepository repo, IContentFactory factory, ISiteService siteService, IParamService paramService, ICache cache = null)
+        /// <param name="search">The optional content search</param>
+        public PageService(IPageRepository repo, IContentFactory factory, ISiteService siteService, IParamService paramService,
+            ICache cache = null, ISearch search = null)
         {
             _repo = repo;
             _factory = factory;
             _siteService = siteService;
             _paramService = paramService;
+            _search = search;
 
             if ((int)App.CacheLevel > 2)
             {
@@ -638,6 +645,12 @@ namespace Piranha.Services
             // Call after save hook
             App.Hooks.OnAfterSave<PageBase>(model);
 
+            // Update search document
+            if (_search != null)
+            {
+                await _search.SavePageAsync(model);
+            }
+
             // Remove from cache
             await RemoveFromCache(model).ConfigureAwait(false);
 
@@ -757,6 +770,12 @@ namespace Piranha.Services
             App.Hooks.OnBeforeDelete<PageBase>(model);
             await _repo.Delete(model.Id).ConfigureAwait(false);
             App.Hooks.OnAfterDelete<PageBase>(model);
+
+            // Delete search document
+            if (_search != null)
+            {
+                await _search.DeletePageAsync(model);
+            }
 
             // Remove from cache & invalidate sitemap
             await RemoveFromCache(model).ConfigureAwait(false);

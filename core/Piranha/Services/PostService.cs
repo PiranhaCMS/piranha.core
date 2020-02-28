@@ -26,6 +26,7 @@ namespace Piranha.Services
         private readonly IPageService _pageService;
         private readonly IParamService _paramService;
         private readonly ICache _cache;
+        private readonly ISearch _search;
 
         /// <summary>
         /// Default constructor.
@@ -36,13 +37,16 @@ namespace Piranha.Services
         /// <param name="pageService">The page service</param>
         /// <param name="paramService">The param service</param>
         /// <param name="cache">The optional model cache</param>
-        public PostService(IPostRepository repo, IContentFactory factory, ISiteService siteService, IPageService pageService, IParamService paramService, ICache cache = null)
+        /// <param name="search">The optional search service</param>
+        public PostService(IPostRepository repo, IContentFactory factory, ISiteService siteService, IPageService pageService,
+            IParamService paramService, ICache cache = null, ISearch search = null)
         {
             _repo = repo;
             _factory = factory;
             _siteService = siteService;
             _pageService = pageService;
             _paramService = paramService;
+            _search = search;
 
             if ((int)App.CacheLevel > 2)
             {
@@ -723,6 +727,12 @@ namespace Piranha.Services
 
             App.Hooks.OnAfterSave<PostBase>(model);
 
+            // Update search document
+            if (_search != null)
+            {
+                await _search.SavePostAsync(model);
+            }
+
             // Remove the post from cache
             RemoveFromCache(model);
 
@@ -772,6 +782,12 @@ namespace Piranha.Services
             App.Hooks.OnBeforeDelete<PostBase>(model);
             await _repo.Delete(model.Id).ConfigureAwait(false);
             App.Hooks.OnAfterDelete<PostBase>(model);
+
+            // Delete search document
+            if (_search != null)
+            {
+                await _search.DeletePostAsync(model);
+            }
 
             // Remove from cache & invalidate sitemap
             RemoveFromCache(model);

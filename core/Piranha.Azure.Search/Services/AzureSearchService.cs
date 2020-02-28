@@ -8,7 +8,6 @@
  *
  */
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +16,6 @@ using System.Threading.Tasks;
 using Microsoft.Azure.Search;
 using Microsoft.Azure.Search.Models;
 using Piranha.Extend;
-using Piranha.Extend.Blocks;
 using Piranha.Models;
 
 namespace Piranha.Azure.Search.Services
@@ -25,7 +23,7 @@ namespace Piranha.Azure.Search.Services
     /// <summary>
     /// The identity module.
     /// </summary>
-    public class ContentSearchService
+    public class AzureSearchService : ISearch
     {
         private readonly string _serviceName = "";
         private readonly string _apiKey = "";
@@ -35,10 +33,13 @@ namespace Piranha.Azure.Search.Services
         /// </summary>
         /// <param name="serviceName">The search service name</param>
         /// <param name="apiKey">The admin api key</param>
-        public ContentSearchService(string serviceName, string apiKey)
+        public AzureSearchService(string serviceName, string apiKey)
         {
             _serviceName = serviceName;
             _apiKey = apiKey;
+
+            // Make sure the search indexes are up to date
+            CreateIndexes();
         }
 
         /// <summary>
@@ -62,7 +63,7 @@ namespace Piranha.Azure.Search.Services
         /// given page.
         /// </summary>
         /// <param name="page">The page</param>
-        public Task PageSaveAsync(PageBase page)
+        public async Task SavePageAsync(PageBase page)
         {
             using (var client = CreateClient())
             {
@@ -97,7 +98,7 @@ namespace Piranha.Azure.Search.Services
                 };
                 var batch = IndexBatch.New(actions);
 
-                return indexClient.Documents.IndexAsync(batch);
+                await indexClient.Documents.IndexAsync(batch);
             }
         }
 
@@ -105,15 +106,15 @@ namespace Piranha.Azure.Search.Services
         /// Deletes the given page from the search index.
         /// </summary>
         /// <param name="page">The page to delete</param>
-        public Task PageDeleteAsync(PageBase page)
+        public async Task DeletePageAsync(PageBase page)
         {
             using (var client = CreateClient())
             {
                 var indexClient = client.Indexes.GetClient("content");
 
-                var batch = IndexBatch.Delete("content", new List<string> { page.Id.ToString() });
+                var batch = IndexBatch.Delete("contentId", new List<string> { page.Id.ToString() });
 
-                return indexClient.Documents.IndexAsync(batch);
+                await indexClient.Documents.IndexAsync(batch);
             }
         }
 
@@ -122,7 +123,7 @@ namespace Piranha.Azure.Search.Services
         /// given post.
         /// </summary>
         /// <param name="post">The post</param>
-        public Task PostSaveAsync(PostBase post)
+        public async Task SavePostAsync(PostBase post)
         {
             using (var client = CreateClient())
             {
@@ -159,7 +160,7 @@ namespace Piranha.Azure.Search.Services
                 };
                 var batch = IndexBatch.New(actions);
 
-                return indexClient.Documents.IndexAsync(batch);
+                await indexClient.Documents.IndexAsync(batch);
             }
         }
 
@@ -167,15 +168,15 @@ namespace Piranha.Azure.Search.Services
         /// Deletes the given post from the search index.
         /// </summary>
         /// <param name="post">The post to delete</param>
-        public Task PostDeleteAsync(PostBase post)
+        public async Task DeletePostAsync(PostBase post)
         {
             using (var client = CreateClient())
             {
                 var indexClient = client.Indexes.GetClient("content");
 
-                var batch = IndexBatch.Delete("content", new List<string> { post.Id.ToString() });
+                var batch = IndexBatch.Delete("contentId", new List<string> { post.Id.ToString() });
 
-                return indexClient.Documents.IndexAsync(batch);
+                await indexClient.Documents.IndexAsync(batch);
             }
         }
 
