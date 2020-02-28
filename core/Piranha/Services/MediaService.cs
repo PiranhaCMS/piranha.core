@@ -368,7 +368,7 @@ namespace Piranha.Services
 
             var media = await GetByIdAsync(id).ConfigureAwait(false);
 
-            return media != null ? await EnsureVersionAsync(media, width, height) : null;
+            return media != null ? await EnsureVersionAsync(media, width, height).ConfigureAwait(false) : null;
         }
 
         public async Task<string> EnsureVersionAsync(Media media, int width, int? height = null)

@@ -158,7 +158,7 @@ namespace Piranha.Extend.Fields
 
         /// <summary>
         /// Gets the display title for the given enum. If the DisplayAttribute
-        /// is present it's description is returned, otherwise the string 
+        /// is present it's description is returned, otherwise the string
         /// representation of the enum.
         /// </summary>
         /// <param name="val">The enum value</param>
@@ -193,7 +193,9 @@ namespace Piranha.Extend.Fields
             lock (Mutex)
             {
                 if (IsInitialized)
+                {
                     return;
+                }
 
                 foreach (var val in Enum.GetValues(typeof(T)))
                 {

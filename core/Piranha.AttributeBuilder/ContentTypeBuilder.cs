@@ -279,7 +279,9 @@ namespace Piranha.AttributeBuilder
         private void RegisterField(Type type)
         {
             if (typeof(IEnumerable).IsAssignableFrom(type))
+            {
                 type = type.GenericTypeArguments.First();
+            }
 
             if (typeof(IField).IsAssignableFrom(type))
             {

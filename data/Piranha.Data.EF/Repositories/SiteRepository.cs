@@ -169,11 +169,15 @@ namespace Piranha.Repositories
             }
 
             if (string.IsNullOrEmpty(site.SiteTypeId))
+            {
                 return null;
+            }
 
             var type = App.SiteTypes.GetById(site.SiteTypeId);
             if (type == null)
+            {
                 return null;
+            }
 
             return await _contentService.TransformAsync<T>(site, type);
         }

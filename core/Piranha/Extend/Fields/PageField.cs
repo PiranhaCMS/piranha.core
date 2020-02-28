@@ -72,7 +72,9 @@ namespace Piranha.Extend.Fields
         public virtual Task<T> GetPageAsync<T>(IApi api) where T : Models.GenericPage<T>
         {
             if (Id.HasValue)
+            {
                 return api.Pages.GetByIdAsync<T>(Id.Value);
+            }
             return null;
         }
 

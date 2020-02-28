@@ -62,7 +62,7 @@ namespace Piranha.Local
         {
             using (var file = File.OpenWrite(_basePath + id))
             {
-                await stream.CopyToAsync(file);
+                await stream.CopyToAsync(file).ConfigureAwait(false);
             }
             return _baseUrl + id;
         }

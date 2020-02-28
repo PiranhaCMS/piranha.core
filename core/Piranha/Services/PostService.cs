@@ -875,7 +875,7 @@ namespace Piranha.Services
                         blogPages.Add(blog);
                     }
 
-                    await OnLoadAsync(model, blog);
+                    await OnLoadAsync(model, blog).ConfigureAwait(false);
                 }
             }
 

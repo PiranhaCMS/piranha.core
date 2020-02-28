@@ -41,7 +41,9 @@ namespace Piranha
             for (var i = 0; i < arr.Length; i++)
             {
                 if (i >= startpos && i < (startpos + length))
+                {
                     tmp.Add(arr[i]);
+                }
             }
             return tmp.ToArray();
         }

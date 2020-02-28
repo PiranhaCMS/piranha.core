@@ -61,7 +61,9 @@ namespace Piranha.Services
                     modelType = Type.GetType(type.CLRType);
 
                     if (modelType != typeof(T) && !typeof(T).IsAssignableFrom(modelType))
+                    {
                         return null;
+                    }
                 }
 
                 // Create an initialized model
@@ -124,7 +126,8 @@ namespace Piranha.Services
                                 }
                                 else
                                 {
-                                    await AddComplexValueAsync(model, type, regionKey, fields.Where(f => f.SortOrder == sortOrder).ToList());
+                                    await AddComplexValueAsync(model, type, regionKey, fields.Where(f => f.SortOrder == sortOrder).ToList())
+                                        .ConfigureAwait(false);
                                 }
                                 sortOrder++;
                             }

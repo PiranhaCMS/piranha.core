@@ -203,7 +203,7 @@ namespace Piranha.Services
             {
                 model = await _repo.GetContentById<T>(id).ConfigureAwait(false);
 
-                await OnLoadContentAsync(model);
+                await OnLoadContentAsync(model).ConfigureAwait(false);
             }
 
             if (model != null && model is T)
