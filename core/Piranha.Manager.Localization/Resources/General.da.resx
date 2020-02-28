@@ -226,15 +226,15 @@
     <value>Archives and Comments</value>
   </data>
   <data name="Author" xml:space="preserve">
-    <value>Author</value>
+    <value>Forfatter</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>Comments</value>
+    <value>Kommentarer</value>
   </data>
   <data name="Created" xml:space="preserve">
-    <value>Created</value>
+    <value>Oprettet</value>
   </data>
   <data name="Username and/or password are incorrect." xml:space="preserve">
-    <value>Username and/or password are incorrect.</value>
+    <value>Der findes ingen bruger med det indtastede brugernavn og password.</value>
   </data>
 </root>
