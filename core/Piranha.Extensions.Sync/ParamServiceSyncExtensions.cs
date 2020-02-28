@@ -29,6 +29,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the model with the specified id.
         /// </summary>
+        /// <param name="service">The param service</param>
         /// <param name="id">The unique id</param>
         /// <returns>The model, or null if it doesn't exist</returns>
         public static Param GetById(this IParamService service, Guid id)
@@ -39,6 +40,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the model with the given key.
         /// </summary>
+        /// <param name="service">The param service</param>
         /// <param name="key">The unique key</param>
         /// <returns>The model</returns>
         public static Param GetByKey(this IParamService service, string key) {
@@ -49,6 +51,7 @@ namespace Piranha.Services
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>
+        /// <param name="service">The param service</param>
         /// <param name="model">The model</param>
         public static void Save(this IParamService service, Param model)
         {
@@ -58,6 +61,7 @@ namespace Piranha.Services
         /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
+        /// <param name="service">The param service</param>
         /// <param name="id">The unique id</param>
         public static void Delete(this IParamService service, Guid id)
         {
@@ -67,6 +71,7 @@ namespace Piranha.Services
         /// <summary>
         /// Deletes the given model.
         /// </summary>
+        /// <param name="service">The param service</param>
         /// <param name="model">The model</param>
         public static void Delete(this IParamService service, Param model)
         {

@@ -31,6 +31,7 @@ namespace Piranha.Manager.Services
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
+        /// <param name="factory">The content factory</param>
         public SiteService(IApi api, IContentFactory factory)
         {
             _api = api;

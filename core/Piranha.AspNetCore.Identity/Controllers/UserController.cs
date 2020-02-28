@@ -39,6 +39,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
         /// </summary>
         /// <param name="db">The current db context</param>
         /// <param name="userManager">The current user manager</param>
+        /// <param name="localizer">The manager localizer</param>
         public UserController(IDb db, UserManager<User> userManager, ManagerLocalizer localizer)
         {
             _db = db;
@@ -119,9 +120,9 @@ namespace Piranha.AspNetCore.Identity.Controllers
                 return BadRequest(GetErrorMessage(_localizer.Security["The user could not be found."]));
             }
 
-            
 
-            try { 
+
+            try {
                 var userId = model.User.Id;
                 var isNew = userId == Guid.Empty;
 
@@ -145,7 +146,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
                     return BadRequest(GetErrorMessage(_localizer.Security["Password is mandatory when creating a new user."]));
                 }
 
-                
+
 
                 if (!string.IsNullOrWhiteSpace(model.Password) && _userManager.PasswordValidators.Count > 0)
                 {

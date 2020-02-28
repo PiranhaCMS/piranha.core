@@ -19,7 +19,7 @@ public static class FileStorageExtensions
     /// </summary>
     /// <param name="services">The current service collection</param>
     /// <param name="basePath">The optional base path for where uploaded media is stored.null Default is wwwroot/uploads/</param>
-    /// <param name="baseUrl">The optional base url for accessing uploaded media. Default is ~/uploads/</params>
+    /// <param name="baseUrl">The optional base url for accessing uploaded media. Default is ~/uploads/</param>
     /// <param name="scope">The optional service scope. Default is singleton</param>
     /// <returns>The service collection</returns>
     public static IServiceCollection AddPiranhaFileStorage(this IServiceCollection services,

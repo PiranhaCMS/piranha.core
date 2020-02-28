@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +19,7 @@ public static class SimpleSecurityExtensions
     /// Adds the simple security implementation to the service collection.
     /// </summary>
     /// <param name="services">The current service collection</param>
+    /// <param name="users">The users to add for authentication</param>
     /// <returns>The updated collection</returns>
     public static IServiceCollection AddPiranhaSimpleSecurity(this IServiceCollection services, params Piranha.AspNetCore.SimpleUser[] users)
     {
@@ -36,7 +37,7 @@ public static class SimpleSecurityExtensions
     /// Uses the piranha simple security implementation.
     /// </summary>
     /// <param name="builder">The current application builder</param>
-    /// <returns>The builder</returns>    
+    /// <returns>The builder</returns>
     public static IApplicationBuilder UsePiranhaSimpleSecurity(this IApplicationBuilder builder)
     {
         return builder.UseAuthentication();

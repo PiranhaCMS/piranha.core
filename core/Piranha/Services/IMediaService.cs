@@ -89,7 +89,7 @@ namespace Piranha.Services
         /// <summary>
         /// Moves the media to the folder with the specified id.
         /// </summary>
-        /// <param name="media">The media</param>
+        /// <param name="model">The model</param>
         /// <param name="folderId">The folder id</param>
         Task MoveAsync(Media model, Guid? folderId);
 

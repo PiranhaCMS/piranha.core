@@ -307,6 +307,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="pages">The full page list</param>
         /// <param name="parentId">The current parent id</param>
+        /// <param name="level">The level in structure</param>
         /// <returns>The sitemap</returns>
         private Models.Sitemap Sort(IEnumerable<Page> pages, Guid? parentId = null, int level = 0)
         {

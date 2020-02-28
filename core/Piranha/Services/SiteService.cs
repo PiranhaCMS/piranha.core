@@ -36,6 +36,7 @@ namespace Piranha.Services
         /// Default constructor.
         /// </summary>
         /// <param name="repo">The main repository</param>
+        /// <param name="factory">The content factory</param>
         /// <param name="cache">The optional model cache</param>
         public SiteService(ISiteRepository repo, IContentFactory factory, ICache cache = null)
         {

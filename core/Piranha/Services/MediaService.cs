@@ -332,7 +332,7 @@ namespace Piranha.Services
         /// <summary>
         /// Moves the media to the folder with the specified id.
         /// </summary>
-        /// <param name="media">The media</param>
+        /// <param name="model">The model</param>
         /// <param name="folderId">The folder id</param>
         public async Task MoveAsync(Media model, Guid? folderId)
         {
@@ -608,9 +608,8 @@ namespace Piranha.Services
         }
 
         /// <summary>
-        /// Removes the given model from cache.
+        /// Removes the media structure from cache.
         /// </summary>
-        /// <param name="model">The model</param>
         private void RemoveStructureFromCache()
         {
             _cache?.Remove(MEDIA_STRUCTURE);

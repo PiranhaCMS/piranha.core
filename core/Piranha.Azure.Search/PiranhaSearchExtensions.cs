@@ -18,7 +18,9 @@ public static class PiranhaSearchExtensions
     /// <summary>
     /// Adds the Azure Search module.
     /// </summary>
-    /// <param name="services">The current service collection</param>
+    /// <param name="serviceBuilder">The service builder</param>
+    /// <param name="serviceName">The unique name of the azure search service</param>
+    /// <param name="apiKey">The admin api key</param>
     /// <returns>The services</returns>
     public static PiranhaServiceBuilder UseAzureSearch(this PiranhaServiceBuilder serviceBuilder,
         string serviceName, string apiKey)
@@ -32,6 +34,8 @@ public static class PiranhaSearchExtensions
     /// Adds the Azure Search module.
     /// </summary>
     /// <param name="services">The current service collection</param>
+    /// <param name="serviceName">The unique name of the azure search service</param>
+    /// <param name="apiKey">The admin api key</param>
     /// <returns>The services</returns>
     public static IServiceCollection AddPiranhaAzureSearch(this IServiceCollection services,
         string serviceName, string apiKey)

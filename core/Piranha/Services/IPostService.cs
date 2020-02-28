@@ -27,6 +27,8 @@ namespace Piranha.Services
         /// Gets the available posts for the specified blog.
         /// </summary>
         /// <param name="blogId">The unique blog id</param>
+        /// <param name="index">The optional page to fetch</param>
+        /// <param name="pageSize">The optional page size</param>
         /// <returns>The posts</returns>
         Task<IEnumerable<DynamicPost>> GetAllAsync(Guid blogId, int? index = null, int? pageSize = null);
 
@@ -34,6 +36,8 @@ namespace Piranha.Services
         /// Gets the available post items.
         /// </summary>
         /// <param name="blogId">The unique id</param>
+        /// <param name="index">The optional page to fetch</param>
+        /// <param name="pageSize">The optional page size</param>
         /// <returns>The posts</returns>
         Task<IEnumerable<T>> GetAllAsync<T>(Guid blogId, int? index = null, int? pageSize = null) where T : PostBase;
 
@@ -70,14 +74,14 @@ namespace Piranha.Services
         /// <summary>
         /// Gets all available categories for the specified blog.
         /// </summary>
-        /// <param name="id">The blog id</param>
+        /// <param name="blogId">The blog id</param>
         /// <returns>The available categories</returns>
         Task<IEnumerable<Taxonomy>> GetAllCategoriesAsync(Guid blogId);
 
         /// <summary>
         /// Gets all available tags for the specified blog.
         /// </summary>
-        /// <param name="id">The blog id</param>
+        /// <param name="blogId">The blog id</param>
         /// <returns>The available tags</returns>
         Task<IEnumerable<Taxonomy>> GetAllTagsAsync(Guid blogId);
 
@@ -85,7 +89,7 @@ namespace Piranha.Services
         /// Gets the id of all posts that have a draft for
         /// the specified blog.
         /// </summary>
-        /// <param name="blogId">The unique blog id</param>
+        /// <param name="blogId">The blog id</param>
         /// <returns>The posts that have a draft</returns>
         Task<IEnumerable<Guid>> GetAllDraftsAsync(Guid blogId);
 
@@ -137,7 +141,6 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the draft for the post model with the specified id.
         /// </summary>
-        /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
         /// <returns>The draft, or null if no draft exists</returns>
         Task<DynamicPost> GetDraftByIdAsync(Guid id);
@@ -172,7 +175,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the post model with the specified slug.
         /// </summary>
-        /// <param name="blog">The unique blog slug</param>
+        /// <param name="blogId">The unique blog slug</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The post model</returns>
         Task<DynamicPost> GetBySlugAsync(Guid blogId, string slug);
@@ -181,7 +184,7 @@ namespace Piranha.Services
         /// Gets the post model with the specified slug.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
-        /// <param name="blog">The unique blog slug</param>
+        /// <param name="blogId">The unique blog slug</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The post model</returns>
         Task<T> GetBySlugAsync<T>(Guid blogId, string slug) where T : PostBase;

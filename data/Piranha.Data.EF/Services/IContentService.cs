@@ -25,6 +25,7 @@ namespace Piranha.Services
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="content">The content entity</param>
         /// <param name="type">The content type</param>
+        /// <param name="process">Optional func that should be called after transformation</param>
         /// <returns>The page model</returns>
         Task<T> TransformAsync<T>(TContent content, Models.ContentType type, Func<TContent, T, Task> process = null)
             where T : Models.Content, TModelBase;

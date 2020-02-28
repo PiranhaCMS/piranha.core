@@ -47,6 +47,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the available blog pages for the current site.
         /// </summary>
+        /// <param name="service">The page service</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The pages</returns>
         public static IEnumerable<DynamicPage> GetAllBlogs(this IPageService service, Guid? siteId = null)
@@ -57,6 +58,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the available blog pages for the current site.
         /// </summary>
+        /// <param name="service">The page service</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The pages</returns>
         public static IEnumerable<T> GetAllBlogs<T>(this IPageService service, Guid? siteId = null) where T : PageBase
@@ -67,6 +69,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the site startpage.
         /// </summary>
+        /// <param name="service">The page service</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>
         public static DynamicPage GetStartpage(this IPageService service, Guid? siteId = null)
@@ -78,6 +81,7 @@ namespace Piranha.Services
         /// Gets the site startpage.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
+        /// <param name="service">The page service</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>
         public static T GetStartpage<T>(this IPageService service, Guid? siteId = null) where T : PageBase
@@ -88,6 +92,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the page model with the specified id.
         /// </summary>
+        /// <param name="service">The page service</param>
         /// <param name="id">The unique id</param>
         /// <returns>The page model</returns>
         public static DynamicPage GetById(this IPageService service, Guid id)
@@ -98,6 +103,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the model with the specified id.
         /// </summary>
+        /// <param name="service">The page service</param>
         /// <param name="id">The unique id</param>
         /// <returns>The model, or null if it doesn't exist</returns>
         public static T GetById<T>(this IPageService service, Guid id) where T : PageBase
@@ -108,6 +114,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the page model with the specified slug.
         /// </summary>
+        /// <param name="service">The page service</param>
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>
@@ -120,6 +127,7 @@ namespace Piranha.Services
         /// Gets the page model with the specified slug.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
+        /// <param name="service">The page service</param>
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The page model</returns>
@@ -131,6 +139,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the id for the page with the given slug.
         /// </summary>
+        /// <param name="service">The page service</param>
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The optional page id</param>
         /// <returns>The id</returns>
@@ -142,6 +151,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the draft for the model with the specified id.
         /// </summary>
+        /// <param name="service">The page service</param>
         /// <param name="id">The unique id</param>
         /// <returns>The draft, or null if it doesn't exist</returns>
         public static DynamicPage GetDraftById(this IPageService service, Guid id)
@@ -152,6 +162,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the draft for the model with the specified id.
         /// </summary>
+        /// <param name="service">The page service</param>
         /// <param name="id">The unique id</param>
         /// <returns>The draft, or null if it doesn't exist</returns>
         public static T GetDraftById<T>(this IPageService service, Guid id) where T : PageBase
@@ -163,6 +174,7 @@ namespace Piranha.Services
         /// Moves the current page in the structure.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
+        /// <param name="service">The page service</param>
         /// <param name="model">The page to move</param>
         /// <param name="parentId">The new parent id</param>
         /// <param name="sortOrder">The new sort order</param>
@@ -174,6 +186,7 @@ namespace Piranha.Services
         /// <summary>
         /// Saves the given page model
         /// </summary>
+        /// <param name="service">The page service</param>
         /// <param name="model">The page model</param>
         public static void Save<T>(this IPageService service, T model) where T : PageBase
         {
@@ -183,6 +196,7 @@ namespace Piranha.Services
         /// <summary>
         /// Saves the given page model as a draft
         /// </summary>
+        /// <param name="service">The page service</param>
         /// <param name="model">The page model</param>
         public static void SaveDraft<T>(this IPageService service, T model) where T : PageBase
         {
@@ -192,6 +206,7 @@ namespace Piranha.Services
         /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
+        /// <param name="service">The page service</param>
         /// <param name="id">The unique id</param>
         public static void Delete(this IPageService service, Guid id)
         {
@@ -201,6 +216,7 @@ namespace Piranha.Services
         /// <summary>
         /// Deletes the given model.
         /// </summary>
+        /// <param name="service">The page service</param>
         /// <param name="model">The model</param>
         public static void Delete<T>(this IPageService service, T model) where T : PageBase
         {

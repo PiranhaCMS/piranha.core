@@ -83,7 +83,7 @@ public static class IdentityStartupExtensions
     /// <summary>
     /// Uses the Piranha identity module.
     /// </summary>
-    /// <param name="builder">The current application builder</param>
+    /// <param name="applicationBuilder">The current application builder</param>
     /// <returns>The builder</returns>
     public static PiranhaApplicationBuilder UseIdentity(this PiranhaApplicationBuilder applicationBuilder)
     {

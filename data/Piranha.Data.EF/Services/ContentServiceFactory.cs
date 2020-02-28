@@ -21,7 +21,7 @@ namespace Piranha.Services
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="services">The service provider</param>
+        /// <param name="factory">The content factory</param>
         public ContentServiceFactory(IContentFactory factory)
         {
             _factory = factory;

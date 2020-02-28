@@ -415,7 +415,6 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the draft for the page model with the specified id.
         /// </summary>
-        /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
         /// <returns>The draft, or null if no draft exists</returns>
         public Task<DynamicPage> GetDraftByIdAsync(Guid id)
@@ -699,6 +698,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="pageId">The unique page id</param>
         /// <param name="model">The comment model</param>
+        /// <param name="verify">If comment verification should be applied</param>
         private async Task SaveCommentAsync(Guid pageId, Comment model, bool verify)
         {
             // Make sure we have a post

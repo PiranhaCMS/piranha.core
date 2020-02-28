@@ -59,6 +59,7 @@ namespace Piranha.Runtime
             /// </summary>
             /// <param name="extension">The file extension</param>
             /// <param name="contentType">The content type</param>
+            /// <param name="allowProcessing">If image processing should be allowed</param>
             public void Add(string extension, string contentType, bool? allowProcessing = null)
             {
                 Add(new MediaTypeItem

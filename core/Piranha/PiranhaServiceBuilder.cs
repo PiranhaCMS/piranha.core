@@ -30,7 +30,7 @@ namespace Piranha
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="builder">The current application builder</param>
+        /// <param name="services">The current service collection</param>
         public PiranhaServiceBuilder(IServiceCollection services)
         {
             Services = services;

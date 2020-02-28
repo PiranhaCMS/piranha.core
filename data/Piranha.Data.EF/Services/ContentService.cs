@@ -33,6 +33,7 @@ namespace Piranha.Services
         /// <summary>
         /// Default constructor.
         /// </summary>
+        /// <param name="factory">The content factory</param>
         /// <param name="mapper">The AutoMapper instance to use</param>
         public ContentService(IContentFactory factory, IMapper mapper)
         {
@@ -46,6 +47,7 @@ namespace Piranha.Services
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="content">The content entity</param>
         /// <param name="type">The content type</param>
+        /// <param name="process">Optional func that should be called after transformation</param>
         /// <returns>The page model</returns>
         public async Task<T> TransformAsync<T>(TContent content, Models.ContentType type, Func<TContent, T, Task> process = null)
             where T : Models.Content, TModelBase
@@ -553,6 +555,7 @@ namespace Piranha.Services
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="model">The model</param>
+        /// <param name="contentType">The content type</param>
         /// <param name="regionId">The region id</param>
         /// <param name="fields">The field</param>
         private async Task AddComplexValueAsync<T>(T model, Models.ContentType contentType, string regionId, IList<TField> fields) where T : Models.Content

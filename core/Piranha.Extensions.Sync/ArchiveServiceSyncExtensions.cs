@@ -20,6 +20,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the specified post archive for the specified filter.
         /// </summary>
+        /// <param name="service">The archive service</param>
         /// <param name="archiveId">The archive page id</param>
         /// <param name="currentPage">The current page of the archive</param>
         /// <param name="categoryId">The optional category id</param>

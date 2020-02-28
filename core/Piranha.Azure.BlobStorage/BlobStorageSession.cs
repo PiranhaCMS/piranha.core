@@ -88,7 +88,7 @@ namespace Piranha.Azure
         /// <summary>
         /// Deletes the content for the specified media.
         /// </summary>
-        /// <param name="id">The unique id/param>
+        /// <param name="id">The unique id</param>
         public async Task<bool> DeleteAsync(string id)
         {
             var blob = _container.GetBlockBlobReference(id);

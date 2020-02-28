@@ -19,7 +19,7 @@ namespace Piranha.Extend.Fields
         /// <summary>
         /// Implicit operator for converting a Guid id to a field.
         /// </summary>
-        /// <param name="str">The string value</param>
+        /// <param name="guid">The guid value</param>
         public static implicit operator AudioField(Guid guid)
         {
             return new AudioField { Id = guid };
@@ -37,7 +37,7 @@ namespace Piranha.Extend.Fields
         /// <summary>
         /// Impicit operator for converting the field to an url string.
         /// </summary>
-        /// <param name="image">The Audio field</param>
+        /// <param name="audio">The Audio field</param>
         public static implicit operator string(AudioField audio)
         {
             if (audio.Media != null)

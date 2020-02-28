@@ -23,6 +23,7 @@ namespace Piranha.AspNetCore.Models
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
+        /// <param name="loader">The model loader</param>
         public SinglePostModel(IApi api, IModelLoader loader) : base(api, loader) { }
     }
 
@@ -44,6 +45,7 @@ namespace Piranha.AspNetCore.Models
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
+        /// <param name="loader">The model loader</param>
         public SinglePost(IApi api, IModelLoader loader)
         {
             _api = api;

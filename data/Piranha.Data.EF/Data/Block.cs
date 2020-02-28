@@ -13,10 +13,10 @@ using System.Collections.Generic;
 
 namespace Piranha.Data
 {
-    [Serializable]
     /// <summary>
     /// Reusable content block.
     /// </summary>
+    [Serializable]
     public sealed class Block
     {
         /// <summary>
@@ -61,10 +61,5 @@ namespace Piranha.Data
         /// Gets/sets the available fields.
         /// </summary>
         public IList<BlockField> Fields { get; set; } = new List<BlockField>();
-
-        /// <summary>
-        /// Gets/sets the available page connections.
-        /// </summary>
-        //public IList<PageBlock> PageBlocks { get; set; } = new List<PageBlock>();
     }
 }

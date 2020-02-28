@@ -42,8 +42,8 @@ namespace Piranha.Repositories
         /// <summary>
         /// Get media for all Ids in this enumerable.
         /// </summary>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+        /// <param name="ids">One or several media id</param>
+        /// <returns>The matching media</returns>
         Task<IEnumerable<Media>> GetById(params Guid[] ids);
 
         /// <summary>

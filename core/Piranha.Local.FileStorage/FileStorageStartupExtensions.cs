@@ -18,7 +18,7 @@ public static class FileStorageStartupExtensions
     /// </summary>
     /// <param name="serviceBuilder">The service builder</param>
     /// <param name="basePath">The optional base path for where uploaded media is stored.null Default is wwwroot/uploads/</param>
-    /// <param name="baseUrl">The optional base url for accessing uploaded media. Default is ~/uploads/</params>
+    /// <param name="baseUrl">The optional base url for accessing uploaded media. Default is ~/uploads/</param>
     /// <param name="scope">The optional service scope. Default is singleton</param>
     /// <returns>The updated builder</returns>
     public static PiranhaServiceBuilder UseFileStorage(this PiranhaServiceBuilder serviceBuilder,

@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System.IO;
@@ -22,7 +22,7 @@ namespace Piranha.Local
         /// Default constructor.
         /// </summary>
         /// <param name="basePath">The optional base path</param>
-        /// <param name="basePath">The optional base url</param>
+        /// <param name="baseUrl">The optional base url</param>
         public FileStorage(string basePath = null, string baseUrl = null)
         {
             if (!string.IsNullOrEmpty(basePath))

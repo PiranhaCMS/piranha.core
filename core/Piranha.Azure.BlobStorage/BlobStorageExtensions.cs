@@ -18,7 +18,7 @@ public static class BlobStorageExtensions
     /// <summary>
     /// Adds the Azure BlobStorage module.
     /// </summary>
-    /// <param name="services">The current service collection</param>
+    /// <param name="serviceBuilder">The service builder</param>
     /// <param name="credentials">The auth credentials</param>
     /// <param name="containerName">The optional container name</param>
     /// <param name="scope">The optional service scope. Default is singleton</param>
@@ -34,7 +34,7 @@ public static class BlobStorageExtensions
     /// <summary>
     /// Adds the Azure BlobStorage module.
     /// </summary>
-    /// <param name="services">The current service collection</param>
+    /// <param name="serviceBuilder">The service builder</param>
     /// <param name="connectionString">The connection string</param>
     /// <param name="containerName">The optional container name</param>
     /// <param name="scope">The optional service scope. Default is singleton</param>

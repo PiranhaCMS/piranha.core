@@ -384,7 +384,6 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="scope">The current service scope</param>
         /// <param name="block">The block</param>
-        /// <param name="regionType">The region type</param>
         private async Task InitBlockAsync(IServiceScope scope, Extend.Block block)
         {
             if (block != null)
@@ -453,6 +452,8 @@ namespace Piranha.Services
         /// Creates a new region.
         /// </summary>
         /// <param name="scope">The current service scope</param>
+        /// <param name="model">The model to create the region for</param>
+        /// <param name="modelType">The model type</param>
         /// <param name="regionType">The region type</param>
         /// <param name="initFields">If fields should be initialized</param>
         /// <returns>The created region</returns>

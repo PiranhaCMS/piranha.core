@@ -26,7 +26,8 @@ namespace Piranha.Services
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="db">The current db context</param>
+        /// <param name="repo">The main repository</param>
+        /// <param name="siteService">The site service</param>
         /// <param name="cache">The optional model cache</param>
         public AliasService(IAliasRepository repo, ISiteService siteService, ICache cache = null)
         {

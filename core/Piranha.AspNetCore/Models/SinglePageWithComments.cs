@@ -45,6 +45,7 @@ namespace Piranha.AspNetCore.Models
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
+        /// <param name="loader">The model loader</param>
         public SinglePageWithComments(IApi api, IModelLoader loader) : base(api, loader) { }
 
         /// <summary>
