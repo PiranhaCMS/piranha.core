@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 namespace Piranha.Extend.Fields
 {
     [FieldType(Name = "Html", Shorthand = "Html", Component = "html-field")]
-    public class HtmlField : SimpleField<string>
+    public class HtmlField : SimpleField<string>, ISearchable
     {
         /// <summary>
         /// Implicit operator for converting a string to a field.
@@ -50,6 +50,14 @@ namespace Piranha.Extend.Fields
                 return title;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Gets the content that should be indexed for searching.
+        /// </summary>
+        public string GetIndexedContent()
+        {
+            return !string.IsNullOrEmpty(Value) ? Value : "";
         }
     }
 }
