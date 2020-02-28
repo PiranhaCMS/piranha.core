@@ -28,5 +28,6 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
   <files>
     <file src="piranha.png" target="images\" />
     <file src="..\core\Piranha.Azure.BlobStorage\bin\Release\netstandard2.0\Piranha.Azure.BlobStorage.dll" target="lib\netstandard2.0\Piranha.Azure.BlobStorage.dll" />
+    <file src="..\core\Piranha.Azure.BlobStorage\bin\Release\netstandard2.0\Piranha.Azure.BlobStorage.xml" target="lib\netstandard2.0\Piranha.Azure.BlobStorage.xml" />
   </files>
 </package>

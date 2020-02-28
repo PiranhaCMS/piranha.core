@@ -26,5 +26,6 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
   <files>
     <file src="piranha.png" target="images\" />
     <file src="..\core\Piranha.WebApi\bin\Release\netcoreapp3.1\Piranha.WebApi.dll" target="lib\netcoreapp3.1\Piranha.WebApi.dll" />
+    <file src="..\core\Piranha.WebApi\bin\Release\netcoreapp3.1\Piranha.WebApi.xml" target="lib\netcoreapp3.1\Piranha.WebApi.xml" />
   </files>
 </package>

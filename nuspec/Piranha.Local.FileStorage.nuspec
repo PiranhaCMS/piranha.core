@@ -26,5 +26,6 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
   <files>
     <file src="piranha.png" target="images\" />
     <file src="..\core\Piranha.Local.FileStorage\bin\Release\netstandard2.0\Piranha.Local.FileStorage.dll" target="lib\netstandard2.0\Piranha.Local.FileStorage.dll" />
+    <file src="..\core\Piranha.Local.FileStorage\bin\Release\netstandard2.0\Piranha.Local.FileStorage.xml" target="lib\netstandard2.0\Piranha.Local.FileStorage.xml" />
   </files>
 </package>

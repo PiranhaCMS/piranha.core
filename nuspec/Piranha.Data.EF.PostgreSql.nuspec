@@ -28,5 +28,6 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
   <files>
     <file src="piranha.png" target="images\" />
     <file src="..\data\Piranha.Data.EF.PostgreSql\bin\Release\netstandard2.0\Piranha.Data.EF.PostgreSql.dll" target="lib\netstandard2.0\Piranha.Data.EF.PostgreSql.dll" />
+    <file src="..\data\Piranha.Data.EF.PostgreSql\bin\Release\netstandard2.0\Piranha.Data.EF.PostgreSql.xml" target="lib\netstandard2.0\Piranha.Data.EF.PostgreSql.xml" />
   </files>
 </package>

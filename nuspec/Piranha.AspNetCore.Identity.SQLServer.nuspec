@@ -29,5 +29,6 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
   <files>
     <file src="piranha.png" target="images\" />
     <file src="..\core\Piranha.AspNetCore.Identity.SQLServer\bin\Release\netcoreapp3.1\Piranha.AspNetCore.Identity.SQLServer.dll" target="lib\netcoreapp3.1\Piranha.AspNetCore.Identity.SQLServer.dll" />
+    <file src="..\core\Piranha.AspNetCore.Identity.SQLServer\bin\Release\netcoreapp3.1\Piranha.AspNetCore.Identity.SQLServer.xml" target="lib\netcoreapp3.1\Piranha.AspNetCore.Identity.SQLServer.xml" />
   </files>
 </package>

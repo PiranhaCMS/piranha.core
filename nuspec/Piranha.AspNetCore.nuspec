@@ -28,5 +28,6 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
   <files>
     <file src="piranha.png" target="images\" />
     <file src="..\core\Piranha.AspNetCore\bin\Release\netcoreapp3.1\Piranha.AspNetCore.dll" target="lib\netcoreapp3.1\Piranha.AspNetCore.dll" />
+    <file src="..\core\Piranha.AspNetCore\bin\Release\netcoreapp3.1\Piranha.AspNetCore.xml" target="lib\netcoreapp3.1\Piranha.AspNetCore.xml" />
   </files>
 </package>

@@ -29,5 +29,6 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
   <files>
     <file src="piranha.png" target="images\" />
     <file src="..\core\Piranha.AspNetCore.Identity.SQLite\bin\Release\netcoreapp3.1\Piranha.AspNetCore.Identity.SQLite.dll" target="lib\netcoreapp3.1\Piranha.AspNetCore.Identity.SQLite.dll" />
+    <file src="..\core\Piranha.AspNetCore.Identity.SQLite\bin\Release\netcoreapp3.1\Piranha.AspNetCore.Identity.SQLite.xml" target="lib\netcoreapp3.1\Piranha.AspNetCore.Identity.SQLite.xml" />
   </files>
 </package>

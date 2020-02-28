@@ -26,6 +26,7 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
   <files>
     <file src="piranha.png" target="images\" />
     <file src="..\core\Piranha.Manager.Localization\bin\Release\netstandard2.0\Piranha.Manager.Localization.dll" target="lib\netstandard2.0\Piranha.Manager.Localization.dll" />
+    <file src="..\core\Piranha.Manager.Localization\bin\Release\netstandard2.0\Piranha.Manager.Localization.xml" target="lib\netstandard2.0\Piranha.Manager.Localization.xml" />
     <file src="..\core\Piranha.Manager.Localization\bin\Release\netstandard2.0\**\*.dll" target="lib\netstandard2.0" />
   </files>
 </package>

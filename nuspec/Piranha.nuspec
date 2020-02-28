@@ -31,5 +31,6 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
   <files>
     <file src="piranha.png" target="images\" />
     <file src="..\core\Piranha\bin\Release\netstandard2.0\Piranha.dll" target="lib\netstandard2.0\Piranha.dll" />
+    <file src="..\core\Piranha\bin\Release\netstandard2.0\Piranha.xml" target="lib\netstandard2.0\Piranha.xml" />
   </files>
 </package>
