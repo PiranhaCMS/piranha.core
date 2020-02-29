@@ -17,7 +17,6 @@ $indigo:        #6610f2;
 $purple:        #6f42c1;
 $pink:          #e83e8c;
 $red:           #a94441;
-$red-bright:    #f94c3b;
 $orange:        #ff7200;
 $yellow:        #f0ad4e;
 $green:         #439700;
@@ -93,3 +92,7 @@ $nav-tabs-inverted-link-active-border-color: $nav-tabs-inverted-link-active-bg $
 // Progress bars
 
 $progress-bg: $gray-400;
+
+// Login
+
+$login-invalid-feedback-color: #f94c3b;

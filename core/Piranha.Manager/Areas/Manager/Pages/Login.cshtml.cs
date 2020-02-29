@@ -28,24 +28,44 @@ namespace Piranha.Manager.Models
             _localizer = localizer;
         }
 
+        [BindProperty]
+        public InputModel Input { get; set; }
+
+        public string ReturnUrl { get; set; }
+
+        [TempData]
+        public string ErrorMessage { get; set; }
+
         public class InputModel
         {
             [Required]
             public string Username { get; set; }
 
             [Required]
+            [DataType(DataType.Password)]
             public string Password { get; set; }
         }
 
-        public async Task<IActionResult> OnPostAsync(InputModel model)
+        public void OnGet(string returnUrl = null)
         {
-            if (!ModelState.IsValid || await _service.SignIn(HttpContext, model.Username, model.Password))
+            if (!string.IsNullOrEmpty(ErrorMessage))
+            {
+                ModelState.AddModelError(string.Empty, ErrorMessage);
+            }
+
+            ReturnUrl = returnUrl;
+        }
+
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        {
+            if (!ModelState.IsValid || !await _service.SignIn(HttpContext, Input.Username, Input.Password))
             {
                 ModelState.Clear();
                 ModelState.AddModelError(string.Empty, _localizer.General["Username and/or password are incorrect."].Value);
                 return Page();
             }
-
+            if(!string.IsNullOrEmpty(returnUrl))
+                return LocalRedirect(returnUrl);
             return new RedirectToPageResult("Index");
         }
     }

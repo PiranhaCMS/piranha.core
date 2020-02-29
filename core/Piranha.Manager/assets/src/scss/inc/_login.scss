@@ -58,13 +58,12 @@
     background: #0C3C50 url("../img/login.png");
     background-size: cover;
     margin: 0;
-    /*.error-message {
-        margin: 0;
-        color: $red-bright;
+
+    .invalid-feedback {
+        color: $login-invalid-feedback-color;
         text-align: center;
-        opacity: 0;
-        animation-delay: 1s;
-    }*/
+    }
+
     .container {
         max-width: 360px;
         margin-top: 6rem;
@@ -98,23 +97,6 @@
             }
         }
 
-        &.validation-summary-errors {
-            position: relative;
-            text-align: center;
-            color: saturate(lighten(theme-color-level('danger', $alert-color-level), 25%), 20%);
-
-            & > ul {
-                animation: shake-message 1s cubic-bezier(.36,.07,.19,.97) both;
-                opacity: 0;
-                @include list-unstyled();
-                margin-bottom: 0;
-            }
-
-            & + .card-body-form {
-                animation: shake-box 0.75s cubic-bezier(.36,.07,.19,.97) both;
-            }
-        }
-
         &.card-body-form {
             position: relative;
             background-color: transparent;
@@ -127,6 +109,28 @@
                 border: 0;
                 font-weight: 300;
             }
+        }
+    }
+
+    .error-message {
+        margin: 0;
+        color: $login-invalid-feedback-color;
+        text-align: center;
+        opacity: 0;
+        animation-delay: 0.5s;
+    }
+
+    .was-validated .error-message {
+        visibility: hidden;
+    }
+
+    .has-error {
+        .error-message {
+            animation: shake-message 0.75s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        .card-body-form {
+            animation: shake-box 0.75s cubic-bezier(.36,.07,.19,.97) both;
         }
     }
 }
