@@ -64,8 +64,12 @@ namespace Piranha.Manager.Models
                 ModelState.AddModelError(string.Empty, _localizer.General["Username and/or password are incorrect."].Value);
                 return Page();
             }
-            if(!string.IsNullOrEmpty(returnUrl))
+
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
                 return LocalRedirect(returnUrl);
+            }
+
             return new RedirectToPageResult("Index");
         }
     }
