@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Piranha.Data.EF.PostgreSql</id>
+    <title>Piranha Data PostgreSQL</title>
+    <version>8.1.2</version>
+    <authors>Håkan Edling, Jason Underhill</authors>
+    <owners>Håkan Edling</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Entity Framework Core migration package for PostgreSQL</description>
+    <copyright>Copyright 2020 (c) Håkan Edling</copyright>
+    <tags>cms mvc aspnetcore netstandard</tags>
+    <license type="expression">MIT</license>
+    <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
+    <icon>images\piranha.png</icon>
+    <iconUrl>http://piranhacms.org/assets/twitter-shield.png</iconUrl>
+		<releaseNotes>See the changelog available at:
+https://github.com/piranhacms/piranha.core/wiki/changelog
+    </releaseNotes>
+    <dependencies>
+      <group targetFramework="netstandard2.0">
+        <dependency id="Piranha" version="[8.1.0,9.0.0)" />
+        <dependency id="Piranha.Data.EF" version="[8.1.2,9.0.0)" />
+        <dependency id="Npgsql.EntityFrameworkCore.PostgreSQL" version="3.1.1.2" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="piranha.png" target="images\" />
+    <file src="..\data\Piranha.Data.EF.PostgreSql\bin\Release\netstandard2.0\Piranha.Data.EF.PostgreSql.dll" target="lib\netstandard2.0\Piranha.Data.EF.PostgreSql.dll" />
+    <file src="..\data\Piranha.Data.EF.PostgreSql\bin\Release\netstandard2.0\Piranha.Data.EF.PostgreSql.xml" target="lib\netstandard2.0\Piranha.Data.EF.PostgreSql.xml" />
+  </files>
+</package>

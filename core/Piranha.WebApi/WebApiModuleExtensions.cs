@@ -17,7 +17,7 @@ public static class WebApiModuleExtensions
     /// <summary>
     /// Adds the Piranha Api module.
     /// </summary>
-    /// <param name="services">The current service collection</param>
+    /// <param name="serviceBuilder">The service builder</param>
     /// <returns>The services</returns>
     public static PiranhaServiceBuilder UseApi(this PiranhaServiceBuilder serviceBuilder)
     {

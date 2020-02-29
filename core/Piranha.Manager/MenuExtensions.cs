@@ -19,6 +19,7 @@ namespace Piranha.Manager
         /// <summary>
         /// Gets the applicable menu structure for the given user.
         /// </summary>
+        /// <param name="items">The menu items to filter</param>
         /// <param name="user">The user</param>
         /// <param name="auth">The authorization service</param>
         /// <returns></returns>

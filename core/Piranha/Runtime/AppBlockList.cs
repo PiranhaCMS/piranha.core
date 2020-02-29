@@ -34,6 +34,7 @@ namespace Piranha.Runtime
         /// Gets the blocks for the given category.
         /// </summary>
         /// <param name="category">The category</param>
+        /// <param name="includeGroups">If block groups should be included</param>
         /// <returns>The block types</returns>
         public IEnumerable<AppBlock> GetByCategory(string category, bool includeGroups = true)
         {

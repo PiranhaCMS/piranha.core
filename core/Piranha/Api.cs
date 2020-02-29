@@ -98,7 +98,8 @@ namespace Piranha
             ISiteTypeRepository siteTypeRepository,
             ICache cache = null,
             IStorage storage = null,
-            IImageProcessor processor = null)
+            IImageProcessor processor = null,
+            ISearch search = null)
         {
             // Store the cache
             _cache = cache;
@@ -113,8 +114,8 @@ namespace Piranha
             // Create services with dependencies
             Aliases = new AliasService(aliasRepository, Sites, cache);
             Media = new MediaService(mediaRepository, Params, storage, processor, cache);
-            Pages = new PageService(pageRepository, contentFactory, Sites, Params, cache);
-            Posts = new PostService(postRepository, contentFactory, Sites, Pages, Params, cache);
+            Pages = new PageService(pageRepository, contentFactory, Sites, Params, cache, search);
+            Posts = new PostService(postRepository, contentFactory, Sites, Pages, Params, cache, search);
             Archives = new ArchiveService(archiveRepository, Params, Posts);
         }
 

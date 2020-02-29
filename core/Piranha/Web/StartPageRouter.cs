@@ -20,7 +20,7 @@ namespace Piranha.Web
         /// </summary>
         /// <param name="api">The current api</param>
         /// <param name="url">The requested url</param>
-        /// <param name="hostname">The optional hostname</param>
+        /// <param name="siteId">The site id</param>
         /// <returns>The piranha response, null if no matching page was found</returns>
         public static async Task<IRouteResponse> InvokeAsync(IApi api, string url, Guid siteId)
         {

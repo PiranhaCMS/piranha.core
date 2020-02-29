@@ -118,7 +118,7 @@ namespace Piranha.Repositories
         /// Gets the site startpage.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
-        /// <param param name="siteId">The site id</param>
+        /// <param name="siteId">The site id</param>
         /// <returns>The page model</returns>
         public async Task<T> GetStartpage<T>(Guid siteId) where T : Models.PageBase
         {
@@ -128,7 +128,7 @@ namespace Piranha.Repositories
 
             if (page != null)
             {
-                return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), Process);
+                return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync);
             }
             return null;
         }
@@ -147,7 +147,7 @@ namespace Piranha.Repositories
 
             if (page != null)
             {
-                return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), Process);
+                return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync);
             }
             return null;
         }
@@ -167,7 +167,7 @@ namespace Piranha.Repositories
 
             if (page != null)
             {
-                return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), Process);
+                return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync);
             }
             return null;
         }
@@ -197,7 +197,7 @@ namespace Piranha.Repositories
                     // Transform data model
                     var page = JsonConvert.DeserializeObject<Page>(draft.Data);
 
-                    return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), Process);
+                    return await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync);
                 }
             }
             return null;
@@ -463,6 +463,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="pageId">The unique page id</param>
         /// <param name="onlyApproved">If only approved comments should be fetched</param>
+        /// <param name="onlyPending">If only pending comments should be fetched</param>
         /// <param name="page">The page number</param>
         /// <param name="pageSize">The page size</param>
         /// <returns>The available comments</returns>
@@ -520,6 +521,7 @@ namespace Piranha.Repositories
         /// Saves the given page model
         /// </summary>
         /// <param name="model">The page model</param>
+        /// <param name="isDraft">If the model should be saved as a draft</param>
         private async Task<IEnumerable<Guid>> Save<T>(T model, bool isDraft) where T : Models.PageBase
         {
             var type = App.PageTypes.GetById(model.TypeId);
@@ -873,7 +875,6 @@ namespace Piranha.Repositories
         /// <summary>
         /// Gets the base query for loading pages.
         /// </summary>
-        /// <param name="fullModel">If this is a full load or not</param>
         /// <typeparam name="T">The requested model type</typeparam>
         /// <returns>The queryable</returns>
         private IQueryable<Page> GetQuery<T>()
@@ -898,7 +899,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="page">The source page</param>
         /// <param name="model">The targe model</param>
-        private async void Process<T>(Data.Page page, T model) where T : Models.PageBase
+        private async Task ProcessAsync<T>(Data.Page page, T model) where T : Models.PageBase
         {
             // Permissions
             foreach (var permission in page.Permissions)
@@ -940,6 +941,7 @@ namespace Piranha.Repositories
         /// <summary>
         /// Moves the pages around. This is done when a page is deleted or moved in the structure.
         /// </summary>
+        /// <param name="pages">The pages</param>
         /// <param name="pageId">The id of the page that is moved</param>
         /// <param name="siteId">The site id</param>
         /// <param name="parentId">The parent id</param>

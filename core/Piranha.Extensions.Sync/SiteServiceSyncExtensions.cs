@@ -20,6 +20,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets all available models.
         /// </summary>
+        /// <param name="service">The site service</param>
         /// <returns>The available models</returns>
         public static IEnumerable<Site> GetAll(this ISiteService service)
         {
@@ -29,6 +30,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the model with the specified id.
         /// </summary>
+        /// <param name="service">The site service</param>
         /// <param name="id">The unique id</param>
         /// <returns>The model, or null if it doesn't exist</returns>
         public static Site GetById(this ISiteService service, Guid id)
@@ -39,6 +41,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the model with the given internal id.
         /// </summary>
+        /// <param name="service">The site service</param>
         /// <param name="internalId">The unique internal i</param>
         /// <returns>The model</returns>
         public static Site GetByInternalId(this ISiteService service, string internalId)
@@ -49,6 +52,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the model with the given hostname.
         /// </summary>
+        /// <param name="service">The site service</param>
         /// <param name="hostname">The hostname</param>
         /// <returns>The model</returns>
         public static Site GetByHostname(this ISiteService service, string hostname)
@@ -59,6 +63,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the default side.
         /// </summary>
+        /// <param name="service">The site service</param>
         /// <returns>The modell, or NULL if it doesnt exist</returns>
         public static Site GetDefault(this ISiteService service)
         {
@@ -68,6 +73,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the site content for given site id.
         /// </summary>
+        /// <param name="service">The site service</param>
         /// <param name="id">Site id</param>
         /// <returns>The site content model</returns>
         public static DynamicSiteContent GetContentById(this ISiteService service, Guid id)
@@ -78,6 +84,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the site content for given site id.
         /// </summary>
+        /// <param name="service">The site service</param>
         /// <param name="id">Site id</param>
         /// <typeparam name="T">The site model type</typeparam>
         /// <returns>The site content model</returns>
@@ -89,6 +96,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the hierachical sitemap structure.
         /// </summary>
+        /// <param name="service">The site service</param>
         /// <param name="id">The optional site id</param>
         /// <param name="onlyPublished">If only published items should be included</param>
         /// <returns>The sitemap</returns>
@@ -101,6 +109,7 @@ namespace Piranha.Services
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>
+        /// <param name="service">The site service</param>
         /// <param name="model">The model</param>
         public static void Save(this ISiteService service, Site model)
         {
@@ -111,6 +120,7 @@ namespace Piranha.Services
         /// Saves the given site content to the site with the
         /// given id.
         /// </summary>
+        /// <param name="service">The site service</param>
         /// <param name="siteId">The site id</param>
         /// <param name="model">The site content model</param>
         /// <typeparam name="T">The site content type</typeparam>
@@ -122,6 +132,7 @@ namespace Piranha.Services
         /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
+        /// <param name="service">The site service</param>
         /// <param name="id">The unique id</param>
         public static void Delete(this ISiteService service, Guid id)
         {
@@ -131,6 +142,7 @@ namespace Piranha.Services
         /// <summary>
         /// Deletes the given model.
         /// </summary>
+        /// <param name="service">The site service</param>
         /// <param name="model">The model</param>
         public static void Delete(this ISiteService service, Site model)
         {

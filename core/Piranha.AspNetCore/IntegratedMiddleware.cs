@@ -29,6 +29,7 @@ namespace Piranha.AspNetCore
         /// Creates a new middleware instance.
         /// </summary>
         /// <param name="next">The next middleware in the pipeline</param>
+        /// <param name="config">The current route configuration</param>
         /// <param name="factory">The logger factory</param>
         public IntegratedMiddleware(RequestDelegate next, PiranhaRouteConfig config, ILoggerFactory factory = null) : base(next, factory)
         {
@@ -40,6 +41,7 @@ namespace Piranha.AspNetCore
         /// </summary>
         /// <param name="context">The current http context</param>
         /// <param name="api">The current api</param>
+        /// <param name="service">The application service</param>
         /// <returns>An async task</returns>
         public override async Task Invoke(HttpContext context, IApi api, IApplicationService service)
         {
@@ -108,6 +110,12 @@ namespace Piranha.AspNetCore
                         var cultureInfo = new CultureInfo(service.Site.Culture);
                         CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = cultureInfo;
                     }
+                }
+                else
+                {
+                    // There's no sites available, let the application finish
+                    await _next.Invoke(context);
+                    return;
                 }
 
                 // Store hostname

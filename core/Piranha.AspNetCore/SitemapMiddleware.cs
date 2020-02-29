@@ -38,6 +38,7 @@ namespace Piranha.AspNetCore
         /// </summary>
         /// <param name="context">The current http context</param>
         /// <param name="api">The current api</param>
+        /// <param name="service">The application service</param>
         /// <returns>An async task</returns>
         public override async Task Invoke(HttpContext context, IApi api, IApplicationService service)
         {
@@ -73,10 +74,12 @@ namespace Piranha.AspNetCore
 
                     foreach (var page in pages)
                     {
-                        var urls = await GetPageUrlsAsync(api, page, baseUrl);
+                        var urls = await GetPageUrlsAsync(api, page, baseUrl).ConfigureAwait(false);
 
                         if (urls.Count > 0)
+                        {
                             sitemap.AddRange(urls);
+                        }
                     }
                     context.Response.ContentType = "application/xml";
                     await context.Response.WriteAsync(sitemap.ToXml());

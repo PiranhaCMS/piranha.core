@@ -33,6 +33,8 @@ namespace Piranha.Manager.Services
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
+        /// <param name="factory">The content factory</param>
+        /// <param name="localizer">The manager localizer</param>
         public PageService(IApi api, IContentFactory factory, ManagerLocalizer localizer)
         {
             _api = api;

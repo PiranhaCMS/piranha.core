@@ -8,10 +8,6 @@
  *
  */
 
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-
 namespace Piranha.Cache
 {
     /// <summary>
@@ -22,7 +18,6 @@ namespace Piranha.Cache
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="clone">If returned objects should be cloned</param>
         public SimpleCacheWithClone() : base(true) { }
     }
 }

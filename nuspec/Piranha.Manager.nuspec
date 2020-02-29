@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.Manager</id>
     <title>Piranha Manager</title>
-    <version>8.1.0-beta4</version>
+    <version>8.1.0</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -19,8 +19,8 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework="netcoreapp3.1">
-        <dependency id="Piranha" version="[8.1.0-beta4,9.0.0)" />
-        <dependency id="Piranha.Manager.Localization" version="[8.1.0-beta4,9.0.0)" />
+        <dependency id="Piranha" version="[8.1.0,9.0.0)" />
+        <dependency id="Piranha.Manager.Localization" version="[8.1.0,9.0.0)" />
         <dependency id="Microsoft.AspNetCore.Mvc.NewtonsoftJson" version="3.1.0" />
         <dependency id="Microsoft.Extensions.FileProviders.Embedded" version="3.1.0" />
       </group>
@@ -29,7 +29,9 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
   <files>
     <file src="piranha.png" target="images\" />
     <file src="..\core\Piranha.Manager\bin\Release\netcoreapp3.1\Piranha.Manager.Core.dll" target="lib\netcoreapp3.1\Piranha.Manager.Core.dll" />
+    <file src="..\core\Piranha.Manager\bin\Release\netcoreapp3.1\Piranha.Manager.Core.xml" target="lib\netcoreapp3.1\Piranha.Manager.Core.xml" />
     <file src="..\core\Piranha.Manager\bin\Release\netcoreapp3.1\Piranha.Manager.dll" target="lib\netcoreapp3.1\Piranha.Manager.dll" />
+    <file src="..\core\Piranha.Manager\bin\Release\netcoreapp3.1\Piranha.Manager.xml" target="lib\netcoreapp3.1\Piranha.Manager.xml" />
     <file src="..\core\Piranha.Manager\bin\Release\netcoreapp3.1\Piranha.Manager.views.dll" target="lib\netcoreapp3.1\Piranha.Manager.views.dll" />
   </files>
 </package>

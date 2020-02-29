@@ -20,6 +20,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets all available models.
         /// </summary>
+        /// <param name="service">The site type service</param>
         /// <returns>The available models</returns>
         public static IEnumerable<SiteType> GetAll(this ISiteTypeService service)
         {
@@ -29,6 +30,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the model with the specified id.
         /// </summary>
+        /// <param name="service">The site type service</param>
         /// <param name="id">The unique i</param>
         /// <returns></returns>
         public static Models.SiteType GetById(this ISiteTypeService service, string id)
@@ -40,6 +42,7 @@ namespace Piranha.Services
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>
+        /// <param name="service">The site type service</param>
         /// <param name="model">The model</param>
         public static void Save(this ISiteTypeService service, SiteType model)
         {
@@ -49,6 +52,7 @@ namespace Piranha.Services
         /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
+        /// <param name="service">The site type service</param>
         /// <param name="id">The unique id</param>
         public static void Delete(this ISiteTypeService service, string id)
         {
@@ -58,6 +62,7 @@ namespace Piranha.Services
         /// <summary>
         /// Deletes the given model.
         /// </summary>
+        /// <param name="service">The site type service</param>
         /// <param name="model">The model</param>
         public static void Delete(this ISiteTypeService service, SiteType model)
         {

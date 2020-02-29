@@ -10,7 +10,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Piranha.Models;
 
 namespace Piranha.Services
@@ -20,6 +19,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets all available models for the specified site.
         /// </summary>
+        /// <param name="service">The alias service</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The available models</returns>
         public static IEnumerable<Alias> GetAll(this IAliasService service, Guid? siteId = null)
@@ -30,6 +30,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the model with the specified id.
         /// </summary>
+        /// <param name="service">The alias service</param>
         /// <param name="id">The unique id</param>
         /// <returns>The model, or null if it doesn't exist</returns>
         public static Alias GetById(this IAliasService service, Guid id)
@@ -40,6 +41,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the model with the given alias url.
         /// </summary>
+        /// <param name="service">The alias service</param>
         /// <param name="url">The unique url</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The model</returns>
@@ -51,6 +53,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the model with the given redirect url.
         /// </summary>
+        /// <param name="service">The alias service</param>
         /// <param name="url">The unique url</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The model</returns>
@@ -63,6 +66,7 @@ namespace Piranha.Services
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>
+        /// <param name="service">The alias service</param>
         /// <param name="model">The model</param>
         public static void Save(this IAliasService service, Alias model)
         {
@@ -72,6 +76,7 @@ namespace Piranha.Services
         /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
+        /// <param name="service">The alias service</param>
         /// <param name="id">The unique id</param>
         public static void Delete(this IAliasService service, Guid id)
         {
@@ -81,6 +86,7 @@ namespace Piranha.Services
         /// <summary>
         /// Deletes the given model.
         /// </summary>
+        /// <param name="service">The alias service</param>
         /// <param name="model">The model</param>
         public static void Delete(this IAliasService service, Alias model)
         {

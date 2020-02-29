@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.AspNetCore</id>
     <title>Piranha AspNetCore</title>
-    <version>8.1.0-beta4</version>
+    <version>8.1.0</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -20,7 +20,7 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     <dependencies>
       <group targetFramework="netcoreapp3.1">
         <dependency id="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" version="3.1.0" />
-        <dependency id="Piranha" version="[8.1.0-beta4,9.0.0)" />
+        <dependency id="Piranha" version="[8.1.0,9.0.0)" />
         <dependency id="XSitemap" version="2.0.7" />
       </group>
     </dependencies>
@@ -28,5 +28,6 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
   <files>
     <file src="piranha.png" target="images\" />
     <file src="..\core\Piranha.AspNetCore\bin\Release\netcoreapp3.1\Piranha.AspNetCore.dll" target="lib\netcoreapp3.1\Piranha.AspNetCore.dll" />
+    <file src="..\core\Piranha.AspNetCore\bin\Release\netcoreapp3.1\Piranha.AspNetCore.xml" target="lib\netcoreapp3.1\Piranha.AspNetCore.xml" />
   </files>
 </package>

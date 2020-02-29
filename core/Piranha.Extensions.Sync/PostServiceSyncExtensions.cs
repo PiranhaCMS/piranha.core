@@ -20,6 +20,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the available posts for the specified blog.
         /// </summary>
+        /// <param name="service">The post service</param>
         /// <param name="blogId">The unique blog id</param>
         /// <returns>The posts</returns>
         public static IEnumerable<DynamicPost> GetAll(this IPostService service, Guid blogId)
@@ -30,6 +31,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the available post items.
         /// </summary>
+        /// <param name="service">The post service</param>
         /// <param name="blogId">The unique id</param>
         /// <returns>The posts</returns>
         public static IEnumerable<T> GetAll<T>(this IPostService service, Guid blogId) where T : PostBase
@@ -40,6 +42,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the available posts for the specified blog.
         /// </summary>
+        /// <param name="service">The post service</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The posts</returns>
         public static IEnumerable<DynamicPost> GetAllBySiteId(this IPostService service, Guid? siteId = null)
@@ -50,6 +53,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the available post items.
         /// </summary>
+        /// <param name="service">The post service</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The posts</returns>
         public static IEnumerable<T> GetAllBySiteId<T>(this IPostService service, Guid? siteId = null) where T : PostBase
@@ -60,6 +64,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the available posts for the specified blog.
         /// </summary>
+        /// <param name="service">The post service</param>
         /// <param name="slug">The blog slug</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The posts</returns>
@@ -71,6 +76,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the available posts for the specified blog.
         /// </summary>
+        /// <param name="service">The post service</param>
         /// <param name="slug">The blog slug</param>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The posts</returns>
@@ -82,7 +88,8 @@ namespace Piranha.Services
         /// <summary>
         /// Gets all available categories for the specified blog.
         /// </summary>
-        /// <param name="id">The blog id</param>
+        /// <param name="service">The post service</param>
+        /// <param name="blogId">The blog id</param>
         /// <returns>The available categories</returns>
         public static IEnumerable<Taxonomy> GetAllCategories(this IPostService service, Guid blogId)
         {
@@ -92,7 +99,8 @@ namespace Piranha.Services
         /// <summary>
         /// Gets all available tags for the specified blog.
         /// </summary>
-        /// <param name="id">The blog id</param>
+        /// <param name="service">The post service</param>
+        /// <param name="blogId">The blog id</param>
         /// <returns>The available tags</returns>
         public static IEnumerable<Taxonomy> GetAllTags(this IPostService service, Guid blogId)
         {
@@ -102,6 +110,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the post model with the specified id.
         /// </summary>
+        /// <param name="service">The post service</param>
         /// <param name="id">The unique id</param>
         /// <returns>The post model</returns>
         public static DynamicPost GetById(this IPostService service, Guid id)
@@ -113,6 +122,7 @@ namespace Piranha.Services
         /// Gets the post model with the specified id.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
+        /// <param name="service">The post service</param>
         /// <param name="id">The unique id</param>
         /// <returns>The post model</returns>
         public static T GetById<T>(this IPostService service, Guid id) where T : PostBase
@@ -123,6 +133,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the post model with the specified slug.
         /// </summary>
+        /// <param name="service">The post service</param>
         /// <param name="blog">The unique blog slug</param>
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The optional site id</param>
@@ -136,6 +147,7 @@ namespace Piranha.Services
         /// Gets the post model with the specified slug.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
+        /// <param name="service">The post service</param>
         /// <param name="blog">The unique blog slug</param>
         /// <param name="slug">The unique slug</param>
         /// <param name="siteId">The optional site id</param>
@@ -148,7 +160,8 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the post model with the specified slug.
         /// </summary>
-        /// <param name="blog">The unique blog slug</param>
+        /// <param name="service">The post service</param>
+        /// <param name="blogId">The unique blog slug</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The post model</returns>
         public static DynamicPost GetBySlug(this IPostService service, Guid blogId, string slug)
@@ -159,7 +172,8 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the post model with the specified slug.
         /// </summary>
-        /// <param name="blog">The unique blog slug</param>
+        /// <param name="service">The post service</param>
+        /// <param name="blogId">The unique blog slug</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The post model</returns>
         public static T GetBySlug<T>(this IPostService service, Guid blogId, string slug) where T : PostBase
@@ -170,6 +184,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the category with the given slug.
         /// </summary>
+        /// <param name="service">The post service</param>
         /// <param name="blogId">The blog id</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The model</returns>
@@ -181,6 +196,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the tag with the given slug.
         /// </summary>
+        /// <param name="service">The post service</param>
         /// <param name="blogId">The blog id</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The model</returns>
@@ -192,6 +208,7 @@ namespace Piranha.Services
         /// <summary>
         /// Saves the given post model
         /// </summary>
+        /// <param name="service">The post service</param>
         /// <param name="model">The post model</param>
         public static void Save<T>(this IPostService service, T model) where T : PostBase
         {
@@ -201,6 +218,7 @@ namespace Piranha.Services
         /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
+        /// <param name="service">The post service</param>
         /// <param name="id">The unique id</param>
         public static void Delete(this IPostService service, Guid id)
         {
@@ -210,6 +228,7 @@ namespace Piranha.Services
         /// <summary>
         /// Deletes the given model.
         /// </summary>
+        /// <param name="service">The post service</param>
         /// <param name="model">The model</param>
         public static void Delete<T>(this IPostService service, T model) where T : PostBase
         {

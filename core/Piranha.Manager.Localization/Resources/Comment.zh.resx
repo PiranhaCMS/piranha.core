@@ -14,10 +14,10 @@
   </resheader>
 
   <data name="Approved" xml:space="preserve">
-    <value>通過</value>
+    <value>批准</value>
   </data>
   <data name="ApprovedSingle" xml:space="preserve">
-    <value>通過</value>
+    <value>批准</value>
   </data>
   <data name="Pending" xml:space="preserve">
     <value>擱置</value>

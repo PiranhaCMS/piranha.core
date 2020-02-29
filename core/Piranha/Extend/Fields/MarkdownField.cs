@@ -11,7 +11,7 @@
 namespace Piranha.Extend.Fields
 {
     [FieldType(Name = "Markdown", Shorthand = "Markdown", Component = "markdown-field")]
-    public class MarkdownField : SimpleField<string>
+    public class MarkdownField : SimpleField<string>, ISearchable
     {
         /// <summary>
         /// Implicit operator for converting a string to a field.
@@ -38,6 +38,14 @@ namespace Piranha.Extend.Fields
         public string ToHtml()
         {
             return App.Markdown.Transform(Value);
+        }
+
+        /// <summary>
+        /// Gets the content that should be indexed for searching.
+        /// </summary>
+        public string GetIndexedContent()
+        {
+            return !string.IsNullOrEmpty(Value) ? ToHtml() : "";
         }
     }
 }

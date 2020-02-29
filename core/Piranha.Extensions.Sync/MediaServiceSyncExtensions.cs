@@ -20,6 +20,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets all media available in the specified folder.
         /// </summary>
+        /// <param name="service">The media service</param>
         /// <param name="folderId">The optional folder id</param>
         /// <returns>The available media</returns>
         public static IEnumerable<Media> GetAll(this IMediaService service, Guid? folderId = null)
@@ -31,6 +32,7 @@ namespace Piranha.Services
         /// Gets all media folders available in the specified
         /// folder.
         /// </summary>
+        /// <param name="service">The media service</param>
         /// <param name="folderId">The optional folder id</param>
         /// <returns>The available media folders</returns>
         public static IEnumerable<MediaFolder> GetAllFolders(this IMediaService service, Guid? folderId = null)
@@ -41,6 +43,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the media with the given id.
         /// </summary>
+        /// <param name="service">The media service</param>
         /// <param name="id">The unique id</param>
         /// <returns>The media</returns>
         public static Media GetById(this IMediaService service, Guid id)
@@ -51,6 +54,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the media folder with the given id.
         /// </summary>
+        /// <param name="service">The media service</param>
         /// <param name="id">The unique id</param>
         /// <returns>The media folder</returns>
         public static MediaFolder GetFolderById(this IMediaService service, Guid id)
@@ -61,6 +65,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the hierachical media structure.
         /// </summary>
+        /// <param name="service">The media service</param>
         /// <returns>The media structure</returns>
         public static Models.MediaStructure GetStructure(this IMediaService service)
         {
@@ -71,6 +76,7 @@ namespace Piranha.Services
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>
+        /// <param name="service">The media service</param>
         /// <param name="content">The content to save</param>
         public static void Save(this IMediaService service, Models.MediaContent content)
         {
@@ -81,6 +87,7 @@ namespace Piranha.Services
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>
+        /// <param name="service">The media service</param>
         /// <param name="model">The model</param>
         public static void SaveFolder(this IMediaService service, MediaFolder model)
         {
@@ -90,7 +97,8 @@ namespace Piranha.Services
         /// <summary>
         /// Moves the media to the folder with the specified id.
         /// </summary>
-        /// <param name="media">The media</param>
+        /// <param name="service">The media service</param>
+        /// <param name="model">The media</param>
         /// <param name="folderId">The folder id</param>
         public static void Move(this IMediaService service, Media model, Guid? folderId)
         {
@@ -100,6 +108,7 @@ namespace Piranha.Services
         /// <summary>
         /// Deletes the media with the given id.
         /// </summary>
+        /// <param name="service">The media service</param>
         /// <param name="id">The unique id</param>
         public static void Delete(this IMediaService service, Guid id)
         {
@@ -109,6 +118,7 @@ namespace Piranha.Services
         /// <summary>
         /// Deletes the given model.
         /// </summary>
+        /// <param name="service">The media service</param>
         /// <param name="model">The media</param>
         public static void Delete(this IMediaService service, Media model)
         {
@@ -118,6 +128,7 @@ namespace Piranha.Services
         /// <summary>
         /// Deletes the media folder with the given id.
         /// </summary>
+        /// <param name="service">The media service</param>
         /// <param name="id">The unique id</param>
         public static void DeleteFolder(this IMediaService service, Guid id)
         {
@@ -127,6 +138,7 @@ namespace Piranha.Services
         /// <summary>
         /// Deletes the given model.
         /// </summary>
+        /// <param name="service">The media service</param>
         /// <param name="model">The media</param>
         public static void DeleteFolder(this IMediaService service, MediaFolder model)
         {

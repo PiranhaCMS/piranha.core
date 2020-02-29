@@ -37,11 +37,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuspec", ".nuspec", "{A1B6
 		nuspec\Piranha.AttributeBuilder.nuspec = nuspec\Piranha.AttributeBuilder.nuspec
 		nuspec\Piranha.Azure.BlobStorage.nuspec = nuspec\Piranha.Azure.BlobStorage.nuspec
 		nuspec\Piranha.Data.EF.nuspec = nuspec\Piranha.Data.EF.nuspec
+		nuspec\Piranha.Data.EF.PostgreSql.nuspec = nuspec\Piranha.Data.EF.PostgreSql.nuspec
 		nuspec\Piranha.Extensions.Sync.nuspec = nuspec\Piranha.Extensions.Sync.nuspec
 		nuspec\Piranha.ImageSharp.nuspec = nuspec\Piranha.ImageSharp.nuspec
 		nuspec\Piranha.Local.FileStorage.nuspec = nuspec\Piranha.Local.FileStorage.nuspec
+		nuspec\Piranha.Manager.Localization.nuspec = nuspec\Piranha.Manager.Localization.nuspec
 		nuspec\Piranha.Manager.nuspec = nuspec\Piranha.Manager.nuspec
 		nuspec\Piranha.nuspec = nuspec\Piranha.nuspec
+		nuspec\Piranha.Data.EF.MySql.nuspec = nuspec\Piranha.Data.EF.MySql.nuspec
+		nuspec\Piranha.Data.EF.SQLite.nuspec = nuspec\Piranha.Data.EF.SQLite.nuspec
+		nuspec\Piranha.Data.EF.SQLServer.nuspec = nuspec\Piranha.Data.EF.SQLServer.nuspec
+		nuspec\Piranha.Manager.Summernote.nuspec = nuspec\Piranha.Manager.Summernote.nuspec
+		nuspec\Piranha.Manager.TinyMCE.nuspec = nuspec\Piranha.Manager.TinyMCE.nuspec
+		nuspec\Piranha.WebApi.nuspec = nuspec\Piranha.WebApi.nuspec
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AspNetCore.SimpleSecurity", "core\Piranha.AspNetCore.SimpleSecurity\Piranha.AspNetCore.SimpleSecurity.csproj", "{DAE71F77-F4C7-4727-83D3-3AFC7362886D}"
@@ -87,6 +95,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Data.EF.SQLite", "data\Piranha.Data.EF.SQLite\Piranha.Data.EF.SQLite.csproj", "{A9C23685-EC2E-4C57-90EB-069054796F5C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Data.EF.SQLServer", "data\Piranha.Data.EF.SQLServer\Piranha.Data.EF.SQLServer.csproj", "{538596A9-6085-4535-96ED-508A0C30DF32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Data.EF.MySql", "data\Piranha.Data.EF.MySql\Piranha.Data.EF.MySql.csproj", "{1D7557A7-EB80-4E33-928C-9E3F6A2735C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Data.EF.PostgreSql", "data\Piranha.Data.EF.PostgreSql\Piranha.Data.EF.PostgreSql.csproj", "{F6DD71E5-F9F8-4150-8A0B-851EADAE532B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Azure.Search", "core\Piranha.Azure.Search\Piranha.Azure.Search.csproj", "{02521046-DE43-4511-8D4C-BC7330884373}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -198,6 +212,18 @@ Global
 		{538596A9-6085-4535-96ED-508A0C30DF32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{538596A9-6085-4535-96ED-508A0C30DF32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{538596A9-6085-4535-96ED-508A0C30DF32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D7557A7-EB80-4E33-928C-9E3F6A2735C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D7557A7-EB80-4E33-928C-9E3F6A2735C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D7557A7-EB80-4E33-928C-9E3F6A2735C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D7557A7-EB80-4E33-928C-9E3F6A2735C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6DD71E5-F9F8-4150-8A0B-851EADAE532B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6DD71E5-F9F8-4150-8A0B-851EADAE532B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6DD71E5-F9F8-4150-8A0B-851EADAE532B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6DD71E5-F9F8-4150-8A0B-851EADAE532B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02521046-DE43-4511-8D4C-BC7330884373}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02521046-DE43-4511-8D4C-BC7330884373}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02521046-DE43-4511-8D4C-BC7330884373}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02521046-DE43-4511-8D4C-BC7330884373}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -229,6 +255,9 @@ Global
 		{497CBEC0-6D71-43ED-9E8C-6A0DB605AA47} = {DE1913AC-4AA3-4F66-83F1-615710D8367B}
 		{A9C23685-EC2E-4C57-90EB-069054796F5C} = {DCC52317-BC88-4F0A-923F-C9D9F6D952ED}
 		{538596A9-6085-4535-96ED-508A0C30DF32} = {DCC52317-BC88-4F0A-923F-C9D9F6D952ED}
+		{1D7557A7-EB80-4E33-928C-9E3F6A2735C6} = {DCC52317-BC88-4F0A-923F-C9D9F6D952ED}
+		{F6DD71E5-F9F8-4150-8A0B-851EADAE532B} = {DCC52317-BC88-4F0A-923F-C9D9F6D952ED}
+		{02521046-DE43-4511-8D4C-BC7330884373} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF88AA05-D127-4707-8214-A230F0DA569B}

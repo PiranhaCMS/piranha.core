@@ -33,7 +33,7 @@ namespace Piranha.Manager.Services
         /// <summary>
         /// Get media model by media id
         /// </summary>
-        /// <param name="id">Media IDidparam>
+        /// <param name="id">Media id</param>
         /// <returns>Model</returns>
         public async Task<MediaListModel.MediaItem> GetById(Guid id)
         {
@@ -65,6 +65,9 @@ namespace Piranha.Manager.Services
         /// folder if to folder id is given.
         /// </summary>
         /// <param name="folderId">The optional folder id</param>
+        /// <param name="filter">The optional content type filter</param>
+        /// <param name="width">The optional width for images</param>
+        /// <param name="height">The optional height for images</param>
         /// <returns>The list model</returns>
         public async Task<MediaListModel> GetList(Guid? folderId = null, MediaType? filter = null, int? width = null, int? height = null)
         {

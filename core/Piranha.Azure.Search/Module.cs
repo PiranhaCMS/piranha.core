@@ -51,31 +51,6 @@ namespace Piranha.Azure.Search
         /// <summary>
         /// Initializes the module.
         /// </summary>
-        public void Init()
-        {
-            // Make sure indexes are created
-            ContentSearch.CreateIndexes();
-
-            // Add or update page in the search index
-            App.Hooks.Pages.RegisterOnAfterSave((model) =>
-            {
-                ContentSearch.PageSave(model);
-            });
-            // Delete page from the search index
-            App.Hooks.Pages.RegisterOnAfterDelete((model) =>
-            {
-                ContentSearch.PageDelete(model);
-            });
-            // Add or update page in the search index
-            App.Hooks.Posts.RegisterOnAfterSave((model) =>
-            {
-                ContentSearch.PostSave(model);
-            });
-            // Delete page from the search index
-            App.Hooks.Posts.RegisterOnAfterDelete((model) =>
-            {
-                ContentSearch.PostDelete(model);
-            });
-        }
+        public void Init() { }
     }
 }

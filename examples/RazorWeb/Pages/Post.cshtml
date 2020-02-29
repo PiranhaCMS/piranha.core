@@ -50,7 +50,7 @@
     {
         <div class="row justify-content-center comments">
             <div id="comments" class="col col-lg-8 col-md-10">
-                @if (Model.Data.isCommentsOpen)
+                @if (Model.Data.IsCommentsOpen)
                 {
                     <div class="alert alert-warning mt-2 mb-5">
                         <form asp-page-handler="SaveComment" method="post">

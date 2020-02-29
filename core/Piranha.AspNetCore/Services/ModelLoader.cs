@@ -26,6 +26,8 @@ namespace Piranha.AspNetCore.Services
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
+        /// <param name="auth">The authorization service</param>
+        /// <param name="app">The application service</param>
         public ModelLoader(IApi api, IAuthorizationService auth, IApplicationService app)
         {
             _api = api;

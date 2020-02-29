@@ -41,7 +41,9 @@ namespace Piranha
             for (var i = 0; i < arr.Length; i++)
             {
                 if (i >= startpos && i < (startpos + length))
+                {
                     tmp.Add(arr[i]);
+                }
             }
             return tmp.ToArray();
         }
@@ -50,6 +52,7 @@ namespace Piranha
         /// Generates a slug from the given string.
         /// </summary>
         /// <param name="str">The string</param>
+        /// <param name="hierarchical">If forward slashes should be allowed</param>
         /// <returns>The slug</returns>
         public static string GenerateSlug(string str, bool hierarchical = true)
         {
@@ -254,6 +257,7 @@ namespace Piranha
         /// Gets the value of the property with the given name for the
         /// given instance.
         /// </summary>
+        /// <param name="type">The current type</param>
         /// <param name="propertyName">The property name</param>
         /// <param name="instance">The object instance</param>
         /// <returns>The property value</returns>
@@ -272,6 +276,7 @@ namespace Piranha
         /// Sets the value of the property with the given name for the
         /// given instance.
         /// </summary>
+        /// <param name="type">The current type</param>
         /// <param name="propertyName">The property name</param>
         /// <param name="instance">The object instance</param>
         /// <param name="value">The value to set</param>

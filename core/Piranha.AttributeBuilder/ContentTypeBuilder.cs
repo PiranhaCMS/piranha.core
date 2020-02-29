@@ -110,7 +110,6 @@ namespace Piranha.AttributeBuilder
     /// </summary>
     /// <typeparam name="T">The builder type</typeparam>
     /// <typeparam name="TType">The content type</typeparam>
-    /// <typeparam name="TAttr">The attribute type</typeparam>
     public abstract class ContentTypeBuilder<T, TType>
         where T : ContentTypeBuilder<T, TType>
         where TType : ContentType
@@ -280,7 +279,9 @@ namespace Piranha.AttributeBuilder
         private void RegisterField(Type type)
         {
             if (typeof(IEnumerable).IsAssignableFrom(type))
+            {
                 type = type.GenericTypeArguments.First();
+            }
 
             if (typeof(IField).IsAssignableFrom(type))
             {

@@ -21,6 +21,8 @@ namespace Piranha.Repositories
         /// Gets the available posts for the specified blog.
         /// </summary>
         /// <param name="blogId">The unique id</param>
+        /// <param name="index">The optional page to fetch</param>
+        /// <param name="pageSize">The optional page size</param>
         /// <returns>The posts</returns>
         Task<IEnumerable<Guid>> GetAll(Guid blogId, int? index = null, int? pageSize = null);
 
@@ -34,14 +36,14 @@ namespace Piranha.Repositories
         /// <summary>
         /// Gets all available categories for the specified blog.
         /// </summary>
-        /// <param name="id">The blog id</param>
+        /// <param name="blogId">The blog id</param>
         /// <returns>The available categories</returns>
         Task<IEnumerable<Taxonomy>> GetAllCategories(Guid blogId);
 
         /// <summary>
         /// Gets all available tags for the specified blog.
         /// </summary>
-        /// <param name="id">The blog id</param>
+        /// <param name="blogId">The blog id</param>
         /// <returns>The available tags</returns>
         Task<IEnumerable<Taxonomy>> GetAllTags(Guid blogId);
 

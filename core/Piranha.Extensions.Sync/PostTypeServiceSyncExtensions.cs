@@ -29,6 +29,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the model with the specified id.
         /// </summary>
+        /// <param name="service">The post type service</param>
         /// <param name="id">The unique i</param>
         /// <returns></returns>
         public static PostType GetById(this IPostTypeService service, string id)
@@ -40,6 +41,7 @@ namespace Piranha.Services
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>
+        /// <param name="service">The post type service</param>
         /// <param name="model">The model</param>
         public static void Save(this IPostTypeService service, PostType model)
         {
@@ -49,6 +51,7 @@ namespace Piranha.Services
         /// <summary>
         /// Deletes the model with the specified id.
         /// </summary>
+        /// <param name="service">The post type service</param>
         /// <param name="id">The unique id</param>
         public static void Delete(this IPostTypeService service, string id)
         {
@@ -58,6 +61,7 @@ namespace Piranha.Services
         /// <summary>
         /// Deletes the given model.
         /// </summary>
+        /// <param name="service">The post type service</param>
         /// <param name="model">The model</param>
         public static void Delete(this IPostTypeService service, PostType model)
         {

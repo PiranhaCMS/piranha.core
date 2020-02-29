@@ -39,6 +39,8 @@ namespace Piranha.Repositories
         /// Gets the available posts for the specified archive.
         /// </summary>
         /// <param name="blogId">The blog id</param>
+        /// <param name="index">The optional page to fetch</param>
+        /// <param name="pageSize">The optional page size</param>
         /// <returns>The posts</returns>
         public async Task<IEnumerable<Guid>> GetAll(Guid blogId, int? index = null, int? pageSize = null)
         {
@@ -86,7 +88,7 @@ namespace Piranha.Repositories
         /// <summary>
         /// Gets all available categories for the specified blog.
         /// </summary>
-        /// <param name="id">The blog id</param>
+        /// <param name="blogId">The blog id</param>
         /// <returns>The available categories</returns>
         public async Task<IEnumerable<Models.Taxonomy>> GetAllCategories(Guid blogId)
         {
@@ -107,7 +109,7 @@ namespace Piranha.Repositories
         /// <summary>
         /// Gets all available tags for the specified blog.
         /// </summary>
-        /// <param name="id">The blog id</param>
+        /// <param name="blogId">The blog id</param>
         /// <returns>The available tags</returns>
         public async Task<IEnumerable<Models.Taxonomy>> GetAllTags(Guid blogId)
         {
@@ -184,7 +186,7 @@ namespace Piranha.Repositories
 
             if (post != null)
             {
-                return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), Process);
+                return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), ProcessAsync);
             }
             return null;
         }
@@ -205,7 +207,7 @@ namespace Piranha.Repositories
 
             if (post != null)
             {
-                return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), Process);
+                return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), ProcessAsync);
             }
             return null;
         }
@@ -235,7 +237,7 @@ namespace Piranha.Repositories
                     // Transform data model
                     var post = JsonConvert.DeserializeObject<Post>(draft.Data);
 
-                    return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), Process);
+                    return await _contentService.TransformAsync<T>(post, App.PostTypes.GetById(post.PostTypeId), ProcessAsync);
                 }
             }
             return null;
@@ -542,6 +544,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="postId">The unique post id</param>
         /// <param name="onlyApproved">If only approved comments should be fetched</param>
+        /// <param name="onlyPending">If only pending comments should be fetched</param>
         /// <param name="page">The page number</param>
         /// <param name="pageSize">The page size</param>
         /// <returns>The available comments</returns>
@@ -599,6 +602,7 @@ namespace Piranha.Repositories
         /// Saves the given post model
         /// </summary>
         /// <param name="model">The post model</param>
+        /// <param name="isDraft">If the model should be saved as a draft</param>
         private async Task Save<T>(T model, bool isDraft) where T : Models.PostBase
         {
             var type = App.PostTypes.GetById(model.TypeId);
@@ -1051,7 +1055,7 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="post">The source post</param>
         /// <param name="model">The targe model</param>
-        private async void Process<T>(Data.Post post, T model) where T : Models.PostBase
+        private async Task ProcessAsync<T>(Data.Post post, T model) where T : Models.PostBase
         {
             // Permissions
             foreach (var permission in post.Permissions)

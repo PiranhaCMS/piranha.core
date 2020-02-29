@@ -86,7 +86,7 @@ namespace Piranha.Services
         /// Gets the pending comments available for the page with the specified id. If no page id
         /// is provided all comments are fetched.
         /// </summary>
-        /// <param name="pageID">The unique page id</param>
+        /// <param name="pageId">The unique page id</param>
         /// <param name="page">The optional page number</param>
         /// <param name="pageSize">The optional page size</param>
         /// <returns>The available comments</returns>
@@ -150,7 +150,6 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the draft for the page model with the specified id.
         /// </summary>
-        /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
         /// <returns>The draft, or null if no draft exists</returns>
         Task<DynamicPage> GetDraftByIdAsync(Guid id);

@@ -58,6 +58,7 @@ namespace Piranha.AspNetCore
         /// </summary>
         /// <param name="context">The current http context</param>
         /// <param name="api">The current api</param>
+        /// <param name="service">The application service</param>
         /// <returns>An async task</returns>
         public abstract Task Invoke(HttpContext context, IApi api, IApplicationService service);
 

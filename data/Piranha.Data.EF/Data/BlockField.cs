@@ -13,10 +13,10 @@ using Newtonsoft.Json;
 
 namespace Piranha.Data
 {
-    [Serializable]
     /// <summary>
     /// Content field for a block.
     /// </summary>
+    [Serializable]
     public sealed class BlockField
     {
         /// <summary>

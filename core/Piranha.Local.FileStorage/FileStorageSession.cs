@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -25,7 +25,7 @@ namespace Piranha.Local
         /// Default constructor.
         /// </summary>
         /// <param name="basePath">The base path</param>
-        /// <param name="basePath">The base url</param>
+        /// <param name="baseUrl">The base url</param>
         public FileStorageSession(string basePath, string baseUrl)
         {
             _basePath = basePath;
@@ -62,7 +62,7 @@ namespace Piranha.Local
         {
             using (var file = File.OpenWrite(_basePath + id))
             {
-                await stream.CopyToAsync(file);
+                await stream.CopyToAsync(file).ConfigureAwait(false);
             }
             return _baseUrl + id;
         }
@@ -86,7 +86,7 @@ namespace Piranha.Local
         /// <summary>
         /// Deletes the content for the specified media.
         /// </summary>
-        /// <param name="id">The unique id/param>
+        /// <param name="id">The unique id</param>
         public Task<bool> DeleteAsync(string id)
         {
             return Task.Run(() =>

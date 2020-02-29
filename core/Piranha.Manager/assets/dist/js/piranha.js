@@ -1023,36 +1023,12 @@ $(document).on('focusin', function (e) {
         e.stopImmediatePropagation();
     }
 });
-/*global
-    piranha
-*/
-
 Vue.component("page-item", {
-    props: ["item"],
-    methods: {
-        toggleItem: function (item) {
-            item.isExpanded = !item.isExpanded;
-        }
-    },
-    template:
-        "<li :data-id='item.id' class='dd-item' :class='{ expanded: item.isExpanded || item.items.length === 0 }'>" +
-        "  <div class='sitemap-item expanded'>" +
-        "    <div class='link'>" +
-        "      <span class='actions'>" +
-        "        <a v-if='item.items.length > 0 && item.isExpanded' v-on:click.prevent='toggleItem(item)' class='expand' href='#'><i class='fas fa-minus'></i></a>" +
-        "        <a v-if='item.items.length > 0 && !item.isExpanded' v-on:click.prevent='toggleItem(item)' class='expand' href='#'><i class='fas fa-plus'></i></a>" +
-        "      </span>" +
-        "      <a href='#' v-on:click.prevent='piranha.pagepicker.select(item)'>" +
-        "        {{ item.title }}" +
-        "      </a>" +
-        "    </div>" +
-        "    <div class='type d-none d-md-block'>" +
-        "      {{ item.typeName }}" +
-        "    </div>" +
-        "  </div>" +
-        "  <ol class='dd-list' v-if='item.items.length > 0'>" +
-        "    <page-item v-for='child in item.items' v-bind:key='child.id' v-bind:item='child'>" +
-        "    </page-item>" +
-        "  </ol>" +
-        "</li>"
+  props: ["item"],
+  methods: {
+    toggleItem: function (item) {
+      item.isExpanded = !item.isExpanded;
+    }
+  },
+  template: "\n<li :data-id=\"item.id\" class=\"dd-item\" :class=\"{ expanded: item.isExpanded || item.items.length === 0 }\">\n    <div class=\"sitemap-item expanded\">\n        <div class=\"link\">\n            <span class=\"actions\">\n                <a v-if=\"item.items.length > 0 && item.isExpanded\" v-on:click.prevent=\"toggleItem(item)\" class=\"expand\" href=\"#\"><i class=\"fas fa-minus\"></i></a>\n                <a v-if=\"item.items.length > 0 && !item.isExpanded\" v-on:click.prevent=\"toggleItem(item)\" class=\"expand\" href=\"#\"><i class=\"fas fa-plus\"></i></a>\n            </span>\n            <a href=\"#\" v-on:click.prevent=\"piranha.pagepicker.select(item)\">\n                {{ item.title }}\n            </a>\n        </div>\n        <div class=\"type d-none d-md-block\">\n            {{ item.typeName }}\n        </div>\n    </div>\n    <ol class=\"dd-list\" v-if=\"item.items.length > 0\">\n        <page-item v-for=\"child in item.items\" v-bind:key=\"child.id\" v-bind:item=\"child\">\n        </page-item>\n    </ol>\n</li>\n"
 });

@@ -13,10 +13,10 @@ using Newtonsoft.Json;
 
 namespace Piranha.Data
 {
-    [Serializable]
     /// <summary>
     /// Connection between a post and a block.
     /// </summary>
+    [Serializable]
     public sealed class PostBlock : IContentBlock
     {
         /// <summary>

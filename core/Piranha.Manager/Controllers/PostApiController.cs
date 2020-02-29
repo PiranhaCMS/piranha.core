@@ -216,6 +216,7 @@ namespace Piranha.Manager.Controllers
         /// Saves the given model
         /// </summary>
         /// <param name="model">The model</param>
+        /// <param name="draft">If the page should be saved as a draft</param>
         /// <returns>The result of the operation</returns>
         private async Task<PostEditModel> Save(PostEditModel model, bool draft = false)
         {

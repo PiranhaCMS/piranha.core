@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.AspNetCore.Identity</id>
     <title>Piranha AspNetCore Identity</title>
-    <version>8.1.0-beta4</version>
+    <version>8.1.0</version>
     <authors>Håkan Edling</authors>
     <owners>Håkan Edling</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -19,8 +19,8 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework="netcoreapp3.1">
-        <dependency id="Piranha" version="[8.1.0-beta4,9.0.0)" />
-        <dependency id="Piranha.Manager" version="[8.1.0-beta4,9.0.0)" />
+        <dependency id="Piranha" version="[8.1.0,9.0.0)" />
+        <dependency id="Piranha.Manager" version="[8.1.0,9.0.0)" />
         <dependency id="Microsoft.AspNetCore.Identity.EntityFrameworkCore" version="3.1.0" />
       </group>
     </dependencies>
@@ -28,6 +28,7 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
   <files>
     <file src="piranha.png" target="images\" />
     <file src="..\core\Piranha.AspNetCore.Identity\bin\Release\netcoreapp3.1\Piranha.AspNetCore.Identity.dll" target="lib\netcoreapp3.1\Piranha.AspNetCore.Identity.dll" />
+    <file src="..\core\Piranha.AspNetCore.Identity\bin\Release\netcoreapp3.1\Piranha.AspNetCore.Identity.xml" target="lib\netcoreapp3.1\Piranha.AspNetCore.Identity.xml" />
     <file src="..\core\Piranha.AspNetCore.Identity\bin\Release\netcoreapp3.1\Piranha.AspNetCore.Identity.Views.dll" target="lib\netcoreapp3.1\Piranha.AspNetCore.Identity.Views.dll" />
   </files>
 </package>

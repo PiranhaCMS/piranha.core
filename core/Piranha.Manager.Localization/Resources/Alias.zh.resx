@@ -22,13 +22,13 @@
     <value>別名網址</value>
   </data>
   <data name="Alias URL is mandatory." xml:space="preserve">
-    <value>強制別名網址</value>
+    <value>別名網址是必填項。</value>
   </data>
   <data name="Redirect URL" xml:space="preserve">
     <value>導向網址</value>
   </data>
   <data name="Redirect URL is mandatory." xml:space="preserve">
-    <value>強制導向網址</value>
+    <value>導向網址是必填項。</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>永久</value>
@@ -37,7 +37,7 @@
     <value>是否確定要刪除此別名？</value>
   </data>
   <data name="If the redirect should be permanent" xml:space="preserve">
-    <value>這個轉向網址應該是強制的</value>
+    <value>這個導向網址應該是永久的</value>
   </data>
   <data name="The alias was successfully added to the list" xml:space="preserve">
     <value>該別名已加入列表中</value>

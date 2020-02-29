@@ -28,6 +28,7 @@ namespace RazorWeb
                 options.UseManager();
                 options.UseTinyMCE();
                 options.UseMemoryCache();
+
                 options.UseEF<SQLiteDb>(db =>
                     db.UseSqlite("Filename=./piranha.razorweb.db"));
                 options.UseIdentityWithSeed<IdentitySQLiteDb>(db =>

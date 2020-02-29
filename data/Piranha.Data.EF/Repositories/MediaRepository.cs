@@ -76,7 +76,11 @@ namespace Piranha.Repositories
                 .ToListAsync()
                 .ConfigureAwait(false);
 
-        /// <inheritdoc cref="IMediaRepository.GetAllByIdAsync"/>
+        /// <summary>
+        /// Get media for all Ids in this enumerable.
+        /// </summary>
+        /// <param name="ids">One or several media id</param>
+        /// <returns>The matching media</returns>
         public Task<IEnumerable<Models.Media>> GetById(params Guid[] ids) => _db.Media.AsNoTracking()
             .Include(c => c.Versions).Where(m => ids.Contains(m.Id)).OrderBy(m => m.Filename).ToArrayAsync()
             .ContinueWith(t => t.Result.Select(m => (Models.Media) m));
@@ -140,7 +144,7 @@ namespace Piranha.Repositories
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>
-        /// <param name="content">The content to save</param>
+        /// <param name="model">The model to save</param>
         public async Task Save(Models.Media model)
         {
             var media = await _db.Media
@@ -233,7 +237,7 @@ namespace Piranha.Repositories
         /// <summary>
         /// Moves the media to the folder with the specified id.
         /// </summary>
-        /// <param name="media">The media</param>
+        /// <param name="model">The model</param>
         /// <param name="folderId">The folder id</param>
         public async Task Move(Models.Media model, Guid? folderId)
         {
@@ -287,7 +291,9 @@ namespace Piranha.Repositories
         /// Sorts the items.
         /// </summary>
         /// <param name="folders">The full folder list</param>
+        /// <param name="count">The list of item count</param>
         /// <param name="parentId">The current parent id</param>
+        /// <param name="level">The current level in the structure</param>
         /// <returns>The structure</returns>
         private Models.MediaStructure Sort(IEnumerable<MediaFolder> folders, IList<FolderCount> count, Guid? parentId = null, int level = 0)
         {

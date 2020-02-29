@@ -16,7 +16,7 @@ namespace Piranha.Extend.Fields
         /// <summary>
         /// Implicit operator for converting a int to a field.
         /// </summary>
-        /// <param name="str">The string value</param>
+        /// <param name="number">The integer value</param>
         public static implicit operator NumberField(int number)
         {
             return new NumberField { Value = number };

@@ -19,7 +19,7 @@ namespace Piranha.Extend.Fields
         /// <summary>
         /// Implicit operator for converting a Guid id to a field.
         /// </summary>
-        /// <param name="str">The string value</param>
+        /// <param name="guid">The guid value</param>
         public static implicit operator DocumentField(Guid guid)
         {
             return new DocumentField { Id = guid };

@@ -26,6 +26,7 @@ namespace Piranha.Services
         private readonly IPageService _pageService;
         private readonly IParamService _paramService;
         private readonly ICache _cache;
+        private readonly ISearch _search;
 
         /// <summary>
         /// Default constructor.
@@ -36,13 +37,16 @@ namespace Piranha.Services
         /// <param name="pageService">The page service</param>
         /// <param name="paramService">The param service</param>
         /// <param name="cache">The optional model cache</param>
-        public PostService(IPostRepository repo, IContentFactory factory, ISiteService siteService, IPageService pageService, IParamService paramService, ICache cache = null)
+        /// <param name="search">The optional search service</param>
+        public PostService(IPostRepository repo, IContentFactory factory, ISiteService siteService, IPageService pageService,
+            IParamService paramService, ICache cache = null, ISearch search = null)
         {
             _repo = repo;
             _factory = factory;
             _siteService = siteService;
             _pageService = pageService;
             _paramService = paramService;
+            _search = search;
 
             if ((int)App.CacheLevel > 2)
             {
@@ -81,6 +85,8 @@ namespace Piranha.Services
         /// Gets the available posts for the specified blog.
         /// </summary>
         /// <param name="blogId">The unique blog id</param>
+        /// <param name="index">The optional page to fetch</param>
+        /// <param name="pageSize">The optional page size</param>
         /// <returns>The posts</returns>
         public Task<IEnumerable<DynamicPost>> GetAllAsync(Guid blogId, int? index = null, int? pageSize = null)
         {
@@ -91,6 +97,8 @@ namespace Piranha.Services
         /// Gets the available post items.
         /// </summary>
         /// <param name="blogId">The unique id</param>
+        /// <param name="index">The optional page to fetch</param>
+        /// <param name="pageSize">The optional page size</param>
         /// <returns>The posts</returns>
         public async Task<IEnumerable<T>> GetAllAsync<T>(Guid blogId, int? index = null, int? pageSize = null) where T : PostBase
         {
@@ -185,7 +193,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets all available categories for the specified blog.
         /// </summary>
-        /// <param name="id">The blog id</param>
+        /// <param name="blogId">The blog id</param>
         /// <returns>The available categories</returns>
         public Task<IEnumerable<Taxonomy>> GetAllCategoriesAsync(Guid blogId)
         {
@@ -195,7 +203,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets all available tags for the specified blog.
         /// </summary>
-        /// <param name="id">The blog id</param>
+        /// <param name="blogId">The blog id</param>
         /// <returns>The available tags</returns>
         public Task<IEnumerable<Taxonomy>> GetAllTagsAsync(Guid blogId)
         {
@@ -308,7 +316,7 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the post model with the specified slug.
         /// </summary>
-        /// <param name="blog">The unique blog slug</param>
+        /// <param name="blogId">The unique blog slug</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The post model</returns>
         public Task<DynamicPost> GetBySlugAsync(Guid blogId, string slug)
@@ -320,7 +328,7 @@ namespace Piranha.Services
         /// Gets the post model with the specified slug.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
-        /// <param name="blog">The unique blog slug</param>
+        /// <param name="blogId">The unique blog slug</param>
         /// <param name="slug">The unique slug</param>
         /// <returns>The post model</returns>
         public async Task<T> GetBySlugAsync<T>(Guid blogId, string slug) where T : PostBase
@@ -364,7 +372,6 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the draft for the post model with the specified id.
         /// </summary>
-        /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
         /// <returns>The draft, or null if no draft exists</returns>
         public Task<DynamicPost> GetDraftByIdAsync(Guid id)
@@ -643,6 +650,7 @@ namespace Piranha.Services
         /// Saves the given post model
         /// </summary>
         /// <param name="model">The post model</param>
+        /// <param name="isDraft">If the model should be saved as a draft</param>
         private async Task SaveAsync<T>(T model, bool isDraft) where T : PostBase
         {
             // Ensure id
@@ -723,6 +731,12 @@ namespace Piranha.Services
 
             App.Hooks.OnAfterSave<PostBase>(model);
 
+            // Update search document
+            if (_search != null)
+            {
+                await _search.SavePostAsync(model);
+            }
+
             // Remove the post from cache
             RemoveFromCache(model);
 
@@ -772,6 +786,12 @@ namespace Piranha.Services
             App.Hooks.OnBeforeDelete<PostBase>(model);
             await _repo.Delete(model.Id).ConfigureAwait(false);
             App.Hooks.OnAfterDelete<PostBase>(model);
+
+            // Delete search document
+            if (_search != null)
+            {
+                await _search.DeletePostAsync(model);
+            }
 
             // Remove from cache & invalidate sitemap
             RemoveFromCache(model);
@@ -855,7 +875,7 @@ namespace Piranha.Services
                         blogPages.Add(blog);
                     }
 
-                    await OnLoadAsync(model, blog);
+                    await OnLoadAsync(model, blog).ConfigureAwait(false);
                 }
             }
 

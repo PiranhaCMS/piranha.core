@@ -54,7 +54,7 @@ namespace Piranha.Models
         /// items recursively.
         /// </summary>
         /// <param name="items">The items</param>
-        /// <param name="pageId">The unique id</param>
+        /// <param name="id">The unique id</param>
         /// <param name="includeRootNode">If the root node should be included</param>
         /// <returns>The partial structure if found</returns>
         private TThis GetPartialRecursive(IList<T> items, Guid id, bool includeRootNode)
@@ -91,7 +91,7 @@ namespace Piranha.Models
         /// items recursively.
         /// </summary>
         /// <param name="items">The items</param>
-        /// <param name="pageId">The unique id</param>
+        /// <param name="id">The unique id</param>
         /// <returns>The breadcrumb items</returns>
         private IList<T> GetBreadcrumbRecursive(IList<T> items, Guid id)
         {
