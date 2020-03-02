@@ -180,7 +180,7 @@ namespace Piranha.Services
 
                     if (!regionType.Collection)
                     {
-                        MapRegion(model, content, GetRegion(model, regionKey), regionType, regionKey);
+                        MapRegion(content, GetRegion(model, regionKey), regionType, regionKey);
                     }
                     else
                     {
@@ -188,7 +188,7 @@ namespace Piranha.Services
                         var sortOrder = 0;
                         foreach (var region in GetEnumerable(model, regionKey))
                         {
-                            var fields = MapRegion(model, content, region, regionType, regionKey, sortOrder++);
+                            var fields = MapRegion(content, region, regionType, regionKey, sortOrder++);
 
                             if (fields.Count > 0)
                                 items.AddRange(fields);
@@ -398,14 +398,12 @@ namespace Piranha.Services
         /// <summary>
         /// Maps a region to the given data entity.
         /// </summary>
-        /// <typeparam name="T">The model type</typeparam>
-        /// <param name="model">The model</param>
         /// <param name="content">The content entity</param>
         /// <param name="region">The region to map</param>
         /// <param name="regionType">The region type</param>
         /// <param name="regionId">The region id</param>
         /// <param name="sortOrder">The optional sort order</param>
-        private IList<Guid> MapRegion<T>(T model, TContent content, object region, Models.RegionType regionType, string regionId, int sortOrder = 0) where T : Models.ContentBase
+        private IList<Guid> MapRegion(TContent content, object region, Models.RegionType regionType, string regionId, int sortOrder = 0)
         {
             var items = new List<Guid>();
 
