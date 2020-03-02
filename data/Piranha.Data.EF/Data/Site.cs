@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2017-2019 Håkan Edling
+ * Copyright (c) 2017-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -13,7 +13,7 @@ using System;
 namespace Piranha.Data
 {
     [Serializable]
-    public sealed class Site : Content<SiteField>
+    public sealed class Site : ContentBase<SiteField>
     {
         /// <summary>
         /// Gets/sets the optional site type id.

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) 2019-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -16,7 +16,7 @@ namespace Piranha.Models
     /// Custom editor for a content type.
     /// </summary>
     [Serializable]
-    public class ContentTypeEditor
+    public sealed class ContentTypeEditor
     {
         /// <summary>
         /// Gets/sets the editor component.

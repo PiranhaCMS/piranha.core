@@ -12,7 +12,7 @@ using System;
 
 namespace Piranha.Data
 {
-    public class PageRevision : ContentRevision
+    public class PageRevision : ContentRevisionBase
     {
         /// <summary>
         /// Gets/sets the id of the page this revision

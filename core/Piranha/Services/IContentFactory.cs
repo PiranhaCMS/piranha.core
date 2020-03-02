@@ -21,7 +21,7 @@ namespace Piranha.Services
         /// <param name="type">The content type</param>
         /// <typeparam name="T">The model type</typeparam>
         /// <returns>The new model</returns>
-        Task<T> CreateAsync<T>(ContentType type) where T : Content;
+        Task<T> CreateAsync<T>(ContentTypeBase type) where T : ContentBase;
 
         /// <summary>
         /// Creates a new dynamic region.
@@ -29,7 +29,7 @@ namespace Piranha.Services
         /// <param name="type">The content type</param>
         /// <param name="regionId">The region id</param>
         /// <returns>The new region value</returns>
-        Task<object> CreateDynamicRegionAsync(ContentType type, string regionId);
+        Task<object> CreateDynamicRegionAsync(ContentTypeBase type, string regionId);
 
         /// <summary>
         /// Creates and initializes a new block of the specified type.
@@ -45,7 +45,7 @@ namespace Piranha.Services
         /// <param name="type">The content type</param>
         /// <typeparam name="T">The model type</typeparam>
         /// <returns>The initialized model</returns>
-        Task<T> InitAsync<T>(T model, ContentType type) where T : Content;
+        Task<T> InitAsync<T>(T model, ContentTypeBase type) where T : ContentBase;
 
         /// <summary>
         /// Initializes the given dynamic model.
@@ -54,6 +54,6 @@ namespace Piranha.Services
         /// <param name="type">The content type</param>
         /// <typeparam name="T">The model type</typeparam>
         /// <returns>The initialized model</returns>
-        Task<T> InitDynamicAsync<T>(T model, ContentType type) where T : IDynamicModel;
+        Task<T> InitDynamicAsync<T>(T model, ContentTypeBase type) where T : IDynamicModel;
     }
 }

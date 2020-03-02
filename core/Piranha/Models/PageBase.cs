@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2019 Håkan Edling
+ * Copyright (c) 2016-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -18,7 +18,7 @@ namespace Piranha.Models
     /// Base class for page models.
     /// </summary>
     [Serializable]
-    public abstract class PageBase : RoutedContent, IBlockModel, IMeta, ICommentModel
+    public abstract class PageBase : RoutedContentBase, IBlockModel, IMeta, ICommentModel
     {
         /// <summary>
         /// Gets/sets the site id.

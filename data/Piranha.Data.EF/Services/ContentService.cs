@@ -21,9 +21,9 @@ using Piranha.Models;
 namespace Piranha.Services
 {
     public class ContentService<TContent, TField, TModelBase> : IContentService<TContent, TField, TModelBase>
-        where TContent : Content<TField>
-        where TField : ContentField
-        where TModelBase : Content
+        where TContent : ContentBase<TField>
+        where TField : ContentFieldBase
+        where TModelBase : ContentBase
     {
         //
         // Members
@@ -49,8 +49,8 @@ namespace Piranha.Services
         /// <param name="type">The content type</param>
         /// <param name="process">Optional func that should be called after transformation</param>
         /// <returns>The page model</returns>
-        public async Task<T> TransformAsync<T>(TContent content, Models.ContentType type, Func<TContent, T, Task> process = null)
-            where T : Models.Content, TModelBase
+        public async Task<T> TransformAsync<T>(TContent content, Models.ContentTypeBase type, Func<TContent, T, Task> process = null)
+            where T : Models.ContentBase, TModelBase
         {
             if (type != null)
             {
@@ -72,10 +72,8 @@ namespace Piranha.Services
                 // Map basic fields
                 _mapper.Map<TContent, TModelBase>(content, model);
 
-                if (model is Models.RoutedContent)
+                if (model is Models.RoutedContentBase routeModel)
                 {
-                    var routeModel = (Models.RoutedContent)(object)model;
-
                     // Map route (if available)
                     if (string.IsNullOrWhiteSpace(routeModel.Route) && type.Routes.Count > 0)
                         routeModel.Route = type.Routes.First();
@@ -151,8 +149,8 @@ namespace Piranha.Services
         /// <param name="type">The conten type</param>
         /// <param name="dest">The optional dest object</param>
         /// <returns>The content data</returns>
-        public TContent Transform<T>(T model, Models.ContentType type, TContent dest = null)
-            where T : Models.Content, TModelBase
+        public TContent Transform<T>(T model, Models.ContentTypeBase type, TContent dest = null)
+            where T : Models.ContentBase, TModelBase
         {
             var content = dest == null ? Activator.CreateInstance<TContent>() : dest;
 
@@ -342,7 +340,7 @@ namespace Piranha.Services
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <returns>The enumerator</returns>
-        private IEnumerable GetEnumerable<T>(T model, string regionId) where T : Models.Content
+        private IEnumerable GetEnumerable<T>(T model, string regionId) where T : Models.ContentBase
         {
             object value = null;
 
@@ -366,7 +364,7 @@ namespace Piranha.Services
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <returns>The region</returns>
-        private object GetRegion<T>(T model, string regionId) where T : Models.Content
+        private object GetRegion<T>(T model, string regionId) where T : Models.ContentBase
         {
             if (model is Models.IDynamicModel)
             {
@@ -385,7 +383,7 @@ namespace Piranha.Services
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <returns>If the region exists</returns>
-        private bool HasRegion<T>(T model, string regionId) where T : Models.Content
+        private bool HasRegion<T>(T model, string regionId) where T : Models.ContentBase
         {
             if (model is Models.IDynamicModel)
             {
@@ -407,7 +405,7 @@ namespace Piranha.Services
         /// <param name="regionType">The region type</param>
         /// <param name="regionId">The region id</param>
         /// <param name="sortOrder">The optional sort order</param>
-        private IList<Guid> MapRegion<T>(T model, TContent content, object region, Models.RegionType regionType, string regionId, int sortOrder = 0) where T : Models.Content
+        private IList<Guid> MapRegion<T>(T model, TContent content, object region, Models.RegionType regionType, string regionId, int sortOrder = 0) where T : Models.ContentBase
         {
             var items = new List<Guid>();
 
@@ -475,7 +473,7 @@ namespace Piranha.Services
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <param name="field">The field</param>
-        private void SetSimpleValue<T>(T model, string regionId, TField field) where T : Models.Content
+        private void SetSimpleValue<T>(T model, string regionId, TField field) where T : Models.ContentBase
         {
             if (model is Models.IDynamicModel)
             {
@@ -500,7 +498,7 @@ namespace Piranha.Services
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <param name="field">The field</param>
-        private void AddSimpleValue<T>(T model, string regionId, TField field) where T : Models.Content
+        private void AddSimpleValue<T>(T model, string regionId, TField field) where T : Models.ContentBase
         {
             if (model is Models.IDynamicModel)
             {
@@ -526,7 +524,7 @@ namespace Piranha.Services
         /// <param name="regionId">The region id</param>
         /// <param name="fieldId">The field id</param>
         /// <param name="field">The field</param>
-        private void SetComplexValue<T>(T model, string regionId, string fieldId, TField field) where T : Models.Content
+        private void SetComplexValue<T>(T model, string regionId, string fieldId, TField field) where T : Models.ContentBase
         {
             if (model is Models.IDynamicModel)
             {
@@ -561,7 +559,7 @@ namespace Piranha.Services
         /// <param name="contentType">The content type</param>
         /// <param name="regionId">The region id</param>
         /// <param name="fields">The field</param>
-        private async Task AddComplexValueAsync<T>(T model, Models.ContentType contentType, string regionId, IList<TField> fields) where T : Models.Content
+        private async Task AddComplexValueAsync<T>(T model, Models.ContentTypeBase contentType, string regionId, IList<TField> fields) where T : Models.ContentBase
         {
             if (fields.Count > 0)
             {

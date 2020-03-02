@@ -14,7 +14,7 @@ using System.Collections.Generic;
 namespace Piranha.Data
 {
     [Serializable]
-    public sealed class Page : RoutedContent<PageField>
+    public sealed class Page : RoutedContentBase<PageField>
     {
         /// <summary>
         /// Gets/sets the page type id.
