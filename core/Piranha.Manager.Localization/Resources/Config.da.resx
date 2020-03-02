@@ -16,66 +16,66 @@
     <value>Konfiguration</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>Hierarchical page slugs</value>
+    <value>Hierarkiske sidestier</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>If page slugs should include the parent slug.</value>
+    <value>Aktivér for at inkludere forælderens sidesti.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
-    <value>Expanded levels in the sitemap</value>
+    <value>Antal udvidede niveauer i sitemap</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
     <value>Sidestørrelse for samlinger</value>
   </data>
   <data name="Caching" xml:space="preserve">
-    <value>Caching</value>
+    <value>Cachelagring</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Page cache expiration (minutes)</value>
+    <value>Cachelagring af sider (i minutter)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
-    <value>Page revisions</value>
+    <value>Sidehistorik</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Post cache expiration (minutes)</value>
+    <value>Cachelagring af opslag (i minutter)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
-    <value>Post revisions</value>
+    <value>Opslagshistorik</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
-    <value>Media CDN</value>
+    <value>Medie CDN</value>
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
-    <value>If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps.</value>
+    <value>Afgør om sidestier bygger videre på forælderens sidesti når de genereres. Dette anbefales før større sitemaps.</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
-    <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
+    <value>Det antal niveauer der er udvidet i sitemap når det åbnes. Dette er mest brugbart til små sitemaps.</value>
   </data>
   <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
-    <value>The default page size for archive pages. Please note that this this can be overridden for specific archives.</value>
+    <value>Det antal opslag der vises pr. side i arkiver. Bemærk at dette kan konfigureres på det enkelte arkiv.</value>
   </data>
   <data name="The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation." xml:space="preserve">
-    <value>The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation.</value>
+    <value>Det højeste antal revisioner der gemmes for hver side. Angiv 0 hvis ingen begrænsning ønskes.</value>
   </data>
   <data name="The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation." xml:space="preserve">
-    <value>The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation.</value>
+    <value>Det højeste antal revisioner der gemmes for hvert opslag. Angiv 0 hvis ingen begrænsning ønskes.</value>
   </data>
   <data name="The time in minutes that web browsers can use pages before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use pages before asking the server for new updates.</value>
+    <value>Antal minutter browsere kan cache sider uden at de genindlæses fra serveren.</value>
   </data>
   <data name="The time in minutes that web browsers can use posts before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use posts before asking the server for new updates.</value>
+    <value>Antal minutter browsere kan cache opslag uden at de genindlæses fra serveren.</value>
   </data>
   <data name="The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL." xml:space="preserve">
-    <value>The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL.</value>
+    <value>Den komplette URL (inklusiv sti) til CDN'en der bruges til uploadet indhold. Lad feltet være tomt, hvis du ikke bruger CDN.</value>
   </data>
 
   <data name="Approve comments" xml:space="preserve">
-    <value>Approve comments</value>
+    <value>Godkend kommentarer</value>
   </data>
   <data name="Close comments after" xml:space="preserve">
-    <value>Close comments after</value>
+    <value>Luk kommentarer efter</value>
   </data>
   <data name="Collapse block headers" xml:space="preserve">
     <value>Collapse block headers</value>
@@ -84,16 +84,16 @@
     <value>Collapse blocks</value>
   </data>
   <data name="Comments page size" xml:space="preserve">
-    <value>Comments page size</value>
+    <value>Antal kommentarer pr. side</value>
   </data>
   <data name="Enable page comments" xml:space="preserve">
-    <value>Enable page comments</value>
+    <value>Aktiver sidekommentarer</value>
   </data>
   <data name="Enable post comments" xml:space="preserve">
-    <value>Enable post comments</value>
+    <value>Aktiver opslagskommentarer</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
-    <value>Manager list size</value>
+    <value>Sidestørrelse i manager</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
     <value>If block group headers should be collapsed by default when opening a page or post in the manager.</value>
@@ -102,21 +102,21 @@
     <value>If blocks should be collapsed by default when opening a page or post in the manager.</value>
   </data>
   <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
-    <value>If comments should be approved by default. Please note that this can be overridden by third party moderation services.</value>
+    <value>Angiver om kommentarer skal godkendes som standard. Bemærk at dette kan omgås af tredjeparts modereringstjenester.</value>
   </data>
   <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages.</value>
+    <value>Afgør om kommentarer er aktiveret på nye sider. Bemærk at dette kan overskrives på den enkelte side.</value>
   </data>
   <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
-    <value>If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts.</value>
+    <value>Afgør om kommentarer er aktiveret på nye opslag. Bemærk at dette kan overskrives på det enkelte opslag.</value>
   </data>
   <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>The default page size when loading comments. Please note that this this can be overridden for specific pages.</value>
+    <value>Standardsidestørrelsen for kommentarer. Bemærk at dette kan konfigureres på den enkelte side.</value>
   </data>
   <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
-    <value>The number of days commenting should be open after publish date. A value of 0 means forever.</value>
+    <value>Antal dage kommentarsporet er åbent efter udgivelse. Angiv 0 hvis du ikke ønsker at lukke kommentarsporet.</value>
   </data>
   <data name="The page size for lists within the manager interface." xml:space="preserve">
-    <value>The page size for lists within the manager interface.</value>
+    <value>Sidestørrelsen på lister i manager grænsefladen.</value>
   </data>
 </root>

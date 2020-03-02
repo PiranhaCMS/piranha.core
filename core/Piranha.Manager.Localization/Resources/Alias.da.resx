@@ -19,25 +19,25 @@
     <value>Tilføj nyt alias</value>
   </data>
   <data name="Alias URL" xml:space="preserve">
-    <value>Alias URL</value>
+    <value>Alias</value>
   </data>
   <data name="Alias URL is mandatory." xml:space="preserve">
-    <value>Alias URL is mandatory.</value>
+    <value>Alias er påkrævet.</value>
   </data>
   <data name="Redirect URL" xml:space="preserve">
-    <value>Redirect URL</value>
+    <value>Omdirigering</value>
   </data>
   <data name="Redirect URL is mandatory." xml:space="preserve">
-    <value>Redirect URL is mandatory.</value>
+    <value>Omdirigering er påkrævet.</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>Permanent</value>
   </data>
   <data name="Are you sure you want to delete this alias?" xml:space="preserve">
-    <value>Are you sure you want to delete this alias?</value>
+    <value>Er du sikker på, at du vil slette dette alias?</value>
   </data>
   <data name="If the redirect should be permanent" xml:space="preserve">
-    <value>If the redirect should be permanent</value>
+    <value>Aktivér, for at gøre omdirigeringen permanent</value>
   </data>
   <data name="The alias was successfully added to the list" xml:space="preserve">
     <value>Aliaset blev tilføjet til listen</value>
