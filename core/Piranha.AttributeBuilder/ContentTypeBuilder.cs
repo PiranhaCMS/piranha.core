@@ -114,6 +114,9 @@ namespace Piranha.AttributeBuilder
         where T : ContentTypeBuilder<T, TType>
         where TType : ContentTypeBase
     {
+        /// <summary>
+        /// The currently imported types.
+        /// </summary>
         protected readonly List<Type> _types = new List<Type>();
 
         /// <summary>

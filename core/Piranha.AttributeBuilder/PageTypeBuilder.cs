@@ -14,10 +14,12 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Piranha.Models;
-using Piranha.Services;
 
 namespace Piranha.AttributeBuilder
 {
+    /// <summary>
+    /// Class for building and importing page types.
+    /// </summary>
     public class PageTypeBuilder : ContentTypeBuilder<PageTypeBuilder, PageType>
     {
         private readonly IApi _api;
