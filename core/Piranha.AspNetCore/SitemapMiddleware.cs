@@ -47,10 +47,8 @@ namespace Piranha.AspNetCore
             if (useSitemapRouting && !IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/"))
             {
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
-                var host = context.Request.Host.Host;
                 var scheme = context.Request.Scheme;
-                var port = context.Request.Host.Port;
-                var baseUrl = scheme + "://" + host + (port.HasValue ? $":{port}" : "");
+                var baseUrl = scheme + "://" + service.Hostname;
 
                 if (url.ToLower() == "/sitemap.xml")
                 {
