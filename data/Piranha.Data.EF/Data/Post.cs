@@ -33,6 +33,16 @@ namespace Piranha.Data
         public Guid CategoryId { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional primary image id.
+        /// </summary>
+        public Guid? PrimaryImageId { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional excerpt.
+        /// </summary>
+        public string Excerpt { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional redirect.
         /// </summary>
         /// <returns></returns>

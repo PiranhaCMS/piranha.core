@@ -14,7 +14,7 @@ namespace Piranha.Data.EF.MySql.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.0")
+                .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Piranha.Data.Alias", b =>
@@ -585,6 +585,9 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasColumnType("tinyint(1)")
                         .HasDefaultValue(true);
 
+                    b.Property<string>("Excerpt")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime(6)");
 
@@ -600,6 +603,9 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
                         .HasMaxLength(64);
+
+                    b.Property<Guid?>("PrimaryImageId")
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime?>("Published")
                         .HasColumnType("datetime(6)");

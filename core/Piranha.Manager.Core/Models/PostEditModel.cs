@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) 2019-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using Piranha.Extend.Fields;
 
 namespace Piranha.Manager.Models
 {
@@ -22,6 +23,11 @@ namespace Piranha.Manager.Models
         /// Gets/sets the mandatory blog id.
         /// </summary>
         public Guid BlogId { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional primary image.
+        /// </summary>
+        public ImageField PrimaryImage { get; set; }
 
         /// <summary>
         /// Gets/sets the unique slug.
@@ -37,6 +43,11 @@ namespace Piranha.Manager.Models
         /// Gets/sets the optional meta description.
         /// </summary>
         public string MetaDescription { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional excerpt.
+        /// </summary>
+        public string Excerpt { get; set; }
 
         /// <summary>
         /// Gets/sets the published date.

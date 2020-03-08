@@ -18,9 +18,15 @@ namespace Piranha.Models
     {
         /// <summary>
         /// Gets/sets if the post type should use the block editor
-        /// for its main content. The default value is True.
+        /// for its main content. The default value is true.
         /// </summary>
         public bool UseBlocks { get; set; } = true;
+
+        /// <summary>
+        /// Gets/sets if the post type should use the default primary
+        /// image. The default value is true.
+        /// </summary>
+        public bool UsePrimaryImage { get; set; } = true;
 
         /// <summary>
         /// Validates that the page type is correctly defined.

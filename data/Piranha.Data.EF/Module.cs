@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) 2019-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -8,10 +8,9 @@
  *
  */
 
-using System.Collections.Generic;
+using System;
 using AutoMapper;
 using Piranha.Extend;
-using Piranha.Security;
 
 namespace Piranha.Data.EF
 {
@@ -103,6 +102,7 @@ namespace Piranha.Data.EF
                     .ForMember(p => p.Created, o => o.Ignore());
                 cfg.CreateMap<Data.Post, Models.PostBase>()
                     .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PostTypeId))
+                    .ForMember(p => p.PrimaryImage, o => o.MapFrom(m => m.PrimaryImageId))
                     .ForMember(p => p.Permalink, o => o.Ignore())
                     .ForMember(p => p.Permissions, o => o.Ignore())
                     .ForMember(p => p.Blocks, o => o.Ignore())
@@ -114,6 +114,7 @@ namespace Piranha.Data.EF
                 cfg.CreateMap<Models.PostBase, Data.Post>()
                     .ForMember(p => p.PostTypeId, o => o.MapFrom(m => m.TypeId))
                     .ForMember(p => p.CategoryId, o => o.MapFrom(m => m.Category.Id))
+                    .ForMember(p => p.PrimaryImageId, o => o.MapFrom(m => m.PrimaryImage != null ? m.PrimaryImage.Id : (Guid?)null ))
                     .ForMember(p => p.Blocks, o => o.Ignore())
                     .ForMember(p => p.Fields, o => o.Ignore())
                     .ForMember(p => p.Created, o => o.Ignore())
