@@ -115,7 +115,7 @@ namespace Piranha
             Aliases = new AliasService(aliasRepository, Sites, cache);
             Media = new MediaService(mediaRepository, Params, storage, processor, cache);
             Pages = new PageService(pageRepository, contentFactory, Sites, Params, cache, search);
-            Posts = new PostService(postRepository, contentFactory, Sites, Pages, Params, cache, search);
+            Posts = new PostService(postRepository, contentFactory, Sites, Pages, Params, Media, cache, search);
             Archives = new ArchiveService(archiveRepository, Params, Posts);
         }
 

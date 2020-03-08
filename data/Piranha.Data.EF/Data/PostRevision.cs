@@ -12,7 +12,7 @@ using System;
 
 namespace Piranha.Data
 {
-    public class PostRevision : ContentRevision
+    public class PostRevision : ContentRevisionBase
     {
         /// <summary>
         /// Gets/sets the id of the post this revision

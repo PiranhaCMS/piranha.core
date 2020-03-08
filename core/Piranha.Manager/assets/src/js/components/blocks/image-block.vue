@@ -1,6 +1,6 @@
 <template>
-    <div class="block-body has-media-picker" :class="{ empty: isEmpty }">
-        <img :src="mediaUrl">
+    <div class="block-body has-media-picker rounded" :class="{ empty: isEmpty }">
+        <img class="rounded" :src="mediaUrl">
         <div class="media-picker">
             <div class="btn-group float-right">
                 <button v-on:click.prevent="select" class="btn btn-primary text-center">

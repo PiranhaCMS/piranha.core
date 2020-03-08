@@ -14,7 +14,7 @@ using System.Collections.Generic;
 namespace Piranha.Data
 {
     [Serializable]
-    public sealed class Post : RoutedContent<PostField>
+    public sealed class Post : RoutedContentBase<PostField>
     {
         /// <summary>
         /// Gets/sets the post type id.
@@ -31,6 +31,16 @@ namespace Piranha.Data
         /// Gets/sets the category id.
         /// </summary>
         public Guid CategoryId { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional primary image id.
+        /// </summary>
+        public Guid? PrimaryImageId { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional excerpt.
+        /// </summary>
+        public string Excerpt { get; set; }
 
         /// <summary>
         /// Gets/sets the optional redirect.

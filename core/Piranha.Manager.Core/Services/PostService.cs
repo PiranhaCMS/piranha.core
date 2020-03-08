@@ -260,12 +260,14 @@ namespace Piranha.Manager.Services
                 post.Slug = model.Slug;
                 post.MetaKeywords = model.MetaKeywords;
                 post.MetaDescription = model.MetaDescription;
+                post.Excerpt = model.Excerpt;
                 post.Published = !string.IsNullOrEmpty(model.Published) ? DateTime.Parse(model.Published) : (DateTime?)null;
                 post.RedirectUrl = model.RedirectUrl;
                 post.RedirectType = (RedirectType)Enum.Parse(typeof(RedirectType), model.RedirectType);
                 post.EnableComments = model.EnableComments;
                 post.CloseCommentsAfterDays = model.CloseCommentsAfterDays;
                 post.Permissions = model.SelectedPermissions;
+                post.PrimaryImage = model.PrimaryImage;
 
                 if (postType.Routes.Count > 1)
                 {
@@ -434,10 +436,12 @@ namespace Piranha.Manager.Services
                 Id = post.Id,
                 BlogId = post.BlogId,
                 TypeId = post.TypeId,
+                PrimaryImage = post.PrimaryImage,
                 Title = post.Title,
                 Slug = post.Slug,
                 MetaKeywords = post.MetaKeywords,
                 MetaDescription = post.MetaDescription,
+                Excerpt = post.Excerpt,
                 Published = post.Published?.ToString("yyyy-MM-dd HH:mm"),
                 RedirectUrl = post.RedirectUrl,
                 RedirectType = post.RedirectType.ToString(),
