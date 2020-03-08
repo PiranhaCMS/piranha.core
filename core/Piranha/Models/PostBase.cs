@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Piranha.Extend.Fields;
 
 namespace Piranha.Models
 {
@@ -31,6 +32,16 @@ namespace Piranha.Models
         /// </summary>
         [Required]
         public Taxonomy Category { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional primary image.
+        /// </summary>
+        public ImageField PrimaryImage { get; set; } = new ImageField();
+
+        /// <summary>
+        /// Gets/sets the optional excerpt.
+        /// </summary>
+        public string Excerpt { get; set; }
 
         /// <summary>
         /// Gets/sets the optional redirect.

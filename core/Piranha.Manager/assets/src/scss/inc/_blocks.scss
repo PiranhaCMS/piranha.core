@@ -239,6 +239,15 @@
     .empty {
         background: $gray-100;
     }
+
+    &.primary-image {
+        padding: 1rem 0;
+        margin-bottom: 2rem !important;
+
+        &:hover, &:focus-within {
+            border-color: transparent;
+        }
+    }
 }
 
 .separator-block {
@@ -262,6 +271,23 @@
         font-size: .875rem;
         margin-bottom: 0;
         white-space: normal;
+    }
+
+    p {
+        min-height: 1.3rem;
+        height: 100%;
+        padding: 0 1rem;
+    }
+}
+
+.ingress {
+    padding: 1rem 0 2rem;
+    font-family: "Open Sans", sans-serif;
+    font-size: 1.2rem;
+    font-weight: 300;
+
+    &:hover, &:focus-within {
+        border-color: transparent;
     }
 }
 
