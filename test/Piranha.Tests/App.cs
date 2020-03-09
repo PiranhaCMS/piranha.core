@@ -82,7 +82,7 @@ namespace Piranha.Tests
 
         private IApi CreateApi()
         {
-            var factory = new ContentFactory(services);
+            var factory = new LegacyContentFactory(services);
             var serviceFactory = new ContentServiceFactory(factory);
 
             var db = GetDb();

@@ -27,9 +27,9 @@ namespace Piranha.Manager.Services
     public class PostService
     {
         private readonly IApi _api;
-        private readonly IContentFactory _factory;
+        private readonly ILegacyContentFactory _factory;
 
-        public PostService(IApi api, IContentFactory factory)
+        public PostService(IApi api, ILegacyContentFactory factory)
         {
             _api = api;
             _factory = factory;

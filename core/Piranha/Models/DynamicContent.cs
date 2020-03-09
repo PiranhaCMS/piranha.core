@@ -9,16 +9,21 @@
  */
 
 using System.Collections.Generic;
+using System.Dynamic;
 using Piranha.Extend;
 
 namespace Piranha.Models
 {
     /// <summary>
-    /// Base class for all pages.
+    /// Dynamic content model.
     /// </summary>
-    [ContentGroup(Title = "Page")]
-    public abstract class Page : RoutedContent, IBlockContent
+    public sealed class DynamicContent : Content, IDynamicContent, IBlockContent
     {
+        /// <summary>
+        /// Gets/sets the regions.
+        /// </summary>
+        public dynamic Regions { get; set; } = new ExpandoObject();
+
         /// <summary>
         /// Gets/sets the available blocks.
         /// </summary>

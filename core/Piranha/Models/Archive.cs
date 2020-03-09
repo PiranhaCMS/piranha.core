@@ -8,20 +8,16 @@
  *
  */
 
-using System.Collections.Generic;
 using Piranha.Extend;
 
 namespace Piranha.Models
 {
     /// <summary>
-    /// Base class for all pages.
+    /// Base class for all archives.
     /// </summary>
-    [ContentGroup(Title = "Page")]
-    public abstract class Page : RoutedContent, IBlockContent
+    [ContentGroup(Title = "Archive")]
+    [ContentGroupChild(typeof(Post))]
+    public abstract class Archive : RoutedContent
     {
-        /// <summary>
-        /// Gets/sets the available blocks.
-        /// </summary>
-        public IList<Block> Blocks { get; set; }
     }
 }

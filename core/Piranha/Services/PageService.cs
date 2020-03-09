@@ -21,7 +21,7 @@ namespace Piranha.Services
     public class PageService : IPageService
     {
         private readonly IPageRepository _repo;
-        private readonly IContentFactory _factory;
+        private readonly ILegacyContentFactory _factory;
         private readonly ISiteService _siteService;
         private readonly IParamService _paramService;
         private readonly ICache _cache;
@@ -36,7 +36,7 @@ namespace Piranha.Services
         /// <param name="paramService">The param service</param>
         /// <param name="cache">The optional model cache</param>
         /// <param name="search">The optional content search</param>
-        public PageService(IPageRepository repo, IContentFactory factory, ISiteService siteService, IParamService paramService,
+        public PageService(IPageRepository repo, ILegacyContentFactory factory, ISiteService siteService, IParamService paramService,
             ICache cache = null, ISearch search = null)
         {
             _repo = repo;

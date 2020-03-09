@@ -16,13 +16,13 @@ namespace Piranha.Services
 {
     public class ContentServiceFactory : IContentServiceFactory
     {
-        private readonly IContentFactory _factory;
+        private readonly ILegacyContentFactory _factory;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="factory">The content factory</param>
-        public ContentServiceFactory(IContentFactory factory)
+        public ContentServiceFactory(ILegacyContentFactory factory)
         {
             _factory = factory;
         }

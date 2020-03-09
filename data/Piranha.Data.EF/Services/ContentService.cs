@@ -27,7 +27,7 @@ namespace Piranha.Services
     {
         //
         // Members
-        protected readonly IContentFactory _factory;
+        protected readonly ILegacyContentFactory _factory;
         protected readonly IMapper _mapper;
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="factory">The content factory</param>
         /// <param name="mapper">The AutoMapper instance to use</param>
-        public ContentService(IContentFactory factory, IMapper mapper)
+        public ContentService(ILegacyContentFactory factory, IMapper mapper)
         {
             _factory = factory;
             _mapper = mapper;

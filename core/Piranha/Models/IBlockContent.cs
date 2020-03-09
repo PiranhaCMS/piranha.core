@@ -13,15 +13,11 @@ using Piranha.Extend;
 
 namespace Piranha.Models
 {
-    /// <summary>
-    /// Base class for all pages.
-    /// </summary>
-    [ContentGroup(Title = "Page")]
-    public abstract class Page : RoutedContent, IBlockContent
+    public interface IBlockContent
     {
         /// <summary>
         /// Gets/sets the available blocks.
         /// </summary>
-        public IList<Block> Blocks { get; set; }
+        IList<Block> Blocks { get; set; }
     }
 }

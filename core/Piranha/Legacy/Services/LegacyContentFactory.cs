@@ -24,7 +24,7 @@ namespace Piranha.Services
     /// The content factory is responsible for creating models and
     /// initializing them after they have been loaded.
     /// </summary>
-    public class ContentFactory : IContentFactory
+    public class LegacyContentFactory : ILegacyContentFactory
     {
         private readonly IServiceProvider _services;
 
@@ -32,7 +32,7 @@ namespace Piranha.Services
         /// Default constructor.
         /// </summary>
         /// <param name="services">The current service provider</param>
-        public ContentFactory(IServiceProvider services)
+        public LegacyContentFactory(IServiceProvider services)
         {
             _services = services;
         }

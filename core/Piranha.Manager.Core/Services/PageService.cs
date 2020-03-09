@@ -26,7 +26,7 @@ namespace Piranha.Manager.Services
     public class PageService
     {
         private readonly IApi _api;
-        private readonly IContentFactory _factory;
+        private readonly ILegacyContentFactory _factory;
         private readonly ManagerLocalizer _localizer;
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Piranha.Manager.Services
         /// <param name="api">The current api</param>
         /// <param name="factory">The content factory</param>
         /// <param name="localizer">The manager localizer</param>
-        public PageService(IApi api, IContentFactory factory, ManagerLocalizer localizer)
+        public PageService(IApi api, ILegacyContentFactory factory, ManagerLocalizer localizer)
         {
             _api = api;
             _factory = factory;

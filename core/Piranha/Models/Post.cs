@@ -1,34 +1,52 @@
-﻿/*
- * Copyright (c) 2016-2020 Håkan Edling
+/*
+ * Copyright (c) 2020 Piranha CMS
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
  *
- * https://github.com/piranhacms/piranha.core
+ * http://github.com/piranhacms/piranha
  *
  */
 
-using System;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using Piranha.Extend;
+using Piranha.Extend.Fields;
 
 namespace Piranha.Models
 {
     /// <summary>
-    /// Generic post model.
+    /// Base class for all posts.
     /// </summary>
-    /// <typeparam name="T">The model type</typeparam>
-    [Serializable]
-    public class Post<T> : PostBase where T : Post<T>
+    [ContentGroup(Title = "Post", IsPrimaryContent = false)]
+    public abstract class Post : RoutedContent, IBlockContent
     {
         /// <summary>
-        /// Creates a new post model using the given post type id.
+        /// Gets/sets the category.
         /// </summary>
-        /// <param name="api">The current api</param>
-        /// <param name="typeId">The unique post type id</param>
-        /// <returns>The new model</returns>
-        public static Task<T> CreateAsync(IApi api, string typeId = null)
-        {
-            return api.Posts.CreateAsync<T>(typeId);
-        }
+        [Required]
+        public Taxonomy Category { get; set; }
+
+        /// <summary>
+        /// Gets/sets the primary image.
+        /// </summary>
+        [Region]
+        public ImageField PrimaryImage { get; set; }
+
+        /// <summary>
+        /// Gets/sets the excerpt.
+        /// </summary>
+        [Region]
+        public TextField Excerpt { get; set; }
+
+        /// <summary>
+        /// Gets/sets the available blocks.
+        /// </summary>
+        public IList<Block> Blocks { get; set; }
+
+        /// <summary>
+        /// Gets/sets the availabel tags.
+        /// </summary>
+        public IList<Taxonomy> Tags { get; set; } = new List<Taxonomy>();
     }
 }

@@ -13,7 +13,7 @@ using Piranha.Models;
 
 namespace Piranha.Services
 {
-    public interface IContentFactory
+    public interface ILegacyContentFactory
     {
         /// <summary>
         /// Creates and initializes a new content model.

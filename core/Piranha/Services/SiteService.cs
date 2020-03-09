@@ -28,7 +28,7 @@ namespace Piranha.Services
         }
 
         private readonly ISiteRepository _repo;
-        private readonly IContentFactory _factory;
+        private readonly ILegacyContentFactory _factory;
         private readonly ICache _cache;
         private const string SITE_MAPPINGS = "Site_Mappings";
 
@@ -38,7 +38,7 @@ namespace Piranha.Services
         /// <param name="repo">The main repository</param>
         /// <param name="factory">The content factory</param>
         /// <param name="cache">The optional model cache</param>
-        public SiteService(ISiteRepository repo, IContentFactory factory, ICache cache = null)
+        public SiteService(ISiteRepository repo, ILegacyContentFactory factory, ICache cache = null)
         {
             _repo = repo;
             _factory = factory;

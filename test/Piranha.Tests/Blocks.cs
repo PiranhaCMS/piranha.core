@@ -41,7 +41,7 @@ namespace Piranha.Tests
             using (var api = CreateApi()) {
                 Piranha.App.Init(api);
 
-                contentService = new ContentService<Page, PageField, Models.PageBase>(new ContentFactory(services), Piranha.Data.EF.Module.Mapper);
+                contentService = new ContentService<Page, PageField, Models.PageBase>(new LegacyContentFactory(services), Piranha.Data.EF.Module.Mapper);
 
                 // Add media
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png")) {
@@ -329,7 +329,7 @@ namespace Piranha.Tests
 
         private IApi CreateApi()
         {
-            var factory = new ContentFactory(services);
+            var factory = new LegacyContentFactory(services);
             var serviceFactory = new ContentServiceFactory(factory);
 
             var db = GetDb();

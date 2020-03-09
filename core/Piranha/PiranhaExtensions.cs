@@ -21,7 +21,7 @@ public static class PiranhaExtensions
     public static IServiceCollection AddPiranha(this IServiceCollection services,
         ServiceLifetime scope = ServiceLifetime.Scoped)
     {
-        services.Add(new ServiceDescriptor(typeof(IContentFactory), typeof(ContentFactory), ServiceLifetime.Singleton));
+        services.Add(new ServiceDescriptor(typeof(ILegacyContentFactory), typeof(LegacyContentFactory), ServiceLifetime.Singleton));
         services.Add(new ServiceDescriptor(typeof(IApi), typeof(Api), scope));
 
         return services;

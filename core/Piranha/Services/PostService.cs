@@ -21,7 +21,7 @@ namespace Piranha.Services
     public class PostService : IPostService
     {
         private readonly IPostRepository _repo;
-        private readonly IContentFactory _factory;
+        private readonly ILegacyContentFactory _factory;
         private readonly ISiteService _siteService;
         private readonly IPageService _pageService;
         private readonly IParamService _paramService;
@@ -40,7 +40,7 @@ namespace Piranha.Services
         /// <param name="mediaService">The media service</param>
         /// <param name="cache">The optional model cache</param>
         /// <param name="search">The optional search service</param>
-        public PostService(IPostRepository repo, IContentFactory factory, ISiteService siteService, IPageService pageService,
+        public PostService(IPostRepository repo, ILegacyContentFactory factory, ISiteService siteService, IPageService pageService,
             IParamService paramService, IMediaService mediaService, ICache cache = null, ISearch search = null)
         {
             _repo = repo;

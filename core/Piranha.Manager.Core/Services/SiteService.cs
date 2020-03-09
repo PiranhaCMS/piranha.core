@@ -25,14 +25,14 @@ namespace Piranha.Manager.Services
     public class SiteService
     {
         private readonly IApi _api;
-        private readonly IContentFactory _factory;
+        private readonly ILegacyContentFactory _factory;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
         /// <param name="factory">The content factory</param>
-        public SiteService(IApi api, IContentFactory factory)
+        public SiteService(IApi api, ILegacyContentFactory factory)
         {
             _api = api;
             _factory = factory;

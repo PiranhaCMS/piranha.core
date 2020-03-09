@@ -85,7 +85,7 @@ namespace Piranha
         /// repositories.
         /// </summary>
         public Api(
-            IContentFactory contentFactory,
+            ILegacyContentFactory contentFactory,
             IAliasRepository aliasRepository,
             IArchiveRepository archiveRepository,
             IMediaRepository mediaRepository,
