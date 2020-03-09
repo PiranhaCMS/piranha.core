@@ -21,6 +21,11 @@ namespace Piranha.Extend
         public string Title { get; set; }
 
         /// <summary>
+        /// Gets/sets the default route for the content group.
+        /// </summary>
+        public string DefaultRoute { get; set; }
+
+        /// <summary>
         /// Gets/sets if instances of this group can be positioned
         /// directly in the sitemap.
         /// </summary>

@@ -16,7 +16,7 @@ namespace Piranha.Models
     /// <summary>
     /// Base class for all pages.
     /// </summary>
-    [ContentGroup(Title = "Page")]
+    [ContentGroup(Title = "Page", DefaultRoute = "/page")]
     public abstract class Page : RoutedContent, IBlockContent
     {
         /// <summary>

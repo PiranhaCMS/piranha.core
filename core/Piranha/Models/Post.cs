@@ -18,7 +18,7 @@ namespace Piranha.Models
     /// <summary>
     /// Base class for all posts.
     /// </summary>
-    [ContentGroup(Title = "Post", IsPrimaryContent = false)]
+    [ContentGroup(Title = "Post", DefaultRoute = "/post", IsPrimaryContent = false)]
     public abstract class Post : RoutedContent, IBlockContent
     {
         /// <summary>

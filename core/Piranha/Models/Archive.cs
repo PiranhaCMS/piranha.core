@@ -15,7 +15,7 @@ namespace Piranha.Models
     /// <summary>
     /// Base class for all archives.
     /// </summary>
-    [ContentGroup(Title = "Archive")]
+    [ContentGroup(Title = "Archive", DefaultRoute = "/archive")]
     [ContentGroupChild(typeof(Post))]
     public abstract class Archive : RoutedContent
     {
