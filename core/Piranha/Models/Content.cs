@@ -36,6 +36,22 @@ namespace Piranha.Models
         public string Title { get; set; }
 
         /// <summary>
+        /// Gets/sets if comments should be enabled.
+        /// </summary>
+        public bool EnableComments { get; set; } = true;
+
+        /// <summary>
+        /// Gets/sets after how many days after publish date comments
+        /// should be closed. A value of 0 means never.
+        /// </summary>
+        public int CloseCommentsAfterDays { get; set; }
+
+        /// <summary>
+        /// Gets/sets the comment count.
+        /// </summary>
+        public int CommentCount { get; set; }
+
+        /// <summary>
         /// Gets/sets the permissions needed to access the content.
         /// </summary>
         public IList<string> Permissions { get; set; } = new List<string>();
