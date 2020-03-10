@@ -47,7 +47,7 @@
 
                     @if ((await Auth.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.UsersDelete)).Succeeded)
                     {
-                        <button v-if="!isNew && userModel && currentUserName != userModel.user.userName" title="Radera" class="btn btn-danger btn-icon" v-on:click.prevent="remove(userModel.user.id)"><i class="fas fa-trash"></i></button>
+                        <button v-if="!isNew && userModel && currentUserName != userModel.user.userName" title="@Localizer.General["Delete"]" class="btn btn-danger btn-icon" v-on:click.prevent="remove(userModel.user.id)"><i class="fas fa-trash"></i></button>
                     }
                 </div>
             </div>
