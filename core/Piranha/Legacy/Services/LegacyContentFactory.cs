@@ -45,7 +45,7 @@ namespace Piranha.Services
         /// <returns>The new model</returns>
         public Task<T> CreateAsync<T>(ContentTypeBase type) where T : ContentBase
         {
-            if (typeof(IDynamicModel).IsAssignableFrom(typeof(T)))
+            if (typeof(IDynamicContent).IsAssignableFrom(typeof(T)))
             {
                 return CreateDynamicModelAsync<T>(type);
             }
@@ -136,7 +136,7 @@ namespace Piranha.Services
                         {
                             // Create the region list
                             region = Activator.CreateInstance(typeof(RegionList<>).MakeGenericType(listObject.GetType()));
-                            ((IRegionList)region).Model = (IDynamicModel)model;
+                            ((IRegionList)region).Model = (IDynamicContent)model;
                             ((IRegionList)region).TypeId = type.Id;
                             ((IRegionList)region).RegionId = regionType.Id;
                         }
@@ -144,7 +144,7 @@ namespace Piranha.Services
 
                     if (region != null)
                     {
-                        ((IDictionary<string, object>)((IDynamicModel)model).Regions).Add(regionType.Id, region);
+                        ((IDictionary<string, object>)((IDynamicContent)model).Regions).Add(regionType.Id, region);
                     }
                 }
                 return model;
@@ -213,7 +213,7 @@ namespace Piranha.Services
         /// <param name="type">The content type</param>
         /// <typeparam name="T">The model type</typeparam>
         /// <returns>The initialized model</returns>
-        public async Task<T> InitDynamicAsync<T>(T model, ContentTypeBase type) where T : IDynamicModel
+        public async Task<T> InitDynamicAsync<T>(T model, ContentTypeBase type) where T : IDynamicContent
         {
             using (var scope = _services.CreateScope())
             {
@@ -238,7 +238,7 @@ namespace Piranha.Services
                     }
                 }
 
-                if (model is IBlockModel blockModel)
+                if (model is IBlockContent blockModel)
                 {
                     foreach (var block in blockModel.Blocks)
                     {
@@ -266,7 +266,7 @@ namespace Piranha.Services
         /// <returns>The initialized model</returns>
         public async Task<T> InitAsync<T>(T model, ContentTypeBase type) where T : ContentBase
         {
-            if (model is IDynamicModel)
+            if (model is IDynamicContent)
             {
                 throw new ArgumentException("For dynamic models InitDynamic should be used.");
             }
@@ -296,9 +296,9 @@ namespace Piranha.Services
                     }
                 }
 
-                if (!(model is IContentInfo) && model is IBlockModel)
+                if (!(model is IContentInfo) && model is IBlockContent blockModel)
                 {
-                    foreach (var block in ((IBlockModel)model).Blocks)
+                    foreach (var block in blockModel.Blocks)
                     {
                         await InitBlockAsync(scope, block).ConfigureAwait(false);
 

@@ -18,7 +18,7 @@ namespace Piranha.Models
     /// Base class for page models.
     /// </summary>
     [Serializable]
-    public abstract class PageBase : RoutedContentBase, IBlockModel, IMeta, ICommentModel
+    public abstract class PageBase : RoutedContentBase, IBlockContent, IMeta, ICommentModel
     {
         /// <summary>
         /// Gets/sets the site id.

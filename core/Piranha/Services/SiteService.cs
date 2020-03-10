@@ -457,7 +457,7 @@ namespace Piranha.Services
             if (model != null)
             {
                 // Initialize model
-                if (model is IDynamicModel)
+                if (model is IDynamicContent)
                 {
                     await _factory.InitDynamicAsync((Models.DynamicSiteContent)model, App.SiteTypes.GetById(model.TypeId));
                 }

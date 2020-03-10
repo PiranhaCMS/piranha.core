@@ -17,7 +17,7 @@ namespace Piranha.Models
     /// Dynamic page model.
     /// </summary>
     [Serializable]
-    public class DynamicPost : Post<DynamicPost>, IDynamicModel
+    public class DynamicPost : Post<DynamicPost>, IDynamicContent
     {
         /// <summary>
         /// Gets/sets the regions.

@@ -54,6 +54,6 @@ namespace Piranha.Services
         /// <param name="type">The content type</param>
         /// <typeparam name="T">The model type</typeparam>
         /// <returns>The initialized model</returns>
-        Task<T> InitDynamicAsync<T>(T model, ContentTypeBase type) where T : IDynamicModel;
+        Task<T> InitDynamicAsync<T>(T model, ContentTypeBase type) where T : IDynamicContent;
     }
 }

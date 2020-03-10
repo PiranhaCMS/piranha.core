@@ -17,7 +17,7 @@ namespace Piranha.Models
     /// Dynamic page model.
     /// </summary>
     [Serializable]
-    public class DynamicSiteContent : SiteContent<DynamicSiteContent>, IDynamicModel
+    public class DynamicSiteContent : SiteContent<DynamicSiteContent>, IDynamicContent
     {
         /// <summary>
         /// Gets/sets the regions.
