@@ -61,7 +61,6 @@ namespace Piranha.Services
             return returns;
         }
 
-
         /// <summary>
         /// Gets all media available in the specified folder.
         /// </summary>
