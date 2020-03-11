@@ -120,9 +120,8 @@ namespace Piranha.AspNetCore.Identity.Controllers
                 return BadRequest(GetErrorMessage(_localizer.Security["The user could not be found."]));
             }
 
-
-
-            try {
+            try
+            {
                 var userId = model.User.Id;
                 var isNew = userId == Guid.Empty;
 
@@ -145,8 +144,6 @@ namespace Piranha.AspNetCore.Identity.Controllers
                 {
                     return BadRequest(GetErrorMessage(_localizer.Security["Password is mandatory when creating a new user."]));
                 }
-
-
 
                 if (!string.IsNullOrWhiteSpace(model.Password) && _userManager.PasswordValidators.Count > 0)
                 {
@@ -215,7 +212,6 @@ namespace Piranha.AspNetCore.Identity.Controllers
 
                 return Ok(GetSuccessMessage(_localizer.Security["The user has been deleted."]));
             }
-
 
             return NotFound(GetErrorMessage(_localizer.Security["The user could not be found."]));
         }

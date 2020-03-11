@@ -469,7 +469,6 @@ namespace Piranha.Services
             await _siteService.InvalidateSitemapAsync(model.SiteId).ConfigureAwait(false);
         }
 
-
         /// <summary>
         /// Gets the comment with the given id.
         /// </summary>

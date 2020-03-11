@@ -800,7 +800,6 @@ namespace Piranha.Services
             RemoveFromCache(model);
         }
 
-
         /// <summary>
         /// Deletes the comment with the specified id.
         /// </summary>

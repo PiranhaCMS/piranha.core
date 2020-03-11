@@ -118,7 +118,6 @@ public static class IdentityModuleExtensions
         services.ConfigureApplicationCookie(cookieOptions != null ? cookieOptions : SetDefaultCookieOptions);
         services.AddScoped<ISecurity, IdentitySecurity>();
 
-
         return services;
     }
 

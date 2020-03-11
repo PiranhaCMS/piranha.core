@@ -81,7 +81,6 @@ namespace Piranha.Manager.Controllers
             return await _service.Create(archiveId, typeId);
         }
 
-
         [Route("modal")]
         [HttpGet]
         [Authorize(Policy = Permission.Posts)]

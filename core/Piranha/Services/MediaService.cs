@@ -98,7 +98,6 @@ namespace Piranha.Services
             return models;
         }
 
-
         /// <summary>
         /// Gets the media with the given id.
         /// </summary>

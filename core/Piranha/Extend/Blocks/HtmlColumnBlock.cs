@@ -48,6 +48,5 @@ namespace Piranha.Extend.Blocks
             }
             return content.ToString();
         }
-
     }
 }

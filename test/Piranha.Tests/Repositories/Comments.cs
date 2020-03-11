@@ -171,7 +171,6 @@ namespace Piranha.Tests.Repositories
                         Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
                     });
                 });
-
             }
         }
 
@@ -292,7 +291,6 @@ namespace Piranha.Tests.Repositories
                         Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
                     });
                 });
-
             }
         }
 

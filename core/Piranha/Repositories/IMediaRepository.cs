@@ -53,14 +53,6 @@ namespace Piranha.Repositories
         /// <returns>The media</returns>
         Task<Media> GetById(Guid id);
 
-        ///// <summary>
-        ///// Gets the media matching the specified IdQuery.
-        ///// </summary>
-        ///// <param name="idQuery"></param>
-        ///// <returns></returns>
-        //IQueryable<Media> GetById(IQueryable<Guid> idQuery);
-
-
         /// <summary>
         /// Gets the media folder with the given id.
         /// </summary>

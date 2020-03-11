@@ -118,7 +118,6 @@ namespace Piranha.AspNetCore.Services
             return GetPageAsync<T>(id, user, draft);
         }
 
-
         /// <summary>
         /// Gets the specified post model for the given user.
         /// </summary>
