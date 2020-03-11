@@ -235,7 +235,6 @@ namespace Piranha.Repositories
             return affected;
         }
 
-
         /// <summary>
         /// Gets the comment with the given id.
         /// </summary>

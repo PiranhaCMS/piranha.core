@@ -24,6 +24,5 @@ public static class SimpleModuleExtensions
             FileProvider = new EmbeddedFileProvider(typeof(SimpleModuleExtensions).Assembly, "SimpleModule.assets.dist"),
             RequestPath = "/manager/simplemodule"
         });
-
     }
 }

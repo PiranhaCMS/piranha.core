@@ -61,7 +61,6 @@ namespace Piranha.Services
             return returns;
         }
 
-
         /// <summary>
         /// Gets all media available in the specified folder.
         /// </summary>
@@ -97,7 +96,6 @@ namespace Piranha.Services
             }
             return models;
         }
-
 
         /// <summary>
         /// Gets the media with the given id.

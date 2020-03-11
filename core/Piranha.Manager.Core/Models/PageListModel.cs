@@ -33,7 +33,6 @@ namespace Piranha.Manager.Models
             public static readonly string Draft = "Draft";
             public static readonly string Unpublished = "Unpublished";
 
-
             public Guid Id { get; set; }
             public Guid SiteId { get; set; }
             public string Title { get; set; }

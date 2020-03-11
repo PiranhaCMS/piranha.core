@@ -94,7 +94,6 @@ namespace Piranha.Runtime
             {
                 App.Hooks.RegisterOnLoad<T>(hook);
             }
-
         }
 
         //
