@@ -8,6 +8,7 @@
  *
  */
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Piranha.Extend;
@@ -18,6 +19,7 @@ namespace Piranha.Models
     /// <summary>
     /// Base class for all posts.
     /// </summary>
+    [Serializable]
     [ContentGroup(Title = "Post", DefaultRoute = "/post", IsPrimaryContent = false)]
     public abstract class Post : RoutedContent, IBlockContent
     {

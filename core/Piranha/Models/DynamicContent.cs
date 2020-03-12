@@ -8,6 +8,7 @@
  *
  */
 
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using Piranha.Extend;
@@ -18,6 +19,7 @@ namespace Piranha.Models
     /// Dynamic content model. As this will be the same for all content types it needs to
     /// contain all possible data.
     /// </summary>
+    [Serializable]
     public sealed class DynamicContent : RoutedContent, IDynamicContent, IBlockContent
     {
         /// <summary>

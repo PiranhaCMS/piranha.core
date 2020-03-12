@@ -8,6 +8,7 @@
  *
  */
 
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Piranha.Models
@@ -16,6 +17,7 @@ namespace Piranha.Models
     /// Base class for all content that can be routed to directly
     /// in the client application.
     /// </summary>
+    [Serializable]
     public abstract class RoutedContent : Content
     {
         /// <summary>

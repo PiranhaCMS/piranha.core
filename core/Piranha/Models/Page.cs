@@ -8,6 +8,7 @@
  *
  */
 
+using System;
 using System.Collections.Generic;
 using Piranha.Extend;
 
@@ -16,6 +17,7 @@ namespace Piranha.Models
     /// <summary>
     /// Base class for all pages.
     /// </summary>
+    [Serializable]
     [ContentGroup(Title = "Page", DefaultRoute = "/page")]
     public abstract class Page : RoutedContent, IBlockContent
     {

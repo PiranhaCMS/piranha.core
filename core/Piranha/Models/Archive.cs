@@ -8,6 +8,7 @@
  *
  */
 
+using System;
 using Piranha.Extend;
 
 namespace Piranha.Models
@@ -15,6 +16,7 @@ namespace Piranha.Models
     /// <summary>
     /// Base class for all archives.
     /// </summary>
+    [Serializable]
     [ContentGroup(Title = "Archive", DefaultRoute = "/archive")]
     [ContentGroupChild(typeof(Post))]
     public abstract class Archive : RoutedContent

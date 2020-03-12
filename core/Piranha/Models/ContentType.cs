@@ -8,11 +8,16 @@
  *
  */
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Piranha.Models
 {
+    /// <summary>
+    /// Class for defining a content type.
+    /// </summary>
+    [Serializable]
     public sealed class ContentType
     {
         /// <summary>
