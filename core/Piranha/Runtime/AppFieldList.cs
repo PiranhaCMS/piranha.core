@@ -35,13 +35,16 @@ namespace Piranha.Runtime
         /// <returns>The processed item</returns>
         protected override AppField OnRegister<TValue>(AppField item)
         {
-            var attr = typeof(TValue).GetTypeInfo().GetCustomAttribute<Extend.FieldTypeAttribute>();
+            var type = typeof(TValue);
+
+            var attr = type.GetTypeInfo().GetCustomAttribute<Extend.FieldTypeAttribute>();
             if (attr != null)
             {
                 item.Name = attr.Name;
                 item.Shorthand = attr.Shorthand;
                 item.Component = !string.IsNullOrWhiteSpace(attr.Component) ? attr.Component : "missing-field";
             }
+
             return item;
         }
 

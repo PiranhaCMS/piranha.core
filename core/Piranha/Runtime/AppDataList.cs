@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -39,6 +39,7 @@ namespace Piranha.Runtime
 
                 item.Type = type;
                 item.TypeName = type.FullName;
+                item.AssemblyName = type.Assembly.GetName().Name;
 
                 _items.Add(OnRegister<TValue>(item));
             }

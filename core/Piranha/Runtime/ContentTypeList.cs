@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020 Håkan Edling
+ * Copyright (c) 2019-2020 Piranha CMS
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -14,6 +14,44 @@ using Piranha.Models;
 
 namespace Piranha.Runtime
 {
+    public sealed class ContentTypeList : List<ContentType>
+    {
+        /// <summary>
+        /// Initializes the model from the given list of types.
+        /// </summary>
+        /// <param name="types">The content types</param>
+        public void Init(IEnumerable<ContentType> types)
+        {
+            // Add the types
+            foreach (var type in types)
+            {
+                Add(type);
+            }
+
+            // Register runtime hooks to update the collection
+            App.Hooks.RegisterOnAfterSave<ContentType>((model) =>
+            {
+                var old = this.FirstOrDefault(t => t.Id == model.Id);
+
+                if (old != null)
+                {
+                    Remove(old);
+                }
+                Add(model);
+            });
+        }
+
+        /// <summary>
+        /// Gets the content type with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The content type</returns>
+        public ContentType GetById(string id)
+        {
+            return this.FirstOrDefault(t => t.Id == id);
+        }
+    }
+
     public sealed class ContentTypeList<T> : List<T> where T : ContentTypeBase
     {
         /// <summary>

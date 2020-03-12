@@ -35,6 +35,11 @@ namespace Piranha
         public IArchiveService Archives { get; }
 
         /// <summary>
+        /// Gets/sets the content type service.
+        /// </summary>
+        public IContentTypeService ContentTypes { get; set; }
+
+        /// <summary>
         /// Gets the media service.
         /// </summary>
         /// <returns></returns>
@@ -88,6 +93,7 @@ namespace Piranha
             ILegacyContentFactory contentFactory,
             IAliasRepository aliasRepository,
             IArchiveRepository archiveRepository,
+            IContentTypeRepository contentTypeRepository,
             IMediaRepository mediaRepository,
             IPageRepository pageRepository,
             IPageTypeRepository pageTypeRepository,
@@ -105,6 +111,7 @@ namespace Piranha
             _cache = cache;
 
             // Create services without dependecies
+            ContentTypes = new ContentTypeService(contentTypeRepository, cache);
             PageTypes = new PageTypeService(pageTypeRepository, cache);
             Params = new ParamService(paramRepository, cache);
             PostTypes = new PostTypeService(postTypeRepository, cache);

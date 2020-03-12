@@ -48,6 +48,11 @@ namespace Piranha
         public DbSet<Data.Category> Categories { get; set; }
 
         /// <summary>
+        /// Gets/sets the content type set.
+        /// </summary>
+        public DbSet<Data.ContentType> ContentTypes { get; set; }
+
+        /// <summary>
         /// Gets/sets the media set.
         /// </summary>
         public DbSet<Data.Media> Media { get; set; }
@@ -209,6 +214,9 @@ namespace Piranha
             mb.Entity<Data.Category>().Property(c => c.Title).IsRequired().HasMaxLength(64);
             mb.Entity<Data.Category>().Property(c => c.Slug).IsRequired().HasMaxLength(64);
             mb.Entity<Data.Category>().HasIndex(c => new { c.BlogId, c.Slug }).IsUnique();
+
+            mb.Entity<Data.ContentType>().ToTable("Piranha_ContentTypes");
+            mb.Entity<Data.ContentType>().Property(t => t.Group).IsRequired().HasMaxLength(64);
 
             mb.Entity<Data.Media>().ToTable("Piranha_Media");
             mb.Entity<Data.Media>().Property(m => m.Filename).HasMaxLength(128).IsRequired();

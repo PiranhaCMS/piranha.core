@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Piranha CMS
+ * Copyright (c) 2017 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -13,7 +13,7 @@ using System;
 namespace Piranha.Data
 {
     [Serializable]
-    public class ContentType
+    public abstract class ContentTypeBase
     {
         /// <summary>
         /// Gets/sets the unique id.
@@ -21,9 +21,9 @@ namespace Piranha.Data
         public string Id { get; set; }
 
         /// <summary>
-        /// Gets/sets the content group.
+        /// Gets/sets the CLR type of the content model.
         /// </summary>
-        public string Group { get; set; }
+        public string CLRType { get; set; }
 
         /// <summary>
         /// Gets/sets the JSON serialized body of the post type.

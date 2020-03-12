@@ -28,31 +28,43 @@ namespace Piranha.Models
         public string Id { get; set; }
 
         /// <summary>
-        /// Gets/sets the full type name of the content model.
+        /// Gets/sets the type name of the content model.
         /// </summary>
+        [Required]
         [StringLength(255)]
         public string TypeName { get; set; }
 
         /// <summary>
-        /// Gets/sets the full assembly name of the content model.
+        /// Gets/sets the short assembly name of the content model.
         /// </summary>
+        [Required]
         [StringLength(255)]
         public string AssemblyName { get; set; }
 
         /// <summary>
         /// Gets/sets the optional title.
         /// </summary>
+        [Required]
+        [StringLength(128)]
         public string Title { get; set; }
 
         /// <summary>
         /// Gets/sets the content group name.
         /// </summary>
+        [Required]
+        [StringLength(64)]
         public string Group { get; set; }
+
+        /// <summary>
+        /// Gets/sets if this is primary content or not.
+        /// </summary>
+        /// <value></value>
+        public bool IsPrimaryContent { get; set; }
 
         /// <summary>
         /// Gets/sets the available regions.
         /// </summary>
-        public IList<RegionType> Regions { get; set; } = new List<RegionType>();
+        public IList<ContentTypeRegion> Regions { get; set; } = new List<ContentTypeRegion>();
 
         /// <summary>
         /// Gets/sets the optional routes.

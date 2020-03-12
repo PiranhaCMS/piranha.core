@@ -237,6 +237,7 @@ namespace Piranha.Tests.Repositories
                 factory,
                 new AliasRepository(db),
                 new ArchiveRepository(db),
+                new ContentTypeRepository(db),
                 new Piranha.Repositories.MediaRepository(db),
                 new PageRepository(db, serviceFactory),
                 new PageTypeRepository(db),

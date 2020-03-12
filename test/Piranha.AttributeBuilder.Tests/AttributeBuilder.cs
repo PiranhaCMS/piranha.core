@@ -220,6 +220,7 @@ namespace Piranha.AttributeBuilder.Tests
                 factory,
                 new AliasRepository(db),
                 new ArchiveRepository(db),
+                new ContentTypeRepository(db),
                 new MediaRepository(db),
                 new PageRepository(db, serviceFactory),
                 new PageTypeRepository(db),
