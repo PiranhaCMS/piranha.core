@@ -60,7 +60,7 @@
     margin: 0;
 
     .invalid-feedback {
-        color: $login-invalid-feedback-color;
+        color: $red-bright;
         text-align: center;
     }
 
@@ -81,7 +81,7 @@
                 height: 150px;
                 margin-bottom: 1rem;
             }
-
+            
             p {
                 font: 300 32px "Open Sans",Arial;
                 text-transform: uppercase;
@@ -114,7 +114,7 @@
 
     .error-message {
         margin: 0;
-        color: $login-invalid-feedback-color;
+        color: $red-bright;
         text-align: center;
         opacity: 0;
         animation-delay: 0.5s;
