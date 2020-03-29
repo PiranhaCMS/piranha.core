@@ -269,7 +269,7 @@ var js = [
 //
 // Compile & minimize less files
 //
-gulp.task("min:css", function () {
+gulp.task("min:css", function (done) {
     // Minimize and combine styles
     for (var n = 0; n < css.length; n++)
     {
@@ -288,12 +288,13 @@ gulp.task("min:css", function () {
         gulp.src(fonts[n])
             .pipe(gulp.dest(output + "webfonts"));
     }
+    done();
 });
 
 //
 // Compile & minimize less files
 //
-gulp.task("min:js", function () {
+gulp.task("min:js", function (done) {
     for (var n = 0; n < js.length; n++)
     {
         gulp.src(js[n].items, { base: "." })
@@ -308,10 +309,11 @@ gulp.task("min:js", function () {
             }))
             .pipe(gulp.dest("."));
     }
+    done();
 });
 
 //
 // Default tasks
 //
-gulp.task("serve", ["min:css", "min:js"]);
-gulp.task("default", ["serve"]);
+gulp.task("serve", gulp.parallel(["min:css", "min:js"]));
+gulp.task("default", gulp.series("serve"));

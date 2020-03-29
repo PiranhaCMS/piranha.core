@@ -18,7 +18,7 @@
     "@fortawesome/fontawesome-free": "5.8.1",
     "bootstrap": "4.4.1",
     "dropzone": "5.5.1",
-    "gulp": "3.9.1",
+    "gulp": "^4.0.2",
     "gulp-concat": "2.6.1",
     "gulp-cssmin": "0.2.0",
     "gulp-sass": "^4.0.2",
