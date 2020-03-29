@@ -81,7 +81,7 @@
                 height: 150px;
                 margin-bottom: 1rem;
             }
-            
+
             p {
                 font: 300 32px "Open Sans",Arial;
                 text-transform: uppercase;
@@ -106,10 +106,13 @@
             }
 
             .form-control {
-                border: 0;
                 font-weight: 300;
             }
         }
+    }
+
+    .was-validated .form-control:invalid {
+        border-color: $red-bright;
     }
 
     .error-message {
