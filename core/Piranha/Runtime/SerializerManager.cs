@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2017-2018 Håkan Edling
+ * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using Piranha.Extend;
@@ -24,9 +24,9 @@ namespace Piranha.Runtime
         /// <summary>
         /// Gets the serializer for the specified type.
         /// </summary>
-        public ISerializer this[Type type] 
+        public ISerializer this[Type type]
         {
-            get 
+            get
             {
                 ISerializer serializer = null;
 

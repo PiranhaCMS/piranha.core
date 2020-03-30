@@ -50,7 +50,7 @@ The manager interface can be found at the URL `~/manager` with the default crede
 
     admin / password
 
-For production scenarios we advise you to remove this user, or change the password 
+For production scenarios we advise you to remove this user, or change the password
 **and** update the password strength policy. More information on this can be found in
 the official documentation [here](http://piranhacms.org/docs/architecture/authentication/identity).
 
@@ -73,3 +73,12 @@ Support Piranha CMS with a monthly donation and help us focus on giving you even
 
 <img src="https://opencollective.com/piranhacms/tiers/sponsor.svg?avatarHeight=36" />
 <img src="https://opencollective.com/piranhacms/tiers/backer.svg?avatarHeight=36&width=600" />
+
+## Code of Conduct
+
+This project has adopted the code of conduct defined by the [Contributor Covenant](http://contributor-covenant.org/) to clarify expected behavior in our community.
+For more information see the [.NET Foundation Code of Conduct](http://www.dotnetfoundation.org/code-of-conduct).
+
+## .NET Foundation
+
+This project is supported by the [.NET Foundation](http://www.dotnetfoundation.org).

@@ -4,11 +4,11 @@
     <id>Piranha.AspNetCore.SimpleSecurity</id>
     <title>Piranha AspNetCore SimpleSecurity</title>
     <version>8.1.0</version>
-    <authors>Håkan Edling</authors>
-    <owners>Håkan Edling</owners>
+    <authors>Piranha CMS</authors>
+    <owners>Piranha CMS</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Piranha CMS simple security provider for AspNetCore</description>
-    <copyright>Copyright 2017-2020 (c) Håkan Edling</copyright>
+    <copyright>Copyright (c) .NET Foundation and Contributors</copyright>
     <tags>cms mvc aspnetcore netstandard</tags>
     <license type="expression">MIT</license>
     <projectUrl>http://github.com/piranhacms/piranha.core</projectUrl>
