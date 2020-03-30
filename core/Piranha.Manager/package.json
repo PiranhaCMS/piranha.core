@@ -7,7 +7,7 @@
     "url": "https://github.com/piranhacms/piranha.core.git"
   },
   "main": "index.js",
-  "author": "Håkan Edling",
+  "author": "Copyright (c) .NET Foundation and Contributors",
   "license": "MIT",
   "devDependencies": {
     "@aspnet/signalr": "1.1.0",

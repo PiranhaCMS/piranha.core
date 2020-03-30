@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -10,7 +10,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Piranha.Models;
 
 namespace Piranha.Services

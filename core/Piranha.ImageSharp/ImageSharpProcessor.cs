@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2018 Håkan Edling
+ * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using SixLabors.ImageSharp;
@@ -51,7 +51,7 @@ namespace Piranha.ImageSharp
 
         /// <summary>
         /// Gets an image from the provided stream, crops it according
-        /// to the given size and writes out a new jpeg image on the 
+        /// to the given size and writes out a new jpeg image on the
         /// destination stream.
         /// </summary>
         /// <param name="source">The image data stream</param>
@@ -76,7 +76,7 @@ namespace Piranha.ImageSharp
 
         /// <summary>
         /// Gets an image from the provided stream, scales it according
-        /// to the given width and writes out a new jpeg image on the 
+        /// to the given width and writes out a new jpeg image on the
         /// destination stream.
         /// </summary>
         /// <param name="source">The image data stream</param>
@@ -99,8 +99,8 @@ namespace Piranha.ImageSharp
         }
 
         /// <summary>
-        /// Gets an image from the provided stream, crops and scales it 
-        /// according to the given size and writes out a new jpeg image 
+        /// Gets an image from the provided stream, crops and scales it
+        /// according to the given size and writes out a new jpeg image
         /// on the destination stream.
         /// </summary>
         /// <param name="source">The image data stream</param>
