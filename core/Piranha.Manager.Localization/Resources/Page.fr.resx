@@ -34,10 +34,10 @@
     <value>Si la page doit être cachée dans le plan du site</value>
   </data>
   <data name="Meta keywords" xml:space="preserve">
-    <value>"meta" Mot clés</value>
+    <value>Méta mots-clés</value>
   </data>
   <data name="Meta description" xml:space="preserve">
-    <value>"meta" description</value>
+    <value>Méta description</value>
   </data>
   <data name="Navigation title" xml:space="preserve">
     <value>Titre de la navigation</value>

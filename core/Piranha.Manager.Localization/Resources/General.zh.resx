@@ -211,7 +211,7 @@
     <value>取消發布</value>
   </data>
   <data name="Unpublished" xml:space="preserve">
-    <value>取消發布</value>
+    <value>未發佈</value>
   </data>
   <data name="Users" xml:space="preserve">
     <value>用戶</value>

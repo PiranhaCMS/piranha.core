@@ -49,7 +49,7 @@
     <value>Detaljer</value>
   </data>
   <data name="Dimensions" xml:space="preserve">
-    <value>Dimensions</value>
+    <value>Dimensioner</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>Download</value>
@@ -100,16 +100,16 @@
     <value>Log af</value>
   </data>
   <data name="Looks like there's no items here. Click on the button above to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button above to get started!</value>
+    <value>Her ser tomt ud. Tryk på knappen ovenfor for at komme i gang!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button below to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button below to get started!</value>
+    <value>Her ser tomt ud. Tryk på knappen herunder for at komme i gang!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button to the left to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button to the left to get started!</value>
+    <value>Her ser tomt ud. Tryk på knappen til venstre for at komme i gang!</value>
   </data>
   <data name="Main content" xml:space="preserve">
-    <value>Main content</value>
+    <value>Primært sideindhold</value>
   </data>
   <data name="Modified" xml:space="preserve">
     <value>Ændret</value>
@@ -226,15 +226,15 @@
     <value>Archives and Comments</value>
   </data>
   <data name="Author" xml:space="preserve">
-    <value>Author</value>
+    <value>Forfatter</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>Comments</value>
+    <value>Kommentarer</value>
   </data>
   <data name="Created" xml:space="preserve">
-    <value>Created</value>
+    <value>Oprettet</value>
   </data>
   <data name="Username and/or password are incorrect." xml:space="preserve">
-    <value>Username and/or password are incorrect.</value>
+    <value>Der findes ingen bruger med det indtastede brugernavn og password.</value>
   </data>
 </root>
