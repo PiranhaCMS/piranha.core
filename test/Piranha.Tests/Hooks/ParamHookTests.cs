@@ -9,15 +9,14 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using Xunit;
 using Piranha.Models;
-using Piranha.Repositories;
-using Piranha.Services;
 
 namespace Piranha.Tests.Hooks
 {
     [Collection("Integration tests")]
-    public class Params : BaseTests
+    public class ParamHookTests : BaseTestsAsync
     {
         private const string KEY = "MyHookParam";
         private readonly Guid ID = Guid.NewGuid();
@@ -28,7 +27,7 @@ namespace Piranha.Tests.Hooks
         public class ParamOnBeforeDeleteException : Exception {}
         public class ParamOnAfterDeleteException : Exception {}
 
-        protected override void Init()
+        public override async Task InitializeAsync()
         {
             using (var api = CreateApi())
             {
@@ -36,7 +35,7 @@ namespace Piranha.Tests.Hooks
                 Piranha.App.Init(api);
 
                 // Create test param
-                api.Params.Save(new Param
+                await api.Params.SaveAsync(new Param
                 {
                     Id = ID,
                     Key = KEY
@@ -44,43 +43,43 @@ namespace Piranha.Tests.Hooks
             }
         }
 
-        protected override void Cleanup()
+        public override async Task DisposeAsync()
         {
             using (var api = CreateApi())
             {
                 // Remove test data
-                var param = api.Params.GetAll();
+                var param = await api.Params.GetAllAsync();
 
                 foreach (var p in param)
                 {
-                    api.Params.Delete(p);
+                    await api.Params.DeleteAsync(p);
                 }
             }
         }
 
         [Fact]
-        public void OnLoad()
+        public async Task OnLoad()
         {
             Piranha.App.Hooks.Param.RegisterOnLoad(m => throw new ParamOnLoadException());
             using (var api = CreateApi())
             {
-                Assert.Throws<ParamOnLoadException>(() =>
+                await Assert.ThrowsAsync<ParamOnLoadException>(async () =>
                 {
-                    api.Params.GetById(ID);
+                    await api.Params.GetByIdAsync(ID);
                 });
             }
             Piranha.App.Hooks.Param.Clear();
         }
 
         [Fact]
-        public void OnBeforeSave()
+        public async Task OnBeforeSave()
         {
             Piranha.App.Hooks.Param.RegisterOnBeforeSave(m => throw new ParamOnBeforeSaveException());
             using (var api = CreateApi())
             {
-                Assert.Throws<ParamOnBeforeSaveException>(() =>
+                await Assert.ThrowsAsync<ParamOnBeforeSaveException>(async () =>
                 {
-                    api.Params.Save(new Param {
+                    await api.Params.SaveAsync(new Param {
                         Key = "MyFirstHookKey"
                     });
                 });
@@ -89,14 +88,14 @@ namespace Piranha.Tests.Hooks
         }
 
         [Fact]
-        public void OnAfterSave()
+        public async Task OnAfterSave()
         {
             Piranha.App.Hooks.Param.RegisterOnAfterSave(m => throw new ParamOnAfterSaveException());
             using (var api = CreateApi())
             {
-                Assert.Throws<ParamOnAfterSaveException>(() =>
+                await Assert.ThrowsAsync<ParamOnAfterSaveException>(async () =>
                 {
-                    api.Params.Save(new Param {
+                    await api.Params.SaveAsync(new Param {
                         Key = "MySecondHookKey"
                     });
                 });
@@ -105,54 +104,31 @@ namespace Piranha.Tests.Hooks
         }
 
         [Fact]
-        public void OnBeforeDelete()
+        public async Task OnBeforeDelete()
         {
             Piranha.App.Hooks.Param.RegisterOnBeforeDelete(m => throw new ParamOnBeforeDeleteException());
             using (var api = CreateApi())
             {
-                Assert.Throws<ParamOnBeforeDeleteException>(() =>
+                await Assert.ThrowsAsync<ParamOnBeforeDeleteException>(async () =>
                 {
-                    api.Params.Delete(ID);
+                    await api.Params.DeleteAsync(ID);
                 });
             }
             Piranha.App.Hooks.Param.Clear();
         }
 
         [Fact]
-        public void OnAfterDelete()
+        public async Task OnAfterDelete()
         {
             Piranha.App.Hooks.Param.RegisterOnAfterDelete(m => throw new ParamOnAfterDeleteException());
             using (var api = CreateApi())
             {
-                Assert.Throws<ParamOnAfterDeleteException>(() =>
+                await Assert.ThrowsAsync<ParamOnAfterDeleteException>(async () =>
                 {
-                    api.Params.Delete(ID);
+                    await api.Params.DeleteAsync(ID);
                 });
             }
             Piranha.App.Hooks.Param.Clear();
-        }
-
-        private IApi CreateApi()
-        {
-            var factory = new ContentFactory(services);
-            var serviceFactory = new ContentServiceFactory(factory);
-
-            var db = GetDb();
-
-            return new Api(
-                factory,
-                new AliasRepository(db),
-                new ArchiveRepository(db),
-                new Piranha.Repositories.MediaRepository(db),
-                new PageRepository(db, serviceFactory),
-                new PageTypeRepository(db),
-                new ParamRepository(db),
-                new PostRepository(db, serviceFactory),
-                new PostTypeRepository(db),
-                new SiteRepository(db, serviceFactory),
-                new SiteTypeRepository(db),
-                storage: storage
-            );
         }
     }
 }

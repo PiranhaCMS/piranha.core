@@ -20,6 +20,7 @@ namespace Piranha.Services
         /// Gets all available models.
         /// </summary>
         /// <returns>The available models</returns>
+        [Obsolete]
         public static IEnumerable<Param> GetAll(this IParamService service)
         {
             return service.GetAllAsync().GetAwaiter().GetResult();
@@ -31,6 +32,7 @@ namespace Piranha.Services
         /// <param name="service">The param service</param>
         /// <param name="id">The unique id</param>
         /// <returns>The model, or null if it doesn't exist</returns>
+        [Obsolete]
         public static Param GetById(this IParamService service, Guid id)
         {
             return service.GetByIdAsync(id).GetAwaiter().GetResult();
@@ -42,6 +44,7 @@ namespace Piranha.Services
         /// <param name="service">The param service</param>
         /// <param name="key">The unique key</param>
         /// <returns>The model</returns>
+        [Obsolete]
         public static Param GetByKey(this IParamService service, string key) {
             return service.GetByKeyAsync(key).GetAwaiter().GetResult();
         }
@@ -52,6 +55,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="service">The param service</param>
         /// <param name="model">The model</param>
+        [Obsolete]
         public static void Save(this IParamService service, Param model)
         {
             service.SaveAsync(model).GetAwaiter().GetResult();
@@ -62,6 +66,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="service">The param service</param>
         /// <param name="id">The unique id</param>
+        [Obsolete]
         public static void Delete(this IParamService service, Guid id)
         {
             service.DeleteAsync(id).GetAwaiter().GetResult();
@@ -72,6 +77,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="service">The param service</param>
         /// <param name="model">The model</param>
+        [Obsolete]
         public static void Delete(this IParamService service, Param model)
         {
             service.DeleteAsync(model).GetAwaiter().GetResult();

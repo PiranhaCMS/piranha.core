@@ -8,6 +8,7 @@
  *
  */
 
+using System;
 using System.Collections.Generic;
 using Piranha.Models;
 
@@ -20,6 +21,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="service">The site type service</param>
         /// <returns>The available models</returns>
+        [Obsolete]
         public static IEnumerable<SiteType> GetAll(this ISiteTypeService service)
         {
             return service.GetAllAsync().GetAwaiter().GetResult();
@@ -31,6 +33,7 @@ namespace Piranha.Services
         /// <param name="service">The site type service</param>
         /// <param name="id">The unique i</param>
         /// <returns></returns>
+        [Obsolete]
         public static Models.SiteType GetById(this ISiteTypeService service, string id)
         {
             return service.GetByIdAsync(id).GetAwaiter().GetResult();
@@ -42,6 +45,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="service">The site type service</param>
         /// <param name="model">The model</param>
+        [Obsolete]
         public static void Save(this ISiteTypeService service, SiteType model)
         {
             service.SaveAsync(model).GetAwaiter().GetResult();
@@ -52,6 +56,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="service">The site type service</param>
         /// <param name="id">The unique id</param>
+        [Obsolete]
         public static void Delete(this ISiteTypeService service, string id)
         {
             service.DeleteAsync(id).GetAwaiter().GetResult();
@@ -62,6 +67,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="service">The site type service</param>
         /// <param name="model">The model</param>
+        [Obsolete]
         public static void Delete(this ISiteTypeService service, SiteType model)
         {
             service.DeleteAsync(model).GetAwaiter().GetResult();

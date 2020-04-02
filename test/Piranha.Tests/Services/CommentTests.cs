@@ -14,13 +14,11 @@ using System.Threading.Tasks;
 using Xunit;
 using Piranha.AttributeBuilder;
 using Piranha.Models;
-using Piranha.Repositories;
-using Piranha.Services;
 
-namespace Piranha.Tests.Repositories
+namespace Piranha.Tests.Services
 {
     [Collection("Integration tests")]
-    public class Comments : BaseTestsAsync
+    public class CommentTests : BaseTestsAsync
     {
         private Guid SITE_ID = Guid.NewGuid();
         private Guid PAGE_ID = Guid.NewGuid();
@@ -361,29 +359,6 @@ namespace Piranha.Tests.Repositories
                 Assert.NotNull(comment);
                 Assert.False(comment.IsApproved);
             }
-        }
-
-        private IApi CreateApi()
-        {
-            var factory = new ContentFactory(services);
-            var serviceFactory = new ContentServiceFactory(factory);
-
-            var db = GetDb();
-
-            return new Api(
-                factory,
-                new AliasRepository(db),
-                new ArchiveRepository(db),
-                new Piranha.Repositories.MediaRepository(db),
-                new PageRepository(db, serviceFactory),
-                new PageTypeRepository(db),
-                new ParamRepository(db),
-                new PostRepository(db, serviceFactory),
-                new PostTypeRepository(db),
-                new SiteRepository(db, serviceFactory),
-                new SiteTypeRepository(db),
-                storage: storage
-            );
         }
     }
 }

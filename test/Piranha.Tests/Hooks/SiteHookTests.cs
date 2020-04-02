@@ -9,15 +9,14 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using Xunit;
 using Piranha.Models;
-using Piranha.Repositories;
-using Piranha.Services;
 
 namespace Piranha.Tests.Hooks
 {
     [Collection("Integration tests")]
-    public class Sites : BaseTests
+    public class SiteHookTests : BaseTestsAsync
     {
         private const string TITLE = "My Hook Site";
         private readonly Guid ID = Guid.NewGuid();
@@ -28,7 +27,7 @@ namespace Piranha.Tests.Hooks
         public class SiteOnBeforeDeleteException : Exception {}
         public class SiteOnAfterDeleteException : Exception {}
 
-        protected override void Init()
+        public override async Task InitializeAsync()
         {
             using (var api = CreateApi())
             {
@@ -36,7 +35,7 @@ namespace Piranha.Tests.Hooks
                 Piranha.App.Init(api);
 
                 // Create test param
-                api.Sites.Save(new Site
+                await api.Sites.SaveAsync(new Site
                 {
                     Id = ID,
                     Title = TITLE
@@ -44,43 +43,43 @@ namespace Piranha.Tests.Hooks
             }
         }
 
-        protected override void Cleanup()
+        public override async Task DisposeAsync()
         {
             using (var api = CreateApi())
             {
                 // Remove test data
-                var sites = api.Sites.GetAll();
+                var sites = await api.Sites.GetAllAsync();
 
                 foreach (var s in sites)
                 {
-                    api.Sites.Delete(s);
+                    await api.Sites.DeleteAsync(s);
                 }
             }
         }
 
         [Fact]
-        public void OnLoad()
+        public async Task OnLoad()
         {
             Piranha.App.Hooks.Site.RegisterOnLoad(m => throw new SiteOnLoadException());
             using (var api = CreateApi())
             {
-                Assert.Throws<SiteOnLoadException>(() =>
+                await Assert.ThrowsAsync<SiteOnLoadException>(async () =>
                 {
-                    api.Sites.GetById(ID);
+                    await api.Sites.GetByIdAsync(ID);
                 });
             }
             Piranha.App.Hooks.Site.Clear();
         }
 
         [Fact]
-        public void OnBeforeSave()
+        public async Task OnBeforeSave()
         {
             Piranha.App.Hooks.Site.RegisterOnBeforeSave(m => throw new SiteOnBeforeSaveException());
             using (var api = CreateApi())
             {
-                Assert.Throws<SiteOnBeforeSaveException>(() =>
+                await Assert.ThrowsAsync<SiteOnBeforeSaveException>(async () =>
                 {
-                    api.Sites.Save(new Site {
+                    await api.Sites.SaveAsync(new Site {
                         Title = "My First Hook Site"
                     });
                 });
@@ -89,14 +88,14 @@ namespace Piranha.Tests.Hooks
         }
 
         [Fact]
-        public void OnAfterSave()
+        public async Task OnAfterSave()
         {
             Piranha.App.Hooks.Site.RegisterOnAfterSave(m => throw new SiteOnAfterSaveException());
             using (var api = CreateApi())
             {
-                Assert.Throws<SiteOnAfterSaveException>(() =>
+                await Assert.ThrowsAsync<SiteOnAfterSaveException>(async () =>
                 {
-                    api.Sites.Save(new Site {
+                    await api.Sites.SaveAsync(new Site {
                         Title = "My Second Hook Site"
                     });
                 });
@@ -105,54 +104,31 @@ namespace Piranha.Tests.Hooks
         }
 
         [Fact]
-        public void OnBeforeDelete()
+        public async Task OnBeforeDelete()
         {
             Piranha.App.Hooks.Site.RegisterOnBeforeDelete(m => throw new SiteOnBeforeDeleteException());
             using (var api = CreateApi())
             {
-                Assert.Throws<SiteOnBeforeDeleteException>(() =>
+                await Assert.ThrowsAsync<SiteOnBeforeDeleteException>(async () =>
                 {
-                    api.Sites.Delete(ID);
+                    await api.Sites.DeleteAsync(ID);
                 });
             }
             Piranha.App.Hooks.Site.Clear();
         }
 
         [Fact]
-        public void OnAfterDelete()
+        public async Task OnAfterDelete()
         {
             Piranha.App.Hooks.Site.RegisterOnAfterDelete(m => throw new SiteOnAfterDeleteException());
             using (var api = CreateApi())
             {
-                Assert.Throws<SiteOnAfterDeleteException>(() =>
+                await Assert.ThrowsAsync<SiteOnAfterDeleteException>(async () =>
                 {
-                    api.Sites.Delete(ID);
+                    await api.Sites.DeleteAsync(ID);
                 });
             }
             Piranha.App.Hooks.Site.Clear();
-        }
-
-        private IApi CreateApi()
-        {
-            var factory = new ContentFactory(services);
-            var serviceFactory = new ContentServiceFactory(factory);
-
-            var db = GetDb();
-
-            return new Api(
-                factory,
-                new AliasRepository(db),
-                new ArchiveRepository(db),
-                new Piranha.Repositories.MediaRepository(db),
-                new PageRepository(db, serviceFactory),
-                new PageTypeRepository(db),
-                new ParamRepository(db),
-                new PostRepository(db, serviceFactory),
-                new PostTypeRepository(db),
-                new SiteRepository(db, serviceFactory),
-                new SiteTypeRepository(db),
-                storage: storage
-            );
         }
     }
 }

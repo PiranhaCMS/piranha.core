@@ -9,31 +9,29 @@
  */
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 using Piranha.Models;
-using Piranha.Repositories;
-using Piranha.Services;
 
-namespace Piranha.Tests.Repositories
+namespace Piranha.Tests.Services
 {
     [Collection("Integration tests")]
-    public class SiteTypesCached : SiteTypes
+    public class PageTypeTestsCached : PageTypeTests
     {
-        protected override void Init()
+        public override Task InitializeAsync()
         {
-            cache = new Cache.SimpleCache();
+            _cache = new Cache.SimpleCache();
 
-            base.Init();
+            return base.InitializeAsync();
         }
     }
 
     [Collection("Integration tests")]
-    public class SiteTypes : BaseTests
+    public class PageTypeTests : BaseTestsAsync
     {
-        protected ICache cache;
-        private readonly List<SiteType> siteTypes = new List<SiteType>
+        private readonly List<PageType> pageTypes = new List<PageType>
         {
-            new SiteType
+            new PageType
             {
                 Id = "MyFirstType",
                 Regions = new List<RegionType>
@@ -43,7 +41,8 @@ namespace Piranha.Tests.Repositories
                         Id = "Body",
                         Fields = new List<FieldType>
                         {
-                            new FieldType {
+                            new FieldType
+                            {
                                 Id = "Default",
                                 Type = "Html"
                             }
@@ -51,7 +50,7 @@ namespace Piranha.Tests.Repositories
                     }
                 }
             },
-            new SiteType
+            new PageType
             {
                 Id = "MySecondType",
                 Regions = new List<RegionType>
@@ -70,7 +69,7 @@ namespace Piranha.Tests.Repositories
                     }
                 }
             },
-            new SiteType
+            new PageType
             {
                 Id = "MyThirdType",
                 Regions = new List<RegionType>
@@ -89,7 +88,7 @@ namespace Piranha.Tests.Repositories
                     }
                 }
             },
-            new SiteType
+            new PageType
             {
                 Id = "MyFourthType",
                 Regions = new List<RegionType>
@@ -108,7 +107,7 @@ namespace Piranha.Tests.Repositories
                     }
                 }
             },
-            new SiteType
+            new PageType
             {
                 Id = "MyFifthType",
                 Regions = new List<RegionType>
@@ -129,25 +128,25 @@ namespace Piranha.Tests.Repositories
             }
         };
 
-        protected override void Init()
+        public override async Task InitializeAsync()
         {
             using (var api = CreateApi())
             {
-                api.SiteTypes.Save(siteTypes[0]);
-                api.SiteTypes.Save(siteTypes[3]);
-                api.SiteTypes.Save(siteTypes[4]);
+                await api.PageTypes.SaveAsync(pageTypes[0]);
+                await api.PageTypes.SaveAsync(pageTypes[3]);
+                await api.PageTypes.SaveAsync(pageTypes[4]);
             }
         }
 
-        protected override void Cleanup()
+        public override async Task DisposeAsync()
         {
             using (var api = CreateApi())
             {
-                var siteTypes = api.SiteTypes.GetAll();
+                var pageTypes = await api.PageTypes.GetAllAsync();
 
-                foreach (var p in siteTypes)
+                foreach (var p in pageTypes)
                 {
-                    api.SiteTypes.Delete(p);
+                    await api.PageTypes.DeleteAsync(p);
                 }
             }
         }
@@ -157,25 +156,25 @@ namespace Piranha.Tests.Repositories
         {
             using (var api = CreateApi())
             {
-                Assert.Equal(this.GetType() == typeof(SiteTypesCached), ((Api)api).IsCached);
+                Assert.Equal(this.GetType() == typeof(PageTypeTestsCached), ((Api)api).IsCached);
             }
         }
 
         [Fact]
-        public void Add()
+        public async Task Add()
         {
             using (var api = CreateApi())
             {
-                api.SiteTypes.Save(siteTypes[1]);
+                await api.PageTypes.SaveAsync(pageTypes[1]);
             }
         }
 
         [Fact]
-        public void GetAll()
+        public async Task GetAll()
         {
             using (var api = CreateApi())
             {
-                var models = api.SiteTypes.GetAll();
+                var models = await api.PageTypes.GetAllAsync();
 
                 Assert.NotNull(models);
                 Assert.NotEmpty(models);
@@ -183,91 +182,67 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetNoneById()
+        public async Task GetNoneById()
         {
             using (var api = CreateApi())
             {
-                var none = api.SiteTypes.GetById("none-existing-type");
+                var none = await api.PageTypes.GetByIdAsync("none-existing-type");
 
                 Assert.Null(none);
             }
         }
 
         [Fact]
-        public void GetById()
+        public async Task GetById()
         {
             using (var api = CreateApi())
             {
-                var model = api.SiteTypes.GetById(siteTypes[0].Id);
+                var model = await api.PageTypes.GetByIdAsync(pageTypes[0].Id);
 
                 Assert.NotNull(model);
-                Assert.Equal(siteTypes[0].Regions[0].Fields[0].Id, model.Regions[0].Fields[0].Id);
+                Assert.Equal(pageTypes[0].Regions[0].Fields[0].Id, model.Regions[0].Fields[0].Id);
             }
         }
 
         [Fact]
-        public void Update()
+        public async Task Update()
         {
             using (var api = CreateApi())
             {
-                var model = api.SiteTypes.GetById(siteTypes[0].Id);
+                var model = await api.PageTypes.GetByIdAsync(pageTypes[0].Id);
 
                 Assert.Null(model.Title);
 
                 model.Title = "Updated";
 
-                api.SiteTypes.Save(model);
+                await api.PageTypes.SaveAsync(model);
             }
         }
 
         [Fact]
-        public void Delete()
+        public async Task Delete()
         {
             using (var api = CreateApi())
             {
-                var model = api.SiteTypes.GetById(siteTypes[3].Id);
+                var model = await api.PageTypes.GetByIdAsync(pageTypes[3].Id);
 
                 Assert.NotNull(model);
 
-                api.SiteTypes.Delete(model);
+                await api.PageTypes.DeleteAsync(model);
             }
         }
 
         [Fact]
-        public void DeleteById()
+        public async Task DeleteById()
         {
             using (var api = CreateApi())
             {
-                var model = api.SiteTypes.GetById(siteTypes[4].Id);
+                var model = await api.PageTypes.GetByIdAsync(pageTypes[4].Id);
 
                 Assert.NotNull(model);
 
-                api.SiteTypes.Delete(model.Id);
+                await api.PageTypes.DeleteAsync(model.Id);
             }
-        }
-
-        private IApi CreateApi()
-        {
-            var factory = new ContentFactory(services);
-            var serviceFactory = new ContentServiceFactory(factory);
-
-            var db = GetDb();
-
-            return new Api(
-                factory,
-                new AliasRepository(db),
-                new ArchiveRepository(db),
-                new Piranha.Repositories.MediaRepository(db),
-                new PageRepository(db, serviceFactory),
-                new PageTypeRepository(db),
-                new ParamRepository(db),
-                new PostRepository(db, serviceFactory),
-                new PostTypeRepository(db),
-                new SiteRepository(db, serviceFactory),
-                new SiteTypeRepository(db),
-                cache: cache,
-                storage: storage
-            );
         }
     }
 }

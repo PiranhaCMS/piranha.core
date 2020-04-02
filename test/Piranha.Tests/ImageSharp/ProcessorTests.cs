@@ -10,10 +10,11 @@
 
 using System.IO;
 using Xunit;
+using Piranha.ImageSharp;
 
-namespace Piranha.ImageSharp.Tests
+namespace Piranha.Tests.ImageSharp
 {
-    public class Processor
+    public class ProcessorTests
     {
         [Fact]
         public void GetSizeStream() {

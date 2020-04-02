@@ -17,24 +17,22 @@ using Piranha.AttributeBuilder;
 using Piranha.Extend;
 using Piranha.Extend.Fields;
 using Piranha.Models;
-using Piranha.Repositories;
-using Piranha.Services;
 
-namespace Piranha.Tests.Repositories
+namespace Piranha.Tests.Services
 {
     [Collection("Integration tests")]
-    public class SitesCached : Sites
+    public class SiteTestsCached : SiteTests
     {
         public override async Task InitializeAsync()
         {
-            cache = new Cache.SimpleCache();
+            _cache = new Cache.SimpleCache();
 
             await base.InitializeAsync();
         }
     }
 
     [Collection("Integration tests")]
-    public class Sites : BaseTestsAsync
+    public class SiteTests : BaseTestsAsync
     {
         private const string SITE_1 = "MyFirstSite";
         private const string SITE_2 = "MySecondSite";
@@ -42,7 +40,6 @@ namespace Piranha.Tests.Repositories
         private const string SITE_5 = "MyFifthSite";
         private const string SITE_6 = "MySixthSite";
         private const string SITE_1_HOSTS = "mysite.com";
-        protected ICache cache;
 
         private readonly Guid SITE_1_ID = Guid.NewGuid();
 
@@ -191,7 +188,7 @@ namespace Piranha.Tests.Repositories
         public void IsCached()
         {
             using (var api = CreateApi()) {
-                Assert.Equal(this.GetType() == typeof(SitesCached), ((Api)api).IsCached);
+                Assert.Equal(this.GetType() == typeof(SiteTestsCached), ((Api)api).IsCached);
             }
         }
 
@@ -417,7 +414,7 @@ namespace Piranha.Tests.Repositories
 
                 Assert.True(site1.IsDefault);
                 site1.IsDefault = false;
-                api.Sites.Save(site1);
+                await api.Sites.SaveAsync(site1);
 
                 site1 = await api.Sites.GetByIdAsync(SITE_1_ID);
 
@@ -608,30 +605,6 @@ namespace Piranha.Tests.Repositories
 
                 Assert.Null(model);
             }
-        }
-
-        private IApi CreateApi()
-        {
-            var factory = new ContentFactory(services);
-            var serviceFactory = new ContentServiceFactory(factory);
-
-            var db = GetDb();
-
-            return new Api(
-                factory,
-                new AliasRepository(db),
-                new ArchiveRepository(db),
-                new Piranha.Repositories.MediaRepository(db),
-                new PageRepository(db, serviceFactory),
-                new PageTypeRepository(db),
-                new ParamRepository(db),
-                new PostRepository(db, serviceFactory),
-                new PostTypeRepository(db),
-                new SiteRepository(db, serviceFactory),
-                new SiteTypeRepository(db),
-                cache: cache,
-                storage: storage
-            );
         }
     }
 }

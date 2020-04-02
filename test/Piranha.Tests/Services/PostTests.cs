@@ -18,24 +18,22 @@ using Piranha.AttributeBuilder;
 using Piranha.Extend;
 using Piranha.Extend.Fields;
 using Piranha.Models;
-using Piranha.Repositories;
-using Piranha.Services;
 
-namespace Piranha.Tests.Repositories
+namespace Piranha.Tests.Services
 {
     [Collection("Integration tests")]
-    public class PostsCached : Posts
+    public class PostTestsCached : PostTests
     {
         public override async Task InitializeAsync()
         {
-            cache = new Cache.SimpleCache();
+            _cache = new Cache.SimpleCache();
 
             await base.InitializeAsync();
         }
     }
 
     [Collection("Integration tests")]
-    public class Posts : BaseTestsAsync
+    public class PostTests : BaseTestsAsync
     {
         private readonly Guid SITE_ID = Guid.NewGuid();
         private readonly Guid BLOG_ID = Guid.NewGuid();
@@ -44,7 +42,6 @@ namespace Piranha.Tests.Repositories
         private readonly Guid POST_2_ID = Guid.NewGuid();
         private readonly Guid POST_3_ID = Guid.NewGuid();
         private readonly Guid POST_DI_ID = Guid.NewGuid();
-        protected ICache cache;
 
         public interface IMyService
         {
@@ -102,7 +99,7 @@ namespace Piranha.Tests.Repositories
 
         public override async Task InitializeAsync()
         {
-            services = new ServiceCollection()
+            _services = new ServiceCollection()
                 .AddSingleton<IMyService, MyService>()
                 .BuildServiceProvider();
 
@@ -130,7 +127,7 @@ namespace Piranha.Tests.Repositories
                     InternalId = "PostSite",
                     IsDefault = true
                 };
-                api.Sites.Save(site);
+                await api.Sites.SaveAsync(site);
 
                 // Add blog page
                 var page = await BlogPage.CreateAsync(api);
@@ -240,7 +237,7 @@ namespace Piranha.Tests.Repositories
         {
             using (var api = CreateApi())
             {
-                Assert.Equal(this.GetType() == typeof(PostsCached), ((Api)api).IsCached);
+                Assert.Equal(this.GetType() == typeof(PostTestsCached), ((Api)api).IsCached);
             }
         }
 
@@ -324,9 +321,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetAllById() {
-            using (var api = CreateApi()) {
-                var posts = api.Posts.GetAll(BLOG_ID);
+        public async Task GetAllById()
+        {
+            using (var api = CreateApi())
+            {
+                var posts = await api.Posts.GetAllAsync(BLOG_ID);
 
                 Assert.NotNull(posts);
                 Assert.NotEmpty(posts);
@@ -334,9 +333,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetAllBaseClassById() {
-            using (var api = CreateApi()) {
-                var posts = api.Posts.GetAll<Models.PostBase>(BLOG_ID);
+        public async Task GetAllBaseClassById()
+        {
+            using (var api = CreateApi())
+            {
+                var posts = await api.Posts.GetAllAsync<Models.PostBase>(BLOG_ID);
 
                 Assert.NotNull(posts);
                 Assert.NotEmpty(posts);
@@ -344,9 +345,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetAllByIdMissing() {
-            using (var api = CreateApi()) {
-                var posts = api.Posts.GetAll<MissingPost>(BLOG_ID);
+        public async Task GetAllByIdMissing()
+        {
+            using (var api = CreateApi())
+            {
+                var posts = await api.Posts.GetAllAsync<MissingPost>(BLOG_ID);
 
                 Assert.NotNull(posts);
                 Assert.Empty(posts);
@@ -354,9 +357,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetAllBySlug() {
-            using (var api = CreateApi()) {
-                var posts = api.Posts.GetAll("blog");
+        public async Task GetAllBySlug()
+        {
+            using (var api = CreateApi())
+            {
+                var posts = await api.Posts.GetAllAsync("blog");
 
                 Assert.NotNull(posts);
                 Assert.NotEmpty(posts);
@@ -364,9 +369,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetAllBaseClassBySlug() {
-            using (var api = CreateApi()) {
-                var posts = api.Posts.GetAll<Models.PostBase>("blog");
+        public async Task GetAllBaseClassBySlug()
+        {
+            using (var api = CreateApi())
+            {
+                var posts = await api.Posts.GetAllAsync<Models.PostBase>("blog");
 
                 Assert.NotNull(posts);
                 Assert.NotEmpty(posts);
@@ -374,9 +381,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetAllBySlugMissing() {
-            using (var api = CreateApi()) {
-                var posts = api.Posts.GetAll<MissingPost>("blog");
+        public async Task GetAllBySlugMissing()
+        {
+            using (var api = CreateApi())
+            {
+                var posts = await api.Posts.GetAllAsync<MissingPost>("blog");
 
                 Assert.NotNull(posts);
                 Assert.Empty(posts);
@@ -384,9 +393,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetAllBySlugAndSite() {
-            using (var api = CreateApi()) {
-                var posts = api.Posts.GetAll("blog", SITE_ID);
+        public async Task GetAllBySlugAndSite()
+        {
+            using (var api = CreateApi())
+            {
+                var posts = await api.Posts.GetAllAsync("blog", SITE_ID);
 
                 Assert.NotNull(posts);
                 Assert.NotEmpty(posts);
@@ -394,9 +405,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetAllNoneById() {
-            using (var api = CreateApi()) {
-                var posts = api.Posts.GetAll(Guid.NewGuid());
+        public async Task GetAllNoneById()
+        {
+            using (var api = CreateApi())
+            {
+                var posts = await api.Posts.GetAllAsync(Guid.NewGuid());
 
                 Assert.NotNull(posts);
                 Assert.Empty(posts);
@@ -404,9 +417,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetAllNoneBySlug() {
-            using (var api = CreateApi()) {
-                var posts = api.Posts.GetAll("no-blog");
+        public async Task GetAllNoneBySlug()
+        {
+            using (var api = CreateApi())
+            {
+                var posts = await api.Posts.GetAllAsync("no-blog");
 
                 Assert.NotNull(posts);
                 Assert.Empty(posts);
@@ -414,9 +429,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetAllNoneBySlugAndSite() {
-            using (var api = CreateApi()) {
-                var posts = api.Posts.GetAll("blog", Guid.NewGuid());
+        public async Task GetAllNoneBySlugAndSite()
+        {
+            using (var api = CreateApi())
+            {
+                var posts = await api.Posts.GetAllAsync("blog", Guid.NewGuid());
 
                 Assert.NotNull(posts);
                 Assert.Empty(posts);
@@ -424,9 +441,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetGenericById() {
-            using (var api = CreateApi()) {
-                var model = api.Posts.GetById<MyPost>(POST_1_ID);
+        public async Task GetGenericById()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Posts.GetByIdAsync<MyPost>(POST_1_ID);
 
                 Assert.NotNull(model);
                 Assert.Equal("my-first-post", model.Slug);
@@ -436,9 +455,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetBaseClassById() {
-            using (var api = CreateApi()) {
-                var model = api.Posts.GetById<Models.PostBase>(POST_1_ID);
+        public async Task GetBaseClassById()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Posts.GetByIdAsync<Models.PostBase>(POST_1_ID);
 
                 Assert.NotNull(model);
                 Assert.Equal(typeof(MyPost), model.GetType());
@@ -449,9 +470,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetBlocksById() {
-            using (var api = CreateApi()) {
-                var model = api.Posts.GetById<MyPost>(POST_1_ID);
+        public async Task GetBlocksById()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Posts.GetByIdAsync<MyPost>(POST_1_ID);
 
                 Assert.NotNull(model);
                 Assert.Equal(2, model.Blocks.Count);
@@ -461,18 +484,22 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetMissingById() {
-            using (var api = CreateApi()) {
-                var model = api.Posts.GetById<MissingPost>(POST_1_ID);
+        public async Task GetMissingById()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Posts.GetByIdAsync<MissingPost>(POST_1_ID);
 
                 Assert.Null(model);
             }
         }
 
         [Fact]
-        public void GetInfoById() {
-            using (var api = CreateApi()) {
-                var model = api.Posts.GetById<Models.PostInfo>(POST_1_ID);
+        public async Task GetInfoById()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Posts.GetByIdAsync<Models.PostInfo>(POST_1_ID);
 
                 Assert.NotNull(model);
                 Assert.Equal("my-first-post", model.Slug);
@@ -482,9 +509,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetGenericBySlug() {
-            using (var api = CreateApi()) {
-                var model = api.Posts.GetBySlug<MyPost>("blog", "my-first-post");
+        public async Task GetGenericBySlug()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Posts.GetBySlugAsync<MyPost>("blog", "my-first-post");
 
                 Assert.NotNull(model);
                 Assert.Equal("my-first-post", model.Slug);
@@ -494,9 +523,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetBaseClassBySlug() {
-            using (var api = CreateApi()) {
-                var model = api.Posts.GetBySlug<Models.PostBase>("blog", "my-first-post");
+        public async Task GetBaseClassBySlug()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Posts.GetBySlugAsync<Models.PostBase>("blog", "my-first-post");
 
                 Assert.NotNull(model);
                 Assert.Equal(typeof(MyPost), model.GetType());
@@ -507,18 +538,22 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetMissingBySlug() {
-            using (var api = CreateApi()) {
-                var model = api.Posts.GetBySlug<MissingPost>("blog", "my-first-post");
+        public async Task GetMissingBySlug()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Posts.GetBySlugAsync<MissingPost>("blog", "my-first-post");
 
                 Assert.Null(model);
             }
         }
 
         [Fact]
-        public void GetInfoBySlug() {
-            using (var api = CreateApi()) {
-                var model = api.Posts.GetBySlug<Models.PostInfo>("blog", "my-first-post");
+        public async Task GetInfoBySlug()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Posts.GetBySlugAsync<Models.PostInfo>("blog", "my-first-post");
 
                 Assert.NotNull(model);
                 Assert.Equal("my-first-post", model.Slug);
@@ -528,9 +563,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetDynamicById() {
-            using (var api = CreateApi()) {
-                var model = api.Posts.GetById(POST_1_ID);
+        public async Task GetDynamicById()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Posts.GetByIdAsync(POST_1_ID);
 
                 Assert.NotNull(model);
                 Assert.Equal("my-first-post", model.Slug);
@@ -540,9 +577,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetDynamicBySlug() {
-            using (var api = CreateApi()) {
-                var model = api.Posts.GetBySlug("blog", "my-first-post");
+        public async Task GetDynamicBySlug()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Posts.GetBySlugAsync("blog", "my-first-post");
 
                 Assert.NotNull(model);
                 Assert.Equal("My first post", model.Title);
@@ -551,9 +590,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void CheckPermlinkSyntax() {
-            using (var api = CreateApi()) {
-                var model = api.Posts.GetById(POST_1_ID);
+        public async Task CheckPermlinkSyntax()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.Posts.GetByIdAsync(POST_1_ID);
 
                 Assert.NotNull(model);
                 Assert.NotNull(model.Permalink);
@@ -562,9 +603,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetCollectionPost() {
-            using (var api = CreateApi()) {
-                var post = api.Posts.GetBySlug<MyCollectionPost>(BLOG_ID, "my-collection-post");
+        public async Task GetCollectionPost()
+        {
+            using (var api = CreateApi())
+            {
+                var post = await api.Posts.GetBySlugAsync<MyCollectionPost>(BLOG_ID, "my-collection-post");
 
                 Assert.NotNull(post);
                 Assert.Equal(3, post.Texts.Count);
@@ -573,9 +616,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetBaseClassCollectionPost() {
-            using (var api = CreateApi()) {
-                var post = api.Posts.GetBySlug<Models.PostBase>(BLOG_ID, "my-collection-post");
+        public async Task GetBaseClassCollectionPost()
+        {
+            using (var api = CreateApi())
+            {
+                var post = await api.Posts.GetBySlugAsync<Models.PostBase>(BLOG_ID, "my-collection-post");
 
                 Assert.NotNull(post);
                 Assert.Equal(typeof(MyCollectionPost), post.GetType());
@@ -584,9 +629,11 @@ namespace Piranha.Tests.Repositories
             }
         }
         [Fact]
-        public void GetDynamicCollectionPost() {
-            using (var api = CreateApi()) {
-                var post = api.Posts.GetBySlug(BLOG_ID, "my-collection-post");
+        public async Task GetDynamicCollectionPost()
+        {
+            using (var api = CreateApi())
+            {
+                var post = await api.Posts.GetBySlugAsync(BLOG_ID, "my-collection-post");
 
                 Assert.NotNull(post);
                 Assert.Equal(3, post.Regions.Texts.Count);
@@ -599,8 +646,8 @@ namespace Piranha.Tests.Repositories
         {
             using (var api = CreateApi())
             {
-                var count = api.Posts.GetAll(BLOG_ID).Count();
-                var catCount = api.Posts.GetAllCategories(BLOG_ID).Count();
+                var count = (await api.Posts.GetAllAsync(BLOG_ID)).Count();
+                var catCount = (await api.Posts.GetAllCategoriesAsync(BLOG_ID)).Count();
                 var post = await MyPost.CreateAsync(api, "MyPost");
                 post.BlogId = BLOG_ID;
                 post.Category = "My category";
@@ -608,10 +655,10 @@ namespace Piranha.Tests.Repositories
                 post.Ingress = "My fourth ingress";
                 post.Body = "My fourth body";
 
-                api.Posts.Save(post);
+                await api.Posts.SaveAsync(post);
 
-                Assert.Equal(count + 1, api.Posts.GetAll(BLOG_ID).Count());
-                Assert.Equal(catCount, api.Posts.GetAllCategories(BLOG_ID).Count());
+                Assert.Equal(count + 1, (await api.Posts.GetAllAsync(BLOG_ID)).Count());
+                Assert.Equal(catCount, (await api.Posts.GetAllCategoriesAsync(BLOG_ID)).Count());
             }
         }
 
@@ -620,9 +667,9 @@ namespace Piranha.Tests.Repositories
         {
             using (var api = CreateApi())
             {
-                var count = api.Posts.GetAll(BLOG_ID).Count();
-                var catCount = api.Posts.GetAllCategories(BLOG_ID).Count();
-                var tagCount = api.Posts.GetAllTags(BLOG_ID).Count();
+                var count = (await api.Posts.GetAllAsync(BLOG_ID)).Count();
+                var catCount = (await api.Posts.GetAllCategoriesAsync(BLOG_ID)).Count();
+                var tagCount = (await api.Posts.GetAllTagsAsync(BLOG_ID)).Count();
 
                 var post = await MyPost.CreateAsync(api, "MyPost");
                 post.BlogId = BLOG_ID;
@@ -632,23 +679,23 @@ namespace Piranha.Tests.Repositories
                 post.Ingress = "My fifth ingress";
                 post.Body = "My fifth body";
 
-                api.Posts.Save(post);
+                await api.Posts.SaveAsync(post);
 
-                Assert.Equal(count + 1, api.Posts.GetAll(BLOG_ID).Count());
-                Assert.Equal(catCount, api.Posts.GetAllCategories(BLOG_ID).Count());
-                Assert.Equal(tagCount + 3, api.Posts.GetAllTags(BLOG_ID).Count());
+                Assert.Equal(count + 1, (await api.Posts.GetAllAsync(BLOG_ID)).Count());
+                Assert.Equal(catCount, (await api.Posts.GetAllCategoriesAsync(BLOG_ID)).Count());
+                Assert.Equal(tagCount + 3, (await api.Posts.GetAllTagsAsync(BLOG_ID)).Count());
 
-                post = api.Posts.GetBySlug<MyPost>(BLOG_ID, Piranha.Utils.GenerateSlug("My fifth post"));
+                post = await api.Posts.GetBySlugAsync<MyPost>(BLOG_ID, Piranha.Utils.GenerateSlug("My fifth post"));
 
                 Assert.NotNull(post);
                 Assert.Equal(3, post.Tags.Count);
                 post.Tags.Add("Another tag");
 
-                api.Posts.Save(post);
+                await api.Posts.SaveAsync(post);
 
-                Assert.Equal(tagCount + 4, api.Posts.GetAllTags(BLOG_ID).Count());
+                Assert.Equal(tagCount + 4, (await api.Posts.GetAllTagsAsync(BLOG_ID)).Count());
 
-                post = api.Posts.GetBySlug<MyPost>(BLOG_ID, Piranha.Utils.GenerateSlug("My fifth post"));
+                post = await api.Posts.GetBySlugAsync<MyPost>(BLOG_ID, Piranha.Utils.GenerateSlug("My fifth post"));
 
                 Assert.NotNull(post);
                 Assert.Equal(4, post.Tags.Count);
@@ -656,17 +703,19 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void Update() {
-            using (var api = CreateApi()) {
-                var post = api.Posts.GetById<MyPost>(POST_1_ID);
+        public async Task Update()
+        {
+            using (var api = CreateApi())
+            {
+                var post = await api.Posts.GetByIdAsync<MyPost>(POST_1_ID);
 
                 Assert.NotNull(post);
                 Assert.Equal("My first post", post.Title);
 
                 post.Title = "Updated post";
-                api.Posts.Save(post);
+                await api.Posts.SaveAsync(post);
 
-                post = api.Posts.GetById<MyPost>(POST_1_ID);
+                post = await api.Posts.GetByIdAsync<MyPost>(POST_1_ID);
 
                 Assert.NotNull(post);
                 Assert.Equal("Updated post", post.Title);
@@ -674,9 +723,11 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void UpdateCollectionPost() {
-            using (var api = CreateApi()) {
-                var post = api.Posts.GetBySlug<MyCollectionPost>("blog", "my-collection-post");
+        public async Task UpdateCollectionPost()
+        {
+            using (var api = CreateApi())
+            {
+                var post = await api.Posts.GetBySlugAsync<MyCollectionPost>("blog", "my-collection-post");
 
                 Assert.NotNull(post);
                 Assert.Equal(3, post.Texts.Count);
@@ -684,9 +735,9 @@ namespace Piranha.Tests.Repositories
 
                 post.Texts[0] = "Updated text";
                 post.Texts.RemoveAt(2);
-                api.Posts.Save(post);
+                await api.Posts.SaveAsync(post);
 
-                post = api.Posts.GetBySlug<MyCollectionPost>("blog", "my-collection-post");
+                post = await api.Posts.GetBySlugAsync<MyCollectionPost>("blog", "my-collection-post");
 
                 Assert.NotNull(post);
                 Assert.Equal(2, post.Texts.Count);
@@ -695,34 +746,40 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void Delete() {
-            using (var api = CreateApi()) {
-                var post = api.Posts.GetById<MyPost>(POST_3_ID);
-                var count = api.Posts.GetAll(BLOG_ID).Count();
+        public async Task Delete()
+        {
+            using (var api = CreateApi())
+            {
+                var post = await api.Posts.GetByIdAsync<MyPost>(POST_3_ID);
+                var count = (await api.Posts.GetAllAsync(BLOG_ID)).Count();
 
                 Assert.NotNull(post);
 
-                api.Posts.Delete(post);
+                await api.Posts.DeleteAsync(post);
 
-                Assert.Equal(count - 1, api.Posts.GetAll(BLOG_ID).Count());
+                Assert.Equal(count - 1, (await api.Posts.GetAllAsync(BLOG_ID)).Count());
             }
         }
 
         [Fact]
-        public void DeleteById() {
-            using (var api = CreateApi()) {
-                var count = api.Posts.GetAll(BLOG_ID).Count();
+        public async Task DeleteById()
+        {
+            using (var api = CreateApi())
+            {
+                var count = (await api.Posts.GetAllAsync(BLOG_ID)).Count();
 
-                api.Posts.Delete(POST_2_ID);
+                await api.Posts.DeleteAsync(POST_2_ID);
 
-                Assert.Equal(count - 1, api.Posts.GetAll(BLOG_ID).Count());
+                Assert.Equal(count - 1, (await api.Posts.GetAllAsync(BLOG_ID)).Count());
             }
         }
 
         [Fact]
-        public void GetDIGeneric() {
-            using (var api = CreateApi()) {
-                var post = api.Posts.GetById<MyDIPost>(POST_DI_ID);
+        public async Task GetDIGeneric()
+        {
+            using (var api = CreateApi())
+            {
+                var post = await api.Posts.GetByIdAsync<MyDIPost>(POST_DI_ID);
 
                 Assert.NotNull(post);
                 Assert.Equal("My service value", post.Body.Value);
@@ -730,37 +787,15 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetDIDynamic() {
-            using (var api = CreateApi()) {
-                var post = api.Posts.GetById(POST_DI_ID);
+        public async Task GetDIDynamic()
+        {
+            using (var api = CreateApi())
+            {
+                var post = await api.Posts.GetByIdAsync(POST_DI_ID);
 
                 Assert.NotNull(post);
                 Assert.Equal("My service value", post.Regions.Body.Value);
             }
-        }
-
-        private IApi CreateApi()
-        {
-            var factory = new ContentFactory(services);
-            var serviceFactory = new ContentServiceFactory(factory);
-
-            var db = GetDb();
-
-            return new Api(
-                factory,
-                new AliasRepository(db),
-                new ArchiveRepository(db),
-                new Piranha.Repositories.MediaRepository(db),
-                new PageRepository(db, serviceFactory),
-                new PageTypeRepository(db),
-                new ParamRepository(db),
-                new PostRepository(db, serviceFactory),
-                new PostTypeRepository(db),
-                new SiteRepository(db, serviceFactory),
-                new SiteTypeRepository(db),
-                cache: cache,
-                storage: storage
-            );
         }
     }
 }
