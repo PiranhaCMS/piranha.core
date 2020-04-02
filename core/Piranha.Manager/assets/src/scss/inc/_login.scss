@@ -22,7 +22,7 @@
     }
 
     100% {
-        top: 0px;
+        top: 0;
     }
 }
 
@@ -55,16 +55,13 @@
 }
 
 #login {
-    background: $primary url("../img/login.png");
+    background: #0C3C50 url("../img/login.png");
     background-size: cover;
-    margin-left: 0;
+    margin: 0;
 
-    .error-message {
-        margin: 0;
+    .invalid-feedback {
         color: $red-bright;
         text-align: center;
-        opacity: 0;
-        animation-delay: 0.5s;
     }
 
     .container {
@@ -102,13 +99,33 @@
 
         &.card-body-form {
             position: relative;
-            animation-delay: 0.5s;
+            background-color: transparent;
+
+            .col-form-label {
+                @include sr-only();
+            }
 
             .form-control {
-                border: 0;
                 font-weight: 300;
             }
         }
+    }
+
+    .was-validated .form-control:invalid {
+        border-color: $red-bright;
+        box-shadow: 0 0 10px $red-bright;
+    }
+
+    .error-message {
+        margin: 0;
+        color: $red-bright;
+        text-align: center;
+        opacity: 0;
+        animation-delay: 0.5s;
+    }
+
+    .was-validated .error-message {
+        visibility: hidden;
     }
 
     .has-error {
