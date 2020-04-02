@@ -113,6 +113,7 @@
 
     .was-validated .form-control:invalid {
         border-color: $red-bright;
+        box-shadow: 0 0 10px $red-bright;
     }
 
     .error-message {
