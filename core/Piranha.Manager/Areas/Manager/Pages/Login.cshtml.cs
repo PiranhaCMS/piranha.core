@@ -20,13 +20,21 @@ namespace Piranha.Manager.Models
     public class LoginModel : PageModel
     {
         private readonly ISecurity _service;
+        private readonly ManagerLocalizer _localizer;
 
-        public bool SignInFailed { get; set; }
-
-        public LoginModel(ISecurity service)
+        public LoginModel(ISecurity service, ManagerLocalizer localizer)
         {
             _service = service;
+            _localizer = localizer;
         }
+
+        [BindProperty]
+        public InputModel Input { get; set; }
+
+        public string ReturnUrl { get; set; }
+
+        [TempData]
+        public string ErrorMessage { get; set; }
 
         public class InputModel
         {
@@ -34,16 +42,35 @@ namespace Piranha.Manager.Models
             public string Username { get; set; }
 
             [Required]
+            [DataType(DataType.Password)]
             public string Password { get; set; }
         }
 
-        public async Task<IActionResult> OnPostAsync(InputModel model)
-        {            
-            if (ModelState.IsValid && await _service.SignIn(HttpContext, model.Username, model.Password))
-                return new RedirectToPageResult("Index");
+        public void OnGet(string returnUrl = null)
+        {
+            if (!string.IsNullOrEmpty(ErrorMessage))
+            {
+                ModelState.AddModelError(string.Empty, ErrorMessage);
+            }
 
-            SignInFailed = true;
-            return Page();
+            ReturnUrl = returnUrl;
+        }
+
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        {
+            if (!ModelState.IsValid || !await _service.SignIn(HttpContext, Input.Username, Input.Password))
+            {
+                ModelState.Clear();
+                ModelState.AddModelError(string.Empty, _localizer.General["Username and/or password are incorrect."].Value);
+                return Page();
+            }
+
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                return LocalRedirect(returnUrl);
+            }
+
+            return new RedirectToPageResult("Index");
         }
     }
 }
