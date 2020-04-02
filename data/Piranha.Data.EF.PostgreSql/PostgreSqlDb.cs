@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Piranha.Data.EF.PostgreSql
 {
+    [NoCoverage]
     public sealed class PostgreSqlDb : Db<PostgreSqlDb>
     {
         /// <summary>

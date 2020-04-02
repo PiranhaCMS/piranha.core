@@ -8,6 +8,7 @@ using Piranha.Data.EF.PostgreSql;
 
 namespace Piranha.Data.EF.PostgreSql
 {
+    [NoCoverage]
     [DbContext(typeof(PostgreSqlDb))]
     partial class DbModelSnapshot : ModelSnapshot
     {

@@ -7,6 +7,7 @@ using Piranha.Data.EF.MySql;
 
 namespace Piranha.Data.EF.MySql.Migrations
 {
+    [NoCoverage]
     [DbContext(typeof(MySqlDb))]
     partial class DbModelSnapshot : ModelSnapshot
     {

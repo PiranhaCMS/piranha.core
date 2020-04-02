@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Piranha.Data.EF.MySql.Migrations
 {
+    [NoCoverage]
     public partial class AddComments : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

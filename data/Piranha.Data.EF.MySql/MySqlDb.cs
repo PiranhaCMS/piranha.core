@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Piranha.Data.EF.MySql
 {
+    [NoCoverage]
     public sealed class MySqlDb : Db<MySqlDb>
     {
         /// <summary>

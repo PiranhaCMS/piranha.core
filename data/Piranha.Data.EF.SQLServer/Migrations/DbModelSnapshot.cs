@@ -8,6 +8,7 @@ using Piranha.Data.EF.SQLServer;
 
 namespace Piranha.Data.EF.SQLServer.Migrations
 {
+    [NoCoverage]
     [DbContext(typeof(SQLServerDb))]
     partial class DbModelSnapshot : ModelSnapshot
     {

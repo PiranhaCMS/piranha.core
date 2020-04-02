@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Piranha.Data.EF.SQLServer
 {
+    [NoCoverage]
     public sealed class SQLServerDb : Db<SQLServerDb>
     {
         /// <summary>

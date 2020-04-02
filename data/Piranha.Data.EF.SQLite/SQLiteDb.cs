@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Piranha.Data.EF.SQLite
 {
+    [NoCoverage]
     public sealed class SQLiteDb : Db<SQLiteDb>
     {
         /// <summary>

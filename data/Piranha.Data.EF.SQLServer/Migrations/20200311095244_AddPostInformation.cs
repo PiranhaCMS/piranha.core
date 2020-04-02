@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Piranha.Data.EF.SQLServer.Migrations
 {
+    [NoCoverage]
     public partial class AddPostInformation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

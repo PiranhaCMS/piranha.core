@@ -15,7 +15,7 @@ before_build:
 build_script:
   - dotnet build -c Debug /p:DebugType=full
 test_script:
-  - ps: cd test/Piranha.Tests
-  - ps: dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings
+  - ps: cd test\Piranha.Tests
+  - ps: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByAttribute="NoCoverage"
   - ps: cd ..\..
-  - ps: .\tools\coveralls.net.0.7.0\tools\csmacnz.coveralls.exe --opencover -i TestResults/*/coverage.opencover.xml --repoToken $env:COVERALLS_REPO_TOKEN --useRelativePaths --commitId $env:APPVEYOR_REPO_COMMIT --commitBranch $env:APPVEYOR_REPO_BRANCH --commitAuthor $env:APPVEYOR_REPO_COMMIT_AUTHOR --commitEmail $env:APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL --commitMessage $env:APPVEYOR_REPO_COMMIT_MESSAGE --jobId $env:APPVEYOR_BUILD_NUMBER --serviceName appveyor
+  - ps: .\tools\coveralls.net.0.7.0\tools\csmacnz.coveralls.exe --opencover -i test\Piranha.Test\coverage.opencover.xml --repoToken $env:COVERALLS_REPO_TOKEN --useRelativePaths --commitId $env:APPVEYOR_REPO_COMMIT --commitBranch $env:APPVEYOR_REPO_BRANCH --commitAuthor $env:APPVEYOR_REPO_COMMIT_AUTHOR --commitEmail $env:APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL --commitMessage $env:APPVEYOR_REPO_COMMIT_MESSAGE --jobId $env:APPVEYOR_BUILD_NUMBER --serviceName appveyor
