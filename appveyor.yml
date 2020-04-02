@@ -17,4 +17,5 @@ build_script:
 test_script:
   - ps: cd test/Piranha.Tests
   - ps: dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings
+  - ps: cd ..\..
   - ps: .\tools\coveralls.net.0.7.0\tools\csmacnz.coveralls.exe --opencover -i TestResults/*/coverage.opencover.xml --repoToken $env:COVERALLS_REPO_TOKEN --useRelativePaths --commitId $env:APPVEYOR_REPO_COMMIT --commitBranch $env:APPVEYOR_REPO_BRANCH --commitAuthor $env:APPVEYOR_REPO_COMMIT_AUTHOR --commitEmail $env:APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL --commitMessage $env:APPVEYOR_REPO_COMMIT_MESSAGE --jobId $env:APPVEYOR_BUILD_NUMBER --serviceName appveyor
