@@ -20,17 +20,24 @@ namespace Piranha.Tests.AttributeBuilder
     [Collection("Integration tests")]
     public class TypeBuilderTests : BaseTestsAsync
     {
-
         [PageType(Id = "Simple", Title = "Simple Page Type")]
         public class SimplePageType
         {
-            [Region]
+            [Region(SortOrder = 1)]
             public Extend.Fields.TextField Body { get; set; }
+        }
+
+        [PageType(Id = "Archive", Title = "Archive Page Type", UseBlocks = false, IsArchive = true)]
+        [PageTypeArchiveItem(typeof(SimplePostType))]
+        public class ArchivePageType
+        {
         }
 
         [PageType(Id = "Complex", Title = "Complex Page Type")]
         [PageTypeRoute(Title = "Default", Route = "/complex")]
-        [PageTypeEditor(Title = "Custom Editor", Component = "custom-editor", Icon = "fas fa-fish")]
+        [PageTypeEditor(Title = "Custom Editor", Component = "will be replaced", Icon = "will be replaced")]
+        [PageTypeEditor(Title = "Custom Editor", Component = "custom-editor", Icon = "fa fas-fish")]
+        [PageTypeEditor(Title = "Another Editor", Component = "another-editor", Icon = "fa fas-fish")]
         public class ComplexPageType
         {
             public class BodyRegion
@@ -42,7 +49,7 @@ namespace Piranha.Tests.AttributeBuilder
                 public Extend.Fields.TextField Body { get; set; }
             }
 
-            [Region(Title = "Intro")]
+            [Region(Title = "Intro", ListTitle = "Default", ListPlaceholder = "Add new item", ListExpand = false, Icon = "fa fas-fish")]
             public IList<Extend.Fields.TextField> Slider { get; set; }
 
             [Region(Title = "Main content")]
@@ -59,7 +66,9 @@ namespace Piranha.Tests.AttributeBuilder
 
         [PostType(Id = "Complex", Title = "Complex Post Type")]
         [PostTypeRoute(Title = "Default", Route = "/complex")]
-        [PostTypeEditor(Title = "Custom Editor", Component = "custom-editor", Icon = "fas fa-fish")]
+        [PostTypeEditor(Title = "Custom Editor", Component = "will be replaced", Icon = "will be replaced")]
+        [PostTypeEditor(Title = "Custom Editor", Component = "custom-editor", Icon = "fa fas-fish")]
+        [PostTypeEditor(Title = "Another Editor", Component = "another-editor", Icon = "fa fas-fish")]
         public class ComplexPostType
         {
             public class BodyRegion
@@ -80,7 +89,7 @@ namespace Piranha.Tests.AttributeBuilder
         [SiteType(Id = "Simple", Title = "Simple Page Type")]
         public class SimpleSiteType
         {
-            [Region]
+            [Region(SortOrder = 1)]
             public Extend.Fields.TextField Body { get; set; }
         }
 
@@ -143,9 +152,28 @@ namespace Piranha.Tests.AttributeBuilder
                 var type = await api.PageTypes.GetByIdAsync("Simple");
 
                 Assert.NotNull(type);
+                Assert.True(type.UseBlocks);
                 Assert.Equal(1, type.Regions.Count);
                 Assert.Equal("Body", type.Regions[0].Id);
                 Assert.Equal(1, type.Regions[0].Fields.Count);
+            }
+        }
+
+        [Fact]
+        public async Task AddArchivePageType()
+        {
+            using (var api = CreateApi())
+            {
+                var builder = new PageTypeBuilder(api)
+                    .AddType(typeof(ArchivePageType));
+                builder.Build();
+
+                var type = await api.PageTypes.GetByIdAsync("Archive");
+
+                Assert.NotNull(type);
+                Assert.True(type.IsArchive);
+                Assert.False(type.UseBlocks);
+                Assert.NotEmpty(type.ArchiveItemTypes);
             }
         }
 
@@ -165,6 +193,10 @@ namespace Piranha.Tests.AttributeBuilder
 
                 Assert.Equal("Slider", type.Regions[0].Id);
                 Assert.Equal("Intro", type.Regions[0].Title);
+                Assert.Equal("Default", type.Regions[0].ListTitleField);
+                Assert.Equal("Add new item", type.Regions[0].ListTitlePlaceholder);
+                Assert.Equal("fa fas-fish", type.Regions[0].Icon);
+                Assert.False(type.Regions[0].ListExpand);
                 Assert.True(type.Regions[0].Collection);
                 Assert.Equal(1, type.Regions[0].Fields.Count);
 
@@ -181,10 +213,10 @@ namespace Piranha.Tests.AttributeBuilder
                 Assert.Equal(1, type.Routes.Count);
                 Assert.Equal("/complex", type.Routes[0]);
 
-                Assert.Equal(1, type.CustomEditors.Count);
+                Assert.Equal(2, type.CustomEditors.Count);
                 Assert.Equal("Custom Editor", type.CustomEditors[0].Title);
                 Assert.Equal("custom-editor", type.CustomEditors[0].Component);
-                Assert.Equal("fas fa-fish", type.CustomEditors[0].Icon);
+                Assert.Equal("fa fas-fish", type.CustomEditors[0].Icon);
             }
         }
 
@@ -233,10 +265,10 @@ namespace Piranha.Tests.AttributeBuilder
                 Assert.Equal(1, type.Routes.Count);
                 Assert.Equal("/complex", type.Routes[0]);
 
-                Assert.Equal(1, type.CustomEditors.Count);
+                Assert.Equal(2, type.CustomEditors.Count);
                 Assert.Equal("Custom Editor", type.CustomEditors[0].Title);
                 Assert.Equal("custom-editor", type.CustomEditors[0].Component);
-                Assert.Equal("fas fa-fish", type.CustomEditors[0].Icon);
+                Assert.Equal("fa fas-fish", type.CustomEditors[0].Icon);
             }
         }
 

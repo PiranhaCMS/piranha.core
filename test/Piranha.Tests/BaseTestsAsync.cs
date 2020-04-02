@@ -28,6 +28,7 @@ namespace Piranha.Tests
         protected IStorage _storage = new Local.FileStorage("uploads/", "~/uploads/");
         protected IImageProcessor _processor = new ImageSharpProcessor();
         protected IServiceProvider _services = new ServiceCollection()
+            .AddPiranhaFileStorage()
             .BuildServiceProvider();
         protected ICache _cache;
 
