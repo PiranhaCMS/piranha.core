@@ -30,7 +30,35 @@ namespace Piranha.Tests.AttributeBuilder
 
         [PageType(Id = "Complex", Title = "Complex Page Type")]
         [PageTypeRoute(Title = "Default", Route = "/complex")]
+        [PageTypeEditor(Title = "Custom Editor", Component = "custom-editor", Icon = "fas fa-fish")]
         public class ComplexPageType
+        {
+            public class BodyRegion
+            {
+                [Field]
+                public Extend.Fields.TextField Title { get; set; }
+                [Field]
+                public Extend.Fields.TextField Body { get; set; }
+            }
+
+            [Region(Title = "Intro")]
+            public IList<Extend.Fields.TextField> Slider { get; set; }
+
+            [Region(Title = "Main content")]
+            public BodyRegion Content { get; set; }
+        }
+
+        [PostType(Id = "Simple", Title = "Simple Post Type")]
+        public class SimplePostType
+        {
+            [Region]
+            public Extend.Fields.TextField Body { get; set; }
+        }
+
+        [PostType(Id = "Complex", Title = "Complex Post Type")]
+        [PostTypeRoute(Title = "Default", Route = "/complex")]
+        [PostTypeEditor(Title = "Custom Editor", Component = "custom-editor", Icon = "fas fa-fish")]
+        public class ComplexPostType
         {
             public class BodyRegion
             {
@@ -102,7 +130,7 @@ namespace Piranha.Tests.AttributeBuilder
         }
 
         [Fact]
-        public async Task AddSimple()
+        public async Task AddSimplePageType()
         {
             using (var api = CreateApi())
             {
@@ -120,7 +148,7 @@ namespace Piranha.Tests.AttributeBuilder
         }
 
         [Fact]
-        public async Task AddComplex()
+        public async Task AddComplexPageType()
         {
             using (var api = CreateApi())
             {
@@ -145,6 +173,63 @@ namespace Piranha.Tests.AttributeBuilder
 
                 Assert.Equal(1, type.Routes.Count);
                 Assert.Equal("/complex", type.Routes[0]);
+
+                Assert.Equal(1, type.CustomEditors.Count);
+                Assert.Equal("Custom Editor", type.CustomEditors[0].Title);
+                Assert.Equal("custom-editor", type.CustomEditors[0].Component);
+                Assert.Equal("fas fa-fish", type.CustomEditors[0].Icon);
+            }
+        }
+
+        [Fact]
+        public async Task AddSimplePostType()
+        {
+            using (var api = CreateApi())
+            {
+                var builder = new PostTypeBuilder(api)
+                    .AddType(typeof(SimplePostType));
+                builder.Build();
+
+                var type = await api.PostTypes.GetByIdAsync("Simple");
+
+                Assert.NotNull(type);
+                Assert.Equal(1, type.Regions.Count);
+                Assert.Equal("Body", type.Regions[0].Id);
+                Assert.Equal(1, type.Regions[0].Fields.Count);
+            }
+        }
+
+        [Fact]
+        public async Task AddComplexPostType()
+        {
+            using (var api = CreateApi())
+            {
+                var builder = new PostTypeBuilder(api)
+                    .AddType(typeof(ComplexPostType));
+                builder.Build();
+
+                var type = await api.PostTypes.GetByIdAsync("Complex");
+
+                Assert.NotNull(type);
+                Assert.Equal(2, type.Regions.Count);
+
+                Assert.Equal("Slider", type.Regions[0].Id);
+                Assert.Equal("Intro", type.Regions[0].Title);
+                Assert.True(type.Regions[0].Collection);
+                Assert.Equal(1, type.Regions[0].Fields.Count);
+
+                Assert.Equal("Content", type.Regions[1].Id);
+                Assert.Equal("Main content", type.Regions[1].Title);
+                Assert.False(type.Regions[1].Collection);
+                Assert.Equal(2, type.Regions[1].Fields.Count);
+
+                Assert.Equal(1, type.Routes.Count);
+                Assert.Equal("/complex", type.Routes[0]);
+
+                Assert.Equal(1, type.CustomEditors.Count);
+                Assert.Equal("Custom Editor", type.CustomEditors[0].Title);
+                Assert.Equal("custom-editor", type.CustomEditors[0].Component);
+                Assert.Equal("fas fa-fish", type.CustomEditors[0].Icon);
             }
         }
 

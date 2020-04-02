@@ -13,12 +13,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Piranha.Data;
-using Piranha.Data.EF.SQLite;
-using Piranha.Repositories;
+using Piranha.Extend.Blocks;
 using Piranha.Services;
 
 namespace Piranha.Tests
@@ -68,6 +65,36 @@ namespace Piranha.Tests
                 {
                     await api.Media.DeleteAsync(item);
                 }
+            }
+        }
+
+        [Fact]
+        public void AudioBlockNoTitle()
+        {
+            var block = new AudioBlock();
+            var title = block.GetTitle();
+
+            Assert.Equal("No audio selected", title);
+        }
+
+        [Fact]
+        public async Task AudioBlockHasTitle()
+        {
+            using (var api = CreateApi())
+            {
+                var media = await api.Media.GetByIdAsync(image1Id);
+
+                var block = new AudioBlock()
+                {
+                    Body = new Extend.Fields.AudioField
+                    {
+                        Id = media.Id,
+                        Media = media
+                    }
+                };
+                var title = block.GetTitle();
+
+                Assert.Equal("HLD_Screenshot_01_mech_1080.png", title);
             }
         }
 
@@ -204,8 +231,6 @@ namespace Piranha.Tests
 
             Assert.Equal(typeof(Extend.Blocks.ImageBlock), models.First().GetType());
             Assert.Null(((Extend.Blocks.ImageBlock)models[0]).Body.Media);
-            //Assert.NotNull(((Extend.Blocks.ImageBlock)models[0]).Body.Media);
-            //Assert.Equal("HLD_Screenshot_01_mech_1080.png", ((Extend.Blocks.ImageBlock)models[0]).Body.Media.Filename);
         }
 
         [Fact]

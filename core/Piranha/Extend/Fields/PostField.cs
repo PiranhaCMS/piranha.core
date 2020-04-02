@@ -10,8 +10,6 @@
 
 using System;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Piranha.Services;
 
 namespace Piranha.Extend.Fields
 {
