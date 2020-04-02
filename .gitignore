@@ -35,6 +35,9 @@ bld/
 [Bb]in/
 [Oo]bj/
 
+# Test results
+*opencover.xml
+
 # Mac OSX temp files
 ._*
 *.DS_Store
@@ -155,7 +158,7 @@ publish/
 # Publish Web Output
 *.[Pp]ublish.xml
 *.azurePubxml
-# TODO: Comment the next line if you want to checkin your web deploy settings 
+# TODO: Comment the next line if you want to checkin your web deploy settings
 # but database connection strings (with potential passwords) will be unencrypted
 *.pubxml
 *.publishproj

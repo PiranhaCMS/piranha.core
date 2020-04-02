@@ -30,7 +30,7 @@ namespace Piranha.Extend.Blocks
         /// <returns>The title</returns>
         public override string GetTitle()
         {
-            if (Body.Value != null)
+            if (Body?.Value != null)
             {
                 var title = Regex.Replace(Body.Value, @"<[^>]*>", "");
 

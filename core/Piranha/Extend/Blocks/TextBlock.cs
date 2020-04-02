@@ -29,7 +29,7 @@ namespace Piranha.Extend.Blocks
         /// <returns>The title</returns>
         public override string GetTitle()
         {
-            if (Body.Value != null)
+            if (Body?.Value != null)
             {
                 return Body.Value;
             }

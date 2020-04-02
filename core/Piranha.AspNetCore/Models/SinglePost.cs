@@ -17,6 +17,7 @@ using Piranha.Models;
 namespace Piranha.AspNetCore.Models
 {
     [Obsolete("SinglePostModel<T> has been renamed to SinglePost<T>")]
+    [NoCoverage]
     public class SinglePostModel<T> : SinglePost<T> where T : PostBase
     {
         /// <summary>

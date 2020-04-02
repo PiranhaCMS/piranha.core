@@ -17,6 +17,7 @@ using Piranha.Models;
 namespace Piranha.AspNetCore.Models
 {
     [Obsolete("SinglePageModel<T> has been renamed to SinglePage<T>")]
+    [NoCoverage]
     public class SinglePageModel<T> : SinglePage<T> where T : PageBase
     {
         /// <summary>

@@ -36,8 +36,9 @@ namespace Piranha.Tests.AttributeBuilder
             public class BodyRegion
             {
                 [Field]
+                [FieldDescription("This is the title")]
                 public Extend.Fields.TextField Title { get; set; }
-                [Field]
+                [Field(Title = "Main Body")]
                 public Extend.Fields.TextField Body { get; set; }
             }
 
@@ -45,6 +46,7 @@ namespace Piranha.Tests.AttributeBuilder
             public IList<Extend.Fields.TextField> Slider { get; set; }
 
             [Region(Title = "Main content")]
+            [RegionDescription("This is where you enter the main content")]
             public BodyRegion Content { get; set; }
         }
 
@@ -168,8 +170,13 @@ namespace Piranha.Tests.AttributeBuilder
 
                 Assert.Equal("Content", type.Regions[1].Id);
                 Assert.Equal("Main content", type.Regions[1].Title);
+                Assert.Equal("This is where you enter the main content", type.Regions[1].Description);
                 Assert.False(type.Regions[1].Collection);
                 Assert.Equal(2, type.Regions[1].Fields.Count);
+                Assert.Equal("Title", type.Regions[1].Fields[0].Id);
+                Assert.Equal("This is the title", type.Regions[1].Fields[0].Description);
+                Assert.Equal("Body", type.Regions[1].Fields[1].Id);
+                Assert.Equal("Main Body", type.Regions[1].Fields[1].Title);
 
                 Assert.Equal(1, type.Routes.Count);
                 Assert.Equal("/complex", type.Routes[0]);

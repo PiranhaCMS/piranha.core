@@ -99,6 +99,133 @@ namespace Piranha.Tests
         }
 
         [Fact]
+        public void ImageBlockNoTitle()
+        {
+            var block = new ImageBlock();
+            var title = block.GetTitle();
+
+            Assert.Equal("No image selected", title);
+        }
+
+        [Fact]
+        public async Task ImageBlockHasTitle()
+        {
+            using (var api = CreateApi())
+            {
+                var media = await api.Media.GetByIdAsync(image1Id);
+
+                var block = new ImageBlock()
+                {
+                    Body = new Extend.Fields.ImageField
+                    {
+                        Id = media.Id,
+                        Media = media
+                    }
+                };
+                var title = block.GetTitle();
+
+                Assert.Equal("HLD_Screenshot_01_mech_1080.png", title);
+            }
+        }
+
+        [Fact]
+        public void HtmlBlockNoTitle()
+        {
+            var block = new HtmlBlock();
+            var title = block.GetTitle();
+
+            Assert.Equal("Empty", title);
+        }
+
+        [Fact]
+        public void HtmlBlockHasTitle()
+        {
+            var block = new HtmlBlock()
+            {
+                Body = new Extend.Fields.HtmlField
+                {
+                    Value = "<p>Lorem ipsum</p>"
+                }
+            };
+            var title = block.GetTitle();
+
+            Assert.Equal("Lorem ipsum", title);
+        }
+
+        [Fact]
+        public void HtmlBlockHasLongTitle()
+        {
+            var block = new HtmlBlock()
+            {
+                Body = new Extend.Fields.HtmlField
+                {
+                    Value = "<p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Maecenas faucibus mollis interdum. Donec id elit non mi porta gravida at eget metus. Nulla vitae elit libero, a pharetra augue. Sed posuere consectetur est at lobortis. Etiam porta sem malesuada magna mollis euismod.</p>"
+                }
+            };
+            var title = block.GetTitle();
+
+            Assert.Equal(43, title.Length);
+            Assert.EndsWith("...", title);
+        }
+
+        [Fact]
+        public void QuoteBlockNoTitle()
+        {
+            var block = new QuoteBlock();
+            var title = block.GetTitle();
+
+            Assert.Equal("Empty", title);
+        }
+
+        [Fact]
+        public void QuoteBlockHasTitle()
+        {
+            var block = new QuoteBlock()
+            {
+                Body = new Extend.Fields.TextField
+                {
+                    Value = "To be or not to be"
+                }
+            };
+            var title = block.GetTitle();
+
+            Assert.Equal("To be or not to be", title);
+        }
+
+        [Fact]
+        public void SeparatorBlockTitle()
+        {
+            var block = new SeparatorBlock();
+            var title = block.GetTitle();
+
+            Assert.Equal("----", title);
+        }
+
+        [Fact]
+        public void TextBlockNoTitle()
+        {
+            var block = new TextBlock();
+            var title = block.GetTitle();
+
+            Assert.Equal("Empty", title);
+        }
+
+        [Fact]
+        public void TextBlockHasTitle()
+        {
+            var block = new TextBlock()
+            {
+                Body = new Extend.Fields.TextField
+                {
+                    Value = "Lorem ipsum"
+                }
+            };
+            var title = block.GetTitle();
+
+            Assert.Equal("Lorem ipsum", title);
+        }
+
+        [Fact]
         public void DeserializeHtmlBlock() {
             var blocks = new List<Block>();
             blocks.Add(new Block

@@ -113,6 +113,7 @@ namespace Piranha.AspNetCore.Services
         /// <typeparam name="T">The model type</typeparam>
         /// <returns>The page model</returns>
         [Obsolete("GetPage<T> has been renamed to GetPageAsync<T>")]
+        [NoCoverage]
         public Task<T> GetPage<T>(Guid id, ClaimsPrincipal user, bool draft = false) where T : PageBase
         {
             return GetPageAsync<T>(id, user, draft);
@@ -196,6 +197,7 @@ namespace Piranha.AspNetCore.Services
         /// <typeparam name="T">The model type</typeparam>
         /// <returns>The post model</returns>
         [Obsolete("GetPost<T> has been renamed to GetPostAsync<T>")]
+        [NoCoverage]
         public Task<T> GetPost<T>(Guid id, ClaimsPrincipal user, bool draft = false) where T : PostBase
         {
             return GetPostAsync<T>(id, user, draft);
