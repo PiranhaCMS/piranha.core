@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -22,7 +23,7 @@ using Piranha.Services;
 
 namespace Piranha.Tests
 {
-    public class Blocks : BaseTests
+    public class Blocks : BaseTestsAsync
     {
         private Guid image1Id;
         private IContentService<Page, PageField, Models.PageBase> contentService;
@@ -30,27 +31,23 @@ namespace Piranha.Tests
         /// <summary>
         /// Sets up and initializes the tests.
         /// </summary>
-        protected override void Init() {
-            services = new ServiceCollection()
-                .AddDbContext<SQLiteDb>(options =>
-                    options.UseSqlite("Filename=./piranha.tests.db"))
-                .AddPiranhaEF<SQLiteDb>()
-                .AddSingleton<IStorage, Local.FileStorage>()
-                .BuildServiceProvider();
-
-            using (var api = CreateApi()) {
+        public override async Task InitializeAsync()
+        {
+            using (var api = CreateApi())
+            {
                 Piranha.App.Init(api);
 
-                contentService = new ContentService<Page, PageField, Models.PageBase>(new ContentFactory(services), Piranha.Data.EF.Module.Mapper);
+                contentService = new ContentService<Page, PageField, Models.PageBase>(new ContentFactory(_services), Piranha.Data.EF.Module.Mapper);
 
                 // Add media
-                using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png")) {
+                using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png"))
+                {
                     var image1 = new Models.StreamMediaContent
                     {
                         Filename = "HLD_Screenshot_01_mech_1080.png",
                         Data = stream
                     };
-                    api.Media.Save(image1);
+                    await api.Media.SaveAsync(image1);
 
                     image1Id = image1.Id.Value;
                 }
@@ -61,12 +58,15 @@ namespace Piranha.Tests
         /// Cleans up any possible data and resources
         /// created by the test.
         /// </summary>
-        protected override void Cleanup() {
-            using (var api = CreateApi()) {
-                var media = api.Media.GetAll();
+        public override async Task DisposeAsync()
+        {
+            using (var api = CreateApi())
+            {
+                var media = await api.Media.GetAllByFolderIdAsync();
 
-                foreach (var item in media) {
-                    api.Media.Delete(item);
+                foreach (var item in media)
+                {
+                    await api.Media.DeleteAsync(item);
                 }
             }
         }
@@ -325,29 +325,6 @@ namespace Piranha.Tests
             Assert.Equal(typeof(Extend.Blocks.QuoteBlock).FullName, blocks[0].CLRType);
             Assert.Equal(typeof(Extend.Fields.TextField).FullName, blocks[0].Fields[0].CLRType);
             Assert.Equal("Lorem ipsum", blocks[0].Fields[0].Value);
-        }
-
-        private IApi CreateApi()
-        {
-            var factory = new ContentFactory(services);
-            var serviceFactory = new ContentServiceFactory(factory);
-
-            var db = GetDb();
-
-            return new Api(
-                factory,
-                new AliasRepository(db),
-                new ArchiveRepository(db),
-                new Piranha.Repositories.MediaRepository(db),
-                new PageRepository(db, serviceFactory),
-                new PageTypeRepository(db),
-                new ParamRepository(db),
-                new PostRepository(db, serviceFactory),
-                new PostTypeRepository(db),
-                new SiteRepository(db, serviceFactory),
-                new SiteTypeRepository(db),
-                storage: storage
-            );
         }
     }
 }

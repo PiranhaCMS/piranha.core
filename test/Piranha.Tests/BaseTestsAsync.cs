@@ -14,6 +14,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Piranha.Data.EF.SQLite;
+using Piranha.ImageSharp;
+using Piranha.Repositories;
+using Piranha.Services;
 
 namespace Piranha.Tests
 {
@@ -22,9 +25,11 @@ namespace Piranha.Tests
     /// </summary>
     public abstract class BaseTestsAsync : IAsyncLifetime
     {
-        protected IStorage storage = new Local.FileStorage("uploads/", "~/uploads/");
-        protected IServiceProvider services = new ServiceCollection()
+        protected IStorage _storage = new Local.FileStorage("uploads/", "~/uploads/");
+        protected IImageProcessor _processor = new ImageSharpProcessor();
+        protected IServiceProvider _services = new ServiceCollection()
             .BuildServiceProvider();
+        protected ICache _cache;
 
         public abstract Task InitializeAsync();
         public abstract Task DisposeAsync();
@@ -38,6 +43,34 @@ namespace Piranha.Tests
             builder.UseSqlite("Filename=./piranha.tests.db");
 
             return new SQLiteDb(builder.Options);
+        }
+
+        /// <summary>
+        /// Creates a new api.
+        /// </summary>
+        protected virtual IApi CreateApi()
+        {
+            var factory = new ContentFactory(_services);
+            var serviceFactory = new ContentServiceFactory(factory);
+
+            var db = GetDb();
+
+            return new Api(
+                factory,
+                new AliasRepository(db),
+                new ArchiveRepository(db),
+                new Piranha.Repositories.MediaRepository(db),
+                new PageRepository(db, serviceFactory),
+                new PageTypeRepository(db),
+                new ParamRepository(db),
+                new PostRepository(db, serviceFactory),
+                new PostTypeRepository(db),
+                new SiteRepository(db, serviceFactory),
+                new SiteTypeRepository(db),
+                cache: _cache,
+                storage: _storage,
+                processor: _processor
+            );
         }
     }
 }

@@ -8,6 +8,7 @@
  *
  */
 
+using System;
 using System.Collections.Generic;
 using Piranha.Models;
 
@@ -19,6 +20,7 @@ namespace Piranha.Services
         /// Gets all available models.
         /// </summary>
         /// <returns>The available models</returns>
+        [Obsolete]
         public static IEnumerable<PageType> GetAll(this IPageTypeService service)
         {
             return service.GetAllAsync().GetAwaiter().GetResult();
@@ -30,6 +32,7 @@ namespace Piranha.Services
         /// <param name="service">The page type service</param>
         /// <param name="id">The unique i</param>
         /// <returns></returns>
+        [Obsolete]
         public static Models.PageType GetById(this IPageTypeService service, string id)
         {
             return service.GetByIdAsync(id).GetAwaiter().GetResult();
@@ -41,6 +44,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="service">The page type service</param>
         /// <param name="model">The model</param>
+        [Obsolete]
         public static void Save(this IPageTypeService service, PageType model)
         {
             service.SaveAsync(model).GetAwaiter().GetResult();
@@ -51,6 +55,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="service">The page type service</param>
         /// <param name="id">The unique id</param>
+        [Obsolete]
         public static void Delete(this IPageTypeService service, string id)
         {
             service.DeleteAsync(id).GetAwaiter().GetResult();
@@ -61,6 +66,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="service">The page type service</param>
         /// <param name="model">The model</param>
+        [Obsolete]
         public static void Delete(this IPageTypeService service, PageType model)
         {
             service.DeleteAsync(model).GetAwaiter().GetResult();

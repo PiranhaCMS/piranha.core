@@ -9,28 +9,26 @@
  */
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 using Piranha.Models;
-using Piranha.Repositories;
-using Piranha.Services;
 
 namespace Piranha.Tests.Repositories
 {
     [Collection("Integration tests")]
-    public class PostTypesCached : PostTypes
+    public class PostTypeTestsCached : PostTypeTests
     {
-        protected override void Init() {
-            cache = new Cache.SimpleCache();
+        public override Task InitializeAsync()
+        {
+            _cache = new Cache.SimpleCache();
 
-            base.Init();
+            return base.InitializeAsync();
         }
     }
 
     [Collection("Integration tests")]
-    public class PostTypes : BaseTests
+    public class PostTypeTests : BaseTestsAsync
     {
-        #region Members
-        protected ICache cache;
         private readonly List<PostType> postTypes = new List<PostType>
         {
             new PostType
@@ -129,43 +127,54 @@ namespace Piranha.Tests.Repositories
                 }
             }
         };
-        #endregion
 
-        protected override void Init() {
-            using (var api = CreateApi()) {
-                api.PostTypes.Save(postTypes[0]);
-                api.PostTypes.Save(postTypes[3]);
-                api.PostTypes.Save(postTypes[4]);
+        public override async Task InitializeAsync()
+        {
+            using (var api = CreateApi())
+            {
+                await api.PostTypes.SaveAsync(postTypes[0]);
+                await api.PostTypes.SaveAsync(postTypes[3]);
+                await api.PostTypes.SaveAsync(postTypes[4]);
             }
         }
 
-        protected override void Cleanup() {
-            using (var api = CreateApi()) {
-                var postTypes = api.PostTypes.GetAll();
+        public override async Task DisposeAsync()
+        {
+            using (var api = CreateApi())
+            {
+                var postTypes = await api.PostTypes.GetAllAsync();
 
                 foreach (var p in postTypes)
-                    api.PostTypes.Delete(p);
+                {
+                    await api.PostTypes.DeleteAsync(p);
+                }
             }
         }
 
         [Fact]
-        public void IsCached() {
-            using (var api = CreateApi()) {
-                Assert.Equal(this.GetType() == typeof(PostTypesCached), ((Api)api).IsCached);
+        public void IsCached()
+        {
+            using (var api = CreateApi())
+            {
+                Assert.Equal(this.GetType() == typeof(PostTypeTestsCached), ((Api)api).IsCached);
             }
         }
 
         [Fact]
-        public void Add() {
-            using (var api = CreateApi()) {
-                api.PostTypes.Save(postTypes[1]);
+        public async Task Add()
+        {
+            using (var api = CreateApi())
+            {
+                await api.PostTypes.SaveAsync(postTypes[1]);
             }
         }
 
         [Fact]
-        public void GetAll() {
-            using (var api = CreateApi()) {
-                var models = api.PostTypes.GetAll();
+        public async Task GetAll()
+        {
+            using (var api = CreateApi())
+            {
+                var models = await api.PostTypes.GetAllAsync();
 
                 Assert.NotNull(models);
                 Assert.NotEmpty(models);
@@ -173,18 +182,22 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void GetNoneById() {
-            using (var api = CreateApi()) {
-                var none = api.PostTypes.GetById("none-existing-type");
+        public async Task GetNoneById()
+        {
+            using (var api = CreateApi())
+            {
+                var none = await api.PostTypes.GetByIdAsync("none-existing-type");
 
                 Assert.Null(none);
             }
         }
 
         [Fact]
-        public void GetById() {
-            using (var api = CreateApi()) {
-                var model = api.PostTypes.GetById(postTypes[0].Id);
+        public async Task GetById()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.PostTypes.GetByIdAsync(postTypes[0].Id);
 
                 Assert.NotNull(model);
                 Assert.Equal(postTypes[0].Regions[0].Fields[0].Id, model.Regions[0].Fields[0].Id);
@@ -192,62 +205,44 @@ namespace Piranha.Tests.Repositories
         }
 
         [Fact]
-        public void Update() {
-            using (var api = CreateApi()) {
-                var model = api.PostTypes.GetById(postTypes[0].Id);
+        public async Task Update()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.PostTypes.GetByIdAsync(postTypes[0].Id);
 
                 Assert.Null(model.Title);
 
                 model.Title = "Updated";
 
-                api.PostTypes.Save(model);
+                await api.PostTypes.SaveAsync(model);
             }
         }
 
         [Fact]
-        public void Delete() {
-            using (var api = CreateApi()) {
-                var model = api.PostTypes.GetById(postTypes[3].Id);
-
-                Assert.NotNull(model);
-
-                api.PostTypes.Delete(model);
-            }
-        }
-
-        [Fact]
-        public void DeleteById() {
-            using (var api = CreateApi()) {
-                var model = api.PostTypes.GetById(postTypes[4].Id);
-
-                Assert.NotNull(model);
-
-                api.PostTypes.Delete(model.Id);
-            }
-        }
-
-        private IApi CreateApi()
+        public async Task Delete()
         {
-            var factory = new ContentFactory(services);
-            var serviceFactory = new ContentServiceFactory(factory);
+            using (var api = CreateApi())
+            {
+                var model = await api.PostTypes.GetByIdAsync(postTypes[3].Id);
 
-            var db = GetDb();
+                Assert.NotNull(model);
 
-            return new Api(
-                factory,
-                new AliasRepository(db),
-                new ArchiveRepository(db),
-                new Piranha.Repositories.MediaRepository(db),
-                new PageRepository(db, serviceFactory),
-                new PageTypeRepository(db),
-                new ParamRepository(db),
-                new PostRepository(db, serviceFactory),
-                new PostTypeRepository(db),
-                new SiteRepository(db, serviceFactory),
-                new SiteTypeRepository(db),
-                cache: cache,
-                storage: storage
-            );
+                await api.PostTypes.DeleteAsync(model);
+            }
+        }
+
+        [Fact]
+        public async Task DeleteById()
+        {
+            using (var api = CreateApi())
+            {
+                var model = await api.PostTypes.GetByIdAsync(postTypes[4].Id);
+
+                Assert.NotNull(model);
+
+                await api.PostTypes.DeleteAsync(model.Id);
+            }
         }
     }
 }

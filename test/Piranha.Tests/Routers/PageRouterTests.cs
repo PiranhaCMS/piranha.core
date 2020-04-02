@@ -15,13 +15,11 @@ using Piranha.AttributeBuilder;
 using Piranha.Extend;
 using Piranha.Extend.Fields;
 using Piranha.Models;
-using Piranha.Repositories;
-using Piranha.Services;
 
 namespace Piranha.Tests.Routers
 {
     [Collection("Integration tests")]
-    public class Pages : BaseTestsAsync
+    public class PageRouterTests : BaseTestsAsync
     {
         private readonly Guid SITE1_ID = Guid.NewGuid();
         private readonly Guid SITE2_ID = Guid.NewGuid();
@@ -258,29 +256,6 @@ namespace Piranha.Tests.Routers
 
                 Assert.Null(response);
             }
-        }
-
-        private IApi CreateApi()
-        {
-            var factory = new ContentFactory(services);
-            var serviceFactory = new ContentServiceFactory(factory);
-
-            var db = GetDb();
-
-            return new Api(
-                factory,
-                new AliasRepository(db),
-                new ArchiveRepository(db),
-                new Piranha.Repositories.MediaRepository(db),
-                new PageRepository(db, serviceFactory),
-                new PageTypeRepository(db),
-                new ParamRepository(db),
-                new PostRepository(db, serviceFactory),
-                new PostTypeRepository(db),
-                new SiteRepository(db, serviceFactory),
-                new SiteTypeRepository(db),
-                storage: storage
-            );
         }
     }
 }

@@ -9,15 +9,14 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using Xunit;
 using Piranha.Models;
-using Piranha.Repositories;
-using Piranha.Services;
 
 namespace Piranha.Tests.Hooks
 {
     [Collection("Integration tests")]
-    public class Aliases : BaseTests
+    public class AliasHookTests : BaseTestsAsync
     {
         private const string ALIAS = "/alias-url";
         private readonly Guid SITE_ID = Guid.NewGuid();
@@ -29,7 +28,7 @@ namespace Piranha.Tests.Hooks
         public class AliasOnBeforeDeleteException : Exception {}
         public class AliasOnAfterDeleteException : Exception {}
 
-        protected override void Init()
+        public override async Task InitializeAsync()
         {
             using (var api = CreateApi())
             {
@@ -37,14 +36,14 @@ namespace Piranha.Tests.Hooks
                 Piranha.App.Init(api);
 
                 // Create site
-                api.Sites.Save(new Site
+                await api.Sites.SaveAsync(new Site
                 {
                     Id = SITE_ID,
                     Title = "Alias Hook Site"
                 });
 
                 // Create test alias
-                api.Aliases.Save(new Alias
+                await api.Aliases.SaveAsync(new Alias
                 {
                     Id = ID,
                     SiteId = SITE_ID,
@@ -54,44 +53,44 @@ namespace Piranha.Tests.Hooks
             }
         }
 
-        protected override void Cleanup()
+        public override async Task DisposeAsync()
         {
             using (var api = CreateApi())
             {
                 // Remove test data
-                var aliases = api.Aliases.GetAll();
+                var aliases = await api.Aliases.GetAllAsync();
 
                 foreach (var a in aliases)
                 {
-                    api.Aliases.Delete(a);
+                    await api.Aliases.DeleteAsync(a);
                 }
-                api.Sites.Delete(SITE_ID);
+                await api.Sites.DeleteAsync(SITE_ID);
             }
         }
 
         [Fact]
-        public void OnLoad()
+        public async Task OnLoad()
         {
             Piranha.App.Hooks.Alias.RegisterOnLoad(m => throw new AliasOnLoadException());
             using (var api = CreateApi())
             {
-                Assert.Throws<AliasOnLoadException>(() =>
+                await Assert.ThrowsAsync<AliasOnLoadException>(async () =>
                 {
-                    api.Aliases.GetById(ID);
+                    await api.Aliases.GetByIdAsync(ID);
                 });
             }
             Piranha.App.Hooks.Alias.Clear();
         }
 
         [Fact]
-        public void OnBeforeSave()
+        public async Task OnBeforeSave()
         {
             Piranha.App.Hooks.Alias.RegisterOnBeforeSave(m => throw new AliasOnBeforeSaveException());
             using (var api = CreateApi())
             {
-                Assert.Throws<AliasOnBeforeSaveException>(() =>
+                await Assert.ThrowsAsync<AliasOnBeforeSaveException>(async () =>
                 {
-                    api.Aliases.Save(new Alias
+                    await api.Aliases.SaveAsync(new Alias
                     {
                         SiteId = SITE_ID,
                         AliasUrl = "/my-first-alias",
@@ -103,14 +102,14 @@ namespace Piranha.Tests.Hooks
         }
 
         [Fact]
-        public void OnAfterSave()
+        public async Task OnAfterSave()
         {
             Piranha.App.Hooks.Alias.RegisterOnAfterSave(m => throw new AliasOnAfterSaveException());
             using (var api = CreateApi())
             {
-                Assert.Throws<AliasOnAfterSaveException>(() =>
+                await Assert.ThrowsAsync<AliasOnAfterSaveException>(async () =>
                 {
-                    api.Aliases.Save(new Alias
+                    await api.Aliases.SaveAsync(new Alias
                     {
                         SiteId = SITE_ID,
                         AliasUrl = "/my-second-alias",
@@ -122,54 +121,31 @@ namespace Piranha.Tests.Hooks
         }
 
         [Fact]
-        public void OnBeforeDelete()
+        public async Task OnBeforeDelete()
         {
             Piranha.App.Hooks.Alias.RegisterOnBeforeDelete(m => throw new AliasOnBeforeDeleteException());
             using (var api = CreateApi())
             {
-                Assert.Throws<AliasOnBeforeDeleteException>(() =>
+                await Assert.ThrowsAsync<AliasOnBeforeDeleteException>(async () =>
                 {
-                    api.Aliases.Delete(ID);
+                    await api.Aliases.DeleteAsync(ID);
                 });
             }
             Piranha.App.Hooks.Alias.Clear();
         }
 
         [Fact]
-        public void OnAfterDelete()
+        public async Task OnAfterDelete()
         {
             Piranha.App.Hooks.Alias.RegisterOnAfterDelete(m => throw new AliasOnAfterDeleteException());
             using (var api = CreateApi())
             {
-                Assert.Throws<AliasOnAfterDeleteException>(() =>
+                await Assert.ThrowsAsync<AliasOnAfterDeleteException>(async () =>
                 {
-                    api.Aliases.Delete(ID);
+                    await api.Aliases.DeleteAsync(ID);
                 });
             }
             Piranha.App.Hooks.Alias.Clear();
-        }
-
-        private IApi CreateApi()
-        {
-            var factory = new ContentFactory(services);
-            var serviceFactory = new ContentServiceFactory(factory);
-
-            var db = GetDb();
-
-            return new Api(
-                factory,
-                new AliasRepository(db),
-                new ArchiveRepository(db),
-                new Piranha.Repositories.MediaRepository(db),
-                new PageRepository(db, serviceFactory),
-                new PageTypeRepository(db),
-                new ParamRepository(db),
-                new PostRepository(db, serviceFactory),
-                new PostTypeRepository(db),
-                new SiteRepository(db, serviceFactory),
-                new SiteTypeRepository(db),
-                storage: storage
-            );
         }
     }
 }
