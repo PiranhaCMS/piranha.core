@@ -10,7 +10,7 @@
 
 namespace Piranha.Models
 {
-    public interface IDynamicModel
+    public interface IDynamicContent
     {
         /// <summary>
         /// Gets/sets the regions.

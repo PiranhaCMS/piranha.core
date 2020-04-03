@@ -56,7 +56,7 @@ namespace Piranha.Services
             {
                 var modelType = typeof(T);
 
-                if (!typeof(Models.IDynamicModel).IsAssignableFrom(modelType) && !typeof(Models.IContentInfo).IsAssignableFrom(modelType))
+                if (!typeof(Models.IDynamicContent).IsAssignableFrom(modelType) && !typeof(Models.IContentInfo).IsAssignableFrom(modelType))
                 {
                     modelType = Type.GetType(type.CLRType);
 
@@ -344,9 +344,9 @@ namespace Piranha.Services
         {
             object value = null;
 
-            if (model is Models.IDynamicModel)
+            if (model is Models.IDynamicContent dynamicModel)
             {
-                value = ((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId];
+                value = ((IDictionary<string, object>)dynamicModel.Regions)[regionId];
             }
             else
             {
@@ -366,9 +366,9 @@ namespace Piranha.Services
         /// <returns>The region</returns>
         private object GetRegion<T>(T model, string regionId) where T : Models.ContentBase
         {
-            if (model is Models.IDynamicModel)
+            if (model is Models.IDynamicContent dynamicModel)
             {
-                return ((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId];
+                return ((IDictionary<string, object>)dynamicModel.Regions)[regionId];
             }
             else
             {
@@ -385,9 +385,9 @@ namespace Piranha.Services
         /// <returns>If the region exists</returns>
         private bool HasRegion<T>(T model, string regionId) where T : Models.ContentBase
         {
-            if (model is Models.IDynamicModel)
+            if (model is Models.IDynamicContent dynamicModel)
             {
-                return ((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions).ContainsKey(regionId);
+                return ((IDictionary<string, object>)dynamicModel.Regions).ContainsKey(regionId);
             }
             else
             {
@@ -473,9 +473,9 @@ namespace Piranha.Services
         /// <param name="field">The field</param>
         private void SetSimpleValue<T>(T model, string regionId, TField field) where T : Models.ContentBase
         {
-            if (model is Models.IDynamicModel)
+            if (model is Models.IDynamicContent dynamicModel)
             {
-                ((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId] =
+                ((IDictionary<string, object>)dynamicModel.Regions)[regionId] =
                     DeserializeValue(field);
             }
             else
@@ -498,9 +498,9 @@ namespace Piranha.Services
         /// <param name="field">The field</param>
         private void AddSimpleValue<T>(T model, string regionId, TField field) where T : Models.ContentBase
         {
-            if (model is Models.IDynamicModel)
+            if (model is Models.IDynamicContent dynamicModel)
             {
-                ((IList)((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId]).Add(
+                ((IList)((IDictionary<string, object>)dynamicModel.Regions)[regionId]).Add(
                     DeserializeValue(field));
             }
             else
@@ -524,9 +524,9 @@ namespace Piranha.Services
         /// <param name="field">The field</param>
         private void SetComplexValue<T>(T model, string regionId, string fieldId, TField field) where T : Models.ContentBase
         {
-            if (model is Models.IDynamicModel)
+            if (model is Models.IDynamicContent dynamicModel)
             {
-                ((IDictionary<string, object>)((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId])[fieldId] =
+                ((IDictionary<string, object>)((IDictionary<string, object>)dynamicModel.Regions)[regionId])[fieldId] =
                     DeserializeValue(field);
             }
             else
@@ -561,9 +561,9 @@ namespace Piranha.Services
         {
             if (fields.Count > 0)
             {
-                if (model is Models.IDynamicModel)
+                if (model is Models.IDynamicContent dynamicModel)
                 {
-                    var list = (IList)((IDictionary<string, object>)((Models.IDynamicModel)(object)model).Regions)[regionId];
+                    var list = (IList)((IDictionary<string, object>)dynamicModel.Regions)[regionId];
                     var obj = await _factory.CreateDynamicRegionAsync(contentType, regionId);
 
                     foreach (var field in fields)

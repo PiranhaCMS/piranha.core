@@ -906,9 +906,9 @@ namespace Piranha.Services
             if (model != null)
             {
                 // Initialize model
-                if (typeof(IDynamicModel).IsAssignableFrom(model.GetType()))
+                if (model is IDynamicContent dynamicModel)
                 {
-                    await _factory.InitDynamicAsync((DynamicPage)model, App.PageTypes.GetById(model.TypeId)).ConfigureAwait(false);
+                    await _factory.InitDynamicAsync(dynamicModel, App.PageTypes.GetById(model.TypeId)).ConfigureAwait(false);
                 }
                 else
                 {

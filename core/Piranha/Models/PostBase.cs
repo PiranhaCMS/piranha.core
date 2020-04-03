@@ -19,7 +19,7 @@ namespace Piranha.Models
     /// Base class for post models.
     /// </summary>
     [Serializable]
-    public abstract class PostBase : RoutedContentBase, IBlockModel, IMeta, ICommentModel
+    public abstract class PostBase : RoutedContentBase, IBlockContent, IMeta, ICommentModel
     {
         /// <summary>
         /// Gets/sets the blog page id.

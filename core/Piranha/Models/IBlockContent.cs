@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace Piranha.Models
 {
-    public interface IBlockModel
+    public interface IBlockContent
     {
         /// <summary>
         /// Gets/sets the blocks.

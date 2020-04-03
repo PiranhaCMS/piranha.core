@@ -33,7 +33,7 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the parent model.
         /// </summary>
-        public IDynamicModel Model { get; set; }
+        public IDynamicContent Model { get; set; }
 
         /// <summary>
         /// Adds a new item to the region list

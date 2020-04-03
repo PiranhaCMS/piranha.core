@@ -922,9 +922,9 @@ namespace Piranha.Services
                 model.Permalink = $"/{blog.Slug}/{model.Slug}";
 
                 // Initialize model
-                if (typeof(IDynamicModel).IsAssignableFrom(model.GetType()))
+                if (model is IDynamicContent dynamicModel)
                 {
-                    await _factory.InitDynamicAsync((DynamicPost)model, App.PostTypes.GetById(model.TypeId));
+                    await _factory.InitDynamicAsync(dynamicModel, App.PostTypes.GetById(model.TypeId));
                 }
                 else
                 {
