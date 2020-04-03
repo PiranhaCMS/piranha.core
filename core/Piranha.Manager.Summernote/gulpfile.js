@@ -39,7 +39,7 @@ var scripts = [
     "assets/src/piranha.editor.js"
 ];
 
-gulp.task("min", function () {
+gulp.task("min", function (done) {
     // Copy resources
     var n;
     for (n = 0; n < resources.length; n++)
@@ -71,10 +71,11 @@ gulp.task("min", function () {
             suffix: ".min"
         }))
         .pipe(gulp.dest("."));
+    done();
 });
 
 //
 // Default tasks
 //
-gulp.task("serve", ["min"]);
-gulp.task("default", ["serve"]);
+gulp.task("serve", gulp.series("min"));
+gulp.task("default", gulp.series("serve"));

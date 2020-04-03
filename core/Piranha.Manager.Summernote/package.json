@@ -6,7 +6,7 @@
   "author": "Håkan Edling",
   "license": "MIT",
   "devDependencies": {
-    "gulp": "3.9.1",
+    "gulp": "^4.0.2",
     "gulp-concat": "2.6.1",
     "gulp-cssmin": "0.2.0",
     "gulp-sass": "^4.0.2",
