@@ -43,12 +43,12 @@
     <value>Wyloguj</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>Comments</value>
+    <value>Komentarze</value>
   </data>
   <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
+    <value>Role</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>Użytkownicy</value>
   </data>
 </root>
