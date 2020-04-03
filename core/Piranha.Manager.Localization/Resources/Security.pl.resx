@@ -13,43 +13,43 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Username is used by another user." xml:space="preserve">
-    <value>Username is used by another user.</value>
+    <value>Nazwa użytkownika jest używana przez innego użytkownika.</value>
   </data>
   <data name="Email address is used by another user." xml:space="preserve">
-    <value>Email address is used by another user.</value>
+    <value>Adres e-mail jest używany przez innego użytkownika.</value>
   </data>
   <data name="The user could not be found." xml:space="preserve">
-    <value>The user could not be found.</value>
+    <value>Użytkownik nie został znaleziony.</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>Adres e-mail jest obowiązkowy.</value>
   </data>
   <data name="The new passwords does not match." xml:space="preserve">
-    <value>The new passwords does not match.</value>
+    <value>Nowe hasła nie pasują.</value>
   </data>
   <data name="Password is mandatory when creating a new user." xml:space="preserve">
-    <value>Password is mandatory when creating a new user.</value>
+    <value>Hasło jest obowiązkowe podczas tworzenia nowego użytkownika.</value>
   </data>
   <data name="The user could not be saved." xml:space="preserve">
-    <value>The user could not be saved.</value>
+    <value>Nie można zapisać użytkownika.</value>
   </data>
   <data name="User is saved." xml:space="preserve">
-    <value>User is saved.</value>
+    <value>Użytkownik został zapisany.</value>
   </data>
   <data name="Are you sure you want to delete this user?" xml:space="preserve">
-    <value>Are you sure you want to delete this user?</value>
+    <value>Czy na pewno chcesz usunąć tego użytkownika?</value>
   </data>
   <data name="The user has been deleted." xml:space="preserve">
-    <value>The user has been deleted.</value>
+    <value>Użytkownik został usunięty.</value>
   </data>
   <data name="Can't delete yourself." xml:space="preserve">
-    <value>Can't delete yourself.</value>
+    <value>Nie można usunąć siebie.</value>
   </data>
 
   <data name="New password" xml:space="preserve">
-    <value>New password</value>
+    <value>Nowe hasło</value>
   </data>
   <data name="Confirm password" xml:space="preserve">
-    <value>Confirm password</value>
+    <value>Potwierdź hasło</value>
   </data>
 </root>
