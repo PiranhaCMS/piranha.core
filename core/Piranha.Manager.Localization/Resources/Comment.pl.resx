@@ -14,42 +14,42 @@
   </resheader>
 
   <data name="Approved" xml:space="preserve">
-    <value>Approved</value>
+    <value>Zatwierdzono</value>
   </data>
   <data name="ApprovedSingle" xml:space="preserve">
-    <value>Approved</value>
+    <value>Zatwierdzono</value>
   </data>
   <data name="Pending" xml:space="preserve">
-    <value>Pending</value>
+    <value>Oczekujące</value>
   </data>
   <data name="Comment" xml:space="preserve">
-    <value>Comment</value>
+    <value>Skomentuj</value>
   </data>
   <data name="Response to" xml:space="preserve">
-    <value>Response to</value>
+    <value>Odpowiedz do</value>
   </data>
   <data name="The comment was successfully approved" xml:space="preserve">
-    <value>The comment was successfully approved</value>
+    <value>Komentarz został pomyślnie zatwierdzony</value>
   </data>
   <data name="The comment was successfully unapproved" xml:space="preserve">
-    <value>The comment was successfully unapproved</value>
+    <value>Komentarz został pomyślnie odrzucony</value>
   </data>
   <data name="The comment was successfully deleted" xml:space="preserve">
-    <value>The comment was successfully deleted</value>
+    <value>Komentarz został pomyślnie usunięty</value>
   </data>
   <data name="Days allowed for commenting" xml:space="preserve">
-    <value>Days allowed for commenting</value>
+    <value>Dni dozwolone do komentowania</value>
   </data>
   <data name="Comments are not allowed." xml:space="preserve">
-    <value>Comments are not allowed.</value>
+    <value>Komentarze są niedozwolone.</value>
   </data>
   <data name="Comments are not allowed for unpublished content." xml:space="preserve">
-    <value>Comments are not allowed for unpublished content.</value>
+    <value>Komentarze nie są dozwolone dla nieopublikowanych treści.</value>
   </data>
   <data name="Comments are currently open." xml:space="preserve">
-    <value>Comments are currently open.</value>
+    <value>Komentarze są obecnie otwarte.</value>
   </data>
   <data name="Comments were closed" xml:space="preserve">
-    <value>Comments were closed</value>
+    <value>Komentarze zostały zamknięte</value>
   </data>
 </root>
