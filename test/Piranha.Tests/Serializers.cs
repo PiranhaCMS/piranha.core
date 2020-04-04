@@ -18,6 +18,13 @@ namespace Piranha.Tests
 {
     public class Serializers
     {
+        public enum ColorType
+        {
+            Red,
+            Green,
+            Blue
+        }
+
         [Fact]
         public SerializerManager Register() {
             var manager = new SerializerManager();
@@ -433,6 +440,103 @@ namespace Piranha.Tests
             {
                 Value = DateTime.Now
             }));
+        }
+
+        [Fact]
+        public void SerializePageField() {
+            var serializer = new PageFieldSerializer();
+            var pageId = Guid.NewGuid();
+
+            var str = serializer.Serialize(new PageField
+            {
+                Id = pageId
+            });
+
+            Assert.Equal(pageId.ToString(), str);
+        }
+
+        [Fact]
+        public void DeserializePageField() {
+            var serializer = new PageFieldSerializer();
+            var pageId = Guid.NewGuid();
+
+            var field = (PageField)serializer.Deserialize(pageId.ToString());
+
+            Assert.Equal(pageId, field.Id);
+        }
+
+        [Fact]
+        public void WrongInputPageField() {
+            var serializer = new PageFieldSerializer();
+
+            Assert.Throws<ArgumentException>(() => serializer.Serialize(new DateField
+            {
+                Value = DateTime.Now
+            }));
+        }
+
+        [Fact]
+        public void SerializePostField() {
+            var serializer = new PostFieldSerializer();
+            var postId = Guid.NewGuid();
+
+            var str = serializer.Serialize(new PostField
+            {
+                Id = postId
+            });
+
+            Assert.Equal(postId.ToString(), str);
+        }
+
+        [Fact]
+        public void DeserializePostField() {
+            var serializer = new PostFieldSerializer();
+            var postId = Guid.NewGuid();
+
+            var field = (PostField)serializer.Deserialize(postId.ToString());
+
+            Assert.Equal(postId, field.Id);
+        }
+
+        [Fact]
+        public void WrongInputPostField() {
+            var serializer = new PostFieldSerializer();
+
+            Assert.Throws<ArgumentException>(() => serializer.Serialize(new DateField
+            {
+                Value = DateTime.Now
+            }));
+        }
+
+        [Fact]
+        public void SerializeSelectField() {
+            var serializer = new SelectFieldSerializer<SelectField<ColorType>>();
+
+            var str = serializer.Serialize(new SelectField<ColorType>
+            {
+                EnumValue = ColorType.Green.ToString()
+            });
+
+            Assert.Equal("Green", str);
+        }
+
+        [Fact]
+        public void DeserializeSelectField() {
+            var serializer = new SelectFieldSerializer<SelectField<ColorType>>();
+
+            var field = (SelectField<ColorType>)serializer.Deserialize("Blue");
+
+            Assert.Equal(ColorType.Blue.ToString(), field.EnumValue);
+        }
+
+        [Fact]
+        public void DeserializeEmptySelectField() {
+            var serializer = new SelectFieldSerializer<SelectField<ColorType>>();
+
+            var field = (SelectField<ColorType>)serializer.Deserialize(null);
+
+            // Default value of the enum sequence
+            Assert.Equal("Red", field.EnumValue);
         }
     }
 }
