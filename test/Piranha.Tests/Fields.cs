@@ -648,6 +648,10 @@ namespace Piranha.Tests
 
             Piranha.Extend.Fields.NumberField field = number;
             Assert.Equal(number, field.Value);
+
+            int? converted = field;
+            Assert.True(converted.HasValue);
+            Assert.Equal(25, converted.Value);
         }
 
         [Fact]

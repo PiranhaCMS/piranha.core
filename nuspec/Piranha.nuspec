@@ -3,9 +3,9 @@
   <metadata>
     <id>Piranha</id>
 		<title>Piranha</title>
-    <version>8.1.0</version>
-    <authors>Håkan Edling</authors>
-    <owners>Håkan Edling</owners>
+    <version>8.2.0</version>
+    <authors>Piranha CMS</authors>
+    <owners>Piranha CMS</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Core package for Piranha CMS for .NET Core.</description>
     <copyright>Copyright (c) .NET Foundation and Contributors</copyright>

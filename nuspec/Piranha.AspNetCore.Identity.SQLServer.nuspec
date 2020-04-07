@@ -3,7 +3,7 @@
   <metadata>
     <id>Piranha.AspNetCore.Identity.SQLServer</id>
     <title>Piranha AspNetCore Identity SQLServer</title>
-    <version>8.1.0</version>
+    <version>8.2.0</version>
     <authors>Piranha CMS</authors>
     <owners>Piranha CMS</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
