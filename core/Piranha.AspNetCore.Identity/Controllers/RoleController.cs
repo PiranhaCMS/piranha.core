@@ -26,7 +26,8 @@ namespace Piranha.AspNetCore.Identity.Controllers
         {
             _db = db;
         }
-
+        
+        [HttpGet]
         [Route("/manager/roles")]
         [Authorize(Policy = Permissions.Roles)]
         public IActionResult List()
@@ -34,6 +35,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
             return View(RoleListModel.Get(_db));
         }
 
+        [HttpGet]
         [Route("/manager/role/{id:Guid}")]
         [Authorize(Policy = Permissions.RolesEdit)]
         public IActionResult Edit(Guid id)
@@ -41,6 +43,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
             return View("Edit", RoleEditModel.GetById(_db, id));
         }
 
+        [HttpGet]
         [Route("/manager/role")]
         [Authorize(Policy = Permissions.RolesAdd)]
         public IActionResult Add()
@@ -63,6 +66,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
             return View("Edit", model);
         }
 
+        [HttpGet]
         [Route("/manager/role/delete")]
         [Authorize(Policy = Permissions.RolesDelete)]
         public IActionResult Delete(Guid id)
