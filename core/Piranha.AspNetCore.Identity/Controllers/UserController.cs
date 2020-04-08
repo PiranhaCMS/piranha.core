@@ -50,6 +50,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
         /// <summary>
         /// Gets the list view with the currently available users.
         /// </summary>
+        [HttpGet]
         [Route("/manager/users")]
         [Authorize(Policy = Permissions.Users)]
         public IActionResult List()
@@ -60,6 +61,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
         /// <summary>
         /// Gets the list view with the currently available users.
         /// </summary>
+        [HttpGet]
         [Route("/manager/users/list")]
         [Authorize(Policy = Permissions.Users)]
         public UserListModel Get()
@@ -71,6 +73,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
         /// Gets the edit view for an existing user.
         /// </summary>
         /// <param name="id">The user id</param>
+        [HttpGet]
         [Route("/manager/user/{id:Guid?}")]
         [Authorize(Policy = Permissions.UsersEdit)]
         public IActionResult Edit(Guid id)
@@ -83,6 +86,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
         /// Gets the edit view for an existing user.
         /// </summary>
         /// <param name="id">The user id</param>
+        [HttpGet]
         [Route("/manager/user/edit/{id:Guid}")]
         [Authorize(Policy = Permissions.UsersEdit)]
         public UserEditModel Get(Guid id)
@@ -94,6 +98,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
         /// <summary>
         /// Gets the edit view for a new user.
         /// </summary>
+        [HttpGet]
         [Route("/manager/user/add")]
         [Authorize(Policy = Permissions.UsersEdit)]
         public UserEditModel Add()
@@ -193,6 +198,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
         /// Deletes the user with the given id.
         /// </summary>
         /// <param name="id">The user id</param>
+        [HttpGet]
         [Route("/manager/user/delete/{id:Guid}")]
         [Authorize(Policy = Permissions.UsersSave)]
         public async Task<IActionResult> Delete(Guid id)

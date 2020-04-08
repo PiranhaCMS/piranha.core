@@ -44,6 +44,7 @@ namespace MvcWeb.Controllers
         /// <param name="page">The optional page</param>
         /// <param name="category">The optional category</param>
         /// <param name="tag">The optional tag</param>
+        [HttpGet]
         [Route("archive")]
         public async Task<IActionResult> Archive(Guid id, int? year = null, int? month = null, int? page = null,
             Guid? category = null, Guid? tag = null)
@@ -58,6 +59,7 @@ namespace MvcWeb.Controllers
         /// Gets the page with the given id.
         /// </summary>
         /// <param name="id">The unique page id</param>
+        [HttpGet]
         [Route("page")]
         public async Task<IActionResult> Page(Guid id, bool draft = false)
         {
@@ -70,6 +72,7 @@ namespace MvcWeb.Controllers
         /// Gets the page with the given id.
         /// </summary>
         /// <param name="id">The unique page id</param>
+        [HttpGet]
         [Route("pagewide")]
         public async Task<IActionResult> PageWide(Guid id, bool draft = false)
         {
@@ -83,6 +86,7 @@ namespace MvcWeb.Controllers
         /// </summary>
         /// <param name="id">The unique post id</param>
         ///
+        [HttpGet]
         [Route("post")]
         public async Task<IActionResult> Post(Guid id, bool draft = false)
         {
@@ -96,6 +100,7 @@ namespace MvcWeb.Controllers
         /// </summary>
         /// <param name="id">The page id</param>
         /// <param name="startpage">If this is the startpage of the site</param>
+        [HttpGet]
         [Route("teaserpage")]
         public async Task<IActionResult> TeaserPage(Guid id, bool startpage = false, bool draft = false)
         {
