@@ -20,7 +20,7 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     <dependencies>
       <group targetFramework="netcoreapp3.1">
         <dependency id="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" version="3.1.0" />
-        <dependency id="Piranha" version="[8.1.0,9.0.0)" />
+        <dependency id="Piranha" version="[8.2.0,9.0.0)" />
         <dependency id="XSitemap" version="2.0.7" />
       </group>
     </dependencies>

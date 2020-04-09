@@ -19,7 +19,7 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework="netstandard2.0">
-        <dependency id="Piranha" version="[8.1.0,9.0.0)" />
+        <dependency id="Piranha" version="[8.2.0,9.0.0)" />
         <dependency id="Microsoft.Azure.KeyVault.Core" version="3.0.4" />
         <dependency id="Microsoft.Azure.Storage.Blob" version="11.1.0" />
       </group>

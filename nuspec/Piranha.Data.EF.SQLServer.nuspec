@@ -19,8 +19,8 @@ https://github.com/piranhacms/piranha.core/wiki/changelog
     </releaseNotes>
     <dependencies>
       <group targetFramework="netstandard2.0">
-        <dependency id="Piranha" version="[8.1.0,9.0.0)" />
-        <dependency id="Piranha.Data.EF" version="[8.1.2,9.0.0)" />
+        <dependency id="Piranha" version="[8.2.0,9.0.0)" />
+        <dependency id="Piranha.Data.EF" version="[8.2.0,9.0.0)" />
         <dependency id="Microsoft.EntityFrameworkCore.SqlServer" version="3.1.0" />
       </group>
     </dependencies>
