@@ -35,7 +35,7 @@ namespace Piranha.Extend.Fields
         /// Gets/sets the related media object.
         /// </summary>
         /// [JsonIgnore]
-        public Models.Media Media { get; set; }
+        public Models.Media Media { get; internal set; }
 
         /// <summary>
         /// Gets if the field has a media object available.

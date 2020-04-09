@@ -88,10 +88,11 @@ namespace Piranha.Tests
                 {
                     Body = new Extend.Fields.AudioField
                     {
-                        Id = media.Id,
-                        Media = media
+                        Id = media.Id
                     }
                 };
+                await block.Body.Init(api);
+
                 var title = block.GetTitle();
 
                 Assert.Equal("HLD_Screenshot_01_mech_1080.png", title);
@@ -118,10 +119,11 @@ namespace Piranha.Tests
                 {
                     Body = new Extend.Fields.ImageField
                     {
-                        Id = media.Id,
-                        Media = media
+                        Id = media.Id
                     }
                 };
+                await block.Body.Init(api);
+
                 var title = block.GetTitle();
 
                 Assert.Equal("HLD_Screenshot_01_mech_1080.png", title);
