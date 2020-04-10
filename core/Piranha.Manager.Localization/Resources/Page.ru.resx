@@ -76,6 +76,6 @@
     <value>Заголовок вашей страницы</value>
   </data>
   <data name="If comments should be enabled for this page" xml:space="preserve">
-    <value>If comments should be enabled for this page</value>
+    <value>Комментарии включены для этой страницы</value>
   </data>
 </root>
