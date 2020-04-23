@@ -275,7 +275,7 @@ namespace Piranha.AspNetCore
                             query.Append("&startpage=true");
                         }
 
-                        if (!pageType.IsArchive)
+                        if (!pageType.IsArchive || !_config.UseArchiveRouting)
                         {
                             if (HandleCache(context, site, page, appConfig.CacheExpiresPages))
                             {

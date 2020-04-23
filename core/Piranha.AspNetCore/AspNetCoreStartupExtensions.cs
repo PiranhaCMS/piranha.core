@@ -31,6 +31,7 @@ public static class AspNetCoreStartupExtensions
         var config = new PiranhaRouteConfig
         {
             UseAliasRouting = serviceBuilder.UseAliasRouting,
+            UseArchiveRouting = serviceBuilder.UseArchiveRouting,
             UsePageRouting = serviceBuilder.UsePageRouting,
             UsePostRouting = serviceBuilder.UsePostRouting,
             UseSiteRouting = serviceBuilder.UseSiteRouting,

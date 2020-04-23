@@ -22,6 +22,11 @@ namespace Piranha
         public bool UseAliasRouting { get; set; } = true;
 
         /// <summary>
+        /// Gets/sets if archive routing should be used.
+        /// </summary>
+        public bool UseArchiveRouting { get; set; } = true;
+
+        /// <summary>
         /// Gets/sets if page routing should be used.
         /// </summary>
         public bool UsePageRouting { get; set; } = true;
