@@ -13,24 +13,24 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add site" xml:space="preserve">
-    <value>Adicionar site</value>
+    <value>Add site</value>
   </data>
   <data name="Are you really sure?" xml:space="preserve">
-    <value>Você tem mesmo certeza?</value>
+    <value>Are you really sure?</value>
   </data>
   <data name="Edit site" xml:space="preserve">
-    <value>Editar site</value>
+    <value>Edit site</value>
   </data>
   <data name="Hostnames" xml:space="preserve">
     <value>Hostnames</value>
   </data>
   <data name="If this should be the default site of the installation." xml:space="preserve">
-    <value>Se este deve ser o site padrão da instalação.</value>
+    <value>If this should be the default site of the installation.</value>
   </data>
   <data name="Please type in the name of the site to confirm." xml:space="preserve">
-    <value>Por favor, digite o nome do site para confirmar.</value>
+    <value>Please type in the name of the site to confirm.</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
-    <value>Esta ação &lt;strong>não pode ser&lt;/strong> desfeita. Isto irá excluir permanentemente o site {{ title }} e todas as suas &lt;strong>páginas&lt;/strong> &lt;strong>arquivos&lt;/strong> e &lt;strong>posts&lt;/strong>.</value>
+    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the site {{ title }} and all of its &lt;strong>pages&lt;/strong>, &lt;strong>archives&lt;/strong> and &lt;strong>posts&lt;/strong>.</value>
   </data>
 </root>
