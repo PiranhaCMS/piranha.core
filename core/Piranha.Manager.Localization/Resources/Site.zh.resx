@@ -13,24 +13,24 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add site" xml:space="preserve">
-    <value>Add site</value>
+    <value>新增網站</value>
   </data>
   <data name="Are you really sure?" xml:space="preserve">
-    <value>Are you really sure?</value>
+    <value>是否確定要刪除嗎？</value>
   </data>
   <data name="Edit site" xml:space="preserve">
-    <value>Edit site</value>
+    <value>編輯網站</value>
   </data>
   <data name="Hostnames" xml:space="preserve">
-    <value>Hostnames</value>
+    <value>主機名稱</value>
   </data>
   <data name="If this should be the default site of the installation." xml:space="preserve">
-    <value>If this should be the default site of the installation.</value>
+    <value>設置為預設網站。</value>
   </data>
   <data name="Please type in the name of the site to confirm." xml:space="preserve">
-    <value>Please type in the name of the site to confirm.</value>
+    <value>請確認本網站的名稱。</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
-    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the site {{ title }} and all of its &lt;strong>pages&lt;/strong>, &lt;strong>archives&lt;/strong> and &lt;strong>posts&lt;/strong>.</value>
+    <value>這個動作&lt;strong>不能&lt;/strong>被回復，將永久刪除 {{ title }} 網站及所有&lt;strong>頁面&lt;/strong>、&lt;strong>存檔&lt;/strong>及&lt;strong>貼文&lt;/strong>內容。</value>
   </data>
 </root>
