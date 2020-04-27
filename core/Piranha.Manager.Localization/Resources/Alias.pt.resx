@@ -16,33 +16,33 @@
     <value>Aliases</value>
   </data>
   <data name="Add new alias" xml:space="preserve">
-    <value>Adicionar novo alias</value>
+    <value>Add new alias</value>
   </data>
   <data name="Alias URL" xml:space="preserve">
-    <value>URL do Alias</value>
+    <value>Alias URL</value>
   </data>
   <data name="Alias URL is mandatory." xml:space="preserve">
-    <value>A URL do alias é obrigatório.</value>
+    <value>Alias URL is mandatory.</value>
   </data>
   <data name="Redirect URL" xml:space="preserve">
-    <value>Redirecionar para URL</value>
+    <value>Redirect URL</value>
   </data>
   <data name="Redirect URL is mandatory." xml:space="preserve">
-    <value>Redirecionar a URL é obrigatório.</value>
+    <value>Redirect URL is mandatory.</value>
   </data>
   <data name="Permanent" xml:space="preserve">
-    <value>Permanente</value>
+    <value>Permanent</value>
   </data>
   <data name="Are you sure you want to delete this alias?" xml:space="preserve">
-    <value>Você tem certeza que deseja apagar esta alias?</value>
+    <value>Are you sure you want to delete this alias?</value>
   </data>
   <data name="If the redirect should be permanent" xml:space="preserve">
-    <value>Se o redirecionamento deve ser permanente</value>
+    <value>If the redirect should be permanent</value>
   </data>
   <data name="The alias was successfully added to the list" xml:space="preserve">
-    <value>O alias foi adicionado com sucesso à lista</value>
+    <value>The alias was successfully added to the list</value>
   </data>
   <data name="The alias was successfully deleted" xml:space="preserve">
-    <value>O alias foi excluído com sucesso da lista</value>
+    <value>The alias was successfully deleted</value>
   </data>
 </root>
