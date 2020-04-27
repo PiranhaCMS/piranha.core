@@ -72,49 +72,49 @@
   </data>
 
   <data name="Approve comments" xml:space="preserve">
-    <value>Approve comments</value>
+    <value>Подтверждать комментарии</value>
   </data>
   <data name="Close comments after" xml:space="preserve">
-    <value>Close comments after</value>
+    <value>Закрыть комментарии после</value>
   </data>
   <data name="Collapse block headers" xml:space="preserve">
-    <value>Collapse block headers</value>
+    <value>Свернуть заголовки блоков</value>
   </data>
   <data name="Collapse blocks" xml:space="preserve">
-    <value>Collapse blocks</value>
+    <value>Свернуть блоки</value>
   </data>
   <data name="Comments page size" xml:space="preserve">
-    <value>Comments page size</value>
+    <value>Размер страницы комментариев</value>
   </data>
   <data name="Enable page comments" xml:space="preserve">
-    <value>Enable page comments</value>
+    <value>Включить комментарии для страниц</value>
   </data>
   <data name="Enable post comments" xml:space="preserve">
-    <value>Enable post comments</value>
+    <value>Включить комментарии для поста</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
     <value>Manager list size</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If block group headers should be collapsed by default when opening a page or post in the manager.</value>
+    <value>Группы блоков должны быть свернуты по умолчанию при открытии страницы или поста в редакторе.</value>
   </data>
   <data name="If blocks should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If blocks should be collapsed by default when opening a page or post in the manager.</value>
+    <value>Блоки должны быть свернуты по умолчанию при открытии страницы или поста в редакторе.</value>
   </data>
   <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
-    <value>If comments should be approved by default. Please note that this can be overridden by third party moderation services.</value>
+    <value>Комментарии будут быть одобрены по умолчанию. Пожалуйста, обратите внимание, что это может быть переопределено сторонними сервисами модерации.</value>
   </data>
   <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages.</value>
+    <value>Комментарии должны быть включены для страниц по умолчанию. Пожалуйста, обратите внимание, что это может быть переопределено для отдельных страниц.</value>
   </data>
   <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
-    <value>If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts.</value>
+    <value>Комментарии должны быть включены для постов по умолчанию. Пожалуйста, обратите внимание, что это может быть переопределено для отдельных страниц.</value>
   </data>
   <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>The default page size when loading comments. Please note that this this can be overridden for specific pages.</value>
+    <value>Размер страницы по умолчанию при загрузке комментариев. Пожалуйста, обратите внимание, что это может быть переопределено для отдельных страниц.</value>
   </data>
   <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
-    <value>The number of days commenting should be open after publish date. A value of 0 means forever.</value>
+    <value>Количество дней после даты публикации, когда разрешено оставлять комментарии. Значение "0" означает навсегда.</value>
   </data>
   <data name="The page size for lists within the manager interface." xml:space="preserve">
     <value>The page size for lists within the manager interface.</value>

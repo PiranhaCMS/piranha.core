@@ -46,6 +46,6 @@
     <value>Заголовок вашего поста</value>
   </data>
   <data name="If comments should be enabled for this post" xml:space="preserve">
-    <value>If comments should be enabled for this post</value>
+    <value>Комментарии включены для этого поста</value>
   </data>
 </root>

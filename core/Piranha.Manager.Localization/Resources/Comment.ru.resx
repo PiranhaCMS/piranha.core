@@ -14,42 +14,42 @@
   </resheader>
 
   <data name="Approved" xml:space="preserve">
-    <value>Approved</value>
+    <value>Одобренные</value>
   </data>
   <data name="ApprovedSingle" xml:space="preserve">
-    <value>Approved</value>
+    <value>Одобрен</value>
   </data>
   <data name="Pending" xml:space="preserve">
-    <value>Pending</value>
+    <value>В ожидании</value>
   </data>
   <data name="Comment" xml:space="preserve">
-    <value>Comment</value>
+    <value>Комментарий</value>
   </data>
   <data name="Response to" xml:space="preserve">
-    <value>Response to</value>
+    <value>Ответ</value>
   </data>
   <data name="The comment was successfully approved" xml:space="preserve">
-    <value>The comment was successfully approved</value>
+    <value>Комментарий одобрен</value>
   </data>
   <data name="The comment was successfully unapproved" xml:space="preserve">
-    <value>The comment was successfully unapproved</value>
+    <value>Комментарий не был одобрен</value>
   </data>
   <data name="The comment was successfully deleted" xml:space="preserve">
-    <value>The comment was successfully deleted</value>
+    <value>Комментарий удален</value>
   </data>
   <data name="Days allowed for commenting" xml:space="preserve">
-    <value>Days allowed for commenting</value>
+    <value>Количество дней для комментирования</value>
   </data>
   <data name="Comments are not allowed." xml:space="preserve">
-    <value>Comments are not allowed.</value>
+    <value>Комментарии запрещены.</value>
   </data>
   <data name="Comments are not allowed for unpublished content." xml:space="preserve">
-    <value>Comments are not allowed for unpublished content.</value>
+    <value>Комментарии к неопубликованному контенту запрещены.</value>
   </data>
   <data name="Comments are currently open." xml:space="preserve">
-    <value>Comments are currently open.</value>
+    <value>Комментарии разрешены.</value>
   </data>
   <data name="Comments were closed" xml:space="preserve">
-    <value>Comments were closed</value>
+    <value>Комментарии отключены</value>
   </data>
 </root>

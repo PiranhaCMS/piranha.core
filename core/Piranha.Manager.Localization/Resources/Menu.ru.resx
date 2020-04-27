@@ -43,12 +43,12 @@
     <value>Выйти</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>Comments</value>
+    <value>Комментарии</value>
   </data>
   <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
+    <value>Роли</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>Пользователи</value>
   </data>
 </root>

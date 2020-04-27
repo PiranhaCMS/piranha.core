@@ -47,9 +47,9 @@
   </data>
 
   <data name="New password" xml:space="preserve">
-    <value>New password</value>
+    <value>Новый пароль</value>
   </data>
   <data name="Confirm password" xml:space="preserve">
-    <value>Confirm password</value>
+    <value>Подтверждение пароля</value>
   </data>
 </root>

@@ -118,7 +118,7 @@
     <value>Имя</value>
   </data>
   <data name="Name is mandatory." xml:space="preserve">
-    <value>Name is mandatory.</value>
+    <value>Имя является обязательным.</value>
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
     <value>Открывать внешние ссылки в новой вкладке</value>
@@ -202,7 +202,7 @@
     <value>Имя пользователя является обязательным.</value>
   </data>
   <data name="Title is mandatory." xml:space="preserve">
-    <value>Title is mandatory.</value>
+    <value>Заголовок является обязательным.</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Тип</value>
@@ -226,15 +226,15 @@
     <value>Archives and Comments</value>
   </data>
   <data name="Author" xml:space="preserve">
-    <value>Author</value>
+    <value>Автор</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>Comments</value>
+    <value>Комментарии</value>
   </data>
   <data name="Created" xml:space="preserve">
     <value>Created</value>
   </data>
   <data name="Username and/or password are incorrect." xml:space="preserve">
-    <value>Username and/or password are incorrect.</value>
+    <value>Неверное имя пользователя или пароль.</value>
   </data>
 </root>
