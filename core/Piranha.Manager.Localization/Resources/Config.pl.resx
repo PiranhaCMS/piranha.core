@@ -16,7 +16,7 @@
     <value>Konfiguracja</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>Hierarchiczne skróty strony</value>
+    <value>Hierarchiczne ścieżki strony</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
     <value>Czy skrót strony powinien zawierać skrót nadrzędny.</value>
@@ -93,7 +93,7 @@
     <value>Włącz komentarze postów</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
-    <value>Manager list size</value>
+    <value>Rozmiar listy menedżera</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
     <value>Czy nagłówki grupy bloków powinny być domyślnie zwinięte podczas otwierania strony lub postu w menedżerze.</value>
@@ -117,6 +117,6 @@
     <value>Liczba dni od publikacji w ciągu których komentowanie jest dozwolone. Wartość 0 oznacza na zawsze.</value>
   </data>
   <data name="The page size for lists within the manager interface." xml:space="preserve">
-    <value>The page size for lists within the manager interface.</value>
+    <value>Rozmiar strony listy w interfejsie menedżera.</value>
   </data>
 </root>
