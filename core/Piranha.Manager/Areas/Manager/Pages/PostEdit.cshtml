@@ -114,9 +114,9 @@
 
         <!-- Blocks -->
         <div class="card" :class="{ 'd-none': selectedRegion.uid != 'uid-blocks' }">
-            <div class="card-body mb-3">
+            <div class="card-body mb-3" v-if="usePrimaryImage || useExcerpt">
                 <div class="blocks">
-                    <div class="unsortable">
+                    <div class="unsortable" v-if="usePrimaryImage">
                         <div class="block image-block primary-image">
                             <div class="block-body has-media-picker rounded" :class="{ empty: primaryImage.id === null }">
                                 <img class="rounded" :src="primaryImageUrl">
@@ -141,7 +141,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="unsortable">
+                    <div class="unsortable" v-if="useExcerpt">
                         <div class="block text-block ingress">
                             <div class="block-body" :class="{ empty: isExcerptEmpty }">
                                 <p spellcheck="false" contenteditable="true" v-html="excerpt" v-on:blur="onExcerptBlur"></p>

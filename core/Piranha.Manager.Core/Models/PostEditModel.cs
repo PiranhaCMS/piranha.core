@@ -130,5 +130,17 @@ namespace Piranha.Manager.Models
         /// Gets/sets all of the available permissions.
         /// </summary>
         public IList<KeyValuePair<string, string>> Permissions { get; set; } = new List<KeyValuePair<string, string>>();
+
+        /// <summary>
+        /// Gets/sets if primary image should be used for the
+        /// post type. The default value is true.
+        /// </summary>
+        public bool UsePrimaryImage { get; set; } = true;
+
+        /// <summary>
+        /// Gets/sets if excerpt should be used for the
+        /// post type. The default value is true.
+        /// </summary>
+        public bool UseExcerpt { get; set; } = true;
     }
 }
