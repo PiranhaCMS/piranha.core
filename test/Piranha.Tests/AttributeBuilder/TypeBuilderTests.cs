@@ -57,7 +57,7 @@ namespace Piranha.Tests.AttributeBuilder
             public BodyRegion Content { get; set; }
         }
 
-        [PostType(Id = "Simple", Title = "Simple Post Type")]
+        [PostType(Id = "Simple", Title = "Simple Post Type", UseBlocks = false, UsePrimaryImage = false, UseExcerpt = false)]
         public class SimplePostType
         {
             [Region]
@@ -232,6 +232,9 @@ namespace Piranha.Tests.AttributeBuilder
                 var type = await api.PostTypes.GetByIdAsync("Simple");
 
                 Assert.NotNull(type);
+                Assert.False(type.UseBlocks);
+                Assert.False(type.UseExcerpt);
+                Assert.False(type.UsePrimaryImage);
                 Assert.Equal(1, type.Regions.Count);
                 Assert.Equal("Body", type.Regions[0].Id);
                 Assert.Equal(1, type.Regions[0].Fields.Count);
@@ -250,6 +253,9 @@ namespace Piranha.Tests.AttributeBuilder
                 var type = await api.PostTypes.GetByIdAsync("Complex");
 
                 Assert.NotNull(type);
+                Assert.True(type.UseBlocks);
+                Assert.True(type.UseExcerpt);
+                Assert.True(type.UsePrimaryImage);
                 Assert.Equal(2, type.Regions.Count);
 
                 Assert.Equal("Slider", type.Regions[0].Id);

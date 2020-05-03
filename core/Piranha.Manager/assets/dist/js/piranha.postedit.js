@@ -28,6 +28,8 @@ piranha.postedit = new Vue({
         regions: [],
         editors: [],
         useBlocks: true,
+        usePrimaryImage: true,
+        useExcerpt: true,
         permissions: [],
         primaryImage: {
             id: null,
@@ -99,6 +101,8 @@ piranha.postedit = new Vue({
             this.categories = model.categories;
             this.tags = model.tags;
             this.useBlocks = model.useBlocks;
+            this.usePrimaryImage = model.usePrimaryImage;
+            this.useExcerpt = model.useExcerpt;
             this.selectedCategory = model.selectedCategory;
             this.selectedTags = model.selectedTags;
             this.selectedRoute = model.selectedRoute;

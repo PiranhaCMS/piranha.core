@@ -117,7 +117,9 @@ namespace Piranha.AttributeBuilder
                         Id = attr.Id,
                         CLRType = type.GetTypeInfo().AssemblyQualifiedName,
                         Title = attr.Title,
-                        UseBlocks = attr.UseBlocks
+                        UseBlocks = attr.UseBlocks,
+                        UsePrimaryImage = attr.UsePrimaryImage,
+                        UseExcerpt = attr.UseExcerpt
                     };
 
                     // Get all post routes

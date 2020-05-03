@@ -450,6 +450,8 @@ namespace Piranha.Manager.Services
                 CommentCount = post.CommentCount,
                 State = post.GetState(isDraft),
                 UseBlocks = type.UseBlocks,
+                UsePrimaryImage = type.UsePrimaryImage,
+                UseExcerpt = type.UseExcerpt,
                 SelectedRoute = route == null ? null : new RouteModel
                 {
                     Title = route.Title,
