@@ -78,10 +78,10 @@
     <value>Luk kommentarer efter</value>
   </data>
   <data name="Collapse block headers" xml:space="preserve">
-    <value>Collapse block headers</value>
+    <value>Sammenfold blok headers</value>
   </data>
   <data name="Collapse blocks" xml:space="preserve">
-    <value>Collapse blocks</value>
+    <value>Sammenfold blokke</value>
   </data>
   <data name="Comments page size" xml:space="preserve">
     <value>Antal kommentarer pr. side</value>
@@ -96,10 +96,10 @@
     <value>Sidestørrelse i manager</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If block group headers should be collapsed by default when opening a page or post in the manager.</value>
+    <value>Aktivér for at sammenfolde blok headers som standard når en side eller et opslag åbnes i manageren.</value>
   </data>
   <data name="If blocks should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If blocks should be collapsed by default when opening a page or post in the manager.</value>
+    <value>Aktivér for at sammenfolde blokke som standard når en side eller et opslag åbnes i manageren.</value>
   </data>
   <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
     <value>Angiver om kommentarer skal godkendes som standard. Bemærk at dette kan omgås af tredjeparts modereringstjenester.</value>
