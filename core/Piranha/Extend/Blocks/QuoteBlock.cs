@@ -8,7 +8,6 @@
  *
  */
 
-using System;
 using Piranha.Extend.Fields;
 
 namespace Piranha.Extend.Blocks
@@ -25,8 +24,9 @@ namespace Piranha.Extend.Blocks
         public TextField Body { get; set; }
 
         /// <summary>
-        /// Gets the content that should be indexed for searching.
+        /// Gets the title of the block when used in a block group.
         /// </summary>
+        /// <returns>The title</returns>
         public override string GetTitle()
         {
             if (Body?.Value != null)
