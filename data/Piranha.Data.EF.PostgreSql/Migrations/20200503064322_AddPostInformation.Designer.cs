@@ -2,17 +2,18 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Piranha.Data.EF.PostgreSql;
 
-namespace Piranha.Data.EF.PostgreSql
+namespace Piranha.Data.EF.PostgreSql.Migrations
 {
-    [NoCoverage]
     [DbContext(typeof(PostgreSqlDb))]
-    partial class DbModelSnapshot : ModelSnapshot
+    [Migration("20200503064322_AddPostInformation")]
+    partial class AddPostInformation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
