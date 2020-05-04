@@ -20,7 +20,7 @@
         a {
             color: $gray-700;
             display: block;
-            padding: .35rem .25rem;
+            padding: .5rem;
 
             i {
                 color: $gray-600;
@@ -39,7 +39,11 @@
         }
 
         form {
-            padding: .15rem .25rem .09rem;
+            padding: .15rem .25rem .09rem .5rem;
+
+            i {
+                margin-top: .35rem;
+            }
         }
 
         &.active {

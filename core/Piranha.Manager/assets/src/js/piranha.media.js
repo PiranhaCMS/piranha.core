@@ -60,6 +60,13 @@ piranha.media = new Vue({
                 document.getElementById("folder-" + this.currentFolderId).focus();
             });
         },
+        editAddFolder: function () {
+            this.isAdding = true;
+
+            this.$nextTick(function () {
+                document.getElementById("add-folder").focus();
+            });
+        },
         cancelEditFolder: function () {
             this.currentFolder.edit = false;
             this.currentFolderName = this.currentFolder.name;
