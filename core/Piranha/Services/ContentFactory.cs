@@ -13,6 +13,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha.Extend;
@@ -93,7 +94,7 @@ namespace Piranha.Services
                         if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
                         {
                             var field = Activator.CreateInstance(prop.PropertyType);
-                            await InitFieldAsync(scope, field).ConfigureAwait(false);
+                            await InitFieldAsync(scope, field, false).ConfigureAwait(false);
                             prop.SetValue(block, field);
                         }
                     }
@@ -213,7 +214,32 @@ namespace Piranha.Services
         /// <param name="type">The content type</param>
         /// <typeparam name="T">The model type</typeparam>
         /// <returns>The initialized model</returns>
-        public async Task<T> InitDynamicAsync<T>(T model, ContentTypeBase type) where T : IDynamicContent
+        public Task<T> InitDynamicAsync<T>(T model, ContentTypeBase type) where T : IDynamicContent
+        {
+            return InitDynamicAsync<T>(model, type, false);
+        }
+
+        /// <summary>
+        /// Initializes the given dynamic model for the manager.
+        /// </summary>
+        /// <param name="model">The model</param>
+        /// <param name="type">The content type</param>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <returns>The initialized model</returns>
+        public Task<T> InitDynamicManagerAsync<T>(T model, ContentTypeBase type) where T : IDynamicContent
+        {
+            return InitDynamicAsync<T>(model, type, true);
+        }
+
+        /// <summary>
+        /// Initializes the given dynamic model.
+        /// </summary>
+        /// <param name="model">The model</param>
+        /// <param name="type">The content type</param>
+        /// <param name="managerInit">If this is initialization used by the manager</param>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <returns>The initialized model</returns>
+        private async Task<T> InitDynamicAsync<T>(T model, ContentTypeBase type, bool managerInit) where T : IDynamicContent
         {
             using (var scope = _services.CreateScope())
             {
@@ -225,14 +251,14 @@ namespace Piranha.Services
                         if (!regionType.Collection)
                         {
                             // Initialize it
-                            await InitDynamicRegionAsync(scope, region, regionType).ConfigureAwait(false);
+                            await InitDynamicRegionAsync(scope, region, regionType, managerInit).ConfigureAwait(false);
                         }
                         else
                         {
                             // This region was a collection. Initialize all items
                             foreach (var item in (IList)region)
                             {
-                                await InitDynamicRegionAsync(scope, item, regionType).ConfigureAwait(false);
+                                await InitDynamicRegionAsync(scope, item, regionType, managerInit).ConfigureAwait(false);
                             }
                         }
                     }
@@ -242,13 +268,13 @@ namespace Piranha.Services
                 {
                     foreach (var block in blockModel.Blocks)
                     {
-                        await InitBlockAsync(scope, block).ConfigureAwait(false);
+                        await InitBlockAsync(scope, block, managerInit).ConfigureAwait(false);
 
                         if (block is BlockGroup blockGroup)
                         {
                             foreach (var child in blockGroup.Items)
                             {
-                                await InitBlockAsync(scope, child).ConfigureAwait(false);
+                                await InitBlockAsync(scope, child, managerInit).ConfigureAwait(false);
                             }
                         }
                     }
@@ -264,7 +290,32 @@ namespace Piranha.Services
         /// <param name="type">The content type</param>
         /// <typeparam name="T">The model type</typeparam>
         /// <returns>The initialized model</returns>
-        public async Task<T> InitAsync<T>(T model, ContentTypeBase type) where T : ContentBase
+        public Task<T> InitAsync<T>(T model, ContentTypeBase type) where T : ContentBase
+        {
+            return InitAsync<T>(model, type, false);
+        }
+
+        /// <summary>
+        /// Initializes the given model for the manager.
+        /// </summary>
+        /// <param name="model">The model</param>
+        /// <param name="type">The content type</param>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <returns>The initialized model</returns>
+        public Task<T> InitManagerAsync<T>(T model, ContentTypeBase type) where T : ContentBase
+        {
+            return InitAsync<T>(model, type, true);
+        }
+
+        /// <summary>
+        /// Initializes the given model.
+        /// </summary>
+        /// <param name="model">The model</param>
+        /// <param name="type">The content type</param>
+        /// <param name="managerInit">If this is initialization used by the manager</param>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <returns>The initialized model</returns>
+        private async Task<T> InitAsync<T>(T model, ContentTypeBase type, bool managerInit) where T : ContentBase
         {
             if (model is IDynamicContent)
             {
@@ -283,14 +334,14 @@ namespace Piranha.Services
                         if (!regionType.Collection)
                         {
                             // Initialize it
-                            await InitRegionAsync(scope, region, regionType).ConfigureAwait(false);
+                            await InitRegionAsync(scope, region, regionType, managerInit).ConfigureAwait(false);
                         }
                         else
                         {
                             // This region was a collection. Initialize all items
                             foreach (var item in (IList)region)
                             {
-                                await InitRegionAsync(scope, item, regionType).ConfigureAwait(false);
+                                await InitRegionAsync(scope, item, regionType, managerInit).ConfigureAwait(false);
                             }
                         }
                     }
@@ -300,13 +351,13 @@ namespace Piranha.Services
                 {
                     foreach (var block in blockModel.Blocks)
                     {
-                        await InitBlockAsync(scope, block).ConfigureAwait(false);
+                        await InitBlockAsync(scope, block, managerInit).ConfigureAwait(false);
 
                         if (block is Extend.BlockGroup)
                         {
                             foreach (var child in ((Extend.BlockGroup)block).Items)
                             {
-                                await InitBlockAsync(scope, child).ConfigureAwait(false);
+                                await InitBlockAsync(scope, child, managerInit).ConfigureAwait(false);
                             }
                         }
                     }
@@ -321,7 +372,8 @@ namespace Piranha.Services
         /// <param name="scope">The current service scope</param>
         /// <param name="region">The region</param>
         /// <param name="regionType">The region type</param>
-        private async Task InitDynamicRegionAsync(IServiceScope scope, object region, RegionType regionType)
+        /// <param name="managerInit">If this is initialization used by the manager</param>
+        private async Task InitDynamicRegionAsync(IServiceScope scope, object region, RegionType regionType, bool managerInit)
         {
             if (region != null)
             {
@@ -329,7 +381,7 @@ namespace Piranha.Services
                 {
                     // This region only has one field, that means
                     // the region is in fact a field.
-                    await InitFieldAsync(scope, region).ConfigureAwait(false);
+                    await InitFieldAsync(scope, region, managerInit).ConfigureAwait(false);
                 }
                 else
                 {
@@ -338,7 +390,7 @@ namespace Piranha.Services
                     {
                         if (((IDictionary<string, object>)region).TryGetValue(fieldType.Id, out var field))
                         {
-                            await InitFieldAsync(scope, field).ConfigureAwait(false);
+                            await InitFieldAsync(scope, field, managerInit).ConfigureAwait(false);
                         }
                     }
                 }
@@ -351,7 +403,8 @@ namespace Piranha.Services
         /// <param name="scope">The current service scope</param>
         /// <param name="region">The region</param>
         /// <param name="regionType">The region type</param>
-        private async Task InitRegionAsync(IServiceScope scope, object region, RegionType regionType)
+        /// <param name="managerInit">If this is initialization used by the manager</param>
+        private async Task InitRegionAsync(IServiceScope scope, object region, RegionType regionType, bool managerInit)
         {
             if (region != null)
             {
@@ -359,7 +412,7 @@ namespace Piranha.Services
                 {
                     // This region only has one field, that means
                     // the region is in fact a field.
-                    await InitFieldAsync(scope, region).ConfigureAwait(false);
+                    await InitFieldAsync(scope, region, managerInit).ConfigureAwait(false);
                 }
                 else
                 {
@@ -372,7 +425,7 @@ namespace Piranha.Services
 
                         if (field != null)
                         {
-                            await InitFieldAsync(scope, field).ConfigureAwait(false);
+                            await InitFieldAsync(scope, field, managerInit).ConfigureAwait(false);
                         }
                     }
                 }
@@ -384,7 +437,8 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="scope">The current service scope</param>
         /// <param name="block">The block</param>
-        private async Task InitBlockAsync(IServiceScope scope, Extend.Block block)
+        /// <param name="managerInit">If this is initialization used by the manager</param>
+        private async Task InitBlockAsync(IServiceScope scope, Extend.Block block, bool managerInit)
         {
             if (block != null)
             {
@@ -399,7 +453,7 @@ namespace Piranha.Services
 
                         if (field != null)
                         {
-                            await InitFieldAsync(scope, field).ConfigureAwait(false);
+                            await InitFieldAsync(scope, field, managerInit).ConfigureAwait(false);
                         }
                     }
                 }
@@ -422,7 +476,7 @@ namespace Piranha.Services
                 {
                     if (initFields)
                     {
-                        await InitFieldAsync(scope, field).ConfigureAwait(false);
+                        await InitFieldAsync(scope, field, false).ConfigureAwait(false);
                     }
                     return field;
                 }
@@ -438,7 +492,7 @@ namespace Piranha.Services
                     {
                         if (initFields)
                         {
-                            await InitFieldAsync(scope, field).ConfigureAwait(false);
+                            await InitFieldAsync(scope, field, false).ConfigureAwait(false);
                         }
                         ((IDictionary<string, object>)reg).Add(fieldType.Id, field);
                     }
@@ -466,7 +520,7 @@ namespace Piranha.Services
                 {
                     if (initFields)
                     {
-                        await InitFieldAsync(scope, field).ConfigureAwait(false);
+                        await InitFieldAsync(scope, field, false).ConfigureAwait(false);
                     }
                     return field;
                 }
@@ -486,7 +540,7 @@ namespace Piranha.Services
                         {
                             if (initFields)
                             {
-                                await InitFieldAsync(scope, field).ConfigureAwait(false);
+                                await InitFieldAsync(scope, field, false).ConfigureAwait(false);
                             }
                             reg.GetType().SetPropertyValue(fieldType.Id, reg, field);
                         }
@@ -518,10 +572,20 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="scope">The current service scope</param>
         /// <param name="field">The field</param>
+        /// <param name="managerInit">If this is initialization used by the manager</param>
         /// <returns>The initialized field</returns>
-        protected async Task<object> InitFieldAsync(IServiceScope scope, object field)
+        protected async Task<object> InitFieldAsync(IServiceScope scope, object field, bool managerInit)
         {
-            var init = field.GetType().GetMethod("Init");
+            MethodInfo init = null;
+
+            if (!managerInit)
+            {
+                init = field.GetType().GetMethod("Init");
+            }
+            else
+            {
+                init = field.GetType().GetMethod("InitManager");
+            }
 
             if (init != null)
             {

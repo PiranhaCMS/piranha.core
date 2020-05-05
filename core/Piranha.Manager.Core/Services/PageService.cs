@@ -208,6 +208,10 @@ namespace Piranha.Manager.Services
 
             if (page != null)
             {
+                // Perform manager init
+                await _factory.InitDynamicManagerAsync(page,
+                    App.PageTypes.GetById(page.TypeId));
+
                 var model = Transform(page, isDraft);
 
                 model.PendingCommentCount = (await _api.Pages.GetAllPendingCommentsAsync(id))

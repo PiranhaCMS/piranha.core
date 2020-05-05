@@ -194,6 +194,10 @@ namespace Piranha.Manager.Services
 
             if (post != null)
             {
+                // Perform manager init
+                await _factory.InitDynamicManagerAsync(post,
+                    App.PostTypes.GetById(post.TypeId));
+
                 var postModel = Transform(post, isDraft);
 
                 postModel.Categories = (await _api.Posts.GetAllCategoriesAsync(post.BlogId))

@@ -65,6 +65,10 @@ namespace Piranha.Manager.Services
 
             if (site != null)
             {
+                // Perform manager init
+                await _factory.InitDynamicManagerAsync(site,
+                    App.SiteTypes.GetById(site.TypeId));
+
                 return Transform(site);
             }
             return null;
