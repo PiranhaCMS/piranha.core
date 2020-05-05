@@ -12,10 +12,11 @@
     <tags>cms mvc aspnetcore netstandard</tags>
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/piranhacms/piranha.core</projectUrl>
+    <repository type="git" url="https://github.com/piranhacms/piranha.core" />
     <icon>images\piranha.png</icon>
     <iconUrl>http://piranhacms.org/assets/twitter-shield.png</iconUrl>
     <releaseNotes>See the changelog available at:
-https://github.com/piranhacms/piranha.core/wiki/changelog
+https://github.com/piranhacms/piranha.core/releases
     </releaseNotes>
     <dependencies>
       <group targetFramework="netcoreapp3.1">
