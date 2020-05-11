@@ -242,7 +242,7 @@ namespace Piranha.Services
 
             var type = App.MediaTypes.GetItem(content.Filename);
 
-            model.Filename = content.Filename;
+            model.Filename = content.Filename.Replace(" ", "_");
             model.FolderId = content.FolderId;
             model.Type = App.MediaTypes.GetMediaType(content.Filename);
             model.ContentType = type.ContentType;

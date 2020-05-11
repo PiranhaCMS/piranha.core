@@ -35,6 +35,7 @@ namespace Piranha.Tests.Services
         private Guid image2Id;
         private Guid image3Id;
         private Guid image4Id;
+        private Guid image5Id;
         private Guid folder1Id;
 
         public override async Task InitializeAsync()
@@ -96,6 +97,18 @@ namespace Piranha.Tests.Services
                     await api.Media.SaveAsync(image3);
 
                     image3Id = image3.Id.Value;
+                }
+
+                using (var stream = File.OpenRead("../../../Assets/HLD Screenshot 01 mech 1080.png"))
+                {
+                    var image5 = new Models.StreamMediaContent
+                    {
+                        Filename = "HLD Screenshot 01 mech 1080.png",
+                        Data = stream
+                    };
+                    await api.Media.SaveAsync(image5);
+
+                    image5Id = image5.Id.Value;
                 }
             }
         }
@@ -169,6 +182,18 @@ namespace Piranha.Tests.Services
 
                 Assert.NotEmpty(media);
                 Assert.Equal("HLD_Screenshot_01_rise_1080.png", media[0].Filename);
+            }
+        }
+
+        [Fact]
+        public async Task FilenameHasNoSpaces()
+        {
+            using (var api = CreateApi())
+            {
+                var media = await api.Media.GetByIdAsync(image5Id);
+
+                Assert.NotNull(media);
+                Assert.Equal("HLD_Screenshot_01_mech_1080.png", media.Filename);
             }
         }
 
