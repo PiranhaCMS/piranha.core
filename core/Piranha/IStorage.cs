@@ -9,6 +9,7 @@
  */
 
 using System.Threading.Tasks;
+using Piranha.Models;
 
 namespace Piranha
 {
@@ -26,8 +27,9 @@ namespace Piranha
         /// <summary>
         /// Gets the public URL for the given media object.
         /// </summary>
-        /// <param name="id">The file id</param>
+        /// <param name="media">The media file</param>
+        /// <param name="filename">The file name</param>
         /// <returns>The public url</returns>
-        string GetPublicUrl(string id);
+        string GetPublicUrl(Media media, string filename);
     }
 }

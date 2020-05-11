@@ -21,12 +21,17 @@ public static class BlobStorageExtensions
     /// <param name="serviceBuilder">The service builder</param>
     /// <param name="credentials">The auth credentials</param>
     /// <param name="containerName">The optional container name</param>
+    /// <param name="naming">How uploaded media files should be named</param>
     /// <param name="scope">The optional service scope. Default is singleton</param>
     /// <returns>The service collection</returns>
-    public static PiranhaServiceBuilder UseBlobStorage(this PiranhaServiceBuilder serviceBuilder,
-        StorageCredentials credentials, string containerName = "uploads", ServiceLifetime scope = ServiceLifetime.Singleton)
+    public static PiranhaServiceBuilder UseBlobStorage(
+        this PiranhaServiceBuilder serviceBuilder,
+        StorageCredentials credentials,
+        string containerName = "uploads",
+        BlobStorageNaming naming = BlobStorageNaming.UniqueFileNames,
+        ServiceLifetime scope = ServiceLifetime.Singleton)
     {
-        serviceBuilder.Services.AddPiranhaBlobStorage(credentials, containerName, scope);
+        serviceBuilder.Services.AddPiranhaBlobStorage(credentials, containerName, naming, scope);
 
         return serviceBuilder;
     }
@@ -37,12 +42,17 @@ public static class BlobStorageExtensions
     /// <param name="serviceBuilder">The service builder</param>
     /// <param name="connectionString">The connection string</param>
     /// <param name="containerName">The optional container name</param>
+    /// <param name="naming">How uploaded media files should be named</param>
     /// <param name="scope">The optional service scope. Default is singleton</param>
     /// <returns>The service collection</returns>
-    public static PiranhaServiceBuilder UseBlobStorage(this PiranhaServiceBuilder serviceBuilder,
-        string connectionString, string containerName = "uploads", ServiceLifetime scope = ServiceLifetime.Singleton)
+    public static PiranhaServiceBuilder UseBlobStorage(
+        this PiranhaServiceBuilder serviceBuilder,
+        string connectionString,
+        string containerName = "uploads",
+        BlobStorageNaming naming = BlobStorageNaming.UniqueFileNames,
+        ServiceLifetime scope = ServiceLifetime.Singleton)
     {
-        serviceBuilder.Services.AddPiranhaBlobStorage(connectionString, containerName, scope);
+        serviceBuilder.Services.AddPiranhaBlobStorage(connectionString, containerName, naming, scope);
 
         return serviceBuilder;
     }
@@ -53,14 +63,20 @@ public static class BlobStorageExtensions
     /// <param name="services">The current service collection</param>
     /// <param name="credentials">The auth credentials</param>
     /// <param name="containerName">The optional container name</param>
+    /// <param name="naming">How uploaded media files should be named</param>
     /// <param name="scope">The optional service scope. Default is singleton</param>
     /// <returns>The service collection</returns>
-    public static IServiceCollection AddPiranhaBlobStorage(this IServiceCollection services,
-        StorageCredentials credentials, string containerName = "uploads", ServiceLifetime scope = ServiceLifetime.Singleton)
+    public static IServiceCollection AddPiranhaBlobStorage(
+        this IServiceCollection services,
+        StorageCredentials credentials,
+        string containerName = "uploads",
+        BlobStorageNaming naming = BlobStorageNaming.UniqueFileNames,
+        ServiceLifetime scope = ServiceLifetime.Singleton)
     {
         App.Modules.Register<BlobStorageModule>();
 
-        services.Add(new ServiceDescriptor(typeof(IStorage), sp => new BlobStorage(credentials, containerName), scope));
+        services.Add(new ServiceDescriptor(typeof(IStorage), sp =>
+            new BlobStorage(credentials, containerName, naming), scope));
 
         return services;
     }
@@ -71,14 +87,20 @@ public static class BlobStorageExtensions
     /// <param name="services">The current service collection</param>
     /// <param name="connectionString">The connection string</param>
     /// <param name="containerName">The optional container name</param>
+    /// <param name="naming">How uploaded media files should be named</param>
     /// <param name="scope">The optional service scope. Default is singleton</param>
     /// <returns>The service collection</returns>
-    public static IServiceCollection AddPiranhaBlobStorage(this IServiceCollection services,
-        string connectionString, string containerName = "uploads", ServiceLifetime scope = ServiceLifetime.Singleton)
+    public static IServiceCollection AddPiranhaBlobStorage(
+        this IServiceCollection services,
+        string connectionString,
+        string containerName = "uploads",
+        BlobStorageNaming naming = BlobStorageNaming.UniqueFileNames,
+        ServiceLifetime scope = ServiceLifetime.Singleton)
     {
         App.Modules.Register<BlobStorageModule>();
 
-        services.Add(new ServiceDescriptor(typeof(IStorage), sp => new BlobStorage(connectionString, containerName), scope));
+        services.Add(new ServiceDescriptor(typeof(IStorage), sp =>
+            new BlobStorage(connectionString, containerName, naming), scope));
 
         return services;
     }
