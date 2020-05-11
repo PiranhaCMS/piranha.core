@@ -12,6 +12,7 @@ using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Auth;
 using Microsoft.Azure.Storage.Blob;
 using System.Threading.Tasks;
+using Piranha.Models;
 
 namespace Piranha.Azure
 {
@@ -33,21 +34,41 @@ namespace Piranha.Azure
         private string _containerUrl;
 
         /// <summary>
+        /// How uploaded files should be named to
+        /// ensure uniqueness.
+        /// </summary>
+        private readonly BlobStorageNaming _naming;
+
+        /// <summary>
         /// Creates a new Blog Storage service from the given credentials.
         /// </summary>
-        public BlobStorage(StorageCredentials credentials, string containerName = "uploads")
+        /// <param name="credentials">The connection credentials</param>
+        /// <param name="containerName">The container name</param>
+        /// <param name="naming">How uploaded media files should be named</param>
+        public BlobStorage(
+            StorageCredentials credentials,
+            string containerName = "uploads",
+            BlobStorageNaming naming = BlobStorageNaming.UniqueFileNames)
         {
             _storage = new CloudStorageAccount(credentials, true);
             _containerName = containerName;
+            _naming = naming;
         }
 
         /// <summary>
         /// Creates a new Blob Storage service from the given connection string.
         /// </summary>
-        public BlobStorage(string connectionString, string containerName = "uploads")
+        /// <param name="connectionString">The connection string</param>
+        /// <param name="containerName">The container name</param>
+        /// <param name="naming">How uploaded media files should be named</param>
+        public BlobStorage(
+            string connectionString,
+            string containerName = "uploads",
+            BlobStorageNaming naming = BlobStorageNaming.UniqueFileNames)
         {
             _storage = CloudStorageAccount.Parse(connectionString);
             _containerName = containerName;
+            _naming = naming;
         }
 
         /// <summary>
@@ -69,17 +90,18 @@ namespace Piranha.Azure
             }
             _containerUrl = container.Uri.AbsoluteUri;
 
-            return new BlobStorageSession(container);
+            return new BlobStorageSession(this, container, _naming);
         }
 
         /// <summary>
         /// Gets the public URL for the given media object.
         /// </summary>
-        /// <param name="id">The media resource id</param>
+        /// <param name="media">The media file</param>
+        /// <param name="id">The resource id</param>
         /// <returns>The public url</returns>
-        public string GetPublicUrl(string id)
+        public string GetPublicUrl(Media media, string id)
         {
-            if (!string.IsNullOrWhiteSpace(id))
+            if (media != null && !string.IsNullOrWhiteSpace(id))
             {
                 if (string.IsNullOrEmpty(_containerUrl))
                 {
@@ -88,9 +110,28 @@ namespace Piranha.Azure
 
                     _containerUrl = container.Uri.AbsoluteUri;
                 }
-                return _containerUrl + "/" + id;
+                return $"{ _containerUrl }/{ GetResourceName(media, id) }";
             }
             return null;
+        }
+
+        /// <summary>
+        /// Formats the resource name according to the current
+        /// naming convention.
+        /// </summary>
+        /// <param name="media">The media file</param>
+        /// <param name="filename">The file name</param>
+        /// <returns></returns>
+        internal string GetResourceName(Media media, string filename)
+        {
+            if (_naming == BlobStorageNaming.UniqueFileNames)
+            {
+                return $"{ media.Id }-{ filename }";
+            }
+            else
+            {
+                return $"{ media.Id }/{ filename }";
+            }
         }
     }
 }

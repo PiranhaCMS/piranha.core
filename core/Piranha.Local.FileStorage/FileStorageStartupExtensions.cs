@@ -10,6 +10,7 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;
+using Piranha.Local;
 
 public static class FileStorageStartupExtensions
 {
@@ -19,12 +20,17 @@ public static class FileStorageStartupExtensions
     /// <param name="serviceBuilder">The service builder</param>
     /// <param name="basePath">The optional base path for where uploaded media is stored.null Default is wwwroot/uploads/</param>
     /// <param name="baseUrl">The optional base url for accessing uploaded media. Default is ~/uploads/</param>
+    /// <param name="naming">How uploaded media files should be named</param>
     /// <param name="scope">The optional service scope. Default is singleton</param>
     /// <returns>The updated builder</returns>
-    public static PiranhaServiceBuilder UseFileStorage(this PiranhaServiceBuilder serviceBuilder,
-        string basePath = null, string baseUrl = null, ServiceLifetime scope = ServiceLifetime.Singleton)
+    public static PiranhaServiceBuilder UseFileStorage(
+        this PiranhaServiceBuilder serviceBuilder,
+        string basePath = null,
+        string baseUrl = null,
+        FileStorageNaming naming = FileStorageNaming.UniqueFileNames,
+        ServiceLifetime scope = ServiceLifetime.Singleton)
     {
-        serviceBuilder.Services.AddPiranhaFileStorage(basePath, baseUrl, scope);
+        serviceBuilder.Services.AddPiranhaFileStorage(basePath, baseUrl, naming, scope);
 
         return serviceBuilder;
     }
