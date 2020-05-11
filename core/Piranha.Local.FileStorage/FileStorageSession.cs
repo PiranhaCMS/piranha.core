@@ -46,7 +46,7 @@ namespace Piranha.Local
         /// <returns>If the media was found</returns>
         public async Task<bool> GetAsync(Media media, string filename, Stream stream)
         {
-            var path = _storage.GetPath(media, filename);
+            var path = _storage.GetResourceName(media, filename);
 
             if (File.Exists(_basePath + path))
             {
@@ -69,7 +69,7 @@ namespace Piranha.Local
         /// <returns>The public URL</returns>
         public async Task<string> PutAsync(Media media, string filename, string contentType, Stream stream)
         {
-            var path = _storage.GetPath(media, filename);
+            var path = _storage.GetResourceName(media, filename);
 
             EnsureFolder(media);
 
@@ -90,7 +90,7 @@ namespace Piranha.Local
         /// <returns>The public URL</returns>
         public async Task<string> PutAsync(Media media, string filename, string contentType, byte[] bytes)
         {
-            var path = _storage.GetPath(media, filename);
+            var path = _storage.GetResourceName(media, filename);
 
             EnsureFolder(media);
 
@@ -110,7 +110,7 @@ namespace Piranha.Local
         {
             return Task.Run(() =>
             {
-                var path = _storage.GetPath(media, filename);
+                var path = _storage.GetResourceName(media, filename);
 
                 if (File.Exists(_basePath + path))
                 {

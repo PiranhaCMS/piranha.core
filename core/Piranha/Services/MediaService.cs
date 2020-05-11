@@ -678,7 +678,7 @@ namespace Piranha.Services
 
                 if (!string.IsNullOrWhiteSpace(cdn))
                 {
-                    return cdn + name;
+                    return cdn + _storage.GetResourceName(media, name);
                 }
                 return _storage.GetPublicUrl(media, name);
             }

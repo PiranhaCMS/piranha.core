@@ -116,13 +116,12 @@ namespace Piranha.Azure
         }
 
         /// <summary>
-        /// Formats the resource name according to the current
-        /// naming convention.
+        /// Gets the resource name for the given media object.
         /// </summary>
         /// <param name="media">The media file</param>
         /// <param name="filename">The file name</param>
-        /// <returns></returns>
-        internal string GetResourceName(Media media, string filename)
+        /// <returns>The public url</returns>
+        public string GetResourceName(Media media, string filename)
         {
             if (_naming == BlobStorageNaming.UniqueFileNames)
             {

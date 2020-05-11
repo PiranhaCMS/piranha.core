@@ -70,19 +70,18 @@ namespace Piranha.Local
         {
             if (media != null && !string.IsNullOrWhiteSpace(filename))
             {
-                return _baseUrl + GetPath(media, filename);
+                return _baseUrl + GetResourceName(media, filename);
             }
             return null;
         }
 
         /// <summary>
-        /// Gets the path for the given media file using the
-        /// currently configured naming.
+        /// Gets the resource name for the given media object.
         /// </summary>
         /// <param name="media">The media file</param>
         /// <param name="filename">The file name</param>
-        /// <returns>The file path</returns>
-        internal string GetPath(Media media, string filename)
+        /// <returns>The public url</returns>
+        public string GetResourceName(Media media, string filename)
         {
             if (media != null && !string.IsNullOrWhiteSpace(filename))
             {
