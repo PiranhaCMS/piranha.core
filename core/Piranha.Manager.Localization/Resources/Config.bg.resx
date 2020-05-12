@@ -72,10 +72,10 @@
   </data>
 
   <data name="Approve comments" xml:space="preserve">
-    <value>Approve comments</value>
+    <value>Одобри коментари</value>
   </data>
   <data name="Close comments after" xml:space="preserve">
-    <value>Close comments after</value>
+    <value>Затвори коментари след</value>
   </data>
   <data name="Collapse block headers" xml:space="preserve">
     <value>Collapse block headers</value>
