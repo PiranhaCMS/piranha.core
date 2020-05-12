@@ -16,6 +16,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using Piranha.Extend;
+using Piranha.Extend.Fields;
 using Piranha.Manager.Extensions;
 using Piranha.Models;
 using Piranha.Manager.Models;
@@ -359,7 +360,7 @@ namespace Piranha.Manager.Services
 
                         if (groupType != null)
                         {
-                            var postBlock = (Extend.BlockGroup)Activator.CreateInstance(groupType.Type);
+                            var postBlock = (BlockGroup)Activator.CreateInstance(groupType.Type);
 
                             postBlock.Id = blockGroup.Id;
                             postBlock.Type = blockGroup.Type;
@@ -523,9 +524,9 @@ namespace Piranha.Manager.Services
                             }
                         };
 
-                        if (typeof(Extend.Fields.SelectFieldBase).IsAssignableFrom(appFieldType.Type))
+                        if (typeof(SelectFieldBase).IsAssignableFrom(appFieldType.Type))
                         {
-                            foreach(var item in ((Extend.Fields.SelectFieldBase)Activator.CreateInstance(appFieldType.Type)).Items)
+                            foreach(var item in ((SelectFieldBase)Activator.CreateInstance(appFieldType.Type)).Items)
                             {
                                 field.Meta.Options.Add(Convert.ToInt32(item.Value), item.Title);
                             }
@@ -533,7 +534,7 @@ namespace Piranha.Manager.Services
 
                         if (regionType.Fields.Count > 1)
                         {
-                            field.Model = (Extend.IField)((IDictionary<string, object>)regionModel)[fieldType.Id];
+                            field.Model = (IField)((IDictionary<string, object>)regionModel)[fieldType.Id];
 
                             if (regionType.ListTitleField == fieldType.Id)
                             {
@@ -543,7 +544,7 @@ namespace Piranha.Manager.Services
                         }
                         else
                         {
-                            field.Model = (Extend.IField)regionModel;
+                            field.Model = (IField)regionModel;
                             field.Meta.NotifyChange = true;
                             regionItem.Title = field.Model.GetTitle();
                         }
