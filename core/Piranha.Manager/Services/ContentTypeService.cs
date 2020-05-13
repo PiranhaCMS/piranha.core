@@ -12,6 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Piranha.Extend;
+using Piranha.Extend.Fields;
 using Piranha.Models;
 using Piranha.Manager.Models;
 using Piranha.Manager.Models.Content;
@@ -191,12 +193,12 @@ namespace Piranha.Manager.Services
 
                 if (regionType.Fields.Count > 1)
                 {
-                    field.Model = (Extend.IField)((IDictionary<string, object>)regionModel)[fieldType.Id];
+                    field.Model = (IField)((IDictionary<string, object>)regionModel)[fieldType.Id];
                     field.Meta.NotifyChange = regionType.ListTitleField == fieldType.Id;
                 }
                 else
                 {
-                    field.Model = (Extend.IField)regionModel;
+                    field.Model = (IField)regionModel;
                     field.Meta.NotifyChange = true;
                 }
                 regionItem.Fields.Add(field);
@@ -215,9 +217,9 @@ namespace Piranha.Manager.Services
 
             if (blockType != null)
             {
-                var block = (Extend.Block)(await _factory.CreateBlockAsync(type));
+                var block = (Block)(await _factory.CreateBlockAsync(type));
 
-                if (block is Extend.BlockGroup)
+                if (block is BlockGroup)
                 {
                     var item = new BlockGroupModel
                     {
@@ -297,9 +299,9 @@ namespace Piranha.Manager.Services
         private void PopulateFieldOptions(Runtime.AppField fieldType, FieldModel fieldModel)
         {
             // Check if this is a select field
-            if (typeof(Extend.Fields.SelectFieldBase).IsAssignableFrom(fieldType.Type))
+            if (typeof(SelectFieldBase).IsAssignableFrom(fieldType.Type))
             {
-                foreach (var selectItem in ((Extend.Fields.SelectFieldBase)Activator.CreateInstance(fieldType.Type)).Items)
+                foreach (var selectItem in ((SelectFieldBase)Activator.CreateInstance(fieldType.Type)).Items)
                 {
                     fieldModel.Meta.Options.Add(Convert.ToInt32(selectItem.Value), selectItem.Title);
                 }
