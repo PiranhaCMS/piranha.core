@@ -13,11 +13,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Piranha;
 using Piranha.Data.EF.SQLite;
 using Piranha.AspNetCore.Identity.SQLite;
 using Piranha.AttributeBuilder;
-using Microsoft.OpenApi.Models;
+using Piranha.Local;
 
 namespace RazorWeb
 {
@@ -34,7 +35,7 @@ namespace RazorWeb
             {
                 options.AddRazorRuntimeCompilation = true;
 
-                options.UseFileStorage();
+                options.UseFileStorage(naming: FileStorageNaming.UniqueFolderNames);
                 options.UseImageSharp();
                 options.UseManager();
                 options.UseTinyMCE();

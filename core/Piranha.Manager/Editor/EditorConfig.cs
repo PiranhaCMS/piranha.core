@@ -40,6 +40,11 @@ namespace Piranha.Manager.Editor
         public string Toolbar { get; set; }
 
         /// <summary>
+        /// Gets/sets the extra valid html elements for the editor.
+        /// </summary>
+        public string ExtendedValidElements { get; set; }
+
+        /// <summary>
         /// Gets/sets the configured block formats.
         /// </summary>
         public string BlockFormats { get; set; }

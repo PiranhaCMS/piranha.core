@@ -10,6 +10,7 @@
 
 using System.IO;
 using System.Threading.Tasks;
+using Piranha.Models;
 
 namespace Piranha.Local
 {
@@ -17,13 +18,18 @@ namespace Piranha.Local
     {
         private readonly string _basePath = "wwwroot/uploads/";
         private readonly string _baseUrl = "~/uploads/";
+        private readonly FileStorageNaming _naming;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="basePath">The optional base path</param>
         /// <param name="baseUrl">The optional base url</param>
-        public FileStorage(string basePath = null, string baseUrl = null)
+        /// <param name="naming">How uploaded media files should be named</param>
+        public FileStorage(
+            string basePath = null,
+            string baseUrl = null,
+            FileStorageNaming naming = FileStorageNaming.UniqueFileNames)
         {
             if (!string.IsNullOrEmpty(basePath))
             {
@@ -38,6 +44,8 @@ namespace Piranha.Local
             {
                 Directory.CreateDirectory(_basePath);
             }
+
+            _naming = naming;
         }
 
         /// <summary>
@@ -48,20 +56,46 @@ namespace Piranha.Local
         {
             return Task.Run(() =>
             {
-                return (IStorageSession)new FileStorageSession(_basePath, _baseUrl);
+                return (IStorageSession)new FileStorageSession(this, _basePath, _baseUrl, _naming);
             });
         }
 
         /// <summary>
         /// Gets the public URL for the given media object.
         /// </summary>
-        /// <param name="id">The media resource id</param>
+        /// <param name="media">The media file</param>
+        /// <param name="filename">The file name</param>
         /// <returns>The public url</returns>
-        public string GetPublicUrl(string id)
+        public string GetPublicUrl(Media media, string filename)
         {
-            if (!string.IsNullOrWhiteSpace(id))
+            if (media != null && !string.IsNullOrWhiteSpace(filename))
             {
-                return _baseUrl + id;
+                return _baseUrl + GetResourceName(media, filename);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the resource name for the given media object.
+        /// </summary>
+        /// <param name="media">The media file</param>
+        /// <param name="filename">The file name</param>
+        /// <returns>The public url</returns>
+        public string GetResourceName(Media media, string filename)
+        {
+            if (media != null && !string.IsNullOrWhiteSpace(filename))
+            {
+                var path = "";
+
+                if (_naming == FileStorageNaming.UniqueFileNames)
+                {
+                    path = $"{ media.Id }-{ filename }";
+                }
+                else
+                {
+                    path = $"{ media.Id }/{ filename }";
+                }
+                return path;
             }
             return null;
         }

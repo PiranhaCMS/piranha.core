@@ -230,19 +230,19 @@ namespace Piranha.Services
                         foreach (var version in model.Versions)
                         {
                             // Delete version from storage
-                            await session.DeleteAsync(GetResourceName(model, version.Width, version.Height, version.FileExtension)).ConfigureAwait(false);
+                            await session.DeleteAsync(model, GetResourceName(model, version.Width, version.Height, version.FileExtension)).ConfigureAwait(false);
                         }
                         model.Versions.Clear();
                     }
 
                     // Delete the old file because we might have a different filename
-                    await session.DeleteAsync(GetResourceName(model)).ConfigureAwait(false);
+                    await session.DeleteAsync(model, GetResourceName(model)).ConfigureAwait(false);
                 }
             }
 
             var type = App.MediaTypes.GetItem(content.Filename);
 
-            model.Filename = content.Filename;
+            model.Filename = content.Filename.Replace(" ", "_");
             model.FolderId = content.FolderId;
             model.Type = App.MediaTypes.GetMediaType(content.Filename);
             model.ContentType = type.ContentType;
@@ -279,7 +279,7 @@ namespace Piranha.Services
                     var bc = (BinaryMediaContent)content;
 
                     model.Size = bc.Data.Length;
-                    await session.PutAsync(model.Id + "-" + model.Filename,
+                    await session.PutAsync(model, model.Filename,
                         model.ContentType, bc.Data).ConfigureAwait(false);
                 }
                 else if (content is StreamMediaContent)
@@ -288,7 +288,7 @@ namespace Piranha.Services
                     var stream = sc.Data;
 
                     model.Size = sc.Data.Length;
-                    await session.PutAsync(model.Id + "-" + model.Filename,
+                    await session.PutAsync(model, model.Filename,
                         model.ContentType, stream).ConfigureAwait(false);
                 }
             }
@@ -399,7 +399,7 @@ namespace Piranha.Services
             {
                 using (var session = await _storage.OpenAsync().ConfigureAwait(false))
                 {
-                    if (!await session.GetAsync(media.Id + "-" + media.Filename, stream).ConfigureAwait(false))
+                    if (!await session.GetAsync(media, media.Filename, stream).ConfigureAwait(false))
                     {
                         return null;
                     }
@@ -449,7 +449,7 @@ namespace Piranha.Services
 
                         if (upload)
                         {
-                            return await session.PutAsync(GetResourceName(media, width, height), media.ContentType,
+                            return await session.PutAsync(media, GetResourceName(media, width, height), media.ContentType,
                                     output)
                                 .ConfigureAwait(false);
                         }
@@ -480,7 +480,7 @@ namespace Piranha.Services
                         foreach (var version in media.Versions)
                         {
                             // Delete version from storage
-                            await session.DeleteAsync(GetResourceName(media, version.Width, version.Height, version.FileExtension))
+                            await session.DeleteAsync(media, GetResourceName(media, version.Width, version.Height, version.FileExtension))
                                 .ConfigureAwait(false);
                         }
                     }
@@ -488,7 +488,7 @@ namespace Piranha.Services
                     // Call hooks & save
                     App.Hooks.OnBeforeDelete(media);
                     await _repo.Delete(id).ConfigureAwait(false);
-                    await session.DeleteAsync(media.Id + "-" + media.Filename).ConfigureAwait(false);
+                    await session.DeleteAsync(media, media.Filename).ConfigureAwait(false);
                     App.Hooks.OnAfterDelete(media);
                 }
                 RemoveFromCache(media);
@@ -626,8 +626,12 @@ namespace Piranha.Services
             var filename = new FileInfo(media.Filename);
             var sb = new StringBuilder();
 
-            sb.Append(media.Id);
-            sb.Append("-");
+            //
+            // This is now handled in the provider
+            //
+            // sb.Append(media.Id);
+            // sb.Append("-");
+            //
 
             if (width.HasValue)
             {
@@ -674,9 +678,9 @@ namespace Piranha.Services
 
                 if (!string.IsNullOrWhiteSpace(cdn))
                 {
-                    return cdn + name;
+                    return cdn + _storage.GetResourceName(media, name);
                 }
-                return _storage.GetPublicUrl(name);
+                return _storage.GetPublicUrl(media, name);
             }
         }
     }

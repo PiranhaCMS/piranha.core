@@ -1,0 +1,181 @@
+name: publish to nuget
+on:
+  push:
+    branches:
+      - release # Default release branch
+
+env:
+  NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+  INCLUDE_SYMBOLS: true
+
+jobs:
+  publish:
+    name: build, pack & publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # - name: Setup dotnet
+      #   uses: actions/setup-dotnet@v1
+      #   with:
+      #     dotnet-version: 3.1.200
+
+      # Publish Piranha
+      - name: publish Piranha
+        id: publish_piranha
+        uses: rohith/publish-nuget@v2
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: core/Piranha/Piranha.csproj
+
+      # Publish Piranha.AspNetCore
+      - name: publish Piranha.AspNetCore
+        id: publish_piranha_aspnetcore
+        uses: rohith/publish-nuget@v2
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: core/Piranha.AspNetCore/Piranha.AspNetCore.csproj
+          
+      # Publish Piranha.AspNetCore.Identity
+      - name: publish Piranha.AspNetCore.Identity
+        id: publish_piranha_aspnetcore_identity
+        uses: rohith/publish-nuget@v2
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: core/Piranha.AspNetCore.Identity/Piranha.AspNetCore.Identity.csproj
+          
+      # Publish Piranha.AspNetCore.Identity.SQLite
+      - name: publish Piranha.AspNetCore.Identity.SQLite
+        id: publish_piranha_aspnetcore_identity_sqlite
+        uses: rohith/publish-nuget@v2
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: core/Piranha.AspNetCore.Identity.SQLite/Piranha.AspNetCore.Identity.SQLite.csproj
+          
+      # Publish Piranha.AspNetCore.Identity.SQLServer
+      - name: publish Piranha.AspNetCore.Identity.SQLServer
+        id: publish_piranha_aspnetcore_identity_sqlserver
+        uses: rohith/publish-nuget@v2
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: core/Piranha.AspNetCore.Identity.SQLServer/Piranha.AspNetCore.Identity.SQLServer.csproj
+          
+      # Publish Piranha.AspNetCore.SimpleSecurity
+      - name: publish Piranha.AspNetCore.SimpleSecurity
+        id: publish_piranha_aspnetcore_simplesecurity
+        uses: rohith/publish-nuget@v2
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: core/Piranha.AspNetCore.SimpleSecurity/Piranha.AspNetCore.SimpleSecurity.csproj
+          
+      # Publish Piranha.AttributeBuilder
+      - name: publish Piranha.AttributeBuilder
+        id: publish_piranha_attributebuilder
+        uses: rohith/publish-nuget@v2
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: core/Piranha.AttributeBuilder/Piranha.AttributeBuilder.csproj
+          
+      # Publish Piranha.Azure.BlobStorage
+      - name: publish Piranha.Azure.BlobStorage
+        id: publish_piranha_azure_blogstorage
+        uses: rohith/publish-nuget@v2
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: core/Piranha.Azure.BlobStorage/Piranha.Azure.BlobStorage.csproj
+          
+      # Publish Piranha.ImageSharp
+      - name: publish Piranha.ImageSharp
+        id: publish_piranha_imagesharp
+        uses: rohith/publish-nuget@v2
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: core/Piranha.ImageSharp/Piranha.ImageSharp.csproj
+          
+      # Publish Piranha.Local.FileStorage
+      - name: publish Piranha.Local.FileStorage
+        id: publish_piranha_local_filestorage
+        uses: rohith/publish-nuget@v2
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: core/Piranha.Local.FileStorage/Piranha.Local.FileStorage.csproj
+          
+      # Publish Piranha.Manager
+      - name: publish Piranha.Manager
+        id: publish_piranha_manager
+        uses: rohith/publish-nuget@v2
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: core/Piranha.Manager/Piranha.Manager.csproj
+          
+      # Publish Piranha.Manager.Localization
+      - name: publish Piranha.Manager.Localization
+        id: publish_piranha_manager_localizer
+        uses: rohith/publish-nuget@v2
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: core/Piranha.Manager.Localization/Piranha.Manager.Localization.csproj
+          
+      # Publish Piranha.Manager.Summernote
+      - name: publish Piranha.Manager.Summernote
+        id: publish_piranha_manager_summernote
+        uses: rohith/publish-nuget@v2
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: core/Piranha.Manager.Summernote/Piranha.Manager.Summernote.csproj
+          
+      # Publish Piranha.Manager.TinyMCE
+      - name: publish Piranha.Manager.TinyMCE
+        id: publish_piranha_manager_tinymce
+        uses: rohith/publish-nuget@v2
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: core/Piranha.Manager.TinyMCE/Piranha.Manager.TinyMCE.csproj
+          
+      # Publish Piranha.WebApi
+      - name: publish Piranha.WebApi
+        id: publish_piranha_webapi
+        uses: rohith/publish-nuget@v2
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: core/Piranha.WebApi/Piranha.WebApi.csproj
+          
+      # Publish Piranha.Data.EF
+      - name: publish Piranha.Data.EF
+        id: publish_piranha_data_ef
+        uses: rohith/publish-nuget@v2
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: data/Piranha.Data.EF/Piranha.Data.EF.csproj
+          
+      # Publish Piranha.Data.EF.MySql
+      - name: publish Piranha.Data.EF.MySql
+        id: publish_piranha_data_ef_mysql
+        uses: rohith/publish-nuget@v2
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: data/Piranha.Data.EF.MySql/Piranha.Data.EF.MySql.csproj
+          
+      # Publish Piranha.Data.EF.PostgreSql
+      - name: publish Piranha.Data.EF.PostgreSql
+        id: publish_piranha_data_ef_postgresql
+        uses: rohith/publish-nuget@v2
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: data/Piranha.Data.EF.PostgreSql/Piranha.Data.EF.PostgreSql.csproj
+          
+      # Publish Piranha.Data.EF.SQLite
+      - name: publish Piranha.Data.EF.SQLite
+        id: publish_piranha_data_ef_sqlite
+        uses: rohith/publish-nuget@v2
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: data/Piranha.Data.EF.SQLite/Piranha.Data.EF.SQLite.csproj
+          
+      # Publish Piranha.Data.EF.SQLServer
+      - name: publish Piranha.Data.EF.SQLServer
+        id: publish_piranha_data_ef_sqlserver
+        uses: rohith/publish-nuget@v2
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: data/Piranha.Data.EF.SQLServer/Piranha.Data.EF.SQLServer.csproj
