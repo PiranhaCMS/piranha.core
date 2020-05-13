@@ -83,7 +83,7 @@ piranha.comment = new Vue({
         remove: function (id) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/comment/delete/" + id + "/" + self.contentId)
+            fetch(piranha.baseUrl + "manager/api/comment/delete/" + id)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     // Push status to notification hub
