@@ -11,6 +11,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using Xunit;
 using Piranha.Models;
 
@@ -21,8 +22,9 @@ namespace Piranha.Tests.Services
     {
         public override Task InitializeAsync()
         {
-            _cache = new Cache.SimpleCache();
-
+            _cache = new Cache.MemoryCache(new MemoryCache(
+                new MemoryCacheOptions()
+            ));
             return base.InitializeAsync();
         }
     }
