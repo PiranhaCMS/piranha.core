@@ -600,6 +600,13 @@ namespace Piranha.Services
                 model.Slug = Utils.GenerateSlug(model.Slug);
             }
 
+            // Ensure slug is not null or empty
+            // after removing unwanted characters
+            if (string.IsNullOrWhiteSpace(model.Slug))
+            {
+                throw new ValidationException("The generated slug is empty as the title only contains special characters, please specify a slug to save the page.");
+            }
+
             // Check if we're changing the state
             var current = await _repo.GetById<PageInfo>(model.Id).ConfigureAwait(false);
             var changeState = IsPublished(current) != IsPublished(model);
