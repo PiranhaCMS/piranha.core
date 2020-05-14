@@ -26,7 +26,7 @@ namespace RazorWeb.Models
         /// <summary>
         /// Gets/sets the page header.
         /// </summary>
-        [Region(Display = RegionDisplayMode.Setting)]
+        [Region]
         public Regions.Hero Hero { get; set; }
     }
 }

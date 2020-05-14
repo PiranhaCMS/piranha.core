@@ -26,20 +26,20 @@
         </div>
     </div>
 
-    @if (Model.Data.Hero.PrimaryImage.HasValue)
+    @if (Model.Data.PrimaryImage.HasValue)
     {
         <div class="row justify-content-center">
             <div class="col-lg-10 col-md-12">
-                <img class="primary-image" src="@Url.Content(Model.Data.Hero.PrimaryImage)">
+                <img class="primary-image" src="@Url.Content(Model.Data.PrimaryImage)">
             </div>
         </div>
     }
 
     <div class="row justify-content-center">
         <div class="col col-lg-8 col-md-10">
-            @if (!string.IsNullOrEmpty(Model.Data.Hero.Ingress.Value))
+            @if (!string.IsNullOrEmpty(Model.Data.Excerpt))
             {
-                <p class="lead">@Model.Data.Hero.Ingress.Value</p>
+                <p class="lead">@Model.Data.Excerpt</p>
             }
 
             @Html.DisplayFor(m => m.Data.Blocks)
