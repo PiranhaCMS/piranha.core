@@ -25,10 +25,5 @@ namespace RazorWeb.Models
         /// </summary>
         [Region]
         public Regions.Hero Hero { get; set; }
-
-        /// <summary>
-        /// View model property for storing the current archive items.
-        /// </summary>
-        public PostArchive<DynamicPost> Archive { get; set; }
     }
 }

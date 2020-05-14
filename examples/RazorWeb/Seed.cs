@@ -240,6 +240,7 @@ namespace RazorWeb
                 var blogpost = await Models.BlogPost.CreateAsync(api);
                 blogpost.BlogId = blogpage.Id;
                 blogpost.Title = "What is Piranha";
+                blogpost.Excerpt = "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Nulla vitae elit libero, a pharetra augue. Etiam porta sem malesuada magna mollis euismod. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.";
                 blogpost.Category = "Piranha CMS";
                 blogpost.Tags.Add("welcome");
 
