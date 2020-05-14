@@ -690,6 +690,13 @@ namespace Piranha.Services
                 model.Slug = Utils.GenerateSlug(model.Slug, false);
             }
 
+            // Ensure slug is not null or empty
+            // after removing unwanted characters
+            if (string.IsNullOrWhiteSpace(model.Slug))
+            {
+                throw new ValidationException("The generated slug is empty as the title only contains special characters, please specify a slug to save the post.");
+            }
+
             // Ensure category
             if (model.Category == null || (string.IsNullOrWhiteSpace(model.Category.Title) && string.IsNullOrWhiteSpace(model.Category.Slug)))
             {
