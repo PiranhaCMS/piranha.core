@@ -25,6 +25,18 @@ on:
         - name: Build solution and generate NuGet package
           run: ./pack.sh
 
+        # Install SignClient
+        - name: Install SignClient
+          run: dotnet tool install --tool-path . SignClient
+
+        # Sign packages
+        - name: Sign packages
+          run: SignClient "SIGN" --input "artifacts/*.nupkg" --config "sign.json" --user "${{secrets.SignClientUser}}" --secret "${{secrets.SignClientSecret}}" --name "Piranha" --description "Piranha" --descriptionUrl "https://github.com/piranhacms/piranha.core"
+
+        # Sign symbol packages
+        - name: Sign packages
+          run: SignClient "SIGN" --input "artifacts/*.snupkg" --config "sign.json" --user "${{secrets.SignClientUser}}" --secret "${{secrets.SignClientSecret}}" --name "Piranha" --description "Piranha" --descriptionUrl "https://github.com/piranhacms/piranha.core"
+
         # Push to NuGet
         # - name: Push generated package to GitHub registry
         #   run: dotnet nuget push ./artifacts/*.nupkg --skip-duplicate
