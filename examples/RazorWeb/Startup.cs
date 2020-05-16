@@ -40,9 +40,9 @@ namespace RazorWeb
                 options.UseManager();
                 options.UseTinyMCE();
                 options.UseMemoryCache();
-                options.UseApi(options =>
+                options.UseApi(config =>
                 {
-                    options.AllowAnonymousAccess = true;
+                    config.AllowAnonymousAccess = true;
                 });
 
                 options.UseEF<SQLiteDb>(db =>
