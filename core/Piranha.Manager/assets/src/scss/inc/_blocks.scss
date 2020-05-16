@@ -203,31 +203,24 @@
 }
 
 .quote-block {
-    .empty:not(:focus-within) {
-        background: $gray-100 url("../img/empty-text.png") no-repeat 50% 50%;
-        height: 8rem;
-    }
+    .blockquote {
+        *[contenteditable] {
+            cursor: text;
+            padding: .5rem;
+        }
 
-    p {
-        color: $gray-600;
-        height: 100%;
-        min-height: 2rem;
-        font-family: "Open Sans", serif;
-        font-size: 1.4rem;
-        margin-left: 4.5rem;
-    }
+        *[data-placeholder]:empty {
+            &:after {
+                content: attr(data-placeholder);
+                color: $gray-500;
+            }
+        }
 
-    .quote {
-        display: none;
-        color: $gray-500;
-        float: left;
-        font-size: 2rem;
-        padding: .25rem 1rem;
-    }
-
-    :not(.empty), :focus-within {
-        .quote {
-            display: inline;
+        .blockquote-body {
+            font-family: "Open Sans", serif;
+            font-size: 1.4rem;
+            margin-bottom: 0;
+            color: $gray-600;
         }
     }
 }

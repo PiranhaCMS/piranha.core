@@ -497,8 +497,19 @@ Vue.component("missing-block", {
 });
 Vue.component("quote-block", {
   props: ["uid", "model"],
+  data: function () {
+    return {
+      placeholder: {
+        body: "",
+        author: ""
+      }
+    };
+  },
   methods: {
-    onBlur: function (e) {
+    onAuthorBlur: function (e) {
+      this.model.author.value = e.target.innerText;
+    },
+    onBodyBlur: function (e) {
       this.model.body.value = e.target.innerText; // Tell parent that title has been updated
 
       var title = this.model.body.value.replace(/(<([^>]+)>)/ig, "");
@@ -513,12 +524,32 @@ Vue.component("quote-block", {
       });
     }
   },
-  computed: {
-    isEmpty: function () {
-      return piranha.utils.isEmptyText(this.model.body.value);
-    }
+  created: function () {
+    var quotes = [{
+      author: "Nelson Mandela",
+      body: "The greatest glory in living lies not in never falling, but in rising every time we fall."
+    }, {
+      author: "Walt Disney",
+      body: "The way to get started is to quit talking and begin doing."
+    }, {
+      author: "Eleanor Roosevelt",
+      body: "The future belongs to those who believe in the beauty of their dreams."
+    }, {
+      author: "John Lennon",
+      body: "Life is what happens when you're busy making other plans."
+    }, {
+      author: "Audrey Hepburn",
+      body: "Nothing is impossible, the word itself says, 'I'm possible!'"
+    }, {
+      author: "Mark Twain",
+      body: "Twenty years from now you will be more disappointed by the things that you didn't do than by the ones you did do."
+    }, {
+      author: "Maya Angelou",
+      body: "You will face many defeats in life, but never let yourself be defeated."
+    }];
+    this.placeholder = quotes[Math.floor(Math.random() * quotes.length)];
   },
-  template: "\n<div class=\"block-body\" :class=\"{ empty: isEmpty }\">\n    <i class=\"fas fa-quote-right quote\"></i>\n    <p class=\"lead\" contenteditable=\"true\" spellcheck=\"false\" v-html=\"model.body.value\" v-on:blur=\"onBlur\"></p>\n</div>\n"
+  template: "\n<div class=\"block-body\">\n    <blockquote class=\"blockquote\">\n        <p contenteditable=\"true\" class=\"blockquote-body\" v-html=\"model.body.value\" v-on:blur=\"onBodyBlur\" :data-placeholder=\"placeholder.body\"></p>\n        <footer contenteditable=\"true\" class=\"blockquote-footer\" v-html=\"model.author.value\" v-on:blur=\"onAuthorBlur\" :data-placeholder=\"placeholder.author\"></footer>\n    </blockquote>\n</div>\n"
 });
 Vue.component("separator-block", {
   props: ["model"],
