@@ -58,6 +58,8 @@ namespace Piranha.Manager.Models
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            await _service.SignOut(HttpContext);
+
             if (!ModelState.IsValid || !await _service.SignIn(HttpContext, Input.Username, Input.Password))
             {
                 ModelState.Clear();
