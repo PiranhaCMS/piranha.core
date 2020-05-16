@@ -9,28 +9,28 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Piranha.Models;
 
 namespace Piranha.WebApi
 {
     [ApiController]
     [Route("api/media")]
-    [Authorize(Policy = Permissions.Media)]
     public class MediaApiController : Controller
     {
         private readonly IApi _api;
+        private readonly IAuthorizationService _auth;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public MediaApiController(IApi api)
+        /// <param name="auth">The authorization service</param>
+        public MediaApiController(IApi api, IAuthorizationService auth)
         {
             _api = api;
+            _auth = auth;
         }
 
         /// <summary>
@@ -40,9 +40,16 @@ namespace Piranha.WebApi
         /// <returns>The media asset</returns>
         [HttpGet]
         [Route("{id:Guid}")]
-        public Task<Media> GetById(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
-            return _api.Media.GetByIdAsync(id);
+            if (!Module.AllowAnonymousAccess)
+            {
+                if (!(await _auth.AuthorizeAsync(User, Permissions.Media)).Succeeded)
+                {
+                    return Unauthorized();
+                }
+            }
+            return Json(await _api.Media.GetByIdAsync(id));
         }
 
         /// <summary>
@@ -54,9 +61,16 @@ namespace Piranha.WebApi
         /// <returns></returns>
         [HttpGet]
         [Route("list/{folderId:Guid?}")]
-        public Task<IEnumerable<Media>> GetByFolderId(Guid? folderId = null)
+        public async Task<IActionResult> GetByFolderId(Guid? folderId = null)
         {
-            return _api.Media.GetAllByFolderIdAsync(folderId);
+            if (!Module.AllowAnonymousAccess)
+            {
+                if (!(await _auth.AuthorizeAsync(User, Permissions.Media)).Succeeded)
+                {
+                    return Unauthorized();
+                }
+            }
+            return Json(await _api.Media.GetAllByFolderIdAsync(folderId));
         }
 
         /// <summary>
@@ -65,9 +79,16 @@ namespace Piranha.WebApi
         /// <returns></returns>
         [HttpGet]
         [Route("structure")]
-        public Task<MediaStructure> GetStructure()
+        public async Task<IActionResult> GetStructure()
         {
-            return _api.Media.GetStructureAsync();
+            if (!Module.AllowAnonymousAccess)
+            {
+                if (!(await _auth.AuthorizeAsync(User, Permissions.Media)).Succeeded)
+                {
+                    return Unauthorized();
+                }
+            }
+            return Json(await _api.Media.GetStructureAsync());
         }
     }
 }

@@ -40,6 +40,10 @@ namespace RazorWeb
                 options.UseManager();
                 options.UseTinyMCE();
                 options.UseMemoryCache();
+                options.UseApi(options =>
+                {
+                    options.AllowAnonymousAccess = true;
+                });
 
                 options.UseEF<SQLiteDb>(db =>
                     db.UseSqlite("Filename=./piranha.razorweb.db"));

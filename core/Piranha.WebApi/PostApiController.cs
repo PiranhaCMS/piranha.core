@@ -18,18 +18,20 @@ namespace Piranha.WebApi
 {
     [ApiController]
     [Route("api/post")]
-    [Authorize(Policy = Permissions.Posts)]
     public class PostApiController : Controller
     {
         private readonly IApi _api;
+        private readonly IAuthorizationService _auth;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public PostApiController(IApi api)
+        /// <param name="auth">The authorization service</param>
+        public PostApiController(IApi api, IAuthorizationService auth)
         {
             _api = api;
+            _auth = auth;
         }
 
         /// <summary>
@@ -40,9 +42,16 @@ namespace Piranha.WebApi
         /// <returns>The post model</returns>
         [HttpGet]
         [Route("{id:Guid}")]
-        public Task<PostBase> GetById(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
-            return _api.Posts.GetByIdAsync<PostBase>(id);
+            if (!Module.AllowAnonymousAccess)
+            {
+                if (!(await _auth.AuthorizeAsync(User, Permissions.Posts)).Succeeded)
+                {
+                    return Unauthorized();
+                }
+            }
+            return Json(await _api.Posts.GetByIdAsync<PostBase>(id));
         }
 
         /// <summary>
@@ -54,9 +63,16 @@ namespace Piranha.WebApi
         /// <returns>The post model</returns>
         [HttpGet]
         [Route("{archiveId}/{slug}")]
-        public Task<PostBase> GetBySlugAndArchive(Guid archiveId, string slug)
+        public async Task<IActionResult> GetBySlugAndArchive(Guid archiveId, string slug)
         {
-            return _api.Posts.GetBySlugAsync<PostBase>(archiveId, slug);
+            if (!Module.AllowAnonymousAccess)
+            {
+                if (!(await _auth.AuthorizeAsync(User, Permissions.Posts)).Succeeded)
+                {
+                    return Unauthorized();
+                }
+            }
+            return Json(await _api.Posts.GetBySlugAsync<PostBase>(archiveId, slug));
         }
 
         /// <summary>
@@ -67,9 +83,16 @@ namespace Piranha.WebApi
         /// <returns>The post model</returns>
         [HttpGet]
         [Route("info/{id:Guid}")]
-        public Task<PostInfo> GetInfoById(Guid id)
+        public async Task<IActionResult> GetInfoById(Guid id)
         {
-            return _api.Posts.GetByIdAsync<PostInfo>(id);
+            if (!Module.AllowAnonymousAccess)
+            {
+                if (!(await _auth.AuthorizeAsync(User, Permissions.Posts)).Succeeded)
+                {
+                    return Unauthorized();
+                }
+            }
+            return Json(await _api.Posts.GetByIdAsync<PostInfo>(id));
         }
 
         /// <summary>
@@ -81,9 +104,16 @@ namespace Piranha.WebApi
         /// <returns>The post model</returns>
         [HttpGet]
         [Route("info/{archiveId}/{slug}")]
-        public Task<PostInfo> GetInfoBySlugAndSite(Guid archiveId, string slug)
+        public async Task<IActionResult> GetInfoBySlugAndSite(Guid archiveId, string slug)
         {
-            return _api.Posts.GetBySlugAsync<PostInfo>(archiveId, slug);
+            if (!Module.AllowAnonymousAccess)
+            {
+                if (!(await _auth.AuthorizeAsync(User, Permissions.Posts)).Succeeded)
+                {
+                    return Unauthorized();
+                }
+            }
+            return Json(await _api.Posts.GetBySlugAsync<PostInfo>(archiveId, slug));
         }
     }
 }

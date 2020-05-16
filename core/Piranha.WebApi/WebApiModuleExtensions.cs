@@ -8,6 +8,7 @@
  *
  */
 
+using System;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;
 using Piranha.WebApi;
@@ -18,10 +19,12 @@ public static class WebApiModuleExtensions
     /// Adds the Piranha Api module.
     /// </summary>
     /// <param name="serviceBuilder">The service builder</param>
+    /// <param name="configure">The optional api configuration</param>
     /// <returns>The services</returns>
-    public static PiranhaServiceBuilder UseApi(this PiranhaServiceBuilder serviceBuilder)
+    public static PiranhaServiceBuilder UseApi(this PiranhaServiceBuilder serviceBuilder,
+        Action<WebApiOptions> configure = null)
     {
-        serviceBuilder.Services.AddPiranhaApi();
+        serviceBuilder.Services.AddPiranhaApi(configure);
 
         return serviceBuilder;
     }
@@ -30,9 +33,16 @@ public static class WebApiModuleExtensions
     /// Adds the Piranha Api module.
     /// </summary>
     /// <param name="services">The current service collection</param>
+    /// <param name="configure">The optional api configuration</param>
     /// <returns>The services</returns>
-    public static IServiceCollection AddPiranhaApi(this IServiceCollection services)
+    public static IServiceCollection AddPiranhaApi(this IServiceCollection services,
+        Action<WebApiOptions> configure = null)
     {
+        // Configure the api module
+        var options = new WebApiOptions();
+        configure?.Invoke(options);
+        Module.AllowAnonymousAccess = options.AllowAnonymousAccess;
+
         // Add the api module
         Piranha.App.Modules.Register<Piranha.WebApi.Module>();
 

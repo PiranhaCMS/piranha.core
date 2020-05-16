@@ -12,7 +12,6 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Piranha.Models;
 
 namespace Piranha.WebApi
 {
@@ -22,14 +21,17 @@ namespace Piranha.WebApi
     public class SitemapApiController : Controller
     {
         private readonly IApi _api;
+        private readonly IAuthorizationService _auth;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public SitemapApiController(IApi api)
+        /// <param name="auth">The authorization service</param>
+        public SitemapApiController(IApi api, IAuthorizationService auth)
         {
             _api = api;
+            _auth = auth;
         }
 
         /// <summary>
@@ -39,9 +41,16 @@ namespace Piranha.WebApi
         /// <returns>The sitemap</returns>
         [HttpGet]
         [Route("{id:Guid?}")]
-        public Task<Sitemap> GetById(Guid? id = null)
+        public async Task<IActionResult> GetById(Guid? id = null)
         {
-            return _api.Sites.GetSitemapAsync(id);
+            if (!Module.AllowAnonymousAccess)
+            {
+                if (!(await _auth.AuthorizeAsync(User, Permissions.Sitemap)).Succeeded)
+                {
+                    return Unauthorized();
+                }
+            }
+            return Json(await _api.Sites.GetSitemapAsync(id));
         }
     }
 }

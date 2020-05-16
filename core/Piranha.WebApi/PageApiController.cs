@@ -18,18 +18,20 @@ namespace Piranha.WebApi
 {
     [ApiController]
     [Route("api/page")]
-    [Authorize(Policy = Permissions.Pages)]
     public class PageApiController : Controller
     {
         private readonly IApi _api;
+        private readonly IAuthorizationService _auth;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="api">The current api</param>
-        public PageApiController(IApi api)
+        /// <param name="auth">The authorization service</param>
+        public PageApiController(IApi api, IAuthorizationService auth)
         {
             _api = api;
+            _auth = auth;
         }
 
         /// <summary>
@@ -40,9 +42,16 @@ namespace Piranha.WebApi
         /// <returns>The page model</returns>
         [HttpGet]
         [Route("{id:Guid}")]
-        public Task<PageBase> GetById(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
-            return _api.Pages.GetByIdAsync<PageBase>(id);
+            if (!Module.AllowAnonymousAccess)
+            {
+                if (!(await _auth.AuthorizeAsync(User, Permissions.Pages)).Succeeded)
+                {
+                    return Unauthorized();
+                }
+            }
+            return Json(await _api.Pages.GetByIdAsync<PageBase>(id));
         }
 
         /// <summary>
@@ -53,9 +62,16 @@ namespace Piranha.WebApi
         /// <returns>The page model</returns>
         [HttpGet]
         [Route("{slug}")]
-        public Task<PageBase> GetBySlug(string slug)
+        public async Task<IActionResult> GetBySlug(string slug)
         {
-            return _api.Pages.GetBySlugAsync<PageBase>(slug);
+            if (!Module.AllowAnonymousAccess)
+            {
+                if (!(await _auth.AuthorizeAsync(User, Permissions.Pages)).Succeeded)
+                {
+                    return Unauthorized();
+                }
+            }
+            return Json(await _api.Pages.GetBySlugAsync<PageBase>(slug));
         }
 
         /// <summary>
@@ -67,9 +83,16 @@ namespace Piranha.WebApi
         /// <returns>The page model</returns>
         [HttpGet]
         [Route("{siteId}/{slug}")]
-        public Task<PageBase> GetBySlugAndSite(Guid siteId, string slug)
+        public async Task<IActionResult> GetBySlugAndSite(Guid siteId, string slug)
         {
-            return _api.Pages.GetBySlugAsync<PageBase>(slug, siteId);
+            if (!Module.AllowAnonymousAccess)
+            {
+                if (!(await _auth.AuthorizeAsync(User, Permissions.Pages)).Succeeded)
+                {
+                    return Unauthorized();
+                }
+            }
+            return Json(await _api.Pages.GetBySlugAsync<PageBase>(slug, siteId));
         }
 
         /// <summary>
@@ -80,9 +103,16 @@ namespace Piranha.WebApi
         /// <returns>The page model</returns>
         [HttpGet]
         [Route("info/{id:Guid}")]
-        public Task<PageInfo> GetInfoById(Guid id)
+        public async Task<IActionResult> GetInfoById(Guid id)
         {
-            return _api.Pages.GetByIdAsync<PageInfo>(id);
+            if (!Module.AllowAnonymousAccess)
+            {
+                if (!(await _auth.AuthorizeAsync(User, Permissions.Pages)).Succeeded)
+                {
+                    return Unauthorized();
+                }
+            }
+            return Json(await _api.Pages.GetByIdAsync<PageInfo>(id));
         }
 
         /// <summary>
@@ -93,9 +123,16 @@ namespace Piranha.WebApi
         /// <returns>The page model</returns>
         [HttpGet]
         [Route("info/{slug}")]
-        public Task<PageInfo> GetInfoBySlug(string slug)
+        public async Task<IActionResult> GetInfoBySlug(string slug)
         {
-            return _api.Pages.GetBySlugAsync<PageInfo>(slug);
+            if (!Module.AllowAnonymousAccess)
+            {
+                if (!(await _auth.AuthorizeAsync(User, Permissions.Pages)).Succeeded)
+                {
+                    return Unauthorized();
+                }
+            }
+            return Json(await _api.Pages.GetBySlugAsync<PageInfo>(slug));
         }
 
         /// <summary>
@@ -107,9 +144,16 @@ namespace Piranha.WebApi
         /// <returns>The page model</returns>
         [HttpGet]
         [Route("info/{siteId}/{slug}")]
-        public Task<PageInfo> GetInfoBySlugAndSite(Guid siteId, string slug)
+        public async Task<IActionResult> GetInfoBySlugAndSite(Guid siteId, string slug)
         {
-            return _api.Pages.GetBySlugAsync<PageInfo>(slug, siteId);
+            if (!Module.AllowAnonymousAccess)
+            {
+                if (!(await _auth.AuthorizeAsync(User, Permissions.Pages)).Succeeded)
+                {
+                    return Unauthorized();
+                }
+            }
+            return Json(await _api.Pages.GetBySlugAsync<PageInfo>(slug, siteId));
         }
     }
 }

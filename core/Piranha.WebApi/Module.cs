@@ -57,6 +57,12 @@ namespace Piranha.WebApi
         public string IconUrl => "http://piranhacms.org/assets/twitter-shield.png";
 
         /// <summary>
+        /// Gets/sets if anonymous users should be able to access
+        /// the api.
+        /// </summary>
+        internal static bool AllowAnonymousAccess { get; set; }
+
+        /// <summary>
         /// The assembly.
         /// </summary>
         internal static readonly Assembly Assembly;
