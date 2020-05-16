@@ -19,6 +19,11 @@ namespace Piranha.Extend.Blocks
     public class QuoteBlock : Block, ISearchable
     {
         /// <summary>
+        /// Gets/sets the author
+        /// </summary>
+        public StringField Author { get; set; }
+
+        /// <summary>
         /// Gets/sets the text body.
         /// </summary>
         public TextField Body { get; set; }
