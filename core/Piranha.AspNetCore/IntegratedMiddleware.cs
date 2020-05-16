@@ -104,6 +104,11 @@ namespace Piranha.AspNetCore
                     service.Site.Culture = site.Culture;
                     service.Site.Sitemap = await api.Sites.GetSitemapAsync(site.Id);
 
+                    // Set prefered hostname & prefix
+                    var siteHost = GetFirstHost(site);
+                    service.Site.Host = siteHost[0];
+                    service.Site.SitePrefix = siteHost[1];
+
                     // Set current culture if specified in site
                     if (!string.IsNullOrEmpty(site.Culture))
                     {
@@ -488,6 +493,30 @@ namespace Piranha.AspNetCore
                 };
             }
             return false;
+        }
+
+        /// <summary>
+        /// Gets the first hostname of the site.
+        /// </summary>
+        /// <param name="site">The site</param>
+        /// <returns>The hostname split into host and prefix</returns>
+        private string[] GetFirstHost(Site site)
+        {
+            var result = new string[2];
+
+            if (!string.IsNullOrEmpty(site.Hostnames))
+            {
+                foreach (var hostname in site.Hostnames.Split(","))
+                {
+                    var segments = hostname.Split("/", StringSplitOptions.RemoveEmptyEntries);
+
+                    result[0] = segments[0];
+                    result[1] = segments.Length > 1 ? segments[1] : null;
+
+                    break;
+                }
+            }
+            return result;
         }
     }
 }

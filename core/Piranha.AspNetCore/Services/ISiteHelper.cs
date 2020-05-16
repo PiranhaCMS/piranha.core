@@ -27,6 +27,17 @@ namespace Piranha.AspNetCore.Services
         string Culture { get; set; }
 
         /// <summary>
+        /// Gets/set the optional hostname of the requested site.
+        /// </summary>
+        string Host { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional site prefic of the requested site
+        /// if it's routed with `host/prefix`.
+        /// </summary>
+        string SitePrefix { get; set; }
+
+        /// <summary>
         /// Gets/sets the sitemap of the currently requested site.
         /// </summary>
         Sitemap Sitemap { get; set; }

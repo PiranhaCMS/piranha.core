@@ -50,7 +50,9 @@ namespace Piranha.AspNetCore
                 var host = context.Request.Host.Host;
                 var scheme = context.Request.Scheme;
                 var port = context.Request.Host.Port;
-                var baseUrl = scheme + "://" + host + (port.HasValue ? $":{port}" : "");
+                var prefix = service.Site.SitePrefix != null ?
+                    $"/{ service.Site.SitePrefix }" : "";
+                var baseUrl = scheme + "://" + host + (port.HasValue ? $":{port}" : "") + prefix;
 
                 if (url.ToLower() == "/sitemap.xml")
                 {

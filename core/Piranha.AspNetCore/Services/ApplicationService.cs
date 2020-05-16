@@ -36,6 +36,17 @@ namespace Piranha.AspNetCore.Services
             public string Culture { get; set; }
 
             /// <summary>
+            /// Gets/set the optional hostname of the requested site.
+            /// </summary>
+            public string Host { get; set; }
+
+            /// <summary>
+            /// Gets/sets the optional site prefic of the requested site
+            /// if it's routed with `host/prefix`.
+            /// </summary>
+            public string SitePrefix { get; set; }
+
+            /// <summary>
             /// Gets the sitemap of the currently requested site.
             /// </summary>
             public Sitemap Sitemap { get; set; }
@@ -184,6 +195,7 @@ namespace Piranha.AspNetCore.Services
                     {
                         context.Request.Path = "/" + string.Join("/", segments.Skip(1));
                         hostname = prefixedHostname;
+
                     }
                 }
 
@@ -201,6 +213,10 @@ namespace Piranha.AspNetCore.Services
                     Site.Id = site.Id;
                     Site.Culture = site.Culture;
                     Site.Sitemap = await Api.Sites.GetSitemapAsync(Site.Id);
+
+                    var siteHost = GetFirstHost(site);
+                    Site.Host = siteHost[0];
+                    Site.SitePrefix = siteHost[1];
                 }
             }
 
@@ -229,6 +245,28 @@ namespace Piranha.AspNetCore.Services
                 return "https://www.gravatar.com/avatar/" + sb.ToString().ToLower() +
                        (size > 0 ? "?s=" + size : "");
             }
+        }
+
+        /// <summary>
+        /// Gets the first hostname of the site.
+        /// </summary>
+        /// <param name="site">The site</param>
+        /// <returns>The hostname split into host and prefix</returns>
+        private string[] GetFirstHost(Site site)
+        {
+            var result = new string[2];
+
+            if (!string.IsNullOrEmpty(site.Hostnames))
+            {
+                foreach (var hostname in site.Hostnames.Split(","))
+                {
+                    var segments = hostname.Split("/", StringSplitOptions.RemoveEmptyEntries);
+
+                    result[0] = segments[0];
+                    result[1] = segments.Length > 1 ? segments[1] : null;
+                }
+            }
+            return result;
         }
     }
 }
