@@ -24,6 +24,7 @@ namespace Piranha.Services
         private readonly IContentFactory _factory;
         private readonly ISiteService _siteService;
         private readonly IParamService _paramService;
+        private readonly IMediaService _mediaService;
         private readonly ICache _cache;
         private readonly ISearch _search;
 
@@ -34,15 +35,17 @@ namespace Piranha.Services
         /// <param name="factory">The content facory</param>
         /// <param name="siteService">The site service</param>
         /// <param name="paramService">The param service</param>
+        /// <param name="mediaService">The media service</param>
         /// <param name="cache">The optional model cache</param>
         /// <param name="search">The optional content search</param>
-        public PageService(IPageRepository repo, IContentFactory factory, ISiteService siteService, IParamService paramService,
-            ICache cache = null, ISearch search = null)
+        public PageService(IPageRepository repo, IContentFactory factory, ISiteService siteService,
+            IParamService paramService, IMediaService mediaService, ICache cache = null, ISearch search = null)
         {
             _repo = repo;
             _factory = factory;
             _siteService = siteService;
             _paramService = paramService;
+            _mediaService = mediaService;
             _search = search;
 
             if ((int)App.CacheLevel > 2)
@@ -920,6 +923,23 @@ namespace Piranha.Services
                 else
                 {
                     await _factory.InitAsync(model, App.PageTypes.GetById(model.TypeId)).ConfigureAwait(false);
+                }
+
+                // Initialize primary image
+                if (model.PrimaryImage == null)
+                {
+                    model.PrimaryImage = new Extend.Fields.ImageField();
+                }
+
+                if (model.PrimaryImage.Id.HasValue)
+                {
+                    model.PrimaryImage.Media = await _mediaService.GetByIdAsync(model.PrimaryImage.Id.Value).ConfigureAwait(false);
+
+                    // Clear id if the image has been deleted
+                    if (model.PrimaryImage.Media == null)
+                    {
+                        model.PrimaryImage.Id = null;
+                    }
                 }
 
                 App.Hooks.OnLoad(model);

@@ -17,6 +17,7 @@ piranha.pageedit = new Vue({
         slug: null,
         metaKeywords: null,
         metaDescription: null,
+        excerpt: null,
         isHidden: false,
         published: null,
         redirectUrl: null,
@@ -30,7 +31,13 @@ piranha.pageedit = new Vue({
         regions: [],
         editors: [],
         useBlocks: true,
+        usePrimaryImage: true,
+        useExcerpt: true,
         permissions: [],
+        primaryImage: {
+            id: null,
+            media: null
+        },
         selectedPermissions: [],
         isCopy: false,
         saving: false,
@@ -55,6 +62,16 @@ piranha.pageedit = new Vue({
                 return item.meta.display === "setting";
             });
         },
+        primaryImageUrl: function () {
+            if (this.primaryImage.media != null) {
+                return piranha.utils.formatUrl(this.primaryImage.media.publicUrl);
+            } else {
+                return piranha.utils.formatUrl("~/manager/assets/img/empty-image.png");
+            }
+        },
+        isExcerptEmpty: function () {
+            return piranha.utils.isEmptyText(this.excerpt);
+        }
     },
     mounted() {
         document.addEventListener("keydown", this.doHotKeys);
@@ -75,6 +92,7 @@ piranha.pageedit = new Vue({
             this.slug = model.slug;
             this.metaKeywords = model.metaKeywords;
             this.metaDescription = model.metaDescription;
+            this.excerpt = model.excerpt;
             this.isHidden = model.isHidden;
             this.published = model.published;
             this.redirectUrl = model.redirectUrl;
@@ -88,10 +106,13 @@ piranha.pageedit = new Vue({
             this.regions = model.regions;
             this.editors = model.editors;
             this.useBlocks = model.useBlocks;
+            this.usePrimaryImage = model.usePrimaryImage;
+            this.useExcerpt = model.useExcerpt;
             this.isCopy = model.isCopy;
             this.selectedRoute = model.selectedRoute;
             this.routes = model.routes;
             this.permissions = model.permissions;
+            this.primaryImage = model.primaryImage;
             this.selectedPermissions = model.selectedPermissions;
 
             if (!this.useBlocks) {
@@ -195,6 +216,7 @@ piranha.pageedit = new Vue({
                 slug: self.slug,
                 metaKeywords: self.metaKeywords,
                 metaDescription: self.metaDescription,
+                excerpt: self.excerpt,
                 isHidden: self.isHidden,
                 published: self.published,
                 redirectUrl: self.redirectUrl,
@@ -205,7 +227,10 @@ piranha.pageedit = new Vue({
                 blocks: JSON.parse(JSON.stringify(self.blocks)),
                 regions: JSON.parse(JSON.stringify(self.regions)),
                 selectedRoute: self.selectedRoute,
-                selectedPermissions: self.selectedPermissions
+                selectedPermissions: self.selectedPermissions,
+                primaryImage: {
+                    id: self.primaryImage.id
+                },
             };
 
             fetch(route, {
@@ -341,6 +366,28 @@ piranha.pageedit = new Vue({
             date = date.addDays(this.closeCommentsAfterDays);
 
             return date.toDateString();
+        },
+        selectPrimaryImage: function () {
+            if (this.primaryImage.media !== null) {
+                piranha.mediapicker.open(this.updatePrimaryImage, "Image", this.primaryImage.media.folderId);
+            } else {
+                piranha.mediapicker.openCurrentFolder(this.updatePrimaryImage, "Image");
+            }
+        },
+        removePrimaryImage: function () {
+            this.primaryImage.id = null;
+            this.primaryImage.media = null;
+        },
+        updatePrimaryImage: function (media) {
+            if (media.type === "Image") {
+                this.primaryImage.id = media.id;
+                this.primaryImage.media = media;
+            } else {
+                console.log("No image was selected");
+            }
+        },
+        onExcerptBlur: function (e) {
+            this.excerpt = e.target.innerHTML;
         }
     },
     created: function () {

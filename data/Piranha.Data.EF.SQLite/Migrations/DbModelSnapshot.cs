@@ -293,6 +293,9 @@ namespace Piranha.Data.EF.SQLite.Migrations
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(false);
 
+                    b.Property<string>("Excerpt")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("IsHidden")
                         .HasColumnType("INTEGER");
 
@@ -320,6 +323,9 @@ namespace Piranha.Data.EF.SQLite.Migrations
                         .HasMaxLength(64);
 
                     b.Property<Guid?>("ParentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("PrimaryImageId")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("Published")
@@ -583,7 +589,7 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     b.Property<bool>("EnableComments")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(true);
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Excerpt")
                         .HasColumnType("TEXT");

@@ -584,7 +584,7 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     b.Property<bool>("EnableComments")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(true);
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("TEXT");

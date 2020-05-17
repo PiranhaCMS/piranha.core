@@ -296,6 +296,9 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
+                    b.Property<string>("Excerpt")
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsHidden")
                         .HasColumnType("boolean");
 
@@ -323,6 +326,9 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasMaxLength(64);
 
                     b.Property<Guid?>("ParentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("PrimaryImageId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("Published")
@@ -586,7 +592,7 @@ namespace Piranha.Data.EF.PostgreSql
                     b.Property<bool>("EnableComments")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
-                        .HasDefaultValue(true);
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Excerpt")
                         .HasColumnType("text");

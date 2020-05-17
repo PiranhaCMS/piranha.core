@@ -118,6 +118,8 @@ namespace Piranha.AttributeBuilder
                         CLRType = type.GetTypeInfo().AssemblyQualifiedName,
                         Title = attr.Title,
                         UseBlocks = attr.UseBlocks,
+                        UsePrimaryImage = attr.UsePrimaryImage,
+                        UseExcerpt = attr.UseExcerpt,
                         IsArchive = typeof(IArchivePage).IsAssignableFrom(type) || attr.IsArchive
                     };
 

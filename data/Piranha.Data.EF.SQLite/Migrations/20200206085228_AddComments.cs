@@ -18,7 +18,7 @@ namespace Piranha.Data.EF.SQLite.Migrations
                 name: "EnableComments",
                 table: "Piranha_Posts",
                 nullable: false,
-                defaultValue: true);
+                defaultValue: false);
 
             migrationBuilder.AddColumn<int>(
                 name: "CloseCommentsAfterDays",

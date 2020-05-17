@@ -268,6 +268,8 @@ namespace Piranha.Manager.Services
                 page.Slug = model.Slug;
                 page.MetaKeywords = model.MetaKeywords;
                 page.MetaDescription = model.MetaDescription;
+                page.PrimaryImage = model.PrimaryImage;
+                page.Excerpt = model.Excerpt;
                 page.IsHidden = model.IsHidden;
                 page.Published = !string.IsNullOrEmpty(model.Published) ? DateTime.Parse(model.Published) : (DateTime?)null;
                 page.RedirectUrl = model.RedirectUrl;
@@ -509,6 +511,8 @@ namespace Piranha.Manager.Services
                 Slug = page.Slug,
                 MetaKeywords = page.MetaKeywords,
                 MetaDescription = page.MetaDescription,
+                PrimaryImage = page.PrimaryImage,
+                Excerpt = page.Excerpt,
                 IsHidden = page.IsHidden,
                 Published = page.Published.HasValue ? page.Published.Value.ToString("yyyy-MM-dd HH:mm") : null,
                 RedirectUrl = page.RedirectUrl,
@@ -518,6 +522,8 @@ namespace Piranha.Manager.Services
                 CommentCount = page.CommentCount,
                 State = page.GetState(isDraft),
                 UseBlocks = type.UseBlocks,
+                UsePrimaryImage = type.UsePrimaryImage,
+                UseExcerpt = type.UseExcerpt,
                 SelectedRoute = route == null ? null : new RouteModel
                 {
                     Title = route.Title,

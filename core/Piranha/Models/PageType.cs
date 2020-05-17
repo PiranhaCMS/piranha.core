@@ -24,6 +24,18 @@ namespace Piranha.Models
         public bool UseBlocks { get; set; } = true;
 
         /// <summary>
+        /// Gets/sets if primary image should be used for the
+        /// post type. The default value is true.
+        /// </summary>
+        public bool UsePrimaryImage { get; set; } = true;
+
+        /// <summary>
+        /// Gets/sets if excerpt should be used for the
+        /// post type. The default value is true.
+        /// </summary>
+        public bool UseExcerpt { get; set; } = true;
+
+        /// <summary>
         /// Gets/sets if this is an archive page or not.
         /// </summary>
         public bool IsArchive { get; set; }
