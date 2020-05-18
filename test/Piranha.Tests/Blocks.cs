@@ -465,6 +465,10 @@ namespace Piranha.Tests
             var models = new List<Extend.Block>();
             models.Add(new Extend.Blocks.QuoteBlock
             {
+                Author = new Extend.Fields.StringField
+                {
+                    Value = "Joe Doe"
+                },
                 Body = new Extend.Fields.TextField
                 {
                     Value = "Lorem ipsum"
@@ -477,8 +481,10 @@ namespace Piranha.Tests
             Assert.Single(blocks);
 
             Assert.Equal(typeof(Extend.Blocks.QuoteBlock).FullName, blocks[0].CLRType);
-            Assert.Equal(typeof(Extend.Fields.TextField).FullName, blocks[0].Fields[0].CLRType);
-            Assert.Equal("Lorem ipsum", blocks[0].Fields[0].Value);
+            Assert.Equal(typeof(Extend.Fields.StringField).FullName, blocks[0].Fields[0].CLRType);
+            Assert.Equal(typeof(Extend.Fields.TextField).FullName, blocks[0].Fields[1].CLRType);
+            Assert.Equal("Joe Doe", blocks[0].Fields[0].Value);
+            Assert.Equal("Lorem ipsum", blocks[0].Fields[1].Value);
         }
     }
 }
