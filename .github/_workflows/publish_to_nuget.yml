@@ -20,12 +20,19 @@ on:
           env:
             NUGET_AUTH_TOKEN: ${{secrets.NugetAuthToken}}
 
-        # Restore packages
-        - name: NPM Install
+        # Setup Node.js
+        - name: Use Node.js 10.x
+          uses: actions/setup-node@v1
+          with:
+            node-version: 10.x
+
+        # Install NPM packages and run gulp
+        - name: NPM Install and Gulp
           run: |
             cd core/Piranha.Manager
             npm install
-            cd ../../
+            npm audit fix
+            gulp
 
         # Build and pack
         - name: Build solution and generate NuGet package
