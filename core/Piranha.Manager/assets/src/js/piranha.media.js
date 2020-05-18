@@ -31,9 +31,13 @@ piranha.media = new Vue({
             this.parentFolderId = result.parentFolderId;
 
             this.initFolders(result.structure);
-
             this.folders = result.folders;
-            this.items = result.media;
+
+            this.items = result.media.map(function (i) {
+                i.selected = false
+                return i;
+            });
+
             this.structure = result.structure;
             this.rootCount = result.rootCount;
             this.totalCount = result.totalCount;
@@ -98,18 +102,50 @@ piranha.media = new Vue({
                 target.removeClass("active");
             }
 
-            var mediaId = event.dataTransfer.getData("mediaId");
+            var selections = this.items.filter(function (item) {
+                return item.selected;
+            });
 
-            fetch(piranha.baseUrl + "manager/api/media/move/" + mediaId + "/" + (folderId ? folderId : ""))
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    if (result.type === "success") {
-                        piranha.media.refresh();
-                    }
-                    // Push status to notification hub
-                    piranha.notifications.push(result);
-                })
-                .catch(function (error) { console.log("error:", error); });
+            if (selections.length > 0) {
+                var fetches = [];
+                for (var n = 0; n < selections.length; n++) {
+                    fetches.push(fetch(piranha.baseUrl + "manager/api/media/move/" + selections[n].id + "/" + (folderId ? folderId : "")));
+                }
+                Promise.all(fetches)
+                    .then(function (results) {
+                        console.log("results", results)
+                        var errors = results.filter(function (r) {
+                            return !r.ok;
+                        });
+                        if (errors.length > 0) {
+
+                        } else {
+                            piranha.media.refresh();
+                        }
+                    })
+                    .catch(function (error) { console.log("error:", error); });
+
+            } else {
+                var mediaId = event.dataTransfer.getData("mediaId");
+
+                fetch(piranha.baseUrl + "manager/api/media/move/" + mediaId + "/" + (folderId ? folderId : ""))
+                    .then(function (response) { return response.json(); })
+                    .then(function (result) {
+                        if (result.type === "success") {
+                            piranha.media.refresh();
+                        }
+                        // Push status to notification hub
+                        piranha.notifications.push(result);
+                    })
+                    .catch(function (error) { console.log("error:", error); });
+            }
+        },
+        onClick: function (event, media) {
+            if (event.shiftKey) {
+                media.selected = !media.selected;
+            } else {
+                piranha.preview.openItem(media);
+            }
         },
         showList: function () {
             this.listView = true;
