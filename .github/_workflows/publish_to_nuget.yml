@@ -20,6 +20,13 @@ on:
           env:
             NUGET_AUTH_TOKEN: ${{secrets.NugetAuthToken}}
 
+        # Restore packages
+        - name: NPM Install
+          run: |
+            cd core/Piranha.Manager
+            npm install
+            cd ../../
+
         # Build and pack
         - name: Build solution and generate NuGet package
           run: ./pack.sh
