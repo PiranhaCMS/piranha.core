@@ -169,7 +169,7 @@
                 </div>
             </div>
             <div class="card-body" v-bind:class="{ readonly: isCopy }">
-                <div class="blocks">
+                <div id="content-blocks" class="blocks">
                     <a v-if="!isCopy" href="#" class="block-add unsortable" v-on:click.prevent="piranha.blockpicker.open(piranha.pageedit.addBlock, 0)">
                         <hr>
                         <i class="fas fa-plus-circle"></i>

@@ -361,7 +361,7 @@ piranha.postedit = new Vue({
 
         if (this.loading)
         {
-            sortable(".blocks", {
+            sortable("#content-blocks", {
                 handle: ".handle",
                 items: ":not(.unsortable)"
             })[0].addEventListener("sortupdate", function (e) {
@@ -390,8 +390,8 @@ piranha.postedit = new Vue({
             });
         }
         else {
-            sortable(".blocks", "disable");
-            sortable(".blocks", "enable");
+            sortable("#content-blocks", "disable");
+            sortable("#content-blocks", "enable");
         }
 
         this.loading = false;
