@@ -222,15 +222,43 @@ piranha.media = new Vue({
         remove: function (id) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/media/delete/" + id)
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    self.bind(result);
+            fetch(piranha.baseUrl + "manager/api/media/delete", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify([id])
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                // Refresh
+                self.refresh();
 
-                    // Push status to notification hub
-                    piranha.notifications.push(result.status);
-                })
-                .catch(function (error) { console.log("error:", error ); });
+                // Push status to notification hub
+                piranha.notifications.push(result);
+            })
+            .catch(function (error) { console.log("error:", error ); });
+        },
+        removeSelection: function () {
+            var self = this;
+            var selections = this.items.filter(i => i.selected).map(i => i.id);
+
+            fetch(piranha.baseUrl + "manager/api/media/delete", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(selections)
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                // Refresh
+                self.refresh();
+
+                // Push status to notification hub
+                piranha.notifications.push(result);
+            })
+            .catch(function (error) { console.log("error:", error); });
         },
         removeFolder: function (id) {
             var self = this;

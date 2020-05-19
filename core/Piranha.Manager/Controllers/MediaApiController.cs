@@ -293,41 +293,34 @@ namespace Piranha.Manager.Controllers
                     Body = e.Message
                 });
             }
-
-            return BadRequest(new StatusMessage
-            {
-                Type = StatusMessage.Error,
-                Body = ""
-            });
         }
 
-        [Route("delete/{id:Guid}")]
-        [HttpGet]
+        [Route("delete")]
+        [HttpPost]
+        [Consumes("application/json")]
         [Authorize(Policy = Permission.MediaDelete)]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete([FromBody] IEnumerable<Guid> items)
         {
             try
             {
-                var folderId = await _service.DeleteMedia(id);
-                var result = await _service.GetList(folderId);
+                foreach(var id in items)
+                {
+                    await _service.DeleteMedia(id);
+                }
 
-                result.Status = new StatusMessage
+                return Ok(new StatusMessage
                 {
                     Type = StatusMessage.Success,
                     Body = _localizer.Media["The media file was successfully deleted"]
-                };
-
-                return Ok(result);
+                });
             }
             catch (ValidationException e)
             {
-                var result = new MediaListModel();
-                result.Status = new StatusMessage
+                return BadRequest(new StatusMessage
                 {
                     Type = StatusMessage.Error,
                     Body = e.Message
-                };
-                return BadRequest(result);
+                });
             }
         }
     }
