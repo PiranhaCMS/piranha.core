@@ -12,6 +12,15 @@
             }
         }
 
+        &.selected {
+            color: white;
+            background: $blue;
+
+            a {
+                color: white;
+            }
+        }
+
         td, th {
             &.actions {
                 text-align: right;
@@ -19,6 +28,7 @@
                 &.one {
                     width: 3.5rem;
                 }
+
                 &.three {
                     width: 7.5rem;
                 }

@@ -102,45 +102,32 @@ piranha.media = new Vue({
                 target.removeClass("active");
             }
 
-            var selections = this.items.filter(function (item) {
-                return item.selected;
-            });
+            var dropped = event.dataTransfer.getData("mediaId");
+            var selections = this.items.filter(i => i.selected).map(i => i.id);
 
-            if (selections.length > 0) {
-                var fetches = [];
-                for (var n = 0; n < selections.length; n++) {
-                    fetches.push(fetch(piranha.baseUrl + "manager/api/media/move/" + selections[n].id + "/" + (folderId ? folderId : "")));
-                }
-                Promise.all(fetches)
-                    .then(function (results) {
-                        console.log("results", results)
-                        var errors = results.filter(function (r) {
-                            return !r.ok;
-                        });
-                        if (errors.length > 0) {
-
-                        } else {
-                            piranha.media.refresh();
-                        }
-                    })
-                    .catch(function (error) { console.log("error:", error); });
-
-            } else {
-                var mediaId = event.dataTransfer.getData("mediaId");
-
-                fetch(piranha.baseUrl + "manager/api/media/move/" + mediaId + "/" + (folderId ? folderId : ""))
-                    .then(function (response) { return response.json(); })
-                    .then(function (result) {
-                        if (result.type === "success") {
-                            piranha.media.refresh();
-                        }
-                        // Push status to notification hub
-                        piranha.notifications.push(result);
-                    })
-                    .catch(function (error) { console.log("error:", error); });
+            if (!selections.includes(dropped)) {
+                selections = [];
+                selections.push(dropped);
             }
+
+            fetch(piranha.baseUrl + "manager/api/media/move/" + (folderId || ""), {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(selections)
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                if (result.type === "success") {
+                    piranha.media.refresh();
+                }
+                // Push status to notification hub
+                piranha.notifications.push(result);
+            })
+            .catch(function (error) { console.log("error:", error); });
         },
-        onClick: function (event, media) {
+        onItemClick: function (event, media) {
             if (event.shiftKey) {
                 media.selected = !media.selected;
             } else {
@@ -260,6 +247,13 @@ piranha.media = new Vue({
                     piranha.notifications.push(result.status);
                 })
                 .catch(function (error) { console.log("error:", error ); });
+        }
+    },
+    computed: {
+        hasSelection: function () {
+            return this.items.some(function (item) {
+                return item.selected;
+            });
         }
     },
     updated: function () {

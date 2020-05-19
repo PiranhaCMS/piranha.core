@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -238,46 +239,51 @@ namespace Piranha.Manager.Controllers
             }
         }
 
-        [Route("move/{mediaId}/{folderId?}")]
-        [HttpGet]
+        [Route("move/{folderId?}")]
+        [HttpPost]
+        [Consumes("application/json")]
         [Authorize(Policy = Permission.MediaEdit)]
-        public async Task<IActionResult> Move(Guid mediaId, Guid? folderId)
-        {
+        public async Task<IActionResult> Move([FromBody] IEnumerable<Guid> items, Guid? folderId)
+        {            
             try
             {
-                if (mediaId != folderId)
+                var moved = 0;
+                foreach (var id in items)
                 {
-                    var media = await _api.Media.GetByIdAsync(mediaId);
+                    var media = await _api.Media.GetByIdAsync(id);
                     if (media != null)
                     {
                         await _api.Media.MoveAsync(media, folderId);
+                        moved++;
 
-                        return Ok(new StatusMessage
-                        {
-                            Type = StatusMessage.Success,
-                            Body = $"{media.Filename} was successfully moved."
-                        });
+                        continue;
                     }
 
-                    var folder = await _api.Media.GetFolderByIdAsync(mediaId);
+                    var folder = await _api.Media.GetFolderByIdAsync(id);
                     if (folder != null)
                     {
                         folder.ParentId = folderId;
                         await _api.Media.SaveFolderAsync(folder);
-
-                        return Ok(new StatusMessage
-                        {
-                            Type = StatusMessage.Success,
-                            Body = $"{folder.Name} was successfully moved."
-                        });
+                        moved++;
                     }
+                }
+
+                if (moved > 0)
+                {
+                    return Ok(new StatusMessage
+                    {
+                        Type = StatusMessage.Success,
+                        Body = $"{moved} item{(moved > 1 ? "s" : "")} was successfully moved."
+                    });
+                }
+                else
+                {
                     return BadRequest(new StatusMessage
                     {
                         Type = StatusMessage.Error,
                         Body = _localizer.Media["The media file was not found."]
                     });
                 }
-                return BadRequest();
             }
             catch (Exception e)
             {
@@ -287,6 +293,12 @@ namespace Piranha.Manager.Controllers
                     Body = e.Message
                 });
             }
+
+            return BadRequest(new StatusMessage
+            {
+                Type = StatusMessage.Error,
+                Body = ""
+            });
         }
 
         [Route("delete/{id:Guid}")]
