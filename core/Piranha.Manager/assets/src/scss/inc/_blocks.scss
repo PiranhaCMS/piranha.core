@@ -245,12 +245,15 @@
 
 .page-block, .post-block {
     .page-image {
+        float: left;
         background: $body-bg;
         background-position: 50% 50%;
         background-repeat: no-repeat;
+        max-width: 446px;
+        margin-bottom: 0;
+        margin-right: 1rem;
         text-align: center;
         border-radius: $border-radius;
-        margin-bottom: .5rem;
     }
 
     img {
@@ -264,13 +267,12 @@
 }
 
 .block-group {
-    .col:only-child {
+    .col:not(:only-child) {
         .page-block, .post-block {
             .page-image {
-                float: left;
-                max-width: 446px;
-                margin-bottom: 0;
-                margin-right: 1rem;
+                float: none;
+                margin-bottom: .5rem;
+                margin-right: 0;
             }
         }
     }

@@ -1,5 +1,5 @@
 <template>
-    <div class="block-body has-media-picker rounded" :class="{ empty: isEmpty }">
+    <div class="block-body has-media-picker rounded clearfix" :class="{ empty: isEmpty }">
         <div>
             <div class="page-image" :style="'background-image:url(' + pageImage + ')'">
                 <img :src="piranha.utils.formatUrl('~/manager/assets/img/primaryimage-placeholder.png')">
