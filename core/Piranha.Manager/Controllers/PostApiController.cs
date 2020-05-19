@@ -29,15 +29,17 @@ namespace Piranha.Manager.Controllers
     public class PostApiController : Controller
     {
         private readonly PostService _service;
+        private readonly IApi _api;
         private readonly ManagerLocalizer _localizer;
         private readonly IHubContext<Hubs.PreviewHub> _hub;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public PostApiController(PostService service, ManagerLocalizer localizer, IHubContext<Hubs.PreviewHub> hub)
+        public PostApiController(PostService service, IApi api, ManagerLocalizer localizer, IHubContext<Hubs.PreviewHub> hub)
         {
             _service = service;
+            _api = api;
             _localizer = localizer;
             _hub = hub;
         }
@@ -65,6 +67,20 @@ namespace Piranha.Manager.Controllers
         public async Task<PostEditModel> Get(Guid id)
         {
             return await _service.GetById(id);
+        }
+
+        /// <summary>
+        /// Gets the info model for the post with the
+        /// given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The post info model</returns>
+        [Route("info/{id}")]
+        [HttpGet]
+        [Authorize(Policy = Permission.Posts)]
+        public async Task<Piranha.Models.PostInfo> GetInfo(Guid id)
+        {
+            return await _api.Posts.GetByIdAsync<Piranha.Models.PostInfo>(id);
         }
 
         /// <summary>

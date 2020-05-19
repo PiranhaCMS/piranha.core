@@ -495,6 +495,160 @@ Vue.component("missing-block", {
   props: ["model"],
   template: "\n<div class=\"alert alert-danger text-center\" role=\"alert\">No component registered for <code>{{ model.type }}</code></div>\n"
 });
+Vue.component("page-block", {
+  props: ["uid", "model"],
+  methods: {
+    select: function () {
+      piranha.pagepicker.open(this.update);
+    },
+    remove: function () {
+      this.model.body.id = null;
+      this.model.body.page = null;
+    },
+    update: function (page) {
+      if (page !== null) {
+        var self = this;
+        fetch(piranha.baseUrl + "manager/api/page/info/" + page.id).then(function (response) {
+          return response.json();
+        }).then(function (result) {
+          self.model.body.id = result.id;
+          self.model.body.page = result; // Tell parent that title has been updated
+
+          self.$emit('update-title', {
+            uid: self.uid,
+            title: self.model.body.page.title
+          });
+        }).catch(function (error) {
+          console.log("error:", error);
+        });
+      } else {
+        console.log("No page was selected");
+      }
+    }
+  },
+  computed: {
+    isEmpty: function () {
+      return this.model.body.page == null;
+    },
+    pageImage: function () {
+      if (this.hasPageImage) {
+        return piranha.baseUrl + "manager/api/media/url/" + this.model.body.page.primaryImage.id + "/446/220"; //return piranha.utils.formatUrl(this.model.body.page.primaryImage.media.publicUrl);
+      } else {
+        return piranha.utils.formatUrl("~/manager/assets/img/empty-image.png");
+      }
+    },
+    hasPageImage: function () {
+      return this.model.body.page !== null && this.model.body.page.primaryImage.media !== null;
+    },
+    pageTitle: function () {
+      if (this.hasPageTitle) {
+        return this.model.body.page.title;
+      }
+
+      return "Lorem Ipsum";
+    },
+    hasPageTitle: function () {
+      return this.model.body.page !== null;
+    },
+    pageExcerpt: function () {
+      if (this.hasPageExcerpt) {
+        return this.model.body.page.excerpt;
+      }
+
+      return "Donec id elit non mi porta gravida at eget metus. Cras mattis consectetur purus sit amet fermentum. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.";
+    },
+    hasPageExcerpt: function () {
+      return this.model.body.page !== null && this.model.body.page.excerpt !== null;
+    }
+  },
+  mounted: function () {
+    this.model.getTitle = function () {
+      if (this.model.body.page !== null) {
+        return this.model.body.page.title;
+      } else {
+        return "No page selected";
+      }
+    };
+  },
+  template: "\n<div class=\"block-body has-media-picker rounded\" :class=\"{ empty: isEmpty }\">\n    <div>\n        <div class=\"page-image\" :style=\"'background-image:url(' + pageImage + ')'\">\n            <img :src=\"piranha.utils.formatUrl('~/manager/assets/img/primaryimage-placeholder.png')\">\n        </div>\n        <h3 :class=\"{ 'text-light': !hasPageTitle }\">{{ pageTitle }}</h3>\n        <p :class=\"{ 'text-light': !hasPageExcerpt }\" v-html=\"pageExcerpt\"></p>\n    </div>\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                &nbsp;\n            </div>\n            <div class=\"card-body\" v-else>\n                <a :href=\"piranha.baseUrl + 'manager/page/edit/' + model.body.page.id\" target=\"_blank\">{{ model.body.page.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+});
+Vue.component("post-block", {
+  props: ["uid", "model"],
+  methods: {
+    select: function () {
+      piranha.postpicker.open(this.update);
+    },
+    remove: function () {
+      this.model.body.id = null;
+      this.model.body.post = null;
+    },
+    update: function (post) {
+      if (post !== null) {
+        var self = this;
+        fetch(piranha.baseUrl + "manager/api/post/info/" + post.id).then(function (response) {
+          return response.json();
+        }).then(function (result) {
+          self.model.body.id = result.id;
+          self.model.body.post = result; // Tell parent that title has been updated
+
+          self.$emit('update-title', {
+            uid: self.uid,
+            title: self.model.body.post.title
+          });
+        }).catch(function (error) {
+          console.log("error:", error);
+        });
+      } else {
+        console.log("No post was selected");
+      }
+    }
+  },
+  computed: {
+    isEmpty: function () {
+      return this.model.body.post == null;
+    },
+    postImage: function () {
+      if (this.hasPostImage) {
+        return piranha.baseUrl + "manager/api/media/url/" + this.model.body.post.primaryImage.id + "/446/220";
+      } else {
+        return piranha.utils.formatUrl("~/manager/assets/img/empty-image.png");
+      }
+    },
+    hasPostImage: function () {
+      return this.model.body.post !== null && this.model.body.post.primaryImage.media !== null;
+    },
+    postTitle: function () {
+      if (this.hasPostTitle) {
+        return this.model.body.post.title;
+      }
+
+      return "Lorem Ipsum";
+    },
+    hasPostTitle: function () {
+      return this.model.body.post !== null;
+    },
+    postExcerpt: function () {
+      if (this.hasPostExcerpt) {
+        return this.model.body.post.excerpt;
+      }
+
+      return "Donec id elit non mi porta gravida at eget metus. Cras mattis consectetur purus sit amet fermentum. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.";
+    },
+    hasPostExcerpt: function () {
+      return this.model.body.post !== null && this.model.body.post.excerpt !== null;
+    }
+  },
+  mounted: function () {
+    this.model.getTitle = function () {
+      if (this.model.body.post !== null) {
+        return this.model.body.post.title;
+      } else {
+        return "No post selected";
+      }
+    };
+  },
+  template: "\n<div class=\"block-body has-media-picker rounded\" :class=\"{ empty: isEmpty }\">\n    <div>\n        <div class=\"page-image\" :style=\"'background-image:url(' + postImage + ')'\">\n            <img :src=\"piranha.utils.formatUrl('~/manager/assets/img/primaryimage-placeholder.png')\">\n        </div>\n        <h3 :class=\"{ 'text-light': !hasPostTitle }\">{{ postTitle }}</h3>\n        <p :class=\"{ 'text-light': !hasPostExcerpt }\" v-html=\"postExcerpt\"></p>\n    </div>\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                &nbsp;\n            </div>\n            <div class=\"card-body\" v-else>\n                <a :href=\"piranha.baseUrl + 'manager/post/edit/' + model.body.post.id\" target=\"_blank\">{{ model.body.post.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+});
 Vue.component("quote-block", {
   props: ["uid", "model"],
   data: function () {

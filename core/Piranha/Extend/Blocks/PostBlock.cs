@@ -13,15 +13,15 @@ using Piranha.Extend.Fields;
 namespace Piranha.Extend.Blocks
 {
     /// <summary>
-    /// Image block.
+    /// Block for referencing a post.
     /// </summary>
-    [BlockType(Name = "Image", Category = "Media", Icon = "fas fa-image", Component = "image-block")]
-    public class ImageBlock : Block
+    [BlockType(Name = "Post link", Category = "Content", Icon = "fas fa-link", Component = "post-block")]
+    public class PostBlock : Block
     {
         /// <summary>
-        /// Gets/sets the image body.
+        /// Gets/sets the post link.
         /// </summary>
-        public ImageField Body { get; set; }
+        public PostField Body { get; set; }
 
         /// <summary>
         /// Gets the title of the block when used in a block group.
@@ -29,11 +29,11 @@ namespace Piranha.Extend.Blocks
         /// <returns>The title</returns>
         public override string GetTitle()
         {
-            if (Body != null && Body.Media != null)
+            if (Body != null && Body.Post != null)
             {
-                return Body.Media.Filename;
+                return Body.Post.Title;
             }
-            return "No image selected";
+            return "No post selected";
         }
     }
 }

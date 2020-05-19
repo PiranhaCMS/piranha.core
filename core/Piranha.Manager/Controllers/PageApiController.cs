@@ -74,7 +74,6 @@ namespace Piranha.Manager.Controllers
                 siteId = (await _api.Sites.GetDefaultAsync()).Id;
             }
             return await _service.GetSiteList(siteId.Value);
-            //return await _service.GetPageStructure(siteId.Value);
         }
 
         /// <summary>
@@ -88,6 +87,20 @@ namespace Piranha.Manager.Controllers
         public async Task<PageEditModel> Get(Guid id)
         {
             return await _service.GetById(id);
+        }
+
+        /// <summary>
+        /// Gets the info model for the page with the
+        /// given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The page info model</returns>
+        [Route("info/{id}")]
+        [HttpGet]
+        [Authorize(Policy = Permission.Pages)]
+        public async Task<Piranha.Models.PageInfo> GetInfo(Guid id)
+        {
+            return await _api.Pages.GetByIdAsync<Piranha.Models.PageInfo>(id);
         }
 
         /// <summary>
