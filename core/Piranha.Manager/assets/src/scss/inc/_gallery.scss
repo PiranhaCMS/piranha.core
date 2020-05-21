@@ -89,12 +89,12 @@
 
     &.selected {
         > *:not(.btn) {
-            color: white;
-            border-color: $blue;
+            color: $thumbnail-selected-color;
+            border-color: $thumbnail-selected-bg;
         }
 
         .thumbnail-text {
-            background: $blue;
+            background: $thumbnail-selected-bg;
         }
     }
 

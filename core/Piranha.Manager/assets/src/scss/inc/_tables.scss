@@ -13,11 +13,11 @@
         }
 
         &.selected {
-            color: white;
-            background: $blue;
+            color: $table-selected-color;
+            background: $table-selected-bg;
 
             a {
-                color: white;
+                color: $table-selected-color;
             }
         }
 
