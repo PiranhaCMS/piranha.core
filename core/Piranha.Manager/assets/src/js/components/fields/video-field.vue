@@ -43,7 +43,14 @@ export default {
         update: function (media) {
             if (media.type === "Video") {
                 this.model.id = media.id;
-                this.model.media = media;
+                this.model.media = {
+                    id: media.id,
+                    folderId: media.folderId,
+                    type: media.type,
+                    filename: media.filename,
+                    contentType: media.contentType,
+                    publicUrl: media.publicUrl,
+                };
 
                 // Tell parent that title has been updated
                 this.$emit('update-title', {

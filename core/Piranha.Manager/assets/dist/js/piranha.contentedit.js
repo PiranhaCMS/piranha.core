@@ -802,7 +802,14 @@ Vue.component("audio-field", {
     update: function (media) {
       if (media.type === "Audio") {
         this.model.id = media.id;
-        this.model.media = media; // Tell parent that title has been updated
+        this.model.media = {
+          id: media.id,
+          folderId: media.folderId,
+          type: media.type,
+          filename: media.filename,
+          contentType: media.contentType,
+          publicUrl: media.publicUrl
+        }; // Tell parent that title has been updated
 
         this.$emit('update-title', {
           uid: this.uid,
@@ -872,7 +879,14 @@ Vue.component("document-field", {
     update: function (media) {
       if (media.type === "Document") {
         this.model.id = media.id;
-        this.model.media = media; // Tell parent that title has been updated
+        this.model.media = {
+          id: media.id,
+          folderId: media.folderId,
+          type: media.type,
+          filename: media.filename,
+          contentType: media.contentType,
+          publicUrl: media.publicUrl
+        }; // Tell parent that title has been updated
 
         this.$emit('update-title', {
           uid: this.uid,
@@ -966,7 +980,14 @@ Vue.component("image-field", {
     update: function (media) {
       if (media.type === "Image") {
         this.model.id = media.id;
-        this.model.media = media; // Tell parent that title has been updated
+        this.model.media = {
+          id: media.id,
+          folderId: media.folderId,
+          type: media.type,
+          filename: media.filename,
+          contentType: media.contentType,
+          publicUrl: media.publicUrl
+        }; // Tell parent that title has been updated
 
         this.$emit('update-title', {
           uid: this.uid,
@@ -1035,7 +1056,14 @@ Vue.component("media-field", {
     },
     update: function (media) {
       this.model.id = media.id;
-      this.model.media = media; // Tell parent that title has been updated
+      this.model.media = {
+        id: media.id,
+        folderId: media.folderId,
+        type: media.type,
+        filename: media.filename,
+        contentType: media.contentType,
+        publicUrl: media.publicUrl
+      }; // Tell parent that title has been updated
 
       this.$emit('update-title', {
         uid: this.uid,
@@ -1204,7 +1232,14 @@ Vue.component("video-field", {
     update: function (media) {
       if (media.type === "Video") {
         this.model.id = media.id;
-        this.model.media = media; // Tell parent that title has been updated
+        this.model.media = {
+          id: media.id,
+          folderId: media.folderId,
+          type: media.type,
+          filename: media.filename,
+          contentType: media.contentType,
+          publicUrl: media.publicUrl
+        }; // Tell parent that title has been updated
 
         this.$emit('update-title', {
           uid: this.uid,
