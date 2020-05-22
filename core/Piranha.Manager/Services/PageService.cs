@@ -285,6 +285,12 @@ namespace Piranha.Manager.Services
                 }
 
                 //
+                // Make sure we only keep permissions for pages are registered
+                //
+                var currentPermissions = App.Permissions.GetPublicPermissions().Select(p => p.Name);
+                page.Permissions = page.Permissions.Where(p => currentPermissions.Contains(p)).ToList();
+
+                //
                 // We only need to save regions & blocks for pages that are not copies
                 //
                 if (!page.OriginalPageId.HasValue)

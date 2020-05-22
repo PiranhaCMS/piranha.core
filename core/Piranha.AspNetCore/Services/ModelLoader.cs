@@ -10,6 +10,7 @@
 
 using System;
 using System.Security.Claims;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Piranha.Models;
@@ -93,8 +94,19 @@ namespace Piranha.AspNetCore.Services
             // Check permissions
             if (model.Permissions.Count > 0)
             {
+                var currentPermissions = App.Permissions.GetPublicPermissions()
+                    .Select(p => p.Name);
+
                 foreach (var permission in model.Permissions)
                 {
+                    // Make sure the permissions is still available as a
+                    // registered public permission.
+                    if (!currentPermissions.Contains(permission))
+                    {
+                        continue;
+                    }
+
+                    // Authorize
                     if (!(await _auth.AuthorizeAsync(user, permission)).Succeeded)
                     {
                         throw new UnauthorizedAccessException();
