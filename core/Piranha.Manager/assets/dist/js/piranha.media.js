@@ -35,9 +35,13 @@ piranha.media = new Vue({
             this.parentFolderId = result.parentFolderId;
 
             this.initFolders(result.structure);
-
             this.folders = result.folders;
-            this.items = result.media;
+
+            this.items = result.media.map(function (i) {
+                i.selected = false
+                return i;
+            });
+
             this.structure = result.structure;
             this.rootCount = result.rootCount;
             this.totalCount = result.totalCount;
@@ -102,18 +106,37 @@ piranha.media = new Vue({
                 target.removeClass("active");
             }
 
-            var mediaId = event.dataTransfer.getData("mediaId");
+            var dropped = event.dataTransfer.getData("mediaId");
+            var selections = this.items.filter(i => i.selected).map(i => i.id);
 
-            fetch(piranha.baseUrl + "manager/api/media/move/" + mediaId + "/" + (folderId ? folderId : ""))
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    if (result.type === "success") {
-                        piranha.media.refresh();
-                    }
-                    // Push status to notification hub
-                    piranha.notifications.push(result);
-                })
-                .catch(function (error) { console.log("error:", error); });
+            if (!selections.includes(dropped)) {
+                selections = [];
+                selections.push(dropped);
+            }
+
+            fetch(piranha.baseUrl + "manager/api/media/move/" + (folderId || ""), {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(selections)
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                if (result.type === "success") {
+                    piranha.media.refresh();
+                }
+                // Push status to notification hub
+                piranha.notifications.push(result);
+            })
+            .catch(function (error) { console.log("error:", error); });
+        },
+        onItemClick: function (event, media) {
+            if (event.shiftKey) {
+                media.selected = !media.selected;
+            } else {
+                piranha.preview.openItem(media);
+            }
         },
         showList: function () {
             this.listView = true;
@@ -203,15 +226,43 @@ piranha.media = new Vue({
         remove: function (id) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/media/delete/" + id)
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    self.bind(result);
+            fetch(piranha.baseUrl + "manager/api/media/delete", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify([id])
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                // Refresh
+                self.refresh();
 
-                    // Push status to notification hub
-                    piranha.notifications.push(result.status);
-                })
-                .catch(function (error) { console.log("error:", error ); });
+                // Push status to notification hub
+                piranha.notifications.push(result);
+            })
+            .catch(function (error) { console.log("error:", error ); });
+        },
+        removeSelection: function () {
+            var self = this;
+            var selections = this.items.filter(i => i.selected).map(i => i.id);
+
+            fetch(piranha.baseUrl + "manager/api/media/delete", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(selections)
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                // Refresh
+                self.refresh();
+
+                // Push status to notification hub
+                piranha.notifications.push(result);
+            })
+            .catch(function (error) { console.log("error:", error); });
         },
         removeFolder: function (id) {
             var self = this;
@@ -228,6 +279,13 @@ piranha.media = new Vue({
                     piranha.notifications.push(result.status);
                 })
                 .catch(function (error) { console.log("error:", error ); });
+        }
+    },
+    computed: {
+        hasSelection: function () {
+            return this.items.some(function (item) {
+                return item.selected;
+            });
         }
     },
     updated: function () {

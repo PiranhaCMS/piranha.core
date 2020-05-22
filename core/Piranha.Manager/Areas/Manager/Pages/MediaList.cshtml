@@ -70,12 +70,15 @@
                     </div>
                 </div>
                 <div class="col-lg-9 col-8">
-                    <div class="mb-3">
+                    <div class="d-flex mb-3">
                         <button v-on:click="showGallery()" class="btn btn-sm" :class="{ 'btn-light': !listView, 'btn-white': listView }">
                             <i class="fas fa-table"></i>
                         </button>
                         <button v-on:click="showList()" class="btn btn-sm" :class="{ 'btn-light': listView, 'btn-white': !listView }">
                             <i class="fas fa-list"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger ml-auto" v-show="hasSelection" v-on:click="removeSelection()">
+                            <i class="fas fa-trash"></i> @Localizer.Media["Delete selected items"]
                         </button>
                     </div>
                     @if ((await Auth.AuthorizeAsync(User, Permission.MediaAdd)).Succeeded)

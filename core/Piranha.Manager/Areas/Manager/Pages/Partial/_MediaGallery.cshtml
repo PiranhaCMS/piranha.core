@@ -19,7 +19,7 @@
     </a>
 
     <template v-for="item in items">
-        <a href="#" class="thumbnail" v-on:click.prevent="piranha.preview.openItem(item)" draggable="true" v-on:dragstart="drag($event, item)">
+        <a href="#" class="thumbnail" :class="{ selected: item.selected }" v-on:click.prevent="onItemClick($event, item)" draggable="true" v-on:dragstart="drag($event, item)">
             <button v-if="piranha.permissions.media.delete" class="btn btn-danger media-delete" v-on:click.stop.prevent="remove(item.id)"><i class="fas fa-trash"></i></button>
 
             <template v-if="item.type === 'Image'">

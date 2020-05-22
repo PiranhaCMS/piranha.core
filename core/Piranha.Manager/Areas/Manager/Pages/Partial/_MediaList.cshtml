@@ -31,9 +31,9 @@
                 <a href="#" class="danger" v-if="folder.itemCount === 0" v-on:click.prevent="removeFolder(folder.id)"><i class="fas fa-trash"></i></a>
             </td>
         </tr>
-        <tr v-for="item in items" draggable="true" v-on:dragstart="drag($event, item)">
+        <tr v-for="item in items" :class="{ selected: item.selected }" draggable="true" v-on:dragstart="drag($event, item)">
             <td>
-                <a href="#" v-on:click.prevent="piranha.preview.open(item.id)">
+                <a href="#" v-on:click.prevent="onItemClick($event, item)">
                 <i v-if="item.type === 'Audio'" class="fas fa-volume-up"></i>
                 <i v-if="item.type === 'Document'" class="fas fa-file-alt"></i>
                 <i v-if="item.type === 'Image'" class="fas fa-image"></i>
