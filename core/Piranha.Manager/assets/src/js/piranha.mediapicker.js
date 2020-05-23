@@ -136,17 +136,18 @@ piranha.mediapicker = new Vue({
         }
     },
     mounted: function () {
+        var self = this;
         piranha.permissions.load(function () {
             if (piranha.permissions.media.add) {
-                this.dropzone = piranha.dropzone.init("#mediapicker-upload-container");
-                this.dropzone.on("complete", function (file) {
+                self.dropzone = piranha.dropzone.init("#mediapicker-upload-container");
+                self.dropzone.on("complete", function (file) {
                     if (file.status === "success") {
                         setTimeout(function () {
-                            piranha.mediapicker.dropzone.removeFile(file);
+                            self.dropzone.removeFile(file);
                         }, 3000)
                     }
                 });
-                this.dropzone.on("queuecomplete", function () {
+                self.dropzone.on("queuecomplete", function () {
                     piranha.mediapicker.refresh();
                 });
             }
