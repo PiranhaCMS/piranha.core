@@ -3,6 +3,25 @@
         <img class="rounded" :src="mediaUrl">
         <div class="media-picker">
             <div class="btn-group float-right">
+                <button id="aspectBtn" class="btn btn-info text-center" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <div class="dropdown-menu aspect-menu" aria-labelledby="aspectBtn">
+                    <label class="mb-0">Preferred Aspect</label>
+                    <div class="dropdown-divider"></div>
+                    <a v-on:click.prevent="selectAspect(0)" class="dropdown-item" :class="{ active: isAspectSelected(0) }" href="#">
+                        <img :src="piranha.utils.formatUrl('~/manager/assets/img/icons/img-original.svg')">Original
+                    </a>
+                    <a v-on:click.prevent="selectAspect(1)" class="dropdown-item" :class="{ active: isAspectSelected(1) }" href="#">
+                        <img :src="piranha.utils.formatUrl('~/manager/assets/img/icons/img-landscape.svg')">Landscape
+                    </a>
+                    <a v-on:click.prevent="selectAspect(2)" class="dropdown-item" :class="{ active: isAspectSelected(2) }" href="#">
+                        <img :src="piranha.utils.formatUrl('~/manager/assets/img/icons/img-portrait.svg')">Portrait
+                    </a>
+                    <a v-on:click.prevent="selectAspect(3)" class="dropdown-item" :class="{ active: isAspectSelected(3) }" href="#">
+                        <img :src="piranha.utils.formatUrl('~/manager/assets/img/icons/img-square.svg')">Square
+                    </a>
+                </div>
                 <button v-on:click.prevent="select" class="btn btn-primary text-center">
                     <i class="fas fa-plus"></i>
                 </button>
@@ -43,7 +62,14 @@ export default {
         update: function (media) {
             if (media.type === "Image") {
                 this.model.body.id = media.id;
-                this.model.body.media = media;
+                this.model.body.media = {
+                    id: media.id,
+                    folderId: media.folderId,
+                    type: media.type,
+                    filename: media.filename,
+                    contentType: media.contentType,
+                    publicUrl: media.publicUrl,
+                };
 
                 // Tell parent that title has been updated
                 this.$emit('update-title', {
@@ -53,6 +79,12 @@ export default {
             } else {
                 console.log("No image was selected");
             }
+        },
+        selectAspect: function (val) {
+            this.model.aspect.value = val;
+        },
+        isAspectSelected (val) {
+            return this.model.aspect.value === val;
         }
     },
     computed: {

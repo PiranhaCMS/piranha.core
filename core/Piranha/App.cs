@@ -187,6 +187,7 @@ namespace Piranha
             Instance._mediaTypes.Audio.Add(".wav", "audio/wav");
 
             // Compose field types
+            Instance._fields.Register<Extend.Fields.AudioField>();
             Instance._fields.Register<Extend.Fields.CheckBoxField>();
             Instance._fields.Register<Extend.Fields.DateField>();
             Instance._fields.Register<Extend.Fields.DocumentField>();
@@ -201,7 +202,9 @@ namespace Piranha
             Instance._fields.Register<Extend.Fields.StringField>();
             Instance._fields.Register<Extend.Fields.TextField>();
             Instance._fields.Register<Extend.Fields.VideoField>();
-            Instance._fields.Register<Extend.Fields.AudioField>();
+
+            // Compose select field types
+            Instance._fields.RegisterSelect<Extend.Blocks.ImageAspect>();
 
             // Compose block types
             Instance._blocks.Register<Extend.Blocks.AudioBlock>();

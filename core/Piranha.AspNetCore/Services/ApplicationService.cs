@@ -14,111 +14,12 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Piranha.Extend.Fields;
 using Piranha.Models;
 
 namespace Piranha.AspNetCore.Services
 {
     public class ApplicationService : IApplicationService
     {
-        public class SiteHelper : ISiteHelper
-        {
-            private readonly IApi _api;
-
-            /// <summary>
-            /// Gets the id of the currently requested site.
-            /// </summary>
-            public Guid Id { get; set; }
-
-            /// <summary>
-            /// Gets/sets the optional culture of the requested site.
-            /// </summary>
-            public string Culture { get; set; }
-
-            /// <summary>
-            /// Gets/set the optional hostname of the requested site.
-            /// </summary>
-            public string Host { get; set; }
-
-            /// <summary>
-            /// Gets/sets the optional site prefic of the requested site
-            /// if it's routed with `host/prefix`.
-            /// </summary>
-            public string SitePrefix { get; set; }
-
-            /// <summary>
-            /// Gets the sitemap of the currently requested site.
-            /// </summary>
-            public Sitemap Sitemap { get; set; }
-
-            /// <summary>
-            /// Default internal constructur.
-            /// </summary>
-            internal SiteHelper(IApi api)
-            {
-                _api = api;
-            }
-
-            /// <summary>
-            /// Gets the site content for the current site.
-            /// </summary>
-            /// <typeparam name="T">The content type</typeparam>
-            /// <returns>The site content model</returns>
-            public Task<T> GetContentAsync<T>() where T : SiteContent<T>
-            {
-                if (Id != Guid.Empty)
-                {
-                    return _api.Sites.GetContentByIdAsync<T>(Id);
-                }
-                return null;
-            }
-        }
-
-        public class MediaHelper : IMediaHelper
-        {
-            private readonly IApi _api;
-
-            /// <summary>
-            /// Default internal constructur.
-            /// </summary>
-            internal MediaHelper(IApi api)
-            {
-                _api = api;
-            }
-
-            /// <summary>
-            /// Resizes the given image to the given dimensions.
-            /// </summary>
-            /// <param name="image"></param>
-            /// <param name="width"></param>
-            /// <param name="height"></param>
-            /// <returns></returns>
-            public string ResizeImage(ImageField image, int width, int? height = null)
-            {
-                if (image.Id.HasValue)
-                {
-                    return _api.Media.EnsureVersion(image.Id.Value, width, height);
-                }
-                return null;
-            }
-
-            /// <summary>
-            /// Resizes the given image to the given dimensions.
-            /// </summary>
-            /// <param name="image"></param>
-            /// <param name="width"></param>
-            /// <param name="height"></param>
-            /// <returns></returns>
-            public string ResizeImage(Media image, int width, int? height = null)
-            {
-                if (image.Id != Guid.Empty && image.Type == MediaType.Image)
-                {
-                    return _api.Media.EnsureVersion(image.Id, width, height);
-                }
-                return null;
-            }
-        }
-
         /// <summary>
         /// Gets the current api.
         /// </summary>
