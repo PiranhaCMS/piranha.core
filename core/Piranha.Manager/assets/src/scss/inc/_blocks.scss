@@ -241,6 +241,16 @@
         }
     }
 
+    .btn-aspect {
+        img {
+            width: 15px !important;
+            height: 15px !important;
+            float: left;
+            border: solid 1px #fff;
+            border-radius: .125rem;
+        }
+    }
+
     .aspect-menu {
         label {
             font-weight: bold;

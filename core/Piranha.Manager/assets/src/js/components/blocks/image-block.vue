@@ -3,10 +3,11 @@
         <img class="rounded" :src="mediaUrl">
         <div class="media-picker">
             <div class="btn-group float-right">
-                <button id="aspectBtn" class="btn btn-info text-center" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-cog"></i>
+                <button :id="uid + '-aspect'" class="btn btn-info btn-aspect text-center" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i v-if="model.aspect.value === 0" class="fas fa-cog"></i>
+                    <img v-else :src="iconUrl">
                 </button>
-                <div class="dropdown-menu aspect-menu" aria-labelledby="aspectBtn">
+                <div class="dropdown-menu aspect-menu" :aria-labelledby="uid + '-aspect'">
                     <label class="mb-0">Preferred Aspect</label>
                     <div class="dropdown-divider"></div>
                     <a v-on:click.prevent="selectAspect(0)" class="dropdown-item" :class="{ active: isAspectSelected(0) }" href="#">
@@ -100,6 +101,18 @@ export default {
             } else {
                 return piranha.utils.formatUrl("~/manager/assets/img/empty-image.png");
             }
+        },
+        iconUrl: function () {
+            if (this.model.aspect.value > 0) {
+                if (this.model.aspect.value === 1 || this.model.aspect.value === 3) {
+                    return piranha.utils.formatUrl("~/manager/assets/img/icons/img-landscape.svg");
+                } else if (this.model.aspect.value == 2) {
+                    return piranha.utils.formatUrl("~/manager/assets/img/icons/img-portrait.svg");
+                } else if (this.model.aspect.value == 4) {
+                    return piranha.utils.formatUrl("~/manager/assets/img/icons/img-square.svg");
+                }
+            }
+            return null;
         }
     },
     mounted: function() {
