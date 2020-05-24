@@ -20,15 +20,19 @@ namespace Piranha.Extend.Blocks
         /// </summary>
         Original,
         /// <summary>
-        /// Crops the image to landscape
+        /// Crops the image to landscape (3x2)
         /// </summary>
         Landscape,
         /// <summary>
-        /// Crops the image to portrait
+        /// Crops the image to portrait (2x3)
         /// </summary>
         Portrait,
         /// <summary>
-        /// Crops the image to square
+        /// Crops the image to widescreen (16x9)
+        /// </summary>
+        Widescreen,
+        /// <summary>
+        /// Crops the image to square (1x1)
         /// </summary>
         Square
     }

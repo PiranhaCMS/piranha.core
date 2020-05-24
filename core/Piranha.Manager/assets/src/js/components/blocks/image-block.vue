@@ -19,6 +19,9 @@
                         <img :src="piranha.utils.formatUrl('~/manager/assets/img/icons/img-portrait.svg')">Portrait
                     </a>
                     <a v-on:click.prevent="selectAspect(3)" class="dropdown-item" :class="{ active: isAspectSelected(3) }" href="#">
+                        <img :src="piranha.utils.formatUrl('~/manager/assets/img/icons/img-landscape.svg')">Widescreen
+                    </a>
+                    <a v-on:click.prevent="selectAspect(4)" class="dropdown-item" :class="{ active: isAspectSelected(4) }" href="#">
                         <img :src="piranha.utils.formatUrl('~/manager/assets/img/icons/img-square.svg')">Square
                     </a>
                 </div>

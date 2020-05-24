@@ -74,11 +74,15 @@ namespace Piranha.AspNetCore.Services
 
                 if (block.Aspect.Value == ImageAspect.Landscape)
                 {
-                    height = Convert.ToInt32(width * 10 / 16);
+                    height = Convert.ToInt32(width * 2 / 3);
                 }
                 else if (block.Aspect.Value == ImageAspect.Portrait)
                 {
-                    height = Convert.ToInt32(width * 16 / 10);
+                    height = Convert.ToInt32(width * 3 / 2);
+                }
+                else if (block.Aspect.Value == ImageAspect.Widescreen)
+                {
+                    height = Convert.ToInt32(width * 9 / 16);
                 }
                 else if (block.Aspect.Value == ImageAspect.Square)
                 {
