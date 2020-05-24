@@ -457,7 +457,14 @@ Vue.component("image-block", {
     update: function (media) {
       if (media.type === "Image") {
         this.model.body.id = media.id;
-        this.model.body.media = media; // Tell parent that title has been updated
+        this.model.body.media = {
+          id: media.id,
+          folderId: media.folderId,
+          type: media.type,
+          filename: media.filename,
+          contentType: media.contentType,
+          publicUrl: media.publicUrl
+        }; // Tell parent that title has been updated
 
         this.$emit('update-title', {
           uid: this.uid,
@@ -466,7 +473,15 @@ Vue.component("image-block", {
       } else {
         console.log("No image was selected");
       }
+    },
+    selectAspect: function (val) {
+      this.model.aspect.value = val;
+    },
+
+    isAspectSelected(val) {
+      return this.model.aspect.value === val;
     }
+
   },
   computed: {
     isEmpty: function () {
@@ -489,7 +504,7 @@ Vue.component("image-block", {
       }
     };
   },
-  template: "\n<div class=\"block-body has-media-picker rounded\" :class=\"{ empty: isEmpty }\">\n    <img class=\"rounded\" :src=\"mediaUrl\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                &nbsp;\n            </div>\n            <div class=\"card-body\" v-else>\n                {{ model.body.media.filename }}\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"block-body has-media-picker rounded\" :class=\"{ empty: isEmpty }\">\n    <img class=\"rounded\" :src=\"mediaUrl\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button id=\"aspectBtn\" class=\"btn btn-info text-center\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n                <i class=\"fas fa-cog\"></i>\n            </button>\n            <div class=\"dropdown-menu aspect-menu\" aria-labelledby=\"aspectBtn\">\n                <label class=\"mb-0\">Preferred Aspect</label>\n                <div class=\"dropdown-divider\"></div>\n                <a v-on:click.prevent=\"selectAspect(0)\" class=\"dropdown-item\" :class=\"{ active: isAspectSelected(0) }\" href=\"#\">\n                    <img :src=\"piranha.utils.formatUrl('~/manager/assets/img/icons/img-original.svg')\">Original\n                </a>\n                <a v-on:click.prevent=\"selectAspect(1)\" class=\"dropdown-item\" :class=\"{ active: isAspectSelected(1) }\" href=\"#\">\n                    <img :src=\"piranha.utils.formatUrl('~/manager/assets/img/icons/img-landscape.svg')\">Landscape\n                </a>\n                <a v-on:click.prevent=\"selectAspect(2)\" class=\"dropdown-item\" :class=\"{ active: isAspectSelected(2) }\" href=\"#\">\n                    <img :src=\"piranha.utils.formatUrl('~/manager/assets/img/icons/img-portrait.svg')\">Portrait\n                </a>\n                <a v-on:click.prevent=\"selectAspect(3)\" class=\"dropdown-item\" :class=\"{ active: isAspectSelected(3) }\" href=\"#\">\n                    <img :src=\"piranha.utils.formatUrl('~/manager/assets/img/icons/img-square.svg')\">Square\n                </a>\n            </div>\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                &nbsp;\n            </div>\n            <div class=\"card-body\" v-else>\n                {{ model.body.media.filename }}\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("missing-block", {
   props: ["model"],

@@ -125,7 +125,6 @@
     }
 
     .has-media-picker {
-
         .media-picker {
             background: rgba(0,0,0,.4);
             position: absolute;
@@ -239,6 +238,32 @@
 
         &:hover, &:focus-within {
             border-color: transparent;
+        }
+    }
+
+    .aspect-menu {
+        label {
+            font-weight: bold;
+            padding: .25rem 1.5rem;
+            white-space: nowrap;
+        }
+
+        img {
+            width: 18px;
+            height: 18px;
+            background: #666;
+            margin-right: .5rem;
+            border: solid 2px #666;
+            border-radius: .25rem;
+            float: left;
+            margin-top: .125rem;
+        }
+
+        .active {
+            img {
+                background: #007eaa;
+                border-color: #007eaa;
+            }
         }
     }
 }
