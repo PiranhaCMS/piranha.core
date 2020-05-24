@@ -26,7 +26,7 @@ namespace Piranha.Extend.Blocks
         /// <summary>
         /// Gets/sets the selected image aspect.
         /// </summary>
-        public SelectField<ImageAspect> Aspect { get; set; }
+        public SelectField<ImageAspect> Aspect { get; set; } = new SelectField<ImageAspect>();
 
         /// <summary>
         /// Gets the title of the block when used in a block group.
