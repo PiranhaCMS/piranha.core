@@ -142,8 +142,13 @@
                         </div>
                     </div>
                     <div class="unsortable" v-if="useExcerpt">
-                        <div class="block text-block ingress">
-                            <div class="block-body" :class="{ empty: isExcerptEmpty }">
+                        <div v-if="useHtmlExcerpt" class="block text-block ingress" :class="{ empty: isExcerptEmpty }">
+                            <div id="excerpt-toolbar" class="component-toolbar"></div>
+                            <div id="excerpt-body" class="block-body html-block" spellcheck="false" contenteditable="true" v-html="excerpt" v-on:blur="onExcerptBlur">
+                            </div>
+                        </div>
+                        <div v-else class="block text-block ingress ingress-text" :class="{ empty: isExcerptEmpty }">
+                            <div class="block-body">
                                 <p spellcheck="false" contenteditable="true" v-html="excerpt" v-on:blur="onExcerptBlur"></p>
                             </div>
                         </div>

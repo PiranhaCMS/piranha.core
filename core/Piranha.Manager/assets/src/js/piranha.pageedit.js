@@ -33,6 +33,7 @@ piranha.pageedit = new Vue({
         useBlocks: true,
         usePrimaryImage: true,
         useExcerpt: true,
+        useHtmlExcerpt: true,
         permissions: [],
         primaryImage: {
             id: null,
@@ -108,6 +109,7 @@ piranha.pageedit = new Vue({
             this.useBlocks = model.useBlocks;
             this.usePrimaryImage = model.usePrimaryImage;
             this.useExcerpt = model.useExcerpt;
+            this.useHtmlExcerpt = model.useHtmlExcerpt;
             this.isCopy = model.isCopy;
             this.selectedRoute = model.selectedRoute;
             this.routes = model.routes;
@@ -401,6 +403,7 @@ piranha.pageedit = new Vue({
             })[0].addEventListener("sortupdate", function (e) {
                 piranha.pageedit.moveBlock(e.detail.origin.index, e.detail.destination.index);
             });
+            piranha.editor.addInline('excerpt-body', 'excerpt-toolbar');
         }
         else {
             sortable("#content-blocks", "disable");

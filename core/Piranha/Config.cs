@@ -35,12 +35,13 @@ namespace Piranha
         public static readonly string COMMENTS_POSTS_ENABLED = "CommentsPostsEnabled";
         public static readonly string COMMENTS_PAGES_ENABLED = "CommentsPagesEnabled";
         public static readonly string COMMENTS_CLOSE_AFTER_DAYS = "CommentsCloseAfterDays";
-        public static readonly string PAGES_HIERARCHICAL_SLUGS = "HierarchicalPageSlugs";
+        public static readonly string HTML_EXCERPT = "HtmlExcerpt";
         public static readonly string MEDIA_CDN_URL = "MediaCdnUrl";
         public static readonly string MANAGER_EXPANDED_SITEMAP_LEVELS = "ManagerExpandedSitemapLevels";
         public static readonly string MANAGER_PAGE_SIZE = "ManagerPageSize";
         public static readonly string MANAGER_DEFAULT_COLLAPSED_BLOCKS = "ManagerDefaultCollapsedBlocks";
         public static readonly string MANAGER_DEFAULT_COLLAPSED_BLOCKGROUPHEADERS = "ManagerDefaultCollapsedBlockGroupHeaders";
+        public static readonly string PAGES_HIERARCHICAL_SLUGS = "HierarchicalPageSlugs";
         public static readonly string PAGE_REVISIONS = "PageRevisions";
         public static readonly string POST_REVISIONS = "PostRevisions";
 
@@ -234,6 +235,31 @@ namespace Piranha
                     param = new Param
                     {
                         Key = COMMENTS_PAGE_SIZE
+                    };
+                }
+                param.Value = value.ToString();
+                _service.SaveAsync(param).GetAwaiter().GetResult();
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets if page and post excerpt should be in HTML
+        /// format by default.
+        /// </summary>
+        public bool HtmlExcerpt {
+            get {
+                var param = _service.GetByKeyAsync(HTML_EXCERPT).GetAwaiter().GetResult();
+                if (param != null)
+                    return Convert.ToBoolean(param.Value);
+                return false;
+            }
+            set {
+                var param = _service.GetByKeyAsync(HTML_EXCERPT).GetAwaiter().GetResult();
+                if (param == null)
+                {
+                    param = new Param
+                    {
+                        Key = HTML_EXCERPT
                     };
                 }
                 param.Value = value.ToString();

@@ -30,6 +30,7 @@ piranha.postedit = new Vue({
         useBlocks: true,
         usePrimaryImage: true,
         useExcerpt: true,
+        useHtmlExcerpt: true,
         permissions: [],
         primaryImage: {
             id: null,
@@ -103,6 +104,7 @@ piranha.postedit = new Vue({
             this.useBlocks = model.useBlocks;
             this.usePrimaryImage = model.usePrimaryImage;
             this.useExcerpt = model.useExcerpt;
+            this.useHtmlExcerpt = model.useHtmlExcerpt;
             this.selectedCategory = model.selectedCategory;
             this.selectedTags = model.selectedTags;
             this.selectedRoute = model.selectedRoute;
@@ -388,12 +390,12 @@ piranha.postedit = new Vue({
                     self.selectedTags.push(items[n].text);
                 }
             });
+            piranha.editor.addInline('excerpt-body', 'excerpt-toolbar');
         }
         else {
             sortable("#content-blocks", "disable");
             sortable("#content-blocks", "enable");
         }
-
         this.loading = false;
     },
     components: {

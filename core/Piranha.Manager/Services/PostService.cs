@@ -457,6 +457,7 @@ namespace Piranha.Manager.Services
                 UseBlocks = type.UseBlocks,
                 UsePrimaryImage = type.UsePrimaryImage,
                 UseExcerpt = type.UseExcerpt,
+                UseHtmlExcerpt = config.HtmlExcerpt,
                 SelectedRoute = route == null ? null : new RouteModel
                 {
                     Title = route.Title,

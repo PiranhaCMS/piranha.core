@@ -344,10 +344,33 @@
 }
 
 .ingress {
-    padding: 1rem 0 2rem;
-    font-family: "Open Sans", sans-serif;
-    font-size: 1.2rem;
-    font-weight: 300;
+    padding: 1rem 0;
+    margin-bottom: 1rem !important;
+
+    .component-toolbar {
+        margin-top: -1.5rem;
+    }
+
+    &.ingress-text {
+        font-family: "Open Sans", sans-serif;
+        font-size: 1.2rem;
+        font-weight: 300;
+
+        &.empty:not(:focus-within) {
+            p {
+                height: 100%;
+            }
+        }
+    }
+
+    &.empty:not(:focus-within) {
+        background: $gray-100 url("../img/empty-text.png") no-repeat 50% 50%;
+        height: 8rem;
+
+        .block-body {
+            height: 100%;
+        }
+    }
 
     &:hover, &:focus-within {
         border-color: transparent;

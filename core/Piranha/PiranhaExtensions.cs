@@ -23,6 +23,7 @@ public static class PiranhaExtensions
     {
         services.Add(new ServiceDescriptor(typeof(IContentFactory), typeof(ContentFactory), ServiceLifetime.Singleton));
         services.Add(new ServiceDescriptor(typeof(IApi), typeof(Api), scope));
+        services.Add(new ServiceDescriptor(typeof(Config), typeof(Config), scope));
 
         return services;
     }

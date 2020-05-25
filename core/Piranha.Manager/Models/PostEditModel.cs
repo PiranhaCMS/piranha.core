@@ -142,5 +142,11 @@ namespace Piranha.Manager.Models
         /// post type. The default value is true.
         /// </summary>
         public bool UseExcerpt { get; set; } = true;
+
+        /// <summary>
+        /// Gets/sets if excerpt should in HTML-format. The
+        /// default value is false.
+        /// </summary>
+        public bool UseHtmlExcerpt { get; set; } = false;
     }
 }
