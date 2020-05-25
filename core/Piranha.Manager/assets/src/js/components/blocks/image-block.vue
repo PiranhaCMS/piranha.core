@@ -8,22 +8,22 @@
                     <img v-else :src="iconUrl">
                 </button>
                 <div class="dropdown-menu aspect-menu" :aria-labelledby="uid + '-aspect'">
-                    <label class="mb-0">Preferred Aspect</label>
+                    <label class="mb-0">{{ piranha.resources.texts.aspectLabel }}</label>
                     <div class="dropdown-divider"></div>
                     <a v-on:click.prevent="selectAspect(0)" class="dropdown-item" :class="{ active: isAspectSelected(0) }" href="#">
-                        <img :src="piranha.utils.formatUrl('~/manager/assets/img/icons/img-original.svg')">Original
+                        <img :src="piranha.utils.formatUrl('~/manager/assets/img/icons/img-original.svg')"><span>{{ piranha.resources.texts.aspectOriginal }}</span>
                     </a>
                     <a v-on:click.prevent="selectAspect(1)" class="dropdown-item" :class="{ active: isAspectSelected(1) }" href="#">
-                        <img :src="piranha.utils.formatUrl('~/manager/assets/img/icons/img-landscape.svg')">Landscape
+                        <img :src="piranha.utils.formatUrl('~/manager/assets/img/icons/img-landscape.svg')"><span>{{ piranha.resources.texts.aspectLandscape }}</span>
                     </a>
                     <a v-on:click.prevent="selectAspect(2)" class="dropdown-item" :class="{ active: isAspectSelected(2) }" href="#">
-                        <img :src="piranha.utils.formatUrl('~/manager/assets/img/icons/img-portrait.svg')">Portrait
+                        <img :src="piranha.utils.formatUrl('~/manager/assets/img/icons/img-portrait.svg')"><span>{{ piranha.resources.texts.aspectPortrait }}</span>
                     </a>
                     <a v-on:click.prevent="selectAspect(3)" class="dropdown-item" :class="{ active: isAspectSelected(3) }" href="#">
-                        <img :src="piranha.utils.formatUrl('~/manager/assets/img/icons/img-landscape.svg')">Widescreen
+                        <img :src="piranha.utils.formatUrl('~/manager/assets/img/icons/img-landscape.svg')"><span>{{ piranha.resources.texts.aspectWidescreen }}</span>
                     </a>
                     <a v-on:click.prevent="selectAspect(4)" class="dropdown-item" :class="{ active: isAspectSelected(4) }" href="#">
-                        <img :src="piranha.utils.formatUrl('~/manager/assets/img/icons/img-square.svg')">Square
+                        <img :src="piranha.utils.formatUrl('~/manager/assets/img/icons/img-square.svg')"><span>{{ piranha.resources.texts.aspectSquare }}</span>
                     </a>
                 </div>
                 <button v-on:click.prevent="select" class="btn btn-primary text-center">
