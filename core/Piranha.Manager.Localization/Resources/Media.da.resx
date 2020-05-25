@@ -49,21 +49,21 @@
     <value>Oversigt</value>
   </data>
   <data name="Preferred aspect" xml:space="preserve">
-    <value>Preferred aspect</value>
+    <value>Fortrukket billedformat</value>
   </data>
   <data name="Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Oprindelig</value>
   </data>
   <data name="Landscape" xml:space="preserve">
-    <value>Landscape</value>
+    <value>Liggende</value>
   </data>
   <data name="Portrait" xml:space="preserve">
-    <value>Portrait</value>
+    <value>Stående</value>
   </data>
   <data name="Widescreen" xml:space="preserve">
     <value>Widescreen</value>
   </data>
   <data name="Square" xml:space="preserve">
-    <value>Square</value>
+    <value>Kvadrat</value>
   </data>
 </root>
