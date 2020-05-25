@@ -49,21 +49,21 @@
     <value>Lista</value>
   </data>
   <data name="Preferred aspect" xml:space="preserve">
-    <value>Preferred aspect</value>
+    <value>Önskat bildläge</value>
   </data>
   <data name="Original" xml:space="preserve">
     <value>Original</value>
   </data>
   <data name="Landscape" xml:space="preserve">
-    <value>Landscape</value>
+    <value>Landskap</value>
   </data>
   <data name="Portrait" xml:space="preserve">
-    <value>Portrait</value>
+    <value>Porträtt</value>
   </data>
   <data name="Widescreen" xml:space="preserve">
-    <value>Widescreen</value>
+    <value>Vidvinkel</value>
   </data>
   <data name="Square" xml:space="preserve">
-    <value>Square</value>
+    <value>Kvadrat</value>
   </data>
 </root>
