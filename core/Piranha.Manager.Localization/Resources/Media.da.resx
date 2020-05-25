@@ -48,4 +48,22 @@
   <data name="List" xml:space="preserve">
     <value>Oversigt</value>
   </data>
+  <data name="Preferred aspect" xml:space="preserve">
+    <value>Fortrukket billedformat</value>
+  </data>
+  <data name="Original" xml:space="preserve">
+    <value>Oprindelig</value>
+  </data>
+  <data name="Landscape" xml:space="preserve">
+    <value>Liggende</value>
+  </data>
+  <data name="Portrait" xml:space="preserve">
+    <value>Stående</value>
+  </data>
+  <data name="Widescreen" xml:space="preserve">
+    <value>Widescreen</value>
+  </data>
+  <data name="Square" xml:space="preserve">
+    <value>Kvadrat</value>
+  </data>
 </root>

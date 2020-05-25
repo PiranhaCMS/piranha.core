@@ -18,6 +18,9 @@
   <data name="An error occured while deleting the page" xml:space="preserve">
     <value>Ett fel inträffade när sidan skulle raderas</value>
   </data>
+  <data name="Archive" xml:space="preserve">
+    <value>Arkiv</value>
+  </data>
   <data name="Detach page" xml:space="preserve">
     <value>Koppla loss</value>
   </data>
