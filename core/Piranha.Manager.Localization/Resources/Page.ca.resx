@@ -18,6 +18,9 @@
   <data name="An error occured while deleting the page" xml:space="preserve">
     <value>An error occured while deleting the page</value>
   </data>
+  <data name="Archive" xml:space="preserve">
+    <value>Archive</value>
+  </data>
   <data name="Detach page" xml:space="preserve">
     <value>Detach page</value>
   </data>

@@ -18,6 +18,9 @@
   <data name="An error occured while deleting the page" xml:space="preserve">
     <value>Сталася помилка під час видалення сторінки</value>
   </data>
+  <data name="Archive" xml:space="preserve">
+    <value>Archive</value>
+  </data>
   <data name="Detach page" xml:space="preserve">
     <value>Від'єднати сторінку</value>
   </data>
