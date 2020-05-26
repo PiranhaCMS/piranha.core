@@ -78,7 +78,7 @@
                             <i class="fas fa-list"></i>
                         </button>
                         <button class="btn btn-sm btn-danger ml-auto" v-show="hasSelection" v-on:click="removeSelection()">
-                            <i class="fas fa-trash"></i> @Localizer.Media["Delete selected items"]
+                            <i class="fas fa-trash"></i> @Localizer.Media["Delete selected media"]
                         </button>
                     </div>
                     @if ((await Auth.AuthorizeAsync(User, Permission.MediaAdd)).Succeeded)

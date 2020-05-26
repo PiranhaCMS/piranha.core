@@ -273,7 +273,7 @@ namespace Piranha.Manager.Controllers
                     return Ok(new StatusMessage
                     {
                         Type = StatusMessage.Success,
-                        Body = $"{moved} item{(moved > 1 ? "s" : "")} was successfully moved."
+                        Body = _localizer.Media[$"Media file{(moved > 1 ? "s" : "")} was successfully moved."]
                     });
                 }
                 else
@@ -311,7 +311,7 @@ namespace Piranha.Manager.Controllers
                 return Ok(new StatusMessage
                 {
                     Type = StatusMessage.Success,
-                    Body = _localizer.Media["The media file was successfully deleted"]
+                    Body = _localizer.Media[$"The media file{(items.Count() > 1 ? "s" : "")} was successfully deleted"]
                 });
             }
             catch (ValidationException e)
