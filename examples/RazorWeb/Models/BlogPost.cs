@@ -9,13 +9,12 @@
  */
 
 using Piranha.AttributeBuilder;
-using Piranha.Extend;
 using Piranha.Models;
 
 namespace RazorWeb.Models
 {
     /// <summary>
-    /// Basic post with main content in markdown.
+    /// Basic post blog post.
     /// </summary>
     [PostType(Title = "Blog post")]
     public class BlogPost : Post<BlogPost>
