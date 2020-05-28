@@ -66,4 +66,25 @@
   <data name="Square" xml:space="preserve">
     <value>Kvadrat</value>
   </data>
+  <data name="Are you sure you want to delete selected media?" xml:space="preserve">
+    <value>Er du sikker på at du vil slette de valgte medier?</value>
+  </data>
+  <data name="Delete selected items" xml:space="preserve">
+    <value>Slet valgte elementer</value>
+  </data>
+  <data name="Media file was successfully moved." xml:space="preserve">
+    <value>Mediefilen blev flyttet.</value>
+  </data>
+  <data name="Media files was successfully moved." xml:space="preserve">
+    <value>Mediefilerne blev flyttet.</value>
+  </data>
+  <data name="The media file was not found." xml:space="preserve">
+    <value>Mediefilen blev ikke fundet.</value>
+  </data>
+  <data name="The media file was successfully deleted" xml:space="preserve">
+    <value>Mediefilen blev slettet</value>
+  </data>
+  <data name="The media files was successfully deleted" xml:space="preserve">
+    <value>Mediefilerne blev slettet</value>
+  </data>
 </root>
