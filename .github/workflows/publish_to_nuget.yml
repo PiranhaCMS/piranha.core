@@ -44,7 +44,7 @@ jobs:
 
     # Sign packages
     - name: Sign packages
-      run: /SignClient "SIGN" --input "artifacts/*.nupkg" --config "sign.json" --user "${{secrets.SignClientUser}}" --secret "${{secrets.SignClientSecret}}" --name "Piranha" --description "Piranha" --descriptionUrl "https://github.com/piranhacms/piranha.core"
+      run: ./SignClient "SIGN" --input "artifacts/*.nupkg" --config "sign.json" --user "${{secrets.SignClientUser}}" --secret "${{secrets.SignClientSecret}}" --name "Piranha" --description "Piranha" --descriptionUrl "https://github.com/piranhacms/piranha.core"
 
     # Sign symbol packages
     - name: Sign packages
