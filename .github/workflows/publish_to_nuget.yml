@@ -51,5 +51,5 @@ jobs:
       run: ./SignClient "SIGN" --input "artifacts/*.snupkg" --config "sign.json" --user "${{secrets.SignClientUser}}" --secret "${{secrets.SignClientSecret}}" --name "Piranha" --description "Piranha" --descriptionUrl "https://github.com/piranhacms/piranha.core"
 
     # Push to NuGet
-    # - name: Push generated package to GitHub registry
-    #   run: dotnet nuget push **/*.nupkg --skip-duplicate -k ${{ secrets.NugetAuthToken }}
+    - name: Push generated package to GitHub registry
+      run: dotnet nuget push **/*.nupkg --skip-duplicate -k ${{ secrets.NugetAuthToken }}
