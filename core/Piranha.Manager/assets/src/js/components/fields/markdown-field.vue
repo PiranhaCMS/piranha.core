@@ -1,6 +1,6 @@
 <template>
     <div class="markdown-field" :class="{ empty: isEmpty }">
-        <textarea :id="uid" spellcheck="false" v-html="model.value"></textarea>
+        <textarea :id="uid" v-html="model.value"></textarea>
         <div class="markdown-preview"></div>
     </div>
 </template>

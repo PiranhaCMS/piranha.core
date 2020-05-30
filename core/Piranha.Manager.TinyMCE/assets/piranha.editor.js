@@ -8,6 +8,7 @@
 piranha.editor.addInline = function (id, toolbarId) {
     tinymce.init({
         selector: "#" + id,
+        browser_spellcheck: true,
         fixed_toolbar_container: "#" + toolbarId,
         menubar: false,
         branding: false,

@@ -1,6 +1,6 @@
 <template>
     <div class="block-body" :class="{ empty: isEmpty }">
-        <pre contenteditable="true" spellcheck="false" v-html="model.body.value" v-on:blur="onBlur"></pre>
+        <pre contenteditable="true" v-html="model.body.value" v-on:blur="onBlur"></pre>
     </div>
 </template>
 
