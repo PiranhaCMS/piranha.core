@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <Version>8.3.0-beta1</Version>
+    <Version>8.3.0</Version>
     <Company>Piranha CMS</Company>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
@@ -13,7 +13,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
     <PackageId>Piranha.Manager.Summernote</PackageId>
-    <PackageVersion>8.3.0-beta1</PackageVersion>
+    <PackageVersion>8.3.0</PackageVersion>
     <Authors>Piranha CMS</Authors>
     <Description>Summernote WYSIWYG Editor for Piranha CMS</Description>
     <Copyright>Copyright (c) .NET Foundation and Contributors</Copyright>

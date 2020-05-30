@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>8.3.0-beta1</Version>
+    <Version>8.3.0</Version>
     <Company>Piranha CMS</Company>
     <RootNamespace>Piranha.Azure</RootNamespace>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
@@ -13,7 +13,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
     <PackageId>Piranha.Azure.BlobStorage</PackageId>
-    <PackageVersion>8.3.0-beta1</PackageVersion>
+    <PackageVersion>8.3.0</PackageVersion>
     <Authors>Piranha CMS</Authors>
     <Description>Package for storing uploaded media assets on Azure Blob Storage</Description>
     <Copyright>Copyright (c) .NET Foundation and Contributors</Copyright>
