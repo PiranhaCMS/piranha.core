@@ -49,42 +49,42 @@
     <value>Liste</value>
   </data>
   <data name="Preferred aspect" xml:space="preserve">
-    <value>Preferred aspect</value>
+    <value>Aspect préféré</value>
   </data>
   <data name="Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Initial</value>
   </data>
   <data name="Landscape" xml:space="preserve">
-    <value>Landscape</value>
+    <value>Paysage</value>
   </data>
   <data name="Portrait" xml:space="preserve">
     <value>Portrait</value>
   </data>
   <data name="Widescreen" xml:space="preserve">
-    <value>Widescreen</value>
+    <value>Écran large</value>
   </data>
   <data name="Square" xml:space="preserve">
-    <value>Square</value>
+    <value>Carré</value>
   </data>
   <data name="Are you sure you want to delete selected media?" xml:space="preserve">
-    <value>Are you sure you want to delete selected media?</value>
+    <value>Êtes-vous sûr de vouloir supprimer les médias sélectionnés ?</value>
   </data>
   <data name="Delete selected items" xml:space="preserve">
-    <value>Delete selected items</value>
+    <value>Supprimer les éléments sélectionnés</value>
   </data>
   <data name="Media file was successfully moved." xml:space="preserve">
-    <value>Media file was successfully moved.</value>
+    <value>Le fichier média a été déplacé avec succès.</value>
   </data>
   <data name="Media files was successfully moved." xml:space="preserve">
-    <value>Media files was successfully moved.</value>
+    <value>Les fichiers média ont été déplacés avec succès.</value>
   </data>
   <data name="The media file was not found." xml:space="preserve">
-    <value>The media file was not found.</value>
+    <value>Le fichier média n'a pas été trouvé.</value>
   </data>
   <data name="The media file was successfully deleted" xml:space="preserve">
-    <value>The media file was successfully deleted</value>
+    <value>Le fichier média a été supprimé avec succès</value>
   </data>
   <data name="The media files was successfully deleted" xml:space="preserve">
-    <value>The media files was successfully deleted</value>
+    <value>Le fichier média a été déplacé avec succès</value>
   </data>
 </root>
