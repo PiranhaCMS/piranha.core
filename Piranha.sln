@@ -96,6 +96,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Data.EF.PostgreSql"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Azure.Search", "core\Piranha.Azure.Search\Piranha.Azure.Search.csproj", "{02521046-DE43-4511-8D4C-BC7330884373}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.AspNetCore.Identity.MySQL", "core\Piranha.AspNetCore.Identity.MySQL\Piranha.AspNetCore.Identity.MySQL.csproj", "{29051A1A-2FC0-490E-85B0-B19279E756EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.AspNetCore.Identity.PostgreSQL", "core\Piranha.AspNetCore.Identity.PostgreSQL\Piranha.AspNetCore.Identity.PostgreSQL.csproj", "{B91D76C2-5999-418D-81B6-D52EC32836A0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -206,6 +210,14 @@ Global
 		{02521046-DE43-4511-8D4C-BC7330884373}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02521046-DE43-4511-8D4C-BC7330884373}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02521046-DE43-4511-8D4C-BC7330884373}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29051A1A-2FC0-490E-85B0-B19279E756EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29051A1A-2FC0-490E-85B0-B19279E756EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29051A1A-2FC0-490E-85B0-B19279E756EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29051A1A-2FC0-490E-85B0-B19279E756EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B91D76C2-5999-418D-81B6-D52EC32836A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B91D76C2-5999-418D-81B6-D52EC32836A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B91D76C2-5999-418D-81B6-D52EC32836A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B91D76C2-5999-418D-81B6-D52EC32836A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -237,6 +249,8 @@ Global
 		{1D7557A7-EB80-4E33-928C-9E3F6A2735C6} = {DCC52317-BC88-4F0A-923F-C9D9F6D952ED}
 		{F6DD71E5-F9F8-4150-8A0B-851EADAE532B} = {DCC52317-BC88-4F0A-923F-C9D9F6D952ED}
 		{02521046-DE43-4511-8D4C-BC7330884373} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
+		{29051A1A-2FC0-490E-85B0-B19279E756EF} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
+		{B91D76C2-5999-418D-81B6-D52EC32836A0} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF88AA05-D127-4707-8214-A230F0DA569B}
