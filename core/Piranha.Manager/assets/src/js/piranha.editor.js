@@ -13,7 +13,7 @@ piranha.editor = {
         var simplemde = new SimpleMDE({
             element: document.getElementById(id),
             status: false,
-            spellChecker: false,
+            spellChecker: true,
             hideIcons: ["preview", "guide"],
             initialValue: value,
             toolbar: [
