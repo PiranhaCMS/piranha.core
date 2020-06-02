@@ -289,6 +289,9 @@ namespace Piranha.Services
                 {
                     def.IsDefault = false;
                     await _repo.Save(def).ConfigureAwait(false);
+
+                    // Remove the old default site from cache
+                    RemoveFromCache(def);
                 }
             }
             else

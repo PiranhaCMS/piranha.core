@@ -10,9 +10,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Runtime.Serialization.Formatters.Binary;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 
@@ -25,6 +22,7 @@ namespace Piranha.Cache
     {
         private readonly IDistributedCache _cache;
         private readonly Dictionary<Type, bool> _types = new Dictionary<Type, bool>();
+        private readonly JsonSerializerSettings _jsonSettings;
 
         /// <summary>
         /// Default constructor.
@@ -33,6 +31,10 @@ namespace Piranha.Cache
         public DistributedCache(IDistributedCache cache)
         {
             _cache = cache;
+            _jsonSettings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All
+            };
         }
 
         /// <summary>
@@ -43,7 +45,13 @@ namespace Piranha.Cache
         /// <returns>The cached model, null it wasn't found</returns>
         public T Get<T>(string key)
         {
-            return Deserialize<T>(_cache.Get(key));
+            var json = _cache.GetString(key);
+
+            if (!string.IsNullOrEmpty(json))
+            {
+                return JsonConvert.DeserializeObject<T>(json, _jsonSettings);
+            }
+            return default(T);
         }
 
         /// <summary>
@@ -54,7 +62,7 @@ namespace Piranha.Cache
         /// <param name="value">The model</param>
         public void Set<T>(string key, T value)
         {
-            _cache.Set(key, Serialize(value));
+            _cache.SetString(key, JsonConvert.SerializeObject(value, _jsonSettings));
         }
 
         /// <summary>
@@ -64,86 +72,6 @@ namespace Piranha.Cache
         public void Remove(string key)
         {
             _cache.Remove(key);
-        }
-
-        /// <summary>
-        /// Serializes the given object to a byte array.
-        /// </summary>
-        /// <param name="obj">The object</param>
-        /// <returns>The serialized byte array</returns>
-        private byte[] Serialize(object obj)
-        {
-            if (obj == null)
-            {
-                return null;
-            }
-
-            var formatter = new BinaryFormatter();
-            using (var stream = new MemoryStream())
-            {
-                if (IsSerializable(obj.GetType()))
-                {
-                    formatter.Serialize(stream, obj);
-                    return stream.ToArray();
-                }
-
-                // First, serialize the object to JSON.
-                var settings = new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.All
-                };
-                var json = JsonConvert.SerializeObject(obj, settings);
-
-                // Next lets convert the json to a byte array
-                formatter.Serialize(stream, json);
-                return stream.ToArray();
-            }
-        }
-
-        /// <summary>
-        /// Deserializes the byte array to an object.
-        /// </summary>
-        /// <param name="bytes">The byte array</param>
-        /// <typeparam name="T">The object type</typeparam>
-        /// <returns>The deserialized object</returns>
-        private T Deserialize<T>(byte[] bytes)
-        {
-            if (bytes == null)
-            {
-                return default(T);
-            }
-
-            var formatter = new BinaryFormatter();
-            using (var stream = new MemoryStream(bytes))
-            {
-                if (IsSerializable(typeof(T)))
-                {
-                    return (T)formatter.Deserialize(stream);
-                }
-
-                // First lets decode the byte array into a string
-                var json = (string)formatter.Deserialize(stream);
-
-                // Next deserialize the json into an object
-                var settings = new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.All
-                };
-                return JsonConvert.DeserializeObject<T>(json, settings);
-            }
-        }
-
-        private bool IsSerializable(Type type)
-        {
-            if (_types.TryGetValue(type, out var serializable))
-            {
-                return serializable;
-            }
-
-            var attr = type.GetCustomAttribute<SerializableAttribute>();
-            _types[type] = attr != null;
-
-            return attr != null;
         }
     }
 }

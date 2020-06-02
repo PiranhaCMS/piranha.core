@@ -11,12 +11,34 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Distributed;
 using Xunit;
 using Piranha.AttributeBuilder;
 using Piranha.Models;
 
 namespace Piranha.Tests.Services
 {
+    [Collection("Integration tests")]
+    public class CommentTestsMemoryCache : CommentTests
+    {
+        public override Task InitializeAsync()
+        {
+            _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
+            return base.InitializeAsync();
+        }
+    }
+
+    [Collection("Integration tests")]
+    public class CommentTestsDistributedCache : CommentTests
+    {
+        public override Task InitializeAsync()
+        {
+            _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
+            return base.InitializeAsync();
+        }
+    }
+
     [Collection("Integration tests")]
     public class CommentTests : BaseTestsAsync
     {
@@ -118,6 +140,17 @@ namespace Piranha.Tests.Services
                 {
                     await api.Sites.DeleteAsync(s);
                 }
+            }
+        }
+
+        [Fact]
+        public void IsCached()
+        {
+            using (var api = CreateApi())
+            {
+                Assert.Equal(((Api)api).IsCached,
+                    this.GetType() == typeof(CommentTestsMemoryCache) ||
+                    this.GetType() == typeof(CommentTestsDistributedCache));
             }
         }
 

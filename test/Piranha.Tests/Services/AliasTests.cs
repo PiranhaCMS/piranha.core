@@ -12,19 +12,28 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Distributed;
 using Xunit;
 using Piranha.Models;
 
 namespace Piranha.Tests.Services
 {
     [Collection("Integration tests")]
-    public class AliasTestsCached : AliasTests
+    public class AliasTestsMemoryCache : AliasTests
     {
         public override Task InitializeAsync()
         {
-            _cache = new Cache.MemoryCache(new MemoryCache(
-                new MemoryCacheOptions()
-            ));
+            _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
+            return base.InitializeAsync();
+        }
+    }
+
+    [Collection("Integration tests")]
+    public class AliasTestsDistributedCache : AliasTests
+    {
+        public override Task InitializeAsync()
+        {
+            _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
             return base.InitializeAsync();
         }
     }
@@ -99,7 +108,9 @@ namespace Piranha.Tests.Services
         [Fact]
         public void IsCached() {
             using (var api = CreateApi()) {
-                Assert.Equal(this.GetType() == typeof(AliasTestsCached), ((Api)api).IsCached);
+                Assert.Equal(((Api)api).IsCached,
+                    this.GetType() == typeof(AliasTestsMemoryCache) ||
+                    this.GetType() == typeof(AliasTestsDistributedCache));
             }
         }
 
