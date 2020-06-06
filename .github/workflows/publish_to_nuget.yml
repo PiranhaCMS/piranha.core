@@ -31,7 +31,6 @@ jobs:
       run: |
         cd core/Piranha.Manager
         npm install
-        npm audit fix
         gulp
 
     # Build and pack
