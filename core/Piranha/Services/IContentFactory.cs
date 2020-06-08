@@ -28,8 +28,9 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="type">The content type</param>
         /// <param name="regionId">The region id</param>
+        /// <param name="managerInit">If manager initialization should be performed</param>
         /// <returns>The new region value</returns>
-        Task<object> CreateDynamicRegionAsync(ContentTypeBase type, string regionId);
+        Task<object> CreateDynamicRegionAsync(ContentTypeBase type, string regionId, bool managerInit = false);
 
         /// <summary>
         /// Creates and initializes a new block of the specified type.

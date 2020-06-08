@@ -166,7 +166,7 @@ namespace Piranha.Manager.Services
         private async Task<RegionItemModel> CreateRegionAsync(ContentTypeBase type, string region)
         {
             var regionType = type.Regions.First(r => r.Id == region);
-            var regionModel = await _factory.CreateDynamicRegionAsync(type, region);
+            var regionModel = await _factory.CreateDynamicRegionAsync(type, region, true);
             var regionItem = new RegionItemModel
             {
                 Title = regionType.ListTitlePlaceholder ?? "..."
