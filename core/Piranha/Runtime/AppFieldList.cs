@@ -55,5 +55,17 @@ namespace Piranha.Runtime
                 new Extend.Serializers.SelectFieldSerializer<Extend.Fields.SelectField<TValue>>()
             );
         }
+
+        /// <summary>
+        /// Registers a new data select field and its associated serializer.
+        /// </summary>
+        /// <typeparam name="TValue">The value type</typeparam>
+        public void RegisterDataSelect<TValue>() where TValue : class
+        {
+            Register<Extend.Fields.DataSelectField<TValue>>();
+            App.Serializers.Register<Extend.Fields.DataSelectField<TValue>>(
+                new Extend.Serializers.DataSelectFieldSerializer<Extend.Fields.DataSelectField<TValue>>()
+            );
+        }
     }
 }

@@ -247,22 +247,31 @@ piranha.media = new Vue({
             var self = this;
             var selections = this.items.filter(i => i.selected).map(i => i.id);
 
-            fetch(piranha.baseUrl + "manager/api/media/delete", {
-                method: "post",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(selections)
-            })
-            .then(function (response) { return response.json(); })
-            .then(function (result) {
-                // Refresh
-                self.refresh();
+            piranha.alert.open({
+                title: piranha.resources.texts.delete,
+                body: piranha.resources.texts.deleteMediaSelectionConfirm,
+                confirmCss: "btn-danger",
+                confirmIcon: "fas fa-trash",
+                confirmText: piranha.resources.texts.delete,
+                onConfirm: function () {
+                    fetch(piranha.baseUrl + "manager/api/media/delete", {
+                        method: "post",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(selections)
+                    })
+                    .then(function (response) { return response.json(); })
+                    .then(function (result) {
+                        // Refresh
+                        self.refresh();
 
-                // Push status to notification hub
-                piranha.notifications.push(result);
-            })
-            .catch(function (error) { console.log("error:", error); });
+                        // Push status to notification hub
+                        piranha.notifications.push(result);
+                    })
+                    .catch(function (error) { console.log("error:", error); });
+                }
+            });
         },
         removeFolder: function (id) {
             var self = this;

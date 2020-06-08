@@ -297,6 +297,11 @@ namespace Piranha.AttributeBuilder
                         var method = typeof(Runtime.AppFieldList).GetMethod("RegisterSelect");
                         generic = method.MakeGenericMethod(type.GenericTypeArguments.First());
                     }
+                    else if (typeof(Extend.Fields.DataSelectFieldBase).IsAssignableFrom(type))
+                    {
+                        var method = typeof(Runtime.AppFieldList).GetMethod("RegisterDataSelect");
+                        generic = method.MakeGenericMethod(type.GenericTypeArguments.First());
+                    }
                     else
                     {
                         var method = typeof(Runtime.AppFieldList).GetMethod("Register");

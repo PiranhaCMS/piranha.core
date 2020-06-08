@@ -216,6 +216,7 @@ var js = [
 
             "assets/src/js/components/fields/audio-field.vue",
             "assets/src/js/components/fields/checkbox-field.vue",
+            "assets/src/js/components/fields/data-select-field.vue",
             "assets/src/js/components/fields/date-field.vue",
             "assets/src/js/components/fields/document-field.vue",
             "assets/src/js/components/fields/html-field.vue",

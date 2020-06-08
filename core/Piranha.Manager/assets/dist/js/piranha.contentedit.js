@@ -396,7 +396,7 @@ Vue.component("html-block", {
   beforeDestroy: function () {
     piranha.editor.remove(this.uid);
   },
-  template: "\n<div class=\"block-body\" :class=\"{ empty: isEmpty }\">\n    <div contenteditable=\"true\" :id=\"uid\" spellcheck=\"false\" v-html=\"body\" v-on:blur=\"onBlur\"></div>\n</div>\n"
+  template: "\n<div class=\"block-body\" :class=\"{ empty: isEmpty }\">\n    <div contenteditable=\"true\" :id=\"uid\" v-html=\"body\" v-on:blur=\"onBlur\"></div>\n</div>\n"
 });
 Vue.component("html-column-block", {
   props: ["uid", "toolbar", "model"],
@@ -436,7 +436,7 @@ Vue.component("html-column-block", {
     piranha.editor.remove(this.uid + 1);
     piranha.editor.remove(this.uid + 2);
   },
-  template: "\n<div class=\"row block-body\">\n    <div class=\"col-md-6\">\n        <div :class=\"{ empty: isEmpty1 }\">\n            <div :id=\"uid + 1\" contenteditable=\"true\" spellcheck=\"false\" v-html=\"column1\" v-on:blur=\"onBlurCol1\"></div>\n        </div>\n    </div>\n    <div class='col-md-6'>\n        <div :class='{ empty: isEmpty2 }'>\n            <div :id=\"uid + 2\" contenteditable=\"true\" spellcheck=\"false\" v-html=\"column2\" v-on:blur=\"onBlurCol2\"></div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"row block-body\">\n    <div class=\"col-md-6\">\n        <div :class=\"{ empty: isEmpty1 }\">\n            <div :id=\"uid + 1\" contenteditable=\"true\" v-html=\"column1\" v-on:blur=\"onBlurCol1\"></div>\n        </div>\n    </div>\n    <div class='col-md-6'>\n        <div :class='{ empty: isEmpty2 }'>\n            <div :id=\"uid + 2\" contenteditable=\"true\" v-html=\"column2\" v-on:blur=\"onBlurCol2\"></div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("image-block", {
   props: ["uid", "model"],
@@ -760,7 +760,7 @@ Vue.component("text-block", {
       return piranha.utils.isEmptyText(this.model.body.value);
     }
   },
-  template: "\n<div class=\"block-body\" :class=\"{ empty: isEmpty }\">\n    <pre contenteditable=\"true\" spellcheck=\"false\" v-html=\"model.body.value\" v-on:blur=\"onBlur\"></pre>\n</div>\n"
+  template: "\n<div class=\"block-body\" :class=\"{ empty: isEmpty }\">\n    <pre contenteditable=\"true\" v-html=\"model.body.value\" v-on:blur=\"onBlur\"></pre>\n</div>\n"
 });
 Vue.component("video-block", {
   props: ["uid", "model"],
@@ -867,6 +867,21 @@ Vue.component("audio-field", {
 Vue.component("checkbox-field", {
   props: ["uid", "model", "meta"],
   template: "\n<div class=\"form-group form-check\">\n    <input type=\"checkbox\" class=\"form-check-input\" :id=\"meta.uid\" v-model=\"model.value\">\n    <label class=\"form-check-label\" :for=\"meta.uid\">{{ meta.placeholder}}</label>\n</div>\n"
+});
+Vue.component("data-select-field", {
+  props: ["uid", "model", "meta"],
+  methods: {
+    update: function () {
+      if (this.meta.notifyChange) {
+        // Tell parent that value has been updated
+        this.$emit('update-field', {
+          uid: this.uid,
+          title: this.model.items.$values[this.model.id]
+        });
+      }
+    }
+  },
+  template: "\n<select class=\"form-control\" v-model=\"model.id\" v-on:change=\"update()\">\n    <option v-for=\"(item) in model.items.$values\" v-bind:key=\"item.id\" v-bind:value=\"item.id\">\n        {{ item.name }}\n    </option>\n</select>\n"
 });
 Vue.component("date-field", {
   props: ["uid", "model", "meta"],
@@ -989,7 +1004,7 @@ Vue.component("html-field", {
   beforeDestroy: function () {
     piranha.editor.remove(this.uid);
   },
-  template: "\n<div class=\"field html-field\" :class=\"{ empty: isEmpty }\">\n    <div contenteditable=\"true\" :id=\"uid\" spellcheck=\"false\" v-html=\"body\" v-on:blur=\"onBlur\"></div>\n</div>\n"
+  template: "\n<div class=\"field html-field\" :class=\"{ empty: isEmpty }\">\n    <div contenteditable=\"true\" :id=\"uid\" v-html=\"body\" v-on:blur=\"onBlur\"></div>\n</div>\n"
 });
 Vue.component("image-field", {
   props: ["uid", "model", "meta"],
@@ -1066,7 +1081,7 @@ Vue.component("markdown-field", {
   beforeDestroy: function () {
     piranha.editor.remove(this.uid);
   },
-  template: "\n<div class=\"markdown-field\" :class=\"{ empty: isEmpty }\">\n    <textarea :id=\"uid\" spellcheck=\"false\" v-html=\"model.value\"></textarea>\n    <div class=\"markdown-preview\"></div>\n</div>\n"
+  template: "\n<div class=\"markdown-field\" :class=\"{ empty: isEmpty }\">\n    <textarea :id=\"uid\" v-html=\"model.value\"></textarea>\n    <div class=\"markdown-preview\"></div>\n</div>\n"
 });
 Vue.component("media-field", {
   props: ["uid", "model", "meta"],
