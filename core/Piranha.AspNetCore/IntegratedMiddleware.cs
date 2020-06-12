@@ -160,13 +160,13 @@ namespace Piranha.AspNetCore
                     // Scan for the most unique slug
                     for (var n = segments.Length; n > pos; n--)
                     {
-                        var slug = string.Join("/", segments.Subset(pos, n));
+                        var slug = string.Join("/", segments.Subset(pos, n - pos));
                         page = await api.Pages.GetBySlugAsync<PageBase>(slug, site.Id)
                             .ConfigureAwait(false);
 
                         if (page != null)
                         {
-                            pos = pos + n;
+                            pos = n;
                             break;
                         }
                     }
