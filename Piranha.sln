@@ -25,44 +25,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".global", ".global", "{8805
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Local.FileStorage", "core\Piranha.Local.FileStorage\Piranha.Local.FileStorage.csproj", "{4587BC7F-94D4-4DF5-B46E-4CC0E462FF03}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuspec", ".nuspec", "{A1B6ED88-8C91-45B0-9585-036E8A1C4A3C}"
-	ProjectSection(SolutionItems) = preProject
-		nuspec\Piranha.AspNetCore.Identity.nuspec = nuspec\Piranha.AspNetCore.Identity.nuspec
-		nuspec\Piranha.AspNetCore.Identity.SQLite.nuspec = nuspec\Piranha.AspNetCore.Identity.SQLite.nuspec
-		nuspec\Piranha.AspNetCore.Identity.SQLServer.nuspec = nuspec\Piranha.AspNetCore.Identity.SQLServer.nuspec
-		nuspec\Piranha.AspNetCore.nuspec = nuspec\Piranha.AspNetCore.nuspec
-		nuspec\Piranha.AspNetCore.SimpleSecurity.nuspec = nuspec\Piranha.AspNetCore.SimpleSecurity.nuspec
-		nuspec\Piranha.AttributeBuilder.nuspec = nuspec\Piranha.AttributeBuilder.nuspec
-		nuspec\Piranha.Azure.BlobStorage.nuspec = nuspec\Piranha.Azure.BlobStorage.nuspec
-		nuspec\Piranha.Data.EF.nuspec = nuspec\Piranha.Data.EF.nuspec
-		nuspec\Piranha.Data.EF.PostgreSql.nuspec = nuspec\Piranha.Data.EF.PostgreSql.nuspec
-		nuspec\Piranha.Extensions.Sync.nuspec = nuspec\Piranha.Extensions.Sync.nuspec
-		nuspec\Piranha.ImageSharp.nuspec = nuspec\Piranha.ImageSharp.nuspec
-		nuspec\Piranha.Local.FileStorage.nuspec = nuspec\Piranha.Local.FileStorage.nuspec
-		nuspec\Piranha.Manager.Localization.nuspec = nuspec\Piranha.Manager.Localization.nuspec
-		nuspec\Piranha.Manager.nuspec = nuspec\Piranha.Manager.nuspec
-		nuspec\Piranha.nuspec = nuspec\Piranha.nuspec
-		nuspec\Piranha.Data.EF.MySql.nuspec = nuspec\Piranha.Data.EF.MySql.nuspec
-		nuspec\Piranha.Data.EF.SQLite.nuspec = nuspec\Piranha.Data.EF.SQLite.nuspec
-		nuspec\Piranha.Data.EF.SQLServer.nuspec = nuspec\Piranha.Data.EF.SQLServer.nuspec
-		nuspec\Piranha.Manager.Summernote.nuspec = nuspec\Piranha.Manager.Summernote.nuspec
-		nuspec\Piranha.Manager.TinyMCE.nuspec = nuspec\Piranha.Manager.TinyMCE.nuspec
-		nuspec\Piranha.WebApi.nuspec = nuspec\Piranha.WebApi.nuspec
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AspNetCore.SimpleSecurity", "core\Piranha.AspNetCore.SimpleSecurity\Piranha.AspNetCore.SimpleSecurity.csproj", "{DAE71F77-F4C7-4727-83D3-3AFC7362886D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.Azure.BlobStorage", "core\Piranha.Azure.BlobStorage\Piranha.Azure.BlobStorage.csproj", "{F1B30DE3-5B64-4A20-A41A-C391719E51FD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.ImageSharp", "core\Piranha.ImageSharp\Piranha.ImageSharp.csproj", "{512309F2-0557-41DF-9BD0-FDE898C2D34A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{BB78ACA1-9978-4B95-8124-D92FBCC52C9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AspNetCore.Identity", "identity\Piranha.AspNetCore.Identity\Piranha.AspNetCore.Identity.csproj", "{4BCC1E64-AACC-4D9B-973E-6072416D98A1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AspNetCore.Identity", "core\Piranha.AspNetCore.Identity\Piranha.AspNetCore.Identity.csproj", "{4BCC1E64-AACC-4D9B-973E-6072416D98A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AspNetCore.Identity.SQLite", "identity\Piranha.AspNetCore.Identity.SQLite\Piranha.AspNetCore.Identity.SQLite.csproj", "{1F5FD0E8-1B4D-4381-9DFC-C235D3BC4C77}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AspNetCore.Identity.SQLite", "core\Piranha.AspNetCore.Identity.SQLite\Piranha.AspNetCore.Identity.SQLite.csproj", "{1F5FD0E8-1B4D-4381-9DFC-C235D3BC4C77}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AspNetCore.Identity.SQLServer", "core\Piranha.AspNetCore.Identity.SQLServer\Piranha.AspNetCore.Identity.SQLServer.csproj", "{CC742AA4-A544-46D4-901C-7A605B4F132B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AspNetCore.Identity.SQLServer", "identity\Piranha.AspNetCore.Identity.SQLServer\Piranha.AspNetCore.Identity.SQLServer.csproj", "{CC742AA4-A544-46D4-901C-7A605B4F132B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcWeb", "examples\MvcWeb\MvcWeb.csproj", "{14F9CA8A-6532-40CC-81D6-9763351AFD91}"
 EndProject
@@ -96,9 +69,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Data.EF.PostgreSql"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Azure.Search", "core\Piranha.Azure.Search\Piranha.Azure.Search.csproj", "{02521046-DE43-4511-8D4C-BC7330884373}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.AspNetCore.Identity.MySQL", "core\Piranha.AspNetCore.Identity.MySQL\Piranha.AspNetCore.Identity.MySQL.csproj", "{29051A1A-2FC0-490E-85B0-B19279E756EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.AspNetCore.Identity.MySQL", "identity\Piranha.AspNetCore.Identity.MySQL\Piranha.AspNetCore.Identity.MySQL.csproj", "{29051A1A-2FC0-490E-85B0-B19279E756EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.AspNetCore.Identity.PostgreSQL", "core\Piranha.AspNetCore.Identity.PostgreSQL\Piranha.AspNetCore.Identity.PostgreSQL.csproj", "{B91D76C2-5999-418D-81B6-D52EC32836A0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.AspNetCore.Identity.PostgreSQL", "identity\Piranha.AspNetCore.Identity.PostgreSQL\Piranha.AspNetCore.Identity.PostgreSQL.csproj", "{B91D76C2-5999-418D-81B6-D52EC32836A0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "identity", "identity", "{9C09AC36-71CF-4E0E-B7CE-C38969A3E123}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -231,9 +206,9 @@ Global
 		{DAE71F77-F4C7-4727-83D3-3AFC7362886D} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 		{F1B30DE3-5B64-4A20-A41A-C391719E51FD} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 		{512309F2-0557-41DF-9BD0-FDE898C2D34A} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
-		{4BCC1E64-AACC-4D9B-973E-6072416D98A1} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
-		{1F5FD0E8-1B4D-4381-9DFC-C235D3BC4C77} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
-		{CC742AA4-A544-46D4-901C-7A605B4F132B} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
+		{4BCC1E64-AACC-4D9B-973E-6072416D98A1} = {9C09AC36-71CF-4E0E-B7CE-C38969A3E123}
+		{1F5FD0E8-1B4D-4381-9DFC-C235D3BC4C77} = {9C09AC36-71CF-4E0E-B7CE-C38969A3E123}
+		{CC742AA4-A544-46D4-901C-7A605B4F132B} = {9C09AC36-71CF-4E0E-B7CE-C38969A3E123}
 		{14F9CA8A-6532-40CC-81D6-9763351AFD91} = {A82A5922-BF05-4DD7-A2C1-DD22F1AD6A57}
 		{D17485D2-371E-4F7C-952F-57B26606FC6A} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 		{4CCD6AF9-3A1D-41E3-B58F-80E9D6616CA3} = {DCC52317-BC88-4F0A-923F-C9D9F6D952ED}
@@ -249,8 +224,8 @@ Global
 		{1D7557A7-EB80-4E33-928C-9E3F6A2735C6} = {DCC52317-BC88-4F0A-923F-C9D9F6D952ED}
 		{F6DD71E5-F9F8-4150-8A0B-851EADAE532B} = {DCC52317-BC88-4F0A-923F-C9D9F6D952ED}
 		{02521046-DE43-4511-8D4C-BC7330884373} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
-		{29051A1A-2FC0-490E-85B0-B19279E756EF} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
-		{B91D76C2-5999-418D-81B6-D52EC32836A0} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
+		{29051A1A-2FC0-490E-85B0-B19279E756EF} = {9C09AC36-71CF-4E0E-B7CE-C38969A3E123}
+		{B91D76C2-5999-418D-81B6-D52EC32836A0} = {9C09AC36-71CF-4E0E-B7CE-C38969A3E123}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF88AA05-D127-4707-8214-A230F0DA569B}

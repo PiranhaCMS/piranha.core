@@ -11,10 +11,10 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
-    <PackageId>Piranha.AspNetCore.Identity.SQLServer</PackageId>
+    <PackageId>Piranha.AspNetCore.Identity.SQLite</PackageId>
     <PackageVersion>8.3.0</PackageVersion>
     <Authors>Piranha CMS</Authors>
-    <Description>Piranha CMS AspNetCore Identity provider for SQLServer</Description>
+    <Description>Piranha CMS AspNetCore Identity provider for SQLite</Description>
     <Copyright>Copyright (c) .NET Foundation and Contributors</Copyright>
     <PackageTags>cms mvc aspnetcore netstandard</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -31,9 +31,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SQLServer" Version="3.1.0" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
-    <ProjectReference Include="..\Piranha\Piranha.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SQLite" Version="3.1.0" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
     <ProjectReference Include="..\Piranha.AspNetCore.Identity\Piranha.AspNetCore.Identity.csproj" />
   </ItemGroup>
 

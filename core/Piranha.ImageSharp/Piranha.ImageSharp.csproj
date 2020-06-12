@@ -29,7 +29,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0007" />
     <ProjectReference Include="..\Piranha\Piranha.csproj" />
   </ItemGroup>
