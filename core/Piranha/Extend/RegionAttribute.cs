@@ -37,10 +37,10 @@ namespace Piranha.Extend
         public string ListPlaceholder { get; set; }
 
         /// <summary>
-        /// Gets/sets if list items should be expandable. If not, the
-        /// content is placed directly in the title.
+        /// Gets/sets if all lite items should be expanded in the UI.
+        /// This works best for single field regions or smaller regions.
         /// </summary>
-        public bool ListExpand { get; set; } = true;
+        public bool ListExpand { get; set; } = false;
 
         /// <summary>
         /// Gets/sets the optional sort order.
