@@ -32,7 +32,7 @@ namespace Piranha.AspNetCore.Services
         string Host { get; set; }
 
         /// <summary>
-        /// Gets/sets the optional site prefic of the requested site
+        /// Gets/sets the optional site prefix of the requested site
         /// if it's routed with `host/prefix`.
         /// </summary>
         string SitePrefix { get; set; }

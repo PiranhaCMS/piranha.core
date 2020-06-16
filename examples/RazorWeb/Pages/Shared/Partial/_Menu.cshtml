@@ -14,7 +14,7 @@
                 if (!item.IsHidden)
                 {
                     <li class="nav-item @(item.Id == WebApp.PageId || item.HasChild(WebApp.PageId) ? "active" : "")">
-                        <a class="nav-link" href="@item.Permalink">@item.MenuTitle</a>
+                        <a class="nav-link" href="@WebApp.Url(item)">@item.MenuTitle</a>
                     </li>
                 }
             }
