@@ -109,6 +109,12 @@ namespace Piranha.AspNetCore
                     service.Site.Host = siteHost[0];
                     service.Site.SitePrefix = siteHost[1];
 
+                    // Default to the request hostname
+                    if (string.IsNullOrEmpty(service.Site.Host))
+                    {
+                        service.Site.Host = context.Request.Host.Host;
+                    }
+
                     // Set current culture if specified in site
                     if (!string.IsNullOrEmpty(site.Culture))
                     {
