@@ -109,27 +109,15 @@ public static class UrlGenerationExtensions
     }
 
     /// <summary>
-    /// Generates an absolute url for the given category in the
+    /// Generates an absolute url for the given taxonomy in the
     /// current archive.
     /// </summary>
     /// <param name="app">The application service</param>
-    /// <param name="category">The category</param>
+    /// <param name="taxonomy">The taxonomy</param>
     /// <returns></returns>
-    public static string AbsoluteCategoryUrl(this IApplicationService app, Taxonomy category)
+    public static string AbsoluteUrl(this IApplicationService app, Taxonomy taxonomy)
     {
-        return $"{ AbsoluteUrlStart(app) }{ CategoryUrl(app, category) }";
-    }
-
-    /// <summary>
-    /// Generates an absolute url for the given tag in the
-    /// current archive.
-    /// </summary>
-    /// <param name="app">The application service</param>
-    /// <param name="tag">The tag</param>
-    /// <returns></returns>
-    public static string AbsoluteTagUrl(this IApplicationService app, Taxonomy tag)
-    {
-        return $"{ AbsoluteUrlStart(app) }{ TagUrl(app, tag) }";
+        return $"{ AbsoluteUrlStart(app) }{ Url(app, taxonomy) }";
     }
 
     /// <summary>
@@ -268,33 +256,21 @@ public static class UrlGenerationExtensions
     }
 
     /// <summary>
-    /// Generates a local url for the given category in the
+    /// Generates a local url for the given taxonomy in the
     /// current archive.
     /// </summary>
     /// <param name="app">The application service</param>
-    /// <param name="category">The category</param>
+    /// <param name="taxonomy">The taxonomy</param>
     /// <returns></returns>
-    public static string CategoryUrl(this IApplicationService app, Taxonomy category)
+    public static string Url(this IApplicationService app, Taxonomy taxonomy)
     {
-        if (app.CurrentPage != null && category != null)
+        if (app.CurrentPage != null && taxonomy != null && taxonomy.Type != TaxonomyType.NotSet)
         {
-            return $"{ Url(app, app.CurrentPage) }/category/{ category.Slug }";
-        }
-        return "";
-    }
-
-    /// <summary>
-    /// Generates a local url for the given tag in the
-    /// current archive.
-    /// </summary>
-    /// <param name="app">The application service</param>
-    /// <param name="tag">The tag</param>
-    /// <returns></returns>
-    public static string TagUrl(this IApplicationService app, Taxonomy tag)
-    {
-        if (app.CurrentPage != null && tag != null)
-        {
-            return $"{ Url(app, app.CurrentPage) }/tag/{ tag.Slug }";
+            if (taxonomy.Type == TaxonomyType.Category)
+            {
+                return $"{ Url(app, app.CurrentPage) }/category/{ taxonomy.Slug }";
+            }
+            return $"{ Url(app, app.CurrentPage) }/tag/{ taxonomy.Slug }";
         }
         return "";
     }

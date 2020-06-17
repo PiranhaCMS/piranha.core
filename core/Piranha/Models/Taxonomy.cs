@@ -34,6 +34,11 @@ namespace Piranha.Models
         public string Slug { get; set; }
 
         /// <summary>
+        /// Gets/sets the type.
+        /// </summary>
+        public TaxonomyType Type { get; set; } = TaxonomyType.NotSet;
+
+        /// <summary>
         /// Operator for type casting a string to a taxonomy.
         /// </summary>
         /// <param name="str">The string</param>

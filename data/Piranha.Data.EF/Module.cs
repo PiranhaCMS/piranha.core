@@ -64,7 +64,8 @@ namespace Piranha.Data.EF
                 cfg.CreateMap<Data.Category, Data.Category>()
                     .ForMember(c => c.Id, o => o.Ignore())
                     .ForMember(c => c.Created, o => o.Ignore());
-                cfg.CreateMap<Data.Category, Models.Taxonomy>();
+                cfg.CreateMap<Data.Category, Models.Taxonomy>()
+                    .ForMember(c => c.Type, o => o.MapFrom(m => Models.TaxonomyType.Category));
                 cfg.CreateMap<Data.MediaFolder, Data.MediaFolder>()
                     .ForMember(f => f.Id, o => o.Ignore())
                     .ForMember(f => f.Created, o => o.Ignore())
@@ -112,7 +113,8 @@ namespace Piranha.Data.EF
                 cfg.CreateMap<Data.PostTag, Models.Taxonomy>()
                     .ForMember(p => p.Id, o => o.MapFrom(m => m.TagId))
                     .ForMember(p => p.Title, o => o.MapFrom(m => m.Tag.Title))
-                    .ForMember(p => p.Slug, o => o.MapFrom(m => m.Tag.Slug));
+                    .ForMember(p => p.Slug, o => o.MapFrom(m => m.Tag.Slug))
+                    .ForMember(p => p.Type, o => o.MapFrom(m => Models.TaxonomyType.Tag));
                 cfg.CreateMap<Models.PostBase, Data.Post>()
                     .ForMember(p => p.PostTypeId, o => o.MapFrom(m => m.TypeId))
                     .ForMember(p => p.CategoryId, o => o.MapFrom(m => m.Category.Id))
@@ -146,7 +148,8 @@ namespace Piranha.Data.EF
                 cfg.CreateMap<Data.Tag, Data.Tag>()
                     .ForMember(t => t.Id, o => o.Ignore())
                     .ForMember(t => t.Created, o => o.Ignore());
-                cfg.CreateMap<Data.Tag, Models.Taxonomy>();
+                cfg.CreateMap<Data.Tag, Models.Taxonomy>()
+                    .ForMember(t => t.Type, o => o.MapFrom(m => Models.TaxonomyType.Tag));
             });
             mapperConfig.AssertConfigurationIsValid();
             Mapper = mapperConfig.CreateMapper();

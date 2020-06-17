@@ -43,11 +43,11 @@
                         <h2><a href="@WebApp.Url(post)">@post.Title</a></h2>
                     </header>
                     <p class="small">
-                        <strong>In</strong> <a href="@WebApp.CategoryUrl(post.Category)">@post.Category.Title</a> <span class="sep">&#9670;</span>
+                        <strong>In</strong> <a href="@WebApp.Url(post.Category)">@post.Category.Title</a> <span class="sep">&#9670;</span>
                         <strong>Tags</strong>
                         @foreach (var tag in post.Tags)
                         {
-                            <a href="@WebApp.TagUrl(tag)">#@tag.Title</a>
+                            <a href="@WebApp.Url(tag)">#@tag.Title</a>
                         }
                         <span class="sep">&#9670;</span>
                         <strong>Published</strong> @post.Published.Value.ToString("yyyy-MM-dd")
