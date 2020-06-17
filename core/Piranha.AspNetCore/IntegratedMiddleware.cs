@@ -111,7 +111,7 @@ namespace Piranha.AspNetCore
                     service.Site.Sitemap = await api.Sites.GetSitemapAsync(site.Id);
 
                     // Set prefered hostname & prefix
-                    var siteHost = GetFirstHost(site);
+                    var siteHost = GetMatchingHost(site, hostname);
                     service.Site.Host = siteHost[0];
                     service.Site.SitePrefix = siteHost[1];
 
@@ -510,24 +510,28 @@ namespace Piranha.AspNetCore
         }
 
         /// <summary>
-        /// Gets the first hostname of the site.
+        /// Gets the matching hostname.
         /// </summary>
         /// <param name="site">The site</param>
+        /// <param name="hostname">The requested host</param>
         /// <returns>The hostname split into host and prefix</returns>
-        private string[] GetFirstHost(Site site)
+        private string[] GetMatchingHost(Site site, string hostname)
         {
             var result = new string[2];
 
             if (!string.IsNullOrEmpty(site.Hostnames))
             {
-                foreach (var hostname in site.Hostnames.Split(","))
+                foreach (var host in site.Hostnames.Split(","))
                 {
-                    var segments = hostname.Split("/", StringSplitOptions.RemoveEmptyEntries);
+                    if (host.Trim().ToLower() == hostname)
+                    {
+                        var segments = host.Split("/", StringSplitOptions.RemoveEmptyEntries);
 
-                    result[0] = segments[0];
-                    result[1] = segments.Length > 1 ? segments[1] : null;
+                        result[0] = segments[0];
+                        result[1] = segments.Length > 1 ? segments[1] : null;
 
-                    break;
+                        break;
+                    }
                 }
             }
             return result;
