@@ -169,7 +169,8 @@ namespace Piranha.Manager.Services
             var regionModel = await _factory.CreateDynamicRegionAsync(type, region, true);
             var regionItem = new RegionItemModel
             {
-                Title = regionType.ListTitlePlaceholder ?? "..."
+                Title = regionType.ListTitlePlaceholder ?? "...",
+                IsNew = true
             };
 
             foreach (var fieldType in regionType.Fields)

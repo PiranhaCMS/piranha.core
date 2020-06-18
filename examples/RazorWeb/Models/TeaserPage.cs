@@ -11,6 +11,7 @@
 using System.Collections.Generic;
 using Piranha.AttributeBuilder;
 using Piranha.Extend;
+using Piranha.Extend.Fields;
 using Piranha.Models;
 
 namespace RazorWeb.Models
@@ -32,6 +33,9 @@ namespace RazorWeb.Models
         [Region(Title = "All fields")]
         [RegionDescription("Vestibulum id ligula porta felis euismod <strong>semper</strong>. Curabitur blandit tempus porttitor.")]
         public Regions.AllFields AllFields { get; set; }
+
+        [Region(Title = "Images", ListTitle = "Title", ListPlaceholder = "New image", Icon = "fas fa-images", ListExpand = false)]
+        public IList<ImageField> Images { get; set; }
 
         /// <summary>
         /// Gets/sets the available teasers.

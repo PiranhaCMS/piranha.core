@@ -44,4 +44,20 @@ namespace Piranha.Models
         /// </summary>
         public DateTime Created { get; set; }
     }
+
+    [Serializable]
+    public class MediaFolderSimple
+    {
+        /// <summary>
+        /// Gets/sets the unique id.
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Gets/sets the folder name.
+        /// </summary>
+        [Required]
+        [StringLength(128)]
+        public string Name { get; set; }
+    }
 }

@@ -17,6 +17,12 @@ export default {
                     uid: this.uid,
                     title: this.model.items.$values[this.model.id]
                 });
+
+                 // Tell parent that title has been updated
+                this.$emit('update-title', {
+                    uid: this.uid,
+                    title: this.model.items.$values[this.model.id]
+                });
             }
         }
     }
