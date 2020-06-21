@@ -49,22 +49,22 @@
     <value>Lista</value>
   </data>
   <data name="Preferred aspect" xml:space="preserve">
-    <value>Preferred aspect</value>
+    <value>Aspecto preferido</value>
   </data>
   <data name="Original" xml:space="preserve">
     <value>Original</value>
   </data>
   <data name="Landscape" xml:space="preserve">
-    <value>Landscape</value>
+    <value>Paisagem</value>
   </data>
   <data name="Portrait" xml:space="preserve">
-    <value>Portrait</value>
+    <value>Retrato</value>
   </data>
   <data name="Widescreen" xml:space="preserve">
     <value>Widescreen</value>
   </data>
   <data name="Square" xml:space="preserve">
-    <value>Square</value>
+    <value>Quadrado</value>
   </data>
   <data name="Are you sure you want to delete selected media?" xml:space="preserve">
     <value>Are you sure you want to delete selected media?</value>
