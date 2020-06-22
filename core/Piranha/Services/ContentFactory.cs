@@ -308,6 +308,20 @@ namespace Piranha.Services
         }
 
         /// <summary>
+        /// Initializes the given field.
+        /// </summary>
+        /// <param name="field">The field</param>
+        /// <param name="managerInit">If this is initialization used by the manager</param>
+        /// <returns>The initialized field</returns>
+        public async Task<object> InitFieldAsync(object field, bool managerInit = false)
+        {
+            using (var scope = _services.CreateScope())
+            {
+                return await InitFieldAsync(scope, field, managerInit);
+            }
+        }
+
+        /// <summary>
         /// Initializes the given model.
         /// </summary>
         /// <param name="model">The model</param>
@@ -556,7 +570,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="fieldType">The field type</param>
         /// <returns>The new instance</returns>
-        protected object CreateField(FieldType fieldType)
+        private object CreateField(FieldType fieldType)
         {
             var type = App.Fields.GetByType(fieldType.Type);
 
@@ -574,7 +588,7 @@ namespace Piranha.Services
         /// <param name="field">The field</param>
         /// <param name="managerInit">If this is initialization used by the manager</param>
         /// <returns>The initialized field</returns>
-        protected async Task<object> InitFieldAsync(IServiceScope scope, object field, bool managerInit)
+        private async Task<object> InitFieldAsync(IServiceScope scope, object field, bool managerInit)
         {
             MethodInfo init = null;
 

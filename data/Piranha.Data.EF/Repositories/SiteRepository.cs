@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
 using Piranha.Data.EF;
+using Piranha.Extend.Fields;
 using Piranha.Services;
 
 namespace Piranha.Repositories
@@ -41,25 +42,33 @@ namespace Piranha.Repositories
         /// <returns>The available models</returns>
         public async Task<IEnumerable<Models.Site>> GetAll()
         {
-            return await _db.Sites
+            var sites = await _db.Sites
                 .AsNoTracking()
                 .OrderBy(s => s.Title)
-                .Select(s => new Models.Site
-                {
-                    Id = s.Id,
-                    SiteTypeId = s.SiteTypeId,
-                    Title = s.Title,
-                    InternalId = s.InternalId,
-                    Description = s.Description,
-                    Hostnames = s.Hostnames,
-                    IsDefault = s.IsDefault,
-                    Culture = s.Culture,
-                    ContentLastModified = s.ContentLastModified,
-                    Created = s.Created,
-                    LastModified = s.LastModified
-                })
                 .ToListAsync()
                 .ConfigureAwait(false);
+
+            var models = new List<Models.Site>();
+
+            foreach (var site in sites)
+            {
+                models.Add(new Models.Site
+                {
+                    Id = site.Id,
+                    SiteTypeId = site.SiteTypeId,
+                    Title = site.Title,
+                    InternalId = site.InternalId,
+                    Description = site.Description,
+                    Logo = site.LogoId.HasValue ? site.LogoId.Value : new ImageField(),
+                    Hostnames = site.Hostnames,
+                    IsDefault = site.IsDefault,
+                    Culture = site.Culture,
+                    ContentLastModified = site.ContentLastModified,
+                    Created = site.Created,
+                    LastModified = site.LastModified
+                });
+            }
+            return models;
         }
 
         /// <summary>
@@ -67,25 +76,31 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <returns>The model, or NULL if it doesn't exist</returns>
-        public Task<Models.Site> GetById(Guid id)
+        public async Task<Models.Site> GetById(Guid id)
         {
-            return _db.Sites
+            var site = await _db.Sites
                 .AsNoTracking()
-                .Select(s => new Models.Site
-                {
-                    Id = s.Id,
-                    SiteTypeId = s.SiteTypeId,
-                    Title = s.Title,
-                    InternalId = s.InternalId,
-                    Description = s.Description,
-                    Hostnames = s.Hostnames,
-                    IsDefault = s.IsDefault,
-                    Culture = s.Culture,
-                    ContentLastModified = s.ContentLastModified,
-                    Created = s.Created,
-                    LastModified = s.LastModified
-                })
                 .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (site != null)
+            {
+                return new Models.Site
+                {
+                    Id = site.Id,
+                    SiteTypeId = site.SiteTypeId,
+                    Title = site.Title,
+                    InternalId = site.InternalId,
+                    Description = site.Description,
+                    Logo = site.LogoId.HasValue ? site.LogoId.Value : new ImageField(),
+                    Hostnames = site.Hostnames,
+                    IsDefault = site.IsDefault,
+                    Culture = site.Culture,
+                    ContentLastModified = site.ContentLastModified,
+                    Created = site.Created,
+                    LastModified = site.LastModified
+                };
+            }
+            return null;
         }
 
         /// <summary>
@@ -93,50 +108,62 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="internalId">The unique internal i</param>
         /// <returns>The model</returns>
-        public Task<Models.Site> GetByInternalId(string internalId)
+        public async Task<Models.Site> GetByInternalId(string internalId)
         {
-            return _db.Sites
+            var site = await _db.Sites
                 .AsNoTracking()
-                .Select(s => new Models.Site
-                {
-                    Id = s.Id,
-                    SiteTypeId = s.SiteTypeId,
-                    Title = s.Title,
-                    InternalId = s.InternalId,
-                    Description = s.Description,
-                    Hostnames = s.Hostnames,
-                    IsDefault = s.IsDefault,
-                    Culture = s.Culture,
-                    ContentLastModified = s.ContentLastModified,
-                    Created = s.Created,
-                    LastModified = s.LastModified
-                })
                 .FirstOrDefaultAsync(s => s.InternalId == internalId);
+
+            if (site != null)
+            {
+                return new Models.Site
+                {
+                    Id = site.Id,
+                    SiteTypeId = site.SiteTypeId,
+                    Title = site.Title,
+                    InternalId = site.InternalId,
+                    Description = site.Description,
+                    Logo = site.LogoId.HasValue ? site.LogoId.Value : new ImageField(),
+                    Hostnames = site.Hostnames,
+                    IsDefault = site.IsDefault,
+                    Culture = site.Culture,
+                    ContentLastModified = site.ContentLastModified,
+                    Created = site.Created,
+                    LastModified = site.LastModified
+                };
+            }
+            return null;
         }
 
         /// <summary>
         /// Gets the default side.
         /// </summary>
         /// <returns>The modell, or NULL if it doesnt exist</returns>
-        public Task<Models.Site> GetDefault()
+        public async Task<Models.Site> GetDefault()
         {
-            return _db.Sites
+            var site = await _db.Sites
                 .AsNoTracking()
-                .Select(s => new Models.Site
-                {
-                    Id = s.Id,
-                    SiteTypeId = s.SiteTypeId,
-                    Title = s.Title,
-                    InternalId = s.InternalId,
-                    Description = s.Description,
-                    Hostnames = s.Hostnames,
-                    IsDefault = s.IsDefault,
-                    Culture = s.Culture,
-                    ContentLastModified = s.ContentLastModified,
-                    Created = s.Created,
-                    LastModified = s.LastModified
-                })
                 .FirstOrDefaultAsync(s => s.IsDefault);
+
+            if (site != null)
+            {
+                return new Models.Site
+                {
+                    Id = site.Id,
+                    SiteTypeId = site.SiteTypeId,
+                    Title = site.Title,
+                    InternalId = site.InternalId,
+                    Description = site.Description,
+                    Logo = site.LogoId.HasValue ? site.LogoId.Value : new ImageField(),
+                    Hostnames = site.Hostnames,
+                    IsDefault = site.IsDefault,
+                    Culture = site.Culture,
+                    ContentLastModified = site.ContentLastModified,
+                    Created = site.Created,
+                    LastModified = site.LastModified
+                };
+            }
+            return null;
         }
 
         /// <summary>
@@ -229,6 +256,7 @@ namespace Piranha.Repositories
             site.Title = model.Title;
             site.InternalId = model.InternalId;
             site.Description = model.Description;
+            site.LogoId = model.Logo?.Id;
             site.Hostnames = model.Hostnames;
             site.Culture = model.Culture;
             site.IsDefault = model.IsDefault;

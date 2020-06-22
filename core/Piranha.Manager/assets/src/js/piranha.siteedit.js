@@ -12,6 +12,10 @@ piranha.siteedit = new Vue({
         internalId: null,
         culture: null,
         description: null,
+        logo: {
+            id: null,
+            media: null
+        },
         hostnames: null,
         isDefault: false,
         siteTypes: [],
@@ -39,6 +43,7 @@ piranha.siteedit = new Vue({
                     self.internalId = result.internalId;
                     self.culture = result.culture;
                     self.description = result.description;
+                    self.logo = result.logo;
                     self.hostnames = result.hostnames;
                     self.isDefault = result.isDefault;
                     self.siteTypes = result.siteTypes;
@@ -68,6 +73,7 @@ piranha.siteedit = new Vue({
                 internalId: this.internalId,
                 culture: this.culture,
                 description: this.description,
+                logo: this.logo,
                 hostnames: this.hostnames,
                 isDefault: this.isDefault
             };

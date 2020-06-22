@@ -73,5 +73,13 @@ namespace Piranha.Services
         /// <typeparam name="T">The model type</typeparam>
         /// <returns>The initialized model</returns>
         Task<T> InitDynamicManagerAsync<T>(T model, ContentTypeBase type) where T : IDynamicContent;
+
+        /// <summary>
+        /// Initializes the given field.
+        /// </summary>
+        /// <param name="field">The field</param>
+        /// <param name="managerInit">If this is initialization used by the manager</param>
+        /// <returns>The initialized field</returns>
+        Task<object> InitFieldAsync(object field, bool managerInit = false);
     }
 }

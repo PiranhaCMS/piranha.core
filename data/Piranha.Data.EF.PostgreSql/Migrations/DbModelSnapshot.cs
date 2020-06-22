@@ -869,6 +869,9 @@ namespace Piranha.Data.EF.PostgreSql
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<Guid?>("LogoId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("SiteTypeId")
                         .HasColumnType("character varying(64)")
                         .HasMaxLength(64);

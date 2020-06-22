@@ -138,6 +138,7 @@ namespace Piranha.Data.EF
                     .ForMember(s => s.SiteTypeId, o => o.Ignore())
                     .ForMember(s => s.InternalId, o => o.Ignore())
                     .ForMember(s => s.Description, o => o.Ignore())
+                    .ForMember(s => s.LogoId, o => o.Ignore())
                     .ForMember(s => s.Hostnames, o => o.Ignore())
                     .ForMember(s => s.IsDefault, o => o.Ignore())
                     .ForMember(s => s.Culture, o => o.Ignore())

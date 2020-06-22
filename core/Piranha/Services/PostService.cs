@@ -742,7 +742,7 @@ namespace Piranha.Services
             App.Hooks.OnAfterSave<PostBase>(model);
 
             // Update search document
-            if (_search != null)
+            if (!isDraft && _search != null)
             {
                 await _search.SavePostAsync(model);
             }

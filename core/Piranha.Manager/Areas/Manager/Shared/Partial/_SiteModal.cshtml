@@ -60,6 +60,14 @@
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
+                                    <label>Logo</label>
+                                    <image-field v-bind:uid="'site_logo_' + id" v-bind:meta="{ placeholder: null }" v-bind:model="logo"></image-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
                                     <label>@Localizer.General["Description"]</label>
                                     <textarea v-model="description" class="form-control"></textarea>
                                 </div>
@@ -91,7 +99,7 @@
                     <div class="region" v-for="(region) in regions" v-if="selectedRegion.uid === region.meta.uid">
                         <region v-bind:content="'site'" v-bind:type="typeId" v-bind:model="region"></region>
                     </div>
-                </form>                
+                </form>
             </div>
 
             <!-- Footer -->

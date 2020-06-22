@@ -31,6 +31,11 @@ namespace Piranha.Data
         public string Description { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional logo image id.
+        /// </summary>
+        public Guid? LogoId { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional hostnames to bind this site for.
         /// </summary>
         public string Hostnames { get; set; }

@@ -115,6 +115,11 @@ namespace Piranha.AspNetCore
                     service.Site.Host = siteHost[0];
                     service.Site.SitePrefix = siteHost[1];
 
+                    // Set site description
+                    service.Site.Description.Title = site.Title;
+                    service.Site.Description.Body = site.Description;
+                    service.Site.Description.Logo = site.Logo;
+
                     // Default to the request hostname
                     if (string.IsNullOrEmpty(service.Site.Host))
                     {

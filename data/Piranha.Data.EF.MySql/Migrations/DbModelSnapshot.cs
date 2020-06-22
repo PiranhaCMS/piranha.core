@@ -867,6 +867,9 @@ namespace Piranha.Data.EF.MySql.Migrations
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<Guid?>("LogoId")
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("SiteTypeId")
                         .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
                         .HasMaxLength(64);

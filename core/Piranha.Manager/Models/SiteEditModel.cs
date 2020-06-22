@@ -9,6 +9,7 @@
  */
 
 using System.Collections.Generic;
+using Piranha.Extend.Fields;
 using Piranha.Manager.Models.Content;
 
 namespace Piranha.Manager.Models
@@ -27,6 +28,11 @@ namespace Piranha.Manager.Models
         /// Gets/sets the optional description.
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional site logo.
+        /// </summary>
+        public ImageField Logo { get; set; }
 
         /// <summary>
         /// Gets/sets the optional hostnames to bind this site for.

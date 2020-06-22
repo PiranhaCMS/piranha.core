@@ -10,6 +10,7 @@
 
 using System;
 using System.Threading.Tasks;
+using Piranha.AspNetCore.Models;
 using Piranha.Models;
 
 namespace Piranha.AspNetCore.Services
@@ -41,6 +42,11 @@ namespace Piranha.AspNetCore.Services
         /// Gets/sets the sitemap of the currently requested site.
         /// </summary>
         Sitemap Sitemap { get; set; }
+
+        /// <summary>
+        /// Gets/sets the site description.
+        /// </summary>
+        SiteDescription Description { get; set; }
 
         /// <summary>
         /// Gets the site content for the current site.

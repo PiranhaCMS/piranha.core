@@ -654,7 +654,7 @@ namespace Piranha.Services
             App.Hooks.OnAfterSave<PageBase>(model);
 
             // Update search document
-            if (_search != null)
+            if (!isDraft && _search != null)
             {
                 await _search.SavePageAsync(model);
             }

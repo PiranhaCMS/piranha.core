@@ -10,6 +10,7 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using Piranha.Extend.Fields;
 
 namespace Piranha.Models
 {
@@ -45,6 +46,11 @@ namespace Piranha.Models
         /// </summary>
         [StringLength(256)]
         public string Description { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional site logo.
+        /// </summary>
+        public ImageField Logo { get; set; } = new ImageField();
 
         /// <summary>
         /// Gets/sets the optional hostnames to bind this site for.

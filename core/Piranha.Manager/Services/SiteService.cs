@@ -110,6 +110,7 @@ namespace Piranha.Manager.Services
             site.Culture = model.Culture;
             site.Hostnames = model.Hostnames;
             site.Description = model.Description;
+            site.Logo = model.Logo;
             site.IsDefault = model.IsDefault;
 
             await _api.Sites.SaveAsync(site);
@@ -218,6 +219,7 @@ namespace Piranha.Manager.Services
                 InternalId = site.InternalId,
                 Culture = site.Culture,
                 Description = site.Description,
+                Logo = site.Logo,
                 Hostnames = site.Hostnames,
                 IsDefault = site.IsDefault,
                 SiteTypes = App.SiteTypes.Select(t => new ContentTypeModel

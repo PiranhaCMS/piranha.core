@@ -53,9 +53,21 @@ namespace Piranha.Services
         /// Gets all available models.
         /// </summary>
         /// <returns>The available models</returns>
-        public Task<IEnumerable<Site>> GetAllAsync()
+        public async Task<IEnumerable<Site>> GetAllAsync()
         {
-            return _repo.GetAll();
+            var models = await _repo.GetAll();
+
+            if (models.Count() > 0)
+            {
+                foreach (var model in models)
+                {
+                    if (model.Logo != null && model.Logo.Id.HasValue)
+                    {
+                        await _factory.InitFieldAsync(model.Logo);
+                    }
+                }
+            }
+            return models;
         }
 
         /// <summary>
@@ -72,6 +84,11 @@ namespace Piranha.Services
                 model = await _repo.GetById(id).ConfigureAwait(false);
 
                 OnLoad(model);
+            }
+
+            if (model != null && model.Logo != null && model.Logo.Id.HasValue)
+            {
+                await _factory.InitFieldAsync(model.Logo);
             }
             return model;
         }
@@ -95,6 +112,11 @@ namespace Piranha.Services
                 model = await _repo.GetByInternalId(internalId).ConfigureAwait(false);
 
                 OnLoad(model);
+            }
+
+            if (model != null &&model.Logo != null && model.Logo.Id.HasValue)
+            {
+                await _factory.InitFieldAsync(model.Logo);
             }
             return model;
         }
@@ -165,6 +187,11 @@ namespace Piranha.Services
                 model = await _repo.GetDefault().ConfigureAwait(false);
 
                 OnLoad(model);
+            }
+
+            if (model != null && model.Logo != null && model.Logo.Id.HasValue)
+            {
+                await _factory.InitFieldAsync(model.Logo);
             }
             return model;
         }
@@ -283,7 +310,7 @@ namespace Piranha.Services
             if (model.IsDefault)
             {
                 // Make sure no other site is default first
-                var def = await GetDefaultAsync().ConfigureAwait(false);
+                var def = await _repo.GetDefault().ConfigureAwait(false);
 
                 if (def != null && def.Id != model.Id)
                 {
