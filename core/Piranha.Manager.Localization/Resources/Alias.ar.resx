@@ -13,7 +13,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Aliases" xml:space="preserve">
-    <value>أسماء مستعارة</value>
+    <value>الأسماء التقنية</value>
   </data>
   <data name="Add new alias" xml:space="preserve">
     <value>أضف اسمًا مستعارًا جديدًا</value>
