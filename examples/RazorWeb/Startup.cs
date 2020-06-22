@@ -40,6 +40,7 @@ namespace RazorWeb
                 options.UseManager();
                 options.UseTinyMCE();
                 options.UseMemoryCache();
+                options.UseIndexEngineSearch();
                 options.UseApi(config =>
                 {
                     config.AllowAnonymousAccess = true;
