@@ -128,11 +128,18 @@ namespace Piranha.AttributeBuilder
                     {
                         if (!string.IsNullOrWhiteSpace(route.Title) && !string.IsNullOrWhiteSpace(route.Route))
                         {
-                            postType.Routes.Add(new ContentTypeRoute
+                            var contentRoute = new ContentTypeRoute
                             {
                                 Title = route.Title,
                                 Route = route.Route
-                            });
+                            };
+
+                            // Make sure the route starts with a forward slash
+                            if (!contentRoute.Route.StartsWith("/"))
+                            {
+                                contentRoute.Route = $"/{ contentRoute.Route }";
+                            }
+                            postType.Routes.Add(contentRoute);
                         }
                     }
 

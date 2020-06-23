@@ -27,6 +27,12 @@ namespace Piranha.Tests.AttributeBuilder
             public Extend.Fields.TextField Body { get; set; }
         }
 
+        [PageType(Id = "Routed", Title = "Routed Page Type")]
+        [PageTypeRoute(Title = "Default", Route = "pageroute")]
+        public class RoutedPageType
+        {
+        }
+
         [PageType(Id = "Archive", Title = "Archive Page Type", UseBlocks = false, IsArchive = true)]
         [PageTypeArchiveItem(typeof(SimplePostType))]
         public class ArchivePageType
@@ -62,6 +68,12 @@ namespace Piranha.Tests.AttributeBuilder
         {
             [Region]
             public Extend.Fields.TextField Body { get; set; }
+        }
+
+        [PostType(Id = "Routed", Title = "Routed Post Type")]
+        [PostTypeRoute(Title = "Default", Route = "postroute")]
+        public class RoutedPostType
+        {
         }
 
         [PostType(Id = "Complex", Title = "Complex Post Type")]
@@ -160,6 +172,24 @@ namespace Piranha.Tests.AttributeBuilder
         }
 
         [Fact]
+        public async Task AddForwardSlashToPageRoutes()
+        {
+            using (var api = CreateApi())
+            {
+                var builder = new PageTypeBuilder(api)
+                    .AddType(typeof(RoutedPageType));
+                builder.Build();
+
+                var type = await api.PageTypes.GetByIdAsync("Routed");
+
+                Assert.NotNull(type);
+
+                Assert.NotEmpty(type.Routes);
+                Assert.StartsWith("/", type.Routes[0]);
+            }
+        }
+
+        [Fact]
         public async Task AddArchivePageType()
         {
             using (var api = CreateApi())
@@ -238,6 +268,24 @@ namespace Piranha.Tests.AttributeBuilder
                 Assert.Equal(1, type.Regions.Count);
                 Assert.Equal("Body", type.Regions[0].Id);
                 Assert.Equal(1, type.Regions[0].Fields.Count);
+            }
+        }
+
+        [Fact]
+        public async Task AddForwardSlashToPostRoutes()
+        {
+            using (var api = CreateApi())
+            {
+                var builder = new PostTypeBuilder(api)
+                    .AddType(typeof(RoutedPostType));
+                builder.Build();
+
+                var type = await api.PostTypes.GetByIdAsync("Routed");
+
+                Assert.NotNull(type);
+
+                Assert.NotEmpty(type.Routes);
+                Assert.StartsWith("/", type.Routes[0]);
             }
         }
 

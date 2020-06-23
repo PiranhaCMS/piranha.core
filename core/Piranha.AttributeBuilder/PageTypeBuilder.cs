@@ -128,11 +128,20 @@ namespace Piranha.AttributeBuilder
                     foreach (PageTypeRouteAttribute route in routes)
                     {
                         if (!string.IsNullOrWhiteSpace(route.Title) && !string.IsNullOrWhiteSpace(route.Route))
-                            pageType.Routes.Add(new ContentTypeRoute
+                        {
+                            var contentRoute = new ContentTypeRoute
                             {
                                 Title = route.Title,
                                 Route = route.Route
-                            });
+                            };
+
+                            // Make sure the route starts with a forward slash
+                            if (!contentRoute.Route.StartsWith("/"))
+                            {
+                                contentRoute.Route = $"/{ contentRoute.Route }";
+                            }
+                            pageType.Routes.Add(contentRoute);
+                        }
                     }
 
                     // Add default custom editors
