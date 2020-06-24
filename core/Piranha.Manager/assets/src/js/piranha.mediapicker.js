@@ -10,6 +10,13 @@ piranha.mediapicker = new Vue({
         listView: true,
         currentFolderId: null,
         parentFolderId: null,
+        currentDocumentFolderId: null,
+        parentDocumentFolderId: null,
+        currentImageFolderId: null,
+        parentImageFolderId: null,
+        currentVideoFolderId: null,
+        parentVideoFolderId: null,
+        currentFolderBreadcrumb: null,
         folders: [],
         items: [],
         folder: {
@@ -45,8 +52,8 @@ piranha.mediapicker = new Vue({
             var self = this;
 
             var url = piranha.baseUrl + "manager/api/media/list" + (id ? "/" + id : "")+"/?width=210&height=160";
-            if (this.filter) {
-                url += "&filter=" + this.filter;
+            if (self.filter) {
+                url += "&filter=" + self.filter;
             }
 
             fetch(url)
@@ -58,6 +65,25 @@ piranha.mediapicker = new Vue({
                     self.items = result.media;
                     self.listView = result.viewMode === "list";
                     self.search = "";
+                    self.currentFolderBreadcrumb = result.currentFolderBreadcrumb;
+
+                    //set current folder for filter
+                    if (self.filter) {
+                        switch (self.filter.toLowerCase()) {
+                            case "document":
+                                self.currentDocumentFolderId = result.currentFolderId;
+                                self.parentDocumentFolderId = result.parentFolderId;
+                                break;
+                            case "image":
+                                self.currentImageFolderId = result.currentFolderId;
+                                self.parentImageFolderId = result.parentFolderId;
+                                break;
+                            case "video":
+                                self.currentVideoFolderId = result.currentFolderId;
+                                self.parentVideoFolderId = result.parentFolderId;
+                                break;
+                        }
+                    }
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },
@@ -80,17 +106,32 @@ piranha.mediapicker = new Vue({
             this.callback = callback;
             this.filter = filter;
 
-            this.load(this.currentFolderId);
+            var folderId = this.currentFolderId;
+            if (filter) {
+                switch (filter.toLowerCase()) {
+                    case "document":
+                        folderId = this.currentDocumentFolderId? this.currentDocumentFolderId : folderId;
+                        break;
+                    case "image":
+                        folderId = this.currentImageFolderId ? this.currentImageFolderId : folderId;
+                        break;
+                    case "video":
+                        folderId = this.currentVideoFolderId ? this.currentVideoFolderId : folderId;
+                        break;
+                }
+            }
+            
+            this.load(folderId);
 
             $("#mediapicker").modal("show");
         },
         onEnter: function () {
-            if (this.filteredItems.length == 0 && this.filteredFolders.length == 1) {
+            if (this.filteredItems.length === 0 && this.filteredFolders.length === 1) {
                 this.load(this.filteredFolders[0].id);
                 this.search = "";
             }
 
-            if (this.filteredItems.length == 1 && this.filteredFolders.length == 0) {
+            if (this.filteredItems.length === 1 && this.filteredFolders.length === 0) {
                 this.select(this.filteredItems[0]);
             }
         },

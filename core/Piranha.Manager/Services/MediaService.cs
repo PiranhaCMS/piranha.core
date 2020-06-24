@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using Piranha.Models;
 using Piranha.Manager.Models;
 using System.IO;
+using System.Collections.Generic;
+using System.Data;
 
 namespace Piranha.Manager.Services
 {
@@ -61,8 +63,55 @@ namespace Piranha.Manager.Services
         }
 
         /// <summary>
+        /// Gets the breadcrumb list of the folders from the selected folder id
+        /// </summary>
+        /// <param name="structure">The complete media folder structure</param>
+        /// <param name="folderId">The folder id</param>
+        /// <returns></returns>
+        public async Task<List<MediaFolderSimple>> GetFolderBreadCrumb(MediaStructure structure, Guid? folderId)
+        {
+            var folders = await GetFolderBreadCrumbReversed(structure, folderId);
+            folders.Reverse();
+            return folders;
+        }
+
+        /// <summary>
+        /// Gets the breadcrumb list of the folders from the selected folder id in reverse order with child first in list
+        /// </summary>
+        /// <param name="structure">The complete media folder structure</param>
+        /// <param name="folderId">The folder id</param>
+        /// <returns></returns>
+        private async Task<List<MediaFolderSimple>> GetFolderBreadCrumbReversed(MediaStructure structure, Guid? folderId) 
+        {
+            var folders = new List<MediaFolderSimple>();
+
+            if (!folderId.HasValue)
+                return folders;
+
+            foreach (var item in structure)
+            {
+                if (item.Id == folderId)
+                {
+                    folders.Add(new MediaFolderSimple() { Id = item.Id, Name = item.Name });
+                    return folders;
+                }
+
+                if (item.Items.Count > 0)
+                {
+                    folders = await GetFolderBreadCrumbReversed(item.Items, folderId);
+                    if(folders.Count > 0)
+                    {
+                        folders.Add(new MediaFolderSimple() { Id = item.Id, Name = item.Name });
+                        return folders;
+                    }
+                }
+            }
+            return folders;
+        }
+
+        /// <summary>
         /// Gets the list model for the specified folder, or the root
-        /// folder if to folder id is given.
+        /// folder if no folder id is given.
         /// </summary>
         /// <param name="folderId">The optional folder id</param>
         /// <param name="filter">The optional content type filter</param>
@@ -76,7 +125,11 @@ namespace Piranha.Manager.Services
                 CurrentFolderId = folderId,
                 ParentFolderId = null,
                 Structure = await _api.Media.GetStructureAsync()
+                
             };
+
+            model.CurrentFolderBreadcrumb = await GetFolderBreadCrumb(model.Structure, folderId);
+            
             model.RootCount = model.Structure.MediaCount;
             model.TotalCount = model.Structure.TotalCount;
 

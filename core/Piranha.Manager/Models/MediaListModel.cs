@@ -8,6 +8,7 @@
  *
  */
 
+using Piranha.Models;
 using System;
 using System.Collections.Generic;
 
@@ -167,6 +168,11 @@ namespace Piranha.Manager.Models
         /// Gets/sets the media folder structure.
         /// </summary>
         public Piranha.Models.MediaStructure Structure { get; set; }
+
+        /// <summary>
+        /// Gets/sets the media folder structure.
+        /// </summary>
+        public List<MediaFolderSimple> CurrentFolderBreadcrumb { get; set; }
 
         /// <summary>
         /// Gets/sets the amount of media files at root level.
