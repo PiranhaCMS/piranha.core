@@ -149,6 +149,10 @@ namespace Piranha.Manager.Services
 
             if (page != null)
             {
+                // Perform manager init
+                await _factory.InitDynamicManagerAsync(page,
+                    App.PageTypes.GetById(page.TypeId));
+
                 return Transform(page, false);
             }
             return null;
@@ -169,7 +173,11 @@ namespace Piranha.Manager.Services
 
                 if (page != null)
                 {
-                    return Transform(page, false);
+                    // Perform manager init
+                    await _factory.InitDynamicManagerAsync(page,
+                        App.PageTypes.GetById(page.TypeId));
+
+                   return Transform(page, false);
                 }
             }
             return null;
@@ -190,6 +198,10 @@ namespace Piranha.Manager.Services
                     page.SiteId = relative.SiteId;
                     page.ParentId = after ? relative.ParentId : relative.Id;
                     page.SortOrder = after ? relative.SortOrder + 1 : 0;
+
+                    // Perform manager init
+                    await _factory.InitDynamicManagerAsync(page,
+                        App.PageTypes.GetById(page.TypeId));
 
                     return Transform(page, false);
                 }
@@ -233,6 +245,10 @@ namespace Piranha.Manager.Services
                 await _api.Pages.DetachAsync(page);
 
                 page = await _api.Pages.GetByIdAsync(id);
+
+                // Perform manager init
+                await _factory.InitDynamicManagerAsync(page,
+                    App.PageTypes.GetById(page.TypeId));
 
                 return Transform(page, false);
             }

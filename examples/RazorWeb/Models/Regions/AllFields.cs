@@ -26,6 +26,9 @@ namespace RazorWeb.Models.Regions
             Narrow
         }
 
+        [Field]
+        public DataSelectField<PageItem> MyPage { get; set; }
+
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         public AudioField Audio { get; set; }
 

@@ -1,7 +1,7 @@
 <template>
-    <select class="form-control" v-model="model.value" v-on:change="update()">
-        <option v-for="(name, value) in meta.options" v-bind:key="value" v-bind:value="value">
-            {{ name }}
+    <select class="form-control" v-model="model.id" v-on:change="update()">
+        <option v-for="(item) in model.items.$values" v-bind:key="item.id" v-bind:value="item.id">
+            {{ item.name }}
         </option>
     </select>
 </template>
@@ -15,13 +15,13 @@ export default {
                 // Tell parent that value has been updated
                 this.$emit('update-field', {
                     uid: this.uid,
-                    title: this.meta.options[this.model.value]
+                    title: this.model.items.$values[this.model.id]
                 });
 
-                // Tell parent that title has been updated
+                 // Tell parent that title has been updated
                 this.$emit('update-title', {
                     uid: this.uid,
-                    title: this.meta.options[this.model.value]
+                    title: this.model.items.$values[this.model.id]
                 });
             }
         }

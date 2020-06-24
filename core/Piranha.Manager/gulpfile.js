@@ -22,7 +22,8 @@ function vueCompile() {
         var relativeFile = path.relative(file.cwd, file.path);
         var ext = path.extname(file.path);
         if (ext === '.vue') {
-            function getComponent(ast, sourceCode) {
+            var getComponent;
+            getComponent = function (ast, sourceCode) {
                 const ta = ast.program.body[0]
                 if (!babelTypes.isExportDefaultDeclaration(ta)) {
                     var msg = 'Top level declation in file ' + relativeFile + ' must be "export default {" \n' + codeFrameColumns(sourceCode, { start: ta.loc.start }, { highlightCode: true });
@@ -31,7 +32,8 @@ function vueCompile() {
                 return ta.declaration;
             }
 
-            function compile(componentName, content) {
+            var compile;
+            compile = function (componentName, content) {
                 var component = vueCompiler.parseComponent(content, []);
                 if (component.styles.length > 0) {
                     component.styles.forEach(s => {
@@ -216,6 +218,7 @@ var js = [
 
             "assets/src/js/components/fields/audio-field.vue",
             "assets/src/js/components/fields/checkbox-field.vue",
+            "assets/src/js/components/fields/data-select-field.vue",
             "assets/src/js/components/fields/date-field.vue",
             "assets/src/js/components/fields/document-field.vue",
             "assets/src/js/components/fields/html-field.vue",

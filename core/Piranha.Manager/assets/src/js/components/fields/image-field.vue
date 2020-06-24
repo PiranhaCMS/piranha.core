@@ -14,6 +14,9 @@
                     <span v-if="meta.placeholder != null" class="text-secondary">{{ meta.placeholder }}</span>
                     <span v-if="meta.placeholder == null" class="text-secondary">&nbsp;</span>
                 </div>
+                <div class="card-body" v-else-if="model.media.title != null">
+                    <a href="#" v-on:click.prevent="piranha.preview.open(model.id)">{{ model.media.title }} ({{ model.media.filename }})</a>
+                </div>
                 <div class="card-body" v-else>
                     <a href="#" v-on:click.prevent="piranha.preview.open(model.id)">{{ model.media.filename }}</a>
                 </div>
@@ -45,15 +48,18 @@ export default {
                     folderId: media.folderId,
                     type: media.type,
                     filename: media.filename,
+                    title: media.title,
                     contentType: media.contentType,
                     publicUrl: media.publicUrl,
                 };
-
+                
                 // Tell parent that title has been updated
-                this.$emit('update-title', {
-                    uid: this.uid,
-                    title: this.model.media.filename
-                });
+                if (this.meta.notifyChange) {
+                    this.$emit('update-title', {
+                        uid: this.uid,
+                        title: this.model.media.title != null ? this.model.media.title + ' (' + this.model.media.filename + ')' : this.model.media.filename
+                    });
+                }
             } else {
                 console.log("No image was selected");
             }
@@ -67,7 +73,7 @@ export default {
     mounted: function() {
         this.model.getTitle = function () {
             if (this.model.media != null) {
-                return this.model.media.filename;
+                return this.model.media.title != null ? this.model.media.title + ' (' + this.model.media.filename + ')' : this.model.media.filename;
             } else {
                 return "No image selected";
             }

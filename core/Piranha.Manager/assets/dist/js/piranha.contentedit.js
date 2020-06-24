@@ -18,10 +18,20 @@ Vue.component("region", {
       this.model.items.splice(this.model.items.indexOf(item), 1);
     },
     updateTitle: function (e) {
-      for (var n = 0; n < this.model.items.length; n++) {
-        if (this.model.items[n].uid === e.uid) {
-          this.model.items[n].title = e.title;
-          break;
+      var self = this;
+
+      if (self.model.meta.isCollection) {
+        for (var n = 0; n < self.model.items.length; n++) {
+          var item = self.model.items[n];
+
+          for (var m = 0; m < item.fields.length; m++) {
+            var field = item.fields[m];
+
+            if (field.meta.uid === e.uid) {
+              self.model.items[n].title = e.title;
+              break;
+            }
+          }
         }
       }
     }
@@ -37,7 +47,7 @@ Vue.component("region", {
       });
     }
   },
-  template: "\n<div class=\"row\" v-if=\"!model.meta.isCollection\">\n    <div class=\"col-sm-12\" v-if=\"model.meta.description != null\">\n        <div class=\"alert alert-info\" v-html=\"model.meta.description\"></div>\n    </div>\n    <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"'field' + field.meta.uid\" v-for=\"field in model.items[0].fields\">\n        <label v-if=\"model.items[0].fields.length > 1\">{{ field.meta.name }}</label>\n        <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n        <div class=\"field-body\">\n            <div :id=\"'tb-' + field.meta.uid\" class=\"component-toolbar\"></div>\n            <component v-if=\"field.model != null\" v-bind:is=\"field.meta.component\" v-bind:uid=\"field.meta.uid\" v-bind:meta=\"field.meta\" v-bind:toolbar=\"'tb-' + field.meta.uid\" v-bind:model=\"field.model\"></component>\n        </div>\n    </div>\n</div>\n<div v-else>\n    <div v-if=\"model.meta.description != null\">\n        <div class=\"alert alert-info\" v-html=\"model.meta.description\"></div>\n    </div>\n    <div :id=\"model.meta.uid\" class=\"accordion sortable\" :class=\"model.items.length !== 0 ? 'mb-3' : ''\">\n        <div class=\"card\" :key=\"item.uid\" v-for=\"(item) in model.items\">\n            <div class=\"card-header\">\n                <a href=\"#\" :data-toggle=\"!model.meta.expanded ? 'collapse' : false\" :data-target=\"'#body' + item.uid\">\n                    <div class=\"handle\">\n                        <i class=\"fas fa-ellipsis-v\"></i>\n                    </div>\n                    {{ item.title }}\n                </a>\n                <span class=\"actions float-right\">\n                    <a v-on:click.prevent=\"removeItem(item)\" href=\"#\" class=\"danger\"><i class=\"fas fa-trash\"></i></a>\n                </span>\n            </div>\n            <div :id=\"'body' + item.uid\" :class=\"{ 'collapse' : !model.meta.expanded}\" :data-parent=\"'#' + model.meta.uid\">\n                <div class=\"card-body\">\n                    <div class=\"row\">\n                        <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"field.meta.uid\" v-for=\"field in item.fields\">\n                            <label>{{ field.meta.name }}</label>\n                            <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n                            <div class=\"field-body\">\n                                <div :id=\"'tb-' + field.meta.uid\" class=\"component-toolbar\"></div>\n                                <component v-if=\"field.model != null\" v-bind:is=\"field.meta.component\" v-bind:uid=\"field.meta.uid\" v-bind:meta=\"field.meta\" v-bind:toolbar=\"'tb-' + field.meta.uid\" v-bind:model=\"field.model\" v-on:update-title=\"updateTitle($event)\"></component>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <a href=\"#\" class=\"block-add\" v-on:click.prevent=\"addItem()\">\n        <hr>\n        <i class=\"fas fa-plus-circle\"></i>\n    </a>\n    <div v-if=\"model.items.length === 0\" class=\"empty-info unsortable\">\n        <p>{{ piranha.resources.texts.emptyAddAbove }}</p>\n    </div>\n</div>\n"
+  template: "\n<div class=\"row\" v-if=\"!model.meta.isCollection\">\n    <div class=\"col-sm-12\" v-if=\"model.meta.description != null\">\n        <div class=\"alert alert-info\" v-html=\"model.meta.description\"></div>\n    </div>\n    <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"'field' + field.meta.uid\" v-for=\"field in model.items[0].fields\">\n        <label v-if=\"model.items[0].fields.length > 1\">{{ field.meta.name }}</label>\n        <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n        <div class=\"field-body\">\n            <div :id=\"'tb-' + field.meta.uid\" class=\"component-toolbar\"></div>\n            <component v-if=\"field.model != null\" v-bind:is=\"field.meta.component\" v-bind:uid=\"field.meta.uid\" v-bind:meta=\"field.meta\" v-bind:toolbar=\"'tb-' + field.meta.uid\" v-bind:model=\"field.model\"></component>\n        </div>\n    </div>\n</div>\n<div v-else>\n    <div v-if=\"model.meta.description != null\">\n        <div class=\"alert alert-info\" v-html=\"model.meta.description\"></div>\n    </div>\n    <div :id=\"model.meta.uid\" class=\"accordion sortable\" :class=\"model.items.length !== 0 ? 'mb-3' : ''\">\n        <div class=\"card\" :key=\"item.uid\" v-for=\"(item) in model.items\">\n            <div class=\"card-header\">\n                <a href=\"#\" :data-toggle=\"!model.meta.expanded && !item.isNew ? 'collapse' : false\" :data-target=\"'#body' + item.uid\">\n                    <div class=\"handle\">\n                        <i class=\"fas fa-ellipsis-v\"></i>\n                    </div>\n                    {{ item.title }}\n                </a>\n                <span class=\"actions float-right\">\n                    <a v-on:click.prevent=\"removeItem(item)\" href=\"#\" class=\"danger\"><i class=\"fas fa-trash\"></i></a>\n                </span>\n            </div>\n            <div :id=\"'body' + item.uid\" :class=\"{ 'collapse' : !model.meta.expanded && !item.isNew }\" :data-parent=\"'#' + model.meta.uid\">\n                <div class=\"card-body\">\n                    <div class=\"row\">\n                        <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"field.meta.uid\" v-for=\"field in item.fields\">\n                            <label v-if=\"item.fields.length > 1 || field.meta.id !== 'Default'\">{{ field.meta.name }}</label>\n                            <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n                            <div class=\"field-body\">\n                                <div :id=\"'tb-' + field.meta.uid\" class=\"component-toolbar\"></div>\n                                <component v-if=\"field.model != null\" v-bind:is=\"field.meta.component\" v-bind:uid=\"field.meta.uid\" v-bind:meta=\"field.meta\" v-bind:toolbar=\"'tb-' + field.meta.uid\" v-bind:model=\"field.model\" v-on:update-title=\"updateTitle($event)\"></component>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n    <a href=\"#\" class=\"block-add\" v-on:click.prevent=\"addItem()\">\n        <hr>\n        <i class=\"fas fa-plus-circle\"></i>\n    </a>\n    <div v-if=\"model.items.length === 0\" class=\"empty-info unsortable\">\n        <p>{{ piranha.resources.texts.emptyAddAbove }}</p>\n    </div>\n</div>\n"
 });
 Vue.component("post-archive", {
   props: ["uid", "id"],
@@ -835,14 +845,17 @@ Vue.component("audio-field", {
           folderId: media.folderId,
           type: media.type,
           filename: media.filename,
+          title: media.title,
           contentType: media.contentType,
           publicUrl: media.publicUrl
         }; // Tell parent that title has been updated
 
-        this.$emit('update-title', {
-          uid: this.uid,
-          title: this.model.media.filename
-        });
+        if (this.meta.notifyChange) {
+          this.$emit('update-title', {
+            uid: this.uid,
+            title: this.model.media.title != null ? this.model.media.title + ' (' + this.model.media.filename + ')' : this.model.media.filename
+          });
+        }
       } else {
         console.log("No audio was selected");
       }
@@ -856,17 +869,37 @@ Vue.component("audio-field", {
   mounted: function () {
     this.model.getTitle = function () {
       if (this.model.media != null) {
-        return this.model.media.filename;
+        return this.model.media.title != null ? this.model.media.title + ' (' + this.model.media.filename + ')' : this.model.media.filename;
       } else {
         return "No audio selected";
       }
     };
   },
-  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.filename }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else-if=\"model.media.title != null\">\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.title }} ({{ model.media.filename }})</a>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.filename }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("checkbox-field", {
   props: ["uid", "model", "meta"],
   template: "\n<div class=\"form-group form-check\">\n    <input type=\"checkbox\" class=\"form-check-input\" :id=\"meta.uid\" v-model=\"model.value\">\n    <label class=\"form-check-label\" :for=\"meta.uid\">{{ meta.placeholder}}</label>\n</div>\n"
+});
+Vue.component("data-select-field", {
+  props: ["uid", "model", "meta"],
+  methods: {
+    update: function () {
+      if (this.meta.notifyChange) {
+        // Tell parent that value has been updated
+        this.$emit('update-field', {
+          uid: this.uid,
+          title: this.model.items.$values[this.model.id]
+        }); // Tell parent that title has been updated
+
+        this.$emit('update-title', {
+          uid: this.uid,
+          title: this.model.items.$values[this.model.id]
+        });
+      }
+    }
+  },
+  template: "\n<select class=\"form-control\" v-model=\"model.id\" v-on:change=\"update()\">\n    <option v-for=\"(item) in model.items.$values\" v-bind:key=\"item.id\" v-bind:value=\"item.id\">\n        {{ item.name }}\n    </option>\n</select>\n"
 });
 Vue.component("date-field", {
   props: ["uid", "model", "meta"],
@@ -912,14 +945,17 @@ Vue.component("document-field", {
           folderId: media.folderId,
           type: media.type,
           filename: media.filename,
+          title: media.title,
           contentType: media.contentType,
           publicUrl: media.publicUrl
         }; // Tell parent that title has been updated
 
-        this.$emit('update-title', {
-          uid: this.uid,
-          title: this.model.media.filename
-        });
+        if (this.meta.notifyChange) {
+          this.$emit('update-title', {
+            uid: this.uid,
+            title: this.model.media.title != null ? this.model.media.title + ' (' + this.model.media.filename + ')' : this.model.media.filename
+          });
+        }
       } else {
         console.log("No document was selected");
       }
@@ -933,13 +969,13 @@ Vue.component("document-field", {
   mounted: function () {
     this.model.getTitle = function () {
       if (this.model.media != null) {
-        return this.model.media.filename;
+        return this.model.media.title != null ? this.model.media.title + ' (' + this.model.media.filename + ')' : this.model.media.filename;
       } else {
         return "No document selected";
       }
     };
   },
-  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.filename }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else-if=\"model.media.title != null\">\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.title }} ({{ model.media.filename }})</a>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.filename }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("html-field", {
   props: ["uid", "toolbar", "model"],
@@ -1013,14 +1049,17 @@ Vue.component("image-field", {
           folderId: media.folderId,
           type: media.type,
           filename: media.filename,
+          title: media.title,
           contentType: media.contentType,
           publicUrl: media.publicUrl
         }; // Tell parent that title has been updated
 
-        this.$emit('update-title', {
-          uid: this.uid,
-          title: this.model.media.filename
-        });
+        if (this.meta.notifyChange) {
+          this.$emit('update-title', {
+            uid: this.uid,
+            title: this.model.media.title != null ? this.model.media.title + ' (' + this.model.media.filename + ')' : this.model.media.filename
+          });
+        }
       } else {
         console.log("No image was selected");
       }
@@ -1034,13 +1073,13 @@ Vue.component("image-field", {
   mounted: function () {
     this.model.getTitle = function () {
       if (this.model.media != null) {
-        return this.model.media.filename;
+        return this.model.media.title != null ? this.model.media.title + ' (' + this.model.media.filename + ')' : this.model.media.filename;
       } else {
         return "No image selected";
       }
     };
   },
-  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.filename }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else-if=\"model.media.title != null\">\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.title }} ({{ model.media.filename }})</a>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.filename }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("markdown-field", {
   props: ["uid", "model"],
@@ -1089,14 +1128,17 @@ Vue.component("media-field", {
         folderId: media.folderId,
         type: media.type,
         filename: media.filename,
+        title: media.title,
         contentType: media.contentType,
         publicUrl: media.publicUrl
       }; // Tell parent that title has been updated
 
-      this.$emit('update-title', {
-        uid: this.uid,
-        title: this.model.media.filename
-      });
+      if (this.meta.notifyChange) {
+        this.$emit('update-title', {
+          uid: this.uid,
+          title: this.model.media.title != null ? this.model.media.title + ' (' + this.model.media.filename + ')' : this.model.media.filename
+        });
+      }
     }
   },
   computed: {
@@ -1107,13 +1149,13 @@ Vue.component("media-field", {
   mounted: function () {
     this.model.getTitle = function () {
       if (this.model.media != null) {
-        return this.model.media.filename;
+        return this.model.media.title != null ? this.model.media.title + ' (' + this.model.media.filename + ')' : this.model.media.filename;
       } else {
         return "No media selected";
       }
     };
   },
-  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.filename }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else-if=\"model.media.title != null\">\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.title }} ({{ model.media.filename }})</a>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.filename }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("missing-field", {
   props: ["meta", "model"],
@@ -1216,6 +1258,11 @@ Vue.component("select-field", {
         this.$emit('update-field', {
           uid: this.uid,
           title: this.meta.options[this.model.value]
+        }); // Tell parent that title has been updated
+
+        this.$emit('update-title', {
+          uid: this.uid,
+          title: this.meta.options[this.model.value]
         });
       }
     }
@@ -1229,6 +1276,11 @@ Vue.component("string-field", {
       if (this.meta.notifyChange) {
         // Tell parent that value has been updated
         this.$emit('update-field', {
+          uid: this.uid,
+          title: this.model.value
+        }); // Tell parent that title has been updated
+
+        this.$emit('update-title', {
           uid: this.uid,
           title: this.model.value
         });
@@ -1265,14 +1317,17 @@ Vue.component("video-field", {
           folderId: media.folderId,
           type: media.type,
           filename: media.filename,
+          title: media.title,
           contentType: media.contentType,
           publicUrl: media.publicUrl
         }; // Tell parent that title has been updated
 
-        this.$emit('update-title', {
-          uid: this.uid,
-          title: this.model.media.filename
-        });
+        if (this.meta.notifyChange) {
+          this.$emit('update-title', {
+            uid: this.uid,
+            title: this.model.media.title != null ? this.model.media.title + ' (' + this.model.media.filename + ')' : this.model.media.filename
+          });
+        }
       } else {
         console.log("No video was selected");
       }
@@ -1286,11 +1341,11 @@ Vue.component("video-field", {
   mounted: function () {
     this.model.getTitle = function () {
       if (this.model.media != null) {
-        return this.model.media.filename;
+        return this.model.media.title != null ? this.model.media.title + ' (' + this.model.media.filename + ')' : this.model.media.filename;
       } else {
         return "No video selected";
       }
     };
   },
-  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.filename }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else-if=\"model.media.title != null\">\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.title }} ({{ model.media.filename }})</a>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.filename }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });

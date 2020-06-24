@@ -58,8 +58,9 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="type">The content type</param>
         /// <param name="regionId">The region id</param>
+        /// <param name="managerInit">If manager initialization should be performed</param>
         /// <returns>The new region value</returns>
-        public Task<object> CreateDynamicRegionAsync(ContentTypeBase type, string regionId)
+        public Task<object> CreateDynamicRegionAsync(ContentTypeBase type, string regionId, bool managerInit = false)
         {
             using (var scope = _services.CreateScope())
             {
@@ -67,7 +68,7 @@ namespace Piranha.Services
 
                 if (region != null)
                 {
-                    return CreateDynamicRegionAsync(scope, region);
+                    return CreateDynamicRegionAsync(scope, region, true, managerInit);
                 }
                 return null;
             }
@@ -480,8 +481,9 @@ namespace Piranha.Services
         /// <param name="scope">The current service scope</param>
         /// <param name="regionType">The region type</param>
         /// <param name="initFields">If fields should be initialized</param>
+        /// <param name="managerInit">If manager init should be performed on the fields</param>
         /// <returns>The created region</returns>
-        private async Task<object> CreateDynamicRegionAsync(IServiceScope scope, RegionType regionType, bool initFields = true)
+        private async Task<object> CreateDynamicRegionAsync(IServiceScope scope, RegionType regionType, bool initFields = true, bool managerInit = false)
         {
             if (regionType.Fields.Count == 1)
             {
@@ -490,7 +492,7 @@ namespace Piranha.Services
                 {
                     if (initFields)
                     {
-                        await InitFieldAsync(scope, field, false).ConfigureAwait(false);
+                        await InitFieldAsync(scope, field, managerInit).ConfigureAwait(false);
                     }
                     return field;
                 }
@@ -506,7 +508,7 @@ namespace Piranha.Services
                     {
                         if (initFields)
                         {
-                            await InitFieldAsync(scope, field, false).ConfigureAwait(false);
+                            await InitFieldAsync(scope, field, managerInit).ConfigureAwait(false);
                         }
                         ((IDictionary<string, object>)reg).Add(fieldType.Id, field);
                     }

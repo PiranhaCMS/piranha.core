@@ -29,6 +29,11 @@ namespace Piranha.Manager.Models.Content
         public string Title { get; set; } = "...";
 
         /// <summary>
+        /// Gets/sets if the region is new (added)
+        /// </summary>
+        public bool IsNew { get; set; }
+
+        /// <summary>
         /// Gets/sets the available fields.
         /// </summary>
         public IList<FieldModel> Fields { get; set; } = new List<FieldModel>();

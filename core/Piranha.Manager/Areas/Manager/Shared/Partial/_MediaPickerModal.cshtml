@@ -58,6 +58,12 @@
                      <input id="mediapickerSearch" class="form-control" v-model="search" v-on:keyup.enter="onEnter" placeholder="@Localizer.General["Search..."]"/>
                 </div>
 
+                <div v-if="currentFolderBreadcrumb != null" class="breadcrumb">
+                    <span class="folder"><a href="#" v-on:click.prevent="load()"><i class="fas fa-folder-open"></i>@Localizer.Media["Media"]</a></span>
+                    <span v-for="folder in currentFolderBreadcrumb" class="folder"><a href="#" v-on:click.prevent="load(folder.id)"><i class="fas fa-folder-open"></i>{{ folder.name }}</a></span>
+
+                </div>
+
                 <template v-if="listView">
                     <table class="table table-borderless table-media">
                         <thead>

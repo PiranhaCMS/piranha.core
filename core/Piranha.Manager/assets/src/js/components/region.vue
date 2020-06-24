@@ -19,7 +19,7 @@
         <div :id="model.meta.uid" class="accordion sortable" :class="model.items.length !== 0 ? 'mb-3' : ''">
             <div class="card" :key="item.uid" v-for="(item) in model.items">
                 <div class="card-header">
-                    <a href="#" :data-toggle="!model.meta.expanded ? 'collapse' : false" :data-target="'#body' + item.uid">
+                    <a href="#" :data-toggle="!model.meta.expanded && !item.isNew ? 'collapse' : false" :data-target="'#body' + item.uid">
                         <div class="handle">
                             <i class="fas fa-ellipsis-v"></i>
                         </div>
@@ -29,11 +29,11 @@
                         <a v-on:click.prevent="removeItem(item)" href="#" class="danger"><i class="fas fa-trash"></i></a>
                     </span>
                 </div>
-                <div :id="'body' + item.uid" :class="{ 'collapse' : !model.meta.expanded}" :data-parent="'#' + model.meta.uid">
+                <div :id="'body' + item.uid" :class="{ 'collapse' : !model.meta.expanded && !item.isNew }" :data-parent="'#' + model.meta.uid">
                     <div class="card-body">
                         <div class="row">
                             <div class="form-group" :class="{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }" v-bind:key="field.meta.uid" v-for="field in item.fields">
-                                <label>{{ field.meta.name }}</label>
+                                <label v-if="item.fields.length > 1 || field.meta.id !== 'Default'">{{ field.meta.name }}</label>
                                 <div v-if="field.meta.description != null" v-html="field.meta.description" class="field-description small text-muted"></div>
                                 <div class="field-body">
                                     <div :id="'tb-' + field.meta.uid" class="component-toolbar"></div>
@@ -77,10 +77,17 @@ export default {
             this.model.items.splice(this.model.items.indexOf(item), 1);
         },
         updateTitle: function (e) {
-            for (var n = 0; n < this.model.items.length; n++) {
-                if (this.model.items[n].uid === e.uid) {
-                    this.model.items[n].title = e.title;
-                    break;
+            var self = this;
+            if (self.model.meta.isCollection) {
+                for (var n = 0; n < self.model.items.length; n++) {
+                    var item = self.model.items[n];
+                    for (var m = 0; m < item.fields.length; m++) {
+                        var field = item.fields[m];
+                        if (field.meta.uid === e.uid) {
+                            self.model.items[n].title = e.title;
+                            break;
+                        }
+                    }
                 }
             }
         },

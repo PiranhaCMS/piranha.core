@@ -24,7 +24,7 @@
     "gulp-sass": "^4.0.2",
     "gulp-uglify": "3.0.2",
     "html5sortable": "0.9.10",
-    "jquery": "3.3.1",
+    "jquery": "^3.5.1",
     "nestable2": "1.6.0",
     "popper.js": "1.14.7",
     "select2": "4.0.7",

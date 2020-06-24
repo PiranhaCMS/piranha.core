@@ -225,6 +225,10 @@ namespace Piranha.Manager.Services
                 post.Id = Guid.NewGuid();
                 post.BlogId = archiveId;
 
+                // Perform manager init
+                await _factory.InitDynamicManagerAsync(post,
+                    App.PostTypes.GetById(post.TypeId));
+
                 var postModel = Transform(post, false);
 
                 postModel.Categories = (await _api.Posts.GetAllCategoriesAsync(post.BlogId))
