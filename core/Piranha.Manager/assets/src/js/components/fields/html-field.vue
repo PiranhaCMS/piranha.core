@@ -6,7 +6,7 @@
 
 <script>
 export default {
-    props: ["uid", "toolbar", "model"],
+    props: ["uid", "toolbar", "model", "meta"],
     data: function () {
         return {
             body: this.model.value
@@ -36,10 +36,13 @@ export default {
                 title = title.substring(0, 40) + "...";
             }
 
-            this.$emit('update-title', {
-                uid: this.uid,
-                title: title
-            });
+            // Tell parent that title has been updated
+            if (this.meta.notifyChange) {
+                this.$emit('update-title', {
+                    uid: this.uid,
+                    title: title
+                });
+            }
         }
     },
     computed: {

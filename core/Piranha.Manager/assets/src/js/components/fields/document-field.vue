@@ -54,7 +54,7 @@ export default {
                 };
 
                 // Tell parent that title has been updated
-               if (this.meta.notifyChange) {
+                if (this.meta.notifyChange) {
                     this.$emit('update-title', {
                         uid: this.uid,
                         title: this.model.media.title != null ? this.model.media.title + ' (' + this.model.media.filename + ')' : this.model.media.filename

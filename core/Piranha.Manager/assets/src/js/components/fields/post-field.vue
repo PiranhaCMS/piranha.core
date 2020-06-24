@@ -38,10 +38,12 @@ export default {
             this.model.post = post;
 
             // Tell parent that title has been updated
-            this.$emit('update-title', {
-                uid: this.uid,
-                title: this.model.post.title
-            });
+            if (this.meta.notifyChange) {
+                this.$emit('update-title', {
+                    uid: this.uid,
+                    title: this.model.post.title
+                });
+            }
         }
     },
     computed: {

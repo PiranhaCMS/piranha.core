@@ -17,6 +17,14 @@ export default {
                 (d.getDate() < 10 ? "0" : "") + d.getDate();
 
             this.model.value = str;
+
+            // Tell parent that title has been updated
+            if (this.meta.notifyChange) {
+                this.$emit('update-title', {
+                    uid: this.uid,
+                    title: this.model.value
+                });
+            }
         }
     },
     created: function () {

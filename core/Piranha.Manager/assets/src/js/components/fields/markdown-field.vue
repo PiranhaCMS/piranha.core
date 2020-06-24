@@ -7,7 +7,7 @@
 
 <script>
 export default {
-    props: ["uid", "model"],
+    props: ["uid", "model", "meta"],
     data: function () {
         return {
             body: this.model.value
@@ -16,6 +16,19 @@ export default {
     methods: {
         update: function (md) {
             this.model.value = md;
+
+            // Tell parent that title has been updated
+            if (this.meta.notifyChange) {
+                var title = this.model.value;
+                if (title.length > 40) {
+                    title = title.substring(0, 40) + "...";
+                }
+
+                this.$emit('update-title', {
+                    uid: this.uid,
+                    title: title
+                });
+            }
         }
     },
     computed: {

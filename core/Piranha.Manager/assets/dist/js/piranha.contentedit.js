@@ -885,13 +885,8 @@ Vue.component("data-select-field", {
   props: ["uid", "model", "meta"],
   methods: {
     update: function () {
+      // Tell parent that title has been updated
       if (this.meta.notifyChange) {
-        // Tell parent that value has been updated
-        this.$emit('update-field', {
-          uid: this.uid,
-          title: this.model.items.$values[this.model.id]
-        }); // Tell parent that title has been updated
-
         this.$emit('update-title', {
           uid: this.uid,
           title: this.model.items.$values[this.model.id]
@@ -910,7 +905,14 @@ Vue.component("date-field", {
     onClosed: function () {
       var d = this.model.value;
       var str = d.getFullYear() + "-" + (d.getMonth() < 9 ? "0" : "") + (d.getMonth() + 1) + "-" + (d.getDate() < 10 ? "0" : "") + d.getDate();
-      this.model.value = str;
+      this.model.value = str; // Tell parent that title has been updated
+
+      if (this.meta.notifyChange) {
+        this.$emit('update-title', {
+          uid: this.uid,
+          title: this.model.value
+        });
+      }
     }
   },
   created: function () {
@@ -978,7 +980,7 @@ Vue.component("document-field", {
   template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else-if=\"model.media.title != null\">\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.title }} ({{ model.media.filename }})</a>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.filename }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("html-field", {
-  props: ["uid", "toolbar", "model"],
+  props: ["uid", "toolbar", "model", "meta"],
   data: function () {
     return {
       body: this.model.value
@@ -1006,12 +1008,15 @@ Vue.component("html-field", {
 
       if (title.length > 40) {
         title = title.substring(0, 40) + "...";
-      }
+      } // Tell parent that title has been updated
 
-      this.$emit('update-title', {
-        uid: this.uid,
-        title: title
-      });
+
+      if (this.meta.notifyChange) {
+        this.$emit('update-title', {
+          uid: this.uid,
+          title: title
+        });
+      }
     }
   },
   computed: {
@@ -1082,7 +1087,7 @@ Vue.component("image-field", {
   template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else-if=\"model.media.title != null\">\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.title }} ({{ model.media.filename }})</a>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\" v-on:click.prevent=\"piranha.preview.open(model.id)\">{{ model.media.filename }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("markdown-field", {
-  props: ["uid", "model"],
+  props: ["uid", "model", "meta"],
   data: function () {
     return {
       body: this.model.value
@@ -1090,7 +1095,20 @@ Vue.component("markdown-field", {
   },
   methods: {
     update: function (md) {
-      this.model.value = md;
+      this.model.value = md; // Tell parent that title has been updated
+
+      if (this.meta.notifyChange) {
+        var title = this.model.value;
+
+        if (title.length > 40) {
+          title = title.substring(0, 40) + "...";
+        }
+
+        this.$emit('update-title', {
+          uid: this.uid,
+          title: title
+        });
+      }
     }
   },
   computed: {
@@ -1187,10 +1205,12 @@ Vue.component("page-field", {
       this.model.id = page.id;
       this.model.page = page; // Tell parent that title has been updated
 
-      this.$emit('update-title', {
-        uid: this.uid,
-        title: this.model.page.title
-      });
+      if (this.meta.notifyChange) {
+        this.$emit('update-title', {
+          uid: this.uid,
+          title: this.model.page.title
+        });
+      }
     }
   },
   computed: {
@@ -1223,10 +1243,12 @@ Vue.component("post-field", {
       this.model.id = post.id;
       this.model.post = post; // Tell parent that title has been updated
 
-      this.$emit('update-title', {
-        uid: this.uid,
-        title: this.model.post.title
-      });
+      if (this.meta.notifyChange) {
+        this.$emit('update-title', {
+          uid: this.uid,
+          title: this.model.post.title
+        });
+      }
     }
   },
   computed: {
@@ -1253,13 +1275,8 @@ Vue.component("select-field", {
   props: ["uid", "model", "meta"],
   methods: {
     update: function () {
+      // Tell parent that title has been updated
       if (this.meta.notifyChange) {
-        // Tell parent that value has been updated
-        this.$emit('update-field', {
-          uid: this.uid,
-          title: this.meta.options[this.model.value]
-        }); // Tell parent that title has been updated
-
         this.$emit('update-title', {
           uid: this.uid,
           title: this.meta.options[this.model.value]
@@ -1273,13 +1290,8 @@ Vue.component("string-field", {
   props: ["uid", "model", "meta"],
   methods: {
     update: function () {
+      // Tell parent that title has been updated
       if (this.meta.notifyChange) {
-        // Tell parent that value has been updated
-        this.$emit('update-field', {
-          uid: this.uid,
-          title: this.model.value
-        }); // Tell parent that title has been updated
-
         this.$emit('update-title', {
           uid: this.uid,
           title: this.model.value
@@ -1291,7 +1303,24 @@ Vue.component("string-field", {
 });
 Vue.component("text-field", {
   props: ["uid", "model", "meta"],
-  template: "\n<textarea class=\"form-control\" rows=\"4\" :placeholder=\"meta.placeholder\" v-model=\"model.value\"></textarea>\n"
+  methods: {
+    update: function () {
+      // Tell parent that title has been updated
+      if (this.meta.notifyChange) {
+        var title = this.model.value;
+
+        if (title.length > 40) {
+          title = title.substring(0, 40) + "...";
+        }
+
+        this.$emit('update-title', {
+          uid: this.uid,
+          title: title
+        });
+      }
+    }
+  },
+  template: "\n<textarea class=\"form-control\" rows=\"4\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\"></textarea>\n"
 });
 Vue.component("video-field", {
   props: ["uid", "model", "meta"],

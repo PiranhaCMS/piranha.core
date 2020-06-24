@@ -53,7 +53,7 @@ export default {
                     filename: media.filename,
                     title: media.title,
                     contentType: media.contentType,
-                    publicUrl: media.publicUrl,
+                    publicUrl: media.publicUrl
                 };
 
                 // Tell parent that title has been updated
