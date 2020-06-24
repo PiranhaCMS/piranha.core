@@ -64,6 +64,7 @@ namespace Piranha.Runtime
                 item.Name = attr.Name;
                 item.Category = attr.Category;
                 item.Icon = attr.Icon;
+                item.ListTitleField = attr.ListTitle;
                 item.IsUnlisted = attr.IsUnlisted;
                 item.IsGeneric = attr.IsGeneric;
                 item.Component = !string.IsNullOrWhiteSpace(attr.Component) ? attr.Component : "missing-block";

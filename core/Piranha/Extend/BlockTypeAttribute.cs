@@ -35,6 +35,14 @@ namespace Piranha.Extend
         public string Icon { get; set; }
 
         /// <summary>
+        /// Gets/sets the field that will be used to generate the list
+        /// item title if the block is used in a block group. Please note
+        /// that this value is only used for generic blocks as custom blocks
+        /// are responsible for emitting their title changes.
+        /// </summary>
+        public string ListTitle { get; set; }
+
+        /// <summary>
         /// Gets/sets if the block type should only be listed
         /// where specified explicitly.
         /// </summary>

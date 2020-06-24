@@ -345,7 +345,15 @@ Vue.component("block-group-vertical", {
 });
 Vue.component("generic-block", {
   props: ["uid", "toolbar", "model"],
-  template: "\n<div class=\"block-body\">\n    <div class=\"row\">\n        <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"'field' + field.meta.uid\" v-for=\"field in model\">\n            <label>{{ field.meta.name }}</label>\n            <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n            <component v-bind:is=\"field.meta.component\" v-bind:uid=\"field.meta.uid\" v-bind:meta=\"field.meta\" v-bind:toolbar=\"toolbar\" v-bind:model=\"field.model\"></component>\n        </div>\n    </div>\n</div>\n"
+  methods: {
+    updateTitle: function (e) {
+      this.$emit('update-title', {
+        uid: this.uid,
+        title: e.title
+      });
+    }
+  },
+  template: "\n<div class=\"block-body\">\n    <div class=\"row\">\n        <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"'field' + field.meta.uid\" v-for=\"field in model\">\n            <label>{{ field.meta.name }}</label>\n            <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n            <component v-bind:is=\"field.meta.component\" v-bind:uid=\"field.meta.uid\" v-bind:meta=\"field.meta\" v-bind:toolbar=\"toolbar\" v-bind:model=\"field.model\" v-on:update-title=\"updateTitle($event)\"></component>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("audio-block", {
   props: ["uid", "model"],
@@ -1008,32 +1016,35 @@ Vue.component("html-field", {
     onBlur: function (e) {
       this.model.value = tinyMCE.activeEditor.getContent(); // Tell parent that title has been updated
 
-      var title = this.model.value.replace(/(<([^>]+)>)/ig, "");
-
-      if (title.length > 40) {
-        title = title.substring(0, 40) + "...";
-      }
-
-      this.$emit('update-title', {
-        uid: this.uid,
-        title: title
-      });
-    },
-    onChange: function (data) {
-      this.model.value = data; // Tell parent that title has been updated
-
-      var title = this.model.value.replace(/(<([^>]+)>)/ig, "");
-
-      if (title.length > 40) {
-        title = title.substring(0, 40) + "...";
-      } // Tell parent that title has been updated
-
-
       if (this.meta.notifyChange) {
+        var title = this.model.value.replace(/(<([^>]+)>)/ig, "");
+
+        if (title.length > 40) {
+          title = title.substring(0, 40) + "...";
+        }
+
         this.$emit('update-title', {
           uid: this.uid,
           title: title
         });
+      }
+    },
+    onChange: function (data) {
+      this.model.value = data; // Tell parent that title has been updated
+
+      if (this.meta.notifyChange) {
+        var title = this.model.value.replace(/(<([^>]+)>)/ig, "");
+
+        if (title.length > 40) {
+          title = title.substring(0, 40) + "...";
+        }
+
+        if (this.meta.notifyChange) {
+          this.$emit('update-title', {
+            uid: this.uid,
+            title: title
+          });
+        }
       }
     }
   },

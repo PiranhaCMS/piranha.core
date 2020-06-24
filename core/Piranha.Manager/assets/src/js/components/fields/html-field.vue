@@ -17,31 +17,34 @@ export default {
             this.model.value = tinyMCE.activeEditor.getContent();
 
             // Tell parent that title has been updated
-            var title = this.model.value.replace(/(<([^>]+)>)/ig, "");
-            if (title.length > 40) {
-                title = title.substring(0, 40) + "...";
-            }
+            if (this.meta.notifyChange) {
+                var title = this.model.value.replace(/(<([^>]+)>)/ig, "");
+                if (title.length > 40) {
+                    title = title.substring(0, 40) + "...";
+                }
 
-            this.$emit('update-title', {
-                uid: this.uid,
-                title: title
-            });
+                this.$emit('update-title', {
+                    uid: this.uid,
+                    title: title
+                });
+            }
         },
         onChange: function (data) {
             this.model.value = data;
 
             // Tell parent that title has been updated
-            var title = this.model.value.replace(/(<([^>]+)>)/ig, "");
-            if (title.length > 40) {
-                title = title.substring(0, 40) + "...";
-            }
-
-            // Tell parent that title has been updated
             if (this.meta.notifyChange) {
-                this.$emit('update-title', {
-                    uid: this.uid,
-                    title: title
-                });
+                var title = this.model.value.replace(/(<([^>]+)>)/ig, "");
+                if (title.length > 40) {
+                    title = title.substring(0, 40) + "...";
+                }
+
+                if (this.meta.notifyChange) {
+                    this.$emit('update-title', {
+                        uid: this.uid,
+                        title: title
+                    });
+                }
             }
         }
     },

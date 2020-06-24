@@ -32,6 +32,11 @@ namespace Piranha.Runtime
         public string Icon { get; set; }
 
         /// <summary>
+        /// Gets/sets the field that should be used to render list item title.
+        /// </summary>
+        public string ListTitleField { get; set; }
+
+        /// <summary>
         /// Gets/sets if the block type should only be listed
         /// where specified explicitly.
         /// </summary>

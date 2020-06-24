@@ -33,7 +33,21 @@ namespace Piranha.Extend
         /// <returns>The title</returns>
         public virtual string GetTitle()
         {
-            return "[Not Implemented]";
+            var blockType = App.Blocks.GetByType(GetType());
+            var title = "[Not Implemented]";
+
+            if (!string.IsNullOrEmpty(blockType.ListTitleField))
+            {
+                var prop = GetType().GetProperty(blockType.ListTitleField, App.PropertyBindings);
+
+                if (prop != null && typeof(IField).IsAssignableFrom(prop.PropertyType))
+                {
+                    var field = (IField)prop.GetValue(this);
+
+                    title = field.GetTitle();
+                }
+            }
+            return title;
         }
     }
 }

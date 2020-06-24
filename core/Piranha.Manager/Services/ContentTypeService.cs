@@ -270,21 +270,36 @@ namespace Piranha.Manager.Services
                     }
                     else
                     {
+                        var blockModel = new BlockGenericModel
+                        {
+                            Model = ContentUtils.GetBlockFields(block),
+                            Type = block.Type,
+                            Meta = new BlockMeta
+                            {
+                                Name = blockType.Name,
+                                Title = block.GetTitle(),
+                                Icon = blockType.Icon,
+                                Component = blockType.Component
+                            }
+                        };
+
+                        if (blockModel.Model.Count == 1)
+                        {
+                            blockModel.Model[0].Meta.NotifyChange = true;
+                        }
+                        else
+                        {
+                            foreach (var blockField in blockModel.Model)
+                            {
+                                blockField.Meta.NotifyChange =
+                                    blockField.Meta.Id == blockType.ListTitleField;
+                            }
+                        }
+
                         // Generic block model
                         return new AsyncResult<BlockModel>
                         {
-                            Body = new BlockGenericModel
-                            {
-                                Model = ContentUtils.GetBlockFields(block),
-                                Type = block.Type,
-                                Meta = new BlockMeta
-                                {
-                                    Name = blockType.Name,
-                                    Title = block.GetTitle(),
-                                    Icon = blockType.Icon,
-                                    Component = blockType.Component
-                                }
-                            }
+                            Body = blockModel
                         };
                     }
                 }
