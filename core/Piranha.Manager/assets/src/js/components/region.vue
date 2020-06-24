@@ -19,7 +19,7 @@
         <div :id="model.meta.uid" class="accordion sortable" :class="model.items.length !== 0 ? 'mb-3' : ''">
             <div class="card" :key="item.uid" v-for="(item) in model.items">
                 <div class="card-header">
-                    <a href="#" :data-toggle="!model.meta.expanded && !item.isNew ? 'collapse' : false" :data-target="'#body' + item.uid">
+                    <a href="#" :data-toggle="!model.meta.expanded ? 'collapse' : false" :data-target="'#body' + item.uid">
                         <div class="handle">
                             <i class="fas fa-ellipsis-v"></i>
                         </div>
@@ -29,7 +29,7 @@
                         <a v-on:click.prevent="removeItem(item)" href="#" class="danger"><i class="fas fa-trash"></i></a>
                     </span>
                 </div>
-                <div :id="'body' + item.uid" :class="{ 'collapse' : !model.meta.expanded && !item.isNew }" :data-parent="'#' + model.meta.uid">
+                <div :id="'body' + item.uid" :class="{ 'collapse' : !model.meta.expanded }" :data-parent="'#' + model.meta.uid">
                     <div class="card-body">
                         <div class="row">
                             <div class="form-group" :class="{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }" v-bind:key="field.meta.uid" v-for="field in item.fields">
@@ -58,6 +58,11 @@
 <script>
 export default {
     props: ["model", "content", "type"],
+    data: function () {
+        return {
+            itemAdded: false
+        };
+    },
     methods: {
         moveItem: function (from, to) {
             this.model.items.splice(to, 0, this.model.items.splice(from, 1)[0])
@@ -69,6 +74,7 @@ export default {
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.model.items.push(result);
+                    self.itemAdded = true;
                 })
                 .catch(function (error) { console.log("error:", error );
             });
@@ -93,8 +99,7 @@ export default {
         },
     },
     mounted: function () {
-        if (this.model.meta.isCollection)
-        {
+        if (this.model.meta.isCollection) {
             var self = this;
 
             sortable("#" + this.model.meta.uid, {
@@ -103,6 +108,17 @@ export default {
             })[0].addEventListener("sortupdate", function (e) {
                 self.moveItem(e.detail.origin.index, e.detail.destination.index);
             });
+        }
+    },
+    updated: function () {
+        if (this.model.meta.isCollection && this.itemAdded) {
+            sortable("#" + this.model.meta.uid, "disable");
+            sortable("#" + this.model.meta.uid, "enable");
+
+            if (!this.model.meta.expanded) {
+                $("#" + this.model.meta.uid + " .card:last-child a").click();
+            }
+            this.itemAdded = false;
         }
     }
 }
