@@ -4,6 +4,7 @@
 @{
     Layout = null;
     var module = Piranha.App.Modules.Get<Piranha.Manager.Module>();
+    var prerelease = Piranha.Utils.IsPreRelease(typeof(Piranha.Manager.Module).Assembly) ? "pre-release" : "";
 }
 <!doctype html>
 <html lang="en" style="min-height:100%">
@@ -18,7 +19,11 @@
 
     <title>@Localizer.General["Login"]</title>
 </head>
-<body id="login">
+<body id="login" class="@prerelease">
+    @if (!string.IsNullOrEmpty(prerelease))
+    {
+    <div class="pre-release">Pre-release</div>
+    }
     <div class="container">
         <form method="post" class="needs-validation" novalidate>
             <div class="card card-login @(!Model.ModelState.IsValid ? "has-error" : "")">

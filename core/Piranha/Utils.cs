@@ -225,6 +225,18 @@ namespace Piranha
         }
 
         /// <summary>
+        /// Checks if the given assembly is a pre-release.
+        /// </summary>
+        /// <param name="assembly">The assembly</param>
+        /// <returns>If it is a pre-release</returns>
+        public static bool IsPreRelease(Assembly assembly)
+        {
+            var version = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion.ToLower();
+
+            return version.Contains("alpha") || version.Contains("beta");
+        }
+
+        /// <summary>
         /// Clones the entire given object into a new instance.
         /// </summary>
         /// <param name="obj">The object to clone</param>

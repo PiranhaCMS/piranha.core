@@ -1,5 +1,6 @@
 ﻿@{
     var module = Piranha.App.Modules.Get<Piranha.Manager.Module>();
+    var prerelease = Piranha.Utils.IsPreRelease(typeof(Piranha.Manager.Module).Assembly) ? "pre-release" : "";
 }
 <!doctype html>
 <html lang="en">
@@ -14,7 +15,11 @@
 
     <title>@ViewBag.Title</title>
 </head>
-<body>
+<body class="@prerelease">
+    @if (!string.IsNullOrEmpty(prerelease))
+    {
+    <div class="pre-release">Pre-release</div>
+    }
     <partial name="~/Areas/Manager/Shared/Partial/_Menu.cshtml" />
 
     @RenderBody()
