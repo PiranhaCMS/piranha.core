@@ -96,6 +96,30 @@ namespace Piranha.Runtime
             }
         }
 
+        public class SitemapServiceHooks
+        {
+            /// <summary>
+            /// Registers a new hook to be executed after the sitemap
+            /// has been loaded but BEFORE it has been added into
+            /// the cache.
+            /// </summary>
+            /// <param name="hook">The hook</param>
+            public void RegisterOnLoad(ModelDelegate<Sitemap> hook)
+            {
+                App.Hooks.RegisterOnLoad(hook);
+            }
+
+            /// <summary>
+            /// Registers a new hook to be executed when the sitemap
+            /// is invalidated due to a change in the site structure.
+            /// </summary>
+            /// <param name="hook">The hook</param>
+            public void RegisterOnInvalidate(ModelDelegate<Sitemap> hook)
+            {
+                App.Hooks.RegisterOnBeforeDelete(hook);
+            }
+        }
+
         //
         // Private hook collections.
         //
@@ -169,6 +193,11 @@ namespace Piranha.Runtime
         /// Gets the hooks available for sites.
         /// </summary>
         public ServiceHooks<SiteContentBase> SiteContent { get; } = new ServiceHooks<SiteContentBase>();
+
+        /// <summary>
+        /// Gets the hooks available for sitemaps.
+        /// </summary>
+        public SitemapServiceHooks Sitemap { get; } = new SitemapServiceHooks();
 
         /// <summary>
         /// Gets the hook for slug generation.

@@ -266,6 +266,8 @@ namespace Piranha.Services
                 {
                     sitemap = await _repo.GetSitemap(id.Value, onlyPublished).ConfigureAwait(false);
 
+                    App.Hooks.OnLoad<Sitemap>(sitemap);
+
                     if (onlyPublished)
                     {
                         _cache?.Set($"Sitemap_{id}", sitemap);
@@ -406,6 +408,11 @@ namespace Piranha.Services
                     site.ContentLastModified = DateTime.Now;
                     await SaveAsync(site).ConfigureAwait(false);
                 }
+            }
+            var sitemap = _cache?.Get<Sitemap>($"Sitemap_{id}");
+            if (sitemap != null)
+            {
+                App.Hooks.OnBeforeDelete<Sitemap>(sitemap);
             }
             _cache?.Remove($"Sitemap_{id}");
         }
