@@ -31,7 +31,7 @@
             </div>
             <a v-if="postTypes.length === 1 && piranha.permissions.posts.add" :href="piranha.baseUrl + postTypes[0].addUrl + id + '/' + postTypes[0].id" class="btn btn-sm btn-primary btn-labeled float-right"><i class="fas fa-plus"></i>{{ piranha.resources.texts.add }}</a>
         </div>
-        <table class="table">
+        <table v-if="items.length > 0" class="table">
             <tbody>
                 <tr v-bind:key="post.id" v-for="post in selectedPosts" :class="{ unpublished: post.status === 'unpublished' || post.isScheduled }">
                     <td>
@@ -53,6 +53,9 @@
                 </tr>
             </tbody>
         </table>
+        <div v-else class="empty-info">
+            <p>Looks like there's no posts here. Click on the Add button above to get started!</p>
+        </div>
         <nav v-if="totalPages > 1">
             <ul class="pagination justify-content-center">
                 <li class="page-item" :class="{ disabled: !hasPrev() }"><button v-on:click.prevent="first()" :disabled="!hasPrev()" class="page-link" href="#"><i class="fas fa-angle-double-left"></i></button></li>
