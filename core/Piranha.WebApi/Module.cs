@@ -20,10 +20,10 @@ namespace Piranha.WebApi
     {
         private readonly List<PermissionItem> _permissions = new List<PermissionItem>
         {
-            new PermissionItem { Name = Permissions.Media, Title = "Media Api" },
-            new PermissionItem { Name = Permissions.Pages, Title = "Page Api" },
-            new PermissionItem { Name = Permissions.Posts, Title = "Post Api" },
-            new PermissionItem { Name = Permissions.Sitemap, Title = "Sitemap Api" }
+            new PermissionItem { Name = Permissions.Media, Title = "Media Api", IsInternal = true },
+            new PermissionItem { Name = Permissions.Pages, Title = "Page Api", IsInternal = true },
+            new PermissionItem { Name = Permissions.Posts, Title = "Post Api", IsInternal = true },
+            new PermissionItem { Name = Permissions.Sitemap, Title = "Sitemap Api", IsInternal = true }
         };
 
         /// <summary>
