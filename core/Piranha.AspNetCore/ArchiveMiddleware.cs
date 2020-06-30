@@ -48,7 +48,7 @@ namespace Piranha.AspNetCore
 
                     if (!response.IsPublished)
                     {
-                        if (!context.User.HasClaim(Security.Permission.PagePreview, Security.Permission.PagePreview))
+                        if (!context.User.HasClaim(Piranha.Security.Permission.PagePreview, Piranha.Security.Permission.PagePreview))
                         {
                             _logger?.LogInformation($"User not authorized to preview unpublished archive page");
                             authorized = false;

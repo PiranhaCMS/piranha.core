@@ -40,15 +40,16 @@ namespace RazorWeb
                 options.UseManager();
                 options.UseTinyMCE();
                 options.UseMemoryCache();
-                options.UseApi(config =>
-                {
-                    config.AllowAnonymousAccess = true;
-                });
 
                 options.UseEF<SQLiteDb>(db =>
                     db.UseSqlite("Filename=./piranha.razorweb.db"));
                 options.UseIdentityWithSeed<IdentitySQLiteDb>(db =>
                     db.UseSqlite("Filename=./piranha.razorweb.db"));
+
+                options.UseSecurity(o =>
+                {
+                    o.UsePermission("Subscriber");
+                });
             });
 
             services.AddSwaggerGen(options =>
@@ -100,7 +101,8 @@ namespace RazorWeb
             //
             // Simplified setup with dependencies
             //
-            app.UsePiranha(options => {
+            app.UsePiranha(options =>
+            {
                 options.UseManager();
                 options.UseTinyMCE();
                 options.UseIdentity();
