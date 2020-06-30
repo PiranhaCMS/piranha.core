@@ -17,6 +17,11 @@ namespace Piranha
     public class PiranhaRouteConfig
     {
         /// <summary>
+        /// Gets/sets the login url.
+        /// </summary>
+        public string LoginUrl { get; set; } = "/login";
+
+        /// <summary>
         /// Gets/sets if alias routing should be used.
         /// </summary>
         public bool UseAliasRouting { get; set; } = true;

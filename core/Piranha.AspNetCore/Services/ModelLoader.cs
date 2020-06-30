@@ -58,7 +58,7 @@ namespace Piranha.AspNetCore.Services
             if (draft)
             {
                 // Check that the current user is authorized to preview pages
-                if ((await _auth.AuthorizeAsync(user, Security.Permission.PagePreview)).Succeeded)
+                if ((await _auth.AuthorizeAsync(user, Piranha.Security.Permission.PagePreview)).Succeeded)
                 {
                     // Get the draft, if available
                     model = await _api.Pages.GetDraftByIdAsync<T>(id);
@@ -153,7 +153,7 @@ namespace Piranha.AspNetCore.Services
             if (draft)
             {
                 // Check that the current user is authorized to preview pages
-                if ((await _auth.AuthorizeAsync(user, Security.Permission.PostPreview)).Succeeded)
+                if ((await _auth.AuthorizeAsync(user, Piranha.Security.Permission.PostPreview)).Succeeded)
                 {
                     // Get the draft, if available
                     model = await _api.Posts.GetDraftByIdAsync<T>(id);
