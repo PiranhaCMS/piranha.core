@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace Piranha.Models
 {
@@ -86,6 +87,11 @@ namespace Piranha.Models
         /// Gets/sets the last modification date.
         /// </summary>
         public DateTime LastModified { get; set; }
+
+        /// <summary>
+        /// Gets/sets the permissions needed to access the page.
+        /// </summary>
+        public IList<string> Permissions { get; set; } = new List<string>();
 
         /// <summary>
         /// Default constructor.

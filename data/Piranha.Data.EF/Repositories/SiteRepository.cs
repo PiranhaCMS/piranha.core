@@ -219,6 +219,7 @@ namespace Piranha.Repositories
         {
             var pages = await _db.Pages
                 .AsNoTracking()
+                .Include(p => p.Permissions)
                 .Where(p => p.SiteId == id)
                 .OrderBy(p => p.ParentId)
                 .ThenBy(p => p.SortOrder)

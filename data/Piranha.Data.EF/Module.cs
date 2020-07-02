@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Linq;
 using AutoMapper;
 using Piranha.Extend;
 
@@ -99,7 +100,8 @@ namespace Piranha.Data.EF
                     .ForMember(p => p.Level, o => o.Ignore())
                     .ForMember(p => p.Items, o => o.Ignore())
                     .ForMember(p => p.PageTypeName, o => o.Ignore())
-                    .ForMember(p => p.Permalink, o => o.MapFrom(d => !d.ParentId.HasValue && d.SortOrder == 0 ? "/" : "/" + d.Slug));
+                    .ForMember(p => p.Permalink, o => o.MapFrom(d => !d.ParentId.HasValue && d.SortOrder == 0 ? "/" : "/" + d.Slug))
+                    .ForMember(p => p.Permissions, o => o.MapFrom(d => d.Permissions.Select(dp => dp.Permission).ToList()));
                 cfg.CreateMap<Data.Param, Data.Param>()
                     .ForMember(p => p.Id, o => o.Ignore())
                     .ForMember(p => p.Created, o => o.Ignore());

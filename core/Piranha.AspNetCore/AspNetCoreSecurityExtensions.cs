@@ -9,10 +9,15 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;
 using Piranha.AspNetCore.Security;
+using Piranha.Models;
 
 /// <summary>
 /// Security extensions for simplifying authorization in
@@ -46,5 +51,46 @@ public static class AspNetCoreSecurityExtensions
     public static IApplicationBuilder UseSecurityMiddleware(this IApplicationBuilder builder)
     {
         return builder.UseMiddleware<Piranha.AspNetCore.Security.SecurityMiddleware>();
+    }
+
+    /// <summary>
+    /// Filters the current sitemap collection to only include the items the
+    /// current user has access to. Please note that this only filters the
+    /// current collection, it doesn't filter the entire strucure.
+    /// </summary>
+    /// <param name="sitemap">The sitemap items</param>
+    /// <param name="user">The current user</param>
+    /// <param name="auth">The authorization service</param>
+    /// <returns>The filtered collection</returns>
+    public static async Task<IEnumerable<SitemapItem>> ForUserAsync(this IEnumerable<SitemapItem> sitemap, ClaimsPrincipal user, IAuthorizationService auth)
+    {
+        var result = new Sitemap();
+
+        foreach (var item in sitemap)
+        {
+            if (item.Permissions.Count == 0)
+            {
+                result.Add(item);
+            }
+            else
+            {
+                var success = true;
+
+                foreach (var permission in item.Permissions)
+                {
+                    if (!(await auth.AuthorizeAsync(user, permission)).Succeeded)
+                    {
+                        success = false;
+                        break;
+                    }
+                }
+
+                if (success)
+                {
+                    result.Add(item);
+                }
+            }
+        }
+        return result;
     }
 }

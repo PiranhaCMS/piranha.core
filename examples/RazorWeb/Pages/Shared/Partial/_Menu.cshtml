@@ -1,3 +1,5 @@
+@inject Microsoft.AspNetCore.Authorization.IAuthorizationService Auth
+
 <nav class="navbar navbar-expand-md">
     <div class="navbar-brand">
         <a href="https://twitter.com/piranhacms" target="blank"><img src="~/assets/img/twitter.png"></a>
@@ -9,7 +11,7 @@
     <div class="navbar-collapse collapse" id="mobileNavbar">
         <ul class="justify-content-center navbar-nav mr-auto">
 
-            @foreach (var item in WebApp.Site.Sitemap)
+            @foreach (var item in await WebApp.Site.Sitemap.ForUserAsync(User, Auth))
             {
                 if (!item.IsHidden)
                 {
