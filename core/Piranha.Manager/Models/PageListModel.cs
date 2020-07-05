@@ -43,6 +43,7 @@ namespace Piranha.Manager.Models
             public bool IsCopy { get; set; }
             public bool IsDraft { get; set; }
             public bool IsExpanded { get; set; }
+            public bool IsRestricted { get; set; }
             public string Permalink { get; set; }
             public List<PageItem> Items { get; set; } = new List<PageItem>();
         }

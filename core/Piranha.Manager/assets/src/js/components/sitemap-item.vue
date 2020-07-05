@@ -9,11 +9,13 @@
                 </span>
                 <a v-if="piranha.permissions.pages.edit" :href="piranha.baseUrl + item.editUrl + item.id">
                     <span v-html="item.title"></span>
+                    <span v-if="item.isRestricted" class="icon-restricted text-secondary small"><i class="fas fa-lock"></i></span>
                     <span v-if="item.status" class="badge badge-info">{{ item.status }}</span>
                     <span v-if="item.isCopy" class="badge badge-warning">{{ piranha.resources.texts.copy }}</span>
                 </a>
                 <span v-else class="title">
                     <span v-html="item.title"></span>
+                    <span v-if="item.isRestricted" class="icon-restricted text-secondary small"><i class="fas fa-lock"></i></span>
                     <span v-if="item.status" class="badge badge-info">{{ item.status }}</span>
                     <span v-if="item.isCopy" class="badge badge-warning">{{ piranha.resources.texts.copy }}</span>
                 </span>
