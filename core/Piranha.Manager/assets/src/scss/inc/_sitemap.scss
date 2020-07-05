@@ -95,3 +95,13 @@
         }
     }
 }
+
+.icon-restricted {
+    i {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        margin-left: .5rem;
+        opacity: .5;
+    }
+}

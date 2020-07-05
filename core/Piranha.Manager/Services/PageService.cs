@@ -504,6 +504,7 @@ namespace Piranha.Manager.Services
                 EditUrl = "manager/page/edit/",
                 IsExpanded = level < expandedLevels,
                 IsCopy = item.OriginalPageId.HasValue,
+                IsRestricted = item.Permissions.Count > 0,
                 Permalink = item.Permalink
             };
 
