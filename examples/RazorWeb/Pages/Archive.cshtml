@@ -30,6 +30,10 @@
         return null;
     };
 }
+@section head
+{
+    @WebApp.MetaTags(Model.Data)
+}
 
 @Html.DisplayFor(m => m.Data.Hero)
 

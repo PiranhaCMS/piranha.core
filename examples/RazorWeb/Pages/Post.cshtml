@@ -3,6 +3,10 @@
 @{
     ViewData["Title"] = Model.Data.Title;
 }
+@section head
+{
+    @WebApp.MetaTags(Model.Data)
+}
 
 <div class="container body-container body-top">
     <div class="row justify-content-center">

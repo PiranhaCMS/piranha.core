@@ -18,10 +18,6 @@
 
     <title>@ViewBag.Title</title>
 
-    @if (Model is Piranha.Models.IMeta) {
-        <partial name="Partial/_Meta.cshtml" />
-    }
-
     @RenderSection("head", required: false)
 </head>
 <body>

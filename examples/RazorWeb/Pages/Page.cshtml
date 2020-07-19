@@ -3,6 +3,10 @@
 @{
     ViewData["Title"] = Model.Data.Title;
 }
+@section head
+{
+    @WebApp.MetaTags(Model.Data)
+}
 
 @Html.DisplayFor(m => m.Data.Hero)
 
