@@ -50,7 +50,7 @@ namespace Piranha.AspNetCore
             if (!IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/"))
             {
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
-                var segments = url.Substring(1).Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+                var segments = !string.IsNullOrEmpty(url) ? url.Substring(1).Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries) : new string[] { };
                 int pos = 0;
 
                 //
