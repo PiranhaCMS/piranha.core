@@ -114,9 +114,9 @@
     <value>The default page size when loading comments. Please note that this this can be overridden for specific pages.</value>
   </data>
   <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
-    <value>The number of days commenting should be open after publish date. A value of 0 means forever.</value>
+    <value>Die Anzahl der Tage nach dem Veröffentlichungsdatum, für die das Kommentieren geöffnet sein soll. Ein Wert von 0 bedeutet für immer.</value>
   </data>
   <data name="The page size for lists within the manager interface." xml:space="preserve">
-    <value>The page size for lists within the manager interface.</value>
+    <value>Die Seitengröße für Listen innerhalb der Manager-Schnittstelle.</value>
   </data>
 </root>
