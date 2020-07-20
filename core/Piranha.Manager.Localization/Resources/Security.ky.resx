@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Username is used by another user." xml:space="preserve">
+    <value>Username is used by another user.</value>
+  </data>
+  <data name="Email address is used by another user." xml:space="preserve">
+    <value>Email address is used by another user.</value>
+  </data>
+  <data name="The user could not be found." xml:space="preserve">
+    <value>The user could not be found.</value>
+  </data>
+  <data name="Email address is mandatory." xml:space="preserve">
+    <value>Email address is mandatory.</value>
+  </data>
+  <data name="The new passwords does not match." xml:space="preserve">
+    <value>The new passwords does not match.</value>
+  </data>
+  <data name="Password is mandatory when creating a new user." xml:space="preserve">
+    <value>Password is mandatory when creating a new user.</value>
+  </data>
+  <data name="The user could not be saved." xml:space="preserve">
+    <value>The user could not be saved.</value>
+  </data>
+  <data name="User is saved." xml:space="preserve">
+    <value>User is saved.</value>
+  </data>
+  <data name="Are you sure you want to delete this user?" xml:space="preserve">
+    <value>Are you sure you want to delete this user?</value>
+  </data>
+  <data name="The user has been deleted." xml:space="preserve">
+    <value>The user has been deleted.</value>
+  </data>
+  <data name="Can't delete yourself." xml:space="preserve">
+    <value>Can't delete yourself.</value>
+  </data>
+
+  <data name="New password" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="Confirm password" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+</root>
