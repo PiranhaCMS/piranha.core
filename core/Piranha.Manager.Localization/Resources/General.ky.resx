@@ -16,7 +16,7 @@
     <value>Add</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>All</value>
+    <value>Баары</value>
   </data>
   <data name="An error occurred" xml:space="preserve">
     <value>An error occurred</value>
@@ -28,19 +28,19 @@
     <value>Content</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Continue</value>
+    <value>Улантуу</value>
   </data>
   <data name="Content type" xml:space="preserve">
     <value>Content type</value>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Copy</value>
+    <value>Көчүрүү</value>
   </data>
   <data name="Culture" xml:space="preserve">
     <value>Culture</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Өчүрүү</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Description</value>
@@ -49,16 +49,16 @@
     <value>Details</value>
   </data>
   <data name="Dimensions" xml:space="preserve">
-    <value>Dimensions</value>
+    <value>Өлчөмдөр</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>Download</value>
   </data>
   <data name="Draft" xml:space="preserve">
-    <value>Draft</value>
+    <value>Кара барак</value>
   </data>
   <data name="Drafts" xml:space="preserve">
-    <value>Drafts</value>
+    <value>Кара барактар</value>
   </data>
   <data name="Email address" xml:space="preserve">
     <value>Email address</value>
@@ -73,7 +73,7 @@
     <value>Height</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>Өзгөртү</value>
   </data>
   <data name="Empty" xml:space="preserve">
     <value>Empty</value>
