@@ -61,7 +61,7 @@
     <value>Retrato</value>
   </data>
   <data name="Widescreen" xml:space="preserve">
-    <value>Widescreen</value>
+    <value>Tela Cheia</value>
   </data>
   <data name="Square" xml:space="preserve">
     <value>Quadrado</value>
