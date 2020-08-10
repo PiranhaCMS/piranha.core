@@ -282,8 +282,12 @@ namespace Piranha.Manager.Services
                 page.Title = model.Title;
                 page.NavigationTitle = model.NavigationTitle;
                 page.Slug = model.Slug;
+                page.MetaTitle = model.MetaTitle;
                 page.MetaKeywords = model.MetaKeywords;
                 page.MetaDescription = model.MetaDescription;
+                page.OgTitle = model.OgTitle;
+                page.OgDescription = model.OgDescription;
+                page.OgImage = model.OgImage;
                 page.PrimaryImage = model.PrimaryImage;
                 page.Excerpt = model.Excerpt;
                 page.IsHidden = model.IsHidden;
@@ -532,8 +536,12 @@ namespace Piranha.Manager.Services
                 Title = page.Title,
                 NavigationTitle = page.NavigationTitle,
                 Slug = page.Slug,
+                MetaTitle = page.MetaTitle,
                 MetaKeywords = page.MetaKeywords,
                 MetaDescription = page.MetaDescription,
+                OgTitle = page.OgTitle,
+                OgDescription = page.OgDescription,
+                OgImage = page.OgImage,
                 PrimaryImage = page.PrimaryImage,
                 Excerpt = page.Excerpt,
                 IsHidden = page.IsHidden,

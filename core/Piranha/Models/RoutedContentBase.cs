@@ -10,6 +10,7 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using Piranha.Extend.Fields;
 
 namespace Piranha.Models
 {
@@ -31,6 +32,12 @@ namespace Piranha.Models
         public string Permalink { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional meta title.
+        /// </summary>
+        [StringLength(128)]
+        public string MetaTitle { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional meta keywords.
         /// </summary>
         [StringLength(128)]
@@ -41,6 +48,23 @@ namespace Piranha.Models
         /// </summary>
         [StringLength(256)]
         public string MetaDescription { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional open graph title.
+        /// </summary>
+        [StringLength(128)]
+        public string OgTitle { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional open graph description.
+        /// </summary>
+        [StringLength(256)]
+        public string OgDescription { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional open graph image.
+        /// </summary>
+        public ImageField OgImage { get; set; } = new ImageField();
 
         /// <summary>
         /// Gets/sets the optional route used by the middleware.

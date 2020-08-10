@@ -54,12 +54,31 @@ public static class HtmlExtensions
         {
             // Generate open graph tags
             sb.AppendLine($"<meta name=\"og:type\" value=\"article\">");
-            sb.AppendLine($"<meta name=\"og:title\" value=\"{ content.Title }\">");
-            if (!string.IsNullOrWhiteSpace(content.MetaDescription))
+            sb.AppendLine($"<meta name=\"og:title\" value=\"{ OgTitle(content) }\">");
+            if (content.OgImage != null && content.OgImage.HasValue)
             {
-                sb.AppendLine($"<meta name=\"og:description\" value=\"{ content.MetaDescription }\">");
+                sb.AppendLine($"<meta name=\"og:image\" value=\"{ app.AbsoluteUrl(content.OgImage) }\">");
+            }
+            if (!string.IsNullOrWhiteSpace(OgDescription(content)))
+            {
+                sb.AppendLine($"<meta name=\"og:description\" value=\"{ OgDescription(content) }\">");
             }
         }
         return new HtmlString(sb.ToString());
+    }
+
+    private static string MetaTitle(IMeta content)
+    {
+        return !string.IsNullOrWhiteSpace(content.MetaTitle) ? content.MetaTitle : content.Title;
+    }
+
+    public static string OgTitle(IMeta content)
+    {
+        return !string.IsNullOrWhiteSpace(content.OgTitle) ? content.OgTitle : MetaTitle(content);
+    }
+
+    public static string OgDescription(IMeta content)
+    {
+        return !string.IsNullOrWhiteSpace(content.OgDescription) ? content.OgDescription : content.MetaDescription;
     }
 }
