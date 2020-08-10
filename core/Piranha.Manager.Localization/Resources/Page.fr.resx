@@ -19,7 +19,7 @@
     <value>Une erreur s'est produite lors de la suppression de la page</value>
   </data>
   <data name="Archive" xml:space="preserve">
-    <value>Archive</value>
+    <value>Archiver</value>
   </data>
   <data name="Detach page" xml:space="preserve">
     <value>Détacher la page</value>
@@ -37,7 +37,7 @@
     <value>Si la page doit être cachée dans le plan du site</value>
   </data>
   <data name="Meta title" xml:space="preserve">
-    <value>Meta title</value>
+    <value>Méta titre</value>
   </data>
   <data name="Meta keywords" xml:space="preserve">
     <value>Méta mots-clés</value>
@@ -46,10 +46,10 @@
     <value>Méta description</value>
   </data>
   <data name="Og title" xml:space="preserve">
-    <value>Og title</value>
+    <value>Titre Open Graph</value>
   </data>
   <data name="Og image" xml:space="preserve">
-    <value>Og image</value>
+    <value>Image Open Graph</value>
   </data>
   <data name="Og description" xml:space="preserve">
     <value>Og description</value>
