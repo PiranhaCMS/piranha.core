@@ -36,11 +36,23 @@
   <data name="If the page should be hidden in the sitemap" xml:space="preserve">
     <value>Chọn nếu muốn trang được ẩn trên bản đồ trang</value>
   </data>
+  <data name="Meta title" xml:space="preserve">
+    <value>Meta title</value>
+  </data>
   <data name="Meta keywords" xml:space="preserve">
     <value>Từ khóa Meta</value>
   </data>
   <data name="Meta description" xml:space="preserve">
     <value>Mô tả Meta</value>
+  </data>
+  <data name="Og title" xml:space="preserve">
+    <value>Og title</value>
+  </data>
+  <data name="Og image" xml:space="preserve">
+    <value>Og image</value>
+  </data>
+  <data name="Og description" xml:space="preserve">
+    <value>Og description</value>
   </data>
   <data name="Navigation title" xml:space="preserve">
     <value>Tiêu đề điều hướng</value>

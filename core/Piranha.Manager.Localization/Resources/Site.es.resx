@@ -24,6 +24,9 @@
   <data name="Hostnames" xml:space="preserve">
     <value>Nombres de host</value>
   </data>
+  <data name="Logo" xml:space="preserve">
+    <value>Logo</value>
+  </data>
   <data name="If this should be the default site of the installation." xml:space="preserve">
     <value>Este debería ser el sitio por defecto de la instalación.</value>
   </data>

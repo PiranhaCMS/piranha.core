@@ -36,11 +36,23 @@
   <data name="If the page should be hidden in the sitemap" xml:space="preserve">
     <value>If the page should be hidden in the sitemap</value>
   </data>
+  <data name="Meta title" xml:space="preserve">
+    <value>Meta title</value>
+  </data>
   <data name="Meta keywords" xml:space="preserve">
     <value>Meta keywords</value>
   </data>
   <data name="Meta description" xml:space="preserve">
     <value>Meta description</value>
+  </data>
+  <data name="Og title" xml:space="preserve">
+    <value>Og title</value>
+  </data>
+  <data name="Og image" xml:space="preserve">
+    <value>Og image</value>
+  </data>
+  <data name="Og description" xml:space="preserve">
+    <value>Og description</value>
   </data>
   <data name="Navigation title" xml:space="preserve">
     <value>Navigation title</value>

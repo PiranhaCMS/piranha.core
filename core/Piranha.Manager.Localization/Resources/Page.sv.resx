@@ -36,11 +36,23 @@
   <data name="If the page should be hidden in the sitemap" xml:space="preserve">
     <value>Om sidan ska vara dold i sidstrukturen</value>
   </data>
+  <data name="Meta title" xml:space="preserve">
+    <value>Titel</value>
+  </data>
   <data name="Meta keywords" xml:space="preserve">
     <value>Nyckelord</value>
   </data>
   <data name="Meta description" xml:space="preserve">
     <value>Beskrivning</value>
+  </data>
+  <data name="Og title" xml:space="preserve">
+    <value>OG-titel</value>
+  </data>
+  <data name="Og image" xml:space="preserve">
+    <value>OG-bild</value>
+  </data>
+  <data name="Og description" xml:space="preserve">
+    <value>OG-beskrivning</value>
   </data>
   <data name="Navigation title" xml:space="preserve">
     <value>Navigeringstitel</value>

@@ -24,6 +24,9 @@
   <data name="Hostnames" xml:space="preserve">
     <value>Domenenavn</value>
   </data>
+  <data name="Logo" xml:space="preserve">
+    <value>Logo</value>
+  </data>
   <data name="If this should be the default site of the installation." xml:space="preserve">
     <value>Om denne siden skal være standardsiden for denne installasjonen.</value>
   </data>
