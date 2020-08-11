@@ -318,7 +318,7 @@ namespace Piranha.Services
         {
             using (var scope = _services.CreateScope())
             {
-                return await InitFieldAsync(scope, field, managerInit);
+                return await InitFieldAsync(scope, field, managerInit).ConfigureAwait(false);
             }
         }
 

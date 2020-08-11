@@ -123,7 +123,7 @@ namespace Piranha.AspNetCore
 
                 foreach (var child in item.Items)
                 {
-                    var childUrls = await GetPageUrlsAsync(api, child, baseUrl);
+                    var childUrls = await GetPageUrlsAsync(api, child, baseUrl).ConfigureAwait(false);
 
                     if (childUrls.Count > 0)
                     {

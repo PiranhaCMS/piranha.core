@@ -134,7 +134,7 @@ namespace Piranha.Services
                 }
                 if (process != null)
                 {
-                    await process(content, model);
+                    await process(content, model).ConfigureAwait(false);
                 }
 
                 return model;

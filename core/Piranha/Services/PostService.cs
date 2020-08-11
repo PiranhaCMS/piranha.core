@@ -396,7 +396,7 @@ namespace Piranha.Services
             {
                 var blog = await _pageService.GetByIdAsync<PageInfo>(draft.BlogId).ConfigureAwait(false);
 
-                await OnLoadAsync(draft, blog, true);
+                await OnLoadAsync(draft, blog, true).ConfigureAwait(false);
             }
             return draft;
         }
@@ -813,7 +813,7 @@ namespace Piranha.Services
         /// <param name="id">The unique id</param>
         public async Task DeleteCommentAsync(Guid id)
         {
-            var model = await GetCommentByIdAsync(id);
+            var model = await GetCommentByIdAsync(id).ConfigureAwait(false);
 
             if (model != null)
             {
