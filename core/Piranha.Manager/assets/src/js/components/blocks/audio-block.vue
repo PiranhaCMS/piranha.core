@@ -43,7 +43,14 @@ export default {
         update: function (media) {
             if (media.type === "Audio") {
                 this.model.body.id = media.id;
-                this.model.body.media = media;
+                this.model.body.media = {
+                    id: media.id,
+                    folderId: media.folderId,
+                    type: media.type,
+                    filename: media.filename,
+                    contentType: media.contentType,
+                    publicUrl: media.publicUrl,
+                };
 
                 // Tell parent that title has been updated
                 this.$emit('update-title', {

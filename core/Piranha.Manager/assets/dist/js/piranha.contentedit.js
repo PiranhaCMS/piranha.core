@@ -374,7 +374,14 @@ Vue.component("audio-block", {
     update: function (media) {
       if (media.type === "Audio") {
         this.model.body.id = media.id;
-        this.model.body.media = media; // Tell parent that title has been updated
+        this.model.body.media = {
+          id: media.id,
+          folderId: media.folderId,
+          type: media.type,
+          filename: media.filename,
+          contentType: media.contentType,
+          publicUrl: media.publicUrl
+        }; // Tell parent that title has been updated
 
         this.$emit('update-title', {
           uid: this.uid,
@@ -817,7 +824,14 @@ Vue.component("video-block", {
     update: function (media) {
       if (media.type === "Video") {
         this.model.body.id = media.id;
-        this.model.body.media = media; // Tell parent that title has been updated
+        this.model.body.media = {
+          id: media.id,
+          folderId: media.folderId,
+          type: media.type,
+          filename: media.filename,
+          contentType: media.contentType,
+          publicUrl: media.publicUrl
+        }; // Tell parent that title has been updated
 
         this.$emit('update-title', {
           uid: this.uid,
