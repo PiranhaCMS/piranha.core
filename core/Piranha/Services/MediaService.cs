@@ -362,8 +362,6 @@ namespace Piranha.Services
         /// <returns>The public URL</returns>
         public async Task<string> EnsureVersionAsync(Guid id, int width, int? height = null)
         {
-            if (_processor == null) return null;
-
             var media = await GetByIdAsync(id).ConfigureAwait(false);
 
             return media != null ? await EnsureVersionAsync(media, width, height).ConfigureAwait(false) : null;
@@ -371,6 +369,10 @@ namespace Piranha.Services
 
         public async Task<string> EnsureVersionAsync(Media media, int width, int? height = null)
         {
+            // If no processor is registered, return the original url
+            if (_processor == null)
+                return GetPublicUrl(media);
+
             // Get the media type
             var type = App.MediaTypes.GetItem(media.Filename);
 

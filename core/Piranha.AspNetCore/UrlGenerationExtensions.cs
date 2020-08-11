@@ -283,6 +283,10 @@ public static class UrlGenerationExtensions
     /// <returns>The url</returns>
     public static string Url(this IApplicationService app, string slug)
     {
+        // Make sure we got a slug
+        if (slug == null)
+            return null;
+
         // If this is an external url, return it
         if (slug.ToLower().StartsWith("http"))
         {
