@@ -83,7 +83,7 @@ namespace Piranha.Azure
             if (!await container.ExistsAsync())
             {
                 await container.CreateAsync();
-                await container.SetPermissionsAsync(new BlobContainerPermissions()
+                await container.SetPermissionsAsync(new BlobContainerPermissions
                 {
                     PublicAccess = BlobContainerPublicAccessType.Blob
                 });

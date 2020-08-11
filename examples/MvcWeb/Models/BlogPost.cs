@@ -23,7 +23,7 @@ namespace MvcWeb.Models
         /// <summary>
         /// Gets/sets the heading.
         /// </summary>
-        [Region()]
+        [Region]
         public Regions.Hero Hero { get; set; }
     }
 }

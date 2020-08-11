@@ -9,7 +9,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -339,16 +338,6 @@ namespace Piranha.Manager.Controllers
 
                 return model;
             }
-            /*
-            catch
-            {
-                return new StatusMessage
-                {
-                    Type = StatusMessage.Error,
-                    Body = "An error occured while saving the page"
-                };
-            }
-            */
 
             var ret = await _service.GetById(model.Id);
             ret.Status = new StatusMessage

@@ -154,7 +154,7 @@ namespace Piranha.Repositories
 
             if (media == null)
             {
-                media = new Media()
+                media = new Media
                 {
                     Id = model.Id,
                     Created = DateTime.Now

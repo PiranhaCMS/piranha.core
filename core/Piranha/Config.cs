@@ -492,7 +492,6 @@ namespace Piranha
         /// </summary>
         public void Dispose()
         {
-            GC.SuppressFinalize(this);
         }
     }
 }

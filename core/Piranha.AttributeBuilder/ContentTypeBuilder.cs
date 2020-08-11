@@ -69,7 +69,6 @@ namespace Piranha.AttributeBuilder
                     if (siteAttr != null)
                     {
                         _siteTypes.AddType(type);
-                        continue;
                     }
                 }
             }

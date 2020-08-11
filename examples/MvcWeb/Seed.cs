@@ -49,7 +49,7 @@ namespace MvcWeb
                 {
                     using (var stream = File.OpenRead("seed/" + image.filename))
                     {
-                        await api.Media.SaveAsync(new Piranha.Models.StreamMediaContent()
+                        await api.Media.SaveAsync(new Piranha.Models.StreamMediaContent
                         {
                             Id = image.id,
                             Filename = image.filename,

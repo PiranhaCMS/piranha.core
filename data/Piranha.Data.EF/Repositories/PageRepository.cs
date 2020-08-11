@@ -219,9 +219,9 @@ namespace Piranha.Repositories
             var dest = model.ParentId == parentId ? source : await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == parentId).ToListAsync().ConfigureAwait(false);
 
             // Remove the old position for the page
-            affected.AddRange(MovePages(source, model.Id, model.SiteId, model.ParentId, model.SortOrder + 1, false));
+            affected.AddRange(MovePages(source, model.Id, model.SiteId, model.SortOrder + 1, false));
             // Add room for the new position of the page
-            affected.AddRange(MovePages(dest, model.Id, model.SiteId, parentId, sortOrder, true));
+            affected.AddRange(MovePages(dest, model.Id, model.SiteId, sortOrder, true));
 
             // Update the position of the current page
             var page = await _db.Pages
@@ -405,7 +405,7 @@ namespace Piranha.Repositories
                 var siblings = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync().ConfigureAwait(false);
 
                 // Move all remaining pages after this page in the site structure.
-                affected.AddRange(MovePages(siblings, id, model.SiteId, model.ParentId, model.SortOrder + 1, false));
+                affected.AddRange(MovePages(siblings, id, model.SiteId, model.SortOrder + 1, false));
 
                 await _db.SaveChangesAsync().ConfigureAwait(false);
             }
@@ -581,7 +581,7 @@ namespace Piranha.Repositories
 
                             // Make room for the new page
                             var dest = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync().ConfigureAwait(false);
-                            affected.AddRange(MovePages(dest, page.Id, model.SiteId, model.ParentId, model.SortOrder, true));
+                            affected.AddRange(MovePages(dest, page.Id, model.SiteId, model.SortOrder, true));
                         }
                     }
                     else
@@ -593,9 +593,9 @@ namespace Piranha.Repositories
                             var dest = page.ParentId == model.ParentId ? source : await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync().ConfigureAwait(false);
 
                             // Remove the old position for the page
-                            affected.AddRange(MovePages(source, page.Id, page.SiteId, page.ParentId, page.SortOrder + 1, false));
+                            affected.AddRange(MovePages(source, page.Id, page.SiteId, page.SortOrder + 1, false));
                             // Add room for the new position of the page
-                            affected.AddRange(MovePages(dest, page.Id, model.SiteId, model.ParentId, model.SortOrder, true));
+                            affected.AddRange(MovePages(dest, page.Id, model.SiteId, model.SortOrder, true));
                         }
                     }
 
@@ -680,7 +680,7 @@ namespace Piranha.Repositories
 
                         // Make room for the new page
                         var dest = await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync().ConfigureAwait(false);
-                        affected.AddRange(MovePages(dest, page.Id, model.SiteId, model.ParentId, model.SortOrder, true));
+                        affected.AddRange(MovePages(dest, page.Id, model.SiteId, model.SortOrder, true));
                     }
                 }
                 else
@@ -692,9 +692,9 @@ namespace Piranha.Repositories
                         var dest = page.ParentId == model.ParentId ? source : await _db.Pages.Where(p => p.SiteId == model.SiteId && p.ParentId == model.ParentId).ToListAsync().ConfigureAwait(false);
 
                         // Remove the old position for the page
-                        affected.AddRange(MovePages(source, page.Id, page.SiteId, page.ParentId, page.SortOrder + 1, false));
+                        affected.AddRange(MovePages(source, page.Id, page.SiteId, page.SortOrder + 1, false));
                         // Add room for the new position of the page
-                        affected.AddRange(MovePages(dest, page.Id, model.SiteId, model.ParentId, model.SortOrder, true));
+                        affected.AddRange(MovePages(dest, page.Id, model.SiteId, model.SortOrder, true));
                     }
                     page.LastModified = DateTime.Now;
                 }
@@ -919,8 +919,6 @@ namespace Piranha.Repositories
             {
                 if (page.Blocks.Count > 0)
                 {
-                    //model.Blocks = _contentService.TransformBlocks<PageBlock>(page.Blocks.OrderBy(b => b.SortOrder));
-
                     foreach (var pageBlock in page.Blocks.OrderBy(b => b.SortOrder))
                     {
                         if (pageBlock.Block.ParentId.HasValue)
@@ -943,10 +941,9 @@ namespace Piranha.Repositories
         /// <param name="pages">The pages</param>
         /// <param name="pageId">The id of the page that is moved</param>
         /// <param name="siteId">The site id</param>
-        /// <param name="parentId">The parent id</param>
         /// <param name="sortOrder">The sort order</param>
         /// <param name="increase">If sort order should be increase or decreased</param>
-        private IEnumerable<Guid> MovePages(IList<Page> pages, Guid pageId, Guid siteId, Guid? parentId, int sortOrder, bool increase)
+        private IEnumerable<Guid> MovePages(IList<Page> pages, Guid pageId, Guid siteId, int sortOrder, bool increase)
         {
             var affected = pages.Where(p => p.SortOrder >= sortOrder).ToList();
 
