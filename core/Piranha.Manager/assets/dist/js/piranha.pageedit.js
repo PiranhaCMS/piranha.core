@@ -15,8 +15,15 @@ piranha.pageedit = new Vue({
         title: null,
         navigationTitle: null,
         slug: null,
+        metaTitle: null,
         metaKeywords: null,
         metaDescription: null,
+        ogTitle: null,
+        ogDescription: null,
+        ogImage: {
+            id: null,
+            media: null
+        },
         excerpt: null,
         isHidden: false,
         published: null,
@@ -91,8 +98,12 @@ piranha.pageedit = new Vue({
             this.title = model.title;
             this.navigationTitle = model.navigationTitle;
             this.slug = model.slug;
+            this.metaTitle = model.metaTitle;
             this.metaKeywords = model.metaKeywords;
             this.metaDescription = model.metaDescription;
+            this.ogTitle = model.ogTitle;
+            this.ogDescription = model.ogDescription;
+            this.ogImage = model.ogImage;
             this.excerpt = model.excerpt;
             this.isHidden = model.isHidden;
             this.published = model.published;
@@ -216,8 +227,14 @@ piranha.pageedit = new Vue({
                 title: self.title,
                 navigationTitle: self.navigationTitle,
                 slug: self.slug,
+                metaTitle: self.metaTitle,
                 metaKeywords: self.metaKeywords,
                 metaDescription: self.metaDescription,
+                ogTitle: self.ogTitle,
+                ogDescription: self.ogDescription,
+                ogImage: {
+                    id: self.ogImage.id
+                },
                 excerpt: self.excerpt,
                 isHidden: self.isHidden,
                 published: self.published,

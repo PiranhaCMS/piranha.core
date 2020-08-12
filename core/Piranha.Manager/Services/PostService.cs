@@ -267,8 +267,12 @@ namespace Piranha.Manager.Services
                 post.TypeId = model.TypeId;
                 post.Title = model.Title;
                 post.Slug = model.Slug;
+                post.MetaTitle = model.MetaTitle;
                 post.MetaKeywords = model.MetaKeywords;
                 post.MetaDescription = model.MetaDescription;
+                post.OgTitle = model.OgTitle;
+                post.OgDescription = model.OgDescription;
+                post.OgImage = model.OgImage;
                 post.Excerpt = model.Excerpt;
                 post.Published = !string.IsNullOrEmpty(model.Published) ? DateTime.Parse(model.Published) : (DateTime?)null;
                 post.RedirectUrl = model.RedirectUrl;
@@ -448,8 +452,12 @@ namespace Piranha.Manager.Services
                 PrimaryImage = post.PrimaryImage,
                 Title = post.Title,
                 Slug = post.Slug,
+                MetaTitle = post.MetaTitle,
                 MetaKeywords = post.MetaKeywords,
                 MetaDescription = post.MetaDescription,
+                OgTitle = post.OgTitle,
+                OgDescription = post.OgDescription,
+                OgImage = post.OgImage,
                 Excerpt = post.Excerpt,
                 Published = post.Published?.ToString("yyyy-MM-dd HH:mm"),
                 RedirectUrl = post.RedirectUrl,

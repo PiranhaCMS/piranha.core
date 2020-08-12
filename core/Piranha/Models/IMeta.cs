@@ -8,6 +8,8 @@
  *
  */
 
+using Piranha.Extend.Fields;
+
 namespace Piranha.Models
 {
     public interface IMeta
@@ -18,6 +20,11 @@ namespace Piranha.Models
         string Title { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional meta title.
+        /// </summary>
+        string MetaTitle { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional meta keywords.
         /// </summary>
         string MetaKeywords { get; set; }
@@ -26,5 +33,20 @@ namespace Piranha.Models
         /// Gets/sets the optional meta description.
         /// </summary>
         string MetaDescription { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional open graph title.
+        /// </summary>
+        string OgTitle { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional open graph description.
+        /// </summary>
+        string OgDescription { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional open graph image.
+        /// </summary>
+        ImageField OgImage { get; set; }
     }
 }

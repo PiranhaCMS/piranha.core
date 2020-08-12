@@ -231,8 +231,11 @@ namespace Piranha
             mb.Entity<Data.Page>().Property(p => p.Title).HasMaxLength(128).IsRequired();
             mb.Entity<Data.Page>().Property(p => p.NavigationTitle).HasMaxLength(128);
             mb.Entity<Data.Page>().Property(p => p.Slug).HasMaxLength(128).IsRequired();
+            mb.Entity<Data.Page>().Property(p => p.MetaTitle).HasMaxLength(128);
             mb.Entity<Data.Page>().Property(p => p.MetaKeywords).HasMaxLength(128);
             mb.Entity<Data.Page>().Property(p => p.MetaDescription).HasMaxLength(256);
+            mb.Entity<Data.Page>().Property(p => p.OgTitle).HasMaxLength(128);
+            mb.Entity<Data.Page>().Property(p => p.OgDescription).HasMaxLength(256);
             mb.Entity<Data.Page>().Property(p => p.Route).HasMaxLength(256);
             mb.Entity<Data.Page>().Property(p => p.RedirectUrl).HasMaxLength(256);
             mb.Entity<Data.Page>().Property(p => p.EnableComments).HasDefaultValue(false);
@@ -271,8 +274,11 @@ namespace Piranha
             mb.Entity<Data.Post>().Property(p => p.PostTypeId).HasMaxLength(64).IsRequired();
             mb.Entity<Data.Post>().Property(p => p.Title).HasMaxLength(128).IsRequired();
             mb.Entity<Data.Post>().Property(p => p.Slug).HasMaxLength(128).IsRequired();
+            mb.Entity<Data.Post>().Property(p => p.MetaTitle).HasMaxLength(128);
             mb.Entity<Data.Post>().Property(p => p.MetaKeywords).HasMaxLength(128);
             mb.Entity<Data.Post>().Property(p => p.MetaDescription).HasMaxLength(256);
+            mb.Entity<Data.Post>().Property(p => p.OgTitle).HasMaxLength(128);
+            mb.Entity<Data.Post>().Property(p => p.OgDescription).HasMaxLength(256);
             mb.Entity<Data.Post>().Property(p => p.Route).HasMaxLength(256);
             mb.Entity<Data.Post>().Property(p => p.RedirectUrl).HasMaxLength(256);
             mb.Entity<Data.Post>().Property(p => p.EnableComments).HasDefaultValue(false);

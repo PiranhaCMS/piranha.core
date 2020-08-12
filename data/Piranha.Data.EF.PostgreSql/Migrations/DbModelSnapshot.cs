@@ -313,7 +313,22 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasColumnType("character varying(128)")
                         .HasMaxLength(128);
 
+                    b.Property<string>("MetaTitle")
+                        .HasColumnType("character varying(128)")
+                        .HasMaxLength(128);
+
                     b.Property<string>("NavigationTitle")
+                        .HasColumnType("character varying(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("OgDescription")
+                        .HasColumnType("character varying(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<Guid>("OgImageId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("OgTitle")
                         .HasColumnType("character varying(128)")
                         .HasMaxLength(128);
 
@@ -605,6 +620,21 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasMaxLength(256);
 
                     b.Property<string>("MetaKeywords")
+                        .HasColumnType("character varying(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("MetaTitle")
+                        .HasColumnType("character varying(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("OgDescription")
+                        .HasColumnType("character varying(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<Guid>("OgImageId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("OgTitle")
                         .HasColumnType("character varying(128)")
                         .HasMaxLength(128);
 

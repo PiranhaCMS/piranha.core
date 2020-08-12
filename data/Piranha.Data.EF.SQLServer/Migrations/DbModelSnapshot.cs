@@ -313,7 +313,22 @@ namespace Piranha.Data.EF.SQLServer.Migrations
                         .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
+                    b.Property<string>("MetaTitle")
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
                     b.Property<string>("NavigationTitle")
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("OgDescription")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<Guid>("OgImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("OgTitle")
                         .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
@@ -605,6 +620,21 @@ namespace Piranha.Data.EF.SQLServer.Migrations
                         .HasMaxLength(256);
 
                     b.Property<string>("MetaKeywords")
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("MetaTitle")
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("OgDescription")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<Guid>("OgImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("OgTitle")
                         .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 

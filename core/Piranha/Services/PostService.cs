@@ -946,13 +946,18 @@ namespace Piranha.Services
 
                 if (model.PrimaryImage.Id.HasValue)
                 {
-                    model.PrimaryImage.Media = await _mediaService.GetByIdAsync(model.PrimaryImage.Id.Value).ConfigureAwait(false);
+                    await _factory.InitFieldAsync(model.PrimaryImage).ConfigureAwait(false);
+                }
 
-                    // Clear id if the image has been deleted
-                    if (model.PrimaryImage.Media == null)
-                    {
-                        model.PrimaryImage.Id = null;
-                    }
+                // Initialize og image
+                if (model.OgImage == null)
+                {
+                    model.OgImage = new Extend.Fields.ImageField();
+                }
+
+                if (model.OgImage.Id.HasValue)
+                {
+                    await _factory.InitFieldAsync(model.OgImage).ConfigureAwait(false);
                 }
 
                 App.Hooks.OnLoad(model);

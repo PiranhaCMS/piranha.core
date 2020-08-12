@@ -11,8 +11,15 @@ piranha.postedit = new Vue({
         typeId: null,
         title: null,
         slug: null,
+        metaTitle: null,
         metaKeywords: null,
         metaDescription: null,
+        ogTitle: null,
+        ogDescription: null,
+        ogImage: {
+            id: null,
+            media: null
+        },
         excerpt: null,
         published: null,
         redirectUrl: null,
@@ -85,8 +92,12 @@ piranha.postedit = new Vue({
             this.typeId = model.typeId;
             this.title = model.title;
             this.slug = model.slug;
+            this.metaTitle = model.metaTitle;
             this.metaKeywords = model.metaKeywords;
             this.metaDescription = model.metaDescription;
+            this.ogTitle = model.ogTitle;
+            this.ogDescription = model.ogDescription;
+            this.ogImage = model.ogImage;
             this.excerpt = model.excerpt;
             this.published = model.published;
             this.redirectUrl = model.redirectUrl;
@@ -189,8 +200,14 @@ piranha.postedit = new Vue({
                 },
                 title: self.title,
                 slug: self.slug,
+                metaTitle: self.metaTitle,
                 metaKeywords: self.metaKeywords,
                 metaDescription: self.metaDescription,
+                ogTitle: self.ogTitle,
+                ogDescription: self.ogDescription,
+                ogImage: {
+                    id: self.ogImage.id
+                },
                 excerpt: self.excerpt,
                 published: self.published,
                 redirectUrl: self.redirectUrl,

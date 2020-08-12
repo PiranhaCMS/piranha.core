@@ -35,6 +35,11 @@ namespace Piranha.Manager.Models
         public string Slug { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional meta title.
+        /// </summary>
+        public string MetaTitle { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional meta keywords.
         /// </summary>
         public string MetaKeywords { get; set; }
@@ -43,6 +48,21 @@ namespace Piranha.Manager.Models
         /// Gets/sets the optional meta description.
         /// </summary>
         public string MetaDescription { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional og title.
+        /// </summary>
+        public string OgTitle { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional og description.
+        /// </summary>
+        public string OgDescription { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional og image.
+        /// </summary>
+        public ImageField OgImage { get; set; }
 
         /// <summary>
         /// Gets/sets the optional excerpt.
