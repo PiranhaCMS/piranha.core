@@ -54,7 +54,7 @@ namespace Piranha.WebApi
         /// <summary>
         /// Gets the icon url.
         /// </summary>
-        public string IconUrl => "http://piranhacms.org/assets/twitter-shield.png";
+        public string IconUrl => "https://piranhacms.org/assets/twitter-shield.png";
 
         /// <summary>
         /// Gets/sets if anonymous users should be able to access

@@ -114,7 +114,7 @@ namespace Piranha.Manager
         /// <summary>
         /// Gets the icon url.
         /// </summary>
-        public string IconUrl => "http://piranhacms.org/assets/twitter-shield.png";
+        public string IconUrl => "https://piranhacms.org/assets/twitter-shield.png";
 
         /// <summary>
         /// The assembly.
