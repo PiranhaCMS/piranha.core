@@ -27,15 +27,22 @@ namespace Piranha.Tests
     {
         protected IStorage _storage = new Local.FileStorage("uploads/", "~/uploads/");
         protected IImageProcessor _processor = new ImageSharpProcessor();
-        protected IServiceProvider _services = new ServiceCollection()
-            .AddMemoryCache()
-            .AddDistributedMemoryCache()
-            .AddPiranhaFileStorage()
-            .BuildServiceProvider();
+        protected IServiceProvider _services = CreateServiceCollection().BuildServiceProvider();
         protected ICache _cache;
 
         public abstract Task InitializeAsync();
         public abstract Task DisposeAsync();
+
+        protected static IServiceCollection CreateServiceCollection()
+        {
+            return new ServiceCollection()
+                .AddPiranhaEF<SQLiteDb>(db =>
+                    db.UseSqlite("Filename=./piranha.tests.db"))
+                .AddPiranha()
+                .AddMemoryCache()
+                .AddDistributedMemoryCache()
+                .AddPiranhaFileStorage();
+        }
 
         /// <summary>
         /// Gets the test context.

@@ -110,7 +110,7 @@ namespace Piranha.Tests.Services
 
         public override async Task InitializeAsync()
         {
-            _services = new ServiceCollection()
+            _services = CreateServiceCollection()
                 .AddSingleton<IMyService, MyService>()
                 .BuildServiceProvider();
 

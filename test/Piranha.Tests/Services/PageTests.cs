@@ -12,11 +12,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Piranha.AttributeBuilder;
+using Piranha.Data.EF.SQLite;
 using Piranha.Extend;
 using Piranha.Extend.Fields;
 using Piranha.Models;
@@ -127,7 +129,7 @@ namespace Piranha.Tests.Services
 
         public override async Task InitializeAsync()
         {
-            _services = new ServiceCollection()
+            _services = CreateServiceCollection()
                 .AddSingleton<IMyService, MyService>()
                 .BuildServiceProvider();
 
