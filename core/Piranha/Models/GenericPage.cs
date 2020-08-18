@@ -21,13 +21,6 @@ namespace Piranha.Models
     public class GenericPage<T> : PageBase where T : GenericPage<T>
     {
         /// <summary>
-        /// Gets if this is the startpage of the site.
-        /// </summary>
-        public bool IsStartPage {
-            get { return !ParentId.HasValue && SortOrder == 0; }
-        }
-
-        /// <summary>
         /// Creates a new page model using the given page type id.
         /// </summary>
         /// <param name="api">The current api</param>

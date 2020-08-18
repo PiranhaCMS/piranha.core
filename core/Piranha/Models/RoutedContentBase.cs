@@ -67,6 +67,16 @@ namespace Piranha.Models
         public ImageField OgImage { get; set; } = new ImageField();
 
         /// <summary>
+        /// Gets/sets the optional primary image.
+        /// </summary>
+        public ImageField PrimaryImage { get; set; } = new ImageField();
+
+        /// <summary>
+        /// Gets/sets the optional excerpt.
+        /// </summary>
+        public string Excerpt { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional route used by the middleware.
         /// </summary>
         [StringLength(256)]

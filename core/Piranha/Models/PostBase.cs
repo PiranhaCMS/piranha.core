@@ -34,16 +34,6 @@ namespace Piranha.Models
         public Taxonomy Category { get; set; }
 
         /// <summary>
-        /// Gets/sets the optional primary image.
-        /// </summary>
-        public ImageField PrimaryImage { get; set; } = new ImageField();
-
-        /// <summary>
-        /// Gets/sets the optional excerpt.
-        /// </summary>
-        public string Excerpt { get; set; }
-
-        /// <summary>
         /// Gets/sets the optional redirect.
         /// </summary>
         [StringLength(256)]

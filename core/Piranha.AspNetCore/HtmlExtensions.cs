@@ -53,11 +53,24 @@ public static class HtmlExtensions
         if (opengraph)
         {
             // Generate open graph tags
-            sb.AppendLine($"<meta name=\"og:type\" value=\"article\">");
+            if (content is PageBase page && page.IsStartPage)
+            {
+                sb.AppendLine($"<meta name=\"og:type\" value=\"website\">");
+            }
+            else
+            {
+                sb.AppendLine($"<meta name=\"og:type\" value=\"article\">");
+            }
             sb.AppendLine($"<meta name=\"og:title\" value=\"{ OgTitle(content) }\">");
             if (content.OgImage != null && content.OgImage.HasValue)
             {
                 sb.AppendLine($"<meta name=\"og:image\" value=\"{ app.AbsoluteUrl(content.OgImage) }\">");
+            }
+            else if (content is RoutedContentBase contentBase && contentBase.PrimaryImage != null && contentBase.PrimaryImage.HasValue)
+            {
+                // If there's no OG image specified but we have a primary image,
+                // default to the primary image.
+                sb.AppendLine($"<meta name=\"og:image\" value=\"{ app.AbsoluteUrl(contentBase.PrimaryImage) }\">");
             }
             if (!string.IsNullOrWhiteSpace(OgDescription(content)))
             {

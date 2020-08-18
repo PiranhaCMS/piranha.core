@@ -37,16 +37,6 @@ namespace Piranha.Models
         public int SortOrder { get; set; }
 
         /// <summary>
-        /// Gets/sets the optional primary image.
-        /// </summary>
-        public ImageField PrimaryImage { get; set; } = new ImageField();
-
-        /// <summary>
-        /// Gets/sets the optional excerpt.
-        /// </summary>
-        public string Excerpt { get; set; }
-
-        /// <summary>
         /// Gets/sets the navigation title.
         /// </summary>
         [StringLength(128)]
@@ -100,5 +90,11 @@ namespace Piranha.Models
         /// Checks if comments are open for this page.
         /// </summary>
         public bool IsCommentsOpen => EnableComments && Published.HasValue && (CloseCommentsAfterDays == 0 || Published.Value.AddDays(CloseCommentsAfterDays) > DateTime.Now);
+
+        /// <summary>
+        /// Gets if this is the startpage of the site.
+        /// </summary>
+        public bool IsStartPage => !ParentId.HasValue && SortOrder == 0;
+
     }
 }
