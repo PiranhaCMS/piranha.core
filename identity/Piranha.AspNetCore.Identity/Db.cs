@@ -83,7 +83,7 @@ namespace Piranha.AspNetCore.Identity
         }
 
         /// <summary>
-        ///     Seeds the default data.
+        /// Seeds the default data.
         /// </summary>
         private void Seed()
         {
