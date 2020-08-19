@@ -38,7 +38,7 @@ namespace Piranha.Runtime
                 var item = Activator.CreateInstance<TItem>();
 
                 item.Type = type;
-                item.TypeName = type.FullName;
+                item.TypeName = type.ToString();
 
                 _items.Add(OnRegister<TValue>(item));
             }
@@ -74,6 +74,16 @@ namespace Piranha.Runtime
         /// <returns>The item, null if not found</returns>
         public virtual TItem GetByType(string typeName)
         {
+            // Temporary hotfix for poorly formatted CLR types
+            // for generic types
+            var versionIndex = typeName.IndexOf(",");
+            if (versionIndex != -1)
+            {
+                var fixedName = typeName.Substring(0, versionIndex).Replace("[[", "[");
+
+                return _items.SingleOrDefault(i => i.TypeName.StartsWith(fixedName));
+            }
+
             return _items.SingleOrDefault(i => i.TypeName == typeName);
         }
 
