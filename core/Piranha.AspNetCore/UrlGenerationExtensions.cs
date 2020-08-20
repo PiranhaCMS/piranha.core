@@ -87,28 +87,6 @@ public static class UrlGenerationExtensions
     }
 
     /// <summary>
-    /// Generates an absolute url for the given image block.
-    /// </summary>
-    /// <param name="app">The application service</param>
-    /// <param name="block">The block</param>
-    /// <returns>The url</returns>
-    public static string AbsoluteUrl(this IApplicationService app, ImageBlock block)
-    {
-        return $"{ AbsoluteUrlStart(app) }{ Url(app, block) }";
-    }
-
-    /// <summary>
-    /// Generates an absolute url for the given media field.
-    /// </summary>
-    /// <param name="app">The application service</param>
-    /// <param name="field">The field</param>
-    /// <returns>The url</returns>
-    public static string AbsoluteUrl(this IApplicationService app, MediaField field)
-    {
-        return $"{ AbsoluteUrlStart(app) }{ Url(app, field) }";
-    }
-
-    /// <summary>
     /// Generates an absolute url for the given taxonomy in the
     /// current archive.
     /// </summary>
@@ -226,36 +204,6 @@ public static class UrlGenerationExtensions
     }
 
     /// <summary>
-    /// Generates a local url for the given image block.
-    /// </summary>
-    /// <param name="app">The application service</param>
-    /// <param name="block">The block</param>
-    /// <returns>The url</returns>
-    public static string Url(this IApplicationService app, ImageBlock block)
-    {
-        if (block != null)
-        {
-            return Url(app, block.Body);
-        }
-        return "";
-    }
-
-    /// <summary>
-    /// Generates a local url for the given media field.
-    /// </summary>
-    /// <param name="app">The application service</param>
-    /// <param name="field">The field</param>
-    /// <returns>The url</returns>
-    public static string Url(this IApplicationService app, MediaField field)
-    {
-        if (field != null && field.Media != null)
-        {
-            return Url(app, field.Media.PublicUrl);
-        }
-        return "";
-    }
-
-    /// <summary>
     /// Generates a local url for the given taxonomy in the
     /// current archive.
     /// </summary>
@@ -283,6 +231,72 @@ public static class UrlGenerationExtensions
     /// <returns>The url</returns>
     public static string Url(this IApplicationService app, string slug)
     {
+        return GenerateUrl(app, slug, true);
+    }
+
+    /// <summary>
+    /// Generates a local url for the given content.
+    /// </summary>
+    /// <param name="app">The current application service</param>
+    /// <param name="url">The content url</param>
+    /// <returns>The url</returns>
+    public static string ContentUrl(this IApplicationService app, string url)
+    {
+        return GenerateUrl(app, url, false);
+    }
+
+    /// <summary>
+    /// Generates an absolute url for the given slug.
+    /// </summary>
+    /// <param name="app">The current application service</param>
+    /// <param name="slug">The slug</param>
+    /// <returns>The url</returns>
+    public static string AbsoluteUrl(this IApplicationService app, string slug)
+    {
+        return $"{ AbsoluteUrlStart(app) }{ Url(app, slug) }";
+    }
+
+    /// <summary>
+    /// Generates an absolute url for the given content.
+    /// </summary>
+    /// <param name="app">The current application service</param>
+    /// <param name="url">The content url</param>
+    /// <returns>The url</returns>
+    public static string AbsoluteContentUrl(this IApplicationService app, string url)
+    {
+        return $"{ AbsoluteUrlStart(app) }{ ContentUrl(app, url) }";
+    }
+
+    /// <summary>
+    /// Generates the scheme://host:port segment of the url from
+    /// the current application request.
+    /// </summary>
+    /// <param name="app">The current application service</param>
+    /// <returns>The url segment</returns>
+    private static string AbsoluteUrlStart(IApplicationService app)
+    {
+        var sb = new StringBuilder();
+
+        sb.Append(app.Request.Scheme);
+        sb.Append("://");
+        sb.Append(app.Request.Host);
+        if (app.Request.Port.HasValue)
+        {
+            sb.Append(":");
+            sb.Append(app.Request.Port.ToString());
+        }
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// Generates a local url for the given slug.
+    /// </summary>
+    /// <param name="app">The current application service</param>
+    /// <param name="slug">The slug</param>
+    /// <param name="prefix">If site prefix should be appended</param>
+    /// <returns>The url</returns>
+    private static string GenerateUrl(this IApplicationService app, string slug, bool prefix)
+    {
         // Make sure we got a slug
         if (slug == null)
             return null;
@@ -306,42 +320,10 @@ public static class UrlGenerationExtensions
         }
 
         // Append site prefix, if available
-        if (!string.IsNullOrEmpty(app.Site.SitePrefix))
+        if (prefix && !string.IsNullOrEmpty(app.Site.SitePrefix))
         {
             slug = $"/{ app.Site.SitePrefix }{ slug }";
         }
         return slug;
-    }
-
-    /// <summary>
-    /// Generates an absolute url for the given slug.
-    /// </summary>
-    /// <param name="app">The current application service</param>
-    /// <param name="slug">The slug</param>
-    /// <returns>The url</returns>
-    public static string AbsoluteUrl(this IApplicationService app, string slug)
-    {
-        return $"{ AbsoluteUrlStart(app) }{ Url(app, slug) }";
-    }
-
-    /// <summary>
-    /// Generates the scheme://host:port segment of the url from
-    /// the current application request.
-    /// </summary>
-    /// <param name="app">The current application service</param>
-    /// <returns>The url segment</returns>
-    private static string AbsoluteUrlStart(IApplicationService app)
-    {
-        var sb = new StringBuilder();
-
-        sb.Append(app.Request.Scheme);
-        sb.Append("://");
-        sb.Append(app.Request.Host);
-        if (app.Request.Port.HasValue)
-        {
-            sb.Append(":");
-            sb.Append(app.Request.Port.ToString());
-        }
-        return sb.ToString();
     }
 }

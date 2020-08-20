@@ -64,13 +64,13 @@ public static class HtmlExtensions
             sb.AppendLine($"<meta name=\"og:title\" value=\"{ OgTitle(content) }\">");
             if (content.OgImage != null && content.OgImage.HasValue)
             {
-                sb.AppendLine($"<meta name=\"og:image\" value=\"{ app.AbsoluteUrl(content.OgImage) }\">");
+                sb.AppendLine($"<meta name=\"og:image\" value=\"{ app.AbsoluteContentUrl(content.OgImage) }\">");
             }
             else if (content is RoutedContentBase contentBase && contentBase.PrimaryImage != null && contentBase.PrimaryImage.HasValue)
             {
                 // If there's no OG image specified but we have a primary image,
                 // default to the primary image.
-                sb.AppendLine($"<meta name=\"og:image\" value=\"{ app.AbsoluteUrl(contentBase.PrimaryImage) }\">");
+                sb.AppendLine($"<meta name=\"og:image\" value=\"{ app.AbsoluteContentUrl(contentBase.PrimaryImage) }\">");
             }
             if (!string.IsNullOrWhiteSpace(OgDescription(content)))
             {

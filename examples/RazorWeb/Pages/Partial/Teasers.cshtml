@@ -14,7 +14,7 @@
                             <h3>@teaser.Title.Value</h3>
                             @if (teaser.Image.HasValue)
                             {
-                                <img src="@WebApp.Url(WebApp.Media.ResizeImage(teaser.Image, 132))">
+                                <img src="@Url.Content(WebApp.Media.ResizeImage(teaser.Image, 132))">
                             }
                             @Html.Raw(teaser.Body)
                         </div>
