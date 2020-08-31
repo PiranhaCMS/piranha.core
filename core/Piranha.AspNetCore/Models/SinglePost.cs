@@ -16,18 +16,6 @@ using Piranha.Models;
 
 namespace Piranha.AspNetCore.Models
 {
-    [Obsolete("SinglePostModel<T> has been renamed to SinglePost<T>")]
-    [NoCoverage]
-    public class SinglePostModel<T> : SinglePost<T> where T : PostBase
-    {
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="api">The current api</param>
-        /// <param name="loader">The model loader</param>
-        public SinglePostModel(IApi api, IModelLoader loader) : base(api, loader) { }
-    }
-
     /// <summary>
     /// Razor Page model for a single post.
     /// </summary>

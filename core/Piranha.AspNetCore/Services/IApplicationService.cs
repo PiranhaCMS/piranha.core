@@ -38,18 +38,6 @@ namespace Piranha.AspNetCore.Services
         IRequestHelper Request { get; }
 
         /// <summary>
-        /// Gets/sets the currently requested URL.
-        /// </summary>
-        [Obsolete("This method has been moved to Request.Url")]
-        string Url { get; set; }
-
-        /// <summary>
-        /// Gets/sets the requested hostname
-        /// </summary>
-        [Obsolete("This method has been moved to Request.Host")]
-        string Hostname { get; set; }
-
-        /// <summary>
         /// Gets/sets the id of the currently requested page.
         /// </summary>
         Guid PageId { get; set; }

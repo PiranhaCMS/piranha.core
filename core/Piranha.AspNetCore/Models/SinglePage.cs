@@ -16,18 +16,6 @@ using Piranha.Models;
 
 namespace Piranha.AspNetCore.Models
 {
-    [Obsolete("SinglePageModel<T> has been renamed to SinglePage<T>")]
-    [NoCoverage]
-    public class SinglePageModel<T> : SinglePage<T> where T : PageBase
-    {
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="api">The current api</param>
-        /// <param name="loader">The model loader</param>
-        public SinglePageModel(IApi api, IModelLoader loader) : base(api, loader) { }
-    }
-
     /// <summary>
     /// Razor Page model for a single page.
     /// </summary>

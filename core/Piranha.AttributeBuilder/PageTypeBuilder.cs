@@ -120,7 +120,7 @@ namespace Piranha.AttributeBuilder
                         UseBlocks = attr.UseBlocks,
                         UsePrimaryImage = attr.UsePrimaryImage,
                         UseExcerpt = attr.UseExcerpt,
-                        IsArchive = typeof(IArchivePage).IsAssignableFrom(type) || attr.IsArchive
+                        IsArchive = attr.IsArchive
                     };
 
                     // Get all page routes

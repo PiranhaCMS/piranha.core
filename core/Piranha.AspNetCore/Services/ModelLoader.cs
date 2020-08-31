@@ -117,21 +117,6 @@ namespace Piranha.AspNetCore.Services
         }
 
         /// <summary>
-        /// Gets the specified page model for the given user.
-        /// </summary>
-        /// <param name="id">The unique id</param>
-        /// <param name="user">The current user</param>
-        /// <param name="draft">If a draft should be loaded</param>
-        /// <typeparam name="T">The model type</typeparam>
-        /// <returns>The page model</returns>
-        [Obsolete("GetPage<T> has been renamed to GetPageAsync<T>")]
-        [NoCoverage]
-        public Task<T> GetPage<T>(Guid id, ClaimsPrincipal user, bool draft = false) where T : PageBase
-        {
-            return GetPageAsync<T>(id, user, draft);
-        }
-
-        /// <summary>
         /// Gets the specified post model for the given user.
         /// </summary>
         /// <param name="id">The unique id</param>
@@ -198,21 +183,6 @@ namespace Piranha.AspNetCore.Services
                 }
             }
             return model;
-        }
-
-        /// <summary>
-        /// Gets the specified post model for the given user.
-        /// </summary>
-        /// <param name="id">The unique id</param>
-        /// <param name="user">The current user</param>
-        /// <param name="draft">If a draft should be loaded</param>
-        /// <typeparam name="T">The model type</typeparam>
-        /// <returns>The post model</returns>
-        [Obsolete("GetPost<T> has been renamed to GetPostAsync<T>")]
-        [NoCoverage]
-        public Task<T> GetPost<T>(Guid id, ClaimsPrincipal user, bool draft = false) where T : PostBase
-        {
-            return GetPostAsync<T>(id, user, draft);
         }
     }
 }

@@ -56,10 +56,7 @@ namespace Piranha.AspNetCore
                 //
                 // 1: Store raw url & request information
                 //
-                #pragma warning disable
-                // OBSOLETE: service.Url
-                service.Request.Url = service.Url = context.Request.Path.Value;
-                #pragma warning enable
+                service.Request.Url = context.Request.Path.Value;
                 service.Request.Host = context.Request.Host.Host;
                 service.Request.Port = context.Request.Host.Port;
                 service.Request.Scheme = context.Request.Scheme;
@@ -139,11 +136,6 @@ namespace Piranha.AspNetCore
                     await _next.Invoke(context);
                     return;
                 }
-
-                #pragma warning disable
-                // OBSOLETE: service.Hostname
-                service.Hostname = hostname;
-                #pragma warning enable
 
                 //
                 // Check if we shouldn't handle empty requests for start page

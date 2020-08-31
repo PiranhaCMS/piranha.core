@@ -41,16 +41,6 @@ namespace Piranha.AspNetCore.Services
         public IRequestHelper Request { get; } = new RequestHelper();
 
         /// <summary>
-        /// Gets/sets the currently requested URL.
-        /// </summary>
-        public string Url { get; set; }
-
-        /// <summary>
-        /// Gets/sets the requested hostname
-        /// </summary>
-        public string Hostname { get; set; }
-
-        /// <summary>
         /// Gets/sets the id of the currently requested page.
         /// </summary>
         public Guid PageId { get; set; }
@@ -125,10 +115,6 @@ namespace Piranha.AspNetCore.Services
                     Site.SitePrefix = siteHost[1];
                 }
             }
-
-            // Get the current url
-            Url = context.Request.Path.Value;
-            Hostname = hostname;
         }
 
         /// <summary>
