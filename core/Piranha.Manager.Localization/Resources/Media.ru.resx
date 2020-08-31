@@ -58,7 +58,7 @@
     <value>Landscape</value>
   </data>
   <data name="Portrait" xml:space="preserve">
-    <value>Portrait</value>
+    <value>Портрет</value>
   </data>
   <data name="Widescreen" xml:space="preserve">
     <value>Widescreen</value>
