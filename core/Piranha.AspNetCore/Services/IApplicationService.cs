@@ -11,10 +11,16 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Piranha.AspNetCore.Helpers;
 using Piranha.Models;
 
 namespace Piranha.AspNetCore.Services
 {
+    /// <summary>
+    /// The main application service. This service must be
+    /// registered as a scoped service as it contains information
+    /// about the current requst.
+    /// </summary>
     public interface IApplicationService
     {
         /// <summary>

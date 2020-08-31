@@ -21,7 +21,10 @@ using Piranha.Models;
 
 namespace Piranha.AspNetCore
 {
-    public class IntegratedMiddleware : MiddlewareBase
+    /// <summary>
+    /// The main application middleware.
+    /// </summary>
+    public class PiranhaMiddleware : MiddlewareBase
     {
         private readonly PiranhaRouteConfig _config;
 
@@ -31,7 +34,7 @@ namespace Piranha.AspNetCore
         /// <param name="next">The next middleware in the pipeline</param>
         /// <param name="config">The current route configuration</param>
         /// <param name="factory">The logger factory</param>
-        public IntegratedMiddleware(RequestDelegate next, PiranhaRouteConfig config, ILoggerFactory factory = null) : base(next, factory)
+        public PiranhaMiddleware(RequestDelegate next, PiranhaRouteConfig config, ILoggerFactory factory = null) : base(next, factory)
         {
             _config = config;
         }

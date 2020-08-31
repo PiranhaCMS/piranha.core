@@ -8,21 +8,54 @@
  *
  */
 
+using System;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Piranha;
+using Piranha.AspNetCore;
 using Piranha.Extend;
 using Piranha.Security;
 
+/// <summary>
+/// Extensions methods for setting up Piranha in Configure
+/// and ConfigureServices.
+/// </summary>
 public static class AspNetCoreExtensions
 {
     /// <summary>
-    /// Adds the piranha application service.
+    /// Adds the core Piranha services if simple startup is used.
     /// </summary>
-    /// <param name="services">The service collection</param>
-    public static IServiceCollection AddPiranhaApplication(this IServiceCollection services)
+    /// <param name="services">The current service collection</param>
+    /// <param name="options">The builder options</param>
+    /// <returns>The updated service collection</returns>
+    public static IServiceCollection AddPiranha(this IServiceCollection services, Action<PiranhaServiceBuilder> options)
     {
-        return services
+        var serviceBuilder = new PiranhaServiceBuilder(services);
+
+        options?.Invoke(serviceBuilder);
+
+        var config = new PiranhaRouteConfig
+        {
+            LoginUrl = serviceBuilder.LoginUrl,
+            UseAliasRouting = serviceBuilder.UseAliasRouting,
+            UseArchiveRouting = serviceBuilder.UseArchiveRouting,
+            UsePageRouting = serviceBuilder.UsePageRouting,
+            UsePostRouting = serviceBuilder.UsePostRouting,
+            UseSiteRouting = serviceBuilder.UseSiteRouting,
+            UseSitemapRouting = serviceBuilder.UseSitemapRouting,
+            UseStartpageRouting = serviceBuilder.UseStartpageRouting
+        };
+        services.AddSingleton<PiranhaRouteConfig>(config);
+
+        services.AddControllersWithViews();
+        var mvcBuilder = services.AddRazorPages();
+        if (serviceBuilder.AddRazorRuntimeCompilation)
+        {
+            mvcBuilder.AddRazorRuntimeCompilation();
+        }
+        services
+            .AddPiranha()
             .AddScoped<Piranha.AspNetCore.Services.IApplicationService, Piranha.AspNetCore.Services.ApplicationService>()
             .AddScoped<Piranha.AspNetCore.Services.IModelLoader, Piranha.AspNetCore.Services.ModelLoader>()
             .AddAuthorization(o =>
@@ -36,133 +69,31 @@ public static class AspNetCoreExtensions
                     policy.RequireClaim(Permission.PostPreview, Permission.PostPreview);
                 });
             });
+        return serviceBuilder.Services;
     }
 
     /// <summary>
-    /// Uses the integrated piranha middleware.
+    /// Simple startup with integrated middleware that also adds common
+    /// dependencies needed for an integrated web application.
     /// </summary>
-    /// <param name="builder">The current application builder</param>
-    /// <returns>The builder</returns>
-    public static IApplicationBuilder UseIntegratedPiranha(this IApplicationBuilder builder)
+    /// <param name="builder">The application builder</param>
+    /// <param name="options">Action for configuring the builder</param>
+    /// <returns>The updated application builder</returns>
+    public static IApplicationBuilder UsePiranha(this IApplicationBuilder builder, Action<PiranhaApplicationBuilder> options)
     {
-        return builder
-            .UseMiddleware<Piranha.AspNetCore.IntegratedMiddleware>();
-    }
+        var piranhaOptions = new PiranhaApplicationBuilder(builder);
 
-    /// <summary>
-    /// Uses the piranha middleware.
-    /// </summary>
-    /// <param name="builder">The current application builder</param>
-    /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranha(this IApplicationBuilder builder)
-    {
-        return builder
-            .UseMiddleware<Piranha.AspNetCore.ApplicationMiddleware>()
-            .UseMiddleware<Piranha.AspNetCore.AliasMiddleware>()
-            .UseMiddleware<Piranha.AspNetCore.PageMiddleware>()
-            .UseMiddleware<Piranha.AspNetCore.PostMiddleware>()
-            .UseMiddleware<Piranha.AspNetCore.ArchiveMiddleware>()
-            .UseMiddleware<Piranha.AspNetCore.StartPageMiddleware>()
-            .UseMiddleware<Piranha.AspNetCore.SitemapMiddleware>();
-    }
+        piranhaOptions.Builder
+            .UseSecurityMiddleware()
+            .UseStaticFiles()
+            .UseMiddleware<Piranha.AspNetCore.PiranhaMiddleware>()
+            .UseMiddleware<Piranha.AspNetCore.SitemapMiddleware>()
+            .UseRouting()
+            .UseAuthentication()
+            .UseAuthorization();
 
-    /// <summary>
-    /// Uses the piranha alias middleware.
-    /// </summary>
-    /// <param name="builder">The current application builder</param>
-    /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranhaAliases(this IApplicationBuilder builder)
-    {
-        return builder
-            .UseMiddleware<Piranha.AspNetCore.AliasMiddleware>();
-    }
+        options?.Invoke(piranhaOptions);
 
-    /// <summary>
-    /// Uses the piranha application middleware.
-    /// </summary>
-    /// <param name="builder">The current application builder</param>
-    /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranhaApplication(this IApplicationBuilder builder)
-    {
-        return builder
-            .UseMiddleware<Piranha.AspNetCore.ApplicationMiddleware>();
-    }
-
-    /// <summary>
-    /// Uses the piranha archive middleware.
-    /// </summary>
-    /// <param name="builder">The current application builder</param>
-    /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranhaArchives(this IApplicationBuilder builder)
-    {
-        return builder
-            .UseMiddleware<Piranha.AspNetCore.ArchiveMiddleware>();
-    }
-
-    /// <summary>
-    /// Uses the piranha page middleware.
-    /// </summary>
-    /// <param name="builder">The current application builder</param>
-    /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranhaPages(this IApplicationBuilder builder)
-    {
-        return builder
-            .UseMiddleware<Piranha.AspNetCore.PageMiddleware>();
-    }
-
-    /// <summary>
-    /// Uses the piranha post middleware.
-    /// </summary>
-    /// <param name="builder">The current application builder</param>
-    /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranhaPosts(this IApplicationBuilder builder)
-    {
-        return builder
-            .UseMiddleware<Piranha.AspNetCore.PostMiddleware>();
-    }
-
-    /// <summary>
-    /// Uses the piranha startpage middleware.
-    /// </summary>
-    /// <param name="builder">The current application builder</param>
-    /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranhaStartPage(this IApplicationBuilder builder)
-    {
-        return builder
-            .UseMiddleware<Piranha.AspNetCore.StartPageMiddleware>();
-    }
-
-    /// <summary>
-    /// Uses the piranha sitemap generation middleware.
-    /// </summary>
-    /// <param name="builder">The current application builder</param>
-    /// <returns>The builder</returns>
-    public static IApplicationBuilder UsePiranhaSitemap(this IApplicationBuilder builder)
-    {
-        return builder
-            .UseMiddleware<Piranha.AspNetCore.SitemapMiddleware>();
-    }
-
-    /// <summary>
-    /// Converts the type name of the block into a pretty
-    /// css class name.
-    /// </summary>
-    /// <param name="block">The current block</param>
-    /// <returns>The css class name</returns>
-    public static string CssName(this Block block)
-    {
-        return ClassNameToWebName(block.GetType().Name);
-    }
-
-    /// <summary>
-    /// Converts a standard camel case class name to a lowercase
-    /// string with each word separated with a dash, suitable
-    /// for use in views.
-    /// </summary>
-    /// <param name="str">The camel case string</param>
-    /// <returns>The converted string</returns>
-    private static string ClassNameToWebName(string str)
-    {
-        return Regex.Replace(str, "([A-Z])", " $1", RegexOptions.Compiled).Trim().Replace(" ", "-").ToLower();
+        return piranhaOptions.Builder;
     }
 }

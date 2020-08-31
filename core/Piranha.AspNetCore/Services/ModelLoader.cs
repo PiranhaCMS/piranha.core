@@ -17,10 +17,25 @@ using Piranha.Models;
 
 namespace Piranha.AspNetCore.Services
 {
+    /// <summary>
+    /// The model loader is used for retrieving content models with
+    /// built in permission checks for the current user.
+    /// </summary>
     public class ModelLoader : IModelLoader
     {
+        /// <summary>
+        /// The current api.
+        /// </summary>
         protected readonly IApi _api;
+
+        /// <summary>
+        /// The current authorization service.
+        /// </summary>
         protected readonly IAuthorizationService _auth;
+
+        /// <summary>
+        /// The current application service.
+        /// </summary>
         protected readonly IApplicationService _app;
 
         /// <summary>
@@ -37,7 +52,9 @@ namespace Piranha.AspNetCore.Services
         }
 
         /// <summary>
-        /// Gets the specified page model for the given user.
+        /// Gets the specified page model for the given user. If the
+        /// user doesn't have access to the requested page an
+        /// UnauthorizedAccessException is thrown.
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <param name="user">The current user</param>
@@ -117,7 +134,9 @@ namespace Piranha.AspNetCore.Services
         }
 
         /// <summary>
-        /// Gets the specified post model for the given user.
+        /// Gets the specified post model for the given user. If the
+        /// user doesn't have access to the requested post an
+        /// UnauthorizedAccessException is thrown.
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <param name="user">The current user</param>

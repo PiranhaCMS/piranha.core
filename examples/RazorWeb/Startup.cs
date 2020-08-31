@@ -28,9 +28,6 @@ namespace RazorWeb
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            //
-            // Simplified setup with dependencies
-            //
             services.AddPiranha(options =>
             {
                 options.AddRazorRuntimeCompilation = true;
@@ -98,9 +95,6 @@ namespace RazorWeb
             System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
              */
 
-            //
-            // Simplified setup with dependencies
-            //
             app.UsePiranha(options =>
             {
                 options.UseManager();

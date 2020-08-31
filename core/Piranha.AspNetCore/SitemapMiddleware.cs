@@ -18,6 +18,10 @@ using X.Web.Sitemap;
 
 namespace Piranha.AspNetCore
 {
+    /// <summary>
+    /// Middleware used to ouput a xml sitemap based on
+    /// the content of the current site.
+    /// </summary>
     public class SitemapMiddleware : MiddlewareBase
     {
         private readonly PiranhaRouteConfig _config;

@@ -29,15 +29,31 @@ namespace Piranha.AspNetCore.Models
         /// </summary>
         public IEnumerable<Comment> Comments { get; set; } = new List<Comment>();
 
+        /// <summary>
+        /// Author name when a new comment is submitted from
+        /// the web application.
+        /// </summary>
         [BindProperty]
         public string CommentAuthor { get; set; }
 
+        /// <summary>
+        /// Author email when a new comment is submitted from
+        /// the web application.
+        /// </summary>
         [BindProperty]
         public string CommentEmail { get; set; }
 
+        /// <summary>
+        /// Author url when a new comment is submitted from
+        /// the web application.
+        /// </summary>
         [BindProperty]
         public string CommentUrl { get; set; }
 
+        /// <summary>
+        /// Main body when a new comment is submitted from
+        /// the web application.
+        /// </summary>
         [BindProperty]
         public string CommentBody { get; set; }
 

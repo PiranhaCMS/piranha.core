@@ -23,7 +23,7 @@ using Piranha.Models;
 /// Security extensions for simplifying authorization in
 /// the client application.
 /// </summary>
-public static class AspNetCoreSecurityExtensions
+public static class PiranhaSecurityExtensions
 {
     /// <summary>
     /// Adds authorization with the given application policies to the aplication.

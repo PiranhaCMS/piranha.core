@@ -40,7 +40,14 @@ namespace Piranha.AspNetCore.Models
         where T : PageBase
         where TPost: PostBase
     {
+        /// <summary>
+        /// The current api.
+        /// </summary>
         protected readonly IApi _api;
+
+        /// <summary>
+        /// The current model loader.
+        /// </summary>
         protected readonly IModelLoader _loader;
 
         /// <summary>

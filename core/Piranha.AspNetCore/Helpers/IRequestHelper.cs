@@ -8,32 +8,32 @@
  *
  */
 
-namespace Piranha.AspNetCore.Services
+namespace Piranha.AspNetCore.Helpers
 {
     /// <summary>
     /// The request helper provides information regarding the
     /// current request.
     /// </summary>
-    public sealed class RequestHelper : IRequestHelper
+    public interface IRequestHelper
     {
         /// <summary>
         /// Gets/sets the current hostname.
         /// </summary>
-        public string Host { get; set; }
+        string Host { get; set; }
 
         /// <summary>
         /// Gets/sets the current port.
         /// </summary>
-        public int? Port { get; set; }
+        int? Port { get; set; }
 
         /// <summary>
         /// Gets/sets the current scheme.
         /// </summary>
-        public string Scheme { get; set; }
+        string Scheme { get; set; }
 
         /// <summary>
         /// Gets/sets the requested raw url.
         /// </summary>
-        public string Url { get; set; }
+        string Url { get; set; }
     }
 }
