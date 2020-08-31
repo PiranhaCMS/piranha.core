@@ -9,19 +9,17 @@
  */
 
 using System;
-using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;
 using Piranha.AspNetCore;
-using Piranha.Extend;
 using Piranha.Security;
 
 /// <summary>
 /// Extensions methods for setting up Piranha in Configure
 /// and ConfigureServices.
 /// </summary>
-public static class AspNetCoreExtensions
+public static class PiranhaStartupExtensions
 {
     /// <summary>
     /// Adds the core Piranha services if simple startup is used.
