@@ -31,7 +31,7 @@
             <div class="modal-body bg-light">
                 <div :class="{ 'd-none': selectedSetting != 'uid-settings' }">
                     <div class="form-group" v-if="usePrimaryImage">
-                        <label>@Localizer.General["Primary image"]</label>
+                        <label>@Localizer.Content["Primary image"]</label>
                         <div class="block image-block primary-image primary-image-modal">
                             <div class="block-body has-media-picker rounded" :class="{ empty: primaryImage.id === null }">
                                 <img class="rounded" :src="primaryImageUrl">
@@ -98,7 +98,7 @@
                         </div>
                     </div>
                     <div class="form-group" v-if="useExcerpt">
-                        <label>@Localizer.General["Excerpt"]</label>
+                        <label>@Localizer.Content["Excerpt"]</label>
                         <div v-if="useHtmlExcerpt" class="block text-block ingress" :class="{ empty: isExcerptEmpty }">
                             <div id="excerpt-toolbar" class="component-toolbar"></div>
                             <div id="excerpt-body" class="block-body html-block" contenteditable="true" v-html="excerpt" v-on:blur="onExcerptBlur">

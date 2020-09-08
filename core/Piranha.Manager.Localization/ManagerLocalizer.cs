@@ -83,6 +83,7 @@ namespace Piranha.Manager
         public ManagerLocalizer(
             IStringLocalizer<Localization.Alias> alias,
             IStringLocalizer<Localization.Comment> comment,
+            IStringLocalizer<Localization.Content> content,
             IStringLocalizer<Localization.Config> config,
             IStringLocalizer<Localization.General> general,
             IStringLocalizer<Localization.Security> security,
@@ -95,6 +96,7 @@ namespace Piranha.Manager
         {
             Alias = alias;
             Comment = comment;
+            Content = content;
             Config = config;
             General = general;
             Security = security;
