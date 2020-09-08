@@ -40,7 +40,7 @@ namespace RazorWeb.Models
         /// <summary>
         /// Gets/sets the available teasers.
         /// </summary>
-        [Region(Display = RegionDisplayMode.Setting, ListTitle = "Title", ListPlaceholder = "New Teaser", Icon = "fas fa-bookmark")]
+        [Region(ListTitle = "Title", ListPlaceholder = "New Teaser", Icon = "fas fa-bookmark")]
         public IList<Regions.Teaser> Teasers { get; set; } = new List<Regions.Teaser>();
 
         /// <summary>

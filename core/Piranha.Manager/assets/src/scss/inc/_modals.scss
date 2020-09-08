@@ -15,6 +15,7 @@
         height: 100%;
         margin: 0;
         float: right;
+        overflow: hidden;
 
         &.modal-lg {
             width: 800px;
@@ -23,6 +24,10 @@
         .modal-content {
             height: 100%;
             border-radius: 0;
+        }
+
+        .modal-body {
+            overflow-y: auto;
         }
     }
 }

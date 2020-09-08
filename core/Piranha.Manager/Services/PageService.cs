@@ -291,7 +291,7 @@ namespace Piranha.Manager.Services
                 page.PrimaryImage = model.PrimaryImage;
                 page.Excerpt = model.Excerpt;
                 page.IsHidden = model.IsHidden;
-                page.Published = !string.IsNullOrEmpty(model.Published) ? DateTime.Parse(model.Published) : (DateTime?)null;
+                page.Published = ParsePublishedDate(model); // !string.IsNullOrEmpty(model.Published) ? DateTime.Parse(model.Published) : (DateTime?)null;
                 page.RedirectUrl = model.RedirectUrl;
                 page.RedirectType = (RedirectType)Enum.Parse(typeof(RedirectType), model.RedirectType);
                 page.EnableComments = model.EnableComments;
@@ -545,7 +545,8 @@ namespace Piranha.Manager.Services
                 PrimaryImage = page.PrimaryImage,
                 Excerpt = page.Excerpt,
                 IsHidden = page.IsHidden,
-                Published = page.Published.HasValue ? page.Published.Value.ToString("yyyy-MM-dd HH:mm") : null,
+                Published = page.Published.HasValue ? page.Published.Value.ToString("yyyy-MM-dd") : null,
+                PublishedTime = page.Published.HasValue ? page.Published.Value.ToString("HH:mm") : null,
                 RedirectUrl = page.RedirectUrl,
                 RedirectType = page.RedirectType.ToString(),
                 EnableComments = page.EnableComments,
@@ -782,6 +783,21 @@ namespace Piranha.Manager.Services
                 });
             }
             return model;
+        }
+
+        private DateTime? ParsePublishedDate(PageEditModel model)
+        {
+            if (!string.IsNullOrEmpty(model.Published))
+            {
+                var str = model.Published;
+
+                if (!string.IsNullOrEmpty(model.PublishedTime))
+                {
+                    str += $" { model.PublishedTime }";
+                }
+                return DateTime.Parse(str);
+            }
+            return null;
         }
     }
 }

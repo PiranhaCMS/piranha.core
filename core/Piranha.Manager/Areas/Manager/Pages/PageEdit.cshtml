@@ -58,7 +58,7 @@
                 <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
                 <li class="breadcrumb-item"><a href="~/manager/pages">@Localizer.Menu["Pages"]</a></li>
                 <li class="breadcrumb-item active" aria-current="page">@Localizer.General["Edit"]</li>
-                <li v-if="isCopy" class="badge-item"><span class="badge badge-warning">@Localizer.General["Copy"]</span></li>
+                <li v-if="isCopy" class="badge-item app" :class="{ ready: !loading }"><span class="badge badge-warning">@Localizer.General["Copy"]</span></li>
                 <li v-if="state === 'draft'" class="badge-item app" :class="{ ready: !loading }"><span class="badge badge-info"><i class="fas fa-pen"></i> @Localizer.General["Draft"]</span></li>
             </ol>
         </nav>
@@ -132,47 +132,6 @@
 
         <!-- Blocks -->
         <div class="card" :class="{ 'd-none': selectedRegion.uid != 'uid-blocks' }">
-            <div class="card-body mb-3">
-                <div class="blocks">
-                    <div class="unsortable" v-if="usePrimaryImage">
-                        <div class="block image-block primary-image">
-                            <div class="block-body has-media-picker rounded" :class="{ empty: primaryImage.id === null }">
-                                <img class="rounded" :src="primaryImageUrl">
-                                <div class="media-picker">
-                                    <div class="btn-group float-right">
-                                        <button v-on:click.prevent="selectPrimaryImage" class="btn btn-primary text-center">
-                                            <i class="fas fa-plus"></i>
-                                        </button>
-                                        <button v-on:click.prevent="removePrimaryImage" class="btn btn-danger text-center">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </div>
-                                    <div class="card text-left">
-                                        <div class="card-body" v-if="primaryImage.id === null">
-                                            &nbsp;
-                                        </div>
-                                        <div class="card-body" v-else>
-                                            {{ primaryImage.media.filename }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="unsortable" v-if="useExcerpt">
-                        <div v-if="useHtmlExcerpt" class="block text-block ingress" :class="{ empty: isExcerptEmpty }">
-                            <div id="excerpt-toolbar" class="component-toolbar"></div>
-                            <div id="excerpt-body" class="block-body html-block" contenteditable="true" v-html="excerpt" v-on:blur="onExcerptBlur">
-                            </div>
-                        </div>
-                        <div v-else class="block text-block ingress ingress-text" :class="{ empty: isExcerptEmpty }">
-                            <div class="block-body">
-                                <p contenteditable="true" v-html="excerpt" v-on:blur="onExcerptBlur"></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="card-body" v-bind:class="{ readonly: isCopy }">
                 <div id="content-blocks" class="blocks">
                     <a v-if="!isCopy" href="#" class="block-add unsortable" v-on:click.prevent="piranha.blockpicker.open(piranha.pageedit.addBlock, 0)">

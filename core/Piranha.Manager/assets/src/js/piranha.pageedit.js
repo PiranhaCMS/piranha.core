@@ -27,6 +27,7 @@ piranha.pageedit = new Vue({
         excerpt: null,
         isHidden: false,
         published: null,
+        publishedTime: null,
         redirectUrl: null,
         redirectType: null,
         enableComments: null,
@@ -72,7 +73,8 @@ piranha.pageedit = new Vue({
         },
         primaryImageUrl: function () {
             if (this.primaryImage.media != null) {
-                return piranha.utils.formatUrl(this.primaryImage.media.publicUrl);
+                return piranha.utils.formatUrl("~/manager/api/media/url/" + this.primaryImage.id + "/448/200");
+                //return piranha.utils.formatUrl(this.primaryImage.media.publicUrl);
             } else {
                 return piranha.utils.formatUrl("~/manager/assets/img/empty-image.png");
             }
@@ -107,6 +109,7 @@ piranha.pageedit = new Vue({
             this.excerpt = model.excerpt;
             this.isHidden = model.isHidden;
             this.published = model.published;
+            this.publishedTime = model.publishedTime;
             this.redirectUrl = model.redirectUrl;
             this.redirectType = model.redirectType;
             this.enableComments = model.enableComments;
@@ -238,6 +241,7 @@ piranha.pageedit = new Vue({
                 excerpt: self.excerpt,
                 isHidden: self.isHidden,
                 published: self.published,
+                publishedTime: self.publishedTime,
                 redirectUrl: self.redirectUrl,
                 redirectType: self.redirectType,
                 enableComments: self.enableComments,
@@ -266,6 +270,7 @@ piranha.pageedit = new Vue({
                 self.id = result.id;
                 self.slug = result.slug;
                 self.published = result.published;
+                self.publishedTime = result.publishedTime;
                 self.state = result.state;
                 self.isCopy = result.isCopy;
                 self.selectedRoute = result.selectedRoute;
@@ -375,13 +380,13 @@ piranha.pageedit = new Vue({
             });
         },
         isCommentsOpen: function () {
-            var date = new Date(this.published);
+            var date = new Date(this.published + " " + this.publishedTime);
             date = date.addDays(this.closeCommentsAfterDays);
 
             return date > new Date();
         },
         commentsClosedDate: function () {
-            var date = new Date(this.published);
+            var date = new Date(this.published + " " + this.publishedTime);
             date = date.addDays(this.closeCommentsAfterDays);
 
             return date.toDateString();

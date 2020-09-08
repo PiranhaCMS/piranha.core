@@ -67,6 +67,11 @@ $(document).on('hide.bs.collapse', '.collapse', function () {
 	$(this).parent().removeClass('active');
 });
 
+// Fix scroll prevention for multiple modals in bootstrap
+$(document).on('hidden.bs.modal', '.modal', function () {
+    $('.modal:visible').length && $(document.body).addClass('modal-open');
+});
+
 $(window).scroll(function () {
     var scroll = $(this).scrollTop();
 
