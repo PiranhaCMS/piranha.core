@@ -1,7 +1,7 @@
 @inject ManagerLocalizer Localizer
 
-<div id="pageSettings" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
+<div id="pageSettings" class="modal modal-panel fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <!-- Header -->
             <div class="modal-header border-bottom-0">
@@ -19,6 +19,9 @@
                 <li class="nav-item">
                     <a href="#" class="nav-link" :class="{ active: selectedSetting === 'uid-seo' }" v-on:click.prevent="selectSetting('uid-seo')">@Localizer.General["SEO"]</a>
                 </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" :class="{ active: selectedSetting === 'uid-advanced' }" v-on:click.prevent="selectSetting('uid-advanced')">@Localizer.General["Advanced"]</a>
+                </li>
                 <li class="nav-item" v-for="region in settingRegions">
                     <a href="#" class="nav-link" :class="{ active: selectedSetting === region.meta.uid }" v-on:click.prevent="selectSetting(region.meta.uid)">{{ region.meta.name }}</a>
                 </li>
@@ -27,138 +30,103 @@
             <!-- Body -->
             <div class="modal-body bg-light">
                 <div :class="{ 'd-none': selectedSetting != 'uid-settings' }">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>@Localizer.General["Slug"]</label>
-                                <div class="input-group">
-                                    <input v-model="slug" type="text" maxlength="128" class="form-control">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text text-muted">
-                                            {{ piranha.utils.strLength(slug) + "/128" }}
-                                        </div>
+                    <div class="form-group" v-if="usePrimaryImage">
+                        <label>@Localizer.General["Primary image"]</label>
+                        <div class="block image-block primary-image primary-image-modal">
+                            <div class="block-body has-media-picker rounded" :class="{ empty: primaryImage.id === null }">
+                                <img class="rounded" :src="primaryImageUrl">
+                                <div class="media-picker">
+                                    <div class="btn-group float-right">
+                                        <button v-on:click.prevent="selectPrimaryImage" class="btn btn-primary text-center">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                        <button v-on:click.prevent="removePrimaryImage" class="btn btn-danger text-center">
+                                            <i class="fas fa-times"></i>
+                                        </button>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>@Localizer.Page["Navigation title"]</label>
-                                <div class="input-group">
-                                    <input v-model="navigationTitle" type="text" maxlength="128" class="form-control">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text text-muted">
-                                            {{ piranha.utils.strLength(navigationTitle) + "/128" }}
+                                    <div class="card text-left">
+                                        <div class="card-body" v-if="primaryImage.id === null">
+                                            &nbsp;
+                                        </div>
+                                        <div class="card-body" v-else>
+                                            {{ primaryImage.media.filename }}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>@Localizer.General["Publish date"]</label>
+                    </div>
+                    <div class="form-group">
+                        <label>@Localizer.Page["Navigation title"]</label>
+                        <div class="input-group">
+                            <input v-model="navigationTitle" type="text" maxlength="128" class="form-control">
+                            <div class="input-group-append">
+                                <div class="input-group-text text-muted">
+                                    {{ piranha.utils.strLength(navigationTitle) + "/128" }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>@Localizer.General["Slug"]</label>
+                        <div class="input-group">
+                            <input v-model="slug" type="text" maxlength="128" class="form-control">
+                            <div class="input-group-append">
+                                <div class="input-group-text text-muted">
+                                    {{ piranha.utils.strLength(slug) + "/128" }}
+                                </div>
+                            </div>
+                        </div>
+                        <span class="field-description small text-muted">
+                            http://localhost:5000/<span v-text="slug"></span>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label>@Localizer.General["Publish date"]</label>
+                        <div class="row">
+                            <div class="col">
                                 <datepicker v-model="published" :format="'yyyy-MM-dd'" :monday-first="true" :typeable="true" :bootstrap-styling="true"></datepicker>
                             </div>
-                            <div class="form-group">
-                                <label for="isHidden">@Localizer.Page["Hidden"]</label>
-                                <div class="form-switch">
-                                    <button id="isHidden" v-on:click.prevent="isHidden = !isHidden" class="switch" :aria-pressed="isHidden"><span></span></button>
-                                    <label for="isHidden" class="form-check-label">@Localizer.Page["If the page should be hidden in the sitemap"]</label>
+                            <div class="col">
+                                <div class="input-group">
+                                    <input class="form-control" type="time" v-model="publishedTime">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>@Localizer.General["Redirect"]</label>
-                                <input type="text" v-model="redirectUrl" maxlength="256" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="enableComments">@Localizer.General["Comments"]</label>
-                                <div class="form-switch">
-                                    <button id="enableComments" v-on:click.prevent="enableComments = !enableComments" class="switch" :aria-pressed="enableComments"><span></span></button>
-                                    <label for="enableComments" class="form-check-label">@Localizer.Page["If comments should be enabled for this page"]</label>
-                                </div>
-                            </div>
-                            <div class="form-group" v-if="routes && routes.length > 1">
-                                <label>@Localizer.General["Route"]</label>
-                                <select v-model="selectedRoute" class="form-control">
-                                    <option :value="route" v-for="route in routes">{{ route.title }}</option>
-                                </select>
+                    <div class="form-group" v-if="useExcerpt">
+                        <label>@Localizer.General["Excerpt"]</label>
+                        <div v-if="useHtmlExcerpt" class="block text-block ingress" :class="{ empty: isExcerptEmpty }">
+                            <div id="excerpt-toolbar" class="component-toolbar"></div>
+                            <div id="excerpt-body" class="block-body html-block" contenteditable="true" v-html="excerpt" v-on:blur="onExcerptBlur">
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>@Localizer.General["Redirect Type"]</label>
-                                <select v-model="redirectType" class="form-control">
-                                    <option value="Permanent">@Localizer.General["Permanent"]</option>
-                                    <option value="Temporary">@Localizer.General["Temporary"]</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>@Localizer.Comment["Days allowed for commenting"]</label>
-                                <input type="number" v-model.number="closeCommentsAfterDays" class="form-control">
-                                <span v-if="enableComments === false" class="field-description small text-muted">
-                                    @Localizer.Comment["Comments are not allowed."]
-                                </span>
-                                <span v-else-if="published === null" class="field-description small text-muted">
-                                    @Localizer.Comment["Comments are not allowed for unpublished content."]
-                                </span>
-                                <span v-else-if="closeCommentsAfterDays === 0 || isCommentsOpen()" class="field-description small text-muted">
-                                    @Localizer.Comment["Comments are currently open."]
-                                </span>
-                                <span v-else class="field-description small text-muted">
-                                    @Localizer.Comment["Comments were closed"] {{ commentsClosedDate() }}.
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div v-if="permissions.length > 0" class="row">
-                        <div class="col">
-                            <div class="form-group">
-                            <label>@Localizer.General["Permissions"]</label>
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <div class="row">
-                                            <div v-for="permission in permissions" class="col-sm-4">
-                                                <div class="checkbox">
-                                                    <label class="mb-0">
-                                                        <input v-model="selectedPermissions" type="checkbox" :value="permission.key"> {{ permission.value }}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        <textarea v-else v-model="excerpt" rows="5" maxlength="255" class="form-control"></textarea>
                     </div>
                 </div>
 
                 <div :class="{ 'd-none': selectedSetting != 'uid-seo' }">
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label>@Localizer.Page["Meta title"]</label>
-                                <div class="input-group">
-                                    <input v-model="metaTitle" type="text" maxlength="128" class="form-control" :placeholder="title">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text text-muted">
-                                            {{ piranha.utils.strLength(metaTitle) + "/128" }}
-                                        </div>
-                                    </div>
+                    <div class="form-group">
+                        <label>@Localizer.Page["Meta title"]</label>
+                        <div class="input-group">
+                            <input v-model="metaTitle" type="text" maxlength="128" class="form-control" :placeholder="title">
+                            <div class="input-group-append">
+                                <div class="input-group-text text-muted">
+                                    {{ piranha.utils.strLength(metaTitle) + "/128" }}
                                 </div>
                             </div>
                         </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label>@Localizer.Page["Meta keywords"]</label>
-                                <div class="input-group">
-                                    <input v-model="metaKeywords" type="text" maxlength="128" class="form-control">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text text-muted">
-                                            {{ piranha.utils.strLength(metaKeywords) + "/128" }}
-                                        </div>
-                                    </div>
+                    </div>
+                    <div class="form-group">
+                        <label>@Localizer.Page["Meta keywords"]</label>
+                        <div class="input-group">
+                            <input v-model="metaKeywords" type="text" maxlength="128" class="form-control">
+                            <div class="input-group-append">
+                                <div class="input-group-text text-muted">
+                                    {{ piranha.utils.strLength(metaKeywords) + "/128" }}
                                 </div>
                             </div>
                         </div>
@@ -174,26 +142,20 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label>@Localizer.Page["Og title"]</label>
-                                <div class="input-group">
-                                    <input v-model="ogTitle" type="text" maxlength="128" class="form-control" :placeholder="metaTitle !== null && metaTitle !== '' ? metaTitle : title">
-                                    <div class="input-group-append">
-                                        <div class="input-group-text text-muted">
-                                            {{ piranha.utils.strLength(ogTitle) + "/128" }}
-                                        </div>
-                                    </div>
+                    <div class="form-group">
+                        <label>@Localizer.Page["Og title"]</label>
+                        <div class="input-group">
+                            <input v-model="ogTitle" type="text" maxlength="128" class="form-control" :placeholder="metaTitle !== null && metaTitle !== '' ? metaTitle : title">
+                            <div class="input-group-append">
+                                <div class="input-group-text text-muted">
+                                    {{ piranha.utils.strLength(ogTitle) + "/128" }}
                                 </div>
                             </div>
                         </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label>@Localizer.Page["Og image"]</label>
-                                <image-field v-bind:uid="'og_image_' + id" v-bind:meta="{ placeholder: null }" v-bind:model="ogImage"></image-field>
-                            </div>
-                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>@Localizer.Page["Og image"]</label>
+                        <image-field v-bind:uid="'og_image_' + id" v-bind:meta="{ placeholder: null }" v-bind:model="ogImage"></image-field>
                     </div>
                     <div class="form-group">
                         <label>@Localizer.Page["Og description"]</label>
@@ -204,6 +166,74 @@
                                     {{ piranha.utils.strLength(ogDescription) + "/255" }}
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div :class="{ 'd-none': selectedSetting != 'uid-advanced' }">
+                    <div class="form-group">
+                        <label for="isHidden">@Localizer.Page["Hidden"]</label>
+                        <div class="form-switch">
+                            <button id="isHidden" v-on:click.prevent="isHidden = !isHidden" class="switch" :aria-pressed="isHidden"><span></span></button>
+                            <label for="isHidden" class="form-check-label">@Localizer.Page["If the page should be hidden in the sitemap"]</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="enableComments">@Localizer.General["Comments"]</label>
+                        <div class="form-switch">
+                            <button id="enableComments" v-on:click.prevent="enableComments = !enableComments" class="switch" :aria-pressed="enableComments"><span></span></button>
+                            <label for="enableComments" class="form-check-label">@Localizer.Page["If comments should be enabled for this page"]</label>
+                        </div>
+                    </div>
+                    <div class="form-group" :class="{ 'text-muted': !enableComments }">
+                        <label>@Localizer.Comment["Days allowed for commenting"]</label>
+                        <input type="number" v-model.number="closeCommentsAfterDays" class="form-control" :disabled="!enableComments">
+                        <span v-if="enableComments === false" class="field-description small text-muted">
+                            @Localizer.Comment["Comments are not allowed."]
+                        </span>
+                        <span v-else-if="published === null" class="field-description small text-muted">
+                            @Localizer.Comment["Comments are not allowed for unpublished content."]
+                        </span>
+                        <span v-else-if="closeCommentsAfterDays === 0 || isCommentsOpen()" class="field-description small text-muted">
+                            @Localizer.Comment["Comments are currently open."]
+                        </span>
+                        <span v-else class="field-description small text-muted">
+                            @Localizer.Comment["Comments were closed"] {{ commentsClosedDate() }}.
+                        </span>
+                    </div>
+                    <div class="form-group" v-if="routes && routes.length > 1">
+                        <label>@Localizer.General["Route"]</label>
+                        <select v-model="selectedRoute" class="form-control">
+                            <option :value="route" v-for="route in routes">{{ route.title }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>@Localizer.General["Redirect"]</label>
+                        <input type="text" v-model="redirectUrl" maxlength="256" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>@Localizer.General["Redirect Type"]</label>
+                        <select v-model="redirectType" class="form-control" :disabled="redirectUrl === null || redirectUrl.length === 0">
+                            <option v-if="redirectUrl !== null && redirectUrl.length > 0" value="Permanent">@Localizer.General["Permanent"]</option><option v-else value="Permanent"></option>
+                            <option v-if="redirectUrl !== null && redirectUrl.length > 0" value="Temporary">@Localizer.General["Temporary"]</option><option v-else value="Temporary"></option>
+                        </select>
+                    </div>
+                    <div v-if="permissions.length > 0">
+                        <div class="form-group">
+                            <label>@Localizer.General["Permissions"]</label>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div v-for="permission in permissions" class="col-sm-6">
+                                            <div class="checkbox">
+                                                <label class="mb-0">
+                                                    <input v-model="selectedPermissions" type="checkbox" :value="permission.key"> {{ permission.value }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
