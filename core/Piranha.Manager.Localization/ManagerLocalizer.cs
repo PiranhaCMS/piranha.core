@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Håkan Edling
+ * Copyright (c) .NET Foundation and Contributors
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -20,10 +20,16 @@ namespace Piranha.Manager
         public IStringLocalizer<Localization.Alias> Alias { get; private set; }
 
         /// <summary>
-        /// Gets/sets comment string resource.
+        /// Gets/sets comment string resources.
         /// </summary>
         /// <value></value>
         public IStringLocalizer<Localization.Comment> Comment { get; private set; }
+
+        /// <summary>
+        /// Gets/sets content string resources.
+        /// </summary>
+        /// <value></value>
+        public IStringLocalizer<Localization.Content> Content { get; private set; }
 
         /// <summary>
         /// Gets/sets config string resources.
