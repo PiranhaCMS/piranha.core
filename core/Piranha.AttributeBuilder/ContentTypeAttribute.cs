@@ -13,18 +13,41 @@ using System;
 namespace Piranha.AttributeBuilder
 {
     /// <summary>
-    /// Abstract class for building content types.
+    /// Attribute for marking a class as a content type.
     /// </summary>
-    public abstract class ContentTypeAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Class)]
+    public class ContentTypeAttribute : ContentTypeBaseAttribute
     {
         /// <summary>
-        /// Gets/sets the unique id.
+        /// Gets/sets the group name of the content type.
         /// </summary>
-        public string Id { get; set; }
+        public string Group { get; set; }
 
         /// <summary>
-        /// Gets/sets the optional title.
+        /// Gets/sets if the content type should be categorized.
         /// </summary>
-        public string Title { get; set; }
+        public bool UseCategory { get; set; } = false;
+
+        /// <summary>
+        /// Gets/sets if excerpt should be used for the
+        /// content type. The default value is true.
+        /// </summary>
+        public bool UseExcerpt { get; set; } = true;
+
+        /// <summary>
+        /// Gets/sets if primary image should be used for the
+        /// content type. The default value is true.
+        /// </summary>
+        public bool UsePrimaryImage { get; set; } = true;
+
+        /// <summary>
+        /// Gets/sets if the content type should be tagged.
+        /// </summary>
+        public bool UseTags { get; set; } = false;
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public ContentTypeAttribute() : base() { }
     }
 }

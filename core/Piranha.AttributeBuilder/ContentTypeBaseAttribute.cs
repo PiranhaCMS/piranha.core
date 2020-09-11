@@ -13,14 +13,18 @@ using System;
 namespace Piranha.AttributeBuilder
 {
     /// <summary>
-    /// Attribute for marking a class as a page type.
+    /// Abstract class for building content types.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class)]
-    public class SiteTypeAttribute : ContentTypeBaseAttribute
+    public abstract class ContentTypeBaseAttribute : Attribute
     {
         /// <summary>
-        /// Default constructor.
+        /// Gets/sets the unique id.
         /// </summary>
-        public SiteTypeAttribute() : base() { }
+        public string Id { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional title.
+        /// </summary>
+        public string Title { get; set; }
     }
 }

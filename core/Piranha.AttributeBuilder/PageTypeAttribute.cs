@@ -16,7 +16,7 @@ namespace Piranha.AttributeBuilder
     /// Attribute for marking a class as a page type.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class PageTypeAttribute : ContentTypeAttribute
+    public class PageTypeAttribute : ContentTypeBaseAttribute
     {
         /// <summary>
         /// Gets/sets if this page type should be used as

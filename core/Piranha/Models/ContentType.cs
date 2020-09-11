@@ -14,34 +14,38 @@ using System.Linq;
 namespace Piranha.Models
 {
     [Serializable]
-    public sealed class PostType : ContentTypeBase
+    public sealed class ContentType : ContentTypeBase
     {
         /// <summary>
-        /// Gets/sets if the post type should use the block editor
-        /// for its main content. The default value is true.
+        /// Gets/sets the group name of the content type.
         /// </summary>
-        public bool UseBlocks { get; set; } = true;
+        public string Group { get; set; }
 
         /// <summary>
         /// Gets/sets if primary image should be used for the
-        /// post type. The default value is true.
+        /// content type. The default value is true.
         /// </summary>
         public bool UsePrimaryImage { get; set; } = true;
 
         /// <summary>
         /// Gets/sets if excerpt should be used for the
-        /// post type. The default value is true.
+        /// content type. The default value is true.
         /// </summary>
         public bool UseExcerpt { get; set; } = true;
 
         /// <summary>
-        /// Validates that the post type is correctly defined.
+        /// Validates that the content type is correctly defined.
         /// </summary>
         public void Ensure()
         {
+            if (string.IsNullOrEmpty(Group))
+            {
+                throw new InvalidOperationException($"No group specified for content type {Id}");
+            }
+
             if (Regions.Select(r => r.Id).Distinct().Count() != Regions.Count)
             {
-                throw new InvalidOperationException($"Region Id not unique for post type {Id}");
+                throw new InvalidOperationException($"Region Id not unique for content type {Id}");
             }
 
             foreach (var region in Regions)
@@ -50,7 +54,7 @@ namespace Piranha.Models
 
                 if (region.Fields.Select(f => f.Id).Distinct().Count() != region.Fields.Count)
                 {
-                    throw new InvalidOperationException($"Field Id not unique for post type {Id}");
+                    throw new InvalidOperationException($"Field Id not unique for content type {Id}");
                 }
 
                 foreach (var field in region.Fields)
