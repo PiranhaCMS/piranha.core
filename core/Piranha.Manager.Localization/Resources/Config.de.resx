@@ -75,7 +75,7 @@
     <value>Kommentar genehmigen</value>
   </data>
   <data name="Close comments after" xml:space="preserve">
-    <value>Close comments after</value>
+    <value>Kommentare schließen nach</value>
   </data>
   <data name="Collapse block headers" xml:space="preserve">
     <value>Block-Header einklappen</value>
@@ -84,7 +84,7 @@
     <value>Block minimieren</value>
   </data>
   <data name="Comments page size" xml:space="preserve">
-    <value>Comments page size</value>
+    <value>Seitengröße für Kommentar</value>
   </data>
   <data name="Enable page comments" xml:space="preserve">
     <value>Seitenkommentare aktivieren</value>
