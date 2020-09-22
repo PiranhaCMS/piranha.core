@@ -38,7 +38,7 @@
     <value>Der Kommentar wurde erfolgreich gelöscht</value>
   </data>
   <data name="Days allowed for commenting" xml:space="preserve">
-    <value>Days allowed for commenting</value>
+    <value>Tage, die offen für Kommentare sind</value>
   </data>
   <data name="Comments are not allowed." xml:space="preserve">
     <value>Kommentare sind nicht aktiviert.</value>
