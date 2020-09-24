@@ -92,7 +92,7 @@ namespace Piranha.Runtime
             /// <param name="hook">The hook</param>
             public void RegisterOnValidate(ModelDelegate<T> hook)
             {
-                App.Hooks.RegisterOnLoad<T>(hook);
+                App.Hooks.RegisterOnValidate<T>(hook);
             }
         }
 
