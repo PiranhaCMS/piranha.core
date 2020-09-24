@@ -13,8 +13,12 @@ using System.Threading.Tasks;
 using Piranha.AspNetCore.Models;
 using Piranha.Models;
 
-namespace Piranha.AspNetCore.Services
+namespace Piranha.AspNetCore.Helpers
 {
+    /// <summary>
+    /// Helper for accessing information about site in
+    /// the current request.
+    /// </summary>
     public interface ISiteHelper
     {
         /// <summary>

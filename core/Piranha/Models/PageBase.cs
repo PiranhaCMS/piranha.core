@@ -9,9 +9,7 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Piranha.Extend.Fields;
 
 namespace Piranha.Models
 {
@@ -19,7 +17,7 @@ namespace Piranha.Models
     /// Base class for page models.
     /// </summary>
     [Serializable]
-    public abstract class PageBase : RoutedContentBase, IBlockContent, IMeta, ICommentModel
+    public abstract class PageBase : RoutedContentBase
     {
         /// <summary>
         /// Gets/sets the site id.
@@ -48,53 +46,13 @@ namespace Piranha.Models
         public bool IsHidden { get; set; }
 
         /// <summary>
-        /// Gets/sets the optional redirect.
-        /// </summary>
-        [StringLength(256)]
-        public string RedirectUrl { get; set; }
-
-        /// <summary>
-        /// Gets/sets the redirect type.
-        /// </summary>
-        /// <returns></returns>
-        public RedirectType RedirectType { get; set; }
-
-        /// <summary>
         /// Gets/sets the id of the page this page is a copy of
         /// </summary>
         public Guid? OriginalPageId { get; set; }
 
         /// <summary>
-        /// Gets/sets the available blocks.
-        /// </summary>
-        public IList<Extend.Block> Blocks { get; set; } = new List<Extend.Block>();
-
-        /// <summary>
-        /// Gets/sets if comments should be enabled.
-        /// </summary>
-        /// <value></value>
-        public bool EnableComments { get; set; } = false;
-
-        /// <summary>
-        /// Gets/sets after how many days after publish date comments
-        /// should be closed. A value of 0 means never.
-        /// </summary>
-        public int CloseCommentsAfterDays { get; set; }
-
-        /// <summary>
-        /// Gets/sets the comment count.
-        /// </summary>
-        public int CommentCount { get; set; }
-
-        /// <summary>
-        /// Checks if comments are open for this page.
-        /// </summary>
-        public bool IsCommentsOpen => EnableComments && Published.HasValue && (CloseCommentsAfterDays == 0 || Published.Value.AddDays(CloseCommentsAfterDays) > DateTime.Now);
-
-        /// <summary>
         /// Gets if this is the startpage of the site.
         /// </summary>
         public bool IsStartPage => !ParentId.HasValue && SortOrder == 0;
-
     }
 }

@@ -233,8 +233,20 @@
     }
 
     &.primary-image {
-        padding: 1rem 0;
-        margin-bottom: 2rem !important;
+        &:not(.primary-image-modal) {
+            padding: 1rem 0;
+            margin-bottom: 2rem !important;
+        }
+        &.primary-image-modal {
+            background: $white;
+            padding: .5rem;
+            margin-bottom: 0 !important;
+            border: 1px solid $gray-400;
+
+            &:hover {
+                border: 1px solid $gray-400;
+            }
+        }
 
         &:hover, &:focus-within {
             border-color: transparent;

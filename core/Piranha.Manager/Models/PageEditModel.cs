@@ -92,6 +92,11 @@ namespace Piranha.Manager.Models
         public string Published { get; set; }
 
         /// <summary>
+        /// Gets/sets the published time.
+        /// </summary>
+        public string PublishedTime { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional redirect url.
         /// </summary>
         public string RedirectUrl { get; set; }

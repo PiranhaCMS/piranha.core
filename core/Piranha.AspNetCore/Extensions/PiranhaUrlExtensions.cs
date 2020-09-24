@@ -18,7 +18,7 @@ using Piranha.Models;
 /// Extension class with helper methods for generating
 /// URL's for the default components.
 /// </summary>
-public static class UrlGenerationExtensions
+public static class PiranhaUrlExtensions
 {
     /// <summary>
     /// Generates an absolute url for the given page.

@@ -13,8 +13,11 @@ using Piranha.Extend.Fields;
 using Piranha.Extend.Blocks;
 using Piranha.Models;
 
-namespace Piranha.AspNetCore.Services
+namespace Piranha.AspNetCore.Helpers
 {
+    /// <summary>
+    /// Helper for manipulating media files.
+    /// </summary>
     public class MediaHelper : IMediaHelper
     {
         private readonly IApi _api;

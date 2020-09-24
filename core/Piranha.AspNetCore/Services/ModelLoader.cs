@@ -17,10 +17,25 @@ using Piranha.Models;
 
 namespace Piranha.AspNetCore.Services
 {
+    /// <summary>
+    /// The model loader is used for retrieving content models with
+    /// built in permission checks for the current user.
+    /// </summary>
     public class ModelLoader : IModelLoader
     {
+        /// <summary>
+        /// The current api.
+        /// </summary>
         protected readonly IApi _api;
+
+        /// <summary>
+        /// The current authorization service.
+        /// </summary>
         protected readonly IAuthorizationService _auth;
+
+        /// <summary>
+        /// The current application service.
+        /// </summary>
         protected readonly IApplicationService _app;
 
         /// <summary>
@@ -37,7 +52,9 @@ namespace Piranha.AspNetCore.Services
         }
 
         /// <summary>
-        /// Gets the specified page model for the given user.
+        /// Gets the specified page model for the given user. If the
+        /// user doesn't have access to the requested page an
+        /// UnauthorizedAccessException is thrown.
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <param name="user">The current user</param>
@@ -117,22 +134,9 @@ namespace Piranha.AspNetCore.Services
         }
 
         /// <summary>
-        /// Gets the specified page model for the given user.
-        /// </summary>
-        /// <param name="id">The unique id</param>
-        /// <param name="user">The current user</param>
-        /// <param name="draft">If a draft should be loaded</param>
-        /// <typeparam name="T">The model type</typeparam>
-        /// <returns>The page model</returns>
-        [Obsolete("GetPage<T> has been renamed to GetPageAsync<T>")]
-        [NoCoverage]
-        public Task<T> GetPage<T>(Guid id, ClaimsPrincipal user, bool draft = false) where T : PageBase
-        {
-            return GetPageAsync<T>(id, user, draft);
-        }
-
-        /// <summary>
-        /// Gets the specified post model for the given user.
+        /// Gets the specified post model for the given user. If the
+        /// user doesn't have access to the requested post an
+        /// UnauthorizedAccessException is thrown.
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <param name="user">The current user</param>
@@ -198,21 +202,6 @@ namespace Piranha.AspNetCore.Services
                 }
             }
             return model;
-        }
-
-        /// <summary>
-        /// Gets the specified post model for the given user.
-        /// </summary>
-        /// <param name="id">The unique id</param>
-        /// <param name="user">The current user</param>
-        /// <param name="draft">If a draft should be loaded</param>
-        /// <typeparam name="T">The model type</typeparam>
-        /// <returns>The post model</returns>
-        [Obsolete("GetPost<T> has been renamed to GetPostAsync<T>")]
-        [NoCoverage]
-        public Task<T> GetPost<T>(Guid id, ClaimsPrincipal user, bool draft = false) where T : PostBase
-        {
-            return GetPostAsync<T>(id, user, draft);
         }
     }
 }

@@ -21,7 +21,10 @@ using Piranha.Models;
 
 namespace Piranha.AspNetCore
 {
-    public class IntegratedMiddleware : MiddlewareBase
+    /// <summary>
+    /// The main application middleware.
+    /// </summary>
+    public class PiranhaMiddleware : MiddlewareBase
     {
         private readonly PiranhaRouteConfig _config;
 
@@ -31,7 +34,7 @@ namespace Piranha.AspNetCore
         /// <param name="next">The next middleware in the pipeline</param>
         /// <param name="config">The current route configuration</param>
         /// <param name="factory">The logger factory</param>
-        public IntegratedMiddleware(RequestDelegate next, PiranhaRouteConfig config, ILoggerFactory factory = null) : base(next, factory)
+        public PiranhaMiddleware(RequestDelegate next, PiranhaRouteConfig config, ILoggerFactory factory = null) : base(next, factory)
         {
             _config = config;
         }
@@ -56,10 +59,7 @@ namespace Piranha.AspNetCore
                 //
                 // 1: Store raw url & request information
                 //
-                #pragma warning disable
-                // OBSOLETE: service.Url
-                service.Request.Url = service.Url = context.Request.Path.Value;
-                #pragma warning enable
+                service.Request.Url = context.Request.Path.Value;
                 service.Request.Host = context.Request.Host.Host;
                 service.Request.Port = context.Request.Host.Port;
                 service.Request.Scheme = context.Request.Scheme;
@@ -139,11 +139,6 @@ namespace Piranha.AspNetCore
                     await _next.Invoke(context);
                     return;
                 }
-
-                #pragma warning disable
-                // OBSOLETE: service.Hostname
-                service.Hostname = hostname;
-                #pragma warning enable
 
                 //
                 // Check if we shouldn't handle empty requests for start page

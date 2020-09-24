@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>8.4.0</Version>
+    <Version>9.0.0-alpha1</Version>
     <Company>Piranha CMS</Company>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
@@ -12,7 +12,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
     <PackageId>Piranha.Data.EF.MySql</PackageId>
-    <PackageVersion>8.4.0</PackageVersion>
+    <PackageVersion>9.0.0-alpha1</PackageVersion>
     <Authors>Piranha CMS</Authors>
     <Description>Entity Framework Core migration package for MySql</Description>
     <Copyright>Copyright (c) .NET Foundation and Contributors</Copyright>
@@ -30,7 +30,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.2" />
     <ProjectReference Include="..\Piranha.Data.EF\Piranha.Data.EF.csproj" />
     <ProjectReference Include="..\..\core\Piranha\Piranha.csproj" />
   </ItemGroup>

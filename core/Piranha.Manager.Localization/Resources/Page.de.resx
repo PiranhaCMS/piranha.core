@@ -19,7 +19,7 @@
     <value>Beim Löschen der Seite ist ein Fehler aufgetreten</value>
   </data>
   <data name="Archive" xml:space="preserve">
-    <value>Archive</value>
+    <value>Archiv</value>
   </data>
   <data name="Detach page" xml:space="preserve">
     <value>Seite lösen</value>
@@ -37,7 +37,7 @@
     <value>Wenn die Seite im Sitemap versteckt werden soll</value>
   </data>
   <data name="Meta title" xml:space="preserve">
-    <value>Meta title</value>
+    <value>Meta-Titel</value>
   </data>
   <data name="Meta keywords" xml:space="preserve">
     <value>Meta-Keywords</value>
@@ -46,13 +46,13 @@
     <value>Meta-Description</value>
   </data>
   <data name="Og title" xml:space="preserve">
-    <value>Og title</value>
+    <value>OG Titel</value>
   </data>
   <data name="Og image" xml:space="preserve">
-    <value>Og image</value>
+    <value>OG Bild</value>
   </data>
   <data name="Og description" xml:space="preserve">
-    <value>Og description</value>
+    <value>OG Beschreibung</value>
   </data>
   <data name="Navigation title" xml:space="preserve">
     <value>Navigations-Titel</value>

@@ -14,10 +14,16 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Piranha.AspNetCore.Helpers;
 using Piranha.Models;
 
 namespace Piranha.AspNetCore.Services
 {
+    /// <summary>
+    /// The main application service. This service must be
+    /// registered as a scoped service as it contains information
+    /// about the current requst.
+    /// </summary>
     public class ApplicationService : IApplicationService
     {
         /// <summary>
