@@ -120,15 +120,13 @@ namespace Piranha.Tests.Services
 
                 Piranha.App.Fields.Register<MyFourthField>();
 
-                var pageTypeBuilder = new PageTypeBuilder(api)
-                    .AddType(typeof(BlogPage));
-                pageTypeBuilder.Build();
-                var postTypeBuilder = new PostTypeBuilder(api)
+                new ContentTypeBuilder(api)
+                    .AddType(typeof(BlogPage))
                     .AddType(typeof(MissingPost))
                     .AddType(typeof(MyPost))
                     .AddType(typeof(MyCollectionPost))
-                    .AddType(typeof(MyDIPost));
-                postTypeBuilder.Build();
+                    .AddType(typeof(MyDIPost))
+                    .Build();
 
                 // Add site
                 var site = new Site

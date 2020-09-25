@@ -9,6 +9,7 @@
  */
 
 using Piranha.AttributeBuilder;
+using Piranha.Extend;
 using Piranha.Models;
 
 namespace RazorWeb.Models
@@ -19,5 +20,10 @@ namespace RazorWeb.Models
     [PostType(Title = "Blog post")]
     public class BlogPost : Post<BlogPost>
     {
+        /// <summary>
+        /// Gets/sets the page header.
+        /// </summary>
+        [Region]
+        public Regions.Hero Hero { get; set; }
     }
 }

@@ -67,6 +67,10 @@ namespace Piranha.Data.EF
                     .ForMember(c => c.Created, o => o.Ignore());
                 cfg.CreateMap<Data.Category, Models.Taxonomy>()
                     .ForMember(c => c.Type, o => o.MapFrom(m => Models.TaxonomyType.Category));
+                cfg.CreateMap<Data.ContentGroup, Models.ContentGroup>();
+                cfg.CreateMap<Models.ContentGroup, Data.ContentGroup>()
+                    .ForMember(g => g.Created, o => o.Ignore())
+                    .ForMember(g => g.LastModified, o => o.Ignore());
                 cfg.CreateMap<Data.MediaFolder, Data.MediaFolder>()
                     .ForMember(f => f.Id, o => o.Ignore())
                     .ForMember(f => f.Created, o => o.Ignore())

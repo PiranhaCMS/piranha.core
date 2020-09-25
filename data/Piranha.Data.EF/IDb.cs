@@ -41,6 +41,16 @@ namespace Piranha
         DbSet<Data.Category> Categories { get; set; }
 
         /// <summary>
+        /// Gets/sets the content group set.
+        /// </summary>
+        DbSet<Data.ContentGroup> ContentGroups { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content type set.
+        /// </summary>
+        DbSet<Data.ContentType> ContentTypes { get; set; }
+
+        /// <summary>
         /// Gets/sets the media set.
         /// </summary>
         DbSet<Data.Media> Media { get; set; }

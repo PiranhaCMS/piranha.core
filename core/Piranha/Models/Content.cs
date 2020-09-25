@@ -17,7 +17,7 @@ namespace Piranha.Models
     /// Base class for project defined content.
     /// </summary>
     /// <typeparam name="T">The type</typeparam>
-    public abstract class Content<T> where T : Content<T>
+    public abstract class Content<T> : ContentBase, IContent where T : Content<T>
     {
         /// <summary>
         /// Gets/sets the optional primary image.
@@ -28,15 +28,5 @@ namespace Piranha.Models
         /// Gets/sets the optional excerpt.
         /// </summary>
         public string Excerpt { get; set; }
-
-        /// <summary>
-        /// Gets/sets the optional category.
-        /// </summary>
-        public Taxonomy Category { get; set; }
-
-        /// <summary>
-        /// Gets/sets the available tags.
-        /// </summary>
-        public IList<Taxonomy> Tags { get; set; } = new List<Taxonomy>();
     }
 }

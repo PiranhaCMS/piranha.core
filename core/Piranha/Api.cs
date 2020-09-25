@@ -25,14 +25,24 @@ namespace Piranha
         private readonly ICache _cache;
 
         /// <summary>
-        /// Gets/sets the alias service.
+        /// Gets the alias service.
         /// </summary>
         public IAliasService Aliases { get; }
 
         /// <summary>
-        /// Gets/sets the archive service.
+        /// Gets the archive service.
         /// </summary>
         public IArchiveService Archives { get; }
+
+        /// <summary>
+        /// Gets the content group service.
+        /// </summary>
+        public IContentGroupService ContentGroups { get; }
+
+        /// <summary>
+        /// Gets the content type service.
+        /// </summary>
+        public IContentTypeService ContentTypes { get; }
 
         /// <summary>
         /// Gets the media service.
@@ -88,6 +98,8 @@ namespace Piranha
             IContentFactory contentFactory,
             IAliasRepository aliasRepository,
             IArchiveRepository archiveRepository,
+            IContentGroupRepository contentGroupRepository,
+            IContentTypeRepository contentTypeRepository,
             IMediaRepository mediaRepository,
             IPageRepository pageRepository,
             IPageTypeRepository pageTypeRepository,
@@ -105,6 +117,8 @@ namespace Piranha
             _cache = cache;
 
             // Create services without dependecies
+            ContentGroups = new ContentGroupService(contentGroupRepository, cache);
+            ContentTypes = new ContentTypeService(contentTypeRepository, cache);
             PageTypes = new PageTypeService(pageTypeRepository, cache);
             Params = new ParamService(paramRepository, cache);
             PostTypes = new PostTypeService(postTypeRepository, cache);

@@ -13,8 +13,9 @@ using System;
 namespace Piranha.AttributeBuilder
 {
     /// <summary>
-    /// Attribute for adding a route to a post type.
+    /// Attribute for adding a custom editor to a post type.
     /// </summary>
+    [Obsolete("PostTypeEditorAttribute is obsolete and has been replaced with ContentTypeEditorAttribute", true)]
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public class PostTypeRouteAttribute : ContentTypeRouteAttribute { }
+    public class PostTypeEditorAttribute : ContentTypeEditorAttribute { }
 }

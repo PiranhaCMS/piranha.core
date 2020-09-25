@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace Piranha.Models
@@ -19,7 +20,21 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the group name of the content type.
         /// </summary>
+        [Required]
+        [StringLength(64)]
         public string Group { get; set; }
+
+        /// <summary>
+        /// Gets/sets if the content type should be
+        /// categorized.
+        /// </summary>
+        public bool UseCategory { get; set; }
+
+        /// <summary>
+        /// Gets/sets if excerpt should be used for the
+        /// content type. The default value is true.
+        /// </summary>
+        public bool UseExcerpt { get; set; } = true;
 
         /// <summary>
         /// Gets/sets if primary image should be used for the
@@ -28,10 +43,9 @@ namespace Piranha.Models
         public bool UsePrimaryImage { get; set; } = true;
 
         /// <summary>
-        /// Gets/sets if excerpt should be used for the
-        /// content type. The default value is true.
+        /// Gets/sets if tags should be used for the content type.
         /// </summary>
-        public bool UseExcerpt { get; set; } = true;
+        public bool UseTags { get; set; }
 
         /// <summary>
         /// Validates that the content type is correctly defined.

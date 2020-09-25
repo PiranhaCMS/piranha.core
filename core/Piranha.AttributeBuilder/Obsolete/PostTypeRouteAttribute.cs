@@ -13,19 +13,9 @@ using System;
 namespace Piranha.AttributeBuilder
 {
     /// <summary>
-    /// Attribute for marking a class as a content type.
+    /// Attribute for adding a route to a post type.
     /// </summary>
+    [Obsolete("PostTypeRouteAttribute is obsolete and has been replaced with ContentTypeRouteAttribute", true)]
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public class ContentTypeRouteAttribute : Attribute
-    {
-        /// <summary>
-        /// Gets/sets the display title.
-        /// </summary>
-        public string Title { get; set; }
-
-        /// <summary>
-        /// Gets/sets the internal route.
-        /// </summary>
-        public string Route { get; set; }
-    }
+    public class PostTypeRouteAttribute : ContentTypeRouteAttribute { }
 }

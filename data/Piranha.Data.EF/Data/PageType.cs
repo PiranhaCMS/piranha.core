@@ -13,5 +13,5 @@ using System;
 namespace Piranha.Data
 {
     [Serializable]
-    public sealed class PageType : ContentType { }
+    public sealed class PageType : ContentTypeBase { }
 }

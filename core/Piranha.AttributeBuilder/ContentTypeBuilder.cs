@@ -25,9 +25,18 @@ namespace Piranha.AttributeBuilder
     /// </summary>
     public class ContentTypeBuilder
     {
-        private readonly PageTypeBuilder _pageTypes;
-        private readonly PostTypeBuilder _postTypes;
-        private readonly SiteTypeBuilder _siteTypes;
+        private class BuilderItem<T> where T : ContentTypeBase
+        {
+            public Type Type { get; set; }
+            public T ContentType { get; set; }
+        }
+
+        private readonly IApi _api;
+        private readonly IList<Type> _contentGroups = new List<Type>();
+        private readonly IList<BuilderItem<ContentType>> _contentTypes = new List<BuilderItem<ContentType>>();
+        private readonly IList<BuilderItem<PageType>> _pageTypes = new List<BuilderItem<PageType>>();
+        private readonly IList<BuilderItem<PostType>> _postTypes = new List<BuilderItem<PostType>>();
+        private readonly IList<BuilderItem<SiteType>> _siteTypes = new List<BuilderItem<SiteType>>();
 
         /// <summary>
         /// Default constructor.
@@ -35,9 +44,7 @@ namespace Piranha.AttributeBuilder
         /// <param name="api">The current api</param>
         public ContentTypeBuilder(IApi api)
         {
-            _pageTypes = new PageTypeBuilder(api);
-            _postTypes = new PostTypeBuilder(api);
-            _siteTypes = new SiteTypeBuilder(api);
+            _api = api;
         }
 
         /// <summary>
@@ -49,26 +56,73 @@ namespace Piranha.AttributeBuilder
         {
             foreach (var type in assembly.GetTypes())
             {
-                if (type.IsClass && !type.IsAbstract)
+                if (type.IsClass)
                 {
-                    var pageAttr = type.GetCustomAttribute<PageTypeAttribute>();
-                    if (pageAttr != null)
-                    {
-                        _pageTypes.AddType(type);
-                        continue;
-                    }
+                    AddType(type);
+                }
+            }
+            return this;
+        }
 
-                    var postAttr = type.GetCustomAttribute<PostTypeAttribute>();
-                    if (postAttr != null)
-                    {
-                        _postTypes.AddType(type);
-                        continue;
-                    }
+        /// <summary>
+        /// Adds a new type to build content types from.
+        /// </summary>
+        /// <param name="type">The type</param>
+        /// <returns>The builder</returns>
+        public ContentTypeBuilder AddType(Type type)
+        {
+            // Make sure the type is a class
+            if (!type.IsClass) return this;
 
-                    var siteAttr = type.GetCustomAttribute<SiteTypeAttribute>();
-                    if (siteAttr != null)
+            if (type.IsAbstract)
+            {
+                // Type is abstract, check if this is a content group
+                if (type.GetCustomAttribute<ContentGroupAttribute>(false) != null)
+                {
+                    _contentGroups.Add(type);
+                }
+            }
+            else
+            {
+                // Type is a non abstract class, check if it is a content type
+                if (typeof(IContent).IsAssignableFrom(type))
+                {
+                    if (type.GetCustomAttribute<ContentTypeAttribute>() != null)
                     {
-                        _siteTypes.AddType(type);
+                        _contentTypes.Add(new BuilderItem<ContentType>
+                        {
+                            Type = type
+                        });
+                    }
+                }
+                else if (typeof(PageBase).IsAssignableFrom(type))
+                {
+                    if (type.GetCustomAttribute<PageTypeAttribute>() != null)
+                    {
+                        _pageTypes.Add(new BuilderItem<PageType>
+                        {
+                            Type = type
+                        });
+                    }
+                }
+                else if (typeof(PostBase).IsAssignableFrom(type))
+                {
+                    if (type.GetCustomAttribute<PostTypeAttribute>() != null)
+                    {
+                        _postTypes.Add(new BuilderItem<PostType>
+                        {
+                            Type = type
+                        });
+                    }
+                }
+                else if (typeof(SiteContentBase).IsAssignableFrom(type))
+                {
+                    if (type.GetCustomAttribute<SiteTypeAttribute>() != null)
+                    {
+                        _siteTypes.Add(new BuilderItem<SiteType>
+                        {
+                            Type = type
+                        });
                     }
                 }
             }
@@ -76,15 +130,79 @@ namespace Piranha.AttributeBuilder
         }
 
         /// <summary>
-        /// Builds all of the importer content types and saves the to the
+        /// Builds all of the content types and saves them to the
         /// database.
         /// </summary>
         /// <returns>The builder</returns>
         public ContentTypeBuilder Build()
         {
-            _pageTypes.Build();
-            _postTypes.Build();
-            _siteTypes.Build();
+            return BuildAsync().GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Builds all of the content types and saves them to the
+        /// database.
+        /// </summary>
+        /// <returns>The builder</returns>
+        public async Task<ContentTypeBuilder> BuildAsync()
+        {
+            // Build content groups
+            foreach (var t in _contentGroups)
+            {
+                var group = GetContentGroup(t);
+                if (group != null)
+                {
+                    await _api.ContentGroups.SaveAsync(group);
+                }
+            }
+
+            // Build content types
+            foreach (var t in _contentTypes)
+            {
+                var type = GetContentType(t.Type);
+                if (type != null)
+                {
+                    type.Ensure();
+                    t.ContentType = type;
+                    await _api.ContentTypes.SaveAsync(type);
+                }
+            }
+
+            // Build page types
+            foreach (var t in _pageTypes)
+            {
+                var type = GetPageType(t.Type);
+                if (type != null)
+                {
+                    type.Ensure();
+                    t.ContentType = type;
+                    await _api.PageTypes.SaveAsync(type);
+                }
+            }
+
+            // Build post types
+            foreach (var t in _postTypes)
+            {
+                var type = GetPostType(t.Type);
+                if (type != null)
+                {
+                    type.Ensure();
+                    t.ContentType = type;
+                    await _api.PostTypes.SaveAsync(type);
+                }
+            }
+
+            // Build site types
+            foreach (var t in _siteTypes)
+            {
+                var type = GetSiteType(t.Type);
+                if (type != null)
+                {
+                    type.Ensure();
+                    t.ContentType = type;
+                    await _api.SiteTypes.SaveAsync(type);
+                }
+            }
 
             return this;
         }
@@ -96,66 +214,328 @@ namespace Piranha.AttributeBuilder
         /// <returns>The builder</returns>
         public ContentTypeBuilder DeleteOrphans()
         {
-            _pageTypes.DeleteOrphans();
-            _postTypes.DeleteOrphans();
-            _siteTypes.DeleteOrphans();
+            return DeleteOrphansAsync().GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Deletes all content types that does not currently exist in
+        /// the builder.
+        /// </summary>
+        /// <returns>The builder</returns>
+        public async Task<ContentTypeBuilder> DeleteOrphansAsync()
+        {
+            var orphanedPageTypes = new List<PageType>();
+            foreach (var pt in await _api.PageTypes.GetAllAsync())
+            {
+                if (!_pageTypes.Any(t => t.ContentType.Id == pt.Id))
+                {
+                    orphanedPageTypes.Add(pt);
+                }
+            }
+            await _api.PageTypes.DeleteAsync(orphanedPageTypes);
+
+            var orphanedPostTypes = new List<PostType>();
+            foreach (var pt in await _api.PostTypes.GetAllAsync())
+            {
+                if (!_postTypes.Any(t => t.ContentType.Id == pt.Id))
+                {
+                    orphanedPostTypes.Add(pt);
+                }
+            }
+            await _api.PostTypes.DeleteAsync(orphanedPostTypes);
+
+            var orphanedSiteTypes = new List<SiteType>();
+            foreach (var st in await _api.SiteTypes.GetAllAsync())
+            {
+                if (!_siteTypes.Any(t => t.ContentType.Id == st.Id))
+                {
+                    orphanedSiteTypes.Add(st);
+                }
+            }
+            await _api.SiteTypes.DeleteAsync(orphanedSiteTypes);
 
             return this;
         }
-    }
 
-    /// <summary>
-    /// Abstract base class for importing a content type from attributes.
-    /// </summary>
-    /// <typeparam name="T">The builder type</typeparam>
-    /// <typeparam name="TType">The content type</typeparam>
-    public abstract class ContentTypeBuilder<T, TType>
-        where T : ContentTypeBuilder<T, TType>
-        where TType : ContentTypeBase
-    {
-        /// <summary>
-        /// The currently imported types.
-        /// </summary>
-        protected readonly List<Type> _types = new List<Type>();
-
-        /// <summary>
-        /// Adds a new type to build page types from
-        /// </summary>
-        /// <param name="type">The type</param>
-        /// <returns>The builder</returns>
-        public T AddType(Type type)
+        private ContentGroup GetContentGroup(Type type)
         {
-            _types.Add(type);
+            var attr = type.GetCustomAttribute<ContentGroupAttribute>(false);
 
-            return (T)this;
+            if (attr != null)
+            {
+                // Create the content group
+                return new ContentGroup
+                {
+                    Id = attr.Id,
+                    Title = attr.Title,
+                    CLRType = type.AssemblyQualifiedName
+                };
+            }
+            return null;
         }
 
-        /// <summary>
-        /// Builds the page types.
-        /// </summary>
-        public virtual T Build()
+        private ContentType GetContentType(Type type)
         {
-            return BuildAsync().GetAwaiter().GetResult();
+            var group = type.GetCustomAttribute<ContentGroupAttribute>();
+            if (group == null)
+            {
+                throw new ArgumentException($"Content Group is missing for the Content Type { type.Name }");
+            }
+
+            var attr = type.GetTypeInfo().GetCustomAttribute<ContentTypeAttribute>();
+
+            if (attr != null)
+            {
+                // Set default id if not specified
+                if (string.IsNullOrWhiteSpace(attr.Id))
+                {
+                    attr.Id = type.Name;
+                }
+
+                // Make sure both id and title are set
+                if (string.IsNullOrEmpty(attr.Id) || string.IsNullOrEmpty(attr.Title))
+                {
+                    throw new ArgumentException($"[{ type.Name }] Id and Title is mandatory for content types.");
+                }
+
+                return new ContentType
+                {
+                    Id = attr.Id,
+                    CLRType = type.GetTypeInfo().AssemblyQualifiedName,
+                    Title = attr.Title,
+                    Group = group.Id,
+                    UseExcerpt = attr.UseExcerpt,
+                    UsePrimaryImage = attr.UsePrimaryImage,
+                    UseCategory = typeof(ICategorizedContent).IsAssignableFrom(type),
+                    UseTags = typeof(ITaggedContent).IsAssignableFrom(type),
+                    CustomEditors = GetEditors(type),
+                    Regions = GetRegions(type)
+                };
+            }
+            return null;
         }
 
-        /// <summary>
-        /// Builds the page types.
-        /// </summary>
-        public abstract Task<T> BuildAsync();
+        private PageType GetPageType(Type type)
+        {
+            var attr = type.GetTypeInfo().GetCustomAttribute<PageTypeAttribute>();
 
-        /// <summary>
-        /// Gets the possible content type for the given type.
-        /// </summary>
-        /// <param name="type">The type</param>
-        /// <returns>The content type</returns>
-        protected abstract TType GetContentType(Type type);
+            if (attr != null)
+            {
+                // Set default id if not specified
+                if (string.IsNullOrWhiteSpace(attr.Id))
+                {
+                    attr.Id = type.Name;
+                }
 
-        /// <summary>
-        /// Gets the possible region type for the given property.
-        /// </summary>
-        /// <param name="prop">The property info</param>
-        /// <returns>The region type</returns>
-        protected Tuple<int?, RegionType> GetRegionType(PropertyInfo prop)
+                // Make sure both id and title are set
+                if (string.IsNullOrEmpty(attr.Id) || string.IsNullOrEmpty(attr.Title))
+                {
+                    throw new ArgumentException($"[{ type.Name }] Id and Title is mandatory for content types.");
+                }
+
+                // Create page type
+                var pageType = new PageType
+                {
+                    Id = attr.Id,
+                    CLRType = type.GetTypeInfo().AssemblyQualifiedName,
+                    Title = attr.Title,
+                    UseBlocks = attr.UseBlocks,
+                    UsePrimaryImage = attr.UsePrimaryImage,
+                    UseExcerpt = attr.UseExcerpt,
+                    IsArchive = attr.IsArchive,
+                    Routes = GetRoutes(type),
+                    CustomEditors = GetEditors(type),
+                    Regions = GetRegions(type)
+                };
+
+                // Add default archive editor
+                if (pageType.IsArchive)
+                {
+                    pageType.CustomEditors.Insert(0, new ContentTypeEditor
+                    {
+                        Component = "post-archive",
+                        Icon = "fas fa-book",
+                        Title = "Archive"
+                    });
+                }
+
+                // Add archive items
+                if (pageType.IsArchive)
+                {
+                    var itemTypes = type.GetCustomAttributes(typeof(PageTypeArchiveItemAttribute));
+                    foreach (PageTypeArchiveItemAttribute itemType in itemTypes)
+                    {
+                        var postAttr = itemType.PostType.GetCustomAttribute<PostTypeAttribute>();
+                        if (postAttr != null)
+                        {
+                            var typeId = postAttr.Id;
+                            if (string.IsNullOrWhiteSpace(typeId))
+                            {
+                                typeId = itemType.PostType.Name;
+                            }
+                            pageType.ArchiveItemTypes.Add(typeId);
+                        }
+                    }
+                }
+
+                return pageType;
+            }
+            return null;
+        }
+
+        private PostType GetPostType(Type type)
+        {
+            var attr = type.GetTypeInfo().GetCustomAttribute<PostTypeAttribute>();
+
+            if (attr != null)
+            {
+                // Set default id if not specified
+                if (string.IsNullOrWhiteSpace(attr.Id))
+                {
+                    attr.Id = type.Name;
+                }
+
+                // Make sure both id and title are set
+                if (string.IsNullOrEmpty(attr.Id) || string.IsNullOrEmpty(attr.Title))
+                {
+                    throw new ArgumentException($"[{ type.Name }] Id and Title is mandatory for content types.");
+                }
+
+                // Create post type
+                return new PostType
+                {
+                    Id = attr.Id,
+                    CLRType = type.GetTypeInfo().AssemblyQualifiedName,
+                    Title = attr.Title,
+                    UseBlocks = attr.UseBlocks,
+                    UsePrimaryImage = attr.UsePrimaryImage,
+                    UseExcerpt = attr.UseExcerpt,
+                    Routes = GetRoutes(type),
+                    CustomEditors = GetEditors(type),
+                    Regions = GetRegions(type)
+                };
+            }
+            return null;
+        }
+
+        private SiteType GetSiteType(Type type)
+        {
+            var attr = type.GetTypeInfo().GetCustomAttribute<SiteTypeAttribute>();
+
+            if (attr != null)
+            {
+                // Set default id if not specified
+                if (string.IsNullOrWhiteSpace(attr.Id))
+                {
+                    attr.Id = type.Name;
+                }
+
+                // Make sure both id and title are set
+                if (string.IsNullOrEmpty(attr.Id) || string.IsNullOrEmpty(attr.Title))
+                {
+                    throw new ArgumentException($"[{ type.Name }] Id and Title is mandatory for content types.");
+                }
+
+                // Create post type
+                return new SiteType
+                {
+                    Id = attr.Id,
+                    CLRType = type.GetTypeInfo().AssemblyQualifiedName,
+                    Title = attr.Title,
+                    Regions = GetRegions(type)
+                };
+            }
+            return null;
+        }
+
+        private IList<ContentTypeRoute> GetRoutes(Type type)
+        {
+            var routes = new List<ContentTypeRoute>();
+
+            var attrs = type.GetTypeInfo().GetCustomAttributes(typeof(ContentTypeRouteAttribute));
+            foreach (ContentTypeRouteAttribute attr in attrs)
+            {
+                if (!string.IsNullOrWhiteSpace(attr.Title) && !string.IsNullOrWhiteSpace(attr.Route))
+                {
+                    var contentRoute = new ContentTypeRoute
+                    {
+                        Title = attr.Title,
+                        Route = attr.Route
+                    };
+
+                    // Make sure the route starts with a forward slash
+                    if (!contentRoute.Route.StartsWith("/"))
+                    {
+                        contentRoute.Route = $"/{ contentRoute.Route }";
+                    }
+                    routes.Add(contentRoute);
+                }
+            }
+            return routes;
+        }
+
+        private IList<ContentTypeEditor> GetEditors(Type type)
+        {
+            var editors = new List<ContentTypeEditor>();
+
+            var attrs = type.GetTypeInfo().GetCustomAttributes(typeof(ContentTypeEditorAttribute));
+            foreach (ContentTypeEditorAttribute attr in attrs)
+            {
+                if (!string.IsNullOrWhiteSpace(attr.Component) && !string.IsNullOrWhiteSpace(attr.Title))
+                {
+                    // Check if we already have an editor registered with this name
+                    var current = editors.FirstOrDefault(e => e.Title == attr.Title);
+
+                    if (current != null)
+                    {
+                        // Replace current editor
+                        current.Component = attr.Component;
+                        current.Icon = attr.Icon;
+                        current.Title = attr.Title;
+                    }
+                    else
+                    {
+                        // Add new editor
+                        editors.Add(new ContentTypeEditor
+                        {
+                            Component = attr.Component,
+                            Icon = attr.Icon,
+                            Title = attr.Title
+                        });
+                    }
+                }
+            }
+            return editors;
+        }
+
+        private IList<RegionType> GetRegions(Type type)
+        {
+            var regions = new List<RegionType>();
+
+            // Get regions
+            var sortedRegions = new List<Tuple<int?, RegionType>>();
+            foreach (var prop in type.GetProperties(App.PropertyBindings))
+            {
+                var regionType = GetRegionType(prop);
+
+                if (regionType != null)
+                {
+                    sortedRegions.Add(regionType);
+                }
+            }
+            sortedRegions = sortedRegions.OrderBy(t => t.Item1).ToList();
+
+            // First add sorted regions
+            foreach (var regionType in sortedRegions.Where(t => t.Item1.HasValue))
+                regions.Add(regionType.Item2);
+            // Then add the unsorted regions
+            foreach (var regionType in sortedRegions.Where(t => !t.Item1.HasValue))
+                regions.Add(regionType.Item2);
+
+            return regions;
+        }
+
+        private Tuple<int?, RegionType> GetRegionType(PropertyInfo prop)
         {
             var attr = prop.GetCustomAttribute<RegionAttribute>();
 
@@ -235,12 +615,7 @@ namespace Piranha.AttributeBuilder
             return null;
         }
 
-        /// <summary>
-        /// Gets the possible field type for the given property.
-        /// </summary>
-        /// <param name="prop">The property</param>
-        /// <returns>The field type</returns>
-        protected FieldType GetFieldType(PropertyInfo prop)
+        private FieldType GetFieldType(PropertyInfo prop)
         {
             var attr = prop.GetCustomAttribute<FieldAttribute>();
 

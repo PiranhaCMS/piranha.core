@@ -77,13 +77,10 @@ namespace Piranha.Tests.Services
             {
                 Piranha.App.Init(api);
 
-                var builder = new PageTypeBuilder(api)
-                    .AddType(typeof(MyPage));
-                builder.Build();
-
-                var siteBuilder = new SiteTypeBuilder(api)
-                    .AddType(typeof(MySiteContent));
-                siteBuilder.Build();
+                new ContentTypeBuilder(api)
+                    .AddType(typeof(MyPage))
+                    .AddType(typeof(MySiteContent))
+                    .Build();
 
                 await api.Sites.SaveAsync(new Site
                 {

@@ -24,11 +24,6 @@ namespace Piranha.AttributeBuilder
         public string Group { get; set; }
 
         /// <summary>
-        /// Gets/sets if the content type should be categorized.
-        /// </summary>
-        public bool UseCategory { get; set; } = false;
-
-        /// <summary>
         /// Gets/sets if excerpt should be used for the
         /// content type. The default value is true.
         /// </summary>
@@ -39,11 +34,6 @@ namespace Piranha.AttributeBuilder
         /// content type. The default value is true.
         /// </summary>
         public bool UsePrimaryImage { get; set; } = true;
-
-        /// <summary>
-        /// Gets/sets if the content type should be tagged.
-        /// </summary>
-        public bool UseTags { get; set; } = false;
 
         /// <summary>
         /// Default constructor.

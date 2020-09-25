@@ -18,8 +18,8 @@ namespace MvcWeb.Models
     /// Basic page with main content in markdown.
     /// </summary>
     [PageType(Title = "Standard Page")]
-    [PageTypeRoute(Title = "Narrow", Route = "/page")]
-    [PageTypeRoute(Title = "Wide", Route = "/pagewide")]
+    [ContentTypeRoute(Title = "Narrow", Route = "/page")]
+    [ContentTypeRoute(Title = "Wide", Route = "/pagewide")]
     public class StandardPage : Page<StandardPage>
     {
         /// <summary>

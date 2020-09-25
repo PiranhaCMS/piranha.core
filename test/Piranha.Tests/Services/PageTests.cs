@@ -139,13 +139,13 @@ namespace Piranha.Tests.Services
 
                 Piranha.App.Fields.Register<MyFourthField>();
 
-                var builder = new PageTypeBuilder(api)
+                new ContentTypeBuilder(api)
                     .AddType(typeof(MissingPage))
                     .AddType(typeof(MyBlogPage))
                     .AddType(typeof(MyPage))
                     .AddType(typeof(MyCollectionPage))
-                    .AddType(typeof(MyDIPage));
-                builder.Build();
+                    .AddType(typeof(MyDIPage))
+                    .Build();
 
                 var site = new Site
                 {

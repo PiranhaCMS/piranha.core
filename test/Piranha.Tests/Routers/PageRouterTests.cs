@@ -40,9 +40,9 @@ namespace Piranha.Tests.Routers
             {
                 Piranha.App.Init(api);
 
-                var builder = new PageTypeBuilder(api)
-                    .AddType(typeof(MyPage));
-                builder.Build();
+                new ContentTypeBuilder(api)
+                    .AddType(typeof(MyPage))
+                    .Build();
 
                 // Add site
                 var site1 = new Site

@@ -13,10 +13,10 @@ using System;
 namespace Piranha.AttributeBuilder
 {
     /// <summary>
-    /// Attribute for adding a custom editor to a post type.
+    /// Base class for content type editor attributes.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public class PostTypeEditorAttribute : Attribute
+    public class ContentTypeEditorAttribute : Attribute
     {
         /// <summary>
         /// Gets/sets the editor component.

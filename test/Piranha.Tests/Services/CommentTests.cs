@@ -60,10 +60,10 @@ namespace Piranha.Tests.Services
             using (var api = CreateApi())
             {
                 // Import content types
-                new PageTypeBuilder(api)
+                new ContentTypeBuilder(api)
                     .AddType(typeof(BlogArchive))
                     .Build();
-                new PostTypeBuilder(api)
+                new ContentTypeBuilder(api)
                     .AddType(typeof(BlogPost))
                     .Build();
 

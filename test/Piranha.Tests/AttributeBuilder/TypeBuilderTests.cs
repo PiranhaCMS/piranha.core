@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Piranha.AttributeBuilder;
 using Piranha.Extend;
+using Piranha.Models;
 
 namespace Piranha.Tests.AttributeBuilder
 {
@@ -21,30 +22,30 @@ namespace Piranha.Tests.AttributeBuilder
     public class TypeBuilderTests : BaseTestsAsync
     {
         [PageType(Id = "Simple", Title = "Simple Page Type")]
-        public class SimplePageType
+        public class SimplePageType : Page<SimplePageType>
         {
             [Region(SortOrder = 1)]
             public Extend.Fields.TextField Body { get; set; }
         }
 
         [PageType(Id = "Routed", Title = "Routed Page Type")]
-        [PageTypeRoute(Title = "Default", Route = "pageroute")]
-        public class RoutedPageType
+        [ContentTypeRoute(Title = "Default", Route = "pageroute")]
+        public class RoutedPageType : Page<RoutedPageType>
         {
         }
 
         [PageType(Id = "Archive", Title = "Archive Page Type", UseBlocks = false, IsArchive = true)]
         [PageTypeArchiveItem(typeof(SimplePostType))]
-        public class ArchivePageType
+        public class ArchivePageType : Page<ArchivePageType>
         {
         }
 
         [PageType(Id = "Complex", Title = "Complex Page Type")]
-        [PageTypeRoute(Title = "Default", Route = "/complex")]
-        [PageTypeEditor(Title = "Custom Editor", Component = "will be replaced", Icon = "will be replaced")]
-        [PageTypeEditor(Title = "Custom Editor", Component = "custom-editor", Icon = "fa fas-fish")]
-        [PageTypeEditor(Title = "Another Editor", Component = "another-editor", Icon = "fa fas-fish")]
-        public class ComplexPageType
+        [ContentTypeRoute(Title = "Default", Route = "/complex")]
+        [ContentTypeEditor(Title = "Custom Editor", Component = "will be replaced", Icon = "will be replaced")]
+        [ContentTypeEditor(Title = "Custom Editor", Component = "custom-editor", Icon = "fa fas-fish")]
+        [ContentTypeEditor(Title = "Another Editor", Component = "another-editor", Icon = "fa fas-fish")]
+        public class ComplexPageType : Page<ComplexPageType>
         {
             public class BodyRegion
             {
@@ -64,24 +65,24 @@ namespace Piranha.Tests.AttributeBuilder
         }
 
         [PostType(Id = "Simple", Title = "Simple Post Type", UseBlocks = false, UsePrimaryImage = false, UseExcerpt = false)]
-        public class SimplePostType
+        public class SimplePostType : Post<SimplePostType>
         {
             [Region]
             public Extend.Fields.TextField Body { get; set; }
         }
 
         [PostType(Id = "Routed", Title = "Routed Post Type")]
-        [PostTypeRoute(Title = "Default", Route = "postroute")]
-        public class RoutedPostType
+        [ContentTypeRoute(Title = "Default", Route = "postroute")]
+        public class RoutedPostType : Post<RoutedPostType>
         {
         }
 
         [PostType(Id = "Complex", Title = "Complex Post Type")]
-        [PostTypeRoute(Title = "Default", Route = "/complex")]
-        [PostTypeEditor(Title = "Custom Editor", Component = "will be replaced", Icon = "will be replaced")]
-        [PostTypeEditor(Title = "Custom Editor", Component = "custom-editor", Icon = "fa fas-fish")]
-        [PostTypeEditor(Title = "Another Editor", Component = "another-editor", Icon = "fa fas-fish")]
-        public class ComplexPostType
+        [ContentTypeRoute(Title = "Default", Route = "/complex")]
+        [ContentTypeEditor(Title = "Custom Editor", Component = "will be replaced", Icon = "will be replaced")]
+        [ContentTypeEditor(Title = "Custom Editor", Component = "custom-editor", Icon = "fa fas-fish")]
+        [ContentTypeEditor(Title = "Another Editor", Component = "another-editor", Icon = "fa fas-fish")]
+        public class ComplexPostType : Post<ComplexPostType>
         {
             public class BodyRegion
             {
@@ -99,14 +100,14 @@ namespace Piranha.Tests.AttributeBuilder
         }
 
         [SiteType(Id = "Simple", Title = "Simple Page Type")]
-        public class SimpleSiteType
+        public class SimpleSiteType : SiteContent<SimpleSiteType>
         {
             [Region(SortOrder = 1)]
             public Extend.Fields.TextField Body { get; set; }
         }
 
         [SiteType(Id = "Complex", Title = "Complex Page Type")]
-        public class ComplexSiteType
+        public class ComplexSiteType : SiteContent<ComplexSiteType>
         {
             public class BodyRegion
             {
@@ -157,9 +158,9 @@ namespace Piranha.Tests.AttributeBuilder
         {
             using (var api = CreateApi())
             {
-                var builder = new PageTypeBuilder(api)
-                    .AddType(typeof(SimplePageType));
-                builder.Build();
+                new ContentTypeBuilder(api)
+                    .AddType(typeof(SimplePageType))
+                    .Build();
 
                 var type = await api.PageTypes.GetByIdAsync("Simple");
 
@@ -176,11 +177,12 @@ namespace Piranha.Tests.AttributeBuilder
         {
             using (var api = CreateApi())
             {
-                var builder = new PageTypeBuilder(api)
-                    .AddType(typeof(RoutedPageType));
-                builder.Build();
+                new ContentTypeBuilder(api)
+                    .AddType(typeof(RoutedPageType))
+                    .Build();
 
                 var type = await api.PageTypes.GetByIdAsync("Routed");
+                var types = await api.PageTypes.GetAllAsync();
 
                 Assert.NotNull(type);
 
@@ -194,9 +196,9 @@ namespace Piranha.Tests.AttributeBuilder
         {
             using (var api = CreateApi())
             {
-                var builder = new PageTypeBuilder(api)
-                    .AddType(typeof(ArchivePageType));
-                builder.Build();
+                new ContentTypeBuilder(api)
+                    .AddType(typeof(ArchivePageType))
+                    .Build();
 
                 var type = await api.PageTypes.GetByIdAsync("Archive");
 
@@ -212,9 +214,9 @@ namespace Piranha.Tests.AttributeBuilder
         {
             using (var api = CreateApi())
             {
-                var builder = new PageTypeBuilder(api)
-                    .AddType(typeof(ComplexPageType));
-                builder.Build();
+                new ContentTypeBuilder(api)
+                    .AddType(typeof(ComplexPageType))
+                    .Build();
 
                 var type = await api.PageTypes.GetByIdAsync("Complex");
 
@@ -255,9 +257,9 @@ namespace Piranha.Tests.AttributeBuilder
         {
             using (var api = CreateApi())
             {
-                var builder = new PostTypeBuilder(api)
-                    .AddType(typeof(SimplePostType));
-                builder.Build();
+                new ContentTypeBuilder(api)
+                    .AddType(typeof(SimplePostType))
+                    .Build();
 
                 var type = await api.PostTypes.GetByIdAsync("Simple");
 
@@ -276,9 +278,9 @@ namespace Piranha.Tests.AttributeBuilder
         {
             using (var api = CreateApi())
             {
-                var builder = new PostTypeBuilder(api)
-                    .AddType(typeof(RoutedPostType));
-                builder.Build();
+                new ContentTypeBuilder(api)
+                    .AddType(typeof(RoutedPostType))
+                    .Build();
 
                 var type = await api.PostTypes.GetByIdAsync("Routed");
 
@@ -294,9 +296,9 @@ namespace Piranha.Tests.AttributeBuilder
         {
             using (var api = CreateApi())
             {
-                var builder = new PostTypeBuilder(api)
-                    .AddType(typeof(ComplexPostType));
-                builder.Build();
+                new ContentTypeBuilder(api)
+                    .AddType(typeof(ComplexPostType))
+                    .Build();
 
                 var type = await api.PostTypes.GetByIdAsync("Complex");
 
@@ -331,16 +333,17 @@ namespace Piranha.Tests.AttributeBuilder
         {
             using (var api = CreateApi())
             {
-                var builder = new PageTypeBuilder(api)
+                new ContentTypeBuilder(api)
                     .AddType(typeof(SimplePageType))
-                    .AddType(typeof(ComplexPageType));
-                builder.Build();
+                    .AddType(typeof(ComplexPageType))
+                    .Build();
 
                 Assert.Equal(2, (await api.PageTypes.GetAllAsync()).Count());
 
-                builder = new PageTypeBuilder(api)
-                    .AddType(typeof(SimplePageType));
-                builder.DeleteOrphans();
+                new ContentTypeBuilder(api)
+                    .AddType(typeof(SimplePageType))
+                    .Build()
+                    .DeleteOrphans();
 
                 Assert.Single(await api.PageTypes.GetAllAsync());
             }
@@ -351,9 +354,9 @@ namespace Piranha.Tests.AttributeBuilder
         {
             using (var api = CreateApi())
             {
-                var builder = new SiteTypeBuilder(api)
-                    .AddType(typeof(SimpleSiteType));
-                builder.Build();
+                new ContentTypeBuilder(api)
+                    .AddType(typeof(SimpleSiteType))
+                    .Build();
 
                 var type = await api.SiteTypes.GetByIdAsync("Simple");
 
@@ -369,9 +372,9 @@ namespace Piranha.Tests.AttributeBuilder
         {
             using (var api = CreateApi())
             {
-                var builder = new SiteTypeBuilder(api)
-                    .AddType(typeof(ComplexSiteType));
-                builder.Build();
+                new ContentTypeBuilder(api)
+                    .AddType(typeof(ComplexSiteType))
+                    .Build();
 
                 var type = await api.SiteTypes.GetByIdAsync("Complex");
 
