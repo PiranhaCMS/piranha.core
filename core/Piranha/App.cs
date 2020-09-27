@@ -84,6 +84,11 @@ namespace Piranha
         private IMarkdown _markdown;
 
         /// <summary>
+        /// The currently available content types.
+        /// </summary>
+        private readonly ContentTypeList<Models.ContentType> _contentTypes;
+
+        /// <summary>
         /// The currently available page types.
         /// </summary>
         private readonly ContentTypeList<Models.PageType> _pageTypes;
@@ -153,6 +158,11 @@ namespace Piranha
             get => Instance._cacheLevel;
             set => Instance._cacheLevel = value;
         }
+
+        /// <summary>
+        /// Gets the currently available content types.
+        /// </summary>
+        public static ContentTypeList<Models.ContentType> ContentTypes => Instance._contentTypes;
 
         /// <summary>
         /// Gets the currently available page types.
@@ -266,6 +276,7 @@ namespace Piranha
             _serializers = new SerializerManager();
             _hooks = new HookManager();
             _permissions = new PermissionManager();
+            _contentTypes = new ContentTypeList<Models.ContentType>();
             _pageTypes = new ContentTypeList<Models.PageType>();
             _postTypes = new ContentTypeList<Models.PostType>();
             _siteTypes = new ContentTypeList<Models.SiteType>();
@@ -322,6 +333,7 @@ namespace Piranha
                     if (!_isInitialized)
                     {
                         // Initialize content types
+                        _contentTypes.Init(api.ContentTypes.GetAllAsync().GetAwaiter().GetResult());
                         _pageTypes.Init(api.PageTypes.GetAllAsync().GetAwaiter().GetResult());
                         _postTypes.Init(api.PostTypes.GetAllAsync().GetAwaiter().GetResult());
                         _siteTypes.Init(api.SiteTypes.GetAllAsync().GetAwaiter().GetResult());
