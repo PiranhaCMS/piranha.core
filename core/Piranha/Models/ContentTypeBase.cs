@@ -18,7 +18,7 @@ namespace Piranha.Models
     /// Base class for templated content types.
     /// </summary>
     [Serializable]
-    public abstract class ContentTypeBase
+    public abstract class ContentTypeBase : ITypeModel
     {
         /// <summary>
         /// Gets/sets the unique id.

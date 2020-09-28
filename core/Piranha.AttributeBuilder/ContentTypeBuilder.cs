@@ -268,7 +268,8 @@ namespace Piranha.AttributeBuilder
                 {
                     Id = attr.Id,
                     Title = attr.Title,
-                    CLRType = type.AssemblyQualifiedName
+                    CLRType = type.AssemblyQualifiedName,
+                    Icon = attr.Icon
                 };
             }
             return null;

@@ -84,24 +84,29 @@ namespace Piranha
         private IMarkdown _markdown;
 
         /// <summary>
+        /// The currently available content group.
+        /// </summary>
+        private readonly CachedList<Models.ContentGroup> _contentGroups;
+
+        /// <summary>
         /// The currently available content types.
         /// </summary>
-        private readonly ContentTypeList<Models.ContentType> _contentTypes;
+        private readonly CachedList<Models.ContentType> _contentTypes;
 
         /// <summary>
         /// The currently available page types.
         /// </summary>
-        private readonly ContentTypeList<Models.PageType> _pageTypes;
+        private readonly CachedList<Models.PageType> _pageTypes;
 
         /// <summary>
         /// The currently available post types.
         /// </summary>
-        private readonly ContentTypeList<Models.PostType> _postTypes;
+        private readonly CachedList<Models.PostType> _postTypes;
 
         /// <summary>
         /// The currently available post types.
         /// </summary>
-        private readonly ContentTypeList<Models.SiteType> _siteTypes;
+        private readonly CachedList<Models.SiteType> _siteTypes;
 
         /// <summary>
         /// Gets the currently registered block types.
@@ -160,24 +165,29 @@ namespace Piranha
         }
 
         /// <summary>
+        /// Gets the currently available content groups.
+        /// </summary>
+        public static CachedList<Models.ContentGroup> ContentGroups => Instance._contentGroups;
+
+        /// <summary>
         /// Gets the currently available content types.
         /// </summary>
-        public static ContentTypeList<Models.ContentType> ContentTypes => Instance._contentTypes;
+        public static CachedList<Models.ContentType> ContentTypes => Instance._contentTypes;
 
         /// <summary>
         /// Gets the currently available page types.
         /// </summary>
-        public static ContentTypeList<Models.PageType> PageTypes => Instance._pageTypes;
+        public static CachedList<Models.PageType> PageTypes => Instance._pageTypes;
 
         /// <summary>
         /// Gets the currently available page types.
         /// </summary>
-        public static ContentTypeList<Models.PostType> PostTypes => Instance._postTypes;
+        public static CachedList<Models.PostType> PostTypes => Instance._postTypes;
 
         /// <summary>
         /// Gets the currently available page types.
         /// </summary>
-        public static ContentTypeList<Models.SiteType> SiteTypes => Instance._siteTypes;
+        public static CachedList<Models.SiteType> SiteTypes => Instance._siteTypes;
 
         /// <summary>
         /// Static constructor. Called once every application
@@ -276,10 +286,11 @@ namespace Piranha
             _serializers = new SerializerManager();
             _hooks = new HookManager();
             _permissions = new PermissionManager();
-            _contentTypes = new ContentTypeList<Models.ContentType>();
-            _pageTypes = new ContentTypeList<Models.PageType>();
-            _postTypes = new ContentTypeList<Models.PostType>();
-            _siteTypes = new ContentTypeList<Models.SiteType>();
+            _contentGroups = new CachedList<Models.ContentGroup>();
+            _contentTypes = new CachedList<Models.ContentType>();
+            _pageTypes = new CachedList<Models.PageType>();
+            _postTypes = new CachedList<Models.PostType>();
+            _siteTypes = new CachedList<Models.SiteType>();
         }
 
         /// <summary>
@@ -333,6 +344,7 @@ namespace Piranha
                     if (!_isInitialized)
                     {
                         // Initialize content types
+                        _contentGroups.Init(api.ContentGroups.GetAllAsync().GetAwaiter().GetResult());
                         _contentTypes.Init(api.ContentTypes.GetAllAsync().GetAwaiter().GetResult());
                         _pageTypes.Init(api.PageTypes.GetAllAsync().GetAwaiter().GetResult());
                         _postTypes.Init(api.PostTypes.GetAllAsync().GetAwaiter().GetResult());

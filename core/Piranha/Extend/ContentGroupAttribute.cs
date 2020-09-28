@@ -38,5 +38,10 @@ namespace Piranha.Extend
                 }
             }
         }
+
+        /// <summary>
+        /// Gets/set the icon css.
+        /// </summary>
+        public string Icon { get; set; }
     }
 }

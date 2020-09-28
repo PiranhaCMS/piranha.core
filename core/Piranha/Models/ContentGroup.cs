@@ -17,7 +17,7 @@ namespace Piranha.Models
     /// Class for defining a content group.
     /// </summary>
     [Serializable]
-    public class ContentGroup
+    public class ContentGroup : ITypeModel
     {
         /// <summary>
         /// Gets/sets the unique id.
@@ -38,5 +38,11 @@ namespace Piranha.Models
         [Required]
         [StringLength(128)]
         public string Title { get; set; }
+
+        /// <summary>
+        /// Gets/set the icon css.
+        /// </summary>
+        [StringLength(64)]
+        public string Icon { get; set; }
     }
 }

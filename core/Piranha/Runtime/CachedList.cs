@@ -14,7 +14,7 @@ using Piranha.Models;
 
 namespace Piranha.Runtime
 {
-    public sealed class ContentTypeList<T> : List<T> where T : ContentTypeBase
+    public sealed class CachedList<T> : List<T> where T : ITypeModel
     {
         /// <summary>
         /// Initializes the model from the given list of types.
