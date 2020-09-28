@@ -14,16 +14,6 @@ using Piranha.Models;
 
 namespace RazorWeb.Models
 {
-    [ContentGroup(Title = "Products")]
-    public abstract class Product<T> : Content<T>, ICategorizedContent
-        where T : Product<T>
-    {
-        /// <summary>
-        /// Gets/sets the product category.
-        /// </summary>
-        public Taxonomy Category { get; set; }
-    }
-
     /// <summary>
     /// Basic product.
     /// </summary>
@@ -32,10 +22,5 @@ namespace RazorWeb.Models
     {
         [Region(Title = "All fields")]
         public Regions.AllFields AllFields { get; set; }
-    }
-
-    [ContentType(Title = "Special Product")]
-    public class SpecialProduct : Product<SpecialProduct>
-    {
     }
 }
