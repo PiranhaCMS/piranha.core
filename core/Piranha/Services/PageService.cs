@@ -727,6 +727,12 @@ namespace Piranha.Services
                     model.Created = DateTime.Now;
                 }
 
+                // Ensure conted id
+                if (model.ContentId == Guid.Empty)
+                {
+                    model.ContentId = pageId;
+                }
+
                 // Validate model
                 var context = new ValidationContext(model);
                 Validator.ValidateObject(model, context, true);

@@ -615,10 +615,17 @@ namespace Piranha.Services
                     model.Id = Guid.NewGuid();
                 }
 
+
                 // Ensure created date
                 if (model.Created == DateTime.MinValue)
                 {
                     model.Created = DateTime.Now;
+                }
+
+                // Ensure conted id
+                if (model.ContentId == Guid.Empty)
+                {
+                    model.ContentId = postId;
                 }
 
                 // Validate model
