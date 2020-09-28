@@ -727,7 +727,7 @@ namespace Piranha.Services
                     model.Created = DateTime.Now;
                 }
 
-                // Ensure conted id
+                // Ensure content id
                 if (model.ContentId == Guid.Empty)
                 {
                     model.ContentId = pageId;
