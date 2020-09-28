@@ -33,6 +33,15 @@ namespace RazorWeb
                     new { id = Guid.NewGuid(), filename = "drifter2.jpg" },
                 };
 
+                // Create secondary language
+                var lang2Id = Guid.NewGuid();
+                await api.Languages.SaveAsync(new Piranha.Models.Language
+                {
+                    Id = lang2Id,
+                    Title = "Swedish",
+                    Culture = "sv-SE"
+                });
+
                 // Get the default site id
                 var siteId = (await api.Sites.GetDefaultAsync()).Id;
                 var site2Id = Guid.NewGuid();
@@ -40,6 +49,7 @@ namespace RazorWeb
                 await api.Sites.SaveAsync(new Piranha.Models.Site
                 {
                     Id = site2Id,
+                    LanguageId = lang2Id,
                     Title = "Swedish",
                     Culture = "sv-SE"
                 });

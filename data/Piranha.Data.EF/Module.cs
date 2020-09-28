@@ -140,11 +140,13 @@ namespace Piranha.Data.EF
                     .ForMember(p => p.Tags, o => o.Ignore());
                 cfg.CreateMap<Data.Site, Data.Site>()
                     .ForMember(s => s.Id, o => o.Ignore())
+                    .ForMember(s => s.Language, o => o.Ignore())
                     .ForMember(s => s.Created, o => o.Ignore());
                 cfg.CreateMap<Data.Site, Models.SiteContentBase>()
                     .ForMember(s => s.TypeId, o => o.MapFrom(m => m.SiteTypeId))
                     .ForMember(s => s.Permissions, o => o.Ignore());
                 cfg.CreateMap<Models.SiteContentBase, Data.Site>()
+                    .ForMember(s => s.LanguageId, o => o.Ignore())
                     .ForMember(s => s.SiteTypeId, o => o.Ignore())
                     .ForMember(s => s.InternalId, o => o.Ignore())
                     .ForMember(s => s.Description, o => o.Ignore())
@@ -153,6 +155,7 @@ namespace Piranha.Data.EF
                     .ForMember(s => s.IsDefault, o => o.Ignore())
                     .ForMember(s => s.Culture, o => o.Ignore())
                     .ForMember(s => s.Fields, o => o.Ignore())
+                    .ForMember(s => s.Language, o => o.Ignore())
                     .ForMember(s => s.Created, o => o.Ignore())
                     .ForMember(s => s.LastModified, o => o.Ignore())
                     .ForMember(s => s.ContentLastModified, o => o.Ignore());

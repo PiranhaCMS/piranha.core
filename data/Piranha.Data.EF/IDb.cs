@@ -51,6 +51,11 @@ namespace Piranha
         DbSet<Data.ContentType> ContentTypes { get; set; }
 
         /// <summary>
+        /// Gets/sets the language set.
+        /// </summary>
+        DbSet<Data.Language> Languages { get; set; }
+
+        /// <summary>
         /// Gets/sets the media set.
         /// </summary>
         DbSet<Data.Media> Media { get; set; }

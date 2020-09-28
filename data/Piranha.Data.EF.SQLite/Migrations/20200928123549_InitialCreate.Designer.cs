@@ -9,14 +9,14 @@ using Piranha.Data.EF.SQLite;
 namespace Piranha.Data.EF.SQLite.Migrations
 {
     [DbContext(typeof(SQLiteDb))]
-    [Migration("20200306083211_AddPostInformation")]
-    partial class AddPostInformation
+    [Migration("20200928123549_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.1");
+                .HasAnnotation("ProductVersion", "3.1.8");
 
             modelBuilder.Entity("Piranha.Data.Alias", b =>
                 {
@@ -150,6 +150,87 @@ namespace Piranha.Data.EF.SQLite.Migrations
                         .IsUnique();
 
                     b.ToTable("Piranha_Categories");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentGroup", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("CLRType")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(64);
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(128);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Piranha_ContentGroups");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentType", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Body")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CLRType")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Group")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(64);
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Piranha_ContentTypes");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Language", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Culture")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(6);
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(64);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Piranha_Languages");
                 });
 
             modelBuilder.Entity("Piranha.Data.Media", b =>
@@ -294,6 +375,9 @@ namespace Piranha.Data.EF.SQLite.Migrations
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(false);
 
+                    b.Property<string>("Excerpt")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("IsHidden")
                         .HasColumnType("INTEGER");
 
@@ -308,7 +392,22 @@ namespace Piranha.Data.EF.SQLite.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(128);
 
+                    b.Property<string>("MetaTitle")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(128);
+
                     b.Property<string>("NavigationTitle")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("OgDescription")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(256);
+
+                    b.Property<Guid>("OgImageId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OgTitle")
                         .HasColumnType("TEXT")
                         .HasMaxLength(128);
 
@@ -321,6 +420,9 @@ namespace Piranha.Data.EF.SQLite.Migrations
                         .HasMaxLength(64);
 
                     b.Property<Guid?>("ParentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("PrimaryImageId")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("Published")
@@ -584,7 +686,7 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     b.Property<bool>("EnableComments")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasDefaultValue(true);
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Excerpt")
                         .HasColumnType("TEXT");
@@ -597,6 +699,21 @@ namespace Piranha.Data.EF.SQLite.Migrations
                         .HasMaxLength(256);
 
                     b.Property<string>("MetaKeywords")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("MetaTitle")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("OgDescription")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(256);
+
+                    b.Property<Guid>("OgImageId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OgTitle")
                         .HasColumnType("TEXT")
                         .HasMaxLength(128);
 
@@ -858,7 +975,13 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     b.Property<bool>("IsDefault")
                         .HasColumnType("INTEGER");
 
+                    b.Property<Guid>("LanguageId")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("LogoId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SiteTypeId")
@@ -873,6 +996,8 @@ namespace Piranha.Data.EF.SQLite.Migrations
 
                     b.HasIndex("InternalId")
                         .IsUnique();
+
+                    b.HasIndex("LanguageId");
 
                     b.ToTable("Piranha_Sites");
                 });
@@ -1168,6 +1293,15 @@ namespace Piranha.Data.EF.SQLite.Migrations
                         .WithMany()
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Piranha.Data.Site", b =>
+                {
+                    b.HasOne("Piranha.Data.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 

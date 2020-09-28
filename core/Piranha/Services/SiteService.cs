@@ -29,6 +29,7 @@ namespace Piranha.Services
 
         private readonly ISiteRepository _repo;
         private readonly IContentFactory _factory;
+        private readonly ILanguageService _langService;
         private readonly ICache _cache;
         private const string SITE_MAPPINGS = "Site_Mappings";
 
@@ -37,11 +38,13 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="repo">The main repository</param>
         /// <param name="factory">The content factory</param>
+        /// <param name="langService">The language service</param>
         /// <param name="cache">The optional model cache</param>
-        public SiteService(ISiteRepository repo, IContentFactory factory, ICache cache = null)
+        public SiteService(ISiteRepository repo, IContentFactory factory, ILanguageService langService, ICache cache = null)
         {
             _repo = repo;
             _factory = factory;
+            _langService = langService;
 
             if ((int)App.CacheLevel > 0)
             {
@@ -289,6 +292,12 @@ namespace Piranha.Services
             if (model.Id == Guid.Empty)
             {
                 model.Id = Guid.NewGuid();
+            }
+
+            // Ensure language id
+            if (model.LanguageId == Guid.Empty)
+            {
+                model.LanguageId = (await _langService.GetDefaultAsync()).Id;
             }
 
             // Validate model

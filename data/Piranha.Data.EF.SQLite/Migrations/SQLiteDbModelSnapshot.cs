@@ -2,17 +2,15 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Piranha.Data.EF.SQLite;
 
 namespace Piranha.Data.EF.SQLite.Migrations
 {
     [DbContext(typeof(SQLiteDb))]
-    [Migration("20200925073425_AddContentTypes")]
-    partial class AddContentTypes
+    partial class SQLiteDbModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,6 +164,10 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Icon")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(64);
+
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("TEXT");
 
@@ -204,6 +206,29 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Piranha_ContentTypes");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Language", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Culture")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(6);
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(64);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Piranha_Languages");
                 });
 
             modelBuilder.Entity("Piranha.Data.Media", b =>
@@ -948,6 +973,9 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     b.Property<bool>("IsDefault")
                         .HasColumnType("INTEGER");
 
+                    b.Property<Guid>("LanguageId")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("TEXT");
 
@@ -966,6 +994,8 @@ namespace Piranha.Data.EF.SQLite.Migrations
 
                     b.HasIndex("InternalId")
                         .IsUnique();
+
+                    b.HasIndex("LanguageId");
 
                     b.ToTable("Piranha_Sites");
                 });
@@ -1261,6 +1291,15 @@ namespace Piranha.Data.EF.SQLite.Migrations
                         .WithMany()
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Piranha.Data.Site", b =>
+                {
+                    b.HasOne("Piranha.Data.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 

@@ -58,6 +58,11 @@ namespace Piranha
         public DbSet<Data.ContentType> ContentTypes { get; set; }
 
         /// <summary>
+        /// Gets/sets the language set.
+        /// </summary>
+        public DbSet<Data.Language> Languages { get; set; }
+
+        /// <summary>
         /// Gets/sets the media set.
         /// </summary>
         public DbSet<Data.Media> Media { get; set; }
@@ -187,7 +192,7 @@ namespace Piranha
                         // Migrate database
                         Database.Migrate();
                         // Seed
-                        Seed();
+                        //Seed();
 
                         IsInitialized = true;
                     }
@@ -227,6 +232,10 @@ namespace Piranha
 
             mb.Entity<Data.ContentType>().ToTable("Piranha_ContentTypes");
             mb.Entity<Data.ContentType>().Property(t => t.Group).IsRequired().HasMaxLength(64);
+
+            mb.Entity<Data.Language>().ToTable("Piranha_Languages");
+            mb.Entity<Data.Language>().Property(l => l.Title).IsRequired().HasMaxLength(64);
+            mb.Entity<Data.Language>().Property(l => l.Culture).HasMaxLength(6);
 
             mb.Entity<Data.Media>().ToTable("Piranha_Media");
             mb.Entity<Data.Media>().Property(m => m.Filename).HasMaxLength(128).IsRequired();
@@ -432,18 +441,50 @@ namespace Piranha
                 });
 
             //
+            // Default language
+            //
+            var langId = Guid.NewGuid();
+
+            if (Languages.Count() == 0)
+            {
+                Languages.Add(new Data.Language
+                {
+                    Id = langId,
+                    Title = "Default",
+                    Culture = "en-US",
+                    IsDefault = true
+                });
+            }
+            else
+            {
+                langId = Languages.FirstOrDefault(l => l.IsDefault).Id;
+            }
+
+            //
             // Default site
             //
             if (Sites.Count() == 0)
+            {
                 Sites.Add(new Data.Site
                 {
                     Id = Guid.NewGuid(),
+                    LanguageId = langId,
                     InternalId = "Default",
                     IsDefault = true,
                     Title = "Default Site",
                     Created = DateTime.Now,
                     LastModified = DateTime.Now
                 });
+            }
+            else
+            {
+                // When upgrading, make sure we assign the default language id
+                // to already created sites.
+                foreach (var site in Sites.Where(s => s.LanguageId == Guid.Empty))
+                {
+                    site.LanguageId = langId;
+                }
+            }
 
             //
             // Make sure we don't have NULL values in Piranha_MediaVersions.FileExtension

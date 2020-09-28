@@ -39,6 +39,11 @@ namespace Piranha
         IContentTypeService ContentTypes { get; }
 
         /// <summary>
+        /// Gets the language service.
+        /// </summary>
+        ILanguageService Languages { get; }
+
+        /// <summary>
         /// Gets the media service.
         /// </summary>
         IMediaService Media { get; }

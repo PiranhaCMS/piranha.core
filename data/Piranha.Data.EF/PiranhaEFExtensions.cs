@@ -44,6 +44,7 @@ public static class PiranhaEFExtensions
         services.Add(new ServiceDescriptor(typeof(IArchiveRepository), typeof(ArchiveRepository), scope));
         services.Add(new ServiceDescriptor(typeof(IContentGroupRepository), typeof(ContentGroupRepository), scope));
         services.Add(new ServiceDescriptor(typeof(IContentTypeRepository), typeof(ContentTypeRepository), scope));
+        services.Add(new ServiceDescriptor(typeof(ILanguageRepository), typeof(LanguageRepository), scope));
         services.Add(new ServiceDescriptor(typeof(IMediaRepository), typeof(MediaRepository), scope));
         services.Add(new ServiceDescriptor(typeof(IPageRepository), typeof(PageRepository), scope));
         services.Add(new ServiceDescriptor(typeof(IPageTypeRepository), typeof(PageTypeRepository), scope));
