@@ -307,7 +307,6 @@ namespace Piranha.AttributeBuilder
                     Group = group.Id,
                     UseExcerpt = attr.UseExcerpt,
                     UsePrimaryImage = attr.UsePrimaryImage,
-                    UseBlocks = typeof(IBlockContent).IsAssignableFrom(type),
                     UseCategory = typeof(ICategorizedContent).IsAssignableFrom(type),
                     UseTags = typeof(ITaggedContent).IsAssignableFrom(type),
                     CustomEditors = GetEditors(type),

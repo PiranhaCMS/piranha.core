@@ -25,11 +25,6 @@ namespace Piranha.Models
         public string Group { get; set; }
 
         /// <summary>
-        /// Gets/sets if the content type should support blocks.
-        /// </summary>
-        public bool UseBlocks { get; set; }
-
-        /// <summary>
         /// Gets/sets if the content type should be
         /// categorized.
         /// </summary>
