@@ -192,7 +192,7 @@ namespace Piranha
                         // Migrate database
                         Database.Migrate();
                         // Seed
-                        //Seed();
+                        Seed();
 
                         IsInitialized = true;
                     }
