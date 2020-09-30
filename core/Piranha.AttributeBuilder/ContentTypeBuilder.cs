@@ -85,7 +85,7 @@ namespace Piranha.AttributeBuilder
             else
             {
                 // Type is a non abstract class, check if it is a content type
-                if (typeof(IContent).IsAssignableFrom(type))
+                if (typeof(GenericContent).IsAssignableFrom(type))
                 {
                     if (type.GetCustomAttribute<ContentTypeAttribute>() != null)
                     {

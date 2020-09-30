@@ -67,10 +67,30 @@ namespace Piranha.Data.EF
                     .ForMember(c => c.Created, o => o.Ignore());
                 cfg.CreateMap<Data.Category, Models.Taxonomy>()
                     .ForMember(c => c.Type, o => o.MapFrom(m => Models.TaxonomyType.Category));
+                cfg.CreateMap<Data.Content, Models.GenericContent>()
+                    .ForMember(p => p.PrimaryImage, o => o.MapFrom(m => m.PrimaryImageId))
+                    .ForMember(p => p.Permissions, o => o.Ignore());
+                cfg.CreateMap<Models.GenericContent, Data.Content>()
+                    .ForMember(c => c.CategoryId, o => o.Ignore())
+                    .ForMember(c => c.Category, o => o.Ignore())
+                    .ForMember(c => c.Fields, o => o.Ignore())
+                    .ForMember(c => c.Tags, o => o.Ignore())
+                    .ForMember(c => c.Type, o => o.Ignore())
+                    .ForMember(c => c.Translations, o => o.Ignore())
+                    .ForMember(c => c.Created, o => o.Ignore())
+                    .ForMember(c => c.LastModified, o => o.Ignore());
                 cfg.CreateMap<Data.ContentGroup, Models.ContentGroup>();
                 cfg.CreateMap<Models.ContentGroup, Data.ContentGroup>()
                     .ForMember(g => g.Created, o => o.Ignore())
                     .ForMember(g => g.LastModified, o => o.Ignore());
+                cfg.CreateMap<Data.ContentTranslation, Models.GenericContent>()
+                    .ForMember(c =>  c.Id, o => o.Ignore())
+                    .ForMember(c =>  c.TypeId, o => o.Ignore())
+                    .ForMember(c =>  c.PrimaryImage, o => o.Ignore())
+                    .ForMember(c =>  c.Excerpt, o => o.Ignore())
+                    .ForMember(c =>  c.Created, o => o.Ignore())
+                    .ForMember(c =>  c.LastModified, o => o.Ignore())
+                    .ForMember(c =>  c.Permissions, o => o.Ignore());
                 cfg.CreateMap<Data.MediaFolder, Data.MediaFolder>()
                     .ForMember(f => f.Id, o => o.Ignore())
                     .ForMember(f => f.Created, o => o.Ignore())

@@ -48,6 +48,31 @@ namespace Piranha
         public DbSet<Data.Category> Categories { get; set; }
 
         /// <summary>
+        /// Gets/sets the content set.
+        /// </summary>
+        public DbSet<Data.Content> Content { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content field set.
+        /// </summary>
+        public DbSet<Data.ContentField> ContentFields { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content field translation set.
+        /// </summary>
+        public DbSet<Data.ContentFieldTranslation> ContentFieldTranslations { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content taxonomy set.
+        /// </summary>
+        public DbSet<Data.ContentTaxonomy> ContentTaxonomies { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content translation set.
+        /// </summary>
+        public DbSet<Data.ContentTranslation> ContentTranslations { get; set; }
+
+        /// <summary>
         /// Gets/sets the content group set.
         /// </summary>
         public DbSet<Data.ContentGroup> ContentGroups { get; set; }
@@ -178,6 +203,11 @@ namespace Piranha
         public DbSet<Data.Tag> Tags { get; set; }
 
         /// <summary>
+        /// Gets/sets the taxonomy set.
+        /// </summary>
+        public DbSet<Data.Taxonomy> Taxonomies { get; set; }
+
+        /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="options">Configuration options</param>
@@ -225,10 +255,31 @@ namespace Piranha
             mb.Entity<Data.Category>().Property(c => c.Slug).IsRequired().HasMaxLength(64);
             mb.Entity<Data.Category>().HasIndex(c => new { c.BlogId, c.Slug }).IsUnique();
 
+
+            mb.Entity<Data.Content>().ToTable("Piranha_Content");
+            mb.Entity<Data.Content>().Property(p => p.TypeId).HasMaxLength(64).IsRequired();
+
+            mb.Entity<Data.ContentField>().ToTable("Piranha_ContentFields");
+            mb.Entity<Data.ContentField>().Property(f => f.RegionId).HasMaxLength(64).IsRequired();
+            mb.Entity<Data.ContentField>().Property(f => f.FieldId).HasMaxLength(64).IsRequired();
+            mb.Entity<Data.ContentField>().Property(f => f.CLRType).HasMaxLength(256).IsRequired();
+            mb.Entity<Data.ContentField>().HasIndex(f => new { f.ContentId, f.RegionId, f.FieldId, f.SortOrder });
+
+            mb.Entity<Data.ContentFieldTranslation>().ToTable("Piranha_ContentFieldTranslations");
+            mb.Entity<Data.ContentFieldTranslation>().HasKey(t => new { t.FieldId, t.LanguageId });
+
             mb.Entity<Data.ContentGroup>().ToTable("Piranha_ContentGroups");
             mb.Entity<Data.ContentGroup>().Property(t => t.Id).IsRequired().HasMaxLength(64);
             mb.Entity<Data.ContentGroup>().Property(t => t.CLRType).IsRequired().HasMaxLength(255);
             mb.Entity<Data.ContentGroup>().Property(t => t.Title).IsRequired().HasMaxLength(128);
+
+            mb.Entity<Data.ContentTaxonomy>().ToTable("Piranha_ContentTaxonomies");
+            mb.Entity<Data.ContentTaxonomy>().HasKey(t => new { t.ContentId, t.TaxonomyId });
+            mb.Entity<Data.ContentTaxonomy>().HasOne(t => t.Taxonomy).WithMany().IsRequired().OnDelete(DeleteBehavior.Restrict);
+
+            mb.Entity<Data.ContentTranslation>().ToTable("Piranha_ContentTranslations");
+            mb.Entity<Data.ContentTranslation>().HasKey(t => new { t.ContentId, t.LanguageId });
+            mb.Entity<Data.ContentTranslation>().Property(p => p.Title).HasMaxLength(128).IsRequired();
 
             mb.Entity<Data.ContentType>().ToTable("Piranha_ContentTypes");
             mb.Entity<Data.ContentType>().Property(t => t.Group).IsRequired().HasMaxLength(64);
@@ -363,6 +414,12 @@ namespace Piranha
             mb.Entity<Data.Tag>().Property(t => t.Title).IsRequired().HasMaxLength(64);
             mb.Entity<Data.Tag>().Property(t => t.Slug).IsRequired().HasMaxLength(64);
             mb.Entity<Data.Tag>().HasIndex(t => new { t.BlogId, t.Slug }).IsUnique();
+
+            mb.Entity<Data.Taxonomy>().ToTable("Piranha_Taxonomies");
+            mb.Entity<Data.Taxonomy>().Property(t => t.GroupId).IsRequired().HasMaxLength(64);
+            mb.Entity<Data.Taxonomy>().Property(t => t.Title).IsRequired().HasMaxLength(64);
+            mb.Entity<Data.Taxonomy>().Property(t => t.Slug).IsRequired().HasMaxLength(64);
+            mb.Entity<Data.Taxonomy>().HasIndex(t => new { t.GroupId, t.Type, t.Slug }).IsUnique();
         }
 
         /// <summary>

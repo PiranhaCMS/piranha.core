@@ -25,6 +25,12 @@ namespace Piranha.Services
             where TModelBase : Models.ContentBase;
 
         /// <summary>
+        /// Creates a new content service.
+        /// </summary>
+        /// <returns>The content service</returns>
+        IContentService<Data.Content, Data.ContentField, Models.GenericContent> CreateContentService();
+
+        /// <summary>
         /// Creates a new page content service.
         /// </summary>
         /// <returns>The content service</returns>

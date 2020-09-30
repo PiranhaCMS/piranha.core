@@ -881,6 +881,7 @@ namespace Piranha.Tests
                 factory,
                 new AliasRepository(db),
                 new ArchiveRepository(db),
+                new ContentRepository(db, serviceFactory),
                 new ContentGroupRepository(db),
                 new ContentTypeRepository(db),
                 new LanguageRepository(db),

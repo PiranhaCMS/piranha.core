@@ -16,7 +16,7 @@ namespace Piranha.Extend.Blocks
     /// Single column quote block.
     /// </summary>
     [BlockType(Name = "Quote", Category = "Content", Icon = "fas fa-quote-right", Component = "quote-block")]
-    public class QuoteBlock : Block, ISearchable
+    public class QuoteBlock : Block, ISearchable, ITranslatable
     {
         /// <summary>
         /// Gets/sets the author

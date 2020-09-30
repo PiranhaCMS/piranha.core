@@ -41,6 +41,15 @@ namespace Piranha.Services
         }
 
         /// <summary>
+        /// Creates a new content service.
+        /// </summary>
+        /// <returns>The content service</returns>
+        public IContentService<Data.Content, Data.ContentField, Models.GenericContent> CreateContentService()
+        {
+            return new ContentService<Data.Content, Data.ContentField, Models.GenericContent>(_factory, Module.Mapper);
+        }
+
+        /// <summary>
         /// Creates a new page content service.
         /// </summary>
         /// <returns>The content service</returns>

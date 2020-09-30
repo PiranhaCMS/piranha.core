@@ -41,6 +41,31 @@ namespace Piranha
         DbSet<Data.Category> Categories { get; set; }
 
         /// <summary>
+        /// Gets/sets the content set.
+        /// </summary>
+        DbSet<Data.Content> Content { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content field set.
+        /// </summary>
+        DbSet<Data.ContentField> ContentFields { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content field translation set.
+        /// </summary>
+        DbSet<Data.ContentFieldTranslation> ContentFieldTranslations { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content taxonomy set.
+        /// </summary>
+        DbSet<Data.ContentTaxonomy> ContentTaxonomies { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content translation set.
+        /// </summary>
+        DbSet<Data.ContentTranslation> ContentTranslations { get; set; }
+
+        /// <summary>
         /// Gets/sets the content group set.
         /// </summary>
         DbSet<Data.ContentGroup> ContentGroups { get; set; }
@@ -169,6 +194,11 @@ namespace Piranha
         /// Gets/sets the tag set.
         /// </summary>
         DbSet<Data.Tag> Tags { get; set; }
+
+        /// <summary>
+        /// Gets/sets the taxonomy set.
+        /// </summary>
+        DbSet<Data.Taxonomy> Taxonomies { get; set; }
 
         /// <summary>
         /// Gets the entity set for the specified type.

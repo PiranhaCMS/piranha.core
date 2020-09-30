@@ -35,6 +35,11 @@ namespace Piranha
         public IArchiveService Archives { get; }
 
         /// <summary>
+        /// Gets the content service.
+        /// </summary>
+        public IContentService Content { get; }
+
+        /// <summary>
         /// Gets the content group service.
         /// </summary>
         public IContentGroupService ContentGroups { get; }
@@ -103,6 +108,7 @@ namespace Piranha
             IContentFactory contentFactory,
             IAliasRepository aliasRepository,
             IArchiveRepository archiveRepository,
+            IContentRepository contentRepository,
             IContentGroupRepository contentGroupRepository,
             IContentTypeRepository contentTypeRepository,
             ILanguageRepository languageRepository,
@@ -132,6 +138,7 @@ namespace Piranha
             SiteTypes = new SiteTypeService(siteTypeRepository, cache);
 
             // Create services with dependencies
+            Content = new ContentService(contentRepository, contentFactory, Languages, cache, search);
             Sites = new SiteService(siteRepository, contentFactory, Languages,cache);
             Aliases = new AliasService(aliasRepository, Sites, cache);
             Media = new MediaService(mediaRepository, Params, storage, processor, cache);

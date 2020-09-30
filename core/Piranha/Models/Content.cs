@@ -8,25 +8,25 @@
  *
  */
 
-using System.Collections.Generic;
-using Piranha.Extend.Fields;
+using System.Threading.Tasks;
 
 namespace Piranha.Models
 {
     /// <summary>
-    /// Base class for project defined content.
+    /// Base class for generic content.
     /// </summary>
-    /// <typeparam name="T">The type</typeparam>
-    public abstract class Content<T> : ContentBase, IContent where T : Content<T>
+    /// <typeparam name="T">The content type</typeparam>
+    public abstract class Content<T> : GenericContent where T : Content<T>
     {
         /// <summary>
-        /// Gets/sets the optional primary image.
+        /// Creates a new page model using the given page type id.
         /// </summary>
-        public ImageField PrimaryImage { get; set; } = new ImageField();
-
-        /// <summary>
-        /// Gets/sets the optional excerpt.
-        /// </summary>
-        public string Excerpt { get; set; }
+        /// <param name="api">The current api</param>
+        /// <param name="typeId">The unique page type id</param>
+        /// <returns>The new model</returns>
+        public static Task<T> CreateAsync(IApi api, string typeId = null)
+        {
+            return api.Content.CreateAsync<T>(typeId);
+        }
     }
 }

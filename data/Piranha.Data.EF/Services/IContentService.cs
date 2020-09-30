@@ -26,8 +26,9 @@ namespace Piranha.Services
         /// <param name="content">The content entity</param>
         /// <param name="type">The content type</param>
         /// <param name="process">Optional func that should be called after transformation</param>
+        /// <param name="languageId">The optional language id</param>
         /// <returns>The page model</returns>
-        Task<T> TransformAsync<T>(TContent content, Models.ContentTypeBase type, Func<TContent, T, Task> process = null)
+        Task<T> TransformAsync<T>(TContent content, Models.ContentTypeBase type, Func<TContent, T, Task> process = null, Guid? languageId = null)
             where T : Models.ContentBase, TModelBase;
 
         /// <summary>
@@ -36,8 +37,9 @@ namespace Piranha.Services
         /// <param name="model">The model</param>
         /// <param name="type">The conten type</param>
         /// <param name="dest">The optional dest object</param>
+        /// <param name="languageId">The optional language id</param>
         /// <returns>The content data</returns>
-        TContent Transform<T>(T model, Models.ContentTypeBase type, TContent dest = null)
+        TContent Transform<T>(T model, Models.ContentTypeBase type, TContent dest = null, Guid? languageId = null)
             where T : Models.ContentBase, TModelBase;
 
         /// <summary>

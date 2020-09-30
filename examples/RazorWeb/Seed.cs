@@ -68,6 +68,22 @@ namespace RazorWeb
                     }
                 }
 
+                var content = await Models.StandardProduct.CreateAsync(api).ConfigureAwait(false);
+                content.Title = "My content";
+                content.Category = "Uncategorized";
+                content.Tags.Add("Lorem");
+                content.Tags.Add("Ipsum");
+                content.AllFields.Date = DateTime.Now;
+                content.AllFields.Text = "Lorum ipsum";
+                await api.Content.SaveAsync(content);
+
+                content.Title = "Mitt innehåll";
+                content.AllFields.Text = "Svenskum dansum";
+                await api.Content.SaveAsync(content, lang2Id);
+
+                var loadedContent = await api.Content.GetByIdAsync<Models.StandardProduct>(content.Id);
+                var swedishContent = await api.Content.GetByIdAsync<Models.StandardProduct>(content.Id, lang2Id);
+
                 // Create the start page
                 var startpage = await Models.TeaserPage.CreateAsync(api).ConfigureAwait(false);
                 startpage.SiteId = siteId;

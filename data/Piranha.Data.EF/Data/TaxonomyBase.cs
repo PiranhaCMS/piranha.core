@@ -9,43 +9,35 @@
  */
 
 using System;
-using System.Collections.Generic;
 
-namespace Piranha.Models
+namespace Piranha.Data
 {
-    /// <summary>
-    /// Interface for generic content models.
-    /// </summary>
-    public interface IContent
+    [Serializable]
+    public abstract class TaxonomyBase
     {
         /// <summary>
         /// Gets/sets the unique id.
         /// </summary>
-        Guid Id { get; set; }
-
-        /// <summary>
-        /// Gets/sets the content type id.
-        /// </summary>
-        string TypeId { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets/sets the title.
         /// </summary>
-        string Title { get; set; }
+        public string Title { get; set; }
 
         /// <summary>
-        /// Gets/sets the permissions needed to access the page.
+        /// Gets/sets the slug.
         /// </summary>
-        IList<string> Permissions { get; set; }
+        public string Slug { get; set; }
 
         /// <summary>
         /// Gets/sets the created date.
         /// </summary>
-        DateTime Created { get; set; }
+        public DateTime Created { get; set; }
 
         /// <summary>
         /// Gets/sets the last modification date.
         /// </summary>
-        DateTime LastModified { get; set; }
+        public DateTime LastModified { get; set; }
     }
 }

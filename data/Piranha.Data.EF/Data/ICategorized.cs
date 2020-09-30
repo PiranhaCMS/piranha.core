@@ -12,17 +12,14 @@ using System;
 
 namespace Piranha.Data
 {
-    [Serializable]
-    public sealed class Taxonomy : TaxonomyBase
+    /// <summary>
+    /// Interface for categorized content.
+    /// </summary>
+    public interface ICategorized
     {
         /// <summary>
-        /// Gets/sets the id used for grouping.
+        /// Gets/sets the category id.
         /// </summary>
-        public string GroupId { get; set; }
-
-        /// <summary>
-        /// Gets/sets the taxonomy type.
-        /// </summary>
-        public TaxonomyType Type { get; set; }
+        Guid? CategoryId { get; set; }
     }
 }

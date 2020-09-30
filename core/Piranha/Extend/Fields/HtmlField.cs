@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 namespace Piranha.Extend.Fields
 {
     [FieldType(Name = "Html", Shorthand = "Html", Component = "html-field")]
-    public class HtmlField : SimpleField<string>, ISearchable
+    public class HtmlField : SimpleField<string>, ISearchable, ITranslatable
     {
         /// <summary>
         /// Implicit operator for converting a string to a field.
