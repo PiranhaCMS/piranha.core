@@ -26,6 +26,14 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the content model with the specified id.
         /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <param name="languageId">The optional language id</param>
+        /// <returns>The content model</returns>
+        Task<DynamicContent> GetByIdAsync(Guid id, Guid? languageId = null);
+
+        /// <summary>
+        /// Gets the content model with the specified id.
+        /// </summary>
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
         /// <param name="languageId">The optional language id</param>

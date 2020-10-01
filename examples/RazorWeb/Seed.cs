@@ -83,6 +83,7 @@ namespace RazorWeb
 
                 var loadedContent = await api.Content.GetByIdAsync<Models.StandardProduct>(content.Id);
                 var swedishContent = await api.Content.GetByIdAsync<Models.StandardProduct>(content.Id, lang2Id);
+                var dynamicSwedish = await api.Content.GetByIdAsync(content.Id, lang2Id);
 
                 // Create the start page
                 var startpage = await Models.TeaserPage.CreateAsync(api).ConfigureAwait(false);

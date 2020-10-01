@@ -72,6 +72,17 @@ namespace Piranha.Services
         /// <summary>
         /// Gets the content model with the specified id.
         /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <param name="languageId">The optional language id</param>
+        /// <returns>The content model</returns>
+        public Task<DynamicContent> GetByIdAsync(Guid id, Guid? languageId = null)
+        {
+            return GetByIdAsync<DynamicContent>(id, languageId);
+        }
+
+        /// <summary>
+        /// Gets the content model with the specified id.
+        /// </summary>
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
         /// <param name="languageId">The optional language id</param>
@@ -99,7 +110,14 @@ namespace Piranha.Services
             // If we have a model, let's initialize it
             if (model != null)
             {
-                await _factory.InitAsync(model, App.ContentTypes.GetById(model.TypeId)).ConfigureAwait(false);
+                if (model is IDynamicContent dynamicModel)
+                {
+                    await _factory.InitDynamicAsync(dynamicModel, App.ContentTypes.GetById(model.TypeId)).ConfigureAwait(false);
+                }
+                else
+                {
+                    await _factory.InitAsync(model, App.ContentTypes.GetById(model.TypeId)).ConfigureAwait(false);
+                }
             }
 
             // If we don't have a model, get it from the repository
@@ -207,7 +225,14 @@ namespace Piranha.Services
             if (model == null) return;
 
             // Initialize the model
-            await _factory.InitAsync(model, App.ContentTypes.GetById(model.TypeId));
+            if (model is IDynamicContent dynamicModel)
+            {
+                await _factory.InitDynamicAsync(dynamicModel, App.ContentTypes.GetById(model.TypeId)).ConfigureAwait(false);
+            }
+            else
+            {
+                await _factory.InitAsync(model, App.ContentTypes.GetById(model.TypeId)).ConfigureAwait(false);
+            }
 
             // Execute on load hook
             App.Hooks.OnLoad(model);
