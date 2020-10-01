@@ -224,8 +224,13 @@ namespace Piranha.Repositories
                 }
 
                 await _db.SaveChangesAsync().ConfigureAwait(false);
-                //await DeleteUnusedCategories(model.BlogId).ConfigureAwait(false);
-                //await DeleteUnusedTags(model.BlogId).ConfigureAwait(false);
+
+                /*
+                 * TODO
+                 *
+                await DeleteUnusedCategories(model.BlogId).ConfigureAwait(false);
+                await DeleteUnusedTags(model.BlogId).ConfigureAwait(false);
+                 */
             }
         }
 
@@ -233,9 +238,27 @@ namespace Piranha.Repositories
         /// Deletes the content model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>
-        public Task Delete(Guid id)
+        public async Task Delete(Guid id)
         {
-            throw new NotImplementedException();
+            var model = await _db.Content
+                .Include(c => c.Translations)
+                .Include(c => c.Fields).ThenInclude(f => f.Translations)
+                .FirstOrDefaultAsync(p => p.Id == id)
+                .ConfigureAwait(false);
+
+            if (model != null)
+            {
+                _db.Content.Remove(model);
+
+                await _db.SaveChangesAsync().ConfigureAwait(false);
+
+                /*
+                 * TODO
+                 *
+                await DeleteUnusedCategories(model.BlogId).ConfigureAwait(false);
+                await DeleteUnusedTags(model.BlogId).ConfigureAwait(false);
+                 */
+            }
         }
 
         /// <summary>
