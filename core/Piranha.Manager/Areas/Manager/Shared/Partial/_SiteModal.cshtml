@@ -53,9 +53,16 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label>@Localizer.General["Language"]</label>
-                                    <select v-model="languageId" class="form-control">
-                                        <option :value="language.id" v-for="language in languages">{{ language.title }}</option>
-                                    </select>
+                                    <div class="input-group">
+                                        <select v-model="languageId" class="form-control">
+                                            <option :value="language.id" v-for="language in languages">{{ language.title }}</option>
+                                        </select>
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-icon btn-primary rounded ml-3" title="@Localizer.General["Configure languages"]">
+                                                <i class="fas fa-cog"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
