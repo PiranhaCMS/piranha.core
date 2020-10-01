@@ -52,8 +52,10 @@
                             </div>
                             <div class="col">
                                 <div class="form-group">
-                                    <label>@Localizer.General["Culture"]</label>
-                                    <input v-model="culture" type="text" class="form-control">
+                                    <label>@Localizer.General["Language"]</label>
+                                    <select v-model="languageId" class="form-control">
+                                        <option :value="language.id" v-for="language in languages">{{ language.title }}</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
