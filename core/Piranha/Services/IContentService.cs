@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Piranha.Models;
 
@@ -22,6 +23,23 @@ namespace Piranha.Services
         /// <param name="typeId">The content type id</param>
         /// <returns>The created page</returns>
         Task<T> CreateAsync<T>(string typeId) where T : GenericContent;
+
+        /// <summary>
+        /// Gets all of the available content for the optional
+        /// group id.
+        /// </summary>
+        /// <param name="groupId">The optional group id</param>
+        /// <returns>The available content</returns>
+        Task<IEnumerable<DynamicContent>> GetAllAsync(string groupId = null);
+
+        /// <summary>
+        /// Gets all of the available content for the optional
+        /// group id.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="groupId">The optional group id</param>
+        /// <returns>The available content</returns>
+        Task<IEnumerable<T>> GetAllAsync<T>(string groupId = null) where T : GenericContent;
 
         /// <summary>
         /// Gets the content model with the specified id.

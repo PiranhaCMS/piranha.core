@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace Piranha.Services
 {
     public class ContentService : IContentService
     {
-        private readonly IContentRepository _pageRepo;
+        private readonly IContentRepository _repo;
         private readonly IContentFactory _factory;
         private readonly ILanguageService _langService;
         private readonly ICache _cache;
@@ -28,14 +29,14 @@ namespace Piranha.Services
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="pageRepo">The main page repository</param>
+        /// <param name="repo">The page repository</param>
         /// <param name="factory">The content factory</param>
         /// <param name="langService">The language service</param>
         /// <param name="cache">The optional cache service</param>
         /// <param name="search">The optional search service</param>
-        public ContentService(IContentRepository pageRepo, IContentFactory factory, ILanguageService langService, ICache cache = null, ISearch search = null)
+        public ContentService(IContentRepository repo, IContentFactory factory, ILanguageService langService, ICache cache = null, ISearch search = null)
         {
-            _pageRepo = pageRepo;
+            _repo = repo;
             _factory = factory;
             _langService = langService;
 
@@ -67,6 +68,41 @@ namespace Piranha.Services
                 return model;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Gets all of the available content for the optional
+        /// group id.
+        /// </summary>
+        /// <param name="groupId">The optional group id</param>
+        /// <returns>The available content</returns>
+        public Task<IEnumerable<DynamicContent>> GetAllAsync(string groupId = null)
+        {
+            return GetAllAsync<DynamicContent>(groupId);
+        }
+
+        /// <summary>
+        /// Gets all of the available content for the optional
+        /// group id.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="groupId">The optional group id</param>
+        /// <returns>The available content</returns>
+        public async Task<IEnumerable<T>> GetAllAsync<T>(string groupId = null) where T : GenericContent
+        {
+            var models = new List<T>();
+            var all = await _repo.GetAll(groupId).ConfigureAwait(false);
+
+            foreach (var contentId in all)
+            {
+                var content = await GetByIdAsync<T>(contentId).ConfigureAwait(false);
+
+                if (content != null)
+                {
+                    models.Add(content);
+                }
+            }
+            return models;
         }
 
         /// <summary>
@@ -123,7 +159,7 @@ namespace Piranha.Services
             // If we don't have a model, get it from the repository
             if (model == null)
             {
-                model = await _pageRepo.GetById<T>(id, languageId.Value).ConfigureAwait(false);
+                model = await _repo.GetById<T>(id, languageId.Value).ConfigureAwait(false);
 
                 await OnLoadAsync(model).ConfigureAwait(false);
             }
@@ -171,7 +207,7 @@ namespace Piranha.Services
 
             // Call hooks and save
             App.Hooks.OnBeforeSave<GenericContent>(model);
-            await _pageRepo.Save(model, languageId.Value);
+            await _repo.Save(model, languageId.Value);
             App.Hooks.OnAfterSave<GenericContent>(model);
 
             // Remove from cache
@@ -200,7 +236,7 @@ namespace Piranha.Services
         {
             // Call hooks and delete
             App.Hooks.OnBeforeDelete<GenericContent>(model);
-            await _pageRepo.Delete(model.Id).ConfigureAwait(false);
+            await _repo.Delete(model.Id).ConfigureAwait(false);
             App.Hooks.OnAfterDelete<GenericContent>(model);
 
             // Delete search document

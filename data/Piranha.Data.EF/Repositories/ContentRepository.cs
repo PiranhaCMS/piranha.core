@@ -35,6 +35,31 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Gets all of the available content for the optional
+        /// group id.
+        /// </summary>
+        /// <param name="groupId">The optional group id</param>
+        /// <returns>The available content</returns>
+        public async Task<IEnumerable<Guid>> GetAll(string groupId = null)
+        {
+            var query = _db.Content
+                .AsNoTracking();
+
+            if (!string.IsNullOrEmpty(groupId))
+            {
+                query = query
+                    .Where(c => c.Type.Group == groupId);
+            }
+
+            return await query
+                .OrderBy(c => c.Title)
+                .ThenBy(c => c.LastModified)
+                .Select(c => c.Id)
+                .ToListAsync()
+                .ConfigureAwait(false);
+        }
+
+        /// <summary>
         /// Gets the content model with the specified id.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
