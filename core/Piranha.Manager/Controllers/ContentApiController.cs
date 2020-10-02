@@ -25,14 +25,16 @@ namespace Piranha.Manager.Controllers
     [ApiController]
     public class ContentApiController : Controller
     {
-        private readonly ContentTypeService _service;
+        private readonly ContentService _content;
+        private readonly ContentTypeService _contentType;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public ContentApiController(ContentTypeService service)
+        public ContentApiController(ContentService content, ContentTypeService contentType)
         {
-            _service = service;
+            _content = content;
+            _contentType = contentType;
         }
 
         /// <summary>
@@ -44,7 +46,7 @@ namespace Piranha.Manager.Controllers
         [HttpGet]
         public BlockListModel GetBlockTypes(string parentType = null)
         {
-            return _service.GetBlockTypes(parentType);
+            return _contentType.GetBlockTypes(parentType);
         }
 
         /// <summary>
@@ -56,7 +58,7 @@ namespace Piranha.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateBlockAsync(string type)
         {
-            var block = await _service.CreateBlockAsync(type);
+            var block = await _contentType.CreateBlockAsync(type);
 
             if (block != null)
             {
@@ -78,17 +80,26 @@ namespace Piranha.Manager.Controllers
         {
             if (content == "page")
             {
-                return Ok(await _service.CreatePageRegionAsync(type, region));
+                return Ok(await _contentType.CreatePageRegionAsync(type, region));
             }
             else if (content == "post")
             {
-                return Ok(await _service.CreatePostRegionAsync(type, region));
+                return Ok(await _contentType.CreatePostRegionAsync(type, region));
             }
             else if (content == "site")
             {
-                return Ok(await _service.CreateSiteRegionAsync(type, region));
+                return Ok(await _contentType.CreateSiteRegionAsync(type, region));
             }
             return NotFound();
+        }
+
+        [Route("{group}/list")]
+        [HttpGet]
+        public async Task<IActionResult> List(string group)
+        {
+            var model = await _content.GetListAsync(group);
+
+            return Ok(model);
         }
     }
 }
