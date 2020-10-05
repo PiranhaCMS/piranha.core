@@ -1,0 +1,51 @@
+@inject ManagerLocalizer Localizer
+
+<div id="languageedit" class="modal modal-panel fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!-- Modal header -->
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title"><i class="fas fa-cubes"></i> @Localizer.General["Languages"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body bg-light mt-0">
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <th class="w-100">Title</th>
+                            <th class="text-center">Culture</th>
+                            <th class="text-center">Default</th>
+                            <th class="actions one"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in items">
+                            <td>
+                                <input type="text" class="form-control form-control-sm" :class="{ 'is-invalid': item.errorTitle }" v-model="item.title">
+                            </td>
+                            <td class="text-center">
+                                <input type="text" class="form-control form-control-sm" v-model="item.culture">
+                            </td>
+                            <td class="text-center">
+                                <button v-on:click.prevent="setDefault(item)" class="switch" :aria-pressed="item.isDefault"><span></span></button>
+                            </td>
+                            <td class="actions one">
+                                <a v-if="!item.isDefault" v-on:click.prevent="removeItem(item)" href="#" class="danger"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button v-on:click.prevent="addItem()" class="btn btn-sm btn-primary btn-labeled">
+                    <i class="fas fa-plus"></i>@Localizer.General["Add"]
+                </button>
+                <button v-on:click.prevent="save()" class="btn btn-sm btn-success btn-labeled float-right">
+                    <i class="fas fa-check"></i>@Localizer.General["Save"]
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

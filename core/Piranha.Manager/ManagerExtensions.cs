@@ -33,6 +33,7 @@ public static class ManagerModuleExtensions
         services.AddScoped<CommentService>();
         services.AddScoped<ConfigService>();
         services.AddScoped<ContentTypeService>();
+        services.AddScoped<LanguageService>();
         services.AddScoped<MediaService>();
         services.AddScoped<ModuleService>();
         services.AddScoped<PageService>();

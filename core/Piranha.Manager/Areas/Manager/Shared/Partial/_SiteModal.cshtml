@@ -58,7 +58,7 @@
                                             <option :value="language.id" v-for="language in languages">{{ language.title }}</option>
                                         </select>
                                         <div class="input-group-append">
-                                            <button type="button" class="btn btn-icon btn-primary rounded ml-3" title="@Localizer.General["Configure languages"]">
+                                            <button v-on:click.prevent="piranha.languageedit.open()" type="button" class="btn btn-icon btn-primary rounded ml-3" title="@Localizer.General["Configure languages"]">
                                                 <i class="fas fa-cog"></i>
                                             </button>
                                         </div>

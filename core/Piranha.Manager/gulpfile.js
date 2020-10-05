@@ -158,6 +158,7 @@ var js = [
             "assets/src/js/piranha.pagepicker.js",
             "assets/src/js/piranha.postpicker.js",
             "assets/src/js/piranha.preview.js",
+            "assets/src/js/piranha.languageedit.js",
             "assets/src/js/piranha.resources.js",
             "assets/src/js/piranha.editor.js",
             "assets/src/js/components/page-item.vue"
