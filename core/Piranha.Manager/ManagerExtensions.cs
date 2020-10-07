@@ -99,6 +99,27 @@ public static class ManagerModuleExtensions
                 policy.RequireClaim(Permission.ConfigEdit, Permission.ConfigEdit);
             });
 
+            // Language policies
+            o.AddPolicy(Permission.Language, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Language, Permission.Language);
+            });
+            o.AddPolicy(Permission.LanguageAdd, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Language, Permission.Language);
+                policy.RequireClaim(Permission.LanguageAdd, Permission.LanguageAdd);
+            });
+            o.AddPolicy(Permission.LanguageDelete, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Language, Permission.Language);
+                policy.RequireClaim(Permission.LanguageDelete, Permission.LanguageDelete);
+            });
+            o.AddPolicy(Permission.LanguageEdit, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Language, Permission.Language);
+                policy.RequireClaim(Permission.LanguageEdit, Permission.LanguageEdit);
+            });
+
             // Media policies
             o.AddPolicy(Permission.Media, policy => {
                 policy.RequireClaim(Permission.Admin, Permission.Admin);

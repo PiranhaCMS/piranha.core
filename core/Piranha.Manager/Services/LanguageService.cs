@@ -42,6 +42,44 @@ namespace Piranha.Manager.Services
         }
 
         /// <summary>
+        /// Saves the given language and returns the updated edit model.
+        /// </summary>
+        /// <param name="model">The language model</param>
+        /// <returns>The updated data</returns>
+        public async Task<LanguageEditModel> Save(Language model)
+        {
+            await _api.Languages.SaveAsync(model);
+
+            return await Get();
+        }
+
+        /// <summary>
+        /// Deletes the given language and returns the updated edit model.
+        /// </summary>
+        /// <param name="id">The id of the language to delete</param>
+        /// <returns>The updated data</returns>
+        public async Task<LanguageEditModel> Delete(Guid id)
+        {
+            var defaultLanguage = await _api.Languages.GetDefaultAsync();
+            var sites = await _api.Sites.GetAllAsync();
+
+            // Assign all sites to the default language that has
+            // the specified language selected.
+            foreach (var site in sites)
+            {
+                if (site.LanguageId == id)
+                {
+                    site.LanguageId = defaultLanguage.Id;
+                    await _api.Sites.SaveAsync(site);
+                }
+            }
+            // Now delete the language
+            await _api.Languages.DeleteAsync(id);
+
+            return await Get();
+        }
+
+        /// <summary>
         /// Saves the given edit model and returns the updated data.
         /// </summary>
         /// <param name="model">The edit model</param>

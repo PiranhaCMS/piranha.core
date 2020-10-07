@@ -8,11 +8,13 @@
  *
  */
 
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Piranha.Manager.Models;
 using Piranha.Manager.Services;
+using Piranha.Models;
 
 namespace Piranha.Manager.Controllers
 {
@@ -57,6 +59,13 @@ namespace Piranha.Manager.Controllers
         public async Task<LanguageEditModel> Save(LanguageEditModel model)
         {
             return await _service.Save(model);
+        }
+
+        [Route("{id}")]
+        [HttpDelete]
+        public async Task<LanguageEditModel> Delete(Guid id)
+        {
+            return await _service.Delete(id);
         }
     }
 }

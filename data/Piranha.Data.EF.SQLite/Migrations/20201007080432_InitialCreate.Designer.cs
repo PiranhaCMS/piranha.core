@@ -9,8 +9,8 @@ using Piranha.Data.EF.SQLite;
 namespace Piranha.Data.EF.SQLite.Migrations
 {
     [DbContext(typeof(SQLiteDb))]
-    [Migration("20200930095842_AddContent")]
-    partial class AddContent
+    [Migration("20201007080432_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1534,7 +1534,7 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     b.HasOne("Piranha.Data.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 

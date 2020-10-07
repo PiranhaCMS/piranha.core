@@ -1532,7 +1532,7 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     b.HasOne("Piranha.Data.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 

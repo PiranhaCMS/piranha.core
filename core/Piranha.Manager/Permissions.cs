@@ -24,6 +24,10 @@ namespace Piranha.Manager
         public const string CommentsDelete = "PiranhaCommentsDelete";
         public const string Config = "PiranhaConfig";
         public const string ConfigEdit = "PiranhaConfigEdit";
+        public const string Language = "Language";
+        public const string LanguageAdd = "LanguageAdd";
+        public const string LanguageEdit = "LanguageEdit";
+        public const string LanguageDelete = "LanguageDelete";
         public const string Media = "PiranhaMedia";
         public const string MediaAdd = "PiranhaMediaAdd";
         public const string MediaDelete = "PiranhaMediaDelete";
@@ -60,6 +64,10 @@ namespace Piranha.Manager
                 CommentsDelete,
                 Config,
                 ConfigEdit,
+                Language,
+                LanguageAdd,
+                LanguageDelete,
+                LanguageEdit,
                 Media,
                 MediaAdd,
                 MediaDelete,

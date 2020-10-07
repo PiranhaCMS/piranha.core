@@ -971,9 +971,30 @@ piranha.languageedit = new Vue({
     el: "#languageedit",
     data: {
         loading: true,
-        items: []
+        items: [],
+        originalDefault: null,
+        currentDefault: null,
+        showDefaultInfo: false,
+        currentDelete: null,
+        showDeleteInfo: false,
     },
     methods: {
+        bind: function (result) {
+            for (var n = 0; n < result.items.length; n++)
+            {
+                result.items[n].errorTitle = false;
+
+                if (result.items[n].isDefault) {
+                    this.originalDefault = this.currentDefault = result.items[n];
+                }
+            }
+            this.items = result.items;
+            this.showDefaultInfo = false;
+            this.showDeleteInfo = false;
+            this.currentDelete = null;
+            this.loading = false;
+
+        },
         load: function () {
             var self = this;
 
@@ -981,45 +1002,12 @@ piranha.languageedit = new Vue({
             fetch(piranha.baseUrl + "manager/api/language")
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    for (var n = 0; n < result.items.length; n++)
-                    {
-                        result.items[n].errorTitle = false;
-                    }
-                    self.items = result.items;
-                    self.loading = false;
+                    self.bind(result);
                 })
                 .catch(function (error) {
                     console.log("error:", error );
                     self.loading = false;
                 });
-        },
-        open: function () {
-            this.load();
-            $("#languageedit").modal("show");
-        },
-        close: function () {
-            $("#languageedit").modal("hide");
-        },
-        setDefault: function (item) {
-            if (!item.isDefault) {
-                for (var n = 0; n < this.items.length; n++) {
-                    if (this.items[n].id != item.id) {
-                        this.items[n].isDefault = false;
-                    }
-                }
-                item.isDefault = true;
-            }
-        },
-        addItem: function () {
-            this.items.push({
-                id: "00000000-0000-0000-0000-000000000000",
-                title: "",
-                culture: "",
-                isDefault: false
-            });
-        },
-        removeItem: function (item) {
-            this.items.splice(this.items.indexOf(item), 1);
         },
         save: function () {
             // Validate form
@@ -1040,8 +1028,7 @@ piranha.languageedit = new Vue({
                 .then(function (result) {
                     //if (result.status.type === "success")
                     //{
-                        self.items = result.items;
-                        self.loading = false;
+                        self.bind(result);
                     //}
 
                     // Push status to notification hub
@@ -1052,7 +1039,80 @@ piranha.languageedit = new Vue({
                 });
             }
         },
-        validate: function () {
+        remove: function (item) {
+            var self = this;
+
+            self.loading = true;
+            fetch(piranha.baseUrl + "manager/api/language/" + item.id, {
+                method: "delete",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(item)
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                //if (result.status.type === "success")
+                //{
+                    self.bind(result);
+                //}
+
+                // Push status to notification hub
+                // piranha.notifications.push(result.status);
+            })
+            .catch(function (error) {
+                console.log("error:", error);
+            });
+        },
+        open: function () {
+            this.load();
+            $("#languageedit").modal("show");
+        },
+        close: function () {
+            $("#languageedit").modal("hide");
+        },
+        addItem: function () {
+            this.items.push({
+                id: "00000000-0000-0000-0000-000000000000",
+                title: "",
+                culture: "",
+                isDefault: false
+            });
+        },
+        setDefault: function (item) {
+            if (!item.isDefault) {
+                for (var n = 0; n < this.items.length; n++) {
+                    if (this.items[n].id != item.id) {
+                        this.items[n].isDefault = false;
+                    }
+                }
+                item.isDefault = true;
+                this.currentDefault = item;
+                if (this.originalDefault != item) {
+                    this.showDefaultInfo = true;
+                }
+            }
+        },
+        setDefaultConfirm: function (item) {
+            this.showDefaultInfo = false;
+        },
+        setDefaultCancel: function (items) {
+            this.setDefault(this.originalDefault);
+            this.currentDefault = this.originalDefault;
+            this.showDefaultInfo = false;
+        },
+        removeItem: function (item) {
+            this.currentDelete = item;
+            this.showDeleteInfo = true;
+        },
+        removeConfirm: function () {
+            this.remove(this.currentDelete);
+        },
+        removeCancel: function () {
+            this.currentDelete = null;
+            this.showDeleteInfo = false;
+        },
+        validate: function (item) {
             isValid = true;
 
             for (var n = 0; n < this.items.length; n++) {
