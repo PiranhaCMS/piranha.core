@@ -18,9 +18,9 @@
                     <table class="table table-borderless">
                         <thead>
                             <tr>
-                                <th class="w-100">Title</th>
-                                <th class="text-center">Culture</th>
-                                <th class="text-center">Default</th>
+                                <th class="w-100">@Localizer.General["Title"]</th>
+                                <th class="text-center">@Localizer.General["Culture"]</th>
+                                <th class="text-center">@Localizer.General["Default"]</th>
                                 <th class="actions one"></th>
                             </tr>
                         </thead>
@@ -47,8 +47,7 @@
                     <div v-if="showDefaultInfo" class="alert alert-primary w-100" role="alert">
                         <h5>@Localizer.Site["Are you really sure?"]</h5>
                         <p>
-                            Changing the default site will affect how the application behaves and should be
-                            configured during initial setup.
+                            @Html.Raw(@Localizer.Language["ChangeDefaultConfirm"])
                         </p>
                         <p class="text-right">
                             <button v-on:click.prevent="setDefaultCancel" class="btn btn-sm btn-secondary">
@@ -62,10 +61,7 @@
                     <div v-if="showDeleteInfo" class="alert alert-danger w-100">
                         <h5>@Localizer.Site["Are you really sure?"]</h5>
                         <p>
-                            This action <strong>cannot</strong> be undone. This will permanently delete the
-                            language {{ currentDelete.title }} and all of its <strong>translations</strong>.
-                            Any sites that have selected {{ currentDelete.title }} as their language will
-                            be assigned the default language.
+                            @Html.Raw(@Localizer.Language["RemoveLanguageConfirm"])
                         </p>
                         <p class="text-right">
                             <button v-on:click.prevent="removeCancel" class="btn btn-sm btn-secondary">
