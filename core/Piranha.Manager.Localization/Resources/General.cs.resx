@@ -39,6 +39,9 @@
   <data name="Culture" xml:space="preserve">
     <value>Kultura</value>
   </data>
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Smazat</value>
   </data>
@@ -92,6 +95,12 @@
   </data>
   <data name="Is default" xml:space="preserve">
     <value>Je výchozí</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Languages" xml:space="preserve">
+    <value>Languages</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Přihlásit se</value>
