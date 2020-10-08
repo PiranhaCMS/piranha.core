@@ -39,6 +39,9 @@
   <data name="Culture" xml:space="preserve">
     <value>Kulturinställning</value>
   </data>
+  <data name="Default" xml:space="preserve">
+    <value>Standard</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Radera</value>
   </data>
@@ -92,6 +95,12 @@
   </data>
   <data name="Is default" xml:space="preserve">
     <value>Standard</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Språk</value>
+  </data>
+  <data name="Languages" xml:space="preserve">
+    <value>Språk</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Logga in</value>
