@@ -46,17 +46,15 @@ namespace Piranha.Manager.Services
         /// <returns>Gets the list model.</returns>
         public async Task<ContentListModel> GetListAsync(string contentGroup)
         {
-            var group = _api.ContentGroups.GetByIdAsync(contentGroup);
-            var items = _api.Content.GetAllAsync<ContentInfo>(contentGroup);
-            var types = _api.ContentTypes.GetByGroupAsync(contentGroup);
-
-            await Task.WhenAll(group, items, types);
+            var group = App.ContentGroups.GetById(contentGroup);
+            var types = App.ContentTypes.GetByGroupId(contentGroup);
+            var items = await _api.Content.GetAllAsync<ContentInfo>(contentGroup);
 
             return new ContentListModel
             {
-                Group = group.Result,
-                Items = items.Result,
-                Types = types.Result
+                Group = group,
+                Items = items,
+                Types = types
                     .Select(t =>
                         new Models.Content.ContentTypeModel
                         {
