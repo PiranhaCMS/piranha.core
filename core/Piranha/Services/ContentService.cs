@@ -270,6 +270,17 @@ namespace Piranha.Services
                 await _factory.InitAsync(model, App.ContentTypes.GetById(model.TypeId)).ConfigureAwait(false);
             }
 
+            // Initialize primary image
+             if (model.PrimaryImage == null)
+            {
+                model.PrimaryImage = new Extend.Fields.ImageField();
+            }
+
+            if (model.PrimaryImage.Id.HasValue)
+            {
+                await _factory.InitFieldAsync(model.PrimaryImage).ConfigureAwait(false);
+            }
+
             // Execute on load hook
             App.Hooks.OnLoad(model);
 

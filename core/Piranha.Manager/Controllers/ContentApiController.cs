@@ -8,6 +8,8 @@
  *
  */
 
+using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -93,13 +95,114 @@ namespace Piranha.Manager.Controllers
             return NotFound();
         }
 
-        [Route("{group}/list")]
+        [Route("{contentGroup}/list")]
         [HttpGet]
-        public async Task<IActionResult> List(string group)
+        [Authorize(Policy = Permission.Content)]
+        public async Task<IActionResult> List(string contentGroup)
         {
-            var model = await _content.GetListAsync(group);
+            var model = await _content.GetListAsync(contentGroup);
 
             return Ok(model);
+        }
+
+        /// <summary>
+        /// Gets the post with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The post edit model</returns>
+        [Route("{id:Guid}")]
+        [HttpGet]
+        [Authorize(Policy = Permission.Content)]
+        public async Task<ContentEditModel> Get(Guid id)
+        {
+           return await _content.GetByIdAsync(id);
+        } 
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="contentType">The content type</param>
+        /// <returns>The edit model</returns>
+        [Route("create/{contentType}")]
+        [HttpGet]
+        [Authorize(Policy = Permission.ContentAdd)]
+        public async Task<ContentEditModel> Create(string contentType)
+        {
+           return await _content.CreateAsync(contentType);
+        }
+
+        /// <summary>
+        /// Saves the given model
+        /// </summary>
+        /// <param name="model">The model</param>
+        /// <returns>The result of the operation</returns>
+        [Route("save")]
+        [HttpPost]
+        [Authorize(Policy = Permission.ContentSave)]
+        public async Task<ContentEditModel> Save(ContentEditModel model)
+        {
+             try
+            {
+                await _content.SaveAsync(model);
+            }
+            catch (ValidationException e)
+            {
+                model.Status = new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = e.Message
+                };
+
+                return model;
+            }
+
+            var ret = await _content.GetByIdAsync(model.Id);
+            ret.Status = new StatusMessage
+            {
+                Type = StatusMessage.Success,
+                Body = "The content was successfully saved"
+            };
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Deletes the content with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The result of the operation</returns>
+        [Route("delete/{id}")]
+        [HttpGet]
+        [Authorize(Policy = Permission.ContentDelete)]
+        public async Task<StatusMessage> Delete(Guid id)
+        {
+            try
+            {
+                await _content.DeleteAsync(id);
+            }
+            catch (ValidationException e)
+            {
+                // Validation did not succeed
+                return new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = e.Message
+                };
+            }
+            catch
+            {
+                return new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = "An error occured while deleting the content"
+                };
+            }
+
+            return new StatusMessage
+            {
+                Type = StatusMessage.Success,
+                Body = "The content was successfully deleted"
+            };
         }
     }
 }

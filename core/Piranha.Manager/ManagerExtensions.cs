@@ -99,6 +99,32 @@ public static class ManagerModuleExtensions
                 policy.RequireClaim(Permission.ConfigEdit, Permission.ConfigEdit);
             });
 
+            // Content policies
+            o.AddPolicy(Permission.Content, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Content, Permission.Content);
+            });
+            o.AddPolicy(Permission.ContentAdd, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Content, Permission.Content);
+                policy.RequireClaim(Permission.ContentAdd, Permission.ContentAdd);
+            });
+            o.AddPolicy(Permission.ContentEdit, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Content, Permission.Content);
+                policy.RequireClaim(Permission.ContentEdit, Permission.ContentEdit);
+            });
+            o.AddPolicy(Permission.ContentSave, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Content, Permission.Content);
+                policy.RequireClaim(Permission.ContentSave, Permission.ContentSave);
+            });
+            o.AddPolicy(Permission.ContentDelete, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Content, Permission.Content);
+                policy.RequireClaim(Permission.ContentDelete, Permission.ContentDelete);
+            });
+
             // Media policies
             o.AddPolicy(Permission.Media, policy => {
                 policy.RequireClaim(Permission.Admin, Permission.Admin);

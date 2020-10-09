@@ -195,7 +195,7 @@ var js = [
         ]
     },
     {
-        name: "piranha.contentedit.js",
+        name: "piranha.components.js",
         items: [
             "assets/src/js/components/region.vue",
             "assets/src/js/components/post-archive.vue",
@@ -240,6 +240,12 @@ var js = [
         name: "piranha.contentlist.js",
         items: [
             "assets/src/js/piranha.contentlist.js"
+        ]
+    },
+    {
+        name: "piranha.contentedit.js",
+        items: [
+            "assets/src/js/piranha.contentedit.js"
         ]
     },
     {

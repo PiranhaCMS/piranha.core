@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Piranha.Manager.Models
 {
     [Authorize(Policy = Permission.Content)]
-    public class ContentListViewModel : PageModel
+    public class ContentEditViewModel : PageModel
     {
     }
 }
