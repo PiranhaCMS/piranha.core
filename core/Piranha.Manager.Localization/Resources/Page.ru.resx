@@ -19,7 +19,7 @@
     <value>Произошла ошибка при удалении страницы</value>
   </data>
   <data name="Archive" xml:space="preserve">
-    <value>Archive</value>
+    <value>Архив</value>
   </data>
   <data name="Detach page" xml:space="preserve">
     <value>Открепить страницу</value>
@@ -37,7 +37,7 @@
     <value>Страница должна быть скрыта на карте сайта</value>
   </data>
   <data name="Meta title" xml:space="preserve">
-    <value>Meta title</value>
+    <value>Мета заголовок</value>
   </data>
   <data name="Meta keywords" xml:space="preserve">
     <value>Ключевые слова (Meta)</value>
