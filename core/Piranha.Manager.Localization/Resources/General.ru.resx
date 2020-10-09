@@ -40,7 +40,7 @@
     <value>Язык</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>По умолчанию</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Удалить</value>
@@ -97,10 +97,10 @@
     <value>По умолчанию</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>Язык</value>
   </data>
   <data name="Languages" xml:space="preserve">
-    <value>Languages</value>
+    <value>Языки</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Войти</value>
@@ -232,7 +232,7 @@
     <value>Ширина</value>
   </data>
   <data name="Archives and Comments" xml:space="preserve">
-    <value>Archives and Comments</value>
+    <value>Архивы и комментарии</value>
   </data>
   <data name="Author" xml:space="preserve">
     <value>Автор</value>
