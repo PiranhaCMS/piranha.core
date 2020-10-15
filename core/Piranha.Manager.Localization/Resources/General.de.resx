@@ -40,7 +40,7 @@
     <value>Kultur-Einstellung</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Standard</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Löschen</value>
@@ -97,10 +97,10 @@
     <value>Standard</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>Sprache</value>
   </data>
   <data name="Languages" xml:space="preserve">
-    <value>Languages</value>
+    <value>Sprachen</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Anmelden</value>
