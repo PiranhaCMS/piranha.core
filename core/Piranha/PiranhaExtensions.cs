@@ -8,6 +8,7 @@
  *
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Piranha.Models;
@@ -38,6 +39,6 @@ public static class PiranhaExtensions
     /// <param name="contentGroupId">Content group type id</param>
     public static IList<ContentType> GetByGroupId(this CachedList<ContentType> list, string contentGroupId)
     {
-        return Piranha.App.ContentTypes.Where(ct => ct.Group == contentGroupId).ToList();
+        return Piranha.App.ContentTypes.Where(ct => string.Equals(ct.Group, contentGroupId, StringComparison.OrdinalIgnoreCase)).ToList();
     }
 }
