@@ -53,7 +53,15 @@ namespace Piranha.Manager.Services
             return new ContentListModel
             {
                 Group = group,
-                Items = items,
+                Items = items
+                    .Select(i => new ContentListModel.ContentItem
+                        {
+                            Id = i.Id,
+                            Title = i.Title,
+                            TypeId = i.TypeId,
+                            Modified = i.LastModified.ToString("yyyy-MM-dd")
+                        })
+                    .ToList(),
                 Types = types
                     .Select(t =>
                         new Models.Content.ContentTypeModel
