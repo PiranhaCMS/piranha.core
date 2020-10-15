@@ -70,7 +70,7 @@
                         {{ item.modified }}
                     </td>
                     <td class="actions one">
-                        <a class="danger">
+                        <a v-on:click.prevent="remove(item.id)" class="danger">
                             <span class="fas fa-trash"></span>
                          </a>
                     </td>

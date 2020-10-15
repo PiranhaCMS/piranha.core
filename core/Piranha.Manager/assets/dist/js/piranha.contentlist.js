@@ -6,8 +6,8 @@ piranha.contentlist = new Vue({
     el: "#contentlist",
     data: {
         loading: true,
+        group: null,
         items: [],
-        group: [],
         types: []
     },
     methods: {
@@ -27,6 +27,7 @@ piranha.contentlist = new Vue({
         },
         load: function (group) {
             var self = this;
+
             piranha.permissions.load(function () {
                 fetch(piranha.baseUrl + "manager/api/content/" + group + "/list")
                 .then(function (response) { return response.json(); })
@@ -37,7 +38,28 @@ piranha.contentlist = new Vue({
                 })
                 .catch(function (error) { console.log("error:", error ); });
             });
-        }
+        },
+        remove: function (id) {
+            var self = this;
+
+            piranha.alert.open({
+                title: piranha.resources.texts.delete,
+                body: piranha.resources.texts.deletePageConfirm,
+                confirmCss: "btn-danger",
+                confirmIcon: "fas fa-trash",
+                confirmText: piranha.resources.texts.delete,
+                onConfirm: function () {
+                    fetch(piranha.baseUrl + "manager/api/content/delete/" + id)
+                    .then(function (response) { return response.json(); })
+                    .then(function (result) {
+                        piranha.notifications.push(result);
+
+                        self.load(self.group.id);
+                    })
+                    .catch(function (error) { console.log("error:", error ); });
+                }
+            });
+        },
     },
     created: function () {
     }
