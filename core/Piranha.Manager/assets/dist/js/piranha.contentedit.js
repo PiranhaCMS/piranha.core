@@ -8,7 +8,9 @@ piranha.contentedit = new Vue({
         loading: true,
         id: null,
         typeId: null,
-        group: null,
+        typeTitle: null,
+        groupId: null,
+        groupTitle: null,
         title: null,
         excerpt: null,
         state: "new",
@@ -66,7 +68,9 @@ piranha.contentedit = new Vue({
         bind: function (model) {
             this.id = model.id;
             this.typeId = model.typeId;
-            this.group = model.group;
+            this.typeTitle = model.typeTitle;
+            this.groupId = model.groupId;
+            this.groupTitle = model.groupTitle;
             this.title = model.title;
             this.excerpt = model.excerpt;
             this.state = model.state;
@@ -190,14 +194,14 @@ piranha.contentedit = new Vue({
                 confirmIcon: "fas fa-trash",
                 confirmText: piranha.resources.texts.delete,                
                 onConfirm: function () {
-                    var contentGroup = self.group;
+                    var groupId = self.groupId;
 
                     fetch(piranha.baseUrl + "manager/api/content/delete/" + self.id)
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
                         piranha.notifications.push(result);
 
-                        window.location = piranha.baseUrl + "manager/content/" + contentGroup;
+                        window.location = piranha.baseUrl + "manager/content/" + groupId;
                     })
                     .catch(function (error) { console.log("error:", error ); });
                 }

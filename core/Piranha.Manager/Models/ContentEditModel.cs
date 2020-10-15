@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using Piranha.Extend.Fields;
+using Piranha.Models;
 
 namespace Piranha.Manager.Models
 {
@@ -30,11 +31,21 @@ namespace Piranha.Manager.Models
         /// Gets/sets the content type id.
         /// </summary>
         public string TypeId { get; set; }
-        
+
         /// <summary>
-        /// Gets/sets the content type group.
+        /// Gets/sets the content type title.
         /// </summary>
-        public string Group { get; set; }
+        public string TypeTitle { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content type group id.
+        /// </summary>
+        public string GroupId { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content type group title.
+        /// </summary>
+        public string GroupTitle { get; set; }  
 
         /// <summary>
         /// Gets/sets the mandatory title.

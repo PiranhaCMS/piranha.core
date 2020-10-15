@@ -104,16 +104,23 @@ namespace Piranha.Manager.Services
         /// <returns>Nee edit model</returns>
         public async Task<ContentEditModel> CreateAsync(string typeId)
         {
+            var type =  App.ContentTypes.GetById(typeId);
+            var group = App.ContentGroups.GetById(type.Group);
             var content = await _api.Content.CreateAsync<DynamicContent>(typeId);
             if (content != null)
             {
                 content.Id = Guid.NewGuid();
 
-                await _factory.InitDynamicManagerAsync(content, App.ContentTypes.GetById(typeId));
+                await _factory.InitDynamicManagerAsync(content, type);
 
                 var model = Transform(content);
-                model.State = ContentState.New;
 
+                model.TypeId = type.Id;
+                model.TypeTitle = type.Title;
+                model.GroupId = group.Id;
+                model.GroupTitle = group.Title;
+                model.State = ContentState.New;
+                
                 return model;
             }
 
@@ -233,7 +240,6 @@ namespace Piranha.Manager.Services
             {
                 Id = content.Id,
                 TypeId = content.TypeId,
-                Group = type.Group,
                 PrimaryImage = content.PrimaryImage,
                 Title = content.Title,
                 UsePrimaryImage = type.UsePrimaryImage,
