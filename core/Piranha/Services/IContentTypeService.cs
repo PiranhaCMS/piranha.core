@@ -30,6 +30,13 @@ namespace Piranha.Services
         Task<ContentType> GetByIdAsync(string id);
 
         /// <summary>
+        /// Gets all available models from the specified group.
+        /// </summary>
+        /// <param name="group">The content group</param>
+        /// <returns>The available models</returns>
+        Task<IEnumerable<ContentType>> GetByGroupAsync(string group);
+
+        /// <summary>
         /// Adds or updates the given model in the database
         /// depending on its state.
         /// </summary>

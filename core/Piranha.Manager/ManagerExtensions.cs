@@ -32,6 +32,7 @@ public static class ManagerModuleExtensions
         services.AddScoped<AliasService>();
         services.AddScoped<CommentService>();
         services.AddScoped<ConfigService>();
+        services.AddScoped<ContentService>();
         services.AddScoped<ContentTypeService>();
         services.AddScoped<LanguageService>();
         services.AddScoped<MediaService>();
@@ -97,6 +98,32 @@ public static class ManagerModuleExtensions
                 policy.RequireClaim(Permission.Admin, Permission.Admin);
                 policy.RequireClaim(Permission.Config, Permission.Config);
                 policy.RequireClaim(Permission.ConfigEdit, Permission.ConfigEdit);
+            });
+
+            // Content policies
+            o.AddPolicy(Permission.Content, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Content, Permission.Content);
+            });
+            o.AddPolicy(Permission.ContentAdd, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Content, Permission.Content);
+                policy.RequireClaim(Permission.ContentAdd, Permission.ContentAdd);
+            });
+            o.AddPolicy(Permission.ContentEdit, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Content, Permission.Content);
+                policy.RequireClaim(Permission.ContentEdit, Permission.ContentEdit);
+            });
+            o.AddPolicy(Permission.ContentSave, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Content, Permission.Content);
+                policy.RequireClaim(Permission.ContentSave, Permission.ContentSave);
+            });
+            o.AddPolicy(Permission.ContentDelete, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Content, Permission.Content);
+                policy.RequireClaim(Permission.ContentDelete, Permission.ContentDelete);
             });
 
             // Language policies

@@ -1,0 +1,117 @@
+@page "~/manager/content/{action}/{contentType}/{id?}"
+@model ContentListViewModel
+@inject ManagerLocalizer Localizer
+@{
+    ViewBag.Title = "Add/Edit";
+    ViewBag.MenuItem = "Add/Edit";
+    string action = ((string)RouteData.Values["action"]).ToLower();
+}
+
+@section script
+{
+    <script src="@Url.Content(Piranha.Manager.Editor.EditorScripts.MainScriptUrl)"></script>
+    <script src="@Url.Content(Piranha.Manager.Editor.EditorScripts.EditorScriptUrl)"></script>
+    <script src="~/manager/assets/js/piranha.components.min.js"></script>
+    <script src="~/manager/assets/js/piranha.contentedit.min.js"></script>
+
+    @if (action == "edit")
+    {
+        <script>
+            piranha.permissions.load(function () {
+                piranha.contentedit.load("@RouteData.Values["id"]");
+                $(".title input").focus();
+            });
+        </script>
+    }
+    else if (action == "add")
+    {
+        <script>
+            piranha.permissions.load(function () {
+                piranha.contentedit.create("@RouteData.Values["contentType"]");
+                $(".title input").focus();
+            });
+        </script>
+    }
+}
+
+@section partials
+{
+   
+}
+
+<div id="contentedit">
+    <div class="top">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
+                <li class="breadcrumb-item"><a :href="piranha.baseUrl + 'manager/content/' + groupId">{{ groupTitle }}</a></li>
+                <li class="breadcrumb-item">{{ typeTitle }}</li>
+                <li v-if="state !== 'new'" class="breadcrumb-item active" aria-current="page">@Localizer.General["Edit"]</li>
+            </ol>
+        </nav>
+
+        <div class="container-fluid app" :class="{ ready: !loading }">
+            <div class="top-nav">
+                @foreach (var menuAction in Piranha.Manager.Actions.Toolbars.ContentEdit)
+                {
+                    <partial name="@menuAction.ActionView" />
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid app" :class="{ ready: !loading }">
+        <!-- Content navigation -->
+        <ul v-if="(useBlocks && (editors.length + contentRegions.length > 0)) || editors.length + contentRegions.length > 1" class="nav nav-pills nav-pills-card justify-content-center">
+            <li v-if="useBlocks" class="nav-item">
+                <a class="nav-link" v-on:click.prevent="selectRegion({ uid: 'uid-blocks' })" :class="{ active: selectedRegion.uid === 'uid-blocks' }" href="#">
+                    <i class="fas fa-pen-alt"></i>@Localizer.General["Main content"]
+                </a>
+            </li>
+            <li v-for="editor in editors" class="nav-item">
+                <a class="nav-link" v-on:click.prevent="selectRegion(editor)" :class="{ active: selectedRegion.uid == editor.uid }" href="#">
+                    <i :class="editor.icon"></i>{{ editor.name }}
+                </a>
+            </li>
+            <li v-for="region in contentRegions" class="nav-item">
+                <a class="nav-link" v-on:click.prevent="selectRegion(region.meta)" :class="{ active: selectedRegion.uid == region.meta.uid }" href="#">
+                    <i :class="region.meta.icon"></i>{{ region.meta.name }}
+                </a>
+            </li>
+        </ul>
+
+        <!-- Title -->
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group title">
+                            <input v-model="title" type="text" class="form-control form-control-lg" placeholder="@Localizer.Page["Your page title"]">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Editors -->
+        <div class="card" :class="{ 'd-none': selectedRegion.uid != editor.uid }" v-for="editor in editors">
+            <div class="card-body">
+                <div class="region-center">
+                    <component v-bind:is="editor.component" v-bind:uid="editor.uid" v-bind:id="id"></component>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Regions -->
+        <div class="card" :class="{ 'd-none': selectedRegion.uid != region.meta.uid }" v-for="region in contentRegions">
+            <div class="card-body">
+                <div class="region region-center">
+                    <region v-bind:content="'page'" v-bind:type="typeId" v-bind:model="region"></region>
+                    <div class="content-blocker"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <partial name="Partial/_ContentSettings" />
+</div>

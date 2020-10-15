@@ -10,10 +10,12 @@
 
 using System;
 using System.Collections.Generic;
+using Piranha.Extend.Fields;
+using Piranha.Models;
 
 namespace Piranha.Manager.Models
 {
-    public class ContentEditModel
+    public class ContentEditModel : AsyncResult
     {
         /// <summary>
         /// Gets/sets the unique id.
@@ -31,14 +33,39 @@ namespace Piranha.Manager.Models
         public string TypeId { get; set; }
 
         /// <summary>
+        /// Gets/sets the content type title.
+        /// </summary>
+        public string TypeTitle { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content type group id.
+        /// </summary>
+        public string GroupId { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content type group title.
+        /// </summary>
+        public string GroupTitle { get; set; }  
+
+        /// <summary>
         /// Gets/sets the mandatory title.
         /// </summary>
         public string Title { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional primary image.
+        /// </summary>
+        public ImageField PrimaryImage { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional excerpt.
+        /// </summary>
+        public string Excerpt { get; set; }
+
+        /// <summary>
         /// Gets/sets if blocks should be used.
         /// </summary>
-        public bool UseBlocks { get; set; } = true;
+        public bool UseBlocks { get; set; } = false;
 
         /// <summary>
         /// Gets/sets if the content type should be
@@ -47,16 +74,22 @@ namespace Piranha.Manager.Models
         public bool UseCategory { get; set; }
 
         /// <summary>
+        /// Gets/sets if primary image should be used for the
+        /// content type. The default value is true.
+        /// </summary>
+        public bool UsePrimaryImage { get; set; } = true;
+
+        /// <summary>
         /// Gets/sets if excerpt should be used for the
         /// content type. The default value is true.
         /// </summary>
         public bool UseExcerpt { get; set; } = true;
 
         /// <summary>
-        /// Gets/sets if primary image should be used for the
-        /// content type. The default value is true.
+        /// Gets/sets if excerpt should in HTML-format. The
+        /// default value is false.
         /// </summary>
-        public bool UsePrimaryImage { get; set; } = true;
+        public bool UseHtmlExcerpt { get; set; } = false;
 
         /// <summary>
         /// Gets/sets if tags should be used for the content type.
@@ -67,6 +100,11 @@ namespace Piranha.Manager.Models
         /// Gets/sets if the content should be translatable.
         /// </summary>
         public bool UseTranslations { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content status.
+        /// </summary>
+        public string State { get; set; }
 
         /// <summary>
         /// Gets/sets the available blocks.
