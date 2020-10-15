@@ -31,6 +31,11 @@ namespace Piranha.Data
 	    public string Title { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional excerpt.
+        /// </summary>
+        public string Excerpt { get; set; }
+
+        /// <summary>
         /// Gets/sets the content.
         /// </summary>
         public Content Content { get; set; }

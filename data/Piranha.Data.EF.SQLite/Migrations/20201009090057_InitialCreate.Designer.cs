@@ -9,7 +9,7 @@ using Piranha.Data.EF.SQLite;
 namespace Piranha.Data.EF.SQLite.Migrations
 {
     [DbContext(typeof(SQLiteDb))]
-    [Migration("20201007080432_InitialCreate")]
+    [Migration("20201009090057_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -297,6 +297,9 @@ namespace Piranha.Data.EF.SQLite.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("LanguageId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Excerpt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")

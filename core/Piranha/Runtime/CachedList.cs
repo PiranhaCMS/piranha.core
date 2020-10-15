@@ -8,6 +8,7 @@
  *
  */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Piranha.Models;
@@ -48,7 +49,7 @@ namespace Piranha.Runtime
         /// <returns>The content type</returns>
         public T GetById(string id)
         {
-            return this.FirstOrDefault(t => t.Id == id);
+            return this.FirstOrDefault(t => string.Equals(t.Id, id, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

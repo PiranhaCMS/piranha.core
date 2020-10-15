@@ -495,6 +495,18 @@ namespace Piranha.Tests.Services
         }
 
         [Fact]
+        public async Task GetMultipleBaseClassById()
+        {
+            using (var api = CreateApi())
+            {
+                var models = await api.Pages.GetByIdsAsync<Models.PageBase>(PAGE_1_ID, PAGE_2_ID, PAGE_3_ID);
+
+                Assert.NotEmpty(models);
+                Assert.Equal(3, models.Count());
+            }
+        }
+
+        [Fact]
         public async Task GetGenericBySlug()
         {
             using (var api = CreateApi())

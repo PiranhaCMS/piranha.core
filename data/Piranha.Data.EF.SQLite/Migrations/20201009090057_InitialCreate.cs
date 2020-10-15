@@ -451,7 +451,8 @@ namespace Piranha.Data.EF.SQLite.Migrations
                 {
                     ContentId = table.Column<Guid>(nullable: false),
                     LanguageId = table.Column<Guid>(nullable: false),
-                    Title = table.Column<string>(maxLength: 128, nullable: false)
+                    Title = table.Column<string>(maxLength: 128, nullable: false),
+                    Excerpt = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

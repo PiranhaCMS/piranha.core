@@ -297,6 +297,9 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     b.Property<Guid>("LanguageId")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Excerpt")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT")

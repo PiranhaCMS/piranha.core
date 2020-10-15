@@ -153,6 +153,27 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Gets the page models with the specified id's.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="ids">The unique id's</param>
+        /// <returns>The page models</returns>
+        public async Task<IEnumerable<T>> GetByIds<T>(params Guid[] ids) where T : Models.PageBase
+        {
+            var ret = new List<T>();
+            var pages = await GetQuery<T>()
+                .Where(p => ids.Contains(p.Id))
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            foreach (var page in pages)
+            {
+                ret.Add(await _contentService.TransformAsync<T>(page, App.PageTypes.GetById(page.PageTypeId), ProcessAsync).ConfigureAwait(false));
+            }
+            return ret;
+        }
+
+        /// <summary>
         /// Gets the page model with the specified slug.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
