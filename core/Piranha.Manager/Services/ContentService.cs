@@ -84,11 +84,20 @@ namespace Piranha.Manager.Services
             var content = await _api.Content.GetByIdAsync<DynamicContent>(id);
             if (content != null)
             {
+                var type =  App.ContentTypes.GetById(content.TypeId);
+                var group = App.ContentGroups.GetById(type.Group);
+
                 // Perform manager init
                 await _factory.InitDynamicManagerAsync(content,
                     App.ContentTypes.GetById(content.TypeId));
 
                 var model = Transform(content);
+
+                model.TypeId = type.Id;
+                model.TypeTitle = type.Title;
+                model.GroupId = group.Id;
+                model.GroupTitle = group.Title;
+
                 model.State = ContentState.Published;
 
                 return model;
