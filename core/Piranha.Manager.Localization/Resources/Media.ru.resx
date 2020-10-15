@@ -52,19 +52,19 @@
     <value>Preferred aspect</value>
   </data>
   <data name="Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Исходный</value>
   </data>
   <data name="Landscape" xml:space="preserve">
-    <value>Landscape</value>
+    <value>Альбомная</value>
   </data>
   <data name="Portrait" xml:space="preserve">
     <value>Портрет</value>
   </data>
   <data name="Widescreen" xml:space="preserve">
-    <value>Widescreen</value>
+    <value>Широкий экран</value>
   </data>
   <data name="Square" xml:space="preserve">
-    <value>Square</value>
+    <value>Квадрат</value>
   </data>
   <data name="Are you sure you want to delete selected media?" xml:space="preserve">
     <value>Вы уверены, что хотите удалить выбранные медиа файлы?</value>
