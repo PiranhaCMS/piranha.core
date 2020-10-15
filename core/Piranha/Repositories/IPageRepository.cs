@@ -78,6 +78,14 @@ namespace Piranha.Repositories
         Task<T> GetById<T>(Guid id) where T : PageBase;
 
         /// <summary>
+        /// Gets the page models with the specified id's.
+        /// </summary>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <param name="ids">The unique id's</param>
+        /// <returns>The page models</returns>
+        Task<IEnumerable<T>> GetByIds<T>(params Guid[] ids) where T : PageBase;
+
+        /// <summary>
         /// Gets the page model with the specified slug.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
