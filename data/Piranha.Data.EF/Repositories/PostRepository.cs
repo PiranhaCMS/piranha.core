@@ -475,9 +475,6 @@ namespace Piranha.Repositories
 
                 _db.Posts.Remove(model);
 
-                //
-                // TODO
-                //
                 // If this is a published post, update last modified for the
                 // blog page for caching purposes.
                 if (model.Published.HasValue)

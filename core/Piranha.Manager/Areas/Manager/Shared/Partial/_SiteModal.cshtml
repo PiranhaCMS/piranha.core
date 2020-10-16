@@ -1,3 +1,4 @@
+@inject IAuthorizationService Auth
 @inject ManagerLocalizer Localizer
 
 <div id="siteedit" class="modal fade" tabindex="-1" role="dialog">
@@ -52,8 +53,20 @@
                             </div>
                             <div class="col">
                                 <div class="form-group">
-                                    <label>@Localizer.General["Culture"]</label>
-                                    <input v-model="culture" type="text" class="form-control">
+                                    <label>@Localizer.General["Language"]</label>
+                                    <div class="input-group">
+                                        <select v-model="languageId" class="form-control">
+                                            <option :value="language.id" v-for="language in languages">{{ language.title }}</option>
+                                        </select>
+                                        @if ((await Auth.AuthorizeAsync(User, Permission.Language)).Succeeded)
+                                        {
+                                            <div class="input-group-append">
+                                                <button v-on:click.prevent="piranha.languageedit.open()" type="button" class="btn btn-icon btn-primary rounded ml-3" title="@Localizer.General["Configure languages"]">
+                                                    <i class="fas fa-cog"></i>
+                                                </button>
+                                            </div>
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </div>

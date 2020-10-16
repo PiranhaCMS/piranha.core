@@ -11,7 +11,7 @@
 namespace Piranha.Extend.Fields
 {
     [FieldType(Name = "String", Shorthand = "String", Component = "string-field")]
-    public class StringField : SimpleField<string>, ISearchable
+    public class StringField : SimpleField<string>, ISearchable, ITranslatable
     {
         /// <summary>
         /// Implicit operator for converting a string to a field.

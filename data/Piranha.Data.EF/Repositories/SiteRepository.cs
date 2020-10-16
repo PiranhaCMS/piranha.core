@@ -55,6 +55,7 @@ namespace Piranha.Repositories
                 models.Add(new Models.Site
                 {
                     Id = site.Id,
+                    LanguageId = site.LanguageId,
                     SiteTypeId = site.SiteTypeId,
                     Title = site.Title,
                     InternalId = site.InternalId,
@@ -87,6 +88,7 @@ namespace Piranha.Repositories
                 return new Models.Site
                 {
                     Id = site.Id,
+                    LanguageId = site.LanguageId,
                     SiteTypeId = site.SiteTypeId,
                     Title = site.Title,
                     InternalId = site.InternalId,
@@ -119,6 +121,7 @@ namespace Piranha.Repositories
                 return new Models.Site
                 {
                     Id = site.Id,
+                    LanguageId = site.LanguageId,
                     SiteTypeId = site.SiteTypeId,
                     Title = site.Title,
                     InternalId = site.InternalId,
@@ -150,6 +153,7 @@ namespace Piranha.Repositories
                 return new Models.Site
                 {
                     Id = site.Id,
+                    LanguageId = site.LanguageId,
                     SiteTypeId = site.SiteTypeId,
                     Title = site.Title,
                     InternalId = site.InternalId,
@@ -253,6 +257,7 @@ namespace Piranha.Repositories
                 };
                 await _db.Sites.AddAsync(site).ConfigureAwait(false);
             }
+            site.LanguageId = model.LanguageId;
             site.SiteTypeId = model.SiteTypeId;
             site.Title = model.Title;
             site.InternalId = model.InternalId;

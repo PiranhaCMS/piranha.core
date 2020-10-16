@@ -11,7 +11,7 @@
 namespace Piranha.Extend.Fields
 {
     [FieldType(Name = "Markdown", Shorthand = "Markdown", Component = "markdown-field")]
-    public class MarkdownField : SimpleField<string>, ISearchable
+    public class MarkdownField : SimpleField<string>, ISearchable, ITranslatable
     {
         /// <summary>
         /// Implicit operator for converting a string to a field.

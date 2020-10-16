@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 namespace Piranha.Data
 {
     [Serializable]
-    public sealed class Category : Taxonomy
+    public sealed class Category : TaxonomyBase
     {
         /// <summary>
         /// Gets/sets the id of the blog page this

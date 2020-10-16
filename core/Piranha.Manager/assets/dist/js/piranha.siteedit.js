@@ -8,6 +8,7 @@ piranha.siteedit = new Vue({
         loading: true,
         id: null,
         typeId: null,
+        languageId: null,
         title: null,
         internalId: null,
         culture: null,
@@ -19,6 +20,7 @@ piranha.siteedit = new Vue({
         hostnames: null,
         isDefault: false,
         siteTypes: [],
+        languages: [],
         regions: [],
         isNew: false,
         isConfirm: false,
@@ -39,6 +41,7 @@ piranha.siteedit = new Vue({
                 .then(function (result) {
                     self.id = result.id;
                     self.typeId = result.typeId;
+                    self.languageId = result.languageId;
                     self.title = result.title;
                     self.internalId = result.internalId;
                     self.culture = result.culture;
@@ -47,6 +50,7 @@ piranha.siteedit = new Vue({
                     self.hostnames = result.hostnames;
                     self.isDefault = result.isDefault;
                     self.siteTypes = result.siteTypes;
+                    self.languages = result.languages;
                 })
                 .catch(function (error) { console.log("error:", error ); });
 
@@ -69,6 +73,7 @@ piranha.siteedit = new Vue({
             var model = {
                 id: this.id,
                 typeId: this.typeId,
+                languageId: this.languageId,
                 title: this.title,
                 internalId: this.internalId,
                 culture: this.culture,

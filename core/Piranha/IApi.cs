@@ -19,14 +19,34 @@ namespace Piranha
     public interface IApi : IDisposable
     {
         /// <summary>
-        /// Gets/sets the alias repository.
+        /// Gets the alias service.
         /// </summary>
         IAliasService Aliases { get; }
 
         /// <summary>
-        /// Gets/sets the archive service.
+        /// Gets the archive service.
         /// </summary>
         IArchiveService Archives { get; }
+
+        /// <summary>
+        /// Gets the content service.
+        /// </summary>
+        IContentService Content { get; }
+
+        /// <summary>
+        /// Gets the content group service.
+        /// </summary>
+        IContentGroupService ContentGroups { get; }
+
+        /// <summary>
+        /// Gets the content type service.
+        /// </summary>
+        IContentTypeService ContentTypes { get; }
+
+        /// <summary>
+        /// Gets the language service.
+        /// </summary>
+        ILanguageService Languages { get; }
 
         /// <summary>
         /// Gets the media service.

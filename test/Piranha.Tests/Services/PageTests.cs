@@ -139,13 +139,13 @@ namespace Piranha.Tests.Services
 
                 Piranha.App.Fields.Register<MyFourthField>();
 
-                var builder = new PageTypeBuilder(api)
+                new ContentTypeBuilder(api)
                     .AddType(typeof(MissingPage))
                     .AddType(typeof(MyBlogPage))
                     .AddType(typeof(MyPage))
                     .AddType(typeof(MyCollectionPage))
-                    .AddType(typeof(MyDIPage));
-                builder.Build();
+                    .AddType(typeof(MyDIPage))
+                    .Build();
 
                 var site = new Site
                 {
@@ -491,6 +491,18 @@ namespace Piranha.Tests.Services
                 Assert.NotNull(model);
                 Assert.Equal("my-first-page", model.Slug);
                 Assert.Empty(model.Blocks);
+            }
+        }
+
+        [Fact]
+        public async Task GetMultipleBaseClassById()
+        {
+            using (var api = CreateApi())
+            {
+                var models = await api.Pages.GetByIdsAsync<Models.PageBase>(PAGE_1_ID, PAGE_2_ID, PAGE_3_ID);
+
+                Assert.NotEmpty(models);
+                Assert.Equal(3, models.Count());
             }
         }
 

@@ -303,35 +303,60 @@ namespace Piranha.Services
         /// <returns>The model, or null if it doesn't exist</returns>
         public async Task<T> GetByIdAsync<T>(Guid id) where T : PageBase
         {
-            PageBase model = null;
+            return (await GetByIdsAsync<T>(id)).FirstOrDefault();
+        }
 
-            if (typeof(T) == typeof(Models.PageInfo))
-            {
-                model = _cache?.Get<PageInfo>($"PageInfo_{id.ToString()}");
-            }
-            else if (!typeof(DynamicPage).IsAssignableFrom(typeof(T)))
-            {
-                model = _cache?.Get<PageBase>(id.ToString());
+        /// <summary>
+        /// Gets the page models with the specified id's.
+        /// </summary>
+        /// <param name="ids">The unique id's</param>
+        /// <returns>The page models</returns>
+        public async Task<IEnumerable<T>> GetByIdsAsync<T>(params Guid[] ids) where T : PageBase
+        {
+            var ret = new List<T>();
+            var notCached = new List<Guid>();
 
-                if (model != null)
+            foreach (var id in ids)
+            {
+                PageBase model = null;
+
+                if (typeof(T) == typeof(Models.PageInfo))
                 {
-                    await _factory.InitAsync(model, App.PageTypes.GetById(model.TypeId)).ConfigureAwait(false);
+                    model = _cache?.Get<PageInfo>($"PageInfo_{id.ToString()}");
+                }
+                else if (!typeof(DynamicPage).IsAssignableFrom(typeof(T)))
+                {
+                    model = _cache?.Get<PageBase>(id.ToString());
+
+                    if (model != null)
+                    {
+                        await _factory.InitAsync(model, App.PageTypes.GetById(model.TypeId)).ConfigureAwait(false);
+                    }
+                }
+
+                if (model == null)
+                {
+                    notCached.Add(id);
+                }
+                else if (model is T)
+                {
+                    ret.Add(await MapOriginalAsync((T)model).ConfigureAwait(false));
                 }
             }
 
-            if (model == null)
+            if (notCached.Count > 0)
             {
-                model = await _repo.GetById<T>(id).ConfigureAwait(false);
+                var models = await _repo.GetByIds<T>(notCached.ToArray()).ConfigureAwait(false);
 
-                await OnLoadAsync(model).ConfigureAwait(false);
+                foreach (var model in models.Where(m => m is T))
+                {
+                    await OnLoadAsync(model).ConfigureAwait(false);
+                    ret.Add(await MapOriginalAsync((T)model).ConfigureAwait(false));
+                }
             }
-
-            if (model != null && model is T)
-            {
-                return await MapOriginalAsync((T)model).ConfigureAwait(false);
-            }
-            return null;
+            return ret;
         }
+
 
         /// <summary>
         /// Gets the page model with the specified slug.

@@ -16,7 +16,7 @@ namespace Piranha.Extend.Blocks
     /// Single column text block.
     /// </summary>
     [BlockType(Name = "Text", Category = "Content", Icon = "fas fa-font", Component = "text-block")]
-    public class TextBlock : Block, ISearchable
+    public class TextBlock : Block, ISearchable, ITranslatable
     {
         /// <summary>
         /// Gets/sets the text body.

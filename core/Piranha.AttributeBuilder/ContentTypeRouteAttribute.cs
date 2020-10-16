@@ -15,7 +15,8 @@ namespace Piranha.AttributeBuilder
     /// <summary>
     /// Attribute for marking a class as a content type.
     /// </summary>
-    public abstract class ContentTypeRouteAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    public class ContentTypeRouteAttribute : Attribute
     {
         /// <summary>
         /// Gets/sets the display title.

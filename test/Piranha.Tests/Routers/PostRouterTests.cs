@@ -50,13 +50,10 @@ namespace Piranha.Tests.Routers
             {
                 Piranha.App.Init(api);
 
-                var pageBuilder = new PageTypeBuilder(api)
-                    .AddType(typeof(MyPage));
-                pageBuilder.Build();
-
-                var postBuilder = new PostTypeBuilder(api)
-                    .AddType(typeof(MyPost));
-                postBuilder.Build();
+                new ContentTypeBuilder(api)
+                    .AddType(typeof(MyPage))
+                    .AddType(typeof(MyPost))
+                    .Build();
 
                 // Add site
                 var site1 = new Site

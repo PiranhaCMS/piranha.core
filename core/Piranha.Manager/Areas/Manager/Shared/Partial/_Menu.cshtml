@@ -15,6 +15,13 @@
             {
                 <li class="nav-item@(ViewBag.MenuItem == item.InternalId ? " active" :"")"><a href="@Url.Content(item.Route)" class="nav-link" tabindex="-1"><i class="@item.Css"></i>@Localizer.Menu[item.Name]</a></li>
             }
+            @if (group.InternalId == "Content")
+            {
+                foreach (var item in Piranha.App.ContentGroups)
+                {
+                    <li class="nav-item@(ViewBag.MenuItem == item.Id ? " active" :"")"><a href="@Url.Content($"~/manager/content/{ item.Id }")" class="nav-link" tabindex="-1"><i class="@item.Icon"></i>@item.Title</a></li>
+                }
+            }
         }
         <li class="nav-item nav-header"><a class="navbar-text" href="~/manager/logout"><i class="fas fa-power-off"></i>@Localizer.Menu["Logout"]</a></li>
     </ul>

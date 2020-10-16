@@ -108,6 +108,26 @@ namespace Piranha.Services
         }
 
         /// <summary>
+        /// Deletes the given models.
+        /// </summary>
+        /// <param name="models">The models</param>
+        public async Task DeleteAsync(IEnumerable<PageType> models)
+        {
+            if (models != null && models.Count() > 0)
+            {
+                foreach (var model in models)
+                {
+                    // Call hooks & delete
+                    App.Hooks.OnBeforeDelete(model);
+                    await _repo.Delete(model.Id).ConfigureAwait(false);
+                    App.Hooks.OnAfterDelete(model);
+                }
+                // Clear cache
+                _cache?.Remove("Piranha_PageTypes");
+            }
+        }
+
+        /// <summary>
         /// Reloads the page types from the database.
         /// </summary>
         private async Task<IEnumerable<PageType>> GetTypes()

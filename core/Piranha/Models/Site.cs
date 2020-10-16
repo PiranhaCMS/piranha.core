@@ -23,6 +23,11 @@ namespace Piranha.Models
         public Guid Id { get; set; }
 
         /// <summary>
+        /// Gets/sets the language id.
+        /// </summary>
+        public Guid LanguageId { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional site type id.
         /// </summary>
         [StringLength(64)]

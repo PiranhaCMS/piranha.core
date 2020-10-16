@@ -1,0 +1,98 @@
+@inject IAuthorizationService Auth
+@inject ManagerLocalizer Localizer
+
+<div id="languageedit" class="modal modal-panel fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!-- Modal header -->
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title"><i class="fas fa-globe-europe"></i> @Localizer.General["Languages"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body bg-light mt-0">
+                <div class="position-relative">
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th class="w-100">@Localizer.General["Title"]</th>
+                                <th class="text-center">@Localizer.General["Culture"]</th>
+                                <th class="text-center">@Localizer.General["Default"]</th>
+                                <th class="actions one"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in items">
+                                <td>
+                                    <input type="text" class="form-control form-control-sm" :class="{ 'is-invalid': item.errorTitle }" v-model="item.title">
+                                </td>
+                                <td class="text-center">
+                                    <input type="text" class="form-control form-control-sm" v-model="item.culture">
+                                </td>
+                                <td class="text-center">
+                                    <button v-on:click.prevent="setDefault(item)" class="switch mt-1" :aria-pressed="item.isDefault"><span></span></button>
+                                </td>
+                                <td class="actions one">
+                                    @if ((await Auth.AuthorizeAsync(User, Permission.LanguageDelete)).Succeeded)
+                                    {
+                                        <a v-if="!item.isDefault" v-on:click.prevent="removeItem(item)" href="#" class="danger" title="@Localizer.General["Delete"]"><i class="fas fa-trash"></i></a>
+                                    }
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div v-if="showDefaultInfo" class="alert alert-primary w-100" role="alert">
+                        <h5>@Localizer.Site["Are you really sure?"]</h5>
+                        <p>
+                            @Html.Raw(@Localizer.Language["ChangeDefaultConfirm"])
+                        </p>
+                        <p class="text-right">
+                            <button v-on:click.prevent="setDefaultCancel" class="btn btn-sm btn-secondary">
+                                @Localizer.General["Cancel"]
+                            </button>
+                            <button v-on:click.prevent="setDefaultConfirm" class="btn btn-sm btn-labeled btn-success">
+                                <i class="fas fa-check"></i>@Localizer.General["Ok"]
+                            </button>
+                        </p>
+                    </div>
+                    <div v-if="showDeleteInfo" class="alert alert-danger w-100">
+                        <h5>@Localizer.Site["Are you really sure?"]</h5>
+                        <p>
+                            @Html.Raw(@Localizer.Language["RemoveLanguageConfirm"])
+                        </p>
+                        <p class="text-right">
+                            <button v-on:click.prevent="removeCancel" class="btn btn-sm btn-secondary">
+                                @Localizer.General["Cancel"]
+                            </button>
+                            <button v-on:click.prevent="removeConfirm" class="btn btn-sm btn-labeled btn-danger">
+                                <i class="fas fa-trash"></i>@Localizer.General["Continue"]
+                            </button>
+                        </p>
+                    </div>
+                    @if ((await Auth.AuthorizeAsync(User, Permission.LanguageAdd)).Succeeded)
+                    {
+                        <button v-if="!showDefaultInfo && !showDeleteInfo" v-on:click.prevent="addItem()" class="btn btn-sm btn-primary btn-labeled">
+                            <i class="fas fa-plus"></i>@Localizer.General["Add"]
+                        </button>
+                    }
+                    @if ((await Auth.AuthorizeAsync(User, Permission.LanguageEdit)).Succeeded)
+                    {
+                        <button v-if="!showDefaultInfo && !showDeleteInfo" v-on:click.prevent="save()" class="btn btn-sm btn-success btn-labeled float-right">
+                            <i class="fas fa-check"></i>@Localizer.General["Save"]
+                        </button>
+                    }
+                    <div v-if="loading" class="spinner-container">
+                        <div class="spinner">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

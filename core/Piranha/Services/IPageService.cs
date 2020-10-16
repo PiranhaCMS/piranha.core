@@ -116,6 +116,13 @@ namespace Piranha.Services
         Task<DynamicPage> GetByIdAsync(Guid id);
 
         /// <summary>
+        /// Gets the page models with the specified id's.
+        /// </summary>
+        /// <param name="ids">The unique id's</param>
+        /// <returns>The page models</returns>
+        Task<IEnumerable<T>> GetByIdsAsync<T>(params Guid[] ids) where T : PageBase;
+
+        /// <summary>
         /// Gets the model with the specified id.
         /// </summary>
         /// <param name="id">The unique id</param>

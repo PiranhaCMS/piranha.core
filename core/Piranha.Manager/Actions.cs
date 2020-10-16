@@ -62,6 +62,33 @@ namespace Piranha.Manager
             };
 
             /// <summary>
+            /// Gets the available actions for the content list view.
+            /// </summary>
+            public ActionList<ToolbarAction> ContentList { get; private set; } = new ActionList<ToolbarAction>();
+
+            /// <summary>
+            /// Gets the available actions for the content edit view.
+            /// </summary>
+            public ActionList<ToolbarAction> ContentEdit { get; private set; } = new ActionList<ToolbarAction>
+            {
+                new ToolbarAction
+                {
+                    InternalId = "Settings",
+                    ActionView = "Partial/Actions/_ContentSettings"
+                },
+                new ToolbarAction
+                {
+                    InternalId = "Save",
+                    ActionView = "Partial/Actions/_ContentSave"
+                },
+                new ToolbarAction
+                {
+                    InternalId = "Delete",
+                    ActionView = "Partial/Actions/_ContentDelete"
+                }
+            };
+
+            /// <summary>
             /// Gets the available actions for media list view.
             /// </summary>
             public ActionList<ToolbarAction> MediaList { get; private set; } = new ActionList<ToolbarAction>();

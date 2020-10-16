@@ -78,9 +78,9 @@ namespace Piranha.Manager.Controllers
         [Route("create")]
         [HttpGet]
         [Authorize(Policy = Permission.SitesAdd)]
-        public SiteEditModel Create()
+        public async Task<SiteEditModel> Create()
         {
-            return _service.Create();
+            return await _service.Create();
         }
 
         /// <summary>

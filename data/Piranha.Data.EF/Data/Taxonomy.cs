@@ -13,31 +13,16 @@ using System;
 namespace Piranha.Data
 {
     [Serializable]
-    public abstract class Taxonomy
+    public sealed class Taxonomy : TaxonomyBase
     {
         /// <summary>
-        /// Gets/sets the unique id.
+        /// Gets/sets the id used for grouping.
         /// </summary>
-        public Guid Id { get; set; }
+        public string GroupId { get; set; }
 
         /// <summary>
-        /// Gets/sets the title.
+        /// Gets/sets the taxonomy type.
         /// </summary>
-        public string Title { get; set; }
-
-        /// <summary>
-        /// Gets/sets the slug.
-        /// </summary>
-        public string Slug { get; set; }
-
-        /// <summary>
-        /// Gets/sets the created date.
-        /// </summary>
-        public DateTime Created { get; set; }
-
-        /// <summary>
-        /// Gets/sets the last modification date.
-        /// </summary>
-        public DateTime LastModified { get; set; }
+        public TaxonomyType Type { get; set; }
     }
 }

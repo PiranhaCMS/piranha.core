@@ -158,6 +158,7 @@ var js = [
             "assets/src/js/piranha.pagepicker.js",
             "assets/src/js/piranha.postpicker.js",
             "assets/src/js/piranha.preview.js",
+            "assets/src/js/piranha.languageedit.js",
             "assets/src/js/piranha.resources.js",
             "assets/src/js/piranha.editor.js",
             "assets/src/js/components/page-item.vue"
@@ -195,7 +196,7 @@ var js = [
         ]
     },
     {
-        name: "piranha.contentedit.js",
+        name: "piranha.components.js",
         items: [
             "assets/src/js/components/region.vue",
             "assets/src/js/components/post-archive.vue",
@@ -234,6 +235,18 @@ var js = [
             "assets/src/js/components/fields/string-field.vue",
             "assets/src/js/components/fields/text-field.vue",
             "assets/src/js/components/fields/video-field.vue",
+        ]
+    },
+    {
+        name: "piranha.contentlist.js",
+        items: [
+            "assets/src/js/piranha.contentlist.js"
+        ]
+    },
+    {
+        name: "piranha.contentedit.js",
+        items: [
+            "assets/src/js/piranha.contentedit.js"
         ]
     },
     {

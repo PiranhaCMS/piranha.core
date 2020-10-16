@@ -32,7 +32,9 @@ public static class ManagerModuleExtensions
         services.AddScoped<AliasService>();
         services.AddScoped<CommentService>();
         services.AddScoped<ConfigService>();
+        services.AddScoped<ContentService>();
         services.AddScoped<ContentTypeService>();
+        services.AddScoped<LanguageService>();
         services.AddScoped<MediaService>();
         services.AddScoped<ModuleService>();
         services.AddScoped<PageService>();
@@ -96,6 +98,53 @@ public static class ManagerModuleExtensions
                 policy.RequireClaim(Permission.Admin, Permission.Admin);
                 policy.RequireClaim(Permission.Config, Permission.Config);
                 policy.RequireClaim(Permission.ConfigEdit, Permission.ConfigEdit);
+            });
+
+            // Content policies
+            o.AddPolicy(Permission.Content, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Content, Permission.Content);
+            });
+            o.AddPolicy(Permission.ContentAdd, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Content, Permission.Content);
+                policy.RequireClaim(Permission.ContentAdd, Permission.ContentAdd);
+            });
+            o.AddPolicy(Permission.ContentEdit, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Content, Permission.Content);
+                policy.RequireClaim(Permission.ContentEdit, Permission.ContentEdit);
+            });
+            o.AddPolicy(Permission.ContentSave, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Content, Permission.Content);
+                policy.RequireClaim(Permission.ContentSave, Permission.ContentSave);
+            });
+            o.AddPolicy(Permission.ContentDelete, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Content, Permission.Content);
+                policy.RequireClaim(Permission.ContentDelete, Permission.ContentDelete);
+            });
+
+            // Language policies
+            o.AddPolicy(Permission.Language, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Language, Permission.Language);
+            });
+            o.AddPolicy(Permission.LanguageAdd, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Language, Permission.Language);
+                policy.RequireClaim(Permission.LanguageAdd, Permission.LanguageAdd);
+            });
+            o.AddPolicy(Permission.LanguageDelete, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Language, Permission.Language);
+                policy.RequireClaim(Permission.LanguageDelete, Permission.LanguageDelete);
+            });
+            o.AddPolicy(Permission.LanguageEdit, policy => {
+                policy.RequireClaim(Permission.Admin, Permission.Admin);
+                policy.RequireClaim(Permission.Language, Permission.Language);
+                policy.RequireClaim(Permission.LanguageEdit, Permission.LanguageEdit);
             });
 
             // Media policies

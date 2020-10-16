@@ -8,8 +8,10 @@
  *
  */
 
+using System;
 using System.Collections.Generic;
 using Piranha.Extend.Fields;
+using Piranha.Models;
 using Piranha.Manager.Models.Content;
 
 namespace Piranha.Manager.Models
@@ -19,6 +21,11 @@ namespace Piranha.Manager.Models
     /// </summary>
     public class SiteEditModel : Content.ContentEditModel
     {
+        /// <summary>
+        /// Gets/sets the selected language id.
+        /// </summary>
+        public Guid LanguageId { get; set; }
+
         /// <summary>
         /// Gets/sets the internal textual id.
         /// </summary>
@@ -49,7 +56,15 @@ namespace Piranha.Manager.Models
         /// </summary>
         public string Culture { get; set; }
 
+        /// <summary>
+        /// Gets/sets the available site types.
+        /// </summary>
         public IList<ContentTypeModel> SiteTypes { get; set; } = new List<ContentTypeModel>();
+
+        /// <summary>
+        /// Gets/sets the available languages.
+        /// </summary>
+        public IEnumerable<Language> Languages { get; set; } = new List<Language>();
 
         /// <summary>
         /// Default constructor.

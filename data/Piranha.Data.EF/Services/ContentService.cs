@@ -48,14 +48,17 @@ namespace Piranha.Services
         /// <param name="content">The content entity</param>
         /// <param name="type">The content type</param>
         /// <param name="process">Optional func that should be called after transformation</param>
+        /// <param name="languageId">The optional language id</param>
         /// <returns>The page model</returns>
-        public async Task<T> TransformAsync<T>(TContent content, Models.ContentTypeBase type, Func<TContent, T, Task> process = null)
+        public async Task<T> TransformAsync<T>(TContent content, Models.ContentTypeBase type, Func<TContent, T, Task> process = null, Guid? languageId = null)
             where T : Models.ContentBase, TModelBase
         {
             if (type != null)
             {
+                //
+                // 1: Get the requested model type
+                //
                 var modelType = typeof(T);
-
                 if (!typeof(Models.IDynamicContent).IsAssignableFrom(modelType) && !typeof(Models.IContentInfo).IsAssignableFrom(modelType))
                 {
                     modelType = Type.GetType(type.CLRType);
@@ -66,12 +69,19 @@ namespace Piranha.Services
                     }
                 }
 
-                // Create an initialized model
+                //
+                // 2: Create an initialized model
+                //
                 var model = await _factory.CreateAsync<T>(type);
 
-                // Map basic fields
+                //
+                // 3: Map basic fields
+                //
                 _mapper.Map<TContent, TModelBase>(content, model);
 
+                //
+                // 4: Map routes
+                //
                 if (model is Models.RoutedContentBase routeModel)
                 {
                     // Map route (if available)
@@ -79,7 +89,22 @@ namespace Piranha.Services
                         routeModel.Route = type.Routes.First();
                 }
 
-                // Map regions
+                //
+                // 5: Map translation
+                //
+                if (content is ITranslatable translatableContent && languageId.HasValue)
+                {
+                    var translation = translatableContent.GetTranslation(languageId.Value);
+
+                    if (translation != null)
+                    {
+                        _mapper.Map(translation, model);
+                    }
+                }
+
+                //
+                // 6: Map regions
+                //
                 if (!(model is IContentInfo))
                 {
                     var currentRegions = type.Regions.Select(r => r.Id).ToArray();
@@ -99,12 +124,12 @@ namespace Piranha.Services
                                 {
                                     if (region.Fields.Count == 1)
                                     {
-                                        SetSimpleValue(model, regionKey, field);
+                                        SetSimpleValue(model, regionKey, field, languageId);
                                         break;
                                     }
                                     else
                                     {
-                                        SetComplexValue(model, regionKey, fieldDef.Id, field);
+                                        SetComplexValue(model, regionKey, fieldDef.Id, field, languageId);
                                     }
                                 }
                             }
@@ -120,11 +145,11 @@ namespace Piranha.Services
                                 {
                                     var field = fields.SingleOrDefault(f => f.FieldId == region.Fields[0].Id && f.SortOrder == sortOrder);
                                     if (field != null)
-                                        AddSimpleValue(model, regionKey, field);
+                                        AddSimpleValue(model, regionKey, field, languageId);
                                 }
                                 else
                                 {
-                                    await AddComplexValueAsync(model, type, regionKey, fields.Where(f => f.SortOrder == sortOrder).ToList())
+                                    await AddComplexValueAsync(model, type, regionKey, fields.Where(f => f.SortOrder == sortOrder).ToList(), languageId)
                                         .ConfigureAwait(false);
                                 }
                                 sortOrder++;
@@ -148,13 +173,16 @@ namespace Piranha.Services
         /// <param name="model">The model</param>
         /// <param name="type">The conten type</param>
         /// <param name="dest">The optional dest object</param>
+        /// <param name="languageId">The optional language id</param>
         /// <returns>The content data</returns>
-        public TContent Transform<T>(T model, Models.ContentTypeBase type, TContent dest = null)
+        public TContent Transform<T>(T model, Models.ContentTypeBase type, TContent dest = null, Guid? languageId = null)
             where T : Models.ContentBase, TModelBase
         {
             var content = dest == null ? Activator.CreateInstance<TContent>() : dest;
 
-            // Map id
+            //
+            // 1: Map id
+            //
             if (model.Id != Guid.Empty)
             {
                 content.Id = model.Id;
@@ -165,10 +193,33 @@ namespace Piranha.Services
             }
             content.Created = DateTime.Now;
 
-            // Map basic fields
+            //
+            // 2: Map basic fields
+            //
             _mapper.Map<TModelBase, TContent>(model, content);
 
-            // Map regions
+            //
+            // 3: Map translation
+            //
+            if (content is ITranslatable translatableContent && languageId.HasValue)
+            {
+                translatableContent.SetTranslation(content.Id, languageId.Value, model);
+            }
+
+            //
+            // 4: Map category
+            //
+            if (model is Models.ICategorizedContent categorized)
+            {
+                if (content is ICategorized categorizedContent)
+                {
+                    categorizedContent.CategoryId = categorized.Category.Id;
+                }
+            }
+
+            //
+            // 5: Map regions
+            //
             var currentRegions = type.Regions.Select(r => r.Id).ToArray();
 
             foreach (var regionKey in currentRegions)
@@ -180,7 +231,7 @@ namespace Piranha.Services
 
                     if (!regionType.Collection)
                     {
-                        MapRegion(content, GetRegion(model, regionKey), regionType, regionKey);
+                        MapRegion(content, GetRegion(model, regionKey), regionType, regionKey, languageId: languageId);
                     }
                     else
                     {
@@ -188,7 +239,7 @@ namespace Piranha.Services
                         var sortOrder = 0;
                         foreach (var region in GetEnumerable(model, regionKey))
                         {
-                            var fields = MapRegion(content, region, regionType, regionKey, sortOrder++);
+                            var fields = MapRegion(content, region, regionType, regionKey, sortOrder++, languageId);
 
                             if (fields.Count > 0)
                                 items.AddRange(fields);
@@ -403,7 +454,8 @@ namespace Piranha.Services
         /// <param name="regionType">The region type</param>
         /// <param name="regionId">The region id</param>
         /// <param name="sortOrder">The optional sort order</param>
-        private IList<Guid> MapRegion(TContent content, object region, Models.RegionType regionType, string regionId, int sortOrder = 0)
+        /// <param name="languageId">The optional language id</param>
+        private IList<Guid> MapRegion(TContent content, object region, Models.RegionType regionType, string regionId, int sortOrder = 0, Guid? languageId = null)
         {
             var items = new List<Guid>();
 
@@ -452,11 +504,21 @@ namespace Piranha.Services
                             content.Fields.Add(field);
                         }
 
-                        // Update field info & value
+                        // Update field info
                         field.CLRType = fieldType.TypeName;
                         field.SortOrder = sortOrder;
-                        field.Value = App.SerializeObject(fieldValue, fieldType.Type);
 
+                        // Update field value
+                        if (fieldValue is Extend.ITranslatable && field is ITranslatable translatableField && languageId.HasValue)
+                        {
+                            // This is a translatable value
+                            translatableField.SetTranslation(field.Id, languageId.Value, fieldValue);
+                        }
+                        else
+                        {
+                            // this is a non translatable valuye
+                            field.Value = App.SerializeObject(fieldValue, fieldType.Type);
+                        }
                         items.Add(field.Id);
                     }
                 }
@@ -471,12 +533,13 @@ namespace Piranha.Services
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <param name="field">The field</param>
-        private void SetSimpleValue<T>(T model, string regionId, TField field) where T : Models.ContentBase
+        /// <param name="languageId">The languageId</param>
+        private void SetSimpleValue<T>(T model, string regionId, TField field, Guid? languageId) where T : Models.ContentBase
         {
             if (model is Models.IDynamicContent dynamicModel)
             {
                 ((IDictionary<string, object>)dynamicModel.Regions)[regionId] =
-                    DeserializeValue(field);
+                    DeserializeValue(field, languageId);
             }
             else
             {
@@ -484,7 +547,7 @@ namespace Piranha.Services
 
                 if (regionProp != null)
                 {
-                    regionProp.SetValue(model, DeserializeValue(field));
+                    regionProp.SetValue(model, DeserializeValue(field, languageId));
                 }
             }
         }
@@ -496,12 +559,13 @@ namespace Piranha.Services
         /// <param name="model">The model</param>
         /// <param name="regionId">The region id</param>
         /// <param name="field">The field</param>
-        private void AddSimpleValue<T>(T model, string regionId, TField field) where T : Models.ContentBase
+        /// <param name="languageId">The languageId</param>
+        private void AddSimpleValue<T>(T model, string regionId, TField field, Guid? languageId) where T : Models.ContentBase
         {
             if (model is Models.IDynamicContent dynamicModel)
             {
                 ((IList)((IDictionary<string, object>)dynamicModel.Regions)[regionId]).Add(
-                    DeserializeValue(field));
+                    DeserializeValue(field, languageId));
             }
             else
             {
@@ -509,7 +573,7 @@ namespace Piranha.Services
 
                 if (regionProp != null)
                 {
-                    ((IList)regionProp.GetValue(model)).Add(DeserializeValue(field));
+                    ((IList)regionProp.GetValue(model)).Add(DeserializeValue(field, languageId));
                 }
             }
         }
@@ -522,12 +586,14 @@ namespace Piranha.Services
         /// <param name="regionId">The region id</param>
         /// <param name="fieldId">The field id</param>
         /// <param name="field">The field</param>
-        private void SetComplexValue<T>(T model, string regionId, string fieldId, TField field) where T : Models.ContentBase
+        /// <param name="languageId">The languageId</param>
+        private void SetComplexValue<T>(T model, string regionId, string fieldId, TField field, Guid? languageId)
+            where T : Models.ContentBase
         {
             if (model is Models.IDynamicContent dynamicModel)
             {
                 ((IDictionary<string, object>)((IDictionary<string, object>)dynamicModel.Regions)[regionId])[fieldId] =
-                    DeserializeValue(field);
+                    DeserializeValue(field, languageId);
             }
             else
             {
@@ -542,7 +608,7 @@ namespace Piranha.Services
 
                         if (fieldProp != null)
                         {
-                            fieldProp.SetValue(obj, DeserializeValue(field));
+                            fieldProp.SetValue(obj, DeserializeValue(field, languageId));
                         }
                     }
                 }
@@ -557,7 +623,9 @@ namespace Piranha.Services
         /// <param name="contentType">The content type</param>
         /// <param name="regionId">The region id</param>
         /// <param name="fields">The field</param>
-        private async Task AddComplexValueAsync<T>(T model, Models.ContentTypeBase contentType, string regionId, IList<TField> fields) where T : Models.ContentBase
+        /// <param name="languageId">The languageId</param>
+        private async Task AddComplexValueAsync<T>(T model, Models.ContentTypeBase contentType, string regionId, IList<TField> fields, Guid? languageId)
+            where T : Models.ContentBase
         {
             if (fields.Count > 0)
             {
@@ -571,7 +639,7 @@ namespace Piranha.Services
                         if (((IDictionary<string, object>)obj).ContainsKey(field.FieldId))
                         {
                             ((IDictionary<string, object>)obj)[field.FieldId] =
-                                DeserializeValue(field);
+                                DeserializeValue(field, languageId);
                         }
                     }
                     list.Add(obj);
@@ -590,7 +658,7 @@ namespace Piranha.Services
                             var fieldProp = obj.GetType().GetProperty(field.FieldId, App.PropertyBindings);
                             if (fieldProp != null)
                             {
-                                fieldProp.SetValue(obj, DeserializeValue(field));
+                                fieldProp.SetValue(obj, DeserializeValue(field, languageId));
                             }
                         }
                         list.Add(obj);
@@ -603,13 +671,18 @@ namespace Piranha.Services
         /// Deserializes the given field value.
         /// </summary>
         /// <param name="field">The page field</param>
+        /// <param name="languageId">The optional language id</param>
         /// <returns>The value</returns>
-        private object DeserializeValue(TField field)
+        private object DeserializeValue(TField field, Guid? languageId)
         {
             var type = App.Fields.GetByType(field.CLRType);
 
             if (type != null)
             {
+                if (typeof(Extend.ITranslatable).IsAssignableFrom(type.Type) && field is ITranslatable translatable && languageId.HasValue)
+                {
+                    return App.DeserializeObject((string)translatable.GetTranslation(languageId.Value), type.Type);
+                }
                 return App.DeserializeObject(field.Value, type.Type);
             }
             return null;

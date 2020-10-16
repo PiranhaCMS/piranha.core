@@ -19,7 +19,7 @@ namespace MvcWeb.Models
     /// Basic page with main content in markdown.
     /// </summary>
     [PageType(Title = "Teaser Page")]
-    [PageTypeRoute(Title = "Default", Route = "/teaserpage")]
+    [ContentTypeRoute(Title = "Default", Route = "/teaserpage")]
     public class TeaserPage : Page<TeaserPage>
     {
         [Region(Title = "All fields")]

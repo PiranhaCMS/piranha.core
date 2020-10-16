@@ -47,5 +47,11 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="model">The model</param>
         Task DeleteAsync(PostType model);
+
+        /// <summary>
+        /// Deletes the given models.
+        /// </summary>
+        /// <param name="models">The models</param>
+        Task DeleteAsync(IEnumerable<PostType> models);
     }
 }

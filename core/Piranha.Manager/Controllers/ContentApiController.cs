@@ -8,6 +8,8 @@
  *
  */
 
+using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,14 +27,16 @@ namespace Piranha.Manager.Controllers
     [ApiController]
     public class ContentApiController : Controller
     {
-        private readonly ContentTypeService _service;
+        private readonly ContentService _content;
+        private readonly ContentTypeService _contentType;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public ContentApiController(ContentTypeService service)
+        public ContentApiController(ContentService content, ContentTypeService contentType)
         {
-            _service = service;
+            _content = content;
+            _contentType = contentType;
         }
 
         /// <summary>
@@ -44,7 +48,7 @@ namespace Piranha.Manager.Controllers
         [HttpGet]
         public BlockListModel GetBlockTypes(string parentType = null)
         {
-            return _service.GetBlockTypes(parentType);
+            return _contentType.GetBlockTypes(parentType);
         }
 
         /// <summary>
@@ -56,7 +60,7 @@ namespace Piranha.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateBlockAsync(string type)
         {
-            var block = await _service.CreateBlockAsync(type);
+            var block = await _contentType.CreateBlockAsync(type);
 
             if (block != null)
             {
@@ -78,17 +82,127 @@ namespace Piranha.Manager.Controllers
         {
             if (content == "page")
             {
-                return Ok(await _service.CreatePageRegionAsync(type, region));
+                return Ok(await _contentType.CreatePageRegionAsync(type, region));
             }
             else if (content == "post")
             {
-                return Ok(await _service.CreatePostRegionAsync(type, region));
+                return Ok(await _contentType.CreatePostRegionAsync(type, region));
             }
             else if (content == "site")
             {
-                return Ok(await _service.CreateSiteRegionAsync(type, region));
+                return Ok(await _contentType.CreateSiteRegionAsync(type, region));
             }
             return NotFound();
+        }
+
+        [Route("{contentGroup}/list")]
+        [HttpGet]
+        [Authorize(Policy = Permission.Content)]
+        public async Task<IActionResult> List(string contentGroup)
+        {
+            var model = await _content.GetListAsync(contentGroup);
+
+            return Ok(model);
+        }
+
+        /// <summary>
+        /// Gets the post with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The post edit model</returns>
+        [Route("{id:Guid}")]
+        [HttpGet]
+        [Authorize(Policy = Permission.Content)]
+        public async Task<ContentEditModel> Get(Guid id)
+        {
+           return await _content.GetByIdAsync(id);
+        } 
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="contentType">The content type</param>
+        /// <returns>The edit model</returns>
+        [Route("create/{contentType}")]
+        [HttpGet]
+        [Authorize(Policy = Permission.ContentAdd)]
+        public async Task<ContentEditModel> Create(string contentType)
+        {
+           return await _content.CreateAsync(contentType);
+        }
+
+        /// <summary>
+        /// Saves the given model
+        /// </summary>
+        /// <param name="model">The model</param>
+        /// <returns>The result of the operation</returns>
+        [Route("save")]
+        [HttpPost]
+        [Authorize(Policy = Permission.ContentSave)]
+        public async Task<ContentEditModel> Save(ContentEditModel model)
+        {
+             try
+            {
+                await _content.SaveAsync(model);
+            }
+            catch (ValidationException e)
+            {
+                model.Status = new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = e.Message
+                };
+
+                return model;
+            }
+
+            var ret = await _content.GetByIdAsync(model.Id);
+            ret.Status = new StatusMessage
+            {
+                Type = StatusMessage.Success,
+                Body = "The content was successfully saved"
+            };
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Deletes the content with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The result of the operation</returns>
+        [Route("delete/{id}")]
+        [HttpGet]
+        [Authorize(Policy = Permission.ContentDelete)]
+        public async Task<StatusMessage> Delete(Guid id)
+        {
+            try
+            {
+                await _content.DeleteAsync(id);
+            }
+            catch (ValidationException e)
+            {
+                // Validation did not succeed
+                return new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = e.Message
+                };
+            }
+            catch
+            {
+                return new StatusMessage
+                {
+                    Type = StatusMessage.Error,
+                    Body = "An error occured while deleting the content"
+                };
+            }
+
+            return new StatusMessage
+            {
+                Type = StatusMessage.Success,
+                Body = "The content was successfully deleted"
+            };
         }
     }
 }
