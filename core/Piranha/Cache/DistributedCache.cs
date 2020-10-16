@@ -21,7 +21,6 @@ namespace Piranha.Cache
     public class DistributedCache : ICache
     {
         private readonly IDistributedCache _cache;
-        private readonly Dictionary<Type, bool> _types = new Dictionary<Type, bool>();
         private readonly JsonSerializerSettings _jsonSettings;
 
         /// <summary>

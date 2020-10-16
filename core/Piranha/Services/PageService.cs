@@ -149,7 +149,7 @@ namespace Piranha.Services
         public async Task<IEnumerable<T>> GetAllAsync<T>(Guid? siteId = null) where T : PageBase
         {
             var models = new List<T>();
-            var pages = await _repo.GetAll((await EnsureSiteIdAsync(siteId).ConfigureAwait(false)).Value)
+            var pages = await _repo.GetAll(await EnsureSiteIdAsync(siteId).ConfigureAwait(false))
                 .ConfigureAwait(false);
 
             foreach (var pageId in pages)
@@ -182,7 +182,7 @@ namespace Piranha.Services
         public async Task<IEnumerable<T>> GetAllBlogsAsync<T>(Guid? siteId = null) where T : Models.PageBase
         {
             var models = new List<T>();
-            var pages = await _repo.GetAllBlogs((await EnsureSiteIdAsync(siteId).ConfigureAwait(false)).Value)
+            var pages = await _repo.GetAllBlogs(await EnsureSiteIdAsync(siteId).ConfigureAwait(false))
                 .ConfigureAwait(false);
 
             foreach (var pageId in pages)
@@ -205,7 +205,7 @@ namespace Piranha.Services
         /// <returns>The pages that have a draft</returns>
         public async Task<IEnumerable<Guid>> GetAllDraftsAsync(Guid? siteId = null)
         {
-            return await _repo.GetAllDrafts((await EnsureSiteIdAsync(siteId).ConfigureAwait(false)).Value);
+            return await _repo.GetAllDrafts(await EnsureSiteIdAsync(siteId).ConfigureAwait(false));
         }
 
         /// <summary>
@@ -316,6 +316,7 @@ namespace Piranha.Services
             var ret = new List<T>();
             var notCached = new List<Guid>();
 
+            // Try to get the requested models from cache
             foreach (var id in ids)
             {
                 PageBase model = null;
@@ -344,6 +345,8 @@ namespace Piranha.Services
                 }
             }
 
+            // Get the models not available in cache from the
+            // repository.
             if (notCached.Count > 0)
             {
                 var models = await _repo.GetByIds<T>(notCached.ToArray()).ConfigureAwait(false);
@@ -354,7 +357,19 @@ namespace Piranha.Services
                     ret.Add(await MapOriginalAsync((T)model).ConfigureAwait(false));
                 }
             }
-            return ret;
+
+            // Sort the output in the same order as the input array
+            var sorted = new List<T>();
+            foreach (var id in ids)
+            {
+                var model = ret.FirstOrDefault(m => m.Id == id);
+
+                if (model != null)
+                {
+                    sorted.Add(model);
+                }
+            }
+            return sorted;
         }
 
 
@@ -923,7 +938,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="siteId">The optional site id</param>
         /// <returns>The site id</returns>
-        private async Task<Guid?> EnsureSiteIdAsync(Guid? siteId)
+        private async Task<Guid> EnsureSiteIdAsync(Guid? siteId)
         {
             if (!siteId.HasValue)
             {
@@ -934,7 +949,7 @@ namespace Piranha.Services
                     return site.Id;
                 }
             }
-            return siteId;
+            return siteId.Value;
         }
 
         /// <summary>

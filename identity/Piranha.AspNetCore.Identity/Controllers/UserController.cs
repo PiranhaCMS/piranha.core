@@ -128,7 +128,6 @@ namespace Piranha.AspNetCore.Identity.Controllers
             try
             {
                 var userId = model.User.Id;
-                var isNew = userId == Guid.Empty;
 
                 if (string.IsNullOrWhiteSpace(model.User.UserName))
                 {

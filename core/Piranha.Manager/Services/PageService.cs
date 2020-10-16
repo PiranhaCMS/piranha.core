@@ -143,12 +143,12 @@ namespace Piranha.Manager.Services
         {
             var page = await _api.Pages.CreateAsync<DynamicPage>(typeId);
 
-            page.Id = Guid.NewGuid();
-            page.SiteId = siteId;
-            page.SortOrder = (await _api.Sites.GetSitemapAsync(page.SiteId)).Count;
-
             if (page != null)
             {
+                page.Id = Guid.NewGuid();
+                page.SiteId = siteId;
+                page.SortOrder = (await _api.Sites.GetSitemapAsync(page.SiteId)).Count;
+
                 // Perform manager init
                 await _factory.InitDynamicManagerAsync(page,
                     App.PageTypes.GetById(page.TypeId));

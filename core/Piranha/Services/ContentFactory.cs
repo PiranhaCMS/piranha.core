@@ -457,7 +457,6 @@ namespace Piranha.Services
         {
             if (block != null)
             {
-                var type = block.GetType();
                 var properties = block.GetType().GetProperties(App.PropertyBindings);
 
                 foreach (var property in properties)
