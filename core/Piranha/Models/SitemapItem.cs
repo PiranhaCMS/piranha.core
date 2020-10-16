@@ -42,6 +42,16 @@ namespace Piranha.Models
         public string NavigationTitle { get; set; }
 
         /// <summary>
+        /// Gets/sets the meta index.
+        /// </summary>
+        public bool MetaIndex { get; set; }
+
+        /// <summary>
+        /// Gets/sets the meta priority.
+        /// </summary>
+        public double MetaPriority { get; set; }
+
+        /// <summary>
         /// Gets the menu title for the item. The menu title returns
         /// the navigation title if set, otherwise the main title.
         /// </summary>

@@ -80,6 +80,9 @@ namespace Piranha.AspNetCore
 
                     foreach (var page in pages)
                     {
+                        if (!page.MetaIndex)
+                            continue;
+
                         var urls = await GetPageUrlsAsync(api, page, baseUrl).ConfigureAwait(false);
 
                         if (urls.Count > 0)
@@ -105,7 +108,7 @@ namespace Piranha.AspNetCore
                 {
                     ChangeFrequency = ChangeFrequency.Daily,
                     Location = baseUrl + item.Permalink,
-                    Priority = 0.5,
+                    Priority = item.MetaPriority,
                     TimeStamp = item.LastModified
                 });
 
@@ -113,13 +116,13 @@ namespace Piranha.AspNetCore
                 var posts = await api.Posts.GetAllAsync(item.Id);
                 foreach (var post in posts)
                 {
-                    if (post.Published.HasValue && post.Published.Value <= DateTime.Now)
+                    if (post.MetaIndex && post.Published.HasValue && post.Published.Value <= DateTime.Now)
                     {
                         urls.Add(new Url
                         {
                             ChangeFrequency = ChangeFrequency.Daily,
                             Location = baseUrl + post.Permalink,
-                            Priority = 0.5,
+                            Priority = post.MetaPriority,
                             TimeStamp = post.LastModified
                         });
                     }
