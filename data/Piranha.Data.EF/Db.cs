@@ -282,6 +282,7 @@ namespace Piranha
             mb.Entity<Data.ContentTranslation>().Property(p => p.Title).HasMaxLength(128).IsRequired();
 
             mb.Entity<Data.ContentType>().ToTable("Piranha_ContentTypes");
+            mb.Entity<Data.ContentType>().Property(t => t.Id).IsRequired().HasMaxLength(64);
             mb.Entity<Data.ContentType>().Property(t => t.Group).IsRequired().HasMaxLength(64);
 
             mb.Entity<Data.Language>().ToTable("Piranha_Languages");
@@ -312,6 +313,9 @@ namespace Piranha
             mb.Entity<Data.Page>().Property(p => p.MetaTitle).HasMaxLength(128);
             mb.Entity<Data.Page>().Property(p => p.MetaKeywords).HasMaxLength(128);
             mb.Entity<Data.Page>().Property(p => p.MetaDescription).HasMaxLength(256);
+            mb.Entity<Data.Page>().Property(p => p.MetaIndex).HasDefaultValue(true);
+            mb.Entity<Data.Page>().Property(p => p.MetaFollow).HasDefaultValue(true);
+            mb.Entity<Data.Page>().Property(p => p.MetaPriority).HasDefaultValue(0.5);
             mb.Entity<Data.Page>().Property(p => p.OgTitle).HasMaxLength(128);
             mb.Entity<Data.Page>().Property(p => p.OgDescription).HasMaxLength(256);
             mb.Entity<Data.Page>().Property(p => p.Route).HasMaxLength(256);
@@ -355,6 +359,9 @@ namespace Piranha
             mb.Entity<Data.Post>().Property(p => p.MetaTitle).HasMaxLength(128);
             mb.Entity<Data.Post>().Property(p => p.MetaKeywords).HasMaxLength(128);
             mb.Entity<Data.Post>().Property(p => p.MetaDescription).HasMaxLength(256);
+            mb.Entity<Data.Post>().Property(p => p.MetaIndex).HasDefaultValue(true);
+            mb.Entity<Data.Post>().Property(p => p.MetaFollow).HasDefaultValue(true);
+            mb.Entity<Data.Post>().Property(p => p.MetaPriority).HasDefaultValue(0.5);
             mb.Entity<Data.Post>().Property(p => p.OgTitle).HasMaxLength(128);
             mb.Entity<Data.Post>().Property(p => p.OgDescription).HasMaxLength(256);
             mb.Entity<Data.Post>().Property(p => p.Route).HasMaxLength(256);
