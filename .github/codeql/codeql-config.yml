@@ -1,2 +1,2 @@
 paths-ignore:
-  - core/Piranha.Manager/assets/dist
+  - "core/Piranha.Manager/assets/dist"
