@@ -68,26 +68,26 @@ public static class PiranhaHtmlExtensions
             // Generate open graph tags
             if (content is PageBase page && page.IsStartPage)
             {
-                sb.AppendLine($"<meta name=\"og:type\" value=\"website\">");
+                sb.AppendLine($"<meta property=\"og:type\" value=\"website\">");
             }
             else
             {
-                sb.AppendLine($"<meta name=\"og:type\" value=\"article\">");
+                sb.AppendLine($"<meta property=\"og:type\" value=\"article\">");
             }
-            sb.AppendLine($"<meta name=\"og:title\" value=\"{ OgTitle(content) }\">");
+            sb.AppendLine($"<meta property=\"og:title\" value=\"{ OgTitle(content) }\">");
             if (content.OgImage != null && content.OgImage.HasValue)
             {
-                sb.AppendLine($"<meta name=\"og:image\" value=\"{ app.AbsoluteContentUrl(content.OgImage) }\">");
+                sb.AppendLine($"<meta property=\"og:image\" value=\"{ app.AbsoluteContentUrl(content.OgImage) }\">");
             }
             else if (content is RoutedContentBase contentBase && contentBase.PrimaryImage != null && contentBase.PrimaryImage.HasValue)
             {
                 // If there's no OG image specified but we have a primary image,
                 // default to the primary image.
-                sb.AppendLine($"<meta name=\"og:image\" value=\"{ app.AbsoluteContentUrl(contentBase.PrimaryImage) }\">");
+                sb.AppendLine($"<meta property=\"og:image\" value=\"{ app.AbsoluteContentUrl(contentBase.PrimaryImage) }\">");
             }
             if (!string.IsNullOrWhiteSpace(OgDescription(content)))
             {
-                sb.AppendLine($"<meta name=\"og:description\" value=\"{ OgDescription(content) }\">");
+                sb.AppendLine($"<meta property=\"og:description\" value=\"{ OgDescription(content) }\">");
             }
         }
         return new HtmlString(sb.ToString());
