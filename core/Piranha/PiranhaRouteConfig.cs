@@ -57,5 +57,19 @@ namespace Piranha
         /// should be used.
         /// </summary>
         public bool UseStartpageRouting { get; set; } = true;
+
+        /// <summary>
+        /// Disables all routing features of the application.
+        /// </summary>
+        public void DisableRouting()
+        {
+            UseAliasRouting = false;
+            UseArchiveRouting = false;
+            UsePageRouting = false;
+            UsePostRouting = false;
+            UseSitemapRouting = false;
+            UseSiteRouting = false;
+            UseStartpageRouting = false;
+        }
     }
 }
