@@ -47,6 +47,8 @@ public static class PiranhaHtmlExtensions
         if (meta)
         {
             // Generate meta tags
+            sb.AppendLine($"<meta name=\"robots\" value=\"{ MetaRobots(content) }\">");
+
             if (!string.IsNullOrWhiteSpace(content.MetaKeywords))
             {
                 sb.AppendLine($"<meta name=\"keywords\" value=\"{ content.MetaKeywords }\">");
@@ -96,6 +98,11 @@ public static class PiranhaHtmlExtensions
     private static string MetaTitle(IMeta content)
     {
         return !string.IsNullOrWhiteSpace(content.MetaTitle) ? content.MetaTitle : content.Title;
+    }
+
+    private static string MetaRobots(IMeta content)
+    {
+        return (content.MetaIndex ? "index," : "noindex,") + (content.MetaFollow ? "follow" : "nofollow");
     }
 
     private static string OgTitle(IMeta content)
