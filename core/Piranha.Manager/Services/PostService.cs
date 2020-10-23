@@ -270,6 +270,9 @@ namespace Piranha.Manager.Services
                 post.MetaTitle = model.MetaTitle;
                 post.MetaKeywords = model.MetaKeywords;
                 post.MetaDescription = model.MetaDescription;
+                post.MetaIndex = model.MetaIndex;
+                post.MetaFollow = model.MetaFollow;
+                post.MetaPriority = model.MetaPriority;
                 post.OgTitle = model.OgTitle;
                 post.OgDescription = model.OgDescription;
                 post.OgImage = model.OgImage;
@@ -455,6 +458,9 @@ namespace Piranha.Manager.Services
                 MetaTitle = post.MetaTitle,
                 MetaKeywords = post.MetaKeywords,
                 MetaDescription = post.MetaDescription,
+                MetaIndex = post.MetaIndex,
+                MetaFollow = post.MetaFollow,
+                MetaPriority = post.MetaPriority,
                 OgTitle = post.OgTitle,
                 OgDescription = post.OgDescription,
                 OgImage = post.OgImage,

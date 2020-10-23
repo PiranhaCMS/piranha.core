@@ -18,6 +18,9 @@ piranha.pageedit = new Vue({
         metaTitle: null,
         metaKeywords: null,
         metaDescription: null,
+        metaIndex: null,
+        metaFollow: null,
+        metaPriority: null,
         ogTitle: null,
         ogDescription: null,
         ogImage: {
@@ -81,6 +84,17 @@ piranha.pageedit = new Vue({
         },
         isExcerptEmpty: function () {
             return piranha.utils.isEmptyText(this.excerpt);
+        },
+        metaPriorityDescription: function() {
+            var description = piranha.resources.texts.important;
+            if (this.metaPriority <= 0.3)
+                description = piranha.resources.texts.low;
+            else if (this.metaPriority <= 0.6)
+                description =  piranha.resources.texts.medium;
+            else if (this.metaPriority <= 0.9)
+                description =  piranha.resources.texts.high;
+            
+            return description += " (" + this.metaPriority + ")";
         }
     },
     mounted() {
@@ -103,6 +117,9 @@ piranha.pageedit = new Vue({
             this.metaTitle = model.metaTitle;
             this.metaKeywords = model.metaKeywords;
             this.metaDescription = model.metaDescription;
+            this.metaIndex = model.metaIndex;
+            this.metaFollow = model.metaFollow;
+            this.metaPriority = model.metaPriority;
             this.ogTitle = model.ogTitle;
             this.ogDescription = model.ogDescription;
             this.ogImage = model.ogImage;
@@ -233,6 +250,9 @@ piranha.pageedit = new Vue({
                 metaTitle: self.metaTitle,
                 metaKeywords: self.metaKeywords,
                 metaDescription: self.metaDescription,
+                metaIndex: self.metaIndex,
+                metaFollow: self.metaFollow,
+                metaPriority: self.metaPriority,
                 ogTitle: self.ogTitle,
                 ogDescription: self.ogDescription,
                 ogImage: {

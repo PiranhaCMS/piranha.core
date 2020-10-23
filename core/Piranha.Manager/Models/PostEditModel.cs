@@ -50,6 +50,21 @@ namespace Piranha.Manager.Models
         public string MetaDescription { get; set; }
 
         /// <summary>
+        /// Gets/sets the meta index.
+        /// </summary>
+        public bool MetaIndex { get; set; }
+
+        /// <summary>
+        /// Gets/sets the meta follow.
+        /// </summary>
+        public bool MetaFollow { get; set; }
+
+        /// <summary>
+        /// Gets/sets the meta priority.
+        /// </summary>
+        public double MetaPriority { get; set; }
+
+        /// <summary>
         /// Gets/sets the optional og title.
         /// </summary>
         public string OgTitle { get; set; }

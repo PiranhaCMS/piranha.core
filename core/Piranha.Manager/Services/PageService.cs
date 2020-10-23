@@ -285,6 +285,9 @@ namespace Piranha.Manager.Services
                 page.MetaTitle = model.MetaTitle;
                 page.MetaKeywords = model.MetaKeywords;
                 page.MetaDescription = model.MetaDescription;
+                page.MetaIndex = model.MetaIndex;
+                page.MetaFollow = model.MetaFollow;
+                page.MetaPriority = model.MetaPriority;
                 page.OgTitle = model.OgTitle;
                 page.OgDescription = model.OgDescription;
                 page.OgImage = model.OgImage;
@@ -539,6 +542,9 @@ namespace Piranha.Manager.Services
                 MetaTitle = page.MetaTitle,
                 MetaKeywords = page.MetaKeywords,
                 MetaDescription = page.MetaDescription,
+                MetaIndex = page.MetaIndex,
+                MetaFollow = page.MetaFollow,
+                MetaPriority = page.MetaPriority,
                 OgTitle = page.OgTitle,
                 OgDescription = page.OgDescription,
                 OgImage = page.OgImage,

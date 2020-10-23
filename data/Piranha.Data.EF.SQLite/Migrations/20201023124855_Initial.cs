@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Piranha.Data.EF.SQLite.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,7 +44,7 @@ namespace Piranha.Data.EF.SQLite.Migrations
                 name: "Piranha_ContentTypes",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<string>(maxLength: 64, nullable: false),
                     CLRType = table.Column<string>(nullable: true),
                     Body = table.Column<string>(nullable: true),
                     Created = table.Column<DateTime>(nullable: false),
@@ -310,6 +310,9 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     MetaTitle = table.Column<string>(maxLength: 128, nullable: true),
                     MetaKeywords = table.Column<string>(maxLength: 128, nullable: true),
                     MetaDescription = table.Column<string>(maxLength: 256, nullable: true),
+                    MetaIndex = table.Column<bool>(nullable: false, defaultValue: true),
+                    MetaFollow = table.Column<bool>(nullable: false, defaultValue: true),
+                    MetaPriority = table.Column<double>(nullable: false, defaultValue: 0.5),
                     OgTitle = table.Column<string>(maxLength: 128, nullable: true),
                     OgDescription = table.Column<string>(maxLength: 256, nullable: true),
                     OgImageId = table.Column<Guid>(nullable: false),
@@ -665,6 +668,9 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     MetaTitle = table.Column<string>(maxLength: 128, nullable: true),
                     MetaKeywords = table.Column<string>(maxLength: 128, nullable: true),
                     MetaDescription = table.Column<string>(maxLength: 256, nullable: true),
+                    MetaIndex = table.Column<bool>(nullable: false, defaultValue: true),
+                    MetaFollow = table.Column<bool>(nullable: false, defaultValue: true),
+                    MetaPriority = table.Column<double>(nullable: false, defaultValue: 0.5),
                     OgTitle = table.Column<string>(maxLength: 128, nullable: true),
                     OgDescription = table.Column<string>(maxLength: 256, nullable: true),
                     OgImageId = table.Column<Guid>(nullable: false),

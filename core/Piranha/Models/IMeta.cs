@@ -34,6 +34,21 @@ namespace Piranha.Models
         /// </summary>
         string MetaDescription { get; set; }
 
+                /// <summary>
+        /// Gets/sets the meta index.
+        /// </summary>
+        bool MetaIndex { get; set; }
+
+        /// <summary>
+        /// Gets/sets the meta follow.
+        /// </summary>
+        bool MetaFollow { get; set; }
+
+        /// <summary>
+        /// Gets/sets the meta priority.
+        /// </summary>
+        double MetaPriority { get; set; }
+
         /// <summary>
         /// Gets/sets the optional open graph title.
         /// </summary>
