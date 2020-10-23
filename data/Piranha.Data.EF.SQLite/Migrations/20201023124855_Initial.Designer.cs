@@ -9,8 +9,8 @@ using Piranha.Data.EF.SQLite;
 namespace Piranha.Data.EF.SQLite.Migrations
 {
     [DbContext(typeof(SQLiteDb))]
-    [Migration("20201009090057_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20201023124855_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -317,7 +317,8 @@ namespace Piranha.Data.EF.SQLite.Migrations
             modelBuilder.Entity("Piranha.Data.ContentType", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(64);
 
                     b.Property<string>("Body")
                         .HasColumnType("TEXT");
@@ -519,9 +520,24 @@ namespace Piranha.Data.EF.SQLite.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(256);
 
+                    b.Property<bool>("MetaFollow")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("MetaIndex")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(true);
+
                     b.Property<string>("MetaKeywords")
                         .HasColumnType("TEXT")
                         .HasMaxLength(128);
+
+                    b.Property<double>("MetaPriority")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("REAL")
+                        .HasDefaultValue(0.5);
 
                     b.Property<string>("MetaTitle")
                         .HasColumnType("TEXT")
@@ -829,9 +845,24 @@ namespace Piranha.Data.EF.SQLite.Migrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(256);
 
+                    b.Property<bool>("MetaFollow")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("MetaIndex")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(true);
+
                     b.Property<string>("MetaKeywords")
                         .HasColumnType("TEXT")
                         .HasMaxLength(128);
+
+                    b.Property<double>("MetaPriority")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("REAL")
+                        .HasDefaultValue(0.5);
 
                     b.Property<string>("MetaTitle")
                         .HasColumnType("TEXT")
