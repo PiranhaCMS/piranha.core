@@ -53,7 +53,7 @@
     <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
   </data>
   <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
-    <value>The default page size for archive pages. Please note that this this can be overridden for specific archives.</value>
+    <value>არქივის გვერდზე პოსტების რაოდენობა. გთხოვთ გაითვალისწონოთ რომ ეს შეიძლება გაუქმდეს სხვა სერვისების კონფიგურაციით.</value>
   </data>
   <data name="The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation." xml:space="preserve">
     <value>პოსტის შესწორებების მაქსიმალური რაოდენობა, რომელიც უნდა იყოს შენახული თითოეული გვერდისთვის. 0 მნიშვნელობა არ ნიშნავს შეზღუდვას.</value>
