@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Add site" xml:space="preserve">
+    <value>საიტის დამატება</value>
+  </data>
+  <data name="Are you really sure?" xml:space="preserve">
+    <value>აბსოლუტურად დარწმუნებული ხართ?</value>
+  </data>
+  <data name="Edit site" xml:space="preserve">
+    <value>საიტის რედაქტირება</value>
+  </data>
+  <data name="Hostnames" xml:space="preserve">
+    <value>ჰოსტის სახელები</value>
+  </data>
+  <data name="Logo" xml:space="preserve">
+    <value>ლოგო</value>
+  </data>
+  <data name="If this should be the default site of the installation." xml:space="preserve">
+    <value>თუ ეს უნდა იყოს ნაგულისხმევი ინსტალაციის დროს.</value>
+  </data>
+  <data name="Please type in the name of the site to confirm." xml:space="preserve">
+    <value>გთხოვთ აკრიფოთ საიტის სახელი რომ დაადასტუროთ.</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>ამ მოქმედების გაუქმება &lt;strong> შეუძლებელია&lt;/strong>. ეს სამუდამოდ წაშლის საიტს {{ title }} და მის ყველა &lt;strong> გვერდს &lt;/strong>, &lt;strong> არქივებსა &lt;/strong> და &lt;strong> შეტყობინებებს &lt;/strong>.</value>
+  </data>
+</root>

@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Config" xml:space="preserve">
+    <value>კონფიგურაცია</value>
+  </data>
+  <data name="Hierarchical page slugs" xml:space="preserve">
+    <value>იერარქიული გვერდები</value>
+  </data>
+  <data name="If page slugs should include the parent slug." xml:space="preserve">
+    <value>გვერდის მისამართი უნდა შეიცავდეს მშობელი გვერდის მისამართს.</value>
+  </data>
+  <data name="Expanded levels in the sitemap" xml:space="preserve">
+    <value>გაფართოებული დონეები საიტის რუქაზე</value>
+  </data>
+  <data name="Archive page size" xml:space="preserve">
+    <value>საარქივო სიახლეების რაოდენობა გვერდზე</value>
+  </data>
+  <data name="Caching" xml:space="preserve">
+    <value>ქეშირება</value>
+  </data>
+  <data name="Page cache expiration (minutes)" xml:space="preserve">
+    <value>ქეშირების პერიოდი გვერდზე (წუთები)</value>
+  </data>
+  <data name="Page revisions" xml:space="preserve">
+    <value>გვერდის შესწორებები</value>
+  </data>
+  <data name="Post cache expiration (minutes)" xml:space="preserve">
+    <value>ქეშირების პერიოდი პოსტზე (წუთებში)</value>
+  </data>
+  <data name="Post revisions" xml:space="preserve">
+    <value>პოსტის შესწორებები</value>
+  </data>
+  <data name="Media CDN" xml:space="preserve">
+    <value>მედია ფაილების  CDN</value>
+  </data>
+
+  <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
+    <value>თუ გვერდის slugs უნდა გაითვალისწინონ მათი მშობლის slug, როდესაც გენერირდება. ეს სასურველია უფრო დიდი საიტის რუქებისთვის.</value>
+  </data>
+  <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
+    <value>რუქის დონის ნაგულისხმევი რაოდენობა, რომელიც უნდა გაფართოვდეს გვერდის საიტის რუქაზე. ეს სასარგებლოა პატარა საიტების რუქებისთვის.</value>
+  </data>
+  <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
+    <value>არქივის გვერდზე პოსტების რაოდენობა. გთხოვთ გაითვალისწონოთ რომ ეს შეიძლება გაუქმდეს სხვა სერვისების კონფიგურაციით.</value>
+  </data>
+  <data name="The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation." xml:space="preserve">
+    <value>პოსტის შესწორებების მაქსიმალური რაოდენობა, რომელიც უნდა იყოს შენახული თითოეული გვერდისთვის. 0 მნიშვნელობა არ ნიშნავს შეზღუდვას.</value>
+  </data>
+  <data name="The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation." xml:space="preserve">
+    <value>პოსტის შესწორებების მაქსიმალური რაოდენობა, რომელიც უნდა იყოს შენახული თითოეული პოსტისთვის. 0 მნიშვნელობა არ ნიშნავს შეზღუდვას.</value>
+  </data>
+  <data name="The time in minutes that web browsers can use pages before asking the server for new updates." xml:space="preserve">
+    <value>ქეშირების დრო წუთებში, როდესაც ბრაუზერი არ მიმართავს სერვერს გვერდების განახლებისთვის.</value>
+  </data>
+  <data name="The time in minutes that web browsers can use posts before asking the server for new updates." xml:space="preserve">
+    <value>ქეშირების დრო წუთებში, როდესაც ბრაუზერი არ მიმართავს სერვერს პოსტების განახლებისთვის.</value>
+  </data>
+  <data name="The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL." xml:space="preserve">
+    <value>სრული URL (საქაღალდის ნებისმიერი სახელის ჩათვლით) CDN- ზე, რომელიც გამოიყენება ატვირთული მედიის მომსახურებისთვის. დატოვეთ ცარიელი, რომ გამოიყენოთ ნაგულისხმევი მეხსიერების URL.</value>
+  </data>
+
+  <data name="Approve comments" xml:space="preserve">
+    <value>კომენტარების დადასტურება</value>
+  </data>
+  <data name="Close comments after" xml:space="preserve">
+    <value>კომენტარების დახურვის პერიოდი</value>
+  </data>
+  <data name="Collapse block headers" xml:space="preserve">
+    <value>ბლოკის სათაურების აკეცვა</value>
+  </data>
+  <data name="Collapse blocks" xml:space="preserve">
+    <value>ბლოკების აკეცვა</value>
+  </data>
+  <data name="Comments page size" xml:space="preserve">
+    <value>კომენტარების გვერდის ზომა</value>
+  </data>
+  <data name="Enable page comments" xml:space="preserve">
+    <value>გვერდზე კომენტარის დაწერის უფლება</value>
+  </data>
+  <data name="Enable post comments" xml:space="preserve">
+    <value>პოსტზე კომენტარის დაწერის უფლება</value>
+  </data>
+  <data name="Manager list size" xml:space="preserve">
+    <value>გვერდების სიის ზომა მენეჯერში</value>
+  </data>
+  <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
+    <value>ბლოკის ჯგუფის სათაურები უნდა იყოს აკეცილი, როდესაც ხსნი გვერდს ან პოსტს მენეჯერში.</value>
+  </data>
+  <data name="If blocks should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
+    <value>ბლოკის სათაურები უნდა იყოს აკეცილი, როდესაც ხსნი გვერდს ან პოსტს მენეჯერში.</value>
+  </data>
+  <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
+    <value>კომენტარების დადასტურება ავტომატურად. გთხოვთ გაითვალისწონოთ რომ ეს შეიძლება გაუქმდეს სხვა სერვისების კონფიგურაციით.</value>
+  </data>
+  <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
+    <value>კომენტარები დაწერის უფლება გვერდებზე ხელმისაწვდომი იყოს მუდმივად. გთხოვთ გაითვალისწონოთ რომ ეს შეიძლება გაუქმდეს სხვა სერვისების კონფიგურაციით.</value>
+  </data>
+  <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
+    <value>კომენტარები დაწერის უფლება პოსტებზე ხელმისაწვდომი იყოს მუდმივად. გთხოვთ გაითვალისწონოთ რომ ეს შეიძლება გაუქმდეს სხვა სერვისების კონფიგურაციით.</value>
+  </data>
+  <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
+    <value>კომენტარების გვერდის ზომა, როდესაც ჩაიტვირთება გვერდი. გთხოვთ გაითვალისწონოთ რომ ეს შეიძლება გაუქმდეს სხვა სერვისების კონფიგურაციით.</value>
+  </data>
+  <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
+    <value>დღეების რაოდენობა, როდესაც დაშვებულია კომენტარების დაწერა გამოქვეყნების თარიღიდან. 0 მნიშვნელობა არ ნიშნავს შეზღუდვას.</value>
+  </data>
+  <data name="The page size for lists within the manager interface." xml:space="preserve">
+    <value>მენეჯერის ინტერფეისზე სიის გვერდის ზომა.</value>
+  </data>
+</root>
