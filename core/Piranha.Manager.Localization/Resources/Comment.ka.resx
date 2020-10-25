@@ -26,19 +26,19 @@
     <value>კომენტარი</value>
   </data>
   <data name="Response to" xml:space="preserve">
-    <value>Response to</value>
+    <value>უპასუხა</value>
   </data>
   <data name="The comment was successfully approved" xml:space="preserve">
     <value>კომენტარის გამოქვეყნება წარმატებით დასრულდა</value>
   </data>
   <data name="The comment was successfully unapproved" xml:space="preserve">
-    <value>The comment was successfully unapproved</value>
+    <value>კომენტარზე დადასტურების მოხსნა წარმატებით დასრულდა</value>
   </data>
   <data name="The comment was successfully deleted" xml:space="preserve">
-    <value>The comment was successfully deleted</value>
+    <value>კომენტარის წაშლა წარმატებით დასრულდა</value>
   </data>
   <data name="Days allowed for commenting" xml:space="preserve">
-    <value>Days allowed for commenting</value>
+    <value>რამდენი დღე იყოს კომენტარები დაშვებული</value>
   </data>
   <data name="Comments are not allowed." xml:space="preserve">
     <value>კომენტარები არ არის დაშვებული.</value>
@@ -47,7 +47,7 @@
     <value>კომენტარები არ არის დაშვებული გამოუქვეყნებელ კონტენტზე.</value>
   </data>
   <data name="Comments are currently open." xml:space="preserve">
-    <value>Comments are currently open.</value>
+    <value>კომენტარები ამჟამად ღიაა.</value>
   </data>
   <data name="Comments were closed" xml:space="preserve">
     <value>კომენტარები დახურულია</value>
