@@ -17,10 +17,10 @@
     <value>დადასტურებულია</value>
   </data>
   <data name="ApprovedSingle" xml:space="preserve">
-    <value>Approved</value>
+    <value>დადასტურებულია</value>
   </data>
   <data name="Pending" xml:space="preserve">
-    <value>Pending</value>
+    <value>მუშავდება</value>
   </data>
   <data name="Comment" xml:space="preserve">
     <value>კომენტარი</value>
@@ -29,7 +29,7 @@
     <value>Response to</value>
   </data>
   <data name="The comment was successfully approved" xml:space="preserve">
-    <value>The comment was successfully approved</value>
+    <value>კომენტარის გამოქვეყნება წარმატებით დასრულდა</value>
   </data>
   <data name="The comment was successfully unapproved" xml:space="preserve">
     <value>The comment was successfully unapproved</value>
@@ -41,15 +41,15 @@
     <value>Days allowed for commenting</value>
   </data>
   <data name="Comments are not allowed." xml:space="preserve">
-    <value>Comments are not allowed.</value>
+    <value>კომენტარები არ არის დაშვებული.</value>
   </data>
   <data name="Comments are not allowed for unpublished content." xml:space="preserve">
-    <value>Comments are not allowed for unpublished content.</value>
+    <value>კომენტარები არ არის დაშვებული გამოუქვეყნებელ კონტენტზე.</value>
   </data>
   <data name="Comments are currently open." xml:space="preserve">
     <value>Comments are currently open.</value>
   </data>
   <data name="Comments were closed" xml:space="preserve">
-    <value>Comments were closed</value>
+    <value>კომენტარები დახურულია</value>
   </data>
 </root>
