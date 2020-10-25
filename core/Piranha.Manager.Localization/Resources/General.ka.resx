@@ -13,52 +13,52 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>დამატება</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>All</value>
+    <value>ყველა</value>
   </data>
   <data name="An error occurred" xml:space="preserve">
-    <value>An error occurred</value>
+    <value>შეცდომა მოხდა</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>გაუქმება</value>
   </data>
   <data name="Content" xml:space="preserve">
-    <value>Content</value>
+    <value>შინაარსი</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Continue</value>
+    <value>გაგრძელება</value>
   </data>
   <data name="Content type" xml:space="preserve">
-    <value>Content type</value>
+    <value>შიგთავსის ტიპი</value>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Copy</value>
+    <value>კოპირება</value>
   </data>
   <data name="Culture" xml:space="preserve">
-    <value>Culture</value>
+    <value>კულტურა</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>ძირითადი</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>წაშლა</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Description</value>
+    <value>აღწერა</value>
   </data>
   <data name="Details" xml:space="preserve">
-    <value>Details</value>
+    <value>დეტალები</value>
   </data>
   <data name="Dimensions" xml:space="preserve">
-    <value>Dimensions</value>
+    <value>ზომები</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>გადმოწერა</value>
   </data>
   <data name="Draft" xml:space="preserve">
-    <value>Draft</value>
+    <value>დასასრულებელი</value>
   </data>
   <data name="Drafts" xml:space="preserve">
     <value>Drafts</value>
