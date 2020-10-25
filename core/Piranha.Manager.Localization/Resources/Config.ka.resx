@@ -13,10 +13,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Config" xml:space="preserve">
-    <value>Config</value>
+    <value>კონფიგურაცია</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>Hierarchical page slugs</value>
+    <value>იერარქიული გვერდები</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
     <value>If page slugs should include the parent slug.</value>
@@ -28,7 +28,7 @@
     <value>Archive page size</value>
   </data>
   <data name="Caching" xml:space="preserve">
-    <value>Caching</value>
+    <value>ქეშირება</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
     <value>Page cache expiration (minutes)</value>
