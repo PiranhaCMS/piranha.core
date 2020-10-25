@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Add or select existing category" xml:space="preserve">
+    <value>არსებული კატეგორიის შერჩევა ან დამატება</value>
+  </data>
+  <data name="Add or select existing tags (optional)" xml:space="preserve">
+    <value>არსებული ტაგების არჩევა ან დამატება (სურვილისამებრ)</value>
+  </data>
+  <data name="All categories" xml:space="preserve">
+    <value>ყველა კატეგორია</value>
+  </data>
+  <data name="Categories" xml:space="preserve">
+    <value>კატეგორიები</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>კატეგორია</value>
+  </data>
+  <data name="Edit post" xml:space="preserve">
+	  <value>პოსტის რედაქტირება</value>
+	</data>
+  <data name="Tag" xml:space="preserve">
+    <value>ტეგი</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>ტეგები</value>
+  </data>
+  <data name="Are you sure you want to delete this post?" xml:space="preserve">
+    <value>ნამდვილად გსურთ პოსტის წაშლა?</value>
+  </data>
+  <data name="Welcome to your new post. Click on the button above to add your first block of content!" xml:space="preserve">
+    <value>მოგესალმებით თქვენს ახალ პოსტში. დააჭირეთ ზემოთ მოცემულ ღილაკს, რომ დაამატოთ თქვენი პირველი შინაარსის ბლოკი!</value>
+  </data>
+  <data name="Your post title" xml:space="preserve">
+    <value>თქვენი პოსტის სათაური</value>
+  </data>
+  <data name="If comments should be enabled for this post" xml:space="preserve">
+    <value>კომენტარების დაწერის უფლება ამ პოსტზე</value>
+  </data>
+</root>

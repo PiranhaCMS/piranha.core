@@ -75,7 +75,7 @@
     <value>Kommentar genehmigen</value>
   </data>
   <data name="Close comments after" xml:space="preserve">
-    <value>Close comments after</value>
+    <value>Kommentare schließen nach</value>
   </data>
   <data name="Collapse block headers" xml:space="preserve">
     <value>Block-Header einklappen</value>
@@ -84,7 +84,7 @@
     <value>Block minimieren</value>
   </data>
   <data name="Comments page size" xml:space="preserve">
-    <value>Comments page size</value>
+    <value>Seitengröße für Kommentar</value>
   </data>
   <data name="Enable page comments" xml:space="preserve">
     <value>Seitenkommentare aktivieren</value>
@@ -93,25 +93,25 @@
     <value>Beitragskommentare aktivieren</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
-    <value>Manager list size</value>
+    <value>Listenlänge im Manager</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If block group headers should be collapsed by default when opening a page or post in the manager.</value>
+    <value>Wenn Blockgruppen-Kopfzeilen standardmäßig beim Öffnen einer Seite oder einem Beitrag im Manager eingeklappt werden sollen.</value>
   </data>
   <data name="If blocks should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If blocks should be collapsed by default when opening a page or post in the manager.</value>
+    <value>Wenn Blöcke standardmäßig beim Öffnen einer Seite oder eines Beitrags im Manager eingeklappt werden sollen.</value>
   </data>
   <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
-    <value>If comments should be approved by default. Please note that this can be overridden by third party moderation services.</value>
+    <value>Wenn Kommentare standardmäßig freigegeben werden sollen. Bitte beachten Sie, dass dies von Drittanbieter-Moderationsdiensten überschrieben werden kann.</value>
   </data>
   <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages.</value>
+    <value>Wenn Kommentare standardmäßig für Beiträge aktiviert werden sollen. Bitte beachten Sie, dass dies für bestimmte Seiten überschrieben werden kann.</value>
   </data>
   <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
-    <value>If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts.</value>
+    <value>Wenn Kommentare standardmäßig für Beiträge aktiviert werden sollen. Bitte beachten Sie, dass dies für bestimmte Beiträge überschrieben werden kann.</value>
   </data>
   <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>The default page size when loading comments. Please note that this this can be overridden for specific pages.</value>
+    <value>Die Standardgröße für zu ladende Kommentare. Bitte beachte, dass dies für bestimmte Seiten überschrieben werden kann.</value>
   </data>
   <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
     <value>Die Anzahl der Tage nach dem Veröffentlichungsdatum, für die das Kommentieren geöffnet sein soll. Ein Wert von 0 bedeutet für immer.</value>

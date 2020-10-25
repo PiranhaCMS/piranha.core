@@ -52,39 +52,39 @@
     <value>Preferred aspect</value>
   </data>
   <data name="Original" xml:space="preserve">
-    <value>Original</value>
+    <value>Исходный</value>
   </data>
   <data name="Landscape" xml:space="preserve">
-    <value>Landscape</value>
+    <value>Альбомная</value>
   </data>
   <data name="Portrait" xml:space="preserve">
-    <value>Portrait</value>
+    <value>Портрет</value>
   </data>
   <data name="Widescreen" xml:space="preserve">
-    <value>Widescreen</value>
+    <value>Широкий экран</value>
   </data>
   <data name="Square" xml:space="preserve">
-    <value>Square</value>
+    <value>Квадрат</value>
   </data>
   <data name="Are you sure you want to delete selected media?" xml:space="preserve">
-    <value>Are you sure you want to delete selected media?</value>
+    <value>Вы уверены, что хотите удалить выбранные медиа файлы?</value>
   </data>
   <data name="Delete selected items" xml:space="preserve">
-    <value>Delete selected items</value>
+    <value>Удалить выбранные элементы</value>
   </data>
   <data name="Media file was successfully moved." xml:space="preserve">
-    <value>Media file was successfully moved.</value>
+    <value>Медиа файл успешно перемещен.</value>
   </data>
   <data name="Media files was successfully moved." xml:space="preserve">
-    <value>Media files was successfully moved.</value>
+    <value>Медиа файлы успешно перемещен.</value>
   </data>
   <data name="The media file was not found." xml:space="preserve">
-    <value>The media file was not found.</value>
+    <value>Медиа файл не найден.</value>
   </data>
   <data name="The media file was successfully deleted" xml:space="preserve">
-    <value>The media file was successfully deleted</value>
+    <value>Медиа файл успешно удален</value>
   </data>
   <data name="The media files was successfully deleted" xml:space="preserve">
-    <value>The media files was successfully deleted</value>
+    <value>Медиа файлы успешно удалены</value>
   </data>
 </root>

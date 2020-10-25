@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ChangeDefaultConfirm" xml:space="preserve">
+    <value>Ændring af standardsproget vil påvirke hvordan programmet opfører sig og bør konfigureres under den indledende opsætning.</value>
+  </data>
+  <data name="RemoveLanguageConfirm" xml:space="preserve">
+    <value>Denne handling kan &lt;strong>ikke&lt;/strong> fortrydes. Dette vil permanent slette sproget {{ currentDelete.title }} og alle dets &lt;strong>oversættelser&lt;/strong>. Alle websteder, der har valgt {{ currentDelete.title }} som deres sprog, vil blive indstillet til standardsproget.</value>
+  </data>
+</root>

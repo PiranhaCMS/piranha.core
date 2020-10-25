@@ -39,6 +39,9 @@
   <data name="Culture" xml:space="preserve">
     <value>Kultur-Einstellung</value>
   </data>
+  <data name="Default" xml:space="preserve">
+    <value>Standard</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Löschen</value>
   </data>
@@ -92,6 +95,12 @@
   </data>
   <data name="Is default" xml:space="preserve">
     <value>Standard</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Sprache</value>
+  </data>
+  <data name="Languages" xml:space="preserve">
+    <value>Sprachen</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Anmelden</value>
@@ -235,6 +244,6 @@
     <value>Erstellt am</value>
   </data>
   <data name="Username and/or password are incorrect." xml:space="preserve">
-    <value>Username and/or password are incorrect.</value>
+    <value>Benutzername und/oder Passwort sind falsch.</value>
   </data>
 </root>

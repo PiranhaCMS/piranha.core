@@ -20,10 +20,16 @@ namespace Piranha.Manager
         public IStringLocalizer<Localization.Alias> Alias { get; private set; }
 
         /// <summary>
-        /// Gets/sets comment string resource.
+        /// Gets/sets comment string resources.
         /// </summary>
         /// <value></value>
         public IStringLocalizer<Localization.Comment> Comment { get; private set; }
+
+        /// <summary>
+        /// Gets/sets content string resources.
+        /// </summary>
+        /// <value></value>
+        public IStringLocalizer<Localization.Content> Content { get; private set; }
 
         /// <summary>
         /// Gets/sets config string resources.
@@ -40,6 +46,11 @@ namespace Piranha.Manager
         /// </summary>
         /// <value></value>
         public IStringLocalizer<Localization.Security> Security { get; private set; }
+
+        /// <summary>
+        /// Gets/sets language string localization.
+        /// </summary>
+        public IStringLocalizer<Localization.Language> Language { get; private set; }
 
         /// <summary>
         /// Gets/sets media string localization.
@@ -80,6 +91,7 @@ namespace Piranha.Manager
             IStringLocalizer<Localization.Config> config,
             IStringLocalizer<Localization.General> general,
             IStringLocalizer<Localization.Security> security,
+            IStringLocalizer<Localization.Language> language,
             IStringLocalizer<Localization.Media> media,
             IStringLocalizer<Localization.Menu> menu,
             IStringLocalizer<Localization.Module> module,
@@ -92,9 +104,10 @@ namespace Piranha.Manager
             Config = config;
             General = general;
             Security = security;
-            Module = module;
+            Language = language;
             Media = media;
             Menu = menu;
+            Module = module;
             Page = page;
             Post = post;
             Site = site;
