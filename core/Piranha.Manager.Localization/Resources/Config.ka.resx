@@ -78,28 +78,28 @@
     <value>კომენტარების დახურვის პერიოდი</value>
   </data>
   <data name="Collapse block headers" xml:space="preserve">
-    <value>ბლოკის სათაურების დახურვა</value>
+    <value>ბლოკის სათაურების აკეცვა</value>
   </data>
   <data name="Collapse blocks" xml:space="preserve">
-    <value>Collapse blocks</value>
+    <value>ბლოკების აკეცვა</value>
   </data>
   <data name="Comments page size" xml:space="preserve">
-    <value>Comments page size</value>
+    <value>კომენტარების გვერდის ზომა</value>
   </data>
   <data name="Enable page comments" xml:space="preserve">
-    <value>Enable page comments</value>
+    <value>გვერდზე კომენტარის დაწერის უფლება</value>
   </data>
   <data name="Enable post comments" xml:space="preserve">
-    <value>Enable post comments</value>
+    <value>პოსტზე კომენტარის დაწერის უფლება</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
-    <value>Manager list size</value>
+    <value>გვერდების სიის ზომა მენეჯერში</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If block group headers should be collapsed by default when opening a page or post in the manager.</value>
+    <value>ბლოკის ჯგუფის სათაურები უნდა იყოს აკეცილი, როდესაც ხსნი გვერდს ან პოსტს მენეჯერში.</value>
   </data>
   <data name="If blocks should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If blocks should be collapsed by default when opening a page or post in the manager.</value>
+    <value>ბლოკის სათაურები უნდა იყოს აკეცილი, როდესაც ხსნი გვერდს ან პოსტს მენეჯერში.</value>
   </data>
   <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
     <value>If comments should be approved by default. Please note that this can be overridden by third party moderation services.</value>
