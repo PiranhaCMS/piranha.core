@@ -14,7 +14,7 @@
   </resheader>
 
   <data name="Approved" xml:space="preserve">
-    <value>Approved</value>
+    <value>დადასტურებულია</value>
   </data>
   <data name="ApprovedSingle" xml:space="preserve">
     <value>Approved</value>
@@ -23,7 +23,7 @@
     <value>Pending</value>
   </data>
   <data name="Comment" xml:space="preserve">
-    <value>Comment</value>
+    <value>კომენტარი</value>
   </data>
   <data name="Response to" xml:space="preserve">
     <value>Response to</value>
