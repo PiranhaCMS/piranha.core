@@ -28,12 +28,12 @@
     <value>ლოგო</value>
   </data>
   <data name="If this should be the default site of the installation." xml:space="preserve">
-    <value>If this should be the default site of the installation.</value>
+    <value>თუ ეს უნდა იყოს ნაგულისხმევი ინსტალაციის დროს.</value>
   </data>
   <data name="Please type in the name of the site to confirm." xml:space="preserve">
-    <value>Please type in the name of the site to confirm.</value>
+    <value>გთხოვთ აკრიფოთ საიტის სახელი რომ დაადასტუროთ.</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
-    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the site {{ title }} and all of its &lt;strong>pages&lt;/strong>, &lt;strong>archives&lt;/strong> and &lt;strong>posts&lt;/strong>.</value>
+    <value>ამ მოქმედების გაუქმება &lt;strong> შეუძლებელია&lt;/strong>. ეს სამუდამოდ წაშლის საიტს {{ title }} და მის ყველა &lt;strong> გვერდს &lt;/strong>, &lt;strong> არქივებსა &lt;/strong> და &lt;strong> შეტყობინებებს &lt;/strong>.</value>
   </data>
 </root>
