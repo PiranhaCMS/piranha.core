@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Add folder" xml:space="preserve">
+    <value>საქაღალდის დამატება</value>
+  </data>
+  <data name="Drop files here or click to upload." xml:space="preserve">
+    <value>ასატვირთად გადმოათრიეთ ფაილები აქ.</value>
+  </data>
+  <data name="Download media" xml:space="preserve">
+    <value>ჩამოტვირთვა</value>
+  </data>
+  <data name="Folder name" xml:space="preserve">
+    <value>საქაღალდის სახელი</value>
+  </data>
+  <data name="Folder name is mandatory." xml:space="preserve">
+    <value>საქაღალდის სახელი სავალდებულოა.</value>
+  </data>
+  <data name="Gallery" xml:space="preserve">
+    <value>გალერეა</value>
+  </data>
+  <data name="Media" xml:space="preserve">
+    <value>მედია ფაილები</value>
+  </data>
+  <data name="Media preview is not available" xml:space="preserve">
+    <value>მედია ფაილის ჩვენება შეუძლებელია</value>
+  </data>
+  <data name="Open media in new tab" xml:space="preserve">
+    <value>მედია ფაილის ახალ ტაბში გახსნა</value>
+  </data>
+  <data name="Select media" xml:space="preserve">
+    <value>მედია ფაილის მონიშვნა</value>
+  </data>
+  <data name="Your browser does not support the video tag." xml:space="preserve">
+    <value>თქვენის ბრაუზერში არ არის ხელმისაწვდომი ვიდეოს გაშვება.</value>
+  </data>
+  <data name="List" xml:space="preserve">
+    <value>სია</value>
+  </data>
+  <data name="Preferred aspect" xml:space="preserve">
+    <value>სასურველი ასპექტები</value>
+  </data>
+  <data name="Original" xml:space="preserve">
+    <value>ორიგინალი</value>
+  </data>
+  <data name="Landscape" xml:space="preserve">
+    <value>ჰორიზონტალური</value>
+  </data>
+  <data name="Portrait" xml:space="preserve">
+    <value>ვერტიკალური</value>
+  </data>
+  <data name="Widescreen" xml:space="preserve">
+    <value>ფართე ეკრანი</value>
+  </data>
+  <data name="Square" xml:space="preserve">
+    <value>ოთხკუთხა</value>
+  </data>
+  <data name="Are you sure you want to delete selected media?" xml:space="preserve">
+    <value>ნამდვილად გსურთ მონიშნული მედია ფაილის წაშლა?</value>
+  </data>
+  <data name="Delete selected items" xml:space="preserve">
+    <value>წაშალე მონიშნული ელემენტები</value>
+  </data>
+  <data name="Media file was successfully moved." xml:space="preserve">
+    <value>მედია ფაილის გადაადგილება წარმატებით დასრულდა.</value>
+  </data>
+  <data name="Media files was successfully moved." xml:space="preserve">
+    <value>მედია ფაილების გადაადგილება წარმატებით დასრულდა.</value>
+  </data>
+  <data name="The media file was not found." xml:space="preserve">
+    <value>მედია ფაილი არ მოიძებნა.</value>
+  </data>
+  <data name="The media file was successfully deleted" xml:space="preserve">
+    <value>მედია ფაილის წაშლა წარმატებით დასრულდა</value>
+  </data>
+  <data name="The media files was successfully deleted" xml:space="preserve">
+    <value>მედია ფაილების წაშლა წარმატებით დასრულდა</value>
+  </data>
+</root>

@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Add page" xml:space="preserve">
+    <value>გვერდის დამატება</value>
+  </data>
+  <data name="An error occured while deleting the page" xml:space="preserve">
+    <value>დაფიქსირდა შეცდომა გვერდის წაშლისას</value>
+  </data>
+  <data name="Archive" xml:space="preserve">
+    <value>არქივი</value>
+  </data>
+  <data name="Detach page" xml:space="preserve">
+    <value>გვერდის განცალკევება</value>
+  </data>
+  <data name="Edit original" xml:space="preserve">
+    <value>ორიგინალის რედაქტირება</value>
+  </data>
+  <data name="Edit page" xml:space="preserve">
+    <value>გვერდის რედაქტირება</value>
+  </data>
+  <data name="Hidden" xml:space="preserve">
+    <value>დაფარული</value>
+  </data>
+  <data name="If the page should be hidden in the sitemap" xml:space="preserve">
+    <value>გვერდი უნდა იყოს დაფარული საიტის რუქაზე</value>
+  </data>
+  <data name="Meta title" xml:space="preserve">
+    <value>Meta სათაური</value>
+  </data>
+  <data name="Meta keywords" xml:space="preserve">
+    <value>Mata საკვანძო სიტყვები</value>
+  </data>
+  <data name="Meta description" xml:space="preserve">
+    <value>Mata აღწერა</value>
+  </data>
+  <data name="Og title" xml:space="preserve">
+    <value>Og სათაური</value>
+  </data>
+  <data name="Og image" xml:space="preserve">
+    <value>Og სურათი</value>
+  </data>
+  <data name="Og description" xml:space="preserve">
+    <value>Og აღწერა</value>
+  </data>
+  <data name="Navigation title" xml:space="preserve">
+    <value>ნავიგაციის სათაური</value>
+  </data>
+  <data name="Are you sure you want to delete this page?" xml:space="preserve">
+    <value>ნამდვილად გსურთ გვერდის წაშლა?</value>
+  </data>
+  <data name="Pages" xml:space="preserve">
+    <value>გვერდები</value>
+  </data>
+  <data name="The page was successfully deleted" xml:space="preserve">
+    <value>გვერდის წაშლა წარმატებით დასრულდა</value>
+  </data>
+  <data name="The page was successfully detached from the original" xml:space="preserve">
+    <value>გვერდის განცალკევება ორიგინალთან წარმატებით დასრულდა</value>
+  </data>
+  <data name="The page was successfully published" xml:space="preserve">
+    <value>გვერდის გამოქვეყნება წარმატებით დასრულდა</value>
+  </data>
+  <data name="The page was successfully unpublished" xml:space="preserve">
+    <value>გვერდის გამოქვეყნება გაუქმება წარმატებით დასრულდა</value>
+  </data>
+  <data name="The page was successfully saved" xml:space="preserve">
+    <value>გვერდის შენახვა წარმატებით დასრულდა</value>
+  </data>
+  <data name="The page was successfully reverted to its previous state" xml:space="preserve">
+    <value>გვერდი წარმატებით დაუბრუნდა წინა მდგომარეობას</value>
+  </data>
+  <data name="This is a copy. In order to edit the content of the page you first need to detach it from the original. If you want to keep the page as a copy you should edit the content of the original page." xml:space="preserve">
+    <value>ეს არის ასლი. იმისათვის, რომ შეცვალოთ გვერდის შინაარსი, პირველ რიგში საჭიროა მისი ორიგინალისგან განცალკევება. თუ გსურთ გვერდი შეინარჩუნოთ ასლად, უნდა შეცვალოთ ორიგინალის შიგთავსი.</value>
+  </data>
+  <data name="Welcome to your new page. Click on the button above to add your first block of content!" xml:space="preserve">
+    <value>მოგესალმებით თქვენს ახალ გვერდზე. დააჭირეთ ზემოთ მოცემულ ღილაკს, რომ დაამატოთ თქვენი პირველი შინაარსის ბლოკი!</value>
+  </data>
+  <data name="Your page title" xml:space="preserve">
+    <value>თქვენი გვერდის სათაური</value>
+  </data>
+  <data name="If comments should be enabled for this page" xml:space="preserve">
+    <value>კომენტარების დაწერის უფლება ამ გვერდზე</value>
+  </data>
+</root>
