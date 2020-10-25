@@ -22,7 +22,7 @@
     <value>გვერდის მისამართი უნდა შეიცავდეს მშობელი გვერდის მისამართს.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
-    <value>Expanded levels in the sitemap</value>
+    <value>გაფართოებული დონეები საიტის რუქაზე</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
     <value>საარქივო სიახლეების რაოდენობა გვერდზე</value>
@@ -47,10 +47,10 @@
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
-    <value>If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps.</value>
+    <value>თუ გვერდის slugs უნდა გაითვალისწინონ მათი მშობლის slug, როდესაც გენერირდება. ეს სასურველია უფრო დიდი საიტის რუქებისთვის.</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
-    <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
+    <value>რუქის დონის ნაგულისხმევი რაოდენობა, რომელიც უნდა გაფართოვდეს გვერდის საიტის რუქაზე. ეს სასარგებლოა პატარა საიტების რუქებისთვის.</value>
   </data>
   <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
     <value>არქივის გვერდზე პოსტების რაოდენობა. გთხოვთ გაითვალისწონოთ რომ ეს შეიძლება გაუქმდეს სხვა სერვისების კონფიგურაციით.</value>
@@ -68,7 +68,7 @@
     <value>ქეშირების დრო წუთებში, როდესაც ბრაუზერი არ მიმართავს სერვერს პოსტების განახლებისთვის.</value>
   </data>
   <data name="The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL." xml:space="preserve">
-    <value>The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL.</value>
+    <value>სრული URL (საქაღალდის ნებისმიერი სახელის ჩათვლით) CDN- ზე, რომელიც გამოიყენება ატვირთული მედიის მომსახურებისთვის. დატოვეთ ცარიელი, რომ გამოიყენოთ ნაგულისხმევი მეხსიერების URL.</value>
   </data>
 
   <data name="Approve comments" xml:space="preserve">
