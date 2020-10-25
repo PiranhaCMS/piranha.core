@@ -13,7 +13,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add page" xml:space="preserve">
-    <value>Add page</value>
+    <value>გვერდის დამატება</value>
   </data>
   <data name="An error occured while deleting the page" xml:space="preserve">
     <value>An error occured while deleting the page</value>
