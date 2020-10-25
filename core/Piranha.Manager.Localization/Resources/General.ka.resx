@@ -25,7 +25,7 @@
     <value>გაუქმება</value>
   </data>
   <data name="Content" xml:space="preserve">
-    <value>შინაარსი</value>
+    <value>შემცველობა</value>
   </data>
   <data name="Continue" xml:space="preserve">
     <value>გაგრძელება</value>
@@ -91,10 +91,10 @@
     <value>ისტორია</value>
   </data>
   <data name="Internal id" xml:space="preserve">
-    <value>Internal id</value>
+    <value>შიდა id</value>
   </data>
   <data name="Is default" xml:space="preserve">
-    <value>Is default</value>
+    <value>ნაგულისხმევია</value>
   </data>
   <data name="Language" xml:space="preserve">
     <value>ენა</value>
@@ -142,7 +142,7 @@
     <value>უფლებები</value>
   </data>
   <data name="Pixels" xml:space="preserve">
-    <value>Pixels</value>
+    <value>პიქსელები</value>
   </data>
   <data name="Preview" xml:space="preserve">
     <value>წინასწარ ნახვა</value>
@@ -163,87 +163,87 @@
     <value>დაბრუნება</value>
   </data>
   <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
+    <value>როლი</value>
   </data>
   <data name="Route" xml:space="preserve">
-    <value>Route</value>
+    <value>მარშუტი</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>შენახვა</value>
   </data>
   <data name="Scheduled" xml:space="preserve">
-    <value>Scheduled</value>
+    <value>განრიგი</value>
   </data>
   <data name="Search..." xml:space="preserve">
-    <value>Search...</value>
+    <value>ძებნა...</value>
   </data>
   <data name="Select block" xml:space="preserve">
-    <value>Select block</value>
+    <value>ბლოკის მონიშვნა</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>პარამეტრები</value>
   </data>
   <data name="Size" xml:space="preserve">
-    <value>Size</value>
+    <value>ზომა</value>
   </data>
   <data name="Slug" xml:space="preserve">
-    <value>Slug</value>
+    <value>მისამართი</value>
   </data>
   <data name="System" xml:space="preserve">
-    <value>System</value>
+    <value>სისტემა</value>
   </data>
   <data name="Temporary" xml:space="preserve">
-    <value>Temporary</value>
+    <value>დროებითი</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>სათაური</value>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Update</value>
+    <value>განახლება</value>
   </data>
   <data name="Update password" xml:space="preserve">
-    <value>Update password</value>
+    <value>პაროლის განახლება</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Username</value>
+    <value>მომხმარებელი</value>
   </data>
   <data name="Username is mandatory." xml:space="preserve">
-    <value>Username is mandatory.</value>
+    <value>მომხმარებლის სახელი სავალდებულოა.</value>
   </data>
   <data name="Title is mandatory." xml:space="preserve">
-    <value>Title is mandatory.</value>
+    <value>სათაური სავალდებულოა.</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Type</value>
+    <value>სახეობა</value>
   </data>
   <data name="Unpublish" xml:space="preserve">
-    <value>Unpublish</value>
+    <value>გამოუქვეყნებელი</value>
   </data>
   <data name="Unpublished" xml:space="preserve">
-    <value>Unpublished</value>
+    <value>გამოუქვეყნებელი</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>მომხმარებლები</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Version</value>
+    <value>ვერსია</value>
   </data>
   <data name="Width" xml:space="preserve">
-    <value>Width</value>
+    <value>სიგანე</value>
   </data>
   <data name="Archives and Comments" xml:space="preserve">
-    <value>Archives and Comments</value>
+    <value>არქივები და კომენტარები</value>
   </data>
   <data name="Author" xml:space="preserve">
-    <value>Author</value>
+    <value>ავტორი</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>Comments</value>
+    <value>კომენტარები</value>
   </data>
   <data name="Created" xml:space="preserve">
-    <value>Created</value>
+    <value>შექმნილია</value>
   </data>
   <data name="Username and/or password are incorrect." xml:space="preserve">
-    <value>Username and/or password are incorrect.</value>
+    <value>მომხმარებელი ან/და პაროლი არასწორია.</value>
   </data>
 </root>
