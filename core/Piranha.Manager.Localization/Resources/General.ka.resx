@@ -61,34 +61,34 @@
     <value>დასასრულებელი</value>
   </data>
   <data name="Drafts" xml:space="preserve">
-    <value>Drafts</value>
+    <value>შავი ნიმუშები</value>
   </data>
   <data name="Email address" xml:space="preserve">
-    <value>Email address</value>
+    <value>ელ-ფოსტა</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>ელ-ფოსტა სავალდებულოა.</value>
   </data>
   <data name="Filename" xml:space="preserve">
-    <value>Filename</value>
+    <value>ფაილის სახელი</value>
   </data>
   <data name="Height" xml:space="preserve">
-    <value>Height</value>
+    <value>სიმაღლე</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>რედაქტირება</value>
   </data>
   <data name="Empty" xml:space="preserve">
-    <value>Empty</value>
+    <value>ცარიელია</value>
   </data>
   <data name="General" xml:space="preserve">
-    <value>General</value>
+    <value>ზოგადი</value>
   </data>
   <data name="General information" xml:space="preserve">
-    <value>General information</value>
+    <value>ზოგადი ინფორმაცია</value>
   </data>
   <data name="History" xml:space="preserve">
-    <value>History</value>
+    <value>ისტორია</value>
   </data>
   <data name="Internal id" xml:space="preserve">
     <value>Internal id</value>
@@ -97,70 +97,70 @@
     <value>Is default</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>ენა</value>
   </data>
   <data name="Languages" xml:space="preserve">
-    <value>Languages</value>
+    <value>ენები</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>ავტორიზაცია</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+    <value>გამოსვლა</value>
   </data>
   <data name="Looks like there's no items here. Click on the button above to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button above to get started!</value>
+    <value>როგორც ჩანს, აქ ელემენტები არ არის. დასაწყებად დააჭირეთ ღილაკს ზემოთ!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button below to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button below to get started!</value>
+    <value>როგორც ჩანს, აქ ელემენტები არ არის. დასაწყებად დააჭირეთ ღილაკს ქვემოთ!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button to the left to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button to the left to get started!</value>
+    <value>როგორც ჩანს, აქ ელემენტები არ არის. დასაწყებად დააჭირეთ ღილაკს მარცხნივ!</value>
   </data>
   <data name="Main content" xml:space="preserve">
-    <value>Main content</value>
+    <value>ძირითადი კონტენტი</value>
   </data>
   <data name="Modified" xml:space="preserve">
-    <value>Modified</value>
+    <value>განახლდა</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>სახელი</value>
   </data>
   <data name="Name is mandatory." xml:space="preserve">
-    <value>Name is mandatory.</value>
+    <value>სახელი აუცილებელია.</value>
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
-    <value>Open public URL in new tab</value>
+    <value>გახსენით საჯარო მისამართი (URL) ახალ ტაბში</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>პაროლი</value>
   </data>
   <data name="Permanent" xml:space="preserve">
-    <value>Permanent</value>
+    <value>მუდმივი</value>
   </data>
   <data name="Permissions" xml:space="preserve">
-    <value>Permissions</value>
+    <value>უფლებები</value>
   </data>
   <data name="Pixels" xml:space="preserve">
     <value>Pixels</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Preview</value>
+    <value>წინასწარ ნახვა</value>
   </data>
   <data name="Publish" xml:space="preserve">
-    <value>Publish</value>
+    <value>გამოქვეყნება</value>
   </data>
   <data name="Publish date" xml:space="preserve">
-    <value>Publish date</value>
+    <value>გამოქვეყნების თარიღი</value>
   </data>
   <data name="Redirect" xml:space="preserve">
-    <value>Redirect</value>
+    <value>გადამისამართება</value>
   </data>
   <data name="Redirect Type" xml:space="preserve">
-    <value>Redirect Type</value>
+    <value>გადამისამართების ტიპი</value>
   </data>
   <data name="Revert" xml:space="preserve">
-    <value>Revert</value>
+    <value>დაბრუნება</value>
   </data>
   <data name="Roles" xml:space="preserve">
     <value>Roles</value>
