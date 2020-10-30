@@ -15,6 +15,7 @@ namespace Piranha.AttributeBuilder
     /// <summary>
     /// Attribute for adding a custom editor to a page type.
     /// </summary>
+    [NoCoverage]
     [Obsolete("PageTypeEditorAttribute is obsolete and has been replaced with ContentTypeEditorAttribute", true)]
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class PageTypeEditorAttribute : ContentTypeEditorAttribute { }

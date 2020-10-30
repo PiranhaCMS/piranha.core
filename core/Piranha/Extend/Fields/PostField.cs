@@ -25,7 +25,7 @@ namespace Piranha.Extend.Fields
         /// <summary>
         /// Gets/sets the related post object.
         /// </summary>
-        public Models.PostInfo Post { get; private set; }
+        public Models.PostInfo Post { get; set; }
 
         /// <summary>
         /// Gets if the field has a post object available.

@@ -7,6 +7,7 @@ using Piranha.Data.EF.SQLite;
 
 namespace Piranha.Data.EF.SQLite.Migrations
 {
+    [NoCoverage]
     [DbContext(typeof(SQLiteDb))]
     partial class SQLiteDbModelSnapshot : ModelSnapshot
     {

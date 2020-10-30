@@ -15,6 +15,7 @@ namespace Piranha.AttributeBuilder
     /// <summary>
     /// Attribute for adding a route to a post type.
     /// </summary>
+    [NoCoverage]
     [Obsolete("PostTypeRouteAttribute is obsolete and has been replaced with ContentTypeRouteAttribute", true)]
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class PostTypeRouteAttribute : ContentTypeRouteAttribute { }

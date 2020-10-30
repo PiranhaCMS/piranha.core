@@ -16,6 +16,7 @@ namespace Piranha.AttributeBuilder
     /// <summary>
     /// Class for building and importing post types.
     /// </summary>
+    [NoCoverage]
     [Obsolete("PostTypeBuilder is obsolete and has been replaced with ContentTypeBuilder", true)]
     public class PostTypeBuilder : ContentTypeBuilder<PostTypeBuilder, PostType>
     {

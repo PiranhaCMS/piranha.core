@@ -25,7 +25,7 @@ namespace Piranha.Extend.Fields
         /// <summary>
         /// Gets/sets the related page object.
         /// </summary>
-        public Models.PageInfo Page { get; private set; }
+        public Models.PageInfo Page { get; set; }
 
         /// <summary>
         /// Gets if the field has a page object available.

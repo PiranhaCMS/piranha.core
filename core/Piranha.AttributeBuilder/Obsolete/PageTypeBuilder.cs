@@ -16,6 +16,7 @@ namespace Piranha.AttributeBuilder
     /// <summary>
     /// Class for building and importing page types.
     /// </summary>
+    [NoCoverage]
     [Obsolete("PageTypeBuilder is obsolete and has been replaced with ContentTypeBuilder", true)]
     public class PageTypeBuilder : ContentTypeBuilder<PageTypeBuilder, PageType>
     {

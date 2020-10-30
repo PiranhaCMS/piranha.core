@@ -16,6 +16,7 @@ namespace Piranha.AttributeBuilder
     /// <summary>
     /// Class for building and importing site types.
     /// </summary>
+    [NoCoverage]
     [Obsolete("SiteTypeBuilder is obsolete and has been replaced with ContentTypeBuilder", true)]
     public class SiteTypeBuilder : ContentTypeBuilder<SiteTypeBuilder, SiteType>
     {

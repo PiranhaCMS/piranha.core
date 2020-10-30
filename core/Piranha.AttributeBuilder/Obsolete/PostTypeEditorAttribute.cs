@@ -15,6 +15,7 @@ namespace Piranha.AttributeBuilder
     /// <summary>
     /// Attribute for adding a custom editor to a post type.
     /// </summary>
+    [NoCoverage]
     [Obsolete("PostTypeEditorAttribute is obsolete and has been replaced with ContentTypeEditorAttribute", true)]
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class PostTypeEditorAttribute : ContentTypeEditorAttribute { }

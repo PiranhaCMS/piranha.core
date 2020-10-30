@@ -18,6 +18,7 @@ namespace Piranha.AttributeBuilder
     /// </summary>
     /// <typeparam name="T">The builder type</typeparam>
     /// <typeparam name="TType">The content type</typeparam>
+    [NoCoverage]
     public abstract class ContentTypeBuilder<T, TType>
         where T : ContentTypeBuilder<T, TType>
         where TType : ContentTypeBase

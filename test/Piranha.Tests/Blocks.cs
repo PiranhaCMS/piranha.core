@@ -171,6 +171,64 @@ namespace Piranha.Tests
         }
 
         [Fact]
+        public void PageBlockNoTitle()
+        {
+            var block = new Extend.Blocks.PageBlock();
+            var title = block.GetTitle();
+
+            Assert.Equal("No page selected", title);
+        }
+
+        [Fact]
+        public void PageBlockHasTitle()
+        {
+            var block = new Extend.Blocks.PageBlock()
+            {
+                Body = new Extend.Fields.PageField
+                {
+                    Page = new Models.PageInfo
+                    {
+
+                        Id = Guid.NewGuid(),
+                        Title = "Lorem ipsum"
+                    }
+                }
+            };
+            var title = block.GetTitle();
+
+            Assert.Equal("Lorem ipsum", title);
+        }
+
+        [Fact]
+        public void PostBlockNoTitle()
+        {
+            var block = new Extend.Blocks.PostBlock();
+            var title = block.GetTitle();
+
+            Assert.Equal("No post selected", title);
+        }
+
+        [Fact]
+        public void PostBlockHasTitle()
+        {
+            var block = new Extend.Blocks.PostBlock()
+            {
+                Body = new Extend.Fields.PostField
+                {
+                    Post = new Models.PostInfo
+                    {
+
+                        Id = Guid.NewGuid(),
+                        Title = "Lorem ipsum"
+                    }
+                }
+            };
+            var title = block.GetTitle();
+
+            Assert.Equal("Lorem ipsum", title);
+        }
+
+        [Fact]
         public void QuoteBlockNoTitle()
         {
             var block = new QuoteBlock();
@@ -228,6 +286,33 @@ namespace Piranha.Tests
         }
 
         [Fact]
+        public void VideoBlockNoTitle()
+        {
+            var block = new VideoBlock();
+            var title = block.GetTitle();
+
+            Assert.Equal("No video selected", title);
+        }
+
+        [Fact]
+        public void VideoBlockHasTitle()
+        {
+           var block = new VideoBlock()
+            {
+                Body = new Extend.Fields.VideoField
+                {
+                    Media = new Models.Media
+                    {
+                        Filename = "Lorem_ipsum.mp4"
+                    }
+                }
+            };
+            var title = block.GetTitle();
+
+            Assert.Equal("Lorem_ipsum.mp4", title);
+        }
+
+        [Fact]
         public void DeserializeHtmlBlock() {
             var blocks = new List<Block>();
             blocks.Add(new Block
@@ -275,64 +360,6 @@ namespace Piranha.Tests
             Assert.Equal(typeof(Extend.Fields.HtmlField).FullName, blocks[0].Fields[0].CLRType);
             Assert.Equal("<p>Lorem ipsum</p>", blocks[0].Fields[0].Value);
         }
-
-        /*
-        [Fact]
-        public void DeserializeHtmlColumnBlock() {
-            var blocks = new List<Block>();
-            blocks.Add(new Block() {
-                CLRType = typeof(Extend.Blocks.HtmlColumnBlock).FullName,
-                Fields = new List<BlockField>() {
-                    new BlockField() {
-                        CLRType = typeof(Extend.Fields.HtmlField).FullName,
-                        FieldId = "Column1",
-                        Value = "<p>Column 1</p>"
-                    },
-                    new BlockField() {
-                        CLRType = typeof(Extend.Fields.HtmlField).FullName,
-                        FieldId = "Column2",
-                        Value = "<p>Column 2</p>"
-                    }
-                },
-                Created = DateTime.Now,
-                LastModified = DateTime.Now
-            });
-
-            var models = contentService.TransformBlocks(blocks);
-
-            Assert.NotNull(models);
-            Assert.Single(models);
-
-            Assert.Equal(typeof(Extend.Blocks.HtmlColumnBlock), models.First().GetType());
-            Assert.Equal("<p>Column 1</p>", ((Extend.Blocks.HtmlColumnBlock)models[0]).Column1.Value);
-            Assert.Equal("<p>Column 2</p>", ((Extend.Blocks.HtmlColumnBlock)models[0]).Column2.Value);
-        }
-
-        [Fact]
-        public void SerializeHtmlColumnBlock() {
-            var models = new List<Extend.Block>();
-            models.Add(new Extend.Blocks.HtmlColumnBlock() {
-                Column1 = new Extend.Fields.HtmlField() {
-                    Value = "<p>Column 1</p>"
-                },
-                Column2 = new Extend.Fields.HtmlField() {
-                    Value = "<p>Column 2</p>"
-                },
-            });
-
-            var blocks = contentService.TransformBlocks(models);
-
-            Assert.NotNull(blocks);
-            Assert.Single(blocks);
-            Assert.Equal(2, blocks[0].Fields.Count);
-
-            Assert.Equal(typeof(Extend.Blocks.HtmlColumnBlock).FullName, blocks[0].CLRType);
-            Assert.Equal(typeof(Extend.Fields.HtmlField).FullName, blocks[0].Fields[0].CLRType);
-            Assert.Equal(typeof(Extend.Fields.HtmlField).FullName, blocks[0].Fields[1].CLRType);
-            Assert.Equal("<p>Column 1</p>", blocks[0].Fields[0].Value);
-            Assert.Equal("<p>Column 2</p>", blocks[0].Fields[1].Value);
-        }
-        */
 
         [Fact]
         public void DeserializeImageBlock() {
