@@ -33,7 +33,19 @@ namespace Piranha.Tests.AttributeBuilder
         {
         }
 
-        [ContentType(Id = "Complex", Title = "Complex Content Type")]
+        [ContentType(Id = "Categorized", Title = "Categorized Content Type")]
+        public class CategorizedContentType : MyContent<CategorizedContentType>, ICategorizedContent
+        {
+            public Taxonomy Category { get; set; }
+        }
+
+        [ContentType(Id = "Tagged", Title = "Tagged Content Type")]
+        public class TaggedContentType : MyContent<TaggedContentType>, ITaggedContent
+        {
+            public IList<Taxonomy> Tags { get; set; }
+        }
+
+        [ContentType(Id = "Complex", Title = "Complex Content Type", UseExcerpt = false, UsePrimaryImage = false)]
         [ContentTypeEditor(Title = "Custom Editor", Component = "will be replaced", Icon = "will be replaced")]
         [ContentTypeEditor(Title = "Custom Editor", Component = "custom-editor", Icon = "fa fas-fish")]
         [ContentTypeEditor(Title = "Another Editor", Component = "another-editor", Icon = "fa fas-fish")]
@@ -223,6 +235,48 @@ namespace Piranha.Tests.AttributeBuilder
         }
 
         [Fact]
+        public async Task AddCategorizedContentType()
+        {
+            using (var api = CreateApi())
+            {
+                new ContentTypeBuilder(api)
+                    .AddType(typeof(CategorizedContentType))
+                    .Build();
+
+                var group = await api.ContentGroups.GetByIdAsync("MyContent");
+                var type = await api.ContentTypes.GetByIdAsync("Categorized");
+
+                Assert.NotNull(group);
+                Assert.NotNull(type);
+
+                Assert.Equal("MyContent", type.Group);
+                Assert.True(type.UseCategory);
+                Assert.False(type.UseTags);
+            }
+        }
+
+        [Fact]
+        public async Task AddTaggedContentType()
+        {
+            using (var api = CreateApi())
+            {
+                new ContentTypeBuilder(api)
+                    .AddType(typeof(TaggedContentType))
+                    .Build();
+
+                var group = await api.ContentGroups.GetByIdAsync("MyContent");
+                var type = await api.ContentTypes.GetByIdAsync("Tagged");
+
+                Assert.NotNull(group);
+                Assert.NotNull(type);
+
+                Assert.Equal("MyContent", type.Group);
+                Assert.False(type.UseCategory);
+                Assert.True(type.UseTags);
+            }
+        }
+
+        [Fact]
         public async Task AddComplexContentType()
         {
             using (var api = CreateApi())
@@ -238,6 +292,10 @@ namespace Piranha.Tests.AttributeBuilder
                 Assert.NotNull(type);
                 Assert.Equal("MyContent", type.Group);
                 Assert.Equal(3, type.Regions.Count);
+                Assert.False(type.UseExcerpt);
+                Assert.False(type.UsePrimaryImage);
+                Assert.False(type.UseCategory);
+                Assert.False(type.UseTags);
 
                 Assert.Equal("Body", type.Regions[0].Id);
                 Assert.Equal(1, type.Regions[0].Fields.Count);
