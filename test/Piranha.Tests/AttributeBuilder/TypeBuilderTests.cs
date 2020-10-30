@@ -21,6 +21,41 @@ namespace Piranha.Tests.AttributeBuilder
     [Collection("Integration tests")]
     public class TypeBuilderTests : BaseTestsAsync
     {
+        [ContentGroup(Title = "My Content")]
+        public abstract class MyContent<T> : Content<T> where T : Content<T>
+        {
+            [Region(SortOrder = 1)]
+            public Extend.Fields.TextField Body { get; set; }
+        }
+
+        [ContentType(Id = "Simple", Title = "Simple Content Type")]
+        public class SimpleContentType : MyContent<SimpleContentType>
+        {
+        }
+
+        [ContentType(Id = "Complex", Title = "Complex Content Type")]
+        [ContentTypeEditor(Title = "Custom Editor", Component = "will be replaced", Icon = "will be replaced")]
+        [ContentTypeEditor(Title = "Custom Editor", Component = "custom-editor", Icon = "fa fas-fish")]
+        [ContentTypeEditor(Title = "Another Editor", Component = "another-editor", Icon = "fa fas-fish")]
+        public class ComplexContentType : MyContent<ComplexContentType>
+        {
+            public class BodyRegion
+            {
+                [Field]
+                [FieldDescription("This is the title")]
+                public Extend.Fields.TextField Title { get; set; }
+                [Field(Title = "Main Body")]
+                public Extend.Fields.TextField Body { get; set; }
+            }
+
+            [Region(Title = "Intro", ListTitle = "Default", ListPlaceholder = "Add new item", ListExpand = false, Icon = "fa fas-fish")]
+            public IList<Extend.Fields.TextField> Slider { get; set; }
+
+            [Region(Title = "Main content")]
+            [RegionDescription("This is where you enter the main content")]
+            public BodyRegion Content { get; set; }
+        }
+
         [PageType(Id = "Simple", Title = "Simple Page Type")]
         public class SimplePageType : Page<SimplePageType>
         {
@@ -150,6 +185,105 @@ namespace Piranha.Tests.AttributeBuilder
                 {
                     await api.SiteTypes.DeleteAsync(t);
                 }
+
+                var contentTypes = await api.ContentTypes.GetAllAsync();
+                foreach (var t in contentTypes)
+                {
+                    await api.ContentTypes.DeleteAsync(t);
+                }
+
+                var contentGroups = await api.ContentGroups.GetAllAsync();
+                foreach (var t in contentGroups)
+                {
+                    await api.ContentGroups.DeleteAsync(t);
+                }
+            }
+        }
+
+        [Fact]
+        public async Task AddSimpleContentType()
+        {
+            using (var api = CreateApi())
+            {
+                new ContentTypeBuilder(api)
+                    .AddType(typeof(SimpleContentType))
+                    .Build();
+
+                var group = await api.ContentGroups.GetByIdAsync("MyContent");
+                var type = await api.ContentTypes.GetByIdAsync("Simple");
+
+                Assert.NotNull(group);
+                Assert.NotNull(type);
+
+                Assert.Equal("MyContent", type.Group);
+                Assert.Equal(1, type.Regions.Count);
+                Assert.Equal("Body", type.Regions[0].Id);
+                Assert.Equal(1, type.Regions[0].Fields.Count);
+            }
+        }
+
+        [Fact]
+        public async Task AddComplexContentType()
+        {
+            using (var api = CreateApi())
+            {
+                new ContentTypeBuilder(api)
+                    .AddType(typeof(ComplexContentType))
+                    .Build();
+
+                var group = await api.ContentGroups.GetByIdAsync("MyContent");
+                var type = await api.ContentTypes.GetByIdAsync("Complex");
+
+                Assert.NotNull(group);
+                Assert.NotNull(type);
+                Assert.Equal("MyContent", type.Group);
+                Assert.Equal(3, type.Regions.Count);
+
+                Assert.Equal("Body", type.Regions[0].Id);
+                Assert.Equal(1, type.Regions[0].Fields.Count);
+
+
+                Assert.Equal("Slider", type.Regions[1].Id);
+                Assert.Equal("Intro", type.Regions[1].Title);
+                Assert.Equal("Default", type.Regions[1].ListTitleField);
+                Assert.Equal("Add new item", type.Regions[1].ListTitlePlaceholder);
+                Assert.Equal("fa fas-fish", type.Regions[1].Icon);
+                Assert.False(type.Regions[1].ListExpand);
+                Assert.True(type.Regions[1].Collection);
+                Assert.Equal(1, type.Regions[1].Fields.Count);
+
+                Assert.Equal("Content", type.Regions[2].Id);
+                Assert.Equal("Main content", type.Regions[2].Title);
+                Assert.Equal("This is where you enter the main content", type.Regions[2].Description);
+                Assert.False(type.Regions[2].Collection);
+                Assert.Equal(2, type.Regions[2].Fields.Count);
+                Assert.Equal("Title", type.Regions[2].Fields[0].Id);
+                Assert.Equal("This is the title", type.Regions[2].Fields[0].Description);
+                Assert.Equal("Body", type.Regions[2].Fields[1].Id);
+                Assert.Equal("Main Body", type.Regions[2].Fields[1].Title);
+
+                Assert.Equal(2, type.CustomEditors.Count);
+                Assert.Equal("Custom Editor", type.CustomEditors[0].Title);
+                Assert.Equal("custom-editor", type.CustomEditors[0].Component);
+                Assert.Equal("fa fas-fish", type.CustomEditors[0].Icon);
+            }
+        }
+
+        [Fact]
+        public async Task AddMultipleContentTypes()
+        {
+            using (var api = CreateApi())
+            {
+                new ContentTypeBuilder(api)
+                    .AddType(typeof(SimpleContentType))
+                    .AddType(typeof(ComplexContentType))
+                    .Build();
+
+                var groupCount = (await api.ContentGroups.GetAllAsync()).Count();
+                var typeCount = (await api.ContentTypes.GetAllAsync()).Count();
+
+                Assert.Equal(1, groupCount);
+                Assert.Equal(2, typeCount);
             }
         }
 

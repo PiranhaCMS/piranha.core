@@ -160,6 +160,10 @@ namespace Piranha.Tests.Services
                 page1.Id = PAGE_1_ID;
                 page1.SiteId = SITE_ID;
                 page1.Title = "My first page";
+                page1.MetaKeywords = "Keywords";
+                page1.MetaDescription = "Description";
+                page1.OgTitle = "Og Title";
+                page1.OgDescription = "Og Description";
                 page1.Ingress = "My first ingress";
                 page1.Body = "My first body";
                 page1.Blocks.Add(new Extend.Blocks.TextBlock
@@ -177,6 +181,8 @@ namespace Piranha.Tests.Services
                 page2.Id = PAGE_2_ID;
                 page2.SiteId = SITE_ID;
                 page2.Title = "My second page";
+                page2.MetaFollow = false;
+                page2.MetaIndex = false;
                 page2.Ingress = "My second ingress";
                 page2.Body = "My second body";
                 await api.Pages.SaveAsync(page2);
@@ -452,6 +458,13 @@ namespace Piranha.Tests.Services
                 Assert.NotNull(model);
                 Assert.Equal(typeof(MyPage), model.GetType());
                 Assert.Equal("my-first-page", model.Slug);
+                Assert.Equal("Keywords", model.MetaKeywords);
+                Assert.Equal("Description", model.MetaDescription);
+                Assert.Equal("Og Title", model.OgTitle);
+                Assert.Equal("Og Description", model.OgDescription);
+                Assert.True(model.MetaFollow);
+                Assert.True(model.MetaFollow);
+
                 Assert.Equal("My first body", ((MyPage)model).Body.Value);
             }
         }

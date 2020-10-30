@@ -74,15 +74,7 @@ namespace Piranha.AttributeBuilder
             // Make sure the type is a class
             if (!type.IsClass) return this;
 
-            if (type.IsAbstract)
-            {
-                // Type is abstract, check if this is a content group
-                if (type.GetCustomAttribute<ContentGroupAttribute>(false) != null)
-                {
-                    _contentGroups.Add(type);
-                }
-            }
-            else
+            if (!type.IsAbstract)
             {
                 // Type is a non abstract class, check if it is a content type
                 if (typeof(GenericContent).IsAssignableFrom(type))
@@ -93,6 +85,16 @@ namespace Piranha.AttributeBuilder
                         {
                             Type = type
                         });
+
+                        // Make sure we add the content group for this type as well
+                        var groupType = GetContentGroupType(type);
+                        if (groupType != null)
+                        {
+                            if (!_contentGroups.Contains(groupType))
+                            {
+                                _contentGroups.Add(groupType);
+                            }
+                        }
                     }
                 }
                 else if (typeof(PageBase).IsAssignableFrom(type))
@@ -257,6 +259,20 @@ namespace Piranha.AttributeBuilder
             return this;
         }
 
+        private Type GetContentGroupType(Type type)
+        {
+            if (type.GetCustomAttribute<ContentGroupAttribute>(false) != null)
+            {
+                return type;
+            }
+
+            if (type.BaseType != null)
+            {
+                return GetContentGroupType(type.BaseType);
+            }
+            return null;
+        }
+
         private ContentGroup GetContentGroup(Type type)
         {
             var attr = type.GetCustomAttribute<ContentGroupAttribute>(false);
@@ -268,7 +284,7 @@ namespace Piranha.AttributeBuilder
                 {
                     Id = attr.Id,
                     Title = attr.Title,
-                    CLRType = type.AssemblyQualifiedName,
+                    CLRType = type.Name, // type.AssemblyQualifiedName,
                     Icon = attr.Icon
                 };
             }
