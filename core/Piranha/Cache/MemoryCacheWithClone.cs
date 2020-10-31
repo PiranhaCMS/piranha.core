@@ -15,6 +15,7 @@ namespace Piranha.Cache
     /// <summary>
     /// Simple in memory cache.
     /// </summary>
+    [NoCoverage]
     public class MemoryCacheWithClone : MemoryCache
     {
         /// <summary>
