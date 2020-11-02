@@ -18,7 +18,7 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the language id.
         /// </summary>
-        public Guid LanguageId { get; set; }
+        public Guid? LanguageId { get; set; }
 
         /// <summary>
         /// Gets/sets the optional site type id.

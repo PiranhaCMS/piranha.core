@@ -1136,7 +1136,8 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     b.Property<bool>("IsDefault")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("LanguageId")
+                    b.Property<Guid?>("LanguageId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LastModified")

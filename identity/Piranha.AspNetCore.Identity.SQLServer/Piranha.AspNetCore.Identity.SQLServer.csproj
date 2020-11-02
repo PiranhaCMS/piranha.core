@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>9.0.0-alpha1</Version>
+    <Version>9.0.0-alpha2</Version>
     <Company>Piranha CMS</Company>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
@@ -12,7 +12,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
     <PackageId>Piranha.AspNetCore.Identity.SQLServer</PackageId>
-    <PackageVersion>9.0.0-alpha1</PackageVersion>
+    <PackageVersion>9.0.0-alpha2</PackageVersion>
     <Authors>Piranha CMS</Authors>
     <Description>Piranha CMS AspNetCore Identity provider for SQLServer</Description>
     <Copyright>Copyright (c) .NET Foundation and Contributors</Copyright>
