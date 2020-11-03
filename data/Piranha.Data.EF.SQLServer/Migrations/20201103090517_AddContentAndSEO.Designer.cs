@@ -10,7 +10,7 @@ using Piranha.Data.EF.SQLServer;
 namespace Piranha.Data.EF.SQLServer.Migrations
 {
     [DbContext(typeof(SQLServerDb))]
-    [Migration("20201016123837_AddContentAndSEO")]
+    [Migration("20201103090517_AddContentAndSEO")]
     partial class AddContentAndSEO
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1141,7 +1141,7 @@ namespace Piranha.Data.EF.SQLServer.Migrations
                     b.Property<bool>("IsDefault")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("LanguageId")
+                    b.Property<Guid?>("LanguageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("LastModified")
@@ -1572,8 +1572,7 @@ namespace Piranha.Data.EF.SQLServer.Migrations
                     b.HasOne("Piranha.Data.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Piranha.Data.SiteField", b =>

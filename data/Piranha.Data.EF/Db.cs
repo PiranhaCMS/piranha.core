@@ -405,7 +405,7 @@ namespace Piranha
             mb.Entity<Data.Site>().Property(s => s.Description).HasMaxLength(256);
             mb.Entity<Data.Site>().Property(s => s.Hostnames).HasMaxLength(256);
             mb.Entity<Data.Site>().Property(s => s.Culture).HasMaxLength(6);
-            mb.Entity<Data.Site>().HasOne(s => s.Language).WithMany().IsRequired().OnDelete(DeleteBehavior.Restrict);
+            mb.Entity<Data.Site>().HasOne(s => s.Language).WithMany().OnDelete(DeleteBehavior.Restrict);
             mb.Entity<Data.Site>().HasIndex(s => s.InternalId).IsUnique();
 
 

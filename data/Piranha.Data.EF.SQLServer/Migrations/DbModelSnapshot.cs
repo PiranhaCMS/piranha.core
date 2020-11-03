@@ -1139,7 +1139,7 @@ namespace Piranha.Data.EF.SQLServer.Migrations
                     b.Property<bool>("IsDefault")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("LanguageId")
+                    b.Property<Guid?>("LanguageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("LastModified")
@@ -1570,8 +1570,7 @@ namespace Piranha.Data.EF.SQLServer.Migrations
                     b.HasOne("Piranha.Data.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Piranha.Data.SiteField", b =>

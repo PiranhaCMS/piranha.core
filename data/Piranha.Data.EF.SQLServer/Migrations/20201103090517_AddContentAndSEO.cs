@@ -10,8 +10,7 @@ namespace Piranha.Data.EF.SQLServer.Migrations
             migrationBuilder.AddColumn<Guid>(
                 name: "LanguageId",
                 table: "Piranha_Sites",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+                nullable: true);
 
             migrationBuilder.AddColumn<bool>(
                 name: "MetaFollow",
