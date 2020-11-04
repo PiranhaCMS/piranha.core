@@ -40,10 +40,10 @@
     <value>Makalenin önbellekte kalma müddeti (dakika)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
-    <value>Post revisions</value>
+    <value>Makale tashihleri</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
-    <value>Media CDN</value>
+    <value>Vasıta CDN</value>
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
