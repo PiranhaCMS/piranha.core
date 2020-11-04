@@ -14,10 +14,10 @@
   </resheader>
 
   <data name="Approved" xml:space="preserve">
-    <value>Onaylandı</value>
+    <value>Tasdiklendi</value>
   </data>
   <data name="ApprovedSingle" xml:space="preserve">
-    <value>Onaylandı</value>
+    <value>Tasdiklendi</value>
   </data>
   <data name="Pending" xml:space="preserve">
     <value>Beklemede</value>
@@ -26,7 +26,7 @@
     <value>Yorum</value>
   </data>
   <data name="Response to" xml:space="preserve">
-    <value>Response to</value>
+    <value>Cevap</value>
   </data>
   <data name="The comment was successfully approved" xml:space="preserve">
     <value>The comment was successfully approved</value>
