@@ -37,7 +37,7 @@
     <value>Sayfa tashihleri</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Post cache expiration (minutes)</value>
+    <value>Makalenin önbellekte kalma müddeti (dakika)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
     <value>Post revisions</value>
