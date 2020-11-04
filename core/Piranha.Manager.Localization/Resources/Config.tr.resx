@@ -25,16 +25,16 @@
     <value>Site haritasındaki sahaları genişlet</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
-    <value>Archive page size</value>
+    <value>Arşiv sayfa büyüklüğü</value>
   </data>
   <data name="Caching" xml:space="preserve">
-    <value>Caching</value>
+    <value>Önbelleğe alma</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Page cache expiration (minutes)</value>
+    <value>Sayfanın önbellekte kalma müddeti (dakika)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
-    <value>Page revisions</value>
+    <value>Sayfa tashihleri</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
     <value>Post cache expiration (minutes)</value>
