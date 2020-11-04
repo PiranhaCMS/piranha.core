@@ -47,7 +47,7 @@
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
-    <value>Sayfa başlığı teşekkül ederken üst unsurunu dikkate alsın mı? Bu daha büyük site haritaları için tercih edilir.</value>
+    <value>Sayfa başlığı teşekkül ederken üst unsurunu dikkate alsın mı? Bu daha büyük sayfa haritaları için tercih edilir.</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
     <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
