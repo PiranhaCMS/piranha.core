@@ -19,10 +19,10 @@
     <value>URL için aşamalı sayfa başlıkları</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>Eğer sayfa başlığı bir üst sayfa başlığını da içermeli ise.</value>
+    <value>Eğer sayfa başlığı bir üst sayfa başlığını da tazammun etmeli ise.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
-    <value>Expanded levels in the sitemap</value>
+    <value>Site haritasındaki sahaları genişlet</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
     <value>Archive page size</value>
