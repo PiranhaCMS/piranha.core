@@ -16,10 +16,10 @@
     <value>Yapılandır</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>Aşamalı sayfa satırları</value>
+    <value>URL için aşamalı sayfa başlıkları</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>If page slugs should include the parent slug.</value>
+    <value>Eğer sayfa başlığı bir üst sayfa başlığını da içermeli ise.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
     <value>Expanded levels in the sitemap</value>
