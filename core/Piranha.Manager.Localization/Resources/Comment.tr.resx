@@ -47,9 +47,9 @@
     <value>Yayınlanmamış muhteva için yorumlara izin verilmez.</value>
   </data>
   <data name="Comments are currently open." xml:space="preserve">
-    <value>Comments are currently open.</value>
+    <value>Yorumlara şu an için açık.</value>
   </data>
   <data name="Comments were closed" xml:space="preserve">
-    <value>Comments were closed</value>
+    <value>Yorumlara kapatıldı</value>
   </data>
 </root>
