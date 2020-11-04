@@ -50,7 +50,7 @@
     <value>Sayfa başlığı teşekkül ederken üst unsurunu dikkate alsın mı? Bu daha büyük sayfa haritaları için tercih edilir.</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
-    <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
+    <value>Sayfa haritasında genişletilecek olan, tabii saha sayısı. Bu daha küçük sayfa haritaları için kullanışlıdır.</value>
   </data>
   <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
     <value>The default page size for archive pages. Please note that this this can be overridden for specific archives.</value>
