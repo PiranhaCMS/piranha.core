@@ -13,19 +13,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Content" xml:space="preserve">
-    <value>Content</value>
+    <value>Muhteva</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Ayarlar</value>
   </data>
   <data name="System" xml:space="preserve">
-    <value>System</value>
+    <value>Nizam</value>
   </data>
   <data name="Pages" xml:space="preserve">
-    <value>Pages</value>
+    <value>Metin sayfaları</value>
   </data>
   <data name="Media" xml:space="preserve">
-    <value>Media</value>
+    <value>Vasıta</value>
   </data>
   <data name="Aliases" xml:space="preserve">
     <value>Aliases</value>
