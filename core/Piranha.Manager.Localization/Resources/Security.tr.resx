@@ -37,19 +37,19 @@
     <value>Kul kaydedildi.</value>
   </data>
   <data name="Are you sure you want to delete this user?" xml:space="preserve">
-    <value>Are you sure you want to delete this user?</value>
+    <value>Bu kulu silme talebinden emin misiniz?</value>
   </data>
   <data name="The user has been deleted." xml:space="preserve">
-    <value>The user has been deleted.</value>
+    <value>Kul silindi.</value>
   </data>
   <data name="Can't delete yourself." xml:space="preserve">
-    <value>Can't delete yourself.</value>
+    <value>Kendinizi silemezsiniz.</value>
   </data>
 
   <data name="New password" xml:space="preserve">
-    <value>New password</value>
+    <value>Yeni şifre</value>
   </data>
   <data name="Confirm password" xml:space="preserve">
-    <value>Confirm password</value>
+    <value>Şifreyi doğrula</value>
   </data>
 </root>
