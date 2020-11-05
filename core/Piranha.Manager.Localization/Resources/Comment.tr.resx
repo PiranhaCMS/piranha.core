@@ -32,7 +32,7 @@
     <value>Yorum başarıyla tasdik edildi</value>
   </data>
   <data name="The comment was successfully unapproved" xml:space="preserve">
-    <value>Yorum tasdiki başarıyla kaldırıldı</value>
+    <value>The comment was successfully unapproved</value>
   </data>
   <data name="The comment was successfully deleted" xml:space="preserve">
     <value>Yorum başarıyla silindi</value>
