@@ -31,10 +31,10 @@
     <value>Yeni bir kul teşekkülünde şifre mecburidir.</value>
   </data>
   <data name="The user could not be saved." xml:space="preserve">
-    <value>The user could not be saved.</value>
+    <value>Kul kaydedilemedi.</value>
   </data>
   <data name="User is saved." xml:space="preserve">
-    <value>User is saved.</value>
+    <value>Kul kaydedildi.</value>
   </data>
   <data name="Are you sure you want to delete this user?" xml:space="preserve">
     <value>Are you sure you want to delete this user?</value>
