@@ -13,7 +13,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Username is used by another user." xml:space="preserve">
-    <value>Username is used by another user.</value>
+    <value>Kuladını başka bir kul kullanılıyor.</value>
   </data>
   <data name="Email address is used by another user." xml:space="preserve">
     <value>Email address is used by another user.</value>
