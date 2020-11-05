@@ -28,7 +28,7 @@
     <value>Yeni şifreler ihtilaflı.</value>
   </data>
   <data name="Password is mandatory when creating a new user." xml:space="preserve">
-    <value>Password is mandatory when creating a new user.</value>
+    <value>Yeni bir kul teşekkülünde şifre mecburidir.</value>
   </data>
   <data name="The user could not be saved." xml:space="preserve">
     <value>The user could not be saved.</value>
