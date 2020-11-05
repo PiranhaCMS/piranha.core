@@ -16,16 +16,16 @@
     <value>Kuladını başka bir kul kullanılıyor.</value>
   </data>
   <data name="Email address is used by another user." xml:space="preserve">
-    <value>Email address is used by another user.</value>
+    <value>E-mektup adresini başka bir kul kullanılıyor.</value>
   </data>
   <data name="The user could not be found." xml:space="preserve">
-    <value>The user could not be found.</value>
+    <value>Kul bulunamadı.</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>E-mektup adresi zorunludur.</value>
   </data>
   <data name="The new passwords does not match." xml:space="preserve">
-    <value>The new passwords does not match.</value>
+    <value>Yeni şifreler ihtilaflı.</value>
   </data>
   <data name="Password is mandatory when creating a new user." xml:space="preserve">
     <value>Password is mandatory when creating a new user.</value>
