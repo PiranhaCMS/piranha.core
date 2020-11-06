@@ -15,7 +15,19 @@
   <data name="Excerpt" xml:space="preserve">
     <value>Extrait</value>
   </data>
+  <data name="Meta index" xml:space="preserve">
+    <value>Méta index</value>
+  </data>
+  <data name="Meta follow" xml:space="preserve">
+    <value>Méta follow</value>
+  </data>
+  <data name="Meta priority" xml:space="preserve">
+    <value>Méta priorité</value>
+  </data>
   <data name="Primary image" xml:space="preserve">
     <value>Image principale</value>
+  </data>
+  <data name="Search engine priority, compared to other content in the same site." xml:space="preserve">
+    <value>Priorité pour le moteur de recherche, par rapport aux autres contenus sur le même site.</value>
   </data>
 </root>
