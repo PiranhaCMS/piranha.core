@@ -37,10 +37,10 @@
     <value>Si la page doit être cachée dans le plan du site</value>
   </data>
   <data name="If the page should be indexed by search engines." xml:space="preserve">
-    <value>If the page should be indexed by search engines.</value>
+    <value>Si la page doit être indexée par les moteurs de recherche.</value>
   </data>
   <data name="If links from this page should be indexed." xml:space="preserve">
-    <value>If links from this page should be indexed.</value>
+    <value>Si les liens depuis cette page doivent être indexés.</value>
   </data>
   <data name="Meta title" xml:space="preserve">
     <value>Méta titre</value>
