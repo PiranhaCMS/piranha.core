@@ -70,7 +70,7 @@
     <value>E-mektup adresi</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>E-mektup adresi zaruridir.</value>
   </data>
   <data name="Filename" xml:space="preserve">
     <value>Filename</value>
