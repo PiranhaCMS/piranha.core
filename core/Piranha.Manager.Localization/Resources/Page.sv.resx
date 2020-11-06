@@ -36,6 +36,12 @@
   <data name="If the page should be hidden in the sitemap" xml:space="preserve">
     <value>Om sidan ska vara dold i sidstrukturen</value>
   </data>
+  <data name="If the page should be indexed by search engines." xml:space="preserve">
+    <value>Om sidan ska indexeras av sökmotorer.</value>
+  </data>
+  <data name="If links from this page should be indexed." xml:space="preserve">
+    <value>Om länkar från denna sida ska indexeras.</value>
+  </data>
   <data name="Meta title" xml:space="preserve">
     <value>Titel</value>
   </data>

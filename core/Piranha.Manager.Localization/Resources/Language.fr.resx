@@ -13,9 +13,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ChangeDefaultConfirm" xml:space="preserve">
-    <value>Changing the default language will affect how the application behaves and should be configured during initial setup.</value>
+    <value>Changer la langue par défaut va impacter la façon dont l'application se comporte et doit être paramétré lors de la configuration initiale.</value>
   </data>
   <data name="RemoveLanguageConfirm" xml:space="preserve">
-    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the language {{ currentDelete.title }} and all of its &lt;strong>translations&lt;/strong>. Any sites that have selected {{ currentDelete.title }} as their language will be assigned the default language.</value>
+    <value>Cette opération &lt;strong>ne peut pas&lt;/strong> être annulée. La langue {{ currentDelete.title }} et toutes ses &lt;strong>traduction&lt;/strong> vont être supprimées de façon permanente. Tous les sites qui ont sélectionné la langue {{ currentDelete.title }} se verront assigner la langue par défaut.</value>
   </data>
 </root>

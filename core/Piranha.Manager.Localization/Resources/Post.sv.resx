@@ -48,4 +48,10 @@
   <data name="If comments should be enabled for this post" xml:space="preserve">
     <value>Om kommentarer ska aktiveras för den här artikeln</value>
   </data>
+  <data name="If the post should be indexed by search engines." xml:space="preserve">
+    <value>Om inlägget ska indexeras av sökmotorer.</value>
+  </data>
+  <data name="If links from this post should be indexed." xml:space="preserve">
+    <value>Om länkar från detta inlägg ska indexeras.</value>
+  </data>
 </root>

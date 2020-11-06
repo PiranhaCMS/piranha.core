@@ -13,7 +13,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Username is used by another user." xml:space="preserve">
-    <value>Username is used by another user.</value>
+    <value>Tài khoản đã được sử dụng bởi thành viên khác.</value>
   </data>
   <data name="Email address is used by another user." xml:space="preserve">
     <value>Email address is used by another user.</value>
@@ -34,7 +34,7 @@
     <value>The user could not be saved.</value>
   </data>
   <data name="User is saved." xml:space="preserve">
-    <value>User is saved.</value>
+    <value>Người dùng đã được lưu.</value>
   </data>
   <data name="Are you sure you want to delete this user?" xml:space="preserve">
     <value>Are you sure you want to delete this user?</value>
@@ -43,13 +43,13 @@
     <value>The user has been deleted.</value>
   </data>
   <data name="Can't delete yourself." xml:space="preserve">
-    <value>Can't delete yourself.</value>
+    <value>Không thể xóa chính bạn.</value>
   </data>
 
   <data name="New password" xml:space="preserve">
-    <value>New password</value>
+    <value>Mật khẩu mới</value>
   </data>
   <data name="Confirm password" xml:space="preserve">
-    <value>Confirm password</value>
+    <value>Xác nhận mật khẩu</value>
   </data>
 </root>

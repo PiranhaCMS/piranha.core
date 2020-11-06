@@ -13,42 +13,42 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Content" xml:space="preserve">
-    <value>Content</value>
+    <value>Muhteva</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Ayarlar</value>
   </data>
   <data name="System" xml:space="preserve">
-    <value>System</value>
+    <value>Nizam</value>
   </data>
   <data name="Pages" xml:space="preserve">
-    <value>Pages</value>
+    <value>Metin sayfaları</value>
   </data>
   <data name="Media" xml:space="preserve">
-    <value>Media</value>
+    <value>Vasıtalar</value>
   </data>
   <data name="Aliases" xml:space="preserve">
-    <value>Aliases</value>
+    <value>Takma adlar</value>
   </data>
   <data name="Sites" xml:space="preserve">
-    <value>Sites</value>
+    <value>Sayfalar</value>
   </data>
   <data name="Config" xml:space="preserve">
-    <value>Config</value>
+    <value>Yapılandırma</value>
   </data>
   <data name="Modules" xml:space="preserve">
-    <value>Modules</value>
+    <value>Parçalar</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+    <value>Celseyi kapat</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>Comments</value>
+    <value>Yorumlar</value>
   </data>
   <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
+    <value>Azalıklar</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>Kullanıcılar</value>
   </data>
 </root>

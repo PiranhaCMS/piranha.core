@@ -15,7 +15,19 @@
   <data name="Excerpt" xml:space="preserve">
     <value>Sammanfattning</value>
   </data>
+  <data name="Meta index" xml:space="preserve">
+    <value>Indexering</value>
+  </data>
+  <data name="Meta follow" xml:space="preserve">
+    <value>Följ länkar</value>
+  </data>
+  <data name="Meta priority" xml:space="preserve">
+    <value>Prioritet</value>
+  </data>
   <data name="Primary image" xml:space="preserve">
     <value>Primär bild</value>
+  </data>
+  <data name="Search engine priority, compared to other content in the same site." xml:space="preserve">
+    <value>Sökmotor prioritet, jämfört med annat innehåll på samma webbplats.</value>
   </data>
 </root>

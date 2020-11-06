@@ -48,4 +48,10 @@
   <data name="If comments should be enabled for this post" xml:space="preserve">
     <value>Pokud by měly být pro tento příspěvek povoleny komentáře</value>
   </data>
+  <data name="If the post should be indexed by search engines." xml:space="preserve">
+    <value>If the post should be indexed by search engines.</value>
+  </data>
+  <data name="If links from this post should be indexed." xml:space="preserve">
+    <value>If links from this post should be indexed.</value>
+  </data>
 </root>

@@ -13,9 +13,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Excerpt" xml:space="preserve">
-    <value>Excerpt</value>
+    <value>İktibas</value>
+  </data>
+  <data name="Meta index" xml:space="preserve">
+    <value>Meta index</value>
+  </data>
+  <data name="Meta follow" xml:space="preserve">
+    <value>Meta follow</value>
+  </data>
+  <data name="Meta priority" xml:space="preserve">
+    <value>Meta priority</value>
   </data>
   <data name="Primary image" xml:space="preserve">
-    <value>Primary image</value>
+    <value>Asli resim</value>
+  </data>
+  <data name="Search engine priority, compared to other content in the same site." xml:space="preserve">
+    <value>Search engine priority, compared to other content in the same site.</value>
   </data>
 </root>
