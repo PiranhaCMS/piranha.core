@@ -13,19 +13,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>Ekle</value>
   </data>
   <data name="Advanced" xml:space="preserve">
-    <value>Advanced</value>
+    <value>Gelişmiş</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>All</value>
+    <value>Tüm</value>
   </data>
   <data name="An error occurred" xml:space="preserve">
-    <value>An error occurred</value>
+    <value>Bir hata oluştu</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>İptal</value>
   </data>
   <data name="Content" xml:space="preserve">
     <value>Content</value>
