@@ -22,7 +22,7 @@
     <value>Kul bulunamadı.</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>E-mektup adresi zorunludur.</value>
+    <value>E-mektup adresi zaruridir.</value>
   </data>
   <data name="The new passwords does not match." xml:space="preserve">
     <value>Yeni şifreler ihtilaflı.</value>
