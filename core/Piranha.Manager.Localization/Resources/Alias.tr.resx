@@ -22,13 +22,13 @@
     <value>Takma ad URL</value>
   </data>
   <data name="Alias URL is mandatory." xml:space="preserve">
-    <value>Takma ad URL'u zorunludur.</value>
+    <value>Takma ad URL'u zaruridir.</value>
   </data>
   <data name="Redirect URL" xml:space="preserve">
     <value>URL'u yönlendir</value>
   </data>
   <data name="Redirect URL is mandatory." xml:space="preserve">
-    <value>URL yönlendirme zorunludur.</value>
+    <value>URL yönlendirme zaruridir.</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>Kalıcı</value>
