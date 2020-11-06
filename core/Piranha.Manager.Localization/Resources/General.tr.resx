@@ -13,64 +13,64 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>Ekle</value>
   </data>
   <data name="Advanced" xml:space="preserve">
-    <value>Advanced</value>
+    <value>Gelişmiş</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>All</value>
+    <value>Tüm</value>
   </data>
   <data name="An error occurred" xml:space="preserve">
-    <value>An error occurred</value>
+    <value>Bir hata oluştu</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>İptal</value>
   </data>
   <data name="Content" xml:space="preserve">
-    <value>Content</value>
+    <value>Muhteva</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Continue</value>
+    <value>Devam</value>
   </data>
   <data name="Content type" xml:space="preserve">
-    <value>Content type</value>
+    <value>Muhteva türü</value>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Copy</value>
+    <value>Kopya</value>
   </data>
   <data name="Culture" xml:space="preserve">
-    <value>Culture</value>
+    <value>Kültür</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Faraziye</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Sil</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Description</value>
+    <value>Tasvir</value>
   </data>
   <data name="Details" xml:space="preserve">
-    <value>Details</value>
+    <value>Teferruat</value>
   </data>
   <data name="Dimensions" xml:space="preserve">
-    <value>Dimensions</value>
+    <value>Ebatlar</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>İndir</value>
   </data>
   <data name="Draft" xml:space="preserve">
-    <value>Draft</value>
+    <value>Müsvedde</value>
   </data>
   <data name="Drafts" xml:space="preserve">
-    <value>Drafts</value>
+    <value>Müsveddeler</value>
   </data>
   <data name="Email address" xml:space="preserve">
-    <value>Email address</value>
+    <value>E-mektup adresi</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>E-mektup adresi zaruridir.</value>
   </data>
   <data name="Filename" xml:space="preserve">
     <value>Filename</value>

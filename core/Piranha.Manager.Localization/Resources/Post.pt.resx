@@ -49,9 +49,9 @@
     <value>Se comentários devem ser habilitados para esta página</value>
   </data>
   <data name="If the post should be indexed by search engines." xml:space="preserve">
-    <value>If the post should be indexed by search engines.</value>
+    <value>Se a postagem deve ser indexada pelos motores de busca.</value>
   </data>
   <data name="If links from this post should be indexed." xml:space="preserve">
-    <value>If links from this post should be indexed.</value>
+    <value>Se os links desta postagem devem ser indexados.</value>
   </data>
 </root>

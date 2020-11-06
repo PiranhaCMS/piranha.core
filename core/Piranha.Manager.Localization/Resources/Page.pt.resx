@@ -37,10 +37,10 @@
     <value>Se a página deve ser ocultada no sitemap</value>
   </data>
   <data name="If the page should be indexed by search engines." xml:space="preserve">
-    <value>If the page should be indexed by search engines.</value>
+    <value>Se a página deve ser indexada pelos motores de busca.</value>
   </data>
   <data name="If links from this page should be indexed." xml:space="preserve">
-    <value>If links from this page should be indexed.</value>
+    <value>Se links desta página devem ser indexados.</value>
   </data>
   <data name="Meta title" xml:space="preserve">
     <value>Meta title</value>
