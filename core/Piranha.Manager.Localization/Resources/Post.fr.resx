@@ -49,9 +49,9 @@
     <value>Si les commentaires doivent être activés pour ce billet</value>
   </data>
   <data name="If the post should be indexed by search engines." xml:space="preserve">
-    <value>If the post should be indexed by search engines.</value>
+    <value>Si le billet doit être indexée par les moteurs de recherche.</value>
   </data>
   <data name="If links from this post should be indexed." xml:space="preserve">
-    <value>If links from this post should be indexed.</value>
+    <value>Si les liens depuis ce billet doivent être indexés.</value>
   </data>
 </root>
