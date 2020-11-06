@@ -15,6 +15,9 @@
   <data name="Add" xml:space="preserve">
     <value>Ajouter</value>
   </data>
+  <data name="Advanced" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
   <data name="All" xml:space="preserve">
     <value>Tous</value>
   </data>
@@ -182,6 +185,12 @@
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Paramètres</value>
+  </data>
+  <data name="SEO" xml:space="preserve">
+    <value>SEO</value>
+  </data>
+  <data name="Sharing" xml:space="preserve">
+    <value>Sharing</value>
   </data>
   <data name="Size" xml:space="preserve">
     <value>Taille</value>
