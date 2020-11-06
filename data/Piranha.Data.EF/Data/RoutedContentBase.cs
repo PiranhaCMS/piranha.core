@@ -38,12 +38,12 @@ namespace Piranha.Data
         /// <summary>
         /// Gets/sets the meta index.
         /// </summary>
-        public bool MetaIndex { get; set; }
+        public bool? MetaIndex { get; set; }
 
         /// <summary>
         /// Gets/sets the meta follow.
         /// </summary>
-        public bool MetaFollow { get; set; }
+        public bool? MetaFollow { get; set; }
 
         /// <summary>
         /// Gets/sets the meta priority.

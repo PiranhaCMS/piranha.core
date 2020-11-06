@@ -184,6 +184,7 @@ namespace Piranha.Repositories
                     .Include(c => c.Fields).ThenInclude(f => f.Translations)
                     .Include(c => c.Category)
                     .Include(c => c.Tags).ThenInclude(t => t.Taxonomy)
+                    .AsSplitQuery()
                     .FirstOrDefaultAsync(p => p.Id == model.Id)
                     .ConfigureAwait(false);
 
@@ -268,6 +269,7 @@ namespace Piranha.Repositories
             var model = await _db.Content
                 .Include(c => c.Translations)
                 .Include(c => c.Fields).ThenInclude(f => f.Translations)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync(p => p.Id == id)
                 .ConfigureAwait(false);
 
@@ -296,6 +298,7 @@ namespace Piranha.Repositories
                 .AsNoTracking()
                 .Include(c => c.Translations)
                 .Include(c => c.Fields).ThenInclude(f => f.Translations)
+                .AsSplitQuery()
                 .AsQueryable();
         }
     }
