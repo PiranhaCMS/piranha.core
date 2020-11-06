@@ -43,7 +43,7 @@
     <value>Cultura</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Padrão</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Excluir</value>
@@ -100,10 +100,10 @@
     <value>Padrão</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>Idioma</value>
   </data>
   <data name="Languages" xml:space="preserve">
-    <value>Languages</value>
+    <value>Idiomas</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Login</value>
