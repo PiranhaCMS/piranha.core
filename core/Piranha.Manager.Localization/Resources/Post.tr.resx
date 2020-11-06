@@ -49,9 +49,9 @@
     <value>Bu makale yorumlara açık olsun mu</value>
   </data>
   <data name="If the post should be indexed by search engines." xml:space="preserve">
-    <value>If the post should be indexed by search engines.</value>
+    <value>Eğer makale, arama motorları tarafından işaretmeli ise.</value>
   </data>
   <data name="If links from this post should be indexed." xml:space="preserve">
-    <value>If links from this post should be indexed.</value>
+    <value>Eğer bu makalenin bağlamaları, işaretmeli ise.</value>
   </data>
 </root>
