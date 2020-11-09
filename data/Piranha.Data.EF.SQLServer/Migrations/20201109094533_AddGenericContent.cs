@@ -3,48 +3,55 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Piranha.Data.EF.SQLServer.Migrations
 {
-    public partial class AddContentAndSEO : Migration
+    public partial class AddGenericContent : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<Guid>(
                 name: "LanguageId",
                 table: "Piranha_Sites",
+                type: "uniqueidentifier",
                 nullable: true);
 
             migrationBuilder.AddColumn<bool>(
                 name: "MetaFollow",
                 table: "Piranha_Posts",
-                nullable: false,
+                type: "bit",
+                nullable: true,
                 defaultValue: true);
 
             migrationBuilder.AddColumn<bool>(
                 name: "MetaIndex",
                 table: "Piranha_Posts",
-                nullable: false,
+                type: "bit",
+                nullable: true,
                 defaultValue: true);
 
             migrationBuilder.AddColumn<double>(
                 name: "MetaPriority",
                 table: "Piranha_Posts",
+                type: "float",
                 nullable: false,
                 defaultValue: 0.5);
 
             migrationBuilder.AddColumn<bool>(
                 name: "MetaFollow",
                 table: "Piranha_Pages",
-                nullable: false,
+                type: "bit",
+                nullable: true,
                 defaultValue: true);
 
             migrationBuilder.AddColumn<bool>(
                 name: "MetaIndex",
                 table: "Piranha_Pages",
-                nullable: false,
+                type: "bit",
+                nullable: true,
                 defaultValue: true);
 
             migrationBuilder.AddColumn<double>(
                 name: "MetaPriority",
                 table: "Piranha_Pages",
+                type: "float",
                 nullable: false,
                 defaultValue: 0.5);
 
@@ -52,12 +59,12 @@ namespace Piranha.Data.EF.SQLServer.Migrations
                 name: "Piranha_ContentGroups",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 64, nullable: false),
-                    CLRType = table.Column<string>(maxLength: 255, nullable: false),
-                    Title = table.Column<string>(maxLength: 128, nullable: false),
-                    Icon = table.Column<string>(maxLength: 64, nullable: true),
-                    Created = table.Column<DateTime>(nullable: false),
-                    LastModified = table.Column<DateTime>(nullable: false)
+                    Id = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CLRType = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Icon = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,12 +75,12 @@ namespace Piranha.Data.EF.SQLServer.Migrations
                 name: "Piranha_ContentTypes",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 64, nullable: false),
-                    CLRType = table.Column<string>(nullable: true),
-                    Body = table.Column<string>(nullable: true),
-                    Created = table.Column<DateTime>(nullable: false),
-                    LastModified = table.Column<DateTime>(nullable: false),
-                    Group = table.Column<string>(maxLength: 64, nullable: false)
+                    Id = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Group = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    CLRType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Body = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -84,10 +91,10 @@ namespace Piranha.Data.EF.SQLServer.Migrations
                 name: "Piranha_Languages",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Title = table.Column<string>(maxLength: 64, nullable: false),
-                    Culture = table.Column<string>(maxLength: 6, nullable: true),
-                    IsDefault = table.Column<bool>(nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Culture = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: true),
+                    IsDefault = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -98,13 +105,13 @@ namespace Piranha.Data.EF.SQLServer.Migrations
                 name: "Piranha_Taxonomies",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Title = table.Column<string>(maxLength: 64, nullable: false),
-                    Slug = table.Column<string>(maxLength: 64, nullable: false),
-                    Created = table.Column<DateTime>(nullable: false),
-                    LastModified = table.Column<DateTime>(nullable: false),
-                    GroupId = table.Column<string>(maxLength: 64, nullable: false),
-                    Type = table.Column<int>(nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GroupId = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Slug = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -115,43 +122,43 @@ namespace Piranha.Data.EF.SQLServer.Migrations
                 name: "Piranha_Content",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Title = table.Column<string>(nullable: true),
-                    Created = table.Column<DateTime>(nullable: false),
-                    LastModified = table.Column<DateTime>(nullable: false),
-                    CategoryId = table.Column<Guid>(nullable: true),
-                    TypeId = table.Column<string>(maxLength: 64, nullable: false),
-                    PrimaryImageId = table.Column<Guid>(nullable: true),
-                    Excerpt = table.Column<string>(nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    TypeId = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    PrimaryImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Excerpt = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Piranha_Content", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Piranha_Content_Piranha_Taxonomies_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Piranha_Taxonomies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Piranha_Content_Piranha_ContentTypes_TypeId",
                         column: x => x.TypeId,
                         principalTable: "Piranha_ContentTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Piranha_Content_Piranha_Taxonomies_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Piranha_Taxonomies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Piranha_ContentFields",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    RegionId = table.Column<string>(maxLength: 64, nullable: false),
-                    FieldId = table.Column<string>(maxLength: 64, nullable: false),
-                    SortOrder = table.Column<int>(nullable: false),
-                    CLRType = table.Column<string>(maxLength: 256, nullable: false),
-                    Value = table.Column<string>(nullable: true),
-                    ContentId = table.Column<Guid>(nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ContentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RegionId = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    FieldId = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    SortOrder = table.Column<int>(type: "int", nullable: false),
+                    CLRType = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -168,8 +175,8 @@ namespace Piranha.Data.EF.SQLServer.Migrations
                 name: "Piranha_ContentTaxonomies",
                 columns: table => new
                 {
-                    ContentId = table.Column<Guid>(nullable: false),
-                    TaxonomyId = table.Column<Guid>(nullable: false)
+                    ContentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TaxonomyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -192,10 +199,10 @@ namespace Piranha.Data.EF.SQLServer.Migrations
                 name: "Piranha_ContentTranslations",
                 columns: table => new
                 {
-                    ContentId = table.Column<Guid>(nullable: false),
-                    LanguageId = table.Column<Guid>(nullable: false),
-                    Title = table.Column<string>(maxLength: 128, nullable: false),
-                    Excerpt = table.Column<string>(nullable: true)
+                    ContentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LanguageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Excerpt = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -218,9 +225,9 @@ namespace Piranha.Data.EF.SQLServer.Migrations
                 name: "Piranha_ContentFieldTranslations",
                 columns: table => new
                 {
-                    FieldId = table.Column<Guid>(nullable: false),
-                    LanguageId = table.Column<Guid>(nullable: false),
-                    Value = table.Column<string>(nullable: true)
+                    FieldId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LanguageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -317,10 +324,10 @@ namespace Piranha.Data.EF.SQLServer.Migrations
                 name: "Piranha_Content");
 
             migrationBuilder.DropTable(
-                name: "Piranha_Taxonomies");
+                name: "Piranha_ContentTypes");
 
             migrationBuilder.DropTable(
-                name: "Piranha_ContentTypes");
+                name: "Piranha_Taxonomies");
 
             migrationBuilder.DropIndex(
                 name: "IX_Piranha_Sites_LanguageId",
