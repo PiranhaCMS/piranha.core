@@ -43,7 +43,7 @@
     <value>Se links desta página devem ser indexados.</value>
   </data>
   <data name="Meta title" xml:space="preserve">
-    <value>Meta title</value>
+    <value>Meta título</value>
   </data>
   <data name="Meta keywords" xml:space="preserve">
     <value>Meta keywords</value>
@@ -52,13 +52,13 @@
     <value>Meta descrição</value>
   </data>
   <data name="Og title" xml:space="preserve">
-    <value>Og title</value>
+    <value>Og título</value>
   </data>
   <data name="Og image" xml:space="preserve">
-    <value>Og image</value>
+    <value>Og imagem</value>
   </data>
   <data name="Og description" xml:space="preserve">
-    <value>Og description</value>
+    <value>Descrição Og</value>
   </data>
   <data name="Navigation title" xml:space="preserve">
     <value>Título de navegação</value>
