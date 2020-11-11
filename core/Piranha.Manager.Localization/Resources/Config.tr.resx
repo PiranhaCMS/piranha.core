@@ -13,13 +13,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Config" xml:space="preserve">
-    <value>Yapılandır</value>
+    <value>Yapı</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>URL için aşamalı sayfa başlıkları</value>
+    <value>Aşamalı sayfa başlıkları</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>Eğer sayfa başlığı bir üst sayfa başlığını da tazammun etmeli ise.</value>
+    <value>Eğer sayfa başlığı bir üst başlığı tazammun etmeli ise.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
     <value>Site haritasındaki sahaları genişlet</value>
@@ -31,13 +31,13 @@
     <value>Önbelleğe alma</value>
   </data>
   <data name="Page cache expiration (minutes)" xml:space="preserve">
-    <value>Sayfanın önbellekte kalma müddeti (dakika)</value>
+    <value>Sayfanın önbellek müddeti (dakika)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
     <value>Sayfa tashihleri</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
-    <value>Makalenin önbellekte kalma müddeti (dakika)</value>
+    <value>Makalenin önbellek müddeti (dakika)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
     <value>Makale tashihleri</value>
