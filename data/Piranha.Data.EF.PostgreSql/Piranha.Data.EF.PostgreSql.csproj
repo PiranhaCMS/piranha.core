@@ -30,7 +30,7 @@
 
   <ItemGroup>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.0-rc2" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.0-beta-20204-02" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
     <ProjectReference Include="..\Piranha.Data.EF\Piranha.Data.EF.csproj" />
     <ProjectReference Include="..\..\core\Piranha\Piranha.csproj" />
   </ItemGroup>
