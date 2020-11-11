@@ -388,7 +388,7 @@ namespace Piranha.Services
         /// <param name="region">The region</param>
         /// <param name="regionType">The region type</param>
         /// <param name="managerInit">If this is initialization used by the manager</param>
-        private async Task InitDynamicRegionAsync(IServiceScope scope, object region, RegionType regionType, bool managerInit)
+        private async Task InitDynamicRegionAsync(IServiceScope scope, object region, ContentTypeRegion regionType, bool managerInit)
         {
             if (region != null)
             {
@@ -419,7 +419,7 @@ namespace Piranha.Services
         /// <param name="region">The region</param>
         /// <param name="regionType">The region type</param>
         /// <param name="managerInit">If this is initialization used by the manager</param>
-        private async Task InitRegionAsync(IServiceScope scope, object region, RegionType regionType, bool managerInit)
+        private async Task InitRegionAsync(IServiceScope scope, object region, ContentTypeRegion regionType, bool managerInit)
         {
             if (region != null)
             {
@@ -482,7 +482,7 @@ namespace Piranha.Services
         /// <param name="initFields">If fields should be initialized</param>
         /// <param name="managerInit">If manager init should be performed on the fields</param>
         /// <returns>The created region</returns>
-        private async Task<object> CreateDynamicRegionAsync(IServiceScope scope, RegionType regionType, bool initFields = true, bool managerInit = false)
+        private async Task<object> CreateDynamicRegionAsync(IServiceScope scope, ContentTypeRegion regionType, bool initFields = true, bool managerInit = false)
         {
             if (regionType.Fields.Count == 1)
             {
@@ -526,7 +526,7 @@ namespace Piranha.Services
         /// <param name="regionType">The region type</param>
         /// <param name="initFields">If fields should be initialized</param>
         /// <returns>The created region</returns>
-        private async Task<object> CreateRegionAsync(IServiceScope scope, object model, Type modelType, RegionType regionType, bool initFields = true)
+        private async Task<object> CreateRegionAsync(IServiceScope scope, object model, Type modelType, ContentTypeRegion regionType, bool initFields = true)
         {
             if (regionType.Fields.Count == 1)
             {
@@ -571,7 +571,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="fieldType">The field type</param>
         /// <returns>The new instance</returns>
-        private object CreateField(FieldType fieldType)
+        private object CreateField(ContentTypeField fieldType)
         {
             var type = App.Fields.GetByType(fieldType.Type);
 

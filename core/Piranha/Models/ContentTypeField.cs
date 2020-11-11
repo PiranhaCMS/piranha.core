@@ -13,7 +13,7 @@ using System;
 namespace Piranha.Models
 {
     [Serializable]
-    public sealed class FieldType
+    public sealed class ContentTypeField
     {
         /// <summary>
         /// Gets/sets the id.

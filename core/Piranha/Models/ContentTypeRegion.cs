@@ -14,7 +14,7 @@ using System.Collections.Generic;
 namespace Piranha.Models
 {
     [Serializable]
-    public sealed class RegionType
+    public sealed class ContentTypeRegion
     {
         /// <summary>
         /// Gets/sets the id.
@@ -67,6 +67,6 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the available fields.
         /// </summary>
-        public IList<FieldType> Fields { get; set; } = new List<FieldType>();
+        public IList<ContentTypeField> Fields { get; set; } = new List<ContentTypeField>();
     }
 }

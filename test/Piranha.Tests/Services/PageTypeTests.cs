@@ -45,14 +45,14 @@ namespace Piranha.Tests.Services
             new PageType
             {
                 Id = "MyFirstType",
-                Regions = new List<RegionType>
+                Regions = new List<ContentTypeRegion>
                 {
-                    new RegionType
+                    new ContentTypeRegion
                     {
                         Id = "Body",
-                        Fields = new List<FieldType>
+                        Fields = new List<ContentTypeField>
                         {
-                            new FieldType
+                            new ContentTypeField
                             {
                                 Id = "Default",
                                 Type = "Html"
@@ -64,14 +64,14 @@ namespace Piranha.Tests.Services
             new PageType
             {
                 Id = "MySecondType",
-                Regions = new List<RegionType>
+                Regions = new List<ContentTypeRegion>
                 {
-                    new RegionType
+                    new ContentTypeRegion
                     {
                         Id = "Body",
-                        Fields = new List<FieldType>
+                        Fields = new List<ContentTypeField>
                         {
-                            new FieldType
+                            new ContentTypeField
                             {
                                 Id = "Default",
                                 Type = "Text"
@@ -83,14 +83,14 @@ namespace Piranha.Tests.Services
             new PageType
             {
                 Id = "MyThirdType",
-                Regions = new List<RegionType>
+                Regions = new List<ContentTypeRegion>
                 {
-                    new RegionType
+                    new ContentTypeRegion
                     {
                         Id = "Body",
-                        Fields = new List<FieldType>
+                        Fields = new List<ContentTypeField>
                         {
-                            new FieldType
+                            new ContentTypeField
                             {
                                 Id = "Default",
                                 Type = "Image"
@@ -102,14 +102,14 @@ namespace Piranha.Tests.Services
             new PageType
             {
                 Id = "MyFourthType",
-                Regions = new List<RegionType>
+                Regions = new List<ContentTypeRegion>
                 {
-                    new RegionType
+                    new ContentTypeRegion
                     {
                         Id = "Body",
-                        Fields = new List<FieldType>
+                        Fields = new List<ContentTypeField>
                         {
-                            new FieldType
+                            new ContentTypeField
                             {
                                 Id = "Default",
                                 Type = "String"
@@ -121,14 +121,14 @@ namespace Piranha.Tests.Services
             new PageType
             {
                 Id = "MyFifthType",
-                Regions = new List<RegionType>
+                Regions = new List<ContentTypeRegion>
                 {
-                    new RegionType
+                    new ContentTypeRegion
                     {
                         Id = "Body",
-                        Fields = new List<FieldType>
+                        Fields = new List<ContentTypeField>
                         {
-                            new FieldType
+                            new ContentTypeField
                             {
                                 Id = "Default",
                                 Type = "Text"
