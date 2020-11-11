@@ -37,10 +37,10 @@
     <value>Wenn die Seite im Sitemap versteckt werden soll</value>
   </data>
   <data name="If the page should be indexed by search engines." xml:space="preserve">
-    <value>If the page should be indexed by search engines.</value>
+    <value>Wenn die Seite von Suchmaschinen indiziert werden soll.</value>
   </data>
   <data name="If links from this page should be indexed." xml:space="preserve">
-    <value>If links from this page should be indexed.</value>
+    <value>Wenn Links von dieser Seite indiziert werden sollen.</value>
   </data>
   <data name="Meta title" xml:space="preserve">
     <value>Meta-Titel</value>
