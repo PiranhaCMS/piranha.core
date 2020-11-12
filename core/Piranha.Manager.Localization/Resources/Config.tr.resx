@@ -56,7 +56,7 @@
     <value>Belgelik sayfalar için tabii sayfa boyutu. Lütfen dikkat, bu belli belgelikleri geçersiz kılabilir.</value>
   </data>
   <data name="The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation." xml:space="preserve">
-    <value>The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation.</value>
+    <value>Her sayfa için azami sayfa tashih sayısı. 0 değeri tahdit yok demektir.</value>
   </data>
   <data name="The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation." xml:space="preserve">
     <value>The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation.</value>
