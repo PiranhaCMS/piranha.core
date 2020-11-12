@@ -75,13 +75,13 @@
     <value>Yorumları tasdikle</value>
   </data>
   <data name="Close comments after" xml:space="preserve">
-    <value>Close comments after</value>
+    <value>Müteakiben yorumları kapat</value>
   </data>
   <data name="Collapse block headers" xml:space="preserve">
-    <value>Collapse block headers</value>
+    <value>Öbek başlıklarını daralt</value>
   </data>
   <data name="Collapse blocks" xml:space="preserve">
-    <value>Collapse blocks</value>
+    <value>Öbekleri daralt</value>
   </data>
   <data name="Comments page size" xml:space="preserve">
     <value>Comments page size</value>
