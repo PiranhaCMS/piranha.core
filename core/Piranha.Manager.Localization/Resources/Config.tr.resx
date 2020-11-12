@@ -62,10 +62,10 @@
     <value>Her makale için depolanması gereken azami tashih sayısı. 0 değeri tahdit yok demektir.</value>
   </data>
   <data name="The time in minutes that web browsers can use pages before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use pages before asking the server for new updates.</value>
+    <value>Ağ tarayıcılarının, sunucudan yeni güncellemeler istemeden önce, sayfaları kullanabileceği dakika zaman dilimi.</value>
   </data>
   <data name="The time in minutes that web browsers can use posts before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use posts before asking the server for new updates.</value>
+    <value>Ağ tarayıcılarının, sunucudan yeni güncellemeler istemeden önce, makaleleri kullanabileceği dakika zaman dilimi.</value>
   </data>
   <data name="The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL." xml:space="preserve">
     <value>The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL.</value>
