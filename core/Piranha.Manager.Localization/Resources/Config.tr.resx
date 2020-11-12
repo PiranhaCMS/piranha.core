@@ -68,7 +68,7 @@
     <value>Ağ tarayıcılarının, sunucudan yeni güncellemeler istemeden önce, makaleleri kullanabileceği dakika zaman dilimi.</value>
   </data>
   <data name="The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL." xml:space="preserve">
-    <value>The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL.</value>
+    <value>CDN'e tam URL (herhangi bir dosya adı dahil), yüklenen vasıtaları hizmete sunmak için kullanılır. Faraziye depolama URL'u kullanmak için boş bırakın.</value>
   </data>
 
   <data name="Approve comments" xml:space="preserve">
