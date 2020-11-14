@@ -96,10 +96,10 @@
     <value>İdareci listesi boyutu</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>Eğer öbek grubu başlıklarının bir sayfa veya makale açarken, farazi olarak idarecide daraltılmış olması gerekiyorsa.</value>
+    <value>Eğer öbek grubu başlıkları bir sayfa veya makale açarken, farazi olarak idarecide daraltılmalıysa.</value>
   </data>
   <data name="If blocks should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>Eğer öbeklerin bir sayfa veya makale açarken, farazi olarak idarecide daraltılmış olması gerekiyorsa.</value>
+    <value>Eğer öbekler bir sayfa veya makale açarken, farazi olarak idarecide daraltılmalıysa.</value>
   </data>
   <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
     <value>If comments should be approved by default. Please note that this can be overridden by third party moderation services.</value>
