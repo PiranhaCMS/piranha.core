@@ -114,9 +114,9 @@
     <value>Oletussivun koko kommentteja ladattaessa. Huomaa, että tämä voidaan ohittaa tietyille sivuille.</value>
   </data>
   <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
-    <value>The number of days commenting should be open after publish date. A value of 0 means forever.</value>
+    <value>Päivien lukumäärä, jolloin kommentoinnin pitäisi olla sallittua julkaisun jälkeen. Arvo 0 tarkoittaa ikuisesti.</value>
   </data>
   <data name="The page size for lists within the manager interface." xml:space="preserve">
-    <value>The page size for lists within the manager interface.</value>
+    <value>Listojen sivun koko Manager-käyttöliittymässä.</value>
   </data>
 </root>
