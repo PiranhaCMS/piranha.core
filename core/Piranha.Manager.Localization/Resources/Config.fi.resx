@@ -78,10 +78,10 @@
     <value>Sulje kommentit</value>
   </data>
   <data name="Collapse block headers" xml:space="preserve">
-    <value>Tiivistä lohkojen otsikot</value>
+    <value>Pienennä lohkojen otsikot</value>
   </data>
   <data name="Collapse blocks" xml:space="preserve">
-    <value>Tiivistä lohkot</value>
+    <value>Pienennä lohkot</value>
   </data>
   <data name="Comments page size" xml:space="preserve">
     <value>Kommenttien sivun koko</value>
@@ -93,25 +93,25 @@
     <value>Salli viestien kommentointi</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
-    <value>Manager-osion listojen koko</value>
+    <value>Managerin listojen koko</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If block group headers should be collapsed by default when opening a page or post in the manager.</value>
+    <value>Jos lohkojen ryhmäotsikoiden pitäisi olla oletusarvoisesti pienennettynä, kun avaa sivun tai julkaisun Managerissa.</value>
   </data>
   <data name="If blocks should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If blocks should be collapsed by default when opening a page or post in the manager.</value>
+    <value>Jos lohkojen pitäisi olla oletusarvoisesti pienennettynä, kun avaa sivun tai viestin Managerissa.</value>
   </data>
   <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
-    <value>If comments should be approved by default. Please note that this can be overridden by third party moderation services.</value>
+    <value>Jos kommentit pitäisi hyväksyä oletusarvoisesti. Huomaa, että kolmannen osapuolen moderointipalvelut voivat ohittaa tämän.</value>
   </data>
   <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages.</value>
+    <value>Jos kommentit tulee ottaa käyttöön oletusarvoisesti sivuille. Huomaa, että tämä voidaan ohittaa tietyille sivuille.</value>
   </data>
   <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
-    <value>If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts.</value>
+    <value>Jos kommentit tulisi ottaa käyttöön oletusarvoisesti viesteille. Huomaa, että tämä voidaan ohittaa tiettyihin viesteihin.</value>
   </data>
   <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>The default page size when loading comments. Please note that this this can be overridden for specific pages.</value>
+    <value>Oletussivun koko kommentteja ladattaessa. Huomaa, että tämä voidaan ohittaa tietyille sivuille.</value>
   </data>
   <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
     <value>The number of days commenting should be open after publish date. A value of 0 means forever.</value>
