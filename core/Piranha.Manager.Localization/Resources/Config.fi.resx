@@ -62,38 +62,38 @@
     <value>Jokaisen viestin tallennettavien versioiden enimmäismäärä. Arvo 0 tarkoittaa, ettei rajoituksia ole.</value>
   </data>
   <data name="The time in minutes that web browsers can use pages before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use pages before asking the server for new updates.</value>
+    <value>Aika minuutteina, jonka verkkoselaimet voivat käyttää sivuja ennen kuin pyytävät palvelimelta uusia päivityksiä.</value>
   </data>
   <data name="The time in minutes that web browsers can use posts before asking the server for new updates." xml:space="preserve">
-    <value>The time in minutes that web browsers can use posts before asking the server for new updates.</value>
+    <value>Aika minuutteina, jonka verkkoselaimet voivat käyttää viestejä ennen kuin pyytävät palvelimelta uusia päivityksiä.</value>
   </data>
   <data name="The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL." xml:space="preserve">
-    <value>The full URL (including any folder name) to the CDN used to serve uploaded media. Leave blank to use default storage URL.</value>
+    <value>Koko URL-osoite (mukaan lukien mikä tahansa kansion nimi) CDN: lle, jota käytetään palveluun ladatussa mediassa. Jätä tyhjäksi käyttääksesi oletustallennustilan URL-osoitetta.</value>
   </data>
 
   <data name="Approve comments" xml:space="preserve">
-    <value>Approve comments</value>
+    <value>Hyväksy kommentit</value>
   </data>
   <data name="Close comments after" xml:space="preserve">
-    <value>Close comments after</value>
+    <value>Sulje kommentit</value>
   </data>
   <data name="Collapse block headers" xml:space="preserve">
-    <value>Collapse block headers</value>
+    <value>Tiivistä lohkojen otsikot</value>
   </data>
   <data name="Collapse blocks" xml:space="preserve">
-    <value>Collapse blocks</value>
+    <value>Tiivistä lohkot</value>
   </data>
   <data name="Comments page size" xml:space="preserve">
-    <value>Comments page size</value>
+    <value>Kommenttien sivun koko</value>
   </data>
   <data name="Enable page comments" xml:space="preserve">
-    <value>Enable page comments</value>
+    <value>Salli sivujen kommentointi</value>
   </data>
   <data name="Enable post comments" xml:space="preserve">
-    <value>Enable post comments</value>
+    <value>Salli viestien kommentointi</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
-    <value>Manager list size</value>
+    <value>Manager-osion listojen koko</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
     <value>If block group headers should be collapsed by default when opening a page or post in the manager.</value>
