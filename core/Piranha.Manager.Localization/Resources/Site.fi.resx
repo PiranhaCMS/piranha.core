@@ -34,6 +34,6 @@
     <value>Vahvista kirjoittamalla sivuston nimi.</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
-    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the site {{ title }} and all of its &lt;strong>pages&lt;/strong>, &lt;strong>archives&lt;/strong> and &lt;strong>posts&lt;/strong>.</value>
+    <value>Tätä toimintoa &lt;strong>ei voi&lt;/strong> peruuttaa. Tämä poistaa pysyvästi sivuston {{ title }} ja kaikki sen &lt;strong>sivut&lt;/strong>, &lt;strong>arkistot&lt;/strong> sekä &lt;strong>viestit&lt;/strong>.</value>
   </data>
 </root>
