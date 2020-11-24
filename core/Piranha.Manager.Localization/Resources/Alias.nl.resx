@@ -40,7 +40,7 @@
     <value>Als de omleiding permanent moet zijn</value>
   </data>
   <data name="The alias was successfully added to the list" xml:space="preserve">
-    <value>De alias is met succes toegevoegd aan de lijst</value>
+    <value>De alias is succesvol toegevoegd aan de lijst</value>
   </data>
   <data name="The alias was successfully deleted" xml:space="preserve">
     <value>De alias is succesvol verwijderd</value>
