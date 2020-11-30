@@ -13,7 +13,7 @@ sudo: required
 
 mono: none
 
-dotnet: 3.1
+dotnet: 5
 
 branches:
   only:
@@ -36,5 +36,5 @@ matrix:
       dist: xenial
     - os: osx
       # Ref: https://docs.travis-ci.com/user/reference/osx
-      dotnet: 3.1.100
-      osx_image: xcode10.1
+      dotnet: 5
+      osx_image: xcode12.2
