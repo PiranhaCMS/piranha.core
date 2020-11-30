@@ -455,7 +455,7 @@ namespace Piranha.Services
         /// <param name="regionId">The region id</param>
         /// <param name="sortOrder">The optional sort order</param>
         /// <param name="languageId">The optional language id</param>
-        private IList<Guid> MapRegion(TContent content, object region, Models.RegionType regionType, string regionId, int sortOrder = 0, Guid? languageId = null)
+        private IList<Guid> MapRegion(TContent content, object region, Models.ContentTypeRegion regionType, string regionId, int sortOrder = 0, Guid? languageId = null)
         {
             var items = new List<Guid>();
 

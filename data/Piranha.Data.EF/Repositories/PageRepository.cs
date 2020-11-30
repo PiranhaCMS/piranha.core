@@ -390,7 +390,6 @@ namespace Piranha.Repositories
         {
             var model = await _db.Pages
                 .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
-                .Include(p => p.Fields)
                 .FirstOrDefaultAsync(p => p.Id == id)
                 .ConfigureAwait(false);
             var affected = new List<Guid>();
@@ -561,6 +560,7 @@ namespace Piranha.Repositories
                     .Include(p => p.Permissions)
                     .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                     .Include(p => p.Fields)
+                    .AsSplitQuery()
                     .FirstOrDefaultAsync(p => p.Id == model.Id)
                     .ConfigureAwait(false);
 
@@ -909,7 +909,8 @@ namespace Piranha.Repositories
             {
                 query = query
                     .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
-                    .Include(p => p.Fields);
+                    .Include(p => p.Fields)
+                    .AsSplitQuery();
             }
             return query;
         }

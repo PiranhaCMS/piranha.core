@@ -41,7 +41,7 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the available regions.
         /// </summary>
-        public IList<RegionType> Regions { get; set; } = new List<RegionType>();
+        public IList<ContentTypeRegion> Regions { get; set; } = new List<ContentTypeRegion>();
 
         /// <summary>
         /// Gets/sets the optional routes.
