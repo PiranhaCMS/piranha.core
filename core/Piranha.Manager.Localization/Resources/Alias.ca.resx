@@ -13,16 +13,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Aliases" xml:space="preserve">
-    <value>Aliases</value>
+    <value>Àlies</value>
   </data>
   <data name="Add new alias" xml:space="preserve">
-    <value>Add new alias</value>
+    <value>Afegeix nou àlies</value>
   </data>
   <data name="Alias URL" xml:space="preserve">
     <value>Alias URL</value>
   </data>
   <data name="Alias URL is mandatory." xml:space="preserve">
-    <value>Alias URL is mandatory.</value>
+    <value>La URL de l'àlies és obligatòria.</value>
   </data>
   <data name="Redirect URL" xml:space="preserve">
     <value>Redirect URL</value>
