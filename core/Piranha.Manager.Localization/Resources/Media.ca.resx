@@ -13,64 +13,64 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add folder" xml:space="preserve">
-    <value>Add folder</value>
+    <value>Afegeix una carpeta</value>
   </data>
   <data name="Drop files here or click to upload." xml:space="preserve">
-    <value>Drop files here or click to upload.</value>
+    <value>Deixeu arxius aquí o feu clic per transferir.</value>
   </data>
   <data name="Download media" xml:space="preserve">
-    <value>Download media</value>
+    <value>Descarrega multimèdia</value>
   </data>
   <data name="Folder name" xml:space="preserve">
-    <value>Folder name</value>
+    <value>Nom de la carpeta</value>
   </data>
   <data name="Folder name is mandatory." xml:space="preserve">
-    <value>Folder name is mandatory.</value>
+    <value>El nom de la carpeta és obligatori.</value>
   </data>
   <data name="Gallery" xml:space="preserve">
-    <value>Gallery</value>
+    <value>Galeria</value>
   </data>
   <data name="Media" xml:space="preserve">
-    <value>Media</value>
+    <value>Multimèdia</value>
   </data>
   <data name="Media preview is not available" xml:space="preserve">
-    <value>Media preview is not available</value>
+    <value>La previsualització no està disponible</value>
   </data>
   <data name="Open media in new tab" xml:space="preserve">
-    <value>Open media in new tab</value>
+    <value>Obre en una pestanya nova</value>
   </data>
   <data name="Select media" xml:space="preserve">
-    <value>Select media</value>
+    <value>Escull un recurs multimèdia</value>
   </data>
   <data name="Your browser does not support the video tag." xml:space="preserve">
-    <value>Your browser does not support the video tag.</value>
+    <value>El vostre navegador no admet l'etiqueta de video.</value>
   </data>
   <data name="List" xml:space="preserve">
-    <value>List</value>
+    <value>Llista</value>
   </data>
   <data name="Preferred aspect" xml:space="preserve">
-    <value>Preferred aspect</value>
+    <value>Aspecte preferit</value>
   </data>
   <data name="Original" xml:space="preserve">
     <value>Original</value>
   </data>
   <data name="Landscape" xml:space="preserve">
-    <value>Landscape</value>
+    <value>Horitzontal</value>
   </data>
   <data name="Portrait" xml:space="preserve">
-    <value>Portrait</value>
+    <value>Vertical</value>
   </data>
   <data name="Widescreen" xml:space="preserve">
-    <value>Widescreen</value>
+    <value>Pantalla ampla</value>
   </data>
   <data name="Square" xml:space="preserve">
-    <value>Square</value>
+    <value>Quadrat</value>
   </data>
   <data name="Are you sure you want to delete selected media?" xml:space="preserve">
-    <value>Are you sure you want to delete selected media?</value>
+    <value>Confirmes que vols eliminar els suport seleccionat?</value>
   </data>
   <data name="Delete selected items" xml:space="preserve">
-    <value>Delete selected items</value>
+    <value>Suprimeix el(s) element(s) seleccionat(s)</value>
   </data>
   <data name="Media file was successfully moved." xml:space="preserve">
     <value>Media file was successfully moved.</value>
@@ -82,9 +82,9 @@
     <value>The media file was not found.</value>
   </data>
   <data name="The media file was successfully deleted" xml:space="preserve">
-    <value>The media file was successfully deleted</value>
+    <value>El fitxer multimèdia ha estat eliminat amb èxit</value>
   </data>
   <data name="The media files was successfully deleted" xml:space="preserve">
-    <value>The media files was successfully deleted</value>
+    <value>Els fitxers multimèdia han estat eliminats amb èxit</value>
   </data>
 </root>
