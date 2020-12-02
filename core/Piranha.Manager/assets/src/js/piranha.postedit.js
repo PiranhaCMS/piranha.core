@@ -89,7 +89,7 @@ piranha.postedit = new Vue({
                 description =  piranha.resources.texts.medium;
             else if (this.metaPriority <= 0.9)
                 description =  piranha.resources.texts.high;
-            
+
             return description += " (" + this.metaPriority + ")";
         }
     },
@@ -289,7 +289,7 @@ piranha.postedit = new Vue({
                         });
                         $("#selectedTags").select2({
                             tags: true,
-                            selectOnClose: true,
+                            selectOnClose: false,
                             placeholder: piranha.resources.texts.addTags
                         });
                     });
@@ -417,7 +417,7 @@ piranha.postedit = new Vue({
             });
             $("#selectedTags").select2({
                 tags: true,
-                selectOnClose: true,
+                selectOnClose: false,
                 placeholder: piranha.resources.texts.addTags
             });
             $("#selectedTags").on("change", function() {
