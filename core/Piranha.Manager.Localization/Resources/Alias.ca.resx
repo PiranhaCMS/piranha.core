@@ -37,12 +37,12 @@
     <value>Esteu segur que voleu eliminar aquest àlies?</value>
   </data>
   <data name="If the redirect should be permanent" xml:space="preserve">
-    <value>If the redirect should be permanent</value>
+    <value>La redirecció ha de ser permanent</value>
   </data>
   <data name="The alias was successfully added to the list" xml:space="preserve">
-    <value>The alias was successfully added to the list</value>
+    <value>L'àlies s'ha afegit correctament a la llista</value>
   </data>
   <data name="The alias was successfully deleted" xml:space="preserve">
-    <value>The alias was successfully deleted</value>
+    <value>L'àlies ha estat eliminat amb èxit</value>
   </data>
 </root>
