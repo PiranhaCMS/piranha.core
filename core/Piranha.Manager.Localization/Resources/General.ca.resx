@@ -133,7 +133,7 @@
     <value>El nom és obligatori.</value>
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
-    <value>Open public URL in new tab</value>
+    <value>Obra la URL pública en una nova pestanya</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Contrasenya</value>
@@ -253,6 +253,6 @@
     <value>Creat</value>
   </data>
   <data name="Username and/or password are incorrect." xml:space="preserve">
-    <value>Username and/or password are incorrect.</value>
+    <value>El nom d'usuari o la contrasenya són incorrectes.</value>
   </data>
 </root>
