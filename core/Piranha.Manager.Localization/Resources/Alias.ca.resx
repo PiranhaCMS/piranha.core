@@ -19,22 +19,22 @@
     <value>Afegeix nou àlies</value>
   </data>
   <data name="Alias URL" xml:space="preserve">
-    <value>Alias URL</value>
+    <value>URL de l'àlies</value>
   </data>
   <data name="Alias URL is mandatory." xml:space="preserve">
     <value>La URL de l'àlies és obligatòria.</value>
   </data>
   <data name="Redirect URL" xml:space="preserve">
-    <value>Redirect URL</value>
+    <value>URL de redirecció</value>
   </data>
   <data name="Redirect URL is mandatory." xml:space="preserve">
-    <value>Redirect URL is mandatory.</value>
+    <value>La URL de redirecció és obligatòria.</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>Permanent</value>
   </data>
   <data name="Are you sure you want to delete this alias?" xml:space="preserve">
-    <value>Are you sure you want to delete this alias?</value>
+    <value>Esteu segur que voleu eliminar aquest àlies?</value>
   </data>
   <data name="If the redirect should be permanent" xml:space="preserve">
     <value>If the redirect should be permanent</value>
