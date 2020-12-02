@@ -16,7 +16,7 @@
     <value>Afegeix</value>
   </data>
   <data name="Advanced" xml:space="preserve">
-    <value>Advanced</value>
+    <value>Avançat</value>
   </data>
   <data name="All" xml:space="preserve">
     <value>Tot</value>
@@ -40,76 +40,76 @@
     <value>Copia</value>
   </data>
   <data name="Culture" xml:space="preserve">
-    <value>Culture</value>
+    <value>Cultura</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Per defecte</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Elimina</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Description</value>
+    <value>Descripció</value>
   </data>
   <data name="Details" xml:space="preserve">
-    <value>Details</value>
+    <value>Detalls</value>
   </data>
   <data name="Dimensions" xml:space="preserve">
-    <value>Dimensions</value>
+    <value>Mides</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>Descarrega</value>
   </data>
   <data name="Draft" xml:space="preserve">
-    <value>Draft</value>
+    <value>Esborrany</value>
   </data>
   <data name="Drafts" xml:space="preserve">
-    <value>Drafts</value>
+    <value>Esborranys</value>
   </data>
   <data name="Email address" xml:space="preserve">
-    <value>Email address</value>
+    <value>Adreça de correu electrònic</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>L'adreça de correu electrònic és obligatòria.</value>
   </data>
   <data name="Filename" xml:space="preserve">
-    <value>Filename</value>
+    <value>Nom del fitxer</value>
   </data>
   <data name="Height" xml:space="preserve">
-    <value>Height</value>
+    <value>Alçada</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>Edita</value>
   </data>
   <data name="Empty" xml:space="preserve">
-    <value>Empty</value>
+    <value>Buit</value>
   </data>
   <data name="General" xml:space="preserve">
     <value>General</value>
   </data>
   <data name="General information" xml:space="preserve">
-    <value>General information</value>
+    <value>Informació general</value>
   </data>
   <data name="History" xml:space="preserve">
-    <value>History</value>
+    <value>Històric</value>
   </data>
   <data name="Internal id" xml:space="preserve">
-    <value>Internal id</value>
+    <value>Identificador intern</value>
   </data>
   <data name="Is default" xml:space="preserve">
-    <value>Is default</value>
+    <value>Opció per defecte</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>Idioma</value>
   </data>
   <data name="Languages" xml:space="preserve">
-    <value>Languages</value>
+    <value>Idiomes</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Inicia la sessió</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+    <value>Tanca la sessió</value>
   </data>
   <data name="Looks like there's no items here. Click on the button above to get started!" xml:space="preserve">
     <value>Looks like there's no items here. Click on the button above to get started!</value>
@@ -121,136 +121,136 @@
     <value>Looks like there's no items here. Click on the button to the left to get started!</value>
   </data>
   <data name="Main content" xml:space="preserve">
-    <value>Main content</value>
+    <value>Contingut principal</value>
   </data>
   <data name="Modified" xml:space="preserve">
-    <value>Modified</value>
+    <value>Modificat</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>Nom</value>
   </data>
   <data name="Name is mandatory." xml:space="preserve">
-    <value>Name is mandatory.</value>
+    <value>El nom és obligatori.</value>
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
     <value>Open public URL in new tab</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>Contrasenya</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>Permanent</value>
   </data>
   <data name="Permissions" xml:space="preserve">
-    <value>Permissions</value>
+    <value>Permisos</value>
   </data>
   <data name="Pixels" xml:space="preserve">
-    <value>Pixels</value>
+    <value>Píxels</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Preview</value>
+    <value>Previsualitza</value>
   </data>
   <data name="Publish" xml:space="preserve">
-    <value>Publish</value>
+    <value>Publica</value>
   </data>
   <data name="Publish date" xml:space="preserve">
-    <value>Publish date</value>
+    <value>Data de publicació</value>
   </data>
   <data name="Redirect" xml:space="preserve">
-    <value>Redirect</value>
+    <value>Redirigeix</value>
   </data>
   <data name="Redirect Type" xml:space="preserve">
-    <value>Redirect Type</value>
+    <value>Tipus de redirecció</value>
   </data>
   <data name="Revert" xml:space="preserve">
-    <value>Revert</value>
+    <value>Desfés</value>
   </data>
   <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
+    <value>Rols</value>
   </data>
   <data name="Route" xml:space="preserve">
-    <value>Route</value>
+    <value>Ruta</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>Desa</value>
   </data>
   <data name="Scheduled" xml:space="preserve">
-    <value>Scheduled</value>
+    <value>Programat</value>
   </data>
   <data name="Search..." xml:space="preserve">
-    <value>Search...</value>
+    <value>Cerca...</value>
   </data>
   <data name="Select block" xml:space="preserve">
-    <value>Select block</value>
+    <value>Selecciona un bloc</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Preferències</value>
   </data>
   <data name="SEO" xml:space="preserve">
     <value>SEO</value>
   </data>
   <data name="Sharing" xml:space="preserve">
-    <value>Sharing</value>
+    <value>Comparteix</value>
   </data>
   <data name="Size" xml:space="preserve">
-    <value>Size</value>
+    <value>Mida</value>
   </data>
   <data name="Slug" xml:space="preserve">
     <value>Slug</value>
   </data>
   <data name="System" xml:space="preserve">
-    <value>System</value>
+    <value>Sistema</value>
   </data>
   <data name="Temporary" xml:space="preserve">
-    <value>Temporary</value>
+    <value>Temporal</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Títol</value>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Update</value>
+    <value>Actualitza</value>
   </data>
   <data name="Update password" xml:space="preserve">
-    <value>Update password</value>
+    <value>Actualitza la contrasenya</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Username</value>
+    <value>Nom d'usuari</value>
   </data>
   <data name="Username is mandatory." xml:space="preserve">
-    <value>Username is mandatory.</value>
+    <value>El nom d'usuari és obligatori.</value>
   </data>
   <data name="Title is mandatory." xml:space="preserve">
-    <value>Title is mandatory.</value>
+    <value>El títol és obligatori.</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Type</value>
+    <value>Tipus</value>
   </data>
   <data name="Unpublish" xml:space="preserve">
-    <value>Unpublish</value>
+    <value>Retira</value>
   </data>
   <data name="Unpublished" xml:space="preserve">
-    <value>Unpublished</value>
+    <value>No publicat</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>Usuaris</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Version</value>
+    <value>Versió</value>
   </data>
   <data name="Width" xml:space="preserve">
-    <value>Width</value>
+    <value>Amplada</value>
   </data>
   <data name="Archives and Comments" xml:space="preserve">
     <value>Archives and Comments</value>
   </data>
   <data name="Author" xml:space="preserve">
-    <value>Author</value>
+    <value>Autor/a</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>Comments</value>
+    <value>Comentaris</value>
   </data>
   <data name="Created" xml:space="preserve">
-    <value>Created</value>
+    <value>Creat</value>
   </data>
   <data name="Username and/or password are incorrect." xml:space="preserve">
     <value>Username and/or password are incorrect.</value>
