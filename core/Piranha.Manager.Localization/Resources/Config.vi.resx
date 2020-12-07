@@ -59,7 +59,7 @@
     <value>The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation.</value>
   </data>
   <data name="The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation." xml:space="preserve">
-    <value>The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation.</value>
+    <value>Số lần lưu duyệt lại tối đa cho mỗi bài viết. 0 = không giới hạn </value>
   </data>
   <data name="The time in minutes that web browsers can use pages before asking the server for new updates." xml:space="preserve">
     <value>The time in minutes that web browsers can use pages before asking the server for new updates.</value>
@@ -81,7 +81,7 @@
     <value>Collapse block headers</value>
   </data>
   <data name="Collapse blocks" xml:space="preserve">
-    <value>Collapse blocks</value>
+    <value>Thu gọn Blocks</value>
   </data>
   <data name="Comments page size" xml:space="preserve">
     <value>Comments page size</value>
@@ -114,7 +114,7 @@
     <value>The default page size when loading comments. Please note that this this can be overridden for specific pages.</value>
   </data>
   <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
-    <value>The number of days commenting should be open after publish date. A value of 0 means forever.</value>
+    <value>Số ngày các bình luận được hiển thị kể từ ngày xuất bản. 0 = Vĩnh viễn.</value>
   </data>
   <data name="The page size for lists within the manager interface." xml:space="preserve">
     <value>The page size for lists within the manager interface.</value>

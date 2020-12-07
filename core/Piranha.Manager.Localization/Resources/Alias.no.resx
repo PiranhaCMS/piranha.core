@@ -22,19 +22,19 @@
     <value>Alias URL</value>
   </data>
   <data name="Alias URL is mandatory." xml:space="preserve">
-    <value>Alias URL is mandatory.</value>
+    <value>Alias URL er påbudt.</value>
   </data>
   <data name="Redirect URL" xml:space="preserve">
     <value>Omdirigering</value>
   </data>
   <data name="Redirect URL is mandatory." xml:space="preserve">
-    <value>Redirect URL is mandatory.</value>
+    <value>URL Omadressering er påbudt.</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>Permanent</value>
   </data>
   <data name="Are you sure you want to delete this alias?" xml:space="preserve">
-    <value>Are you sure you want to delete this alias?</value>
+    <value>Er du sikker på at du vil slette denne alias?</value>
   </data>
   <data name="If the redirect should be permanent" xml:space="preserve">
     <value>Om omdirigeringen skal være permanent</value>

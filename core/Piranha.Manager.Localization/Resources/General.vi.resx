@@ -16,22 +16,22 @@
     <value>Thêm</value>
   </data>
   <data name="Advanced" xml:space="preserve">
-    <value>Advanced</value>
+    <value>Nâng cao</value>
   </data>
   <data name="All" xml:space="preserve">
     <value>Tất cả</value>
   </data>
   <data name="An error occurred" xml:space="preserve">
-    <value>An error occurred</value>
+    <value>Có lỗi xuất hiện</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Hủy</value>
   </data>
   <data name="Content" xml:space="preserve">
     <value>Nội Dung</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Continue</value>
+    <value>Tiếp tục</value>
   </data>
   <data name="Content type" xml:space="preserve">
     <value>Loại nội dung</value>
@@ -43,7 +43,7 @@
     <value>Văn hóa</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Mặc định</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Xoá</value>
@@ -67,10 +67,10 @@
     <value>Bảng nháp</value>
   </data>
   <data name="Email address" xml:space="preserve">
-    <value>Email address</value>
+    <value>Địa chỉ Thư điện tử</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>Thư điện tử là bắt buộc.</value>
   </data>
   <data name="Filename" xml:space="preserve">
     <value>Tên tập tin</value>
@@ -88,7 +88,7 @@
     <value>Tổng quan</value>
   </data>
   <data name="General information" xml:space="preserve">
-    <value>General information</value>
+    <value>Thông tin chung</value>
   </data>
   <data name="History" xml:space="preserve">
     <value>Lịch sử</value>
@@ -100,13 +100,13 @@
     <value>Là mặc định</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>Ngôn ngữ</value>
   </data>
   <data name="Languages" xml:space="preserve">
-    <value>Languages</value>
+    <value>Các ngôn ngữ</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Đăng nhập</value>
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Đăng xuất</value>
@@ -130,19 +130,19 @@
     <value>Tên</value>
   </data>
   <data name="Name is mandatory." xml:space="preserve">
-    <value>Name is mandatory.</value>
+    <value>Tên là bắt buộc.</value>
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
     <value>Mở đường dẫn công khai trong tab mới</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>Mật khẩu</value>
   </data>
   <data name="Permanent" xml:space="preserve">
-    <value>Permanent</value>
+    <value>Vĩnh viễn</value>
   </data>
   <data name="Permissions" xml:space="preserve">
-    <value>Permissions</value>
+    <value>Quyền</value>
   </data>
   <data name="Pixels" xml:space="preserve">
     <value>Độ phân giải</value>

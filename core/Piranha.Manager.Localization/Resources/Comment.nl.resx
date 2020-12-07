@@ -14,37 +14,37 @@
   </resheader>
 
   <data name="Approved" xml:space="preserve">
-    <value>Approved</value>
+    <value>Goedgekeurd</value>
   </data>
   <data name="ApprovedSingle" xml:space="preserve">
-    <value>Approved</value>
+    <value>Goedgekeurd</value>
   </data>
   <data name="Pending" xml:space="preserve">
     <value>Pending</value>
   </data>
   <data name="Comment" xml:space="preserve">
-    <value>Comment</value>
+    <value>Opmerking</value>
   </data>
   <data name="Response to" xml:space="preserve">
     <value>Response to</value>
   </data>
   <data name="The comment was successfully approved" xml:space="preserve">
-    <value>The comment was successfully approved</value>
+    <value>De reactie is succesvol goedgekeurd</value>
   </data>
   <data name="The comment was successfully unapproved" xml:space="preserve">
     <value>The comment was successfully unapproved</value>
   </data>
   <data name="The comment was successfully deleted" xml:space="preserve">
-    <value>The comment was successfully deleted</value>
+    <value>De opmerking is succesvol verwijderd</value>
   </data>
   <data name="Days allowed for commenting" xml:space="preserve">
-    <value>Days allowed for commenting</value>
+    <value>Dagen toegestaan om te reageren</value>
   </data>
   <data name="Comments are not allowed." xml:space="preserve">
-    <value>Comments are not allowed.</value>
+    <value>Reacties zijn niet toegestaan.</value>
   </data>
   <data name="Comments are not allowed for unpublished content." xml:space="preserve">
-    <value>Comments are not allowed for unpublished content.</value>
+    <value>Reacties zijn niet toegestaan voor niet-gepubliceerde inhoud.</value>
   </data>
   <data name="Comments are currently open." xml:space="preserve">
     <value>Comments are currently open.</value>
