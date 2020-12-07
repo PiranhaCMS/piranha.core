@@ -22,25 +22,25 @@
     <value>Alias URL</value>
   </data>
   <data name="Alias URL is mandatory." xml:space="preserve">
-    <value>Alias URL is mandatory.</value>
+    <value>Alias URL is verplicht.</value>
   </data>
   <data name="Redirect URL" xml:space="preserve">
     <value>Omleiding URL</value>
   </data>
   <data name="Redirect URL is mandatory." xml:space="preserve">
-    <value>Redirect URL is mandatory.</value>
+    <value>Redirect URL is verplicht.</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>Permanent</value>
   </data>
   <data name="Are you sure you want to delete this alias?" xml:space="preserve">
-    <value>Are you sure you want to delete this alias?</value>
+    <value>Weet u zeker dat u deze alias wilt verwijderen?</value>
   </data>
   <data name="If the redirect should be permanent" xml:space="preserve">
     <value>Als de omleiding permanent moet zijn</value>
   </data>
   <data name="The alias was successfully added to the list" xml:space="preserve">
-    <value>De alias is met succes toegevoegd aan de lijst</value>
+    <value>De alias is succesvol toegevoegd aan de lijst</value>
   </data>
   <data name="The alias was successfully deleted" xml:space="preserve">
     <value>De alias is succesvol verwijderd</value>

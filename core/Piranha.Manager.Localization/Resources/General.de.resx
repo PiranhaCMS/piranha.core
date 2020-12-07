@@ -16,7 +16,7 @@
     <value>Hinzufügen</value>
   </data>
   <data name="Advanced" xml:space="preserve">
-    <value>Advanced</value>
+    <value>Erweiterte</value>
   </data>
   <data name="All" xml:space="preserve">
     <value>Alle</value>
@@ -190,7 +190,7 @@
     <value>SEO</value>
   </data>
   <data name="Sharing" xml:space="preserve">
-    <value>Sharing</value>
+    <value>Teilen</value>
   </data>
   <data name="Size" xml:space="preserve">
     <value>Größe</value>

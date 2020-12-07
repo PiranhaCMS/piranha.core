@@ -13,9 +13,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ChangeDefaultConfirm" xml:space="preserve">
-    <value>Changing the default language will affect how the application behaves and should be configured during initial setup.</value>
+    <value>Canviar l'idioma per defecte afectarà al funcionament de l'aplicació i només s'hauria de definir a la instal·lació inicial.</value>
   </data>
   <data name="RemoveLanguageConfirm" xml:space="preserve">
-    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the language {{ currentDelete.title }} and all of its &lt;strong>translations&lt;/strong>. Any sites that have selected {{ currentDelete.title }} as their language will be assigned the default language.</value>
+    <value>Aquesta acció &lt;strong>no es pot desfer&lt;/strong>. S'eliminarà de forma permanent l'idioma {{ currentDelete.title }} i totes les seves &lt;strong>traduccions&lt;/strong>. Tots els llocs web que tinguin seleccionat {{ currentDelete.title }} com el seu idioma es reasignaran a l'idioma per defecte.</value>
   </data>
 </root>

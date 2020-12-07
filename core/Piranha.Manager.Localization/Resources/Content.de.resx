@@ -16,18 +16,18 @@
     <value>Textauszug</value>
   </data>
   <data name="Meta index" xml:space="preserve">
-    <value>Meta index</value>
+    <value>Metaindex</value>
   </data>
   <data name="Meta follow" xml:space="preserve">
-    <value>Meta follow</value>
+    <value>Meta folgen</value>
   </data>
   <data name="Meta priority" xml:space="preserve">
-    <value>Meta priority</value>
+    <value>Metapriorität</value>
   </data>
   <data name="Primary image" xml:space="preserve">
     <value>Primäres Bild</value>
   </data>
   <data name="Search engine priority, compared to other content in the same site." xml:space="preserve">
-    <value>Search engine priority, compared to other content in the same site.</value>
+    <value>Suchmaschinenpriorität, verglichen mit anderen Inhalten auf der gleichen Website.</value>
   </data>
 </root>

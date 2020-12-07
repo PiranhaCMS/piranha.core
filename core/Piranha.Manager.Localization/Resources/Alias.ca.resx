@@ -13,36 +13,36 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Aliases" xml:space="preserve">
-    <value>Aliases</value>
+    <value>Àlies</value>
   </data>
   <data name="Add new alias" xml:space="preserve">
-    <value>Add new alias</value>
+    <value>Afegeix nou àlies</value>
   </data>
   <data name="Alias URL" xml:space="preserve">
-    <value>Alias URL</value>
+    <value>URL de l'àlies</value>
   </data>
   <data name="Alias URL is mandatory." xml:space="preserve">
-    <value>Alias URL is mandatory.</value>
+    <value>La URL de l'àlies és obligatòria.</value>
   </data>
   <data name="Redirect URL" xml:space="preserve">
-    <value>Redirect URL</value>
+    <value>URL de redirecció</value>
   </data>
   <data name="Redirect URL is mandatory." xml:space="preserve">
-    <value>Redirect URL is mandatory.</value>
+    <value>La URL de redirecció és obligatòria.</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>Permanent</value>
   </data>
   <data name="Are you sure you want to delete this alias?" xml:space="preserve">
-    <value>Are you sure you want to delete this alias?</value>
+    <value>Esteu segur que voleu eliminar aquest àlies?</value>
   </data>
   <data name="If the redirect should be permanent" xml:space="preserve">
-    <value>If the redirect should be permanent</value>
+    <value>La redirecció ha de ser permanent</value>
   </data>
   <data name="The alias was successfully added to the list" xml:space="preserve">
-    <value>The alias was successfully added to the list</value>
+    <value>L'àlies s'ha afegit correctament a la llista</value>
   </data>
   <data name="The alias was successfully deleted" xml:space="preserve">
-    <value>The alias was successfully deleted</value>
+    <value>L'àlies ha estat eliminat amb èxit</value>
   </data>
 </root>
