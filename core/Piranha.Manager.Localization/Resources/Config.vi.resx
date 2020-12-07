@@ -114,7 +114,7 @@
     <value>The default page size when loading comments. Please note that this this can be overridden for specific pages.</value>
   </data>
   <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
-    <value>The number of days commenting should be open after publish date. A value of 0 means forever.</value>
+    <value>Số ngày các bình luận được hiển thị kể từ ngày xuất bản. 0 = Vĩnh viễn.</value>
   </data>
   <data name="The page size for lists within the manager interface." xml:space="preserve">
     <value>The page size for lists within the manager interface.</value>
