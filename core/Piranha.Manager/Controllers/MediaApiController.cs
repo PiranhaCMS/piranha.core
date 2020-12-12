@@ -262,6 +262,9 @@ namespace Piranha.Manager.Controllers
                     var folder = await _api.Media.GetFolderByIdAsync(id);
                     if (folder != null)
                     {
+                        if (folderId.HasValue && folderId == folder.Id)
+                            continue;
+
                         folder.ParentId = folderId;
                         await _api.Media.SaveFolderAsync(folder);
                         moved++;
