@@ -103,8 +103,11 @@ piranha.media = new Vue({
             }
 
             var dropped = event.dataTransfer.getData("mediaId");
-            var selections = this.items.filter(i => i.selected).map(i => i.id);
+            if (dropped === folderId) {
+                return;
+            }
 
+            var selections = this.items.filter(i => i.selected).map(i => i.id);
             if (!selections.includes(dropped)) {
                 selections = [];
                 selections.push(dropped);
