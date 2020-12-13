@@ -10,6 +10,30 @@
     margin: 0 auto;
 }
 
+.color-field {
+    .input-group-prepend {
+        width: 35px;
+        position: relative;
+    }
+
+    .color-preview {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border: solid 1px $gray-400;
+        border-right: 0;
+        border-top-left-radius: $border-radius;
+        border-bottom-left-radius: $border-radius;
+    }
+
+    input[type="color"] {
+        position: absolute;
+        opacity: 0;
+    }
+}
+
 .html-field {
     @include content();
 
