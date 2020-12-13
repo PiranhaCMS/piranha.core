@@ -203,6 +203,52 @@ namespace Piranha.Tests
         }
 
         [Fact]
+        public void ColorFieldConversions()
+        {
+            var inStr = "#007eaa";
+
+            Piranha.Extend.Fields.ColorField field = inStr;
+            Assert.Equal(inStr, field.Value);
+
+            string outStr = field;
+            Assert.Equal(inStr, outStr);
+        }
+
+        [Fact]
+        public void ColorFieldEquals()
+        {
+            var field1 = new Piranha.Extend.Fields.ColorField
+            {
+                Value = "#007eaa"
+            };
+            var field2 = new Piranha.Extend.Fields.ColorField
+            {
+                Value = "#007eaa"
+            };
+
+            Assert.True(field1 == field2);
+            Assert.True(field1.Equals(field2));
+            Assert.True(field1.Equals((object)field2));
+        }
+
+        [Fact]
+        public void ColorFieldNotEquals()
+        {
+            var field1 = new Piranha.Extend.Fields.ColorField
+            {
+                Value = "#007eaa"
+            };
+            var field2 = new Piranha.Extend.Fields.ColorField
+            {
+                Value = null
+            };
+
+            Assert.True(field1 != field2);
+            Assert.True(!field1.Equals(field2));
+            Assert.True(!field1.Equals((object)field2));
+        }
+
+        [Fact]
         public void DateFieldConversions() {
             var now = DateTime.Now;
 
