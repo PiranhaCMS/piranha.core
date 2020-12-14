@@ -72,19 +72,19 @@
   </data>
 
   <data name="Approve comments" xml:space="preserve">
-    <value>Approve comments</value>
+    <value>Godkjenn kommentarer</value>
   </data>
   <data name="Close comments after" xml:space="preserve">
-    <value>Close comments after</value>
+    <value>Lukk kommentarer etter</value>
   </data>
   <data name="Collapse block headers" xml:space="preserve">
-    <value>Collapse block headers</value>
+    <value>Skjul blokkoverskrifter</value>
   </data>
   <data name="Collapse blocks" xml:space="preserve">
-    <value>Collapse blocks</value>
+    <value>Skjul blokker</value>
   </data>
   <data name="Comments page size" xml:space="preserve">
-    <value>Comments page size</value>
+    <value>Kommentarer Sidestørrelse</value>
   </data>
   <data name="Enable page comments" xml:space="preserve">
     <value>Enable page comments</value>
