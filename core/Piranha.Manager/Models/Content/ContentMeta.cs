@@ -28,11 +28,6 @@ namespace Piranha.Manager.Models.Content
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets/sets the title if used in a list.
-        /// </summary>
-        public string Title { get; set; }
-
-        /// <summary>
         /// Gets/sets the type icon.
         /// </summary>
         public string Icon { get; set; }

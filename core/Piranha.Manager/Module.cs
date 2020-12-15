@@ -11,14 +11,23 @@
 using System.Collections.Generic;
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using AutoMapper;
 using Piranha.Extend;
+using Piranha.Manager.Models;
+using Piranha.Models;
 using Piranha.Security;
 
 namespace Piranha.Manager
 {
     public sealed class Module : IModule
     {
+        /// <summary>
+        /// Gets the mapper instance for this module.
+        /// </summary>
+        public static IMapper Mapper { get; private set; }
+
         private readonly List<PermissionItem> _permissions = new List<PermissionItem>
         {
             new PermissionItem { Name = Permission.Admin, Title = "Admin" },
@@ -143,6 +152,170 @@ namespace Piranha.Manager
             // Get assembly information
             Assembly = typeof(Module).GetTypeInfo().Assembly;
             LastModified = new FileInfo(Assembly.Location).LastWriteTime;
+
+            // Create mapper
+            var mapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<GenericContent, ContentModel>()
+                    .ForMember(m => m.Permissions, o => o.MapFrom(p => new ContentPermissions
+                    {
+                        SelectedPermissions = p.Permissions,
+                        Permissions = App.Permissions
+                            .GetPublicPermissions()
+                            .Select(p => new KeyValuePair<string, string>(p.Name, p.Title))
+                            .ToList()
+                    }))
+                    .ForMember(m => m.LanguageId, o => o.Ignore())
+                    .ForMember(m => m.ParentId, o => o.Ignore())
+                    .ForMember(m => m.Published, o => o.Ignore())
+                    .ForMember(m => m.PublishedTime, o => o.Ignore())
+                    .ForMember(m => m.Comments, o => o.Ignore())
+                    .ForMember(m => m.Meta, o => o.Ignore())
+                    .ForMember(m => m.Routes, o => o.Ignore())
+                    .ForMember(m => m.Taxonomies, o => o.Ignore())
+                    .ForMember(m => m.TypeTitle, o => o.Ignore())
+                    .ForMember(m => m.GroupId, o => o.Ignore())
+                    .ForMember(m => m.GroupTitle, o => o.Ignore())
+                    .ForMember(m => m.Slug, o => o.Ignore())
+                    .ForMember(m => m.Features, o => o.Ignore())
+                    .ForMember(m => m.Position, o => o.Ignore())
+                    .ForMember(m => m.AltTitle, o => o.Ignore())
+                    .ForMember(m => m.State, o => o.Ignore())
+                    .ForMember(m => m.Blocks, o => o.Ignore())
+                    .ForMember(m => m.Regions, o => o.Ignore())
+                    .ForMember(m => m.Editors, o => o.Ignore());
+                cfg.CreateMap<PageBase, ContentModel>()
+                    .ForMember(m => m.AltTitle, o => o.MapFrom(p => p.NavigationTitle))
+                    .ForMember(m => m.Published, o => o.MapFrom(p => p.Published.HasValue ? p.Published.Value.ToString("yyyy-MM-dd") : null))
+                    .ForMember(m => m.PublishedTime, o => o.MapFrom(p => p.Published.HasValue ? p.Published.Value.ToString("HH:mm") : null))
+                    .ForMember(m => m.Comments, o => o.MapFrom(p => new ContentComments
+                    {
+                        CloseCommentsAfterDays = p.CloseCommentsAfterDays,
+                        CommentCount = p.CommentCount
+                    }))
+                    .ForMember(m => m.Meta, o => o.MapFrom(p => new ContentMeta
+                    {
+                        MetaTitle = p.MetaTitle,
+                        MetaKeywords = p.MetaKeywords,
+                        MetaDescription = p.MetaDescription,
+                        MetaFollow = p.MetaFollow,
+                        MetaIndex = p.MetaIndex,
+                        MetaPriority = p.MetaPriority,
+                        OgTitle = p.OgTitle,
+                        OgImage = p.OgImage,
+                        OgDescription = p.OgDescription
+                    }))
+                    .ForMember(m => m.Permissions, o => o.MapFrom(p => new ContentPermissions
+                    {
+                        SelectedPermissions = p.Permissions,
+                        Permissions = App.Permissions
+                            .GetPublicPermissions()
+                            .Select(p => new KeyValuePair<string, string>(p.Name, p.Title))
+                            .ToList()
+                    }))
+                    .ForMember(m => m.Position, o => o.MapFrom(p => new ContentPosition
+                    {
+                        IsHidden = p.IsHidden,
+                        SiteId = p.SiteId,
+                        SortOrder = p.SortOrder
+                    }))
+                    .ForMember(m => m.Routes, o => o.MapFrom(p => new ContentRoutes
+                    {
+                        SelectedRoute = new RouteModel { Route = p.Route },
+                        RedirectUrl = p.RedirectUrl,
+                        RedirectType = p.RedirectType.ToString()
+                    }))
+                    .ForMember(m => m.LanguageId, o => o.Ignore())
+                    .ForMember(m => m.TypeTitle, o => o.Ignore())
+                    .ForMember(m => m.GroupId, o => o.Ignore())
+                    .ForMember(m => m.GroupTitle, o => o.Ignore())
+                    .ForMember(m => m.Features, o => o.Ignore())
+                    .ForMember(m => m.Taxonomies, o => o.Ignore())
+                    .ForMember(m => m.State, o => o.Ignore())
+                    .ForMember(m => m.Blocks, o => o.Ignore())
+                    .ForMember(m => m.Regions, o => o.Ignore())
+                    .ForMember(m => m.Editors, o => o.Ignore());
+                cfg.CreateMap<PostBase, ContentModel>()
+                    .ForMember(m => m.ParentId, o => o.MapFrom(p => p.BlogId))
+                    .ForMember(m => m.Published, o => o.MapFrom(p => p.Published.HasValue ? p.Published.Value.ToString("yyyy-MM-dd") : null))
+                    .ForMember(m => m.PublishedTime, o => o.MapFrom(p => p.Published.HasValue ? p.Published.Value.ToString("HH:mm") : null))
+                    .ForMember(m => m.Comments, o => o.MapFrom(p => new ContentComments
+                    {
+                        CloseCommentsAfterDays = p.CloseCommentsAfterDays,
+                        CommentCount = p.CommentCount
+                    }))
+                    .ForMember(m => m.Meta, o => o.MapFrom(p => new ContentMeta
+                    {
+                        MetaTitle = p.MetaTitle,
+                        MetaKeywords = p.MetaKeywords,
+                        MetaDescription = p.MetaDescription,
+                        MetaFollow = p.MetaFollow,
+                        MetaIndex = p.MetaIndex,
+                        MetaPriority = p.MetaPriority,
+                        OgTitle = p.OgTitle,
+                        OgImage = p.OgImage,
+                        OgDescription = p.OgDescription
+                    }))
+                    .ForMember(m => m.Permissions, o => o.MapFrom(p => new ContentPermissions
+                    {
+                        SelectedPermissions = p.Permissions,
+                        Permissions = App.Permissions
+                            .GetPublicPermissions()
+                            .Select(p => new KeyValuePair<string, string>(p.Name, p.Title))
+                            .ToList()
+                    }))
+                    .ForMember(m => m.Routes, o => o.MapFrom(p => new ContentRoutes
+                    {
+                        SelectedRoute = new RouteModel { Route = p.Route },
+                        RedirectUrl = p.RedirectUrl,
+                        RedirectType = p.RedirectType.ToString()
+                    }))
+                    .ForMember(m => m.Taxonomies, o => o.MapFrom(p => new ContentTaxonomies
+                    {
+                        SelectedCategory = p.Category.Title,
+                        SelectedTags = p.Tags.Select(t => t.Title).ToList()
+                    }))
+                    .ForMember(m => m.LanguageId, o => o.Ignore())
+                    .ForMember(m => m.TypeTitle, o => o.Ignore())
+                    .ForMember(m => m.GroupId, o => o.Ignore())
+                    .ForMember(m => m.GroupTitle, o => o.Ignore())
+                    .ForMember(m => m.Features, o => o.Ignore())
+                    .ForMember(m => m.Position, o => o.Ignore())
+                    .ForMember(m => m.AltTitle, o => o.Ignore())
+                    .ForMember(m => m.State, o => o.Ignore())
+                    .ForMember(m => m.Blocks, o => o.Ignore())
+                    .ForMember(m => m.Regions, o => o.Ignore())
+                    .ForMember(m => m.Editors, o => o.Ignore());
+
+                cfg.CreateMap<ContentModel, PageBase>()
+                    .ForMember(p => p.SiteId, o => o.MapFrom(m => m.Position.SiteId))
+                    .ForMember(p => p.SortOrder, o => o.MapFrom(m => m.Position.SortOrder))
+                    .ForMember(p => p.IsHidden, o => o.MapFrom(m => m.Position.IsHidden))
+                    .ForMember(p => p.MetaTitle, o => o.MapFrom(m => m.Meta.MetaTitle))
+                    .ForMember(p => p.MetaKeywords, o => o.MapFrom(m => m.Meta.MetaKeywords))
+                    .ForMember(p => p.MetaDescription, o => o.MapFrom(m => m.Meta.MetaDescription))
+                    .ForMember(p => p.MetaFollow, o => o.MapFrom(m => m.Meta.MetaFollow))
+                    .ForMember(p => p.MetaIndex, o => o.MapFrom(m => m.Meta.MetaIndex))
+                    .ForMember(p => p.MetaPriority, o => o.MapFrom(m => m.Meta.MetaPriority))
+                    .ForMember(p => p.OgTitle, o => o.MapFrom(m => m.Meta.OgTitle))
+                    .ForMember(p => p.OgImage, o => o.MapFrom(m => m.Meta.OgImage))
+                    .ForMember(p => p.OgDescription, o => o.MapFrom(m => m.Meta.OgDescription))
+                    .ForMember(p => p.NavigationTitle, o => o.MapFrom(m => m.AltTitle))
+                    .ForMember(p => p.EnableComments, o => o.MapFrom(m => m.Features.UseComments))
+                    .ForMember(p => p.CloseCommentsAfterDays, o => o.MapFrom(m => m.Comments.CloseCommentsAfterDays))
+                    .ForMember(p => p.CommentCount, o => o.MapFrom(m => m.Comments.CommentCount))
+                    .ForMember(p => p.RedirectUrl, o => o.MapFrom(m => m.Routes.RedirectUrl))
+                    .ForMember(p => p.RedirectType, o => o.MapFrom(m => m.Routes.RedirectType))
+                    .ForMember(p => p.Route, o => o.MapFrom(m => m.Routes.SelectedRoute.Route))
+                    .ForMember(p => p.Blocks, o => o.Ignore())
+                    .ForMember(p => p.OriginalPageId, o => o.Ignore())
+                    .ForMember(p => p.Permalink, o => o.Ignore())
+                    .ForMember(p => p.Permissions, o => o.Ignore())
+                    .ForMember(p => p.Created, o => o.Ignore())
+                    .ForMember(p => p.LastModified, o => o.Ignore());
+            });
+            mapperConfig.AssertConfigurationIsValid();
+            Mapper = mapperConfig.CreateMapper();
         }
 
         /// <summary>

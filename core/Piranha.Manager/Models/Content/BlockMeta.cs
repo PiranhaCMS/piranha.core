@@ -16,6 +16,11 @@ namespace Piranha.Manager.Models.Content
     public class BlockMeta : ContentMeta
     {
         /// <summary>
+        /// Gets/sets the title if used in a list.
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
         /// Gets/sets if this is a block group.
         /// </summary>
         public bool IsGroup { get; set; } = false;

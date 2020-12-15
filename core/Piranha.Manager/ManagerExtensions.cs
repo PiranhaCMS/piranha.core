@@ -41,6 +41,9 @@ public static class ManagerModuleExtensions
         services.AddScoped<PostService>();
         services.AddScoped<SiteService>();
 
+        services.AddScoped<ContentServiceLabs>();
+        services.AddScoped<TransformationService>();
+
         // Add localization service
         services.AddScoped<ManagerLocalizer>();
 
