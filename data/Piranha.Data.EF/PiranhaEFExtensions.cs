@@ -17,12 +17,42 @@ using System;
 
 public static class PiranhaEFExtensions
 {
-    public static PiranhaServiceBuilder UseEF<T>(this PiranhaServiceBuilder serviceBuilder, Action<DbContextOptionsBuilder> dboptions,
+    /// <summary>
+    /// Adds the DbContext and the default services needed to run
+    /// Piranha over Entity Framework Core.
+    /// </summary>
+    /// <param name="serviceBuilder">The current service builder</param>
+    /// <param name="dboptions">The DbContext options builder</param>
+    /// <param name="poolSize">The optional connection pool size. Default value is 128</param>
+    /// <param name="scope">The optional lifetime</param>
+    /// <typeparam name="T">The DbContext type</typeparam>
+    /// <returns>The updated service collection</returns>
+    public static PiranhaServiceBuilder UseEF<T>(this PiranhaServiceBuilder serviceBuilder,
+        Action<DbContextOptionsBuilder> dboptions, int poolSize = 128,
         ServiceLifetime scope = ServiceLifetime.Scoped) where T : DbContext, IDb
     {
-        serviceBuilder.Services.AddPiranhaEF<T>(dboptions, scope);
+        serviceBuilder.Services.AddPiranhaEF<T>(dboptions, poolSize, scope);
 
         return serviceBuilder;
+    }
+
+    /// <summary>
+    /// Adds the DbContext and the default services needed to run
+    /// Piranha over Entity Framework Core.
+    /// </summary>
+    /// <param name="services">The current service collection</param>
+    /// <param name="dboptions">The DbContext options builder</param>
+    /// <param name="poolSize">The optional connection pool size. Default value is 128</param>
+    /// <param name="scope">The optional lifetime</param>
+    /// <typeparam name="T">The DbContext type</typeparam>
+    /// <returns>The updated service collection</returns>
+    public static IServiceCollection AddPiranhaEF<T>(this IServiceCollection services,
+        Action<DbContextOptionsBuilder> dboptions, int poolSize = 128,
+        ServiceLifetime scope = ServiceLifetime.Scoped) where T : DbContext, IDb
+    {
+        services.AddDbContextPool<T>(dboptions, poolSize);
+
+        return RegisterServices<T>(services, scope);
     }
 
     /// <summary>
@@ -33,7 +63,7 @@ public static class PiranhaEFExtensions
     /// <param name="scope">The optional lifetime</param>
     /// <typeparam name="T">The DbContext type</typeparam>
     /// <returns>The updated service collection</returns>
-    public static IServiceCollection AddPiranhaEF<T>(this IServiceCollection services,
+    private static IServiceCollection RegisterServices<T>(this IServiceCollection services,
         ServiceLifetime scope = ServiceLifetime.Scoped) where T : DbContext, IDb
     {
         // Add the identity module
@@ -61,23 +91,5 @@ public static class PiranhaEFExtensions
         services.Add(new ServiceDescriptor(typeof(IDb), typeof(T), scope));
 
         return services;
-    }
-
-    /// <summary>
-    /// Adds the DbContext and the default services needed to run
-    /// Piranha over Entity Framework Core.
-    /// </summary>
-    /// <param name="services">The current service collection</param>
-    /// <param name="dboptions">The DbContext options builder</param>
-    /// <param name="scope">The optional lifetime</param>
-    /// <typeparam name="T">The DbContext type</typeparam>
-    /// <returns>The updated service collection</returns>
-    public static IServiceCollection AddPiranhaEF<T>(this IServiceCollection services,
-        Action<DbContextOptionsBuilder> dboptions,
-        ServiceLifetime scope = ServiceLifetime.Scoped) where T : DbContext, IDb
-    {
-        services.AddDbContext<T>(dboptions);
-
-        return AddPiranhaEF<T>(services, scope);
     }
 }
