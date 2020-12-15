@@ -923,7 +923,21 @@ Vue.component("checkbox-field", {
 });
 Vue.component("color-field", {
   props: ["uid", "model", "meta"],
-  template: "\n<div class=\"input-group color-field\">\n    <div class=\"input-group-prepend\">\n        <div class=\"color-preview\" :style=\"{ backgroundColor: model.value }\"></div>\n        <input class=\"form-control\" type=\"color\" v-model=\"model.value\">\n    </div>\n    <input class=\"form-control\" type=\"text\" v-model=\"model.value\" :placeholder=\"meta.placeholder\">\n</div>    \n"
+  methods: {
+    update: function () {
+      // Tell parent that title has been updated
+      if (this.meta.notifyChange) {
+        this.$emit('update-title', {
+          uid: this.uid,
+          title: this.model.value
+        });
+      }
+    },
+    readonly: function () {
+      return this.meta.settings.DisallowInput != null && this.meta.settings.DisallowInput;
+    }
+  },
+  template: "\n<div class=\"input-group color-field\">\n    <div class=\"input-group-prepend\">\n        <div class=\"color-preview\" :style=\"{ backgroundColor: model.value }\"></div>\n        <input class=\"form-control\" type=\"color\" v-model=\"model.value\">\n    </div>\n    <input class=\"form-control\" type=\"text\" v-model=\"model.value\" v-on:change=\"update()\" :readonly=\"readonly()\" :placeholder=\"meta.placeholder\">\n</div>    \n"
 });
 Vue.component("data-select-field", {
   props: ["uid", "model", "meta"],
