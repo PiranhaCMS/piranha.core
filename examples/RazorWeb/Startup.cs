@@ -62,6 +62,11 @@ namespace RazorWeb
             // Configure cache level
             App.CacheLevel = Piranha.Cache.CacheLevel.Full;
 
+            // Register custom components
+            App.Blocks.Register<MyWeb.Blocks.RawHtmlBlock>();
+            App.Modules.Manager().Scripts.Add("~/assets/custom-blocks.js");
+            App.Modules.Manager().Styles.Add("~/assets/custom-blocks.css");
+
             // Build content types
             new ContentTypeBuilder(api)
                 .AddAssembly(typeof(Startup).Assembly)
