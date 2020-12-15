@@ -19,7 +19,7 @@ namespace Piranha.Extend
     public class ColorFieldSettingsAttribute : FieldSettingsAttribute
     {
         /// <summary>
-        /// Gets/sets if allowing manual input.
+        /// Gets/sets if disallowing manual input.
         /// </summary>
         public bool DisallowInput { get; set; }
 
