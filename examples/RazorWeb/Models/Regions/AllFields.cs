@@ -36,6 +36,7 @@ namespace RazorWeb.Models.Regions
         public CheckBoxField CheckBox { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
+        [ColorFieldSettings(DisallowInput = true)]
         public ColorField Color { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
