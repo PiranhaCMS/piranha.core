@@ -18,7 +18,7 @@ namespace Piranha.Models
     /// Base class for post models.
     /// </summary>
     [Serializable]
-    public abstract class PostBase : RoutedContentBase
+    public abstract class PostBase : RoutedContentBase, ICategorizedContent, ITaggedContent
     {
         /// <summary>
         /// Gets/sets the blog page id.

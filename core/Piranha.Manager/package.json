@@ -27,7 +27,7 @@
     "jquery": "^3.5.1",
     "nestable2": "1.6.0",
     "popper.js": "1.16.0",
-    "select2": "4.0.8",
+    "select2": "4.0.13",
     "simplemde": "1.11.2",
     "through2": "^3.0.1",
     "uglify-es": "3.3.10",

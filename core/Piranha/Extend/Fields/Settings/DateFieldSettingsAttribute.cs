@@ -10,19 +10,14 @@
 
 using System;
 
-namespace Piranha.Extend
+namespace Piranha.Extend.Fields.Settings
 {
     /// <summary>
-    /// Base class for field settings.
+    /// Settings for date fields.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    public class StringFieldSettingsAttribute : FieldSettingsAttribute
+    public class DateFieldSettingsAttribute : RequiredFieldSettingsAttribute
     {
-        /// <summary>
-        /// Gets/sets the optional max length of the field.
-        /// </summary>
-        public int MaxLength { get; set; }
-
         /// <summary>
         /// Gets/sets the optional default value for field.
         /// </summary>

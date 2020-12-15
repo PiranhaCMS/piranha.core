@@ -36,5 +36,10 @@ namespace Piranha.Manager.Models.Content
         /// Gets/sets the field options
         /// </summary>
         public IDictionary<int, string> Options { get; set; } = new Dictionary<int, string>();
+
+        /// <summary>
+        /// Gets/sets the optional field settings.
+        /// </summary>
+        public IDictionary<string, object> Settings { get; set; } = new Dictionary<string, object>();
     }
 }

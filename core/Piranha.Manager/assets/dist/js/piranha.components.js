@@ -921,6 +921,10 @@ Vue.component("checkbox-field", {
   props: ["uid", "model", "meta"],
   template: "\n<div class=\"form-group form-check\">\n    <input type=\"checkbox\" class=\"form-check-input\" :id=\"meta.uid\" v-model=\"model.value\">\n    <label class=\"form-check-label\" :for=\"meta.uid\">{{ meta.placeholder}}</label>\n</div>\n"
 });
+Vue.component("color-field", {
+  props: ["uid", "model", "meta"],
+  template: "\n<div class=\"input-group color-field\">\n    <div class=\"input-group-prepend\">\n        <div class=\"color-preview\" :style=\"{ backgroundColor: model.value }\"></div>\n        <input class=\"form-control\" type=\"color\" v-model=\"model.value\">\n    </div>\n    <input class=\"form-control\" type=\"text\" v-model=\"model.value\" :placeholder=\"meta.placeholder\">\n</div>    \n"
+});
 Vue.component("data-select-field", {
   props: ["uid", "model", "meta"],
   methods: {
@@ -1340,9 +1344,15 @@ Vue.component("string-field", {
           title: this.model.value
         });
       }
+    },
+    maxLength: function () {
+      return this.meta.settings.MaxLength != null && this.meta.settings.MaxLength > 0 ? this.meta.settings.MaxLength : null;
+    },
+    isRequired: function () {
+      return this.meta.settings.IsRequired != null && this.meta.settings.IsRequired;
     }
   },
-  template: "\n<input class=\"form-control\" type=\"text\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\">\n"
+  template: "\n<input class=\"form-control\" type=\"text\" :maxlength=\"maxLength()\" :required=\"isRequired()\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\">\n"
 });
 Vue.component("text-field", {
   props: ["uid", "model", "meta"],

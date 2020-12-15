@@ -664,6 +664,32 @@ namespace Piranha.AttributeBuilder
                     {
                         fieldType.Description = descAttr.Text;
                     }
+
+                    // Get optional settings
+                    var settingsAttr = prop.GetCustomAttribute<FieldSettingsAttribute>();
+                    if (settingsAttr != null)
+                    {
+                        foreach (var setting in settingsAttr.GetType().GetProperties(BindingFlags.Instance|BindingFlags.Public|BindingFlags.DeclaredOnly))
+                        {
+                            if (fieldType.Settings.TryGetValue(setting.Name, out var existing))
+                            {
+                                if (!(existing is IList))
+                                {
+                                    existing = new ArrayList()
+                                    {
+                                        existing
+                                    };
+                                    fieldType.Settings[setting.Name] = existing;
+                                }
+
+                                ((IList)existing).Add(setting.GetValue(settingsAttr));
+                            }
+                            else
+                            {
+                                fieldType.Settings[setting.Name] = setting.GetValue(settingsAttr);
+                            }
+                        }
+                    }
                     return fieldType;
                 }
             }

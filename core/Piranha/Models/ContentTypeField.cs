@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace Piranha.Models
 {
@@ -46,5 +47,10 @@ namespace Piranha.Models
         /// the manager interface.
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Gets/sets the available field settings.
+        /// </summary>
+        public IDictionary<string, object> Settings = new Dictionary<string, object>();
     }
 }
