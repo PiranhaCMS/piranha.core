@@ -1,10 +1,10 @@
-@page "~/manager/post/{action}/{id}/{postType?}"
+@page "~/manager/post/{routeAction}/{id}/{postType?}"
 @model PostEditViewModel
 @inject ManagerLocalizer Localizer
 @{
     ViewBag.Title = Localizer.Page["Edit post"];
     ViewBag.MenuItem = "Pages";
-    string action = ((string)RouteData.Values["action"]).ToLower();
+    string action = ((string)RouteData.Values["routeAction"]).ToLower();
 }
 @section script
 {
