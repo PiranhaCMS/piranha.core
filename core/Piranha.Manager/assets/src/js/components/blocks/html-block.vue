@@ -14,7 +14,7 @@ export default {
     },
     methods: {
         onBlur: function (e) {
-            this.model.body.value = e.target.innerHTML;
+            this.model.body.value = tinyMCE.activeEditor.getContent();
         },
         onChange: function (data) {
             this.model.body.value = data;
