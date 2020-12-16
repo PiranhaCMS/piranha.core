@@ -171,6 +171,7 @@ piranha.siteedit = new Vue({
                     self.hostnames = result.hostnames;
                     self.isDefault = result.isDefault;
                     self.siteTypes = result.siteTypes;
+                    self.languages = result.languages;
 
                     self.isNew = true;
                     self.callback = cb;
