@@ -947,7 +947,7 @@ Vue.component("data-select-field", {
       if (this.meta.notifyChange) {
         this.$emit('update-title', {
           uid: this.uid,
-          title: this.model.items.$values[this.model.id]
+          title: this.model.items.$values.find(v => v.id === this.model.id).name
         });
       }
     }
