@@ -16,154 +16,154 @@
     <value>Lisää</value>
   </data>
   <data name="Advanced" xml:space="preserve">
-    <value>Advanced</value>
+    <value>Lisäasetukset</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>All</value>
+    <value>Kaikki</value>
   </data>
   <data name="An error occurred" xml:space="preserve">
-    <value>An error occurred</value>
+    <value>Tapahtui virhe</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Peruuta</value>
   </data>
   <data name="Content" xml:space="preserve">
-    <value>Content</value>
+    <value>Sisältö</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Continue</value>
+    <value>Jatka</value>
   </data>
   <data name="Content type" xml:space="preserve">
-    <value>Content type</value>
+    <value>Sisällön tyyppi</value>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Copy</value>
+    <value>Kopioi</value>
   </data>
   <data name="Culture" xml:space="preserve">
-    <value>Culture</value>
+    <value>Kulttuuri</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Oletus</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Poista</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Description</value>
+    <value>Kuvaus</value>
   </data>
   <data name="Details" xml:space="preserve">
-    <value>Details</value>
+    <value>Tiedot</value>
   </data>
   <data name="Dimensions" xml:space="preserve">
-    <value>Dimensions</value>
+    <value>Mitat</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>Lataa</value>
   </data>
   <data name="Draft" xml:space="preserve">
-    <value>Draft</value>
+    <value>Luonnos</value>
   </data>
   <data name="Drafts" xml:space="preserve">
-    <value>Drafts</value>
+    <value>Luonnokset</value>
   </data>
   <data name="Email address" xml:space="preserve">
-    <value>Email address</value>
+    <value>Sähköpostiosoite</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>Sähköpostiosoite on pakollinen.</value>
   </data>
   <data name="Filename" xml:space="preserve">
-    <value>Filename</value>
+    <value>Tiedoston nimi</value>
   </data>
   <data name="Height" xml:space="preserve">
-    <value>Height</value>
+    <value>Korkeus</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>Muokkaa</value>
   </data>
   <data name="Empty" xml:space="preserve">
-    <value>Empty</value>
+    <value>Tyhjä</value>
   </data>
   <data name="General" xml:space="preserve">
-    <value>General</value>
+    <value>Yleiset</value>
   </data>
   <data name="General information" xml:space="preserve">
-    <value>General information</value>
+    <value>Yleiset tiedot</value>
   </data>
   <data name="History" xml:space="preserve">
-    <value>History</value>
+    <value>Historia</value>
   </data>
   <data name="Internal id" xml:space="preserve">
-    <value>Internal id</value>
+    <value>Sisäinen id</value>
   </data>
   <data name="Is default" xml:space="preserve">
-    <value>Is default</value>
+    <value>On oletus</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>Kieli</value>
   </data>
   <data name="Languages" xml:space="preserve">
-    <value>Languages</value>
+    <value>Kielet</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Kirjaudu</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+    <value>Kirjaudu ulos</value>
   </data>
   <data name="Looks like there's no items here. Click on the button above to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button above to get started!</value>
+    <value>Näyttää siltä, että täällä ei ole kohteita. Napsauta yllä olevaa painiketta aloittaaksesi!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button below to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button below to get started!</value>
+    <value>Näyttää siltä, että täällä ei ole kohteita. Aloita klikkaamalla alla olevaa painiketta!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button to the left to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button to the left to get started!</value>
+    <value>Näyttää siltä, että täällä ei ole kohteita. Klikkaa painiketta vasemmalle päästäksesi alkuun!</value>
   </data>
   <data name="Main content" xml:space="preserve">
-    <value>Main content</value>
+    <value>Pääsisältö</value>
   </data>
   <data name="Modified" xml:space="preserve">
-    <value>Modified</value>
+    <value>Muokattu</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>Nimi</value>
   </data>
   <data name="Name is mandatory." xml:space="preserve">
-    <value>Name is mandatory.</value>
+    <value>Nimi on pakollinen.</value>
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
-    <value>Open public URL in new tab</value>
+    <value>Avaa julkinen URL uudessa välilehdessä</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>Salasana</value>
   </data>
   <data name="Permanent" xml:space="preserve">
-    <value>Permanent</value>
+    <value>Pysyvä</value>
   </data>
   <data name="Permissions" xml:space="preserve">
-    <value>Permissions</value>
+    <value>Käyttöoikeudet</value>
   </data>
   <data name="Pixels" xml:space="preserve">
-    <value>Pixels</value>
+    <value>Pikseliä</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Preview</value>
+    <value>Esikatselu</value>
   </data>
   <data name="Publish" xml:space="preserve">
-    <value>Publish</value>
+    <value>Julkaise</value>
   </data>
   <data name="Publish date" xml:space="preserve">
-    <value>Publish date</value>
+    <value>Julkaisupäivämäärä</value>
   </data>
   <data name="Redirect" xml:space="preserve">
-    <value>Redirect</value>
+    <value>Uudelleenohjaus</value>
   </data>
   <data name="Redirect Type" xml:space="preserve">
-    <value>Redirect Type</value>
+    <value>Uudelleenohjauksen tyyppi</value>
   </data>
   <data name="Revert" xml:space="preserve">
-    <value>Revert</value>
+    <value>Palauta alkutilaan</value>
   </data>
   <data name="Roles" xml:space="preserve">
     <value>Roles</value>
