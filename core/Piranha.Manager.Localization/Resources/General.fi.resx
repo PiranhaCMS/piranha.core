@@ -166,93 +166,93 @@
     <value>Palauta alkutilaan</value>
   </data>
   <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
+    <value>Roolit</value>
   </data>
   <data name="Route" xml:space="preserve">
-    <value>Route</value>
+    <value>Reitti</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>Tallenna</value>
   </data>
   <data name="Scheduled" xml:space="preserve">
-    <value>Scheduled</value>
+    <value>Ajastettu</value>
   </data>
   <data name="Search..." xml:space="preserve">
-    <value>Search...</value>
+    <value>Etsi...</value>
   </data>
   <data name="Select block" xml:space="preserve">
-    <value>Select block</value>
+    <value>Valitse lohko</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Asetukset</value>
   </data>
   <data name="SEO" xml:space="preserve">
-    <value>SEO</value>
+    <value>Hakukoneoptimointi SEO</value>
   </data>
   <data name="Sharing" xml:space="preserve">
-    <value>Sharing</value>
+    <value>Jakaminen</value>
   </data>
   <data name="Size" xml:space="preserve">
-    <value>Size</value>
+    <value>Koko</value>
   </data>
   <data name="Slug" xml:space="preserve">
-    <value>Slug</value>
+    <value>Tunniste</value>
   </data>
   <data name="System" xml:space="preserve">
-    <value>System</value>
+    <value>Järjestelmä</value>
   </data>
   <data name="Temporary" xml:space="preserve">
-    <value>Temporary</value>
+    <value>Väliaikainen</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Otsikko</value>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Update</value>
+    <value>Päivitä</value>
   </data>
   <data name="Update password" xml:space="preserve">
-    <value>Update password</value>
+    <value>Päivitä salasana</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Username</value>
+    <value>Käyttäjätunnus</value>
   </data>
   <data name="Username is mandatory." xml:space="preserve">
-    <value>Username is mandatory.</value>
+    <value>Käyttäjätunnus on pakollinen.</value>
   </data>
   <data name="Title is mandatory." xml:space="preserve">
-    <value>Title is mandatory.</value>
+    <value>Otsikko on pakollinen.</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Type</value>
+    <value>Tyyppi</value>
   </data>
   <data name="Unpublish" xml:space="preserve">
-    <value>Unpublish</value>
+    <value>Peruuta julkaisu</value>
   </data>
   <data name="Unpublished" xml:space="preserve">
-    <value>Unpublished</value>
+    <value>Julkaisematon</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>Käyttäjät</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Version</value>
+    <value>Versio</value>
   </data>
   <data name="Width" xml:space="preserve">
-    <value>Width</value>
+    <value>Leveys</value>
   </data>
   <data name="Archives and Comments" xml:space="preserve">
-    <value>Archives and Comments</value>
+    <value>Arkistot ja kommentit</value>
   </data>
   <data name="Author" xml:space="preserve">
-    <value>Author</value>
+    <value>Kirjoittaja</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>Comments</value>
+    <value>Kommentit</value>
   </data>
   <data name="Created" xml:space="preserve">
-    <value>Created</value>
+    <value>Luotu</value>
   </data>
   <data name="Username and/or password are incorrect." xml:space="preserve">
-    <value>Username and/or password are incorrect.</value>
+    <value>Käyttäjätunnus ja/tai salasana on virheellinen.</value>
   </data>
 </root>
