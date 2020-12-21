@@ -10,7 +10,7 @@
 
 using System;
 
-namespace Piranha.Extend
+namespace Piranha.Extend.Fields.Settings
 {
     /// <summary>
     /// Base class for field settings.

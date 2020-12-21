@@ -10,6 +10,7 @@
 
 using Piranha.Extend;
 using Piranha.Extend.Fields;
+using Piranha.Extend.Fields.Settings;
 using Piranha.Models;
 
 namespace RazorWeb.Models.Regions
