@@ -370,7 +370,7 @@ piranha.postedit = new Vue({
             }
         },
         onExcerptBlur: function (e) {
-            this.excerpt = e.target.innerHTML;
+            this.excerpt = tinyMCE.activeEditor.getContent();
         }
     },
     created: function () {

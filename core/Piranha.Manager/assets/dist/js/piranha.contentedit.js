@@ -422,7 +422,7 @@ Vue.component("html-block", {
   },
   methods: {
     onBlur: function (e) {
-      this.model.body.value = e.target.innerHTML;
+      this.model.body.value = tinyMCE.activeEditor.getContent();
     },
     onChange: function (data) {
       this.model.body.value = data;
@@ -451,10 +451,12 @@ Vue.component("html-column-block", {
   },
   methods: {
     onBlurCol1: function (e) {
-      this.model.column1.value = e.target.innerHTML;
+      this.model.column1.value = tinyMCE.activeEditor.getContent();
+      ;
     },
     onBlurCol2: function (e) {
-      this.model.column2.value = e.target.innerHTML;
+      this.model.column2.value = tinyMCE.activeEditor.getContent();
+      ;
     },
     onChangeCol1: function (data) {
       this.model.column1.value = data;
