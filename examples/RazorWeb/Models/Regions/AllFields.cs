@@ -72,6 +72,7 @@ namespace RazorWeb.Models.Regions
         public PostField Post { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
+        [StringFieldSettings(MaxLength = 8)]
         public StringField String { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]

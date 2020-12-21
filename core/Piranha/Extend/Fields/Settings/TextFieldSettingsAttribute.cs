@@ -16,7 +16,7 @@ namespace Piranha.Extend.Fields.Settings
     /// Settings for text fields.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    public class TextFieldSettingsAttribute : RequiredFieldSettingsAttribute
+    public class TextFieldSettingsAttribute : FieldSettingsAttribute
     {
         /// <summary>
         /// Gets/sets the optional default value for field.

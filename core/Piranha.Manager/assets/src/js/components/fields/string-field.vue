@@ -1,5 +1,15 @@
 <template>
-    <input class="form-control" type="text" :maxlength="maxLength()" :required="isRequired()" :placeholder="meta.placeholder" v-model="model.value" v-on:change="update()">
+    <div>
+        <div v-if="maxLength() > 0" class="input-group">
+            <input class="form-control" type="text" :maxlength="maxLength()" :required="isRequired()" :placeholder="meta.placeholder" v-model="model.value" v-on:change="update()">
+            <div class="input-group-append">
+                <div class="input-group-text text-muted">
+                    {{ piranha.utils.strLength(model.value) + "/" + maxLength() }}
+                </div>
+            </div>
+        </div>
+        <input v-else class="form-control" type="text" :maxlength="maxLength()" :required="isRequired()" :placeholder="meta.placeholder" v-model="model.value" v-on:change="update()">
+    </div>
 </template>
 
 <script>
@@ -20,7 +30,8 @@ export default {
                 this.meta.settings.MaxLength : null;
         },
         isRequired: function () {
-            return this.meta.settings.IsRequired != null && this.meta.settings.IsRequired;
+            return false;
+            //return this.meta.settings.IsRequired != null && this.meta.settings.IsRequired;
         }
     }
 }

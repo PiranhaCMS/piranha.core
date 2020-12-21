@@ -422,7 +422,7 @@ Vue.component("html-block", {
   },
   methods: {
     onBlur: function (e) {
-      this.model.body.value = e.target.innerHTML;
+      this.model.body.value = tinyMCE.activeEditor.getContent();
     },
     onChange: function (data) {
       this.model.body.value = data;
@@ -451,10 +451,12 @@ Vue.component("html-column-block", {
   },
   methods: {
     onBlurCol1: function (e) {
-      this.model.column1.value = e.target.innerHTML;
+      this.model.column1.value = tinyMCE.activeEditor.getContent();
+      ;
     },
     onBlurCol2: function (e) {
-      this.model.column2.value = e.target.innerHTML;
+      this.model.column2.value = tinyMCE.activeEditor.getContent();
+      ;
     },
     onChangeCol1: function (data) {
       this.model.column1.value = data;
@@ -1366,7 +1368,7 @@ Vue.component("string-field", {
       return this.meta.settings.IsRequired != null && this.meta.settings.IsRequired;
     }
   },
-  template: "\n<input class=\"form-control\" type=\"text\" :maxlength=\"maxLength()\" :required=\"isRequired()\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\">\n"
+  template: "\n<div>\n    <div v-if=\"maxLength() > 0\" class=\"input-group\">\n        <input class=\"form-control\" type=\"text\" :maxlength=\"maxLength()\" :required=\"isRequired()\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\">\n        <div class=\"input-group-append\">\n            <div class=\"input-group-text text-muted\">\n                {{ piranha.utils.strLength(model.value) + \"/\" + maxLength() }}\n            </div>\n        </div>\n    </div>\n    <input v-else class=\"form-control\" type=\"text\" :maxlength=\"maxLength()\" :required=\"isRequired()\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\">\n</div>\n"
 });
 Vue.component("text-field", {
   props: ["uid", "model", "meta"],
@@ -1385,9 +1387,15 @@ Vue.component("text-field", {
           title: title
         });
       }
+    },
+    maxLength: function () {
+      return this.meta.settings.MaxLength != null && this.meta.settings.MaxLength > 0 ? this.meta.settings.MaxLength : null;
+    },
+    isRequired: function () {
+      return this.meta.settings.IsRequired != null && this.meta.settings.IsRequired;
     }
   },
-  template: "\n<textarea class=\"form-control\" rows=\"4\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\"></textarea>\n"
+  template: "\n<div>\n    <div v-if=\"maxLength() > 0\" class=\"input-group\">\n        <textarea class=\"form-control\" rows=\"4\" :maxlength=\"maxLength()\" :required=\"isRequired()\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\"></textarea>\n        <div class=\"input-group-append\">\n            <div class=\"input-group-text text-muted\">\n                {{ piranha.utils.strLength(model.value) + \"/\" + maxLength() }}\n            </div>\n        </div>\n    </div>\n    <textarea v-else class=\"form-control\" rows=\"4\" :maxlength=\"maxLength()\" :required=\"isRequired()\" :placeholder=\"meta.placeholder\" v-model=\"model.value\" v-on:change=\"update()\"></textarea>\n</div>\n"
 });
 Vue.component("video-field", {
   props: ["uid", "model", "meta"],

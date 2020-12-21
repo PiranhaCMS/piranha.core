@@ -25,7 +25,7 @@ namespace RazorWeb.Models.Regions
         /// Gets/sets the optional subtitle.
         /// </summary>
         [Field(Options = FieldOption.HalfWidth)]
-        [StringFieldSettings(MaxLength = 32, DefaultValue = "Olle", IsRequired = true)]
+        [StringFieldSettings(MaxLength = 32, DefaultValue = "Olle")]
         public StringField Subtitle { get; set; }
 
         /// <summary>
