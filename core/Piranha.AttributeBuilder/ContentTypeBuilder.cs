@@ -395,6 +395,13 @@ namespace Piranha.AttributeBuilder
                     }
                 }
 
+                // Add block types
+                var blockTypes = type.GetCustomAttributes<BlockItemTypeAttribute>();
+                foreach (var blockType in blockTypes)
+                {
+                    pageType.BlockItemTypes.Add(blockType.Type.FullName);
+                }
+
                 return pageType;
             }
             return null;
@@ -419,7 +426,7 @@ namespace Piranha.AttributeBuilder
                 }
 
                 // Create post type
-                return new PostType
+                var postType = new PostType
                 {
                     Id = attr.Id,
                     CLRType = type.GetTypeInfo().AssemblyQualifiedName,
@@ -431,6 +438,15 @@ namespace Piranha.AttributeBuilder
                     CustomEditors = GetEditors(type),
                     Regions = GetRegions(type)
                 };
+
+                // Add block types
+                var blockTypes = type.GetCustomAttributes<BlockItemTypeAttribute>();
+                foreach (var blockType in blockTypes)
+                {
+                    postType.BlockItemTypes.Add(blockType.Type.FullName);
+                }
+
+                return postType;
             }
             return null;
         }

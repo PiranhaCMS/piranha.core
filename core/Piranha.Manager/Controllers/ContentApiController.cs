@@ -40,6 +40,34 @@ namespace Piranha.Manager.Controllers
         }
 
         /// <summary>
+        /// Gets the currently available block types for the
+        /// specified page type.
+        /// </summary>
+        /// <param name="pageType">The page type id</param>
+        /// <param name="parentType">The optional parent group type</param>
+        /// <returns>The block list model</returns>
+        [Route("blocktypes/page/{pageType}/{parentType?}")]
+        [HttpGet]
+        public BlockListModel GetBlockTypesForPage(string pageType, string parentType = null)
+        {
+            return _contentType.GetPageBlockTypes(pageType, parentType);
+        }
+
+        /// <summary>
+        /// Gets the currently available block types for the
+        /// specified post type.
+        /// </summary>
+        /// <param name="postType">The post type id</param>
+        /// <param name="parentType">The optional parent group type</param>
+        /// <returns>The block list model</returns>
+        [Route("blocktypes/post/{postType}/{parentType?}")]
+        [HttpGet]
+        public BlockListModel GetBlockTypesForPost(string postType, string parentType = null)
+        {
+            return _contentType.GetPageBlockTypes(postType, parentType);
+        }
+
+        /// <summary>
         /// Gets the currently available block types.
         /// </summary>
         /// <param name="parentType">The optional parent group type</param>
@@ -116,7 +144,7 @@ namespace Piranha.Manager.Controllers
         public async Task<ContentEditModel> Get(Guid id)
         {
            return await _content.GetByIdAsync(id);
-        } 
+        }
 
         /// <summary>
         ///

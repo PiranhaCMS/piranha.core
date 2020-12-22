@@ -38,6 +38,58 @@ namespace Piranha.Manager.Services
         }
 
         /// <summary>
+        /// Gets the currently available block types for the
+        /// specified page type.
+        /// </summary>
+        /// <param name="pageType">The page type id</param>
+        /// <param name="parentType">The optional parent group type</param>
+        /// <returns>The block list model</returns>
+        public BlockListModel GetPageBlockTypes(string pageType, string parentType = null)
+        {
+            var type = App.PageTypes.GetById(pageType);
+            var model = GetBlockTypes(parentType);
+
+            if (type != null && type.BlockItemTypes.Count > 0)
+            {
+                // First remove all block types that are not allowed
+                foreach (var category in model.Categories)
+                {
+                    category.Items = category.Items.Where(i => type.BlockItemTypes.Contains(i.Type)).ToList();
+                }
+
+                // Secondly remove all empty categories
+                model.Categories = model.Categories.Where(c => c.Items.Count > 0).ToList();
+            }
+            return model;
+        }
+
+        /// <summary>
+        /// Gets the currently available block types for the
+        /// specified post type.
+        /// </summary>
+        /// <param name="postType">The post type id</param>
+        /// <param name="parentType">The optional parent group type</param>
+        /// <returns>The block list model</returns>
+        public BlockListModel GetPostBlockTypes(string postType, string parentType = null)
+        {
+            var type = App.PostTypes.GetById(postType);
+            var model = GetBlockTypes(parentType);
+
+            if (type != null && type.BlockItemTypes.Count > 0)
+            {
+                // First remove all block types that are not allowed
+                foreach (var category in model.Categories)
+                {
+                    category.Items = category.Items.Where(i => type.BlockItemTypes.Contains(i.Type)).ToList();
+                }
+
+                // Secondly remove all empty categories
+                model.Categories = model.Categories.Where(c => c.Items.Count > 0).ToList();
+            }
+            return model;
+        }
+
+        /// <summary>
         /// Gets the currently available block types.
         /// </summary>
         /// <param name="parentType">The optional parent group type</param>
