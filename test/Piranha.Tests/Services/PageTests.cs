@@ -10,15 +10,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Piranha.AttributeBuilder;
-using Piranha.Data.EF.SQLite;
 using Piranha.Extend;
 using Piranha.Extend.Fields;
 using Piranha.Models;
@@ -804,6 +803,23 @@ namespace Piranha.Tests.Services
 
                 var param = await api.Params.GetByKeyAsync(Piranha.Config.PAGES_HIERARCHICAL_SLUGS);
                 await api.Params.DeleteAsync(param);
+            }
+        }
+
+        [Fact]
+        public async Task AddDuplicateSlugShouldThrow()
+        {
+            using (var api = CreateApi())
+            {
+                var page = await MyPage.CreateAsync(api);
+                page.SiteId = SITE_ID;
+                page.Title = "My first page";
+                page.Published = DateTime.Now;
+
+                await Assert.ThrowsAsync<ValidationException>(async () =>
+                {
+                    await api.Pages.SaveAsync(page);
+                });
             }
         }
 
