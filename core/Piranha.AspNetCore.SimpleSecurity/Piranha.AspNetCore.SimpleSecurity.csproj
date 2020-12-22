@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <Version>9.0.0-alpha3</Version>
+    <Version>9.0.0-beta1</Version>
     <Company>Piranha CMS</Company>
     <RootNamespace>Piranha.AspNetCore</RootNamespace>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
@@ -13,7 +13,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
     <PackageId>Piranha.AspNetCore.SimpleSecurity</PackageId>
-    <PackageVersion>9.0.0-alpha3</PackageVersion>
+    <PackageVersion>9.0.0-beta1</PackageVersion>
     <Authors>Piranha CMS</Authors>
     <Description>Piranha CMS simple security provider for AspNetCore</Description>
     <Copyright>Copyright (c) .NET Foundation and Contributors</Copyright>
@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="5.0.1" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
     <ProjectReference Include="..\Piranha\Piranha.csproj" />
   </ItemGroup>
