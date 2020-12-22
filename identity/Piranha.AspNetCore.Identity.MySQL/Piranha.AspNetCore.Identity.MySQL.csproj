@@ -2,26 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <Version>9.0.0-beta1</Version>
-    <Company>Piranha CMS</Company>
-    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-
-    <PackageId>Piranha.AspNetCore.Identity.MySQL</PackageId>
-    <PackageVersion>9.0.0-beta1</PackageVersion>
-    <Authors>Piranha CMS</Authors>
     <Description>Piranha CMS AspNetCore Identity provider for MySQL</Description>
-    <Copyright>Copyright (c) .NET Foundation and Contributors</Copyright>
-    <PackageTags>cms mvc aspnetcore netstandard</PackageTags>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageIcon>piranha.png</PackageIcon>
-    <PackageProjectUrl>https://github.com/piranhacms/piranha.core</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/piranhacms/piranha.core</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
