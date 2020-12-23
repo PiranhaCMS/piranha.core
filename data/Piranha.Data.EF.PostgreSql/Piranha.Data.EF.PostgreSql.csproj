@@ -17,11 +17,4 @@
     <ProjectReference Include="..\..\core\Piranha\Piranha.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="piranha.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
-
 </Project>
