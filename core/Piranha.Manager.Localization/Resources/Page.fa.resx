@@ -34,13 +34,13 @@
     <value>پنهان</value>
   </data>
   <data name="If the page should be hidden in the sitemap" xml:space="preserve">
-    <value>If the page should be hidden in the sitemap</value>
+    <value>اگر می‌خواهید صفحه در نقشه سایت نمایش داده نشود</value>
   </data>
   <data name="If the page should be indexed by search engines." xml:space="preserve">
-    <value>If the page should be indexed by search engines.</value>
+    <value>اگر می‌خواهید صفحه توسط موتورهای جستجو ایندکس شود.</value>
   </data>
   <data name="If links from this page should be indexed." xml:space="preserve">
-    <value>If links from this page should be indexed.</value>
+    <value>اگر می‌خواهید پیوندهای این صفحه ایندکس شود.</value>
   </data>
   <data name="Meta title" xml:space="preserve">
     <value>عنوان تگ متا</value>
@@ -52,51 +52,51 @@
     <value>توضیحات تگ متا</value>
   </data>
   <data name="Og title" xml:space="preserve">
-    <value>Og title</value>
+    <value>عنوان تگ Og</value>
   </data>
   <data name="Og image" xml:space="preserve">
-    <value>Og image</value>
+    <value>تصویر تگ Og</value>
   </data>
   <data name="Og description" xml:space="preserve">
-    <value>Og description</value>
+    <value>توضیحات تگ Og</value>
   </data>
   <data name="Navigation title" xml:space="preserve">
-    <value>Navigation title</value>
+    <value>عنوان پیمایش</value>
   </data>
   <data name="Are you sure you want to delete this page?" xml:space="preserve">
-    <value>Are you sure you want to delete this page?</value>
+    <value>آيا مطمئن هستيد که می خواهيد اين صفحه را حذف کنيد؟</value>
   </data>
   <data name="Pages" xml:space="preserve">
     <value>صفحات</value>
   </data>
   <data name="The page was successfully deleted" xml:space="preserve">
-    <value>The page was successfully deleted</value>
+    <value>صفحه با موفقیت حذف شد</value>
   </data>
   <data name="The page was successfully detached from the original" xml:space="preserve">
-    <value>The page was successfully detached from the original</value>
+    <value>صفحه با موفقیت از نسخه اصلی جدا شد</value>
   </data>
   <data name="The page was successfully published" xml:space="preserve">
-    <value>The page was successfully published</value>
+    <value>صفحه با موفقیت منتشر شد</value>
   </data>
   <data name="The page was successfully unpublished" xml:space="preserve">
-    <value>The page was successfully unpublished</value>
+    <value>صفحه با موفقیت لغو انتشار شد</value>
   </data>
   <data name="The page was successfully saved" xml:space="preserve">
-    <value>The page was successfully saved</value>
+    <value>صفحه با موفقیت ذخیره شد</value>
   </data>
   <data name="The page was successfully reverted to its previous state" xml:space="preserve">
-    <value>The page was successfully reverted to its previous state</value>
+    <value>صفحه با موفقیت به حالت قبلی خود برگردانده شد</value>
   </data>
   <data name="This is a copy. In order to edit the content of the page you first need to detach it from the original. If you want to keep the page as a copy you should edit the content of the original page." xml:space="preserve">
-    <value>This is a copy. In order to edit the content of the page you first need to detach it from the original. If you want to keep the page as a copy you should edit the content of the original page.</value>
+    <value>این یک کپی است برای ویرایش محتوای صفحه ابتدا باید آن را از نسخه اصلی جدا کنید. اگر می خواهید صفحه را به عنوان کپی نگه دارید ، باید محتوای صفحه اصلی را ویرایش کنید.</value>
   </data>
   <data name="Welcome to your new page. Click on the button above to add your first block of content!" xml:space="preserve">
-    <value>Welcome to your new page. Click on the button above to add your first block of content!</value>
+    <value>به صفحه جدید خود خوش آمدید روی دکمه بالا کلیک کنید تا اولین محتوا را اضافه کنید!</value>
   </data>
   <data name="Your page title" xml:space="preserve">
-    <value>Your page title</value>
+    <value>عنوان صفحه شما</value>
   </data>
   <data name="If comments should be enabled for this page" xml:space="preserve">
-    <value>If comments should be enabled for this page</value>
+    <value>اگر می‌خواهید نظرات را برای این صفحه فعال باشد</value>
   </data>
 </root>
