@@ -31,136 +31,136 @@
     <value>محتوا</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Continue</value>
+    <value>ادامه</value>
   </data>
   <data name="Content type" xml:space="preserve">
-    <value>Content type</value>
+    <value>نوع محتوا</value>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Copy</value>
+    <value>رونوشت‌</value>
   </data>
   <data name="Culture" xml:space="preserve">
-    <value>Culture</value>
+    <value>فرهنگ</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>پیش‌فرض</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>حذف</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Description</value>
+    <value>توضیحات</value>
   </data>
   <data name="Details" xml:space="preserve">
-    <value>Details</value>
+    <value>جزئیات</value>
   </data>
   <data name="Dimensions" xml:space="preserve">
-    <value>Dimensions</value>
+    <value>ابعاد</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>دانلود</value>
   </data>
   <data name="Draft" xml:space="preserve">
-    <value>Draft</value>
+    <value>پیش‌نویس</value>
   </data>
   <data name="Drafts" xml:space="preserve">
-    <value>Drafts</value>
+    <value>پیش‌نویس‌ها</value>
   </data>
   <data name="Email address" xml:space="preserve">
-    <value>Email address</value>
+    <value>آدرس ایمیل</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>Email address is mandatory.</value>
+    <value>آدرس ایمیل الزامی است.</value>
   </data>
   <data name="Filename" xml:space="preserve">
-    <value>Filename</value>
+    <value>نام فایل</value>
   </data>
   <data name="Height" xml:space="preserve">
-    <value>Height</value>
+    <value>ارتفاع</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>ویرایش</value>
   </data>
   <data name="Empty" xml:space="preserve">
-    <value>Empty</value>
+    <value>خالی</value>
   </data>
   <data name="General" xml:space="preserve">
-    <value>General</value>
+    <value>عمومی</value>
   </data>
   <data name="General information" xml:space="preserve">
-    <value>General information</value>
+    <value>اطلاعات عمومی</value>
   </data>
   <data name="History" xml:space="preserve">
-    <value>History</value>
+    <value>تاريخچه</value>
   </data>
   <data name="Internal id" xml:space="preserve">
-    <value>Internal id</value>
+    <value>شناسه داخلی</value>
   </data>
   <data name="Is default" xml:space="preserve">
-    <value>Is default</value>
+    <value>پیش‌فرض است</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>زبان</value>
   </data>
   <data name="Languages" xml:space="preserve">
-    <value>Languages</value>
+    <value>زبان‌ها</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>ورود</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+    <value>خروج</value>
   </data>
   <data name="Looks like there's no items here. Click on the button above to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button above to get started!</value>
+    <value>به نظر در اینجا هیچ موردی وجود ندارد. برای شروع بر روی دکمه بالا کلیک کنید!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button below to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button below to get started!</value>
+    <value>به نظر در اینجا هیچ موردی وجود ندارد. برای شروع بر روی دکمه پایین کلیک کنید!</value>
   </data>
   <data name="Looks like there's no items here. Click on the button to the left to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button to the left to get started!</value>
+    <value>به نظر در اینجا هیچ موردی وجود ندارد. برای شروع بر روی دکمه سمت راست کلیک کنید!</value>
   </data>
   <data name="Main content" xml:space="preserve">
-    <value>Main content</value>
+    <value>محتوای اصلی</value>
   </data>
   <data name="Modified" xml:space="preserve">
-    <value>Modified</value>
+    <value>ویرایش شده</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>نام</value>
   </data>
   <data name="Name is mandatory." xml:space="preserve">
-    <value>Name is mandatory.</value>
+    <value>نام الزامی است.</value>
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
-    <value>Open public URL in new tab</value>
+    <value>URL عمومی را در برگه جدید باز کنید</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>گذرواژه</value>
   </data>
   <data name="Permanent" xml:space="preserve">
-    <value>Permanent</value>
+    <value>دائمی</value>
   </data>
   <data name="Permissions" xml:space="preserve">
-    <value>Permissions</value>
+    <value>مجوزها</value>
   </data>
   <data name="Pixels" xml:space="preserve">
-    <value>Pixels</value>
+    <value>پیکسل‌ها</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Preview</value>
+    <value>پیش‌نمایش</value>
   </data>
   <data name="Publish" xml:space="preserve">
-    <value>Publish</value>
+    <value>انتشار</value>
   </data>
   <data name="Publish date" xml:space="preserve">
-    <value>Publish date</value>
+    <value>تاریخ انتشار</value>
   </data>
   <data name="Redirect" xml:space="preserve">
-    <value>Redirect</value>
+    <value>تغییر مسیر</value>
   </data>
   <data name="Redirect Type" xml:space="preserve">
-    <value>Redirect Type</value>
+    <value>نوع تغییر مسیر</value>
   </data>
   <data name="Revert" xml:space="preserve">
     <value>Revert</value>
