@@ -78,8 +78,9 @@ namespace Piranha.Services
         /// Creates and initializes a new block of the specified type.
         /// </summary>
         /// <param name="typeName">The type name</param>
+        /// <param name="managerInit">If manager initialization should be performed</param>
         /// <returns>The new block</returns>
-        public async Task<object> CreateBlockAsync(string typeName)
+        public async Task<object> CreateBlockAsync(string typeName, bool managerInit = false)
         {
             var blockType = App.Blocks.GetByType(typeName);
 
@@ -95,7 +96,7 @@ namespace Piranha.Services
                         if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
                         {
                             var field = Activator.CreateInstance(prop.PropertyType);
-                            await InitFieldAsync(scope, field, false).ConfigureAwait(false);
+                            await InitFieldAsync(scope, field, managerInit).ConfigureAwait(false);
                             prop.SetValue(block, field);
                         }
                     }

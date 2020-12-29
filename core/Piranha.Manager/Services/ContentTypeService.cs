@@ -270,7 +270,7 @@ namespace Piranha.Manager.Services
 
             if (blockType != null)
             {
-                var block = (Block)(await _factory.CreateBlockAsync(type));
+                var block = (Block)(await _factory.CreateBlockAsync(type, true));
 
                 if (block is BlockGroup)
                 {
