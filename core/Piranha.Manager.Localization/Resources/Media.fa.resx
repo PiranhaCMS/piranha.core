@@ -13,58 +13,58 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add folder" xml:space="preserve">
-    <value>Add folder</value>
+    <value>افزودن پوشه</value>
   </data>
   <data name="Drop files here or click to upload." xml:space="preserve">
-    <value>Drop files here or click to upload.</value>
+    <value>فایل را برای بارگزاری بکشید و اینجا رها کنید.</value>
   </data>
   <data name="Download media" xml:space="preserve">
-    <value>Download media</value>
+    <value>دانلود رسانه</value>
   </data>
   <data name="Folder name" xml:space="preserve">
-    <value>Folder name</value>
+    <value>نام پوشه</value>
   </data>
   <data name="Folder name is mandatory." xml:space="preserve">
-    <value>Folder name is mandatory.</value>
+    <value>نام پوشه الزامی است.</value>
   </data>
   <data name="Gallery" xml:space="preserve">
-    <value>Gallery</value>
+    <value>گالری</value>
   </data>
   <data name="Media" xml:space="preserve">
-    <value>Media</value>
+    <value>رسانه</value>
   </data>
   <data name="Media preview is not available" xml:space="preserve">
-    <value>Media preview is not available</value>
+    <value>پیش نمایش در دسترس نمی باشد</value>
   </data>
   <data name="Open media in new tab" xml:space="preserve">
-    <value>Open media in new tab</value>
+    <value>بازشدن رسانه دربرگه جدید</value>
   </data>
   <data name="Select media" xml:space="preserve">
-    <value>Select media</value>
+    <value>انتخاب رسانه‌</value>
   </data>
   <data name="Your browser does not support the video tag." xml:space="preserve">
-    <value>Your browser does not support the video tag.</value>
+    <value>مرورگر شما تگ ویدئو را پشتیبانی نمی‌کند.</value>
   </data>
   <data name="List" xml:space="preserve">
-    <value>List</value>
+    <value>لیست</value>
   </data>
   <data name="Preferred aspect" xml:space="preserve">
     <value>Preferred aspect</value>
   </data>
   <data name="Original" xml:space="preserve">
-    <value>Original</value>
+    <value>اصلی</value>
   </data>
   <data name="Landscape" xml:space="preserve">
-    <value>Landscape</value>
+    <value>افقی</value>
   </data>
   <data name="Portrait" xml:space="preserve">
-    <value>Portrait</value>
+    <value>عمودی</value>
   </data>
   <data name="Widescreen" xml:space="preserve">
-    <value>Widescreen</value>
+    <value>صفحه عریض</value>
   </data>
   <data name="Square" xml:space="preserve">
-    <value>Square</value>
+    <value>مربع</value>
   </data>
   <data name="Are you sure you want to delete selected media?" xml:space="preserve">
     <value>Are you sure you want to delete selected media?</value>
