@@ -13,42 +13,42 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Content" xml:space="preserve">
-    <value>Content</value>
+    <value>محتوا</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>تنظیمات</value>
   </data>
   <data name="System" xml:space="preserve">
-    <value>System</value>
+    <value>سیستم</value>
   </data>
   <data name="Pages" xml:space="preserve">
-    <value>Pages</value>
+    <value>صفحات</value>
   </data>
   <data name="Media" xml:space="preserve">
-    <value>Media</value>
+    <value>رسانه</value>
   </data>
   <data name="Aliases" xml:space="preserve">
-    <value>Aliases</value>
+    <value>نام‌های مستعار</value>
   </data>
   <data name="Sites" xml:space="preserve">
-    <value>Sites</value>
+    <value>سایت‌ها</value>
   </data>
   <data name="Config" xml:space="preserve">
-    <value>Config</value>
+    <value>پیکربندی</value>
   </data>
   <data name="Modules" xml:space="preserve">
-    <value>Modules</value>
+    <value>ماژول‌ها</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+    <value>خروج</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>Comments</value>
+    <value>نظرات</value>
   </data>
   <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
+    <value>نقش‌ها</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>کاربران</value>
   </data>
 </root>
