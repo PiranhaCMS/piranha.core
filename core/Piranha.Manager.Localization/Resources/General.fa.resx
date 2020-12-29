@@ -163,96 +163,96 @@
     <value>نوع تغییر مسیر</value>
   </data>
   <data name="Revert" xml:space="preserve">
-    <value>Revert</value>
+    <value>بازگرداندن</value>
   </data>
   <data name="Roles" xml:space="preserve">
-    <value>Roles</value>
+    <value>نقش‌ها</value>
   </data>
   <data name="Route" xml:space="preserve">
-    <value>Route</value>
+    <value>مسیر</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>ذخیره</value>
   </data>
   <data name="Scheduled" xml:space="preserve">
-    <value>Scheduled</value>
+    <value>زمان‌بندی</value>
   </data>
   <data name="Search..." xml:space="preserve">
-    <value>Search...</value>
+    <value>جستجو...</value>
   </data>
   <data name="Select block" xml:space="preserve">
-    <value>Select block</value>
+    <value>انتخاب بلوک</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>تنظیمات</value>
   </data>
   <data name="SEO" xml:space="preserve">
-    <value>SEO</value>
+    <value>سئو</value>
   </data>
   <data name="Sharing" xml:space="preserve">
-    <value>Sharing</value>
+    <value>اشتراک گذاری</value>
   </data>
   <data name="Size" xml:space="preserve">
-    <value>Size</value>
+    <value>اندازه‌</value>
   </data>
   <data name="Slug" xml:space="preserve">
-    <value>Slug</value>
+    <value>نامک</value>
   </data>
   <data name="System" xml:space="preserve">
-    <value>System</value>
+    <value>سیستم</value>
   </data>
   <data name="Temporary" xml:space="preserve">
-    <value>Temporary</value>
+    <value>موقت</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>عنوان</value>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Update</value>
+    <value>به‌روزرسانی</value>
   </data>
   <data name="Update password" xml:space="preserve">
-    <value>Update password</value>
+    <value>به روزرسانی گذرواژه</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Username</value>
+    <value>نام‌کاربری</value>
   </data>
   <data name="Username is mandatory." xml:space="preserve">
-    <value>Username is mandatory.</value>
+    <value>نام‌کاربری الزامی است.</value>
   </data>
   <data name="Title is mandatory." xml:space="preserve">
-    <value>Title is mandatory.</value>
+    <value>عنوان الزامی است.</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Type</value>
+    <value>نوع</value>
   </data>
   <data name="Unpublish" xml:space="preserve">
-    <value>Unpublish</value>
+    <value>لغو انتشار</value>
   </data>
   <data name="Unpublished" xml:space="preserve">
-    <value>Unpublished</value>
+    <value>منتشر نشده</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>کاربران</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Version</value>
+    <value>نسخه</value>
   </data>
   <data name="Width" xml:space="preserve">
-    <value>Width</value>
+    <value>عرض</value>
   </data>
   <data name="Archives and Comments" xml:space="preserve">
-    <value>Archives and Comments</value>
+    <value>بایگانی‌ها و نظرات</value>
   </data>
   <data name="Author" xml:space="preserve">
-    <value>Author</value>
+    <value>نویسنده</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>Comments</value>
+    <value>نظرات</value>
   </data>
   <data name="Created" xml:space="preserve">
-    <value>Created</value>
+    <value>ایجادشده</value>
   </data>
   <data name="Username and/or password are incorrect." xml:space="preserve">
-    <value>Username and/or password are incorrect.</value>
+    <value>نام‌کاربری یا گذرواژه اشتباه است.</value>
   </data>
 </root>
