@@ -13,7 +13,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Config" xml:space="preserve">
-    <value>Config</value>
+    <value>پیکربندی</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
     <value>Hierarchical page slugs</value>
@@ -22,10 +22,10 @@
     <value>If page slugs should include the parent slug.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
-    <value>Expanded levels in the sitemap</value>
+    <value>سطح گسترش یافته در نقشه سایت</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
-    <value>Archive page size</value>
+    <value>اندازه صفحه بایگانی</value>
   </data>
   <data name="Caching" xml:space="preserve">
     <value>Caching</value>
@@ -34,13 +34,13 @@
     <value>Page cache expiration (minutes)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
-    <value>Page revisions</value>
+    <value>بازبینی صفحه</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
     <value>Post cache expiration (minutes)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
-    <value>Post revisions</value>
+    <value>بازبینی صفحه</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
     <value>Media CDN</value>
