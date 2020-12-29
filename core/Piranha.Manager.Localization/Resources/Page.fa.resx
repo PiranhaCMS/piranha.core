@@ -13,25 +13,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add page" xml:space="preserve">
-    <value>Add page</value>
+    <value>افزودن صفحه</value>
   </data>
   <data name="An error occured while deleting the page" xml:space="preserve">
-    <value>An error occured while deleting the page</value>
+    <value>هنگام حذف صفحه خطایی روی داد</value>
   </data>
   <data name="Archive" xml:space="preserve">
-    <value>Archive</value>
+    <value>بایگانی</value>
   </data>
   <data name="Detach page" xml:space="preserve">
-    <value>Detach page</value>
+    <value>جدا کردن صفحه</value>
   </data>
   <data name="Edit original" xml:space="preserve">
-    <value>Edit original</value>
+    <value>ویرایش اصلی</value>
   </data>
   <data name="Edit page" xml:space="preserve">
-    <value>Edit page</value>
+    <value>ویرایش صفحه</value>
   </data>
   <data name="Hidden" xml:space="preserve">
-    <value>Hidden</value>
+    <value>پنهان</value>
   </data>
   <data name="If the page should be hidden in the sitemap" xml:space="preserve">
     <value>If the page should be hidden in the sitemap</value>
@@ -43,13 +43,13 @@
     <value>If links from this page should be indexed.</value>
   </data>
   <data name="Meta title" xml:space="preserve">
-    <value>Meta title</value>
+    <value>عنوان تگ متا</value>
   </data>
   <data name="Meta keywords" xml:space="preserve">
-    <value>Meta keywords</value>
+    <value>کلمات کلیدی تگ متا</value>
   </data>
   <data name="Meta description" xml:space="preserve">
-    <value>Meta description</value>
+    <value>توضیحات تگ متا</value>
   </data>
   <data name="Og title" xml:space="preserve">
     <value>Og title</value>
@@ -67,7 +67,7 @@
     <value>Are you sure you want to delete this page?</value>
   </data>
   <data name="Pages" xml:space="preserve">
-    <value>Pages</value>
+    <value>صفحات</value>
   </data>
   <data name="The page was successfully deleted" xml:space="preserve">
     <value>The page was successfully deleted</value>
