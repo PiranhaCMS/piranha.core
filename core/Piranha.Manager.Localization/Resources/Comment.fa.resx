@@ -38,7 +38,7 @@
     <value>نظر با موفقیت حذف شد</value>
   </data>
   <data name="Days allowed for commenting" xml:space="preserve">
-    <value>Days allowed for commenting</value>
+    <value>تعداد روزهایی که امکان ثبت نظر وجود دارد</value>
   </data>
   <data name="Comments are not allowed." xml:space="preserve">
     <value>اظهار نظر مجاز نیست.</value>
