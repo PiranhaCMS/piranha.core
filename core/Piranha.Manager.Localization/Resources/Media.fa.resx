@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Add folder" xml:space="preserve">
+    <value>افزودن پوشه</value>
+  </data>
+  <data name="Drop files here or click to upload." xml:space="preserve">
+    <value>فایل را برای بارگزاری بکشید و اینجا رها کنید.</value>
+  </data>
+  <data name="Download media" xml:space="preserve">
+    <value>دانلود رسانه</value>
+  </data>
+  <data name="Folder name" xml:space="preserve">
+    <value>نام پوشه</value>
+  </data>
+  <data name="Folder name is mandatory." xml:space="preserve">
+    <value>نام پوشه الزامی است.</value>
+  </data>
+  <data name="Gallery" xml:space="preserve">
+    <value>گالری</value>
+  </data>
+  <data name="Media" xml:space="preserve">
+    <value>رسانه</value>
+  </data>
+  <data name="Media preview is not available" xml:space="preserve">
+    <value>پیش نمایش در دسترس نمی باشد</value>
+  </data>
+  <data name="Open media in new tab" xml:space="preserve">
+    <value>بازشدن رسانه دربرگه جدید</value>
+  </data>
+  <data name="Select media" xml:space="preserve">
+    <value>انتخاب رسانه‌</value>
+  </data>
+  <data name="Your browser does not support the video tag." xml:space="preserve">
+    <value>مرورگر شما تگ ویدئو را پشتیبانی نمی‌کند.</value>
+  </data>
+  <data name="List" xml:space="preserve">
+    <value>لیست</value>
+  </data>
+  <data name="Preferred aspect" xml:space="preserve">
+    <value>Preferred aspect</value>
+  </data>
+  <data name="Original" xml:space="preserve">
+    <value>اصلی</value>
+  </data>
+  <data name="Landscape" xml:space="preserve">
+    <value>افقی</value>
+  </data>
+  <data name="Portrait" xml:space="preserve">
+    <value>عمودی</value>
+  </data>
+  <data name="Widescreen" xml:space="preserve">
+    <value>صفحه عریض</value>
+  </data>
+  <data name="Square" xml:space="preserve">
+    <value>مربع</value>
+  </data>
+  <data name="Are you sure you want to delete selected media?" xml:space="preserve">
+    <value>آیا مطمئن هستید که می خواهید رسانه انتخاب شده را حذف کنید؟</value>
+  </data>
+  <data name="Delete selected items" xml:space="preserve">
+    <value>حذف موارد انتحاب شده</value>
+  </data>
+  <data name="Media file was successfully moved." xml:space="preserve">
+    <value>رسانه با موفقیت منتقل شد.</value>
+  </data>
+  <data name="Media files was successfully moved." xml:space="preserve">
+    <value>رسانه‌ها با موفقیت منتقل شدند.</value>
+  </data>
+  <data name="The media file was not found." xml:space="preserve">
+    <value>فایل رسانه یافت نشد.</value>
+  </data>
+  <data name="The media file was successfully deleted" xml:space="preserve">
+    <value>فایل رسانه با موفقیت حذف شد</value>
+  </data>
+  <data name="The media files was successfully deleted" xml:space="preserve">
+    <value>فایل‌های رسانه با موفقیت حذف شدند</value>
+  </data>
+</root>

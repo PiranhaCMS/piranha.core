@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Add" xml:space="preserve">
+    <value>افزودن</value>
+  </data>
+  <data name="Advanced" xml:space="preserve">
+    <value>پیشرفته</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>همه</value>
+  </data>
+  <data name="An error occurred" xml:space="preserve">
+    <value>خطایی روی داد</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>انصراف</value>
+  </data>
+  <data name="Content" xml:space="preserve">
+    <value>محتوا</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>ادامه</value>
+  </data>
+  <data name="Content type" xml:space="preserve">
+    <value>نوع محتوا</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>رونوشت‌</value>
+  </data>
+  <data name="Culture" xml:space="preserve">
+    <value>فرهنگ</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>پیش‌فرض</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>توضیحات</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>جزئیات</value>
+  </data>
+  <data name="Dimensions" xml:space="preserve">
+    <value>ابعاد</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>دانلود</value>
+  </data>
+  <data name="Draft" xml:space="preserve">
+    <value>پیش‌نویس</value>
+  </data>
+  <data name="Drafts" xml:space="preserve">
+    <value>پیش‌نویس‌ها</value>
+  </data>
+  <data name="Email address" xml:space="preserve">
+    <value>آدرس ایمیل</value>
+  </data>
+  <data name="Email address is mandatory." xml:space="preserve">
+    <value>آدرس ایمیل الزامی است.</value>
+  </data>
+  <data name="Filename" xml:space="preserve">
+    <value>نام فایل</value>
+  </data>
+  <data name="Height" xml:space="preserve">
+    <value>ارتفاع</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>ویرایش</value>
+  </data>
+  <data name="Empty" xml:space="preserve">
+    <value>خالی</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>عمومی</value>
+  </data>
+  <data name="General information" xml:space="preserve">
+    <value>اطلاعات عمومی</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>تاريخچه</value>
+  </data>
+  <data name="Internal id" xml:space="preserve">
+    <value>شناسه داخلی</value>
+  </data>
+  <data name="Is default" xml:space="preserve">
+    <value>پیش‌فرض است</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>زبان</value>
+  </data>
+  <data name="Languages" xml:space="preserve">
+    <value>زبان‌ها</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>ورود</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>خروج</value>
+  </data>
+  <data name="Looks like there's no items here. Click on the button above to get started!" xml:space="preserve">
+    <value>به نظر در اینجا هیچ موردی وجود ندارد. برای شروع بر روی دکمه بالا کلیک کنید!</value>
+  </data>
+  <data name="Looks like there's no items here. Click on the button below to get started!" xml:space="preserve">
+    <value>به نظر در اینجا هیچ موردی وجود ندارد. برای شروع بر روی دکمه پایین کلیک کنید!</value>
+  </data>
+  <data name="Looks like there's no items here. Click on the button to the left to get started!" xml:space="preserve">
+    <value>به نظر در اینجا هیچ موردی وجود ندارد. برای شروع بر روی دکمه سمت راست کلیک کنید!</value>
+  </data>
+  <data name="Main content" xml:space="preserve">
+    <value>محتوای اصلی</value>
+  </data>
+  <data name="Modified" xml:space="preserve">
+    <value>ویرایش شده</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>نام</value>
+  </data>
+  <data name="Name is mandatory." xml:space="preserve">
+    <value>نام الزامی است.</value>
+  </data>
+  <data name="Open public URL in new tab" xml:space="preserve">
+    <value>URL عمومی را در برگه جدید باز کنید</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>گذرواژه</value>
+  </data>
+  <data name="Permanent" xml:space="preserve">
+    <value>دائمی</value>
+  </data>
+  <data name="Permissions" xml:space="preserve">
+    <value>مجوزها</value>
+  </data>
+  <data name="Pixels" xml:space="preserve">
+    <value>پیکسل‌ها</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>پیش‌نمایش</value>
+  </data>
+  <data name="Publish" xml:space="preserve">
+    <value>انتشار</value>
+  </data>
+  <data name="Publish date" xml:space="preserve">
+    <value>تاریخ انتشار</value>
+  </data>
+  <data name="Redirect" xml:space="preserve">
+    <value>تغییر مسیر</value>
+  </data>
+  <data name="Redirect Type" xml:space="preserve">
+    <value>نوع تغییر مسیر</value>
+  </data>
+  <data name="Revert" xml:space="preserve">
+    <value>بازگرداندن</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>نقش‌ها</value>
+  </data>
+  <data name="Route" xml:space="preserve">
+    <value>مسیر</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>ذخیره</value>
+  </data>
+  <data name="Scheduled" xml:space="preserve">
+    <value>زمان‌بندی</value>
+  </data>
+  <data name="Search..." xml:space="preserve">
+    <value>جستجو...</value>
+  </data>
+  <data name="Select block" xml:space="preserve">
+    <value>انتخاب بلوک</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>تنظیمات</value>
+  </data>
+  <data name="SEO" xml:space="preserve">
+    <value>سئو</value>
+  </data>
+  <data name="Sharing" xml:space="preserve">
+    <value>اشتراک گذاری</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>اندازه‌</value>
+  </data>
+  <data name="Slug" xml:space="preserve">
+    <value>نامک</value>
+  </data>
+  <data name="System" xml:space="preserve">
+    <value>سیستم</value>
+  </data>
+  <data name="Temporary" xml:space="preserve">
+    <value>موقت</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>عنوان</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>به‌روزرسانی</value>
+  </data>
+  <data name="Update password" xml:space="preserve">
+    <value>به روزرسانی گذرواژه</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>نام‌کاربری</value>
+  </data>
+  <data name="Username is mandatory." xml:space="preserve">
+    <value>نام‌کاربری الزامی است.</value>
+  </data>
+  <data name="Title is mandatory." xml:space="preserve">
+    <value>عنوان الزامی است.</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>نوع</value>
+  </data>
+  <data name="Unpublish" xml:space="preserve">
+    <value>لغو انتشار</value>
+  </data>
+  <data name="Unpublished" xml:space="preserve">
+    <value>منتشر نشده</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>کاربران</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>نسخه</value>
+  </data>
+  <data name="Width" xml:space="preserve">
+    <value>عرض</value>
+  </data>
+  <data name="Archives and Comments" xml:space="preserve">
+    <value>بایگانی‌ها و نظرات</value>
+  </data>
+  <data name="Author" xml:space="preserve">
+    <value>نویسنده</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>نظرات</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>ایجادشده</value>
+  </data>
+  <data name="Username and/or password are incorrect." xml:space="preserve">
+    <value>نام‌کاربری یا گذرواژه اشتباه است.</value>
+  </data>
+</root>
