@@ -15,7 +15,8 @@ var path = require('path'),
     babelTemplate = require("@babel/template").default,
     codeFrameColumns = require('@babel/code-frame').codeFrameColumns,
     babelTypes = require("@babel/types"),
-    through2 = require('through2');
+    through2 = require('through2'),
+    rtlcss = require('gulp-rtlcss');
 
 function vueCompile() {
     return through2.obj(function (file, _, callback) {
@@ -285,6 +286,33 @@ var js = [
     }
 ];
 
+
+//
+// Compile & minimize & rtl less files
+//
+gulp.task("rtl:min:css", function (done) {
+    // Minimize and combine styles
+    for (var n = 0; n < css.length; n++)
+    {
+        gulp.src(css[n])
+            .pipe(sass().on("error", sass.logError))
+            .pipe(cssmin())
+            .pipe(rtlcss()) // Convert to RTL.
+            .pipe(rename({
+                suffix: ".rtl.min"
+            }))
+            .pipe(gulp.dest(output + "css"));
+    }
+
+    // Copy fonts
+    for (var n = 0; n < fonts.length; n++)
+    {
+        gulp.src(fonts[n])
+            .pipe(gulp.dest(output + "webfonts"));
+    }
+    done();
+});
+
 //
 // Compile & minimize less files
 //
@@ -334,5 +362,5 @@ gulp.task("min:js", function (done) {
 //
 // Default tasks
 //
-gulp.task("serve", gulp.parallel(["min:css", "min:js"]));
+gulp.task("serve", gulp.parallel(["min:css", "min:js", "rtl:min:css"]));
 gulp.task("default", gulp.series("serve"));
