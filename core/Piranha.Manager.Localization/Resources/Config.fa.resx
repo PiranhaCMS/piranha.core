@@ -72,7 +72,7 @@
   </data>
 
   <data name="Approve comments" xml:space="preserve">
-    <value>Approve comments</value>
+    <value>تأیید نظرات</value>
   </data>
   <data name="Close comments after" xml:space="preserve">
     <value>Close comments after</value>
@@ -87,10 +87,10 @@
     <value>Comments page size</value>
   </data>
   <data name="Enable page comments" xml:space="preserve">
-    <value>Enable page comments</value>
+    <value>فعال بودن نظرات برای صفحه</value>
   </data>
   <data name="Enable post comments" xml:space="preserve">
-    <value>Enable post comments</value>
+    <value>فعال بودن نظرات برای نوشته</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
     <value>Manager list size</value>
@@ -102,13 +102,13 @@
     <value>If blocks should be collapsed by default when opening a page or post in the manager.</value>
   </data>
   <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
-    <value>If comments should be approved by default. Please note that this can be overridden by third party moderation services.</value>
+    <value>اگر نظرات باید به طور پیش فرض تأیید شوند. لطفا توجه داشته باشید که ممکن است توسط سرویس‌های ثالث نادیده گرفته شود.</value>
   </data>
   <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages.</value>
+    <value>اگر به طور پیش فرض باید نظرات را برای صفحات فعال کنید. لطفاً توجه داشته باشید که این مورد برای صفحات خاص قابل لغو است.</value>
   </data>
   <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
-    <value>If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts.</value>
+    <value>اگر باید نظرات به صورت پیش فرض برای نوشته‌ها فعال باشد. لطفاً توجه داشته باشید که این مورد برای نوشته‌های خاص قابل لغو است.</value>
   </data>
   <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
     <value>The default page size when loading comments. Please note that this this can be overridden for specific pages.</value>
