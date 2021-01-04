@@ -16,18 +16,18 @@
     <value>摘要</value>
   </data>
   <data name="Meta index" xml:space="preserve">
-    <value>關鍵值索引</value>
+    <value>关键值索引</value>
   </data>
   <data name="Meta follow" xml:space="preserve">
-    <value>關鍵值流程</value>
+    <value>关键值流程</value>
   </data>
   <data name="Meta priority" xml:space="preserve">
-    <value>關鍵值優先</value>
+    <value>关健值优先</value>
   </data>
   <data name="Primary image" xml:space="preserve">
-    <value>主要圖片</value>
+    <value>主要图像</value>
   </data>
   <data name="Search engine priority, compared to other content in the same site." xml:space="preserve">
-    <value>搜尋引擎優先</value>
+    <value>与同一站点中的其他内容相比，搜索引擎优先级。</value>
   </data>
 </root>
