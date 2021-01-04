@@ -37,28 +37,28 @@
     <value>在網站地圖中隱藏本面頁</value>
   </data>
   <data name="If the page should be indexed by search engines." xml:space="preserve">
-    <value>If the page should be indexed by search engines.</value>
+    <value>在搜索引擎中索引本面頁。</value>
   </data>
   <data name="If links from this page should be indexed." xml:space="preserve">
-    <value>If links from this page should be indexed.</value>
+    <value>本面頁連結應該被索引到。</value>
   </data>
   <data name="Meta title" xml:space="preserve">
-    <value>Meta title</value>
+    <value>關鍵字標題</value>
   </data>
   <data name="Meta keywords" xml:space="preserve">
-    <value>Meta 關鍵字（提供搜尋引擎抓取）</value>
+    <value>關鍵字內容（提供搜尋引擎抓取）</value>
   </data>
   <data name="Meta description" xml:space="preserve">
-    <value>Meta 說明（提供搜尋引擎抓取）</value>
+    <value>關鍵字說明（提供搜尋引擎抓取）</value>
   </data>
   <data name="Og title" xml:space="preserve">
-    <value>Og title</value>
+    <value>Og 標題</value>
   </data>
   <data name="Og image" xml:space="preserve">
-    <value>Og image</value>
+    <value>Og 圖片</value>
   </data>
   <data name="Og description" xml:space="preserve">
-    <value>Og description</value>
+    <value>Og 說明</value>
   </data>
   <data name="Navigation title" xml:space="preserve">
     <value>導航欄標題</value>
