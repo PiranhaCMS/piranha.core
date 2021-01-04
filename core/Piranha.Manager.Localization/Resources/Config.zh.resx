@@ -22,10 +22,10 @@
     <value>页面后缀是否包含父级后缀。</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
-    <value>Expanded levels in the sitemap</value>
+    <value>扩大站点地图中的级别</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
-    <value>Archive page size</value>
+    <value>存档页面大小</value>
   </data>
   <data name="Caching" xml:space="preserve">
     <value>缓存</value>
@@ -72,51 +72,51 @@
   </data>
 
   <data name="Approve comments" xml:space="preserve">
-    <value>Approve comments</value>
+    <value>核准的评论</value>
   </data>
   <data name="Close comments after" xml:space="preserve">
-    <value>Close comments after</value>
+    <value>关闭评论后</value>
   </data>
   <data name="Collapse block headers" xml:space="preserve">
-    <value>Collapse block headers</value>
+    <value>折叠块头</value>
   </data>
   <data name="Collapse blocks" xml:space="preserve">
-    <value>Collapse blocks</value>
+    <value>折叠区块</value>
   </data>
   <data name="Comments page size" xml:space="preserve">
-    <value>Comments page size</value>
+    <value>评论页面大小</value>
   </data>
   <data name="Enable page comments" xml:space="preserve">
-    <value>Enable page comments</value>
+    <value>启用页面评论</value>
   </data>
   <data name="Enable post comments" xml:space="preserve">
-    <value>Enable post comments</value>
+    <value>启用帖子评论</value>
   </data>
   <data name="Manager list size" xml:space="preserve">
-    <value>Manager list size</value>
+    <value>管理员列表大小</value>
   </data>
   <data name="If block group headers should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If block group headers should be collapsed by default when opening a page or post in the manager.</value>
+    <value>如果区块组头在管理器中打开页面或帖子时默认折叠。</value>
   </data>
   <data name="If blocks should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>If blocks should be collapsed by default when opening a page or post in the manager.</value>
+    <value>如果块在管理器中打开页面或帖子时默认折叠。</value>
   </data>
   <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
-    <value>If comments should be approved by default. Please note that this can be overridden by third party moderation services.</value>
+    <value>如果评论默认应被批准。请注意，这可以被第三方管理服务覆盖。</value>
   </data>
   <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages.</value>
+    <value>如果默认情况下对页面启用评论。请注意，此选项可以为特定页面覆盖。</value>
   </data>
   <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
-    <value>If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts.</value>
+    <value>如果默认情况下对帖子启用评论，请注意这可能会为特定帖子覆盖。</value>
   </data>
   <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>The default page size when loading comments. Please note that this this can be overridden for specific pages.</value>
+    <value>加载评论时的默认页面大小。请注意这可以为特定页面覆盖。</value>
   </data>
   <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
-    <value>The number of days commenting should be open after publish date. A value of 0 means forever.</value>
+    <value>评论天数应该在发布日期后打开。值为 0 表示永远有效。</value>
   </data>
   <data name="The page size for lists within the manager interface." xml:space="preserve">
-    <value>The page size for lists within the manager interface.</value>
+    <value>管理界面中列表的页面大小。</value>
   </data>
 </root>
