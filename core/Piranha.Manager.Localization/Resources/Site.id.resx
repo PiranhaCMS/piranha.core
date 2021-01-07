@@ -28,12 +28,12 @@
     <value>Logo</value>
   </data>
   <data name="If this should be the default site of the installation." xml:space="preserve">
-    <value>If this should be the default site of the installation.</value>
+    <value>Jika ini seharusnya menjadi situs tetap dalam instalasi.</value>
   </data>
   <data name="Please type in the name of the site to confirm." xml:space="preserve">
-    <value>Please type in the name of the site to confirm.</value>
+    <value>Silahkan mengisi nama situs untuk mengkorfirmasi.</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
-    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the site {{ title }} and all of its &lt;strong>pages&lt;/strong>, &lt;strong>archives&lt;/strong> and &lt;strong>posts&lt;/strong>.</value>
+    <value>Langkah ini &lt;strong>tidak dapat&lt;/strong> dibatalkan. Ini akan menghapus situs secara permanen {{ title }} dan semua &lt;strong>halaman&lt;/strong>, &lt;strong>arsip&lt;/strong> dan &lt;strong>kiriman&lt;/strong>.</value>
   </data>
 </root>
