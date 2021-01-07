@@ -11,6 +11,9 @@
 using Piranha;
 using Piranha.AspNetCore;
 
+/// <summary>
+/// Extension class for adding TinyMCE to the web application.
+/// </summary>
 public static class TinyMCEStartupExtensions
 {
     /// <summary>

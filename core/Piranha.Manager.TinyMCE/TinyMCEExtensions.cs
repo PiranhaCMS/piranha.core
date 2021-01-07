@@ -13,6 +13,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Piranha.Manager.Editor;
 
+/// <summary>
+/// Extension class for adding TinyMCE to the web application.
+/// </summary>
 public static class TinyMCEExtensions
 {
     /// <summary>

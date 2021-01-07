@@ -13,6 +13,9 @@ using Piranha.Extend;
 
 namespace Piranha.Manager.TinyMCE
 {
+    /// <summary>
+    /// Module definition for the TinyMCE module.
+    /// </summary>
     public sealed class Module : IModule
     {
         /// <summary>
