@@ -13,13 +13,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Config" xml:space="preserve">
-    <value>Config</value>
+    <value>Pengaturan</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>Hierarchical page slugs</value>
+    <value>Hirarki slugs halaman</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>If page slugs should include the parent slug.</value>
+    <value>Jika halaman slug harus memuat induk slug.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
     <value>Expanded levels in the sitemap</value>
