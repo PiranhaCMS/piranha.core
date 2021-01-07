@@ -13,9 +13,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ChangeDefaultConfirm" xml:space="preserve">
-    <value>Changing the default language will affect how the application behaves and should be configured during initial setup.</value>
+    <value>更改默认语言会影响应用程序的行为方式，并且应该在初始设置中进行配置。</value>
   </data>
   <data name="RemoveLanguageConfirm" xml:space="preserve">
-    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the language {{ currentDelete.title }} and all of its &lt;strong>translations&lt;/strong>. Any sites that have selected {{ currentDelete.title }} as their language will be assigned the default language.</value>
+    <value>这个功能 &lt;strong>不能&lt;/strong> 回复，将永久删除 {{ currentDelete.title }} 及所有的 &lt;strong>转换&lt;/strong> 字串。所有网站的 {{ currentDelete.title }} 将会变成预设语系内容。</value>
   </data>
 </root>
