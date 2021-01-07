@@ -13,16 +13,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add page" xml:space="preserve">
-    <value>Add page</value>
+    <value>Tambahkan laman</value>
   </data>
   <data name="An error occured while deleting the page" xml:space="preserve">
-    <value>An error occured while deleting the page</value>
+    <value>Terjadi kesalahan pada saat menghapus halaman</value>
   </data>
   <data name="Archive" xml:space="preserve">
-    <value>Archive</value>
+    <value>Arsip</value>
   </data>
   <data name="Detach page" xml:space="preserve">
-    <value>Detach page</value>
+    <value>Lepaskan halaman</value>
   </data>
   <data name="Edit original" xml:space="preserve">
     <value>Edit original</value>
