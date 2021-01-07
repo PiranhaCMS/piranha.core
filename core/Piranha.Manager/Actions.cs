@@ -133,6 +133,16 @@ namespace Piranha.Manager
             {
                 new ToolbarAction
                 {
+                    InternalId = "Expand",
+                    ActionView = "Partial/Actions/_PageListExpand"
+                },
+                new ToolbarAction
+                {
+                    InternalId = "Collapse",
+                    ActionView = "Partial/Actions/_PageListCollapse"
+                },
+                new ToolbarAction
+                {
                     InternalId = "AddSite",
                     ActionView = "Partial/Actions/_PageListAddSite"
                 },
