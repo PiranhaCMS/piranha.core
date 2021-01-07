@@ -80,7 +80,7 @@ namespace Piranha
                 .Replace("ì", "i");
 
             // Remove special characters
-            slug = Regex.Replace(slug, @"[^a-z0-9-/ ]", "").Replace("--", "-");
+            slug = Regex.Replace(slug, @"[^a-z\u0600-\u06FF0-9-/ ]", "").Replace("--", "-");
 
             // Remove whitespaces
             slug = Regex.Replace(slug.Replace("-", " "), @"\s+", " ").Replace(" ", "-");
