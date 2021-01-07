@@ -154,6 +154,7 @@ var js = [
             "assets/src/js/piranha.utils.js",
             "assets/src/js/piranha.blockpicker.js",
             "assets/src/js/piranha.notifications.js",
+            "assets/src/js/piranha.contentpicker.js",
             "assets/src/js/piranha.mediapicker.js",
             "assets/src/js/piranha.pagepicker.js",
             "assets/src/js/piranha.postpicker.js",
