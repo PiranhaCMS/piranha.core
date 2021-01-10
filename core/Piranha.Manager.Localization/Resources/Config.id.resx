@@ -13,19 +13,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Config" xml:space="preserve">
-    <value>Config</value>
+    <value>Pengaturan</value>
   </data>
   <data name="Hierarchical page slugs" xml:space="preserve">
-    <value>Hierarchical page slugs</value>
+    <value>Hirarki slugs halaman</value>
   </data>
   <data name="If page slugs should include the parent slug." xml:space="preserve">
-    <value>If page slugs should include the parent slug.</value>
+    <value>Jika halaman slug harus memuat induk slug.</value>
   </data>
   <data name="Expanded levels in the sitemap" xml:space="preserve">
-    <value>Expanded levels in the sitemap</value>
+    <value>Tingkatan yang dibentangkan pada peta situs</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
-    <value>Archive page size</value>
+    <value>Ukuran halaman arsip</value>
   </data>
   <data name="Caching" xml:space="preserve">
     <value>Caching</value>
@@ -34,29 +34,29 @@
     <value>Page cache expiration (minutes)</value>
   </data>
   <data name="Page revisions" xml:space="preserve">
-    <value>Page revisions</value>
+    <value>Revisi halaman</value>
   </data>
   <data name="Post cache expiration (minutes)" xml:space="preserve">
     <value>Post cache expiration (minutes)</value>
   </data>
   <data name="Post revisions" xml:space="preserve">
-    <value>Post revisions</value>
+    <value>Revisi kiriman</value>
   </data>
   <data name="Media CDN" xml:space="preserve">
     <value>Media CDN</value>
   </data>
 
   <data name="If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps." xml:space="preserve">
-    <value>If page slugs should take their parent slug into account when being generated. This is prefered for larger sitemaps.</value>
+    <value>Jika slug halaman harus memperhatikan slug induk ketika sedang dibuat. Ini disarankan untuk peta situs yang besar.</value>
   </data>
   <data name="The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps." xml:space="preserve">
-    <value>The default number of levels that should be expanded in the page sitemap. This is useful for smaller sitemaps.</value>
+    <value>Tetapan jumlah tingkatan yang harus dibentangkan pada halaman peta situs. Ini berguna untuk peta situs yang kecil.</value>
   </data>
   <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
-    <value>The default page size for archive pages. Please note that this this can be overridden for specific archives.</value>
+    <value>Tetapan Ukuran halaman untuk arsip halaman. Harap dicatat bahwa ini dapat ditimpa untuk arsip spesifik.</value>
   </data>
   <data name="The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation." xml:space="preserve">
-    <value>The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation.</value>
+    <value>Jumah maksimum halaman revisi yang harus disimpan untuk setiap halaman. Nilai 0 berarti tanpa batas.</value>
   </data>
   <data name="The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation." xml:space="preserve">
     <value>The maximum number of post revisions that should be stored for each post. A value of 0 means no limitation.</value>
