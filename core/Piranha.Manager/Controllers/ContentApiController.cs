@@ -123,6 +123,14 @@ namespace Piranha.Manager.Controllers
             return NotFound();
         }
 
+        [Route("list")]
+        [HttpGet]
+        [Authorize(Policy = Permission.Content)]
+        public Task<IActionResult> List()
+        {
+            return List(null);
+        }
+
         [Route("{contentGroup}/list")]
         [HttpGet]
         [Authorize(Policy = Permission.Content)]

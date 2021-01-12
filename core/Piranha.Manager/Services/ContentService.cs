@@ -46,13 +46,19 @@ namespace Piranha.Manager.Services
         /// <returns>Gets the list model.</returns>
         public async Task<ContentListModel> GetListAsync(string contentGroup)
         {
-            var group = App.ContentGroups.GetById(contentGroup);
-            var types = App.ContentTypes.GetByGroupId(contentGroup);
-            var items = await _api.Content.GetAllAsync<ContentInfo>(contentGroup);
+            var groups = contentGroup == null ?
+                App.ContentGroups.ToList() :
+                new List<ContentGroup>();
+            var group = contentGroup == null ?
+                App.ContentGroups.GetById(groups.First().Id) :
+                App.ContentGroups.GetById(contentGroup);
+            var types = App.ContentTypes.GetByGroupId(group.Id);
+            var items = await _api.Content.GetAllAsync<ContentInfo>(group.Id);
 
             return new ContentListModel
             {
                 Group = group,
+                Groups = groups,
                 Items = items
                     .Select(i => new ContentListModel.ContentItem
                         {
@@ -129,7 +135,7 @@ namespace Piranha.Manager.Services
                 model.GroupId = group.Id;
                 model.GroupTitle = group.Title;
                 model.State = ContentState.New;
-                
+
                 return model;
             }
 
@@ -244,7 +250,7 @@ namespace Piranha.Manager.Services
         {
             var config = new Config(_api);
             var type = App.ContentTypes.GetById(content.TypeId);
-            
+
             var model = new ContentEditModel
             {
                 Id = content.Id,

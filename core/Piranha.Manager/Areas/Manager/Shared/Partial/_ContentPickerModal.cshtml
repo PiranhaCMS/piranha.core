@@ -7,7 +7,12 @@
 
             <!-- Modal Header -->
             <div class="modal-header border-bottom-0">
-                <h5 class="modal-title"><i class="fas fa-copy"></i> @Localizer.General["Select content"]</h5>
+                <h5 class="modal-title">
+                    <i v-if="currentGroupIcon !== null" :class="currentGroupIcon"></i>
+                    <i v-else class="fas fa-cube"></i>
+                    <span v-if="currentGroupId !== null"> {{ currentGroupTitle }}</span>
+                    <span v-else> @Localizer.General["Select content"]</span>
+                </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -24,7 +29,7 @@
                             {{ currentGroupTitle }}
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#" li v-for="group in groups" v-on:click.prevent="load(group.id)">{{ group.title }}</a>
+                            <a class="dropdown-item" href="#" li v-for="group in groups" v-on:click.prevent="load(group.id, true)">{{ group.title }}</a>
                         </div>
                     </div>
                 </div>
@@ -41,8 +46,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in items">
-                            <td>                        
+                        <tr v-for="item in filteredItems">
+                            <td>
                                 <a href="#" v-on:click.prevent="select(item)">{{ item.title }}</a>
                             </td>
                             <td>

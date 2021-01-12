@@ -10,6 +10,7 @@ piranha.contentpicker = new Vue({
         items: [],
         currentGroupId: null,
         currentGroupTitle: null,
+        currentGroupIcon: null,
         filter: null,
         callback: null,
     },
@@ -26,17 +27,35 @@ piranha.contentpicker = new Vue({
         }
     },
     methods: {
-        load: function (groupId) {
+        bind: function (result, partial) {
+            this.currentGroupId = result.group.id;
+            this.currentGroupTitle = result.group.title;
+            this.currentGroupIcon = result.group.icon;
+            this.types = result.types;
+            this.items = result.items.map(function (i) {
+                var type = result.types.find(function (t) {
+                    return t.id === i.typeId;
+                });
+
+                i.type = type.title || i.typeId;
+
+                return i;
+            });
+
+            if (!partial)
+            {
+                // Only bind groups if this is a full reload
+                this.groups = result.groups;
+            }
+        },
+        load: function (groupId, partial) {
             var url = piranha.baseUrl + "manager/api/content/" + (groupId ? groupId + "/" : "") + "list";
             var self = this;
 
             fetch(url)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    self.currentSiteId = result.siteId;
-                    self.currentSiteTitle = result.siteTitle;
-                    self.sites = result.sites;
-                    self.items = result.items;
+                    self.bind(result, partial);
                 })
                 .catch(function (error) { console.log("error:", error ); });
         },
@@ -44,7 +63,7 @@ piranha.contentpicker = new Vue({
 
         },
         refresh: function () {
-            this.load(piranha.contentpicker.currentGroupId);
+            this.load(piranha.contentpicker.currentGroupId, true);
         },
         open: function (groupId, callback) {
             this.search = '';
@@ -70,7 +89,7 @@ piranha.contentpicker = new Vue({
 });
 
 $(document).ready(function() {
-    $("#pagepicker").on("shown.bs.modal", function() {
+    $("#contentpicker").on("shown.bs.modal", function() {
         $("#contentpickerSearch").trigger("focus");
     });
 });
