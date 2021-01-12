@@ -87,7 +87,6 @@ namespace Piranha.Data.EF
                     .ForMember(c =>  c.Id, o => o.Ignore())
                     .ForMember(c =>  c.TypeId, o => o.Ignore())
                     .ForMember(c =>  c.PrimaryImage, o => o.Ignore())
-                    .ForMember(c =>  c.Excerpt, o => o.Ignore())
                     .ForMember(c =>  c.Created, o => o.Ignore())
                     .ForMember(c =>  c.LastModified, o => o.Ignore())
                     .ForMember(c =>  c.Permissions, o => o.Ignore());

@@ -290,7 +290,7 @@
     }
 }
 
-.page-block, .post-block {
+.page-block, .post-block, .content-block {
     .page-image {
         float: left;
         background: $body-bg;
@@ -315,7 +315,7 @@
 
 .block-group {
     .col:not(:only-child) {
-        .page-block, .post-block {
+        .page-block, .post-block, .content-block {
             .page-image {
                 float: none;
                 margin-bottom: .5rem;

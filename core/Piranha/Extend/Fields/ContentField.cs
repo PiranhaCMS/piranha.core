@@ -13,24 +13,24 @@ using System.Threading.Tasks;
 
 namespace Piranha.Extend.Fields
 {
-    [FieldType(Name = "Page", Shorthand = "Page", Component = "page-field")]
-    public class PageField : IField, IEquatable<PageField>
+    [FieldType(Name = "Content", Shorthand = "Content", Component = "content-field")]
+    public class ContentField : IField, IEquatable<ContentField>
     {
         /// <summary>
-        /// Gets/sets the page id.
+        /// Gets/sets the content id.
         /// </summary>
         /// <returns></returns>
         public Guid? Id { get; set; }
 
         /// <summary>
-        /// Gets/sets the related page object.
+        /// Gets/sets the related content object.
         /// </summary>
-        public Models.PageInfo Page { get; set; }
+        public Models.ContentInfo Content { get; set; }
 
         /// <summary>
-        /// Gets if the field has a page object available.
+        /// Gets if the field has a content object available.
         /// </summary>
-        public bool HasValue => Page != null;
+        public bool HasValue => Content != null;
 
         /// <summary>
         /// Gets the list item title if this field is used in
@@ -38,7 +38,7 @@ namespace Piranha.Extend.Fields
         /// </summary>
         public virtual string GetTitle()
         {
-            return Page?.Title;
+            return Content?.Title;
         }
 
         /// <summary>
@@ -49,13 +49,13 @@ namespace Piranha.Extend.Fields
         {
             if (Id.HasValue)
             {
-                Page = await api.Pages
-                    .GetByIdAsync<Models.PageInfo>(Id.Value)
+                Content = await api.Content
+                    .GetByIdAsync<Models.ContentInfo>(Id.Value)
                     .ConfigureAwait(false);
 
-                if (Page == null)
+                if (Content == null)
                 {
-                    // The page has been removed, remove the
+                    // The content has been removed, remove the
                     // missing id.
                     Id = null;
                 }
@@ -63,35 +63,21 @@ namespace Piranha.Extend.Fields
         }
 
         /// <summary>
-        /// Gets the referenced page.
-        /// </summary>
-        /// <param name="api">The current api</param>
-        /// <returns>The referenced page</returns>
-        public virtual Task<T> GetPageAsync<T>(IApi api) where T : Models.GenericPage<T>
-        {
-            if (Id.HasValue)
-            {
-                return api.Pages.GetByIdAsync<T>(Id.Value);
-            }
-            return null;
-        }
-
-        /// <summary>
         /// Implicit operator for converting a Guid id to a field.
         /// </summary>
         /// <param name="guid">The guid value</param>
-        public static implicit operator PageField(Guid guid)
+        public static implicit operator ContentField(Guid guid)
         {
-            return new PageField { Id = guid };
+            return new ContentField { Id = guid };
         }
 
         /// <summary>
-        /// Implicit operator for converting a page object to a field.
+        /// Implicit operator for converting a content object to a field.
         /// </summary>
-        /// <param name="page">The page object</param>
-        public static implicit operator PageField(Models.PageBase page)
+        /// <param name="content">The content object</param>
+        public static implicit operator ContentField(Models.GenericContent content)
         {
-            return new PageField { Id = page.Id };
+            return new ContentField { Id = content.Id };
         }
 
         /// <summary>
@@ -109,7 +95,7 @@ namespace Piranha.Extend.Fields
         /// <returns>True if the fields are equal</returns>
         public override bool Equals(object obj)
         {
-            if (obj is PageField field)
+            if (obj is ContentField field)
             {
                 return Equals(field);
             }
@@ -121,7 +107,7 @@ namespace Piranha.Extend.Fields
         /// </summary>
         /// <param name="obj">The field</param>
         /// <returns>True if the fields are equal</returns>
-        public virtual bool Equals(PageField obj)
+        public virtual bool Equals(ContentField obj)
         {
             if (obj == null)
             {
@@ -136,7 +122,7 @@ namespace Piranha.Extend.Fields
         /// <param name="field1">The first field</param>
         /// <param name="field2">The second field</param>
         /// <returns>True if the fields are equal</returns>
-        public static bool operator ==(PageField field1, PageField field2)
+        public static bool operator ==(ContentField field1, ContentField field2)
         {
             if ((object) field1 != null && (object) field2 != null)
             {
@@ -156,7 +142,7 @@ namespace Piranha.Extend.Fields
         /// <param name="field1">The first field</param>
         /// <param name="field2">The second field</param>
         /// <returns>True if the fields are equal</returns>
-        public static bool operator !=(PageField field1, PageField field2)
+        public static bool operator !=(ContentField field1, ContentField field2)
         {
             return !(field1 == field2);
         }

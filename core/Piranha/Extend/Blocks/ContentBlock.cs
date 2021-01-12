@@ -13,15 +13,15 @@ using Piranha.Extend.Fields;
 namespace Piranha.Extend.Blocks
 {
     /// <summary>
-    /// Block for referencing a page.
+    /// Block for referencing a content model.
     /// </summary>
-    [BlockType(Name = "Page link", Category = "References", Icon = "fas fa-link", Component = "page-block")]
-    public class PageBlock : Block
+    [BlockType(Name = "Content link", Category = "References", Icon = "fas fa-link", Component = "content-block")]
+    public class ContentBlock : Block
     {
         /// <summary>
         /// Gets/sets the page link.
         /// </summary>
-        public PageField Body { get; set; }
+        public ContentField Body { get; set; }
 
         /// <summary>
         /// Gets the title of the block when used in a block group.
@@ -29,11 +29,11 @@ namespace Piranha.Extend.Blocks
         /// <returns>The title</returns>
         public override string GetTitle()
         {
-            if (Body != null && Body.Page != null)
+            if (Body != null && Body.Content != null)
             {
-                return Body.Page.Title;
+                return Body.Content.Title;
             }
-            return "No page selected";
+            return "No content selected";
         }
     }
 }

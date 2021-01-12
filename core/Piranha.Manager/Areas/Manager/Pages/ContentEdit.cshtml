@@ -36,13 +36,13 @@
 
 @section partials
 {
-   
+
 }
 
 <div id="contentedit">
     <div class="top">
         <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
+            <ol class="breadcrumb app" :class="{ ready: !loading }">
                 <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
                 <li class="breadcrumb-item"><a :href="piranha.baseUrl + 'manager/content/' + groupId">{{ groupTitle }}</a></li>
                 <li class="breadcrumb-item">{{ typeTitle }}</li>
@@ -87,6 +87,49 @@
                     <div class="col">
                         <div class="form-group title">
                             <input v-model="title" type="text" class="form-control form-control-lg" placeholder="@Localizer.Page["Your page title"]">
+                        </div>
+                    </div>
+                </div>
+                <div class="region-center content-center mt-3">
+                    <div class="row">
+                        <div v-if="usePrimaryImage" class="col">
+                            <div class="form-group">
+                                <label>@Localizer.Content["Primary image"]</label>
+                                <div class="block image-block primary-image primary-image-modal">
+                                    <div class="block-body has-media-picker rounded" :class="{ empty: primaryImage.id === null }">
+                                        <img class="rounded" :src="primaryImageUrl">
+                                        <div class="media-picker">
+                                            <div class="btn-group float-right">
+                                                <button v-on:click.prevent="selectPrimaryImage" class="btn btn-primary text-center">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                                <button v-on:click.prevent="removePrimaryImage" class="btn btn-danger text-center">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                            <div class="card text-left">
+                                                <div class="card-body" v-if="primaryImage.id === null">
+                                                    &nbsp;
+                                                </div>
+                                                <div class="card-body" v-else>
+                                                    {{ primaryImage.media.filename }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="useExcerpt" class="col">
+                            <div class="form-group">
+                                <label>@Localizer.Content["Excerpt"]</label>
+                                <div v-if="useHtmlExcerpt" class="block text-block ingress" :class="{ empty: isExcerptEmpty }">
+                                    <div id="excerpt-toolbar" class="component-toolbar"></div>
+                                    <div id="excerpt-body" class="block-body html-block" contenteditable="true" v-html="excerpt" v-on:blur="onExcerptBlur">
+                                    </div>
+                                </div>
+                                <textarea v-else v-model="excerpt" rows="9" maxlength="255" class="form-control" style="height:218px"></textarea>
+                            </div>
                         </div>
                     </div>
                 </div>

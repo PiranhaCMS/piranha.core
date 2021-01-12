@@ -155,6 +155,7 @@ var js = [
             "assets/src/js/piranha.utils.js",
             "assets/src/js/piranha.blockpicker.js",
             "assets/src/js/piranha.notifications.js",
+            "assets/src/js/piranha.contentpicker.js",
             "assets/src/js/piranha.mediapicker.js",
             "assets/src/js/piranha.pagepicker.js",
             "assets/src/js/piranha.postpicker.js",
@@ -207,6 +208,7 @@ var js = [
             "assets/src/js/components/generic-block.vue",
 
             "assets/src/js/components/blocks/audio-block.vue",
+            "assets/src/js/components/blocks/content-block.vue",
             "assets/src/js/components/blocks/html-block.vue",
             "assets/src/js/components/blocks/html-column-block.vue",
             "assets/src/js/components/blocks/image-block.vue",
@@ -221,6 +223,7 @@ var js = [
             "assets/src/js/components/fields/audio-field.vue",
             "assets/src/js/components/fields/checkbox-field.vue",
             "assets/src/js/components/fields/color-field.vue",
+            "assets/src/js/components/fields/content-field.vue",
             "assets/src/js/components/fields/data-select-field.vue",
             "assets/src/js/components/fields/date-field.vue",
             "assets/src/js/components/fields/document-field.vue",

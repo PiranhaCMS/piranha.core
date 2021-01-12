@@ -40,6 +40,17 @@ namespace RazorWeb.Models.Regions
         [ColorFieldSettings(DisallowInput = true)]
         public ColorField Color { get; set; }
 
+        [Field(Placeholder = "Select any content from the application")]
+        public ContentField Content { get; set; }
+
+        [Field(Placeholder = "Select any banner content from the application")]
+        [ContentFieldSettings(Group = "Banners")]
+        public ContentField Banner { get; set; }
+
+        [Field(Placeholder = "Select any product content from the application")]
+        [ContentFieldSettings(Group = "Products")]
+        public ContentField Product { get; set; }
+
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         public DateField Date { get; set; }
 

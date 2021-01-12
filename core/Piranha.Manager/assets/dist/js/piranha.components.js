@@ -413,6 +413,83 @@ Vue.component("audio-block", {
   },
   template: "\n<div class=\"block-body has-media-picker d-flex align-items-center\" :class=\"{ empty: isEmpty }\">\n    <audio class=\"flex-grow-1 w-50\" :src=\"mediaUrl\" controls></audio>\n    <div class=\"media-picker slide-in\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                &nbsp;\n            </div>\n            <div class=\"card-body\" v-else>\n                {{ model.body.media.filename }}\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
+Vue.component("content-block", {
+  props: ["uid", "model"],
+  methods: {
+    select: function () {
+      piranha.contentpicker.open(null, this.update);
+    },
+    remove: function () {
+      this.model.body.id = null;
+      this.model.body.content = null;
+    },
+    update: function (content) {
+      if (content !== null) {
+        var self = this;
+        fetch(piranha.baseUrl + "manager/api/content/info/" + content.id).then(function (response) {
+          return response.json();
+        }).then(function (result) {
+          self.model.body.id = result.id;
+          self.model.body.content = result; // Tell parent that title has been updated
+
+          self.$emit('update-title', {
+            uid: self.uid,
+            title: self.model.body.content.title
+          });
+        }).catch(function (error) {
+          console.log("error:", error);
+        });
+      } else {
+        console.log("No content was selected");
+      }
+    }
+  },
+  computed: {
+    isEmpty: function () {
+      return this.model.body.content == null;
+    },
+    contentImage: function () {
+      if (this.hasContentImage) {
+        return piranha.baseUrl + "manager/api/media/url/" + this.model.body.content.primaryImage.id + "/446/220";
+      } else {
+        return piranha.utils.formatUrl("~/manager/assets/img/empty-image.png");
+      }
+    },
+    hasContentImage: function () {
+      return this.model.body.content !== null && this.model.body.content.primaryImage.media !== null;
+    },
+    contentTitle: function () {
+      if (this.hasContentTitle) {
+        return this.model.body.content.title;
+      }
+
+      return "Lorem Ipsum";
+    },
+    hasContentTitle: function () {
+      return this.model.body.content !== null;
+    },
+    contentExcerpt: function () {
+      if (this.hasContentExcerpt) {
+        return this.model.body.content.excerpt;
+      }
+
+      return "Donec id elit non mi porta gravida at eget metus. Cras mattis consectetur purus sit amet fermentum. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.";
+    },
+    hasContentExcerpt: function () {
+      return this.model.body.content !== null && this.model.body.content.excerpt !== null;
+    }
+  },
+  mounted: function () {
+    this.model.getTitle = function () {
+      if (this.model.body.content !== null) {
+        return this.model.body.content.title;
+      } else {
+        return "No content selected";
+      }
+    };
+  },
+  template: "\n<div class=\"block-body has-media-picker rounded clearfix\" :class=\"{ empty: isEmpty }\">\n    <div>\n        <div class=\"page-image\" :style=\"'background-image:url(' + contentImage + ')'\">\n            <img :src=\"piranha.utils.formatUrl('~/manager/assets/img/primaryimage-placeholder.png')\">\n        </div>\n        <h3 :class=\"{ 'text-light': !hasContentTitle }\">{{ contentTitle }}</h3>\n        <p :class=\"{ 'text-light': !hasContentExcerpt }\" v-html=\"contentExcerpt\"></p>\n    </div>\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                &nbsp;\n            </div>\n            <div class=\"card-body\" v-else>\n                <a :href=\"piranha.baseUrl + 'manager/content/edit/' + model.body.content.typeId + '/' + model.body.content.id\" target=\"_blank\">{{ model.body.content.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+});
 Vue.component("html-block", {
   props: ["uid", "toolbar", "model"],
   data: function () {
@@ -941,6 +1018,44 @@ Vue.component("color-field", {
   },
   template: "\n<div class=\"input-group color-field\">\n    <div class=\"input-group-prepend\">\n        <div class=\"color-preview\" :style=\"{ backgroundColor: model.value }\"></div>\n        <input class=\"form-control\" type=\"color\" v-model=\"model.value\">\n    </div>\n    <input class=\"form-control\" type=\"text\" v-model=\"model.value\" v-on:change=\"update()\" :readonly=\"readonly()\" :placeholder=\"meta.placeholder\">\n</div>    \n"
 });
+Vue.component("content-field", {
+  props: ["uid", "model", "meta"],
+  methods: {
+    select: function () {
+      piranha.contentpicker.open(this.meta.settings.Group, this.update);
+    },
+    remove: function () {
+      this.model.id = null;
+      this.model.content = null;
+    },
+    update: function (content) {
+      this.model.id = content.id;
+      this.model.content = content; // Tell parent that title has been updated
+
+      if (this.meta.notifyChange) {
+        this.$emit('update-title', {
+          uid: this.uid,
+          title: this.model.content.title
+        });
+      }
+    }
+  },
+  computed: {
+    isEmpty: function () {
+      return this.model.content == null;
+    }
+  },
+  mounted: function () {
+    this.model.getTitle = function () {
+      if (this.model.content != null) {
+        return this.model.content.title;
+      } else {
+        return "No content selected";
+      }
+    };
+  },
+  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a :href=\"piranha.baseUrl + 'manager/content/edit/' + model.content.typeId + '/' + model.content.id\" target=\"_blank\">{{ model.content.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+});
 Vue.component("data-select-field", {
   props: ["uid", "model", "meta"],
   methods: {
@@ -1290,7 +1405,7 @@ Vue.component("page-field", {
       }
     };
   },
-  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\">{{ model.page.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"piranha.baseUrl + 'manager/page/edit/' + model.page.id\" target=\"_blank\">{{ model.page.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("post-field", {
   props: ["uid", "model", "meta"],
@@ -1328,7 +1443,7 @@ Vue.component("post-field", {
       }
     };
   },
-  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"#\">{{ model.post.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
+  template: "\n<div class=\"media-field\" :class=\"{ empty: isEmpty }\">\n    <div class=\"media-picker\">\n        <div class=\"btn-group float-right\">\n            <button v-on:click.prevent=\"select\" class=\"btn btn-primary text-center\">\n                <i class=\"fas fa-plus\"></i>\n            </button>\n            <button v-on:click.prevent=\"remove\" class=\"btn btn-danger text-center\">\n                <i class=\"fas fa-times\"></i>\n            </button>\n        </div>\n        <div class=\"card text-left\">\n            <div class=\"card-body\" v-if=\"isEmpty\">\n                <span v-if=\"meta.placeholder != null\" class=\"text-secondary\">{{ meta.placeholder }}</span>\n                <span v-if=\"meta.placeholder == null\" class=\"text-secondary\">&nbsp;</span>\n            </div>\n            <div class=\"card-body\" v-else>\n                <a href=\"piranha.baseUrl + 'manager/post/edit/' + model.post.id\" target=\"_blank\">{{ model.post.title }}</a>\n            </div>\n        </div>\n    </div>\n</div>\n"
 });
 Vue.component("readonly-field", {
   props: ["uid", "model", "meta"],
