@@ -22,20 +22,5 @@ namespace RazorWeb.Models
     [ContentType(Title = "Image Banner")]
     public class ImageBanner : Banner<ImageBanner>
     {
-        public class ImageBannerBody
-        {
-            [Field(Title = "Banner Image", Options = FieldOption.HalfWidth)]
-            public ImageField Image { get; set; }
-
-            [Field(Title = "Banner Title", Options = FieldOption.HalfWidth)]
-            [StringFieldSettings(MaxLength = 64)]
-            public StringField Title { get; set; }
-
-            [Field]
-            public HtmlField Body { get; set; }
-        }
-
-        [Region(Title = "Main Content")]
-        public ImageBannerBody Body { get; set; }
     }
 }

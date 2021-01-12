@@ -49,7 +49,6 @@ piranha.contentedit = new Vue({
         primaryImageUrl: function () {
             if (this.primaryImage.media != null) {
                 return piranha.utils.formatUrl("~/manager/api/media/url/" + this.primaryImage.id + "/448/200");
-                //return piranha.utils.formatUrl(this.primaryImage.media.publicUrl);
             } else {
                 return piranha.utils.formatUrl("~/manager/assets/img/empty-image.png");
             }
@@ -192,7 +191,7 @@ piranha.contentedit = new Vue({
                 body: piranha.resources.texts.deletePageConfirm,
                 confirmCss: "btn-danger",
                 confirmIcon: "fas fa-trash",
-                confirmText: piranha.resources.texts.delete,                
+                confirmText: piranha.resources.texts.delete,
                 onConfirm: function () {
                     var groupId = self.groupId;
 
@@ -269,7 +268,7 @@ piranha.contentedit = new Vue({
             }
         },
         onExcerptBlur: function (e) {
-            this.excerpt = e.target.innerHTML;
+            this.excerpt = tinyMCE.activeEditor.getContent();
         }
     },
     created: function () {

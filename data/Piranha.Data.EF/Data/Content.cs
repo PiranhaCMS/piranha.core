@@ -79,6 +79,7 @@ namespace Piranha.Data
                     Translations.Add(translation);
                 }
                 translation.Title = content.Title;
+                translation.Excerpt = content.Excerpt;
             }
         }
 

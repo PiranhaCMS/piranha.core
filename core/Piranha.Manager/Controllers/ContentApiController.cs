@@ -27,14 +27,16 @@ namespace Piranha.Manager.Controllers
     [ApiController]
     public class ContentApiController : Controller
     {
+        private readonly IApi _api;
         private readonly ContentService _content;
         private readonly ContentTypeService _contentType;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public ContentApiController(ContentService content, ContentTypeService contentType)
+        public ContentApiController(ContentService content, ContentTypeService contentType, IApi api)
         {
+            _api = api;
             _content = content;
             _contentType = contentType;
         }
@@ -152,6 +154,20 @@ namespace Piranha.Manager.Controllers
         public async Task<ContentEditModel> Get(Guid id)
         {
            return await _content.GetByIdAsync(id);
+        }
+
+        /// <summary>
+        /// Gets the info model for the content with the
+        /// given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The content info model</returns>
+        [Route("info/{id}")]
+        [HttpGet]
+        [Authorize(Policy = Permission.Content)]
+        public async Task<Piranha.Models.ContentInfo> GetInfo(Guid id)
+        {
+            return await _api.Content.GetByIdAsync<Piranha.Models.ContentInfo>(id);
         }
 
         /// <summary>
