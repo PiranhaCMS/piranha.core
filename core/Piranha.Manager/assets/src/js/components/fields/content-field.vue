@@ -15,7 +15,7 @@
                     <span v-if="meta.placeholder == null" class="text-secondary">&nbsp;</span>
                 </div>
                 <div class="card-body" v-else>
-                    <a href="piranha.baseUrl + 'manager/post/edit/' + model.post.id" target="_blank">{{ model.post.title }}</a>
+                    <a :href="piranha.baseUrl + 'manager/content/edit/' + model.content.typeId + '/' + model.content.id" target="_blank">{{ model.content.title }}</a>
                 </div>
             </div>
         </div>
@@ -27,36 +27,36 @@ export default {
     props: ["uid", "model", "meta"],
     methods: {
         select: function () {
-            piranha.postpicker.open(this.update);
+            piranha.contentpicker.open(this.meta.settings.Group, this.update);
         },
         remove: function () {
             this.model.id = null;
-            this.model.post = null;
+            this.model.content = null;
         },
-        update: function (post) {
-            this.model.id = post.id;
-            this.model.post = post;
+        update: function (content) {
+            this.model.id = content.id;
+            this.model.content = content;
 
             // Tell parent that title has been updated
             if (this.meta.notifyChange) {
                 this.$emit('update-title', {
                     uid: this.uid,
-                    title: this.model.post.title
+                    title: this.model.content.title
                 });
             }
         }
     },
     computed: {
         isEmpty: function () {
-            return this.model.post == null;
+            return this.model.content == null;
         }
     },
     mounted: function() {
         this.model.getTitle = function () {
-            if (this.model.post != null) {
-                return this.model.post.title;
+            if (this.model.content != null) {
+                return this.model.content.title;
             } else {
-                return "No post selected";
+                return "No content selected";
             }
         };
     }
