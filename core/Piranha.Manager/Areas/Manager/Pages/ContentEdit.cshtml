@@ -1,10 +1,13 @@
-@page "~/manager/content/{action}/{contentType}/{id?}"
+@page "~/manager/content/{action}/{contentType}/{id?}/{langId?}"
 @model ContentListViewModel
 @inject ManagerLocalizer Localizer
 @{
     ViewBag.Title = "Add/Edit";
     ViewBag.MenuItem = "Add/Edit";
     string action = ((string)RouteData.Values["action"]).ToLower();
+
+    string contentId = RouteData.Values.ContainsKey("id") ? (string)RouteData.Values["id"] : null;
+    string languageId = RouteData.Values.ContainsKey("langId") ? (string)RouteData.Values["langId"] : null;
 }
 
 @section script
@@ -18,7 +21,16 @@
     {
         <script>
             piranha.permissions.load(function () {
-                piranha.contentedit.load("@RouteData.Values["id"]");
+                @if (languageId != null)
+                {
+<text>                piranha.contentedit.load("@contentId", "@languageId");
+</text>
+                }
+                else
+                {
+<text>                piranha.contentedit.load("@contentId", null);
+</text>
+                }
                 $(".title input").focus();
             });
         </script>
@@ -82,7 +94,7 @@
 
         <!-- Title -->
         <div class="card">
-            <div class="card-body">
+            <div class="card-body" :class="{ 'pb-0': regions.length > 0 }">
                 <div class="row">
                     <div class="col">
                         <div class="form-group title">
@@ -90,7 +102,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="region-center content-center mt-3">
+                <div class="region-center content-center">
                     <div class="row">
                         <div v-if="usePrimaryImage" class="col">
                             <div class="form-group">
@@ -138,7 +150,7 @@
 
         <!-- Custom Editors -->
         <div class="card" :class="{ 'd-none': selectedRegion.uid != editor.uid }" v-for="editor in editors">
-            <div class="card-body">
+            <div class="card-body pt-0">
                 <div class="region-center">
                     <component v-bind:is="editor.component" v-bind:uid="editor.uid" v-bind:id="id"></component>
                 </div>
@@ -147,7 +159,7 @@
 
         <!-- Content Regions -->
         <div class="card" :class="{ 'd-none': selectedRegion.uid != region.meta.uid }" v-for="region in contentRegions">
-            <div class="card-body">
+            <div class="card-body pt-0">
                 <div class="region region-center">
                     <region v-bind:content="'page'" v-bind:type="typeId" v-bind:model="region"></region>
                     <div class="content-blocker"></div>

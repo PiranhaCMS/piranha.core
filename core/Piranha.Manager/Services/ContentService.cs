@@ -84,10 +84,16 @@ namespace Piranha.Manager.Services
         /// Get the content edit model by contnet id
         /// </summary>
         /// <param name="id">The content id</param>
+        /// <param name="languageId">The optional language id</param>
         /// <returns>Edit model</returns>
-        public async Task<ContentEditModel> GetByIdAsync(Guid id)
+        public async Task<ContentEditModel> GetByIdAsync(Guid id, Guid? languageId = null)
         {
-            var content = await _api.Content.GetByIdAsync<DynamicContent>(id);
+            if (!languageId.HasValue)
+            {
+                languageId = (await _api.Languages.GetDefaultAsync()).Id;
+            }
+
+            var content = await _api.Content.GetByIdAsync<DynamicContent>(id, languageId);
             if (content != null)
             {
                 var type =  App.ContentTypes.GetById(content.TypeId);
@@ -99,6 +105,7 @@ namespace Piranha.Manager.Services
 
                 var model = Transform(content);
 
+                model.LanguageId = languageId;
                 model.TypeId = type.Id;
                 model.TypeTitle = type.Title;
                 model.GroupId = group.Id;
@@ -130,6 +137,7 @@ namespace Piranha.Manager.Services
 
                 var model = Transform(content);
 
+                model.LanguageId = (await _api.Languages.GetDefaultAsync()).Id;
                 model.TypeId = type.Id;
                 model.TypeTitle = type.Title;
                 model.GroupId = group.Id;
@@ -157,7 +165,7 @@ namespace Piranha.Manager.Services
                     model.Id = Guid.NewGuid();
                 }
 
-                var content = await _api.Content.GetByIdAsync(model.Id);
+                var content = await _api.Content.GetByIdAsync(model.Id, model.LanguageId);
 
                 if (content == null)
                 {
@@ -224,7 +232,7 @@ namespace Piranha.Manager.Services
                 }
 
                 // Save content
-                await _api.Content.SaveAsync(content);
+                await _api.Content.SaveAsync(content, model.LanguageId);
             }
             else
             {

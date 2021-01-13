@@ -7,6 +7,7 @@ piranha.contentedit = new Vue({
     data: {
         loading: true,
         id: null,
+        languageId: null,
         typeId: null,
         typeTitle: null,
         groupId: null,
@@ -66,6 +67,7 @@ piranha.contentedit = new Vue({
     methods: {
         bind: function (model) {
             this.id = model.id;
+            this.languageId = model.languageId;
             this.typeId = model.typeId;
             this.typeTitle = model.typeTitle;
             this.groupId = model.groupId;
@@ -102,10 +104,15 @@ piranha.contentedit = new Vue({
                 };
             }
         },
-        load: function (id) {
+        load: function (id, languageId) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/content/" + id)
+            var url = piranha.baseUrl + "manager/api/content/" + id;
+            if (languageId != null) {
+                url += "/" + languageId;
+            }
+
+            fetch(url)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.bind(result);
@@ -143,6 +150,7 @@ piranha.contentedit = new Vue({
 
             var model = {
                 id: self.id,
+                languageId: self.languageId,
                 typeId: self.typeId,
                 title: self.title,
                 excerpt: self.excerpt,

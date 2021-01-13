@@ -147,13 +147,14 @@ namespace Piranha.Manager.Controllers
         /// Gets the post with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
+        /// <param name="languageId">The optional language id</param>
         /// <returns>The post edit model</returns>
-        [Route("{id:Guid}")]
+        [Route("{id}/{languageId?}")]
         [HttpGet]
         [Authorize(Policy = Permission.Content)]
-        public async Task<ContentEditModel> Get(Guid id)
+        public async Task<ContentEditModel> Get(Guid id, Guid? languageId = null)
         {
-           return await _content.GetByIdAsync(id);
+           return await _content.GetByIdAsync(id, languageId);
         }
 
         /// <summary>
@@ -208,7 +209,7 @@ namespace Piranha.Manager.Controllers
                 return model;
             }
 
-            var ret = await _content.GetByIdAsync(model.Id);
+            var ret = await _content.GetByIdAsync(model.Id, model.LanguageId);
             ret.Status = new StatusMessage
             {
                 Type = StatusMessage.Success,
