@@ -19,22 +19,22 @@
     <value>Add or select existing tags (optional)</value>
   </data>
   <data name="All categories" xml:space="preserve">
-    <value>All categories</value>
+    <value>همه‌ دسته‌بندی‌ها</value>
   </data>
   <data name="Categories" xml:space="preserve">
-    <value>Categories</value>
+    <value>دسته‌بندی‌ها</value>
   </data>
   <data name="Category" xml:space="preserve">
-    <value>Category</value>
+    <value>دسته‌بندی</value>
   </data>
   <data name="Edit post" xml:space="preserve">
-	  <value>Edit post</value>
+	  <value>ویرایش نوشته</value>
 	</data>
   <data name="Tag" xml:space="preserve">
-    <value>Tag</value>
+    <value>برچسب</value>
   </data>
   <data name="Tags" xml:space="preserve">
-    <value>Tags</value>
+    <value>برچسب‌ها</value>
   </data>
   <data name="Are you sure you want to delete this post?" xml:space="preserve">
     <value>Are you sure you want to delete this post?</value>
