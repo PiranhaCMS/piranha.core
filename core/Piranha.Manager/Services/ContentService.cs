@@ -103,7 +103,7 @@ namespace Piranha.Manager.Services
                 await _factory.InitDynamicManagerAsync(content,
                     App.ContentTypes.GetById(content.TypeId));
 
-                var model = Transform(content);
+                var model = await Transform(content);
 
                 model.LanguageId = languageId;
                 model.TypeId = type.Id;
@@ -115,7 +115,6 @@ namespace Piranha.Manager.Services
 
                 return model;
             }
-
             return null;
         }
 
@@ -135,7 +134,7 @@ namespace Piranha.Manager.Services
 
                 await _factory.InitDynamicManagerAsync(content, type);
 
-                var model = Transform(content);
+                var model = await Transform(content);
 
                 model.LanguageId = (await _api.Languages.GetDefaultAsync()).Id;
                 model.TypeId = type.Id;
@@ -254,10 +253,11 @@ namespace Piranha.Manager.Services
         /// </summary>
         /// <param name="content">The dynamic content object</param>
         /// <returns>Edit model</returns>
-        private ContentEditModel Transform(DynamicContent content)
+        private async Task<ContentEditModel> Transform(DynamicContent content)
         {
             var config = new Config(_api);
             var type = App.ContentTypes.GetById(content.TypeId);
+            var languages = await _api.Languages.GetAllAsync();
 
             var model = new ContentEditModel
             {
@@ -266,9 +266,13 @@ namespace Piranha.Manager.Services
                 PrimaryImage = content.PrimaryImage,
                 Title = content.Title,
                 Excerpt = content.Excerpt,
+                UseCategory = type.UseCategory,
+                UseTags = type.UseTags,
                 UsePrimaryImage = type.UsePrimaryImage,
                 UseExcerpt = type.UseExcerpt,
-                UseHtmlExcerpt = config.HtmlExcerpt
+                UseHtmlExcerpt = config.HtmlExcerpt,
+                UseTranslations = languages.Count() > 1,
+                Languages = languages
             };
 
             foreach (var regionType in type.Regions)

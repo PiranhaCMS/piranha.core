@@ -73,6 +73,11 @@ namespace Piranha.Manager
             {
                 new ToolbarAction
                 {
+                    InternalId = "Languages",
+                    ActionView = "Partial/Actions/_ContentLangPicker"
+                },
+                new ToolbarAction
+                {
                     InternalId = "Save",
                     ActionView = "Partial/Actions/_ContentSave"
                 },
