@@ -110,7 +110,7 @@ namespace Piranha.Azure
 
                     _containerUrl = container.Uri.AbsoluteUri;
                 }
-                return $"{ _containerUrl }/{ GetResourceName(media, id) }";
+                return $"{ _containerUrl }/{ GetResourceName(media, id, true) }";
             }
             return null;
         }
@@ -123,13 +123,25 @@ namespace Piranha.Azure
         /// <returns>The public url</returns>
         public string GetResourceName(Media media, string filename)
         {
+            return GetResourceName(media, filename, false);
+        }
+
+        /// <summary>
+        /// Gets the resource name for the given media object.
+        /// </summary>
+        /// <param name="media">The media file</param>
+        /// <param name="filename">The file name</param>
+        /// <param name="encode">If the filename should be URL encoded</param>
+        /// <returns>The public url</returns>
+        public string GetResourceName(Media media, string filename, bool encode)
+        {
             if (_naming == BlobStorageNaming.UniqueFileNames)
             {
-                return $"{ media.Id }-{ filename }";
+                return $"{ media.Id }-{ (encode ? System.Web.HttpUtility.UrlEncode(filename) : filename) }";
             }
             else
             {
-                return $"{ media.Id }/{ filename }";
+                return $"{ media.Id }/{ (encode ? System.Web.HttpUtility.UrlEncode(filename) : filename) }";
             }
         }
     }

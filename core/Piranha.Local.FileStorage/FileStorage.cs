@@ -70,7 +70,7 @@ namespace Piranha.Local
         {
             if (media != null && !string.IsNullOrWhiteSpace(filename))
             {
-                return _baseUrl + GetResourceName(media, filename);
+                return _baseUrl + GetResourceName(media, filename, true);
             }
             return null;
         }
@@ -83,17 +83,29 @@ namespace Piranha.Local
         /// <returns>The public url</returns>
         public string GetResourceName(Media media, string filename)
         {
+            return GetResourceName(media, filename, false);
+        }
+
+        /// <summary>
+        /// Gets the resource name for the given media object.
+        /// </summary>
+        /// <param name="media">The media file</param>
+        /// <param name="filename">The file name</param>
+        /// <param name="encode">If the filename should be URL encoded</param>
+        /// <returns>The public url</returns>
+        public string GetResourceName(Media media, string filename, bool encode)
+        {
             if (media != null && !string.IsNullOrWhiteSpace(filename))
             {
                 var path = "";
 
                 if (_naming == FileStorageNaming.UniqueFileNames)
                 {
-                    path = $"{ media.Id }-{ filename }";
+                    path = $"{ media.Id }-{ (encode ? System.Web.HttpUtility.UrlEncode(filename) : filename) }";
                 }
                 else
                 {
-                    path = $"{ media.Id }/{ filename }";
+                    path = $"{ media.Id }/{ (encode ? System.Web.HttpUtility.UrlEncode(filename) : filename) }";
                 }
                 return path;
             }

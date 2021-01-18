@@ -451,9 +451,11 @@ namespace Piranha.Services
 
                         if (upload)
                         {
-                            return await session.PutAsync(media, GetResourceName(media, width, height), media.ContentType,
-                                    output)
-                                .ConfigureAwait(false);
+                            await session.PutAsync(media, GetResourceName(media, width, height), media.ContentType,
+                                    output).ConfigureAwait(false);
+
+                            var info = new FileInfo(media.Filename);
+                            return GetPublicUrl(media, width, height, info.Extension);
                         }
                         //When moving this out of its parent method, realized that if the mutex failed, it would just fall back to the null instead of trying to return the issue.
                         //Added this to ensure that queries didn't just give up if they weren't the first to the party.
