@@ -77,7 +77,10 @@ namespace Piranha
                 .Replace("é", "e")
                 .Replace("è", "e")
                 .Replace("í", "i")
-                .Replace("ì", "i");
+                .Replace("ì", "i")
+                .Replace("ž", "z")
+                .Replace("š", "s")
+                .Replace("č", "c");
 
             // Remove special characters
             slug = Regex.Replace(slug, @"[^a-z\u0600-\u06FF0-9-/ ]", "").Replace("--", "-");
