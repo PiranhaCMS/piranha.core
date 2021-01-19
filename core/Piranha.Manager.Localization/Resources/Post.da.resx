@@ -49,9 +49,9 @@
     <value>Aktiver kommentarer for dette opslag</value>
   </data>
   <data name="If the post should be indexed by search engines." xml:space="preserve">
-    <value>If the post should be indexed by search engines.</value>
+    <value>Markér for at lade søgemaskiner indeksere opslaget.</value>
   </data>
   <data name="If links from this post should be indexed." xml:space="preserve">
-    <value>If links from this post should be indexed.</value>
+    <value>Markér for at indeksere links fra dette opslag.</value>
   </data>
 </root>
