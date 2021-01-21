@@ -249,6 +249,7 @@ namespace Piranha.Manager.Services
             {
                 Id = content.Id,
                 TypeId = content.TypeId,
+                Excerpt = content.Excerpt,
                 PrimaryImage = content.PrimaryImage,
                 Title = content.Title,
                 UsePrimaryImage = type.UsePrimaryImage,
