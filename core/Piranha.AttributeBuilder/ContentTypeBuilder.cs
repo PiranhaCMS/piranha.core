@@ -323,8 +323,13 @@ namespace Piranha.AttributeBuilder
                     Group = group.Id,
                     UseExcerpt = attr.UseExcerpt,
                     UsePrimaryImage = attr.UsePrimaryImage,
-                    UseCategory = typeof(ICategorizedContent).IsAssignableFrom(type),
-                    UseTags = typeof(ITaggedContent).IsAssignableFrom(type),
+                    //
+                    // TODO
+                    //
+                    // Categories & Tags will be removed in this version as they
+                    // need to be localized properly and handled in the manager.
+                    UseCategory = false, // typeof(ICategorizedContent).IsAssignableFrom(type),
+                    UseTags = false, // typeof(ITaggedContent).IsAssignableFrom(type),
                     CustomEditors = GetEditors(type),
                     Regions = GetRegions(type)
                 };
