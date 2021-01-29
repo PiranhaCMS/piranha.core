@@ -4,6 +4,6 @@
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedFiles Include="$(GeneratedAssemblyInfoFile)" />
-    <None Include="$(SolutionDir)piranha.png" Pack="true" Visible="false" PackagePath="" />
+    <None Include="piranha.png" Pack="true" Visible="false" PackagePath="" />
   </ItemGroup>
 </Project>
