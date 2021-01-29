@@ -1,6 +1,7 @@
 @page "~/manager/page/{routeAction}/{id}/{pageType?}/{after?}"
 @model PageEditViewModel
 @inject ManagerLocalizer Localizer
+@inject Piranha.Config Config
 @{
     ViewBag.Title = Localizer.Page["Edit page"];
     ViewBag.MenuItem = "Pages";
@@ -133,7 +134,7 @@
         <!-- Blocks -->
         <div class="card" :class="{ 'd-none': selectedRegion.uid != 'uid-blocks' }">
             <div class="card-body" v-bind:class="{ readonly: isCopy }">
-                <div id="content-blocks" class="blocks">
+                <div id="content-blocks" class="blocks@(Config.ManagerOutlined ? " blocks-outline" : "")">
                     <a v-if="!isCopy" href="#" class="block-add unsortable" v-on:click.prevent="piranha.blockpicker.open(piranha.pageedit.addBlock, 0)">
                         <hr>
                         <i class="fas fa-plus-circle"></i>

@@ -17,6 +17,24 @@
     >div >.block {
         margin: -1rem 0;
     }
+
+    &.blocks-outline {
+        .block {
+            border-color: $gray-400;
+
+            .block {
+                border-color: transparent;
+            }
+
+            &.danger {
+                border-color: $danger;
+            }
+
+            &.block-group:hover:not(.danger), &:focus-within {
+                border-color: $gray-400;
+            }
+        }
+    }
 }
 
 .block {
