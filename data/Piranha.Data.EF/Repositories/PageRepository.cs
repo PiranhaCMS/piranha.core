@@ -556,6 +556,9 @@ namespace Piranha.Repositories
                     pageQuery = pageQuery.AsNoTracking();
                 }
 
+                // FirstOrDefaultAsync(p => p.Id ...
+                pageQuery = pageQuery.OrderBy(p => p.Id);
+
                 var page = await pageQuery
                     .Include(p => p.Permissions)
                     .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
@@ -904,6 +907,9 @@ namespace Piranha.Repositories
             IQueryable<Page> query = _db.Pages
                 .AsNoTracking()
                 .Include(p => p.Permissions);
+
+            // FirstOrDefaultAsync(p => p.Id ...
+            query = query.OrderBy(p => p.Id);
 
             if (loadRelated)
             {

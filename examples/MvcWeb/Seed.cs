@@ -71,7 +71,7 @@ namespace MvcWeb
                 startpage.Hero.PrimaryImage = images[1].id;
                 startpage.Hero.Ingress =
                     "<p>A lightweight & unobtrusive CMS for ASP.NET Core.</p>" +
-                    "<p><small>Stable version 6.1.0 - 2019-05-01 - <a href=\"https://github.com/piranhacms/piranha.core/wiki/changelog\" target=\"_blank\">Changelog</a></small></p>";
+                    "<p><small>beta version 9.0.0 - 2021-01-28 - <a href=\"https://github.com/piranhacms/piranha.core/wiki/changelog\" target=\"_blank\">Changelog</a></small></p>";
 
                 // Teasers
                 startpage.Teasers.Add(new Models.Regions.Teaser
