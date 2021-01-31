@@ -701,6 +701,9 @@ namespace Piranha.Repositories
                     postQuery = postQuery.AsNoTracking();
                 }
 
+                // FirstOrDefaultAsync(p => p.Id ...
+                postQuery = postQuery.OrderBy(p => p.Id);
+
                 var post = await postQuery
                     .Include(p => p.Permissions)
                     .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
@@ -1044,6 +1047,9 @@ namespace Piranha.Repositories
                     .Include(p => p.Blocks).ThenInclude(b => b.Block).ThenInclude(b => b.Fields)
                     .Include(p => p.Fields);
             }
+
+            query = query.OrderBy(p => p.Created);
+
             return query.AsSplitQuery();
         }
 

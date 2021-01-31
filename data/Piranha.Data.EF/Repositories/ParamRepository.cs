@@ -78,7 +78,8 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="key">The unique key</param>
         /// <returns>The model</returns>
-        public Task<Param> GetByKey(string key) {
+        public Task<Param> GetByKey(string key)
+        {
             return _db.Params
                 .AsNoTracking()
                 .Select(p => new Param
