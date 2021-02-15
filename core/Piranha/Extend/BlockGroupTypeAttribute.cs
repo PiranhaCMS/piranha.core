@@ -17,16 +17,17 @@ namespace Piranha.Extend
     public class BlockGroupTypeAttribute : BlockTypeAttribute
     {
         /// <summary>
+        /// Default constructor
+        /// </summary>
+        public BlockGroupTypeAttribute()
+        {
+            _component = null;
+        }
+
+        /// <summary>
         /// Gets/sets how the blocks inside the group should be
         /// displayed in the manager interface.
         /// </summary>
         public BlockDisplayMode Display { get; set; } = BlockDisplayMode.MasterDetail;
-
-        /// <summary>
-        /// Gets/sets if the block group should use a custom
-        /// view for rendering block global fields. The default
-        /// value for this property is false.
-        /// </summary>
-        public bool UseCustomView { get; set; }
     }
 }

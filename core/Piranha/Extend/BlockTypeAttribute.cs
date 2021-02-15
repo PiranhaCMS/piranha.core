@@ -17,7 +17,7 @@ namespace Piranha.Extend
     {
         private bool _isGenericManuallySet = false;
         private bool _isGeneric = true;
-        private string _component = "generic-block";
+        protected string _component = "generic-block";
 
         /// <summary>
         /// Gets/sets the display name.
