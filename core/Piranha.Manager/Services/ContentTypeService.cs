@@ -282,16 +282,10 @@ namespace Piranha.Manager.Services
                             Name = blockType.Name,
                             Title = block.GetTitle(),
                             Icon = blockType.Icon,
-                            Component = "block-group",
+                            Component = blockType.Component,
                             IsGroup = true
                         }
                     };
-
-                    if (blockType.Display != BlockDisplayMode.MasterDetail)
-                    {
-                        item.Meta.Component = blockType.Display == BlockDisplayMode.Horizontal ?
-                            "block-group-horizontal" : "block-group-vertical";
-                    }
 
                     item.Fields = ContentUtils.GetBlockFields(block);
 

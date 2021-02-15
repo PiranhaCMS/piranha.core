@@ -681,19 +681,13 @@ namespace Piranha.Manager.Services
                         {
                             Name = blockType.Name,
                             Icon = blockType.Icon,
-                            Component = "block-group",
+                            Component = blockType.Component,
                             IsGroup = true,
                             IsReadonly = page.OriginalPageId.HasValue,
                             isCollapsed = config.ManagerDefaultCollapsedBlocks,
                             ShowHeader = !config.ManagerDefaultCollapsedBlockGroupHeaders
                         }
                     };
-
-                    if (blockType.Display != BlockDisplayMode.MasterDetail)
-                    {
-                        group.Meta.Component = blockType.Display == BlockDisplayMode.Horizontal ?
-                            "block-group-horizontal" : "block-group-vertical";
-                    }
 
                     group.Fields = ContentUtils.GetBlockFields(block);
 
