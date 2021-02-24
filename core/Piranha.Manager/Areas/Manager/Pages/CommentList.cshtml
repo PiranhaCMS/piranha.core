@@ -43,6 +43,7 @@
                         <button v-on:click.prevent="setStatus('all')" class="btn btn-sm" :class="{ 'btn-primary': state === 'all', 'btn-light': state !== 'all' }">@Localizer.General["All"]</button>
                         <button v-on:click.prevent="setStatus('pending')" class="btn btn-sm" :class="{ 'btn-primary': state === 'pending', 'btn-light': state !== 'pending' }">@Localizer.Comment["Pending"]</button>
                         <button v-on:click.prevent="setStatus('approved')" class="btn btn-sm" :class="{ 'btn-primary': state === 'approved', 'btn-light': state !== 'approved' }">@Localizer.Comment["Approved"]</button>
+                        <button v-on:click.prevent="setStatus('rejected')" class="btn btn-sm" :class="{ 'btn-primary': state === 'rejected', 'btn-light': state !== 'rejected' }">@Localizer.Comment["Rejected"]</button>
                     </div>
                     <table class="table table-borderless table-comments">
                         <thead>
@@ -51,6 +52,8 @@
                                 <th class="w-50">@Localizer.Comment["Comment"]</th>
                                 <th class="text-nowrap">@Localizer.Comment["Response to"]</th>
                                 <th class="text-center">@Localizer.Comment["Approved"]</th>
+                                <th class="text-center">@Localizer.Comment["Rejected"]</th>
+                                <th class="text-nowrap">@Localizer.Comment["Reason"]</th>
                                 <th>@Localizer.General["Created"]</th>
                                 <th class="actions one"></th>
                             </tr>
@@ -68,6 +71,10 @@
                                 <td class="text-center text-success align-middle">
                                     <button v-on:click.prevent="toggleApproved(comment)" class="switch" :aria-pressed="comment.isApproved"><span></span></button>
                                 </td>
+                                <td class="actions one align-middle">
+                                    <a v-if="comment.isRejected" href="#" title="@Localizer.General["Rejected"]" class="danger"><i class="fas fa-exclamation-circle"></i></a>
+                                </td>
+                                <td>{{ comment.statusReason }}</td>
                                 <td class="align-middle">{{ comment.created }}</td>
                                 <td class="actions one align-middle">
                                     <a v-if="piranha.permissions.comments.delete" v-on:click.prevent="remove(comment.id)" href="#" title="@Localizer.General["Delete"]" class="danger"><i class="fas fa-trash"></i></a>

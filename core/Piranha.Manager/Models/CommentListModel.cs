@@ -25,6 +25,8 @@ namespace Piranha.Manager.Models
             public string ArticleTitle { get; set; }
             public string ArticleUrl { get; set; }
             public bool IsApproved { get; set; }
+            public bool IsRejected { get; set; }
+            public string StatusReason { get; set; }
             public string Created { get; set; }
             internal DateTime CreatedDate { get; set; }
         }

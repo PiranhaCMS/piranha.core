@@ -17,10 +17,13 @@ piranha.comment = new Vue({
             return this.items.filter(function (item) {
                 if (self.state === "all") {
                     return true;
-                } else if (self.state === "pending") {
-                    return !item.isApproved;
-                } else {
+                } else if (self.state === "approved") {
                     return item.isApproved;
+                } else if (self.state === "rejected") {
+                    return item.isRejected;
+                } else {
+                    // if (self.state === "pending")
+                    return !item.isApproved && !item.isRejected;
                 }
             });
         }

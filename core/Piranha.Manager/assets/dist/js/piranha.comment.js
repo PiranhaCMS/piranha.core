@@ -14,13 +14,21 @@ piranha.comment = new Vue({
         filteredItems: function () {
             var self = this;
 
+            console.log(">>> self.state=" + self.state);
+            self.items.forEach(function(item, i) {
+                console.log(">>> >> self.items[" + i + "].isApproved=" + item.isApproved);
+                console.log(">>> >> self.items[" + i + "].isRejected=" + item.isRejected);
+                console.log(">>> >> self.items[" + i + "].!a&&!r=" + (!item.isApproved && !item.isRejected));
+            });
             return this.items.filter(function (item) {
                 if (self.state === "all") {
                     return true;
-                } else if (self.state === "pending") {
-                    return !item.isApproved;
-                } else {
+                } else if (self.state === "approved") {
                     return item.isApproved;
+                } else if (self.state === "rejected") {
+                    return item.isRejected;
+                } else {
+                    return !item.isApproved && !item.isRejected;
                 }
             });
         }

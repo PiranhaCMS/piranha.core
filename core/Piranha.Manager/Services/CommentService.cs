@@ -57,7 +57,9 @@ namespace Piranha.Manager.Services
                     AuthorImage = Utils.GenerateGravatarUrl(postComment.Email, 25),
                     Email = postComment.Email,
                     Body = postComment.Body,
-                    IsApproved = postComment.IsApproved,
+                    IsApproved = postComment.Status == CommentStatus.Approved,
+                    IsRejected = postComment.Status == CommentStatus.Rejected,
+                    StatusReason =  postComment.StatusReason,
                     Created = postComment.Created.ToString("yyyy-MM-dd"),
                     CreatedDate = postComment.Created
                 });
@@ -76,7 +78,9 @@ namespace Piranha.Manager.Services
                     AuthorImage = Utils.GenerateGravatarUrl(pageComment.Email, 25),
                     Email = pageComment.Email,
                     Body = pageComment.Body,
-                    IsApproved = pageComment.IsApproved,
+                    IsApproved = pageComment.Status == CommentStatus.Approved,
+                    IsRejected = pageComment.Status == CommentStatus.Rejected,
+                    StatusReason = pageComment.StatusReason,
                     Created = pageComment.Created.ToString("yyyy-MM-dd"),
                     CreatedDate = pageComment.Created
                 });
@@ -95,7 +99,8 @@ namespace Piranha.Manager.Services
 
             if (comment != null)
             {
-                comment.IsApproved = true;
+                comment.Status = CommentStatus.Approved;
+                comment.StatusReason = "Manager Approved";
                 await _api.Posts.SaveCommentAsync(comment.ContentId, comment);
             }
             else
@@ -104,7 +109,8 @@ namespace Piranha.Manager.Services
 
                 if (comment != null)
                 {
-                    comment.IsApproved = true;
+                    comment.Status = CommentStatus.Approved;
+                    comment.StatusReason = "Manager Approved";
                     await _api.Pages.SaveCommentAsync(comment.ContentId, comment);
                 }
             }
@@ -116,7 +122,8 @@ namespace Piranha.Manager.Services
 
             if (comment != null)
             {
-                comment.IsApproved = false;
+                comment.Status = CommentStatus.Rejected;
+                comment.StatusReason = "Manually rejected";
                 await _api.Posts.SaveCommentAsync(comment.ContentId, comment);
             }
             else
@@ -125,7 +132,8 @@ namespace Piranha.Manager.Services
 
                 if (comment != null)
                 {
-                    comment.IsApproved = false;
+                    comment.Status = CommentStatus.Rejected;
+                    comment.StatusReason = "Manually rejected";
                     await _api.Pages.SaveCommentAsync(comment.ContentId, comment);
                 }
             }

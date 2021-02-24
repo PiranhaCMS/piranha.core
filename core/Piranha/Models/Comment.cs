@@ -68,8 +68,31 @@ namespace Piranha.Models
         /// <summary>
         /// Comments are approved by default unless you use some kind of comment
         /// validation mechanism.
+        /// Note on obsolete:
+        /// IsApproved=True corresponds to Status=CommentStatus.Approved
+        /// IsApproved=False corresponds to Status=CommentStatus.Rejected
+        /// Submitted comments with config set to NOT approve directly will result in
+        /// Status=CommentStatus.Pending
+        /// In other words: there is no way to deal with pending comments using IsApproved
         /// </summary>
-        public bool IsApproved { get; set; } = true;
+        [Obsolete("IsApproved is obsolete and has been replaced with CommentStatus", true)]
+        public bool IsApproved 
+        {
+            get => Status == CommentStatus.Approved;
+            set => Status = value ? CommentStatus.Approved : CommentStatus.Rejected;
+        }
+
+        /// <summary>
+        /// Gets/sets the comment status. 
+        /// Models.CommentStatus.Approved is equivalent to <see cref="Models.Comment.IsApproved"/> = true.
+        /// </summary>
+        [Required]
+        public CommentStatus Status { get; set; } = CommentStatus.Approved;
+
+        /// <summary>
+        /// Gets/sets the optional reason for current status
+        /// </summary>
+        public string StatusReason { get; set; }
 
         /// <summary>
         /// Gets/sets the comment body.

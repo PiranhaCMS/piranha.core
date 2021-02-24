@@ -298,12 +298,12 @@ namespace RazorWeb
                     Email = "hakan@tidyui.com",
                     Url = "http://piranhacms.org",
                     Body = "Awesome to see that the project is up and running! Now maybe it's time to start customizing it to your needs. You can find a lot of information in the official docs.",
-                    IsApproved = true
+                    Status = Piranha.Models.CommentStatus.Approved
                 };
                 await api.Posts.SaveCommentAsync(blogpost.Id, comment);
 
                 comment.Id = Guid.Empty;
-                comment.IsApproved = false;
+                comment.Status = Piranha.Models.CommentStatus.Pending;
 
                 await api.Pages.SaveCommentAsync(featurespage.Id, comment);
 

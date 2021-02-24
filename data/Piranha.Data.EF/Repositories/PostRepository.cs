@@ -342,7 +342,8 @@ namespace Piranha.Repositories
                     Author = c.Author,
                     Email = c.Email,
                     Url = c.Url,
-                    IsApproved = c.IsApproved,
+                    Status = c.Status,
+                    StatusReason = c.StatusReason,
                     Body = c.Body,
                     Created = c.Created
                 }).FirstOrDefaultAsync();
@@ -390,7 +391,8 @@ namespace Piranha.Repositories
             comment.Author = model.Author;
             comment.Email = model.Email;
             comment.Url = model.Url;
-            comment.IsApproved = model.IsApproved;
+            comment.Status = model.Status;
+            comment.StatusReason = model.StatusReason;
             comment.Body = model.Body;
             comment.Created = model.Created;
 
@@ -560,11 +562,11 @@ namespace Piranha.Repositories
             // Check if we should only include approved
             if (onlyPending)
             {
-                query = query.Where(c => !c.IsApproved);
+                query = query.Where(c => c.Status == Models.CommentStatus.Pending);
             }
             else if (onlyApproved)
             {
-                query = query.Where(c => c.IsApproved);
+                query = query.Where(c => c.Status == Models.CommentStatus.Approved);
             }
 
             // Order the comments by date
@@ -588,7 +590,8 @@ namespace Piranha.Repositories
                     Author = c.Author,
                     Email = c.Email,
                     Url = c.Url,
-                    IsApproved = c.IsApproved,
+                    Status = c.Status,
+                    StatusReason = c.StatusReason,
                     Body = c.Body,
                     Created = c.Created
                 }).ToListAsync().ConfigureAwait(false);
@@ -1070,7 +1073,7 @@ namespace Piranha.Repositories
             model.EnableComments = post.EnableComments;
             if (model.EnableComments)
             {
-                model.CommentCount = await _db.PostComments.CountAsync(c => c.PostId == model.Id && c.IsApproved).ConfigureAwait(false);
+                model.CommentCount = await _db.PostComments.CountAsync(c => c.PostId == model.Id && c.Status == Models.CommentStatus.Approved).ConfigureAwait(false);
             }
             model.CloseCommentsAfterDays = post.CloseCommentsAfterDays;
 

@@ -87,10 +87,12 @@ namespace Piranha.AspNetCore.Models
         /// <param name="draft">If the draft should be fetched</param>
         public virtual async Task<IActionResult> OnPostSaveComment(Guid id, bool draft = false)
         {
+            var ipAddress = Request.HttpContext.Connection.RemoteIpAddress;
+
             // Create the comment
             var comment = new Comment
             {
-                IpAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString(),
+                IpAddress = ipAddress == null ? string.Empty : ipAddress.ToString(),
                 UserAgent = Request.Headers.ContainsKey("User-Agent") ? Request.Headers["User-Agent"].ToString() : "",
                 Author = CommentAuthor,
                 Email = CommentEmail,

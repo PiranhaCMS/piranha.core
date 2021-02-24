@@ -41,11 +41,15 @@ namespace Piranha.Data
         public string Url { get; set; }
 
         /// <summary>
-        /// Gets/sets if the comment has been approved. Comments are
-        /// approved by default unless you use some kind of comment
-        /// validation mechanism.
+        /// Gets/sets the comment status. 
+        /// Models.CommentStatus.Approved is equivalent to <see cref="Models.Comment.IsApproved"/> = true.
         /// </summary>
-        public bool IsApproved { get; set; } = true;
+        public Models.CommentStatus Status { get; set; } = Models.CommentStatus.Approved;
+
+        /// <summary>
+        /// Gets/sets the optional reason for current status
+        /// </summary>
+        public string StatusReason { get; set; }
 
         /// <summary>
         /// Gets/sets the comment body.
