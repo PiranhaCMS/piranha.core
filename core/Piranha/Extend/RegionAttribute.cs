@@ -57,5 +57,10 @@ namespace Piranha.Extend
         /// the manager interface.
         /// </summary>
         public RegionDisplayMode Display { get; set; }
+
+        /// <summary>
+        /// Gets/sets the editor width. The default value is "Centered".
+        /// </summary>
+        public EditorWidth Width { get; set; } = EditorWidth.Centered;
     }
 }

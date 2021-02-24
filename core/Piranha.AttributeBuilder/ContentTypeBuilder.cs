@@ -590,7 +590,8 @@ namespace Piranha.AttributeBuilder
                     ListTitlePlaceholder = attr.ListPlaceholder,
                     ListExpand = attr.ListExpand,
                     Icon = attr.Icon,
-                    Display = attr.Display
+                    Display = attr.Display,
+                    Width = attr.Width
                 };
                 int? sortOrder = attr.SortOrder != Int32.MaxValue ? attr.SortOrder : (int?)null;
 

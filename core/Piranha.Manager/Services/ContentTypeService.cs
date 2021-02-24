@@ -283,6 +283,7 @@ namespace Piranha.Manager.Services
                             Title = block.GetTitle(),
                             Icon = blockType.Icon,
                             Component = blockType.Component,
+                            Width = blockType.Width.ToString().ToLower(),
                             IsGroup = true
                         }
                     };
@@ -309,7 +310,8 @@ namespace Piranha.Manager.Services
                                     Name = blockType.Name,
                                     Title = block.GetTitle(),
                                     Icon = blockType.Icon,
-                                    Component = blockType.Component
+                                    Component = blockType.Component,
+                                    Width = blockType.Width.ToString().ToLower()
                                 }
                             }
                         };
@@ -325,7 +327,8 @@ namespace Piranha.Manager.Services
                                 Name = blockType.Name,
                                 Title = block.GetTitle(),
                                 Icon = blockType.Icon,
-                                Component = blockType.Component
+                                Component = blockType.Component,
+                                Width = blockType.Width.ToString().ToLower()
                             }
                         };
 

@@ -141,7 +141,7 @@
                     </a>
                     <span v-else class="block-add unsortable"><hr><i class="fas fa-plus-circle"></i></span>
                     <div v-for="(block, index) in blocks" v-bind:key="block.meta.uid">
-                        <div :class="'block ' + block.meta.component + (block.meta.isCollapsed ? ' collapsed' : '')">
+                        <div :class="'block ' + block.meta.component + (block.meta.isCollapsed ? ' collapsed' : '') + (block.meta.width === 'full' ? ' block-full' : '')">
                             <div :id="'tb-' + block.meta.uid" class="component-toolbar"></div>
                             <div class="block-header">
                                 <div class="title">
@@ -189,7 +189,7 @@
         <!-- Content Regions -->
         <div class="card" :class="{ 'd-none': selectedRegion.uid != region.meta.uid }" v-for="region in contentRegions">
             <div class="card-body">
-                <div class="region region-center" :class="{ readonly: isCopy }">
+                <div class="region" :class="{ readonly: isCopy, 'region-center': region.meta.width === 'centered' }">
                     <region v-bind:content="'page'" v-bind:type="typeId" v-bind:model="region"></region>
                     <div class="content-blocker"></div>
                 </div>

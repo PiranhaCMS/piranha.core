@@ -8,6 +8,8 @@
  *
  */
 
+using Piranha.Models;
+
 namespace Piranha.Manager.Models.Content
 {
     /// <summary>
@@ -34,5 +36,10 @@ namespace Piranha.Manager.Models.Content
         /// If the global header fields should be visible.
         /// </summary>
         public bool ShowHeader { get; set; } = true;
+
+        /// <summary>
+        /// Gets/sets the editor width.
+        /// </summary>
+        public string Width { get; set; }
     }
 }

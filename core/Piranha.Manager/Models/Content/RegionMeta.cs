@@ -31,8 +31,13 @@ namespace Piranha.Manager.Models.Content
         public bool Expanded { get; set; }
 
         /// <summary>
-        /// Gets/sets how the region should be display (content/full/setting)
+        /// Gets/sets how the region should be display (content/hidden/setting).
         /// </summary>
         public string Display { get; set; }
+
+        /// <summary>
+        /// Gets/sets the editor width.
+        /// </summary>
+        public string Width { get; set; }
     }
 }

@@ -55,6 +55,11 @@ namespace Piranha.Runtime
         public string Component { get; set; }
 
         /// <summary>
+        /// Gets/sets the editor width.
+        /// </summary>
+        public EditorWidth Width { get; set; }
+
+        /// <summary>
         /// Gets/sets the specified item types.
         /// </summary>
         public IList<Type> ItemTypes { get; set; } = new List<Type>();
