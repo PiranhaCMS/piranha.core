@@ -262,7 +262,8 @@ namespace Piranha.Manager.Services
                         IsCollection = regionType.Collection,
                         Expanded = regionType.ListExpand,
                         Icon = regionType.Icon,
-                        Display = regionType.Display.ToString().ToLower()
+                        Display = regionType.Display.ToString().ToLower(),
+                        Width = regionType.Width.ToString().ToLower()
                     }
                 };
                 var regionListModel = ((IDictionary<string, object>)site.Regions)[regionType.Id];

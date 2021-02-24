@@ -10,10 +10,9 @@
 
 namespace Piranha.Models
 {
-    public enum RegionDisplayMode
+    public enum EditorWidth
     {
-        Content,
-        Setting,
-        Hidden
+        Centered,
+        Full
     }
 }
