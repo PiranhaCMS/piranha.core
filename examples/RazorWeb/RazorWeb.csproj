@@ -25,8 +25,6 @@
     <ProjectReference Include="..\..\data\Piranha.Data.EF.SQLite\Piranha.Data.EF.SQLite.csproj" />
     <ProjectReference Include="..\..\data\Piranha.Data.EF.MySql\Piranha.Data.EF.MySql.csproj" />
     <ProjectReference Include="..\..\data\Piranha.Data.EF.PostgreSql\Piranha.Data.EF.PostgreSql.csproj" />
-    <ProjectReference Include="..\..\data\Piranha.Data.EF.SQLServer\Piranha.Data.EF.SQLServer.csproj" />
-    <ProjectReference Include="..\..\identity\Piranha.AspNetCore.Identity.MySQL\Piranha.AspNetCore.Identity.MySQL.csproj" />
     <ProjectReference Include="..\..\identity\Piranha.AspNetCore.Identity.SQLite\Piranha.AspNetCore.Identity.SQLite.csproj" />
   </ItemGroup>
 </Project>

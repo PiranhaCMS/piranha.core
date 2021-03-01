@@ -789,15 +789,7 @@ namespace Piranha.Services
                 {
                     using (var config = new Config(_paramService))
                     {
-                        if (config.CommentsApprove)
-                        {
-                            model.Status = CommentStatus.Approved;
-                            model.StatusReason = "Config Approved";
-                        }
-                        else
-                        {
-                            model.Status = CommentStatus.Pending;
-                        }
+                        model.Status = config.CommentsApprove ? CommentStatus.Approved : CommentStatus.Pending;
                     }
                     App.Hooks.OnValidate<Comment>(model);
                 }

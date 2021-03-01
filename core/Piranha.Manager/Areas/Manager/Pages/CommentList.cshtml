@@ -74,8 +74,8 @@
                                 <td class="actions one align-middle">
                                     <a v-if="comment.isRejected" href="#" title="@Localizer.General["Rejected"]" class="danger"><i class="fas fa-exclamation-circle"></i></a>
                                 </td>
-                                <td>{{ comment.statusReason }}</td>
-                                <td class="align-middle">{{ comment.created }}</td>
+                                <td class="text-center align-middle">{{ comment.statusReason }}</td>
+                                <td class="align-middle text-nowrap">{{ comment.created }}</td>
                                 <td class="actions one align-middle">
                                     <a v-if="piranha.permissions.comments.delete" v-on:click.prevent="remove(comment.id)" href="#" title="@Localizer.General["Delete"]" class="danger"><i class="fas fa-trash"></i></a>
                                 </td>

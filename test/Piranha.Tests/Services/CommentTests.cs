@@ -243,7 +243,7 @@ namespace Piranha.Tests.Services
                 var comment = await api.Posts.GetCommentByIdAsync(id);
 
                 Assert.NotNull(comment);
-                Assert.True(comment.Status == CommentStatus.Approved);
+				Assert.Equal(CommentStatus.Approved, comment.Status);
             }
         }
 
@@ -270,7 +270,7 @@ namespace Piranha.Tests.Services
                 var comment = await api.Posts.GetCommentByIdAsync(id);
 
                 Assert.NotNull(comment);
-                Assert.False(comment.Status == CommentStatus.Rejected);
+				Assert.Equal(CommentStatus.Pending, comment.Status);
             }
         }
 
@@ -363,7 +363,7 @@ namespace Piranha.Tests.Services
                 var comment = await api.Pages.GetCommentByIdAsync(id);
 
                 Assert.NotNull(comment);
-                Assert.Equal(comment.Status, CommentStatus.Approved);
+                Assert.Equal(CommentStatus.Approved, comment.Status);
             }
         }
 
@@ -390,7 +390,7 @@ namespace Piranha.Tests.Services
                 var comment = await api.Pages.GetCommentByIdAsync(id);
 
                 Assert.NotNull(comment);
-                Assert.Equal(comment.Status, CommentStatus.Rejected);
+                Assert.Equal(CommentStatus.Pending, comment.Status);
             }
         }
     }

@@ -14,8 +14,8 @@ namespace Piranha.Data.EF.MySql.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.0")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64)
+                .HasAnnotation("ProductVersion", "5.0.0");
 
             modelBuilder.Entity("Piranha.Data.Alias", b =>
                 {
@@ -25,8 +25,8 @@ namespace Piranha.Data.EF.MySql.Migrations
 
                     b.Property<string>("AliasUrl")
                         .IsRequired()
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime(6)");
@@ -36,8 +36,8 @@ namespace Piranha.Data.EF.MySql.Migrations
 
                     b.Property<string>("RedirectUrl")
                         .IsRequired()
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
 
                     b.Property<Guid>("SiteId")
                         .HasColumnType("char(36)");
@@ -61,8 +61,8 @@ namespace Piranha.Data.EF.MySql.Migrations
 
                     b.Property<string>("CLRType")
                         .IsRequired()
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime(6)");
@@ -77,8 +77,8 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Title")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -96,13 +96,13 @@ namespace Piranha.Data.EF.MySql.Migrations
 
                     b.Property<string>("CLRType")
                         .IsRequired()
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
 
                     b.Property<string>("FieldId")
                         .IsRequired()
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
 
                     b.Property<int>("SortOrder")
                         .HasColumnType("int");
@@ -135,13 +135,13 @@ namespace Piranha.Data.EF.MySql.Migrations
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -151,6 +151,219 @@ namespace Piranha.Data.EF.MySql.Migrations
                     b.ToTable("Piranha_Categories");
                 });
 
+            modelBuilder.Entity("Piranha.Data.Content", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Excerpt")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("PrimaryImageId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("TypeId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("Piranha_Content");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentField", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("CLRType")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+
+                    b.Property<Guid>("ContentId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("FieldId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+
+                    b.Property<string>("RegionId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContentId", "RegionId", "FieldId", "SortOrder");
+
+                    b.ToTable("Piranha_ContentFields");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentFieldTranslation", b =>
+                {
+                    b.Property<Guid>("FieldId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("LanguageId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("FieldId", "LanguageId");
+
+                    b.HasIndex("LanguageId");
+
+                    b.ToTable("Piranha_ContentFieldTranslations");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentGroup", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+
+                    b.Property<string>("CLRType")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Icon")
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Piranha_ContentGroups");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentTaxonomy", b =>
+                {
+                    b.Property<Guid>("ContentId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("TaxonomyId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("ContentId", "TaxonomyId");
+
+                    b.HasIndex("TaxonomyId");
+
+                    b.ToTable("Piranha_ContentTaxonomies");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentTranslation", b =>
+                {
+                    b.Property<Guid>("ContentId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("LanguageId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Excerpt")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+
+                    b.HasKey("ContentId", "LanguageId");
+
+                    b.HasIndex("LanguageId");
+
+                    b.ToTable("Piranha_ContentTranslations");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentType", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+
+                    b.Property<string>("Body")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("CLRType")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Group")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Piranha_ContentTypes");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Language", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Culture")
+                        .HasMaxLength(6)
+                        .HasColumnType("varchar(6) CHARACTER SET utf8mb4");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Piranha_Languages");
+                });
+
             modelBuilder.Entity("Piranha.Data.Media", b =>
                 {
                     b.Property<Guid>("Id")
@@ -158,25 +371,25 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("AltText")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
 
                     b.Property<string>("ContentType")
                         .IsRequired()
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(512) CHARACTER SET utf8mb4")
-                        .HasMaxLength(512);
+                        .HasMaxLength(512)
+                        .HasColumnType("varchar(512) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Filename")
                         .IsRequired()
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
 
                     b.Property<Guid?>("FolderId")
                         .HasColumnType("char(36)");
@@ -197,8 +410,8 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Title")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
@@ -223,13 +436,13 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(512) CHARACTER SET utf8mb4")
-                        .HasMaxLength(512);
+                        .HasMaxLength(512)
+                        .HasColumnType("varchar(512) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
 
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("char(36)");
@@ -246,8 +459,8 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("FileExtension")
-                        .HasColumnType("varchar(8) CHARACTER SET utf8mb4")
-                        .HasMaxLength(8);
+                        .HasMaxLength(8)
+                        .HasColumnType("varchar(8) CHARACTER SET utf8mb4");
 
                     b.Property<int?>("Height")
                         .HasColumnType("int");
@@ -281,8 +494,8 @@ namespace Piranha.Data.EF.MySql.Migrations
                     b.Property<string>("ContentType")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
                         .HasMaxLength(255)
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
                         .HasDefaultValue("Page");
 
                     b.Property<DateTime>("Created")
@@ -303,39 +516,54 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("MetaDescription")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+
+                    b.Property<bool?>("MetaFollow")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool?>("MetaIndex")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("MetaKeywords")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+
+                    b.Property<double>("MetaPriority")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("double")
+                        .HasDefaultValue(0.5);
 
                     b.Property<string>("MetaTitle")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
 
                     b.Property<string>("NavigationTitle")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
 
                     b.Property<string>("OgDescription")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
 
                     b.Property<Guid>("OgImageId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("OgTitle")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
 
                     b.Property<Guid?>("OriginalPageId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("PageTypeId")
                         .IsRequired()
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
 
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("char(36)");
@@ -350,28 +578,28 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("RedirectUrl")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Route")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
 
                     b.Property<Guid>("SiteId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
 
                     b.Property<int>("SortOrder")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -421,8 +649,8 @@ namespace Piranha.Data.EF.MySql.Migrations
 
                     b.Property<string>("Author")
                         .IsRequired()
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Body")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -432,8 +660,8 @@ namespace Piranha.Data.EF.MySql.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
 
                     b.Property<bool>("IsApproved")
                         .HasColumnType("tinyint(1)");
@@ -442,8 +670,8 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Url")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
 
                     b.Property<string>("UserId")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -463,21 +691,21 @@ namespace Piranha.Data.EF.MySql.Migrations
 
                     b.Property<string>("CLRType")
                         .IsRequired()
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
 
                     b.Property<string>("FieldId")
                         .IsRequired()
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
 
                     b.Property<Guid>("PageId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("RegionId")
                         .IsRequired()
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
 
                     b.Property<int>("SortOrder")
                         .HasColumnType("int");
@@ -530,15 +758,15 @@ namespace Piranha.Data.EF.MySql.Migrations
             modelBuilder.Entity("Piranha.Data.PageType", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Body")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("CLRType")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime(6)");
@@ -561,13 +789,13 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime(6)");
@@ -613,32 +841,47 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("MetaDescription")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+
+                    b.Property<bool?>("MetaFollow")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool?>("MetaIndex")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("MetaKeywords")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+
+                    b.Property<double>("MetaPriority")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("double")
+                        .HasDefaultValue(0.5);
 
                     b.Property<string>("MetaTitle")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
 
                     b.Property<string>("OgDescription")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
 
                     b.Property<Guid>("OgImageId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("OgTitle")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
 
                     b.Property<string>("PostTypeId")
                         .IsRequired()
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
 
                     b.Property<Guid?>("PrimaryImageId")
                         .HasColumnType("char(36)");
@@ -650,22 +893,22 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("RedirectUrl")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Route")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -715,8 +958,8 @@ namespace Piranha.Data.EF.MySql.Migrations
 
                     b.Property<string>("Author")
                         .IsRequired()
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Body")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -726,8 +969,8 @@ namespace Piranha.Data.EF.MySql.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
 
                     b.Property<bool>("IsApproved")
                         .HasColumnType("tinyint(1)");
@@ -736,12 +979,12 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Url")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -758,21 +1001,21 @@ namespace Piranha.Data.EF.MySql.Migrations
 
                     b.Property<string>("CLRType")
                         .IsRequired()
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
 
                     b.Property<string>("FieldId")
                         .IsRequired()
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
 
                     b.Property<Guid>("PostId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("RegionId")
                         .IsRequired()
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
 
                     b.Property<int>("SortOrder")
                         .HasColumnType("int");
@@ -840,15 +1083,15 @@ namespace Piranha.Data.EF.MySql.Migrations
             modelBuilder.Entity("Piranha.Data.PostType", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Body")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("CLRType")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime(6)");
@@ -874,24 +1117,27 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Culture")
-                        .HasColumnType("varchar(6) CHARACTER SET utf8mb4")
-                        .HasMaxLength(6);
+                        .HasMaxLength(6)
+                        .HasColumnType("varchar(6) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Hostnames")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
 
                     b.Property<string>("InternalId")
                         .IsRequired()
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
 
                     b.Property<bool>("IsDefault")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<Guid?>("LanguageId")
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime(6)");
@@ -900,17 +1146,19 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("SiteTypeId")
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Title")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
                     b.HasIndex("InternalId")
                         .IsUnique();
+
+                    b.HasIndex("LanguageId");
 
                     b.ToTable("Piranha_Sites");
                 });
@@ -923,18 +1171,18 @@ namespace Piranha.Data.EF.MySql.Migrations
 
                     b.Property<string>("CLRType")
                         .IsRequired()
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
 
                     b.Property<string>("FieldId")
                         .IsRequired()
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
 
                     b.Property<string>("RegionId")
                         .IsRequired()
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
 
                     b.Property<Guid>("SiteId")
                         .HasColumnType("char(36)");
@@ -955,15 +1203,15 @@ namespace Piranha.Data.EF.MySql.Migrations
             modelBuilder.Entity("Piranha.Data.SiteType", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Body")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("CLRType")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime(6)");
@@ -993,13 +1241,13 @@ namespace Piranha.Data.EF.MySql.Migrations
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -1009,6 +1257,44 @@ namespace Piranha.Data.EF.MySql.Migrations
                     b.ToTable("Piranha_Tags");
                 });
 
+            modelBuilder.Entity("Piranha.Data.Taxonomy", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("GroupId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupId", "Type", "Slug")
+                        .IsUnique();
+
+                    b.ToTable("Piranha_Taxonomies");
+                });
+
             modelBuilder.Entity("Piranha.Data.Alias", b =>
                 {
                     b.HasOne("Piranha.Data.Site", "Site")
@@ -1016,6 +1302,8 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Site");
                 });
 
             modelBuilder.Entity("Piranha.Data.BlockField", b =>
@@ -1025,6 +1313,8 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasForeignKey("BlockId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Block");
                 });
 
             modelBuilder.Entity("Piranha.Data.Category", b =>
@@ -1034,6 +1324,93 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasForeignKey("BlogId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Blog");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Content", b =>
+                {
+                    b.HasOne("Piranha.Data.Taxonomy", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("Piranha.Data.ContentType", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentField", b =>
+                {
+                    b.HasOne("Piranha.Data.Content", "Content")
+                        .WithMany("Fields")
+                        .HasForeignKey("ContentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Content");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentFieldTranslation", b =>
+                {
+                    b.HasOne("Piranha.Data.ContentField", "Field")
+                        .WithMany("Translations")
+                        .HasForeignKey("FieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Piranha.Data.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Field");
+
+                    b.Navigation("Language");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentTaxonomy", b =>
+                {
+                    b.HasOne("Piranha.Data.Content", "Content")
+                        .WithMany("Tags")
+                        .HasForeignKey("ContentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Piranha.Data.Taxonomy", "Taxonomy")
+                        .WithMany()
+                        .HasForeignKey("TaxonomyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Content");
+
+                    b.Navigation("Taxonomy");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentTranslation", b =>
+                {
+                    b.HasOne("Piranha.Data.Content", "Content")
+                        .WithMany("Translations")
+                        .HasForeignKey("ContentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Piranha.Data.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Content");
+
+                    b.Navigation("Language");
                 });
 
             modelBuilder.Entity("Piranha.Data.Media", b =>
@@ -1041,6 +1418,8 @@ namespace Piranha.Data.EF.MySql.Migrations
                     b.HasOne("Piranha.Data.MediaFolder", "Folder")
                         .WithMany("Media")
                         .HasForeignKey("FolderId");
+
+                    b.Navigation("Folder");
                 });
 
             modelBuilder.Entity("Piranha.Data.MediaVersion", b =>
@@ -1050,6 +1429,8 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasForeignKey("MediaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Media");
                 });
 
             modelBuilder.Entity("Piranha.Data.Page", b =>
@@ -1069,6 +1450,12 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PageType");
+
+                    b.Navigation("Parent");
+
+                    b.Navigation("Site");
                 });
 
             modelBuilder.Entity("Piranha.Data.PageBlock", b =>
@@ -1084,6 +1471,10 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasForeignKey("PageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Block");
+
+                    b.Navigation("Page");
                 });
 
             modelBuilder.Entity("Piranha.Data.PageComment", b =>
@@ -1093,6 +1484,8 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasForeignKey("PageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Page");
                 });
 
             modelBuilder.Entity("Piranha.Data.PageField", b =>
@@ -1102,6 +1495,8 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasForeignKey("PageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Page");
                 });
 
             modelBuilder.Entity("Piranha.Data.PagePermission", b =>
@@ -1111,6 +1506,8 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasForeignKey("PageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Page");
                 });
 
             modelBuilder.Entity("Piranha.Data.PageRevision", b =>
@@ -1120,6 +1517,8 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasForeignKey("PageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Page");
                 });
 
             modelBuilder.Entity("Piranha.Data.Post", b =>
@@ -1141,6 +1540,12 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasForeignKey("PostTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Blog");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("PostType");
                 });
 
             modelBuilder.Entity("Piranha.Data.PostBlock", b =>
@@ -1156,6 +1561,10 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Block");
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("Piranha.Data.PostComment", b =>
@@ -1165,6 +1574,8 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("Piranha.Data.PostField", b =>
@@ -1174,6 +1585,8 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("Piranha.Data.PostPermission", b =>
@@ -1183,6 +1596,8 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("Piranha.Data.PostRevision", b =>
@@ -1192,6 +1607,8 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("Piranha.Data.PostTag", b =>
@@ -1207,6 +1624,20 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("Tag");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Site", b =>
+                {
+                    b.HasOne("Piranha.Data.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Language");
                 });
 
             modelBuilder.Entity("Piranha.Data.SiteField", b =>
@@ -1216,6 +1647,8 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Site");
                 });
 
             modelBuilder.Entity("Piranha.Data.Tag", b =>
@@ -1225,6 +1658,62 @@ namespace Piranha.Data.EF.MySql.Migrations
                         .HasForeignKey("BlogId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Blog");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Block", b =>
+                {
+                    b.Navigation("Fields");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Content", b =>
+                {
+                    b.Navigation("Fields");
+
+                    b.Navigation("Tags");
+
+                    b.Navigation("Translations");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentField", b =>
+                {
+                    b.Navigation("Translations");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Media", b =>
+                {
+                    b.Navigation("Versions");
+                });
+
+            modelBuilder.Entity("Piranha.Data.MediaFolder", b =>
+                {
+                    b.Navigation("Media");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Page", b =>
+                {
+                    b.Navigation("Blocks");
+
+                    b.Navigation("Fields");
+
+                    b.Navigation("Permissions");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Post", b =>
+                {
+                    b.Navigation("Blocks");
+
+                    b.Navigation("Fields");
+
+                    b.Navigation("Permissions");
+
+                    b.Navigation("Tags");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Site", b =>
+                {
+                    b.Navigation("Fields");
                 });
 #pragma warning restore 612, 618
         }
