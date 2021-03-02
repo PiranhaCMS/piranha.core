@@ -79,10 +79,8 @@ the official documentation [here](http://piranhacms.org/docs/architecture/authen
 
     > cd piranha.core/core/Piranha.Manager
     > npm install
-    > bower install
-    > cd ../../examples/MvcWeb
-    > npm install
-    > bower install
+    > gulp min:js
+	> gulp min:cs
 
 ### Visual Studio users
 
