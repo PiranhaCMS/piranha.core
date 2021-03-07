@@ -202,14 +202,14 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="pageId">The unique page id</param>
         /// <param name="model">The comment model</param>
-        Task SaveCommentAsync(Guid pageId, Comment model);
+        Task SaveCommentAsync(Guid pageId, PageComment model);
 
         /// <summary>
         /// Saves the comment and verifies if should be approved or not.
         /// </summary>
         /// <param name="pageId">The unique page id</param>
         /// <param name="model">The comment model</param>
-        Task SaveCommentAndVerifyAsync(Guid pageId, Comment model);
+        Task SaveCommentAndVerifyAsync(Guid pageId, PageComment model);
 
         /// <summary>
         /// Deletes the model with the specified id.

@@ -261,11 +261,11 @@ namespace Piranha.Repositories
         /// </summary>
         /// <param name="id">The comment id</param>
         /// <returns>The model</returns>
-        public Task<Models.Comment> GetCommentById(Guid id)
+        public async Task<Models.Comment> GetCommentById(Guid id)
         {
-            return _db.PageComments
+            return await _db.PageComments
                 .Where(c => c.Id == id)
-                .Select(c => new Models.Comment
+                .Select(c => new Models.PageComment
                 {
                     Id = c.Id,
                     ContentId = c.PageId,
@@ -276,7 +276,7 @@ namespace Piranha.Repositories
                     IsApproved = c.IsApproved,
                     Body = c.Body,
                     Created = c.Created
-                }).FirstOrDefaultAsync();
+                }).FirstOrDefaultAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -522,7 +522,7 @@ namespace Piranha.Repositories
 
             // Get the comments
             return await query
-                .Select(c => new Models.Comment
+                .Select(c => new Models.PageComment
                 {
                     Id = c.Id,
                     ContentId = c.PageId,

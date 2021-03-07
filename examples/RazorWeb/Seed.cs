@@ -292,7 +292,7 @@ namespace RazorWeb
                 await api.Posts.SaveAsync(blogpost);
 
                 // Add some comments
-                var comment =  new Piranha.Models.Comment
+                var comment =  new Piranha.Models.PostComment
                 {
                     Author = "Håkan Edling",
                     Email = "hakan@tidyui.com",
@@ -301,11 +301,6 @@ namespace RazorWeb
                     IsApproved = true
                 };
                 await api.Posts.SaveCommentAsync(blogpost.Id, comment);
-
-                comment.Id = Guid.Empty;
-                comment.IsApproved = false;
-
-                await api.Pages.SaveCommentAsync(featurespage.Id, comment);
 
                 // Unpublished Post
                 blogpost = await Models.BlogPost.CreateAsync(api);
