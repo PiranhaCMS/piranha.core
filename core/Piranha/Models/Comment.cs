@@ -75,7 +75,7 @@ namespace Piranha.Models
         /// Status=CommentStatus.Pending
         /// In other words: there is no way to deal with pending comments using IsApproved
         /// </summary>
-        [Obsolete("IsApproved is obsolete and has been replaced with CommentStatus", true)]
+        [Obsolete("IsApproved is obsolete and has been replaced with CommentStatus", false)]
         public bool IsApproved 
         {
             get => Status == CommentStatus.Approved;
