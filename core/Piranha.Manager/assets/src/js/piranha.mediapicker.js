@@ -150,6 +150,7 @@ piranha.mediapicker = new Vue({
                     method: "post",
                     headers: {
                         "Content-Type": "application/json",
+                        "X-XSRF-TOKEN": piranha.antiforgery.value,
                     },
                     body: JSON.stringify({
                         parentId: self.currentFolderId,

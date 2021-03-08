@@ -10,6 +10,7 @@
 
 using System;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;
 using Piranha.AspNetCore;
@@ -46,7 +47,18 @@ public static class PiranhaStartupExtensions
         };
         services.AddSingleton<PiranhaRouteConfig>(config);
 
-        services.AddControllersWithViews();
+        if (serviceBuilder.AddAutoValidateAntiforgeryToken)
+        {
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
+        }
+        else
+        {
+            services.AddControllersWithViews();
+        }
+
         var mvcBuilder = services.AddRazorPages();
         if (serviceBuilder.AddRazorRuntimeCompilation)
         {

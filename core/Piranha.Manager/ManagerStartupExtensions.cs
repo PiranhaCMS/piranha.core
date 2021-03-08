@@ -30,7 +30,19 @@ public static class ManagerStartupExtensions
         serviceBuilder.Services.AddLocalization(options =>
             options.ResourcesPath = "Resources"
         );
-        serviceBuilder.Services.AddControllersWithViews();
+
+        if (serviceBuilder.AddAutoValidateAntiforgeryToken)
+        {
+            serviceBuilder.Services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
+        }
+        else
+        {
+            serviceBuilder.Services.AddControllersWithViews();
+        }
+
         serviceBuilder.Services.AddRazorPages()
             .AddPiranhaManagerOptions(jsonOptions);
 

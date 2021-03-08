@@ -30,6 +30,7 @@ namespace MvcWeb
             services.AddPiranha(options =>
             {
                 options.AddRazorRuntimeCompilation = true;
+                options.AddAutoValidateAntiforgeryToken = true;
 
                 options.UseFileStorage(naming: FileStorageNaming.UniqueFolderNames);
                 options.UseImageSharp();

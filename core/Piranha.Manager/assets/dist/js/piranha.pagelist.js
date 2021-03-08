@@ -79,7 +79,8 @@ piranha.pagelist = new Vue({
                         fetch(piranha.baseUrl + "manager/api/page/move", {
                             method: "post",
                             headers: {
-                                "Content-Type": "application/json"
+                                "Content-Type": "application/json",
+                                "X-XSRF-TOKEN": piranha.antiforgery.value,
                             },
                             body: JSON.stringify({
                                 id: $(e).attr("data-id"),

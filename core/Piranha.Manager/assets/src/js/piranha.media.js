@@ -116,7 +116,8 @@ piranha.media = new Vue({
             fetch(piranha.baseUrl + "manager/api/media/move/" + (folderId || ""), {
                 method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    "X-XSRF-TOKEN": piranha.antiforgery.value,
                 },
                 body: JSON.stringify(selections)
             })
@@ -195,6 +196,7 @@ piranha.media = new Vue({
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",
+                    "X-XSRF-TOKEN": piranha.antiforgery.value,
                 },
                 body: JSON.stringify(folder)
             })
@@ -229,6 +231,7 @@ piranha.media = new Vue({
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",
+                    "X-XSRF-TOKEN": piranha.antiforgery.value,
                 },
                 body: JSON.stringify([id])
             })
@@ -257,6 +260,7 @@ piranha.media = new Vue({
                         method: "post",
                         headers: {
                             "Content-Type": "application/json",
+                            "X-XSRF-TOKEN": piranha.antiforgery.value,
                         },
                         body: JSON.stringify(selections)
                     })
