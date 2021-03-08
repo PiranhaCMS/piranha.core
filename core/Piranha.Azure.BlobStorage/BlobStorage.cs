@@ -137,11 +137,11 @@ namespace Piranha.Azure
         {
             if (_naming == BlobStorageNaming.UniqueFileNames)
             {
-                return $"{ media.Id }-{ (encode ? System.Web.HttpUtility.UrlEncode(filename) : filename) }";
+                return $"{ media.Id }-{ (encode ? System.Web.HttpUtility.UrlPathEncode(filename) : filename) }";
             }
             else
             {
-                return $"{ media.Id }/{ (encode ? System.Web.HttpUtility.UrlEncode(filename) : filename) }";
+                return $"{ media.Id }/{ (encode ? System.Web.HttpUtility.UrlPathEncode(filename) : filename) }";
             }
         }
     }

@@ -101,11 +101,11 @@ namespace Piranha.Local
 
                 if (_naming == FileStorageNaming.UniqueFileNames)
                 {
-                    path = $"{ media.Id }-{ (encode ? System.Web.HttpUtility.UrlEncode(filename) : filename) }";
+                    path = $"{ media.Id }-{ (encode ? System.Web.HttpUtility.UrlPathEncode(filename) : filename) }";
                 }
                 else
                 {
-                    path = $"{ media.Id }/{ (encode ? System.Web.HttpUtility.UrlEncode(filename) : filename) }";
+                    path = $"{ media.Id }/{ (encode ? System.Web.HttpUtility.UrlPathEncode(filename) : filename) }";
                 }
                 return path;
             }
