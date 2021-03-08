@@ -53,6 +53,11 @@ public static class PiranhaStartupExtensions
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
+
+            services.AddAntiforgery(options =>
+            {
+                options.HeaderName = "X-XSRF-TOKEN";
+            });
         }
         else
         {

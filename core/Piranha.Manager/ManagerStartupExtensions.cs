@@ -37,6 +37,11 @@ public static class ManagerStartupExtensions
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
+
+            serviceBuilder.Services.AddAntiforgery(options =>
+            {
+                options.HeaderName = "X-XSRF-TOKEN";
+            });
         }
         else
         {
