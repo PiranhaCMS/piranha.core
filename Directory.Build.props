@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup Label="Package information">
-    <Version>9.0.0-rc3</Version>
+    <Version>9.0.0</Version>
     <Authors>Piranha CMS</Authors>
     <Company>Piranha CMS</Company>
     <Copyright>Copyright (c) .NET Foundation and Contributors</Copyright>
