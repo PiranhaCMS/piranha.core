@@ -92,20 +92,22 @@ namespace Piranha.Manager.Services
         public async Task ApproveAsync(Guid id)
         {
             var comment = await _api.Posts.GetCommentByIdAsync(id);
+            if (comment == null)
+            {
+                comment = await _api.Pages.GetCommentByIdAsync(id);
+            }
 
             if (comment != null)
             {
                 comment.IsApproved = true;
-                await _api.Posts.SaveCommentAsync(comment.ContentId, comment);
-            }
-            else
-            {
-                comment = await _api.Pages.GetCommentByIdAsync(id);
 
-                if (comment != null)
+                if (comment is PageComment pageComment)
                 {
-                    comment.IsApproved = true;
-                    await _api.Pages.SaveCommentAsync(comment.ContentId, comment);
+                    await _api.Pages.SaveCommentAsync(comment.ContentId, pageComment);
+                }
+                else if (comment is PostComment postComment)
+                {
+                    await _api.Posts.SaveCommentAsync(comment.ContentId, postComment);
                 }
             }
         }
@@ -113,20 +115,22 @@ namespace Piranha.Manager.Services
         public async Task UnApproveAsync(Guid id)
         {
             var comment = await _api.Posts.GetCommentByIdAsync(id);
+            if (comment == null)
+            {
+                comment = await _api.Pages.GetCommentByIdAsync(id);
+            }
 
             if (comment != null)
             {
                 comment.IsApproved = false;
-                await _api.Posts.SaveCommentAsync(comment.ContentId, comment);
-            }
-            else
-            {
-                comment = await _api.Pages.GetCommentByIdAsync(id);
 
-                if (comment != null)
+                if (comment is PageComment pageComment)
                 {
-                    comment.IsApproved = false;
-                    await _api.Pages.SaveCommentAsync(comment.ContentId, comment);
+                    await _api.Pages.SaveCommentAsync(comment.ContentId, pageComment);
+                }
+                else if (comment is PostComment postComment)
+                {
+                    await _api.Posts.SaveCommentAsync(comment.ContentId, postComment);
                 }
             }
         }

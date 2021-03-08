@@ -13,8 +13,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Piranha.Models
 {
+    /// <summary>
+    /// Abstract base class for comments.
+    /// </summary>
     [Serializable]
-    public sealed class Comment
+    public abstract class Comment
     {
         /// <summary>
         /// Gets/sets the unique id.

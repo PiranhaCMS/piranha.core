@@ -734,7 +734,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="pageId">The unique page id</param>
         /// <param name="model">The comment model</param>
-        public Task SaveCommentAsync(Guid pageId, Comment model)
+        public Task SaveCommentAsync(Guid pageId, PageComment model)
         {
             return SaveCommentAsync(pageId, model, false);
         }
@@ -744,7 +744,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="pageId">The unique page id</param>
         /// <param name="model">The comment model</param>
-        public Task SaveCommentAndVerifyAsync(Guid pageId, Comment model)
+        public Task SaveCommentAndVerifyAsync(Guid pageId, PageComment model)
         {
             return SaveCommentAsync(pageId, model, true);
         }
