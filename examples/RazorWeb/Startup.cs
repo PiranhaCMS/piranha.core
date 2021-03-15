@@ -63,7 +63,8 @@ namespace RazorWeb
             App.CacheLevel = Piranha.Cache.CacheLevel.Full;
 
             // Register custom components
-            App.Blocks.Register<MyWeb.Blocks.RawHtmlBlock>();
+            App.Blocks.Register<RazorWeb.Models.Blocks.MyGenericBlock>();
+            App.Blocks.Register<RazorWeb.Models.Blocks.RawHtmlBlock>();
             App.Modules.Manager().Scripts.Add("~/assets/custom-blocks.js");
             App.Modules.Manager().Styles.Add("~/assets/custom-blocks.css");
 

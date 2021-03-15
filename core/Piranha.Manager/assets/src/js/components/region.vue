@@ -116,7 +116,7 @@ export default {
             sortable("#" + this.model.meta.uid, "enable");
 
             if (!this.model.meta.expanded) {
-                $("#" + this.model.meta.uid + " .card:last-child a").click();
+                $("#" + this.model.meta.uid + " .card:last-child .card-header > a").click();
             }
             this.itemAdded = false;
         }

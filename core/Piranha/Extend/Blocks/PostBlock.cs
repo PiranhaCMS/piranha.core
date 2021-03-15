@@ -15,7 +15,7 @@ namespace Piranha.Extend.Blocks
     /// <summary>
     /// Block for referencing a post.
     /// </summary>
-    [BlockType(Name = "Post link", Category = "Content", Icon = "fas fa-link", Component = "post-block")]
+    [BlockType(Name = "Post link", Category = "References", Icon = "fas fa-link", Component = "post-block")]
     public class PostBlock : Block
     {
         /// <summary>

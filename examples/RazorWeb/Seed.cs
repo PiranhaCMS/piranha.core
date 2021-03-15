@@ -292,7 +292,7 @@ namespace RazorWeb
                 await api.Posts.SaveAsync(blogpost);
 
                 // Add some comments
-                var comment =  new Piranha.Models.Comment
+                var comment =  new Piranha.Models.PostComment
                 {
                     Author = "Håkan Edling",
                     Email = "hakan@tidyui.com",
@@ -301,11 +301,6 @@ namespace RazorWeb
                     IsApproved = true
                 };
                 await api.Posts.SaveCommentAsync(blogpost.Id, comment);
-
-                comment.Id = Guid.Empty;
-                comment.IsApproved = false;
-
-                await api.Pages.SaveCommentAsync(featurespage.Id, comment);
 
                 // Unpublished Post
                 blogpost = await Models.BlogPost.CreateAsync(api);
@@ -355,6 +350,20 @@ namespace RazorWeb
                 }
                 blogpost.Published = DateTime.Now.AddDays(7);
                 await api.Posts.SaveAsync(blogpost);
+
+                // Add a banner
+                var banner = await Models.ImageBanner.CreateAsync(api);
+                banner.Title = "Welcome to Piranha";
+                banner.Category = "Images";
+                banner.PrimaryImage = images[0].id;
+                banner.Excerpt = "This is a descriptive text";
+                await api.Content.SaveAsync(banner);
+
+                // Translate the banner to another language
+                banner.Title = "Välkommen till Piranha";
+                banner.Category = "Bilder";
+                banner.Excerpt = "Det här är en beskrivande text";
+                await api.Content.SaveAsync(banner, lang2Id);
             }
         }
     }

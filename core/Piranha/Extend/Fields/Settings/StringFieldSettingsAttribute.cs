@@ -24,12 +24,6 @@ namespace Piranha.Extend.Fields.Settings
         public string DefaultValue { get; set; }
 
         /// <summary>
-        /// Gets/sets if the string field is required. The default
-        /// value is false.
-        /// </summary>
-        public bool IsRequired { get; set; }
-
-        /// <summary>
         /// Gets/sets the optional max length of the field. A value
         /// of 0 means that the field has no max length.
         /// </summary>

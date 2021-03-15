@@ -77,12 +77,12 @@ namespace Piranha.AspNetCore.Models
         /// <param name="id">The requested model id</param>
         /// <param name="year">The optionally requested year</param>
         /// <param name="month">The optionally requested month</param>
-        /// <param name="page">The optionally requested page</param>
+        /// <param name="pagenum">The optionally requested page</param>
         /// <param name="category">The optionally requested category</param>
         /// <param name="tag">The optionally requested tag</param>
         /// <param name="draft">If the draft should be fetched</param>
         public virtual async Task<IActionResult> OnGet(Guid id, int? year = null, int? month = null,
-            int? page = null, Guid? category = null, Guid? tag = null, bool draft = false)
+            int? pagenum = null, Guid? category = null, Guid? tag = null, bool draft = false)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace Piranha.AspNetCore.Models
                     return NotFound();
                 }
 
-                Archive = await _api.Archives.GetByIdAsync<TPost>(id, page, category, tag, year, month);
+                Archive = await _api.Archives.GetByIdAsync<TPost>(id, pagenum, category, tag, year, month);
 
                 return Page();
             }

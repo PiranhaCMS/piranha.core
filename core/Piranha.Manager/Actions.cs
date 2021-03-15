@@ -73,8 +73,8 @@ namespace Piranha.Manager
             {
                 new ToolbarAction
                 {
-                    InternalId = "Settings",
-                    ActionView = "Partial/Actions/_ContentSettings"
+                    InternalId = "Languages",
+                    ActionView = "Partial/Actions/_ContentLangPicker"
                 },
                 new ToolbarAction
                 {
@@ -131,6 +131,16 @@ namespace Piranha.Manager
             /// </summary>
             public ActionList<ToolbarAction> PageList { get; private set; } = new ActionList<ToolbarAction>
             {
+                new ToolbarAction
+                {
+                    InternalId = "Expand",
+                    ActionView = "Partial/Actions/_PageListExpand"
+                },
+                new ToolbarAction
+                {
+                    InternalId = "Collapse",
+                    ActionView = "Partial/Actions/_PageListCollapse"
+                },
                 new ToolbarAction
                 {
                     InternalId = "AddSite",

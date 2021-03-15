@@ -13,11 +13,16 @@ using System;
 namespace Piranha.Extend.Fields.Settings
 {
     /// <summary>
-    /// Settings for date fields.
+    /// Base class for field settings.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    public class DateFieldSettingsAttribute : RequiredFieldSettingsAttribute
+    public class ColorFieldSettingsAttribute : FieldSettingsAttribute
     {
+        /// <summary>
+        /// Gets/sets if disallowing manual input.
+        /// </summary>
+        public bool DisallowInput { get; set; }
+
         /// <summary>
         /// Gets/sets the optional default value for field.
         /// </summary>

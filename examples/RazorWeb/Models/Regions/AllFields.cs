@@ -10,6 +10,7 @@
 
 using Piranha.Extend;
 using Piranha.Extend.Fields;
+using Piranha.Extend.Fields.Settings;
 using Piranha.Models;
 
 namespace RazorWeb.Models.Regions
@@ -36,7 +37,19 @@ namespace RazorWeb.Models.Regions
         public CheckBoxField CheckBox { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
+        [ColorFieldSettings(DisallowInput = true)]
         public ColorField Color { get; set; }
+
+        [Field(Placeholder = "Select any content from the application")]
+        public ContentField Content { get; set; }
+
+        [Field(Placeholder = "Select any banner content from the application")]
+        [ContentFieldSettings(Group = "Banners")]
+        public ContentField Banner { get; set; }
+
+        [Field(Placeholder = "Select any product content from the application")]
+        [ContentFieldSettings(Group = "Products")]
+        public ContentField Product { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         public DateField Date { get; set; }
@@ -70,6 +83,7 @@ namespace RazorWeb.Models.Regions
         public PostField Post { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
+        [StringFieldSettings(MaxLength = 8)]
         public StringField String { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]

@@ -3,26 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <Version>9.0.0-alpha3</Version>
-    <Company>Piranha CMS</Company>
-    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-
-    <PackageId>Piranha.Manager</PackageId>
-    <PackageVersion>9.0.0-alpha3</PackageVersion>
-    <Authors>Piranha CMS</Authors>
     <Description>Manager panel for Piranha CMS for AspNetCore</Description>
-    <Copyright>Copyright (c) .NET Foundation and Contributors</Copyright>
-    <PackageTags>cms mvc aspnetcore netstandard</PackageTags>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageIcon>piranha.png</PackageIcon>
-    <PackageProjectUrl>https://github.com/piranhacms/piranha.core</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/piranhacms/piranha.core</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
@@ -31,8 +13,8 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="5.0.1" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
     <ProjectReference Include="..\Piranha\Piranha.csproj" />
     <ProjectReference Include="..\Piranha.AspNetCore\Piranha.AspNetCore.csproj" />
@@ -47,13 +29,6 @@
     <Compile Remove="node_modules\**" />
     <Content Remove="package.json" />
     <Content Remove="package-lock.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="piranha.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
   </ItemGroup>
 
 </Project>

@@ -2,9 +2,6 @@
 @import "variables";
 
 .blocks {
-    max-width: $block-width;
-    margin: 0 auto;
-
     .block-group, .block-group-horizontal {
         .empty-info {
             background: #fff;
@@ -15,12 +12,33 @@
     }
 
     >div >.block {
-        margin: -1rem 0;
+        margin-top: -1rem;
+        margin-bottom: -1rem;
+    }
+
+    &.blocks-outline {
+        .block {
+            border-color: $gray-400;
+
+            .block {
+                border-color: transparent;
+            }
+
+            &.danger {
+                border-color: $danger;
+            }
+
+            &.block-group:hover:not(.danger), &:focus-within {
+                border-color: $gray-400;
+            }
+        }
     }
 }
 
 .block {
     position: relative;
+    max-width: $block-width;
+    margin: 0 auto;
     padding: 2.75rem 1rem;
     border: solid 1px transparent;
     border-radius: $border-radius;
@@ -63,6 +81,10 @@
         > .block-body, > .block-group {
             display: none;
         }
+    }
+
+    &.block-full {
+        max-width: none;
     }
 
     .actions, .custom-actions {
@@ -290,7 +312,7 @@
     }
 }
 
-.page-block, .post-block {
+.page-block, .post-block, .content-block {
     .page-image {
         float: left;
         background: $body-bg;
@@ -315,7 +337,7 @@
 
 .block-group {
     .col:not(:only-child) {
-        .page-block, .post-block {
+        .page-block, .post-block, .content-block {
             .page-image {
                 float: none;
                 margin-bottom: .5rem;

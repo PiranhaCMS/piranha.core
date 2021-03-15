@@ -8,7 +8,9 @@
  *
  */
 
+using System;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -304,7 +306,8 @@ public static class ManagerModuleExtensions
         builder.MapRazorPages();
     }
 
-    public static IMvcBuilder AddPiranhaManagerOptions(this IMvcBuilder builder)
+    public static IMvcBuilder AddPiranhaManagerOptions(this IMvcBuilder builder,
+        Action<MvcNewtonsoftJsonOptions> jsonOptions = null)
     {
         return builder
             .AddRazorPagesOptions(options =>
@@ -316,6 +319,10 @@ public static class ManagerModuleExtensions
             .AddDataAnnotationsLocalization()
             .AddNewtonsoftJson(options =>
             {
+                // Invoke custom json options
+                jsonOptions?.Invoke(options);
+
+                // Set required options for Piranha
                 options.SerializerSettings.TypeNameHandling = TypeNameHandling.Auto;
             });
     }

@@ -15,7 +15,7 @@ namespace Piranha.Extend.Blocks
     /// <summary>
     /// Block for referencing a page.
     /// </summary>
-    [BlockType(Name = "Page link", Category = "Content", Icon = "fas fa-link", Component = "page-block")]
+    [BlockType(Name = "Page link", Category = "References", Icon = "fas fa-link", Component = "page-block")]
     public class PageBlock : Block
     {
         /// <summary>

@@ -27,16 +27,46 @@ namespace Piranha.Manager.Controllers
     [ApiController]
     public class ContentApiController : Controller
     {
+        private readonly IApi _api;
         private readonly ContentService _content;
         private readonly ContentTypeService _contentType;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public ContentApiController(ContentService content, ContentTypeService contentType)
+        public ContentApiController(ContentService content, ContentTypeService contentType, IApi api)
         {
+            _api = api;
             _content = content;
             _contentType = contentType;
+        }
+
+        /// <summary>
+        /// Gets the currently available block types for the
+        /// specified page type.
+        /// </summary>
+        /// <param name="pageType">The page type id</param>
+        /// <param name="parentType">The optional parent group type</param>
+        /// <returns>The block list model</returns>
+        [Route("blocktypes/page/{pageType}/{parentType?}")]
+        [HttpGet]
+        public BlockListModel GetBlockTypesForPage(string pageType, string parentType = null)
+        {
+            return _contentType.GetPageBlockTypes(pageType, parentType);
+        }
+
+        /// <summary>
+        /// Gets the currently available block types for the
+        /// specified post type.
+        /// </summary>
+        /// <param name="postType">The post type id</param>
+        /// <param name="parentType">The optional parent group type</param>
+        /// <returns>The block list model</returns>
+        [Route("blocktypes/post/{postType}/{parentType?}")]
+        [HttpGet]
+        public BlockListModel GetBlockTypesForPost(string postType, string parentType = null)
+        {
+            return _contentType.GetPageBlockTypes(postType, parentType);
         }
 
         /// <summary>
@@ -95,6 +125,14 @@ namespace Piranha.Manager.Controllers
             return NotFound();
         }
 
+        [Route("list")]
+        [HttpGet]
+        [Authorize(Policy = Permission.Content)]
+        public Task<IActionResult> List()
+        {
+            return List(null);
+        }
+
         [Route("{contentGroup}/list")]
         [HttpGet]
         [Authorize(Policy = Permission.Content)]
@@ -109,14 +147,29 @@ namespace Piranha.Manager.Controllers
         /// Gets the post with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
+        /// <param name="languageId">The optional language id</param>
         /// <returns>The post edit model</returns>
-        [Route("{id:Guid}")]
+        [Route("{id}/{languageId?}")]
         [HttpGet]
         [Authorize(Policy = Permission.Content)]
-        public async Task<ContentEditModel> Get(Guid id)
+        public async Task<ContentEditModel> Get(Guid id, Guid? languageId = null)
         {
-           return await _content.GetByIdAsync(id);
-        } 
+           return await _content.GetByIdAsync(id, languageId);
+        }
+
+        /// <summary>
+        /// Gets the info model for the content with the
+        /// given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The content info model</returns>
+        [Route("info/{id}")]
+        [HttpGet]
+        [Authorize(Policy = Permission.Content)]
+        public async Task<Piranha.Models.ContentInfo> GetInfo(Guid id)
+        {
+            return await _api.Content.GetByIdAsync<Piranha.Models.ContentInfo>(id);
+        }
 
         /// <summary>
         ///
@@ -156,7 +209,7 @@ namespace Piranha.Manager.Controllers
                 return model;
             }
 
-            var ret = await _content.GetByIdAsync(model.Id);
+            var ret = await _content.GetByIdAsync(model.Id, model.LanguageId);
             ret.Status = new StatusMessage
             {
                 Type = StatusMessage.Success,

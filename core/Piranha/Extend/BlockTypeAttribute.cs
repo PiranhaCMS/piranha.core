@@ -9,6 +9,7 @@
  */
 
 using System;
+using Piranha.Models;
 
 namespace Piranha.Extend
 {
@@ -17,7 +18,7 @@ namespace Piranha.Extend
     {
         private bool _isGenericManuallySet = false;
         private bool _isGeneric = true;
-        private string _component = "generic-block";
+        protected string _component = "generic-block";
 
         /// <summary>
         /// Gets/sets the display name.
@@ -33,6 +34,11 @@ namespace Piranha.Extend
         /// Gets/set the icon css.
         /// </summary>
         public string Icon { get; set; }
+
+        /// <summary>
+        /// Gets/sets the editor width. The default value is "Centered".
+        /// </summary>
+        public EditorWidth Width { get; set; } = EditorWidth.Centered;
 
         /// <summary>
         /// Gets/sets the field that will be used to generate the list

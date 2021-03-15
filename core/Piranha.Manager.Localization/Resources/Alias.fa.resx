@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Aliases" xml:space="preserve">
+    <value>نام‌های مستعار</value>
+  </data>
+  <data name="Add new alias" xml:space="preserve">
+    <value>افزودن نام مستعار جدید</value>
+  </data>
+  <data name="Alias URL" xml:space="preserve">
+    <value>نام مستعار URL</value>
+  </data>
+  <data name="Alias URL is mandatory." xml:space="preserve">
+    <value>نام مستعار URL اجباری است.</value>
+  </data>
+  <data name="Redirect URL" xml:space="preserve">
+    <value>آدرس تغییر مسیر</value>
+  </data>
+  <data name="Redirect URL is mandatory." xml:space="preserve">
+    <value>آدرس تغییر مسیر اجباری است.</value>
+  </data>
+  <data name="Permanent" xml:space="preserve">
+    <value>دائمی</value>
+  </data>
+  <data name="Are you sure you want to delete this alias?" xml:space="preserve">
+    <value>آیا مطمئن هستید که می خواهید این نام مستعار را حذف کنید؟</value>
+  </data>
+  <data name="If the redirect should be permanent" xml:space="preserve">
+    <value>اگر تغییر مسیر باید دائمی باشد</value>
+  </data>
+  <data name="The alias was successfully added to the list" xml:space="preserve">
+    <value>نام مستعار با موفقیت به لیست اضافه شد</value>
+  </data>
+  <data name="The alias was successfully deleted" xml:space="preserve">
+    <value>نام مستعار با موفقیت حذف شد</value>
+  </data>
+</root>

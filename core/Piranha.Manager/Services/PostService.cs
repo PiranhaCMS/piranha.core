@@ -510,7 +510,8 @@ namespace Piranha.Manager.Services
                         IsCollection = regionType.Collection,
                         Expanded = regionType.ListExpand,
                         Icon = regionType.Icon,
-                        Display = regionType.Display.ToString().ToLower()
+                        Display = regionType.Display.ToString().ToLower(),
+                        Width = regionType.Width.ToString().ToLower()
                     }
                 };
                 var regionListModel = ((IDictionary<string, object>)post.Regions)[regionType.Id];
@@ -594,18 +595,13 @@ namespace Piranha.Manager.Services
                         {
                             Name = blockType.Name,
                             Icon = blockType.Icon,
-                            Component = "block-group",
+                            Component = blockType.Component,
+                            Width = blockType.Width.ToString().ToLower(),
                             IsGroup = true,
                             isCollapsed = config.ManagerDefaultCollapsedBlocks,
                             ShowHeader = !config.ManagerDefaultCollapsedBlockGroupHeaders
                         }
                     };
-
-                    if (blockType.Display != BlockDisplayMode.MasterDetail)
-                    {
-                        group.Meta.Component = blockType.Display == BlockDisplayMode.Horizontal ?
-                            "block-group-horizontal" : "block-group-vertical";
-                    }
 
                     group.Fields = ContentUtils.GetBlockFields(block);
 
@@ -625,7 +621,8 @@ namespace Piranha.Manager.Services
                                     Name = blockType.Name,
                                     Title = child.GetTitle(),
                                     Icon = blockType.Icon,
-                                    Component = blockType.Component
+                                    Component = blockType.Component,
+                                    Width = blockType.Width.ToString().ToLower()
                                 }
                             });
                         }
@@ -643,6 +640,7 @@ namespace Piranha.Manager.Services
                                     Title = child.GetTitle(),
                                     Icon = blockType.Icon,
                                     Component = blockType.Component,
+                                    Width = blockType.Width.ToString().ToLower()
                                 }
                             });
                         }
@@ -664,6 +662,7 @@ namespace Piranha.Manager.Services
                                 Title = block.GetTitle(),
                                 Icon = blockType.Icon,
                                 Component = blockType.Component,
+                                Width = blockType.Width.ToString().ToLower(),
                                 isCollapsed = config.ManagerDefaultCollapsedBlocks
                             }
                         });
@@ -681,6 +680,7 @@ namespace Piranha.Manager.Services
                                 Title = block.GetTitle(),
                                 Icon = blockType.Icon,
                                 Component = blockType.Component,
+                                Width = blockType.Width.ToString().ToLower(),
                                 isCollapsed = config.ManagerDefaultCollapsedBlocks
                             }
                         });

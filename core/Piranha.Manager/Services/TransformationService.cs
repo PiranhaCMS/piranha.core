@@ -280,19 +280,14 @@ namespace Piranha.Manager.Services
                         {
                             Name = type.Name,
                             Icon = type.Icon,
-                            Component = "block-group",
+                            Component = type.Component,
+                            Width = type.Width.ToString().ToLower(),
                             IsGroup = true,
                             // TODO: IsReadonly = page.OriginalPageId.HasValue,
                             isCollapsed = _config.ManagerDefaultCollapsedBlocks,
                             ShowHeader = !_config.ManagerDefaultCollapsedBlockGroupHeaders
                         }
                     };
-
-                    if (type.Display != BlockDisplayMode.MasterDetail)
-                    {
-                        group.Meta.Component = type.Display == BlockDisplayMode.Horizontal ?
-                            "block-group-horizontal" : "block-group-vertical";
-                    }
 
                     foreach (var item in groupBlock.Items)
                     {

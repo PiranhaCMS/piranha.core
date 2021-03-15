@@ -8,7 +8,9 @@
  *
  */
 
+using System;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;
 using Piranha.AspNetCore;
@@ -19,8 +21,10 @@ public static class ManagerStartupExtensions
     /// Uses the Piranha Manager services if simple startup is used.
     /// </summary>
     /// <param name="serviceBuilder">The service builder</param>
+    /// <param name="jsonOptions">Optional JSON options</param>
     /// <returns>The updated builder</returns>
-    public static PiranhaServiceBuilder UseManager(this PiranhaServiceBuilder serviceBuilder)
+    public static PiranhaServiceBuilder UseManager(this PiranhaServiceBuilder serviceBuilder,
+        Action<MvcNewtonsoftJsonOptions> jsonOptions = null)
     {
         // Add dependent services
         serviceBuilder.Services.AddLocalization(options =>
@@ -28,7 +32,7 @@ public static class ManagerStartupExtensions
         );
         serviceBuilder.Services.AddControllersWithViews();
         serviceBuilder.Services.AddRazorPages()
-            .AddPiranhaManagerOptions();
+            .AddPiranhaManagerOptions(jsonOptions);
 
         // Add manager services
         serviceBuilder.Services.AddPiranhaManager();

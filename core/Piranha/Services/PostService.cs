@@ -703,6 +703,13 @@ namespace Piranha.Services
                 throw new ValidationException("The generated slug is empty as the title only contains special characters, please specify a slug to save the post.");
             }
 
+            // Ensure that the slug is unique
+            var duplicate = await GetBySlugAsync(model.BlogId, model.Slug);
+            if (duplicate != null && duplicate.Id != model.Id)
+            {
+                throw new ValidationException("The specified slug already exists, please create a unique slug");
+            }
+
             // Ensure category
             if (model.Category == null || (string.IsNullOrWhiteSpace(model.Category.Title) && string.IsNullOrWhiteSpace(model.Category.Slug)))
             {

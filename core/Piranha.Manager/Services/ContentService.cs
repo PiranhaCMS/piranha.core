@@ -46,13 +46,19 @@ namespace Piranha.Manager.Services
         /// <returns>Gets the list model.</returns>
         public async Task<ContentListModel> GetListAsync(string contentGroup)
         {
-            var group = App.ContentGroups.GetById(contentGroup);
-            var types = App.ContentTypes.GetByGroupId(contentGroup);
-            var items = await _api.Content.GetAllAsync<ContentInfo>(contentGroup);
+            var groups = contentGroup == null ?
+                App.ContentGroups.ToList() :
+                new List<ContentGroup>();
+            var group = contentGroup == null ?
+                App.ContentGroups.GetById(groups.First().Id) :
+                App.ContentGroups.GetById(contentGroup);
+            var types = App.ContentTypes.GetByGroupId(group.Id);
+            var items = await _api.Content.GetAllAsync<ContentInfo>(group.Id);
 
             return new ContentListModel
             {
                 Group = group,
+                Groups = groups,
                 Items = items
                     .Select(i => new ContentListModel.ContentItem
                         {
@@ -78,10 +84,16 @@ namespace Piranha.Manager.Services
         /// Get the content edit model by contnet id
         /// </summary>
         /// <param name="id">The content id</param>
+        /// <param name="languageId">The optional language id</param>
         /// <returns>Edit model</returns>
-        public async Task<ContentEditModel> GetByIdAsync(Guid id)
+        public async Task<ContentEditModel> GetByIdAsync(Guid id, Guid? languageId = null)
         {
-            var content = await _api.Content.GetByIdAsync<DynamicContent>(id);
+            if (!languageId.HasValue)
+            {
+                languageId = (await _api.Languages.GetDefaultAsync()).Id;
+            }
+
+            var content = await _api.Content.GetByIdAsync<DynamicContent>(id, languageId);
             if (content != null)
             {
                 var type =  App.ContentTypes.GetById(content.TypeId);
@@ -91,8 +103,9 @@ namespace Piranha.Manager.Services
                 await _factory.InitDynamicManagerAsync(content,
                     App.ContentTypes.GetById(content.TypeId));
 
-                var model = Transform(content);
+                var model = await Transform(content);
 
+                model.LanguageId = languageId;
                 model.TypeId = type.Id;
                 model.TypeTitle = type.Title;
                 model.GroupId = group.Id;
@@ -102,7 +115,6 @@ namespace Piranha.Manager.Services
 
                 return model;
             }
-
             return null;
         }
 
@@ -122,14 +134,15 @@ namespace Piranha.Manager.Services
 
                 await _factory.InitDynamicManagerAsync(content, type);
 
-                var model = Transform(content);
+                var model = await Transform(content);
 
+                model.LanguageId = (await _api.Languages.GetDefaultAsync()).Id;
                 model.TypeId = type.Id;
                 model.TypeTitle = type.Title;
                 model.GroupId = group.Id;
                 model.GroupTitle = group.Title;
                 model.State = ContentState.New;
-                
+
                 return model;
             }
 
@@ -151,7 +164,7 @@ namespace Piranha.Manager.Services
                     model.Id = Guid.NewGuid();
                 }
 
-                var content = await _api.Content.GetByIdAsync(model.Id);
+                var content = await _api.Content.GetByIdAsync(model.Id, model.LanguageId);
 
                 if (content == null)
                 {
@@ -218,7 +231,7 @@ namespace Piranha.Manager.Services
                 }
 
                 // Save content
-                await _api.Content.SaveAsync(content);
+                await _api.Content.SaveAsync(content, model.LanguageId);
             }
             else
             {
@@ -240,20 +253,26 @@ namespace Piranha.Manager.Services
         /// </summary>
         /// <param name="content">The dynamic content object</param>
         /// <returns>Edit model</returns>
-        private ContentEditModel Transform(DynamicContent content)
+        private async Task<ContentEditModel> Transform(DynamicContent content)
         {
             var config = new Config(_api);
             var type = App.ContentTypes.GetById(content.TypeId);
-            
+            var languages = await _api.Languages.GetAllAsync();
+
             var model = new ContentEditModel
             {
                 Id = content.Id,
                 TypeId = content.TypeId,
                 PrimaryImage = content.PrimaryImage,
                 Title = content.Title,
+                Excerpt = content.Excerpt,
+                UseCategory = type.UseCategory,
+                UseTags = type.UseTags,
                 UsePrimaryImage = type.UsePrimaryImage,
                 UseExcerpt = type.UseExcerpt,
-                UseHtmlExcerpt = config.HtmlExcerpt
+                UseHtmlExcerpt = config.HtmlExcerpt,
+                UseTranslations = languages.Count() > 1,
+                Languages = languages
             };
 
             foreach (var regionType in type.Regions)

@@ -1,10 +1,10 @@
-@page "~/manager/post/{action}/{id}/{postType?}"
+@page "~/manager/post/{routeAction}/{id}/{postType?}"
 @model PostEditViewModel
 @inject ManagerLocalizer Localizer
 @{
     ViewBag.Title = Localizer.Page["Edit post"];
     ViewBag.MenuItem = "Pages";
-    string action = ((string)RouteData.Values["action"]).ToLower();
+    string action = ((string)RouteData.Values["routeAction"]).ToLower();
 }
 @section script
 {
@@ -121,7 +121,7 @@
                         <i class="fas fa-plus-circle"></i>
                     </a>
                     <div v-for="(block, index) in blocks" v-bind:key="block.meta.uid">
-                        <div :class="'block ' + block.meta.component + (block.meta.isCollapsed ? ' collapsed' : '')">
+                        <div :class="'block ' + block.meta.component + (block.meta.isCollapsed ? ' collapsed' : '') + (block.meta.width === 'full' ? ' block-full' : '')">
                             <div :id="'tb-' + block.meta.uid" class="component-toolbar"></div>
                             <div class="block-header">
                                 <div class="title">
@@ -167,7 +167,7 @@
         <!-- Content Regions -->
         <div class="card" :class="{ 'd-none': selectedRegion.uid != region.meta.uid }" v-for="region in contentRegions">
             <div class="card-body">
-                <div class="region region-center">
+                <div class="region" :class="{ 'region-center': region.meta.width === 'centered' }">
                     <region v-bind:content="'post'" v-bind:type="typeId" v-bind:model="region"></region>
                 </div>
             </div>

@@ -1,13 +1,23 @@
 ﻿@{
     var module = Piranha.App.Modules.Get<Piranha.Manager.Module>();
     var prerelease = Piranha.Utils.IsPreRelease(typeof(Piranha.Manager.Module).Assembly) ? "pre-release" : "";
+    var isRightToLeft =  @System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft;
 }
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="~/manager/assets/css/full.min.css">
+    @if(isRightToLeft)
+    {
+        <link rel="stylesheet" href="~/manager/assets/css/full.rtl.min.css">
+    }
+    else
+    {
+        <link rel="stylesheet" href="~/manager/assets/css/full.min.css">
+    }
+    <link rel="icon" href="~/manager/assets/img/logo.png">
+
     @foreach (var style in module.Styles)
     {
     <link href="@Url.Content(style)" rel="stylesheet" type="text/css" />
@@ -26,6 +36,7 @@
 
     <partial name="~/Areas/Manager/Shared/Partial/_BlockPickerModal.cshtml" />
     <partial name="~/Areas/Manager/Shared/Partial/_MediaPickerModal.cshtml" />
+    <partial name="~/Areas/Manager/Shared/Partial/_ContentPickerModal.cshtml" />
     <partial name="~/Areas/Manager/Shared/Partial/_PagePickerModal.cshtml" />
     <partial name="~/Areas/Manager/Shared/Partial/_PostPickerModal.cshtml" />
     <partial name="~/Areas/Manager/Shared/Partial/_PreviewModal.cshtml" />

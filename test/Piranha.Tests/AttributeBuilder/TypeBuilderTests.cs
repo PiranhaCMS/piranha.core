@@ -250,7 +250,12 @@ namespace Piranha.Tests.AttributeBuilder
                 Assert.NotNull(type);
 
                 Assert.Equal("MyContent", type.Group);
-                Assert.True(type.UseCategory);
+                //
+                // TODO
+                //
+                // Categories are currently disabled
+                //
+                // Assert.True(type.UseCategory);
                 Assert.False(type.UseTags);
             }
         }
@@ -272,7 +277,12 @@ namespace Piranha.Tests.AttributeBuilder
 
                 Assert.Equal("MyContent", type.Group);
                 Assert.False(type.UseCategory);
-                Assert.True(type.UseTags);
+                //
+                // TODO
+                //
+                // Tags are currently disabled
+                //
+                // Assert.True(type.UseTags);
             }
         }
 

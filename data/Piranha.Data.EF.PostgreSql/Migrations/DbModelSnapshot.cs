@@ -8,7 +8,6 @@ using Piranha.Data.EF.PostgreSql;
 
 namespace Piranha.Data.EF.PostgreSql
 {
-    [NoCoverage]
     [DbContext(typeof(PostgreSqlDb))]
     partial class DbModelSnapshot : ModelSnapshot
     {
@@ -16,9 +15,9 @@ namespace Piranha.Data.EF.PostgreSql
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .HasAnnotation("ProductVersion", "3.1.1")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .UseIdentityByDefaultColumns()
+                .HasAnnotation("Relational:MaxIdentifierLength", 63)
+                .HasAnnotation("ProductVersion", "5.0.0");
 
             modelBuilder.Entity("Piranha.Data.Alias", b =>
                 {
@@ -28,8 +27,8 @@ namespace Piranha.Data.EF.PostgreSql
 
                     b.Property<string>("AliasUrl")
                         .IsRequired()
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp without time zone");
@@ -39,8 +38,8 @@ namespace Piranha.Data.EF.PostgreSql
 
                     b.Property<string>("RedirectUrl")
                         .IsRequired()
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<Guid>("SiteId")
                         .HasColumnType("uuid");
@@ -64,8 +63,8 @@ namespace Piranha.Data.EF.PostgreSql
 
                     b.Property<string>("CLRType")
                         .IsRequired()
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp without time zone");
@@ -80,8 +79,8 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasColumnType("uuid");
 
                     b.Property<string>("Title")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.HasKey("Id");
 
@@ -99,13 +98,13 @@ namespace Piranha.Data.EF.PostgreSql
 
                     b.Property<string>("CLRType")
                         .IsRequired()
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("FieldId")
                         .IsRequired()
-                        .HasColumnType("character varying(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<int>("SortOrder")
                         .HasColumnType("integer");
@@ -138,13 +137,13 @@ namespace Piranha.Data.EF.PostgreSql
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasColumnType("character varying(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("character varying(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.HasKey("Id");
 
@@ -154,6 +153,219 @@ namespace Piranha.Data.EF.PostgreSql
                     b.ToTable("Piranha_Categories");
                 });
 
+            modelBuilder.Entity("Piranha.Data.Content", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Excerpt")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("PrimaryImageId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TypeId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("Piranha_Content");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentField", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CLRType")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<Guid>("ContentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("FieldId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("RegionId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContentId", "RegionId", "FieldId", "SortOrder");
+
+                    b.ToTable("Piranha_ContentFields");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentFieldTranslation", b =>
+                {
+                    b.Property<Guid>("FieldId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("LanguageId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("text");
+
+                    b.HasKey("FieldId", "LanguageId");
+
+                    b.HasIndex("LanguageId");
+
+                    b.ToTable("Piranha_ContentFieldTranslations");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentGroup", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("CLRType")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Icon")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Piranha_ContentGroups");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentTaxonomy", b =>
+                {
+                    b.Property<Guid>("ContentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TaxonomyId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ContentId", "TaxonomyId");
+
+                    b.HasIndex("TaxonomyId");
+
+                    b.ToTable("Piranha_ContentTaxonomies");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentTranslation", b =>
+                {
+                    b.Property<Guid>("ContentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("LanguageId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Excerpt")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.HasKey("ContentId", "LanguageId");
+
+                    b.HasIndex("LanguageId");
+
+                    b.ToTable("Piranha_ContentTranslations");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentType", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("Body")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CLRType")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Group")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Piranha_ContentTypes");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Language", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Culture")
+                        .HasMaxLength(6)
+                        .HasColumnType("character varying(6)");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Piranha_Languages");
+                });
+
             modelBuilder.Entity("Piranha.Data.Media", b =>
                 {
                     b.Property<Guid>("Id")
@@ -161,25 +373,25 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasColumnType("uuid");
 
                     b.Property<string>("AltText")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("ContentType")
                         .IsRequired()
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("character varying(512)")
-                        .HasMaxLength(512);
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)");
 
                     b.Property<string>("Filename")
                         .IsRequired()
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<Guid?>("FolderId")
                         .HasColumnType("uuid");
@@ -200,8 +412,8 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasColumnType("bigint");
 
                     b.Property<string>("Title")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");
@@ -226,13 +438,13 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("character varying(512)")
-                        .HasMaxLength(512);
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uuid");
@@ -249,8 +461,8 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasColumnType("uuid");
 
                     b.Property<string>("FileExtension")
-                        .HasColumnType("character varying(8)")
-                        .HasMaxLength(8);
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
 
                     b.Property<int?>("Height")
                         .HasColumnType("integer");
@@ -284,8 +496,8 @@ namespace Piranha.Data.EF.PostgreSql
                     b.Property<string>("ContentType")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("character varying(255)")
                         .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
                         .HasDefaultValue("Page");
 
                     b.Property<DateTime>("Created")
@@ -306,39 +518,54 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("MetaDescription")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool?>("MetaFollow")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool?>("MetaIndex")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("MetaKeywords")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<double>("MetaPriority")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("double precision")
+                        .HasDefaultValue(0.5);
 
                     b.Property<string>("MetaTitle")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("NavigationTitle")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("OgDescription")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<Guid>("OgImageId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("OgTitle")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<Guid?>("OriginalPageId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("PageTypeId")
                         .IsRequired()
-                        .HasColumnType("character varying(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uuid");
@@ -353,28 +580,28 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasColumnType("integer");
 
                     b.Property<string>("RedirectUrl")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("Route")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<Guid>("SiteId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<int>("SortOrder")
                         .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.HasKey("Id");
 
@@ -424,8 +651,8 @@ namespace Piranha.Data.EF.PostgreSql
 
                     b.Property<string>("Author")
                         .IsRequired()
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("Body")
                         .HasColumnType("text");
@@ -435,8 +662,8 @@ namespace Piranha.Data.EF.PostgreSql
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<bool>("IsApproved")
                         .HasColumnType("boolean");
@@ -445,8 +672,8 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasColumnType("uuid");
 
                     b.Property<string>("Url")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("text");
@@ -466,21 +693,21 @@ namespace Piranha.Data.EF.PostgreSql
 
                     b.Property<string>("CLRType")
                         .IsRequired()
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("FieldId")
                         .IsRequired()
-                        .HasColumnType("character varying(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<Guid>("PageId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("RegionId")
                         .IsRequired()
-                        .HasColumnType("character varying(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<int>("SortOrder")
                         .HasColumnType("integer");
@@ -533,15 +760,15 @@ namespace Piranha.Data.EF.PostgreSql
             modelBuilder.Entity("Piranha.Data.PageType", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("character varying(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<string>("Body")
                         .HasColumnType("text");
 
                     b.Property<string>("CLRType")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp without time zone");
@@ -564,13 +791,13 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("character varying(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("timestamp without time zone");
@@ -616,32 +843,47 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("MetaDescription")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool?>("MetaFollow")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool?>("MetaIndex")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("MetaKeywords")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<double>("MetaPriority")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("double precision")
+                        .HasDefaultValue(0.5);
 
                     b.Property<string>("MetaTitle")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("OgDescription")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<Guid>("OgImageId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("OgTitle")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("PostTypeId")
                         .IsRequired()
-                        .HasColumnType("character varying(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<Guid?>("PrimaryImageId")
                         .HasColumnType("uuid");
@@ -653,22 +895,22 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasColumnType("integer");
 
                     b.Property<string>("RedirectUrl")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("Route")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.HasKey("Id");
 
@@ -718,8 +960,8 @@ namespace Piranha.Data.EF.PostgreSql
 
                     b.Property<string>("Author")
                         .IsRequired()
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("Body")
                         .HasColumnType("text");
@@ -729,8 +971,8 @@ namespace Piranha.Data.EF.PostgreSql
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<bool>("IsApproved")
                         .HasColumnType("boolean");
@@ -739,12 +981,12 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasColumnType("uuid");
 
                     b.Property<string>("Url")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.HasKey("Id");
 
@@ -761,21 +1003,21 @@ namespace Piranha.Data.EF.PostgreSql
 
                     b.Property<string>("CLRType")
                         .IsRequired()
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("FieldId")
                         .IsRequired()
-                        .HasColumnType("character varying(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<Guid>("PostId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("RegionId")
                         .IsRequired()
-                        .HasColumnType("character varying(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<int>("SortOrder")
                         .HasColumnType("integer");
@@ -843,15 +1085,15 @@ namespace Piranha.Data.EF.PostgreSql
             modelBuilder.Entity("Piranha.Data.PostType", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("character varying(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<string>("Body")
                         .HasColumnType("text");
 
                     b.Property<string>("CLRType")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp without time zone");
@@ -877,24 +1119,27 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Culture")
-                        .HasColumnType("character varying(6)")
-                        .HasMaxLength(6);
+                        .HasMaxLength(6)
+                        .HasColumnType("character varying(6)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("Hostnames")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("InternalId")
                         .IsRequired()
-                        .HasColumnType("character varying(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<bool>("IsDefault")
                         .HasColumnType("boolean");
+
+                    b.Property<Guid?>("LanguageId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("timestamp without time zone");
@@ -903,17 +1148,19 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasColumnType("uuid");
 
                     b.Property<string>("SiteTypeId")
-                        .HasColumnType("character varying(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<string>("Title")
-                        .HasColumnType("character varying(128)")
-                        .HasMaxLength(128);
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("InternalId")
                         .IsUnique();
+
+                    b.HasIndex("LanguageId");
 
                     b.ToTable("Piranha_Sites");
                 });
@@ -926,18 +1173,18 @@ namespace Piranha.Data.EF.PostgreSql
 
                     b.Property<string>("CLRType")
                         .IsRequired()
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("FieldId")
                         .IsRequired()
-                        .HasColumnType("character varying(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<string>("RegionId")
                         .IsRequired()
-                        .HasColumnType("character varying(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<Guid>("SiteId")
                         .HasColumnType("uuid");
@@ -958,15 +1205,15 @@ namespace Piranha.Data.EF.PostgreSql
             modelBuilder.Entity("Piranha.Data.SiteType", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("character varying(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<string>("Body")
                         .HasColumnType("text");
 
                     b.Property<string>("CLRType")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp without time zone");
@@ -996,13 +1243,13 @@ namespace Piranha.Data.EF.PostgreSql
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasColumnType("character varying(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("character varying(64)")
-                        .HasMaxLength(64);
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.HasKey("Id");
 
@@ -1012,6 +1259,44 @@ namespace Piranha.Data.EF.PostgreSql
                     b.ToTable("Piranha_Tags");
                 });
 
+            modelBuilder.Entity("Piranha.Data.Taxonomy", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("GroupId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupId", "Type", "Slug")
+                        .IsUnique();
+
+                    b.ToTable("Piranha_Taxonomies");
+                });
+
             modelBuilder.Entity("Piranha.Data.Alias", b =>
                 {
                     b.HasOne("Piranha.Data.Site", "Site")
@@ -1019,6 +1304,8 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Site");
                 });
 
             modelBuilder.Entity("Piranha.Data.BlockField", b =>
@@ -1028,6 +1315,8 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasForeignKey("BlockId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Block");
                 });
 
             modelBuilder.Entity("Piranha.Data.Category", b =>
@@ -1037,6 +1326,93 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasForeignKey("BlogId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Blog");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Content", b =>
+                {
+                    b.HasOne("Piranha.Data.Taxonomy", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("Piranha.Data.ContentType", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentField", b =>
+                {
+                    b.HasOne("Piranha.Data.Content", "Content")
+                        .WithMany("Fields")
+                        .HasForeignKey("ContentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Content");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentFieldTranslation", b =>
+                {
+                    b.HasOne("Piranha.Data.ContentField", "Field")
+                        .WithMany("Translations")
+                        .HasForeignKey("FieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Piranha.Data.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Field");
+
+                    b.Navigation("Language");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentTaxonomy", b =>
+                {
+                    b.HasOne("Piranha.Data.Content", "Content")
+                        .WithMany("Tags")
+                        .HasForeignKey("ContentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Piranha.Data.Taxonomy", "Taxonomy")
+                        .WithMany()
+                        .HasForeignKey("TaxonomyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Content");
+
+                    b.Navigation("Taxonomy");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentTranslation", b =>
+                {
+                    b.HasOne("Piranha.Data.Content", "Content")
+                        .WithMany("Translations")
+                        .HasForeignKey("ContentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Piranha.Data.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Content");
+
+                    b.Navigation("Language");
                 });
 
             modelBuilder.Entity("Piranha.Data.Media", b =>
@@ -1044,6 +1420,8 @@ namespace Piranha.Data.EF.PostgreSql
                     b.HasOne("Piranha.Data.MediaFolder", "Folder")
                         .WithMany("Media")
                         .HasForeignKey("FolderId");
+
+                    b.Navigation("Folder");
                 });
 
             modelBuilder.Entity("Piranha.Data.MediaVersion", b =>
@@ -1053,6 +1431,8 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasForeignKey("MediaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Media");
                 });
 
             modelBuilder.Entity("Piranha.Data.Page", b =>
@@ -1072,6 +1452,12 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PageType");
+
+                    b.Navigation("Parent");
+
+                    b.Navigation("Site");
                 });
 
             modelBuilder.Entity("Piranha.Data.PageBlock", b =>
@@ -1087,6 +1473,10 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasForeignKey("PageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Block");
+
+                    b.Navigation("Page");
                 });
 
             modelBuilder.Entity("Piranha.Data.PageComment", b =>
@@ -1096,6 +1486,8 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasForeignKey("PageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Page");
                 });
 
             modelBuilder.Entity("Piranha.Data.PageField", b =>
@@ -1105,6 +1497,8 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasForeignKey("PageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Page");
                 });
 
             modelBuilder.Entity("Piranha.Data.PagePermission", b =>
@@ -1114,6 +1508,8 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasForeignKey("PageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Page");
                 });
 
             modelBuilder.Entity("Piranha.Data.PageRevision", b =>
@@ -1123,6 +1519,8 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasForeignKey("PageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Page");
                 });
 
             modelBuilder.Entity("Piranha.Data.Post", b =>
@@ -1144,6 +1542,12 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasForeignKey("PostTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Blog");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("PostType");
                 });
 
             modelBuilder.Entity("Piranha.Data.PostBlock", b =>
@@ -1159,6 +1563,10 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Block");
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("Piranha.Data.PostComment", b =>
@@ -1168,6 +1576,8 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("Piranha.Data.PostField", b =>
@@ -1177,6 +1587,8 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("Piranha.Data.PostPermission", b =>
@@ -1186,6 +1598,8 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("Piranha.Data.PostRevision", b =>
@@ -1195,6 +1609,8 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("Piranha.Data.PostTag", b =>
@@ -1210,6 +1626,20 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("Tag");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Site", b =>
+                {
+                    b.HasOne("Piranha.Data.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Language");
                 });
 
             modelBuilder.Entity("Piranha.Data.SiteField", b =>
@@ -1219,6 +1649,8 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Site");
                 });
 
             modelBuilder.Entity("Piranha.Data.Tag", b =>
@@ -1228,6 +1660,62 @@ namespace Piranha.Data.EF.PostgreSql
                         .HasForeignKey("BlogId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Blog");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Block", b =>
+                {
+                    b.Navigation("Fields");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Content", b =>
+                {
+                    b.Navigation("Fields");
+
+                    b.Navigation("Tags");
+
+                    b.Navigation("Translations");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentField", b =>
+                {
+                    b.Navigation("Translations");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Media", b =>
+                {
+                    b.Navigation("Versions");
+                });
+
+            modelBuilder.Entity("Piranha.Data.MediaFolder", b =>
+                {
+                    b.Navigation("Media");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Page", b =>
+                {
+                    b.Navigation("Blocks");
+
+                    b.Navigation("Fields");
+
+                    b.Navigation("Permissions");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Post", b =>
+                {
+                    b.Navigation("Blocks");
+
+                    b.Navigation("Fields");
+
+                    b.Navigation("Permissions");
+
+                    b.Navigation("Tags");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Site", b =>
+                {
+                    b.Navigation("Fields");
                 });
 #pragma warning restore 612, 618
         }

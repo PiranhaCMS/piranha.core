@@ -7,6 +7,7 @@ piranha.contentedit = new Vue({
     data: {
         loading: true,
         id: null,
+        languageId: null,
         typeId: null,
         typeTitle: null,
         groupId: null,
@@ -14,25 +15,23 @@ piranha.contentedit = new Vue({
         title: null,
         excerpt: null,
         state: "new",
-        blocks: [],
         regions: [],
         editors: [],
-        useBlocks: false,
+        useCategory: false,
+        useTags: false,
         usePrimaryImage: true,
         useExcerpt: true,
         useHtmlExcerpt: true,
+        useTranslations: false,
         permissions: [],
+        languages: [],
         primaryImage: {
             id: null,
             media: null
         },
         selectedPermissions: [],
         saving: false,
-        selectedRegion: {
-            uid: "uid-blocks",
-            name: null,
-            icon: null,
-        },
+        selectedRegion: "",
         selectedSetting: "uid-settings",
     },
     computed: {
@@ -49,13 +48,28 @@ piranha.contentedit = new Vue({
         primaryImageUrl: function () {
             if (this.primaryImage.media != null) {
                 return piranha.utils.formatUrl("~/manager/api/media/url/" + this.primaryImage.id + "/448/200");
-                //return piranha.utils.formatUrl(this.primaryImage.media.publicUrl);
             } else {
                 return piranha.utils.formatUrl("~/manager/assets/img/empty-image.png");
             }
         },
         isExcerptEmpty: function () {
             return piranha.utils.isEmptyText(this.excerpt);
+        },
+        currentLanguage: function () {
+            if (this.languages === null)
+            {
+                return {
+                    id: "",
+                    title: ""
+                };
+            }
+            else
+            {
+                var self = this;
+                return self.languages.find(function (l) {
+                    return l.id === self.languageId;
+                });
+            }
         }
     },
     mounted() {
@@ -67,6 +81,7 @@ piranha.contentedit = new Vue({
     methods: {
         bind: function (model) {
             this.id = model.id;
+            this.languageId = model.languageId;
             this.typeId = model.typeId;
             this.typeTitle = model.typeTitle;
             this.groupId = model.groupId;
@@ -74,39 +89,37 @@ piranha.contentedit = new Vue({
             this.title = model.title;
             this.excerpt = model.excerpt;
             this.state = model.state;
-            this.blocks = model.blocks;
             this.regions = model.regions;
             this.editors = model.editors;
-            this.useBlocks = model.useBlocks;
+            this.languages = model.languages;
+            this.useCategory = model.useCategory;
+            this.useTags = model.useTags;
             this.usePrimaryImage = model.usePrimaryImage;
             this.useExcerpt = model.useExcerpt;
             this.useHtmlExcerpt = model.useHtmlExcerpt;
+            this.useTranslations = model.useTranslations;
             this.permissions = model.permissions;
             this.primaryImage = model.primaryImage;
             this.selectedPermissions = model.selectedPermissions;
 
-            if (!this.useBlocks) {
-                // First choice, select the first custom editor
-                if (this.editors.length > 0) {
-                    this.selectedRegion = this.editors[0];
-                }
-
-                // Second choice, select the first content region
-                else if (this.contentRegions.length > 0) {
-                    this.selectedRegion = this.contentRegions[0].meta;
-                }
-            } else {
-                this.selectedRegion = {
-                    uid: "uid-blocks",
-                    name: null,
-                    icon: null,
-                };
+            // First choice, select the first custom editor
+            if (this.editors.length > 0) {
+                this.selectedRegion = this.editors[0];
+            }
+            // Second choice, select the first content region
+            else if (this.contentRegions.length > 0) {
+                this.selectedRegion = this.contentRegions[0].meta;
             }
         },
-        load: function (id) {
+        load: function (id, languageId) {
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/content/" + id)
+            var url = piranha.baseUrl + "manager/api/content/" + id;
+            if (languageId != null) {
+                url += "/" + languageId;
+            }
+
+            fetch(url)
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
                     self.bind(result);
@@ -144,10 +157,10 @@ piranha.contentedit = new Vue({
 
             var model = {
                 id: self.id,
+                languageId: self.languageId,
                 typeId: self.typeId,
                 title: self.title,
                 excerpt: self.excerpt,
-                blocks: JSON.parse(JSON.stringify(self.blocks)),
                 regions: JSON.parse(JSON.stringify(self.regions)),
                 selectedRoute: self.selectedRoute,
                 selectedPermissions: self.selectedPermissions,
@@ -192,7 +205,7 @@ piranha.contentedit = new Vue({
                 body: piranha.resources.texts.deletePageConfirm,
                 confirmCss: "btn-danger",
                 confirmIcon: "fas fa-trash",
-                confirmText: piranha.resources.texts.delete,                
+                confirmText: piranha.resources.texts.delete,
                 onConfirm: function () {
                     var groupId = self.groupId;
 
@@ -206,36 +219,6 @@ piranha.contentedit = new Vue({
                     .catch(function (error) { console.log("error:", error ); });
                 }
             });
-        },
-        addBlock: function (type, pos) {
-            fetch(piranha.baseUrl + "manager/api/content/block/" + type)
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    piranha.pageedit.blocks.splice(pos, 0, result.body);
-                })
-                .catch(function (error) { console.log("error:", error );
-            });
-        },
-        moveBlock: function (from, to) {
-            this.blocks.splice(to, 0, this.blocks.splice(from, 1)[0])
-        },
-        collapseBlock: function (block) {
-            block.meta.isCollapsed = !block.meta.isCollapsed;
-        },
-        removeBlock: function (block) {
-            var index = this.blocks.indexOf(block);
-
-            if (index !== -1) {
-                this.blocks.splice(index, 1);
-            }
-        },
-        updateBlockTitle: function (e) {
-            for (var n = 0; n < this.blocks.length; n++) {
-                if (this.blocks[n].meta.uid === e.uid) {
-                    this.blocks[n].meta.title = e.title;
-                    break;
-                }
-            }
         },
         selectRegion: function (region) {
             this.selectedRegion = region;
@@ -269,27 +252,12 @@ piranha.contentedit = new Vue({
             }
         },
         onExcerptBlur: function (e) {
-            this.excerpt = e.target.innerHTML;
+            this.excerpt = tinyMCE.activeEditor.getContent();
         }
     },
     created: function () {
     },
     updated: function () {
-        // if (this.loading)
-        // {
-        //     sortable("#content-blocks", {
-        //         handle: ".handle",
-        //         items: ":not(.unsortable)"
-        //     })[0].addEventListener("sortupdate", function (e) {
-        //         piranha.pageedit.moveBlock(e.detail.origin.index, e.detail.destination.index);
-        //     });
-        //     piranha.editor.addInline('excerpt-body', 'excerpt-toolbar');
-        // }
-        // else {
-        //     sortable("#content-blocks", "disable");
-        //     sortable("#content-blocks", "enable");
-        // }
-
         this.loading = false;
     },
     components: {

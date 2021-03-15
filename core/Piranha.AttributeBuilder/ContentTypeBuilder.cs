@@ -323,8 +323,13 @@ namespace Piranha.AttributeBuilder
                     Group = group.Id,
                     UseExcerpt = attr.UseExcerpt,
                     UsePrimaryImage = attr.UsePrimaryImage,
-                    UseCategory = typeof(ICategorizedContent).IsAssignableFrom(type),
-                    UseTags = typeof(ITaggedContent).IsAssignableFrom(type),
+                    //
+                    // TODO
+                    //
+                    // Categories & Tags will be removed in this version as they
+                    // need to be localized properly and handled in the manager.
+                    UseCategory = false, // typeof(ICategorizedContent).IsAssignableFrom(type),
+                    UseTags = false, // typeof(ITaggedContent).IsAssignableFrom(type),
                     CustomEditors = GetEditors(type),
                     Regions = GetRegions(type)
                 };
@@ -395,6 +400,13 @@ namespace Piranha.AttributeBuilder
                     }
                 }
 
+                // Add block types
+                var blockTypes = type.GetCustomAttributes<BlockItemTypeAttribute>();
+                foreach (var blockType in blockTypes)
+                {
+                    pageType.BlockItemTypes.Add(blockType.Type.FullName);
+                }
+
                 return pageType;
             }
             return null;
@@ -419,7 +431,7 @@ namespace Piranha.AttributeBuilder
                 }
 
                 // Create post type
-                return new PostType
+                var postType = new PostType
                 {
                     Id = attr.Id,
                     CLRType = type.GetTypeInfo().AssemblyQualifiedName,
@@ -431,6 +443,15 @@ namespace Piranha.AttributeBuilder
                     CustomEditors = GetEditors(type),
                     Regions = GetRegions(type)
                 };
+
+                // Add block types
+                var blockTypes = type.GetCustomAttributes<BlockItemTypeAttribute>();
+                foreach (var blockType in blockTypes)
+                {
+                    postType.BlockItemTypes.Add(blockType.Type.FullName);
+                }
+
+                return postType;
             }
             return null;
         }
@@ -569,7 +590,8 @@ namespace Piranha.AttributeBuilder
                     ListTitlePlaceholder = attr.ListPlaceholder,
                     ListExpand = attr.ListExpand,
                     Icon = attr.Icon,
-                    Display = attr.Display
+                    Display = attr.Display,
+                    Width = attr.Width
                 };
                 int? sortOrder = attr.SortOrder != Int32.MaxValue ? attr.SortOrder : (int?)null;
 

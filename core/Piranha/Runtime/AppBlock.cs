@@ -55,20 +55,13 @@ namespace Piranha.Runtime
         public string Component { get; set; }
 
         /// <summary>
-        /// Gets/sets if the block group should use a
-        /// custom view.
+        /// Gets/sets the editor width.
         /// </summary>
-        public bool UseCustomView { get; set; }
+        public EditorWidth Width { get; set; }
 
         /// <summary>
         /// Gets/sets the specified item types.
         /// </summary>
         public IList<Type> ItemTypes { get; set; } = new List<Type>();
-
-        /// <summary>
-        /// Gets/sets how the blocks inside the group should be
-        /// displayed in the manager interface.
-        /// </summary>
-        public BlockDisplayMode Display { get; set; } = BlockDisplayMode.MasterDetail;
     }
 }

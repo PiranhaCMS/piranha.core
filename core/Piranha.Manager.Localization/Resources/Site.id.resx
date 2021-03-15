@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Add site" xml:space="preserve">
+    <value>Tambahkan situs</value>
+  </data>
+  <data name="Are you really sure?" xml:space="preserve">
+    <value>Apakah anda yakin?</value>
+  </data>
+  <data name="Edit site" xml:space="preserve">
+    <value>Sunting situs</value>
+  </data>
+  <data name="Hostnames" xml:space="preserve">
+    <value>Nama host</value>
+  </data>
+  <data name="Logo" xml:space="preserve">
+    <value>Logo</value>
+  </data>
+  <data name="If this should be the default site of the installation." xml:space="preserve">
+    <value>Jika ini seharusnya menjadi situs tetap dalam instalasi.</value>
+  </data>
+  <data name="Please type in the name of the site to confirm." xml:space="preserve">
+    <value>Silahkan mengisi nama situs untuk mengkorfirmasi.</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Langkah ini &lt;strong>tidak dapat&lt;/strong> dibatalkan. Ini akan menghapus situs secara permanen {{ title }} dan semua &lt;strong>halaman&lt;/strong>, &lt;strong>arsip&lt;/strong> dan &lt;strong>kiriman&lt;/strong>.</value>
+  </data>
+</root>

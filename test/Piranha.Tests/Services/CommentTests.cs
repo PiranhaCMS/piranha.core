@@ -10,6 +10,7 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Caching.Distributed;
@@ -161,7 +162,7 @@ namespace Piranha.Tests.Services
             {
                 var count = (await api.Posts.GetByIdAsync(BLOGPOST_ID)).CommentCount;
 
-                await api.Posts.SaveCommentAsync(BLOGPOST_ID, new Comment
+                await api.Posts.SaveCommentAsync(BLOGPOST_ID, new PostComment
                 {
                     Author = "John Doe",
                     Email = "john@doe.com",
@@ -175,12 +176,23 @@ namespace Piranha.Tests.Services
         }
 
         [Fact]
+        public async Task CheckPostCommentType()
+        {
+            using (var api = CreateApi())
+            {
+                var comments = await api.Posts.GetAllCommentsAsync(BLOGPOST_ID);
+
+                Assert.True(comments.All(c => c is PostComment));
+            }
+        }
+
+        [Fact]
         public async Task AddPostCommentNoAuthor()
         {
             using (var api = CreateApi())
             {
                 await Assert.ThrowsAsync<ValidationException>(async () => {
-                    await api.Posts.SaveCommentAsync(BLOGPOST_ID, new Comment
+                    await api.Posts.SaveCommentAsync(BLOGPOST_ID, new PostComment
                     {
                         Email = "john@doe.com",
                         Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
@@ -195,7 +207,7 @@ namespace Piranha.Tests.Services
             using (var api = CreateApi())
             {
                 await Assert.ThrowsAsync<ValidationException>(async () => {
-                    await api.Posts.SaveCommentAsync(BLOGPOST_ID, new Comment
+                    await api.Posts.SaveCommentAsync(BLOGPOST_ID, new PostComment
                     {
                         Author = "John Doe",
                         Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
@@ -210,7 +222,7 @@ namespace Piranha.Tests.Services
             using (var api = CreateApi())
             {
                 await Assert.ThrowsAsync<ValidationException>(async () => {
-                    await api.Posts.SaveCommentAsync(BLOGPOST_ID, new Comment
+                    await api.Posts.SaveCommentAsync(BLOGPOST_ID, new PostComment
                     {
                         Author = "John Doe",
                         Email = "ThisIsNotAnEmail",
@@ -232,7 +244,7 @@ namespace Piranha.Tests.Services
 
                 var id = Guid.NewGuid();
 
-                await api.Posts.SaveCommentAndVerifyAsync(BLOGPOST_ID, new Comment
+                await api.Posts.SaveCommentAndVerifyAsync(BLOGPOST_ID, new PostComment
                 {
                     Id = id,
                     Author = "John Doe",
@@ -259,7 +271,7 @@ namespace Piranha.Tests.Services
 
                 var id = Guid.NewGuid();
 
-                await api.Posts.SaveCommentAndVerifyAsync(BLOGPOST_ID, new Comment
+                await api.Posts.SaveCommentAndVerifyAsync(BLOGPOST_ID, new PostComment
                 {
                     Id = id,
                     Author = "John Doe",
@@ -281,7 +293,7 @@ namespace Piranha.Tests.Services
             {
                 var count = (await api.Pages.GetByIdAsync(BLOG_ID)).CommentCount;
 
-                await api.Pages.SaveCommentAsync(BLOG_ID, new Comment
+                await api.Pages.SaveCommentAsync(BLOG_ID, new PageComment
                 {
                     Author = "John Doe",
                     Email = "john@doe.com",
@@ -295,12 +307,23 @@ namespace Piranha.Tests.Services
         }
 
         [Fact]
+        public async Task CheckPageCommentType()
+        {
+            using (var api = CreateApi())
+            {
+                var comments = await api.Pages.GetAllCommentsAsync(BLOG_ID);
+
+                Assert.True(comments.All(c => c is PageComment));
+            }
+        }
+
+        [Fact]
         public async Task AddPageCommentNoAuthor()
         {
             using (var api = CreateApi())
             {
                 await Assert.ThrowsAsync<ValidationException>(async () => {
-                    await api.Pages.SaveCommentAsync(BLOG_ID, new Comment
+                    await api.Pages.SaveCommentAsync(BLOG_ID, new PageComment
                     {
                         Email = "john@doe.com",
                         Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
@@ -315,7 +338,7 @@ namespace Piranha.Tests.Services
             using (var api = CreateApi())
             {
                 await Assert.ThrowsAsync<ValidationException>(async () => {
-                    await api.Pages.SaveCommentAsync(BLOG_ID, new Comment
+                    await api.Pages.SaveCommentAsync(BLOG_ID, new PageComment
                     {
                         Author = "John Doe",
                         Body = "Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
@@ -330,7 +353,7 @@ namespace Piranha.Tests.Services
             using (var api = CreateApi())
             {
                 await Assert.ThrowsAsync<ValidationException>(async () => {
-                    await api.Pages.SaveCommentAsync(BLOG_ID, new Comment
+                    await api.Pages.SaveCommentAsync(BLOG_ID, new PageComment
                     {
                         Author = "John Doe",
                         Email = "ThisIsNotAnEmail",
@@ -352,7 +375,7 @@ namespace Piranha.Tests.Services
 
                 var id = Guid.NewGuid();
 
-                await api.Pages.SaveCommentAndVerifyAsync(BLOG_ID, new Comment
+                await api.Pages.SaveCommentAndVerifyAsync(BLOG_ID, new PageComment
                 {
                     Id = id,
                     Author = "John Doe",
@@ -379,7 +402,7 @@ namespace Piranha.Tests.Services
 
                 var id = Guid.NewGuid();
 
-                await api.Pages.SaveCommentAndVerifyAsync(BLOG_ID, new Comment
+                await api.Pages.SaveCommentAndVerifyAsync(BLOG_ID, new PageComment
                 {
                     Id = id,
                     Author = "John Doe",

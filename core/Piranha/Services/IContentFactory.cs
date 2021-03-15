@@ -36,8 +36,9 @@ namespace Piranha.Services
         /// Creates and initializes a new block of the specified type.
         /// </summary>
         /// <param name="typeName">The type name</param>
+        /// <param name="managerInit">If manager initialization should be performed</param>
         /// <returns>The new block</returns>
-        Task<object> CreateBlockAsync(string typeName);
+        Task<object> CreateBlockAsync(string typeName, bool managerInit = false);
 
         /// <summary>
         /// Initializes the given model.
