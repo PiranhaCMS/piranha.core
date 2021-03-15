@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ChangeDefaultConfirm" xml:space="preserve">
+    <value>更改預設語言會影響應用程序的行為方式，並且應該在初始設置中進行配置。</value>
+  </data>
+  <data name="RemoveLanguageConfirm" xml:space="preserve">
+    <value>這個功能 &lt;strong>不能&lt;/strong> 回復，將永久刪除 {{ currentDelete.title }} 及所有的 &lt;strong>轉換&lt;/strong> 字串。所有網站的 {{ currentDelete.title }} 將會變成預設語系內容。</value>
+  </data>
+</root>

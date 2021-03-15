@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="Approved" xml:space="preserve">
+    <value>審核通過</value>
+  </data>
+  <data name="ApprovedSingle" xml:space="preserve">
+    <value>審核通過</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>待審核</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>評論</value>
+  </data>
+  <data name="Response to" xml:space="preserve">
+    <value>回覆</value>
+  </data>
+  <data name="The comment was successfully approved" xml:space="preserve">
+    <value>該評論已審核</value>
+  </data>
+  <data name="The comment was successfully unapproved" xml:space="preserve">
+    <value>該評論已駁回</value>
+  </data>
+  <data name="The comment was successfully deleted" xml:space="preserve">
+    <value>該評論已刪除</value>
+  </data>
+  <data name="Days allowed for commenting" xml:space="preserve">
+    <value>允許評論的時間</value>
+  </data>
+  <data name="Comments are not allowed." xml:space="preserve">
+    <value>不允許評論</value>
+  </data>
+  <data name="Comments are not allowed for unpublished content." xml:space="preserve">
+    <value>不允許評論未發佈內容。</value>
+  </data>
+  <data name="Comments are currently open." xml:space="preserve">
+    <value>評論已開啟。</value>
+  </data>
+  <data name="Comments were closed" xml:space="preserve">
+    <value>評論已關閉</value>
+  </data>
+</root>

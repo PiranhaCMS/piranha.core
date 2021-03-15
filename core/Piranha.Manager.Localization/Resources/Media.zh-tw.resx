@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Add folder" xml:space="preserve">
+    <value>建立資料夾</value>
+  </data>
+  <data name="Drop files here or click to upload." xml:space="preserve">
+    <value>將檔案拖放到此處，或點選上傳。</value>
+  </data>
+  <data name="Download media" xml:space="preserve">
+    <value>下載媒體檔案</value>
+  </data>
+  <data name="Folder name" xml:space="preserve">
+    <value>資料夾名稱</value>
+  </data>
+  <data name="Folder name is mandatory." xml:space="preserve">
+    <value>資料夾名稱是必填的。</value>
+  </data>
+  <data name="Gallery" xml:space="preserve">
+    <value>相簿</value>
+  </data>
+  <data name="Media" xml:space="preserve">
+    <value>媒體</value>
+  </data>
+  <data name="Media preview is not available" xml:space="preserve">
+    <value>媒體預覽不可用</value>
+  </data>
+  <data name="Open media in new tab" xml:space="preserve">
+    <value>在新標籤中打開媒體</value>
+  </data>
+  <data name="Select media" xml:space="preserve">
+    <value>選擇媒體</value>
+  </data>
+  <data name="Your browser does not support the video tag." xml:space="preserve">
+    <value>您的瀏覽器不支援視訊標籤(video tag)。</value>
+  </data>
+  <data name="List" xml:space="preserve">
+    <value>列表</value>
+  </data>
+  <data name="Preferred aspect" xml:space="preserve">
+    <value>首選尺寸</value>
+  </data>
+  <data name="Original" xml:space="preserve">
+    <value>原始檔案</value>
+  </data>
+  <data name="Landscape" xml:space="preserve">
+    <value>橫向螢幕</value>
+  </data>
+  <data name="Portrait" xml:space="preserve">
+    <value>直向模式</value>
+  </data>
+  <data name="Widescreen" xml:space="preserve">
+    <value>寬螢幕</value>
+  </data>
+  <data name="Square" xml:space="preserve">
+    <value>正方形</value>
+  </data>
+  <data name="Are you sure you want to delete selected media?" xml:space="preserve">
+    <value>您確定要刪除選定的媒體嗎？</value>
+  </data>
+  <data name="Delete selected items" xml:space="preserve">
+    <value>刪除選中專案</value>
+  </data>
+  <data name="Media file was successfully moved." xml:space="preserve">
+    <value>媒體檔案已成功移動。</value>
+  </data>
+  <data name="Media files was successfully moved." xml:space="preserve">
+    <value>媒體檔案已成功移動。</value>
+  </data>
+  <data name="The media file was not found." xml:space="preserve">
+    <value>找不到媒體檔案。</value>
+  </data>
+  <data name="The media file was successfully deleted" xml:space="preserve">
+    <value>媒體檔案已成功刪除</value>
+  </data>
+  <data name="The media files was successfully deleted" xml:space="preserve">
+    <value>媒體檔案已成功刪除</value>
+  </data>
+</root>
