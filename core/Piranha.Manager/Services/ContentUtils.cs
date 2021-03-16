@@ -62,7 +62,7 @@ namespace Piranha.Manager.Services
                         field.Meta.Name = !string.IsNullOrWhiteSpace(attr.Title) ? attr.Title : field.Meta.Name;
                         field.Meta.Placeholder = attr.Placeholder;
                         field.Meta.IsHalfWidth = attr.Options.HasFlag(FieldOption.HalfWidth);
-                        field.OrderId = attr.OrderId;
+                        field.SortOrder = attr.SortOrder;
                     }
 
                     // Check if we have field description meta-data available
@@ -74,7 +74,7 @@ namespace Piranha.Manager.Services
                     fields.Add(field);
                 }
             }
-            return fields.OrderBy(x => x.OrderId).ToList();
+            return fields.OrderBy(x => x.SortOrder).ToList();
         }
 
         public static Block TransformGenericBlock(BlockGenericModel blockGeneric)

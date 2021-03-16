@@ -38,6 +38,6 @@ namespace Piranha.Extend
         /// <summary>
         /// Gets/sets the order number.
         /// </summary>
-        public int OrderId { get; set; }
+        public int SortOrder { get; set; }
     }
 }

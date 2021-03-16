@@ -30,6 +30,6 @@ namespace Piranha.Manager.Models.Content
         /// <summary>
         /// Gets/sets the order number.
         /// </summary>
-        public int OrderId { get; internal set; }
+        public int SortOrder { get; set; }
     }
 }

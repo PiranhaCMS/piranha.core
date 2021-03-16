@@ -644,7 +644,7 @@ namespace Piranha.AttributeBuilder
                             regionType.Fields.Add(fieldType);
                     }
 
-                    regionType.Fields = regionType.Fields.OrderBy(x => x.OrderId).ToList();
+                    regionType.Fields = regionType.Fields.OrderBy(x => x.SortOrder).ToList();
 
                     // Skip regions without fields.
                     if (regionType.Fields.Count == 0)
@@ -681,7 +681,7 @@ namespace Piranha.AttributeBuilder
                         Type = appFieldType.TypeName,
                         Options = attr.Options,
                         Placeholder = attr.Placeholder,
-                        OrderId = attr.OrderId
+                        SortOrder = attr.SortOrder
                     };
 
                     // Get optional description

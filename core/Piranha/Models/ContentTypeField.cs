@@ -51,7 +51,7 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets field order on the manager interface.
         /// </summary>
-        public int OrderId { get; set; }
+        public int SortOrder { get; set; }
 
         /// <summary>
         /// Gets/sets the available field settings.
