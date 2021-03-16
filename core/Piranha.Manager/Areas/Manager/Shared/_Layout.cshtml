@@ -28,7 +28,7 @@
 <body class="@prerelease">
     @if (!string.IsNullOrEmpty(prerelease))
     {
-    <div class="pre-release">Pre-release</div>
+        <div class="pre-release">Pre-release</div>
     }
     <partial name="~/Areas/Manager/Shared/Partial/_Menu.cshtml" />
 
@@ -46,9 +46,9 @@
     <partial name="~/Areas/Manager/Shared/Partial/_AlertDialog.cshtml" />
     @foreach (var partial in module.Partials)
     {
-    <partial name="@partial" />
+        <partial name="@partial" />
     }
-
+    @Html.AntiForgeryToken()
     <script type="text/javascript">
         var piranha = {};
         window.piranha = piranha;
@@ -59,12 +59,12 @@
 
     @RenderSection("partials", required: false)
 
-<environment include="Development">
-    <script type="text/javascript" src="~/manager/assets/js/piranha-deps-dev.js"></script>
-</environment>
-<environment exclude="Development">
-    <script type="text/javascript" src="~/manager/assets/js/piranha-deps.min.js"></script>
-</environment>
+    <environment include="Development">
+        <script type="text/javascript" src="~/manager/assets/js/piranha-deps-dev.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script type="text/javascript" src="~/manager/assets/js/piranha-deps.min.js"></script>
+    </environment>
     @foreach (var script in module.Scripts.Where(s => s.RenderBeforeCoreScripts))
     {
         if (string.IsNullOrWhiteSpace(script.Integrity))
@@ -87,13 +87,13 @@
 
     @if (!string.IsNullOrWhiteSpace(ViewBag.Message))
     {
-    <script>
+        <script>
         piranha.notifications.push({
             body: "@Html.Raw(ViewBag.Message)",
             type: "@Html.Raw(ViewBag.MessageCss)",
             hide: true
         });
-    </script>
+        </script>
     }
 
     <partial name="~/Areas/Manager/Shared/Partial/_Resources.cshtml" />

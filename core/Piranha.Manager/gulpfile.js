@@ -163,6 +163,7 @@ var js = [
             "assets/src/js/piranha.languageedit.js",
             "assets/src/js/piranha.resources.js",
             "assets/src/js/piranha.editor.js",
+            "assets/src/js/piranha.antiforgery.js",
             "assets/src/js/components/page-item.vue"
         ]
     },

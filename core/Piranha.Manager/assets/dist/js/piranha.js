@@ -755,6 +755,7 @@ piranha.mediapicker = new Vue({
                     method: "post",
                     headers: {
                         "Content-Type": "application/json",
+                        "X-XSRF-TOKEN": piranha.antiforgery.value,
                     },
                     body: JSON.stringify({
                         parentId: self.currentFolderId,
@@ -1022,6 +1023,7 @@ piranha.preview = new Vue({
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",
+                    "X-XSRF-TOKEN": piranha.antiforgery.value,
                 },
                 body: JSON.stringify(model)
             })
@@ -1125,6 +1127,7 @@ piranha.languageedit = new Vue({
                     method: "post",
                     headers: {
                         "Content-Type": "application/json",
+                        "X-XSRF-TOKEN": piranha.antiforgery.value,
                     },
                     body: JSON.stringify({
                         items: JSON.parse(JSON.stringify(self.items))
@@ -1343,6 +1346,24 @@ $(document).on('focusin', function (e) {
     if ($(e.target).closest(".tox-tinymce-inline").length) {
         e.stopImmediatePropagation();
     }
+});
+/*global
+    piranha
+*/
+
+piranha.antiforgery = new function () {
+    "use strict";
+
+    var self = this;
+
+    this.init = function () {
+        if (document.getElementsByName('__RequestVerificationToken').length > 0)
+            self.value = document.getElementsByName('__RequestVerificationToken')[0].value;
+    };
+};
+
+$(document).ready(function () {
+    piranha.antiforgery.init();
 });
 Vue.component("page-item", {
   props: ["item"],

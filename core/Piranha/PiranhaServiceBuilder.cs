@@ -28,6 +28,11 @@ namespace Piranha
         public bool AddRazorRuntimeCompilation { get; set; }
 
         /// <summary>
+        /// Gets/sets if auto Antiforgery validation should be enabled.
+        /// </summary>
+        public bool AddAutoValidateAntiforgeryToken { get; set; }
+
+        /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="services">The current service collection</param>

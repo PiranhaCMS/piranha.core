@@ -58,6 +58,7 @@ piranha.config = new Vue({
                     method: "post",
                     headers: {
                         "Content-Type": "application/json",
+                        "X-XSRF-TOKEN": piranha.antiforgery.value,
                     },
                     body: JSON.stringify({
                         hierarchicalPageSlugs: self.model.hierarchicalPageSlugs,

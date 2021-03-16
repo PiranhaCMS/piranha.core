@@ -47,6 +47,7 @@
                     method: "post",
                     headers: {
                         "Content-Type": "application/json",
+                        "X-XSRF-TOKEN": piranha.antiforgery.value,
                     },
                     body: JSON.stringify({
                         id: piranha.alias.model.id,
