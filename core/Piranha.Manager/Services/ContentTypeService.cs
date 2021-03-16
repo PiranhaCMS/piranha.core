@@ -159,6 +159,23 @@ namespace Piranha.Manager.Services
         }
 
         /// <summary>
+        /// Creates a new content region.
+        /// </summary>
+        /// <param name="type">The type id</param>
+        /// <param name="region">The region id</param>
+        /// <returns>The new region item</returns>
+        public Task<RegionItemModel> CreateContentRegionAsync(string type, string region)
+        {
+            var pageType = App.ContentTypes.GetById(type);
+
+            if (pageType != null)
+            {
+                return CreateRegionAsync(pageType, region);
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Creates a new page region.
         /// </summary>
         /// <param name="type">The type id</param>

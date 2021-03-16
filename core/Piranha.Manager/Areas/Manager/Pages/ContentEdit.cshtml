@@ -156,7 +156,7 @@
         <div class="card" :class="{ 'd-none': selectedRegion.uid != region.meta.uid }" v-for="region in contentRegions">
             <div class="card-body pt-0">
                 <div class="region region-center">
-                    <region v-bind:content="'page'" v-bind:type="typeId" v-bind:model="region"></region>
+                    <region v-bind:content="'content'" v-bind:type="typeId" v-bind:model="region"></region>
                     <div class="content-blocker"></div>
                 </div>
             </div>
