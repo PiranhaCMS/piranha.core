@@ -26,5 +26,10 @@ namespace Piranha.Manager.Models.Content
         /// Gets/sets the meta information.
         /// </summary>
         public FieldMeta Meta { get; set; }
+
+        /// <summary>
+        /// Gets/sets the order number.
+        /// </summary>
+        public int OrderId { get; internal set; }
     }
 }

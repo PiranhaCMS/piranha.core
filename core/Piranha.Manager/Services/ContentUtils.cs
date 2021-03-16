@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Piranha.Extend;
 using Piranha.Extend.Fields;
@@ -61,6 +62,7 @@ namespace Piranha.Manager.Services
                         field.Meta.Name = !string.IsNullOrWhiteSpace(attr.Title) ? attr.Title : field.Meta.Name;
                         field.Meta.Placeholder = attr.Placeholder;
                         field.Meta.IsHalfWidth = attr.Options.HasFlag(FieldOption.HalfWidth);
+                        field.OrderId = attr.OrderId;
                     }
 
                     // Check if we have field description meta-data available
@@ -72,7 +74,7 @@ namespace Piranha.Manager.Services
                     fields.Add(field);
                 }
             }
-            return fields;
+            return fields.OrderBy(x => x.OrderId).ToList();
         }
 
         public static Block TransformGenericBlock(BlockGenericModel blockGeneric)

@@ -34,5 +34,10 @@ namespace Piranha.Extend
         /// text based fields.
         /// </summary>
         public string Placeholder { get; set; }
+
+        /// <summary>
+        /// Gets/sets the order number.
+        /// </summary>
+        public int OrderId { get; set; }
     }
 }
