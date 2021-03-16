@@ -252,7 +252,11 @@ piranha.contentedit = new Vue({
             }
         },
         onExcerptBlur: function (e) {
-            this.excerpt = tinyMCE.activeEditor.getContent();
+            if (this.useHtmlExcerpt) {
+                this.excerpt = tinyMCE.activeEditor.getContent();
+            } else {
+                this.excerpt = e.target.innerHTML;
+            }
         }
     },
     created: function () {
