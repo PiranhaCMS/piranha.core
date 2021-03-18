@@ -19,31 +19,31 @@
     <value>Add or select existing tags (optional)</value>
   </data>
   <data name="All categories" xml:space="preserve">
-    <value>All categories</value>
+    <value>Totes les categories</value>
   </data>
   <data name="Categories" xml:space="preserve">
     <value>Categories</value>
   </data>
   <data name="Category" xml:space="preserve">
-    <value>Category</value>
+    <value>Categoria</value>
   </data>
   <data name="Edit post" xml:space="preserve">
-	  <value>Edit post</value>
+	  <value>Edita la publicació</value>
 	</data>
   <data name="Tag" xml:space="preserve">
-    <value>Tag</value>
+    <value>Etiqueta</value>
   </data>
   <data name="Tags" xml:space="preserve">
-    <value>Tags</value>
+    <value>Etiquetes</value>
   </data>
   <data name="Are you sure you want to delete this post?" xml:space="preserve">
-    <value>Are you sure you want to delete this post?</value>
+    <value>Esteu segur que voleu suprimir aquesta publicació?</value>
   </data>
   <data name="Welcome to your new post. Click on the button above to add your first block of content!" xml:space="preserve">
     <value>Welcome to your new post. Click on the button above to add your first block of content!</value>
   </data>
   <data name="Your post title" xml:space="preserve">
-    <value>Your post title</value>
+    <value>Títol de la publicació</value>
   </data>
   <data name="If comments should be enabled for this post" xml:space="preserve">
     <value>If comments should be enabled for this post</value>
