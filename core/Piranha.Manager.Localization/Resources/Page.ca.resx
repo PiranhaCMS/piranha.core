@@ -43,13 +43,13 @@
     <value>Habilita la indexació dels enllaços d'aquesta pàgina.</value>
   </data>
   <data name="Meta title" xml:space="preserve">
-    <value>Meta title</value>
+    <value>Títol de metadades</value>
   </data>
   <data name="Meta keywords" xml:space="preserve">
-    <value>Meta keywords</value>
+    <value>Paraules clau</value>
   </data>
   <data name="Meta description" xml:space="preserve">
-    <value>Meta description</value>
+    <value>Descripció de metadades</value>
   </data>
   <data name="Og title" xml:space="preserve">
     <value>Og title</value>
