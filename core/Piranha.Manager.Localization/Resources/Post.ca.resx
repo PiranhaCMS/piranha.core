@@ -13,10 +13,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add or select existing category" xml:space="preserve">
-    <value>Add or select existing category</value>
+    <value>Afegeix o selecciona una categoria</value>
   </data>
   <data name="Add or select existing tags (optional)" xml:space="preserve">
-    <value>Add or select existing tags (optional)</value>
+    <value>Afegeix o selecciona una etiqueta (opcional)</value>
   </data>
   <data name="All categories" xml:space="preserve">
     <value>Totes les categories</value>
@@ -40,18 +40,18 @@
     <value>Esteu segur que voleu suprimir aquesta publicació?</value>
   </data>
   <data name="Welcome to your new post. Click on the button above to add your first block of content!" xml:space="preserve">
-    <value>Welcome to your new post. Click on the button above to add your first block of content!</value>
+    <value>Us donem la benvinguda a la nova publicació. Fes clic al botó de sota per afegir un nou bloc de contingut.</value>
   </data>
   <data name="Your post title" xml:space="preserve">
     <value>Títol de la publicació</value>
   </data>
   <data name="If comments should be enabled for this post" xml:space="preserve">
-    <value>If comments should be enabled for this post</value>
+    <value>Habilita els comentaris per aquesta publicació</value>
   </data>
   <data name="If the post should be indexed by search engines." xml:space="preserve">
-    <value>If the post should be indexed by search engines.</value>
+    <value>Habilita la indexació d'aquesta publicació per els motors de cerca.</value>
   </data>
   <data name="If links from this post should be indexed." xml:space="preserve">
-    <value>If links from this post should be indexed.</value>
+    <value>Habilita la indexació dels enllaços d'aquesta publicació.</value>
   </data>
 </root>
