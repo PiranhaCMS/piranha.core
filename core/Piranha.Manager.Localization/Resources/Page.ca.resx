@@ -79,10 +79,10 @@
     <value>La pàgina s'ha publicat correctament</value>
   </data>
   <data name="The page was successfully unpublished" xml:space="preserve">
-    <value>The page was successfully unpublished</value>
+    <value>La pàgina s'ha despublicat correctament</value>
   </data>
   <data name="The page was successfully saved" xml:space="preserve">
-    <value>The page was successfully saved</value>
+    <value>La pàgina s'ha desat correctament</value>
   </data>
   <data name="The page was successfully reverted to its previous state" xml:space="preserve">
     <value>The page was successfully reverted to its previous state</value>
