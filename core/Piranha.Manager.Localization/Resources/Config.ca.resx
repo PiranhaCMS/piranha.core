@@ -25,7 +25,7 @@
     <value>Expanded levels in the sitemap</value>
   </data>
   <data name="Archive page size" xml:space="preserve">
-    <value>Archive page size</value>
+    <value>Mida de pàgina d'arxiu de publicacions</value>
   </data>
   <data name="Caching" xml:space="preserve">
     <value>Caching</value>
@@ -72,7 +72,7 @@
   </data>
 
   <data name="Approve comments" xml:space="preserve">
-    <value>Approve comments</value>
+    <value>Aprovar comentaris</value>
   </data>
   <data name="Close comments after" xml:space="preserve">
     <value>Close comments after</value>
