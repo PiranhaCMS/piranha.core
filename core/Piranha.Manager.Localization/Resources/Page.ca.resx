@@ -70,13 +70,13 @@
     <value>Pàgines</value>
   </data>
   <data name="The page was successfully deleted" xml:space="preserve">
-    <value>The page was successfully deleted</value>
+    <value>La pàgina s'ha esborrat correctament</value>
   </data>
   <data name="The page was successfully detached from the original" xml:space="preserve">
-    <value>The page was successfully detached from the original</value>
+    <value>La pàgina s'ha desvinculat correctament de l'original</value>
   </data>
   <data name="The page was successfully published" xml:space="preserve">
-    <value>The page was successfully published</value>
+    <value>La pàgina s'ha publicat correctament</value>
   </data>
   <data name="The page was successfully unpublished" xml:space="preserve">
     <value>The page was successfully unpublished</value>
