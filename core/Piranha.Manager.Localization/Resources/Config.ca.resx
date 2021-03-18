@@ -53,7 +53,7 @@
     <value>El número per defecte de nivells que s'han d'expandir al mapa del lloc web. Això és útil en mapes de lloc web petits.</value>
   </data>
   <data name="The default page size for archive pages. Please note that this this can be overridden for specific archives." xml:space="preserve">
-    <value>The default page size for archive pages. Please note that this this can be overridden for specific archives.</value>
+    <value>Número per defecte d'elements a les pàgines d'arxiu. Tingueu en compte que això es pot sobreescriure per arxius específics.</value>
   </data>
   <data name="The maximum number of page revisions that should be stored for each page. A value of 0 means no limitation." xml:space="preserve">
     <value>El nombre màxim de revisions que s'han de desar per cada pàgina. El valor 0 significa que no hi ha límit.</value>
@@ -81,10 +81,10 @@
     <value>Collapse block headers</value>
   </data>
   <data name="Collapse blocks" xml:space="preserve">
-    <value>Collapse blocks</value>
+    <value>Contraure els blocs</value>
   </data>
   <data name="Comments page size" xml:space="preserve">
-    <value>Comments page size</value>
+    <value>Mida de pàgina de comentaris</value>
   </data>
   <data name="Enable page comments" xml:space="preserve">
     <value>Habilita els comentaris a les pàgines</value>
