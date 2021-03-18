@@ -16,24 +16,24 @@
     <value>Afegeix un lloc web</value>
   </data>
   <data name="Are you really sure?" xml:space="preserve">
-    <value>Are you really sure?</value>
+    <value>N'esteu segur?</value>
   </data>
   <data name="Edit site" xml:space="preserve">
-    <value>Edit site</value>
+    <value>Edita el lloc web</value>
   </data>
   <data name="Hostnames" xml:space="preserve">
-    <value>Hostnames</value>
+    <value>Nom del servidor</value>
   </data>
   <data name="Logo" xml:space="preserve">
-    <value>Logo</value>
+    <value>Logotip</value>
   </data>
   <data name="If this should be the default site of the installation." xml:space="preserve">
-    <value>If this should be the default site of the installation.</value>
+    <value>Aquest hauria de ser el lloc web per defecte.</value>
   </data>
   <data name="Please type in the name of the site to confirm." xml:space="preserve">
-    <value>Please type in the name of the site to confirm.</value>
+    <value>Si us plau, escriu el nom del lloc web per confirmar.</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
-    <value>This action &lt;strong>cannot&lt;/strong> be undone. This will permanently delete the site {{ title }} and all of its &lt;strong>pages&lt;/strong>, &lt;strong>archives&lt;/strong> and &lt;strong>posts&lt;/strong>.</value>
+    <value>Aquesta acció &lt;strong>no es pot desfer&lt;/strong>. S'eliminarà de forma permanent el lloc web {{ title }} i totes les seves &lt;strong>pàgines&lt;/strong>, &lt;strong>arxius&lt;/strong> i &lt;strong>entrades&lt;/strong>.</value>
   </data>
 </root>
