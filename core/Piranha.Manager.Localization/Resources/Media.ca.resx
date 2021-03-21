@@ -73,18 +73,18 @@
     <value>Suprimeix el(s) element(s) seleccionat(s)</value>
   </data>
   <data name="Media file was successfully moved." xml:space="preserve">
-    <value>Media file was successfully moved.</value>
+    <value>S'ha mogut el fitxer multimèdia correctament.</value>
   </data>
   <data name="Media files was successfully moved." xml:space="preserve">
-    <value>Media files was successfully moved.</value>
+    <value>S'han mogut els fitxers multimèdia correctament.</value>
   </data>
   <data name="The media file was not found." xml:space="preserve">
-    <value>The media file was not found.</value>
+    <value>No s'ha trobat el fitxer multimèdia.</value>
   </data>
   <data name="The media file was successfully deleted" xml:space="preserve">
-    <value>El fitxer multimèdia ha estat eliminat amb èxit</value>
+    <value>S'ha eliminat el fitxer multimèdia correctament</value>
   </data>
   <data name="The media files was successfully deleted" xml:space="preserve">
-    <value>Els fitxers multimèdia han estat eliminats amb èxit</value>
+    <value>S'han eliminat els fitxers multimèdia correctament</value>
   </data>
 </root>

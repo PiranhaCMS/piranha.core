@@ -13,43 +13,43 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add page" xml:space="preserve">
-    <value>Add page</value>
+    <value>Afegeix una pàgina</value>
   </data>
   <data name="An error occured while deleting the page" xml:space="preserve">
-    <value>An error occured while deleting the page</value>
+    <value>S'ha produït un error en suprimir la pàgina</value>
   </data>
   <data name="Archive" xml:space="preserve">
     <value>Archive</value>
   </data>
   <data name="Detach page" xml:space="preserve">
-    <value>Detach page</value>
+    <value>Desvincula la pàgina</value>
   </data>
   <data name="Edit original" xml:space="preserve">
-    <value>Edit original</value>
+    <value>Edita l'original</value>
   </data>
   <data name="Edit page" xml:space="preserve">
-    <value>Edit page</value>
+    <value>Edita la pàgina</value>
   </data>
   <data name="Hidden" xml:space="preserve">
-    <value>Hidden</value>
+    <value>Ocult</value>
   </data>
   <data name="If the page should be hidden in the sitemap" xml:space="preserve">
-    <value>If the page should be hidden in the sitemap</value>
+    <value>Amaga la pàgina del mapa del lloc web</value>
   </data>
   <data name="If the page should be indexed by search engines." xml:space="preserve">
-    <value>If the page should be indexed by search engines.</value>
+    <value>Habilita la indexació d'aquesta pàgina per els motors de cerca.</value>
   </data>
   <data name="If links from this page should be indexed." xml:space="preserve">
-    <value>If links from this page should be indexed.</value>
+    <value>Habilita la indexació dels enllaços d'aquesta pàgina.</value>
   </data>
   <data name="Meta title" xml:space="preserve">
-    <value>Meta title</value>
+    <value>Títol de metadades</value>
   </data>
   <data name="Meta keywords" xml:space="preserve">
-    <value>Meta keywords</value>
+    <value>Paraules clau</value>
   </data>
   <data name="Meta description" xml:space="preserve">
-    <value>Meta description</value>
+    <value>Descripció de metadades</value>
   </data>
   <data name="Og title" xml:space="preserve">
     <value>Og title</value>
@@ -61,42 +61,42 @@
     <value>Og description</value>
   </data>
   <data name="Navigation title" xml:space="preserve">
-    <value>Navigation title</value>
+    <value>Títol de navegació</value>
   </data>
   <data name="Are you sure you want to delete this page?" xml:space="preserve">
-    <value>Are you sure you want to delete this page?</value>
+    <value>Esteu segur que voleu suprimir aquesta pàgina?</value>
   </data>
   <data name="Pages" xml:space="preserve">
-    <value>Pages</value>
+    <value>Pàgines</value>
   </data>
   <data name="The page was successfully deleted" xml:space="preserve">
-    <value>The page was successfully deleted</value>
+    <value>La pàgina s'ha esborrat correctament</value>
   </data>
   <data name="The page was successfully detached from the original" xml:space="preserve">
-    <value>The page was successfully detached from the original</value>
+    <value>La pàgina s'ha desvinculat correctament de l'original</value>
   </data>
   <data name="The page was successfully published" xml:space="preserve">
-    <value>The page was successfully published</value>
+    <value>La pàgina s'ha publicat correctament</value>
   </data>
   <data name="The page was successfully unpublished" xml:space="preserve">
-    <value>The page was successfully unpublished</value>
+    <value>La pàgina s'ha despublicat correctament</value>
   </data>
   <data name="The page was successfully saved" xml:space="preserve">
-    <value>The page was successfully saved</value>
+    <value>La pàgina s'ha desat correctament</value>
   </data>
   <data name="The page was successfully reverted to its previous state" xml:space="preserve">
-    <value>The page was successfully reverted to its previous state</value>
+    <value>S'ha restaurat la pàgina al seu estat anterior</value>
   </data>
   <data name="This is a copy. In order to edit the content of the page you first need to detach it from the original. If you want to keep the page as a copy you should edit the content of the original page." xml:space="preserve">
-    <value>This is a copy. In order to edit the content of the page you first need to detach it from the original. If you want to keep the page as a copy you should edit the content of the original page.</value>
+    <value>És una còpia. Per poder editar el contingut de la pàgina, primer cal desvincular-la de la original. Si vols mantenir la pàgina com una còpia, cal que editis la pàgina original.</value>
   </data>
   <data name="Welcome to your new page. Click on the button above to add your first block of content!" xml:space="preserve">
-    <value>Welcome to your new page. Click on the button above to add your first block of content!</value>
+    <value>Us donem la benvinguda a la nova pàgina. Fes clic al botó de sobre per afegir un nou bloc de contingut.</value>
   </data>
   <data name="Your page title" xml:space="preserve">
-    <value>Your page title</value>
+    <value>Títol de la pàgina</value>
   </data>
   <data name="If comments should be enabled for this page" xml:space="preserve">
-    <value>If comments should be enabled for this page</value>
+    <value>Habilita els comentaris per aquesta pàgina</value>
   </data>
 </root>
