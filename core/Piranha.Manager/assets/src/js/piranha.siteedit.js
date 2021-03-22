@@ -92,8 +92,6 @@ piranha.siteedit = new Vue({
             })
             .then(function (response) { return response.json(); })
             .then(function (result) {
-                piranha.notifications.push(result);
-
                 if (result.type === "success") {
                     // Check if we should save content as well
                     if (self.id != null && self.typeId != null) {
@@ -111,15 +109,31 @@ piranha.siteedit = new Vue({
                             },
                             body: JSON.stringify(content)
                         })
-                        .catch(function (error) { console.log("error:", error ); });
-                    }
+                        .then(function (contentResponse) { return contentResponse.json(); })
+                        .then(function (contentResult) {
+                            if (contentResult.type === "success") {
+                                piranha.notifications.push(result);
 
-                    $("#siteedit").modal("hide");
-
-                    if (self.callback)
-                    {
-                        self.callback();
-                        self.callback = null;
+                                $("#siteedit").modal("hide");
+                                if (self.callback)
+                                {
+                                    self.callback();
+                                    self.callback = null;
+                                }
+                            } else {
+                                piranha.notifications.push(contentResult);
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log("error:", error );
+                        });
+                    } else {
+                        $("#siteedit").modal("hide");
+                        if (self.callback)
+                        {
+                            self.callback();
+                            self.callback = null;
+                        }
                     }
                 }
             })
