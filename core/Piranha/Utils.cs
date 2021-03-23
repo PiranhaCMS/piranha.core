@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
@@ -16,6 +17,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using Piranha.Extend;
 
 namespace Piranha
 {
@@ -310,6 +312,43 @@ namespace Piranha
             {
                 property.SetValue(instance, value);
             }
+        }
+
+        /// <summary>
+        /// Gets the attribute defined settings for the given property.
+        /// </summary>
+        /// <param name="prop">The property info</param>
+        /// <returns>The settings</returns>
+        public static IDictionary<string, object> GetFieldSettings(PropertyInfo prop)
+        {
+            var settings = new Dictionary<string, object>();
+
+            // Get optional settings
+            var settingsAttr = prop.GetCustomAttribute<FieldSettingsAttribute>();
+            if (settingsAttr != null)
+            {
+                foreach (var setting in settingsAttr.GetType().GetProperties(BindingFlags.Instance|BindingFlags.Public|BindingFlags.DeclaredOnly))
+                {
+                    if (settings.TryGetValue(setting.Name, out var existing))
+                    {
+                        if (!(existing is IList))
+                        {
+                            existing = new ArrayList()
+                            {
+                                existing
+                            };
+                            settings[setting.Name] = existing;
+                        }
+
+                        ((IList)existing).Add(setting.GetValue(settingsAttr));
+                    }
+                    else
+                    {
+                        settings[setting.Name] = setting.GetValue(settingsAttr);
+                    }
+                }
+            }
+            return settings;
         }
     }
 }
