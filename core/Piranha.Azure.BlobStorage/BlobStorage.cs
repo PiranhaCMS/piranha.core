@@ -38,14 +38,16 @@ namespace Piranha.Azure
         /// A <see cref="Uri"/> referencing the blob service.
         /// This is likely to be similar to "https://{account_name}.blob.core.windows.net".
         /// </param>
-        /// <param name="credentials">The connection credentials</param>
+        /// <param name="credential">
+        /// The token credential used to sign requests.
+        /// </param>
         /// <param name="naming">How uploaded media files should be named</param>
         public BlobStorage(
             Uri blobContainerUri,
-            TokenCredential credentials,
+            TokenCredential credential,
             BlobStorageNaming naming = BlobStorageNaming.UniqueFileNames)
         {
-            _storage = new BlobContainerClient(blobContainerUri, credentials);
+            _storage = new BlobContainerClient(blobContainerUri, credential);
             _naming = naming;
         }
 
