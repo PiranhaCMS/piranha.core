@@ -362,6 +362,8 @@ namespace Piranha
                         }
 
                         _isInitialized = true;
+
+                        api.Media.Init();
                     }
                 }
             }
