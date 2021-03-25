@@ -18,12 +18,12 @@ using Piranha.Models;
 
 namespace Piranha.Azure
 {
-    public class BlobStorage : IStorage, IStorageSession
+    public class BlobStorage : IStorage, IInitializable
     {
         /// <summary>
         /// The private storage account.
         /// </summary>
-        private readonly BlobContainerClient _storage;
+        private readonly BlobContainerClient _blobContainerClient;
 
         /// <summary>
         /// How uploaded files should be named to
@@ -45,9 +45,8 @@ namespace Piranha.Azure
             TokenCredential tokenCredential,
             BlobStorageNaming naming = BlobStorageNaming.UniqueFileNames)
         {
-            _storage = new BlobContainerClient(blobContainerUri, tokenCredential);
+            _blobContainerClient = new BlobContainerClient(blobContainerUri, tokenCredential);
             _naming = naming;
-            _storage.CreateIfNotExists(PublicAccessType.Blob);
         }
 
         /// <summary>
@@ -61,18 +60,8 @@ namespace Piranha.Azure
             string containerName = "uploads",
             BlobStorageNaming naming = BlobStorageNaming.UniqueFileNames)
         {
-            _storage = new BlobContainerClient(connectionString, containerName);
+            _blobContainerClient = new BlobContainerClient(connectionString, containerName);
             _naming = naming;
-            _storage.CreateIfNotExists(PublicAccessType.Blob);
-        }
-
-        /// <summary>
-        /// Opens a new storage session.
-        /// </summary>
-        /// <returns>A new open session</returns>
-        public Task<IStorageSession> OpenAsync()
-        {
-            return Task.FromResult<IStorageSession>(this);
         }
 
         /// <summary>
@@ -83,7 +72,7 @@ namespace Piranha.Azure
         /// <returns>The public url</returns>
         public string GetPublicUrl(Media media, string id)
         {
-            return string.IsNullOrWhiteSpace(id) ? default : $"{_storage.Uri.AbsoluteUri}/{GetResourceName(media, id, true)}";
+            return string.IsNullOrWhiteSpace(id) ? default : $"{_blobContainerClient.Uri.AbsoluteUri}/{GetResourceName(media, id, true)}";
         }
 
         /// <summary>
@@ -109,10 +98,6 @@ namespace Piranha.Azure
             return _naming == BlobStorageNaming.UniqueFileNames ? $"{media.Id}-{(encode ? System.Web.HttpUtility.UrlPathEncode(filename) : filename)}" : $"{media.Id}/{(encode ? System.Web.HttpUtility.UrlPathEncode(filename) : filename)}";
         }
 
-        public void Dispose()
-        {
-        }
-
         /// <summary>
         /// Writes the content for the specified media content to the given stream.
         /// </summary>
@@ -122,7 +107,7 @@ namespace Piranha.Azure
         /// <returns>If the media was found</returns>
         public async Task<bool> GetAsync(Media media, string filename, Stream stream)
         {
-            var blob = _storage.GetBlobClient(GetResourceName(media, filename));
+            var blob = _blobContainerClient.GetBlobClient(GetResourceName(media, filename));
 
             return await blob.ExistsAsync() && (await blob.DownloadToAsync(stream)).Status.IsSuccessStatusCode();
         }
@@ -137,7 +122,7 @@ namespace Piranha.Azure
         /// <returns>The public URL</returns>
         public async Task<string> PutAsync(Media media, string filename, string contentType, Stream stream)
         {
-            var blob = _storage.GetBlobClient(GetResourceName(media, filename));
+            var blob = _blobContainerClient.GetBlobClient(GetResourceName(media, filename));
 
             var blobHttpHeader = new BlobHttpHeaders {ContentType = contentType};
 
@@ -166,9 +151,17 @@ namespace Piranha.Azure
         /// <param name="filename">The file name</param>
         public async Task<bool> DeleteAsync(Media media, string filename)
         {
-            var blob = _storage.GetBlobClient(GetResourceName(media, filename));
+            var blob = _blobContainerClient.GetBlobClient(GetResourceName(media, filename));
 
             return await blob.DeleteIfExistsAsync();
+        }
+
+        /// <summary>
+        /// Initialize the Blob Storage service by ensuring that the Blob Container exists.
+        /// </summary>
+        public void Init()
+        {
+            _blobContainerClient.CreateIfNotExists(PublicAccessType.Blob);
         }
     }
 }

@@ -4,6 +4,6 @@ namespace Piranha
 {
     public interface IInitializable
     {
-        public void Init();
+        void Init();
     }
 }

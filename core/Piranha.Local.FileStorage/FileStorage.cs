@@ -49,18 +49,6 @@ namespace Piranha.Local
         }
 
         /// <summary>
-        /// Opens a new storage session.
-        /// </summary>
-        /// <returns>A new open session</returns>
-        public Task<IStorageSession> OpenAsync()
-        {
-            return Task.Run(() =>
-            {
-                return (IStorageSession)new FileStorageSession(this, _basePath, _baseUrl, _naming);
-            });
-        }
-
-        /// <summary>
         /// Gets the public URL for the given media object.
         /// </summary>
         /// <param name="media">The media file</param>
@@ -110,6 +98,119 @@ namespace Piranha.Local
                 return path;
             }
             return null;
+        }
+
+
+        /// <summary>
+        /// Writes the content for the specified media content to the given stream.
+        /// </summary>
+        /// <param name="media">The media file</param>
+        /// <param name="filename">The file name</param>
+        /// <param name="stream">The output stream</param>
+        /// <returns>If the media was found</returns>
+        public async Task<bool> GetAsync(Media media, string filename, Stream stream)
+        {
+            var path = GetResourceName(media, filename);
+
+            if (File.Exists(_basePath + path))
+            {
+                using (var file = File.OpenRead(_basePath + path))
+                {
+                    await file.CopyToAsync(stream).ConfigureAwait(false);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Stores the given media content.
+        /// </summary>
+        /// <param name="media">The media file</param>
+        /// <param name="filename">The file name</param>
+        /// <param name="contentType">The content type</param>
+        /// <param name="stream">The input stream</param>
+        /// <returns>The public URL</returns>
+        public async Task<string> PutAsync(Media media, string filename, string contentType, Stream stream)
+        {
+            var path = GetResourceName(media, filename);
+
+            EnsureFolder(media);
+
+            using (var file = File.OpenWrite(_basePath + path))
+            {
+                await stream.CopyToAsync(file).ConfigureAwait(false);
+            }
+            return _baseUrl + path;
+        }
+
+        /// <summary>
+        /// Stores the given media content.
+        /// </summary>
+        /// <param name="media">The media file</param>
+        /// <param name="filename">The file name</param>
+        /// <param name="contentType">The content type</param>
+        /// <param name="bytes">The binary data</param>
+        /// <returns>The public URL</returns>
+        public async Task<string> PutAsync(Media media, string filename, string contentType, byte[] bytes)
+        {
+            var path = GetResourceName(media, filename);
+
+            EnsureFolder(media);
+
+            using (var file = File.OpenWrite(_basePath + path))
+            {
+                await file.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
+            }
+            return _baseUrl + path;
+        }
+
+        /// <summary>
+        /// Deletes the content for the specified media.
+        /// </summary>
+        /// <param name="media">The media file</param>
+        /// <param name="filename">The file name</param>
+        public Task<bool> DeleteAsync(Media media, string filename)
+        {
+            return Task.Run(() =>
+            {
+                var path = GetResourceName(media, filename);
+
+                if (File.Exists(_basePath + path))
+                {
+                    File.Delete(_basePath + path);
+
+                    if (_naming == FileStorageNaming.UniqueFolderNames)
+                    {
+                        var folderPath = $"{ _basePath }/{ media.Id }";
+
+                        // Check if the folder is empty, and if so, delete it
+                        if (Directory.GetFiles(folderPath).Length == 0)
+                        {
+                            Directory.Delete(folderPath);
+                        }
+                    }
+
+                    return true;
+                }
+                return false;
+            });
+        }
+
+        /// <summary>
+        /// Makes sure the folder exists if unique folder names
+        /// are used.
+        /// </summary>
+        /// <param name="media">The media file</param>
+        private void EnsureFolder(Media media)
+        {
+            if (_naming == FileStorageNaming.UniqueFolderNames)
+            {
+                if (!Directory.Exists($"{ _basePath }/{ media.Id }"))
+                {
+                    Directory.CreateDirectory($"{ _basePath }/{ media.Id }");
+                }
+            }
         }
     }
 }
