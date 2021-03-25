@@ -681,7 +681,7 @@ namespace Piranha.Services
         }
 
         /// <summary>
-        /// Initialize the MediaService service.
+        /// Initialize the Storage service is it implements IInitializable.
         /// </summary>
         public void Init()
         {
