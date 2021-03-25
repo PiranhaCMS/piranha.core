@@ -110,7 +110,6 @@ namespace Piranha.Local
             return null;
         }
 
-
         /// <summary>
         /// Writes the content for the specified media content to the given stream.
         /// </summary>
