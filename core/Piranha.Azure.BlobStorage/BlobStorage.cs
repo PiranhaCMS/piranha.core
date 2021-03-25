@@ -38,17 +38,16 @@ namespace Piranha.Azure
         /// A <see cref="Uri"/> referencing the blob service.
         /// This is likely to be similar to "https://{account_name}.blob.core.windows.net".
         /// </param>
-        /// <param name="credential">
-        /// The token credential used to sign requests.
-        /// </param>
+        /// <param name="tokenCredential">The connection credentials</param>
         /// <param name="naming">How uploaded media files should be named</param>
         public BlobStorage(
             Uri blobContainerUri,
-            TokenCredential credential,
+            TokenCredential tokenCredential,
             BlobStorageNaming naming = BlobStorageNaming.UniqueFileNames)
         {
-            _storage = new BlobContainerClient(blobContainerUri, credential);
+            _storage = new BlobContainerClient(blobContainerUri, tokenCredential);
             _naming = naming;
+            _storage.CreateIfNotExists(PublicAccessType.Blob);
         }
 
         /// <summary>
@@ -64,20 +63,16 @@ namespace Piranha.Azure
         {
             _storage = new BlobContainerClient(connectionString, containerName);
             _naming = naming;
+            _storage.CreateIfNotExists(PublicAccessType.Blob);
         }
 
         /// <summary>
         /// Opens a new storage session.
         /// </summary>
         /// <returns>A new open session</returns>
-        public async Task<IStorageSession> OpenAsync()
+        public Task<IStorageSession> OpenAsync()
         {
-            if (!await _storage.ExistsAsync())
-            {
-                await _storage.CreateAsync(PublicAccessType.Blob);
-            }
-
-            return this;
+            return Task.FromResult<IStorageSession>(this);
         }
 
         /// <summary>
@@ -88,11 +83,7 @@ namespace Piranha.Azure
         /// <returns>The public url</returns>
         public string GetPublicUrl(Media media, string id)
         {
-            if (media != null && !string.IsNullOrWhiteSpace(id))
-            {
-                return $"{ _storage.Uri.AbsoluteUri }/{ GetResourceName(media, id, true) }";
-            }
-            return null;
+            return string.IsNullOrWhiteSpace(id) ? default : $"{_storage.Uri.AbsoluteUri}/{GetResourceName(media, id, true)}";
         }
 
         /// <summary>
@@ -115,19 +106,11 @@ namespace Piranha.Azure
         /// <returns>The public url</returns>
         public string GetResourceName(Media media, string filename, bool encode)
         {
-            if (_naming == BlobStorageNaming.UniqueFileNames)
-            {
-                return $"{ media.Id }-{ (encode ? System.Web.HttpUtility.UrlPathEncode(filename) : filename) }";
-            }
-            else
-            {
-                return $"{ media.Id }/{ (encode ? System.Web.HttpUtility.UrlPathEncode(filename) : filename) }";
-            }
+            return _naming == BlobStorageNaming.UniqueFileNames ? $"{media.Id}-{(encode ? System.Web.HttpUtility.UrlPathEncode(filename) : filename)}" : $"{media.Id}/{(encode ? System.Web.HttpUtility.UrlPathEncode(filename) : filename)}";
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -141,12 +124,7 @@ namespace Piranha.Azure
         {
             var blob = _storage.GetBlobClient(GetResourceName(media, filename));
 
-            if (await blob.ExistsAsync())
-            {
-                await blob.DownloadToAsync(stream);
-                return true;
-            }
-            return false;
+            return await blob.ExistsAsync() && (await blob.DownloadToAsync(stream)).Status.IsSuccessStatusCode();
         }
 
         /// <summary>
@@ -178,14 +156,7 @@ namespace Piranha.Azure
         /// <returns>The public URL</returns>
         public async Task<string> PutAsync(Media media, string filename, string contentType, byte[] bytes)
         {
-            using (var ms = new MemoryStream())
-            {
-                var writer = new StreamWriter(ms);
-                writer.Write(bytes);
-                writer.Flush();
-                ms.Position = 0;
-                return await PutAsync(media, filename, contentType, ms);
-            }
+            return await PutAsync(media, filename, contentType, new MemoryStream(bytes));
         }
 
         /// <summary>
