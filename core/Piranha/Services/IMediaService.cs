@@ -15,7 +15,7 @@ using Piranha.Models;
 
 namespace Piranha.Services
 {
-    public interface IMediaService
+    public interface IMediaService : IInitializable
     {
         /// <summary>
         /// Gets all media available in the specified folder.

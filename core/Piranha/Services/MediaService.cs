@@ -687,5 +687,16 @@ namespace Piranha.Services
                 return _storage.GetPublicUrl(media, name);
             }
         }
+
+        /// <summary>
+        /// Initialize the MediaService service.
+        /// </summary>
+        public void Init()
+        {
+            if (_storage is IInitializable initializableStorage)
+            {
+                initializableStorage.Init();
+            }
+        }
     }
 }

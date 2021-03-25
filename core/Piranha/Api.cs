@@ -17,7 +17,7 @@ namespace Piranha
     /// <summary>
     /// The main application api.
     /// </summary>
-    public sealed class Api : IApi, IDisposable
+    public sealed class Api : IApi, IDisposable, IInitializable
     {
         /// <summary>
         /// The private model cache.
@@ -152,6 +152,14 @@ namespace Piranha
         /// </summary>
         public void Dispose()
         {
+        }
+
+        /// <summary>
+        /// Initialize the MediaService service.
+        /// </summary>
+        public void Init()
+        {
+            Media.Init();
         }
     }
 }

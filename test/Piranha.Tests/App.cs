@@ -87,7 +87,7 @@ namespace Piranha.Tests
 
             var db = GetDb();
 
-            return new Api(
+            var api = new Api(
                 factory,
                 new AliasRepository(db),
                 new ArchiveRepository(db),
@@ -104,6 +104,10 @@ namespace Piranha.Tests
                 new SiteRepository(db, serviceFactory),
                 new SiteTypeRepository(db)
             );
+
+            api.Init();
+
+            return api;
         }
     }
 }
