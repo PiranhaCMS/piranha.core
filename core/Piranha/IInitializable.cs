@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Piranha
+﻿namespace Piranha
 {
     public interface IInitializable
     {
