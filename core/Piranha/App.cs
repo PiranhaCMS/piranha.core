@@ -361,9 +361,9 @@ namespace Piranha
                             module.Instance.Init();
                         }
 
-                        _isInitialized = true;
-
                         api.Media.Init();
+
+                        _isInitialized = true;
                     }
                 }
             }
