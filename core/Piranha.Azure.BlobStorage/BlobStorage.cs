@@ -18,7 +18,7 @@ using Piranha.Models;
 
 namespace Piranha.Azure
 {
-    public class BlobStorage : IStorage, IInitializable
+    public class BlobStorage : IStorage, IStorageSession, IInitializable
     {
         /// <summary>
         /// The private storage account.
@@ -62,6 +62,11 @@ namespace Piranha.Azure
         {
             _blobContainerClient = new BlobContainerClient(connectionString, containerName);
             _naming = naming;
+        }
+
+        public Task<IStorageSession> OpenAsync()
+        {
+            return Task.FromResult<IStorageSession>(this);
         }
 
         /// <summary>
@@ -162,6 +167,14 @@ namespace Piranha.Azure
         public void Init()
         {
             _blobContainerClient.CreateIfNotExists(PublicAccessType.Blob);
+        }
+
+        /// <summary>
+        /// Disposes the session.
+        /// </summary>
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
         }
     }
 }

@@ -8,13 +8,14 @@
  *
  */
 
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Piranha.Models;
 
 namespace Piranha.Local
 {
-    public class FileStorage : IStorage
+    public class FileStorage : IStorage, IStorageSession
     {
         private readonly string _basePath = "wwwroot/uploads/";
         private readonly string _baseUrl = "~/uploads/";
@@ -46,6 +47,15 @@ namespace Piranha.Local
             }
 
             _naming = naming;
+        }
+
+        /// <summary>
+        /// Opens a new storage session.
+        /// </summary>
+        /// <returns>A new open session</returns>
+        public Task<IStorageSession> OpenAsync()
+        {
+            return Task.FromResult<IStorageSession>(this);
         }
 
         /// <summary>
@@ -195,6 +205,14 @@ namespace Piranha.Local
                 }
                 return false;
             });
+        }
+
+        /// <summary>
+        /// Disposes the session.
+        /// </summary>
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
