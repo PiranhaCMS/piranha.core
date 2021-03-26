@@ -20,7 +20,7 @@ using Piranha.Repositories;
 
 namespace Piranha.Services
 {
-    public class MediaService : IMediaService
+    public class MediaService : IMediaService, IInitializable
     {
         private readonly IMediaRepository _repo;
         private readonly IParamService _paramService;

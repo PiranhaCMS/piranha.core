@@ -361,7 +361,10 @@ namespace Piranha
                             module.Instance.Init();
                         }
 
-                        api.Media.Init();
+                        if (api.Media is IInitializable initializableMediaService)
+                        {
+                            initializableMediaService.Init();
+                        }
 
                         _isInitialized = true;
                     }
