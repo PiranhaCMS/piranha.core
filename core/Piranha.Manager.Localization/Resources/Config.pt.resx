@@ -99,19 +99,19 @@
     <value>Se cabeçalhos de grupo de blocos devem ser recolhidos por padrão ao abrir uma página ou postagem no manager.</value>
   </data>
   <data name="If blocks should be collapsed by default when opening a page or post in the manager." xml:space="preserve">
-    <value>Se cabeçalhos de grupo de blocos devem ser recolhidos por padrão ao abrir uma página ou postagem no manager.</value>
+    <value>Se blocos devem ser recolhidos por padrão ao abrir uma página ou postagem no manager.</value>
   </data>
   <data name="If comments should be approved by default. Please note that this can be overridden by third party moderation services." xml:space="preserve">
     <value>Se os comentários devem ser aprovados por padrão. Observe que isto pode ser sobrescrito por serviços de moderação de terceiros.</value>
   </data>
   <data name="If comments should be enabled for pages by default. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>Se os comentários devem ser habilitados por padrão. Por favor, note que isto pode ser substituído para páginas específicas.</value>
+    <value>Se os comentários devem ser habilitados por padrão para páginas. Por favor, note que isto pode ser substituído para páginas específicas.</value>
   </data>
   <data name="If comments should be enabled for posts by default. Please note that this this can be overridden for specific posts." xml:space="preserve">
-    <value>Se os comentários devem ser habilitados por padrão. Por favor, note que isto pode ser substituído para posts específicos.</value>
+    <value>Se os comentários devem ser habilitados por padrão para posts. Por favor, note que isto pode ser substituído para posts específicos.</value>
   </data>
   <data name="The default page size when loading comments. Please note that this this can be overridden for specific pages." xml:space="preserve">
-    <value>O tamanho padrão para paginação de páginas de arquivo. Note que esse valor pode ser sobrescrito para páginas específicas.</value>
+    <value>A quantidade padrão de comentários a serem mostrados quando carregados. Note que esse valor pode ser sobrescrito para páginas específicas.</value>
   </data>
   <data name="The number of days commenting should be open after publish date. A value of 0 means forever." xml:space="preserve">
     <value>O número de dias que comentários ficam abertos após a data de publicação. Um valor de 0 significa para sempre.</value>
