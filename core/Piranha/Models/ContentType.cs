@@ -25,6 +25,12 @@ namespace Piranha.Models
         public string Group { get; set; }
 
         /// <summary>
+        /// Gets/sets if the page type should use the block editor
+        /// for its main content. The default value is True.
+        /// </summary>
+        public bool UseBlocks { get; set; }
+
+        /// <summary>
         /// Gets/sets if the content type should be
         /// categorized.
         /// </summary>

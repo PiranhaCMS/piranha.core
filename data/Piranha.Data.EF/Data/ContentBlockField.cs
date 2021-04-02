@@ -15,24 +15,22 @@ using Newtonsoft.Json;
 
 namespace Piranha.Data
 {
+    /// <summary>
+    /// Content field for a block.
+    /// </summary>
     [Serializable]
-    public sealed class ContentField : ContentFieldBase, ITranslatable
+    public class ContentBlockField : BlockFieldBase, ITranslatable
     {
         /// <summary>
-        /// Gets/sets the content id.
-        /// </summary>
-        public Guid ContentId { get; set; }
-
-        /// <summary>
-        /// Gets/sets the content.
+        /// Gets/sets the block containing the field.
         /// </summary>
         [JsonIgnore]
-        public Content Content { get; set; }
+        public ContentBlock Block { get; set; }
 
         /// <summary>
         /// Gets/sets the available translations.
         /// </summary>
-        public IList<ContentFieldTranslation> Translations { get; set; } = new List<ContentFieldTranslation>();
+        public IList<ContentBlockFieldTranslation> Translations { get; set; } = new List<ContentBlockFieldTranslation>();
 
         /// <summary>
         /// Sets the translation for the specified language.
@@ -46,7 +44,7 @@ namespace Piranha.Data
 
             if (translation == null)
             {
-                translation = new ContentFieldTranslation
+                translation = new ContentBlockFieldTranslation
                 {
                     FieldId = parentId,
                     LanguageId = languageId

@@ -50,10 +50,26 @@ namespace Piranha.Services
         IList<Extend.Block> TransformBlocks(IEnumerable<Data.Block> blocks);
 
         /// <summary>
+        /// Transforms the given block data into block models.
+        /// </summary>
+        /// <param name="blocks">The data</param>
+        /// <param name="languageId">The language id</param>
+        /// <returns>The transformed blocks</returns>
+        IList<Extend.Block> TransformBlocks(IEnumerable<Data.ContentBlock> blocks, Guid? languageId);
+
+        /// <summary>
         /// Transforms the given blocks to the internal data model.
         /// </summary>
         /// <param name="models">The blocks</param>
         /// <returns>The data model</returns>
         IList<Data.Block> TransformBlocks(IList<Extend.Block> models);
+
+        /// <summary>
+        /// Transforms the given blocks to the internal data model.
+        /// </summary>
+        /// <param name="models">The blocks</param>
+        /// <param name="languageId">The current language</param>
+        /// <returns>The data model</returns>
+        IList<Data.ContentBlock> TransformContentBlocks(IList<Extend.Block> models, Guid languageId);
     }
 }

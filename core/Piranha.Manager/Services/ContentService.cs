@@ -9,7 +9,10 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using Piranha.Extend;
@@ -17,9 +20,6 @@ using Piranha.Extend.Fields;
 using Piranha.Models;
 using Piranha.Manager.Models;
 using Piranha.Services;
-using System.Collections;
-using System.Dynamic;
-using System.ComponentModel.DataAnnotations;
 
 namespace Piranha.Manager.Services
 {
@@ -110,7 +110,6 @@ namespace Piranha.Manager.Services
                 model.TypeTitle = type.Title;
                 model.GroupId = group.Id;
                 model.GroupTitle = group.Title;
-
                 model.State = ContentState.Published;
 
                 return model;
@@ -177,6 +176,28 @@ namespace Piranha.Manager.Services
                 content.Excerpt = model.Excerpt;
                 content.PrimaryImage = model.PrimaryImage;
 
+                // Save category
+                if (contentType.UseCategory)
+                {
+                    content.Category = new Taxonomy
+                    {
+                        Title = model.SelectedCategory
+                    };
+                }
+
+                // Save tags
+                if (contentType.UseTags)
+                {
+                    content.Tags.Clear();
+                    foreach (var tag in model.SelectedTags)
+                    {
+                        content.Tags.Add(new Taxonomy
+                        {
+                            Title = tag
+                        });
+                    }
+                }
+
                 // Save regions
                 foreach (var region in contentType.Regions)
                 {
@@ -230,6 +251,62 @@ namespace Piranha.Manager.Services
                     }
                 }
 
+                // Save blocks
+                content.Blocks.Clear();
+
+                foreach (var block in model.Blocks)
+                {
+                    if (block is Models.Content.BlockGroupModel blockGroup)
+                    {
+                        var groupType = App.Blocks.GetByType(blockGroup.Type);
+
+                        if (groupType != null)
+                        {
+                            var pageBlock = (BlockGroup)Activator.CreateInstance(groupType.Type);
+
+                            pageBlock.Id = blockGroup.Id;
+                            pageBlock.Type = blockGroup.Type;
+
+                            foreach (var field in blockGroup.Fields)
+                            {
+                                var prop = pageBlock.GetType().GetProperty(field.Meta.Id, App.PropertyBindings);
+                                prop.SetValue(pageBlock, field.Model);
+                            }
+
+                            foreach (var item in blockGroup.Items)
+                            {
+                                if (item is Models.Content.BlockItemModel blockItem)
+                                {
+                                    pageBlock.Items.Add(blockItem.Model);
+                                }
+                                else if (item is Models.Content.BlockGenericModel blockGeneric)
+                                {
+                                    var transformed = ContentUtils.TransformGenericBlock(blockGeneric);
+
+                                    if (transformed != null)
+                                    {
+                                        pageBlock.Items.Add(transformed);
+                                    }
+                                }
+                            }
+                            content.Blocks.Add(pageBlock);
+                        }
+                    }
+                    else if (block is Models.Content.BlockItemModel blockItem)
+                    {
+                        content.Blocks.Add(blockItem.Model);
+                    }
+                    else if (block is Models.Content.BlockGenericModel blockGeneric)
+                    {
+                        var transformed = ContentUtils.TransformGenericBlock(blockGeneric);
+
+                        if (transformed != null)
+                        {
+                            content.Blocks.Add(transformed);
+                        }
+                    }
+                }
+
                 // Save content
                 await _api.Content.SaveAsync(content, model.LanguageId);
             }
@@ -258,6 +335,8 @@ namespace Piranha.Manager.Services
             var config = new Config(_api);
             var type = App.ContentTypes.GetById(content.TypeId);
             var languages = await _api.Languages.GetAllAsync();
+            var categories = await _api.Content.GetAllCategoriesAsync(type.Group);
+            var tags = await _api.Content.GetAllTagsAsync(type.Group);
 
             var model = new ContentEditModel
             {
@@ -266,13 +345,18 @@ namespace Piranha.Manager.Services
                 PrimaryImage = content.PrimaryImage,
                 Title = content.Title,
                 Excerpt = content.Excerpt,
+                UseBlocks = type.UseBlocks,
                 UseCategory = type.UseCategory,
                 UseTags = type.UseTags,
                 UsePrimaryImage = type.UsePrimaryImage,
                 UseExcerpt = type.UseExcerpt,
                 UseHtmlExcerpt = config.HtmlExcerpt,
                 UseTranslations = languages.Count() > 1,
-                Languages = languages
+                Languages = languages,
+                SelectedCategory = type.UseCategory ? content.Category?.Title : null,
+                SelectedTags = type.UseTags ? content.Tags.Select(t => t.Title).ToList() : null,
+                Categories = categories.Select(c => c.Title).ToList(),
+                Tags = tags.Select(c => c.Title).ToList()
             };
 
             foreach (var regionType in type.Regions)
@@ -358,6 +442,118 @@ namespace Piranha.Manager.Services
                 model.Regions.Add(region);
             }
 
+            if (type.UseBlocks)
+            {
+                model.UseBlocks = true;
+
+                foreach (var block in content.Blocks)
+                {
+                    var blockType = App.Blocks.GetByType(block.Type);
+
+                    if (block is BlockGroup)
+                    {
+                        var group = new Models.Content.BlockGroupModel
+                        {
+                            Id = block.Id,
+                            Type = block.Type,
+                            Meta = new Models.Content.BlockMeta
+                            {
+                                Name = blockType.Name,
+                                Icon = blockType.Icon,
+                                Component = blockType.Component,
+                                Width = blockType.Width.ToString().ToLower(),
+                                IsGroup = true,
+                                isCollapsed = config.ManagerDefaultCollapsedBlocks,
+                                ShowHeader = !config.ManagerDefaultCollapsedBlockGroupHeaders
+                            }
+                        };
+
+                        group.Fields = ContentUtils.GetBlockFields(block);
+
+                        bool firstChild = true;
+                        foreach (var child in ((BlockGroup)block).Items)
+                        {
+                            blockType = App.Blocks.GetByType(child.Type);
+
+                            if (!blockType.IsGeneric)
+                            {
+                                // Regular block item model
+                                group.Items.Add(new Models.Content.BlockItemModel
+                                {
+                                    IsActive = firstChild,
+                                    Model = child,
+                                    Meta = new Models.Content.BlockMeta
+                                    {
+                                        Name = blockType.Name,
+                                        Title = child.GetTitle(),
+                                        Icon = blockType.Icon,
+                                        Component = blockType.Component,
+                                        Width = blockType.Width.ToString().ToLower()
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                // Generic block item model
+                                group.Items.Add(new Models.Content.BlockGenericModel
+                                {
+                                    IsActive = firstChild,
+                                    Model = ContentUtils.GetBlockFields(child),
+                                    Type = child.Type,
+                                    Meta = new Models.Content.BlockMeta
+                                    {
+                                        Name = blockType.Name,
+                                        Title = child.GetTitle(),
+                                        Icon = blockType.Icon,
+                                        Component = blockType.Component,
+                                        Width = blockType.Width.ToString().ToLower()
+                                    }
+                                });
+                            }
+                            firstChild = false;
+                        }
+                        model.Blocks.Add(group);
+                    }
+                    else
+                    {
+                        if (!blockType.IsGeneric)
+                        {
+                            // Regular block item model
+                            model.Blocks.Add(new Models.Content.BlockItemModel
+                            {
+                                Model = block,
+                                Meta = new Models.Content.BlockMeta
+                                {
+                                    Name = blockType.Name,
+                                    Title = block.GetTitle(),
+                                    Icon = blockType.Icon,
+                                    Component = blockType.Component,
+                                    Width = blockType.Width.ToString().ToLower(),
+                                    isCollapsed = config.ManagerDefaultCollapsedBlocks
+                                }
+                            });
+                        }
+                        else
+                        {
+                            // Generic block item model
+                            model.Blocks.Add(new Models.Content.BlockGenericModel
+                            {
+                                Model = ContentUtils.GetBlockFields(block),
+                                Type = block.Type,
+                                Meta = new Models.Content.BlockMeta
+                                {
+                                    Name = blockType.Name,
+                                    Title = block.GetTitle(),
+                                    Icon = blockType.Icon,
+                                    Component = blockType.Component,
+                                    Width = blockType.Width.ToString().ToLower(),
+                                    isCollapsed = config.ManagerDefaultCollapsedBlocks
+                                }
+                            });
+                        }
+                    }
+                }
+            }
 
             // Custom editors
             foreach (var editor in type.CustomEditors)

@@ -69,6 +69,8 @@ namespace Piranha.Runtime
                 item.IsGeneric = attr.IsGeneric;
                 item.Component = !string.IsNullOrWhiteSpace(attr.Component) ? attr.Component : "missing-block";
                 item.Width = attr.Width;
+                item.Init.InitMethod = Utils.GetMethod<TValue>("Init");
+                item.Init.InitManagerMethod = Utils.GetMethod<TValue>("InitManager");
 
                 if (attr is BlockGroupTypeAttribute groupAttr)
                 {

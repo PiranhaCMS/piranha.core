@@ -46,6 +46,21 @@ namespace Piranha
         DbSet<Data.Content> Content { get; set; }
 
         /// <summary>
+        /// Gets/sets the content block set.
+        /// </summary>
+        DbSet<Data.ContentBlock> ContentBlocks { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content block field set.
+        /// </summary>
+        DbSet<Data.ContentBlockField> ContentBlockFields { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content block field translation set.
+        /// </summary>
+        DbSet<Data.ContentBlockFieldTranslation> ContentBlockFieldTranslations { get; set; }
+
+        /// <summary>
         /// Gets/sets the content field set.
         /// </summary>
         DbSet<Data.ContentField> ContentFields { get; set; }

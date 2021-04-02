@@ -59,6 +59,20 @@ namespace Piranha.Services
         Task<T> GetByIdAsync<T>(Guid id, Guid? languageId = null) where T : GenericContent;
 
         /// <summary>
+        /// Gets all available categories for the specified group.
+        /// </summary>
+        /// <param name="groupId">The group id</param>
+        /// <returns>The available categories</returns>
+        Task<IEnumerable<Taxonomy>> GetAllCategoriesAsync(string groupId);
+
+        /// <summary>
+        /// Gets all available tags for the specified groupd.
+        /// </summary>
+        /// <param name="groupId">The group id</param>
+        /// <returns>The available tags</returns>
+        Task<IEnumerable<Taxonomy>> GetAllTagsAsync(string groupId);
+
+        /// <summary>
         /// Saves the given content model
         /// </summary>
         /// <param name="model">The content model</param>

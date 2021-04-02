@@ -10,6 +10,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Piranha;
 using Piranha.Extend.Blocks;
@@ -75,10 +76,15 @@ namespace RazorWeb
                 content.Tags.Add("Ipsum");
                 content.AllFields.Date = DateTime.Now;
                 content.AllFields.Text = "Lorum ipsum";
+                content.Blocks.Add(new HtmlBlock {
+                    Body = "<p>Hello world!</p>"
+                });
+
                 await api.Content.SaveAsync(content);
 
                 content.Title = "Mitt innehåll";
                 content.AllFields.Text = "Svenskum dansum";
+                ((HtmlBlock)content.Blocks.First()).Body = "<p>Hejsan svejsan!</p>";
                 await api.Content.SaveAsync(content, lang2Id);
 
                 var loadedContent = await api.Content.GetByIdAsync<Models.StandardProduct>(content.Id);

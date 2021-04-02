@@ -15,8 +15,12 @@ piranha.contentedit = new Vue({
         title: null,
         excerpt: null,
         state: "new",
+        blocks: [],
         regions: [],
         editors: [],
+        categories: [],
+        tags: [],
+        useBlocks: false,
         useCategory: false,
         useTags: false,
         usePrimaryImage: true,
@@ -33,6 +37,8 @@ piranha.contentedit = new Vue({
         saving: false,
         selectedRegion: "",
         selectedSetting: "uid-settings",
+        selectedCategory: null,
+        selectedTags: []
     },
     computed: {
         contentRegions: function () {
@@ -89,9 +95,13 @@ piranha.contentedit = new Vue({
             this.title = model.title;
             this.excerpt = model.excerpt;
             this.state = model.state;
+            this.blocks = model.blocks;
             this.regions = model.regions;
             this.editors = model.editors;
+            this.categories = model.categories;
+            this.tags = model.tags;
             this.languages = model.languages;
+            this.useBlocks = model.useBlocks;
             this.useCategory = model.useCategory;
             this.useTags = model.useTags;
             this.usePrimaryImage = model.usePrimaryImage;
@@ -101,14 +111,25 @@ piranha.contentedit = new Vue({
             this.permissions = model.permissions;
             this.primaryImage = model.primaryImage;
             this.selectedPermissions = model.selectedPermissions;
+            this.selectedCategory = model.selectedCategory;
+            this.selectedTags = model.selectedTags;
 
-            // First choice, select the first custom editor
-            if (this.editors.length > 0) {
-                this.selectedRegion = this.editors[0];
-            }
-            // Second choice, select the first content region
-            else if (this.contentRegions.length > 0) {
-                this.selectedRegion = this.contentRegions[0].meta;
+            if (!this.useBlocks) {
+                // First choice, select the first custom editor
+                if (this.editors.length > 0) {
+                    this.selectedRegion = this.editors[0];
+                }
+
+                // Second choice, select the first content region
+                else if (this.contentRegions.length > 0) {
+                    this.selectedRegion = this.contentRegions[0].meta;
+                }
+            } else {
+                this.selectedRegion = {
+                    uid: "uid-blocks",
+                    name: null,
+                    icon: null,
+                };
             }
         },
         load: function (id, languageId) {
@@ -161,9 +182,12 @@ piranha.contentedit = new Vue({
                 typeId: self.typeId,
                 title: self.title,
                 excerpt: self.excerpt,
+                blocks: JSON.parse(JSON.stringify(self.blocks)),
                 regions: JSON.parse(JSON.stringify(self.regions)),
                 selectedRoute: self.selectedRoute,
                 selectedPermissions: self.selectedPermissions,
+                selectedCategory: self.selectedCategory,
+                selectedTags: JSON.parse(JSON.stringify(self.selectedTags)),
                 primaryImage: {
                     id: self.primaryImage.id
                 },
@@ -220,6 +244,36 @@ piranha.contentedit = new Vue({
                 }
             });
         },
+        addBlock: function (type, pos) {
+            fetch(piranha.baseUrl + "manager/api/content/block/" + type)
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    piranha.contentedit.blocks.splice(pos, 0, result.body);
+                })
+                .catch(function (error) { console.log("error:", error );
+            });
+        },
+        moveBlock: function (from, to) {
+            this.blocks.splice(to, 0, this.blocks.splice(from, 1)[0])
+        },
+        collapseBlock: function (block) {
+            block.meta.isCollapsed = !block.meta.isCollapsed;
+        },
+        removeBlock: function (block) {
+            var index = this.blocks.indexOf(block);
+
+            if (index !== -1) {
+                this.blocks.splice(index, 1);
+            }
+        },
+        updateBlockTitle: function (e) {
+            for (var n = 0; n < this.blocks.length; n++) {
+                if (this.blocks[n].meta.uid === e.uid) {
+                    this.blocks[n].meta.title = e.title;
+                    break;
+                }
+            }
+        },
         selectRegion: function (region) {
             this.selectedRegion = region;
             Vue.nextTick(function () {
@@ -262,6 +316,47 @@ piranha.contentedit = new Vue({
     created: function () {
     },
     updated: function () {
+        var self = this;
+
+        if (this.loading)
+        {
+            if (this.useBlocks)
+            {
+                sortable("#content-blocks", {
+                    handle: ".handle",
+                    items: ":not(.unsortable)"
+                })[0].addEventListener("sortupdate", function (e) {
+                    self.moveBlock(e.detail.origin.index, e.detail.destination.index);
+                });
+            }
+            if (this.useCategory)
+            {
+                $("#selectedCategory").select2({
+                    tags: true,
+                    selectOnClose: true,
+                    placeholder: piranha.resources.texts.addCategory
+                });
+                $("#selectedCategory").on("change", function() {
+                    var item = $(this).find("option:selected").text();
+                    self.selectedCategory = item;
+                });
+            }
+            if (this.useTags)
+            {
+                $("#selectedTags").select2({
+                    tags: true,
+                    selectOnClose: false,
+                    placeholder: piranha.resources.texts.addTags
+                });
+                $("#selectedTags").on("change", function() {
+                    var items = $(this).find("option:selected");
+                    self.selectedTags = [];
+                    for (var n = 0; n < items.length; n++) {
+                        self.selectedTags.push(items[n].text);
+                    }
+                });
+            }
+        }
         this.loading = false;
     },
     components: {

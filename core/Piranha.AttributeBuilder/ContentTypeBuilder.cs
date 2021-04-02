@@ -285,7 +285,8 @@ namespace Piranha.AttributeBuilder
                     Id = attr.Id,
                     Title = attr.Title,
                     CLRType = type.Name, // type.AssemblyQualifiedName,
-                    Icon = attr.Icon
+                    Icon = attr.Icon,
+                    IsHidden = attr.IsHidden
                 };
             }
             return null;
@@ -323,13 +324,9 @@ namespace Piranha.AttributeBuilder
                     Group = group.Id,
                     UseExcerpt = attr.UseExcerpt,
                     UsePrimaryImage = attr.UsePrimaryImage,
-                    //
-                    // TODO
-                    //
-                    // Categories & Tags will be removed in this version as they
-                    // need to be localized properly and handled in the manager.
-                    UseCategory = false, // typeof(ICategorizedContent).IsAssignableFrom(type),
-                    UseTags = false, // typeof(ITaggedContent).IsAssignableFrom(type),
+                    UseBlocks = typeof(IBlockContent).IsAssignableFrom(type),
+                    UseCategory = typeof(ICategorizedContent).IsAssignableFrom(type),
+                    UseTags = typeof(ITaggedContent).IsAssignableFrom(type),
                     CustomEditors = GetEditors(type),
                     Regions = GetRegions(type)
                 };

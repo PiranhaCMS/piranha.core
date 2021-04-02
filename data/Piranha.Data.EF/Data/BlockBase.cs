@@ -14,31 +14,30 @@ using System.Collections.Generic;
 namespace Piranha.Data
 {
     /// <summary>
-    /// Reusable content block.
+    /// Abstract base class for all content blocks
     /// </summary>
     [Serializable]
-    public sealed class Block : BlockBase<BlockField>
+    public abstract class BlockBase<T> where T : BlockFieldBase
     {
         /// <summary>
-        /// Gets/sets the optional title. This property
-        /// is only used for reusable blocks within the
-        /// block library.
+        /// Gets/sets the unique id.
         /// </summary>
-        public string Title { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets/sets if this is a reusable block.
+        /// This is not part of the data model. It's only used
+        /// for internal mapping.
         /// </summary>
-        public bool IsReusable { get; set; }
+        public Guid? ParentId { get; set; }
 
         /// <summary>
-        /// Gets/sets the created date.
+        /// Gets/sets the CLR type of the block.
         /// </summary>
-        public DateTime Created { get; set; }
+        public string CLRType { get; set; }
 
         /// <summary>
-        /// Gets/sets the last modification date.
+        /// Gets/sets the available fields.
         /// </summary>
-        public DateTime LastModified { get; set; }
+        public IList<T> Fields { get; set; } = new List<T>();
     }
 }

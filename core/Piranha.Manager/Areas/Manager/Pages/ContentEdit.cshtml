@@ -1,6 +1,7 @@
 @page "~/manager/content/{action}/{contentType}/{id?}/{langId?}"
 @model ContentListViewModel
 @inject ManagerLocalizer Localizer
+@inject Piranha.Config Config
 @{
     ViewBag.Title = "Add/Edit";
     ViewBag.MenuItem = "Add/Edit";
@@ -74,7 +75,12 @@
 
     <div class="container-fluid app" :class="{ ready: !loading }">
         <!-- Content navigation -->
-        <ul v-if="editors.length + contentRegions.length > 1" class="nav nav-pills nav-pills-card justify-content-center">
+        <ul v-if="(useBlocks && (editors.length + contentRegions.length > 0)) || editors.length + contentRegions.length > 1" class="nav nav-pills nav-pills-card justify-content-center">
+            <li v-if="useBlocks" class="nav-item">
+                <a class="nav-link" v-on:click.prevent="selectRegion({ uid: 'uid-blocks' })" :class="{ active: selectedRegion.uid === 'uid-blocks' }" href="#">
+                    <i class="fas fa-pen-alt"></i>@Localizer.General["Main content"]
+                </a>
+            </li>
             <li v-for="editor in editors" class="nav-item">
                 <a class="nav-link" v-on:click.prevent="selectRegion(editor)" :class="{ active: selectedRegion.uid == editor.uid }" href="#">
                     <i :class="editor.icon"></i>{{ editor.name }}
@@ -90,10 +96,28 @@
         <!-- Title -->
         <div class="card">
             <div class="card-body" :class="{ 'pb-0': regions.length > 0 }">
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group title">
+                <div class="form-group title">
+                    <div class="row">
+                        <div class="col">
                             <input v-model="title" type="text" class="form-control form-control-lg" placeholder="@Localizer.General["Title"]">
+                        </div>
+                    </div>
+                    <div v-if="useCategory || useTags" class="row mt-3">
+                        <div v-if="useCategory" class="col">
+                            <div class="form-group mb-0">
+                                <label style="display:none">@Localizer.Post["Category"]</label>
+                                <select id="selectedCategory" class="form-control select2" v-model="selectedCategory">
+                                    <option :value="item" v-for="item in categories">{{ item }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div v-if="useTags" class="col">
+                            <div class="form-group mb-0">
+                                <label style="display:none">@Localizer.Post["Tags"]</label>
+                                <select id="selectedTags" class="form-control select2" multiple="multiple" v-model="selectedTags">
+                                    <option :value="item" v-for="item in tags">{{ item }}</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -138,6 +162,50 @@
                                 <textarea v-else v-model="excerpt" rows="9" maxlength="255" class="form-control" style="height:218px"></textarea>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Blocks -->
+        <div class="card" :class="{ 'd-none': selectedRegion.uid != 'uid-blocks' }">
+            <div class="card-body">
+                <div id="content-blocks" class="blocks@(Config.ManagerOutlined ? " blocks-outline" : "")">
+                    <a href="#" class="block-add unsortable" v-on:click.prevent="piranha.blockpicker.open(piranha.contentedit.addBlock, 0)">
+                        <hr>
+                        <i class="fas fa-plus-circle"></i>
+                    </a>
+                    <div v-for="(block, index) in blocks" v-bind:key="block.meta.uid">
+                        <div :class="'block ' + block.meta.component + (block.meta.isCollapsed ? ' collapsed' : '') + (block.meta.width === 'full' ? ' block-full' : '')">
+                            <div :id="'tb-' + block.meta.uid" class="component-toolbar"></div>
+                            <div class="block-header">
+                                <div class="title">
+                                    <i :class="block.meta.icon"></i><strong>{{ block.meta.name }}</strong> <span v-if="!block.meta.isGroup && block.meta.isCollapsed">- {{ block.meta.title }}</span>
+                                </div>
+                                <div class="actions">
+                                    <span v-on:click.prevent="collapseBlock(block)" class="btn btn-sm">
+                                        <i v-if="block.meta.isCollapsed" class="fas fa-chevron-down"></i>
+                                        <i v-else class="fas fa-chevron-up"></i>
+                                    </span>
+                                    <span class="btn btn-sm handle">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </span>
+                                    <button v-on:click.prevent="removeBlock(block)" class="btn btn-sm danger block-remove" tabindex="-1">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <component v-if="!block.meta.isGroup" v-bind:is="block.meta.component" v-bind:uid="block.meta.uid" v-bind:toolbar="'tb-' + block.meta.uid" v-bind:model="block.model" v-on:update-title='updateBlockTitle($event)'></component>
+                            <component v-if="block.meta.isGroup" v-bind:is="block.meta.component" v-bind:uid="block.meta.uid" v-bind:toolbar="'tb-' + block.meta.uid" v-bind:model="block"></component>
+                            <div class="content-blocker"></div>
+                        </div>
+                        <a href="#" class="block-add" v-on:click.prevent="piranha.blockpicker.open(piranha.contentedit.addBlock, index + 1)">
+                            <hr>
+                            <i class="fas fa-plus-circle"></i>
+                        </a>
+                    </div>
+                    <div v-if="blocks.length == 0" class="empty-info">
+                        <p>@Localizer.Page["Welcome to your new page. Click on the button above to add your first block of content!"]</p>
                     </div>
                 </div>
             </div>
