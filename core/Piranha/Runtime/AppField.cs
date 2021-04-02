@@ -27,5 +27,10 @@ namespace Piranha.Runtime
         /// used to render the field in the manager interface.
         /// </summary>
         public string Component { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional init methods.
+        /// </summary>
+        public AppInitMethod Init { get; set; } = new AppInitMethod();
     }
 }

@@ -11,6 +11,7 @@
 using Piranha.Extend;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Piranha.Runtime
 {
@@ -41,6 +42,8 @@ namespace Piranha.Runtime
                 item.Name = attr.Name;
                 item.Shorthand = attr.Shorthand;
                 item.Component = !string.IsNullOrWhiteSpace(attr.Component) ? attr.Component : "missing-field";
+                item.Init.InitMethod = Utils.GetMethod<TValue>("Init");
+                item.Init.InitManagerMethod = Utils.GetMethod<TValue>("InitManager");
             }
             return item;
         }

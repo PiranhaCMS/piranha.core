@@ -6,10 +6,6 @@
     <Description>Localization for the Piranha CMS manager panel</Description>
   </PropertyGroup>
 
-  <PropertyGroup Label="Package information">
-    <Version>9.0.1</Version>
-  </PropertyGroup>
-
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>

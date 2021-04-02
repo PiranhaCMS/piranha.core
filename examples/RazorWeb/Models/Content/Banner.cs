@@ -8,13 +8,12 @@
  *
  */
 
-using System.Collections.Generic;
 using Piranha.Extend;
 using Piranha.Models;
 
 namespace RazorWeb.Models
 {
-    [ContentGroup(Title = "Banners", Icon = "fas fa-star")]
+    [ContentGroup(Title = "Banners", Icon = "fas fa-star", IsHidden = true)]
     public abstract class Banner<T> : Content<T>, ICategorizedContent
         where T : Banner<T>
     {

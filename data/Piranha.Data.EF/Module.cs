@@ -73,6 +73,7 @@ namespace Piranha.Data.EF
                 cfg.CreateMap<Models.GenericContent, Data.Content>()
                     .ForMember(c => c.CategoryId, o => o.Ignore())
                     .ForMember(c => c.Category, o => o.Ignore())
+                    .ForMember(c => c.Blocks, o => o.Ignore())
                     .ForMember(c => c.Fields, o => o.Ignore())
                     .ForMember(c => c.Tags, o => o.Ignore())
                     .ForMember(c => c.Type, o => o.Ignore())

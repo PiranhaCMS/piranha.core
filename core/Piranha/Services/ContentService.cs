@@ -173,6 +173,26 @@ namespace Piranha.Services
         }
 
         /// <summary>
+        /// Gets all available categories for the specified group.
+        /// </summary>
+        /// <param name="groupId">The group id</param>
+        /// <returns>The available categories</returns>
+        public Task<IEnumerable<Taxonomy>> GetAllCategoriesAsync(string groupId)
+        {
+            return _repo.GetAllCategories(groupId);
+        }
+
+        /// <summary>
+        /// Gets all available tags for the specified groupd.
+        /// </summary>
+        /// <param name="groupId">The group id</param>
+        /// <returns>The available tags</returns>
+        public Task<IEnumerable<Taxonomy>> GetAllTagsAsync(string groupId)
+        {
+            return _repo.GetAllTags(groupId);
+        }
+
+        /// <summary>
         /// Saves the given content model
         /// </summary>
         /// <param name="model">The content model</param>

@@ -16,8 +16,10 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Piranha.Extend;
+using Piranha.Runtime;
 
 namespace Piranha
 {
@@ -312,6 +314,33 @@ namespace Piranha
             {
                 property.SetValue(instance, value);
             }
+        }
+
+        /// <summary>
+        /// Gets the app method with the given name for the specified type.
+        /// </summary>
+        /// <param name="name">The method name</param>
+        /// <typeparam name="T">The type</typeparam>
+        /// <returns>The method if found, otherwise null</returns>
+        internal static AppMethod GetMethod<T>(string name)
+        {
+            var methodInfo = typeof(T).GetMethod(name);
+
+            if (methodInfo != null)
+            {
+                var method = new AppMethod
+                {
+                    Method = methodInfo,
+                    IsAsync = typeof(Task).IsAssignableFrom(methodInfo.ReturnType)
+                };
+
+                foreach (var p in methodInfo.GetParameters())
+                {
+                    method.ParameterTypes.Add(p.ParameterType);
+                }
+                return method;
+            }
+            return null;
         }
 
         /// <summary>
