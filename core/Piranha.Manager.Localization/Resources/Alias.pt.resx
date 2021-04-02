@@ -28,13 +28,13 @@
     <value>Redirecionar para URL</value>
   </data>
   <data name="Redirect URL is mandatory." xml:space="preserve">
-    <value>Redirecionar a URL é obrigatório.</value>
+    <value>A URL do redirecionamento é obrigatório.</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>Permanente</value>
   </data>
   <data name="Are you sure you want to delete this alias?" xml:space="preserve">
-    <value>Você tem certeza que deseja apagar esta alias?</value>
+    <value>Você tem certeza que deseja apagar este alias?</value>
   </data>
   <data name="If the redirect should be permanent" xml:space="preserve">
     <value>Se o redirecionamento deve ser permanente</value>
@@ -43,6 +43,6 @@
     <value>O alias foi adicionado com sucesso à lista</value>
   </data>
   <data name="The alias was successfully deleted" xml:space="preserve">
-    <value>O alias foi excluído com sucesso da lista</value>
+    <value>O alias foi excluído com sucesso</value>
   </data>
 </root>
