@@ -9,16 +9,10 @@
  */
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Piranha.Extend;
-using Piranha.Extend.Fields;
-using Piranha.Manager.Extensions;
 using Piranha.Manager.Models;
-using Piranha.Manager.Models.Content;
 using Piranha.Models;
 using Piranha.Services;
 
