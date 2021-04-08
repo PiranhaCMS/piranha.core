@@ -32,10 +32,9 @@ namespace Piranha.Manager.Controllers
 
         [HttpGet]
         [Route("page/{id}")]
-        public async Task<Piranha.Models.PageBase> GetPageAsync(Guid id)
+        public Task<ContentModel> GetPageAsync(Guid id)
         {
-            var model = await _service.GetPageByIdAsync(id);
-            return await _service.ToPage(model);
+            return _service.GetPageByIdAsync(id);
         }
 
         [HttpGet]

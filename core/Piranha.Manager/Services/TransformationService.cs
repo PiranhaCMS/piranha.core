@@ -121,7 +121,7 @@ namespace Piranha.Manager.Services
             //model.State = post.GetState(isDraft);
             model.Features = new ContentFeatures
             {
-                UseBlocks = false,
+                UseBlocks = type.UseBlocks,
                 UseCategory = type.UseCategory,
                 UseExcerpt = type.UseExcerpt,
                 UseHtmlExcerpt = _config.HtmlExcerpt,
@@ -131,7 +131,25 @@ namespace Piranha.Manager.Services
             };
             model.Regions = GetRegions(content, type);
             model.Editors = GetEditors(type);
+            if (content is IBlockContent blockContent)
+            {
+                model.Blocks = GetBlocks(blockContent);
+            }
 
+            if (type.UseCategory || type.UseTags)
+            {
+                model.Taxonomies = new ContentTaxonomies();
+
+                if (content is ICategorizedContent categorizedContent)
+                {
+                    model.Taxonomies.SelectedCategory = categorizedContent.Category.Title;
+                }
+
+                if (content is ITaggedContent taggedContent)
+                {
+                    model.Taxonomies.SelectedTags = taggedContent.Tags.Select(t => t.Title).ToList();
+                }
+            }
             return model;
         }
 

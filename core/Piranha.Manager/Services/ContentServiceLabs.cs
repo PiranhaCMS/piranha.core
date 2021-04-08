@@ -62,7 +62,7 @@ namespace Piranha.Manager.Services
 
         public async Task<PageBase> ToPage(ContentModel model)
         {
-            var page = await CreatePage(model.TypeId);
+            var page = await CreatePage(model.TypeId).ConfigureAwait(false);
             return _transform.ToPage(model, page);
         }
 
@@ -76,27 +76,33 @@ namespace Piranha.Manager.Services
             var isDraft = true;
 
             // Get the page from the api
-            var page = await _api.Pages.GetDraftByIdAsync<PageBase>(id);
+            var page = await _api.Pages.GetDraftByIdAsync<PageBase>(id).ConfigureAwait(false);
             if (page == null)
             {
-                page = await _api.Pages.GetByIdAsync<PageBase>(id);
+                page = await _api.Pages.GetByIdAsync<PageBase>(id).ConfigureAwait(false);
                 isDraft = false;
             }
 
             if (page != null)
             {
+                // Get the site
+                var site = await _api.Sites.GetByIdAsync(page.SiteId).ConfigureAwait(false);
+
                 // Get the page type
                 var type = App.PageTypes.GetById(page.TypeId);
 
                 // Initialize the page for manager use
-                await _factory.InitManagerAsync(page, type);
+                await _factory.InitManagerAsync(page, type).ConfigureAwait(false);
 
                 // Transform the page
                 var model = _transform.Transform(page, type, isDraft);
 
                 // Get the number of pending comments
-                model.Comments.PendingCommentCount = (await _api.Posts.GetAllPendingCommentsAsync(id))
+                model.Comments.PendingCommentCount = (await _api.Posts.GetAllPendingCommentsAsync(id).ConfigureAwait(false))
                     .Count();
+
+                // Set selected language
+                model.LanguageId = site.LanguageId;
 
                 return model;
             }
@@ -113,15 +119,21 @@ namespace Piranha.Manager.Services
             var isDraft = true;
 
             // Get the post from the api
-            var post = await _api.Posts.GetDraftByIdAsync<PostBase>(id);
+            var post = await _api.Posts.GetDraftByIdAsync<PostBase>(id).ConfigureAwait(false);
             if (post == null)
             {
-                post = await _api.Posts.GetByIdAsync<PostBase>(id);
+                post = await _api.Posts.GetByIdAsync<PostBase>(id).ConfigureAwait(false);
                 isDraft = false;
             }
 
             if (post != null)
             {
+                // Get the archive page
+                var page = await _api.Pages.GetByIdAsync<PageInfo>(post.BlogId).ConfigureAwait(false);
+
+                // Get the site
+                var site = await _api.Sites.GetByIdAsync(page.SiteId).ConfigureAwait(false);
+
                 // Get the post type
                 var type = App.PostTypes.GetById(post.TypeId);
 
@@ -132,23 +144,32 @@ namespace Piranha.Manager.Services
                 var model = _transform.Transform(post, type, isDraft);
 
                 // Get the number of pending comments
-                model.Comments.PendingCommentCount = (await _api.Posts.GetAllPendingCommentsAsync(id))
+                model.Comments.PendingCommentCount = (await _api.Posts.GetAllPendingCommentsAsync(id).ConfigureAwait(false))
                     .Count();
 
                 // Set the available taxonomies
-                model.Taxonomies.Categories = (await _api.Posts.GetAllCategoriesAsync(post.BlogId))
+                model.Taxonomies.Categories = (await _api.Posts.GetAllCategoriesAsync(post.BlogId).ConfigureAwait(false))
                     .Select(p => p.Title).ToList();
-                model.Taxonomies.Tags = (await _api.Posts.GetAllTagsAsync(post.BlogId))
+                model.Taxonomies.Tags = (await _api.Posts.GetAllTagsAsync(post.BlogId).ConfigureAwait(false))
                     .Select(p => p.Title).ToList();
+
+                // Set selected language
+                model.LanguageId = site.LanguageId;
 
                 return model;
             }
             return null;
         }
 
-        public async Task<ContentModel> GetContentByIdAsync(Guid id)
+        public async Task<ContentModel> GetContentByIdAsync(Guid id, Guid? languageId = null)
         {
-            var content = await _api.Content.GetByIdAsync<GenericContent>(id);
+            // Ensure language id
+            if (!languageId.HasValue)
+            {
+                languageId = (await _api.Languages.GetDefaultAsync().ConfigureAwait(false))?.Id;
+            }
+
+            var content = await _api.Content.GetByIdAsync<GenericContent>(id, languageId).ConfigureAwait(false);
 
             if (content != null)
             {
@@ -156,220 +177,27 @@ namespace Piranha.Manager.Services
                 var type = App.ContentTypes.GetById(content.TypeId);
                 var group = App.ContentGroups.GetById(type.Group);
 
-                // Transform the content
-                await _factory.InitManagerAsync(content, type);
+                // Initialize the content for manager use
+                await _factory.InitManagerAsync(content, type).ConfigureAwait(false);
 
-                // Transform the post
+                // Transform the content
                 var model = _transform.Transform(content, type, group);
+
+                // Transform taxonomies if applicable
+                if (model.Features.UseCategory || model.Features.UseTags)
+                {
+                    model.Taxonomies.Categories = (await _api.Content.GetAllCategoriesAsync(model.GroupId).ConfigureAwait(false))
+                        .Select(p => p.Title).ToList();
+                    model.Taxonomies.Tags = (await _api.Content.GetAllTagsAsync(model.GroupId).ConfigureAwait(false))
+                        .Select(p => p.Title).ToList();
+                }
+
+                // Set selected language
+                model.LanguageId = languageId;
 
                 return model;
             }
             return null;
-        }
-
-        private IList<RegionModel> GetRegions(object model, ContentTypeBase type)
-        {
-            var result = new List<RegionModel>();
-
-            foreach (var regionType in type.Regions)
-            {
-                var regionModel = model.GetType().GetProperty(regionType.Id, App.PropertyBindings).GetValue(model);
-
-                var region = new RegionModel
-                {
-                    Meta = new RegionMeta
-                    {
-                        Id = regionType.Id,
-                        Name = regionType.Title,
-                        Icon = regionType.Icon,
-                        IsCollection = regionType.Collection,
-                        Description = regionType.Description,
-                        Placeholder = regionType.ListTitlePlaceholder,
-                        Expanded = regionType.ListExpand,
-                        Display = regionType.Display.ToString().ToLower()
-                    }
-                };
-
-                if (!typeof(IEnumerable).IsAssignableFrom(regionModel.GetType()))
-                {
-                    regionModel = new ArrayList
-                    {
-                        regionModel
-                    };
-                }
-
-                foreach (var regionItem in (IEnumerable)regionModel)
-                {
-                    var item = new RegionItemModel
-                    {
-                        Fields = GetFields(regionItem, regionType)
-                    };
-
-                    if (regionType.Fields.Count == 1)
-                    {
-                        item.Fields.First().Model = (IField)regionItem;
-                        item.Title = ((IField)regionItem).GetTitle();
-                    }
-                    else
-                    {
-                        var titleField = item.Fields.FirstOrDefault(f => f.Meta.Id == regionType.ListTitleField);
-                        if (titleField != null)
-                        {
-                            item.Title = ((IField)titleField.Model).GetTitle();
-                        }
-                    }
-                    region.Items.Add(item);
-                }
-
-                result.Add(region);
-            }
-            return result;
-        }
-
-        private IList<FieldModel> GetFields(object model, ContentTypeRegion regionType)
-        {
-            var result = new List<FieldModel>();
-
-            foreach (var fieldType in regionType.Fields)
-            {
-                var type = App.Fields.GetByType(fieldType.Type);
-
-                var field = new FieldModel
-                {
-                    Meta = new FieldMeta
-                    {
-                        Component = type.Component,
-                        Description = fieldType.Description,
-                        Id = fieldType.Id,
-                        IsHalfWidth = fieldType.Options.HasFlag(FieldOption.HalfWidth),
-                        Name = fieldType.Title,
-                        Placeholder = fieldType.Placeholder,
-                        Settings = fieldType.Settings,
-                        NotifyChange = fieldType.Id == regionType.ListTitleField
-                    }
-                };
-
-                if (typeof(SelectFieldBase).IsAssignableFrom(type.Type))
-                {
-                    foreach(var item in ((SelectFieldBase)Activator.CreateInstance(type.Type)).Items)
-                    {
-                        field.Meta.Options.Add(Convert.ToInt32(item.Value), item.Title);
-                    }
-                }
-
-                if (regionType.Fields.Count > 1)
-                {
-                    // Add the field model
-                    var fieldProp = model.GetType().GetProperty(fieldType.Id, App.PropertyBindings);
-                    field.Model = (IField)fieldProp.GetValue(model);
-                }
-                else
-                {
-                    // We can't add the model here as we don't have the correct
-                    // PropertyInfo instance. Calling method will need to handle this.
-                    // Let's make sure that this field notifies container of changes.
-                    field.Meta.NotifyChange = true;
-                }
-                result.Add(field);
-            }
-            return result;
-        }
-
-        private IList<BlockModel> GetBlocks(IBlockContent content)
-        {
-            var result = new List<BlockModel>();
-
-            foreach (var block in content.Blocks)
-            {
-                var type = App.Blocks.GetByType(block.Type);
-
-                if (block is BlockGroup groupBlock)
-                {
-                    var group = new BlockGroupModel
-                    {
-                        Id = groupBlock.Id,
-                        Type = groupBlock.Type,
-                        Fields = ContentUtils.GetBlockFields(groupBlock),
-                        Meta = new BlockMeta
-                        {
-                            Name = type.Name,
-                            Icon = type.Icon,
-                            Component = type.Component,
-                            Width = type.Width.ToString().ToLower(),
-                            IsGroup = true,
-                            // TODO: IsReadonly = page.OriginalPageId.HasValue,
-                            isCollapsed = _config.ManagerDefaultCollapsedBlocks,
-                            ShowHeader = !_config.ManagerDefaultCollapsedBlockGroupHeaders
-                        }
-                    };
-
-                    foreach (var item in groupBlock.Items)
-                    {
-                        group.Items.Add(GetBlock(item, App.Blocks.GetByType(item.Type)));
-                    }
-                    result.Add(group);
-                }
-                else
-                {
-                    result.Add(GetBlock(block, type));
-                }
-            }
-            return result;
-        }
-
-        private BlockModel GetBlock(Block block, Runtime.AppBlock type)
-        {
-            if (type.IsGeneric)
-            {
-                // Generic block model
-                return new BlockGenericModel
-                {
-                    Model = ContentUtils.GetBlockFields(block),
-                    Type = block.Type,
-                    Meta = new BlockMeta
-                    {
-                        Name = type.Name,
-                        Title = block.GetTitle(),
-                        Icon = type.Icon,
-                        Component = type.Component,
-                        // TODO: IsReadonly = page.OriginalPageId.HasValue,
-                        isCollapsed = _config.ManagerDefaultCollapsedBlocks
-                    }
-                };
-            }
-            else
-            {
-                // Regular block model with a unique Vue component
-                return new BlockItemModel
-                {
-                    Model = block,
-                    Meta = new BlockMeta
-                    {
-                        Name = type.Name,
-                        Title = block.GetTitle(),
-                        Icon = type.Icon,
-                        Component = type.Component,
-                        // TODO: IsReadonly = page.OriginalPageId.HasValue,
-                        isCollapsed = _config.ManagerDefaultCollapsedBlocks
-                    }
-                };
-            }
-        }
-
-        private IList<EditorModel> GetEditors(ContentTypeBase type)
-        {
-            var result = new List<EditorModel>();
-
-            foreach (var editor in type.CustomEditors)
-            {
-                result.Add(new EditorModel
-                {
-                    Component = editor.Component,
-                    Icon = editor.Icon,
-                    Name = editor.Title
-                });
-            }
-            return result;
         }
     }
 }
