@@ -460,6 +460,7 @@ namespace Piranha.Services
             {
                 var properties = block.GetType().GetProperties(App.PropertyBindings);
 
+                // Initialize all of the fields
                 foreach (var property in properties)
                 {
                     if (typeof(Extend.IField).IsAssignableFrom(property.PropertyType))
@@ -471,6 +472,13 @@ namespace Piranha.Services
                             await InitFieldAsync(scope, field, managerInit).ConfigureAwait(false);
                         }
                     }
+                }
+
+                // Initialize the block
+                var appBlock = App.Blocks.GetByType(block.GetType());
+                if (appBlock != null)
+                {
+                    await appBlock.Init.InvokeAsync(block, scope, managerInit).ConfigureAwait(false);
                 }
             }
         }
@@ -592,35 +600,11 @@ namespace Piranha.Services
         /// <returns>The initialized field</returns>
         private async Task<object> InitFieldAsync(IServiceScope scope, object field, bool managerInit)
         {
-            MethodInfo init = null;
+            var appField = App.Fields.GetByType(field.GetType());
 
-            if (!managerInit)
+            if (appField != null)
             {
-                init = field.GetType().GetMethod("Init");
-            }
-            else
-            {
-                init = field.GetType().GetMethod("InitManager");
-            }
-
-            if (init != null)
-            {
-                var param = new List<object>();
-
-                foreach (var p in init.GetParameters())
-                {
-                    param.Add(scope.ServiceProvider.GetService(p.ParameterType));
-                }
-
-                // Check for async
-                if (typeof(Task).IsAssignableFrom(init.ReturnType))
-                {
-                    await ((Task)init.Invoke(field, param.ToArray())).ConfigureAwait(false);
-                }
-                else
-                {
-                    init.Invoke(field, param.ToArray());
-                }
+                await appField.Init.InvokeAsync(field, scope, managerInit);
             }
             return field;
         }

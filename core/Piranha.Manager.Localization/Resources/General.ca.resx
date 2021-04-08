@@ -112,13 +112,13 @@
     <value>Tanca la sessió</value>
   </data>
   <data name="Looks like there's no items here. Click on the button above to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button above to get started!</value>
+    <value>Sembla que no hi han elements. Fes clic al botó de sobre per començar.</value>
   </data>
   <data name="Looks like there's no items here. Click on the button below to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button below to get started!</value>
+    <value>Sembla que no hi han elements. Fes clic al botó de sota per començar.</value>
   </data>
   <data name="Looks like there's no items here. Click on the button to the left to get started!" xml:space="preserve">
-    <value>Looks like there's no items here. Click on the button to the left to get started!</value>
+    <value>Sembla que no hi han elements. Fes clic al botó de l'esquerra per començar.</value>
   </data>
   <data name="Main content" xml:space="preserve">
     <value>Contingut principal</value>

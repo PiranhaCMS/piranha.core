@@ -110,7 +110,11 @@ namespace Piranha.Manager.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateRegionAsync(string content, string type, string region)
         {
-            if (content == "page")
+            if (content == "content")
+            {
+                return Ok(await _contentType.CreateContentRegionAsync(type, region));
+            }
+            else if (content == "page")
             {
                 return Ok(await _contentType.CreatePageRegionAsync(type, region));
             }

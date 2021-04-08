@@ -7,6 +7,7 @@ using Piranha.Data.EF.MySql;
 
 namespace Piranha.Data.EF.MySql.Migrations
 {
+    [NoCoverage]
     [DbContext(typeof(MySqlDb))]
     partial class DbModelSnapshot : ModelSnapshot
     {
@@ -189,6 +190,84 @@ namespace Piranha.Data.EF.MySql.Migrations
                     b.ToTable("Piranha_Content");
                 });
 
+            modelBuilder.Entity("Piranha.Data.ContentBlock", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("CLRType")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+
+                    b.Property<Guid>("ContentId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContentId");
+
+                    b.ToTable("Piranha_ContentBlocks");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentBlockField", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("BlockId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("CLRType")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+
+                    b.Property<string>("FieldId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BlockId", "FieldId", "SortOrder")
+                        .IsUnique();
+
+                    b.ToTable("Piranha_ContentBlockFields");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentBlockFieldTranslation", b =>
+                {
+                    b.Property<Guid>("FieldId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("LanguageId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("FieldId", "LanguageId");
+
+                    b.HasIndex("LanguageId");
+
+                    b.ToTable("Piranha_ContentBlockFieldTranslations");
+                });
+
             modelBuilder.Entity("Piranha.Data.ContentField", b =>
                 {
                     b.Property<Guid>("Id")
@@ -261,6 +340,9 @@ namespace Piranha.Data.EF.MySql.Migrations
                     b.Property<string>("Icon")
                         .HasMaxLength(64)
                         .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+
+                    b.Property<bool>("IsHidden")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime(6)");
@@ -1345,6 +1427,47 @@ namespace Piranha.Data.EF.MySql.Migrations
                     b.Navigation("Type");
                 });
 
+            modelBuilder.Entity("Piranha.Data.ContentBlock", b =>
+                {
+                    b.HasOne("Piranha.Data.Content", "Content")
+                        .WithMany("Blocks")
+                        .HasForeignKey("ContentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Content");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentBlockField", b =>
+                {
+                    b.HasOne("Piranha.Data.ContentBlock", "Block")
+                        .WithMany("Fields")
+                        .HasForeignKey("BlockId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Block");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentBlockFieldTranslation", b =>
+                {
+                    b.HasOne("Piranha.Data.ContentBlockField", "Field")
+                        .WithMany("Translations")
+                        .HasForeignKey("FieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Piranha.Data.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Field");
+
+                    b.Navigation("Language");
+                });
+
             modelBuilder.Entity("Piranha.Data.ContentField", b =>
                 {
                     b.HasOne("Piranha.Data.Content", "Content")
@@ -1669,10 +1792,22 @@ namespace Piranha.Data.EF.MySql.Migrations
 
             modelBuilder.Entity("Piranha.Data.Content", b =>
                 {
+                    b.Navigation("Blocks");
+
                     b.Navigation("Fields");
 
                     b.Navigation("Tags");
 
+                    b.Navigation("Translations");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentBlock", b =>
+                {
+                    b.Navigation("Fields");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentBlockField", b =>
+                {
                     b.Navigation("Translations");
                 });
 

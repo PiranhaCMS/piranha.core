@@ -285,7 +285,8 @@ namespace Piranha.AttributeBuilder
                     Id = attr.Id,
                     Title = attr.Title,
                     CLRType = type.Name, // type.AssemblyQualifiedName,
-                    Icon = attr.Icon
+                    Icon = attr.Icon,
+                    IsHidden = attr.IsHidden
                 };
             }
             return null;
@@ -323,13 +324,9 @@ namespace Piranha.AttributeBuilder
                     Group = group.Id,
                     UseExcerpt = attr.UseExcerpt,
                     UsePrimaryImage = attr.UsePrimaryImage,
-                    //
-                    // TODO
-                    //
-                    // Categories & Tags will be removed in this version as they
-                    // need to be localized properly and handled in the manager.
-                    UseCategory = false, // typeof(ICategorizedContent).IsAssignableFrom(type),
-                    UseTags = false, // typeof(ITaggedContent).IsAssignableFrom(type),
+                    UseBlocks = typeof(IBlockContent).IsAssignableFrom(type),
+                    UseCategory = typeof(ICategorizedContent).IsAssignableFrom(type),
+                    UseTags = typeof(ITaggedContent).IsAssignableFrom(type),
                     CustomEditors = GetEditors(type),
                     Regions = GetRegions(type)
                 };
@@ -688,30 +685,8 @@ namespace Piranha.AttributeBuilder
                     }
 
                     // Get optional settings
-                    var settingsAttr = prop.GetCustomAttribute<FieldSettingsAttribute>();
-                    if (settingsAttr != null)
-                    {
-                        foreach (var setting in settingsAttr.GetType().GetProperties(BindingFlags.Instance|BindingFlags.Public|BindingFlags.DeclaredOnly))
-                        {
-                            if (fieldType.Settings.TryGetValue(setting.Name, out var existing))
-                            {
-                                if (!(existing is IList))
-                                {
-                                    existing = new ArrayList()
-                                    {
-                                        existing
-                                    };
-                                    fieldType.Settings[setting.Name] = existing;
-                                }
+                    fieldType.Settings = Utils.GetFieldSettings(prop);
 
-                                ((IList)existing).Add(setting.GetValue(settingsAttr));
-                            }
-                            else
-                            {
-                                fieldType.Settings[setting.Name] = setting.GetValue(settingsAttr);
-                            }
-                        }
-                    }
                     return fieldType;
                 }
             }

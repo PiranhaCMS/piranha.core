@@ -17,7 +17,7 @@
             }
             @if (group.InternalId == "Content")
             {
-                foreach (var item in Piranha.App.ContentGroups)
+                foreach (var item in Piranha.App.ContentGroups.Where(g => !g.IsHidden))
                 {
                     <li class="nav-item@(ViewBag.MenuItem == item.Id ? " active" :"")"><a href="@Url.Content($"~/manager/content/{ item.Id }")" class="nav-link" tabindex="-1"><i class="@item.Icon"></i>@item.Title</a></li>
                 }

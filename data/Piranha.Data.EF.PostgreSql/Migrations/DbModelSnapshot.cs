@@ -8,6 +8,7 @@ using Piranha.Data.EF.PostgreSql;
 
 namespace Piranha.Data.EF.PostgreSql
 {
+    [NoCoverage]
     [DbContext(typeof(PostgreSqlDb))]
     partial class DbModelSnapshot : ModelSnapshot
     {
@@ -191,6 +192,84 @@ namespace Piranha.Data.EF.PostgreSql
                     b.ToTable("Piranha_Content");
                 });
 
+            modelBuilder.Entity("Piranha.Data.ContentBlock", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CLRType")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<Guid>("ContentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContentId");
+
+                    b.ToTable("Piranha_ContentBlocks");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentBlockField", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("BlockId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CLRType")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("FieldId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BlockId", "FieldId", "SortOrder")
+                        .IsUnique();
+
+                    b.ToTable("Piranha_ContentBlockFields");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentBlockFieldTranslation", b =>
+                {
+                    b.Property<Guid>("FieldId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("LanguageId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("text");
+
+                    b.HasKey("FieldId", "LanguageId");
+
+                    b.HasIndex("LanguageId");
+
+                    b.ToTable("Piranha_ContentBlockFieldTranslations");
+                });
+
             modelBuilder.Entity("Piranha.Data.ContentField", b =>
                 {
                     b.Property<Guid>("Id")
@@ -263,6 +342,9 @@ namespace Piranha.Data.EF.PostgreSql
                     b.Property<string>("Icon")
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
+
+                    b.Property<bool>("IsHidden")
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("timestamp without time zone");
@@ -1347,6 +1429,47 @@ namespace Piranha.Data.EF.PostgreSql
                     b.Navigation("Type");
                 });
 
+            modelBuilder.Entity("Piranha.Data.ContentBlock", b =>
+                {
+                    b.HasOne("Piranha.Data.Content", "Content")
+                        .WithMany("Blocks")
+                        .HasForeignKey("ContentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Content");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentBlockField", b =>
+                {
+                    b.HasOne("Piranha.Data.ContentBlock", "Block")
+                        .WithMany("Fields")
+                        .HasForeignKey("BlockId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Block");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentBlockFieldTranslation", b =>
+                {
+                    b.HasOne("Piranha.Data.ContentBlockField", "Field")
+                        .WithMany("Translations")
+                        .HasForeignKey("FieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Piranha.Data.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Field");
+
+                    b.Navigation("Language");
+                });
+
             modelBuilder.Entity("Piranha.Data.ContentField", b =>
                 {
                     b.HasOne("Piranha.Data.Content", "Content")
@@ -1671,10 +1794,22 @@ namespace Piranha.Data.EF.PostgreSql
 
             modelBuilder.Entity("Piranha.Data.Content", b =>
                 {
+                    b.Navigation("Blocks");
+
                     b.Navigation("Fields");
 
                     b.Navigation("Tags");
 
+                    b.Navigation("Translations");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentBlock", b =>
+                {
+                    b.Navigation("Fields");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentBlockField", b =>
+                {
                     b.Navigation("Translations");
                 });
 

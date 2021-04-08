@@ -93,7 +93,7 @@ piranha.pageedit = new Vue({
                 description =  piranha.resources.texts.medium;
             else if (this.metaPriority <= 0.9)
                 description =  piranha.resources.texts.high;
-            
+
             return description += " (" + this.metaPriority + ")";
         }
     },
@@ -431,7 +431,11 @@ piranha.pageedit = new Vue({
             }
         },
         onExcerptBlur: function (e) {
-            this.excerpt = tinyMCE.activeEditor.getContent();
+            if (this.useHtmlExcerpt) {
+                this.excerpt = tinyMCE.activeEditor.getContent();
+            } else {
+                this.excerpt = e.target.innerHTML;
+            }
         }
     },
     created: function () {

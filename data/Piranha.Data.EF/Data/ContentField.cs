@@ -56,6 +56,11 @@ namespace Piranha.Data
             translation.Value = App.SerializeObject(model, model.GetType());
         }
 
+        /// <summary>
+        /// Gets the translation for the specified language.
+        /// </summary>
+        /// <param name="languageId">The language id</param>
+        /// <returns>The translation</returns>
         public object GetTranslation(Guid languageId)
         {
             return Translations.FirstOrDefault(t => t.LanguageId == languageId)?.Value;

@@ -102,6 +102,16 @@ namespace Piranha.Manager.Models
         public string State { get; set; }
 
         /// <summary>
+        /// Gets/sets if blocks should be used.
+        /// </summary>
+        public bool UseBlocks { get; set; } = true;
+
+        /// <summary>
+        /// Gets/sets the available blocks.
+        /// </summary>
+        public IList<Content.BlockModel> Blocks { get; set; } = new List<Content.BlockModel>();
+
+        /// <summary>
         /// Gets/sets the available regions.
         /// </summary>
         public IList<Content.RegionModel> Regions { get; set; } = new List<Content.RegionModel>();
@@ -115,5 +125,25 @@ namespace Piranha.Manager.Models
         /// Gets/sets the available languages.
         /// </summary>
         public IEnumerable<Language> Languages { get; set; } = new List<Language>();
+
+        /// <summary>
+        /// Gets/sets the selected category.
+        /// </summary>
+        public string SelectedCategory { get; set; }
+
+        /// <summary>
+        /// Gets/sets the selected tags.
+        /// </summary>
+        public List<string> SelectedTags { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Gets/sets the available categories.
+        /// </summary>
+        public IEnumerable<string> Categories { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Gets/sets the available tags.
+        /// </summary>
+        public IEnumerable<string> Tags { get; set; } = new List<string>();
     }
 }

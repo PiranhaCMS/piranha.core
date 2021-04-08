@@ -74,10 +74,30 @@ namespace Piranha.Repositories
 
             if (content != null)
             {
-                return await _service.TransformAsync<T>(content, App.ContentTypes.GetById(content.TypeId), languageId: languageId)
+                return await _service.TransformAsync<T>(content, App.ContentTypes.GetById(content.TypeId), ProcessAsync, languageId)
                     .ConfigureAwait(false);
             }
             return null;
+        }
+
+        /// <summary>
+        /// Gets all available categories for the specified group.
+        /// </summary>
+        /// <param name="groupId">The group id</param>
+        /// <returns>The available categories</returns>
+        public Task<IEnumerable<Models.Taxonomy>> GetAllCategories(string groupId)
+        {
+            return GetAllTaxonomies(groupId, TaxonomyType.Category);
+        }
+
+        /// <summary>
+        /// Gets all available tags for the specified groupd.
+        /// </summary>
+        /// <param name="groupId">The group id</param>
+        /// <returns>The available tags</returns>
+        public Task<IEnumerable<Models.Taxonomy>> GetAllTags(string groupId)
+        {
+            return GetAllTaxonomies(groupId, TaxonomyType.Tag);
         }
 
         /// <summary>
@@ -181,6 +201,7 @@ namespace Piranha.Repositories
 
                 var content = await _db.Content
                     .Include(c => c.Translations)
+                    .Include(c => c.Blocks).ThenInclude(b => b.Fields).ThenInclude(f => f.Translations)
                     .Include(c => c.Fields).ThenInclude(f => f.Translations)
                     .Include(c => c.Category)
                     .Include(c => c.Tags).ThenInclude(t => t.Taxonomy)
@@ -249,6 +270,88 @@ namespace Piranha.Repositories
                     }
                 }
 
+                // Transform blocks
+                if (model is Models.IBlockContent blockModel)
+                {
+                    var blockModels = blockModel.Blocks;
+
+                    if (blockModels != null)
+                    {
+                        var blocks = _service.TransformContentBlocks(blockModels, languageId);
+                        var current = blocks.Select(b => b.Id).ToArray();
+
+                        // Delete removed blocks
+                        var removed = content.Blocks
+                            .Where(b => !current.Contains(b.Id) && b.ParentId == null)
+                            .ToList();
+                        var removedItems = content.Blocks
+                            .Where(b => !current.Contains(b.Id) && b.ParentId != null && removed.Select(p => p.Id).ToList().Contains(b.ParentId.Value))
+                            .ToList();
+
+                        _db.ContentBlocks.RemoveRange(removed);
+                        _db.ContentBlocks.RemoveRange(removedItems);
+
+                        // Map the new block
+                        for (var n = 0; n < blocks.Count; n++)
+                        {
+                            var block = content.Blocks.FirstOrDefault(b => b.Id == blocks[n].Id);
+
+                            if (block == null)
+                            {
+                                block = new ContentBlock
+                                {
+                                    Id = blocks[n].Id != Guid.Empty ? blocks[n].Id : Guid.NewGuid()
+                                };
+                                await _db.ContentBlocks.AddAsync(block).ConfigureAwait(false);
+                            }
+                            block.ParentId = blocks[n].ParentId;
+                            block.SortOrder = n;
+                            block.CLRType = blocks[n].CLRType;
+
+                            var currentFields = blocks[n].Fields.Select(f => f.FieldId).Distinct();
+                            var removedFields = block.Fields.Where(f => !currentFields.Contains(f.FieldId));
+
+                            _db.ContentBlockFields.RemoveRange(removedFields);
+
+                            foreach (var newField in blocks[n].Fields)
+                            {
+                                var field = block.Fields.FirstOrDefault(f => f.FieldId == newField.FieldId);
+                                if (field == null)
+                                {
+                                    field = new ContentBlockField
+                                    {
+                                        Id = newField.Id != Guid.Empty ? newField.Id : Guid.NewGuid(),
+                                        BlockId = block.Id,
+                                        FieldId = newField.FieldId
+                                    };
+                                    await _db.ContentBlockFields.AddAsync(field).ConfigureAwait(false);
+                                    block.Fields.Add(field);
+                                }
+                                field.SortOrder = newField.SortOrder;
+                                field.CLRType = newField.CLRType;
+                                field.Value = newField.Value;
+
+                                foreach (var newTranslation in newField.Translations)
+                                {
+                                    var translation = field.Translations.FirstOrDefault(t => t.LanguageId == newTranslation.LanguageId);
+                                    if (translation == null)
+                                    {
+                                        translation = new ContentBlockFieldTranslation
+                                        {
+                                            FieldId = field.Id,
+                                            LanguageId = languageId
+                                        };
+                                        await _db.ContentBlockFieldTranslations.AddAsync(translation).ConfigureAwait(false);
+                                        field.Translations.Add(translation);
+                                    }
+                                    translation.Value = newTranslation.Value;
+                                }
+                            }
+                            content.Blocks.Add(block);
+                        }
+                    }
+                }
+
                 await _db.SaveChangesAsync().ConfigureAwait(false);
 
                 /*
@@ -288,6 +391,29 @@ namespace Piranha.Repositories
             }
         }
 
+        private async Task<IEnumerable<Models.Taxonomy>> GetAllTaxonomies(string groupId, TaxonomyType type)
+        {
+            var result = new List<Models.Taxonomy>();
+            var taxonomies = await _db.Taxonomies
+                .AsNoTracking()
+                .Where(t => t.GroupId == groupId && t.Type == type)
+                .OrderBy(t => t.Title)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            foreach (var taxonomy in taxonomies)
+            {
+                result.Add(new Models.Taxonomy
+                {
+                    Id = taxonomy.Id,
+                    Title = taxonomy.Title,
+                    Slug = taxonomy.Slug,
+                    Type = taxonomy.Type == TaxonomyType.Category ? Models.TaxonomyType.Category : Models.TaxonomyType.Tag
+                });
+            }
+            return result;
+        }
+
         /// <summary>
         /// Gets the base query for content.
         /// </summary>
@@ -296,10 +422,54 @@ namespace Piranha.Repositories
         {
             return (IQueryable<Content>)_db.Content
                 .AsNoTracking()
+                .Include(c => c.Category)
                 .Include(c => c.Translations)
+                .Include(c => c.Blocks).ThenInclude(b => b.Fields).ThenInclude(f => f.Translations)
                 .Include(c => c.Fields).ThenInclude(f => f.Translations)
+                .Include(c => c.Tags).ThenInclude(t => t.Taxonomy)
                 .AsSplitQuery()
                 .AsQueryable();
+        }
+
+        /// <summary>
+        /// Performs additional processing and loads related models.
+        /// </summary>
+        /// <param name="content">The source content</param>
+        /// <param name="model">The target model</param>
+        private Task ProcessAsync<T>(Data.Content content, T model) where T : Models.GenericContent
+        {
+            return Task.Run(() => {
+                // Map category
+                if (content.Category != null && model is Models.ICategorizedContent categorizedModel)
+                {
+                    categorizedModel.Category = new Models.Taxonomy
+                    {
+                        Id = content.Category.Id,
+                        Title = content.Category.Title,
+                        Slug = content.Category.Slug
+                    };
+                }
+
+                // Map tags
+                if (model is Models.ITaggedContent taggedContent)
+                {
+                    foreach (var tag in content.Tags)
+                    {
+                        taggedContent.Tags.Add(new Models.Taxonomy
+                        {
+                            Id = tag.Taxonomy.Id,
+                            Title = tag.Taxonomy.Title,
+                            Slug = tag.Taxonomy.Slug
+                        });
+                    }
+                }
+
+                // Map Blocks
+                if (!(model is Models.IContentInfo) && model is Models.IBlockContent blockModel)
+                {
+                    blockModel.Blocks = _service.TransformBlocks(content.Blocks.OrderBy(b => b.SortOrder), content.SelectedLanguageId);
+                }
+            });
         }
     }
 }

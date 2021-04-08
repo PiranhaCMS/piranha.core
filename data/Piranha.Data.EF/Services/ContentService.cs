@@ -53,6 +53,12 @@ namespace Piranha.Services
         public async Task<T> TransformAsync<T>(TContent content, Models.ContentTypeBase type, Func<TContent, T, Task> process = null, Guid? languageId = null)
             where T : Models.ContentBase, TModelBase
         {
+            if (content is Content genericContent)
+            {
+                // We need the currently selected language id for mapping.
+                genericContent.SelectedLanguageId = languageId;
+            }
+
             if (type != null)
             {
                 //
@@ -157,6 +163,7 @@ namespace Piranha.Services
                         }
                     }
                 }
+
                 if (process != null)
                 {
                     await process(content, model).ConfigureAwait(false);
@@ -322,6 +329,65 @@ namespace Piranha.Services
         }
 
         /// <summary>
+        /// Transforms the given block data into block models.
+        /// </summary>
+        /// <param name="blocks">The data</param>
+        /// <param name="languageId">The language id</param>
+        /// <returns>The transformed blocks</returns>
+        public IList<Extend.Block> TransformBlocks(IEnumerable<ContentBlock> blocks, Guid? languageId)
+        {
+            var models = new List<Extend.Block>();
+
+            foreach (var block in blocks)
+            {
+                var blockType = App.Blocks.GetByType(block.CLRType);
+
+                if (blockType != null)
+                {
+                    var model = (Extend.Block)Activator.CreateInstance(blockType.Type);
+                    model.Id = block.Id;
+                    model.Type = block.CLRType;
+
+                    foreach (var prop in model.GetType().GetProperties(App.PropertyBindings))
+                    {
+                        if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
+                        {
+                            var field = block.Fields.FirstOrDefault(f => f.FieldId == prop.Name);
+
+                            if (field != null)
+                            {
+                                prop.SetValue(model, DeserializeValue(field, languageId));
+                            }
+                            else
+                            {
+                                prop.SetValue(model, Activator.CreateInstance(prop.PropertyType));
+                            }
+                        }
+                    }
+
+                    if (block.ParentId.HasValue)
+                    {
+                        var parent = models.FirstOrDefault(m => m.Id == block.ParentId.Value);
+
+                        if (parent != null && typeof(Extend.BlockGroup).IsAssignableFrom(parent.GetType()))
+                        {
+                            ((Extend.BlockGroup)parent).Items.Add(model);
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("Block parent is missing");
+                        }
+                    }
+                    else
+                    {
+                        models.Add(model);
+                    }
+                }
+            }
+            return models;
+        }
+
+        /// <summary>
         /// Transforms the given blocks to the internal data model.
         /// </summary>
         /// <param name="models">The blocks</param>
@@ -368,6 +434,91 @@ namespace Piranha.Services
                         if (typeof(Extend.BlockGroup).IsAssignableFrom(models[n].GetType()))
                         {
                             var blockItems = TransformBlocks(((Extend.BlockGroup)models[n]).Items);
+
+                            if (blockItems.Count() > 0)
+                            {
+                                foreach (var item in blockItems)
+                                {
+                                    item.ParentId = block.Id;
+                                }
+                                blocks.AddRange(blockItems);
+                            }
+                        }
+                    }
+                }
+            }
+            return blocks;
+        }
+
+        /// <summary>
+        /// Transforms the given blocks to the internal data model.
+        /// </summary>
+        /// <param name="models">The blocks</param>
+        /// <param name="languageId">The language id</param>
+        /// <returns>The data model</returns>
+        public IList<ContentBlock> TransformContentBlocks(IList<Extend.Block> models, Guid languageId)
+        {
+            var blocks = new List<ContentBlock>();
+
+            if (models != null)
+            {
+                for (var n = 0; n < models.Count; n++)
+                {
+                    var type = App.Blocks.GetByType(models[n].GetType().FullName);
+
+                    if (type != null)
+                    {
+                        // Make sure we generate an id if it's empty
+                        if (models[n].Id == Guid.Empty)
+                        {
+                            models[n].Id = Guid.NewGuid();
+                        }
+
+                        var block = new ContentBlock()
+                        {
+                            Id = models[n].Id,
+                            CLRType = models[n].GetType().FullName
+                        };
+
+                        foreach (var prop in models[n].GetType().GetProperties(App.PropertyBindings))
+                        {
+                            if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
+                            {
+                                var blockValue = prop.GetValue(models[n]);
+
+                                // Only save fields to the database
+                                var field = new ContentBlockField()
+                                {
+                                    Id = Guid.NewGuid(),
+                                    BlockId = block.Id,
+                                    FieldId = prop.Name,
+                                    SortOrder = 0,
+                                    CLRType = prop.PropertyType.FullName,
+                                };
+
+                                // Set value
+                                if (blockValue is Extend.ITranslatable)
+                                {
+                                    var translation = new ContentBlockFieldTranslation
+                                    {
+                                        FieldId = field.Id,
+                                        LanguageId = languageId,
+                                        Value = App.SerializeObject(blockValue, prop.PropertyType)
+                                    };
+                                    field.Translations.Add(translation);
+                                }
+                                else
+                                {
+                                    field.Value = App.SerializeObject(blockValue, prop.PropertyType);
+                                }
+                                block.Fields.Add(field);
+                            }
+                        }
+                        blocks.Add(block);
+
+                        if (typeof(Extend.BlockGroup).IsAssignableFrom(models[n].GetType()))
+                        {
+                            var blockItems = TransformContentBlocks(((Extend.BlockGroup)models[n]).Items, languageId);
 
                             if (blockItems.Count() > 0)
                             {
@@ -674,6 +825,27 @@ namespace Piranha.Services
         /// <param name="languageId">The optional language id</param>
         /// <returns>The value</returns>
         private object DeserializeValue(TField field, Guid? languageId)
+        {
+            var type = App.Fields.GetByType(field.CLRType);
+
+            if (type != null)
+            {
+                if (typeof(Extend.ITranslatable).IsAssignableFrom(type.Type) && field is ITranslatable translatable && languageId.HasValue)
+                {
+                    return App.DeserializeObject((string)translatable.GetTranslation(languageId.Value), type.Type);
+                }
+                return App.DeserializeObject(field.Value, type.Type);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Deserializes the given field value.
+        /// </summary>
+        /// <param name="field">The page field</param>
+        /// <param name="languageId">The optional language id</param>
+        /// <returns>The value</returns>
+        private object DeserializeValue(BlockFieldBase field, Guid? languageId)
         {
             var type = App.Fields.GetByType(field.CLRType);
 

@@ -42,6 +42,7 @@ namespace Piranha.Manager.Services
                             Id = prop.Name,
                             Name = prop.Name,
                             Component = fieldType.Component,
+                            Settings = Utils.GetFieldSettings(prop)
                         }
                     };
 
