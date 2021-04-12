@@ -181,7 +181,8 @@ namespace Piranha.Manager.Services
                 .Select(f => new MediaListModel.FolderItem
                 {
                     Id = f.Id,
-                    Name = f.Name
+                    Name = f.Name,
+                    ItemCount = f.MediaCount
                 }).ToList();
 
             if (width.HasValue)
