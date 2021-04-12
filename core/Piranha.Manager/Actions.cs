@@ -78,6 +78,11 @@ namespace Piranha.Manager
                 },
                 new ToolbarAction
                 {
+                    InternalId = "Settings",
+                    ActionView = "Partial/Actions/_ContentSettings"
+                },
+                new ToolbarAction
+                {
                     InternalId = "Save",
                     ActionView = "Partial/Actions/_ContentSave"
                 },

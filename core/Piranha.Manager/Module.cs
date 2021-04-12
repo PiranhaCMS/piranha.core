@@ -166,6 +166,7 @@ namespace Piranha.Manager
                             .ToList()
                     }))
                     .ForMember(m => m.LanguageId, o => o.Ignore())
+                    .ForMember(m => m.LanguageTitle, o => o.Ignore())
                     .ForMember(m => m.ParentId, o => o.Ignore())
                     .ForMember(m => m.Published, o => o.Ignore())
                     .ForMember(m => m.PublishedTime, o => o.Ignore())
@@ -183,7 +184,8 @@ namespace Piranha.Manager
                     .ForMember(m => m.State, o => o.Ignore())
                     .ForMember(m => m.Blocks, o => o.Ignore())
                     .ForMember(m => m.Regions, o => o.Ignore())
-                    .ForMember(m => m.Editors, o => o.Ignore());
+                    .ForMember(m => m.Editors, o => o.Ignore())
+                    .ForMember(m => m.Languages, o => o.Ignore());
                 cfg.CreateMap<PageBase, ContentModel>()
                     .ForMember(m => m.AltTitle, o => o.MapFrom(p => p.NavigationTitle))
                     .ForMember(m => m.Published, o => o.MapFrom(p => p.Published.HasValue ? p.Published.Value.ToString("yyyy-MM-dd") : null))
@@ -226,6 +228,7 @@ namespace Piranha.Manager
                         RedirectType = p.RedirectType.ToString()
                     }))
                     .ForMember(m => m.LanguageId, o => o.Ignore())
+                    .ForMember(m => m.LanguageTitle, o => o.Ignore())
                     .ForMember(m => m.TypeTitle, o => o.Ignore())
                     .ForMember(m => m.GroupId, o => o.Ignore())
                     .ForMember(m => m.GroupTitle, o => o.Ignore())
@@ -234,7 +237,8 @@ namespace Piranha.Manager
                     .ForMember(m => m.State, o => o.Ignore())
                     .ForMember(m => m.Blocks, o => o.Ignore())
                     .ForMember(m => m.Regions, o => o.Ignore())
-                    .ForMember(m => m.Editors, o => o.Ignore());
+                    .ForMember(m => m.Editors, o => o.Ignore())
+                    .ForMember(m => m.Languages, o => o.Ignore());
                 cfg.CreateMap<PostBase, ContentModel>()
                     .ForMember(m => m.ParentId, o => o.MapFrom(p => p.BlogId))
                     .ForMember(m => m.Published, o => o.MapFrom(p => p.Published.HasValue ? p.Published.Value.ToString("yyyy-MM-dd") : null))
@@ -276,6 +280,7 @@ namespace Piranha.Manager
                         SelectedTags = p.Tags.Select(t => t.Title).ToList()
                     }))
                     .ForMember(m => m.LanguageId, o => o.Ignore())
+                    .ForMember(m => m.LanguageTitle, o => o.Ignore())
                     .ForMember(m => m.TypeTitle, o => o.Ignore())
                     .ForMember(m => m.GroupId, o => o.Ignore())
                     .ForMember(m => m.GroupTitle, o => o.Ignore())
@@ -285,7 +290,13 @@ namespace Piranha.Manager
                     .ForMember(m => m.State, o => o.Ignore())
                     .ForMember(m => m.Blocks, o => o.Ignore())
                     .ForMember(m => m.Regions, o => o.Ignore())
-                    .ForMember(m => m.Editors, o => o.Ignore());
+                    .ForMember(m => m.Editors, o => o.Ignore())
+                    .ForMember(m => m.Languages, o => o.Ignore());
+
+                cfg.CreateMap<ContentModel, GenericContent>()
+                    .ForMember(p => p.Permissions, o => o.Ignore())
+                    .ForMember(p => p.Created, o => o.Ignore())
+                    .ForMember(p => p.LastModified, o => o.Ignore());
 
                 cfg.CreateMap<ContentModel, PageBase>()
                     .ForMember(p => p.SiteId, o => o.MapFrom(m => m.Position.SiteId))
@@ -313,7 +324,33 @@ namespace Piranha.Manager
                     .ForMember(p => p.Permissions, o => o.Ignore())
                     .ForMember(p => p.Created, o => o.Ignore())
                     .ForMember(p => p.LastModified, o => o.Ignore());
+
+                cfg.CreateMap<ContentModel, PostBase>()
+                    .ForMember(p => p.BlogId, o => o.MapFrom(m => m.ParentId))
+                    .ForMember(p => p.MetaTitle, o => o.MapFrom(m => m.Meta.MetaTitle))
+                    .ForMember(p => p.MetaKeywords, o => o.MapFrom(m => m.Meta.MetaKeywords))
+                    .ForMember(p => p.MetaDescription, o => o.MapFrom(m => m.Meta.MetaDescription))
+                    .ForMember(p => p.MetaFollow, o => o.MapFrom(m => m.Meta.MetaFollow))
+                    .ForMember(p => p.MetaIndex, o => o.MapFrom(m => m.Meta.MetaIndex))
+                    .ForMember(p => p.MetaPriority, o => o.MapFrom(m => m.Meta.MetaPriority))
+                    .ForMember(p => p.OgTitle, o => o.MapFrom(m => m.Meta.OgTitle))
+                    .ForMember(p => p.OgImage, o => o.MapFrom(m => m.Meta.OgImage))
+                    .ForMember(p => p.OgDescription, o => o.MapFrom(m => m.Meta.OgDescription))
+                    .ForMember(p => p.EnableComments, o => o.MapFrom(m => m.Features.UseComments))
+                    .ForMember(p => p.CloseCommentsAfterDays, o => o.MapFrom(m => m.Comments.CloseCommentsAfterDays))
+                    .ForMember(p => p.CommentCount, o => o.MapFrom(m => m.Comments.CommentCount))
+                    .ForMember(p => p.RedirectUrl, o => o.MapFrom(m => m.Routes.RedirectUrl))
+                    .ForMember(p => p.RedirectType, o => o.MapFrom(m => m.Routes.RedirectType))
+                    .ForMember(p => p.Route, o => o.MapFrom(m => m.Routes.SelectedRoute.Route))
+                    .ForMember(p => p.Category, o => o.Ignore())
+                    .ForMember(p => p.Tags, o => o.Ignore())
+                    .ForMember(p => p.Blocks, o => o.Ignore())
+                    .ForMember(p => p.Permalink, o => o.Ignore())
+                    .ForMember(p => p.Permissions, o => o.Ignore())
+                    .ForMember(p => p.Created, o => o.Ignore())
+                    .ForMember(p => p.LastModified, o => o.Ignore());
             });
+
             mapperConfig.AssertConfigurationIsValid();
             Mapper = mapperConfig.CreateMapper();
         }

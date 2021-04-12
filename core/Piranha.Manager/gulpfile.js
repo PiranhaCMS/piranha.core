@@ -249,6 +249,12 @@ var js = [
         ]
     },
     {
+        name: "piranha.content.js",
+        items: [
+            "assets/src/js/piranha.content.js"
+        ]
+    },
+    {
         name: "piranha.contentedit.js",
         items: [
             "assets/src/js/piranha.contentedit.js"

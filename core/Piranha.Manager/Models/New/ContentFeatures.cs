@@ -13,6 +13,11 @@ namespace Piranha.Manager.Models
     public sealed class ContentFeatures
     {
         /// <summary>
+        /// Gets/sets if alt title should be used.
+        /// </summary>
+        public bool UseAltTitle { get; set; }
+
+        /// <summary>
         /// Gets/sets if blocks should be used.
         /// </summary>
         public bool UseBlocks { get; set; }
@@ -45,6 +50,12 @@ namespace Piranha.Manager.Models
         /// default value is false.
         /// </summary>
         public bool UseHtmlExcerpt { get; set; }
+
+        /// <summary>
+        /// Gets/sets if this is publicly available content
+        /// that can be published.
+        /// </summary>
+        public bool UsePublish { get; set; }
 
         /// <summary>
         /// Gets/sets if tags should be used for the content type.

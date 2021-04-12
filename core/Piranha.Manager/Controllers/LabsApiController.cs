@@ -37,6 +37,13 @@ namespace Piranha.Manager.Controllers
             return _service.GetPageByIdAsync(id);
         }
 
+        [HttpPost]
+        [Route("page")]
+        public Task<ContentModel> SavePageAsync(ContentModel model)
+        {
+            return _service.SavePageAsync(model);
+        }
+
         [HttpGet]
         [Route("post/{id}")]
         public Task<ContentModel> GetPostAsync(Guid id)
@@ -44,11 +51,25 @@ namespace Piranha.Manager.Controllers
             return _service.GetPostByIdAsync(id);
         }
 
-        [HttpGet]
-        [Route("content/{id}")]
-        public Task<ContentModel> GetContentAsync(Guid id)
+        [HttpPost]
+        [Route("post")]
+        public Task<ContentModel> SavePostAsync(ContentModel model)
         {
-            return _service.GetContentByIdAsync(id);
+            return _service.SavePostAsync(model);
+        }
+
+        [HttpGet]
+        [Route("content/{id}/{langId?}")]
+        public Task<ContentModel> GetContentAsync(Guid id, Guid? langId = null)
+        {
+            return _service.GetContentByIdAsync(id, langId);
+        }
+
+        [HttpPost]
+        [Route("content")]
+        public Task<ContentModel> SaveContentAsync(ContentModel model)
+        {
+            return _service.SaveContentAsync(model);
         }
     }
 }

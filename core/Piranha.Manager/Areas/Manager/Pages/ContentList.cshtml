@@ -21,8 +21,8 @@
 
 @section partials
 {
-   
-} 
+
+}
 
 <div id="contentlist">
     <div class="top">
@@ -60,8 +60,8 @@
             </thead>
             <tbody>
                 <tr v-for="item in items">
-                    <td>                        
-                        <a :href="piranha.baseUrl + 'manager/content/edit/' + item.typeId +  '/' + item.id">{{ item.title }}</a>
+                    <td>
+                        <a :href="piranha.baseUrl + 'manager/content/edit/' + item.id">{{ item.title }}</a>
                     </td>
                     <td>
                         {{ item.type }}

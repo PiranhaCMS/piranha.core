@@ -41,7 +41,7 @@ namespace Piranha.Manager.Services
         /// <param name="type">The page type</param>
         /// <param name="isDraft">If this is a draft</param>
         /// <returns>The content model</returns>
-        public ContentModel Transform(PageBase page, PageType type, bool isDraft)
+        public ContentModel ToModel(PageBase page, PageType type, bool isDraft)
         {
             // Map all of the basic fields
             var model = Module.Mapper.Map<PageBase, ContentModel>(page);
@@ -51,11 +51,13 @@ namespace Piranha.Manager.Services
             model.State = page.GetState(isDraft);
             model.Features = new ContentFeatures
             {
+                UseAltTitle = true,
                 UseBlocks = type.UseBlocks,
                 UseComments = page.EnableComments,
                 UseExcerpt = type.UseExcerpt,
                 UseHtmlExcerpt = _config.HtmlExcerpt,
-                UsePrimaryImage = type.UsePrimaryImage
+                UsePrimaryImage = type.UsePrimaryImage,
+                UsePublish = true
             };
             model.Regions = GetRegions(page, type);
             model.Editors = GetEditors(type);
@@ -74,7 +76,7 @@ namespace Piranha.Manager.Services
         /// <param name="type">The post type</param>
         /// <param name="isDraft">If this is a draft</param>
         /// <returns>The content model</returns>
-        public ContentModel Transform(PostBase post, PostType type, bool isDraft)
+        public ContentModel ToModel(PostBase post, PostType type, bool isDraft)
         {
             // Map all of the basic fields
             var model = Module.Mapper.Map<PostBase, ContentModel>(post);
@@ -90,6 +92,7 @@ namespace Piranha.Manager.Services
                 UseExcerpt = type.UseExcerpt,
                 UseHtmlExcerpt = _config.HtmlExcerpt,
                 UsePrimaryImage = type.UsePrimaryImage,
+                UsePublish = true,
                 UseTags = true
             };
             model.Regions = GetRegions(post, type);
@@ -109,7 +112,7 @@ namespace Piranha.Manager.Services
         /// <param name="type">The content type</param>
         /// <param name="group">The content group</param>
         /// <returns>The content model</returns>
-        public ContentModel Transform(GenericContent content, ContentType type, ContentGroup group)
+        public ContentModel ToModel(GenericContent content, ContentType type, ContentGroup group)
         {
             // Map all of the basic fields
             var model = Module.Mapper.Map<GenericContent, ContentModel>(content);
@@ -118,7 +121,6 @@ namespace Piranha.Manager.Services
             model.TypeTitle = type.Title;
             model.GroupId = group.Id;
             model.GroupTitle = group.Title;
-            //model.State = post.GetState(isDraft);
             model.Features = new ContentFeatures
             {
                 UseBlocks = type.UseBlocks,
@@ -164,11 +166,53 @@ namespace Piranha.Manager.Services
             // Map all of the basic fields
             Module.Mapper.Map<ContentModel, PageBase>(model, page);
 
-            // Set page data
-            SetBlocks(model, page);
+            // Set data
             SetRegions(model, page);
+            SetBlocks(model, page);
 
             return page;
+        }
+
+        /// <summary>
+        /// Transforms the given content model to a post.
+        /// </summary>
+        /// <param name="model">The content model</param>
+        /// <param name="post">The post</param>
+        /// <returns>The transformed post</returns>
+        public PostBase ToPost(ContentModel model, PostBase post)
+        {
+            // Map all of the basic fields
+            Module.Mapper.Map<ContentModel, PostBase>(model, post);
+
+            // Set data
+            SetRegions(model, post);
+            SetBlocks(model, post);
+            SetCategory(model, post);
+            SetTags(model, post);
+
+            return post;
+        }
+
+        public GenericContent ToContent(ContentModel model, GenericContent content)
+        {
+            // Map all of the basic fields
+            Module.Mapper.Map<ContentModel, GenericContent>(model, content);
+
+            // Set data
+            SetRegions(model, content);
+            if (content is IBlockContent blockContent)
+            {
+                SetBlocks(model, blockContent);
+            }
+            if (content is ICategorizedContent categoryContent)
+            {
+                SetCategory(model, categoryContent);
+            }
+            if (content is ITaggedContent tagContent)
+            {
+                SetTags(model, tagContent);
+            }
+            return content;
         }
 
         private IList<RegionModel> GetRegions(object model, ContentTypeBase type)
@@ -307,27 +351,30 @@ namespace Piranha.Manager.Services
                         }
                     };
 
-                    foreach (var item in groupBlock.Items)
+                    for (var n = 0; n < groupBlock.Items.Count; n++)
                     {
-                        group.Items.Add(GetBlock(item, App.Blocks.GetByType(item.Type)));
+                        var item = groupBlock.Items[n];
+
+                        group.Items.Add(GetBlock(item, App.Blocks.GetByType(item.Type), n == 0));
                     }
                     result.Add(group);
                 }
                 else
                 {
-                    result.Add(GetBlock(block, type));
+                    result.Add(GetBlock(block, type, true));
                 }
             }
             return result;
         }
 
-        private BlockModel GetBlock(Block block, Runtime.AppBlock type)
+        private BlockModel GetBlock(Block block, Runtime.AppBlock type, bool isActive)
         {
             if (type.IsGeneric)
             {
                 // Generic block model
                 return new BlockGenericModel
                 {
+                    IsActive = isActive,
                     Model = ContentUtils.GetBlockFields(block),
                     Type = block.Type,
                     Meta = new BlockMeta
@@ -346,6 +393,7 @@ namespace Piranha.Manager.Services
                 // Regular block model with a unique Vue component
                 return new BlockItemModel
                 {
+                    IsActive = isActive,
                     Model = block,
                     Meta = new BlockMeta
                     {
@@ -489,6 +537,37 @@ namespace Piranha.Manager.Services
                     }
                 }
             }
+        }
+
+        private void SetCategory(ContentModel model, ICategorizedContent content)
+        {
+            if (model.Taxonomies == null || model.Taxonomies.SelectedCategory == null)
+            {
+                content.Category = null;
+                return;
+            }
+
+            content.Category = new Taxonomy
+            {
+                Title = model.Taxonomies.SelectedCategory
+            };
+        }
+
+        private void SetTags(ContentModel model, ITaggedContent content)
+        {
+            // Clear old tags
+            content.Tags.Clear();
+
+            if (model.Taxonomies == null || model.Taxonomies.SelectedTags.Count == 0)
+            {
+                return;
+            }
+
+            content.Tags = model.Taxonomies.SelectedTags.Select(t =>
+                new Taxonomy
+                {
+                    Title = t
+                }).ToList();
         }
     }
 }

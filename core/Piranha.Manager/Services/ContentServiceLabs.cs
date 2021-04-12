@@ -40,18 +40,43 @@ namespace Piranha.Manager.Services
             _config = config;
         }
 
-        public async Task<PageBase> CreatePage(string typeId)
+        /// <summary>
+        /// Creates a new page of the given type
+        /// </summary>
+        /// <param name="typeId">The page type</param>
+        /// <returns>The new page</returns>
+        public Task<PageBase> CreatePage(string typeId)
         {
             var type = App.PageTypes.GetById(typeId);
             var modelType = Type.GetType(type.CLRType);
 
-            var create = modelType.GetMethod("CreateAsync", BindingFlags.Public|BindingFlags.Static|BindingFlags.FlattenHierarchy);
-            var task = (Task)create.Invoke(null, new object[] { _api, null });
+            return CreateModel<PageBase>(modelType);
+        }
 
-            await task.ConfigureAwait(false);
+        /// <summary>
+        /// Creates a new post of the given type
+        /// </summary>
+        /// <param name="typeId">The post type</param>
+        /// <returns>The new post</returns>
+        public Task<PostBase> CreatePost(string typeId)
+        {
+            var type = App.PostTypes.GetById(typeId);
+            var modelType = Type.GetType(type.CLRType);
 
-            var result = task.GetType().GetProperty("Result");
-            return (PageBase)result.GetValue(task);
+            return CreateModel<PostBase>(modelType);
+        }
+
+        /// <summary>
+        /// Creates a new content of the given type
+        /// </summary>
+        /// <param name="typeId">The post type</param>
+        /// <returns>The new post</returns>
+        public Task<GenericContent> CreateContent(string typeId)
+        {
+            var type = App.ContentTypes.GetById(typeId);
+            var modelType = Type.GetType(type.CLRType);
+
+            return CreateModel<GenericContent>(modelType);
         }
 
         public async Task<PageBase> ToPage(ContentModel model)
@@ -89,7 +114,7 @@ namespace Piranha.Manager.Services
                 await _factory.InitManagerAsync(page, type).ConfigureAwait(false);
 
                 // Transform the page
-                var model = _transform.Transform(page, type, isDraft);
+                var model = _transform.ToModel(page, type, isDraft);
 
                 // Get the number of pending comments
                 model.Comments.PendingCommentCount = (await _api.Posts.GetAllPendingCommentsAsync(id).ConfigureAwait(false))
@@ -101,6 +126,26 @@ namespace Piranha.Manager.Services
                 return model;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Saves the given page.
+        /// </summary>
+        /// <param name="model">The content model</param>
+        /// <returns>An awaitable task</returns>
+        public async Task<ContentModel> SavePageAsync(ContentModel model)
+        {
+            // Create a new page of the correct type
+            var page = await CreatePage(model.TypeId);
+
+            // Transform the page
+            _transform.ToPage(model, page);
+
+            // Save the page
+            await _api.Pages.SaveAsync(page);
+
+            // Return the updated page
+            return await GetPageByIdAsync(model.Id);
         }
 
         /// <summary>
@@ -135,7 +180,7 @@ namespace Piranha.Manager.Services
                 await _factory.InitManagerAsync(post, type);
 
                 // Transform the post
-                var model = _transform.Transform(post, type, isDraft);
+                var model = _transform.ToModel(post, type, isDraft);
 
                 // Get the number of pending comments
                 model.Comments.PendingCommentCount = (await _api.Posts.GetAllPendingCommentsAsync(id).ConfigureAwait(false))
@@ -155,15 +200,48 @@ namespace Piranha.Manager.Services
             return null;
         }
 
+        /// <summary>
+        /// Saves the given post.
+        /// </summary>
+        /// <param name="model">The content model</param>
+        /// <returns>An awaitable task</returns>
+        public async Task<ContentModel> SavePostAsync(ContentModel model)
+        {
+            // Create a new post of the correct type
+            var post = await CreatePost(model.TypeId);
+
+            // Transform the post
+            _transform.ToPost(model, post);
+
+            // Save the post
+            await _api.Posts.SaveAsync(post);
+
+            // Return the updated post
+            return await GetPostByIdAsync(model.Id);
+        }
+
+        /// <summary>
+        /// Gets the content with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <param name="languageId">The optional language id</param>
+        /// <returns>The content model</returns>
         public async Task<ContentModel> GetContentByIdAsync(Guid id, Guid? languageId = null)
         {
-            // Ensure language id
-            if (!languageId.HasValue)
+            Language language = null;
+
+            // Ensure language
+            if (languageId.HasValue)
             {
-                languageId = (await _api.Languages.GetDefaultAsync().ConfigureAwait(false))?.Id;
+                language = await _api.Languages.GetByIdAsync(languageId.Value).ConfigureAwait(false);
             }
 
-            var content = await _api.Content.GetByIdAsync<GenericContent>(id, languageId).ConfigureAwait(false);
+            if (language == null)
+            {
+                language = await _api.Languages.GetDefaultAsync().ConfigureAwait(false);
+            }
+
+            var content = await _api.Content.GetByIdAsync<GenericContent>(id, language.Id).ConfigureAwait(false);
 
             if (content != null)
             {
@@ -175,7 +253,7 @@ namespace Piranha.Manager.Services
                 await _factory.InitManagerAsync(content, type).ConfigureAwait(false);
 
                 // Transform the content
-                var model = _transform.Transform(content, type, group);
+                var model = _transform.ToModel(content, type, group);
 
                 // Transform taxonomies if applicable
                 if (model.Features.UseCategory || model.Features.UseTags)
@@ -187,11 +265,46 @@ namespace Piranha.Manager.Services
                 }
 
                 // Set selected language
-                model.LanguageId = languageId;
+                model.LanguageId = language.Id;
+                model.LanguageTitle = language.Title;
+
+                // Get the available languages
+                model.Languages = await _api.Languages.GetAllAsync().ConfigureAwait(false);
 
                 return model;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Saves the given content.
+        /// </summary>
+        /// <param name="model">The content model</param>
+        /// <returns>An awaitable task</returns>
+        public async Task<ContentModel> SaveContentAsync(ContentModel model)
+        {
+            // Create a new content of the correct type
+            var content = await CreateContent(model.TypeId);
+
+            // Transform the content
+            _transform.ToContent(model, content);
+
+            // Save the content
+            await _api.Content.SaveAsync(content, model.LanguageId);
+
+            // Return the updated content
+            return await GetContentByIdAsync(model.Id);
+        }
+
+        private async Task<T> CreateModel<T>(Type modelType)
+        {
+            var create = modelType.GetMethod("CreateAsync", BindingFlags.Public|BindingFlags.Static|BindingFlags.FlattenHierarchy);
+            var task = (Task)create.Invoke(null, new object[] { _api, null });
+
+            await task.ConfigureAwait(false);
+
+            var result = task.GetType().GetProperty("Result");
+            return (T)result.GetValue(task);
         }
     }
 }

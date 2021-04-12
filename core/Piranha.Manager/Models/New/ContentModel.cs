@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using Piranha.Extend.Fields;
+using Piranha.Models;
 
 namespace Piranha.Manager.Models
 {
@@ -25,6 +26,11 @@ namespace Piranha.Manager.Models
         /// Gets/sets the optional language id.
         /// </summary>
         public Guid? LanguageId { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional language title.
+        /// </summary>
+        public string LanguageTitle { get; set; }
 
         /// <summary>
         /// Gets/sets the optional parent id.
@@ -142,5 +148,10 @@ namespace Piranha.Manager.Models
         /// Gets/sets the available custom editors.
         /// </summary>
         public IList<Content.EditorModel> Editors { get; set; } = new List<Content.EditorModel>();
+
+        /// <summary>
+        /// Gets/sets the available languages.
+        /// </summary>
+        public IEnumerable<Language> Languages { get; set; } = new List<Language>();
     }
 }

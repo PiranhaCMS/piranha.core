@@ -1,0 +1,44 @@
+@import "variables";
+
+.container-fluid
+{
+    .side-nav {
+        min-width: 300px;
+        padding-right: 0;
+        flex-grow: 0;
+
+        .list-group {
+            .list-group-item {
+                border-color: $body-bg;
+                border-bottom-width: 2px;
+
+                a {
+                    span {
+                        display: block;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+
+                        &:first-child {
+                            font-family: "Open Sans";
+                            font-size: 1rem;
+                        }
+                        &:last-child {
+                            color: $gray-600;
+                        }
+                    }
+
+                    &:hover {
+                        text-decoration: none;
+
+                        span {
+                            &:first-child {
+                                text-decoration: underline;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

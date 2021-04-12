@@ -79,13 +79,35 @@ namespace RazorWeb
                 content.Blocks.Add(new HtmlBlock {
                     Body = "<p>Hello world!</p>"
                 });
-
                 await api.Content.SaveAsync(content);
 
                 content.Title = "Mitt innehåll";
                 content.AllFields.Text = "Svenskum dansum";
                 ((HtmlBlock)content.Blocks.First()).Body = "<p>Hejsan svejsan!</p>";
                 await api.Content.SaveAsync(content, lang2Id);
+
+                content = await Models.StandardProduct.CreateAsync(api).ConfigureAwait(false);
+                content.Title = "My second content";
+                content.Category = "Uncategorized";
+                content.Tags.Add("Dorum");
+                content.AllFields.Date = DateTime.Now;
+                content.AllFields.Text = "Lorum ipsum";
+                content.Blocks.Add(new HtmlBlock {
+                    Body = "<p>Hello second content!</p>"
+                });
+                await api.Content.SaveAsync(content);
+
+                content = await Models.StandardProduct.CreateAsync(api).ConfigureAwait(false);
+                content.Title = "My third content";
+                content.Category = "Another category";
+                content.Tags.Add("Bacon");
+                content.Tags.Add("Ipsum");
+                content.AllFields.Date = DateTime.Now;
+                content.AllFields.Text = "Bacon ipsum";
+                content.Blocks.Add(new HtmlBlock {
+                    Body = "<p>Hello third content!</p>"
+                });
+                await api.Content.SaveAsync(content);
 
                 var loadedContent = await api.Content.GetByIdAsync<Models.StandardProduct>(content.Id);
                 var swedishContent = await api.Content.GetByIdAsync<Models.StandardProduct>(content.Id, lang2Id);

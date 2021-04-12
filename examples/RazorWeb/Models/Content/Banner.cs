@@ -13,7 +13,7 @@ using Piranha.Models;
 
 namespace RazorWeb.Models
 {
-    [ContentGroup(Title = "Banners", Icon = "fas fa-star", IsHidden = true)]
+    [ContentGroup(Title = "Banners", Icon = "fas fa-star")]
     public abstract class Banner<T> : Content<T>, ICategorizedContent
         where T : Banner<T>
     {
