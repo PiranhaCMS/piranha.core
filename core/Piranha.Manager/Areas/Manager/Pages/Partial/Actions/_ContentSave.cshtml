@@ -1,10 +1,64 @@
 @inject IAuthorizationService Auth
 @inject ManagerLocalizer Localizer
 
-@if ((await Auth.AuthorizeAsync(User, Permission.ContentSave)).Succeeded)
-{
-    <button  v-on:click.prevent="save" class="btn btn-primary btn-labeled" title="@Localizer.General["Save"]">
+<div v-if="features.usePublish" class="btn-group d-none d-lg-inline-flex" role="group">
+    <button v-on:click.prevent="saveDraft" :class="{ 'btn-loading' : savingDraft }" type="button" class="btn btn-primary btn-labeled">
         <i class="fas fa-save"></i>
         @Localizer.General["Save"]
     </button>
-}
+    <div v-if="state === 'draft'" class="btn-group" role="group">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="btnGroupDrop1">
+            <a v-if="state === 'draft'" v-on:click.prevent="revert" class="dropdown-item" href="#"><i class="fas fa-undo"></i> @Localizer.General["Revert"]</a>
+        </div>
+    </div>
+</div>
+<button v-else v-on:click.prevent="save" class="btn btn-success btn-labeled d-none d-lg-inline" title="@Localizer.General["Save"]">
+    <i class="fas fa-check"></i>
+    @Localizer.General["Save"]
+</button>
+
+<div v-if="features.usePublish" class="d-inline-block d-lg-none">
+    <div v-if="state === 'draft'" class="dropdown">
+        <button :class="{ 'btn-loading' : savingDraft }" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-save mr-1"></i>
+        </button>
+        <div class="dropdown-menu">
+            <a v-on:click.prevent="saveDraft" class="dropdown-item" href="#">@Localizer.General["Save"]</a>
+            <a v-on:click.prevent="revert" class="dropdown-item" href="#">@Localizer.General["Revert"]</a>
+        </div>
+    </div>
+    <button v-else v-on:click.prevent="saveDraft" class="btn btn-primary btn-icon" title="@Localizer.General["Save"]">
+        <i class="fas fa-save"></i>
+    </button>
+</div>
+<button v-else v-on:click.prevent="save" class="btn btn-success btn-icon d-inline-block d-lg-none" title="@Localizer.General["Save"]">
+    <i class="fas fa-check"></i>
+</button>
+
+<div v-if="features.usePublish" class="btn-group d-none d-lg-inline-flex" role="group">
+    <button v-on:click.prevent="save" :class="{ 'btn-loading' : saving }" type="button" class="btn btn-success btn-labeled">
+        <i class="fas fa-check"></i>
+        @Localizer.General["Publish"]
+    </button>
+    <div v-if="state !== 'new' && state !== 'unpublished'" class="btn-group" role="group">
+        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="btnGroupDrop1">
+            <a v-on:click.prevent="unpublish" class="dropdown-item" href="#"><i class="fas fa-undo"></i> @Localizer.General["Unpublish"]</a>
+        </div>
+    </div>
+</div>
+<div v-if="features.usePublish" class="d-inline-block d-lg-none">
+    <div v-if="state !== 'new' && state !== 'unpublished'" class="dropdown">
+        <button :class="{ 'btn-loading' : saving }" class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-check mr-1"></i>
+        </button>
+        <div class="dropdown-menu">
+            <a v-on:click.prevent="save" class="dropdown-item" href="#">@Localizer.General["Publish"]</a>
+            <a v-on:click.prevent="unpublish" class="dropdown-item" href="#">@Localizer.General["Unpublish"]</a>
+        </div>
+    </div>
+    <button v-else v-on:click.prevent="save" class="btn btn-success btn-icon" title="@Localizer.General["Publish"]">
+        <i class="fas fa-check"></i>
+    </button>
+</div>

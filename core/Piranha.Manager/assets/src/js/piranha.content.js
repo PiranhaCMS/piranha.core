@@ -59,6 +59,7 @@ piranha.content = new Vue({
         // State members
         loading: true,
         saving: false,
+        savingDraft: false,
         selectedRegion: "",
         selectedSetting: "uid-settings"
     },
@@ -299,6 +300,52 @@ piranha.content = new Vue({
             this.saving = true;
             this.saveInternal(piranha.baseUrl + "manager/api/labs/" + this.contentType);
         },
+        saveDraft: function () {
+            this.savingDraft = true;
+            this.saveInternal(piranha.baseUrl + "manager/api/labs/" + this.contentType + "/draft");
+        },
+        revert: function () {
+            var self = this;
+            self.savingDraft = true;
+
+            fetch(piranha.baseUrl + "manager/api/labs/" + this.contentType + "/revert", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(self.id)
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                self.bind(result);
+                self.saving = false;
+                self.savingDraft = false;
+            })
+            .catch(function (error) {
+                console.log("error:", error);
+            });
+        },
+        unpublish: function () {
+            var self = this;
+            self.saving = true;
+
+            fetch(piranha.baseUrl + "manager/api/labs/" + this.contentType + "/unpublish", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(self.id)
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                self.bind(result);
+                self.saving = false;
+                self.savingDraft = false;
+            })
+            .catch(function (error) {
+                console.log("error:", error);
+            });
+        },
         saveInternal: function (route) {
             var self = this;
 
@@ -340,6 +387,7 @@ piranha.content = new Vue({
             .then(function (result) {
                 self.bind(result);
                 self.saving = false;
+                self.savingDraft = false;
             })
             .catch(function (error) {
                 console.log("error:", error);

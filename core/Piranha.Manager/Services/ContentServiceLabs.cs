@@ -132,8 +132,9 @@ namespace Piranha.Manager.Services
         /// Saves the given page.
         /// </summary>
         /// <param name="model">The content model</param>
+        /// <param name="isDraft">If the model should be saved as a draft</param>
         /// <returns>An awaitable task</returns>
-        public async Task<ContentModel> SavePageAsync(ContentModel model)
+        public async Task<ContentModel> SavePageAsync(ContentModel model, bool isDraft = false)
         {
             // Create a new page of the correct type
             var page = await CreatePage(model.TypeId);
@@ -142,10 +143,55 @@ namespace Piranha.Manager.Services
             _transform.ToPage(model, page);
 
             // Save the page
-            await _api.Pages.SaveAsync(page);
+            if (isDraft)
+            {
+                await _api.Pages.SaveDraftAsync(page);
+            }
+            else
+            {
+                await _api.Pages.SaveAsync(page);
+            }
 
             // Return the updated page
             return await GetPageByIdAsync(model.Id);
+        }
+
+        /// <summary>
+        /// Reverts the page to the currently published version.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The reverted content model</returns>
+        public async Task<ContentModel> RevertPageAsync(Guid id)
+        {
+            // Restore the published version
+            var page = await _api.Pages.GetByIdAsync<PageBase>(id);
+            await _api.Pages.SaveAsync(page);
+
+            // Return the updated page
+            return await GetPageByIdAsync(id);
+        }
+
+        /// <summary>
+        /// Unpublishes the page with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The updated content model</returns>
+        public async Task<ContentModel> UnpublishPageAsync(Guid id)
+        {
+            // Get the latest version of the page
+            var page = await _api.Pages.GetDraftByIdAsync<PageBase>(id);
+
+            if (page == null)
+            {
+                page = await _api.Pages.GetByIdAsync<PageBase>(id);
+            }
+
+            // Reset the publish date
+            page.Published = null;
+            await _api.Pages.SaveAsync(page);
+
+            // Return the updated page
+            return await GetPageByIdAsync(id);
         }
 
         /// <summary>
@@ -204,8 +250,9 @@ namespace Piranha.Manager.Services
         /// Saves the given post.
         /// </summary>
         /// <param name="model">The content model</param>
+        /// <param name="isDraft">If the model should be saved as a draft</param>
         /// <returns>An awaitable task</returns>
-        public async Task<ContentModel> SavePostAsync(ContentModel model)
+        public async Task<ContentModel> SavePostAsync(ContentModel model, bool isDraft = false)
         {
             // Create a new post of the correct type
             var post = await CreatePost(model.TypeId);
@@ -214,7 +261,14 @@ namespace Piranha.Manager.Services
             _transform.ToPost(model, post);
 
             // Save the post
-            await _api.Posts.SaveAsync(post);
+            if (isDraft)
+            {
+                await _api.Posts.SaveDraftAsync(post);
+            }
+            else
+            {
+                await _api.Posts.SaveAsync(post);
+            }
 
             // Return the updated post
             return await GetPostByIdAsync(model.Id);
