@@ -285,7 +285,7 @@ namespace Piranha.Repositories
                             .Where(b => !current.Contains(b.Id) && b.ParentId == null)
                             .ToList();
                         var removedItems = content.Blocks
-                            .Where(b => !current.Contains(b.Id) && b.ParentId != null && removed.Select(p => p.Id).ToList().Contains(b.ParentId.Value))
+                            .Where(b => !current.Contains(b.Id) && b.ParentId != null) // && removed.Select(p => p.Id).ToList().Contains(b.ParentId.Value))
                             .ToList();
 
                         _db.ContentBlocks.RemoveRange(removed);

@@ -83,6 +83,7 @@ namespace Piranha.Manager.Services
             if (blockType != null)
             {
                 var pageBlock = (Block)Activator.CreateInstance(blockType.Type);
+                pageBlock.Id = blockGeneric.Id;
 
                 foreach (var field in blockGeneric.Model)
                 {
