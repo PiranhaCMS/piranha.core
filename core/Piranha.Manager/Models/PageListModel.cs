@@ -44,6 +44,8 @@ namespace Piranha.Manager.Models
             public bool IsDraft { get; set; }
             public bool IsExpanded { get; set; }
             public bool IsRestricted { get; set; }
+            public bool IsScheduled { get; set; }
+            public bool IsUnpublished { get; set; }
             public string Permalink { get; set; }
             public List<PageItem> Items { get; set; } = new List<PageItem>();
         }

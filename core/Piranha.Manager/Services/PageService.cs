@@ -512,6 +512,8 @@ namespace Piranha.Manager.Services
                 IsExpanded = level < expandedLevels,
                 IsCopy = item.OriginalPageId.HasValue,
                 IsRestricted = item.Permissions.Count > 0,
+                IsScheduled = item.Published.HasValue && item.Published.Value > DateTime.Now,
+                IsUnpublished = !item.Published.HasValue,
                 Permalink = item.Permalink
             };
 
@@ -551,6 +553,7 @@ namespace Piranha.Manager.Services
                 PrimaryImage = page.PrimaryImage,
                 Excerpt = page.Excerpt,
                 IsHidden = page.IsHidden,
+                IsScheduled = page.Published.HasValue && page.Published.Value > DateTime.Now,
                 Published = page.Published.HasValue ? page.Published.Value.ToString("yyyy-MM-dd") : null,
                 PublishedTime = page.Published.HasValue ? page.Published.Value.ToString("HH:mm") : null,
                 RedirectUrl = page.RedirectUrl,
@@ -720,6 +723,7 @@ namespace Piranha.Manager.Services
                             // Generic block item model
                             group.Items.Add(new BlockGenericModel
                             {
+                                Id = child.Id,
                                 IsActive = firstChild,
                                 Model = ContentUtils.GetBlockFields(child),
                                 Type = child.Type,
@@ -762,6 +766,7 @@ namespace Piranha.Manager.Services
                         // Generic block item model
                         model.Blocks.Add(new BlockGenericModel
                         {
+                            Id = block.Id,
                             Model = ContentUtils.GetBlockFields(block),
                             Type = block.Type,
                             Meta = new BlockMeta
@@ -796,7 +801,7 @@ namespace Piranha.Manager.Services
         {
             if (!string.IsNullOrEmpty(model.Published))
             {
-                var str = model.Published;
+                var str = model.Published.Substring(0, 10);
 
                 if (!string.IsNullOrEmpty(model.PublishedTime))
                 {

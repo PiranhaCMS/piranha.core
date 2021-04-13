@@ -476,6 +476,7 @@ namespace Piranha.Manager.Services
                 UsePrimaryImage = type.UsePrimaryImage,
                 UseExcerpt = type.UseExcerpt,
                 UseHtmlExcerpt = config.HtmlExcerpt,
+                IsScheduled = post.Published.HasValue && post.Published.Value > DateTime.Now,
                 SelectedRoute = route == null ? null : new RouteModel
                 {
                     Title = route.Title,
@@ -631,6 +632,7 @@ namespace Piranha.Manager.Services
                             // Generic block item model
                             group.Items.Add(new BlockGenericModel
                             {
+                                Id = child.Id,
                                 IsActive = firstChild,
                                 Model = ContentUtils.GetBlockFields(child),
                                 Type = child.Type,
@@ -672,6 +674,7 @@ namespace Piranha.Manager.Services
                         // Generic block item model
                         model.Blocks.Add(new BlockGenericModel
                         {
+                            Id = block.Id,
                             Model = ContentUtils.GetBlockFields(block),
                             Type = block.Type,
                             Meta = new BlockMeta

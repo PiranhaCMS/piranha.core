@@ -42,6 +42,7 @@ namespace Piranha.Manager.Services
                             Id = prop.Name,
                             Name = prop.Name,
                             Component = fieldType.Component,
+                            IsTranslatable = typeof(ITranslatable).IsAssignableFrom(fieldType.Type),
                             Settings = Utils.GetFieldSettings(prop)
                         }
                     };
@@ -83,6 +84,7 @@ namespace Piranha.Manager.Services
             if (blockType != null)
             {
                 var pageBlock = (Block)Activator.CreateInstance(blockType.Type);
+                pageBlock.Id = blockGeneric.Id;
 
                 foreach (var field in blockGeneric.Model)
                 {

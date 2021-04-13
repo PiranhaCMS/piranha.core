@@ -52,6 +52,7 @@ piranha.pageedit = new Vue({
         },
         selectedPermissions: [],
         isCopy: false,
+        isScheduled: false,
         saving: false,
         savingDraft: false,
         selectedRegion: {
@@ -142,6 +143,7 @@ piranha.pageedit = new Vue({
             this.useExcerpt = model.useExcerpt;
             this.useHtmlExcerpt = model.useHtmlExcerpt;
             this.isCopy = model.isCopy;
+            this.isScheduled = model.isScheduled;
             this.selectedRoute = model.selectedRoute;
             this.routes = model.routes;
             this.permissions = model.permissions;

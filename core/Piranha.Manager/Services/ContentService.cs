@@ -401,6 +401,7 @@ namespace Piranha.Manager.Services
                                 Component = appFieldType.Component,
                                 Placeholder = fieldType.Placeholder,
                                 IsHalfWidth = fieldType.Options.HasFlag(FieldOption.HalfWidth),
+                                IsTranslatable = typeof(ITranslatable).IsAssignableFrom(appFieldType.Type),
                                 Description = fieldType.Description
                             }
                         };
@@ -497,6 +498,7 @@ namespace Piranha.Manager.Services
                                 // Generic block item model
                                 group.Items.Add(new Models.Content.BlockGenericModel
                                 {
+                                    Id = child.Id,
                                     IsActive = firstChild,
                                     Model = ContentUtils.GetBlockFields(child),
                                     Type = child.Type,
@@ -538,6 +540,7 @@ namespace Piranha.Manager.Services
                             // Generic block item model
                             model.Blocks.Add(new Models.Content.BlockGenericModel
                             {
+                                Id = block.Id,
                                 Model = ContentUtils.GetBlockFields(block),
                                 Type = block.Type,
                                 Meta = new Models.Content.BlockMeta

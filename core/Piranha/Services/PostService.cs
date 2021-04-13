@@ -722,7 +722,7 @@ namespace Piranha.Services
             // Handle revisions and save
             var current = await _repo.GetById<PostInfo>(model.Id).ConfigureAwait(false);
 
-            if (IsPublished(current) && isDraft)
+            if ((IsPublished(current) || IsScheduled(current)) && isDraft)
             {
                 // We're saving a draft since we have a previously
                 // published version of the post
@@ -1014,5 +1014,16 @@ namespace Piranha.Services
         {
             return model != null && model.Published.HasValue && model.Published.Value <= DateTime.Now;
         }
+
+        /// <summary>
+        /// Checks if the given post is scheduled
+        /// </summary>
+        /// <param name="model">The post model</param>
+        /// <returns>If the post is scheduled</returns>
+        private bool IsScheduled(PostBase model)
+        {
+            return model != null && model.Published.HasValue && model.Published.Value > DateTime.Now;
+        }
+
     }
 }
