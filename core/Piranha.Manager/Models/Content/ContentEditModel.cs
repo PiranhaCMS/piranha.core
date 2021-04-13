@@ -39,6 +39,11 @@ namespace Piranha.Manager.Models.Content
         public bool UseBlocks { get; set; } = true;
 
         /// <summary>
+        /// Gets/sets if the content is scheduled.
+        /// </summary>
+        public bool IsScheduled { get; set; }
+
+        /// <summary>
         /// Gets/sets the available blocks.
         /// </summary>
         public IList<BlockModel> Blocks { get; set; } = new List<BlockModel>();

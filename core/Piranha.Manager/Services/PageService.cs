@@ -512,6 +512,8 @@ namespace Piranha.Manager.Services
                 IsExpanded = level < expandedLevels,
                 IsCopy = item.OriginalPageId.HasValue,
                 IsRestricted = item.Permissions.Count > 0,
+                IsScheduled = item.Published.HasValue && item.Published.Value > DateTime.Now,
+                IsUnpublished = !item.Published.HasValue,
                 Permalink = item.Permalink
             };
 
@@ -551,6 +553,7 @@ namespace Piranha.Manager.Services
                 PrimaryImage = page.PrimaryImage,
                 Excerpt = page.Excerpt,
                 IsHidden = page.IsHidden,
+                IsScheduled = page.Published.HasValue && page.Published.Value > DateTime.Now,
                 Published = page.Published.HasValue ? page.Published.Value.ToString("yyyy-MM-dd") : null,
                 PublishedTime = page.Published.HasValue ? page.Published.Value.ToString("HH:mm") : null,
                 RedirectUrl = page.RedirectUrl,

@@ -476,6 +476,7 @@ namespace Piranha.Manager.Services
                 UsePrimaryImage = type.UsePrimaryImage,
                 UseExcerpt = type.UseExcerpt,
                 UseHtmlExcerpt = config.HtmlExcerpt,
+                IsScheduled = post.Published.HasValue && post.Published.Value > DateTime.Now,
                 SelectedRoute = route == null ? null : new RouteModel
                 {
                     Title = route.Title,

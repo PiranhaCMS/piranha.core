@@ -41,6 +41,8 @@
                 <li class="breadcrumb-item"><a href="~/manager/pages">@Localizer.Menu["Pages"]</a></li>
                 <li class="breadcrumb-item"><a :href="piranha.baseUrl + 'manager/page/edit/' + blogId">@Localizer.General["Edit"]</a></li>
                 <li class="breadcrumb-item active" aria-current="page">@Localizer.Post["Edit post"]</li>
+                <li v-if="isScheduled" class="badge-item app" :class="{ ready: !loading }"><span class="badge badge-info"><i class="fas fa-calendar-alt"></i> @Localizer.General["Scheduled"]</span></li>
+                <li v-if="state === 'unpublished'" class="badge-item app" :class="{ ready: !loading }"><span class="badge badge-info"><i class="fas fa-unlink"></i> @Localizer.General["Unpublished"]</span></li>
                 <li v-if="state === 'draft'" class="badge-item app" :class="{ ready: !loading }"><span class="badge badge-info"><i class="fas fa-pen"></i> @Localizer.General["Draft"]</span></li>
             </ol>
         </nav>

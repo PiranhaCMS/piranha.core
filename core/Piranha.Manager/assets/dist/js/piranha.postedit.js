@@ -46,6 +46,7 @@ piranha.postedit = new Vue({
             id: null,
             media: null
         },
+        isScheduled: false,
         selectedPermissions: [],
         saving: false,
         savingDraft: false,
@@ -139,6 +140,7 @@ piranha.postedit = new Vue({
             this.routes = model.routes;
             this.permissions = model.permissions;
             this.primaryImage = model.primaryImage;
+            this.isScheduled = model.isScheduled;
             this.selectedPermissions = model.selectedPermissions;
 
             if (!this.useBlocks) {

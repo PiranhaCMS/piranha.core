@@ -1,6 +1,6 @@
 <template>
     <li class="dd-item" :class="{ expanded: item.isExpanded || item.items.length === 0 }" :data-id="item.id">
-        <div class="sitemap-item">
+        <div class="sitemap-item" :class="{ dimmed: item.isUnpublished || item.isScheduled }">
             <div class="handle dd-handle"><i class="fas fa-ellipsis-v"></i></div>
             <div class="link">
                 <span class="actions">
@@ -11,12 +11,14 @@
                     <span v-html="item.title"></span>
                     <span v-if="item.isRestricted" class="icon-restricted text-secondary small"><i class="fas fa-lock"></i></span>
                     <span v-if="item.status" class="badge badge-info">{{ item.status }}</span>
+                    <span v-if="item.isScheduled" class="badge badge-info">{{ piranha.resources.texts.scheduled }}</span>
                     <span v-if="item.isCopy" class="badge badge-warning">{{ piranha.resources.texts.copy }}</span>
                 </a>
                 <span v-else class="title">
                     <span v-html="item.title"></span>
                     <span v-if="item.isRestricted" class="icon-restricted text-secondary small"><i class="fas fa-lock"></i></span>
                     <span v-if="item.status" class="badge badge-info">{{ item.status }}</span>
+                    <span v-if="item.isScheduled" class="badge badge-info">{{ piranha.resources.texts.scheduled }}</span>
                     <span v-if="item.isCopy" class="badge badge-warning">{{ piranha.resources.texts.copy }}</span>
                 </span>
             </div>
