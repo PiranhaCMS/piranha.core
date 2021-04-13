@@ -28,6 +28,11 @@ namespace Piranha.Manager.Models.Content
         public bool IsHalfWidth { get; set; }
 
         /// <summary>
+        /// Gets/sets if the field is translatable or not.
+        /// </summary>
+        public bool IsTranslatable { get; set; }
+
+        /// <summary>
         /// Gets/sets if this field should notify parent on change.
         /// </summary>
         public bool NotifyChange { get; set; }

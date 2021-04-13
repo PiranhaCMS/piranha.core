@@ -42,6 +42,7 @@ namespace Piranha.Manager.Services
                             Id = prop.Name,
                             Name = prop.Name,
                             Component = fieldType.Component,
+                            IsTranslatable = typeof(ITranslatable).IsAssignableFrom(fieldType.Type),
                             Settings = Utils.GetFieldSettings(prop)
                         }
                     };
