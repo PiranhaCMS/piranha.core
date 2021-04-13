@@ -798,7 +798,7 @@ namespace Piranha.Manager.Services
         {
             if (!string.IsNullOrEmpty(model.Published))
             {
-                var str = model.Published;
+                var str = model.Published.Substring(0, 10);
 
                 if (!string.IsNullOrEmpty(model.PublishedTime))
                 {
