@@ -22,10 +22,10 @@
     <value>Alle Kategorien</value>
   </data>
   <data name="An error occured while deleting the post" xml:space="preserve">
-    <value>An error occured while deleting the post</value>
+    <value>Beim Löschen des Beitrags ist ein Fehler aufgetreten</value>
   </data>
   <data name="An error occured while saving the post" xml:space="preserve">
-    <value>An error occured while saving the post</value>
+    <value>Beim Speichern des Beitrags ist ein Fehler aufgetreten</value>
   </data>
   <data name="Categories" xml:space="preserve">
     <value>Kategorien</value>
@@ -61,18 +61,18 @@
     <value>Wenn Links von diesem Beitrag indiziert werden sollten.</value>
   </data>
   <data name="The post was successfully deleted" xml:space="preserve">
-    <value>The post was successfully deleted</value>
+    <value>Der Beitrag wurde erfolgreich gelöscht</value>
   </data>
   <data name="The post was successfully published" xml:space="preserve">
-    <value>The post was successfully published</value>
+    <value>Der Beitrag wurde erfolgreich veröffentlicht</value>
   </data>
   <data name="The post was successfully unpublished" xml:space="preserve">
-    <value>The post was successfully unpublished</value>
+    <value>Der Beitrag wurde erfolgreich zurückgezogen</value>
   </data>
   <data name="The post was successfully saved" xml:space="preserve">
-    <value>The post was successfully saved</value>
+    <value>Der Beitrag wurde erfolgreich gespeichert</value>
   </data>
   <data name="The post was successfully reverted to its previous state" xml:space="preserve">
-    <value>The post was successfully reverted to its previous state</value>
+    <value>Der Beitrag wurde erfolgreich in seinen vorherigen Status zurückgesetzt</value>
   </data>
 </root>
