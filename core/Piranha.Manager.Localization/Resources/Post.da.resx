@@ -22,10 +22,10 @@
     <value>Alle kategorier</value>
   </data>
   <data name="An error occured while deleting the post" xml:space="preserve">
-    <value>An error occured while deleting the post</value>
+    <value>Der opstod en fejl under sletning af opslaget</value>
   </data>
   <data name="An error occured while saving the post" xml:space="preserve">
-    <value>An error occured while saving the post</value>
+    <value>Der opstod en fejl under lagring af opslaget</value>
   </data>
   <data name="Categories" xml:space="preserve">
     <value>Kategorier</value>
@@ -61,18 +61,18 @@
     <value>Markér for at indeksere links fra dette opslag.</value>
   </data>
   <data name="The post was successfully deleted" xml:space="preserve">
-    <value>The post was successfully deleted</value>
+    <value>Opslaget blev slettet</value>
   </data>
   <data name="The post was successfully published" xml:space="preserve">
-    <value>The post was successfully published</value>
+    <value>Opslaget blev udgivet</value>
   </data>
   <data name="The post was successfully unpublished" xml:space="preserve">
-    <value>The post was successfully unpublished</value>
+    <value>Opslaget er ikke længere udgivet</value>
   </data>
   <data name="The post was successfully saved" xml:space="preserve">
-    <value>The post was successfully saved</value>
+    <value>Opslaget blev gemt</value>
   </data>
   <data name="The post was successfully reverted to its previous state" xml:space="preserve">
-    <value>The post was successfully reverted to its previous state</value>
+    <value>Opslaget er nu gendannet</value>
   </data>
 </root>
