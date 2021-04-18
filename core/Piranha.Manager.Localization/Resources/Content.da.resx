@@ -31,15 +31,15 @@
     <value>Søgemaskineprioritet, set i forhold til andet indhold på samme website.</value>
   </data>
   <data name="The content was successfully deleted" xml:space="preserve">
-    <value>The content was successfully deleted</value>
+    <value>Indholdet blev slettet</value>
   </data>
   <data name="An error occured while deleting the content" xml:space="preserve">
-    <value>An error occured while deleting the content</value>
+    <value>Der opstod en fejl under sletning af indholdet</value>
   </data>
   <data name="The content was successfully saved" xml:space="preserve">
-    <value>The content was successfully saved</value>
+    <value>Indholdet blev gemt</value>
   </data>
   <data name="An error occured while saving the content" xml:space="preserve">
-    <value>An error occured while saving the content</value>
+    <value>Der opstod en fejl under lagring af indholdet</value>
   </data>
 </root>
