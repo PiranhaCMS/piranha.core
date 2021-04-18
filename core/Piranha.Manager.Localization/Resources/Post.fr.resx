@@ -22,10 +22,10 @@
     <value>Toutes les catégories</value>
   </data>
   <data name="An error occured while deleting the post" xml:space="preserve">
-    <value>An error occured while deleting the post</value>
+    <value>Une erreur s'est produite lors de la suppression du billet</value>
   </data>
   <data name="An error occured while saving the post" xml:space="preserve">
-    <value>An error occured while saving the post</value>
+    <value>Une erreur s'est produite lors de la suppression du billet</value>
   </data>
   <data name="Categories" xml:space="preserve">
     <value>Catégories</value>
@@ -61,18 +61,18 @@
     <value>Si les liens depuis ce billet doivent être indexés.</value>
   </data>
   <data name="The post was successfully deleted" xml:space="preserve">
-    <value>The post was successfully deleted</value>
+    <value>Le billet a été supprimée avec succès</value>
   </data>
   <data name="The post was successfully published" xml:space="preserve">
-    <value>The post was successfully published</value>
+    <value>Le billet a été publiée avec succès</value>
   </data>
   <data name="The post was successfully unpublished" xml:space="preserve">
-    <value>The post was successfully unpublished</value>
+    <value>Le billet a été mise hors ligne avec succès</value>
   </data>
   <data name="The post was successfully saved" xml:space="preserve">
-    <value>The post was successfully saved</value>
+    <value>Le billet a été enregistré avec succès</value>
   </data>
   <data name="The post was successfully reverted to its previous state" xml:space="preserve">
-    <value>The post was successfully reverted to its previous state</value>
+    <value>Le billet a été restauré avec succès à son état précédent</value>
   </data>
 </root>
