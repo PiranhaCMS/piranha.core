@@ -275,6 +275,44 @@ namespace Piranha.Manager.Services
         }
 
         /// <summary>
+        /// Reverts the post to the currently published version.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The reverted content model</returns>
+        public async Task<ContentModel> RevertPostAsync(Guid id)
+        {
+            // Restore the published version
+            var post = await _api.Posts.GetByIdAsync<PostBase>(id);
+            await _api.Posts.SaveAsync(post);
+
+            // Return the updated page
+            return await GetPostByIdAsync(id);
+        }
+
+        /// <summary>
+        /// Unpublishes the post with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>The updated content model</returns>
+        public async Task<ContentModel> UnpublishPostAsync(Guid id)
+        {
+            // Get the latest version of the post
+            var post = await _api.Posts.GetDraftByIdAsync<PostBase>(id);
+
+            if (post == null)
+            {
+                post = await _api.Posts.GetByIdAsync<PostBase>(id);
+            }
+
+            // Reset the publish date
+            post.Published = null;
+            await _api.Posts.SaveAsync(post);
+
+            // Return the updated post
+            return await GetPostByIdAsync(id);
+        }
+
+        /// <summary>
         /// Gets the content with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
@@ -348,6 +386,24 @@ namespace Piranha.Manager.Services
 
             // Return the updated content
             return await GetContentByIdAsync(model.Id);
+        }
+
+        /// <summary>
+        /// Deletes the content model with the given id.
+        /// </summary>
+        /// <param name="id">The unique id</param>
+        /// <returns>If the content was successfully deleted</returns>
+        public async Task<bool> DeleteContentAsync(Guid id)
+        {
+            var content = await _api.Content.GetByIdAsync<ContentInfo>(id);
+
+            if (content != null)
+            {
+                await _api.Content.DeleteAsync(id);
+
+                return true;
+            }
+            return false;
         }
 
         private async Task<T> CreateModel<T>(Type modelType)

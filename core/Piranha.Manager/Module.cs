@@ -165,6 +165,7 @@ namespace Piranha.Manager
                             .Select(p => new KeyValuePair<string, string>(p.Name, p.Title))
                             .ToList()
                     }))
+                    .ForMember(m => m.Status, o => o.Ignore())
                     .ForMember(m => m.LanguageId, o => o.Ignore())
                     .ForMember(m => m.LanguageTitle, o => o.Ignore())
                     .ForMember(m => m.ParentId, o => o.Ignore())
@@ -227,6 +228,7 @@ namespace Piranha.Manager
                         RedirectUrl = p.RedirectUrl,
                         RedirectType = p.RedirectType.ToString()
                     }))
+                    .ForMember(m => m.Status, o => o.Ignore())
                     .ForMember(m => m.LanguageId, o => o.Ignore())
                     .ForMember(m => m.LanguageTitle, o => o.Ignore())
                     .ForMember(m => m.TypeTitle, o => o.Ignore())
@@ -279,6 +281,7 @@ namespace Piranha.Manager
                         SelectedCategory = p.Category.Title,
                         SelectedTags = p.Tags.Select(t => t.Title).ToList()
                     }))
+                    .ForMember(m => m.Status, o => o.Ignore())
                     .ForMember(m => m.LanguageId, o => o.Ignore())
                     .ForMember(m => m.LanguageTitle, o => o.Ignore())
                     .ForMember(m => m.TypeTitle, o => o.Ignore())

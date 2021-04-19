@@ -48,7 +48,7 @@ namespace Piranha.Manager.Services
 
             // Set model data
             model.TypeTitle = type.Title;
-            model.State = page.GetState(isDraft);
+            model.State = GetState(page, isDraft);
             model.Features = new ContentFeatures
             {
                 UseAltTitle = true,
@@ -83,7 +83,7 @@ namespace Piranha.Manager.Services
 
             // Set model data
             model.TypeTitle = type.Title;
-            model.State = post.GetState(isDraft);
+            model.State = GetState(post, isDraft);
             model.Features = new ContentFeatures
             {
                 UseBlocks = type.UseBlocks,
@@ -119,6 +119,7 @@ namespace Piranha.Manager.Services
 
             // Set model data
             model.TypeTitle = type.Title;
+            model.State = GetState(content, false);
             model.GroupId = group.Id;
             model.GroupTitle = group.Title;
             model.Features = new ContentFeatures
@@ -374,6 +375,7 @@ namespace Piranha.Manager.Services
                 // Generic block model
                 return new BlockGenericModel
                 {
+                    Id = block.Id,
                     IsActive = isActive,
                     Model = ContentUtils.GetBlockFields(block),
                     Type = block.Type,
@@ -436,6 +438,31 @@ namespace Piranha.Manager.Services
                 });
             }
             return result;
+        }
+
+        private string GetState(ContentBase content, bool isDraft)
+        {
+            // Check if the content is new
+            if (content.Created == DateTime.MinValue)
+            {
+                return ContentState.New;
+            }
+
+            // Check published & draft for public content
+            if (content is RoutedContentBase routedContent)
+            {
+                if (routedContent.Published.HasValue)
+                {
+                    return isDraft ? ContentState.Draft : ContentState.Published;
+                }
+                else
+                {
+                    return ContentState.Unpublished;
+                }
+            }
+
+            // Default to published state for none public content
+            return ContentState.Published;
         }
 
         private void SetBlocks(ContentModel model, IBlockContent content)

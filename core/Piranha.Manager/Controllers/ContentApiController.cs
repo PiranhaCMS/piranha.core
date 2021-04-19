@@ -147,6 +147,16 @@ namespace Piranha.Manager.Controllers
             return Ok(model);
         }
 
+        [Route("{contentId}/listbyid")]
+        [HttpGet]
+        [Authorize(Policy = Permission.Content)]
+        public async Task<IActionResult> ListById(Guid contentId)
+        {
+            var model = await _content.GetListByIdAsync(contentId);
+
+            return Ok(model);
+        }
+
         /// <summary>
         /// Gets the post with the given id.
         /// </summary>

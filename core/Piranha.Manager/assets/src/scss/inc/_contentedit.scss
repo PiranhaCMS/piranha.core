@@ -1,3 +1,4 @@
+@import "mixins";
 @import "variables";
 
 .container-fluid
@@ -12,28 +13,41 @@
                 border-color: $body-bg;
                 border-bottom-width: 2px;
 
+                img {
+                    width: 42px;
+                    height: 42px;
+                    margin-right: .5rem;
+                    border-radius: $border-radius;
+                }
+
                 a {
                     span {
                         display: block;
                         overflow: hidden;
                         text-overflow: ellipsis;
                         white-space: nowrap;
-
-                        &:first-child {
-                            font-family: "Open Sans";
-                            font-size: 1rem;
-                        }
-                        &:last-child {
-                            color: $gray-600;
-                        }
                     }
 
                     &:hover {
                         text-decoration: none;
 
                         span {
-                            &:first-child {
+                            &:first-of-type {
                                 text-decoration: underline;
+                            }
+                        }
+                    }
+                }
+
+                &.selected {
+                    &:after {
+                        @include arrow-left($body-bg, .5rem, -.5rem);
+                    }
+
+                    a {
+                        span {
+                            &:first-of-type {
+                                font-weight: bold;
                             }
                         }
                     }

@@ -60,6 +60,8 @@
                 <li class="breadcrumb-item"><a :href="piranha.baseUrl + 'manager/content/' + groupId">{{ groupTitle }}</a></li>
                 <li class="breadcrumb-item">{{ typeTitle }}</li>
                 <li v-if="state !== 'new'" class="breadcrumb-item active" aria-current="page">@Localizer.General["Edit"]</li>
+                <li v-if="state === 'unpublished'" class="badge-item app" :class="{ ready: !loading }"><span class="badge badge-info"><i class="fas fa-unlink"></i> @Localizer.General["Unpublished"]</span></li>
+                <li v-if="state === 'draft'" class="badge-item app" :class="{ ready: !loading }"><span class="badge badge-info"><i class="fas fa-pen"></i> @Localizer.General["Draft"]</span></li>
             </ol>
         </nav>
 
@@ -76,16 +78,8 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Side navigation -->
-            <div class="col side-nav">
-                <ul class="list-group list-group-flush app" :class="{ ready: !loading }">
-                    <li  v-for="item in items" class="list-group-item">
-                        <a v-on:click.prevent="load('content', item.id)" href="#">
-                            <span>{{ item.title }}</span>
-                            <span>{{ item.type }}</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <content-nav v-bind:groupid="groupId" v-bind:contentid="'@contentId'"></content-nav>
+
             <!-- Main body -->
             <div class="col main-body app" :class="{ ready: !loading }">
                 <!-- Content navigation -->

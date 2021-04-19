@@ -15,7 +15,7 @@ using Piranha.Models;
 
 namespace Piranha.Manager.Models
 {
-    public sealed class ContentModel
+    public sealed class ContentModel : AsyncResult
     {
         /// <summary>
         /// Gets/sets the unique id.

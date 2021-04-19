@@ -1,3 +1,83 @@
+Vue.component("content-nav", {
+  props: ["groupid", "contentid"],
+  data: function () {
+    return {
+      id: null,
+      loading: true,
+      filter: null,
+      group: null,
+      items: [],
+      selectedItem: null
+    };
+  },
+  computed: {
+    filteredItems: function () {
+      var self = this;
+      if (!this.filter || this.filter === "") return this.items;
+      var lcFilter = this.filter.toLowerCase();
+      return this.items.filter(function (i) {
+        return i.title.toLowerCase().indexOf(lcFilter) !== -1;
+      });
+    }
+  },
+  methods: {
+    load: function () {
+      self = this;
+      self.loading = true;
+
+      if (this.id === null) {
+        this.id = this.contentid;
+      }
+
+      var route = "";
+
+      if (this.contentid !== null) {
+        route = piranha.baseUrl + "manager/api/content/" + this.id + "/listbyid";
+      } else {
+        route = piranha.baseUrl + "manager/api/content/" + this.groupid + "/list";
+      }
+
+      fetch(route).then(function (response) {
+        return response.json();
+      }).then(function (result) {
+        self.group = result.group;
+        self.items = result.items.map(function (i) {
+          var type = result.types.find(function (t) {
+            return t.id === i.typeId;
+          });
+          i.type = type.title || i.typeId;
+
+          if (i.id === self.contentid) {
+            self.selectedItem = i;
+          }
+
+          return i;
+        });
+        self.loading = false;
+      }).catch(function (error) {
+        console.log("error:", error);
+      });
+    },
+    select: function (item) {
+      piranha.content.load("content", item.id);
+      this.selectedItem = item;
+    },
+    onSaved: function () {
+      console.log('this.id', this.id);
+      console.log('piranha.content.id', piranha.content.id);
+      this.id = piranha.content.id;
+      this.load();
+    }
+  },
+  mounted: function () {
+    this.load();
+    this.eventBus.$on("onSaved", this.onSaved);
+  },
+  beforeDestroy: function () {
+    this.eventBus.$off("onSaved");
+  },
+  template: "\n<div class=\"col side-nav\">\n    <ul class=\"list-group list-group-flush list-content app\" :class=\"{ ready: !loading }\">\n        <li class=\"list-group-item\">\n            <div class=\"input-group\">\n                <input v-model=\"filter\" type=\"text\" class=\"form-control\" :placeholder=\"piranha.resources.texts.search\">\n                <div class=\"input-group-append\">\n                    <button class=\"btn btn-primary btn-icon\">\n                        <i class=\"fas fa-plus\"></i>\n                    </button>\n                </div>\n            </div>\n        </li>\n        <li v-for=\"item in filteredItems\" v-bind:key=\"item.id\" class=\"list-group-item\" :class=\"{ selected: item === selectedItem}\">\n            <a v-on:click.prevent=\"select(item)\" href=\"#\">\n                <img v-if=\"group.listImage\" class=\"float-left\" :src=\"piranha.utils.formatUrl(item.imageUrl)\" :alt=\"item.title\">\n                <span>{{ item.title }}</span>\n                <span>{{ item.type }}</span>\n            </a>\n        </li>\n    </ul>\n</div>\n"
+});
 /*global
     piranha
 */
@@ -6,9 +86,7 @@ piranha.content = new Vue({
     el: "#content",
     data: {
         contentType: null,
-
-        // List items
-        items: [],
+        onSave: null,
 
         // Features
         features: {
@@ -278,24 +356,6 @@ piranha.content = new Vue({
                 .catch(function (error) { console.log("error:", error );
             });
         },
-        loadItems: function () {
-            self = this;
-
-            fetch(piranha.baseUrl + "manager/api/content/" + self.groupId + "/list")
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    self.items = result.items.map(function (i) {
-                        var type = result.types.find(function (t) {
-                            return t.id === i.typeId;
-                        });
-
-                        i.type = type.title || i.typeId;
-
-                        return i;
-                    });
-                })
-                .catch(function (error) { console.log("error:", error ); });
-        },
         save: function () {
             this.saving = true;
             this.saveInternal(piranha.baseUrl + "manager/api/labs/" + this.contentType);
@@ -320,6 +380,8 @@ piranha.content = new Vue({
                 self.bind(result);
                 self.saving = false;
                 self.savingDraft = false;
+
+                self.eventBus.$emit("onSaved", self.state);
             })
             .catch(function (error) {
                 console.log("error:", error);
@@ -341,6 +403,8 @@ piranha.content = new Vue({
                 self.bind(result);
                 self.saving = false;
                 self.savingDraft = false;
+
+                self.eventBus.$emit("onSaved", self.state);
             })
             .catch(function (error) {
                 console.log("error:", error);
@@ -386,8 +450,13 @@ piranha.content = new Vue({
             .then(function (response) { return response.json(); })
             .then(function (result) {
                 self.bind(result);
+
+                piranha.notifications.push(result.status);
+
                 self.saving = false;
                 self.savingDraft = false;
+
+                self.eventBus.$emit("onSaved", self.state);
             })
             .catch(function (error) {
                 console.log("error:", error);
@@ -402,6 +471,36 @@ piranha.content = new Vue({
                     self.bind(result);
                 })
                 .catch(function (error) { console.log("error:", error );
+            });
+        },
+        remove: function () {
+            self = this;
+
+            piranha.alert.open({
+                title: piranha.resources.texts.delete,
+                body: 'Are you sure you want to delete "' + self.title + '"',
+                confirmCss: "btn-danger",
+                confirmIcon: "fas fa-trash",
+                confirmText: piranha.resources.texts.delete,
+                onConfirm: function () {
+                    self.loading = true;
+
+                    fetch(piranha.baseUrl + "manager/api/labs/" + self.contentType, {
+                        method: "delete",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(self.id)
+                    })
+                    .then(function (response) { return response.json(); })
+                    .then(function (result) {
+                        piranha.notifications.push(result);
+
+                        self.reset();
+                        self.eventBus.$emit("onSaved", self.state);
+                    })
+                    .catch(function (error) { console.log("error:", error ); });
+                }
             });
         },
         addBlock: function (type, pos) {

@@ -45,6 +45,12 @@ namespace Piranha.Extend
         public string Icon { get; set; }
 
         /// <summary>
+        /// Gets/sets if primary image should be display when listing
+        /// content of this group.
+        /// </summary>
+        public bool ListImage { get; set; }
+
+        /// <summary>
         /// Gets/sets if the content group should be hidden from the
         /// menu or not. The default value is false.
         /// </summary>

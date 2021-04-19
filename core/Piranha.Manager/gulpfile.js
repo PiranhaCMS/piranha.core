@@ -251,6 +251,7 @@ var js = [
     {
         name: "piranha.content.js",
         items: [
+            "assets/src/js/components/content-nav.vue",
             "assets/src/js/piranha.content.js"
         ]
     },

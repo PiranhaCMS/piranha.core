@@ -6,9 +6,7 @@ piranha.content = new Vue({
     el: "#content",
     data: {
         contentType: null,
-
-        // List items
-        items: [],
+        onSave: null,
 
         // Features
         features: {
@@ -278,24 +276,6 @@ piranha.content = new Vue({
                 .catch(function (error) { console.log("error:", error );
             });
         },
-        loadItems: function () {
-            self = this;
-
-            fetch(piranha.baseUrl + "manager/api/content/" + self.groupId + "/list")
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    self.items = result.items.map(function (i) {
-                        var type = result.types.find(function (t) {
-                            return t.id === i.typeId;
-                        });
-
-                        i.type = type.title || i.typeId;
-
-                        return i;
-                    });
-                })
-                .catch(function (error) { console.log("error:", error ); });
-        },
         save: function () {
             this.saving = true;
             this.saveInternal(piranha.baseUrl + "manager/api/labs/" + this.contentType);
@@ -320,6 +300,8 @@ piranha.content = new Vue({
                 self.bind(result);
                 self.saving = false;
                 self.savingDraft = false;
+
+                self.eventBus.$emit("onSaved", self.state);
             })
             .catch(function (error) {
                 console.log("error:", error);
@@ -341,6 +323,8 @@ piranha.content = new Vue({
                 self.bind(result);
                 self.saving = false;
                 self.savingDraft = false;
+
+                self.eventBus.$emit("onSaved", self.state);
             })
             .catch(function (error) {
                 console.log("error:", error);
@@ -386,8 +370,13 @@ piranha.content = new Vue({
             .then(function (response) { return response.json(); })
             .then(function (result) {
                 self.bind(result);
+
+                piranha.notifications.push(result.status);
+
                 self.saving = false;
                 self.savingDraft = false;
+
+                self.eventBus.$emit("onSaved", self.state);
             })
             .catch(function (error) {
                 console.log("error:", error);
@@ -402,6 +391,36 @@ piranha.content = new Vue({
                     self.bind(result);
                 })
                 .catch(function (error) { console.log("error:", error );
+            });
+        },
+        remove: function () {
+            self = this;
+
+            piranha.alert.open({
+                title: piranha.resources.texts.delete,
+                body: 'Are you sure you want to delete "' + self.title + '"',
+                confirmCss: "btn-danger",
+                confirmIcon: "fas fa-trash",
+                confirmText: piranha.resources.texts.delete,
+                onConfirm: function () {
+                    self.loading = true;
+
+                    fetch(piranha.baseUrl + "manager/api/labs/" + self.contentType, {
+                        method: "delete",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(self.id)
+                    })
+                    .then(function (response) { return response.json(); })
+                    .then(function (result) {
+                        piranha.notifications.push(result);
+
+                        self.reset();
+                        self.eventBus.$emit("onSaved", self.state);
+                    })
+                    .catch(function (error) { console.log("error:", error ); });
+                }
             });
         },
         addBlock: function (type, pos) {

@@ -14,7 +14,7 @@ using Piranha.Models;
 
 namespace RazorWeb.Models
 {
-    [ContentGroup(Title = "Products", Icon = "fas fa-hammer")]
+    [ContentGroup(Title = "Products", Icon = "fas fa-hammer", ListImage = true)]
     public abstract class Product<T> : Content<T>, ICategorizedContent, ITaggedContent, IBlockContent
         where T : Product<T>
     {

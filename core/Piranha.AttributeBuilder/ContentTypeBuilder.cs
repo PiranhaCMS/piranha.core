@@ -286,6 +286,7 @@ namespace Piranha.AttributeBuilder
                     Title = attr.Title,
                     CLRType = type.Name, // type.AssemblyQualifiedName,
                     Icon = attr.Icon,
+                    ListImage = attr.ListImage,
                     IsHidden = attr.IsHidden
                 };
             }

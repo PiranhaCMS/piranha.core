@@ -23,6 +23,7 @@ namespace Piranha.Manager.Models
         public class ContentItem
         {
             public Guid Id { get; set; }
+            public string ImageUrl { get; set; }
             public string Title { get; set; }
             public string TypeId { get; set; }
             public string Modified { get; set; }

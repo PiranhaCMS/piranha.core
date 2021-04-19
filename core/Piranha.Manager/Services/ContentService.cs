@@ -40,6 +40,24 @@ namespace Piranha.Manager.Services
         }
 
         /// <summary>
+        /// Gets the list model for the content with the given id.
+        /// </summary>
+        /// <param name="contentId">The content id</param>
+        /// <returns>The list model</returns>
+        public async Task<ContentListModel> GetListByIdAsync(Guid contentId)
+        {
+            var model = await _api.Content.GetByIdAsync<ContentInfo>(contentId);
+
+            if (model != null)
+            {
+                var type = App.ContentTypes.GetById(model.TypeId);
+
+                return await GetListAsync(type.Group);
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Gets the list model.
         /// </summary>
         /// <param name="contentGroup">Name of the content group</param>
@@ -63,6 +81,9 @@ namespace Piranha.Manager.Services
                     .Select(i => new ContentListModel.ContentItem
                         {
                             Id = i.Id,
+                            ImageUrl = i.PrimaryImage.Id.HasValue ?
+                                _api.Media.EnsureVersion(i.PrimaryImage.Id.Value, 42, 42) :
+                                "~/manager/assets/img/empty-image.png",
                             Title = i.Title,
                             TypeId = i.TypeId,
                             Modified = i.LastModified.ToString("yyyy-MM-dd")
