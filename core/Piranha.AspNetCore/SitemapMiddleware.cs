@@ -101,7 +101,7 @@ namespace Piranha.AspNetCore
         private async Task<List<Url>> GetPageUrlsAsync(IApi api, Piranha.Models.SitemapItem item, string baseUrl)
         {
             var urls = new List<Url>();
-            
+
             if (item.Published.HasValue && item.Published.Value <= DateTime.Now)
             {
                 urls.Add(new Url
