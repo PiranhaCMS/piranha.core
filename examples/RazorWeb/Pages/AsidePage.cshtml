@@ -1,0 +1,25 @@
+@page
+@model SinglePage<AsidePage>
+@{
+    ViewData["Title"] = Model.Data.Title;
+}
+@section head
+{
+    @WebApp.MetaTags(Model.Data)
+}
+
+<div class="container body-container">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-xs-12">
+            <h1>@Model.Data.Title</h1>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-5 col-xs-6">
+            @Html.DisplayFor(m => m.Data.Blocks)
+        </div>
+        <div class="col-md-5 col-xs-6">
+            @Html.DisplayFor(m => m.Data.Aside)
+        </div>
+    </div>
+</div>

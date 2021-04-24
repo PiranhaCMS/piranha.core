@@ -13,6 +13,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Piranha.Manager.Models;
 using Piranha.Manager.Services;
 
@@ -26,16 +27,19 @@ namespace Piranha.Manager.Controllers
     {
         private readonly ContentServiceLabs _service;
         private readonly ManagerLocalizer _localizer;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="service">The content service</param>
         /// <param name="localizer">The localization service</param>
-        public ContentController(ContentServiceLabs service, ManagerLocalizer localizer)
+        /// <param name="factory">The optional logger factory</param>
+        public ContentController(ContentServiceLabs service, ManagerLocalizer localizer, ILoggerFactory factory = null)
         {
             _service = service;
             _localizer = localizer;
+            _logger = factory?.CreateLogger(typeof(ContentController));
         }
 
         /// <summary>
@@ -70,6 +74,9 @@ namespace Piranha.Manager.Controllers
             }
             catch (ValidationException e)
             {
+                // Log the exception
+                _logger?.LogWarning(e.Message);
+
                 model.Status = new StatusMessage
                 {
                     Type = StatusMessage.Error,
@@ -77,8 +84,11 @@ namespace Piranha.Manager.Controllers
                 };
                 return model;
             }
-            catch
+            catch (Exception e)
             {
+                // Log the exception
+                _logger?.LogError(e.Message);
+
                 model.Status = new StatusMessage
                 {
                     Type = StatusMessage.Error,
@@ -118,6 +128,9 @@ namespace Piranha.Manager.Controllers
             }
             catch (ValidationException e)
             {
+                // Log the exception
+                _logger?.LogWarning(e.Message);
+
                 // Validation did not succeed, return the
                 // validation error
                 return new StatusMessage
@@ -126,7 +139,11 @@ namespace Piranha.Manager.Controllers
                     Body = e.Message
                 };
             }
-            catch { }
+            catch (Exception e)
+            {
+                // Log the exception
+                _logger?.LogError(e.Message);
+            }
 
             // The operation failed. Return generic error message.
             return new StatusMessage

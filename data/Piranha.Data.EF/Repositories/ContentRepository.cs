@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Piranha.Data;
@@ -270,85 +271,109 @@ namespace Piranha.Repositories
                     }
                 }
 
-                // Transform blocks
-                if (model is Models.IBlockContent blockModel)
+                // Get the available sections
+                var sections = type.Sections.Select(s => s.Id).ToList();
+
+                // Insert the empty default section
+                sections.Insert(0, "Blocks");
+
+                // Transform block sections
+                foreach (var section in sections)
                 {
-                    var blockModels = blockModel.Blocks;
+                    // Get the blocks for the current section
+                    IList<Extend.Block> sectionBlocks = new List<Extend.Block>();
 
-                    if (blockModels != null)
+                    if (section == "Blocks" && model is Models.IBlockContent blockModel)
                     {
-                        var blocks = _service.TransformContentBlocks(blockModels, languageId);
-                        var current = blocks.Select(b => b.Id).ToArray();
-
-                        // Delete removed blocks
-                        var removed = content.Blocks
-                            .Where(b => !current.Contains(b.Id) && b.ParentId == null)
-                            .ToList();
-                        var removedItems = content.Blocks
-                            .Where(b => !current.Contains(b.Id) && b.ParentId != null) // && removed.Select(p => p.Id).ToList().Contains(b.ParentId.Value))
-                            .ToList();
-
-                        _db.ContentBlocks.RemoveRange(removed);
-                        _db.ContentBlocks.RemoveRange(removedItems);
-
-                        // Map the new block
-                        for (var n = 0; n < blocks.Count; n++)
+                        sectionBlocks = blockModel.Blocks;
+                    }
+                    else
+                    {
+                        // Get the property
+                        var prop = model.GetType().GetProperty(section, App.PropertyBindings);
+                        if (prop != null)
                         {
-                            var block = content.Blocks.FirstOrDefault(b => b.Id == blocks[n].Id);
-
-                            if (block == null)
-                            {
-                                block = new ContentBlock
-                                {
-                                    Id = blocks[n].Id != Guid.Empty ? blocks[n].Id : Guid.NewGuid()
-                                };
-                                await _db.ContentBlocks.AddAsync(block).ConfigureAwait(false);
-                            }
-                            block.ParentId = blocks[n].ParentId;
-                            block.SortOrder = n;
-                            block.CLRType = blocks[n].CLRType;
-
-                            var currentFields = blocks[n].Fields.Select(f => f.FieldId).Distinct();
-                            var removedFields = block.Fields.Where(f => !currentFields.Contains(f.FieldId));
-
-                            _db.ContentBlockFields.RemoveRange(removedFields);
-
-                            foreach (var newField in blocks[n].Fields)
-                            {
-                                var field = block.Fields.FirstOrDefault(f => f.FieldId == newField.FieldId);
-                                if (field == null)
-                                {
-                                    field = new ContentBlockField
-                                    {
-                                        Id = newField.Id != Guid.Empty ? newField.Id : Guid.NewGuid(),
-                                        BlockId = block.Id,
-                                        FieldId = newField.FieldId
-                                    };
-                                    await _db.ContentBlockFields.AddAsync(field).ConfigureAwait(false);
-                                    block.Fields.Add(field);
-                                }
-                                field.SortOrder = newField.SortOrder;
-                                field.CLRType = newField.CLRType;
-                                field.Value = newField.Value;
-
-                                foreach (var newTranslation in newField.Translations)
-                                {
-                                    var translation = field.Translations.FirstOrDefault(t => t.LanguageId == newTranslation.LanguageId);
-                                    if (translation == null)
-                                    {
-                                        translation = new ContentBlockFieldTranslation
-                                        {
-                                            FieldId = field.Id,
-                                            LanguageId = languageId
-                                        };
-                                        await _db.ContentBlockFieldTranslations.AddAsync(translation).ConfigureAwait(false);
-                                        field.Translations.Add(translation);
-                                    }
-                                    translation.Value = newTranslation.Value;
-                                }
-                            }
-                            content.Blocks.Add(block);
+                            sectionBlocks = (IList<Extend.Block>)prop.GetValue(model);
                         }
+                    }
+
+                    foreach (var moveBlock in content.Blocks)
+                    {
+                        moveBlock.SortOrder += 1000;
+                    }
+
+                    var blocks = _service.TransformContentBlocks(sectionBlocks, languageId);
+                    var current = blocks.Select(b => b.Id).ToArray();
+
+                    // Delete removed blocks
+                    var removed = content.Blocks
+                        .Where(b => b.SectionId == section && !current.Contains(b.Id) && b.ParentId == null)
+                        .ToList();
+                    var removedItems = content.Blocks
+                        .Where(b => b.SectionId == section && !current.Contains(b.Id) && b.ParentId != null)
+                        .ToList();
+
+                    _db.ContentBlocks.RemoveRange(removed);
+                    _db.ContentBlocks.RemoveRange(removedItems);
+
+                    // Map the new block
+                    for (var n = 0; n < blocks.Count; n++)
+                    {
+                        var block = content.Blocks.FirstOrDefault(b => b.Id == blocks[n].Id);
+
+                        if (block == null)
+                        {
+                            block = new ContentBlock
+                            {
+                                Id = blocks[n].Id != Guid.Empty ? blocks[n].Id : Guid.NewGuid()
+                            };
+                            await _db.ContentBlocks.AddAsync(block).ConfigureAwait(false);
+                        }
+                        block.ParentId = blocks[n].ParentId;
+                        block.SortOrder = n;
+                        block.SectionId = section;
+                        block.CLRType = blocks[n].CLRType;
+
+                        var currentFields = blocks[n].Fields.Select(f => f.FieldId).Distinct();
+                        var removedFields = block.Fields.Where(f => !currentFields.Contains(f.FieldId));
+
+                        _db.ContentBlockFields.RemoveRange(removedFields);
+
+                        foreach (var newField in blocks[n].Fields)
+                        {
+                            var field = block.Fields.FirstOrDefault(f => f.FieldId == newField.FieldId);
+                            if (field == null)
+                            {
+                                field = new ContentBlockField
+                                {
+                                    Id = newField.Id != Guid.Empty ? newField.Id : Guid.NewGuid(),
+                                    BlockId = block.Id,
+                                    FieldId = newField.FieldId
+                                };
+                                await _db.ContentBlockFields.AddAsync(field).ConfigureAwait(false);
+                                block.Fields.Add(field);
+                            }
+                            field.SortOrder = newField.SortOrder;
+                            field.CLRType = newField.CLRType;
+                            field.Value = newField.Value;
+
+                            foreach (var newTranslation in newField.Translations)
+                            {
+                                var translation = field.Translations.FirstOrDefault(t => t.LanguageId == newTranslation.LanguageId);
+                                if (translation == null)
+                                {
+                                    translation = new ContentBlockFieldTranslation
+                                    {
+                                        FieldId = field.Id,
+                                        LanguageId = languageId
+                                    };
+                                    await _db.ContentBlockFieldTranslations.AddAsync(translation).ConfigureAwait(false);
+                                    field.Translations.Add(translation);
+                                }
+                                translation.Value = newTranslation.Value;
+                            }
+                        }
+                        content.Blocks.Add(block);
                     }
                 }
 
@@ -464,10 +489,31 @@ namespace Piranha.Repositories
                     }
                 }
 
-                // Map Blocks
-                if (!(model is Models.IContentInfo) && model is Models.IBlockContent blockModel)
+                if (!(model is Models.IContentInfo))
                 {
-                    blockModel.Blocks = _service.TransformBlocks(content.Blocks.OrderBy(b => b.SortOrder), content.SelectedLanguageId);
+                    // Get the page type
+                    var type = App.ContentTypes.GetById(content.TypeId);
+
+                    // Transform standard blocks
+                    if (model is Models.IBlockContent blockModel)
+                    {
+                        blockModel.Blocks = _service.TransformBlocks(content.Blocks.Where(b => b.SectionId == "Blocks").OrderBy(b => b.SortOrder), content.SelectedLanguageId);
+                    }
+
+                    // Transform additional block sections
+                    foreach (var section in type.Sections)
+                    {
+                        var prop = model.GetType().GetProperty(section.Id, App.PropertyBindings);
+                        var blockList = (List<Extend.Block>)prop?.GetValue(model);
+
+                        if (blockList != null)
+                        {
+                            foreach (var block in _service.TransformBlocks(content.Blocks.Where(b => b.SectionId == section.Id).OrderBy(b => b.SortOrder), content.SelectedLanguageId))
+                            {
+                                blockList.Add(block);
+                            }
+                        }
+                    }
                 }
             });
         }

@@ -15,10 +15,17 @@ using Piranha.Models;
 
 namespace RazorWeb.Models
 {
-    [ContentType(Title = "Special Product")]
-    public class SpecialProduct : Product<SpecialProduct>
+    /// <summary>
+    /// Page with an additional block section.
+    /// </summary>
+    [PageType(Title = "Aside Page")]
+    [ContentTypeRoute(Title = "Default", Route = "/asidepage")]
+    public class AsidePage : Page<AsidePage>
     {
+        /// <summary>
+        /// Gets/sets the aside blocks.
+        /// </summary>
         [Section]
-        public IList<Block> Description { get; set; } = new List<Block>();
+        public IList<Block> Aside { get; set; }
     }
 }

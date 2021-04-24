@@ -39,6 +39,11 @@ namespace Piranha.Models
         public string Title { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional custom editors.
+        /// </summary>
+        public IList<ContentTypeEditor> CustomEditors { get; set; } = new List<ContentTypeEditor>();
+
+        /// <summary>
         /// Gets/sets the available regions.
         /// </summary>
         public IList<ContentTypeRegion> Regions { get; set; } = new List<ContentTypeRegion>();
@@ -49,8 +54,8 @@ namespace Piranha.Models
         public IList<ContentTypeRoute> Routes { get; set; } = new List<ContentTypeRoute>();
 
         /// <summary>
-        /// Gets/sets the optional custom editors.
+        /// Gets/sets the additional block sections.
         /// </summary>
-        public IList<ContentTypeEditor> CustomEditors { get; set; } = new List<ContentTypeEditor>();
+        public IList<ContentTypeSection> Sections { get; set; } = new List<ContentTypeSection>();
     }
 }

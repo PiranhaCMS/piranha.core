@@ -329,7 +329,8 @@ namespace Piranha.AttributeBuilder
                     UseCategory = typeof(ICategorizedContent).IsAssignableFrom(type),
                     UseTags = typeof(ITaggedContent).IsAssignableFrom(type),
                     CustomEditors = GetEditors(type),
-                    Regions = GetRegions(type)
+                    Regions = GetRegions(type),
+                    Sections = GetSections(type)
                 };
             }
             return null;
@@ -363,9 +364,10 @@ namespace Piranha.AttributeBuilder
                     UsePrimaryImage = attr.UsePrimaryImage,
                     UseExcerpt = attr.UseExcerpt,
                     IsArchive = attr.IsArchive,
-                    Routes = GetRoutes(type),
                     CustomEditors = GetEditors(type),
-                    Regions = GetRegions(type)
+                    Regions = GetRegions(type),
+                    Routes = GetRoutes(type),
+                    Sections = GetSections(type)
                 };
 
                 // Add default archive editor
@@ -437,9 +439,10 @@ namespace Piranha.AttributeBuilder
                     UseBlocks = attr.UseBlocks,
                     UsePrimaryImage = attr.UsePrimaryImage,
                     UseExcerpt = attr.UseExcerpt,
-                    Routes = GetRoutes(type),
                     CustomEditors = GetEditors(type),
-                    Regions = GetRegions(type)
+                    Regions = GetRegions(type),
+                    Routes = GetRoutes(type),
+                    Sections = GetSections(type)
                 };
 
                 // Add block types
@@ -569,6 +572,31 @@ namespace Piranha.AttributeBuilder
                 regions.Add(regionType.Item2);
 
             return regions;
+        }
+
+        private IList<ContentTypeSection> GetSections(Type type)
+        {
+            var sections = new List<ContentTypeSection>();
+
+            foreach (var prop in type.GetProperties(App.PropertyBindings))
+            {
+                var attr = prop.GetCustomAttribute<SectionAttribute>();
+
+                if (attr != null)
+                {
+                    // Make sure the property has the correcty
+                    // property type.
+                    if (typeof(IList<Block>).IsAssignableFrom(prop.PropertyType))
+                    {
+                        sections.Add(new ContentTypeSection
+                        {
+                            Id = prop.Name,
+                            Title = !string.IsNullOrWhiteSpace(attr.Title) ? attr.Title : prop.Name
+                        });
+                    }
+                }
+            }
+            return sections;
         }
 
         private Tuple<int?, ContentTypeRegion> GetRegionType(PropertyInfo prop)

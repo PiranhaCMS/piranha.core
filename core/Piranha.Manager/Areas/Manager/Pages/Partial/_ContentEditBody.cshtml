@@ -1,0 +1,100 @@
+@inject ManagerLocalizer Localizer
+@inject Piranha.Config Config
+
+<!-- Title -->
+<div class="card">
+    <div class="card-body">
+        <div class="form-group title">
+            <div class="row">
+                <div class="col">
+                    <input v-model="title" type="text" class="form-control form-control-lg" placeholder="@Localizer.General["Title"]">
+                </div>
+            </div>
+            <div v-if="this.features.useCategory || this.features.useTags" class="row mt-3">
+                <div v-if="features.useCategory" class="col">
+                    <div class="form-group mb-0">
+                        <label style="display:none">@Localizer.Post["Category"]</label>
+                        <select id="selectedCategory" class="form-control select2" v-model="taxonomies.selectedCategory">
+                            <option :value="item" v-for="item in taxonomies.categories">{{ item }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div v-if="features.useTags" class="col">
+                    <div class="form-group mb-0">
+                        <label style="display:none">@Localizer.Post["Tags"]</label>
+                        <select id="selectedTags" class="form-control select2" multiple="multiple" v-model="taxonomies.selectedTags">
+                            <option :value="item" v-for="item in taxonomies.tags">{{ item }}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-if="isPreviewActive" class="region-center content-center">
+            <div class="row">
+                <div v-if="features.usePrimaryImage" class="col">
+                    <div class="form-group">
+                        <label>@Localizer.Content["Primary image"]</label>
+                        <div class="block image-block primary-image primary-image-modal">
+                            <div class="block-body has-media-picker rounded" :class="{ empty: primaryImage.id === null }">
+                                <img class="rounded" :src="primaryImageUrl">
+                                <div class="media-picker">
+                                    <div class="btn-group float-right">
+                                        <button v-on:click.prevent="selectPrimaryImage" class="btn btn-primary text-center">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                        <button v-on:click.prevent="removePrimaryImage" class="btn btn-danger text-center">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                    <div class="card text-left">
+                                        <div class="card-body" v-if="primaryImage.id === null">
+                                            &nbsp;
+                                        </div>
+                                        <div class="card-body" v-else>
+                                            {{ primaryImage.media.filename }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="features.useExcerpt" class="col">
+                    <div class="form-group">
+                        <label>@Localizer.Content["Excerpt"]</label>
+                        <div v-if="features.useHtmlExcerpt" class="block text-block ingress" :class="{ empty: isExcerptEmpty }">
+                            <div id="excerpt-toolbar" class="component-toolbar"></div>
+                            <div id="excerpt-body" class="block-body html-block" contenteditable="true" v-html="excerpt" v-on:blur="onExcerptBlur">
+                            </div>
+                        </div>
+                        <textarea v-else v-model="excerpt" rows="9" maxlength="255" class="form-control" style="height:218px"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sections -->
+<div v-for="section in sections" class="card" :class="{ 'd-none': selectedRegion.uid != section.uid }">
+    <block-section v-bind:section="section" v-bind:outline="'@Config.ManagerOutlined'" v-bind:uid="section.uid"></block-section>
+</div>
+
+<!-- Custom Editors -->
+<div class="card" :class="{ 'd-none': selectedRegion.uid != editor.uid }" v-for="editor in editors">
+    <div class="card-body pt-0">
+        <div class="region-center">
+            <component v-bind:is="editor.component" v-bind:uid="editor.uid" v-bind:id="id"></component>
+        </div>
+    </div>
+</div>
+
+<!-- Content Regions -->
+<div class="card" :class="{ 'd-none': selectedRegion.uid != region.meta.uid }" v-for="region in contentRegions">
+    <div class="card-body pt-0">
+        <div class="region region-center">
+            <region v-bind:content="contentType" v-bind:type="typeId" v-bind:model="region"></region>
+            <div class="content-blocker"></div>
+        </div>
+    </div>
+</div>

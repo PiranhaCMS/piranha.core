@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Piranha.Extend;
 using Piranha.Extend.Fields;
-using Piranha.Manager.Extensions;
 using Piranha.Manager.Models;
 using Piranha.Manager.Models.Content;
 using Piranha.Models;
@@ -24,14 +23,17 @@ namespace Piranha.Manager.Services
     public sealed class TransformationService
     {
         private readonly Config _config;
+        private readonly ManagerLocalizer _localizer;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="config">The current piranha config</param>
-        public TransformationService(Config config)
+        /// <param name="localizer">The localization service</param>
+        public TransformationService(Config config, ManagerLocalizer localizer)
         {
             _config = config;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -48,6 +50,7 @@ namespace Piranha.Manager.Services
 
             // Set model data
             model.TypeTitle = type.Title;
+            model.IsReadOnly = page.OriginalPageId.HasValue;
             model.State = GetState(page, isDraft);
             model.Features = new ContentFeatures
             {
@@ -59,13 +62,11 @@ namespace Piranha.Manager.Services
                 UsePrimaryImage = type.UsePrimaryImage,
                 UsePublish = true
             };
-            model.Regions = GetRegions(page, type);
             model.Editors = GetEditors(type);
+            model.Regions = GetRegions(page, type);
             model.Routes.Routes = GetRoutes(type);
-            if (type.UseBlocks)
-            {
-                model.Blocks = GetBlocks(page);
-            }
+            model.Sections = GetSections(page, type, type.UseBlocks, page.OriginalPageId.HasValue);
+
             return model;
         }
 
@@ -95,13 +96,11 @@ namespace Piranha.Manager.Services
                 UsePublish = true,
                 UseTags = true
             };
-            model.Regions = GetRegions(post, type);
             model.Editors = GetEditors(type);
+            model.Regions = GetRegions(post, type);
             model.Routes.Routes = GetRoutes(type);
-            if (type.UseBlocks)
-            {
-                model.Blocks = GetBlocks(post);
-            }
+            model.Sections = GetSections(post, type, type.UseBlocks);
+
             return model;
         }
 
@@ -132,12 +131,9 @@ namespace Piranha.Manager.Services
                 UseTags = type.UseTags,
                 UseTranslations = true
             };
-            model.Regions = GetRegions(content, type);
             model.Editors = GetEditors(type);
-            if (content is IBlockContent blockContent)
-            {
-                model.Blocks = GetBlocks(blockContent);
-            }
+            model.Regions = GetRegions(content, type);
+            model.Sections = GetSections(content, type);
 
             if (type.UseCategory || type.UseTags)
             {
@@ -201,10 +197,8 @@ namespace Piranha.Manager.Services
 
             // Set data
             SetRegions(model, content);
-            if (content is IBlockContent blockContent)
-            {
-                SetBlocks(model, blockContent);
-            }
+            SetBlocks(model, content);
+
             if (content is ICategorizedContent categoryContent)
             {
                 SetCategory(model, categoryContent);
@@ -229,6 +223,7 @@ namespace Piranha.Manager.Services
                     Meta = new RegionMeta
                     {
                         Id = regionType.Id,
+                        Uid = GetUid(nameof(model), regionType.Id),
                         Name = regionType.Title,
                         Icon = regionType.Icon,
                         IsCollection = regionType.Collection,
@@ -324,11 +319,47 @@ namespace Piranha.Manager.Services
             return result;
         }
 
-        private IList<BlockModel> GetBlocks(IBlockContent content)
+        private IList<SectionModel> GetSections(ContentBase model, ContentTypeBase type, bool useBlocks = true, bool readOnly = false)
+        {
+            var result = new List<SectionModel>();
+
+            // Add the old legacy blocks if available
+            if (useBlocks && model is IBlockContent blockModel)
+            {
+                if (blockModel.Blocks.Count > 0)
+                {
+                    result.Add(new SectionModel
+                    {
+                        Id = "Blocks",
+                        Name = _localizer.General["Main content"],
+                        Blocks = GetBlocks(blockModel.Blocks, readOnly)
+                    });
+                }
+            }
+
+            // Add all of the sections
+            foreach (var section in type.Sections)
+            {
+                var prop = model.GetType().GetProperty(section.Id, App.PropertyBindings);
+
+                if (prop != null && typeof(IList<Block>).IsAssignableFrom(prop.PropertyType))
+                {
+                    result.Add(new SectionModel
+                    {
+                        Id = section.Id,
+                        Name = section.Title,
+                        Blocks = GetBlocks((IList<Block>)prop.GetValue(model), readOnly)
+                    });
+                }
+            }
+            return result;
+        }
+
+        private IList<BlockModel> GetBlocks(IList<Block> blocks, bool readOnly = false)
         {
             var result = new List<BlockModel>();
 
-            foreach (var block in content.Blocks)
+            foreach (var block in blocks)
             {
                 var type = App.Blocks.GetByType(block.Type);
 
@@ -341,12 +372,13 @@ namespace Piranha.Manager.Services
                         Fields = ContentUtils.GetBlockFields(groupBlock),
                         Meta = new BlockMeta
                         {
+                            Uid = GetUid(groupBlock.Id.ToString()),
                             Name = type.Name,
                             Icon = type.Icon,
                             Component = type.Component,
                             Width = type.Width.ToString().ToLower(),
                             IsGroup = true,
-                            // TODO: IsReadonly = page.OriginalPageId.HasValue,
+                            IsReadonly = readOnly,
                             isCollapsed = _config.ManagerDefaultCollapsedBlocks,
                             ShowHeader = !_config.ManagerDefaultCollapsedBlockGroupHeaders
                         }
@@ -356,19 +388,19 @@ namespace Piranha.Manager.Services
                     {
                         var item = groupBlock.Items[n];
 
-                        group.Items.Add(GetBlock(item, App.Blocks.GetByType(item.Type), n == 0));
+                        group.Items.Add(GetBlock(item, App.Blocks.GetByType(item.Type), n == 0, readOnly));
                     }
                     result.Add(group);
                 }
                 else
                 {
-                    result.Add(GetBlock(block, type, true));
+                    result.Add(GetBlock(block, type, true, readOnly));
                 }
             }
             return result;
         }
 
-        private BlockModel GetBlock(Block block, Runtime.AppBlock type, bool isActive)
+        private BlockModel GetBlock(Block block, Runtime.AppBlock type, bool isActive, bool readOnly = false)
         {
             if (type.IsGeneric)
             {
@@ -381,11 +413,12 @@ namespace Piranha.Manager.Services
                     Type = block.Type,
                     Meta = new BlockMeta
                     {
+                        Uid = GetUid(block.Id.ToString()),
                         Name = type.Name,
                         Title = block.GetTitle(),
                         Icon = type.Icon,
                         Component = type.Component,
-                        // TODO: IsReadonly = page.OriginalPageId.HasValue,
+                        IsReadonly = readOnly,
                         isCollapsed = _config.ManagerDefaultCollapsedBlocks
                     }
                 };
@@ -399,6 +432,7 @@ namespace Piranha.Manager.Services
                     Model = block,
                     Meta = new BlockMeta
                     {
+                        Uid = GetUid(block.Id.ToString()),
                         Name = type.Name,
                         Title = block.GetTitle(),
                         Icon = type.Icon,
@@ -465,48 +499,63 @@ namespace Piranha.Manager.Services
             return ContentState.Published;
         }
 
-        private void SetBlocks(ContentModel model, IBlockContent content)
+        private string GetUid(params string[] args)
         {
-            foreach (var block in model.Blocks)
+            return "uid-" + Math.Abs(string.Concat(args).GetHashCode()).ToString();
+        }
+
+        private void SetBlocks(ContentModel model, ContentBase content)
+        {
+            foreach (var section in model.Sections)
             {
-                if (block is BlockItemModel blockItem)
-                {
-                    content.Blocks.Add(blockItem.Model);
-                }
-                else if (block is BlockGroupModel blockGroup)
-                {
-                    var groupType = App.Blocks.GetByType(blockGroup.Type);
+                var sectionProp = content.GetType().GetProperty(section.Id, App.PropertyBindings);
 
-                    if (groupType != null)
+                if (sectionProp != null && typeof(IList<Block>).IsAssignableFrom(sectionProp.PropertyType))
+                {
+                    var blocks = (IList<Block>)sectionProp.GetValue(content);
+
+                    foreach (var block in section.Blocks)
                     {
-                        var group = (BlockGroup)Activator.CreateInstance(groupType.Type);
-
-                        group.Id = blockGroup.Id;
-                        group.Type = blockGroup.Type;
-
-                        foreach (var field in blockGroup.Fields)
+                        if (block is BlockItemModel blockItem)
                         {
-                            var prop = group.GetType().GetProperty(field.Meta.Id, App.PropertyBindings);
-                            prop.SetValue(group, field.Model);
+                            blocks.Add(blockItem.Model);
                         }
-
-                        foreach (var item in blockGroup.Items)
+                        else if (block is BlockGroupModel blockGroup)
                         {
-                            if (item is BlockItemModel blockGroupItem)
-                            {
-                                group.Items.Add(blockGroupItem.Model);
-                            }
-                            else if (item is BlockGenericModel blockGeneric)
-                            {
-                                var transformed = ContentUtils.TransformGenericBlock(blockGeneric);
+                            var groupType = App.Blocks.GetByType(blockGroup.Type);
 
-                                if (transformed != null)
+                            if (groupType != null)
+                            {
+                                var group = (BlockGroup)Activator.CreateInstance(groupType.Type);
+
+                                group.Id = blockGroup.Id;
+                                group.Type = blockGroup.Type;
+
+                                foreach (var field in blockGroup.Fields)
                                 {
-                                    group.Items.Add(transformed);
+                                    var prop = group.GetType().GetProperty(field.Meta.Id, App.PropertyBindings);
+                                    prop.SetValue(group, field.Model);
                                 }
+
+                                foreach (var item in blockGroup.Items)
+                                {
+                                    if (item is BlockItemModel blockGroupItem)
+                                    {
+                                        group.Items.Add(blockGroupItem.Model);
+                                    }
+                                    else if (item is BlockGenericModel blockGeneric)
+                                    {
+                                        var transformed = ContentUtils.TransformGenericBlock(blockGeneric);
+
+                                        if (transformed != null)
+                                        {
+                                            group.Items.Add(transformed);
+                                        }
+                                    }
+                                }
+                                blocks.Add(group);
                             }
                         }
-                        content.Blocks.Add(group);
                     }
                 }
             }

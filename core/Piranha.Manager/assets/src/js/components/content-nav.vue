@@ -1,7 +1,7 @@
 <template>
     <div class="col side-nav">
         <ul class="list-group list-group-flush list-content app" :class="{ ready: !loading }">
-            <li class="list-group-item">
+            <li class="list-group-item header">
                 <div class="input-group">
                     <input v-model="filter" type="text" class="form-control" :placeholder="piranha.resources.texts.search">
                     <div class="input-group-append">
@@ -11,7 +11,7 @@
                     </div>
                 </div>
             </li>
-            <li v-for="item in filteredItems" v-bind:key="item.id" class="list-group-item" :class="{ selected: item === selectedItem}">
+            <li v-for="item in filteredItems" v-bind:key="item.id" class="list-group-item" :class="{ active: item === selectedItem}">
                 <a v-on:click.prevent="select(item)" href="#">
                     <img v-if="group.listImage" class="float-left" :src="piranha.utils.formatUrl(item.imageUrl)" :alt="item.title">
                     <span>{{ item.title }}</span>
@@ -59,7 +59,7 @@ export default {
             }
 
             var route = "";
-            if (this.contentid !== null) {
+            if (this.id !== null) {
                 route = piranha.baseUrl + "manager/api/content/" + this.id + "/listbyid";
             } else {
                 route = piranha.baseUrl + "manager/api/content/" + this.groupid + "/list";
@@ -76,7 +76,7 @@ export default {
 
                         i.type = type.title || i.typeId;
 
-                        if (i.id === self.contentid) {
+                        if (i.id === self.id) {
                             self.selectedItem = i;
                         }
                         return i;
@@ -87,13 +87,11 @@ export default {
         },
         select: function (item)
         {
+            history.pushState({ id: item.id }, "", piranha.baseUrl + "manager/content/edit/" + item.id);
             piranha.content.load("content", item.id);
             this.selectedItem = item;
         },
         onSaved: function () {
-            console.log('this.id', this.id);
-            console.log('piranha.content.id', piranha.content.id);
-
             this.id = piranha.content.id;
             this.load();
         }

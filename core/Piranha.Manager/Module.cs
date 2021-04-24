@@ -166,6 +166,8 @@ namespace Piranha.Manager
                             .ToList()
                     }))
                     .ForMember(m => m.Status, o => o.Ignore())
+                    .ForMember(m => m.IsReadOnly, o => o.Ignore())
+                    .ForMember(m => m.IsScheduled, o => o.Ignore())
                     .ForMember(m => m.LanguageId, o => o.Ignore())
                     .ForMember(m => m.LanguageTitle, o => o.Ignore())
                     .ForMember(m => m.ParentId, o => o.Ignore())
@@ -183,12 +185,13 @@ namespace Piranha.Manager
                     .ForMember(m => m.Position, o => o.Ignore())
                     .ForMember(m => m.AltTitle, o => o.Ignore())
                     .ForMember(m => m.State, o => o.Ignore())
-                    .ForMember(m => m.Blocks, o => o.Ignore())
-                    .ForMember(m => m.Regions, o => o.Ignore())
                     .ForMember(m => m.Editors, o => o.Ignore())
-                    .ForMember(m => m.Languages, o => o.Ignore());
+                    .ForMember(m => m.Regions, o => o.Ignore())
+                    .ForMember(m => m.Languages, o => o.Ignore())
+                    .ForMember(m => m.Sections, o => o.Ignore());
                 cfg.CreateMap<PageBase, ContentModel>()
                     .ForMember(m => m.AltTitle, o => o.MapFrom(p => p.NavigationTitle))
+                    .ForMember(m => m.IsScheduled, o => o.MapFrom(p => p.Published.HasValue && p.Published.Value > DateTime.Now))
                     .ForMember(m => m.Published, o => o.MapFrom(p => p.Published.HasValue ? p.Published.Value.ToString("yyyy-MM-dd") : null))
                     .ForMember(m => m.PublishedTime, o => o.MapFrom(p => p.Published.HasValue ? p.Published.Value.ToString("HH:mm") : null))
                     .ForMember(m => m.Comments, o => o.MapFrom(p => new ContentComments
@@ -229,6 +232,7 @@ namespace Piranha.Manager
                         RedirectType = p.RedirectType.ToString()
                     }))
                     .ForMember(m => m.Status, o => o.Ignore())
+                    .ForMember(m => m.IsReadOnly, o => o.Ignore())
                     .ForMember(m => m.LanguageId, o => o.Ignore())
                     .ForMember(m => m.LanguageTitle, o => o.Ignore())
                     .ForMember(m => m.TypeTitle, o => o.Ignore())
@@ -237,12 +241,13 @@ namespace Piranha.Manager
                     .ForMember(m => m.Features, o => o.Ignore())
                     .ForMember(m => m.Taxonomies, o => o.Ignore())
                     .ForMember(m => m.State, o => o.Ignore())
-                    .ForMember(m => m.Blocks, o => o.Ignore())
-                    .ForMember(m => m.Regions, o => o.Ignore())
                     .ForMember(m => m.Editors, o => o.Ignore())
-                    .ForMember(m => m.Languages, o => o.Ignore());
+                    .ForMember(m => m.Regions, o => o.Ignore())
+                    .ForMember(m => m.Languages, o => o.Ignore())
+                    .ForMember(m => m.Sections, o => o.Ignore());
                 cfg.CreateMap<PostBase, ContentModel>()
                     .ForMember(m => m.ParentId, o => o.MapFrom(p => p.BlogId))
+                    .ForMember(m => m.IsScheduled, o => o.MapFrom(p => p.Published.HasValue && p.Published.Value > DateTime.Now))
                     .ForMember(m => m.Published, o => o.MapFrom(p => p.Published.HasValue ? p.Published.Value.ToString("yyyy-MM-dd") : null))
                     .ForMember(m => m.PublishedTime, o => o.MapFrom(p => p.Published.HasValue ? p.Published.Value.ToString("HH:mm") : null))
                     .ForMember(m => m.Comments, o => o.MapFrom(p => new ContentComments
@@ -282,6 +287,7 @@ namespace Piranha.Manager
                         SelectedTags = p.Tags.Select(t => t.Title).ToList()
                     }))
                     .ForMember(m => m.Status, o => o.Ignore())
+                    .ForMember(m => m.IsReadOnly, o => o.Ignore())
                     .ForMember(m => m.LanguageId, o => o.Ignore())
                     .ForMember(m => m.LanguageTitle, o => o.Ignore())
                     .ForMember(m => m.TypeTitle, o => o.Ignore())
@@ -291,10 +297,10 @@ namespace Piranha.Manager
                     .ForMember(m => m.Position, o => o.Ignore())
                     .ForMember(m => m.AltTitle, o => o.Ignore())
                     .ForMember(m => m.State, o => o.Ignore())
-                    .ForMember(m => m.Blocks, o => o.Ignore())
-                    .ForMember(m => m.Regions, o => o.Ignore())
                     .ForMember(m => m.Editors, o => o.Ignore())
-                    .ForMember(m => m.Languages, o => o.Ignore());
+                    .ForMember(m => m.Regions, o => o.Ignore())
+                    .ForMember(m => m.Languages, o => o.Ignore())
+                    .ForMember(m => m.Sections, o => o.Ignore());
 
                 cfg.CreateMap<ContentModel, GenericContent>()
                     .ForMember(p => p.Permissions, o => o.Ignore())

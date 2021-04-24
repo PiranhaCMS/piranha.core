@@ -97,17 +97,18 @@ namespace RazorWeb
                 });
                 await api.Content.SaveAsync(content);
 
-                content = await Models.StandardProduct.CreateAsync(api).ConfigureAwait(false);
-                content.Title = "My third content";
-                content.Category = "Another category";
-                content.Tags.Add("Bacon");
-                content.Tags.Add("Ipsum");
-                content.AllFields.Date = DateTime.Now;
-                content.AllFields.Text = "Bacon ipsum";
-                content.Blocks.Add(new HtmlBlock {
+                var scontent = await Models.SpecialProduct.CreateAsync(api).ConfigureAwait(false);
+                scontent.Title = "My third content";
+                scontent.Category = "Another category";
+                scontent.Tags.Add("Bacon");
+                scontent.Tags.Add("Ipsum");
+                scontent.Blocks.Add(new HtmlBlock {
                     Body = "<p>Hello third content!</p>"
                 });
-                await api.Content.SaveAsync(content);
+                scontent.Description.Add(new HtmlBlock {
+                    Body = "<p>Hello description!</p>"
+                });
+                await api.Content.SaveAsync(scontent);
 
                 var loadedContent = await api.Content.GetByIdAsync<Models.StandardProduct>(content.Id);
                 var swedishContent = await api.Content.GetByIdAsync<Models.StandardProduct>(content.Id, lang2Id);
@@ -378,6 +379,49 @@ namespace RazorWeb
                 }
                 blogpost.Published = DateTime.Now.AddDays(7);
                 await api.Posts.SaveAsync(blogpost);
+
+                // Aside post
+                var asidepost = await Models.AsidePost.CreateAsync(api);
+                asidepost.BlogId = blogpage.Id;
+                asidepost.Title = "The aside post";
+                asidepost.Category = "Aside";
+                asidepost.Tags.Add("welcome", "aside");
+                asidepost.Excerpt = "Nulla vitae elit libero, a pharetra augue. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.";
+                asidepost.Published = DateTime.Now;
+                asidepost.Blocks.Add(new HtmlBlock
+                {
+                    Body = "<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Nullam id dolor id nibh ultricies vehicula ut id elit. Nulla vitae elit libero, a pharetra augue.</p>"
+                });
+                asidepost.Blocks.Add(new HtmlBlock
+                {
+                    Body = "<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vestibulum id ligula porta felis euismod semper. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id elit non mi porta gravida at eget metus.</p>"
+                });
+                asidepost.Aside.Add(new HtmlBlock
+                {
+                    Body = "<p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Aenean lacinia bibendum nulla sed consectetur. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec id elit non mi porta gravida at eget metus.</p>"
+                });
+                await api.Posts.SaveAsync(asidepost);
+
+
+                // Aside page
+                var asidepage = await Models.AsidePage.CreateAsync(api);
+                asidepage.SiteId = siteId;
+                asidepage.Title = "The aside page";
+                asidepage.SortOrder = 3;
+                asidepage.Published = DateTime.Now;
+                asidepage.Blocks.Add(new HtmlBlock
+                {
+                    Body = "<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Nullam id dolor id nibh ultricies vehicula ut id elit. Nulla vitae elit libero, a pharetra augue.</p>"
+                });
+                asidepage.Blocks.Add(new HtmlBlock
+                {
+                    Body = "<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vestibulum id ligula porta felis euismod semper. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id elit non mi porta gravida at eget metus.</p>"
+                });
+                asidepage.Aside.Add(new HtmlBlock
+                {
+                    Body = "<p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Aenean lacinia bibendum nulla sed consectetur. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec id elit non mi porta gravida at eget metus.</p>"
+                });
+                await api.Pages.SaveAsync(asidepage);
 
                 // Add a banner
                 var banner = await Models.ImageBanner.CreateAsync(api);

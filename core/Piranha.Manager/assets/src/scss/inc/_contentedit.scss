@@ -39,18 +39,15 @@
                     }
                 }
 
-                &.selected {
-                    &:after {
-                        @include arrow-left($body-bg, .5rem, -.5rem);
-                    }
-
+                &.active {
                     a {
-                        span {
-                            &:first-of-type {
-                                font-weight: bold;
-                            }
-                        }
+                        color: #fff;
                     }
+                }
+
+                &.header {
+                    background: transparent;
+                    padding: 0 0 .5rem;
                 }
             }
         }

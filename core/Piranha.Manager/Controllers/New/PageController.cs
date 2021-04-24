@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 using Piranha.Manager.Hubs;
 using Piranha.Manager.Models;
 using Piranha.Manager.Services;
@@ -29,6 +30,7 @@ namespace Piranha.Manager.Controllers
         private readonly ContentServiceLabs _service;
         private readonly ManagerLocalizer _localizer;
         private readonly IHubContext<PreviewHub> _hub;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Default constructor.
@@ -36,11 +38,13 @@ namespace Piranha.Manager.Controllers
         /// <param name="service">The content service</param>
         /// <param name="localizer">The localization service</param>
         /// <param name="hub">The SignalR preview hub</param>
-        public PageController(ContentServiceLabs service, ManagerLocalizer localizer, IHubContext<PreviewHub> hub)
+        /// <param name="factory">The optional logger factory</param>
+        public PageController(ContentServiceLabs service, ManagerLocalizer localizer, IHubContext<PreviewHub> hub, ILoggerFactory factory = null)
         {
             _service = service;
             _localizer = localizer;
             _hub = hub;
+            _logger = factory?.CreateLogger(typeof(PageController));
         }
 
         /// <summary>
@@ -152,6 +156,9 @@ namespace Piranha.Manager.Controllers
             }
             catch (ValidationException e)
             {
+                // Log the exception
+                _logger?.LogWarning(e.Message);
+
                 // Validation did not succeed, return the
                 // validation error
                 return new StatusMessage
@@ -160,7 +167,11 @@ namespace Piranha.Manager.Controllers
                     Body = e.Message
                 };
             }
-            catch { }
+            catch (Exception e)
+            {
+                // Log the exception
+                _logger?.LogError(e.Message);
+            }
 
             // The operation failed. Return generic error message.
             return new StatusMessage
@@ -186,6 +197,9 @@ namespace Piranha.Manager.Controllers
             }
             catch (ValidationException e)
             {
+                // Log the exception
+                _logger?.LogWarning(e.Message);
+
                 model.Status = new StatusMessage
                 {
                     Type = StatusMessage.Error,
@@ -193,8 +207,11 @@ namespace Piranha.Manager.Controllers
                 };
                 return model;
             }
-            catch
+            catch (Exception e)
             {
+                // Log the exception
+                _logger?.LogError(e.Message);
+
                 model.Status = new StatusMessage
                 {
                     Type = StatusMessage.Error,

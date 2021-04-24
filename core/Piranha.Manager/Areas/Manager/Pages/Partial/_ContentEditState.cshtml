@@ -1,0 +1,22 @@
+@inject ManagerLocalizer Localizer
+
+<li v-if="isReadOnly" class="badge-item app" :class="{ ready: !loading }">
+    <span class="badge badge-warning">
+        @Localizer.General["Copy"]
+    </span>
+</li>
+<li v-if="isScheduled" class="badge-item app" :class="{ ready: !loading }">
+    <span class="badge badge-info">
+        <i class="fas fa-calendar-alt"></i> @Localizer.General["Scheduled"]
+    </span>
+</li>
+<li v-if="state === 'unpublished'" class="badge-item app" :class="{ ready: !loading }">
+    <span class="badge badge-info">
+        <i class="fas fa-unlink"></i> @Localizer.General["Unpublished"]
+    </span>
+</li>
+<li v-if="state === 'draft'" class="badge-item app" :class="{ ready: !loading }">
+    <span class="badge badge-info">
+        <i class="fas fa-pen"></i> @Localizer.General["Draft"]
+    </span>
+</li>

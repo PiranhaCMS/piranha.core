@@ -1,0 +1,17 @@
+<ul v-if="sections.length + editors.length + contentRegions.length > 1" class="nav nav-pills nav-pills-card justify-content-center">
+    <li v-for="section in sections" class="nav-item">
+        <a class="nav-link" v-on:click.prevent="selectRegion({ uid: section.uid })" :class="{ active: selectedRegion.uid === section.uid }" href="#">
+            <i class="fas fa-pen-alt"></i>{{ section.name }}
+        </a>
+    </li>
+    <li v-for="editor in editors" class="nav-item">
+        <a class="nav-link" v-on:click.prevent="selectRegion(editor)" :class="{ active: selectedRegion.uid == editor.uid }" href="#">
+            <i :class="editor.icon"></i>{{ editor.name }}
+        </a>
+    </li>
+    <li v-for="region in contentRegions" class="nav-item">
+        <a class="nav-link" v-on:click.prevent="selectRegion(region.meta)" :class="{ active: selectedRegion.uid == region.meta.uid }" href="#">
+            <i :class="region.meta.icon"></i>{{ region.meta.name }}
+        </a>
+    </li>
+</ul>

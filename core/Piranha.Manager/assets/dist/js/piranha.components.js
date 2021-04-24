@@ -343,6 +343,56 @@ Vue.component("block-group-vertical", {
   },
   template: "\n<div :id=\"uid\" class=\"block-group\">\n    <div class=\"actions block-group-actions\">\n        <button v-on:click.prevent=\"toggleHeader()\" v-if=\"model.fields.length > 0\" class=\"btn btn-sm\" :class=\"{ selected: model.meta.showHeader }\">\n            <i class=\"fas fa-list\"></i>\n        </button>\n    </div>\n    <div v-if=\"model.meta.showHeader && model.fields.length > 0\" class=\"block-group-header\">\n        <div class=\"row\">\n            <div class=\"form-group\" :class=\"{ 'col-sm-6': field.meta.isHalfWidth, 'col-sm-12': !field.meta.isHalfWidth }\" v-bind:key=\"field.meta.uid\" v-for=\"field in model.fields\">\n                <label>{{ field.meta.name }}</label>\n                <div v-if=\"field.meta.description != null\" v-html=\"field.meta.description\" class=\"field-description small text-muted\"></div>\n                <component v-bind:is=\"field.meta.component\" v-bind:uid=\"field.meta.uid\" v-bind:meta=\"field.meta\" v-bind:toolbar=\"toolbar\" v-bind:model=\"field.model\"></component>\n            </div>\n        </div>\n    </div>\n    <div class=\"block-group-items\">\n        <a href=\"#\" class=\"block-add unsortable\" v-on:click.prevent=\"piranha.blockpicker.open(addGroupBlock, 0, model.type)\">\n            <hr>\n            <i class=\"fas fa-plus-circle\"></i>\n        </a>\n        <div v-if=\"model.items.length === 0\" class=\"col\">\n            <div class=\"empty-info unsortable\">\n                <p>{{ piranha.resources.texts.emptyAddAbove }}</p>\n            </div>\n        </div>\n        <div v-for=\"(child, index) in model.items\" v-bind:key=\"child.meta.uid\">\n            <div class=\"block\" :class=\"child.meta.component + (child.meta.isCollapsed ? ' collapsed' : '')\">\n                <div class=\"block-header\">\n                    <div class=\"title\">\n                        <i :class=\"child.meta.icon\"></i><strong>{{ child.meta.name }}</strong>\n                    </div>\n                    <div class=\"actions\">\n                        <span v-on:click.prevent=\"collapseItem(child)\" class=\"btn btn-sm\">\n                            <i v-if=\"child.meta.isCollapsed\" class=\"fas fa-chevron-down\"></i>\n                            <i v-else class=\"fas fa-chevron-up\"></i>\n                        </span>\n                        <span class=\"btn btn-sm handle\">\n                            <i class=\"fas fa-ellipsis-v\"></i>\n                        </span>\n                        <button v-on:click.prevent=\"removeItem(child)\" class=\"btn btn-sm danger\" tabindex=\"-1\">\n                            <i class=\"fas fa-trash\"></i>\n                        </button>\n                    </div>\n                </div>\n                <component v-bind:is=\"child.meta.component\" v-bind:uid=\"child.meta.uid\" v-bind:toolbar=\"toolbar\" v-bind:model=\"child.model\"></component>\n            </div>\n            <a href=\"#\" class=\"block-add unsortable\" v-on:click.prevent=\"piranha.blockpicker.open(addGroupBlock, index + 1, model.type)\">\n                <hr>\n                <i class=\"fas fa-plus-circle\"></i>\n            </a>\n        </div>\n    </div>\n</div>\n"
 });
+Vue.component("block-section", {
+  props: ["section", "outline"],
+  methods: {
+    add: function (type, pos) {
+      var self = this;
+      fetch(piranha.baseUrl + "manager/api/content/block/" + type).then(function (response) {
+        return response.json();
+      }).then(function (result) {
+        self.section.blocks.splice(pos, 0, result.body);
+      }).catch(function (error) {
+        console.log("error:", error);
+      });
+    },
+    collapse: function (block) {
+      block.meta.isCollapsed = !block.meta.isCollapsed;
+    },
+    move: function (from, to) {
+      this.section.blocks.splice(to, 0, this.section.blocks.splice(from, 1)[0]);
+    },
+    remove: function (block) {
+      var index = this.section.blocks.indexOf(block);
+
+      if (index !== -1) {
+        this.section.blocks.splice(index, 1);
+      }
+    },
+    updateTitle: function (e) {
+      for (var n = 0; n < this.section.blocks.length; n++) {
+        if (this.section.blocks[n].meta.uid === e.uid) {
+          this.section.blocks[n].meta.title = e.title;
+          break;
+        }
+      }
+    }
+  },
+  mounted: function () {
+    var self = this;
+    sortable("#content-blocks-" + this.section.id, {
+      handle: ".handle",
+      items: ":not(.unsortable)"
+    })[0].addEventListener("sortupdate", function (e) {
+      self.move(self.section.id, e.detail.origin.index, e.detail.destination.index);
+    });
+  },
+  updated: function () {
+    sortable("#content-blocks-" + this.section.id, "disable");
+    sortable("#content-blocks-" + this.section.id, "enable");
+  },
+  template: "\n<div class=\"card-body\">\n    <div :id=\"'content-blocks-' + section.id\" :class=\"{ 'blocks-outline': outline }\">\n        <a href=\"#\" class=\"block-add unsortable\" v-on:click.prevent=\"piranha.blockpicker.open(add, 0)\">\n            <hr>\n            <i class=\"fas fa-plus-circle\"></i>\n        </a>\n        <div v-for=\"(block, index) in section.blocks\" v-bind:key=\"block.meta.uid\">\n                <div :class=\"'block ' + block.meta.component + (block.meta.isCollapsed ? ' collapsed' : '') + (block.meta.width === 'full' ? ' block-full' : '')\">\n                <div :id=\"'tb-' + block.meta.uid\" class=\"component-toolbar\"></div>\n                <div class=\"block-header\">\n                    <div class=\"title\">\n                        <i :class=\"block.meta.icon\"></i><strong>{{ block.meta.name }}</strong> <span v-if=\"!block.meta.isGroup && block.meta.isCollapsed\">- {{ block.meta.title }}</span>\n                    </div>\n                    <div class=\"actions\">\n                        <span v-on:click.prevent=\"collapse(block)\" class=\"btn btn-sm\">\n                            <i v-if=\"block.meta.isCollapsed\" class=\"fas fa-chevron-down\"></i>\n                            <i v-else class=\"fas fa-chevron-up\"></i>\n                        </span>\n                        <span class=\"btn btn-sm handle\">\n                            <i class=\"fas fa-ellipsis-v\"></i>\n                        </span>\n                        <button v-on:click.prevent=\"remove(block)\" class=\"btn btn-sm danger block-remove\" tabindex=\"-1\">\n                            <i class=\"fas fa-trash\"></i>\n                        </button>\n                    </div>\n                </div>\n                <component v-if=\"!block.meta.isGroup\" v-bind:is=\"block.meta.component\" v-bind:uid=\"block.meta.uid\" v-bind:toolbar=\"'tb-' + block.meta.uid\" v-bind:model=\"block.model\" v-on:update-title='updateTitle($event)'></component>\n                <component v-if=\"block.meta.isGroup\" v-bind:is=\"block.meta.component\" v-bind:uid=\"block.meta.uid\" v-bind:toolbar=\"'tb-' + block.meta.uid\" v-bind:model=\"block\"></component>\n                <div class=\"content-blocker\"></div>\n            </div>\n            <a href=\"#\" class=\"block-add\" v-on:click.prevent=\"piranha.blockpicker.open(add, index + 1)\">\n                <hr>\n                <i class=\"fas fa-plus-circle\"></i>\n            </a>\n        </div>\n        <div v-if=\"section.blocks.length == 0\" class=\"empty-info\">\n            <p>@Localizer.Page[\"Welcome to your new page. Click on the button above to add your first block of content!\"]</p>\n        </div>\n    </div>\n</div>\n"
+});
 Vue.component("generic-block", {
   props: ["uid", "toolbar", "model"],
   methods: {

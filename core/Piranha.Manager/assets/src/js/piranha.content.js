@@ -7,6 +7,7 @@ piranha.content = new Vue({
     data: {
         contentType: null,
         onSave: null,
+        prevId: null,
 
         // Features
         features: {
@@ -46,13 +47,16 @@ piranha.content = new Vue({
         primaryImage: null,
         excerpt: null,
         state: null,
+        isReadOnly: false,
+        isScheduled: false,
         published: null,
         publishedTime: null,
 
         blocks: [],
-        regions: [],
         editors: [],
+        regions: [],
         languages: [],
+        sections: [],
 
         // State members
         loading: true,
@@ -143,13 +147,15 @@ piranha.content = new Vue({
             this.primaryImage = null;
             this.excerpt = null;
             this.state = null;
+            this.isReadOnly = false;
+            this.isScheduled = false;
             this.published = null;
             this.publishedTime = null;
 
-            this.blocks = [];
-            this.regions = [];
             this.editors = [];
+            this.regions = [];
             this.languages = [];
+            this.sections = [];
         },
         bind: function (model) {
             var self = this;
@@ -187,43 +193,41 @@ piranha.content = new Vue({
             this.primaryImage = model.primaryImage;
             this.excerpt = model.excerpt;
             this.state = model.state;
+            this.isReadOnly = model.isReadOnly;
+            this.isScheduled = model.isScheduled;
             this.published = model.published;
             this.publishedTime = model.publishedTime;
 
-            this.blocks = model.blocks;
-            this.regions = model.regions;
             this.editors = model.editors;
+            this.regions = model.regions;
             this.languages = model.languages;
+            this.sections = model.sections;
 
-            if (!this.features.useBlocks) {
-                // First choice, select the first custom editor
-                if (this.editors.length > 0) {
-                    this.selectedRegion = this.editors[0];
-                }
+            if (this.prevId === null || this.prevId !== this.id) {
+                if (this.sections.length === 0) {
+                    // First choice, select the first custom editor
+                    if (this.editors.length > 0) {
+                        this.selectedRegion = this.editors[0];
+                    }
 
-                // Second choice, select the first content region
-                else if (this.contentRegions.length > 0) {
-                    this.selectedRegion = this.contentRegions[0].meta;
+                    // Second choice, select the first content region
+                    else if (this.contentRegions.length > 0) {
+                        this.selectedRegion = this.contentRegions[0].meta;
+                    }
+                } else {
+                    this.selectedRegion = {
+                        //uid: "uid-blocks",
+                        uid: this.sections[0].uid,
+                        name: null,
+                        icon: null,
+                    };
                 }
-            } else {
-                this.selectedRegion = {
-                    uid: "uid-blocks",
-                    name: null,
-                    icon: null,
-                };
             }
+
+            this.prevId = this.id;
 
             // Initialize UI components
             Vue.nextTick(function () {
-                if (self.features.useBlocks)
-                {
-                    sortable("#content-blocks", {
-                        handle: ".handle",
-                        items: ":not(.unsortable)"
-                    })[0].addEventListener("sortupdate", function (e) {
-                        self.moveBlock(e.detail.origin.index, e.detail.destination.index);
-                    });
-                }
                 if (self.features.useCategory)
                 {
                     $("#selectedCategory").select2({
@@ -298,6 +302,9 @@ piranha.content = new Vue({
             .then(function (response) { return response.json(); })
             .then(function (result) {
                 self.bind(result);
+
+                piranha.notifications.push(result.status);
+
                 self.saving = false;
                 self.savingDraft = false;
 
@@ -356,8 +363,8 @@ piranha.content = new Vue({
                 published: self.published,
                 publishedTime: self.publishedTime,
 
-                blocks: JSON.parse(JSON.stringify(self.blocks)),
-                regions: JSON.parse(JSON.stringify(self.regions))
+                regions: JSON.parse(JSON.stringify(self.regions)),
+                sections: JSON.parse(JSON.stringify(self.sections))
             };
 
             fetch(route, {
@@ -423,38 +430,6 @@ piranha.content = new Vue({
                 }
             });
         },
-        addBlock: function (type, pos) {
-            var self = this;
-
-            fetch(piranha.baseUrl + "manager/api/content/block/" + type)
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    self.blocks.splice(pos, 0, result.body);
-                })
-                .catch(function (error) { console.log("error:", error );
-            });
-        },
-        moveBlock: function (from, to) {
-            this.blocks.splice(to, 0, this.blocks.splice(from, 1)[0])
-        },
-        collapseBlock: function (block) {
-            block.meta.isCollapsed = !block.meta.isCollapsed;
-        },
-        removeBlock: function (block) {
-            var index = this.blocks.indexOf(block);
-
-            if (index !== -1) {
-                this.blocks.splice(index, 1);
-            }
-        },
-        updateBlockTitle: function (e) {
-            for (var n = 0; n < this.blocks.length; n++) {
-                if (this.blocks[n].meta.uid === e.uid) {
-                    this.blocks[n].meta.title = e.title;
-                    break;
-                }
-            }
-        },
         selectRegion: function (region) {
             this.selectedRegion = region;
             Vue.nextTick(function () {
@@ -493,8 +468,6 @@ piranha.content = new Vue({
                 this.excerpt = e.target.innerHTML;
             }
         }
-    },
-    updated: function () {
     },
     components: {
         datepicker: vuejsDatepicker

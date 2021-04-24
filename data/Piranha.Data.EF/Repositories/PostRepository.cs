@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -213,7 +214,7 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
-        /// Gets the draft for the page model with the specified id.
+        /// Gets the draft for the post model with the specified id.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
@@ -399,7 +400,7 @@ namespace Piranha.Repositories
 
         /// <summary>
         /// Creates a revision from the current version
-        /// of the page with the given id.
+        /// of the post with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
         /// <param name="revisions">The maximum number of revisions that should be stored</param>
@@ -491,7 +492,7 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
-        /// Deletes the current draft revision for the page
+        /// Deletes the current draft revision for the post
         /// with the given id.
         /// </summary>
         /// <param name="id">The unique id</param>
@@ -774,20 +775,40 @@ namespace Piranha.Repositories
                     };
                 }
 
-                // Transform blocks
-                var blockModels = model.Blocks;
+                // Get the available sections
+                var sections = type.Sections.Select(s => s.Id).ToList();
 
-                if (blockModels != null)
+                // Insert the empty default section
+                sections.Insert(0, "Blocks");
+
+                foreach (var section in sections)
                 {
-                    var blocks = _contentService.TransformBlocks(blockModels);
+                    // Get the blocks for the current section
+                    IList<Extend.Block> sectionBlocks = new List<Extend.Block>();
+
+                    if (section == "Blocks")
+                    {
+                        sectionBlocks = model.Blocks;
+                    }
+                    else
+                    {
+                        // Get the property
+                        var prop = model.GetType().GetProperty(section, App.PropertyBindings);
+                        if (prop != null)
+                        {
+                            sectionBlocks = (IList<Extend.Block>)prop.GetValue(model);
+                        }
+                    }
+
+                    var blocks = _contentService.TransformBlocks(sectionBlocks);
                     var current = blocks.Select(b => b.Id).ToArray();
 
                     // Delete removed blocks
                     var removed = post.Blocks
-                        .Where(b => !current.Contains(b.BlockId) && !b.Block.IsReusable && b.Block.ParentId == null)
+                        .Where(b => b.SectionId == section && !current.Contains(b.BlockId) && !b.Block.IsReusable && b.Block.ParentId == null)
                         .Select(b => b.Block);
                     var removedItems = post.Blocks
-                        .Where(b => !current.Contains(b.BlockId) && b.Block.ParentId != null && removed.Select(p => p.Id).ToList().Contains(b.Block.ParentId.Value))
+                        .Where(b => b.SectionId == section && !current.Contains(b.BlockId) && b.Block.ParentId != null && removed.Select(p => p.Id).ToList().Contains(b.Block.ParentId.Value))
                         .Select(b => b.Block);
 
                     if (!isDraft)
@@ -796,8 +817,9 @@ namespace Piranha.Repositories
                         _db.Blocks.RemoveRange(removedItems);
                     }
 
-                    // Delete the old page blocks
-                    post.Blocks.Clear();
+                    // Delete all post block references for the current section
+                    post.Blocks.Where(b => b.SectionId == section).ToList()
+                        .ForEach(b => post.Blocks.Remove(b));
 
                     // Now map the new block
                     for (var n = 0; n < blocks.Count; n++)
@@ -808,9 +830,10 @@ namespace Piranha.Repositories
                             blockQuery = blockQuery.AsNoTracking();
                         }
 
-                        var block = blockQuery
+                        var block = await blockQuery
                             .Include(b => b.Fields)
-                            .FirstOrDefault(b => b.Id == blocks[n].Id);
+                            .FirstOrDefaultAsync(b => b.Id == blocks[n].Id)
+                            .ConfigureAwait(false);
 
                         if (block == null)
                         {
@@ -860,14 +883,15 @@ namespace Piranha.Repositories
                             field.Value = newField.Value;
                         }
 
-                        // Create the post block
+                        // Create the page block
                         var postBlock = new PostBlock
                         {
                             Id = Guid.NewGuid(),
                             BlockId = block.Id,
                             Block = block,
                             PostId = post.Id,
-                            SortOrder = n
+                            SortOrder = n,
+                            SectionId = section
                         };
                         if (!isDraft)
                         {
@@ -1079,6 +1103,9 @@ namespace Piranha.Repositories
             {
                 if (post.Blocks.Count > 0)
                 {
+                    // Get the post type
+                    var type = App.PostTypes.GetById(post.PostTypeId);
+
                     foreach (var postBlock in post.Blocks.OrderBy(b => b.SortOrder))
                     {
                         if (postBlock.Block.ParentId.HasValue)
@@ -1090,7 +1117,24 @@ namespace Piranha.Repositories
                             }
                         }
                     }
-                    model.Blocks = _contentService.TransformBlocks(post.Blocks.OrderBy(b => b.SortOrder).Select(b => b.Block));
+
+                    // Transform standard blocks
+                    model.Blocks = _contentService.TransformBlocks(post.Blocks.Where(b => b.SectionId == "Blocks").OrderBy(b => b.SortOrder).Select(b => b.Block));
+
+                    // Transform additional block sections
+                    foreach (var section in type.Sections)
+                    {
+                        var prop = model.GetType().GetProperty(section.Id, App.PropertyBindings);
+                        var blockList = (List<Extend.Block>)prop?.GetValue(model);
+
+                        if (blockList != null)
+                        {
+                            foreach (var block in _contentService.TransformBlocks(post.Blocks.Where(b => b.SectionId == section.Id).OrderBy(b => b.SortOrder).Select(b => b.Block)))
+                            {
+                                blockList.Add(block);
+                            }
+                        }
+                    }
                 }
             }
         }

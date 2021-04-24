@@ -125,6 +125,17 @@ namespace Piranha.Manager.Models
         public string State { get; set; }
 
         /// <summary>
+        /// Gets/sets if the content is read only.
+        /// </summary>
+        public bool IsReadOnly { get; set; }
+
+        /// <summary>
+        /// Gets/sets if the content is scheduled to
+        /// be published at a future time.
+        /// </summary>
+        public bool IsScheduled { get; set; }
+
+        /// <summary>
         /// Gets/sets the published date.
         /// </summary>
         public string Published { get; set; }
@@ -135,9 +146,9 @@ namespace Piranha.Manager.Models
         public string PublishedTime { get; set; }
 
         /// <summary>
-        /// Gets/sets the available blocks.
+        /// Gets/sets the available custom editors.
         /// </summary>
-        public IList<Content.BlockModel> Blocks { get; set; } = new List<Content.BlockModel>();
+        public IList<Content.EditorModel> Editors { get; set; } = new List<Content.EditorModel>();
 
         /// <summary>
         /// Gets/sets the available regions.
@@ -145,13 +156,13 @@ namespace Piranha.Manager.Models
         public IList<Content.RegionModel> Regions { get; set; } = new List<Content.RegionModel>();
 
         /// <summary>
-        /// Gets/sets the available custom editors.
-        /// </summary>
-        public IList<Content.EditorModel> Editors { get; set; } = new List<Content.EditorModel>();
-
-        /// <summary>
         /// Gets/sets the available languages.
         /// </summary>
         public IEnumerable<Language> Languages { get; set; } = new List<Language>();
+
+        /// <summary>
+        /// Gets/sets the available block sections.
+        /// </summary>
+        public IList<Content.SectionModel> Sections { get; set; } = new List<Content.SectionModel>();
     }
 }

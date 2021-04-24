@@ -41,6 +41,11 @@ namespace Piranha.Data
         public Guid BlockId { get; set; }
 
         /// <summary>
+        /// Gets/sets the optional section id.
+        /// </summary>
+        public string SectionId { get; set; }
+
+        /// <summary>
         /// Gets/sets the zero based sort index.
         /// </summary>
         public int SortOrder { get; set; }

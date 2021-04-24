@@ -181,6 +181,7 @@ namespace Piranha.Services
 
                 model.TypeId = type.Id;
 
+                // Create and initialize regions
                 foreach (var regionType in type.Regions)
                 {
                     object region = null;
@@ -203,6 +204,17 @@ namespace Piranha.Services
                     if (region != null)
                     {
                         modelType.SetPropertyValue(regionType.Id, model, region);
+                    }
+                }
+
+                // Create and initialize block section
+                foreach (var section in type.Sections)
+                {
+                    var sectionProp = modelType.GetProperty(section.Id, App.PropertyBindings);
+
+                    if (sectionProp != null)
+                    {
+                        sectionProp.SetValue(model, new List<Extend.Block>());
                     }
                 }
                 return model;
@@ -363,6 +375,7 @@ namespace Piranha.Services
                     }
                 }
 
+                // Initialize standard blocks
                 if (!(model is IContentInfo) && model is IBlockContent blockModel)
                 {
                     foreach (var block in blockModel.Blocks)
@@ -374,6 +387,30 @@ namespace Piranha.Services
                             foreach (var child in ((Extend.BlockGroup)block).Items)
                             {
                                 await InitBlockAsync(scope, child, managerInit).ConfigureAwait(false);
+                            }
+                        }
+                    }
+                }
+
+                // Initialize block sections
+                foreach (var section in type.Sections)
+                {
+                    var sectionProp = model.GetType().GetProperty(section.Id, App.PropertyBindings);
+
+                    if (sectionProp != null)
+                    {
+                        var blockList = (IList<Block>)sectionProp.GetValue(model);
+
+                        foreach (var block in blockList)
+                        {
+                            await InitBlockAsync(scope, block, managerInit).ConfigureAwait(false);
+
+                            if (block is Extend.BlockGroup)
+                            {
+                                foreach (var child in ((Extend.BlockGroup)block).Items)
+                                {
+                                    await InitBlockAsync(scope, child, managerInit).ConfigureAwait(false);
+                                }
                             }
                         }
                     }

@@ -5,20 +5,22 @@
 @{
     ViewBag.Title = Localizer.Page["Edit page"];
     ViewBag.MenuItem = "Pages";
+
     string action = ((string)RouteData.Values["routeAction"]).ToLower();
+    string contentId = RouteData.Values.ContainsKey("id") ? (string)RouteData.Values["id"] : null;
 }
 @section script
 {
     <script src="@Url.Content(Piranha.Manager.Editor.EditorScripts.MainScriptUrl)"></script>
     <script src="@Url.Content(Piranha.Manager.Editor.EditorScripts.EditorScriptUrl)"></script>
     <script src="~/manager/assets/js/piranha.components.min.js"></script>
-    <script src="~/manager/assets/js/piranha.pageedit.min.js"></script>
+    <script src="~/manager/assets/js/piranha.content.min.js"></script>
 
     @if (action == "edit")
     {
         <script>
             piranha.permissions.load(function () {
-                piranha.pageedit.load("@RouteData.Values["id"]");
+                piranha.content.load("page", "@contentId");
                 $(".title input").focus();
             });
         </script>
@@ -52,17 +54,15 @@
     }
 }
 
-<div id="pageedit">
+<div id="content">
     <div class="top">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">@Localizer.Menu["Content"]</li>
                 <li class="breadcrumb-item"><a href="~/manager/pages">@Localizer.Menu["Pages"]</a></li>
                 <li class="breadcrumb-item active" aria-current="page">@Localizer.General["Edit"]</li>
-                <li v-if="isCopy" class="badge-item app" :class="{ ready: !loading }"><span class="badge badge-warning">@Localizer.General["Copy"]</span></li>
-                <li v-if="isScheduled" class="badge-item app" :class="{ ready: !loading }"><span class="badge badge-info"><i class="fas fa-calendar-alt"></i> @Localizer.General["Scheduled"]</span></li>
-                <li v-if="state === 'unpublished'" class="badge-item app" :class="{ ready: !loading }"><span class="badge badge-info"><i class="fas fa-unlink"></i> @Localizer.General["Unpublished"]</span></li>
-                <li v-if="state === 'draft'" class="badge-item app" :class="{ ready: !loading }"><span class="badge badge-info"><i class="fas fa-pen"></i> @Localizer.General["Draft"]</span></li>
+                <!-- Content edit state -->
+                <partial name="Partial/_ContentEditState" />
             </ol>
         </nav>
 
@@ -77,7 +77,7 @@
     </div>
 
     <div class="container-fluid app" :class="{ ready: !loading }">
-        <div v-if="isCopy" class="card">
+        <div v-if="isReadOnly" class="card">
             <div class="card-body">
                 <div class="row">
                     <div class="col">
@@ -95,109 +95,12 @@
             </div>
         </div>
 
-        <!-- Content navigation -->
-        <ul v-if="(useBlocks && (editors.length + contentRegions.length > 0)) || editors.length + contentRegions.length > 1 || (enableComments && (commentCount > 0 || pendingCommentCount > 0))" class="nav nav-pills nav-pills-card justify-content-center">
-            <li v-if="useBlocks" class="nav-item">
-                <a class="nav-link" v-on:click.prevent="selectRegion({ uid: 'uid-blocks' })" :class="{ active: selectedRegion.uid === 'uid-blocks' }" href="#">
-                    <i class="fas fa-pen-alt"></i>@Localizer.General["Main content"]
-                </a>
-            </li>
-            <li v-for="editor in editors" class="nav-item">
-                <a class="nav-link" v-on:click.prevent="selectRegion(editor)" :class="{ active: selectedRegion.uid == editor.uid }" href="#">
-                    <i :class="editor.icon"></i>{{ editor.name }}
-                </a>
-            </li>
-            <li v-for="region in contentRegions" class="nav-item">
-                <a class="nav-link" v-on:click.prevent="selectRegion(region.meta)" :class="{ active: selectedRegion.uid == region.meta.uid }" href="#">
-                    <i :class="region.meta.icon"></i>{{ region.meta.name }}
-                </a>
-            </li>
-            <li v-if="enableComments && (commentCount > 0 || pendingCommentCount > 0)" class="nav-item">
-                <a :href="piranha.baseUrl + 'manager/comments/' + id" target="comments" class="nav-link">
-                    <i class="fas fa-comments"></i>@Localizer.General["Comments"]
-                    <span v-if="pendingCommentCount > 0" class="badge badge-danger">{{ pendingCommentCount }}</span>
-                </a>
-            </li>
-        </ul>
+        <!-- Content edit navigation -->
+        <partial name="Partial/_ContentEditNav" />
 
-        <!-- Title -->
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group title">
-                            <input v-model="title" type="text" class="form-control form-control-lg" placeholder="@Localizer.Page["Your page title"]">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Blocks -->
-        <div class="card" :class="{ 'd-none': selectedRegion.uid != 'uid-blocks' }">
-            <div class="card-body" v-bind:class="{ readonly: isCopy }">
-                <div id="content-blocks" class="blocks@(Config.ManagerOutlined ? " blocks-outline" : "")">
-                    <a v-if="!isCopy" href="#" class="block-add unsortable" v-on:click.prevent="piranha.blockpicker.open(piranha.pageedit.addBlock, 0)">
-                        <hr>
-                        <i class="fas fa-plus-circle"></i>
-                    </a>
-                    <span v-else class="block-add unsortable"><hr><i class="fas fa-plus-circle"></i></span>
-                    <div v-for="(block, index) in blocks" v-bind:key="block.meta.uid">
-                        <div :class="'block ' + block.meta.component + (block.meta.isCollapsed ? ' collapsed' : '') + (block.meta.width === 'full' ? ' block-full' : '')">
-                            <div :id="'tb-' + block.meta.uid" class="component-toolbar"></div>
-                            <div class="block-header">
-                                <div class="title">
-                                    <i :class="block.meta.icon"></i><strong>{{ block.meta.name }}</strong> <span v-if="!block.meta.isGroup && block.meta.isCollapsed">- {{ block.meta.title }}</span>
-                                </div>
-                                <div class="actions">
-                                    <span v-on:click.prevent="collapseBlock(block)" class="btn btn-sm">
-                                        <i v-if="block.meta.isCollapsed" class="fas fa-chevron-down"></i>
-                                        <i v-else class="fas fa-chevron-up"></i>
-                                    </span>
-                                    <span class="btn btn-sm handle">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                    </span>
-                                    <button v-on:click.prevent="removeBlock(block)" class="btn btn-sm danger block-remove" tabindex="-1">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <component v-if="!block.meta.isGroup" v-bind:is="block.meta.component" v-bind:uid="block.meta.uid" v-bind:toolbar="'tb-' + block.meta.uid" v-bind:model="block.model" v-on:update-title='updateBlockTitle($event)'></component>
-                            <component v-if="block.meta.isGroup" v-bind:is="block.meta.component" v-bind:uid="block.meta.uid" v-bind:toolbar="'tb-' + block.meta.uid" v-bind:model="block"></component>
-                            <div class="content-blocker"></div>
-                        </div>
-                        <a v-if="!isCopy" href="#" class="block-add" v-on:click.prevent="piranha.blockpicker.open(piranha.pageedit.addBlock, index + 1)">
-                            <hr>
-                            <i class="fas fa-plus-circle"></i>
-                        </a>
-                        <span v-else class="block-add"><hr><i class="fas fa-plus-circle"></i></span>
-                    </div>
-                    <div v-if="blocks.length == 0" class="empty-info">
-                        <p>@Localizer.Page["Welcome to your new page. Click on the button above to add your first block of content!"]</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Custom Editors -->
-        <div class="card" :class="{ 'd-none': selectedRegion.uid != editor.uid }" v-for="editor in editors">
-            <div class="card-body">
-                <div class="region-center">
-                    <component v-bind:is="editor.component" v-bind:uid="editor.uid" v-bind:id="id"></component>
-                </div>
-            </div>
-        </div>
-
-        <!-- Content Regions -->
-        <div class="card" :class="{ 'd-none': selectedRegion.uid != region.meta.uid }" v-for="region in contentRegions">
-            <div class="card-body">
-                <div class="region" :class="{ readonly: isCopy, 'region-center': region.meta.width === 'centered' }">
-                    <region v-bind:content="'page'" v-bind:type="typeId" v-bind:model="region"></region>
-                    <div class="content-blocker"></div>
-                </div>
-            </div>
-        </div>
+        <!-- Content edit body -->
+        <partial name="Partial/_ContentEditBody" />
     </div>
 
-    <partial name="Partial/_PageSettings" />
+    <partial name="Partial/_ContentSettings" />
 </div>
