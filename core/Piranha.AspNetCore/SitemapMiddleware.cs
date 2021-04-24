@@ -102,7 +102,7 @@ namespace Piranha.AspNetCore
         {
             var urls = new List<Url>();
 
-            if (item.Published.HasValue && item.Published.Value <= DateTime.Now)
+            if (item.MetaIndex && item.Published.HasValue && item.Published.Value <= DateTime.Now)
             {
                 urls.Add(new Url
                 {
