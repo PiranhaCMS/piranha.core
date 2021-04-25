@@ -22,10 +22,10 @@
     <value>所有类别</value>
   </data>
   <data name="An error occured while deleting the post" xml:space="preserve">
-    <value>An error occured while deleting the post</value>
+    <value>删除文章时发生错误</value>
   </data>
   <data name="An error occured while saving the post" xml:space="preserve">
-    <value>An error occured while saving the post</value>
+    <value>保存文章时发生错误</value>
   </data>
   <data name="Categories" xml:space="preserve">
     <value>类别管理</value>
@@ -61,18 +61,18 @@
     <value>如果来自此帖子的链接应该索引。</value>
   </data>
   <data name="The post was successfully deleted" xml:space="preserve">
-    <value>The post was successfully deleted</value>
+    <value>文章已成功删除</value>
   </data>
   <data name="The post was successfully published" xml:space="preserve">
-    <value>The post was successfully published</value>
+    <value>文章已成功发布</value>
   </data>
   <data name="The post was successfully unpublished" xml:space="preserve">
-    <value>The post was successfully unpublished</value>
+    <value>文章已成功取消发布</value>
   </data>
   <data name="The post was successfully saved" xml:space="preserve">
-    <value>The post was successfully saved</value>
+    <value>文章已成功保存</value>
   </data>
   <data name="The post was successfully reverted to its previous state" xml:space="preserve">
-    <value>The post was successfully reverted to its previous state</value>
+    <value>文章已成功还原到其上一个状态</value>
   </data>
 </root>
