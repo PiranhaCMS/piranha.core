@@ -31,15 +31,15 @@
     <value>Search engine priority, compared to other content in the same site.</value>
   </data>
   <data name="The content was successfully deleted" xml:space="preserve">
-    <value>The content was successfully deleted</value>
+    <value>Контент был успешно удален</value>
   </data>
   <data name="An error occured while deleting the content" xml:space="preserve">
-    <value>An error occured while deleting the content</value>
+    <value>Произошла ошибка при удалении контента</value>
   </data>
   <data name="The content was successfully saved" xml:space="preserve">
-    <value>The content was successfully saved</value>
+    <value>Контент успешно сохранен</value>
   </data>
   <data name="An error occured while saving the content" xml:space="preserve">
-    <value>An error occured while saving the content</value>
+    <value>Произошла ошибка при сохранении контента</value>
   </data>
 </root>
