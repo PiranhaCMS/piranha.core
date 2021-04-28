@@ -18,6 +18,9 @@
   <data name="An error occured while deleting the page" xml:space="preserve">
     <value>Der opstod en fejl under sletning af siden</value>
   </data>
+  <data name="An error occured while saving the page" xml:space="preserve">
+    <value>Der opstod en fejl under lagring af siden</value>
+  </data>
   <data name="Archive" xml:space="preserve">
     <value>Arkiv</value>
   </data>

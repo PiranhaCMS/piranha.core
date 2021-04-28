@@ -13,90 +13,93 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add page" xml:space="preserve">
-    <value>添加页面</value>
+    <value>新增頁面</value>
   </data>
   <data name="An error occured while deleting the page" xml:space="preserve">
-    <value>删除页面时出错</value>
+    <value>刪除面頁時發生錯誤</value>
+  </data>
+  <data name="An error occured while saving the page" xml:space="preserve">
+    <value>儲存面頁時發生錯誤</value>
   </data>
   <data name="Archive" xml:space="preserve">
-    <value>存档</value>
+    <value>封存</value>
   </data>
   <data name="Detach page" xml:space="preserve">
-    <value>分离页面</value>
+    <value>分割頁面</value>
   </data>
   <data name="Edit original" xml:space="preserve">
-    <value>编辑原始文件</value>
+    <value>編輯原始頁面</value>
   </data>
   <data name="Edit page" xml:space="preserve">
-    <value>编辑页面</value>
+    <value>編輯頁面</value>
   </data>
   <data name="Hidden" xml:space="preserve">
-    <value>隐藏</value>
+    <value>隱藏</value>
   </data>
   <data name="If the page should be hidden in the sitemap" xml:space="preserve">
-    <value>如果页面被隐藏在站点地图中</value>
+    <value>在網站地圖中隱藏本面頁</value>
   </data>
   <data name="If the page should be indexed by search engines." xml:space="preserve">
-    <value>如果页面应该通过搜索引擎索引。</value>
+    <value>在搜索引擎中索引本面頁。</value>
   </data>
   <data name="If links from this page should be indexed." xml:space="preserve">
-    <value>如果来自此页面的链接应该索引。</value>
+    <value>本面頁連結應該被索引到。</value>
   </data>
   <data name="Meta title" xml:space="preserve">
-    <value>关键字标题</value>
+    <value>關鍵字標題</value>
   </data>
   <data name="Meta keywords" xml:space="preserve">
-    <value>关键字内容</value>
+    <value>關鍵字內容（提供搜尋引擎抓取）</value>
   </data>
   <data name="Meta description" xml:space="preserve">
-    <value>关键字描述</value>
+    <value>關鍵字說明（提供搜尋引擎抓取）</value>
   </data>
   <data name="Og title" xml:space="preserve">
-    <value>Og 标题</value>
+    <value>Og 標題</value>
   </data>
   <data name="Og image" xml:space="preserve">
-    <value>Og 图像</value>
+    <value>Og 圖片</value>
   </data>
   <data name="Og description" xml:space="preserve">
-    <value>Og 描述</value>
+    <value>Og 說明</value>
   </data>
   <data name="Navigation title" xml:space="preserve">
-    <value>导航标题</value>
+    <value>導航欄標題</value>
   </data>
   <data name="Are you sure you want to delete this page?" xml:space="preserve">
-    <value>您确定要删除此页面？</value>
+    <value>是否確定要刪除本頁面？</value>
   </data>
   <data name="Pages" xml:space="preserve">
-    <value>页面</value>
+    <value>頁面</value>
   </data>
   <data name="The page was successfully deleted" xml:space="preserve">
-    <value>页面已成功删除</value>
+    <value>本頁面已刪除成功。</value>
   </data>
   <data name="The page was successfully detached from the original" xml:space="preserve">
-    <value>页面已成功脱离原始页面</value>
+    <value>本頁面已成功從原始頁面中進行分割。</value>
   </data>
   <data name="The page was successfully published" xml:space="preserve">
-    <value>页面已成功发布</value>
+    <value>本頁面已發布成功。</value>
   </data>
   <data name="The page was successfully unpublished" xml:space="preserve">
-    <value>页面已成功取消发布</value>
+    <value>本頁面已取消發佈成功。</value>
   </data>
   <data name="The page was successfully saved" xml:space="preserve">
-    <value>页面已成功保存</value>
+    <value>本頁面已儲存成功。</value>
   </data>
   <data name="The page was successfully reverted to its previous state" xml:space="preserve">
-    <value>页面已成功还原到其上一个状态</value>
+    <value>本頁面已成功回復到先前狀態。</value>
   </data>
   <data name="This is a copy. In order to edit the content of the page you first need to detach it from the original. If you want to keep the page as a copy you should edit the content of the original page." xml:space="preserve">
-    <value>这是一个副本。为了编辑页面的内容，您首先需要将其从原件中分离出来。 如果你想保留页面的副本，你应该编辑原始页面的内容。</value>
+    <value>這是一個複製頁面，若您要編輯本頁面的內容時請記得先進行『分割面頁』；若您想要保持與原始頁面內容相同，請記得『編輯原始頁面』。</value>
   </data>
   <data name="Welcome to your new page. Click on the button above to add your first block of content!" xml:space="preserve">
-    <value>欢迎来到您的新页面。点击上面的按钮添加您的第一个内容块！</value>
+    <value>歡迎您建立新的頁面，請點擊下列按鍵增加您的第一個資料區塊！</value>
   </data>
   <data name="Your page title" xml:space="preserve">
-    <value>您的页面标题</value>
+    <value>頁面標題</value>
   </data>
   <data name="If comments should be enabled for this page" xml:space="preserve">
-    <value>如果评论应该为此页面启用</value>
+    <value>啟用本面頁評論功能</value>
   </data>
 </root>

@@ -13,45 +13,66 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add or select existing category" xml:space="preserve">
-    <value>添加或选择现有类别</value>
+    <value>新增或選擇已有的型錄</value>
   </data>
   <data name="Add or select existing tags (optional)" xml:space="preserve">
-    <value>添加或选择现有标签 (可选)</value>
+    <value>新增或選擇已有的標籤（選項）</value>
   </data>
   <data name="All categories" xml:space="preserve">
-    <value>所有类别</value>
+    <value>所有型錄</value>
+  </data>
+  <data name="An error occured while deleting the post" xml:space="preserve">
+    <value>刪除文章時發生錯誤</value>
+  </data>
+  <data name="An error occured while saving the post" xml:space="preserve">
+    <value>儲存文章時發生錯誤</value>
   </data>
   <data name="Categories" xml:space="preserve">
-    <value>类别管理</value>
+    <value>型錄</value>
   </data>
   <data name="Category" xml:space="preserve">
-    <value>类别</value>
+    <value>型錄</value>
   </data>
   <data name="Edit post" xml:space="preserve">
-	  <value>编辑帖子</value>
+	  <value>編輯文章</value>
 	</data>
   <data name="Tag" xml:space="preserve">
-    <value>标签</value>
+    <value>標籤</value>
   </data>
   <data name="Tags" xml:space="preserve">
-    <value>标签</value>
+    <value>標籤</value>
   </data>
   <data name="Are you sure you want to delete this post?" xml:space="preserve">
-    <value>您确定要删除此帖子？</value>
+    <value>是否確定要刪除本文章？</value>
   </data>
   <data name="Welcome to your new post. Click on the button above to add your first block of content!" xml:space="preserve">
-    <value>欢迎来到您的新帖。点击上面的按钮来添加您的第一个内容块！</value>
+    <value>歡迎您建立新的文章，請點擊下列按鍵增加您的第一個資料區塊！</value>
   </data>
   <data name="Your post title" xml:space="preserve">
-    <value>您的帖子标题</value>
+    <value>文章標題</value>
   </data>
   <data name="If comments should be enabled for this post" xml:space="preserve">
-    <value>如果此帖应启用留言</value>
+    <value>啟用本文章評論功能</value>
   </data>
   <data name="If the post should be indexed by search engines." xml:space="preserve">
-    <value>如果帖子应该通过搜索引擎索引。</value>
+    <value>在搜索引擎中索引本文章。</value>
   </data>
   <data name="If links from this post should be indexed." xml:space="preserve">
-    <value>如果来自此帖子的链接应该索引。</value>
+    <value>本文章連結應該被索引到。</value>
+  </data>
+  <data name="The post was successfully deleted" xml:space="preserve">
+    <value>本文章已刪除成功</value>
+  </data>
+  <data name="The post was successfully published" xml:space="preserve">
+    <value>本文章已成功發布。</value>
+  </data>
+  <data name="The post was successfully unpublished" xml:space="preserve">
+    <value>本文章已成功取消發佈。</value>
+  </data>
+  <data name="The post was successfully saved" xml:space="preserve">
+    <value>本文章已成功儲存。</value>
+  </data>
+  <data name="The post was successfully reverted to its previous state" xml:space="preserve">
+    <value>本文章已成功回復到先前狀態。</value>
   </data>
 </root>

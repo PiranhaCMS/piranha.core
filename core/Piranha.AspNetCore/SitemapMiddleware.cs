@@ -102,12 +102,13 @@ namespace Piranha.AspNetCore
         {
             var urls = new List<Url>();
 
-            if (item.Published.HasValue && item.Published.Value <= DateTime.Now)
+            if (item.MetaIndex && item.Published.HasValue && item.Published.Value <= DateTime.Now)
             {
                 urls.Add(new Url
                 {
                     ChangeFrequency = ChangeFrequency.Daily,
-                    Location = baseUrl + item.Permalink,
+                    // If the Permalink contains an absolute Uri (e.g. redirection), don't prefix with the baseUrl
+                    Location = Uri.IsWellFormedUriString(item.Permalink, UriKind.Absolute) ? item.Permalink : baseUrl + item.Permalink,
                     Priority = item.MetaPriority,
                     TimeStamp = item.LastModified
                 });
@@ -121,7 +122,8 @@ namespace Piranha.AspNetCore
                         urls.Add(new Url
                         {
                             ChangeFrequency = ChangeFrequency.Daily,
-                            Location = baseUrl + post.Permalink,
+                            // If the Permalink contains an absolute Uri (e.g. redirection), don't prefix with the baseUrl
+                            Location = Uri.IsWellFormedUriString(post.Permalink, UriKind.Absolute) ? item.Permalink : baseUrl + post.Permalink,
                             Priority = post.MetaPriority,
                             TimeStamp = post.LastModified
                         });

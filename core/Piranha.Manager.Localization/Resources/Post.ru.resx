@@ -21,6 +21,12 @@
   <data name="All categories" xml:space="preserve">
     <value>Все категории</value>
   </data>
+  <data name="An error occured while deleting the post" xml:space="preserve">
+    <value>Произошла ошибка при удалении поста</value>
+  </data>
+  <data name="An error occured while saving the post" xml:space="preserve">
+    <value>Произошла ошибка при сохранении поста</value>
+  </data>
   <data name="Categories" xml:space="preserve">
     <value>Категории</value>
   </data>
@@ -53,5 +59,20 @@
   </data>
   <data name="If links from this post should be indexed." xml:space="preserve">
     <value>If links from this post should be indexed.</value>
+  </data>
+  <data name="The post was successfully deleted" xml:space="preserve">
+    <value>Пост успешно удален</value>
+  </data>
+  <data name="The post was successfully published" xml:space="preserve">
+    <value>Пост успешно опубликован</value>
+  </data>
+  <data name="The post was successfully unpublished" xml:space="preserve">
+    <value>Пост успешно снят с публикации</value>
+  </data>
+  <data name="The post was successfully saved" xml:space="preserve">
+    <value>Пост успешно сохранен</value>
+  </data>
+  <data name="The post was successfully reverted to its previous state" xml:space="preserve">
+    <value>Пост успешно возвращен в прежнее состояние</value>
   </data>
 </root>

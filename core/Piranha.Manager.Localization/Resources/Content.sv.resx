@@ -30,4 +30,16 @@
   <data name="Search engine priority, compared to other content in the same site." xml:space="preserve">
     <value>Sökmotor prioritet, jämfört med annat innehåll på samma webbplats.</value>
   </data>
+  <data name="The content was successfully deleted" xml:space="preserve">
+    <value>Innehållet har raderats</value>
+  </data>
+  <data name="An error occured while deleting the content" xml:space="preserve">
+    <value>Ett fel inträffade när innehållet skulle raderas</value>
+  </data>
+  <data name="The content was successfully saved" xml:space="preserve">
+    <value>Innehållet har sparats</value>
+  </data>
+  <data name="An error occured while saving the content" xml:space="preserve">
+    <value>Ett fel inträffade när innehållet skulle sparas</value>
+  </data>
 </root>
