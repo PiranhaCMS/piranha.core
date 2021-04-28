@@ -429,6 +429,7 @@ piranha.content = new Vue({
                 groupId: self.groupId,
                 position: JSON.parse(JSON.stringify(self.position)),
                 meta: JSON.parse(JSON.stringify(self.meta)),
+                comments: JSON.parse(JSON.stringify(self.comments)),
                 permissions: {
                     selectedPermissions: self.permissions.selectedPermissions
                 },
@@ -548,7 +549,13 @@ piranha.content = new Vue({
             } else {
                 this.excerpt = e.target.innerHTML;
             }
-        }
+        },
+        commentsClosedDate: function () {
+            var date = new Date(this.published);
+            date = date.addDays(this.comments.closeCommentsAfterDays);
+
+            return date.toDateString();
+        },
     },
     components: {
         datepicker: vuejsDatepicker

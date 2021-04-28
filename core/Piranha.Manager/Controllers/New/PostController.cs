@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 using Piranha.Manager.Hubs;
 using Piranha.Manager.Models;
 using Piranha.Manager.Services;
@@ -29,6 +30,7 @@ namespace Piranha.Manager.Controllers
         private readonly ContentServiceLabs _service;
         private readonly ManagerLocalizer _localizer;
         private readonly IHubContext<PreviewHub> _hub;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Default constructor.
@@ -36,11 +38,14 @@ namespace Piranha.Manager.Controllers
         /// <param name="service">The content service</param>
         /// <param name="localizer">The localization service</param>
         /// <param name="hub">The SignalR preview hub</param>
-        public PostController(ContentServiceLabs service, ManagerLocalizer localizer, IHubContext<PreviewHub> hub)
+        /// <param name="factory">The optional logger factory</param>
+        public PostController(ContentServiceLabs service, ManagerLocalizer localizer, IHubContext<PreviewHub> hub,
+            ILoggerFactory factory = null)
         {
             _service = service;
             _localizer = localizer;
             _hub = hub;
+            _logger = factory?.CreateLogger(typeof(PostController));
         }
 
         /// <summary>
@@ -66,7 +71,7 @@ namespace Piranha.Manager.Controllers
         [Authorize(Policy = Permission.PostsPublish)]
         public Task<ContentModel> SaveAsync(ContentModel model)
         {
-            return _service.SavePostAsync(model);
+            return SaveAsync(model, false);
         }
 
         /// <summary>
@@ -79,7 +84,7 @@ namespace Piranha.Manager.Controllers
         [Authorize(Policy = Permission.PostsSave)]
         public Task<ContentModel> SaveDraftAsync(ContentModel model)
         {
-            return _service.SavePostAsync(model, true);
+            return SaveAsync(model, true);
         }
 
         /// <summary>

@@ -393,6 +393,88 @@ Vue.component("block-section", {
   },
   template: "\n<div class=\"card-body\">\n    <div :id=\"'content-blocks-' + section.id\" :class=\"{ 'blocks-outline': outline }\">\n        <a href=\"#\" class=\"block-add unsortable\" v-on:click.prevent=\"piranha.blockpicker.open(add, 0)\">\n            <hr>\n            <i class=\"fas fa-plus-circle\"></i>\n        </a>\n        <div v-for=\"(block, index) in section.blocks\" v-bind:key=\"block.meta.uid\">\n                <div :class=\"'block ' + block.meta.component + (block.meta.isCollapsed ? ' collapsed' : '') + (block.meta.width === 'full' ? ' block-full' : '')\">\n                <div :id=\"'tb-' + block.meta.uid\" class=\"component-toolbar\"></div>\n                <div class=\"block-header\">\n                    <div class=\"title\">\n                        <i :class=\"block.meta.icon\"></i><strong>{{ block.meta.name }}</strong> <span v-if=\"!block.meta.isGroup && block.meta.isCollapsed\">- {{ block.meta.title }}</span>\n                    </div>\n                    <div class=\"actions\">\n                        <span v-on:click.prevent=\"collapse(block)\" class=\"btn btn-sm\">\n                            <i v-if=\"block.meta.isCollapsed\" class=\"fas fa-chevron-down\"></i>\n                            <i v-else class=\"fas fa-chevron-up\"></i>\n                        </span>\n                        <span class=\"btn btn-sm handle\">\n                            <i class=\"fas fa-ellipsis-v\"></i>\n                        </span>\n                        <button v-on:click.prevent=\"remove(block)\" class=\"btn btn-sm danger block-remove\" tabindex=\"-1\">\n                            <i class=\"fas fa-trash\"></i>\n                        </button>\n                    </div>\n                </div>\n                <component v-if=\"!block.meta.isGroup\" v-bind:is=\"block.meta.component\" v-bind:uid=\"block.meta.uid\" v-bind:toolbar=\"'tb-' + block.meta.uid\" v-bind:model=\"block.model\" v-on:update-title='updateTitle($event)'></component>\n                <component v-if=\"block.meta.isGroup\" v-bind:is=\"block.meta.component\" v-bind:uid=\"block.meta.uid\" v-bind:toolbar=\"'tb-' + block.meta.uid\" v-bind:model=\"block\"></component>\n                <div class=\"content-blocker\"></div>\n            </div>\n            <a href=\"#\" class=\"block-add\" v-on:click.prevent=\"piranha.blockpicker.open(add, index + 1)\">\n                <hr>\n                <i class=\"fas fa-plus-circle\"></i>\n            </a>\n        </div>\n        <div v-if=\"section.blocks.length == 0\" class=\"empty-info\">\n            <p>@Localizer.Page[\"Welcome to your new page. Click on the button above to add your first block of content!\"]</p>\n        </div>\n    </div>\n</div>\n"
 });
+Vue.component("comment-section", {
+  props: ["id", "outline"],
+  data: function () {
+    return {
+      loading: false,
+      items: []
+    };
+  },
+  methods: {
+    load: function () {
+      self = this;
+      self.loading = true;
+      fetch(piranha.baseUrl + "manager/api/comment/" + this.id).then(function (response) {
+        return response.json();
+      }).then(function (result) {
+        self.group = result.group;
+        self.items = result.comments;
+        self.loading = false;
+      }).catch(function (error) {
+        console.log("error:", error);
+      });
+    },
+    approve: function (id) {
+      var self = this;
+      fetch(piranha.baseUrl + "manager/api/comment/approve/" + id + (self.contentId != null ? "/" + self.contentId : "")).then(function (response) {
+        return response.json();
+      }).then(function (result) {
+        if (result.status) {
+          // Push status to notification hub
+          piranha.notifications.push(result.status);
+        }
+
+        self.contentId = result.contentId;
+        self.items = result.comments;
+      }).catch(function (error) {
+        console.log("error:", error);
+      });
+    },
+    unapprove: function (id) {
+      var self = this;
+      fetch(piranha.baseUrl + "manager/api/comment/unapprove/" + id + (self.contentId != null ? "/" + self.contentId : "")).then(function (response) {
+        return response.json();
+      }).then(function (result) {
+        if (result.status) {
+          // Push status to notification hub
+          piranha.notifications.push(result.status);
+        }
+
+        self.contentId = result.contentId;
+        self.items = result.comments;
+      }).catch(function (error) {
+        console.log("error:", error);
+      });
+    },
+    toggleApproved: function (item) {
+      item.isApproved = !item.isApproved;
+
+      if (item.isApproved) {
+        this.approve(item.id);
+      } else {
+        this.unapprove(item.id);
+      }
+    },
+    remove: function (id) {
+      var self = this;
+      fetch(piranha.baseUrl + "manager/api/comment/delete/" + id).then(function (response) {
+        return response.json();
+      }).then(function (result) {
+        // Push status to notification hub
+        piranha.notifications.push(result); // Refresh the list
+
+        self.load(self.contentId);
+      }).catch(function (error) {
+        console.log("error:", error);
+      });
+    }
+  },
+  mounted: function () {
+    this.load();
+  },
+  template: "\n<table class=\"table table-borderless table-comments\">\n    <thead>\n        <tr>\n            <th class=\"w-20\">Author</th>\n            <th class=\"w-50\">Comment</th>\n            <th class=\"text-nowrap\">Response to</th>\n            <th class=\"text-center\">Approved</th>\n            <th>Created</th>\n            <th class=\"actions one\"></th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr v-for=\"comment in items\" v-bind:key=\"comment.id\">\n            <td class=\"text-nowrap align-middle\">\n                <img class=\"rounded mr-2\" :src=\"comment.authorImage\" :alt=\"comment.author\">\n                <a class=\"mr-3\" :href=\"'mailto:' + comment.email\">{{ comment.author }}</a>\n            </td>\n            <td>{{ comment.body }}</td>\n            <td class=\"align-middle\">\n                <a v-if=\"comment.articleTitle\" class=\"author\" :href=\"piranha.baseUrl + comment.articleUrl\" target=\"_blank\">{{ comment.articleTitle }}</a>\n            </td>\n            <td class=\"text-center text-success align-middle\">\n                <button v-on:click.prevent=\"toggleApproved(comment)\" class=\"switch\" :aria-pressed=\"comment.isApproved\"><span></span></button>\n            </td>\n            <td class=\"align-middle\">{{ comment.created }}</td>\n            <td class=\"actions one align-middle\">\n                <a v-if=\"piranha.permissions.comments.delete\" v-on:click.prevent=\"remove(comment.id)\" href=\"#\" title=\"Delete\" class=\"danger\"><i class=\"fas fa-trash\"></i></a>\n            </td>\n        </tr>\n    </tbody>\n</table>\n"
+});
 Vue.component("generic-block", {
   props: ["uid", "toolbar", "model"],
   methods: {

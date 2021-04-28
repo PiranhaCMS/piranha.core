@@ -20,5 +20,11 @@ namespace Piranha.Models
         /// </summary>
         /// <value></value>
         bool EnableComments { get; set; }
+
+        /// <summary>
+        /// Gets/sets after how many days after publish date comments
+        /// should be closed. A value of 0 means never.
+        /// </summary>
+        int CloseCommentsAfterDays { get; set; }
     }
 }

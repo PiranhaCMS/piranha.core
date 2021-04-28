@@ -157,14 +157,7 @@ namespace Piranha.Manager
             var mapperConfig = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<GenericContent, ContentModel>()
-                    .ForMember(m => m.Permissions, o => o.MapFrom(p => new ContentPermissions
-                    {
-                        SelectedPermissions = p.Permissions,
-                        Permissions = App.Permissions
-                            .GetPublicPermissions()
-                            .Select(p => new KeyValuePair<string, string>(p.Name, p.Title))
-                            .ToList()
-                    }))
+                    .ForMember(m => m.Permissions, o => o.Ignore())
                     .ForMember(m => m.Status, o => o.Ignore())
                     .ForMember(m => m.IsReadOnly, o => o.Ignore())
                     .ForMember(m => m.IsScheduled, o => o.Ignore())
@@ -321,7 +314,7 @@ namespace Piranha.Manager
                     .ForMember(p => p.OgImage, o => o.MapFrom(m => m.Meta.OgImage))
                     .ForMember(p => p.OgDescription, o => o.MapFrom(m => m.Meta.OgDescription))
                     .ForMember(p => p.NavigationTitle, o => o.MapFrom(m => m.AltTitle))
-                    .ForMember(p => p.EnableComments, o => o.MapFrom(m => m.Features.UseComments))
+                    .ForMember(p => p.EnableComments, o => o.MapFrom(m => m.Comments.EnableComments))
                     .ForMember(p => p.CloseCommentsAfterDays, o => o.MapFrom(m => m.Comments.CloseCommentsAfterDays))
                     .ForMember(p => p.CommentCount, o => o.MapFrom(m => m.Comments.CommentCount))
                     .ForMember(p => p.RedirectUrl, o => o.MapFrom(m => m.Routes.RedirectUrl))
@@ -345,7 +338,7 @@ namespace Piranha.Manager
                     .ForMember(p => p.OgTitle, o => o.MapFrom(m => m.Meta.OgTitle))
                     .ForMember(p => p.OgImage, o => o.MapFrom(m => m.Meta.OgImage))
                     .ForMember(p => p.OgDescription, o => o.MapFrom(m => m.Meta.OgDescription))
-                    .ForMember(p => p.EnableComments, o => o.MapFrom(m => m.Features.UseComments))
+                    .ForMember(p => p.EnableComments, o => o.MapFrom(m => m.Comments.EnableComments))
                     .ForMember(p => p.CloseCommentsAfterDays, o => o.MapFrom(m => m.Comments.CloseCommentsAfterDays))
                     .ForMember(p => p.CommentCount, o => o.MapFrom(m => m.Comments.CommentCount))
                     .ForMember(p => p.RedirectUrl, o => o.MapFrom(m => m.Routes.RedirectUrl))

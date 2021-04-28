@@ -98,3 +98,12 @@
         </div>
     </div>
 </div>
+
+<!-- Comments -->
+<div class="card" :class="{ 'd-none': selectedRegion.uid != 'uid-comments' }" v-if="features.useComments">
+    <div class="card-body pt-0">
+        <div class="region region-center">
+            <comment-section v-bind:id="id" v-bind:outline="'@Config.ManagerOutlined'"></comment-section>
+        </div>
+    </div>
+</div>

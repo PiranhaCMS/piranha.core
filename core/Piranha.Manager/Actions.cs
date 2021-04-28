@@ -112,7 +112,7 @@ namespace Piranha.Manager
                 new ToolbarAction
                 {
                     InternalId = "Settings",
-                    ActionView = "Partial/Actions/_PageSettings"
+                    ActionView = "Partial/Actions/_ContentSettings"
                 },
                 new ToolbarAction
                 {
@@ -122,12 +122,12 @@ namespace Piranha.Manager
                 new ToolbarAction
                 {
                     InternalId = "Save",
-                    ActionView = "Partial/Actions/_PageSave"
+                    ActionView = "Partial/Actions/_ContentSave"
                 },
                 new ToolbarAction
                 {
                     InternalId = "Delete",
-                    ActionView = "Partial/Actions/_PageDelete"
+                    ActionView = "Partial/Actions/_ContentDelete"
                 }
             };
 
@@ -161,7 +161,7 @@ namespace Piranha.Manager
                 new ToolbarAction
                 {
                     InternalId = "Settings",
-                    ActionView = "Partial/Actions/_PostSettings"
+                    ActionView = "Partial/Actions/_ContentSettings"
                 },
                 new ToolbarAction
                 {
@@ -171,12 +171,12 @@ namespace Piranha.Manager
                 new ToolbarAction
                 {
                     InternalId = "Save",
-                    ActionView = "Partial/Actions/_PostSave"
+                    ActionView = "Partial/Actions/_ContentSave"
                 },
                 new ToolbarAction
                 {
                     InternalId = "Delete",
-                    ActionView = "Partial/Actions/_PostDelete"
+                    ActionView = "Partial/Actions/_ContentDelete"
                 }
             };
 

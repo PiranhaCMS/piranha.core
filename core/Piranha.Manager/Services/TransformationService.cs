@@ -62,6 +62,11 @@ namespace Piranha.Manager.Services
                 UsePrimaryImage = type.UsePrimaryImage,
                 UsePublish = true
             };
+            model.Comments = new ContentComments
+            {
+                EnableComments = page.EnableComments,
+                CloseCommentsAfterDays = page.CloseCommentsAfterDays
+            };
             model.Editors = GetEditors(type);
             model.Regions = GetRegions(page, type);
             model.Routes.Routes = GetRoutes(type);
@@ -95,6 +100,11 @@ namespace Piranha.Manager.Services
                 UsePrimaryImage = type.UsePrimaryImage,
                 UsePublish = true,
                 UseTags = true
+            };
+            model.Comments = new ContentComments
+            {
+                EnableComments = post.EnableComments,
+                CloseCommentsAfterDays = post.CloseCommentsAfterDays
             };
             model.Editors = GetEditors(type);
             model.Regions = GetRegions(post, type);

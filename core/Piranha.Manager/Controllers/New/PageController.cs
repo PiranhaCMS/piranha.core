@@ -39,7 +39,8 @@ namespace Piranha.Manager.Controllers
         /// <param name="localizer">The localization service</param>
         /// <param name="hub">The SignalR preview hub</param>
         /// <param name="factory">The optional logger factory</param>
-        public PageController(ContentServiceLabs service, ManagerLocalizer localizer, IHubContext<PreviewHub> hub, ILoggerFactory factory = null)
+        public PageController(ContentServiceLabs service, ManagerLocalizer localizer, IHubContext<PreviewHub> hub,
+            ILoggerFactory factory = null)
         {
             _service = service;
             _localizer = localizer;

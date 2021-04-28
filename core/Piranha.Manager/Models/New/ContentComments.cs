@@ -13,6 +13,11 @@ namespace Piranha.Manager.Models
     public sealed class ContentComments
     {
         /// <summary>
+        /// Gets/sets if comments should be enabled for this content.
+        /// </summary>
+        public bool EnableComments { get; set; }
+
+        /// <summary>
         /// Gets/sets after how many days after publish date comments
         /// should be closed. A value of 0 means never.
         /// </summary>

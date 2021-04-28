@@ -22,6 +22,9 @@
                 <li v-if="meta != null" class="nav-item">
                     <a href="#" class="nav-link" :class="{ active: selectedSetting === 'uid-sharing' }" v-on:click.prevent="selectSetting('uid-sharing')">@Localizer.General["Sharing"]</a>
                 </li>
+                <li class="nav-item" v-if="features.useComments || routes !== null || permissions !== null">
+                    <a href="#" class="nav-link" :class="{ active: selectedSetting === 'uid-advanced' }" v-on:click.prevent="selectSetting('uid-advanced')">@Localizer.General["Advanced"]</a>
+                </li>
                 <li class="nav-item" v-for="region in settingRegions">
                     <a href="#" class="nav-link" :class="{ active: selectedSetting === region.meta.uid }" v-on:click.prevent="selectSetting(region.meta.uid)">{{ region.meta.name }}</a>
                 </li>
@@ -197,6 +200,86 @@
                             <div class="input-group-append">
                                 <div class="input-group-text text-muted">
                                     {{ piranha.utils.strLength(meta.ogDescription) + "/255" }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced settings -->
+                <div v-if="features.useComments || routes !== null || permissions !== null" :class="{ 'd-none': selectedSetting != 'uid-advanced' }">
+                    <div v-if="comments !== null">
+                        <div class="form-group">
+                            <label for="enableComments">@Localizer.General["Comments"]</label>
+                            <div class="form-switch">
+                                <button id="enableComments" v-on:click.prevent="comments.enableComments = !comments.enableComments" class="switch" :aria-pressed="comments.enableComments"><span></span></button>
+                                <label for="enableComments" class="form-check-label">@Localizer.Post["If comments should be enabled for this post"]</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>@Localizer.Comment["Days allowed for commenting"]</label>
+                            <input type="number" v-model.number="comments.closeCommentsAfterDays" class="form-control">
+                            <span v-if="comments.enableComments === false" class="field-description small text-muted">
+                                @Localizer.Comment["Comments are not allowed."]
+                            </span>
+                            <span v-else-if="published === null" class="field-description small text-muted">
+                                @Localizer.Comment["Comments are not allowed for unpublished content."]
+                            </span>
+                            <span v-else-if="comments.closeCommentsAfterDays === 0 || isCommentsOpen()" class="field-description small text-muted">
+                                @Localizer.Comment["Comments are currently open."]
+                            </span>
+                            <span v-else class="field-description small text-muted">
+                                @Localizer.Comment["Comments were closed"] {{ commentsClosedDate() }}.
+                            </span>
+                        </div>
+                    </div>
+                    <div v-if="routes !== null">
+                        <div class="form-group" v-if="routes.routes.length > 1">
+                            <label>@Localizer.General["Route"]</label>
+                            <select v-model="routes.selectedRoute" class="form-control">
+                                <option :value="route" v-for="route in routes.routes">{{ route.title }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>@Localizer.General["Redirect"]</label>
+                            <div class="input-group">
+                                <input v-model="routes.redirectUrl" type="text" maxlength="256" class="form-control">
+                                <div class="input-group-append">
+                                    <div class="input-group-text text-muted">
+                                        {{ piranha.utils.strLength(routes.redirectUrl) + "/256" }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>@Localizer.General["Redirect Type"]</label>
+                            <select v-model="routes.redirectType" class="form-control" :disabled="routes.redirectUrl === null || routes.redirectUrl.length === 0">
+                                <option v-if="routes.redirectUrl !== null && routes.redirectUrl.length > 0" value="Permanent">@Localizer.General["Permanent"]</option><option v-else value="Permanent"></option>
+                                <option v-if="routes.redirectUrl !== null && routes.redirectUrl.length > 0" value="Temporary">@Localizer.General["Temporary"]</option><option v-else value="Temporary"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div v-if="permissions !== null">
+                        <div v-if="permissions.permissions.length > 0" class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                <label>@Localizer.General["Permissions"]</label>
+                                    <span v-if="permissions.selectedPermissions.length > 0" class="field-description small text-muted d-block">
+                                        @Localizer.Post["By specifying one or more permissions only authenticated users will have access to the post."]
+                                    </span>
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div v-for="permission in permissions.permissions" class="col-sm-4">
+                                                    <div class="checkbox">
+                                                        <label class="mb-0">
+                                                            <input v-model="permissions.selectedPermissions" type="checkbox" :value="permission.key"> {{ permission.value }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
