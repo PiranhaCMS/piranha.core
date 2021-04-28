@@ -22,10 +22,10 @@
     <value>Alla kategorier</value>
   </data>
   <data name="An error occured while deleting the post" xml:space="preserve">
-    <value>An error occured while deleting the post</value>
+    <value>Ett fel inträffade när inlägget skulle raderas</value>
   </data>
   <data name="An error occured while saving the post" xml:space="preserve">
-    <value>An error occured while saving the post</value>
+    <value>Ett fel inträffade när inlägget skulle sparas</value>
   </data>
   <data name="Categories" xml:space="preserve">
     <value>Kategorier</value>
@@ -61,18 +61,18 @@
     <value>Om länkar från detta inlägg ska indexeras.</value>
   </data>
   <data name="The post was successfully deleted" xml:space="preserve">
-    <value>The post was successfully deleted</value>
+    <value>Inlägget har raderats</value>
   </data>
   <data name="The post was successfully published" xml:space="preserve">
-    <value>The post was successfully published</value>
+    <value>Inlägget har publicerats</value>
   </data>
   <data name="The post was successfully unpublished" xml:space="preserve">
-    <value>The post was successfully unpublished</value>
+    <value>Inlägget har avpublicerats</value>
   </data>
   <data name="The post was successfully saved" xml:space="preserve">
-    <value>The post was successfully saved</value>
+    <value>Inlägget har sparats</value>
   </data>
   <data name="The post was successfully reverted to its previous state" xml:space="preserve">
-    <value>The post was successfully reverted to its previous state</value>
+    <value>Inlägget har återställts till föregående version</value>
   </data>
 </root>
