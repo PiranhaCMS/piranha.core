@@ -385,6 +385,9 @@ namespace Piranha.Data.EF.PostgreSql
                     b.Property<string>("Excerpt")
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(128)

@@ -91,6 +91,7 @@ namespace Piranha.Data
                 }
                 translation.Title = content.Title;
                 translation.Excerpt = content.Excerpt;
+                translation.LastModified = DateTime.Now;
             }
         }
 
