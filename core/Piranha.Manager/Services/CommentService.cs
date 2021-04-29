@@ -48,7 +48,7 @@ namespace Piranha.Manager.Services
             {
                 var post = await _api.Posts.GetByIdAsync<PostInfo>(postComment.ContentId);
 
-                model.Comments.Add(new CommentListModel.ListItem
+                model.Comments.Add(new CommentListModel.CommentItem
                 {
                     Id = postComment.Id,
                     ArticleTitle = post?.Title,
@@ -67,7 +67,7 @@ namespace Piranha.Manager.Services
             {
                 var page = await _api.Pages.GetByIdAsync<PageInfo>(pageComment.ContentId);
 
-                model.Comments.Add(new CommentListModel.ListItem
+                model.Comments.Add(new CommentListModel.CommentItem
                 {
                     Id = pageComment.Id,
                     ArticleTitle = page?.Title,

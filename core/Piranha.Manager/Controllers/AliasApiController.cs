@@ -61,7 +61,7 @@ namespace Piranha.Manager.Controllers
         [Route("save")]
         [HttpPost]
         [Authorize(Policy = Permission.AliasesEdit)]
-        public async Task<IActionResult> Save(AliasListModel.ListItem model)
+        public async Task<IActionResult> Save(AliasListModel.AliasItem model)
         {
             try
             {

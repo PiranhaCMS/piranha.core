@@ -30,13 +30,13 @@ namespace Piranha.Manager.Models
             /// <summary>
             /// Gets/sets the available block types for the category.
             /// </summary>
-            public IList<ListItem> Items { get; set; } = new List<ListItem>();
+            public IList<BlockItem> Items { get; set; } = new List<BlockItem>();
         }
 
         /// <summary>
         /// A block type item in the list.
         /// </summary>
-        public class ListItem
+        public class BlockItem
         {
             /// <summary>
             /// Gets/sets the name.
