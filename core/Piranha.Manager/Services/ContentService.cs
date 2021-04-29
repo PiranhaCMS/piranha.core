@@ -402,7 +402,8 @@ namespace Piranha.Manager.Services
                                 Placeholder = fieldType.Placeholder,
                                 IsHalfWidth = fieldType.Options.HasFlag(FieldOption.HalfWidth),
                                 IsTranslatable = typeof(ITranslatable).IsAssignableFrom(appFieldType.Type),
-                                Description = fieldType.Description
+                                Description = fieldType.Description,
+                                Settings = fieldType.Settings
                             }
                         };
 
