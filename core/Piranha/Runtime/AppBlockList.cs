@@ -58,7 +58,7 @@ namespace Piranha.Runtime
         /// <returns>The processed item</returns>
         protected override AppBlock OnRegister<TValue>(AppBlock item)
         {
-            var attr = typeof(TValue).GetTypeInfo().GetCustomAttribute<BlockTypeAttribute>();
+            var attr = typeof(TValue).GetCustomAttribute<BlockTypeAttribute>();
             if (attr != null)
             {
                 item.Name = attr.Name;
@@ -85,8 +85,12 @@ namespace Piranha.Runtime
                     }
                 }
             }
+            else
+            {
+                throw new CustomAttributeFormatException($"Mandatory attribute missing for registered block { typeof(TValue).Name }");
+            }
 
-            var itemAttrs = typeof(TValue).GetTypeInfo().GetCustomAttributes(typeof(BlockItemTypeAttribute));
+            var itemAttrs = typeof(TValue).GetCustomAttributes(typeof(BlockItemTypeAttribute));
             foreach (var itemAttr in itemAttrs)
             {
                 var itemType = ((BlockItemTypeAttribute)itemAttr).Type;
