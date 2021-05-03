@@ -101,6 +101,96 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Gets the current translation status for the content model
+        /// with the given id.
+        /// </summary>
+        /// <param name="contentId">The unique content id</param>
+        /// <returns>The translation status</returns>
+        public async Task<Models.TranslationStatus> GetTranslationStatusById(Guid contentId)
+        {
+            var allLanguages = await _db.Languages
+                .OrderBy(l => l.Title)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            var defaultLang = allLanguages
+                .FirstOrDefault(l => l.IsDefault);
+            var languages = allLanguages
+                .Where(l => !l.IsDefault)
+                .ToList();
+
+            var translations = await _db.ContentTranslations
+                .Where(t => t.ContentId == contentId)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            return GetTranslationStatus(contentId, defaultLang, languages, translations);
+        }
+
+        /// <summary>
+        /// Gets the translation summary for the content group with
+        /// the given id.
+        /// </summary>
+        /// <param name="groupId">The group id</param>
+        /// <returns>The translation summary</returns>
+        public async Task<Models.TranslationSummary> GetTranslationStatusByGroup(string groupId)
+        {
+            var result = new Models.TranslationSummary
+            {
+                GroupId = groupId,
+            };
+
+            var allLanguages = await _db.Languages
+                .OrderBy(l => l.Title)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            var defaultLang = allLanguages
+                .FirstOrDefault(l => l.IsDefault);
+            var languages = allLanguages
+                .Where(l => !l.IsDefault)
+                .ToList();
+
+            var translations = await _db.ContentTranslations
+                .Where(t => t.Content.Type.Group == groupId)
+                .OrderBy(t => t.ContentId)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            var contentIds = translations
+                .Select(t => t.ContentId)
+                .Distinct()
+                .ToList();
+
+            // Get the translation status for each of the
+            // content models.
+            foreach (var contentId in contentIds)
+            {
+                var status = GetTranslationStatus(contentId,
+                    defaultLang,
+                    languages,
+                    translations.Where(t => t.ContentId == contentId));
+
+                if (status != null)
+                {
+                    // Summarize content status
+                    status.UpToDateCount = status.Translations.Count(t => t.IsUpToDate);
+                    status.TotalCount = status.Translations.Count;
+                    status.IsUpToDate = status.UpToDateCount == status.TotalCount;
+
+                    result.Content.Add(status);
+                }
+            }
+
+            // Summarize
+            result.UpToDateCount = result.Content.Sum(c => c.UpToDateCount);
+            result.TotalCount = result.Content.Sum(c => c.TotalCount);
+            result.IsUpToDate = result.UpToDateCount == result.TotalCount;
+
+            return result;
+        }
+
+        /// <summary>
         /// Saves the given content model
         /// </summary>
         /// <param name="model">The content model</param>
@@ -412,6 +502,54 @@ namespace Piranha.Repositories
                 });
             }
             return result;
+        }
+
+        private Models.TranslationStatus GetTranslationStatus(
+            Guid contentId,
+            Language defaultLanguage,
+            IEnumerable<Language> languages,
+            IEnumerable<ContentTranslation> translations)
+        {
+            var defaultTranslation = translations
+                .FirstOrDefault(t => t.LanguageId == defaultLanguage.Id);
+
+            if (defaultTranslation != null)
+            {
+                // Create the result object
+                var result = new Models.TranslationStatus
+                {
+                    ContentId = contentId,
+                    Translations = languages
+                        .Where(l => !l.IsDefault)
+                        .Select(l => new Models.TranslationStatus.TranslationStatusItem
+                    {
+                        LanguageId = l.Id,
+                        LanguageTitle = l.Title
+                    }).OrderBy(l => l.LanguageTitle).ToList()
+                };
+
+                // Examine the available translations
+                foreach (var translation in translations.Where(t => t.LanguageId != defaultLanguage.Id))
+                {
+                    if (translation.LastModified >= defaultTranslation.LastModified)
+                    {
+                        result.Translations
+                            .FirstOrDefault(t => t.LanguageId == translation.LanguageId)
+                            .IsUpToDate = true;
+                    }
+                }
+
+                // Summarize
+                result.TotalCount = result.Translations.Count;
+                result.UpToDateCount = result.Translations.Count(t => t.IsUpToDate);
+                result.IsUpToDate = result.UpToDateCount == result.TotalCount;
+
+                return result;
+            }
+
+            // The content model wasn't available in the default language
+            // which means we can't decide if the translations are up to date.
+            return null;
         }
 
         /// <summary>

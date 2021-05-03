@@ -193,6 +193,28 @@ namespace Piranha.Services
         }
 
         /// <summary>
+        /// Gets the current translation status for the content model
+        /// with the given id.
+        /// </summary>
+        /// <param name="contentId">The unique content id</param>
+        /// <returns>The translation status</returns>
+        public Task<TranslationStatus> GetTranslationStatusByIdAsync(Guid contentId)
+        {
+            return _repo.GetTranslationStatusById(contentId);
+        }
+
+        /// <summary>
+        /// Gets the translation summary for the content group with
+        /// the given id.
+        /// </summary>
+        /// <param name="groupId">The group id</param>
+        /// <returns>The translation summary</returns>
+        public Task<TranslationSummary> GetTranslationStatusByGroupAsync(string groupId)
+        {
+            return _repo.GetTranslationStatusByGroup(groupId);
+        }
+
+        /// <summary>
         /// Saves the given content model
         /// </summary>
         /// <param name="model">The content model</param>

@@ -382,6 +382,9 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     b.Property<string>("Excerpt")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(128)
