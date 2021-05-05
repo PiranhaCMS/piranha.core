@@ -34,6 +34,7 @@ namespace MvcWeb
                 options.UseFileStorage(naming: FileStorageNaming.UniqueFolderNames);
                 options.UseImageSharp();
                 options.UseManager();
+                options.UseManagerSecurity();
                 options.UseTinyMCE();
                 options.UseMemoryCache();
 
@@ -83,6 +84,7 @@ namespace MvcWeb
             app.UsePiranha(options =>
             {
                 options.UseManager();
+                options.UseManagerSecurity();
                 options.UseTinyMCE();
                 options.UseIdentity();
             });
