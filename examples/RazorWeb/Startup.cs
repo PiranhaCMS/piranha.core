@@ -34,7 +34,6 @@ namespace RazorWeb
                 options.UseFileStorage(naming: FileStorageNaming.UniqueFolderNames);
                 options.UseImageSharp();
                 options.UseManager();
-                options.UseManagerSecurity();
                 options.UseTinyMCE();
                 options.UseMemoryCache();
 
@@ -90,7 +89,6 @@ namespace RazorWeb
             app.UsePiranha(options =>
             {
                 options.UseManager();
-                options.UseManagerSecurity();
                 options.UseTinyMCE();
                 options.UseIdentity();
             });
