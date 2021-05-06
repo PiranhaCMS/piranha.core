@@ -350,7 +350,7 @@ piranha.content = new Vue({
                 meta: JSON.parse(JSON.stringify(self.meta)),
                 comments: JSON.parse(JSON.stringify(self.comments)),
                 permissions: {
-                    selectedPermissions: self.permissions.selectedPermissions
+                    selectedPermissions: self.permissions !== null ? self.permissions.selectedPermissions : []
                 },
                 routes: JSON.parse(JSON.stringify(self.routes)),
                 taxonomies: JSON.parse(JSON.stringify(self.taxonomies)),

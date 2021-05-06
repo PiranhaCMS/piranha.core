@@ -19,7 +19,7 @@ namespace Piranha.Manager.Models
     /// </summary>
     public class PageListModel
     {
-        public class SiteItem
+        public class PageSite
         {
             public Guid Id { get; set; }
             public string Title { get; set; }
@@ -50,7 +50,7 @@ namespace Piranha.Manager.Models
             public List<PageItem> Items { get; set; } = new List<PageItem>();
         }
 
-        public IList<SiteItem> Sites { get; set; } = new List<SiteItem>();
+        public IList<PageSite> Sites { get; set; } = new List<PageSite>();
         public IList<ContentTypeModel> PageTypes { get; set; } = new List<ContentTypeModel>();
         public StatusMessage Status { get; set; }
     }

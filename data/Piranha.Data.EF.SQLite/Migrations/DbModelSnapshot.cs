@@ -206,6 +206,13 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("SectionId")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("Blocks");
+
                     b.Property<int>("SortOrder")
                         .HasColumnType("INTEGER");
 
@@ -346,6 +353,9 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("ListImage")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(128)
@@ -380,6 +390,9 @@ namespace Piranha.Data.EF.SQLite.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Excerpt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("LastModified")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
@@ -709,6 +722,13 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("SectionId")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("Blocks");
+
                     b.Property<int>("SortOrder")
                         .HasColumnType("INTEGER");
 
@@ -716,7 +736,7 @@ namespace Piranha.Data.EF.SQLite.Migrations
 
                     b.HasIndex("BlockId");
 
-                    b.HasIndex("PageId", "SortOrder")
+                    b.HasIndex("PageId", "SectionId", "SortOrder")
                         .IsUnique();
 
                     b.ToTable("Piranha_PageBlocks");
@@ -1018,6 +1038,13 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     b.Property<Guid>("PostId")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("SectionId")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("Blocks");
+
                     b.Property<int>("SortOrder")
                         .HasColumnType("INTEGER");
 
@@ -1025,7 +1052,7 @@ namespace Piranha.Data.EF.SQLite.Migrations
 
                     b.HasIndex("BlockId");
 
-                    b.HasIndex("PostId", "SortOrder")
+                    b.HasIndex("PostId", "SectionId", "SortOrder")
                         .IsUnique();
 
                     b.ToTable("Piranha_PostBlocks");

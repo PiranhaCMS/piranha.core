@@ -20,7 +20,7 @@ namespace Piranha.Manager.Models
         /// <summary>
         /// A list item in the module model.
         /// </summary>
-        public class ListItem
+        public class ModuleItem
         {
             public string Author { get; set; }
             public string Name { get; set; }
@@ -33,6 +33,6 @@ namespace Piranha.Manager.Models
         /// <summary>
         /// Gets/set the available items.
         /// </summary>
-        public IList<ListItem> Items { get; set; } = new List<ListItem>();
+        public IList<ModuleItem> Items { get; set; } = new List<ModuleItem>();
     }
 }

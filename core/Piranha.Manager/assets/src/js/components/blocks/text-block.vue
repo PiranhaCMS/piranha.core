@@ -1,6 +1,7 @@
 <template>
     <div class="block-body" :class="{ empty: isEmpty }">
-        <pre contenteditable="true" v-html="model.body.value" v-on:blur="onBlur"></pre>
+        <pre class="invisible" v-html="model.body.value"></pre>
+        <textarea v-model="model.body.value" v-on:blur="onBlur"></textarea>
     </div>
 </template>
 
@@ -9,7 +10,7 @@ export default {
     props: ["uid", "model"],
     methods: {
         onBlur: function (e) {
-            this.model.body.value = e.target.innerHTML;
+            // this.model.body.value = e.target.innerHTML;
 
             // Tell parent that title has been updated
             var title = this.model.body.value.replace(/(<([^>]+)>)/ig, "");

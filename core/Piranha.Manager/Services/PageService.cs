@@ -54,7 +54,7 @@ namespace Piranha.Manager.Services
             {
                 Sites = (await _api.Sites.GetAllAsync())
                     .OrderByDescending(s => s.IsDefault)
-                    .Select(s => new PageListModel.SiteItem
+                    .Select(s => new PageListModel.PageSite
                 {
                     Id = s.Id,
                     Title = s.Title,
@@ -118,7 +118,7 @@ namespace Piranha.Manager.Services
                 SiteTitle = site.Title,
                 Sites = (await _api.Sites.GetAllAsync())
                     .OrderByDescending(s => s.IsDefault)
-                    .Select(s => new PageListModel.SiteItem
+                    .Select(s => new PageListModel.PageSite
                 {
                     Id = s.Id,
                     Title = s.Title,

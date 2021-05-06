@@ -4,7 +4,6 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Data components for Entity Framework Core</Description>
-    <Version>9.1.0-alpha1.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

@@ -135,7 +135,7 @@ namespace Piranha.Manager.Services
                 }
 
                 foreach (var block in items) {
-                    listCategory.Items.Add(new BlockListModel.ListItem
+                    listCategory.Items.Add(new BlockListModel.BlockItem
                     {
                         Name = block.Name,
                         Icon = block.Icon,

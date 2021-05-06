@@ -2,49 +2,49 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Piranha.Data.EF.MySql;
+using Piranha.Data.EF.SQLite;
 
-namespace Piranha.Data.EF.MySql.Migrations
+namespace Piranha.Data.EF.SQLite.Migrations
 {
-    [NoCoverage]
-    [DbContext(typeof(MySqlDb))]
-    partial class DbModelSnapshot : ModelSnapshot
+    [DbContext(typeof(SQLiteDb))]
+    [Migration("20210504101103_AddBlockSections")]
+    partial class AddBlockSections
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.0");
 
             modelBuilder.Entity("Piranha.Data.Alias", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("AliasUrl")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("RedirectUrl")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("SiteId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Type")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -58,28 +58,28 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CLRType")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsReusable")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("ParentId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -90,26 +90,26 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("BlockId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CLRType")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("FieldId")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("SortOrder")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Value")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -123,26 +123,26 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("BlogId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Slug")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -156,30 +156,30 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("CategoryId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Excerpt")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("PrimaryImageId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("TypeId")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -194,21 +194,28 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CLRType")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("ContentId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("ParentId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SectionId")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("Blocks");
 
                     b.Property<int>("SortOrder")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -221,26 +228,26 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("BlockId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CLRType")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("FieldId")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("SortOrder")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Value")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -253,13 +260,13 @@ namespace Piranha.Data.EF.MySql.Migrations
             modelBuilder.Entity("Piranha.Data.ContentBlockFieldTranslation", b =>
                 {
                     b.Property<Guid>("FieldId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("LanguageId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("FieldId", "LanguageId");
 
@@ -272,31 +279,31 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CLRType")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("ContentId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("FieldId")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("RegionId")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("SortOrder")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Value")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -308,13 +315,13 @@ namespace Piranha.Data.EF.MySql.Migrations
             modelBuilder.Entity("Piranha.Data.ContentFieldTranslation", b =>
                 {
                     b.Property<Guid>("FieldId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("LanguageId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("FieldId", "LanguageId");
 
@@ -327,30 +334,33 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CLRType")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Icon")
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsHidden")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("ListImage")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -360,10 +370,10 @@ namespace Piranha.Data.EF.MySql.Migrations
             modelBuilder.Entity("Piranha.Data.ContentTaxonomy", b =>
                 {
                     b.Property<Guid>("ContentId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("TaxonomyId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ContentId", "TaxonomyId");
 
@@ -375,21 +385,21 @@ namespace Piranha.Data.EF.MySql.Migrations
             modelBuilder.Entity("Piranha.Data.ContentTranslation", b =>
                 {
                     b.Property<Guid>("ContentId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("LanguageId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Excerpt")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ContentId", "LanguageId");
 
@@ -402,24 +412,24 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Body")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CLRType")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Group")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -430,19 +440,19 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Culture")
                         .HasMaxLength(6)
-                        .HasColumnType("varchar(6) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDefault")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -453,56 +463,56 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("AltText")
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ContentType")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .HasMaxLength(512)
-                        .HasColumnType("varchar(512) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Filename")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("FolderId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("Height")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Properties")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("PublicUrl")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<long>("Size")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Type")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("Width")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -515,22 +525,22 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .HasMaxLength(512)
-                        .HasColumnType("varchar(512) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("ParentId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -541,23 +551,23 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("FileExtension")
                         .HasMaxLength(8)
-                        .HasColumnType("varchar(8) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("Height")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<Guid>("MediaId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<long>("Size")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Width")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -571,120 +581,120 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("CloseCommentsAfterDays")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ContentType")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(255)
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("Page");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("EnableComments")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(false);
 
                     b.Property<string>("Excerpt")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsHidden")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("MetaDescription")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool?>("MetaFollow")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(true);
 
                     b.Property<bool?>("MetaIndex")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(true);
 
                     b.Property<string>("MetaKeywords")
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<double>("MetaPriority")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("double")
+                        .HasColumnType("REAL")
                         .HasDefaultValue(0.5);
 
                     b.Property<string>("MetaTitle")
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("NavigationTitle")
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("OgDescription")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("OgImageId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("OgTitle")
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("OriginalPageId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("PageTypeId")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("ParentId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("PrimaryImageId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("Published")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("RedirectType")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("RedirectUrl")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Route")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("SiteId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Slug")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("SortOrder")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -702,25 +712,32 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("BlockId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("PageId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("ParentId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SectionId")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("Blocks");
 
                     b.Property<int>("SortOrder")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BlockId");
 
-                    b.HasIndex("PageId", "SortOrder")
+                    b.HasIndex("PageId", "SectionId", "SortOrder")
                         .IsUnique();
 
                     b.ToTable("Piranha_PageBlocks");
@@ -730,36 +747,36 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Author")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Body")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsApproved")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("INTEGER");
 
                     b.Property<Guid>("PageId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Url")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -772,31 +789,31 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CLRType")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("FieldId")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("PageId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("RegionId")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("SortOrder")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Value")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -808,10 +825,10 @@ namespace Piranha.Data.EF.MySql.Migrations
             modelBuilder.Entity("Piranha.Data.PagePermission", b =>
                 {
                     b.Property<Guid>("PageId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Permission")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("PageId", "Permission");
 
@@ -822,16 +839,16 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Data")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("PageId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -844,20 +861,20 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Body")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CLRType")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -868,25 +885,25 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Key")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -900,100 +917,100 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("BlogId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("CategoryId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("CloseCommentsAfterDays")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("EnableComments")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(false);
 
                     b.Property<string>("Excerpt")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("MetaDescription")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool?>("MetaFollow")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(true);
 
                     b.Property<bool?>("MetaIndex")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("INTEGER")
                         .HasDefaultValue(true);
 
                     b.Property<string>("MetaKeywords")
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<double>("MetaPriority")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("double")
+                        .HasColumnType("REAL")
                         .HasDefaultValue(0.5);
 
                     b.Property<string>("MetaTitle")
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("OgDescription")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("OgImageId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("OgTitle")
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("PostTypeId")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("PrimaryImageId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("Published")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("RedirectType")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("RedirectUrl")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Route")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Slug")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -1011,25 +1028,32 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("BlockId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("ParentId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("PostId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SectionId")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("Blocks");
 
                     b.Property<int>("SortOrder")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BlockId");
 
-                    b.HasIndex("PostId", "SortOrder")
+                    b.HasIndex("PostId", "SectionId", "SortOrder")
                         .IsUnique();
 
                     b.ToTable("Piranha_PostBlocks");
@@ -1039,37 +1063,37 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Author")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Body")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsApproved")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("INTEGER");
 
                     b.Property<Guid>("PostId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Url")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UserId")
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -1082,31 +1106,31 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CLRType")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("FieldId")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("PostId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("RegionId")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("SortOrder")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Value")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -1118,10 +1142,10 @@ namespace Piranha.Data.EF.MySql.Migrations
             modelBuilder.Entity("Piranha.Data.PostPermission", b =>
                 {
                     b.Property<Guid>("PostId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Permission")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("PostId", "Permission");
 
@@ -1132,16 +1156,16 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Data")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("PostId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -1153,10 +1177,10 @@ namespace Piranha.Data.EF.MySql.Migrations
             modelBuilder.Entity("Piranha.Data.PostTag", b =>
                 {
                     b.Property<Guid>("PostId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("TagId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("PostId", "TagId");
 
@@ -1169,20 +1193,20 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Body")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CLRType")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -1193,50 +1217,50 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("ContentLastModified")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Culture")
                         .HasMaxLength(6)
-                        .HasColumnType("varchar(6) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Hostnames")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("InternalId")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDefault")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("INTEGER");
 
                     b.Property<Guid?>("LanguageId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("LogoId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("SiteTypeId")
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
                         .HasMaxLength(128)
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -1252,31 +1276,31 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CLRType")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("FieldId")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("RegionId")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("SiteId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("SortOrder")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Value")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -1289,20 +1313,20 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Body")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CLRType")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -1313,26 +1337,26 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("BlogId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Slug")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -1346,31 +1370,31 @@ namespace Piranha.Data.EF.MySql.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("GroupId")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Slug")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Type")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

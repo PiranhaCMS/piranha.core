@@ -49,6 +49,22 @@ namespace Piranha.Repositories
         Task<IEnumerable<Taxonomy>> GetAllTags(string groupId);
 
         /// <summary>
+        /// Gets the current translation status for the content model
+        /// with the given id.
+        /// </summary>
+        /// <param name="contentId">The unique content id</param>
+        /// <returns>The translation status</returns>
+        Task<TranslationStatus> GetTranslationStatusById(Guid contentId);
+
+        /// <summary>
+        /// Gets the translation summary for the content group with
+        /// the given id.
+        /// </summary>
+        /// <param name="groupId">The group id</param>
+        /// <returns>The translation summary</returns>
+        Task<TranslationSummary> GetTranslationStatusByGroup(string groupId);
+
+        /// <summary>
         /// Saves the given content model
         /// </summary>
         /// <param name="model">The content model</param>

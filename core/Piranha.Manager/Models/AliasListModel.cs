@@ -21,7 +21,7 @@ namespace Piranha.Manager.Models
         /// <summary>
         /// A list item in the alias model.
         /// </summary>
-        public class ListItem
+        public class AliasItem
         {
             /// <summary>
             /// Gets/sets the optional id.
@@ -49,7 +49,7 @@ namespace Piranha.Manager.Models
             public bool IsPermanent { get; set; }
         }
 
-        public class SiteItem
+        public class AliasSite
         {
             public Guid Id { get; set; }
             public string Title { get; set; }
@@ -68,12 +68,12 @@ namespace Piranha.Manager.Models
         /// <summary>
         /// Gets/sets the available sites.
         /// </summary>
-        public IList<SiteItem> Sites { get; set; } = new List<SiteItem>();
+        public IList<AliasSite> Sites { get; set; } = new List<AliasSite>();
 
         /// <summary>
         /// Gets/set the available items.
         /// </summary>
-        public IList<ListItem> Items { get; set; } = new List<ListItem>();
+        public IList<AliasItem> Items { get; set; } = new List<AliasItem>();
 
         /// <summary>
         /// Gets/sets the optional status message from the last operation.
