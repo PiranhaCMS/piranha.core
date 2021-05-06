@@ -39,6 +39,13 @@ public static class IdentityModuleExtensions
         Action<CookieAuthenticationOptions> cookieOptions = null)
         where T : Db<T>
     {
+        services
+            .AddRazorPages()
+            .AddRazorPagesOptions(options =>
+        {
+            options.Conventions.AllowAnonymousToAreaPage("Manager", "/login");
+        });
+
         // Add the identity module
         App.Modules.Register<Module>();
 
