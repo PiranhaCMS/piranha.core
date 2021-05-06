@@ -10,8 +10,11 @@
 
 using System.Threading.Tasks;
 
-namespace Piranha
+namespace Piranha.Manager.LocalAuth
 {
+    /// <summary>
+    /// Interface for services implementing local authorization.
+    /// </summary>
     public interface ISecurity
     {
         /// <summary>

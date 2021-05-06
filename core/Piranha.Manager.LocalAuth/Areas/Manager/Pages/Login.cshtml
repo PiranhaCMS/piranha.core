@@ -1,6 +1,6 @@
 ﻿@page "~/manager/login"
-@model LoginModel
-@inject ManagerLocalizer Localizer
+@model Piranha.Manager.LocalAuth.Areas.Manager.Pages.LoginModel
+@inject Piranha.Manager.ManagerLocalizer Localizer
 @{
     Layout = null;
     var module = Piranha.App.Modules.Get<Piranha.Manager.Module>();
@@ -26,6 +26,7 @@
     }
     <div class="container">
         <form method="post" class="needs-validation" novalidate>
+            @Html.AntiForgeryToken()
             <div class="card card-login @(!Model.ModelState.IsValid ? "has-error" : "")">
                 <div class="card-body card-body-logo">
                     <div class="logo"></div>
