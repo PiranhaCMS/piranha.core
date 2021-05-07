@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using System;
+using Piranha.Manager.LocalAuth;
 
 public static class SimpleSecurityExtensions
 {
@@ -30,7 +31,7 @@ public static class SimpleSecurityExtensions
                 o.AccessDeniedPath = new PathString("/home/forbidden");
                 o.ExpireTimeSpan = new TimeSpan(0, 30, 0);
             });
-        return services.AddSingleton<Piranha.ISecurity>(new Piranha.AspNetCore.SimpleSecurity(users));
+        return services.AddSingleton<ISecurity>(new Piranha.AspNetCore.SimpleSecurity(users));
     }
 
     /// <summary>
@@ -40,6 +41,10 @@ public static class SimpleSecurityExtensions
     /// <returns>The builder</returns>
     public static IApplicationBuilder UsePiranhaSimpleSecurity(this IApplicationBuilder builder)
     {
+        // Set logout url to point to local auth
+        Piranha.App.Modules.Manager().LogoutUrl = "~/manager/logout";
+
+        // Return the builder
         return builder.UseAuthentication();
     }
 }

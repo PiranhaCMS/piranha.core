@@ -75,6 +75,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.AspNetCore.Identity
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "identity", "identity", "{9C09AC36-71CF-4E0E-B7CE-C38969A3E123}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Manager.LocalAuth", "core\Piranha.Manager.LocalAuth\Piranha.Manager.LocalAuth.csproj", "{A88D6D8D-725E-494F-91CD-440D87BFF21B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -189,6 +191,10 @@ Global
 		{B91D76C2-5999-418D-81B6-D52EC32836A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B91D76C2-5999-418D-81B6-D52EC32836A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B91D76C2-5999-418D-81B6-D52EC32836A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A88D6D8D-725E-494F-91CD-440D87BFF21B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A88D6D8D-725E-494F-91CD-440D87BFF21B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A88D6D8D-725E-494F-91CD-440D87BFF21B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A88D6D8D-725E-494F-91CD-440D87BFF21B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -221,6 +227,7 @@ Global
 		{02521046-DE43-4511-8D4C-BC7330884373} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 		{29051A1A-2FC0-490E-85B0-B19279E756EF} = {9C09AC36-71CF-4E0E-B7CE-C38969A3E123}
 		{B91D76C2-5999-418D-81B6-D52EC32836A0} = {9C09AC36-71CF-4E0E-B7CE-C38969A3E123}
+		{A88D6D8D-725E-494F-91CD-440D87BFF21B} = {42A64587-89B5-48F2-84D4-85B97F7847F1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF88AA05-D127-4707-8214-A230F0DA569B}
