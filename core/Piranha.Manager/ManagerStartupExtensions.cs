@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;
 using Piranha.AspNetCore;
+using Piranha.Manager;
 
 public static class ManagerStartupExtensions
 {

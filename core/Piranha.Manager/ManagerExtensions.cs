@@ -313,7 +313,6 @@ public static class ManagerModuleExtensions
             .AddRazorPagesOptions(options =>
             {
                 options.Conventions.AuthorizeAreaFolder("Manager", "/");
-                options.Conventions.AllowAnonymousToAreaPage("Manager", "/login");
             })
             .AddViewLocalization()
             .AddDataAnnotationsLocalization()

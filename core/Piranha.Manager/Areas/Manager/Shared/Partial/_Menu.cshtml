@@ -3,6 +3,7 @@
 @inject IAuthorizationService Auth
 @{
     var menu = await Menu.Items.GetForUser(User, Auth);
+    var logout = Piranha.App.Modules.Manager().LogoutUrl;
 }
 
 <nav class="navbar navbar-left fixed-top navbar-dark bg-dark">
@@ -23,6 +24,6 @@
                 }
             }
         }
-        <li class="nav-item nav-header"><a class="navbar-text" href="~/manager/logout"><i class="fas fa-power-off"></i>@Localizer.Menu["Logout"]</a></li>
+        <li class="nav-item nav-header"><a class="navbar-text" href="@Url.Content(logout)"><i class="fas fa-power-off"></i>@Localizer.Menu["Logout"]</a></li>
     </ul>
 </nav>

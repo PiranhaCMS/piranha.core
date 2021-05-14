@@ -90,6 +90,12 @@ namespace Piranha.Manager
         public List<string> Partials { get; private set; }
 
         /// <summary>
+        /// Gets/sets the url that should be used to sign out
+        /// of the manager.
+        /// </summary>
+        public string LogoutUrl { get; set; }
+
+        /// <summary>
         /// Gets/sets the url to the currently registered editor init script.
         /// </summary>
         public static string EditorInitScriptUrl { get; set; }
