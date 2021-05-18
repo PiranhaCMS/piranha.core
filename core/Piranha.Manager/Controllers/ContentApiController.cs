@@ -66,7 +66,7 @@ namespace Piranha.Manager.Controllers
         [HttpGet]
         public BlockListModel GetBlockTypesForPost(string postType, string parentType = null)
         {
-            return _contentType.GetPageBlockTypes(postType, parentType);
+            return _contentType.GetPostBlockTypes(postType, parentType);
         }
 
         /// <summary>
