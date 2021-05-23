@@ -80,7 +80,7 @@ the official documentation [here](http://piranhacms.org/docs/architecture/authen
     > cd piranha.core/core/Piranha.Manager
     > npm install
     > gulp min:js
-	> gulp min:cs
+	> gulp min:css
 
 ### Visual Studio users
 

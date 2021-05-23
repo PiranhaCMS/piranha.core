@@ -27,7 +27,7 @@ function vueCompile() {
             getComponent = function (ast, sourceCode) {
                 const ta = ast.program.body[0]
                 if (!babelTypes.isExportDefaultDeclaration(ta)) {
-                    var msg = 'Top level declation in file ' + relativeFile + ' must be "export default {" \n' + codeFrameColumns(sourceCode, { start: ta.loc.start }, { highlightCode: true });
+                    var msg = 'Top level declaration in file ' + relativeFile + ' must be "export default {" \n' + codeFrameColumns(sourceCode, { start: ta.loc.start }, { highlightCode: true });
                     throw msg;
                 }
                 return ta.declaration;
