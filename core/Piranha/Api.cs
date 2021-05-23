@@ -128,7 +128,7 @@ namespace Piranha
             // Store the cache
             _cache = cache;
 
-            // Create services without dependecies
+            // Create services without dependencies
             ContentGroups = new ContentGroupService(contentGroupRepository, cache);
             ContentTypes = new ContentTypeService(contentTypeRepository, cache);
             Languages = new LanguageService(languageRepository, cache);
