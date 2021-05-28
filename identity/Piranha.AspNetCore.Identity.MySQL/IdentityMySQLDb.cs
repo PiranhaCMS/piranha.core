@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Piranha.AspNetCore.Identity.MySQL
 {
-    public class IdentityMySQLDb : Identity.Db<IdentityMySQLDb> 
+    public class IdentityMySQLDb : EntityFrameworkCore.Db<IdentityMySQLDb> 
     { 
         /// <summary>
         /// Default constructor.

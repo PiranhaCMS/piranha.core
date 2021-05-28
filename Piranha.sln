@@ -77,6 +77,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "identity", "identity", "{9C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piranha.Manager.LocalAuth", "core\Piranha.Manager.LocalAuth\Piranha.Manager.LocalAuth.csproj", "{A88D6D8D-725E-494F-91CD-440D87BFF21B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Piranha.AspNetCore.Identity.EntityFrameworkCore", "identity\Piranha.AspNetCore.Identity.EntityFrameworkCore\Piranha.AspNetCore.Identity.EntityFrameworkCore.csproj", "{52E9EC4E-1E63-47E1-92EC-EE6BB09AEFFC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

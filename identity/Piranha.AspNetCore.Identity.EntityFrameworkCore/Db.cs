@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Piranha.AspNetCore.Identity.Data;
 
-namespace Piranha.AspNetCore.Identity
+namespace Piranha.AspNetCore.Identity.EntityFrameworkCore
 {
     public abstract class Db<T> :
         IdentityDbContext<User, Role, Guid,

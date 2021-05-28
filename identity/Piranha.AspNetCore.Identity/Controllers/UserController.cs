@@ -11,11 +11,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Piranha.AspNetCore.Identity.Data;
 using Piranha.AspNetCore.Identity.Models;
 using Piranha.Manager;
@@ -30,21 +30,21 @@ namespace Piranha.AspNetCore.Identity.Controllers
     [Area("Manager")]
     public class UserController : ManagerController
     {
-        private readonly IDb _db;
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<Role> _roleManager;
         private readonly ManagerLocalizer _localizer;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="db">The current db context</param>
         /// <param name="userManager">The current user manager</param>
+        /// <param name="roleManager">The current role manager</param>
         /// <param name="localizer">The manager localizer</param>
-        public UserController(IDb db, UserManager<User> userManager, ManagerLocalizer localizer)
+        public UserController(UserManager<User> userManager, RoleManager<Role> roleManager, ManagerLocalizer localizer)
         {
-            _db = db;
-            _userManager = userManager;
             _localizer = localizer;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         /// <summary>
@@ -64,12 +64,40 @@ namespace Piranha.AspNetCore.Identity.Controllers
         [HttpGet]
         [Route("/manager/users/list")]
         [Authorize(Policy = Permissions.Users)]
-        public UserListModel Get()
+        public async Task<UserListModel> Get()
         {
-            return UserListModel.Get(_db);
+            var userListModel = new UserListModel();
+
+            foreach (var u in await GetUsers())
+            {
+                userListModel.Users.Add(new UserListModel.ListItem()
+                {
+                    Id = u.Id,
+                    UserName = u.UserName,
+                    Email = u.Email,
+                    GravatarUrl = !string.IsNullOrWhiteSpace(u.Email) ? Utils.GetGravatarUrl(u.Email, 25) : null,
+                    Roles = await _userManager.GetRolesAsync(u)
+                });
+            }
+
+            return userListModel;
+
+            async Task<List<User>> GetUsers()
+            {
+                if (_userManager.SupportsQueryableUsers)
+                {
+                    return _userManager.Users.ToList();
+                }
+                if (_userManager.SupportsUserRole)
+                {
+                    return (await _userManager.GetUsersInRoleAsync(default)).ToList();
+                }
+
+                throw new NotSupportedException($"");
+            }
         }
 
-        /// <summary>
+            /// <summary>
         /// Gets the edit view for an existing user.
         /// </summary>
         /// <param name="id">The user id</param>
@@ -89,10 +117,20 @@ namespace Piranha.AspNetCore.Identity.Controllers
         [HttpGet]
         [Route("/manager/user/edit/{id:Guid}")]
         [Authorize(Policy = Permissions.UsersEdit)]
-        public UserEditModel Get(Guid id)
+        public async Task<UserEditModel> Get(Guid id)
         {
-            return UserEditModel.GetById(_db, id);
-            //return View(UserEditModel.GetById(_db, id));
+            var user = await _userManager.FindByIdAsync(id.ToString());
+
+            if (user == null)
+            {
+                return null;
+            }
+            return new UserEditModel
+            {
+                User = user,
+                SelectedRoles = await _userManager.GetRolesAsync(user),
+                Roles = _roleManager.Roles.OrderBy(r => r.Name).ToList()
+            };
         }
 
         /// <summary>
@@ -103,8 +141,11 @@ namespace Piranha.AspNetCore.Identity.Controllers
         [Authorize(Policy = Permissions.UsersEdit)]
         public UserEditModel Add()
         {
-            return UserEditModel.Create(_db);
-            //return View("Edit", UserEditModel.Create(_db));
+            return new()
+            {
+                User = new User(),
+                Roles = _roleManager.Roles.OrderBy(r => r.Name).ToList()
+            };
         }
 
         /// <summary>
@@ -120,15 +161,13 @@ namespace Piranha.AspNetCore.Identity.Controllers
             //var temp = UserEditModel.Create(_db);
             //model.Roles = temp.Roles;
 
-            if(model.User == null)
+            if (model.User == null)
             {
                 return BadRequest(GetErrorMessage(_localizer.Security["The user could not be found."]));
             }
 
             try
             {
-                var userId = model.User.Id;
-
                 if (string.IsNullOrWhiteSpace(model.User.UserName))
                 {
                     return BadRequest(GetErrorMessage(_localizer.General["Username is mandatory."]));
@@ -165,18 +204,18 @@ namespace Piranha.AspNetCore.Identity.Controllers
                 }
 
                 //check username
-                if (await _db.Users.CountAsync(u => u.UserName.ToLower().Trim() == model.User.UserName.ToLower().Trim() && u.Id != userId) > 0)
+                if (await _userManager.FindByNameAsync(model.User.UserName.ToLower().Trim()) is not null)
                 {
                     return BadRequest(GetErrorMessage(_localizer.Security["Username is used by another user."]));
                 }
 
                 //check email
-                if (await _db.Users.CountAsync(u => u.Email.ToLower().Trim() == model.User.Email.ToLower().Trim() && u.Id != userId) > 0)
+                if (await _userManager.FindByEmailAsync(model.User.Email.ToLower().Trim()) is not null)
                 {
                     return BadRequest(GetErrorMessage(_localizer.Security["Email address is used by another user."]));
                 }
 
-                var result = await model.Save(_userManager);
+                var result = await _userManager.UpdateAsync(model.User);
                 if (result.Succeeded)
                 {
                     return Ok(Get(model.User.Id));
@@ -202,19 +241,17 @@ namespace Piranha.AspNetCore.Identity.Controllers
         [Authorize(Policy = Permissions.UsersSave)]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var user = _db.Users.FirstOrDefault(u => u.Id == id);
 
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-            if (currentUser != null && user.Id == currentUser.Id)
+            if (currentUser?.Id == id)
             {
                 return BadRequest(GetErrorMessage(_localizer.Security["Can't delete yourself."]));
             }
 
+            var user = await _userManager.FindByIdAsync(id.ToString());
             if (user != null)
             {
-                _db.Users.Remove(user);
-                _db.SaveChanges();
-
+                await _userManager.DeleteAsync(user);
                 return Ok(GetSuccessMessage(_localizer.Security["The user has been deleted."]));
             }
 
