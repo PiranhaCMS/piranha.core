@@ -13,16 +13,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>添加</value>
+    <value>新增</value>
   </data>
   <data name="Advanced" xml:space="preserve">
-    <value>高级选项</value>
+    <value>進階</value>
   </data>
   <data name="All" xml:space="preserve">
     <value>全部</value>
   </data>
   <data name="An error occurred" xml:space="preserve">
-    <value>发生了一个错误</value>
+    <value>發生錯誤</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>取消</value>
@@ -31,34 +31,34 @@
     <value>内容</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>继续</value>
+    <value>繼續</value>
   </data>
   <data name="Content type" xml:space="preserve">
-    <value>内容类型</value>
+    <value>內容類型</value>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>拷贝</value>
+    <value>複製</value>
   </data>
   <data name="Culture" xml:space="preserve">
-    <value>语系</value>
+    <value>語系</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>默认</value>
+    <value>預設值</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>删除</value>
+    <value>刪除</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>说明</value>
+    <value>說明</value>
   </data>
   <data name="Details" xml:space="preserve">
-    <value>详细信息</value>
+    <value>詳細資料</value>
   </data>
   <data name="Dimensions" xml:space="preserve">
     <value>尺寸</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>下载</value>
+    <value>下載</value>
   </data>
   <data name="Draft" xml:space="preserve">
     <value>草稿</value>
@@ -67,103 +67,103 @@
     <value>草稿</value>
   </data>
   <data name="Email address" xml:space="preserve">
-    <value>电子邮件地址</value>
+    <value>電子郵件</value>
   </data>
   <data name="Email address is mandatory." xml:space="preserve">
-    <value>电子邮件地址是必须的。</value>
+    <value>電子郵件是必填項。</value>
   </data>
   <data name="Filename" xml:space="preserve">
-    <value>档名</value>
+    <value>檔案名稱</value>
   </data>
   <data name="Height" xml:space="preserve">
-    <value>高</value>
+    <value>高度</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>编辑</value>
+    <value>編輯</value>
   </data>
   <data name="Empty" xml:space="preserve">
-    <value>空</value>
+    <value>空值</value>
   </data>
   <data name="General" xml:space="preserve">
-    <value>基本</value>
+    <value>一般</value>
   </data>
   <data name="General information" xml:space="preserve">
-    <value>基本讯息</value>
+    <value>基本資訊</value>
   </data>
   <data name="History" xml:space="preserve">
-    <value>历史</value>
+    <value>歷史紀錄</value>
   </data>
   <data name="Internal id" xml:space="preserve">
-    <value>内部 Id</value>
+    <value>內部編號</value>
   </data>
   <data name="Is default" xml:space="preserve">
-    <value>是默认值</value>
+    <value>預設網站</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>语系</value>
+    <value>語系</value>
   </data>
   <data name="Languages" xml:space="preserve">
-    <value>语系</value>
+    <value>語系</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>登录</value>
+    <value>登入</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>注销</value>
+    <value>登出</value>
   </data>
   <data name="Looks like there's no items here. Click on the button above to get started!" xml:space="preserve">
-    <value>看来这里没有项目，点击上面的按钮开始！</value>
+    <value>目前沒有內容，請點擊上面的按鍵進行操作！</value>
   </data>
   <data name="Looks like there's no items here. Click on the button below to get started!" xml:space="preserve">
-    <value>看来这里没有项目，点击下面的按钮开始！</value>
+    <value>目前沒有內容，請點擊下面的按鍵進行操作！</value>
   </data>
   <data name="Looks like there's no items here. Click on the button to the left to get started!" xml:space="preserve">
-    <value>似乎这里没有项目，点击左边的按钮开始！</value>
+    <value>目前沒有內容，請點擊左邊的按鍵進行操作！</value>
   </data>
   <data name="Main content" xml:space="preserve">
-    <value>主要内容</value>
+    <value>主要內容</value>
   </data>
   <data name="Modified" xml:space="preserve">
-    <value>已修改</value>
+    <value>修改日期</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>名称</value>
+    <value>用戶名稱</value>
   </data>
   <data name="Name is mandatory." xml:space="preserve">
-    <value>名称为必填项</value>
+    <value>用戶名稱為必填項。</value>
   </data>
   <data name="Open public URL in new tab" xml:space="preserve">
-    <value>新建标签页打开自定义网址</value>
+    <value>於新分頁開啟自訂網址</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>密码</value>
+    <value>密碼</value>
   </data>
   <data name="Permanent" xml:space="preserve">
     <value>永久</value>
   </data>
   <data name="Permissions" xml:space="preserve">
-    <value>权限</value>
+    <value>權限</value>
   </data>
   <data name="Pixels" xml:space="preserve">
     <value>像素</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>预览</value>
+    <value>預覽</value>
   </data>
   <data name="Publish" xml:space="preserve">
-    <value>发布</value>
+    <value>發布</value>
   </data>
   <data name="Publish date" xml:space="preserve">
-    <value>发布日期</value>
+    <value>發布日期</value>
   </data>
   <data name="Redirect" xml:space="preserve">
-    <value>重定向</value>
+    <value>導向</value>
   </data>
   <data name="Redirect Type" xml:space="preserve">
-    <value>重定向类型</value>
+    <value>導向模式</value>
   </data>
   <data name="Revert" xml:space="preserve">
-    <value>还原</value>
+    <value>復原</value>
   </data>
   <data name="Roles" xml:space="preserve">
     <value>角色</value>
@@ -172,87 +172,87 @@
     <value>路由</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>保存</value>
+    <value>儲存</value>
   </data>
   <data name="Scheduled" xml:space="preserve">
-    <value>已排程</value>
+    <value>排程日期</value>
   </data>
   <data name="Search..." xml:space="preserve">
-    <value>搜索中...</value>
+    <value>搜尋 ...</value>
   </data>
   <data name="Select block" xml:space="preserve">
-    <value>选择模块...</value>
+    <value>選擇區塊</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>设置</value>
+    <value>設定</value>
   </data>
   <data name="SEO" xml:space="preserve">
-    <value>搜索引擎优化</value>
+    <value>搜尋引擎優化</value>
   </data>
   <data name="Sharing" xml:space="preserve">
-    <value>共享</value>
+    <value>分享</value>
   </data>
   <data name="Size" xml:space="preserve">
     <value>尺寸</value>
   </data>
   <data name="Slug" xml:space="preserve">
-    <value>网址标识</value>
+    <value>網址後綴</value>
   </data>
   <data name="System" xml:space="preserve">
-    <value>系统</value>
+    <value>系統</value>
   </data>
   <data name="Temporary" xml:space="preserve">
-    <value>临时的</value>
+    <value>臨時</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>标题</value>
+    <value>標題</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>更新</value>
   </data>
   <data name="Update password" xml:space="preserve">
-    <value>更新密码</value>
+    <value>更新密碼</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>用户名</value>
+    <value>用戶名稱</value>
   </data>
   <data name="Username is mandatory." xml:space="preserve">
-    <value>用户名是必填项</value>
+    <value>用戶名稱為必填項。</value>
   </data>
   <data name="Title is mandatory." xml:space="preserve">
-    <value>名称为必填项</value>
+    <value>標題為必填項。</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>类型</value>
+    <value>類型</value>
   </data>
   <data name="Unpublish" xml:space="preserve">
-    <value>取消发布</value>
+    <value>取消發布</value>
   </data>
   <data name="Unpublished" xml:space="preserve">
-    <value>已取消发布</value>
+    <value>未發佈</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>用户</value>
+    <value>用戶</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>版本</value>
   </data>
   <data name="Width" xml:space="preserve">
-    <value>宽度</value>
+    <value>寬度</value>
   </data>
   <data name="Archives and Comments" xml:space="preserve">
-    <value>归档和评论</value>
+    <value>存檔及評論</value>
   </data>
   <data name="Author" xml:space="preserve">
     <value>作者</value>
   </data>
   <data name="Comments" xml:space="preserve">
-    <value>评论</value>
+    <value>評論</value>
   </data>
   <data name="Created" xml:space="preserve">
-    <value>已创建</value>
+    <value>建立日期</value>
   </data>
   <data name="Username and/or password are incorrect." xml:space="preserve">
-    <value>用户名或密码不正确。</value>
+    <value>用戶名稱或密碼不正確</value>
   </data>
 </root>
