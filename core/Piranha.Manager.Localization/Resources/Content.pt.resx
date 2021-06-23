@@ -13,7 +13,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Excerpt" xml:space="preserve">
-    <value>Excerto</value>
+    <value>Excerpt</value>
   </data>
   <data name="Meta index" xml:space="preserve">
     <value>Meta index</value>
@@ -25,10 +25,10 @@
     <value>Meta priority</value>
   </data>
   <data name="Primary image" xml:space="preserve">
-    <value>Imagem principal</value>
+    <value>Primary image</value>
   </data>
   <data name="Search engine priority, compared to other content in the same site." xml:space="preserve">
-    <value>Prioridade do motor de busca, em comparação com outros conteúdos do mesmo site.</value>
+    <value>Search engine priority, compared to other content in the same site.</value>
   </data>
   <data name="The content was successfully deleted" xml:space="preserve">
     <value>The content was successfully deleted</value>
