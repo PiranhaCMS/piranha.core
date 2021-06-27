@@ -6,6 +6,10 @@
     <Description>Core package for Piranha CMS for .NET Core</Description>
   </PropertyGroup>
 
+  <PropertyGroup Label="Package information">
+    <Version>9.1.1</Version>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
