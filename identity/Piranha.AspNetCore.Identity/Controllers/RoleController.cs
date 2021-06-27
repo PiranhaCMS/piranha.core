@@ -9,9 +9,14 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Piranha.AspNetCore.Identity.Data;
 using Piranha.AspNetCore.Identity.Models;
 using Piranha.Manager.Controllers;
 
@@ -20,27 +25,62 @@ namespace Piranha.AspNetCore.Identity.Controllers
     [Area("Manager")]
     public class RoleController : ManagerController
     {
-        private readonly IDb _db;
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<Role> _roleManager;
 
-        public RoleController(IDb db)
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        /// <param name="userManager">The current user manager</param>
+        /// <param name="roleManager">The current role manager</param>
+        public RoleController(UserManager<User> userManager, RoleManager<Role> roleManager)
         {
-            _db = db;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
-        
+
         [HttpGet]
         [Route("/manager/roles")]
         [Authorize(Policy = Permissions.Roles)]
-        public IActionResult List()
+        public async Task<IActionResult> List()
         {
-            return View(RoleListModel.Get(_db));
+            var model = new RoleListModel
+            {
+                Roles = _roleManager.Roles
+                    .OrderBy(r => r.Name)
+                    .Select(r => new RoleListModel.ListItem
+                    {
+                        Id = r.Id,
+                        Name = r.Name
+                    }).ToList()
+            };
+
+            foreach (var role in model.Roles)
+            {
+                role.UserCount = (await _userManager.GetUsersInRoleAsync(role.Id.ToString())).Count;
+            }
+
+            return View(model);
         }
 
         [HttpGet]
         [Route("/manager/role/{id:Guid}")]
         [Authorize(Policy = Permissions.RolesEdit)]
-        public IActionResult Edit(Guid id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            return View("Edit", RoleEditModel.GetById(_db, id));
+            var role = await _roleManager.FindByIdAsync(id.ToString());
+
+            if (role == null)
+            {
+                return View("Edit", null);
+            }
+
+            var model = new RoleEditModel
+            {
+                Role = role,
+                SelectedClaims = (await _roleManager.GetClaimsAsync(role)).Select(claim => claim.Type).ToList()
+            };
+            return View("Edit", model);
         }
 
         [HttpGet]
@@ -48,18 +88,49 @@ namespace Piranha.AspNetCore.Identity.Controllers
         [Authorize(Policy = Permissions.RolesAdd)]
         public IActionResult Add()
         {
-            return View("Edit", RoleEditModel.Create());
+            return View("Edit", new RoleEditModel() {Role = new Role()});
         }
 
         [HttpPost]
         [Route("/manager/role/save")]
         [Authorize(Policy = Permissions.RolesSave)]
-        public IActionResult Save(RoleEditModel model)
+        public async Task<IActionResult> Save(RoleEditModel model)
         {
-            if (model.Save(_db))
+            var role = await _roleManager.FindByIdAsync(model.Role.Id.ToString());
+
+            if (role == null)
             {
-                SuccessMessage("The role has been saved.");
-                return RedirectToAction("Edit", new {id = model.Role.Id});
+                await _roleManager.CreateAsync(model.Role);
+            }
+            else
+            {
+                role.Name = model.Role.Name;
+
+                var currentClaims = await _roleManager.GetClaimsAsync(role);
+
+                foreach (var old in currentClaims)
+                {
+                    if (model.SelectedClaims.Contains(old.Type) == false)
+                    {
+                        await _roleManager.RemoveClaimAsync(role, old);
+                    }
+                }
+
+                foreach (var selected in model.SelectedClaims)
+                {
+                    if (currentClaims.All(c => c.Type != selected))
+                    {
+                        await _roleManager.AddClaimAsync(role, new Claim(selected, selected));
+                    }
+                }
+
+                var result = await _roleManager.UpdateAsync(role);
+
+                if (result.Succeeded)
+                {
+                    SuccessMessage("The role has been saved.");
+                    return RedirectToAction("Edit", new {id = model.Role.Id});
+                }
             }
 
             ErrorMessage("The role could not be saved.", false);
@@ -69,21 +140,20 @@ namespace Piranha.AspNetCore.Identity.Controllers
         [HttpGet]
         [Route("/manager/role/delete")]
         [Authorize(Policy = Permissions.RolesDelete)]
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var role = _db.Roles
-                .FirstOrDefault(r => r.Id == id);
+            var role = await _roleManager.FindByIdAsync(id.ToString());
+            var result = await _roleManager.DeleteAsync(role);
 
-            if (role != null)
+            if (result.Succeeded)
             {
-                _db.Roles.Remove(role);
-                _db.SaveChanges();
-
                 SuccessMessage("The role has been deleted.");
-                return RedirectToAction("List");
+            }
+            else
+            {
+                ErrorMessage("The role could not be deleted.", false);
             }
 
-            ErrorMessage("The role could not be deleted.", false);
             return RedirectToAction("List");
         }
     }

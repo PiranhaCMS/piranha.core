@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Piranha.AspNetCore.Identity.SQLite
 {
-    public class IdentitySQLiteDb : Db<IdentitySQLiteDb>
+    public class IdentitySQLiteDb : EntityFrameworkCore.Db<IdentitySQLiteDb>
     {
         /// <summary>
         /// Default constructor.

@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Piranha;
+using Piranha.AspNetCore.Identity;
+using Piranha.AspNetCore.Identity.EntityFrameworkCore;
 using Piranha.Data.EF.SQLite;
 using Piranha.AspNetCore.Identity.SQLite;
 using Piranha.AttributeBuilder;
@@ -39,8 +41,9 @@ namespace MvcWeb
 
                 options.UseEF<SQLiteDb>(db =>
                     db.UseSqlite("Filename=./piranha.mvcweb.db"));
-                options.UseIdentityWithSeed<IdentitySQLiteDb>(db =>
+                options.UseIdentityEF<IdentitySQLiteDb>(db =>
                     db.UseSqlite("Filename=./piranha.mvcweb.db"));
+                options.UseIdentityWithSeed();
 
                 options.UseSecurity(o =>
                 {

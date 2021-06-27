@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Piranha.AspNetCore.Identity.PostgreSQL
 {
-    public class IdentityPostgreSQLDb : Db<IdentityPostgreSQLDb>
+    public class IdentityPostgreSQLDb : EntityFrameworkCore.Db<IdentityPostgreSQLDb>
     { 
         /// <summary>
         /// Default constructor.

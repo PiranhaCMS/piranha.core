@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Piranha.AspNetCore.Identity.Data;
 
-namespace Piranha.AspNetCore.Identity
+namespace Piranha.AspNetCore.Identity.EntityFrameworkCore
 {
     public interface IDb
     {

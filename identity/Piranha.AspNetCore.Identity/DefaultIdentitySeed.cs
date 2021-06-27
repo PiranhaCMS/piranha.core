@@ -22,11 +22,6 @@ namespace Piranha.AspNetCore.Identity
     public class DefaultIdentitySeed : IIdentitySeed
     {
         /// <summary>
-        /// The private DbContext.
-        /// </summary>
-        private readonly IDb _db;
-
-        /// <summary>
         /// The private user manager.
         /// </summary>
         private readonly UserManager<User> _userManager;
@@ -34,11 +29,9 @@ namespace Piranha.AspNetCore.Identity
         /// <summary>
         /// Default constructor.
         /// </summary>
-        /// <param name="db">The current DbContext</param>
         /// <param name="userManager">The current UserManager</param>
-        public DefaultIdentitySeed(IDb db, UserManager<User> userManager)
+        public DefaultIdentitySeed(UserManager<User> userManager)
         {
-            _db = db;
             _userManager = userManager;
         }
 
@@ -47,13 +40,12 @@ namespace Piranha.AspNetCore.Identity
         /// </summary>
         public async Task CreateAsync()
         {
-            if (!_db.Users.Any())
+            if (!_userManager.Users.Any())
             {
                 var user = new User
                 {
                     UserName = "admin",
-                    Email = "admin@piranhacms.org",
-                    SecurityStamp = Guid.NewGuid().ToString()
+                    Email = "admin@piranhacms.org"
                 };
                 var createResult = await _userManager.CreateAsync(user, "password");
 
