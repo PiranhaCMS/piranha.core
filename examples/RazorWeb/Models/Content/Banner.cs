@@ -13,13 +13,9 @@ using Piranha.Models;
 
 namespace RazorWeb.Models
 {
-    [ContentGroup(Title = "Banners", Icon = "fas fa-star", IsHidden = true)]
-    public abstract class Banner<T> : Content<T>, ICategorizedContent
+    [ContentGroup(Title = "Banners", Icon = "fas fa-star")]
+    public abstract class Banner<T> : Content<T>
         where T : Banner<T>
     {
-        /// <summary>
-        /// Gets/sets the banner category.
-        /// </summary>
-        public Taxonomy Category { get; set; }
     }
 }

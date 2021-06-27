@@ -360,14 +360,12 @@ namespace RazorWeb
                 // Add a banner
                 var banner = await Models.ImageBanner.CreateAsync(api);
                 banner.Title = "Welcome to Piranha";
-                banner.Category = "Images";
                 banner.PrimaryImage = images[0].id;
                 banner.Excerpt = "This is a descriptive text";
                 await api.Content.SaveAsync(banner);
 
                 // Translate the banner to another language
                 banner.Title = "Välkommen till Piranha";
-                banner.Category = "Bilder";
                 banner.Excerpt = "Det här är en beskrivande text";
                 await api.Content.SaveAsync(banner, lang2Id);
             }

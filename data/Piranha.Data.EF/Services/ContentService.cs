@@ -220,7 +220,17 @@ namespace Piranha.Services
             {
                 if (content is ICategorized categorizedContent)
                 {
-                    categorizedContent.CategoryId = categorized.Category.Id;
+                    if (type is Models.ContentType contentType)
+                    {
+                        if (contentType.UseCategory)
+                        {
+                            categorizedContent.CategoryId = categorized.Category.Id;
+                        }
+                    }
+                    else
+                    {
+                        categorizedContent.CategoryId = categorized.Category.Id;
+                    }
                 }
             }
 
