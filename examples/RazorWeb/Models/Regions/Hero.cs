@@ -24,20 +24,20 @@ namespace RazorWeb.Models.Regions
         /// <summary>
         /// Gets/sets the optional subtitle.
         /// </summary>
-        [Field(Options = FieldOption.HalfWidth)]
+        [Field(Options = FieldOption.HalfWidth, SortOrder = 3)]
         [StringFieldSettings(MaxLength = 32, DefaultValue = "Olle")]
         public StringField Subtitle { get; set; }
 
         /// <summary>
         /// Gets/sets the optional primary image.
         /// </summary>
-        [Field(Title = "Primary Image", Options = FieldOption.HalfWidth)]
+        [Field(Title = "Primary Image", Options = FieldOption.HalfWidth, SortOrder = 2)]
         public ImageField PrimaryImage { get; set; }
 
         /// <summary>
         /// Gets/sets the optional ingress.
         /// </summary>
-        [Field]
+        [Field(SortOrder = 1)]
         [FieldDescription("Optional text that is shown on top of the background image")]
         public HtmlField Ingress { get; set; }
     }

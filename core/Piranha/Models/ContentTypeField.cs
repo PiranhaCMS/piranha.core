@@ -49,6 +49,11 @@ namespace Piranha.Models
         public string Description { get; set; }
 
         /// <summary>
+        /// Gets/sets field order on the manager interface.
+        /// </summary>
+        public int SortOrder { get; set; }
+
+        /// <summary>
         /// Gets/sets the available field settings.
         /// </summary>
         public IDictionary<string, object> Settings = new Dictionary<string, object>();
