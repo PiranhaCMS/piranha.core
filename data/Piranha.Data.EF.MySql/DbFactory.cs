@@ -28,8 +28,10 @@ namespace Piranha.Data.EF.MySql
         /// <returns>The db context</returns>
         public MySqlDb CreateDbContext(string[] args)
         {
+            var connectionString = "server=localhost;port=3306;database=piranha;uid=root;password=password";
+
             var builder = new DbContextOptionsBuilder<MySqlDb>();
-            builder.UseMySql("Server=localhost;Port=8889;Database=piranha;User=root;Password=root;");
+            builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
             return new MySqlDb(builder.Options);
         }
     }
