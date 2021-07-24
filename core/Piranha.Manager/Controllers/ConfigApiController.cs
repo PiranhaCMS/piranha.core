@@ -16,7 +16,7 @@ using Piranha.Manager.Services;
 namespace Piranha.Manager.Controllers
 {
     /// <summary>
-    /// Api controller for alias management.
+    /// Api controller for config management.
     /// </summary>
     [Area("Manager")]
     [Route("manager/api/config")]
