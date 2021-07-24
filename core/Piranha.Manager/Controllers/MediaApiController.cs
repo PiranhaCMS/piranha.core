@@ -22,7 +22,7 @@ using Piranha.Models;
 namespace Piranha.Manager.Controllers
 {
     /// <summary>
-    /// Api controller for alias management.
+    /// Api controller for media management.
     /// </summary>
     [Area("Manager")]
     [Route("manager/api/media")]

@@ -20,7 +20,7 @@ using Piranha.Manager.Services;
 namespace Piranha.Manager.Controllers
 {
     /// <summary>
-    /// Api controller for page management.
+    /// Api controller for post management.
     /// </summary>
     [Area("Manager")]
     [Route("manager/api/post")]
