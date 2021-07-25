@@ -61,7 +61,7 @@ namespace Piranha.Repositories
         Task<MediaFolder> GetFolderById(Guid id);
 
         /// <summary>
-        /// Gets the hierachical media structure.
+        /// Gets the hierarchical media structure.
         /// </summary>
         /// <returns>The media structure</returns>
         Task<MediaStructure> GetStructure();
