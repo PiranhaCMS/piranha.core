@@ -31,9 +31,9 @@ namespace Piranha.Repositories
         Task<Language> GetById(Guid id);
 
         /// <summary>
-        /// Gets the default side.
+        /// Gets the default model.
         /// </summary>
-        /// <returns>The modell</returns>
+        /// <returns>The model</returns>
         Task<Language> GetDefault();
 
         /// <summary>
