@@ -244,7 +244,7 @@ namespace Piranha.Services
         }
 
         /// <summary>
-        /// Gets the hierachical sitemap structure.
+        /// Gets the hierarchical sitemap structure.
         /// </summary>
         /// <param name="id">The optional site id</param>
         /// <param name="onlyPublished">If only published items should be included</param>
