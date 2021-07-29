@@ -307,7 +307,7 @@ namespace Piranha.Services
             // Ensure InternalId
             if (string.IsNullOrWhiteSpace(model.InternalId))
             {
-                model.InternalId = Utils.GenerateInteralId(model.Title);
+                model.InternalId = Utils.GenerateInternalId(model.Title);
             }
 
             // Ensure InternalId uniqueness
