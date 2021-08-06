@@ -472,6 +472,8 @@ namespace Piranha.AspNetCore
         public bool HandleCache(HttpContext context, Site site, RoutedContentBase content, int expires)
         {
             var headers = context.Response.GetTypedHeaders();
+            headers.Append("piranha-cache-level", Enum.GetName(App.CacheLevel));
+            headers.Append("piranha-cache-minutes", expires);
 
             if (expires > 0 && content.Published.HasValue)
             {
