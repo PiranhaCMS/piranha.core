@@ -70,7 +70,7 @@
     <value>Are you sure you want to delete selected media?</value>
   </data>
   <data name="Delete selected items" xml:space="preserve">
-    <value>Delete selected items</value>
+    <value>Usuń zaznaczone elementy</value>
   </data>
   <data name="Media file was successfully moved." xml:space="preserve">
     <value>Media file was successfully moved.</value>
