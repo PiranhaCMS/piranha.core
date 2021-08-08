@@ -110,7 +110,7 @@ namespace Piranha.AspNetCore
                     service.Site.Culture = site.Culture;
                     service.Site.Sitemap = await api.Sites.GetSitemapAsync(site.Id);
 
-                    // Set prefered hostname & prefix
+                    // Set preferred hostname & prefix
                     var siteHost = GetMatchingHost(site, hostname);
                     service.Site.Host = siteHost[0];
                     service.Site.SitePrefix = siteHost[1];
@@ -225,7 +225,7 @@ namespace Piranha.AspNetCore
                     {
                         App.PostTypes.GetById(post.TypeId);
 
-                        // Onlyc cache published posts
+                        // Only cache published posts
                         if (post.IsPublished)
                         {
                             service.CurrentPost = post;
