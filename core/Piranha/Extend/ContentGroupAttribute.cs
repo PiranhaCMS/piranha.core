@@ -34,7 +34,7 @@ namespace Piranha.Extend
 
                 if (string.IsNullOrWhiteSpace(Id))
                 {
-                    Id = Utils.GenerateInteralId(value);
+                    Id = Utils.GenerateInternalId(value);
                 }
             }
         }

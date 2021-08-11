@@ -72,9 +72,9 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
-        /// Gets the default side.
+        /// Gets the default model.
         /// </summary>
-        /// <returns>The modell</returns>
+        /// <returns>The model</returns>
         public async Task<Language> GetDefault()
         {
             return await _db.Languages

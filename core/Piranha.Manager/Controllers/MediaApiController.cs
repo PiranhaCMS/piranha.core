@@ -22,7 +22,7 @@ using Piranha.Models;
 namespace Piranha.Manager.Controllers
 {
     /// <summary>
-    /// Api controller for alias management.
+    /// Api controller for media management.
     /// </summary>
     [Area("Manager")]
     [Route("manager/api/media")]
@@ -61,7 +61,7 @@ namespace Piranha.Manager.Controllers
         /// <summary>
         /// Gets the image url for the specified dimensions.
         /// </summary>
-        /// <param name="id">The unqie id</param>
+        /// <param name="id">The unique id</param>
         /// <param name="width">The optional width</param>
         /// <param name="height">The optional height</param>
         /// <returns>The public url</returns>
@@ -109,7 +109,7 @@ namespace Piranha.Manager.Controllers
                 return Ok(new StatusMessage
                 {
                     Type = StatusMessage.Success,
-                    Body = _localizer.Media["The meta information was succesfully updated"]
+                    Body = _localizer.Media["The meta information was successfully updated"]
                 });
             }
             else

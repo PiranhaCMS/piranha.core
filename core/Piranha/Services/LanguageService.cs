@@ -119,7 +119,7 @@ namespace Piranha.Services
             {
                 // Make sure we have a default site
                 var def = await _repo.GetDefault().ConfigureAwait(false);
-                if (def == null || def.Id == model.Id)
+                if (def == null || def.Id == model.Id)
                     model.IsDefault = true;
             }
 

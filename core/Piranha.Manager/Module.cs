@@ -51,7 +51,7 @@ namespace Piranha.Manager
             new PermissionItem { Name = Permission.PagesDelete, Title = "Delete Pages", Category = "Pages" },
             new PermissionItem { Name = Permission.PagesEdit, Title = "Edit Pages", Category = "Pages" },
             new PermissionItem { Name = Permission.PagesPublish, Title = "Publish Pages", Category = "Pages" },
-            new PermissionItem { Name = Permission.PagesSave, Title = "Pages - Save", Category = "Pages" },
+            new PermissionItem { Name = Permission.PagesSave, Title = "Save Pages", Category = "Pages" },
             new PermissionItem { Name = Permission.Posts, Title = "List Posts", Category = "Posts" },
             new PermissionItem { Name = Permission.PostsAdd, Title = "Add Posts", Category = "Posts" },
             new PermissionItem { Name = Permission.PostsDelete, Title = "Delete Posts", Category = "Posts" },

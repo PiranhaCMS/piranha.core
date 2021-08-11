@@ -221,6 +221,13 @@ namespace Piranha.Services
         /// <param name="languageId">The optional language id</param>
         public async Task SaveAsync<T>(T model, Guid? languageId = null) where T : GenericContent
         {
+            // Make sure we have valid content type
+            var type = App.ContentTypes.GetById(model.TypeId);
+            if (type == null)
+            {
+                throw new ValidationException("Content type is missing");
+            }
+
             // Make sure we have an Id
             if (model.Id == Guid.Empty)
             {
@@ -238,11 +245,14 @@ namespace Piranha.Services
             Validator.ValidateObject(model, context, true);
 
             // Ensure category
-            if (model is ICategorizedContent categorizedModel)
+            if (type.UseCategory)
             {
-                if (categorizedModel.Category == null || (string.IsNullOrWhiteSpace(categorizedModel.Category.Title) && string.IsNullOrWhiteSpace(categorizedModel.Category.Slug)))
+                if (model is ICategorizedContent categorizedModel)
                 {
-                    throw new ValidationException("The Category field is required");
+                    if (categorizedModel.Category == null || (string.IsNullOrWhiteSpace(categorizedModel.Category.Title) && string.IsNullOrWhiteSpace(categorizedModel.Category.Slug)))
+                    {
+                        throw new ValidationException("The Category field is required");
+                    }
                 }
             }
 

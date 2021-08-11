@@ -23,7 +23,7 @@ namespace Piranha
         private static volatile bool IsInitialized = false;
 
         /// <summary>
-        /// The object mutext used for initializing the context.
+        /// The object mutex used for initializing the context.
         /// </summary>
         private static readonly object Mutex = new object();
 

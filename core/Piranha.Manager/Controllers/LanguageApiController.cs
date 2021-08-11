@@ -19,7 +19,7 @@ using Piranha.Models;
 namespace Piranha.Manager.Controllers
 {
     /// <summary>
-    /// Api controller for alias management.
+    /// Api controller for language management.
     /// </summary>
     [Area("Manager")]
     [Route("manager/api/language")]

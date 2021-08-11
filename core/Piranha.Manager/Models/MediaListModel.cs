@@ -140,7 +140,7 @@ namespace Piranha.Manager.Models
         public Guid? CurrentFolderId { get; set; }
 
         /// <summary>
-        /// Gets/sets the optinal folder name
+        /// Gets/sets the optional folder name
         /// </summary>
         public string CurrentFolderName { get; set; }
 

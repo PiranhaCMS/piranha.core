@@ -14,9 +14,10 @@ namespace Piranha.Tests.Utils
 {
     public class InternalId
     {
+        //corrected to GenerateInternalId
         [Fact]
         public void ToTitleCase() {
-            Assert.Equal("MyTestValue", Piranha.Utils.GenerateInteralId("mY test vAlUE"));
+            Assert.Equal("MyTestValue", Piranha.Utils.GenerateInternalId("mY test vAlUE"));
         }
     }
 }

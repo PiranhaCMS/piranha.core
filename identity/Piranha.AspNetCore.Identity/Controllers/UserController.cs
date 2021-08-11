@@ -238,7 +238,7 @@ namespace Piranha.AspNetCore.Identity.Controllers
         /// <param name="id">The user id</param>
         [HttpGet]
         [Route("/manager/user/delete/{id:Guid}")]
-        [Authorize(Policy = Permissions.UsersSave)]
+        [Authorize(Policy = Permissions.UsersDelete)]
         public async Task<IActionResult> Delete(Guid id)
         {
 

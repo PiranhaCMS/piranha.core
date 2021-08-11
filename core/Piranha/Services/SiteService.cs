@@ -244,7 +244,7 @@ namespace Piranha.Services
         }
 
         /// <summary>
-        /// Gets the hierachical sitemap structure.
+        /// Gets the hierarchical sitemap structure.
         /// </summary>
         /// <param name="id">The optional site id</param>
         /// <param name="onlyPublished">If only published items should be included</param>
@@ -307,7 +307,7 @@ namespace Piranha.Services
             // Ensure InternalId
             if (string.IsNullOrWhiteSpace(model.InternalId))
             {
-                model.InternalId = Utils.GenerateInteralId(model.Title);
+                model.InternalId = Utils.GenerateInternalId(model.Title);
             }
 
             // Ensure InternalId uniqueness

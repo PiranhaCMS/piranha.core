@@ -119,7 +119,7 @@ namespace Piranha
         /// </summary>
         /// <param name="str">The string</param>
         /// <returns>The internal id</returns>
-        public static string GenerateInteralId(string str)
+        public static string GenerateInternalId(string str)
         {
             var ti = new CultureInfo("en-US", false).TextInfo;
             return ti.ToTitleCase(GenerateSlug(str).Replace('-', ' ')).Replace(" ", "");

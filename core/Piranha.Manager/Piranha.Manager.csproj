@@ -7,6 +7,10 @@
     <Description>Manager panel for Piranha CMS for AspNetCore</Description>
   </PropertyGroup>
 
+  <PropertyGroup Label="Package information">
+    <Version>9.1.1</Version>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>

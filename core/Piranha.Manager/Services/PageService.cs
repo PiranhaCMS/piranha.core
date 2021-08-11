@@ -77,7 +77,7 @@ namespace Piranha.Manager.Services
         }
 
         /// <summary>
-        /// Gets the hierachical page structure for the specified site.
+        /// Gets the hierarchical page structure for the specified site.
         /// </summary>
         /// <param name="siteId">The site id</param>
         /// <returns>The structure</returns>

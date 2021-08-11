@@ -203,89 +203,95 @@ namespace Piranha.Repositories
             if (type != null)
             {
                 // Ensure category
-                if (model is Models.ICategorizedContent categorized)
+                if (type.UseCategory)
                 {
-                    var category = await _db.Taxonomies
-                        .FirstOrDefaultAsync(c => c.Id == categorized.Category.Id)
-                        .ConfigureAwait(false);
-
-                    if (category == null)
+                    if (model is Models.ICategorizedContent categorized)
                     {
-                        if (!string.IsNullOrWhiteSpace(categorized.Category.Slug))
-                        {
-                            category = await _db.Taxonomies
-                                .FirstOrDefaultAsync(c => c.GroupId == type.Group && c.Slug == categorized.Category.Slug && c.Type == TaxonomyType.Category)
-                                .ConfigureAwait(false);
-                        }
-                        if (category == null && !string.IsNullOrWhiteSpace(categorized.Category.Title))
-                        {
-                            category = await _db.Taxonomies
-                                .FirstOrDefaultAsync(c => c.GroupId == type.Group && c.Title == categorized.Category.Title && c.Type == TaxonomyType.Category)
-                                .ConfigureAwait(false);
-                        }
+                        var category = await _db.Taxonomies
+                            .FirstOrDefaultAsync(c => c.Id == categorized.Category.Id)
+                            .ConfigureAwait(false);
 
                         if (category == null)
                         {
-                            category = new Taxonomy
+                            if (!string.IsNullOrWhiteSpace(categorized.Category.Slug))
                             {
-                                Id = categorized.Category.Id != Guid.Empty ? categorized.Category.Id : Guid.NewGuid(),
-                                GroupId = type.Group,
-                                Type = TaxonomyType.Category,
-                                Title = categorized.Category.Title,
-                                Slug = Utils.GenerateSlug(categorized.Category.Title),
-                                Created = DateTime.Now,
-                                LastModified = DateTime.Now
-                            };
-                            await _db.Taxonomies.AddAsync(category).ConfigureAwait(false);
+                                category = await _db.Taxonomies
+                                    .FirstOrDefaultAsync(c => c.GroupId == type.Group && c.Slug == categorized.Category.Slug && c.Type == TaxonomyType.Category)
+                                    .ConfigureAwait(false);
+                            }
+                            if (category == null && !string.IsNullOrWhiteSpace(categorized.Category.Title))
+                            {
+                                category = await _db.Taxonomies
+                                    .FirstOrDefaultAsync(c => c.GroupId == type.Group && c.Title == categorized.Category.Title && c.Type == TaxonomyType.Category)
+                                    .ConfigureAwait(false);
+                            }
+
+                            if (category == null)
+                            {
+                                category = new Taxonomy
+                                {
+                                    Id = categorized.Category.Id != Guid.Empty ? categorized.Category.Id : Guid.NewGuid(),
+                                    GroupId = type.Group,
+                                    Type = TaxonomyType.Category,
+                                    Title = categorized.Category.Title,
+                                    Slug = Utils.GenerateSlug(categorized.Category.Title),
+                                    Created = DateTime.Now,
+                                    LastModified = DateTime.Now
+                                };
+                                await _db.Taxonomies.AddAsync(category).ConfigureAwait(false);
+                            }
+                            categorized.Category.Id = category.Id;
+                            categorized.Category.Title = category.Title;
+                            categorized.Category.Slug = category.Slug;
                         }
-                        categorized.Category.Id = category.Id;
-                        categorized.Category.Title = category.Title;
-                        categorized.Category.Slug = category.Slug;
                     }
                 }
 
                 // Ensure tags
-                if (model is Models.ITaggedContent tagged)
+                if (type.UseTags)
                 {
-                    foreach (var t in tagged.Tags)
+                    if (model is Models.ITaggedContent tagged)
                     {
-                        var tag = await _db.Taxonomies
-                            .FirstOrDefaultAsync(tg => tg.Id == t.Id)
-                            .ConfigureAwait(false);
-
-                        if (tag == null)
+                        foreach (var t in tagged.Tags)
                         {
-                            if (!string.IsNullOrWhiteSpace(t.Slug))
-                            {
-                                tag = await _db.Taxonomies
-                                    .FirstOrDefaultAsync(tg => tg.GroupId == type.Group && tg.Slug == t.Slug && tg.Type == TaxonomyType.Tag)
-                                    .ConfigureAwait(false);
-                            }
-                            if (tag == null && !string.IsNullOrWhiteSpace(t.Title))
-                            {
-                                tag = await _db.Taxonomies
-                                    .FirstOrDefaultAsync(tg => tg.GroupId == type.Group && tg.Title == t.Title && tg.Type == TaxonomyType.Tag)
-                                    .ConfigureAwait(false);
-                            }
+                            var tag = await _db.Taxonomies
+                                .FirstOrDefaultAsync(tg => tg.Id == t.Id)
+                                .ConfigureAwait(false);
 
                             if (tag == null)
                             {
-                                tag = new Taxonomy
+                                if (!string.IsNullOrWhiteSpace(t.Slug))
                                 {
-                                    Id = t.Id != Guid.Empty ? t.Id : Guid.NewGuid(),
-                                    GroupId = type.Group,
-                                    Type = TaxonomyType.Tag,
-                                    Title = t.Title,
-                                    Slug = Utils.GenerateSlug(t.Title),
-                                    Created = DateTime.Now,
-                                    LastModified = DateTime.Now
-                                };
-                                await _db.Taxonomies.AddAsync(tag).ConfigureAwait(false);
+                                    tag = await _db.Taxonomies
+                                        .FirstOrDefaultAsync(tg => tg.GroupId == type.Group && tg.Slug == t.Slug && tg.Type == TaxonomyType.Tag)
+                                        .ConfigureAwait(false);
+                                }
+                                if (tag == null && !string.IsNullOrWhiteSpace(t.Title))
+                                {
+                                    tag = await _db.Taxonomies
+                                        .FirstOrDefaultAsync(tg => tg.GroupId == type.Group && tg.Title == t.Title && tg.Type == TaxonomyType.Tag)
+                                        .ConfigureAwait(false);
+                                }
+
+                                if (tag == null)
+                                {
+                                    tag = new Taxonomy
+                                    {
+                                        Id = t.Id != Guid.Empty ? t.Id : Guid.NewGuid(),
+                                        GroupId = type.Group,
+                                        Type = TaxonomyType.Tag,
+                                        Title = t.Title,
+                                        Slug = Utils.GenerateSlug(t.Title),
+                                        Created = DateTime.Now,
+                                        LastModified = DateTime.Now
+                                    };
+                                    await _db.Taxonomies.AddAsync(tag).ConfigureAwait(false);
+                                }
+                                t.Id = tag.Id;
                             }
-                            t.Id = tag.Id;
+                            t.Title = tag.Title;
+                            t.Slug = tag.Slug;
                         }
-                        t.Title = tag.Title;
-                        t.Slug = tag.Slug;
                     }
                 }
 
@@ -329,33 +335,36 @@ namespace Piranha.Repositories
                     }
                 }
 
-                if (model is Models.ITaggedContent taggedModel)
+                if (type.UseTags)
                 {
-                    // Remove tags
-                    var removedTags = new List<ContentTaxonomy>();
-                    foreach (var tag in content.Tags)
+                    if (model is Models.ITaggedContent taggedModel)
                     {
-                        if (!taggedModel.Tags.Any(t => t.Id == tag.TaxonomyId))
+                        // Remove tags
+                        var removedTags = new List<ContentTaxonomy>();
+                        foreach (var tag in content.Tags)
                         {
-                            removedTags.Add(tag);
-                        }
-                    }
-                    foreach (var removed in removedTags)
-                    {
-                        content.Tags.Remove(removed);
-                    }
-
-                    // Add tags
-                    foreach (var tag in taggedModel.Tags)
-                    {
-                        if (!content.Tags.Any(t => t.ContentId == content.Id && t.TaxonomyId == tag.Id))
-                        {
-                            var contentTaxonomy = new ContentTaxonomy
+                            if (!taggedModel.Tags.Any(t => t.Id == tag.TaxonomyId))
                             {
-                                ContentId = content.Id,
-                                TaxonomyId = tag.Id
-                            };
-                            content.Tags.Add(contentTaxonomy);
+                                removedTags.Add(tag);
+                            }
+                        }
+                        foreach (var removed in removedTags)
+                        {
+                            content.Tags.Remove(removed);
+                        }
+
+                        // Add tags
+                        foreach (var tag in taggedModel.Tags)
+                        {
+                            if (!content.Tags.Any(t => t.ContentId == content.Id && t.TaxonomyId == tag.Id))
+                            {
+                                var contentTaxonomy = new ContentTaxonomy
+                                {
+                                    ContentId = content.Id,
+                                    TaxonomyId = tag.Id
+                                };
+                                content.Tags.Add(contentTaxonomy);
+                            }
                         }
                     }
                 }
