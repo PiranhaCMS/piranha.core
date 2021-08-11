@@ -143,7 +143,7 @@ namespace Piranha.Manager.Controllers
             }
             catch (ValidationException e)
             {
-                var result = new AliasListModel();
+                var result = new MediaListModel();
                 result.Status = new StatusMessage
                 {
                     Type = StatusMessage.Error,
