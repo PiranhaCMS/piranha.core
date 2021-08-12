@@ -25,7 +25,7 @@ namespace Piranha.Azure
         /// <summary>
         /// Gets the Name
         /// </summary>
-        public string Name => "Piranha.Local.BlobStorage";
+        public string Name => "Piranha.Azure.BlobStorage";
 
         /// <summary>
         /// Gets the Version
@@ -40,7 +40,7 @@ namespace Piranha.Azure
         /// <summary>
         /// Gets the package url.
         /// </summary>
-        public string PackageUrl => "https://www.nuget.org/packages/Piranha.Local.BlobStorage";
+        public string PackageUrl => "https://www.nuget.org/packages/Piranha.Azure.BlobStorage";
 
         /// <summary>
         /// Gets the icon url.
