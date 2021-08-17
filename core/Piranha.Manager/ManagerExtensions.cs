@@ -26,9 +26,19 @@ public static class ManagerModuleExtensions
     /// Adds the Piranha manager module.
     /// </summary>
     /// <param name="services">The current service collection</param>
-    /// <param name="configureAuthorizationOptions"></param>
     /// <returns>The services</returns>
-    public static IServiceCollection AddPiranhaManager(this IServiceCollection services, Action<string, AuthorizationPolicyBuilder> configureAuthorizationOptions = null)
+    public static IServiceCollection AddPiranhaManager(this IServiceCollection services)
+    {
+        return services.AddPiranhaManager(null);
+    }
+
+    /// <summary>
+    /// Adds the Piranha manager module.
+    /// </summary>
+    /// <param name="services">The current service collection</param>
+    /// <param name="configurePolicy">The delegate that will be used to build the Piranha Manager named policies.</param>
+    /// <returns>The services</returns>
+    public static IServiceCollection AddPiranhaManager(this IServiceCollection services, Action<string, AuthorizationPolicyBuilder> configurePolicy)
     {
         // Add the manager module
         Piranha.App.Modules.Register<Piranha.Manager.Module>();
@@ -58,12 +68,12 @@ public static class ManagerModuleExtensions
         // Setup authorization policies
         services.AddAuthorization(o =>
         {
-            if (configureAuthorizationOptions is not null)
+            if (configurePolicy is not null)
             {
                 //If custom AuthorizationOptions delegate is provided, invoke
                 foreach (var permission in Permission.All())
                 {
-                    o.AddPolicy(permission, configure => configureAuthorizationOptions.Invoke(permission, configure));
+                    o.AddPolicy(permission, configure => configurePolicy.Invoke(permission, configure));
                 }
             }
             else
