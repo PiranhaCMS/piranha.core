@@ -28,7 +28,7 @@ public static class ManagerModuleExtensions
     /// <param name="services">The current service collection</param>
     /// <param name="configureAuthorizationOptions"></param>
     /// <returns>The services</returns>
-    public static IServiceCollection AddPiranhaManager(this IServiceCollection services, Action<AuthorizationOptions> configureAuthorizationOptions = null)
+    public static IServiceCollection AddPiranhaManager(this IServiceCollection services, Action<string, AuthorizationPolicyBuilder> configureAuthorizationOptions = null)
     {
         // Add the manager module
         Piranha.App.Modules.Register<Piranha.Manager.Module>();
@@ -61,7 +61,10 @@ public static class ManagerModuleExtensions
             if (configureAuthorizationOptions is not null)
             {
                 //If custom AuthorizationOptions delegate is provided, invoke
-                configureAuthorizationOptions.Invoke(o);
+                foreach (var permission in Permission.All())
+                {
+                    o.AddPolicy(permission, configure => configureAuthorizationOptions.Invoke(permission, configure));
+                }
             }
             else
             {
