@@ -19,7 +19,7 @@
     <value>Wystąpił błąd podczas usuwania strony</value>
   </data>
   <data name="An error occured while saving the page" xml:space="preserve">
-    <value>An error occured while saving the page</value>
+    <value>Wystąpił błąd podczas zapisywania strony</value>
   </data>
   <data name="Archive" xml:space="preserve">
     <value>Archive</value>
@@ -100,6 +100,6 @@
     <value>Tytuł twojej strony</value>
   </data>
   <data name="If comments should be enabled for this page" xml:space="preserve">
-    <value>If comments should be enabled for this page</value>
+    <value>Czy komentarze powinny być włączone dla tej strony</value>
   </data>
 </root>

@@ -46,10 +46,10 @@
     <value>Twoja przeglądarka nie obsługuje tagów wideo.</value>
   </data>
   <data name="List" xml:space="preserve">
-    <value>List</value>
+    <value>Lista</value>
   </data>
   <data name="Preferred aspect" xml:space="preserve">
-    <value>Preferred aspect</value>
+    <value>Preferowany aspekt</value>
   </data>
   <data name="Original" xml:space="preserve">
     <value>Original</value>
@@ -70,7 +70,7 @@
     <value>Are you sure you want to delete selected media?</value>
   </data>
   <data name="Delete selected items" xml:space="preserve">
-    <value>Delete selected items</value>
+    <value>Usuń zaznaczone elementy</value>
   </data>
   <data name="Media file was successfully moved." xml:space="preserve">
     <value>Media file was successfully moved.</value>
