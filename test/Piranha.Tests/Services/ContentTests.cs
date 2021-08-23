@@ -10,6 +10,8 @@
 
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using Xunit;
 using Piranha.AttributeBuilder;
 using Piranha.Extend;
@@ -18,6 +20,26 @@ using Piranha.Models;
 
 namespace Piranha.Tests.Services
 {
+    [Collection("Integration tests")]
+    public class ContentTestsMemoryCache : ContentTests
+    {
+        public override async Task InitializeAsync()
+        {
+            _cache = new Cache.MemoryCache((IMemoryCache)_services.GetService(typeof(IMemoryCache)));
+            await base.InitializeAsync();
+        }
+    }
+
+    [Collection("Integration tests")]
+    public class ContentTestsDistributedCache : ContentTests
+    {
+        public override async Task InitializeAsync()
+        {
+            _cache = new Cache.DistributedCache((IDistributedCache)_services.GetService(typeof(IDistributedCache)));
+            await base.InitializeAsync();
+        }
+    }
+
     [Collection("Integration tests")]
     public class ContentTests : BaseTestsAsync
     {
