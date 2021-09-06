@@ -125,7 +125,6 @@ namespace Piranha.Manager.Services
                 CurrentFolderId = folderId,
                 ParentFolderId = null,
                 Structure = await _api.Media.GetStructureAsync()
-                
             };
 
             model.CurrentFolderBreadcrumb = await GetFolderBreadCrumb(model.Structure, folderId);

@@ -61,7 +61,7 @@ namespace Piranha.Services
         Task<MediaFolder> GetFolderByIdAsync(Guid id);
 
         /// <summary>
-        /// Gets the hierachical media structure.
+        /// Gets the hierarchical media structure.
         /// </summary>
         /// <returns>The media structure</returns>
         Task<MediaStructure> GetStructureAsync();
@@ -104,7 +104,7 @@ namespace Piranha.Services
         string EnsureVersion(Guid id, int width, int? height = null);
 
         /// <summary>
-        /// Ensures that the image version with the given size exsists
+        /// Ensures that the image version with the given size exists
         /// and returns its public URL.
         /// </summary>
         /// <param name="id">The unique id</param>

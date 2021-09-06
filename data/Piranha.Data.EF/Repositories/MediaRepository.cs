@@ -118,7 +118,7 @@ namespace Piranha.Repositories
                 .FirstOrDefaultAsync(f => f.Id == id);
 
         /// <summary>
-        /// Gets the hierachical media structure.
+        /// Gets the hierarchical media structure.
         /// </summary>
         /// <returns>The media structure</returns>
         public async Task<Models.MediaStructure> GetStructure()
