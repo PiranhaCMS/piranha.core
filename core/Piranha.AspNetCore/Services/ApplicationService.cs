@@ -123,6 +123,7 @@ namespace Piranha.AspNetCore.Services
                 if (site != null)
                 {
                     Site.Id = site.Id;
+                    Site.LanguageId = site.LanguageId;
                     Site.Culture = site.Culture;
                     Site.Sitemap = await Api.Sites.GetSitemapAsync(Site.Id);
 
