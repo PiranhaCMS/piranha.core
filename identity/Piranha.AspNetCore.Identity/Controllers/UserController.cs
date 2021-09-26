@@ -197,10 +197,10 @@ namespace Piranha.AspNetCore.Identity.Controllers
         /// Deletes the user with the given id.
         /// </summary>
         /// <param name="id">The user id</param>
-        [HttpGet]
-        [Route("/manager/user/delete/{id:Guid}")]
+        [HttpDelete]
+        [Route("/manager/user/delete")]
         [Authorize(Policy = Permissions.UsersDelete)]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete([FromBody]Guid id)
         {
             var user = _db.Users.FirstOrDefault(u => u.Id == id);
 
