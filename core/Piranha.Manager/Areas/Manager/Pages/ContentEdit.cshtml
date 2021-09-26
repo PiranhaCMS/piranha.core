@@ -1,11 +1,11 @@
-@page "~/manager/content/{action}/{contentType}/{id?}/{langId?}"
+@page "~/manager/content/{routeAction}/{contentType}/{id?}/{langId?}"
 @model ContentListViewModel
 @inject ManagerLocalizer Localizer
 @inject Piranha.Config Config
 @{
     ViewBag.Title = "Add/Edit";
     ViewBag.MenuItem = "Add/Edit";
-    string action = ((string)RouteData.Values["action"]).ToLower();
+    string action = ((string)RouteData.Values["routeAction"]).ToLower();
 
     string contentId = RouteData.Values.ContainsKey("id") ? (string)RouteData.Values["id"] : null;
     string languageId = RouteData.Values.ContainsKey("langId") ? (string)RouteData.Values["langId"] : null;
