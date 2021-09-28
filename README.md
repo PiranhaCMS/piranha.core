@@ -93,6 +93,14 @@ Support Piranha CMS with a monthly donation and help us focus on giving you even
 <img src="https://opencollective.com/piranhacms/tiers/sponsor.svg?avatarHeight=36" />
 <img src="https://opencollective.com/piranhacms/tiers/backer.svg?avatarHeight=36&width=600" />
 
+## Sponsors
+
+These are our financial sponsors! You can also become a sponsor either through GitHub or [Open Collective](https://opencollective.com/piranhacms).
+
+[![Arcady](https://piranhacms.azureedge.net/uploads/672d2600-8822-4b74-bb06-392f0c4aa38d-arcady_black.png)](https://www.arcady.nl)
+
+
+
 ## Code of Conduct
 
 This project has adopted the code of conduct defined by the [Contributor Covenant](http://contributor-covenant.org/) to clarify expected behavior in our community.
