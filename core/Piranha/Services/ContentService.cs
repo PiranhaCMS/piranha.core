@@ -74,10 +74,11 @@ namespace Piranha.Services
         /// group id.
         /// </summary>
         /// <param name="groupId">The optional group id</param>
+        /// <param name="languageId">The optional language id</param>
         /// <returns>The available content</returns>
-        public Task<IEnumerable<DynamicContent>> GetAllAsync(string groupId = null)
+        public Task<IEnumerable<DynamicContent>> GetAllAsync(string groupId = null, Guid? languageId = null)
         {
-            return GetAllAsync<DynamicContent>(groupId);
+            return GetAllAsync<DynamicContent>(groupId, languageId);
         }
 
         /// <summary>
@@ -86,15 +87,16 @@ namespace Piranha.Services
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="groupId">The optional group id</param>
+        /// <param name="languageId">The optional language id</param>
         /// <returns>The available content</returns>
-        public async Task<IEnumerable<T>> GetAllAsync<T>(string groupId = null) where T : GenericContent
+        public async Task<IEnumerable<T>> GetAllAsync<T>(string groupId = null, Guid? languageId = null) where T : GenericContent
         {
             var models = new List<T>();
             var all = await _repo.GetAll(groupId).ConfigureAwait(false);
 
             foreach (var contentId in all)
             {
-                var content = await GetByIdAsync<T>(contentId).ConfigureAwait(false);
+                var content = await GetByIdAsync<T>(contentId, languageId).ConfigureAwait(false);
 
                 if (content != null)
                 {

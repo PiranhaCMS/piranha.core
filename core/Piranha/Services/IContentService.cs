@@ -29,8 +29,9 @@ namespace Piranha.Services
         /// group id.
         /// </summary>
         /// <param name="groupId">The optional group id</param>
+        /// <param name="languageId">The optional language id</param>
         /// <returns>The available content</returns>
-        Task<IEnumerable<DynamicContent>> GetAllAsync(string groupId = null);
+        Task<IEnumerable<DynamicContent>> GetAllAsync(string groupId = null, Guid? languageId = null);
 
         /// <summary>
         /// Gets all of the available content for the optional
@@ -38,8 +39,9 @@ namespace Piranha.Services
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="groupId">The optional group id</param>
+        /// <param name="languageId">The optional language id</param>
         /// <returns>The available content</returns>
-        Task<IEnumerable<T>> GetAllAsync<T>(string groupId = null) where T : GenericContent;
+        Task<IEnumerable<T>> GetAllAsync<T>(string groupId = null, Guid? languageId = null) where T : GenericContent;
 
         /// <summary>
         /// Gets the content model with the specified id.
