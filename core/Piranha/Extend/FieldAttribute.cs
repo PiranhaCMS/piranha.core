@@ -34,5 +34,10 @@ namespace Piranha.Extend
         /// text based fields.
         /// </summary>
         public string Placeholder { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional sort order.
+        /// </summary>
+        public int SortOrder { get; set; } = Int32.MaxValue;
     }
 }

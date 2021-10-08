@@ -633,13 +633,24 @@ namespace Piranha.AttributeBuilder
                 }
                 else
                 {
+                    var sortedFields = new List<Tuple<int?, ContentTypeField>>();
                     foreach (var fieldProp in type.GetProperties(App.PropertyBindings))
                     {
                         var fieldType = GetFieldType(fieldProp);
 
                         if (fieldType != null)
-                            regionType.Fields.Add(fieldType);
+                        {
+                            sortedFields.Add(fieldType);
+                        }
                     }
+
+                    // First add sorted fields
+                    foreach (var fieldType in sortedFields.Where(t => t.Item1.HasValue))
+                        regionType.Fields.Add(fieldType.Item2);
+                    // Then add the unsorted fields
+                    foreach (var fieldType in sortedFields.Where(t => !t.Item1.HasValue))
+                        regionType.Fields.Add(fieldType.Item2);                    
+
                     // Skip regions without fields.
                     if (regionType.Fields.Count == 0)
                     {
@@ -651,7 +662,7 @@ namespace Piranha.AttributeBuilder
             return null;
         }
 
-        private ContentTypeField GetFieldType(PropertyInfo prop)
+        private Tuple<int?, ContentTypeField> GetFieldType(PropertyInfo prop)
         {
             var attr = prop.GetCustomAttribute<FieldAttribute>();
 
@@ -676,6 +687,7 @@ namespace Piranha.AttributeBuilder
                         Options = attr.Options,
                         Placeholder = attr.Placeholder
                     };
+                    int? sortOrder = attr.SortOrder != Int32.MaxValue ? attr.SortOrder : (int?)null;
 
                     // Get optional description
                     var descAttr = prop.GetCustomAttribute<FieldDescriptionAttribute>();
@@ -687,7 +699,7 @@ namespace Piranha.AttributeBuilder
                     // Get optional settings
                     fieldType.Settings = Utils.GetFieldSettings(prop);
 
-                    return fieldType;
+                    return new Tuple<int?, ContentTypeField>(sortOrder, fieldType);
                 }
             }
             return null;
