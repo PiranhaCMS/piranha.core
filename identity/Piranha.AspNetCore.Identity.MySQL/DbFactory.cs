@@ -1,4 +1,5 @@
 ﻿#if DEBUG
+using System.Data;
 /*
  * Copyright (c) 2019 aatmmr
  *
@@ -28,8 +29,10 @@ namespace Piranha.AspNetCore.Identity.MySQL
         /// <returns>The db context</returns>
         public IdentityMySQLDb CreateDbContext(string[] args) 
         {
+            var connectionString = "server=localhost;port=3306;database=piranha;uid=root;password=password";
+
             var builder = new DbContextOptionsBuilder<IdentityMySQLDb>();
-            builder.UseMySql("server=localhost;port=3306;database=piranha;uid=root;password=password");
+            builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
             return new IdentityMySQLDb(builder.Options);
         }
     }
