@@ -20,7 +20,7 @@ using Piranha.Repositories;
 
 namespace Piranha.Services
 {
-    public class MediaService : IMediaService
+    public class MediaService : IMediaService, IInitializable
     {
         private readonly IMediaRepository _repo;
         private readonly IParamService _paramService;
@@ -685,6 +685,17 @@ namespace Piranha.Services
                     return cdn + _storage.GetResourceName(media, name);
                 }
                 return _storage.GetPublicUrl(media, name);
+            }
+        }
+
+        /// <summary>
+        /// Initialize the Storage service is it implements IInitializable.
+        /// </summary>
+        public void Init()
+        {
+            if (_storage is IInitializable initializableStorage)
+            {
+                initializableStorage.Init();
             }
         }
     }

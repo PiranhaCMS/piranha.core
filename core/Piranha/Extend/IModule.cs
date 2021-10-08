@@ -13,7 +13,7 @@ namespace Piranha.Extend
     /// <summary>
     /// Interface for defining a Piranha module.
     /// </summary>
-    public interface IModule
+    public interface IModule : IInitializable
     {
         /// <summary>
         /// Get the author for this module
@@ -44,10 +44,5 @@ namespace Piranha.Extend
         /// Gets the logo url for the module.
         /// </summary>
         string IconUrl { get; }
-
-        /// <summary>
-        /// Initializes the module.
-        /// </summary>
-        void Init();
     }
 }
