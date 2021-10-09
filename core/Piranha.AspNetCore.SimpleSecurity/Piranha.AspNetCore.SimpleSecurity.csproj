@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Piranha.AspNetCore</RootNamespace>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <Description>Piranha CMS simple security provider for AspNetCore</Description>
@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="5.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.0-rc.1.21452.15" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
     <ProjectReference Include="..\Piranha.Manager.LocalAuth\Piranha.Manager.LocalAuth.csproj" />
   </ItemGroup>
