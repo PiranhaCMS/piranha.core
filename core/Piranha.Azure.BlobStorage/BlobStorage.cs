@@ -77,7 +77,8 @@ namespace Piranha.Azure
         /// <returns>The public url</returns>
         public string GetPublicUrl(Media media, string id)
         {
-            return string.IsNullOrWhiteSpace(id) ? default : $"{_blobContainerClient.Uri.AbsoluteUri}/{GetResourceName(media, id, true)}";
+            return media == null || string.IsNullOrWhiteSpace(id) ? null : 
+                $"{ _blobContainerClient.Uri.AbsoluteUri }/{ GetResourceName(media, id, true) }";
         }
 
         /// <summary>
@@ -100,7 +101,9 @@ namespace Piranha.Azure
         /// <returns>The public url</returns>
         public string GetResourceName(Media media, string filename, bool encode)
         {
-            return _naming == BlobStorageNaming.UniqueFileNames ? $"{media.Id}-{(encode ? System.Web.HttpUtility.UrlPathEncode(filename) : filename)}" : $"{media.Id}/{(encode ? System.Web.HttpUtility.UrlPathEncode(filename) : filename)}";
+            return _naming == BlobStorageNaming.UniqueFileNames ? 
+                $"{ media.Id }-{ (encode ? System.Web.HttpUtility.UrlPathEncode(filename) : filename) }" : 
+                $"{ media.Id }/{ (encode ? System.Web.HttpUtility.UrlPathEncode(filename) : filename) }";
         }
 
         /// <summary>
