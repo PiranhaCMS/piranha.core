@@ -28,4 +28,4 @@ jobs:
     - name: Test
       run: | 
         dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByAttribute="NoCoverage" --no-build --verbosity normal
-        .\tools\coveralls.net.0.7.0\tools\csmacnz.coveralls.exe --opencover -i .\test\Piranha.Tests\coverage.opencover.xml --repoToken ${{ secrets.coverallstoken }} --useRelativePaths --commitId ${{ github.sha }} --commitBranch master --commitMessage ${{ github.event.head_commit.message }} --jobId ${{ github.job }} --serviceName github
+        .\tools\coveralls.net.0.7.0\tools\csmacnz.coveralls.exe --opencover -i .\test\Piranha.Tests\coverage.opencover.xml --repoToken ${{ secrets.coverallstoken }} --useRelativePaths --commitId ${{ github.sha }} --commitBranch master --commitMessage "${{ github.event.head_commit.message }}" --jobId ${{ github.job }} --serviceName github
