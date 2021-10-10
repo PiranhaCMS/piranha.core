@@ -15,7 +15,7 @@
                     <span v-if="meta.placeholder == null" class="text-secondary">&nbsp;</span>
                 </div>
                 <div class="card-body" v-else>
-                    <a href="piranha.baseUrl + 'manager/page/edit/' + model.page.id" target="_blank">{{ model.page.title }}</a>
+                    <a :href="piranha.baseUrl + 'manager/page/edit/' + model.page.id" target="_blank">{{ model.page.title }}</a>
                 </div>
             </div>
         </div>
