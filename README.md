@@ -10,7 +10,7 @@
 
 | Build server           | Platform     | Build status |
 |------------------------|--------------|--------------|
-| AppVeyor               | Windows      | [![Build status](https://ci.appveyor.com/api/projects/status/brw0cak0b5x4w17m?svg=true)](https://ci.appveyor.com/project/tidyui/piranha-core) |
+| GitHub Actions         | Windows      | [![.NET Win](https://github.com/PiranhaCMS/piranha.core/actions/workflows/dotnet_win.yml/badge.svg)](https://github.com/PiranhaCMS/piranha.core/actions/workflows/dotnet_win.yml) |
 | GitHub Actions         | Linux        | [![.NET](https://github.com/PiranhaCMS/piranha.core/actions/workflows/dotnet.yml/badge.svg)](https://github.com/PiranhaCMS/piranha.core/actions/workflows/dotnet.yml) |
 | CoverAlls              |              | [![Coverage Status](https://coveralls.io/repos/github/PiranhaCMS/piranha.core/badge.svg?branch=master&service=github&random=1)](https://coveralls.io/github/PiranhaCMS/piranha.core?branch=master) |
 | NuGet                  |              | [![NuGet](https://img.shields.io/nuget/v/Piranha.svg)](https://www.nuget.org/packages/Piranha) |
