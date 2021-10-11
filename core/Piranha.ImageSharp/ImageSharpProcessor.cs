@@ -29,6 +29,8 @@ namespace Piranha.ImageSharp
             var imageInfo = Image.Identify(stream);
             width = imageInfo.Width;
             height = imageInfo.Height;
+
+            stream.Position = 0;
         }
 
         /// <summary>
@@ -136,6 +138,22 @@ namespace Piranha.ImageSharp
                 }));
 
                 image.Save(dest, format);
+            }
+        }
+
+        /// <summary>
+        /// Auto orients the image according to exif information.
+        /// </summary>
+        /// <param name="source">The image data stream</param>
+        /// <param name="dest">The destination stream</param>
+        public void AutoOrient(Stream source, Stream dest)
+        {
+            using (var image = Image.Load(source, out IImageFormat format))
+            {
+                image.Mutate(x => x.AutoOrient());
+                image.Save(dest, format);
+
+                dest.Position = 0;
             }
         }
     }
