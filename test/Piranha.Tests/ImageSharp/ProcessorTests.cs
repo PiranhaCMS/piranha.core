@@ -97,5 +97,28 @@ namespace Piranha.Tests.ImageSharp
                 }
             }
         }
+
+        [Fact]
+        public void Scale_WithAutoRotate()
+        {
+            // This image as EXIF info's set, which is set to RightTop. This means this image should be rotated when displayed,
+            // so it displays as portrait. See Issue: https://github.com/PiranhaCMS/piranha.core/issues/1442
+            using (var file = File.OpenRead("../../../Assets/103149995-24d3dc80-4767-11eb-897c-f6f68609227b.jpg"))
+            {
+                var processor = new ImageSharpProcessor();
+
+                using (var outStream = new MemoryStream())
+                {
+                    processor.Scale(file, outStream, 960);
+
+                    outStream.Position = 0;
+
+                    processor.GetSize(outStream, out var width, out var height);
+
+                    Assert.Equal(960, width);
+                    Assert.Equal(1280, height);
+                }
+            }
+        }
     }
 }
