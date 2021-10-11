@@ -61,6 +61,9 @@ namespace Piranha.ImageSharp
         {
             using (var image = Image.Load(source, out IImageFormat format))
             {
+                // First make sure the image is rotated according to the EXIF info's.
+                image.Mutate(x => x.AutoOrient());
+
                 image.Mutate(x => x.Crop(new Rectangle
                 {
                     Width = width,
@@ -85,6 +88,9 @@ namespace Piranha.ImageSharp
         {
             using (var image = Image.Load(source, out IImageFormat format))
             {
+                // First make sure the image is rotated according to the EXIF info's.
+                image.Mutate(x => x.AutoOrient());
+
                 int height = (int)Math.Round(width * ((float)image.Height / image.Width));
 
                 image.Mutate(x => x.Resize(new ResizeOptions
@@ -110,6 +116,9 @@ namespace Piranha.ImageSharp
         {
             using (var image = Image.Load(source, out IImageFormat format))
             {
+                // First make sure the image is rotated according to the EXIF info's.
+                image.Mutate(x => x.AutoOrient());
+
                 var oldRatio = (float)image.Height / image.Width;
                 var newRatio = (float)height / width;
                 var cropWidth = image.Width;
