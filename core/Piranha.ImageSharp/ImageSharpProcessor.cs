@@ -26,11 +26,9 @@ namespace Piranha.ImageSharp
         /// <param name="height">The returned height</param>
         public void GetSize(Stream stream, out int width, out int height)
         {
-            using (var image = Image.Load(stream))
-            {
-                width = image.Width;
-                height = image.Height;
-            }
+            var imageInfo = Image.Identify(stream);
+            width = imageInfo.Width;
+            height = imageInfo.Height;
         }
 
         /// <summary>
@@ -41,11 +39,9 @@ namespace Piranha.ImageSharp
         /// <param name="height">The returned height</param>
         public void GetSize(byte[] bytes, out int width, out int height)
         {
-            using (var image = Image.Load(bytes))
-            {
-                width = image.Width;
-                height = image.Height;
-            }
+            var imageInfo = Image.Identify(bytes);
+            width = imageInfo.Width;
+            height = imageInfo.Height;
         }
 
         /// <summary>
