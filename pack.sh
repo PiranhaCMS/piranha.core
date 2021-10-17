@@ -8,6 +8,7 @@ dotnet build -c Release
 # Create all NuGet packages
 dotnet pack core/Piranha/Piranha.csproj --no-build -c Release -o ./artifacts
 dotnet pack core/Piranha.AspNetCore/Piranha.AspNetCore.csproj --no-build -c Release -o ./artifacts
+dotnet pack core/Piranha.AspNetCore.Hosting/Piranha.AspNetCore.Hosting.csproj --no-build -c Release -o ./artifacts
 dotnet pack core/Piranha.AspNetCore.SimpleSecurity/Piranha.AspNetCore.SimpleSecurity.csproj --no-build -c Release -o ./artifacts
 dotnet pack core/Piranha.AttributeBuilder/Piranha.AttributeBuilder.csproj --no-build -c Release -o ./artifacts
 dotnet pack core/Piranha.Azure.BlobStorage/Piranha.Azure.BlobStorage.csproj --no-build -c Release -o ./artifacts

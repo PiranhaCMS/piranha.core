@@ -15,28 +15,29 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Piranha.AspNetCore.Services;
 using Piranha.Models;
 
-namespace Piranha.AspNetCore
+namespace Piranha.AspNetCore.Http
 {
     /// <summary>
     /// The main application middleware.
     /// </summary>
     public class PiranhaMiddleware : MiddlewareBase
     {
-        private readonly PiranhaRouteConfig _config;
+        private readonly RoutingOptions _options;
 
         /// <summary>
         /// Creates a new middleware instance.
         /// </summary>
         /// <param name="next">The next middleware in the pipeline</param>
-        /// <param name="config">The current route configuration</param>
+        /// <param name="options">The current routing options</param>
         /// <param name="factory">The logger factory</param>
-        public PiranhaMiddleware(RequestDelegate next, PiranhaRouteConfig config, ILoggerFactory factory = null) : base(next, factory)
+        public PiranhaMiddleware(RequestDelegate next, IOptions<RoutingOptions> options, ILoggerFactory factory = null) : base(next, factory)
         {
-            _config = config;
+            _options = options.Value;
         }
 
         /// <summary>
@@ -56,6 +57,8 @@ namespace Piranha.AspNetCore
                 var segments = !string.IsNullOrEmpty(url) ? url.Substring(1).Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries) : new string[] { };
                 int pos = 0;
 
+                _logger?.LogDebug($"Url: [{ url }]");
+
                 //
                 // 1: Store raw url & request information
                 //
@@ -71,7 +74,7 @@ namespace Piranha.AspNetCore
 
                 var hostname = context.Request.Host.Host;
 
-                if (_config.UseSiteRouting)
+                if (_options.UseSiteRouting)
                 {
                     // Try to get the requested site by hostname & prefix
                     if (segments.Length > 0)
@@ -143,7 +146,7 @@ namespace Piranha.AspNetCore
                 //
                 // Check if we shouldn't handle empty requests for start page
                 //
-                if (segments.Length == 0 && !_config.UseStartpageRouting)
+                if (segments.Length == 0 && !_options.UseStartpageRouting)
                 {
                     await _next.Invoke(context);
                     return;
@@ -152,7 +155,7 @@ namespace Piranha.AspNetCore
                 //
                 // 3: Check for alias
                 //
-                if (_config.UseAliasRouting && segments.Length > pos)
+                if (_options.UseAliasRouting && segments.Length > pos)
                 {
                     var alias = await api.Aliases.GetByAliasUrlAsync($"/{ string.Join("/", segments.Subset(pos)) }", service.Site.Id);
 
@@ -208,7 +211,7 @@ namespace Piranha.AspNetCore
                 //
                 PostBase post = null;
 
-                if (_config.UsePostRouting)
+                if (_options.UsePostRouting)
                 {
                     if (page != null && pageType.IsArchive && segments.Length > pos)
                     {
@@ -279,7 +282,7 @@ namespace Piranha.AspNetCore
                         return;
                     }
                 }
-                else if (page != null && _config.UsePageRouting)
+                else if (page != null && _options.UsePageRouting)
                 {
                     if (string.IsNullOrWhiteSpace(page.RedirectUrl))
                     {
@@ -294,7 +297,7 @@ namespace Piranha.AspNetCore
                             query.Append("&startpage=true");
                         }
 
-                        if (!pageType.IsArchive || !_config.UseArchiveRouting)
+                        if (!pageType.IsArchive || !_options.UseArchiveRouting)
                         {
                             if (HandleCache(context, site, page, appConfig.CacheExpiresPages))
                             {
@@ -442,8 +445,7 @@ namespace Piranha.AspNetCore
                     var strRoute = route.ToString();
                     var strQuery = query.ToString();
 
-                    _logger?.LogDebug($"Setting Route: [{ strRoute }]");
-                    _logger?.LogDebug($"Setting Query: [{ strQuery }]");
+                    _logger?.LogDebug($"Setting Route: [{ strRoute }?{ strQuery }]");
 
                     context.Request.Path = new PathString(strRoute);
                     if (context.Request.QueryString.HasValue)

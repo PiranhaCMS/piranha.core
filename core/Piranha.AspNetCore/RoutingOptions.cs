@@ -8,19 +8,13 @@
  *
  */
 
-namespace Piranha
+namespace Piranha.AspNetCore
 {
     /// <summary>
-    /// Used to configure the different parts of the integrated middleware
-    /// routing component.
+    /// The options available for the cms middleware components.
     /// </summary>
-    public class PiranhaRouteConfig
+    public sealed class RoutingOptions
     {
-        /// <summary>
-        /// Gets/sets the login url.
-        /// </summary>
-        public string LoginUrl { get; set; } = "/login";
-
         /// <summary>
         /// Gets/sets if alias routing should be used.
         /// </summary>
@@ -57,19 +51,5 @@ namespace Piranha
         /// should be used.
         /// </summary>
         public bool UseStartpageRouting { get; set; } = true;
-
-        /// <summary>
-        /// Disables all routing features of the application.
-        /// </summary>
-        public void DisableRouting()
-        {
-            UseAliasRouting = false;
-            UseArchiveRouting = false;
-            UsePageRouting = false;
-            UsePostRouting = false;
-            UseSitemapRouting = false;
-            UseSiteRouting = false;
-            UseStartpageRouting = false;
-        }
     }
 }

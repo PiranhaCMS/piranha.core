@@ -10,9 +10,11 @@
 
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
+using Piranha.AspNetCore.Security;
 using Piranha.AspNetCore.Services;
 
-namespace Piranha.AspNetCore.Security
+namespace Piranha.AspNetCore.Http
 {
     /// <summary>
     /// The security middleware responsible for handling and
@@ -21,17 +23,17 @@ namespace Piranha.AspNetCore.Security
     public class SecurityMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly PiranhaRouteConfig _config;
+        private readonly SecurityOptions _options;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="next">The next middleware component in the pipeline</param>
-        /// <param name="config">The piranha route config</param>
-        public SecurityMiddleware(RequestDelegate next, PiranhaRouteConfig config)
+        /// <param name="options">The current routing options</param>
+        public SecurityMiddleware(RequestDelegate next, IOptions<SecurityOptions> options)
         {
             _next = next;
-            _config = config;
+            _options = options.Value;
         }
 
         /// <summary>
@@ -50,7 +52,7 @@ namespace Piranha.AspNetCore.Security
             if (ctx.Response.StatusCode == 401)
             {
                 // Redirect to the configured login url
-                ctx.Response.Redirect($"{ _config.LoginUrl }?returnUrl={ service.Request.Url }");
+                ctx.Response.Redirect($"{ _options.LoginUrl }?returnUrl={ service.Request.Url }");
             }
         }
     }

@@ -31,11 +31,12 @@ namespace MvcWeb
             {
                 options.AddRazorRuntimeCompilation = true;
 
+                options.UseCms();
+                options.UseManager();
                 options.UseFileStorage(naming: FileStorageNaming.UniqueFolderNames);
                 options.UseImageSharp();
-                options.UseManager();
-                options.UseTinyMCE();
                 options.UseMemoryCache();
+                options.UseTinyMCE();
 
                 options.UseEF<SQLiteDb>(db =>
                     db.UseSqlite("Filename=./piranha.mvcweb.db"));

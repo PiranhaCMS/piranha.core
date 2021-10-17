@@ -8,15 +8,16 @@
  *
  */
 
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Piranha.AspNetCore.Services;
 using X.Web.Sitemap;
 
-namespace Piranha.AspNetCore
+namespace Piranha.AspNetCore.Http
 {
     /// <summary>
     /// Middleware used to ouput a xml sitemap based on
@@ -24,17 +25,17 @@ namespace Piranha.AspNetCore
     /// </summary>
     public class SitemapMiddleware : MiddlewareBase
     {
-        private readonly PiranhaRouteConfig _config;
+        private readonly RoutingOptions _options;
 
         /// <summary>
         /// Creates a new middleware instance.
         /// </summary>
         /// <param name="next">The next middleware in the pipeline</param>
-        /// <param name="factory">The logger factory</param>
-        /// <param name="config">The optional route config</param>
-        public SitemapMiddleware(RequestDelegate next, ILoggerFactory factory = null, PiranhaRouteConfig config = null) : base(next, factory)
+        /// <param name="options">The current routing options</param>
+        /// <param name="factory">The optional logger factory</param>
+        public SitemapMiddleware(RequestDelegate next, IOptions<RoutingOptions> options, ILoggerFactory factory = null) : base(next, factory)
         {
-            _config = config;
+            _options = options.Value;
         }
 
         /// <summary>
@@ -46,9 +47,7 @@ namespace Piranha.AspNetCore
         /// <returns>An async task</returns>
         public override async Task Invoke(HttpContext context, IApi api, IApplicationService service)
         {
-            var useSitemapRouting = _config != null ? _config.UseSitemapRouting : true;
-
-            if (useSitemapRouting && !IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/"))
+            if (_options.UseSitemapRouting && !IsHandled(context) && !context.Request.Path.Value.StartsWith("/manager/assets/"))
             {
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
                 var host = context.Request.Host.Host;

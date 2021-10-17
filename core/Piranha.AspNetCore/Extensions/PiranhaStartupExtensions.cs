@@ -9,10 +9,11 @@
  */
 
 using System;
-using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Piranha;
 using Piranha.AspNetCore;
+using Piranha.AspNetCore.Hosting;
 using Piranha.Security;
 
 /// <summary>
@@ -22,38 +23,21 @@ using Piranha.Security;
 public static class PiranhaStartupExtensions
 {
     /// <summary>
-    /// Adds the core Piranha services if simple startup is used.
+    /// Adds the services needed to run a Piranha client application.
     /// </summary>
-    /// <param name="services">The current service collection</param>
-    /// <param name="options">The builder options</param>
-    /// <returns>The updated service collection</returns>
-    public static IServiceCollection AddPiranha(this IServiceCollection services, Action<PiranhaServiceBuilder> options)
+    /// <param name="serviceBuilder">The current service builder</param>
+    /// <param name="options">The optional routing options</param>
+    /// <returns>The updated service builder</returns>
+    public static PiranhaServiceBuilder UseCms(this PiranhaServiceBuilder serviceBuilder,
+        Action<RoutingOptions> options = null)
     {
-        var serviceBuilder = new PiranhaServiceBuilder(services);
-
-        options?.Invoke(serviceBuilder);
-
-        var config = new PiranhaRouteConfig
-        {
-            LoginUrl = serviceBuilder.LoginUrl,
-            UseAliasRouting = serviceBuilder.UseAliasRouting,
-            UseArchiveRouting = serviceBuilder.UseArchiveRouting,
-            UsePageRouting = serviceBuilder.UsePageRouting,
-            UsePostRouting = serviceBuilder.UsePostRouting,
-            UseSiteRouting = serviceBuilder.UseSiteRouting,
-            UseSitemapRouting = serviceBuilder.UseSitemapRouting,
-            UseStartpageRouting = serviceBuilder.UseStartpageRouting
-        };
-        services.AddSingleton<PiranhaRouteConfig>(config);
-
-        services.AddControllersWithViews();
-        var mvcBuilder = services.AddRazorPages();
+        serviceBuilder.Services.AddControllersWithViews();
+        var mvcBuilder = serviceBuilder.Services.AddRazorPages();
         if (serviceBuilder.AddRazorRuntimeCompilation)
         {
             mvcBuilder.AddRazorRuntimeCompilation();
         }
-        services
-            .AddPiranha()
+        serviceBuilder.Services
             .AddScoped<Piranha.AspNetCore.Services.IApplicationService, Piranha.AspNetCore.Services.ApplicationService>()
             .AddScoped<Piranha.AspNetCore.Services.IModelLoader, Piranha.AspNetCore.Services.ModelLoader>()
             .AddAuthorization(o =>
@@ -67,31 +51,10 @@ public static class PiranhaStartupExtensions
                     policy.RequireClaim(Permission.PostPreview, Permission.PostPreview);
                 });
             });
-        return serviceBuilder.Services;
-    }
 
-    /// <summary>
-    /// Simple startup with integrated middleware that also adds common
-    /// dependencies needed for an integrated web application.
-    /// </summary>
-    /// <param name="builder">The application builder</param>
-    /// <param name="options">Action for configuring the builder</param>
-    /// <returns>The updated application builder</returns>
-    public static IApplicationBuilder UsePiranha(this IApplicationBuilder builder, Action<PiranhaApplicationBuilder> options)
-    {
-        var piranhaOptions = new PiranhaApplicationBuilder(builder);
+        serviceBuilder.Services.AddTransient<IStartupFilter, PiranhaStartupFilter>();
+        serviceBuilder.Services.Configure<RoutingOptions>(o => options?.Invoke(o));
 
-        piranhaOptions.Builder
-            .UseSecurityMiddleware()
-            .UseStaticFiles()
-            .UseMiddleware<Piranha.AspNetCore.PiranhaMiddleware>()
-            .UseMiddleware<Piranha.AspNetCore.SitemapMiddleware>()
-            .UseRouting()
-            .UseAuthentication()
-            .UseAuthorization();
-
-        options?.Invoke(piranhaOptions);
-
-        return piranhaOptions.Builder;
+        return serviceBuilder;
     }
 }
