@@ -10,9 +10,12 @@
 
 using System;
 
-namespace Piranha.Web
+namespace Piranha.AspNetCore.Http
 {
-    public class HttpCacheInfo
+    /// <summary>
+    /// Caching information about a content model.
+    /// </summary>
+    public sealed class HttpCacheInfo
     {
         /// <summary>
         /// Gets/sets the entity tag.

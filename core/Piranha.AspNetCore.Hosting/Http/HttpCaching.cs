@@ -10,10 +10,8 @@
 
 using System;
 using Microsoft.AspNetCore.Http;
-using Piranha.Web;
-using Piranha.Models;
 
-namespace Piranha.AspNetCore
+namespace Piranha.AspNetCore.Http
 {
     /// <summary>
     /// Helper class for handling HTTP cache headers.
@@ -24,52 +22,23 @@ namespace Piranha.AspNetCore
         /// Checks if the client has the current version cached.
         /// </summary>
         /// <param name="context">The HTTP Context</param>
-        /// <param name="serverInfo">The service info</param>
+        /// <param name="etag">The entity tag</param>
+        /// <param name="lastModified">The modification date</param>
         /// <returns>If the client has the same version cached</returns>
-        public static bool IsCached(HttpContext context, HttpCacheInfo serverInfo)
+        public static bool IsCached(HttpContext context, string etag, DateTime lastModified)
         {
             var clientInfo = Get(context);
 
-            if (clientInfo.EntityTag == serverInfo.EntityTag)
+            if (clientInfo.EntityTag == etag)
             {
                 return true;
             }
 
             if (clientInfo.LastModified.HasValue)
             {
-                return clientInfo.LastModified.Value >= serverInfo.LastModified.Value;
+                return clientInfo.LastModified.Value >= lastModified;
             }
             return false;
-        }
-
-        /// <summary>
-        /// Checks if the client has the current version cached.
-        /// </summary>
-        /// <param name="context">The HTTP Context</param>
-        /// <param name="etag">The entity tag</param>
-        /// <param name="lastModified">The modification date</param>
-        /// <returns>If the client has the same version cached</returns>
-        public static bool IsCached(HttpContext context, string etag, DateTime? lastModified)
-        {
-            return IsCached(context, new HttpCacheInfo
-            {
-                EntityTag = etag,
-                LastModified = lastModified
-            });
-        }
-
-        /// <summary>
-        /// Gets the HTTP Cache info for the given page.
-        /// </summary>
-        /// <param name="page">The page</param>
-        /// <returns>The cache info</returns>
-        public static HttpCacheInfo Get(PageBase page)
-        {
-            return new HttpCacheInfo
-            {
-                EntityTag = Utils.GenerateETag(page.Id.ToString(), page.LastModified),
-                LastModified = page.LastModified
-            };
         }
 
         /// <summary>
