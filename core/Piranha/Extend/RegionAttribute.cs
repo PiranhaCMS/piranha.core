@@ -40,7 +40,7 @@ namespace Piranha.Extend
         /// Gets/sets if all lite items should be expanded in the UI.
         /// This works best for single field regions or smaller regions.
         /// </summary>
-        public bool ListExpand { get; set; } = false;
+        public bool ListExpand { get; set; }
 
         /// <summary>
         /// Gets/sets the optional sort order.

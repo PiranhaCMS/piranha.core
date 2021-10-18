@@ -20,17 +20,17 @@ namespace Piranha.Manager.Models.Content
         /// <summary>
         /// Gets/sets if this is a block group.
         /// </summary>
-        public bool IsGroup { get; set; } = false;
+        public bool IsGroup { get; set; }
 
         /// <summary>
         /// Gets/sets if the block is collapsed.
         /// </summary>
-        public bool isCollapsed { get; set; } = false;
+        public bool isCollapsed { get; set; }
 
         /// <summary>
         /// Gets/sets if the block is readonly.
         /// </summary>
-        public bool IsReadonly { get; set; } = false;
+        public bool IsReadonly { get; set; }
 
         /// <summary>
         /// If the global header fields should be visible.

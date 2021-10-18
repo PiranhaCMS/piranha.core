@@ -58,18 +58,22 @@ To read more about of our available project templates, please read more on https
 
 ### Get the latest source code and get going
 
-    > git clone https://github.com/PiranhaCMS/piranha.core.git
-    > cd piranha.core
-    > dotnet restore
-    > dotnet build
-    > cd examples/MvcWeb
-    > dotnet run
+~~~
+> git clone https://github.com/PiranhaCMS/piranha.core.git
+> cd piranha.core
+> dotnet restore
+> dotnet build
+> cd examples/MvcWeb
+> dotnet run
+~~~
 
 ### Log into the Manager
 
 The manager interface can be found at the URL `~/manager` with the default credentials:
 
-    admin / password
+~~~
+admin / password
+~~~
 
 For production scenarios we advise you to remove this user, or change the password
 **and** update the password strength policy. More information on this can be found in
@@ -77,10 +81,12 @@ the official documentation [here](http://piranhacms.org/docs/architecture/authen
 
 ### Build and update javascript/css assets
 
-    > cd piranha.core/core/Piranha.Manager
-    > npm install
-    > gulp min:js
-	> gulp min:css
+~~~
+> cd piranha.core/core/Piranha.Manager
+> npm install
+> gulp min:js
+> gulp min:css
+~~~
 
 ### Visual Studio users
 
@@ -98,8 +104,6 @@ Support Piranha CMS with a monthly donation and help us focus on giving you even
 These are our financial sponsors! You can also become a sponsor either through GitHub or [Open Collective](https://opencollective.com/piranhacms).
 
 [![Arcady](https://piranhacms.azureedge.net/uploads/672d2600-8822-4b74-bb06-392f0c4aa38d-arcady_black.png)](https://www.arcady.nl)
-
-
 
 ## Code of Conduct
 

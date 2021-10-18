@@ -84,7 +84,7 @@ namespace Piranha.Manager.Models
         /// Gets/sets if excerpt should in HTML-format. The
         /// default value is false.
         /// </summary>
-        public bool UseHtmlExcerpt { get; set; } = false;
+        public bool UseHtmlExcerpt { get; set; }
 
         /// <summary>
         /// Gets/sets if tags should be used for the content type.

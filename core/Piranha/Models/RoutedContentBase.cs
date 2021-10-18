@@ -118,7 +118,7 @@ namespace Piranha.Models
         /// Gets/sets if comments should be enabled.
         /// </summary>
         /// <value></value>
-        public bool EnableComments { get; set; } = false;
+        public bool EnableComments { get; set; }
 
         /// <summary>
         /// Gets/sets after how many days after publish date comments
