@@ -39,7 +39,7 @@ namespace Piranha.Runtime
         /// <param name="instance">The object instance</param>
         /// <param name="scope">The current service scope</param>
         /// <returns>An async taks</returns>
-        public Task InvokeAsync(object instance, IServiceScope scope)
+        public async Task InvokeAsync(object instance, IServiceScope scope)
         {
             var param = new List<object>();
             foreach (var type in ParameterTypes)
@@ -49,13 +49,12 @@ namespace Piranha.Runtime
 
             if (IsAsync)
             {
-                return (Task)Method.Invoke(instance, param.ToArray());
+                await ((Task)Method.Invoke(instance, param.ToArray()))
+                    .ConfigureAwait(false);
             }
             else
             {
-                return Task.Run(() => {
-                    Method.Invoke(instance, param.ToArray());
-                });
+                Method.Invoke(instance, param.ToArray());
             }
         }
     }

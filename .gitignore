@@ -17,6 +17,8 @@ examples/CoreWeb/assets/lib
 # Runtime test files
 [Uu]ploads
 *.db
+*.db-shm
+*.db-wal
 
 templates/**/wwwroot/uploads
 templates/**/*.db
