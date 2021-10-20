@@ -214,22 +214,28 @@ piranha.siteedit = new Vue({
 
             var self = this;
 
-            fetch(piranha.baseUrl + "manager/api/site/delete/" + self.id)
-                .then(function (response) { return response.json(); })
-                .then(function (result) {
-                    piranha.notifications.push(result);
+            fetch(piranha.baseUrl + "manager/api/site/delete", {
+                method: "delete",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(self.id)
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (result) {
+                piranha.notifications.push(result);
 
-                    if (result.type === "success") {
-                        $("#siteedit").modal("hide");
+                if (result.type === "success") {
+                    $("#siteedit").modal("hide");
 
-                        if (self.callback)
-                        {
-                            self.callback();
-                            self.callback = null;
-                        }
+                    if (self.callback)
+                    {
+                        self.callback();
+                        self.callback = null;
                     }
-                })
-                .catch(function (error) { console.log("error:", error ); });
+                }
+            })
+            .catch(function (error) { console.log("error:", error ); });
         },
         selectRegion: function (region) {
             this.selectedRegion = region;

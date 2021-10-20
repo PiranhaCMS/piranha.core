@@ -100,7 +100,13 @@ piranha.useredit= new Vue({
                 confirmText: piranha.resources.texts.delete,
                 onConfirm: function () {
                     var ok = false;
-                    fetch(piranha.baseUrl + "manager/user/delete/" + userId)
+                    fetch(piranha.baseUrl + "manager/user/delete", {
+                        method: "delete",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(userId)
+                    })
                     .then(function (response) { 
                         ok = response.ok;
                         return response.json();
