@@ -79,7 +79,6 @@ namespace Piranha.AspNetCore.Identity.Controllers
         public IActionResult Edit(Guid id)
         {
             return View(id);
-            //return View(UserEditModel.GetById(_db, id));
         }
 
         /// <summary>
@@ -92,7 +91,6 @@ namespace Piranha.AspNetCore.Identity.Controllers
         public UserEditModel Get(Guid id)
         {
             return UserEditModel.GetById(_db, id);
-            //return View(UserEditModel.GetById(_db, id));
         }
 
         /// <summary>
@@ -104,7 +102,6 @@ namespace Piranha.AspNetCore.Identity.Controllers
         public UserEditModel Add()
         {
             return UserEditModel.Create(_db);
-            //return View("Edit", UserEditModel.Create(_db));
         }
 
         /// <summary>

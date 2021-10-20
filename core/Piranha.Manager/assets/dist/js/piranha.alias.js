@@ -92,7 +92,13 @@
                 confirmIcon: "fas fa-trash",
                 confirmText: piranha.resources.texts.delete,
                 onConfirm: function () {
-                    fetch(piranha.baseUrl + "manager/api/alias/delete/" + id)
+                    fetch(piranha.baseUrl + "manager/api/alias/delete", {
+                        method: "delete",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(id)
+                    })
                     .then(function (response) { return response.json(); })
                     .then(function (result) {
                         self.items = result.items;
