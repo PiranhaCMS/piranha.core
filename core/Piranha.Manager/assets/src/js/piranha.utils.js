@@ -16,9 +16,9 @@ piranha.utils = {
         return str != null ? str.length : 0;
     },
     antiForgery: function () {
-        const cookies = document.cookie.split(';');
+        const cookies = document.cookie.split(";");
         for (let i = 0; i < cookies.length; i++) {
-            let c = cookies[i].trim().split('=');
+            let c = cookies[i].trim().split("=");
             if (c[0] === piranha.antiForgery.cookieName) {
                 return c[1];
             }

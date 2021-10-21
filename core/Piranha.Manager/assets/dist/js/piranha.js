@@ -299,9 +299,9 @@ piranha.utils = {
         return str != null ? str.length : 0;
     },
     antiForgery: function () {
-        const cookies = document.cookie.split(';');
+        const cookies = document.cookie.split(";");
         for (let i = 0; i < cookies.length; i++) {
-            let c = cookies[i].trim().split('=');
+            let c = cookies[i].trim().split("=");
             if (c[0] === piranha.antiForgery.cookieName) {
                 return c[1];
             }
@@ -799,7 +799,7 @@ piranha.mediapicker = new Vue({
                         self.items = result.media;
                     }
 
-                    if (result.status != 400) {
+                    if (result.status !== 400) {
                         // Push status to notification hub
                         piranha.notifications.push(result.status);
                     } else {
@@ -1166,7 +1166,7 @@ piranha.languageedit = new Vue({
                         self.bind(result);
                     }
                     
-                    if (result.status != 400) {
+                    if (result.status !== 400) {
                         // Push status to notification hub
                         piranha.notifications.push(result.status);
                     } else {
@@ -1195,7 +1195,7 @@ piranha.languageedit = new Vue({
                     self.bind(result);
                 }
 
-                if (result.status != 400) {
+                if (result.status !== 400) {
                     // Push status to notification hub
                     piranha.notifications.push(result.status);
                 } else {

@@ -128,7 +128,7 @@ piranha.media = new Vue({
                     piranha.media.refresh();
                 }
 
-                if (result.status != 400) {
+                if (result.status !== 400) {
                     // Push status to notification hub
                     piranha.notifications.push(result.status);
                 } else {
@@ -220,7 +220,7 @@ piranha.media = new Vue({
                     self.refresh();
                 }
 
-                if (result.status != 400) {
+                if (result.status !== 400) {
                     // Push status to notification hub
                     piranha.notifications.push(result.status);
                 } else {
@@ -245,7 +245,7 @@ piranha.media = new Vue({
                 // Refresh
                 self.refresh();
 
-                if (result.status != 400) {
+                if (result.status !== 400) {
                     // Push status to notification hub
                     piranha.notifications.push(result.status);
                 } else {
@@ -276,7 +276,7 @@ piranha.media = new Vue({
                         // Refresh
                         self.refresh();
 
-                        if (result.status != 400) {
+                        if (result.status !== 400) {
                             // Push status to notification hub
                             piranha.notifications.push(result.status);
                         } else {
@@ -303,7 +303,7 @@ piranha.media = new Vue({
                 history.pushState({ folderId: id }, "", piranha.baseUrl + "manager/media" + (id ? "/" + id : ""));
                 document.title = result.currentFolderName ? result.currentFolderName : "Media";
 
-                if (result.status != 400) {
+                if (result.status !== 400) {
                     // Push status to notification hub
                     piranha.notifications.push(result.status);
                 } else {

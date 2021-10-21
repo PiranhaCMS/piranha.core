@@ -78,7 +78,7 @@ piranha.config = new Vue({
                 })
                 .then(function (response) { return response.json(); })
                 .then(function (result) {
-                    if (result.status != 400) {
+                    if (result.status !== 400) {
                         // Push status to notification hub
                         piranha.notifications.push(result.status);
                     } else {

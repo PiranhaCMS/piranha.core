@@ -62,9 +62,9 @@ namespace Piranha.Manager.Controllers
         [Authorize(Policy = Permission.CommentsApprove)]
         public async Task<CommentListModel> Approve(ApprovalModel model)
         {
-            await _service.ApproveAsync(model.Id);
+            await _service.ApproveAsync(model.Id).ConfigureAwait(false);
 
-            var result = await List(model.ParentId);
+            var result = await List(model.ParentId).ConfigureAwait(false);
 
             result.Status = new StatusMessage
             {
@@ -79,9 +79,9 @@ namespace Piranha.Manager.Controllers
         [Authorize(Policy = Permission.CommentsApprove)]
         public async Task<CommentListModel> UnApprove(ApprovalModel model)
         {
-            await _service.UnApproveAsync(model.Id);
+            await _service.UnApproveAsync(model.Id).ConfigureAwait(false);
 
-            var result = await List(model.ParentId);
+            var result = await List(model.ParentId).ConfigureAwait(false);
 
             result.Status = new StatusMessage
             {
@@ -96,7 +96,7 @@ namespace Piranha.Manager.Controllers
         [Authorize(Policy = Permission.CommentsDelete)]
         public async Task<StatusMessage> Delete([FromBody]Guid id)
         {
-            await _service.DeleteAsync(id);
+            await _service.DeleteAsync(id).ConfigureAwait(false);
 
             var result = new StatusMessage
             {

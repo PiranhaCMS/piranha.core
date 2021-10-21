@@ -63,7 +63,7 @@ piranha.languageedit = new Vue({
                         self.bind(result);
                     }
                     
-                    if (result.status != 400) {
+                    if (result.status !== 400) {
                         // Push status to notification hub
                         piranha.notifications.push(result.status);
                     } else {
@@ -92,7 +92,7 @@ piranha.languageedit = new Vue({
                     self.bind(result);
                 }
 
-                if (result.status != 400) {
+                if (result.status !== 400) {
                     // Push status to notification hub
                     piranha.notifications.push(result.status);
                 } else {

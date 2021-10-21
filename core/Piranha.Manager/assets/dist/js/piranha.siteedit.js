@@ -117,7 +117,7 @@ piranha.siteedit = new Vue({
                                     self.callback = null;
                                 }
                             } else {
-                                if (result.status != 400) {
+                                if (result.status !== 400) {
                                     // Push status to notification hub
                                     piranha.notifications.push(contentResult);
                                 } else {
